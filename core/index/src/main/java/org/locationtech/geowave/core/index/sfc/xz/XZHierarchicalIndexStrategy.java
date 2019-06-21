@@ -317,14 +317,12 @@ public class XZHierarchicalIndexStrategy implements HierarchicalNumericIndexStra
 
     baseDefinitions = new NumericDimensionDefinition[numDimensions];
     for (int i = 0; i < numDimensions; i++) {
-      final byte[] dim = new byte[VarintUtils.readUnsignedInt(buf)];
-      buf.get(dim);
+      final byte[] dim = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
       baseDefinitions[i] = (NumericDimensionDefinition) PersistenceUtils.fromBinary(dim);
     }
 
     final int rasterStrategySize = VarintUtils.readUnsignedInt(buf);
-    final byte[] rasterStrategyBinary = new byte[rasterStrategySize];
-    buf.get(rasterStrategyBinary);
+    final byte[] rasterStrategyBinary = ByteArrayUtils.safeRead(buf, rasterStrategySize);
     rasterStrategy = (TieredSFCIndexStrategy) PersistenceUtils.fromBinary(rasterStrategyBinary);
 
     final int bitsPerDimensionLength = VarintUtils.readUnsignedInt(buf);

@@ -11,6 +11,7 @@ package org.locationtech.geowave.core.geotime.util;
 import java.nio.ByteBuffer;
 import java.util.BitSet;
 import java.util.Locale;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -272,7 +273,7 @@ public class TimeDescriptors {
         endRangeBytes = null;
       }
       final ByteBuffer buf = ByteBuffer.allocate(length);
-      byte[] bitMask = bits.toByteArray();
+      final byte[] bitMask = bits.toByteArray();
       buf.put(bitMask.length > 0 ? bitMask[0] : (byte) 0);
       if (timeBytes != null) {
         VarintUtils.writeUnsignedInt(timeBytes.length, buf);
@@ -294,22 +295,20 @@ public class TimeDescriptors {
       final ByteBuffer buf = ByteBuffer.wrap(bytes);
       final BitSet bitSet = BitSet.valueOf(new byte[] {buf.get()});
       if (bitSet.get(0)) {
-        byte[] timeBytes = new byte[VarintUtils.readUnsignedInt(buf)];
-        buf.get(timeBytes);
+        final byte[] timeBytes = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
         timeName = StringUtils.stringFromBinary(timeBytes);
       } else {
         timeName = null;
       }
       if (bitSet.get(1)) {
-        byte[] startRangeBytes = new byte[VarintUtils.readUnsignedInt(buf)];
-        buf.get(startRangeBytes);
+        final byte[] startRangeBytes =
+            ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
         startRangeName = StringUtils.stringFromBinary(startRangeBytes);
       } else {
         startRangeName = null;
       }
       if (bitSet.get(2)) {
-        byte[] endRangeBytes = new byte[VarintUtils.readUnsignedInt(buf)];
-        buf.get(endRangeBytes);
+        final byte[] endRangeBytes = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
         endRangeName = StringUtils.stringFromBinary(endRangeBytes);
 
       } else {

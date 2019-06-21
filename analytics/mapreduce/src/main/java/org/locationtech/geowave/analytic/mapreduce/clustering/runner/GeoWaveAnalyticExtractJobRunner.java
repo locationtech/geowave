@@ -38,7 +38,6 @@ import org.locationtech.geowave.analytic.param.ParameterEnum;
 import org.locationtech.geowave.analytic.param.StoreParameters.StoreParam;
 import org.locationtech.geowave.analytic.store.PersistableStore;
 import org.locationtech.geowave.core.store.api.Query;
-import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
 import org.locationtech.geowave.mapreduce.dedupe.GeoWaveDedupeJobRunner;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputFormat;
@@ -172,10 +171,8 @@ public class GeoWaveAnalyticExtractJobRunner extends GeoWaveDedupeJobRunner impl
         runTimeProperties.getPropertyAsInt(ExtractParameters.Extract.MAX_INPUT_SPLIT, 10000));
     if (query != null) {
       if (query.getQueryConstraints() != null) {
-        GeoWaveInputFormat.setQueryConstraints(
-            config,
-            (QueryConstraints) query.getQueryConstraints());
-        setQueryConstraints((QueryConstraints) query.getQueryConstraints());
+        GeoWaveInputFormat.setQueryConstraints(config, query.getQueryConstraints());
+        setQueryConstraints(query.getQueryConstraints());
       }
 
       if (query.getCommonQueryOptions() != null) {

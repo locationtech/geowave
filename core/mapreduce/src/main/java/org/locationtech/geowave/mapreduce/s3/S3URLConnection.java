@@ -8,15 +8,15 @@
  */
 package org.locationtech.geowave.mapreduce.s3;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.Protocol;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.S3Object;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 
 public class S3URLConnection extends URLConnection {
 
@@ -30,7 +30,7 @@ public class S3URLConnection extends URLConnection {
    *
    * @param url the specified URL.
    */
-  public S3URLConnection(URL url) {
+  public S3URLConnection(final URL url) {
     super(url);
   }
 

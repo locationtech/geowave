@@ -724,23 +724,26 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
     byte[] uuidBytes;
 
     public GeoWaveMetadataWithUUID(
-        byte[] primaryId,
-        byte[] secondaryId,
-        byte[] visibility,
-        byte[] value,
-        byte[] uuidBytes) {
+        final byte[] primaryId,
+        final byte[] secondaryId,
+        final byte[] visibility,
+        final byte[] value,
+        final byte[] uuidBytes) {
       super(primaryId, secondaryId, visibility, value);
       this.uuidBytes = uuidBytes;
     }
 
     @Override
     public boolean equals(final Object o) {
-      if (this == o)
+      if (this == o) {
         return true;
-      if (o == null || getClass() != o.getClass())
+      }
+      if ((o == null) || (getClass() != o.getClass())) {
         return false;
-      if (!super.equals(o))
+      }
+      if (!super.equals(o)) {
         return false;
+      }
       final GeoWaveMetadataWithUUID that = (GeoWaveMetadataWithUUID) o;
       return Arrays.equals(uuidBytes, that.uuidBytes);
     }
@@ -748,7 +751,7 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
     @Override
     public int hashCode() {
       int result = super.hashCode();
-      result = 31 * result + Arrays.hashCode(uuidBytes);
+      result = (31 * result) + Arrays.hashCode(uuidBytes);
       return result;
     }
   }

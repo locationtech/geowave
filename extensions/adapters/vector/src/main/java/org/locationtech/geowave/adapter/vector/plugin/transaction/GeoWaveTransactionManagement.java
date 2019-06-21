@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.adapter.vector.plugin.transaction;
 
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
@@ -33,6 +31,8 @@ import org.opengis.filter.Filter;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.Multimap;
 
 /**
  * Captures changes made to a FeatureStore prior to being committed.

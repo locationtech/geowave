@@ -103,7 +103,7 @@ public class HBaseWriter implements RowWriter {
         while (System.currentTimeMillis() <= lastFlush) {
           try {
             Thread.sleep(10);
-          } catch (InterruptedException e) {
+          } catch (final InterruptedException e) {
             LOGGER.warn("Unable to wait for new time", e);
           }
         }

@@ -38,7 +38,7 @@ public class SingleItemClusterList extends DBScanClusterList implements Cluster 
       final NeighborListFactory<ClusterItem> factory,
       final Map<ByteArray, Cluster> index) {
     super(
-        center.getGeometry() instanceof Point || center.isCompressed() ? center.getGeometry()
+        (center.getGeometry() instanceof Point) || center.isCompressed() ? center.getGeometry()
             : null,
         (int) center.getCount(),
         centerId,
@@ -53,9 +53,10 @@ public class SingleItemClusterList extends DBScanClusterList implements Cluster 
     }
   }
 
-  protected Set<Coordinate> getClusterPoints(boolean allowUpdates) {
-    if (clusterPoints == null || clusterPoints == Collections.<Coordinate>emptySet())
-      clusterPoints = allowUpdates ? new HashSet<Coordinate>() : Collections.<Coordinate>emptySet();
+  protected Set<Coordinate> getClusterPoints(final boolean allowUpdates) {
+    if ((clusterPoints == null) || (clusterPoints == Collections.<Coordinate>emptySet())) {
+      clusterPoints = allowUpdates ? new HashSet<>() : Collections.<Coordinate>emptySet();
+    }
     return clusterPoints;
   }
 
@@ -77,10 +78,10 @@ public class SingleItemClusterList extends DBScanClusterList implements Cluster 
     final Coordinate centerCoordinate =
         context.getItem1() == newInstance ? context.getPoint2() : context.getPoint1();
 
-    Geometry thisGeo = getGeometry();
+    final Geometry thisGeo = getGeometry();
     // only need to cluster this new point if it is likely top be an
     // inter-segment point
-    if (thisGeo == null || !(thisGeo instanceof Point)) {
+    if ((thisGeo == null) || !(thisGeo instanceof Point)) {
       checkForCompress = getClusterPoints(true).add(centerCoordinate);
     }
 
@@ -92,15 +93,17 @@ public class SingleItemClusterList extends DBScanClusterList implements Cluster 
       checkForCompress = getClusterPoints(true).add(newInstanceCoordinate);
     }
 
-    if (checkForCompress)
+    if (checkForCompress) {
       checkForCompression();
+    }
     return 1;
   }
 
   @Override
-  public void merge(Cluster cluster) {
-    if (this == cluster)
+  public void merge(final Cluster cluster) {
+    if (this == cluster) {
       return;
+    }
 
     final SingleItemClusterList singleItemCluster = ((SingleItemClusterList) cluster);
 
@@ -110,7 +113,7 @@ public class SingleItemClusterList extends DBScanClusterList implements Cluster 
       getClusterPoints(true).addAll(Arrays.asList(singleItemCluster.clusterGeo.getCoordinates()));
     }
 
-    Set<Coordinate> otherPoints = singleItemCluster.getClusterPoints(false);
+    final Set<Coordinate> otherPoints = singleItemCluster.getClusterPoints(false);
     if (otherPoints.size() > 0) {
       // handle any remaining points
       getClusterPoints(true).addAll(otherPoints);
@@ -119,10 +122,12 @@ public class SingleItemClusterList extends DBScanClusterList implements Cluster 
     checkForCompression();
   }
 
+  @Override
   public boolean isCompressed() {
     return compressed;
   }
 
+  @Override
   public void finish() {
     super.finish();
     compressAndUpdate();
@@ -140,6 +145,7 @@ public class SingleItemClusterList extends DBScanClusterList implements Cluster 
     compressed = true;
   }
 
+  @Override
   protected Geometry compress() {
     if (getClusterPoints(false).size() > 0) {
       return DBScanClusterList.getHullTool().createHullFromGeometry(
@@ -158,6 +164,7 @@ public class SingleItemClusterList extends DBScanClusterList implements Cluster 
       this.index = index;
     }
 
+    @Override
     public NeighborList<ClusterItem> buildNeighborList(
         final ByteArray centerId,
         final ClusterItem center) {

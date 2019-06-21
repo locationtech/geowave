@@ -8,12 +8,12 @@
  */
 package org.locationtech.geowave.format.landsat8;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.converters.IntegerConverter;
 import org.locationtech.geowave.adapter.vector.ingest.CQLFilterOptionProvider.ConvertCQLStrToFilterConverter;
 import org.locationtech.geowave.adapter.vector.ingest.CQLFilterOptionProvider.FilterParameter;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.opengis.filter.Filter;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.converters.IntegerConverter;
 
 public class Landsat8BasicCommandLineOptions {
   private static final String DEFAULT_WORKSPACE_DIR = "landsat8";
@@ -91,31 +91,31 @@ public class Landsat8BasicCommandLineOptions {
     return nBestBands;
   }
 
-  public void setWorkspaceDir(String workspaceDir) {
+  public void setWorkspaceDir(final String workspaceDir) {
     this.workspaceDir = workspaceDir;
   }
 
-  public void setCqlFilter(String cqlFilter) {
+  public void setCqlFilter(final String cqlFilter) {
     this.cqlFilter = new ConvertCQLStrToFilterConverter().convert(cqlFilter);
   }
 
-  public void setOnlyScenesSinceLastRun(boolean onlyScenesSinceLastRun) {
+  public void setOnlyScenesSinceLastRun(final boolean onlyScenesSinceLastRun) {
     this.onlyScenesSinceLastRun = onlyScenesSinceLastRun;
   }
 
-  public void setUseCachedScenes(boolean useCachedScenes) {
+  public void setUseCachedScenes(final boolean useCachedScenes) {
     this.useCachedScenes = useCachedScenes;
   }
 
-  public void setNBestScenes(int nBestScenes) {
+  public void setNBestScenes(final int nBestScenes) {
     this.nBestScenes = nBestScenes;
   }
 
-  public void setNBestBands(int nBestBands) {
+  public void setNBestBands(final int nBestBands) {
     this.nBestBands = nBestBands;
   }
 
-  public void setNBestPerSpatial(boolean nBestPerSpatial) {
+  public void setNBestPerSpatial(final boolean nBestPerSpatial) {
     this.nBestPerSpatial = nBestPerSpatial;
   }
 }

@@ -8,16 +8,16 @@
  */
 package org.locationtech.geowave.cli.geoserver;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "rmcv", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Remove a GeoServer coverage")
@@ -55,7 +55,7 @@ public class GeoServerRemoveCoverageCommand extends GeoServerRemoveCommand<Strin
     if (getCvgResponse.getStatus() == Status.OK.getStatusCode()) {
       return "\nRemove GeoServer coverage '" + cvgName + "': OK";
     }
-    String errorMessage =
+    final String errorMessage =
         "Error removing GeoServer coverage '"
             + cvgName
             + "': "

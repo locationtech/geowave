@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.datastore.accumulo.operations;
 
-import com.google.common.base.Throwables;
-import com.google.common.collect.Lists;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -31,6 +29,8 @@ import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.operations.SimpleParallelDecoder;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.datastore.accumulo.AccumuloRow;
+import com.google.common.base.Throwables;
+import com.google.common.collect.Lists;
 
 public class AccumuloReader<T> implements RowReader<T> {
   private static final Logger LOGGER = Logger.getLogger(AccumuloReader.class);
@@ -50,7 +50,7 @@ public class AccumuloReader<T> implements RowReader<T> {
       final int partitionKeyLength,
       final boolean wholeRowEncoding,
       final boolean clientSideRowMerging,
-      boolean parallel) {
+      final boolean parallel) {
     this.scanner = scanner;
     this.partitionKeyLength = partitionKeyLength;
     this.wholeRowEncoding = wholeRowEncoding;
@@ -58,10 +58,10 @@ public class AccumuloReader<T> implements RowReader<T> {
 
     if (parallel) {
       this.parallelDecoder =
-          new SimpleParallelDecoder<T>(transformer, getIterator(clientSideRowMerging));
+          new SimpleParallelDecoder<>(transformer, getIterator(clientSideRowMerging));
       try {
         this.parallelDecoder.startDecode();
-      } catch (Exception e) {
+      } catch (final Exception e) {
         Throwables.propagate(e);
       }
 
@@ -71,11 +71,11 @@ public class AccumuloReader<T> implements RowReader<T> {
     }
   }
 
-  private Iterator<GeoWaveRow> getIterator(boolean clientSideRowMerging) {
+  private Iterator<GeoWaveRow> getIterator(final boolean clientSideRowMerging) {
     if (clientSideRowMerging) {
-      return new MergingIterator<T>(this.baseIter, this);
+      return new MergingIterator<>(this.baseIter, this);
     } else {
-      return new NonMergingIterator<T>(this.baseIter, this);
+      return new NonMergingIterator<>(this.baseIter, this);
     }
   }
 
@@ -98,22 +98,24 @@ public class AccumuloReader<T> implements RowReader<T> {
   }
 
   private static class MergingIterator<T> implements Iterator<GeoWaveRow> {
-    private AccumuloReader<T> parent;
+    private final AccumuloReader<T> parent;
     private final Iterator<Entry<Key, Value>> baseIter;
 
-    public MergingIterator(Iterator<Entry<Key, Value>> baseIter, AccumuloReader<T> parent) {
+    public MergingIterator(
+        final Iterator<Entry<Key, Value>> baseIter,
+        final AccumuloReader<T> parent) {
       this.parent = parent;
       this.baseIter = baseIter;
     }
 
     @Override
     public boolean hasNext() {
-      return parent.peekedEntry != null || baseIter.hasNext();
+      return (parent.peekedEntry != null) || baseIter.hasNext();
     }
 
     @Override
     public GeoWaveRow next() {
-      if (parent.peekedEntry == null && !baseIter.hasNext()) {
+      if ((parent.peekedEntry == null) && !baseIter.hasNext()) {
         throw new NoSuchElementException();
       }
       return parent.mergingNext();
@@ -124,7 +126,9 @@ public class AccumuloReader<T> implements RowReader<T> {
     private final AccumuloReader<T> parent;
     private final Iterator<Entry<Key, Value>> baseIter;
 
-    public NonMergingIterator(Iterator<Entry<Key, Value>> baseIter, AccumuloReader<T> parent) {
+    public NonMergingIterator(
+        final Iterator<Entry<Key, Value>> baseIter,
+        final AccumuloReader<T> parent) {
       this.parent = parent;
       this.baseIter = baseIter;
     }
@@ -159,7 +163,7 @@ public class AccumuloReader<T> implements RowReader<T> {
     }
     peekedEntry = null;
 
-    List<Map<Key, Value>> fieldValueMapList = Lists.newLinkedList();
+    final List<Map<Key, Value>> fieldValueMapList = Lists.newLinkedList();
     fieldValueMapList.add(entryToRowMapping(nextEntry));
 
     // (for client-side merge only) Peek ahead to see if it needs to be
@@ -185,9 +189,9 @@ public class AccumuloReader<T> implements RowReader<T> {
   }
 
   private GeoWaveRow internalNext() {
-    Entry<Key, Value> nextEntry = baseIter.next();
+    final Entry<Key, Value> nextEntry = baseIter.next();
 
-    List<Map<Key, Value>> fieldValueMapList = Lists.newLinkedList();
+    final List<Map<Key, Value>> fieldValueMapList = Lists.newLinkedList();
     fieldValueMapList.add(entryToRowMapping(nextEntry));
 
     return new AccumuloRow(
@@ -197,17 +201,19 @@ public class AccumuloReader<T> implements RowReader<T> {
         false);
   }
 
-  private boolean entryRowIdsMatch(Entry<Key, Value> nextEntry, Entry<Key, Value> peekedEntry) {
-    GeoWaveKey nextKey =
+  private boolean entryRowIdsMatch(
+      final Entry<Key, Value> nextEntry,
+      final Entry<Key, Value> peekedEntry) {
+    final GeoWaveKey nextKey =
         new GeoWaveKeyImpl(nextEntry.getKey().getRow().copyBytes(), partitionKeyLength);
 
-    GeoWaveKey peekedKey =
+    final GeoWaveKey peekedKey =
         new GeoWaveKeyImpl(peekedEntry.getKey().getRow().copyBytes(), partitionKeyLength);
 
     return DataStoreUtils.rowIdsMatch(nextKey, peekedKey);
   }
 
-  private Map<Key, Value> entryToRowMapping(Entry<Key, Value> entry) {
+  private Map<Key, Value> entryToRowMapping(final Entry<Key, Value> entry) {
     Map<Key, Value> rowMapping;
 
     if (wholeRowEncoding) {
@@ -220,7 +226,7 @@ public class AccumuloReader<T> implements RowReader<T> {
         return null;
       }
     } else {
-      rowMapping = new HashMap<Key, Value>();
+      rowMapping = new HashMap<>();
       rowMapping.put(entry.getKey(), entry.getValue());
     }
 

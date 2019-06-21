@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.analytic.mapreduce.operations.options;
 
-import com.beust.jcommander.Parameter;
 import org.locationtech.geowave.analytic.param.ClusteringParameters;
 import org.locationtech.geowave.analytic.param.GlobalParameters;
 import org.locationtech.geowave.analytic.param.HullParameters;
@@ -19,6 +18,7 @@ import org.locationtech.geowave.analytic.param.annotations.GlobalParameter;
 import org.locationtech.geowave.analytic.param.annotations.HullParameter;
 import org.locationtech.geowave.analytic.param.annotations.OutputParameter;
 import org.locationtech.geowave.analytic.param.annotations.PartitionParameter;
+import com.beust.jcommander.Parameter;
 
 public class DBScanOptions {
   @OutputParameter(OutputParameters.Output.HDFS_OUTPUT_PATH)
@@ -122,23 +122,23 @@ public class DBScanOptions {
     return partitioningDistanceThresholds;
   }
 
-  public void setPartitioningDistanceThresholds(String clusteringDistanceThresholds) {
-    this.partitioningDistanceThresholds = clusteringDistanceThresholds;
+  public void setPartitioningDistanceThresholds(final String clusteringDistanceThresholds) {
+    partitioningDistanceThresholds = clusteringDistanceThresholds;
   }
 
   public String getPartitioningGeometricDistanceUnit() {
     return partitioningGeometricDistanceUnit;
   }
 
-  public void setPartitioningGeometricDistanceUnit(String clusteringGeometricDistanceUnit) {
-    this.partitioningGeometricDistanceUnit = clusteringGeometricDistanceUnit;
+  public void setPartitioningGeometricDistanceUnit(final String clusteringGeometricDistanceUnit) {
+    partitioningGeometricDistanceUnit = clusteringGeometricDistanceUnit;
   }
 
   public String getClusteringMaxIterations() {
     return clusteringMaxIterations;
   }
 
-  public void setClusteringMaxIterations(String clusteringMaxIterations) {
+  public void setClusteringMaxIterations(final String clusteringMaxIterations) {
     this.clusteringMaxIterations = clusteringMaxIterations;
   }
 
@@ -146,7 +146,7 @@ public class DBScanOptions {
     return clusteringMinimumSize;
   }
 
-  public void setClusteringMinimumSize(String clusteringMinimumSize) {
+  public void setClusteringMinimumSize(final String clusteringMinimumSize) {
     this.clusteringMinimumSize = clusteringMinimumSize;
   }
 
@@ -154,7 +154,7 @@ public class DBScanOptions {
     return globalBatchId;
   }
 
-  public void setGlobalBatchId(String globalBatchId) {
+  public void setGlobalBatchId(final String globalBatchId) {
     this.globalBatchId = globalBatchId;
   }
 
@@ -162,7 +162,7 @@ public class DBScanOptions {
     return hullDataTypeId;
   }
 
-  public void setHullDataTypeId(String hullDataTypeId) {
+  public void setHullDataTypeId(final String hullDataTypeId) {
     this.hullDataTypeId = hullDataTypeId;
   }
 
@@ -170,7 +170,7 @@ public class DBScanOptions {
     return hullProjectionClass;
   }
 
-  public void setHullProjectionClass(String hullProjectionClass) {
+  public void setHullProjectionClass(final String hullProjectionClass) {
     this.hullProjectionClass = hullProjectionClass;
   }
 
@@ -178,7 +178,7 @@ public class DBScanOptions {
     return outputDataNamespaceUri;
   }
 
-  public void setOutputDataNamespaceUri(String outputDataNamespaceUri) {
+  public void setOutputDataNamespaceUri(final String outputDataNamespaceUri) {
     this.outputDataNamespaceUri = outputDataNamespaceUri;
   }
 
@@ -186,7 +186,7 @@ public class DBScanOptions {
     return outputDataTypeId;
   }
 
-  public void setOutputDataTypeId(String outputDataTypeId) {
+  public void setOutputDataTypeId(final String outputDataTypeId) {
     this.outputDataTypeId = outputDataTypeId;
   }
 
@@ -194,7 +194,7 @@ public class DBScanOptions {
     return outputIndexId;
   }
 
-  public void setOutputIndexId(String outputIndexId) {
+  public void setOutputIndexId(final String outputIndexId) {
     this.outputIndexId = outputIndexId;
   }
 
@@ -202,7 +202,7 @@ public class DBScanOptions {
     return partitionMaxMemberSelection;
   }
 
-  public void setPartitionMaxMemberSelection(String partitionMaxMemberSelection) {
+  public void setPartitionMaxMemberSelection(final String partitionMaxMemberSelection) {
     this.partitionMaxMemberSelection = partitionMaxMemberSelection;
   }
 
@@ -210,7 +210,7 @@ public class DBScanOptions {
     return partitionPartitionerClass;
   }
 
-  public void setPartitionPartitionerClass(String partitionPartitionerClass) {
+  public void setPartitionPartitionerClass(final String partitionPartitionerClass) {
     this.partitionPartitionerClass = partitionPartitionerClass;
   }
 
@@ -218,7 +218,7 @@ public class DBScanOptions {
     return partitionPartitionDecreaseRate;
   }
 
-  public void setPartitionPartitionDecreaseRate(String partitionPartitionDecreaseRate) {
+  public void setPartitionPartitionDecreaseRate(final String partitionPartitionDecreaseRate) {
     this.partitionPartitionDecreaseRate = partitionPartitionDecreaseRate;
   }
 
@@ -226,7 +226,7 @@ public class DBScanOptions {
     return partitionMaxDistance;
   }
 
-  public void setPartitionMaxDistance(String partitionMaxDistance) {
+  public void setPartitionMaxDistance(final String partitionMaxDistance) {
     this.partitionMaxDistance = partitionMaxDistance;
   }
 
@@ -234,7 +234,7 @@ public class DBScanOptions {
     return partitionPartitionPrecision;
   }
 
-  public void setPartitionPartitionPrecision(String partitionPartitionPrecision) {
+  public void setPartitionPartitionPrecision(final String partitionPartitionPrecision) {
     this.partitionPartitionPrecision = partitionPartitionPrecision;
   }
 
@@ -242,7 +242,8 @@ public class DBScanOptions {
     return partitionSecondaryPartitionerClass;
   }
 
-  public void setPartitionSecondaryPartitionerClass(String partitionSecondaryPartitionerClass) {
+  public void setPartitionSecondaryPartitionerClass(
+      final String partitionSecondaryPartitionerClass) {
     this.partitionSecondaryPartitionerClass = partitionSecondaryPartitionerClass;
   }
 
@@ -250,7 +251,7 @@ public class DBScanOptions {
     return outputHdfsOutputPath;
   }
 
-  public void setOutputHdfsOutputPath(String outputHdfsOutputPath) {
+  public void setOutputHdfsOutputPath(final String outputHdfsOutputPath) {
     this.outputHdfsOutputPath = outputHdfsOutputPath;
   }
 }

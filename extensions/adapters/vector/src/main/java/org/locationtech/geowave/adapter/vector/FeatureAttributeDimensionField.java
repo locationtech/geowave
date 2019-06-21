@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
@@ -10,6 +10,7 @@ package org.locationtech.geowave.adapter.vector;
 
 import java.nio.ByteBuffer;
 import org.apache.commons.lang3.Range;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.dimension.BasicDimensionDefinition;
@@ -95,13 +96,12 @@ public class FeatureAttributeDimensionField extends
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     final int attrNameLength = VarintUtils.readUnsignedInt(buf);
-    final byte[] strBytes = new byte[attrNameLength];
-    buf.get(strBytes);
+    final byte[] strBytes = ByteArrayUtils.safeRead(buf, attrNameLength);
     attributeName = StringUtils.stringFromBinary(strBytes);
-    final byte[] rest =
-        new byte[bytes.length - VarintUtils.unsignedIntByteLength(attrNameLength) - attrNameLength];
-    if (rest.length > 0) {
-      buf.get(rest);
+    final int restLength =
+        bytes.length - VarintUtils.unsignedIntByteLength(attrNameLength) - attrNameLength;
+    if (restLength > 0) {
+      final byte[] rest = ByteArrayUtils.safeRead(buf, restLength);
       baseDefinition = new BasicDimensionDefinition();
       baseDefinition.fromBinary(rest);
     } else {

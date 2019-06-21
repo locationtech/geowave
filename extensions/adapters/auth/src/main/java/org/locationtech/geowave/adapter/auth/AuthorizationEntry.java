@@ -19,7 +19,7 @@ public class AuthorizationEntry {
     return userName;
   }
 
-  protected void setUserName(String userName) {
+  protected void setUserName(final String userName) {
     this.userName = userName;
   }
 
@@ -27,7 +27,7 @@ public class AuthorizationEntry {
     return authorizations;
   }
 
-  protected void setAuthorizations(List<String> authorizations) {
+  protected void setAuthorizations(final List<String> authorizations) {
     this.authorizations = authorizations;
   }
 }

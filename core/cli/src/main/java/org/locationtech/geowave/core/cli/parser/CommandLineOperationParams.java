@@ -16,8 +16,8 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.prefix.PrefixedJCommander;
 
 public class CommandLineOperationParams implements OperationParams {
-  private final Map<String, Object> context = new HashMap<String, Object>();
-  private final Map<String, Operation> operationMap = new LinkedHashMap<String, Operation>();
+  private final Map<String, Object> context = new HashMap<>();
+  private final Map<String, Operation> operationMap = new LinkedHashMap<>();
   private final String[] args;
   private PrefixedJCommander commander;
   private boolean validate = true;
@@ -27,12 +27,12 @@ public class CommandLineOperationParams implements OperationParams {
   private String successMessage;
   private Throwable successException;
 
-  public CommandLineOperationParams(String[] args) {
+  public CommandLineOperationParams(final String[] args) {
     this.args = args;
   }
 
   public String[] getArgs() {
-    return this.args;
+    return args;
   }
 
   /** Implement parent interface to retrieve operations */
@@ -43,18 +43,18 @@ public class CommandLineOperationParams implements OperationParams {
 
   @Override
   public Map<String, Object> getContext() {
-    return this.context;
+    return context;
   }
 
   public PrefixedJCommander getCommander() {
-    return this.commander;
+    return commander;
   }
 
-  public void setValidate(boolean validate) {
+  public void setValidate(final boolean validate) {
     this.validate = validate;
   }
 
-  public void setAllowUnknown(boolean allowUnknown) {
+  public void setAllowUnknown(final boolean allowUnknown) {
     this.allowUnknown = allowUnknown;
   }
 
@@ -63,16 +63,16 @@ public class CommandLineOperationParams implements OperationParams {
   }
 
   public boolean isAllowUnknown() {
-    return this.allowUnknown;
+    return allowUnknown;
   }
 
-  public void setCommander(PrefixedJCommander commander) {
+  public void setCommander(final PrefixedJCommander commander) {
     this.commander = commander;
   }
 
-  public void addOperation(String name, Operation operation, boolean isCommand) {
+  public void addOperation(final String name, final Operation operation, final boolean isCommand) {
     commandPresent |= isCommand;
-    this.operationMap.put(name, operation);
+    operationMap.put(name, operation);
   }
 
   public boolean isCommandPresent() {
@@ -83,7 +83,7 @@ public class CommandLineOperationParams implements OperationParams {
     return successCode;
   }
 
-  public void setSuccessCode(int successCode) {
+  public void setSuccessCode(final int successCode) {
     this.successCode = successCode;
   }
 
@@ -91,7 +91,7 @@ public class CommandLineOperationParams implements OperationParams {
     return successMessage;
   }
 
-  public void setSuccessMessage(String successMessage) {
+  public void setSuccessMessage(final String successMessage) {
     this.successMessage = successMessage;
   }
 
@@ -99,7 +99,7 @@ public class CommandLineOperationParams implements OperationParams {
     return successException;
   }
 
-  public void setSuccessException(Throwable successException) {
+  public void setSuccessException(final Throwable successException) {
     this.successException = successException;
   }
 }

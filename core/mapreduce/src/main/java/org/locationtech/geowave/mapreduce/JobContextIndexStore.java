@@ -78,7 +78,7 @@ public class JobContextIndexStore implements IndexStore {
   }
 
   @Override
-  public void removeIndex(String indexName) {
+  public void removeIndex(final String indexName) {
     indexCache.remove(indexName);
   }
 

@@ -23,6 +23,6 @@ public class GeoWaveQueryCaps extends QueryCapabilities {
     // argument is empty or null
     // returning false fails the operation, disabling any capability of
     // writing.
-    return sortAttributes == null || sortAttributes.length == 0;
+    return (sortAttributes == null) || (sortAttributes.length == 0);
   }
 }

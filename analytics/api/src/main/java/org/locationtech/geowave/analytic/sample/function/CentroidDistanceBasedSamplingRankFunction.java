@@ -65,7 +65,7 @@ public class CentroidDistanceBasedSamplingRankFunction<T> implements SamplingRan
 
   private SampleProbabilityFn sampleProbabilityFn;
   private NestedGroupCentroidAssignment<T> nestedGroupCentroidAssigner;
-  private final Map<String, Double> groupToConstant = new HashMap<String, Double>();
+  private final Map<String, Double> groupToConstant = new HashMap<>();
   protected AnalyticItemWrapperFactory<T> itemWrapperFactory;;
 
   public static void setParameters(
@@ -111,7 +111,7 @@ public class CentroidDistanceBasedSamplingRankFunction<T> implements SamplingRan
     }
 
     try {
-      nestedGroupCentroidAssigner = new NestedGroupCentroidAssignment<T>(context, scope, logger);
+      nestedGroupCentroidAssigner = new NestedGroupCentroidAssignment<>(context, scope, logger);
     } catch (final Exception e1) {
       throw new IOException(e1);
     }
@@ -121,7 +121,7 @@ public class CentroidDistanceBasedSamplingRankFunction<T> implements SamplingRan
   @Override
   public double rank(final int sampleSize, final T value) {
     final AnalyticItemWrapper<T> item = itemWrapperFactory.create(value);
-    final List<AnalyticItemWrapper<T>> centroids = new ArrayList<AnalyticItemWrapper<T>>();
+    final List<AnalyticItemWrapper<T>> centroids = new ArrayList<>();
     double weight;
     try {
       weight =

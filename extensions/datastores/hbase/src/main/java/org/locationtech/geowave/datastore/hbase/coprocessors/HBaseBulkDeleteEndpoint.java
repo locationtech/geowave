@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.datastore.hbase.coprocessors;
 
-import com.google.protobuf.RpcCallback;
-import com.google.protobuf.RpcController;
-import com.google.protobuf.Service;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -46,6 +43,9 @@ import org.locationtech.geowave.datastore.hbase.coprocessors.protobuf.HBaseBulkD
 import org.locationtech.geowave.datastore.hbase.coprocessors.protobuf.HBaseBulkDeleteProtosServer.BulkDeleteService;
 import org.locationtech.geowave.datastore.hbase.filters.HBaseDistributableFilter;
 import org.locationtech.geowave.datastore.hbase.filters.HBaseNumericIndexStrategyFilter;
+import com.google.protobuf.RpcCallback;
+import com.google.protobuf.RpcController;
+import com.google.protobuf.Service;
 
 public class HBaseBulkDeleteEndpoint extends BulkDeleteService implements
     CoprocessorService,
@@ -139,7 +139,7 @@ public class HBaseBulkDeleteEndpoint extends BulkDeleteService implements
       final ByteBuffer buf = ByteBuffer.wrap(request.getAdapterIds().toByteArray());
       adapterIds.clear();
       while (buf.hasRemaining()) {
-        short adapterId = buf.getShort();
+        final short adapterId = buf.getShort();
         adapterIds.add(StringUtils.stringToBinary(ByteArrayUtils.shortToString(adapterId)));
       }
     }

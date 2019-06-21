@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.datastore.hbase.server;
 
-import com.google.common.base.Function;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Sets;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -33,6 +29,10 @@ import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
+import com.google.common.base.Function;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
 
 public class MergingServerOp implements HBaseServerOp {
   public static Object MUTEX = new Object();

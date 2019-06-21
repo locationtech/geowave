@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.cli.prefix;
 
-import com.beust.jcommander.Parameterized;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -18,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import org.locationtech.geowave.core.cli.annotations.PrefixParameter;
+import com.beust.jcommander.Parameterized;
 
 /**
  * This class will take a collection of objects with JCommander annotations and create a transformed
@@ -28,7 +28,7 @@ import org.locationtech.geowave.core.cli.annotations.PrefixParameter;
  */
 public class JCommanderPrefixTranslator {
 
-  private final Queue<ParseContext> queue = new LinkedList<ParseContext>();
+  private final Queue<ParseContext> queue = new LinkedList<>();
 
   // These will be used to access the "field" or "method" attribute within
   // Parameterized,
@@ -48,7 +48,7 @@ public class JCommanderPrefixTranslator {
 
       paraMethod = Parameterized.class.getDeclaredField("m_method");
       paraMethod.setAccessible(true);
-    } catch (NoSuchFieldException e) {
+    } catch (final NoSuchFieldException e) {
       // This is a programmer error, and will only happen if another
       // version
       // of JCommander is being used.
@@ -56,37 +56,37 @@ public class JCommanderPrefixTranslator {
     }
   }
 
-  public void addObject(Object object) {
-    ParseContext pc = new ParseContext("", object);
+  public void addObject(final Object object) {
+    final ParseContext pc = new ParseContext("", object);
     queue.add(pc);
   }
 
   public JCommanderTranslationMap translate() {
 
     // This map will hold the final translations
-    JCommanderTranslationMap transMap = new JCommanderTranslationMap();
+    final JCommanderTranslationMap transMap = new JCommanderTranslationMap();
 
     try {
 
       while (queue.size() > 0) {
-        ParseContext pc = queue.remove();
-        Object item = pc.getObject();
+        final ParseContext pc = queue.remove();
+        final Object item = pc.getObject();
 
         // This is the JCommander class used to parse the object
         // hierarchy for
         // Parameter annotations. They kept it public ... so I used it.
         // Otherwise,
         // I'd have to parse all the annotations myself.
-        List<Parameterized> params = Parameterized.parseArg(item);
+        final List<Parameterized> params = Parameterized.parseArg(item);
 
         // Iterate over the parameters, copying the method or field
         // parameters
         // into new parameters in 'newClass', ensuring that we maintain
         // annotations.
-        for (Parameterized param : params) {
-          Field f = (Field) paraField.get(param);
-          Method m = (Method) paraMethod.get(param);
-          AnnotatedElement annotatedElement = f != null ? f : m;
+        for (final Parameterized param : params) {
+          final Field f = (Field) paraField.get(param);
+          final Method m = (Method) paraMethod.get(param);
+          final AnnotatedElement annotatedElement = f != null ? f : m;
 
           // If this is a delegate, then process prefix parameter, add
           // the item
@@ -96,12 +96,13 @@ public class JCommanderPrefixTranslator {
             // JCommander only cares about non null fields when
             // processing
             // ParametersDelegate.
-            Object delegateItem = param.get(item);
+            final Object delegateItem = param.get(item);
             if (delegateItem != null) {
 
               // Prefix parameter only matters for
               // ParametersDelegate.
-              PrefixParameter prefixParam = annotatedElement.getAnnotation(PrefixParameter.class);
+              final PrefixParameter prefixParam =
+                  annotatedElement.getAnnotation(PrefixParameter.class);
               String newPrefix = pc.getPrefix();
               if (prefixParam != null) {
                 if (!newPrefix.equals("")) {
@@ -113,31 +114,31 @@ public class JCommanderPrefixTranslator {
               // Is this a list type? If so then process each
               // object independently.
               if (delegateItem instanceof Collection) {
-                Collection<?> coll = (Collection<?>) delegateItem;
-                for (Object collItem : coll) {
-                  ParseContext newPc = new ParseContext(newPrefix, collItem);
+                final Collection<?> coll = (Collection<?>) delegateItem;
+                for (final Object collItem : coll) {
+                  final ParseContext newPc = new ParseContext(newPrefix, collItem);
                   queue.add(newPc);
                 }
               }
               // For maps, use the key as an additional prefix
               // specifier.
               else if (delegateItem instanceof Map) {
-                Map<?, ?> mapp = (Map<?, ?>) delegateItem;
-                for (Map.Entry<?, ?> entry : mapp.entrySet()) {
-                  String prefix = entry.getKey().toString();
-                  Object mapItem = entry.getValue();
+                final Map<?, ?> mapp = (Map<?, ?>) delegateItem;
+                for (final Map.Entry<?, ?> entry : mapp.entrySet()) {
+                  final String prefix = entry.getKey().toString();
+                  final Object mapItem = entry.getValue();
                   String convertedPrefix = newPrefix;
                   if (!convertedPrefix.equals("")) {
                     convertedPrefix += JCommanderTranslationMap.PREFIX_SEPARATOR;
                   }
                   convertedPrefix += prefix;
-                  ParseContext newPc = new ParseContext(convertedPrefix, mapItem);
+                  final ParseContext newPc = new ParseContext(convertedPrefix, mapItem);
                   queue.add(newPc);
                 }
               }
               // Normal params delegate.
               else {
-                ParseContext newPc = new ParseContext(newPrefix, delegateItem);
+                final ParseContext newPc = new ParseContext(newPrefix, delegateItem);
                 queue.add(newPc);
               }
             }
@@ -152,7 +153,7 @@ public class JCommanderPrefixTranslator {
             // Rename the field so there are no conflicts. Name
             // really doesn't matter,
             // but it's used for translation in transMap.
-            String newFieldName = JavassistUtils.getNextUniqueFieldName();
+            final String newFieldName = JavassistUtils.getNextUniqueFieldName();
 
             // Now add an entry to the translation map.
             transMap.addEntry(newFieldName, item, param, pc.getPrefix(), annotatedElement);
@@ -160,7 +161,7 @@ public class JCommanderPrefixTranslator {
         } // Iterate Parameterized
       } // Iterate Queue
       return transMap;
-    } catch (IllegalAccessException e) {
+    } catch (final IllegalAccessException e) {
       // This should never happen, but if it does, then it's a programmer
       // error.
       throw new RuntimeException(e);
@@ -175,7 +176,7 @@ public class JCommanderPrefixTranslator {
     private final String prefix;
     private final Object object;
 
-    public ParseContext(String prefix, Object object) {
+    public ParseContext(final String prefix, final Object object) {
       this.prefix = prefix;
       this.object = object;
     }

@@ -40,7 +40,7 @@ public class ClassificationCredibility {
 
   public ClassificationCredibility() {}
 
-  public ClassificationCredibility(Integer valueConfidence, Integer sourceReliability) {
+  public ClassificationCredibility(final Integer valueConfidence, final Integer sourceReliability) {
     this.valueConfidence = valueConfidence;
     this.sourceReliability = sourceReliability;
   }
@@ -49,7 +49,7 @@ public class ClassificationCredibility {
     return valueConfidence;
   }
 
-  public void setValueConfidence(Integer valueConfidence) {
+  public void setValueConfidence(final Integer valueConfidence) {
     this.valueConfidence = valueConfidence;
   }
 
@@ -57,7 +57,7 @@ public class ClassificationCredibility {
     return sourceReliability;
   }
 
-  public void setSourceReliability(Integer sourceReliability) {
+  public void setSourceReliability(final Integer sourceReliability) {
     this.sourceReliability = sourceReliability;
   }
 }

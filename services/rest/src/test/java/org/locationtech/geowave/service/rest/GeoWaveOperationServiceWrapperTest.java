@@ -16,6 +16,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand.HttpMethod;
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.restlet.Request;
 import org.restlet.Response;
@@ -28,28 +29,29 @@ public class GeoWaveOperationServiceWrapperTest {
 
   private GeoWaveOperationServiceWrapper classUnderTest;
 
-  private ServiceEnabledCommand mockedOperation(HttpMethod method, Boolean successStatusIs200)
-      throws Exception {
+  private ServiceEnabledCommand mockedOperation(
+      final HttpMethod method,
+      final Boolean successStatusIs200) throws Exception {
     return mockedOperation(method, successStatusIs200, false);
   }
 
   private ServiceEnabledCommand mockedOperation(
-      HttpMethod method,
-      Boolean successStatusIs200,
-      boolean isAsync) throws Exception {
-    ServiceEnabledCommand operation = Mockito.mock(ServiceEnabledCommand.class);
+      final HttpMethod method,
+      final Boolean successStatusIs200,
+      final boolean isAsync) throws Exception {
+    final ServiceEnabledCommand operation = Mockito.mock(ServiceEnabledCommand.class);
 
     Mockito.when(operation.getMethod()).thenReturn(method);
     Mockito.when(operation.runAsync()).thenReturn(isAsync);
     Mockito.when(operation.successStatusIs200()).thenReturn(successStatusIs200);
-    Mockito.when(operation.computeResults(Mockito.any())).thenReturn(null);
+    Mockito.when(operation.computeResults(Matchers.any())).thenReturn(null);
 
     return operation;
   }
 
-  private Representation mockedRequest(MediaType mediaType) throws IOException {
+  private Representation mockedRequest(final MediaType mediaType) throws IOException {
 
-    Representation request = Mockito.mock(Representation.class);
+    final Representation request = Mockito.mock(Representation.class);
 
     Mockito.when(request.getMediaType()).thenReturn(mediaType);
     Mockito.when(request.getText()).thenReturn("{}");
@@ -67,9 +69,9 @@ public class GeoWaveOperationServiceWrapperTest {
   public void getMethodReturnsSuccessStatus() throws Exception {
 
     // Rarely used Teapot Code to check.
-    Boolean successStatusIs200 = true;
+    final Boolean successStatusIs200 = true;
 
-    ServiceEnabledCommand operation = mockedOperation(HttpMethod.GET, successStatusIs200);
+    final ServiceEnabledCommand operation = mockedOperation(HttpMethod.GET, successStatusIs200);
 
     classUnderTest = new GeoWaveOperationServiceWrapper(operation, null);
     classUnderTest.setResponse(new Response(null));
@@ -84,9 +86,9 @@ public class GeoWaveOperationServiceWrapperTest {
   public void postMethodReturnsSuccessStatus() throws Exception {
 
     // Rarely used Teapot Code to check.
-    Boolean successStatusIs200 = false;
+    final Boolean successStatusIs200 = false;
 
-    ServiceEnabledCommand operation = mockedOperation(HttpMethod.POST, successStatusIs200);
+    final ServiceEnabledCommand operation = mockedOperation(HttpMethod.POST, successStatusIs200);
 
     classUnderTest = new GeoWaveOperationServiceWrapper(operation, null);
     classUnderTest.setResponse(new Response(null));
@@ -101,9 +103,10 @@ public class GeoWaveOperationServiceWrapperTest {
   public void asyncMethodReturnsSuccessStatus() throws Exception {
 
     // Rarely used Teapot Code to check.
-    Boolean successStatusIs200 = true;
+    final Boolean successStatusIs200 = true;
 
-    ServiceEnabledCommand operation = mockedOperation(HttpMethod.POST, successStatusIs200, true);
+    final ServiceEnabledCommand operation =
+        mockedOperation(HttpMethod.POST, successStatusIs200, true);
 
     classUnderTest = new GeoWaveOperationServiceWrapper(operation, null);
     classUnderTest.setResponse(new Response(null));

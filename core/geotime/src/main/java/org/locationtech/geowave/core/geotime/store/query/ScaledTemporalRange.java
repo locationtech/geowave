@@ -28,40 +28,40 @@ public class ScaledTemporalRange implements Serializable {
   private long timeRange = DEFAULT_TIME_RANGE;
   private double timeScale;
 
-  private Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+  private final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
 
   public ScaledTemporalRange() {
     updateTimeScale();
   }
 
-  public void setTimeRange(Date startTime, Date endTime) {
+  public void setTimeRange(final Date startTime, final Date endTime) {
     this.startTime = startTime;
     this.endTime = endTime;
 
     updateTimeScale();
   }
 
-  public void setTimeRange(long millis) {
-    this.timeRange = millis;
-    this.startTime = null;
-    this.endTime = null;
+  public void setTimeRange(final long millis) {
+    timeRange = millis;
+    startTime = null;
+    endTime = null;
 
     updateTimeScale();
   }
 
-  public void setValueRange(double minVal, double maxVal) {
+  public void setValueRange(final double minVal, final double maxVal) {
     this.minVal = minVal;
     this.maxVal = maxVal;
 
     updateTimeScale();
   }
 
-  public void setTimeScale(double timeScale) {
+  public void setTimeScale(final double timeScale) {
     this.timeScale = timeScale;
   }
 
   private void updateTimeScale() {
-    timeScale = (maxVal - minVal) / (double) getTimeRangeMillis();
+    timeScale = (maxVal - minVal) / getTimeRangeMillis();
   }
 
   public double getTimeScale() {
@@ -69,21 +69,21 @@ public class ScaledTemporalRange implements Serializable {
   }
 
   public long getTimeRangeMillis() {
-    if (startTime == null || endTime == null) {
+    if ((startTime == null) || (endTime == null)) {
       return timeRange;
     }
 
     return endTime.getTime() - startTime.getTime();
   }
 
-  public double timeToValue(Date time) {
-    long deltaTime = time.getTime() - getTimeMin();
+  public double timeToValue(final Date time) {
+    final long deltaTime = time.getTime() - getTimeMin();
 
-    return minVal + ((double) deltaTime * timeScale);
+    return minVal + (deltaTime * timeScale);
   }
 
-  public Date valueToTime(double timeVal) {
-    long timeMillis = (long) (timeVal / timeScale) + getTimeMin();
+  public Date valueToTime(final double timeVal) {
+    final long timeMillis = (long) (timeVal / timeScale) + getTimeMin();
     cal.setTimeInMillis(timeMillis);
 
     return cal.getTime();
@@ -101,7 +101,7 @@ public class ScaledTemporalRange implements Serializable {
     return startTime;
   }
 
-  public void setStartTime(Date startTime) {
+  public void setStartTime(final Date startTime) {
     this.startTime = startTime;
   }
 
@@ -109,7 +109,7 @@ public class ScaledTemporalRange implements Serializable {
     return endTime;
   }
 
-  public void setEndTime(Date endTime) {
+  public void setEndTime(final Date endTime) {
     this.endTime = endTime;
   }
 }

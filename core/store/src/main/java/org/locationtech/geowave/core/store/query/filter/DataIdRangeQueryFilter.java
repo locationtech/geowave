@@ -87,14 +87,12 @@ public class DataIdRangeQueryFilter implements QueryFilter {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     final byte nullIndicator = buf.get();
     if ((nullIndicator % 2) == 0) {
-      startDataIdInclusive = new byte[VarintUtils.readUnsignedInt(buf)];
-      buf.get(startDataIdInclusive);
+      startDataIdInclusive = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
     } else {
       startDataIdInclusive = null;
     }
     if (nullIndicator < 2) {
-      endDataIdInclusive = new byte[VarintUtils.readUnsignedInt(buf)];
-      buf.get(endDataIdInclusive);
+      endDataIdInclusive = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
     } else {
       endDataIdInclusive = null;
     }

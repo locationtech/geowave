@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
@@ -54,19 +54,19 @@ public class KuduLocal {
   // require a separate watchdog for each master/tablet server
   private final List<ExecuteWatchdog> watchdogs;
 
-  public KuduLocal(String localDir, int numTablets) {
+  public KuduLocal(final String localDir, final int numTablets) {
     if (TestUtils.isSet(localDir)) {
-      this.kuduLocalDir = new File(localDir);
+      kuduLocalDir = new File(localDir);
     } else {
-      this.kuduLocalDir = new File(TestUtils.TEMP_DIR, "kudu");
+      kuduLocalDir = new File(TestUtils.TEMP_DIR, "kudu");
     }
-    if (!this.kuduLocalDir.exists() && !this.kuduLocalDir.mkdirs()) {
-      LOGGER.error("unable to create directory {}", this.kuduLocalDir.getAbsolutePath());
-    } else if (!this.kuduLocalDir.isDirectory()) {
-      LOGGER.error("{} exists but is not a directory", this.kuduLocalDir.getAbsolutePath());
+    if (!kuduLocalDir.exists() && !kuduLocalDir.mkdirs()) {
+      LOGGER.error("unable to create directory {}", kuduLocalDir.getAbsolutePath());
+    } else if (!kuduLocalDir.isDirectory()) {
+      LOGGER.error("{} exists but is not a directory", kuduLocalDir.getAbsolutePath());
     }
-    this.kuduDBDir = new File(kuduLocalDir, "db");
-    this.watchdogs = new ArrayList<>();
+    kuduDBDir = new File(kuduLocalDir, "db");
+    watchdogs = new ArrayList<>();
     this.numTablets = numTablets;
   }
 
@@ -97,29 +97,29 @@ public class KuduLocal {
   }
 
   public void stop() {
-    for (ExecuteWatchdog w : watchdogs) {
+    for (final ExecuteWatchdog w : watchdogs) {
       w.destroyProcess();
     }
     try {
       Thread.sleep(STARTUP_DELAY_MS);
-    } catch (InterruptedException e) {
+    } catch (final InterruptedException e) {
     }
   }
 
   public void destroyDB() throws IOException {
     try {
       FileUtils.deleteDirectory(kuduDBDir);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       LOGGER.error("Could not destroy database files", e);
       throw e;
     }
   }
 
   private boolean isInstalled() {
-    File kuduMasterBinary = new File(kuduLocalDir, KUDU_MASTER);
-    File kuduTabletBinary = new File(kuduLocalDir, KUDU_TABLET);
-    boolean okMaster = kuduMasterBinary.exists() && kuduMasterBinary.canExecute();
-    boolean okTablet = kuduTabletBinary.exists() && kuduTabletBinary.canExecute();
+    final File kuduMasterBinary = new File(kuduLocalDir, KUDU_MASTER);
+    final File kuduTabletBinary = new File(kuduLocalDir, KUDU_TABLET);
+    final boolean okMaster = kuduMasterBinary.exists() && kuduMasterBinary.canExecute();
+    final boolean okTablet = kuduTabletBinary.exists() && kuduTabletBinary.canExecute();
     return okMaster && okTablet;
   }
 
@@ -127,10 +127,10 @@ public class KuduLocal {
     LOGGER.info("Installing {}", KUDU_DEB_PACKAGE);
 
     LOGGER.debug("downloading kudu debian package");
-    File debPackageFile = new File(kuduLocalDir, KUDU_DEB_PACKAGE);
+    final File debPackageFile = new File(kuduLocalDir, KUDU_DEB_PACKAGE);
     if (!debPackageFile.exists()) {
       HttpURLConnection.setFollowRedirects(true);
-      URL url = new URL(KUDU_REPO_URL + KUDU_DEB_PACKAGE);
+      final URL url = new URL(KUDU_REPO_URL + KUDU_DEB_PACKAGE);
       try (FileOutputStream fos = new FileOutputStream(debPackageFile)) {
         IOUtils.copy(url.openStream(), fos);
         fos.flush();
@@ -138,7 +138,7 @@ public class KuduLocal {
     }
 
     LOGGER.debug("extracting kudu debian package data contents");
-    File debDataTarGz = new File(kuduLocalDir, "data.tar.gz");
+    final File debDataTarGz = new File(kuduLocalDir, "data.tar.gz");
     if (!debDataTarGz.exists()) {
       try (FileInputStream fis = new FileInputStream(debPackageFile);
           ArchiveInputStream debInputStream =
@@ -156,13 +156,13 @@ public class KuduLocal {
     }
 
     LOGGER.debug("extracting kudu data contents");
-    TarGZipUnArchiver unarchiver = new TarGZipUnArchiver();
+    final TarGZipUnArchiver unarchiver = new TarGZipUnArchiver();
     unarchiver.enableLogging(new ConsoleLogger(Logger.WARN, "Kudu Local Unarchive"));
     unarchiver.setSourceFile(debDataTarGz);
     unarchiver.setDestDirectory(kuduLocalDir);
     unarchiver.extract();
 
-    for (File f : new File[] {debPackageFile, debDataTarGz}) {
+    for (final File f : new File[] {debPackageFile, debDataTarGz}) {
       if (!f.delete()) {
         LOGGER.warn("cannot delete {}", f.getAbsolutePath());
       }
@@ -170,9 +170,10 @@ public class KuduLocal {
 
     LOGGER.debug("moving kudu master and tablet binaries to {}", kuduLocalDir);
     // move the master and tablet server binaries into the kudu local directory
-    Path kuduBin = Paths.get(kuduLocalDir.getAbsolutePath(), "usr", "lib", "kudu", "sbin-release");
-    File kuduMasterBinary = kuduBin.resolve(KUDU_MASTER).toFile();
-    File kuduTabletBinary = kuduBin.resolve(KUDU_TABLET).toFile();
+    final Path kuduBin =
+        Paths.get(kuduLocalDir.getAbsolutePath(), "usr", "lib", "kudu", "sbin-release");
+    final File kuduMasterBinary = kuduBin.resolve(KUDU_MASTER).toFile();
+    final File kuduTabletBinary = kuduBin.resolve(KUDU_TABLET).toFile();
     kuduMasterBinary.setExecutable(true);
     kuduTabletBinary.setExecutable(true);
     FileUtils.moveFileToDirectory(kuduMasterBinary, kuduLocalDir, false);
@@ -187,10 +188,11 @@ public class KuduLocal {
     }
   }
 
-  private void executeAsyncAndWatch(CommandLine command) throws ExecuteException, IOException {
+  private void executeAsyncAndWatch(final CommandLine command)
+      throws ExecuteException, IOException {
     LOGGER.info("Running async: {}", command.toString());
-    ExecuteWatchdog watchdog = new ExecuteWatchdog(ExecuteWatchdog.INFINITE_TIMEOUT);
-    DefaultExecutor executor = new DefaultExecutor();
+    final ExecuteWatchdog watchdog = new ExecuteWatchdog(ExecuteWatchdog.INFINITE_TIMEOUT);
+    final DefaultExecutor executor = new DefaultExecutor();
     executor.setWatchdog(watchdog);
     executor.setWorkingDirectory(kuduLocalDir);
     watchdogs.add(watchdog);
@@ -199,16 +201,16 @@ public class KuduLocal {
   }
 
   private void startKuduLocal() throws ExecuteException, IOException, InterruptedException {
-    if (!this.kuduDBDir.exists() && !this.kuduDBDir.mkdirs()) {
-      LOGGER.error("unable to create directory {}", this.kuduDBDir.getAbsolutePath());
-    } else if (!this.kuduDBDir.isDirectory()) {
-      LOGGER.error("{} exists but is not a directory", this.kuduDBDir.getAbsolutePath());
+    if (!kuduDBDir.exists() && !kuduDBDir.mkdirs()) {
+      LOGGER.error("unable to create directory {}", kuduDBDir.getAbsolutePath());
+    } else if (!kuduDBDir.isDirectory()) {
+      LOGGER.error("{} exists but is not a directory", kuduDBDir.getAbsolutePath());
     }
 
-    File kuduMasterBinary = new File(kuduLocalDir.getAbsolutePath(), KUDU_MASTER);
-    File kuduTabletBinary = new File(kuduLocalDir.getAbsolutePath(), KUDU_TABLET);
+    final File kuduMasterBinary = new File(kuduLocalDir.getAbsolutePath(), KUDU_MASTER);
+    final File kuduTabletBinary = new File(kuduLocalDir.getAbsolutePath(), KUDU_TABLET);
 
-    CommandLine startMaster = new CommandLine(kuduMasterBinary.getAbsolutePath());
+    final CommandLine startMaster = new CommandLine(kuduMasterBinary.getAbsolutePath());
     startMaster.addArgument("--fs_data_dirs");
     startMaster.addArgument(new File(kuduDBDir, "master_fs_data").getAbsolutePath());
     startMaster.addArgument("--fs_metadata_dir");
@@ -218,7 +220,7 @@ public class KuduLocal {
     executeAsyncAndWatch(startMaster);
 
     for (int i = 0; i < numTablets; i++) {
-      CommandLine startTablet = new CommandLine(kuduTabletBinary.getAbsolutePath());
+      final CommandLine startTablet = new CommandLine(kuduTabletBinary.getAbsolutePath());
       startTablet.addArgument("--fs_data_dirs");
       startTablet.addArgument(new File(kuduDBDir, "t" + i + "_fs_data").getAbsolutePath());
       startTablet.addArgument("--fs_metadata_dir");
@@ -231,8 +233,8 @@ public class KuduLocal {
     Thread.sleep(STARTUP_DELAY_MS);
   }
 
-  public static void main(String[] args) {
-    KuduLocal kudu = new KuduLocal(null, 1);
+  public static void main(final String[] args) {
+    final KuduLocal kudu = new KuduLocal(null, 1);
     kudu.start();
   }
 

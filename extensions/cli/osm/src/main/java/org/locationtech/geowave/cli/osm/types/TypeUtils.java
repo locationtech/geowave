@@ -29,16 +29,18 @@ public class TypeUtils {
   private static final Map<String, SpecificDatumWriter> writers = new HashMap<>();
   private static final Map<String, SpecificDatumReader> readers = new HashMap<>();
 
-  private static <T> byte[] deserialize(final T avroObject, Schema avroSchema, Class<T> avroClass)
-      throws IOException {
+  private static <T> byte[] deserialize(
+      final T avroObject,
+      final Schema avroSchema,
+      final Class<T> avroClass) throws IOException {
 
-    ByteArrayOutputStream os = new ByteArrayOutputStream();
-    BinaryEncoder encoder = ef.binaryEncoder(os, null);
+    final ByteArrayOutputStream os = new ByteArrayOutputStream();
+    final BinaryEncoder encoder = ef.binaryEncoder(os, null);
     if (!writers.containsKey(avroClass.toString())) {
       writers.put(avroClass.toString(), new SpecificDatumWriter<T>(avroSchema));
     }
 
-    SpecificDatumWriter<T> writer = writers.get(avroClass.toString());
+    final SpecificDatumWriter<T> writer = writers.get(avroClass.toString());
     writer.write(avroObject, encoder);
     encoder.flush();
     return os.toByteArray();
@@ -47,13 +49,13 @@ public class TypeUtils {
   private static <T> T deserialize(
       final T avroObject,
       final byte[] avroData,
-      Class<T> avroClass,
-      Schema avroSchema) throws IOException {
-    BinaryDecoder decoder = df.binaryDecoder(avroData, null);
+      final Class<T> avroClass,
+      final Schema avroSchema) throws IOException {
+    final BinaryDecoder decoder = df.binaryDecoder(avroData, null);
     if (!readers.containsKey(avroClass.toString())) {
       readers.put(avroClass.toString(), new SpecificDatumReader(avroSchema));
     }
-    SpecificDatumReader<T> reader = readers.get(avroClass.toString());
+    final SpecificDatumReader<T> reader = readers.get(avroClass.toString());
     return reader.read(avroObject, decoder);
   }
 
@@ -70,7 +72,7 @@ public class TypeUtils {
         AvroLongArray.getClassSchema());
   }
 
-  public static byte[] serializeLongArray(AvroLongArray avroObject) throws IOException {
+  public static byte[] serializeLongArray(final AvroLongArray avroObject) throws IOException {
     return deserialize(avroObject, AvroLongArray.getClassSchema(), AvroLongArray.class);
   }
 

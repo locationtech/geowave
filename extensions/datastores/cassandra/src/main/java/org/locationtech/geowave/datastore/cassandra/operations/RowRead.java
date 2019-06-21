@@ -8,15 +8,15 @@
  */
 package org.locationtech.geowave.datastore.cassandra.operations;
 
-import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.core.TypeCodec;
 import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.datastore.cassandra.CassandraRow;
 import org.locationtech.geowave.datastore.cassandra.CassandraRow.CassandraField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.datastax.driver.core.BoundStatement;
+import com.datastax.driver.core.PreparedStatement;
+import com.datastax.driver.core.TypeCodec;
 
 public class RowRead {
   private static final Logger LOGGER = LoggerFactory.getLogger(RowRead.class);

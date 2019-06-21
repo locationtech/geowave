@@ -19,7 +19,7 @@ public class AdapterMapping implements Persistable {
 
   public AdapterMapping() {}
 
-  public AdapterMapping(ByteArray adapterId, short internalAdapterId) {
+  public AdapterMapping(final ByteArray adapterId, final short internalAdapterId) {
     super();
     this.adapterId = adapterId;
     this.internalAdapterId = internalAdapterId;
@@ -37,32 +37,38 @@ public class AdapterMapping implements Persistable {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((adapterId == null) ? 0 : adapterId.hashCode());
+    result = (prime * result) + ((adapterId == null) ? 0 : adapterId.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
+  public boolean equals(final Object obj) {
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
-    AdapterMapping other = (AdapterMapping) obj;
+    }
+    final AdapterMapping other = (AdapterMapping) obj;
     if (adapterId == null) {
-      if (other.adapterId != null)
+      if (other.adapterId != null) {
         return false;
-    } else if (!adapterId.equals(other.adapterId))
+      }
+    } else if (!adapterId.equals(other.adapterId)) {
       return false;
-    if (internalAdapterId != other.internalAdapterId)
+    }
+    if (internalAdapterId != other.internalAdapterId) {
       return false;
+    }
     return true;
   }
 
   @Override
   public byte[] toBinary() {
-    final byte[] adapterIdBytes = this.adapterId.getBytes();
+    final byte[] adapterIdBytes = adapterId.getBytes();
     final ByteBuffer buf =
         ByteBuffer.allocate(
             adapterIdBytes.length + VarintUtils.unsignedShortByteLength(internalAdapterId));
@@ -72,11 +78,11 @@ public class AdapterMapping implements Persistable {
   }
 
   @Override
-  public void fromBinary(byte[] bytes) {
+  public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
-    this.internalAdapterId = VarintUtils.readUnsignedShort(buf);
+    internalAdapterId = VarintUtils.readUnsignedShort(buf);
     final byte[] adapterIdBytes = new byte[buf.remaining()];
     buf.get(adapterIdBytes);
-    this.adapterId = new ByteArray(adapterIdBytes);
+    adapterId = new ByteArray(adapterIdBytes);
   }
 }

@@ -9,8 +9,20 @@
 package org.locationtech.geowave.analytic.spark.sparksql;
 
 import org.apache.spark.sql.types.UDTRegistration;
-import org.locationtech.geowave.analytic.spark.sparksql.udt.*;
-import org.locationtech.jts.geom.*;
+import org.locationtech.geowave.analytic.spark.sparksql.udt.GeometryUDT;
+import org.locationtech.geowave.analytic.spark.sparksql.udt.LineStringUDT;
+import org.locationtech.geowave.analytic.spark.sparksql.udt.MultiLineStringUDT;
+import org.locationtech.geowave.analytic.spark.sparksql.udt.MultiPointUDT;
+import org.locationtech.geowave.analytic.spark.sparksql.udt.MultiPolygonUDT;
+import org.locationtech.geowave.analytic.spark.sparksql.udt.PointUDT;
+import org.locationtech.geowave.analytic.spark.sparksql.udt.PolygonUDT;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.MultiLineString;
+import org.locationtech.jts.geom.MultiPoint;
+import org.locationtech.jts.geom.MultiPolygon;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Polygon;
 
 /** Created by jwileczek on 7/24/18. */
 public class GeoWaveSpatialEncoders {

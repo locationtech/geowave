@@ -8,9 +8,9 @@
  */
 package org.locationtech.geowave.datastore.accumulo.cli.config;
 
-import com.beust.jcommander.Parameter;
 import org.locationtech.geowave.core.store.BaseDataStoreOptions;
 import org.locationtech.geowave.datastore.accumulo.util.AccumuloUtils;
+import com.beust.jcommander.Parameter;
 
 /** This class can be used to modify the behavior of the Accumulo Data Store. */
 public class AccumuloOptions extends BaseDataStoreOptions {

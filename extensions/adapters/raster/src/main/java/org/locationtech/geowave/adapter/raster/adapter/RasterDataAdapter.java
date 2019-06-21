@@ -1364,13 +1364,11 @@ public class RasterDataAdapter implements
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     tileSize = VarintUtils.readUnsignedInt(buf);
     final int coverageNameLength = VarintUtils.readUnsignedInt(buf);
-    final byte[] coverageNameBinary = new byte[coverageNameLength];
-    buf.get(coverageNameBinary);
+    final byte[] coverageNameBinary = ByteArrayUtils.safeRead(buf, coverageNameLength);
     coverageName = StringUtils.stringFromBinary(coverageNameBinary);
 
     final int sampleModelLength = VarintUtils.readUnsignedInt(buf);
-    final byte[] sampleModelBinary = new byte[sampleModelLength];
-    buf.get(sampleModelBinary);
+    final byte[] sampleModelBinary = ByteArrayUtils.safeRead(buf, sampleModelLength);
     try {
       sampleModel = SampleModelPersistenceUtils.getSampleModel(sampleModelBinary);
     } catch (final Exception e) {
@@ -1378,8 +1376,7 @@ public class RasterDataAdapter implements
     }
 
     final int colorModelLength = VarintUtils.readUnsignedInt(buf);
-    final byte[] colorModelBinary = new byte[colorModelLength];
-    buf.get(colorModelBinary);
+    final byte[] colorModelBinary = ByteArrayUtils.safeRead(buf, colorModelLength);
     try {
       final ByteArrayInputStream bais = new ByteArrayInputStream(colorModelBinary);
       final ObjectInputStream ois = new ObjectInputStream(bais);
@@ -1395,12 +1392,10 @@ public class RasterDataAdapter implements
     metadata = new HashMap<>();
     for (int i = 0; i < numMetadataEntries; i++) {
       final int entryBinaryLength = VarintUtils.readUnsignedInt(buf);
-      final byte[] entryBinary = new byte[entryBinaryLength];
-      buf.get(entryBinary);
+      final byte[] entryBinary = ByteArrayUtils.safeRead(buf, entryBinaryLength);
       final ByteBuffer entryBuf = ByteBuffer.wrap(entryBinary);
       final int keyLength = VarintUtils.readUnsignedInt(entryBuf);
-      final byte[] keyBinary = new byte[keyLength];
-      entryBuf.get(keyBinary);
+      final byte[] keyBinary = ByteArrayUtils.safeRead(entryBuf, keyLength);
       final byte[] valueBinary = new byte[entryBuf.remaining()];
       entryBuf.get(valueBinary);
       metadata.put(
@@ -1411,17 +1406,20 @@ public class RasterDataAdapter implements
     if (histogramConfigLength == 0) {
       histogramConfig = null;
     } else {
-      final byte[] histogramConfigBinary = new byte[histogramConfigLength];
-      buf.get(histogramConfigBinary);
+      final byte[] histogramConfigBinary = ByteArrayUtils.safeRead(buf, histogramConfigLength);
       histogramConfig = (HistogramConfig) PersistenceUtils.fromBinary(histogramConfigBinary);
     }
     final int noDataBinaryLength = VarintUtils.readUnsignedInt(buf);
     if (noDataBinaryLength == 0) {
       noDataValuesPerBand = null;
     } else {
-      noDataValuesPerBand = new double[VarintUtils.readUnsignedInt(buf)][];
+      final int numBands = VarintUtils.readUnsignedInt(buf);
+      ByteArrayUtils.verifyBufferSize(buf, numBands);
+      noDataValuesPerBand = new double[numBands][];
       for (int b = 0; b < noDataValuesPerBand.length; b++) {
-        noDataValuesPerBand[b] = new double[VarintUtils.readUnsignedInt(buf)];
+        final int bandLength = VarintUtils.readUnsignedInt(buf);
+        ByteArrayUtils.verifyBufferSize(buf, bandLength);
+        noDataValuesPerBand[b] = new double[bandLength];
         for (int i = 0; i < noDataValuesPerBand[b].length; i++) {
           noDataValuesPerBand[b][i] = buf.getDouble();
         }
@@ -1432,6 +1430,7 @@ public class RasterDataAdapter implements
     if (minsBinaryLength == 0) {
       minsPerBand = null;
     } else {
+      ByteArrayUtils.verifyBufferSize(buf, minsBinaryLength);
       minsPerBand = new double[minsBinaryLength / 8];
       for (int b = 0; b < minsPerBand.length; b++) {
         minsPerBand[b] = buf.getDouble();
@@ -1442,6 +1441,7 @@ public class RasterDataAdapter implements
     if (maxesBinaryLength == 0) {
       maxesPerBand = null;
     } else {
+      ByteArrayUtils.verifyBufferSize(buf, maxesBinaryLength);
       maxesPerBand = new double[maxesBinaryLength / 8];
       for (int b = 0; b < maxesPerBand.length; b++) {
         maxesPerBand[b] = buf.getDouble();
@@ -1452,9 +1452,11 @@ public class RasterDataAdapter implements
     if (namesLength == 0) {
       namesPerBand = null;
     } else {
+      ByteArrayUtils.verifyBufferSize(buf, namesLength);
       namesPerBand = new String[namesLength];
       for (int b = 0; b < namesPerBand.length; b++) {
         final int nameSize = VarintUtils.readUnsignedInt(buf);
+        ByteArrayUtils.verifyBufferSize(buf, nameSize);
         final byte[] nameBytes = new byte[nameSize];
         buf.get(nameBytes);
         namesPerBand[b] = StringUtils.stringFromBinary(nameBytes);
@@ -1465,17 +1467,18 @@ public class RasterDataAdapter implements
     if (backgroundBinaryLength == 0) {
       backgroundValuesPerBand = null;
     } else {
+      ByteArrayUtils.verifyBufferSize(buf, backgroundBinaryLength);
       backgroundValuesPerBand = new double[backgroundBinaryLength / 8];
       for (int b = 0; b < backgroundValuesPerBand.length; b++) {
         backgroundValuesPerBand[b] = buf.getDouble();
       }
     }
 
-    final byte[] mergeStrategyBinary = new byte[VarintUtils.readUnsignedInt(buf)];
-    if (mergeStrategyBinary.length == 0) {
+    final int mergeStrategyBinaryLength = VarintUtils.readUnsignedInt(buf);
+    if (mergeStrategyBinaryLength == 0) {
       mergeStrategy = null;
     } else {
-      buf.get(mergeStrategyBinary);
+      final byte[] mergeStrategyBinary = ByteArrayUtils.safeRead(buf, mergeStrategyBinaryLength);
       mergeStrategy = (RasterTileMergeStrategy<?>) PersistenceUtils.fromBinary(mergeStrategyBinary);
     }
     buildPyramid = (buf.get() != 0);

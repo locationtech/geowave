@@ -93,11 +93,11 @@ public class FeatureNumericHistogramStaticticsTest {
 
     double max = 0;
     for (long i = 0; i < 10000; i++) {
-      final double val = next + 1000 * rand.nextDouble();
+      final double val = next + (1000 * rand.nextDouble());
       stat2.entryIngested(create(val));
       max = Math.max(val, max);
     }
-    final double skewvalue = next + 1000 * rand.nextDouble();
+    final double skewvalue = next + (1000 * rand.nextDouble());
     final SimpleFeature skewedFeature = create(skewvalue);
     for (int i = 0; i < 10000; i++) {
       stat2.entryIngested(skewedFeature);
@@ -181,7 +181,7 @@ public class FeatureNumericHistogramStaticticsTest {
       stat2.entryIngested(create(val));
       min = Math.min(val, min);
     }
-    final double skewvalue = next - 1000 * rand.nextDouble();
+    final double skewvalue = next - (1000 * rand.nextDouble());
     final SimpleFeature skewedFeature = create(skewvalue);
     for (int i = 0; i < 10000; i++) {
       stat2.entryIngested(skewedFeature);

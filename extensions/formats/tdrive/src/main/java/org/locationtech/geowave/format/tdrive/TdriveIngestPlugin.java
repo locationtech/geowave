@@ -181,7 +181,7 @@ public class TdriveIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroTd
     tdrivepointBuilder.set("Latitude", tdrivePoint.getLatitude());
     tdrivepointBuilder.set("Longitude", tdrivePoint.getLongitude());
     featureData.add(
-        new GeoWaveData<SimpleFeature>(
+        new GeoWaveData<>(
             TdriveUtils.TDRIVE_POINT_FEATURE,
             indexNames,
             tdrivepointBuilder.buildFeature(

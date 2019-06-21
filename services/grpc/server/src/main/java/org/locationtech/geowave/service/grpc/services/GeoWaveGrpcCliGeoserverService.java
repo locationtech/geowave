@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.service.grpc.services;
 
-import com.google.protobuf.Descriptors.FieldDescriptor;
-import io.grpc.BindableService;
-import io.grpc.stub.StreamObserver;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +48,9 @@ import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.R
 import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.protobuf.Descriptors.FieldDescriptor;
+import io.grpc.BindableService;
+import io.grpc.stub.StreamObserver;
 
 public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase implements
     GeoWaveGrpcServiceSpi {
@@ -59,16 +59,16 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public BindableService getBindableService() {
-    return (BindableService) this;
+    return this;
   }
 
   @Override
   public void geoServerListWorkspacesCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerListWorkspacesCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.RepeatedStringResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerListWorkspacesCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.RepeatedStringResponseProtos> responseObserver) {
 
-    GeoServerListWorkspacesCommand cmd = new GeoServerListWorkspacesCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final GeoServerListWorkspacesCommand cmd = new GeoServerListWorkspacesCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -92,11 +92,11 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void geoServerAddCoverageCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerAddCoverageCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerAddCoverageCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
 
-    GeoServerAddCoverageCommand cmd = new GeoServerAddCoverageCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final GeoServerAddCoverageCommand cmd = new GeoServerAddCoverageCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -120,11 +120,11 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void geoServerRemoveCoverageStoreCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveCoverageStoreCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveCoverageStoreCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
 
-    GeoServerRemoveCoverageStoreCommand cmd = new GeoServerRemoveCoverageStoreCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final GeoServerRemoveCoverageStoreCommand cmd = new GeoServerRemoveCoverageStoreCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -148,11 +148,11 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void geoServerAddCoverageStoreCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerAddCoverageStoreCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerAddCoverageStoreCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
 
-    GeoServerAddCoverageStoreCommand cmd = new GeoServerAddCoverageStoreCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final GeoServerAddCoverageStoreCommand cmd = new GeoServerAddCoverageStoreCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -176,10 +176,10 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void geoServerGetCoverageStoreCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerGetCoverageStoreCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
-    GeoServerGetCoverageStoreCommand cmd = new GeoServerGetCoverageStoreCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerGetCoverageStoreCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+    final GeoServerGetCoverageStoreCommand cmd = new GeoServerGetCoverageStoreCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -203,10 +203,10 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void geoServerAddDatastoreCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerAddDatastoreCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
-    GeoServerAddDatastoreCommand cmd = new GeoServerAddDatastoreCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerAddDatastoreCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+    final GeoServerAddDatastoreCommand cmd = new GeoServerAddDatastoreCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -230,11 +230,11 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void geoServerGetStyleCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerGetStyleCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerGetStyleCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
 
-    GeoServerGetStyleCommand cmd = new GeoServerGetStyleCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final GeoServerGetStyleCommand cmd = new GeoServerGetStyleCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -258,11 +258,11 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void configGeoServerCommand(
-      org.locationtech.geowave.service.grpc.protobuf.ConfigGeoServerCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.ConfigGeoServerCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
 
-    ConfigGeoServerCommand cmd = new ConfigGeoServerCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final ConfigGeoServerCommand cmd = new ConfigGeoServerCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -286,10 +286,10 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void geoServerGetCoverageCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerGetCoverageCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
-    GeoServerGetCoverageCommand cmd = new GeoServerGetCoverageCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerGetCoverageCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+    final GeoServerGetCoverageCommand cmd = new GeoServerGetCoverageCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -313,11 +313,11 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void geoServerListFeatureLayersCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerListFeatureLayersCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerListFeatureLayersCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
 
-    GeoServerListFeatureLayersCommand cmd = new GeoServerListFeatureLayersCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final GeoServerListFeatureLayersCommand cmd = new GeoServerListFeatureLayersCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -341,11 +341,11 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void geoServerGetStoreAdapterCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerGetStoreAdapterCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.RepeatedStringResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerGetStoreAdapterCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.RepeatedStringResponseProtos> responseObserver) {
 
-    GeoServerGetStoreAdapterCommand cmd = new GeoServerGetStoreAdapterCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final GeoServerGetStoreAdapterCommand cmd = new GeoServerGetStoreAdapterCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -369,10 +369,10 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void geoServerAddWorkspaceCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerAddWorkspaceCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
-    GeoServerAddWorkspaceCommand cmd = new GeoServerAddWorkspaceCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerAddWorkspaceCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+    final GeoServerAddWorkspaceCommand cmd = new GeoServerAddWorkspaceCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -396,11 +396,11 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void geoServerRemoveDatastoreCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveDatastoreCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveDatastoreCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
 
-    GeoServerRemoveDatastoreCommand cmd = new GeoServerRemoveDatastoreCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final GeoServerRemoveDatastoreCommand cmd = new GeoServerRemoveDatastoreCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -424,11 +424,11 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void geoServerRemoveWorkspaceCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveWorkspaceCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveWorkspaceCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
 
-    GeoServerRemoveWorkspaceCommand cmd = new GeoServerRemoveWorkspaceCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final GeoServerRemoveWorkspaceCommand cmd = new GeoServerRemoveWorkspaceCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -452,11 +452,11 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void geoServerAddStyleCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerAddStyleCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerAddStyleCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
 
-    GeoServerAddStyleCommand cmd = new GeoServerAddStyleCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final GeoServerAddStyleCommand cmd = new GeoServerAddStyleCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -480,11 +480,11 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void geoServerListDatastoresCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerListDatastoresCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerListDatastoresCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
 
-    GeoServerListDatastoresCommand cmd = new GeoServerListDatastoresCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final GeoServerListDatastoresCommand cmd = new GeoServerListDatastoresCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -508,11 +508,11 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void geoServerListCoverageStoresCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerListCoverageStoresCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerListCoverageStoresCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
 
-    GeoServerListCoverageStoresCommand cmd = new GeoServerListCoverageStoresCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final GeoServerListCoverageStoresCommand cmd = new GeoServerListCoverageStoresCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -536,11 +536,11 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void geoServerAddLayerCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerAddLayerCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerAddLayerCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
 
-    GeoServerAddLayerCommand cmd = new GeoServerAddLayerCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final GeoServerAddLayerCommand cmd = new GeoServerAddLayerCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -564,11 +564,11 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void geoServerListStylesCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerListStylesCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerListStylesCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
 
-    GeoServerListStylesCommand cmd = new GeoServerListStylesCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final GeoServerListStylesCommand cmd = new GeoServerListStylesCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -592,11 +592,11 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void geoServerGetFeatureLayerCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerGetFeatureLayerCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerGetFeatureLayerCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
 
-    GeoServerGetFeatureLayerCommand cmd = new GeoServerGetFeatureLayerCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final GeoServerGetFeatureLayerCommand cmd = new GeoServerGetFeatureLayerCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -620,11 +620,11 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void geoServerRemoveCoverageCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveCoverageCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveCoverageCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
 
-    GeoServerRemoveCoverageCommand cmd = new GeoServerRemoveCoverageCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final GeoServerRemoveCoverageCommand cmd = new GeoServerRemoveCoverageCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -648,11 +648,11 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void geoServerListCoveragesCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerListCoveragesCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerListCoveragesCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
 
-    GeoServerListCoveragesCommand cmd = new GeoServerListCoveragesCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final GeoServerListCoveragesCommand cmd = new GeoServerListCoveragesCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -676,11 +676,11 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void geoServerRemoveFeatureLayerCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveFeatureLayerCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveFeatureLayerCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
 
-    GeoServerRemoveFeatureLayerCommand cmd = new GeoServerRemoveFeatureLayerCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final GeoServerRemoveFeatureLayerCommand cmd = new GeoServerRemoveFeatureLayerCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -704,11 +704,11 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void geoServerRemoveStyleCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveStyleCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveStyleCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
 
-    GeoServerRemoveStyleCommand cmd = new GeoServerRemoveStyleCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final GeoServerRemoveStyleCommand cmd = new GeoServerRemoveStyleCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -732,11 +732,11 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void geoServerGetDatastoreCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerGetDatastoreCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerGetDatastoreCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
 
-    GeoServerGetDatastoreCommand cmd = new GeoServerGetDatastoreCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final GeoServerGetDatastoreCommand cmd = new GeoServerGetDatastoreCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -760,11 +760,11 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void geoServerAddFeatureLayerCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerAddFeatureLayerCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerAddFeatureLayerCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
 
-    GeoServerAddFeatureLayerCommand cmd = new GeoServerAddFeatureLayerCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final GeoServerAddFeatureLayerCommand cmd = new GeoServerAddFeatureLayerCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -788,11 +788,11 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
   @Override
   public void geoServerSetLayerStyleCommand(
-      org.locationtech.geowave.service.grpc.protobuf.GeoServerSetLayerStyleCommandParametersProtos request,
-      StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+      final org.locationtech.geowave.service.grpc.protobuf.GeoServerSetLayerStyleCommandParametersProtos request,
+      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
 
-    GeoServerSetLayerStyleCommand cmd = new GeoServerSetLayerStyleCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+    final GeoServerSetLayerStyleCommand cmd = new GeoServerSetLayerStyleCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;

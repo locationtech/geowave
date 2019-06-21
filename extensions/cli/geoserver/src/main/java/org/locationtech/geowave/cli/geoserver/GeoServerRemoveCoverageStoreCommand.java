@@ -8,16 +8,16 @@
  */
 package org.locationtech.geowave.cli.geoserver;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "rmcs", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Remove GeoServer Coverage Store")
@@ -26,7 +26,7 @@ public class GeoServerRemoveCoverageStoreCommand extends GeoServerRemoveCommand<
   private String workspace;
 
   @Parameter(description = "<coverage store name>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   private String cvgstoreName = null;
 
@@ -57,7 +57,7 @@ public class GeoServerRemoveCoverageStoreCommand extends GeoServerRemoveCommand<
           + workspace
           + "' on GeoServer: OK";
     }
-    String errorMessage =
+    final String errorMessage =
         "Error deleting store '"
             + cvgstoreName
             + "' from workspace '"

@@ -157,9 +157,11 @@ public class GeoServerIT extends AbstractGeoWaveIT {
     boolean success = true;
     configServiceClient.configGeoServer("localhost:9011");
     // create the workspace
-    Response addWs = geoServerServiceClient.addWorkspace(ServicesTestEnvironment.TEST_WORKSPACE);
+    final Response addWs =
+        geoServerServiceClient.addWorkspace(ServicesTestEnvironment.TEST_WORKSPACE);
     success &= (addWs.getStatus() == 201);
-    Response addWsBad = geoServerServiceClient.addWorkspace(ServicesTestEnvironment.TEST_WORKSPACE);
+    final Response addWsBad =
+        geoServerServiceClient.addWorkspace(ServicesTestEnvironment.TEST_WORKSPACE);
     success &= (addWsBad.getStatus() == 400);
     // enable wfs & wms
     success &= enableWfs();
@@ -170,13 +172,13 @@ public class GeoServerIT extends AbstractGeoWaveIT {
         dataStoreOptions.getType(),
         dataStoreOptions.getGeoWaveNamespace(),
         dataStoreOptions.getOptionsAsMap());
-    Response addDs =
+    final Response addDs =
         geoServerServiceClient.addDataStore(
             dataStoreOptions.getGeoWaveNamespace(),
             ServicesTestEnvironment.TEST_WORKSPACE,
             dataStoreOptions.getGeoWaveNamespace());
     success &= (addDs.getStatus() == 201);
-    Response addDsBad =
+    final Response addDsBad =
         geoServerServiceClient.addDataStore(
             dataStoreOptions.getGeoWaveNamespace(),
             ServicesTestEnvironment.TEST_WORKSPACE,
@@ -184,12 +186,12 @@ public class GeoServerIT extends AbstractGeoWaveIT {
     // Make sure that we handle duplicates correctly
     success &= (addDsBad.getStatus() == 400);
     // make sure the datastore exists
-    Response getDs =
+    final Response getDs =
         geoServerServiceClient.getDataStore(
             dataStoreOptions.getGeoWaveNamespace(),
             ServicesTestEnvironment.TEST_WORKSPACE);
     success &= (getDs.getStatus() == 201);
-    Response getDsBad =
+    final Response getDsBad =
         geoServerServiceClient.getDataStore(
             TestUtils.TEST_NAMESPACE_BAD,
             ServicesTestEnvironment.TEST_WORKSPACE);
@@ -327,7 +329,7 @@ public class GeoServerIT extends AbstractGeoWaveIT {
       final BasicNameValuePair... paramTuples) throws Exception {
     final HttpPost command = new HttpPost(WFS_URL_PREFIX + "/Transaction");
 
-    final ArrayList<BasicNameValuePair> postParameters = new ArrayList<BasicNameValuePair>();
+    final ArrayList<BasicNameValuePair> postParameters = new ArrayList<>();
     postParameters.add(new BasicNameValuePair("version", version));
     postParameters.add(
         new BasicNameValuePair("typename", ServicesTestEnvironment.TEST_WORKSPACE + ":geostuff"));
@@ -347,7 +349,7 @@ public class GeoServerIT extends AbstractGeoWaveIT {
 
     final StringBuilder buf = new StringBuilder();
 
-    final List<BasicNameValuePair> localParams = new LinkedList<BasicNameValuePair>();
+    final List<BasicNameValuePair> localParams = new LinkedList<>();
     localParams.add(new BasicNameValuePair("version", version));
     localParams.add(new BasicNameValuePair("request", "GetFeature"));
     localParams.add(
@@ -463,7 +465,7 @@ public class GeoServerIT extends AbstractGeoWaveIT {
     try {
       final HttpPost command = createWFSTransaction(httpclient, "1.1.0");
       command.setEntity(new StringEntity(update));
-      final LinkedList<HttpResponse> capturedResponse = new LinkedList<HttpResponse>();
+      final LinkedList<HttpResponse> capturedResponse = new LinkedList<>();
       run(new Runnable() {
         @Override
         public void run() {

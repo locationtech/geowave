@@ -42,7 +42,7 @@ public class PersistenceEncoding<T> {
     return internalAdapterId;
   }
 
-  public void setInternalAdapterId(short internalAdapterId) {
+  public void setInternalAdapterId(final short internalAdapterId) {
     this.internalAdapterId = internalAdapterId;
   }
 

@@ -38,7 +38,7 @@ public class CentroidItemWrapperFactory<T> implements AnalyticItemWrapperFactory
   public void initialize(final JobContext context, final Class<?> scope, final Logger logger)
       throws IOException {
     try {
-      nestedGroupCentroidAssignment = new NestedGroupCentroidAssignment<T>(context, scope, logger);
+      nestedGroupCentroidAssignment = new NestedGroupCentroidAssignment<>(context, scope, logger);
     } catch (InstantiationException | IllegalAccessException e) {
       throw new IOException("Failed to instantiate", e);
     }

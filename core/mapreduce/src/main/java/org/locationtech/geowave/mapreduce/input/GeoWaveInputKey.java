@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.mapreduce.input;
 
-import com.google.common.primitives.Bytes;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -21,6 +20,7 @@ import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.api.Index;
+import com.google.common.primitives.Bytes;
 
 /**
  * This class encapsulates the unique identifier for GeoWave input data using a map-reduce GeoWave

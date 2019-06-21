@@ -15,8 +15,8 @@ import java.util.List;
 import org.apache.avro.Schema;
 import org.apache.avro.file.DataFileStream;
 import org.apache.avro.specific.SpecificDatumReader;
-import org.locationtech.geowave.adapter.vector.GeoWaveAvroFeatureUtils;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
+import org.locationtech.geowave.adapter.vector.GeoWaveAvroFeatureUtils;
 import org.locationtech.geowave.adapter.vector.avro.AvroAttributeValues;
 import org.locationtech.geowave.adapter.vector.avro.AvroFeatureDefinition;
 import org.locationtech.geowave.adapter.vector.avro.AvroSimpleFeatureCollection;
@@ -67,7 +67,7 @@ public class GeoWaveAvroIngestPlugin extends
   public boolean supportsFile(final URL file) {
 
     try (DataFileStream<AvroSimpleFeatureCollection> ds =
-        new DataFileStream<AvroSimpleFeatureCollection>(
+        new DataFileStream<>(
             file.openStream(),
             new SpecificDatumReader<AvroSimpleFeatureCollection>(
                 AvroSimpleFeatureCollection.getClassSchema()))) {
@@ -97,7 +97,7 @@ public class GeoWaveAvroIngestPlugin extends
   public CloseableIterator<AvroSimpleFeatureCollection> toAvroObjects(final URL input) {
     try {
       final DataFileStream<AvroSimpleFeatureCollection> reader =
-          new DataFileStream<AvroSimpleFeatureCollection>(
+          new DataFileStream<>(
               input.openStream(),
               new SpecificDatumReader<AvroSimpleFeatureCollection>(
                   AvroSimpleFeatureCollection.getClassSchema()));
@@ -118,7 +118,7 @@ public class GeoWaveAvroIngestPlugin extends
         public void close() {
           try {
             reader.close();
-          } catch (IOException e) {
+          } catch (final IOException e) {
             LOGGER.warn("Unable to close file '" + input.getPath() + "'", e);
           }
         }
@@ -128,7 +128,7 @@ public class GeoWaveAvroIngestPlugin extends
           "Unable to read file '" + input.getPath() + "' as AVRO SimpleFeatureCollection",
           e);
     }
-    return new CloseableIterator.Empty<AvroSimpleFeatureCollection>();
+    return new CloseableIterator.Empty<>();
   }
 
   @Override
@@ -154,7 +154,7 @@ public class GeoWaveAvroIngestPlugin extends
       final String[] indexNames,
       final String globalVisibility) {
     final AvroFeatureDefinition featureDefinition = featureCollection.getFeatureType();
-    final List<GeoWaveData<SimpleFeature>> retVal = new ArrayList<GeoWaveData<SimpleFeature>>();
+    final List<GeoWaveData<SimpleFeature>> retVal = new ArrayList<>();
     SimpleFeatureType featureType;
     try {
       featureType =
@@ -169,7 +169,7 @@ public class GeoWaveAvroIngestPlugin extends
                   featureType,
                   attributeTypes,
                   attributeValues);
-          retVal.add(new GeoWaveData<SimpleFeature>(adapter, indexNames, simpleFeature));
+          retVal.add(new GeoWaveData<>(adapter, indexNames, simpleFeature));
         } catch (final Exception e) {
           LOGGER.warn("Unable to read simple feature from Avro", e);
         }
@@ -177,7 +177,7 @@ public class GeoWaveAvroIngestPlugin extends
     } catch (final ClassNotFoundException e) {
       LOGGER.warn("Unable to read simple feature type from Avro", e);
     }
-    return new Wrapper<GeoWaveData<SimpleFeature>>(retVal.iterator());
+    return new Wrapper<>(retVal.iterator());
   }
 
   @Override

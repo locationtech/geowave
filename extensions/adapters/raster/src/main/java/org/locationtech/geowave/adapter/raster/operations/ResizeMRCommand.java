@@ -131,7 +131,7 @@ public class ResizeMRCommand extends DefaultOperation implements Command {
     return hdfsHostPort;
   }
 
-  public void setHdfsHostPort(String hdfsHostPort) {
+  public void setHdfsHostPort(final String hdfsHostPort) {
     this.hdfsHostPort = hdfsHostPort;
   }
 
@@ -139,7 +139,7 @@ public class ResizeMRCommand extends DefaultOperation implements Command {
     return jobTrackerOrResourceManHostPort;
   }
 
-  public void setJobTrackerOrResourceManHostPort(String jobTrackerOrResourceManHostPort) {
+  public void setJobTrackerOrResourceManHostPort(final String jobTrackerOrResourceManHostPort) {
     this.jobTrackerOrResourceManHostPort = jobTrackerOrResourceManHostPort;
   }
 }

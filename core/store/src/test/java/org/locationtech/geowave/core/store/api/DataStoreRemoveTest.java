@@ -14,14 +14,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.locationtech.geowave.core.store.BaseDataStoreOptions;
-import org.locationtech.geowave.core.store.DataStoreOptions;
-import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
-import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.adapter.MockComponents;
 import org.locationtech.geowave.core.store.index.IndexImpl;
 import org.locationtech.geowave.core.store.memory.MemoryRequiredOptions;
-import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 
 public class DataStoreRemoveTest {
   private static int counter = 0;

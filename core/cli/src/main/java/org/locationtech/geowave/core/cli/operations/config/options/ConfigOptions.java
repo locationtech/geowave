@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.cli.operations.config.options;
 
-import com.beust.jcommander.Parameter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -36,6 +35,7 @@ import org.locationtech.geowave.core.cli.operations.config.security.utils.Securi
 import org.locationtech.geowave.core.cli.utils.JCommanderParameterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.Parameter;
 
 /**
  * Config options allows the user to override the default location for configuration options, and
@@ -103,11 +103,11 @@ public class ConfigOptions {
       final String[] configFiles = defaultPath.list(new FilenameFilter() {
 
         @Override
-        public boolean accept(File dir, String name) {
+        public boolean accept(final File dir, final String name) {
           return name.endsWith("-config.properties");
         }
       });
-      if (configFiles != null && configFiles.length > 0) {
+      if ((configFiles != null) && (configFiles.length > 0)) {
         final String backupVersion = configFiles[0].substring(0, configFiles[0].length() - 18);
         return formatConfigFile(backupVersion, defaultPath);
       } else {
@@ -123,7 +123,7 @@ public class ConfigOptions {
    * @param defaultPath
    * @return Configured File
    */
-  public static File formatConfigFile(String version, File defaultPath) {
+  public static File formatConfigFile(final String version, final File defaultPath) {
     // HP Fortify "Path Manipulation" false positive
     // What Fortify considers "user input" comes only
     // from users with OS-level access anyway
@@ -141,20 +141,20 @@ public class ConfigOptions {
   public static boolean writeProperties(
       final File configFile,
       final Properties properties,
-      Class<?> clazz,
-      String namespacePrefix) {
+      final Class<?> clazz,
+      final String namespacePrefix) {
     try {
-      Properties tmp = new Properties() {
+      final Properties tmp = new Properties() {
         private static final long serialVersionUID = 1L;
 
         @Override
         public Set<Object> keySet() {
-          return Collections.unmodifiableSet(new TreeSet<Object>(super.keySet()));
+          return Collections.unmodifiableSet(new TreeSet<>(super.keySet()));
         }
 
         @Override
         public synchronized Enumeration<Object> keys() {
-          return Collections.enumeration(new TreeSet<Object>(super.keySet()));
+          return Collections.enumeration(new TreeSet<>(super.keySet()));
         }
       };
 
@@ -167,27 +167,28 @@ public class ConfigOptions {
         // check if any values exist that need to be encrypted before
         // written to properties
         if (clazz != null) {
-          Field[] fields = clazz.getDeclaredFields();
-          for (Field field : fields) {
-            for (Annotation annotation : field.getAnnotations()) {
+          final Field[] fields = clazz.getDeclaredFields();
+          for (final Field field : fields) {
+            for (final Annotation annotation : field.getAnnotations()) {
               if (annotation.annotationType() == Parameter.class) {
-                Parameter parameter = (Parameter) annotation;
+                final Parameter parameter = (Parameter) annotation;
 
                 if (JCommanderParameterUtils.isPassword(parameter)) {
-                  String storeFieldName =
-                      (namespacePrefix != null && !"".equals(namespacePrefix.trim()))
+                  final String storeFieldName =
+                      ((namespacePrefix != null) && !"".equals(namespacePrefix.trim()))
                           ? namespacePrefix + "." + field.getName()
                           : field.getName();
                   if (properties.containsKey(storeFieldName)) {
-                    String value = properties.getProperty(storeFieldName);
+                    final String value = properties.getProperty(storeFieldName);
                     String encryptedValue = value;
                     try {
-                      File tokenFile = SecurityUtils.getFormattedTokenKeyFileForConfig(configFile);
+                      final File tokenFile =
+                          SecurityUtils.getFormattedTokenKeyFileForConfig(configFile);
                       encryptedValue =
                           SecurityUtils.encryptAndHexEncodeValue(
                               value,
                               tokenFile.getAbsolutePath());
-                    } catch (Exception e) {
+                    } catch (final Exception e) {
                       LOGGER.error(
                           "An error occurred encrypting specified password value: "
                               + e.getLocalizedMessage(),
@@ -210,10 +211,10 @@ public class ConfigOptions {
             str,
             null);
       }
-    } catch (FileNotFoundException e) {
+    } catch (final FileNotFoundException e) {
       LOGGER.error("Could not find the property file.", e);
       return false;
-    } catch (IOException e) {
+    } catch (final IOException e) {
       LOGGER.error("Exception writing property file.", e);
       return false;
     }
@@ -284,7 +285,7 @@ public class ConfigOptions {
         if (is != null) {
           try {
             is.close();
-          } catch (IOException e) {
+          } catch (final IOException e) {
             LOGGER.error(e.getMessage(), e);
           }
         }
@@ -298,7 +299,7 @@ public class ConfigOptions {
    *
    * @param inputParams
    */
-  public void prepare(OperationParams inputParams) {
+  public void prepare(final OperationParams inputParams) {
     File propertyFile = null;
     if (getConfigFile() != null) {
       propertyFile = new File(getConfigFile());

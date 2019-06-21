@@ -17,7 +17,7 @@ public abstract class RequestParameters {
   protected Map<String, Object> keyValuePairs;
 
   protected RequestParameters() {
-    keyValuePairs = new HashMap<String, Object>();
+    keyValuePairs = new HashMap<>();
   }
 
   /**
@@ -26,7 +26,7 @@ public abstract class RequestParameters {
    * @param parameter The key name of the desired value.
    * @return The value of the specified key name.
    */
-  public Object getValue(String parameter) {
+  public Object getValue(final String parameter) {
     return keyValuePairs.get(parameter);
   }
 
@@ -64,8 +64,8 @@ public abstract class RequestParameters {
    * @param parameter The key name of the desired value.
    * @return an Array of Strings, parsed from the original String value.
    */
-  protected String[] splitStringParameter(String parameter) {
-    String value = getString(parameter);
+  protected String[] splitStringParameter(final String parameter) {
+    final String value = getString(parameter);
     if (value == null) {
       return null;
     }

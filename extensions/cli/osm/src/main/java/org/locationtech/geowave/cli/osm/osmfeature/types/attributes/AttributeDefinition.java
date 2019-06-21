@@ -18,7 +18,7 @@ public class AttributeDefinition {
   public String key = null;
   public final Map<String, List<String>> args = new HashMap<>();
 
-  public Object convert(Object obj) {
+  public Object convert(final Object obj) {
     return AttributeTypes.getAttributeType(type).convert(obj);
   }
 }

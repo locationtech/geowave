@@ -86,7 +86,7 @@ public abstract class ParallelDecoder<T> implements CloseableIterator<T> {
    */
   protected abstract List<RowProvider> getRowProviders() throws Exception;
 
-  private synchronized void setDecodeException(final Exception e) {
+  protected synchronized void setDecodeException(final Exception e) {
     if (exception == null) {
       this.exception = e;
       this.threadPool.shutdownNow();

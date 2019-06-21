@@ -182,7 +182,7 @@ public class KMeansJumpJobRunner extends MapReduceJobController implements Clust
 
   @Override
   public Collection<ParameterEnum<?>> getParameters() {
-    final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
+    final Set<ParameterEnum<?>> params = new HashSet<>();
     params.addAll(kmeansRunner.singleSamplekmeansJobRunner.getParameters());
     params.addAll(kmeansRunner.parallelJobRunner.getParameters());
     params.addAll(
@@ -210,7 +210,7 @@ public class KMeansJumpJobRunner extends MapReduceJobController implements Clust
 
   private static class KMeansParallelJobRunnerDelegate implements MapReduceJobRunner {
     final KMeansSingleSampleJobRunner<SimpleFeature> singleSamplekmeansJobRunner =
-        new KMeansSingleSampleJobRunner<SimpleFeature>();
+        new KMeansSingleSampleJobRunner<>();
     final KMeansParallelJobRunner parallelJobRunner = new KMeansParallelJobRunner();
 
     @Override

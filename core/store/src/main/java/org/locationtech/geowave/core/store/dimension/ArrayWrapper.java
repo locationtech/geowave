@@ -39,7 +39,7 @@ public class ArrayWrapper<T> implements CommonIndexValue {
   }
 
   @Override
-  public boolean overlaps(NumericDimensionField[] field, NumericData[] rangeData) {
+  public boolean overlaps(final NumericDimensionField[] field, final NumericData[] rangeData) {
     // TODO Auto-generated method stub
     return true;
   }

@@ -8,13 +8,13 @@
  */
 package org.locationtech.geowave.format.sentinel2;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.converters.ISO8601DateConverter;
-import com.beust.jcommander.converters.IntegerConverter;
 import java.util.Date;
 import org.locationtech.geowave.adapter.vector.ingest.CQLFilterOptionProvider.ConvertCQLStrToFilterConverter;
 import org.locationtech.geowave.adapter.vector.ingest.CQLFilterOptionProvider.FilterParameter;
 import org.opengis.filter.Filter;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.converters.ISO8601DateConverter;
+import com.beust.jcommander.converters.IntegerConverter;
 
 public class Sentinel2BasicCommandLineOptions {
   private static final String DEFAULT_WORKSPACE_DIR = "sentinel2";
@@ -115,43 +115,43 @@ public class Sentinel2BasicCommandLineOptions {
     return relativeOrbitNumber;
   }
 
-  public void setWorkspaceDir(String workspaceDir) {
+  public void setWorkspaceDir(final String workspaceDir) {
     this.workspaceDir = workspaceDir;
   }
 
-  public void setCqlFilter(String cqlFilter) {
+  public void setCqlFilter(final String cqlFilter) {
     this.cqlFilter = new ConvertCQLStrToFilterConverter().convert(cqlFilter);
   }
 
-  public void setProviderName(String providerName) {
+  public void setProviderName(final String providerName) {
     this.providerName = providerName;
   }
 
-  public void setCollection(String collection) {
+  public void setCollection(final String collection) {
     this.collection = collection;
   }
 
-  public void setPlatform(String platform) {
+  public void setPlatform(final String platform) {
     this.platform = platform;
   }
 
-  public void setLocation(String location) {
+  public void setLocation(final String location) {
     this.location = location;
   }
 
-  public void setStartDate(Date startDate) {
+  public void setStartDate(final Date startDate) {
     this.startDate = startDate;
   }
 
-  public void setEndDate(Date endDate) {
+  public void setEndDate(final Date endDate) {
     this.endDate = endDate;
   }
 
-  public void setOrbitNumber(int orbitNumber) {
+  public void setOrbitNumber(final int orbitNumber) {
     this.orbitNumber = orbitNumber;
   }
 
-  public void setRelativeOrbitNumber(int relativeOrbitNumber) {
+  public void setRelativeOrbitNumber(final int relativeOrbitNumber) {
     this.relativeOrbitNumber = relativeOrbitNumber;
   }
 }

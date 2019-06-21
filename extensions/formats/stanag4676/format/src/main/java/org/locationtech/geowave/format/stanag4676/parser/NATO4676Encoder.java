@@ -118,7 +118,7 @@ public class NATO4676Encoder implements TrackEncoder {
     for (final NATO4676Message msg : run.getMessages()) {
       indentLevel = 0;
       if (msg instanceof TrackMessage) {
-        TrackMessage trackMsg = (TrackMessage) msg;
+        final TrackMessage trackMsg = (TrackMessage) msg;
         if (firstTrackMessage) {
           pw.write(GetXMLOpen());
           pw.write(
@@ -132,8 +132,8 @@ public class NATO4676Encoder implements TrackEncoder {
         Encode(trackMsg);
       } else if (msg instanceof MissionSummaryMessage) {
         pw = pwMission;
-        MissionSummaryMessage msMsg = (MissionSummaryMessage) msg;
-        MissionSummary ms = msMsg.getMissionSummary();
+        final MissionSummaryMessage msMsg = (MissionSummaryMessage) msg;
+        final MissionSummary ms = msMsg.getMissionSummary();
         if (ms != null) {
           pw.write(GetXMLOpen());
           pw.write(
@@ -144,7 +144,7 @@ public class NATO4676Encoder implements TrackEncoder {
           pw.write(indent() + "<missionID>" + ms.getMissionId() + "</missionID>\n");
           pw.write(indent() + "<StartTime>" + EncodeTime(ms.getStartTime()) + "</StartTime>\n");
           pw.write(indent() + "<EndTime>" + EncodeTime(ms.getEndTime()) + "</EndTime>\n");
-          Area area = ms.getCoverageArea();
+          final Area area = ms.getCoverageArea();
           if (area != null) {
             pw.write(indent() + "<CoverageArea xsi:type=\"PolygonArea\">\n");
             Encode(area);
@@ -153,7 +153,7 @@ public class NATO4676Encoder implements TrackEncoder {
           if (ms.getClassifications().size() > 0) {
             pw.write(indent() + "<ActiveObjectClassifications>\n");
             indentLevel++;
-            for (ObjectClassification oc : ms.getClassifications()) {
+            for (final ObjectClassification oc : ms.getClassifications()) {
               pw.write(indent() + "<classification>" + oc.name() + "</classification>\n");
             }
             indentLevel--;
@@ -370,7 +370,7 @@ public class NATO4676Encoder implements TrackEncoder {
     pw.write(indent() + "<frameNumber>" + frame.getFrameNumber() + "</frameNumber>\n");
     pw.write(
         indent() + "<frameTimestamp>" + EncodeTime(frame.getFrameTime()) + "</frameTimestamp>\n");
-    Area area = frame.getCoverageArea();
+    final Area area = frame.getCoverageArea();
     if (area != null) {
       pw.write(indent() + "<frameCoverageArea xsi:type=\"PolygonArea\">\n");
       Encode(frame.getCoverageArea());
@@ -395,15 +395,15 @@ public class NATO4676Encoder implements TrackEncoder {
     pw.write(indent() + "<trackItemTime>" + EncodeTime(tc.getTime()) + "</trackItemTime>\n");
     pw.write(indent() + "<numberofObjects>" + tc.getNumObjects() + "</numberofObjects>\n");
 
-    ObjectClassification oc = tc.getClassification();
+    final ObjectClassification oc = tc.getClassification();
     if (oc != null) {
       pw.write(indent() + "<classification>" + oc.name() + "</classification>\n");
-      ModalityType mt = ModalityType.fromString(tc.getSource());
+      final ModalityType mt = ModalityType.fromString(tc.getSource());
       if (mt != null) {
         pw.write(indent() + "<classificationSource>" + mt.toString() + "</classificationSource>\n");
       }
     }
-    ClassificationCredibility cred = tc.getCredibility();
+    final ClassificationCredibility cred = tc.getCredibility();
     if (cred != null) {
       pw.write(indent() + "<classificationCredibility>\n");
       indentLevel++;
@@ -467,7 +467,7 @@ public class NATO4676Encoder implements TrackEncoder {
   private void Encode(final Area coverageArea) {
     indentLevel++;
     if (coverageArea != null) {
-      for (GeodeticPosition pos : coverageArea.getPoints()) {
+      for (final GeodeticPosition pos : coverageArea.getPoints()) {
         pw.write(indent() + "<areaBoundaryPoints xsi:type=\"GeodeticPosition\">\n");
         Encode(pos);
         pw.write(indent() + "</areaBoundaryPoints>\n");

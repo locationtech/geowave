@@ -19,14 +19,14 @@ public enum ExerciseIndicator {
   private String value;
 
   ExerciseIndicator() {
-    this.value = "OPERATIONAL";
+    value = "OPERATIONAL";
   }
 
   ExerciseIndicator(final String value) {
     this.value = value;
   }
 
-  public static ExerciseIndicator fromString(String value) {
+  public static ExerciseIndicator fromString(final String value) {
     for (final ExerciseIndicator item : ExerciseIndicator.values()) {
       if (item.toString().equals(value)) {
         return item;

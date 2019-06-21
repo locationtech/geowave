@@ -169,7 +169,7 @@ public class MemoryStoreUtils {
   }
 
   public abstract static class CompositeExpression extends VisibilityExpression {
-    protected final List<VisibilityExpression> expressions = new ArrayList<VisibilityExpression>();
+    protected final List<VisibilityExpression> expressions = new ArrayList<>();
 
     @Override
     public VisibilityExpression add(final VisibilityExpression expression) {

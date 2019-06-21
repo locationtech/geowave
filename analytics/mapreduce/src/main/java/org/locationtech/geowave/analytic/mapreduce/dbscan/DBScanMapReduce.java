@@ -89,7 +89,7 @@ public class DBScanMapReduce {
 
     @Override
     protected Map<ByteArray, Cluster> createSummary() {
-      return new HashMap<ByteArray, Cluster>();
+      return new HashMap<>();
     }
 
     @Override
@@ -246,7 +246,7 @@ public class DBScanMapReduce {
         throws IOException, InterruptedException {
       final HadoopWritableSerializer<SimpleFeature, FeatureWritable> serializer =
           outputAdapter.createWritableSerializer();
-      final Set<Cluster> processed = new HashSet<Cluster>();
+      final Set<Cluster> processed = new HashSet<>();
       final Iterator<Map.Entry<ByteArray, Cluster>> clusterIt = summary.entrySet().iterator();
       while (clusterIt.hasNext()) {
         final Cluster cluster = clusterIt.next().getValue();

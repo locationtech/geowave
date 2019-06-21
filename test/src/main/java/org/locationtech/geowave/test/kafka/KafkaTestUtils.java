@@ -12,7 +12,6 @@ import java.io.File;
 import java.net.UnknownHostException;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
-import kafka.server.KafkaConfig;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import org.locationtech.geowave.core.ingest.operations.KafkaToGeowaveCommand;
@@ -26,6 +25,7 @@ import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.ZookeeperTestEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import kafka.server.KafkaConfig;
 
 public class KafkaTestUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(KafkaTestEnvironment.class);
@@ -84,16 +84,16 @@ public class KafkaTestUtils {
 
     // Execute Command
     final KafkaToGeowaveCommand kafkaToGeowave = new KafkaToGeowaveCommand();
-    File configFile = File.createTempFile("test_stats", null);
-    ManualOperationParams params = new ManualOperationParams();
+    final File configFile = File.createTempFile("test_stats", null);
+    final ManualOperationParams params = new ManualOperationParams();
 
     params.getContext().put(ConfigOptions.PROPERTIES_FILE_CONTEXT, configFile);
-    AddIndexCommand addIndex = new AddIndexCommand();
+    final AddIndexCommand addIndex = new AddIndexCommand();
     addIndex.setParameters("test-index");
     addIndex.setPluginOptions(indexOption);
     addIndex.execute(params);
 
-    AddStoreCommand addStore = new AddStoreCommand();
+    final AddStoreCommand addStore = new AddStoreCommand();
     addStore.setParameters("test-store");
     addStore.setPluginOptions(options);
     addStore.execute(params);

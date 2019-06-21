@@ -8,8 +8,10 @@
  */
 package org.locationtech.geowave.core.cli.prefix;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 import java.lang.reflect.Method;
+import org.junit.Assert;
+import org.junit.Test;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -21,18 +23,16 @@ import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.ConstPool;
 import javassist.bytecode.annotation.Annotation;
 import javassist.bytecode.annotation.IntegerMemberValue;
-import org.junit.Assert;
-import org.junit.Test;
 
 public class JavassistUtilsTest {
 
   @Test
   public void testCloneAnnotationsAttribute() {
-    CtClass clz = ClassPool.getDefault().makeClass("testCloneAnnotationsAttribute");
-    CtMethod ctmethod = addNewMethod(clz, "origMethod");
-    AnnotationsAttribute attr = annotateMethod(ctmethod, "origAnno", 135);
+    final CtClass clz = ClassPool.getDefault().makeClass("testCloneAnnotationsAttribute");
+    final CtMethod ctmethod = addNewMethod(clz, "origMethod");
+    final AnnotationsAttribute attr = annotateMethod(ctmethod, "origAnno", 135);
 
-    AnnotationsAttribute clonedAttr =
+    final AnnotationsAttribute clonedAttr =
         JavassistUtils.cloneAnnotationsAttribute(
             ctmethod.getMethodInfo().getConstPool(),
             attr,
@@ -56,7 +56,7 @@ public class JavassistUtilsTest {
 
   @Test
   public void testFindMethod() {
-    CtClass ctclass = ClassPool.getDefault().makeClass("testFindMethodClass");
+    final CtClass ctclass = ClassPool.getDefault().makeClass("testFindMethodClass");
     addNewMethod(ctclass, "method1");
     addNewMethod(ctclass, "method2");
 
@@ -69,9 +69,9 @@ public class JavassistUtilsTest {
     }
 
     try {
-      CtMethod foundMethod = JavassistUtils.findMethod(ctclass, m);
+      final CtMethod foundMethod = JavassistUtils.findMethod(ctclass, m);
       Assert.assertEquals("method1", foundMethod.getName());
-    } catch (NotFoundException e) {
+    } catch (final NotFoundException e) {
       e.printStackTrace();
       fail("Could not find method in CtClass");
     }
@@ -79,20 +79,21 @@ public class JavassistUtilsTest {
 
   @Test
   public void testCopyClassAnnontations() {
-    CtClass fromClass = ClassPool.getDefault().makeClass("fromClass");
-    CtClass toClass = ClassPool.getDefault().makeClass("toClass");
+    final CtClass fromClass = ClassPool.getDefault().makeClass("fromClass");
+    final CtClass toClass = ClassPool.getDefault().makeClass("toClass");
 
     // Create class annotations
-    ConstPool fromPool = fromClass.getClassFile().getConstPool();
-    AnnotationsAttribute attr = new AnnotationsAttribute(fromPool, AnnotationsAttribute.visibleTag);
-    Annotation anno = new Annotation("java.lang.Integer", fromPool);
+    final ConstPool fromPool = fromClass.getClassFile().getConstPool();
+    final AnnotationsAttribute attr =
+        new AnnotationsAttribute(fromPool, AnnotationsAttribute.visibleTag);
+    final Annotation anno = new Annotation("java.lang.Integer", fromPool);
     anno.addMemberValue("copyClassName", new IntegerMemberValue(fromPool, 246));
     attr.addAnnotation(anno);
     fromClass.getClassFile().addAttribute(attr);
 
     JavassistUtils.copyClassAnnotations(fromClass, toClass);
 
-    Annotation toAnno =
+    final Annotation toAnno =
         ((AnnotationsAttribute) toClass.getClassFile().getAttribute(
             AnnotationsAttribute.visibleTag)).getAnnotation("java.lang.Integer");
 
@@ -104,55 +105,55 @@ public class JavassistUtilsTest {
   @Test
   public void testCopyMethodAnnotationsToField() {
 
-    CtClass ctclass = ClassPool.getDefault().makeClass("test");
+    final CtClass ctclass = ClassPool.getDefault().makeClass("test");
 
-    CtMethod createdMethod = addNewMethod(ctclass, "doNothing");
+    final CtMethod createdMethod = addNewMethod(ctclass, "doNothing");
     annotateMethod(createdMethod, "value", 123);
 
-    CtField createdField = addNewField(ctclass, "toField");
+    final CtField createdField = addNewField(ctclass, "toField");
 
     JavassistUtils.copyMethodAnnotationsToField(createdMethod, createdField);
 
     IntegerMemberValue i = null;
-    for (Annotation annot : ((AnnotationsAttribute) createdField.getFieldInfo().getAttribute(
+    for (final Annotation annot : ((AnnotationsAttribute) createdField.getFieldInfo().getAttribute(
         AnnotationsAttribute.visibleTag)).getAnnotations()) {
       i = (IntegerMemberValue) annot.getMemberValue("value");
       if (i != null) {
         break;
       }
     }
-    if (i == null || i.getValue() != 123) {
+    if ((i == null) || (i.getValue() != 123)) {
       fail("Expected annotation value 123 but found " + i);
     }
   }
 
   @Test
   public void testGetNextUniqueClassName() {
-    String unique1 = JavassistUtils.getNextUniqueClassName();
-    String unique2 = JavassistUtils.getNextUniqueClassName();
+    final String unique1 = JavassistUtils.getNextUniqueClassName();
+    final String unique2 = JavassistUtils.getNextUniqueClassName();
 
     Assert.assertFalse(unique1.equals(unique2));
   }
 
   @Test
   public void testGetNextUniqueFieldName() {
-    String unique1 = JavassistUtils.getNextUniqueFieldName();
-    String unique2 = JavassistUtils.getNextUniqueFieldName();
+    final String unique1 = JavassistUtils.getNextUniqueFieldName();
+    final String unique2 = JavassistUtils.getNextUniqueFieldName();
 
     Assert.assertFalse(unique1.equals(unique2));
   }
 
   @Test
   public void testGenerateEmptyClass() {
-    CtClass emptyClass = JavassistUtils.generateEmptyClass();
-    CtClass anotherEmptyClass = JavassistUtils.generateEmptyClass();
+    final CtClass emptyClass = JavassistUtils.generateEmptyClass();
+    final CtClass anotherEmptyClass = JavassistUtils.generateEmptyClass();
 
     Assert.assertFalse(emptyClass.equals(anotherEmptyClass));
 
     // test empty class works as expected
-    CtMethod method = addNewMethod(emptyClass, "a");
+    final CtMethod method = addNewMethod(emptyClass, "a");
     annotateMethod(method, "abc", 7);
-    CtField field = addNewField(emptyClass, "d");
+    final CtField field = addNewField(emptyClass, "d");
     annotateField(field, "def", 9);
 
     Assert.assertEquals(
@@ -177,12 +178,12 @@ public class JavassistUtilsTest {
     }
   }
 
-  private CtMethod addNewMethod(CtClass clz, String methodName) {
+  private CtMethod addNewMethod(final CtClass clz, final String methodName) {
     CtMethod ctmethod = null;
     try {
       ctmethod = CtNewMethod.make("void " + methodName + "(){ return; }", clz);
       clz.addMethod(ctmethod);
-    } catch (CannotCompileException e) {
+    } catch (final CannotCompileException e) {
       e.printStackTrace();
     }
     if (ctmethod == null) {
@@ -193,14 +194,15 @@ public class JavassistUtilsTest {
   }
 
   private AnnotationsAttribute annotateMethod(
-      CtMethod ctmethod,
-      String annotationName,
-      int annotationValue) {
-    AnnotationsAttribute attr =
+      final CtMethod ctmethod,
+      final String annotationName,
+      final int annotationValue) {
+    final AnnotationsAttribute attr =
         new AnnotationsAttribute(
             ctmethod.getMethodInfo().getConstPool(),
             AnnotationsAttribute.visibleTag);
-    Annotation anno = new Annotation("java.lang.Integer", ctmethod.getMethodInfo().getConstPool());
+    final Annotation anno =
+        new Annotation("java.lang.Integer", ctmethod.getMethodInfo().getConstPool());
     anno.addMemberValue(
         annotationName,
         new IntegerMemberValue(ctmethod.getMethodInfo().getConstPool(), annotationValue));
@@ -211,12 +213,12 @@ public class JavassistUtilsTest {
     return attr;
   }
 
-  private CtField addNewField(CtClass clz, String fieldName) {
+  private CtField addNewField(final CtClass clz, final String fieldName) {
     CtField ctfield = null;
     try {
       ctfield = new CtField(clz, fieldName, clz);
       clz.addField(ctfield);
-    } catch (CannotCompileException e) {
+    } catch (final CannotCompileException e) {
       e.printStackTrace();
     }
     if (ctfield == null) {
@@ -226,12 +228,16 @@ public class JavassistUtilsTest {
     return ctfield;
   }
 
-  private void annotateField(CtField ctfield, String annotationName, int annotationValue) {
-    AnnotationsAttribute attr =
+  private void annotateField(
+      final CtField ctfield,
+      final String annotationName,
+      final int annotationValue) {
+    final AnnotationsAttribute attr =
         new AnnotationsAttribute(
             ctfield.getFieldInfo().getConstPool(),
             AnnotationsAttribute.visibleTag);
-    Annotation anno = new Annotation("java.lang.Integer", ctfield.getFieldInfo().getConstPool());
+    final Annotation anno =
+        new Annotation("java.lang.Integer", ctfield.getFieldInfo().getConstPool());
     anno.addMemberValue(
         annotationName,
         new IntegerMemberValue(ctfield.getFieldInfo().getConstPool(), annotationValue));

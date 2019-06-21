@@ -49,8 +49,8 @@ public class GeoWaveFeatureReaderTest extends BaseDataStoreTest {
   SimpleFeatureType type;
   final GeometryFactory factory = new GeometryFactory(new PrecisionModel(PrecisionModel.FIXED));
   Query query = null;
-  List<String> fids = new ArrayList<String>();
-  List<String> pids = new ArrayList<String>();
+  List<String> fids = new ArrayList<>();
+  List<String> pids = new ArrayList<>();
   Date stime, mtime, etime;
 
   @Before

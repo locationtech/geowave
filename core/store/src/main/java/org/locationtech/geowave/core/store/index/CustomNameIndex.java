@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.store.index;
 
 import java.nio.ByteBuffer;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
@@ -52,8 +53,7 @@ public class CustomNameIndex extends IndexImpl {
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     final int selfBinaryLength = VarintUtils.readUnsignedInt(buf);
-    final byte[] selfBinary = new byte[selfBinaryLength];
-    buf.get(selfBinary);
+    final byte[] selfBinary = ByteArrayUtils.safeRead(buf, selfBinaryLength);
 
     super.fromBinary(selfBinary);
     final byte[] nameBinary = new byte[buf.remaining()];

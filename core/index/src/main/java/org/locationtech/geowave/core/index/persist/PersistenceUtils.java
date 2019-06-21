@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,7 @@ public class PersistenceUtils {
     }
     int byteCount = VarintUtils.unsignedIntByteLength(persistables.size());
 
-    final List<byte[]> persistableBinaries = new ArrayList<byte[]>();
+    final List<byte[]> persistableBinaries = new ArrayList<>();
     for (final Persistable persistable : persistables) {
       final byte[] binary = toBinary(persistable);
       byteCount += (VarintUtils.unsignedIntByteLength(binary.length) + binary.length);
@@ -56,7 +57,7 @@ public class PersistenceUtils {
   }
 
   public static byte[] toClassId(final String className) {
-    if (className == null || className.isEmpty()) {
+    if ((className == null) || className.isEmpty()) {
       return new byte[0];
     }
     Short classId;
@@ -67,7 +68,7 @@ public class PersistenceUtils {
         buf.putShort(classId);
         return buf.array();
       }
-    } catch (ClassNotFoundException e) {
+    } catch (final ClassNotFoundException e) {
       LOGGER.warn("Unable to find class", e);
     }
     return new byte[0];
@@ -98,7 +99,7 @@ public class PersistenceUtils {
   }
 
   public static List<Persistable> fromBinaryAsList(final byte[] bytes) {
-    final List<Persistable> persistables = new ArrayList<Persistable>();
+    final List<Persistable> persistables = new ArrayList<>();
     if ((bytes == null) || (bytes.length == 0)) {
       // the original binary didn't even contain the size of the
       // array, assume that nothing was persisted
@@ -107,8 +108,8 @@ public class PersistenceUtils {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     final int size = VarintUtils.readUnsignedInt(buf);
     for (int i = 0; i < size; i++) {
-      final byte[] persistableBinary = new byte[VarintUtils.readUnsignedInt(buf)];
-      buf.get(persistableBinary);
+      final byte[] persistableBinary =
+          ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
       persistables.add(fromBinary(persistableBinary));
     }
     return persistables;

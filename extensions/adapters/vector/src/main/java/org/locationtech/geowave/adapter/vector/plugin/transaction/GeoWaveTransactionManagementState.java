@@ -33,8 +33,7 @@ public class GeoWaveTransactionManagementState implements GeoWaveTransactionStat
    * <p> Differences are stored as a Map of Feature by fid, and are reset during a commit() or
    * rollback().
    */
-  private final Map<String, GeoWaveTransactionManagement> typeNameDiff =
-      new HashMap<String, GeoWaveTransactionManagement>();
+  private final Map<String, GeoWaveTransactionManagement> typeNameDiff = new HashMap<>();
 
   public GeoWaveTransactionManagementState(
       final int transactionBufferSize,

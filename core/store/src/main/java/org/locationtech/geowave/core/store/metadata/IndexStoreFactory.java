@@ -15,7 +15,10 @@ import org.locationtech.geowave.core.store.index.IndexStore;
 
 public class IndexStoreFactory extends BaseStoreFactory<IndexStore> {
 
-  public IndexStoreFactory(String typeName, String description, StoreFactoryHelper helper) {
+  public IndexStoreFactory(
+      final String typeName,
+      final String description,
+      final StoreFactoryHelper helper) {
     super(typeName, description, helper);
   }
 

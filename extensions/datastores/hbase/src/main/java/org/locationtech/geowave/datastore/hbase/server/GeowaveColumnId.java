@@ -19,27 +19,31 @@ class ShortColumnId implements GeowaveColumnId {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + columnId;
+    result = (prime * result) + columnId;
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
+  public boolean equals(final Object obj) {
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
-    ShortColumnId other = (ShortColumnId) obj;
-    if (columnId != other.columnId)
+    }
+    final ShortColumnId other = (ShortColumnId) obj;
+    if (columnId != other.columnId) {
       return false;
+    }
     return true;
   }
 
-  private short columnId;
+  private final short columnId;
 
-  public ShortColumnId(short columnId) {
+  public ShortColumnId(final short columnId) {
     this.columnId = columnId;
   }
 }
@@ -47,34 +51,39 @@ class ShortColumnId implements GeowaveColumnId {
 
 class ByteArrayColumnId implements GeowaveColumnId {
 
-  private ByteArray columnId;
+  private final ByteArray columnId;
 
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((columnId == null) ? 0 : columnId.hashCode());
+    result = (prime * result) + ((columnId == null) ? 0 : columnId.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
+  public boolean equals(final Object obj) {
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
-    ByteArrayColumnId other = (ByteArrayColumnId) obj;
+    }
+    final ByteArrayColumnId other = (ByteArrayColumnId) obj;
     if (columnId == null) {
-      if (other.columnId != null)
+      if (other.columnId != null) {
         return false;
-    } else if (!columnId.equals(other.columnId))
+      }
+    } else if (!columnId.equals(other.columnId)) {
       return false;
+    }
     return true;
   }
 
-  public ByteArrayColumnId(ByteArray columnId) {
+  public ByteArrayColumnId(final ByteArray columnId) {
     this.columnId = columnId;
   }
 }

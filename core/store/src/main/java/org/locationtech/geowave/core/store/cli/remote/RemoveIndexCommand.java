@@ -8,15 +8,15 @@
  */
 package org.locationtech.geowave.core.store.cli.remote;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
 import java.util.ArrayList;
 import java.util.List;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "rmindex", parentOperation = RemoteSection.class)
 @Parameters(
@@ -25,7 +25,7 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 public class RemoveIndexCommand extends DefaultOperation implements Command {
 
   @Parameter(description = "<store name> <indexId>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   @Override
   public void execute(final OperationParams params) {

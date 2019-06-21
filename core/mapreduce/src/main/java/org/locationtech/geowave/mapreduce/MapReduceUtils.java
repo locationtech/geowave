@@ -8,10 +8,10 @@
  */
 package org.locationtech.geowave.mapreduce;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 import java.util.List;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 
 public class MapReduceUtils {
   public static List<String> idsFromAdapters(final List<DataTypeAdapter<Object>> adapters) {

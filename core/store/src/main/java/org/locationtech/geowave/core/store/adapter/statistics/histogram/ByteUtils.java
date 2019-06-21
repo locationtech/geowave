@@ -38,13 +38,13 @@ public class ByteUtils {
           (byte) 0xff,
           (byte) 0xff};
 
-  public static byte[] toBytes(double val) {
-    BigInteger tmp = new BigDecimal(val).toBigInteger();
+  public static byte[] toBytes(final double val) {
+    final BigInteger tmp = new BigDecimal(val).toBigInteger();
     byte[] arr = tmp.toByteArray();
-    if (arr[0] == (byte) 0 && arr.length > 1 && arr[1] == (byte) 0xff) {
+    if ((arr[0] == (byte) 0) && (arr.length > 1) && (arr[1] == (byte) 0xff)) {
       // to represent {0xff, 0xff}, big integer uses {0x00, 0xff, 0xff}
       // due to the one's compliment representation.
-      byte[] clipped = new byte[arr.length - 1];
+      final byte[] clipped = new byte[arr.length - 1];
       System.arraycopy(arr, 1, clipped, 0, arr.length - 1);
       arr = clipped;
     }
@@ -54,12 +54,12 @@ public class ByteUtils {
     return toPaddedBytes(arr);
   }
 
-  public static byte[] toBytes(long val) {
+  public static byte[] toBytes(final long val) {
     byte[] arr = BigInteger.valueOf(val).toByteArray();
-    if (arr[0] == (byte) 0 && arr.length > 1 && arr[1] == (byte) 0xff) {
+    if ((arr[0] == (byte) 0) && (arr.length > 1) && (arr[1] == (byte) 0xff)) {
       // to represent {0xff, 0xff}, big integer uses {0x00, 0xff, 0xff}
       // due to the one's compliment representation.
-      byte[] clipped = new byte[arr.length - 1];
+      final byte[] clipped = new byte[arr.length - 1];
       System.arraycopy(arr, 1, clipped, 0, arr.length - 1);
       arr = clipped;
     }
@@ -78,8 +78,9 @@ public class ByteUtils {
   }
 
   public static byte[] toPaddedBytes(final byte[] b) {
-    if (b.length == 8)
+    if (b.length == 8) {
       return b;
+    }
     final byte[] newD = new byte[8];
     System.arraycopy(b, 0, newD, 0, Math.min(b.length, 8));
     return newD;

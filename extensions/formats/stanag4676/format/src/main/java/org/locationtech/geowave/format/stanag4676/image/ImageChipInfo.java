@@ -32,7 +32,7 @@ public class ImageChipInfo {
     return image;
   }
 
-  public void setImage(BufferedImage image) {
+  public void setImage(final BufferedImage image) {
     this.image = image;
   }
 
@@ -52,7 +52,7 @@ public class ImageChipInfo {
     return imageBytes;
   }
 
-  public void setImageBytes(byte[] imageBytes) {
+  public void setImageBytes(final byte[] imageBytes) {
     this.imageBytes = imageBytes;
   }
 }

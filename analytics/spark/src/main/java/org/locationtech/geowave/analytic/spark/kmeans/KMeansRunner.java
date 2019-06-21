@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.analytic.spark.kmeans;
 
-import com.beust.jcommander.ParameterException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -42,6 +41,7 @@ import org.locationtech.jts.geom.Geometry;
 import org.opengis.filter.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.ParameterException;
 
 public class KMeansRunner {
   private static final Logger LOGGER = LoggerFactory.getLogger(KMeansRunner.class);
@@ -296,7 +296,7 @@ public class KMeansRunner {
   }
 
   public void setSparkSession(final SparkSession ss) {
-    this.session = ss;
+    session = ss;
   }
 
   public void setNumClusters(final int numClusters) {

@@ -8,8 +8,8 @@
  */
 package org.locationtech.geowave.adapter.vector.ingest;
 
-import com.beust.jcommander.ParametersDelegate;
 import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
+import com.beust.jcommander.ParametersDelegate;
 
 /** This class is a holder class for options used in AbstractSimpleFeatureIngest. */
 public class SimpleFeatureIngestOptions implements IngestFormatOptions {

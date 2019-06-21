@@ -8,15 +8,15 @@
  */
 package org.locationtech.geowave.cli.geoserver;
 
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
+import org.locationtech.geowave.core.cli.api.OperationParams;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
-import org.locationtech.geowave.core.cli.api.OperationParams;
 
 @GeowaveOperation(name = "listcs", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "List GeoServer coverage stores")
@@ -42,7 +42,7 @@ public class GeoServerListCoverageStoresCommand extends GeoServerCommand<String>
       final JSONArray cvgStores = jsonResponse.getJSONArray("coverageStores");
       return "\nGeoServer coverage stores list for '" + workspace + "': " + cvgStores.toString(2);
     }
-    String errorMessage =
+    final String errorMessage =
         "Error getting GeoServer coverage stores list for '"
             + workspace
             + "': "

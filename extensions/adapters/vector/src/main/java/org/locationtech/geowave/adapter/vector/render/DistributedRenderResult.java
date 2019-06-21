@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 import org.geoserver.wms.map.ImageUtils;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.VarintUtils;
 
@@ -141,28 +142,28 @@ public class DistributedRenderResult implements Mergeable {
     @Override
     public void fromBinary(final byte[] bytes) {
       final ByteBuffer buf = ByteBuffer.wrap(bytes);
-      final byte[] compositeBinary = new byte[VarintUtils.readUnsignedInt(buf)];
-      if (compositeBinary.length > 0) {
-        buf.get(compositeBinary);
+      final int compositeBinaryLength = VarintUtils.readUnsignedInt(buf);
+      if (compositeBinaryLength > 0) {
+        final byte[] compositeBinary = ByteArrayUtils.safeRead(buf, compositeBinaryLength);
         composite = new PersistableComposite();
         composite.fromBinary(compositeBinary);
       } else {
         composite = null;
       }
       final int styleLength = VarintUtils.readUnsignedInt(buf);
+      ByteArrayUtils.verifyBufferSize(buf, styleLength);
       orderedStyles = new ArrayList<>(styleLength);
       for (int i = 0; i < styleLength; i++) {
 
         final int styleBinaryLength = VarintUtils.readUnsignedInt(buf);
         if (styleBinaryLength > 0) {
-          final byte[] styleBinary = new byte[styleBinaryLength];
-          buf.get(styleBinary);
+          final byte[] styleBinary = ByteArrayUtils.safeRead(buf, styleBinaryLength);
           final ByteBuffer styleBuf = ByteBuffer.wrap(styleBinary);
           final int styleCompositeBinaryLength = VarintUtils.readUnsignedInt(styleBuf);
           PersistableComposite styleComposite;
           if (styleCompositeBinaryLength > 0) {
-            final byte[] styleCompositeBinary = new byte[styleCompositeBinaryLength];
-            styleBuf.get(styleCompositeBinary);
+            final byte[] styleCompositeBinary =
+                ByteArrayUtils.safeRead(styleBuf, styleCompositeBinaryLength);
             styleComposite = new PersistableComposite();
             styleComposite.fromBinary(styleCompositeBinary);
           } else {
@@ -305,15 +306,14 @@ public class DistributedRenderResult implements Mergeable {
   @Override
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
-    final byte[] parentImageBinary = new byte[VarintUtils.readUnsignedInt(buf)];
-    buf.get(parentImageBinary);
+    final byte[] parentImageBinary = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
     parentImage = new PersistableRenderedImage();
     parentImage.fromBinary(parentImageBinary);
     final int numCompositeGroups = VarintUtils.readUnsignedInt(buf);
     orderedComposites = new ArrayList<>(numCompositeGroups);
     for (int i = 0; i < numCompositeGroups; i++) {
-      final byte[] compositeGroupBinary = new byte[VarintUtils.readUnsignedInt(buf)];
-      buf.get(compositeGroupBinary);
+      final byte[] compositeGroupBinary =
+          ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
       final CompositeGroupResult compositeGroup = new CompositeGroupResult();
       compositeGroup.fromBinary(compositeGroupBinary);
       orderedComposites.add(compositeGroup);

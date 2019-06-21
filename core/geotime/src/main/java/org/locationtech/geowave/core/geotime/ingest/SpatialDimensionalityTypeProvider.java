@@ -106,7 +106,7 @@ public class SpatialDimensionalityTypeProvider implements
     String crsCode = null;
     NumericDimensionField<?>[] fields = null;
     NumericDimensionField<?>[] fields_temporal = null;
-    Integer geometryPrecision = options.getGeometryPrecision();
+    final Integer geometryPrecision = options.getGeometryPrecision();
 
     if ((options.crs == null)
         || options.crs.isEmpty()
@@ -252,7 +252,7 @@ public class SpatialDimensionalityTypeProvider implements
       return this;
     }
 
-    public SpatialIndexBuilder setGeometryPrecision(@Nullable Integer precision) {
+    public SpatialIndexBuilder setGeometryPrecision(@Nullable final Integer precision) {
       if (precision == null) {
         options.fullGeometryPrecision = true;
       } else {

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
@@ -35,27 +35,27 @@ public class CassandraOptionsTest {
   @Test
   public void testSetBatchWriteSize() {
     mockOptions.setBatchWriteSize(batchWriteSize);
-    int size = mockOptions.getBatchWriteSize();
+    final int size = mockOptions.getBatchWriteSize();
     Assert.assertEquals(batchWriteSize, size);
   }
 
   @Test
   public void testSetDurableWrites() {
     mockOptions.setDurableWrites(durableSize);
-    boolean isDurable = mockOptions.isDurableWrites();
+    final boolean isDurable = mockOptions.isDurableWrites();
     Assert.assertTrue(isDurable);
   }
 
   @Test
   public void testIsServerSideLibraryEnabled() {
-    boolean isServerEnabled = mockOptions.isServerSideLibraryEnabled();
+    final boolean isServerEnabled = mockOptions.isServerSideLibraryEnabled();
     Assert.assertFalse(isServerEnabled);
   }
 
   @Test
   public void testSetReplicationFactor() {
     mockOptions.setReplicationFactor(replicationFactor);
-    int getRF = mockOptions.getReplicationFactor();
+    final int getRF = mockOptions.getReplicationFactor();
     Assert.assertEquals(replicationFactor, getRF);
   }
 }

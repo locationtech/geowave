@@ -8,7 +8,8 @@
  */
 package org.locationtech.geowave.adapter.vector.plugin.visibility;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import java.text.ParseException;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;

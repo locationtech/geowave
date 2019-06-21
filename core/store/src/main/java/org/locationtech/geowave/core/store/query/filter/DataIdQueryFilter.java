@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
@@ -58,8 +59,7 @@ public class DataIdQueryFilter implements QueryFilter {
     dataIds = new HashSet<>(size);
     for (int i = 0; i < size; i++) {
       final int bsize = VarintUtils.readUnsignedInt(buf);
-      final byte[] dataIdBytes = new byte[bsize];
-      buf.get(dataIdBytes);
+      final byte[] dataIdBytes = ByteArrayUtils.safeRead(buf, bsize);
       dataIds.add(new ByteArray(dataIdBytes));
     }
   }

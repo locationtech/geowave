@@ -45,8 +45,8 @@ public class GeoWaveGrpcOperationParser {
   public static String getGrpcReturnType(final String type) {
     // note: array and enum types require deeper handling and
     // thus should be processed outside this method as well
-    String[] toks = type.split("(<)|(>)");
-    String baseType = toks[0];
+    final String[] toks = type.split("(<)|(>)");
+    final String baseType = toks[0];
 
     if (baseType.equalsIgnoreCase(String.class.getTypeName())) {
       return "string";
@@ -70,8 +70,8 @@ public class GeoWaveGrpcOperationParser {
     } else if (baseType.equalsIgnoreCase(SortedMap.class.getTypeName())
         || baseType.equalsIgnoreCase(Map.class.getTypeName())) {
       toks[1] = toks[1].replaceAll(" ", "");
-      String[] paramToks = toks[1].split(",");
-      String grpcType =
+      final String[] paramToks = toks[1].split(",");
+      final String grpcType =
           "map<" + getGrpcReturnType(paramToks[0]) + ", " + getGrpcReturnType(paramToks[1]) + ">";
       return grpcType;
     } else if (baseType.equalsIgnoreCase(Object.class.getTypeName())) {

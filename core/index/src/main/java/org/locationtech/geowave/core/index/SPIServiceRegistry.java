@@ -38,11 +38,11 @@ public class SPIServiceRegistry extends ServiceRegistry {
   private static final Logger LOGGER = LoggerFactory.getLogger(SPIServiceRegistry.class);
 
   @SuppressWarnings("unchecked")
-  public SPIServiceRegistry(Class<?> category) {
+  public SPIServiceRegistry(final Class<?> category) {
     super((Iterator) Arrays.asList(category).iterator());
   }
 
-  public SPIServiceRegistry(Iterator<Class<?>> categories) {
+  public SPIServiceRegistry(final Iterator<Class<?>> categories) {
     super(categories);
   }
 
@@ -52,17 +52,17 @@ public class SPIServiceRegistry extends ServiceRegistry {
   private final Set<ClassLoader> localClassLoaders =
       Collections.synchronizedSet(new HashSet<ClassLoader>());
 
-  public static void registerClassLoader(ClassLoader loader) {
+  public static void registerClassLoader(final ClassLoader loader) {
     ClassLoaders.add(loader);
   }
 
-  public void registerLocalClassLoader(ClassLoader loader) {
+  public void registerLocalClassLoader(final ClassLoader loader) {
     localClassLoaders.add(loader);
   }
 
   public <T> Iterator<T> load(final Class<T> service) {
 
-    final Set<ClassLoader> checkset = new HashSet<ClassLoader>();
+    final Set<ClassLoader> checkset = new HashSet<>();
     final Set<ClassLoader> clSet = getClassLoaders();
     final Iterator<ClassLoader> loaderIt = clSet.iterator();
 
@@ -72,19 +72,20 @@ public class SPIServiceRegistry extends ServiceRegistry {
 
       @Override
       public boolean hasNext() {
-        while ((spiIT == null || !spiIT.hasNext()) && (loaderIt.hasNext())) {
+        while (((spiIT == null) || !spiIT.hasNext()) && (loaderIt.hasNext())) {
           final ClassLoader l = loaderIt.next();
-          if (checkset.contains(l))
+          if (checkset.contains(l)) {
             continue;
+          }
           checkset.add(l);
-          spiIT = (Iterator<T>) ServiceRegistry.lookupProviders(service, l);
+          spiIT = ServiceRegistry.lookupProviders(service, l);
         }
-        return spiIT != null && spiIT.hasNext();
+        return (spiIT != null) && spiIT.hasNext();
       }
 
       @Override
       public T next() {
-        return (T) spiIT.next();
+        return spiIT.next();
       }
 
       @Override
@@ -112,24 +113,24 @@ public class SPIServiceRegistry extends ServiceRegistry {
    * @return Classloaders to be used for scanning plugins.
    */
   public final Set<ClassLoader> getClassLoaders() {
-    final List<String> exceptions = new LinkedList<String>();
-    final Set<ClassLoader> loaders = new HashSet<ClassLoader>();
+    final List<String> exceptions = new LinkedList<>();
+    final Set<ClassLoader> loaders = new HashSet<>();
 
     try {
       loaders.add(SPIServiceRegistry.class.getClassLoader());
-    } catch (SecurityException ex) {
+    } catch (final SecurityException ex) {
       LOGGER.warn("Unable to get the class loader", ex);
       exceptions.add("SPIServiceRegistry's class loader : " + ex.getLocalizedMessage());
     }
     try {
       loaders.add(ClassLoader.getSystemClassLoader());
-    } catch (SecurityException ex) {
+    } catch (final SecurityException ex) {
       LOGGER.warn("Unable to get the system class loader", ex);
       exceptions.add("System class loader : " + ex.getLocalizedMessage());
     }
     try {
       loaders.add(Thread.currentThread().getContextClassLoader());
-    } catch (SecurityException ex) {
+    } catch (final SecurityException ex) {
       LOGGER.warn("Unable to get the context class loader", ex);
       exceptions.add("Thread's class loader : " + ex.getLocalizedMessage());
     }
@@ -146,7 +147,7 @@ public class SPIServiceRegistry extends ServiceRegistry {
           loaders.remove(parent);
           parent = parent.getParent();
         }
-      } catch (SecurityException ex) {
+      } catch (final SecurityException ex) {
         LOGGER.warn("Unable to get the class loader", ex);
         exceptions.add(
             loaderSet[i].toString() + "'s parent class loader : " + ex.getLocalizedMessage());
@@ -154,7 +155,7 @@ public class SPIServiceRegistry extends ServiceRegistry {
     }
     if (loaders.isEmpty()) {
       LOGGER.warn("No class loaders available. Check security exceptions (logged next).");
-      for (String exString : exceptions) {
+      for (final String exString : exceptions) {
         LOGGER.warn(exString);
       }
     }

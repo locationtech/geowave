@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.adapter.vector.ingest;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
 import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
 import org.locationtech.geowave.core.cli.converters.GeoWaveBaseConverter;
@@ -19,6 +17,8 @@ import org.opengis.filter.Filter;
 import org.opengis.filter.FilterVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
 
 /** Supports converting the filter string to Filter object. */
 public class CQLFilterOptionProvider implements Filter, Persistable {
@@ -88,7 +88,7 @@ public class CQLFilterOptionProvider implements Filter, Persistable {
       super("");
     }
 
-    public ConvertCQLStrToFilterConverter(String optionName) {
+    public ConvertCQLStrToFilterConverter(final String optionName) {
       super(optionName);
     }
 
@@ -119,7 +119,7 @@ public class CQLFilterOptionProvider implements Filter, Persistable {
     private String cqlFilterString;
     private Filter filter;
 
-    public FilterParameter(String cqlFilterString, Filter filter) {
+    public FilterParameter(final String cqlFilterString, final Filter filter) {
       super();
       this.cqlFilterString = cqlFilterString;
       this.filter = filter;
@@ -129,7 +129,7 @@ public class CQLFilterOptionProvider implements Filter, Persistable {
       return cqlFilterString;
     }
 
-    public void setCqlFilterString(String cqlFilterString) {
+    public void setCqlFilterString(final String cqlFilterString) {
       this.cqlFilterString = cqlFilterString;
     }
 
@@ -137,10 +137,11 @@ public class CQLFilterOptionProvider implements Filter, Persistable {
       return filter;
     }
 
-    public void setFilter(Filter filter) {
+    public void setFilter(final Filter filter) {
       this.filter = filter;
     }
 
+    @Override
     public String toString() {
       return cqlFilterString;
     }

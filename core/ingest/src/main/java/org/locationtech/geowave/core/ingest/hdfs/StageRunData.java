@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
  */
 public class StageRunData {
   private static final Logger LOGGER = LoggerFactory.getLogger(StageRunData.class);
-  private final Map<String, DataFileWriter> cachedWriters = new HashMap<String, DataFileWriter>();
+  private final Map<String, DataFileWriter> cachedWriters = new HashMap<>();
   private final Path hdfsBaseDirectory;
   private final FileSystem fs;
 

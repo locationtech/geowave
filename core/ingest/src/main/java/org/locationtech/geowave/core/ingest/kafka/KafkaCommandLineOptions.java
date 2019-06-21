@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.core.ingest.kafka;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,6 +18,8 @@ import org.locationtech.geowave.core.cli.prefix.JCommanderTranslationMap;
 import org.locationtech.geowave.core.cli.prefix.TranslationEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
 
 public class KafkaCommandLineOptions {
   private static final Logger LOGGER = LoggerFactory.getLogger(KafkaCommandLineOptions.class);
@@ -57,19 +57,19 @@ public class KafkaCommandLineOptions {
    * This function looks as 'this' and checks for @PropertyReference annotations, and overrides the
    * string values into the props list based on the propety name in the annotation value.
    */
-  private void applyOverrides(Properties properties) {
+  private void applyOverrides(final Properties properties) {
     // Get the parameters specified in this object.
-    JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
+    final JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
     translator.addObject(this);
-    JCommanderTranslationMap map = translator.translate();
+    final JCommanderTranslationMap map = translator.translate();
 
     // Find objects with the PropertyReference annotation
-    for (TranslationEntry entry : map.getEntries().values()) {
+    for (final TranslationEntry entry : map.getEntries().values()) {
       if (entry.hasValue()) {
-        PropertyReference ref = entry.getMember().getAnnotation(PropertyReference.class);
+        final PropertyReference ref = entry.getMember().getAnnotation(PropertyReference.class);
         if (ref != null) {
-          String propKey = ref.value();
-          String propStringValue = entry.getParam().get(entry.getObject()).toString();
+          final String propKey = ref.value();
+          final String propStringValue = entry.getParam().get(entry.getObject()).toString();
           properties.setProperty(propKey, propStringValue);
         }
       }
@@ -106,7 +106,7 @@ public class KafkaCommandLineOptions {
    *
    * @param kafkaPropertyFile
    */
-  public synchronized void setKafkaPropertyFile(String kafkaPropertyFile) {
+  public synchronized void setKafkaPropertyFile(final String kafkaPropertyFile) {
     this.kafkaPropertyFile = kafkaPropertyFile;
   }
 }

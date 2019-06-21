@@ -8,9 +8,8 @@
  */
 package org.locationtech.geowave.format.sentinel2;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
-import it.geosolutions.jaiext.JAIExt;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.assertThat;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import org.junit.After;
@@ -18,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.geowave.adapter.vector.util.DateUtilities;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
+import it.geosolutions.jaiext.JAIExt;
 
 public class AnalyzeRunnerTest {
   private PrintStream outBak = null;
@@ -36,20 +36,20 @@ public class AnalyzeRunnerTest {
 
   @Test
   public void testExecuteProviders() throws Exception {
-    for (Sentinel2ImageryProvider provider : Sentinel2ImageryProvider.getProviders()) {
+    for (final Sentinel2ImageryProvider provider : Sentinel2ImageryProvider.getProviders()) {
       testExecute(provider.providerName());
     }
   }
 
-  public void testExecute(String providerName) throws Exception {
+  public void testExecute(final String providerName) throws Exception {
     JAIExt.initJAIEXT();
 
-    Sentinel2ImageryProvider provider = Sentinel2ImageryProvider.getProvider(providerName);
+    final Sentinel2ImageryProvider provider = Sentinel2ImageryProvider.getProvider(providerName);
     if (provider == null) {
       throw new RuntimeException("Unable to find '" + providerName + "' Sentinel2 provider");
     }
 
-    Sentinel2BasicCommandLineOptions options = new Sentinel2BasicCommandLineOptions();
+    final Sentinel2BasicCommandLineOptions options = new Sentinel2BasicCommandLineOptions();
     options.setWorkspaceDir(Tests.WORKSPACE_DIR);
     options.setProviderName(providerName);
     options.setCollection(provider.collections()[0]);
@@ -61,7 +61,7 @@ public class AnalyzeRunnerTest {
 
     new AnalyzeRunner(options).runInternal(new ManualOperationParams());
 
-    String outputStr = new String(output.toByteArray());
+    final String outputStr = new String(output.toByteArray());
 
     // Scene information
     assertThat(outputStr, containsString("Provider Name: "));

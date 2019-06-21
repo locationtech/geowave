@@ -18,12 +18,12 @@ public interface AdapterAndIndexBasedQueryConstraints extends QueryConstraints {
   QueryConstraints createQueryConstraints(DataTypeAdapter<?> adapter, Index index);
 
   @Override
-  default List<QueryFilter> createFilters(Index index) {
+  default List<QueryFilter> createFilters(final Index index) {
     return null;
   }
 
   @Override
-  default List<MultiDimensionalNumericData> getIndexConstraints(Index index) {
+  default List<MultiDimensionalNumericData> getIndexConstraints(final Index index) {
     return null;
   }
 }

@@ -81,14 +81,14 @@ public class PersistentDataFormatter implements Formatter {
   /* end[accumulo.api=1.7] */
 
   @Override
-  public void initialize(Iterable<Entry<Key, Value>> scanner,
+  public void initialize(final Iterable<Entry<Key, Value>> scanner,
 
   // @formatter:off
       /*if[accumulo.api=1.7]
       boolean printTimestamps
       else[accumulo.api=1.7]*/
       // @formatter:on
-      FormatterConfig config
+      final FormatterConfig config
   /* end[accumulo.api=1.7] */
   ) {
     checkState(false);
@@ -118,7 +118,7 @@ public class PersistentDataFormatter implements Formatter {
     	timestampFormat = formatter.get();
     else[accumulo.api=1.7]*/
     // @formatter:on
-    if (config != null && config.willPrintTimestamps()) {
+    if ((config != null) && config.willPrintTimestamps()) {
       timestampFormat = config.getDateFormatSupplier().get();
       /* end[accumulo.api=1.7] */
     }
@@ -221,7 +221,7 @@ public class PersistentDataFormatter implements Formatter {
 
   public void appendValue(final StringBuilder sb, final Value value) {
     try {
-      Persistable persistable = URLClassloaderUtils.fromBinary(value.get());
+      final Persistable persistable = URLClassloaderUtils.fromBinary(value.get());
       sb.append(persistable.toString());
     } catch (final Exception ex) {
       LOGGER.info("Exception caught", ex);

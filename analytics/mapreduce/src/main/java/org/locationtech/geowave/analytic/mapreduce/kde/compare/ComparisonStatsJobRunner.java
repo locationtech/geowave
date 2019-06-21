@@ -69,7 +69,7 @@ public class ComparisonStatsJobRunner extends KDEJobRunner {
     // Load the params for config file.
     opts.prepare(params);
 
-    File configFile = (File) params.getContext().get(ConfigOptions.PROPERTIES_FILE_CONTEXT);
+    final File configFile = (File) params.getContext().get(ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
     // Don't care about output, but this will set the datastore options.
     kdeCommand.createRunner(params);

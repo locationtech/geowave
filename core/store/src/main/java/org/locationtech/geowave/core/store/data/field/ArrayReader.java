@@ -12,6 +12,7 @@ import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.field.ArrayWriter.Encoding;
 import org.locationtech.geowave.core.store.util.GenericTypeResolver;
@@ -27,24 +28,25 @@ public class ArrayReader<FieldType> implements FieldReader<FieldType[]> {
 
   @Override
   public FieldType[] readField(final byte[] fieldData) {
-    if (fieldData == null || fieldData.length == 0) {
+    if ((fieldData == null) || (fieldData.length == 0)) {
       return null;
     }
 
     final byte encoding = fieldData[0];
 
-    SerializationHelper<FieldType> serializationHelper = new SerializationHelper<FieldType>() {
+    final SerializationHelper<FieldType> serializationHelper =
+        new SerializationHelper<FieldType>() {
 
-      @Override
-      public int readUnsignedInt(ByteBuffer buffer) {
-        return VarintUtils.readUnsignedInt(buffer);
-      }
+          @Override
+          public int readUnsignedInt(final ByteBuffer buffer) {
+            return VarintUtils.readUnsignedInt(buffer);
+          }
 
-      @Override
-      public FieldType readField(FieldReader<FieldType> reader, byte[] bytes) {
-        return reader.readField(bytes);
-      }
-    };
+          @Override
+          public FieldType readField(final FieldReader<FieldType> reader, final byte[] bytes) {
+            return reader.readField(bytes);
+          }
+        };
 
     // try to read the encoding first
     if (encoding == Encoding.FIXED_SIZE_ENCODING.getByteEncoding()) {
@@ -61,17 +63,18 @@ public class ArrayReader<FieldType> implements FieldReader<FieldType[]> {
   @Override
   public FieldType[] readField(final byte[] fieldData, final byte serializationVersion) {
     if (serializationVersion < FieldUtils.SERIALIZATION_VERSION) {
-      SerializationHelper<FieldType> serializationHelper = new SerializationHelper<FieldType>() {
-        @Override
-        public int readUnsignedInt(ByteBuffer buffer) {
-          return buffer.getInt();
-        }
+      final SerializationHelper<FieldType> serializationHelper =
+          new SerializationHelper<FieldType>() {
+            @Override
+            public int readUnsignedInt(final ByteBuffer buffer) {
+              return buffer.getInt();
+            }
 
-        @Override
-        public FieldType readField(FieldReader<FieldType> reader, byte[] bytes) {
-          return reader.readField(bytes, serializationVersion);
-        }
-      };
+            @Override
+            public FieldType readField(final FieldReader<FieldType> reader, final byte[] bytes) {
+              return reader.readField(bytes, serializationVersion);
+            }
+          };
 
       final byte encoding = fieldData[0];
 
@@ -98,7 +101,7 @@ public class ArrayReader<FieldType> implements FieldReader<FieldType[]> {
       return null;
     }
 
-    final List<FieldType> result = new ArrayList<FieldType>();
+    final List<FieldType> result = new ArrayList<>();
 
     final ByteBuffer buff = ByteBuffer.wrap(fieldData);
 
@@ -109,7 +112,7 @@ public class ArrayReader<FieldType> implements FieldReader<FieldType[]> {
 
     final int bytesPerEntry = serializationHelper.readUnsignedInt(buff);
 
-    final byte[] data = new byte[bytesPerEntry];
+    final byte[] data = new byte[Math.min(bytesPerEntry, buff.remaining())];
 
     while (buff.hasRemaining()) {
 
@@ -145,7 +148,7 @@ public class ArrayReader<FieldType> implements FieldReader<FieldType[]> {
     if ((fieldData == null) || (fieldData.length == 0)) {
       return null;
     }
-    final List<FieldType> result = new ArrayList<FieldType>();
+    final List<FieldType> result = new ArrayList<>();
 
     final ByteBuffer buff = ByteBuffer.wrap(fieldData);
 
@@ -157,8 +160,7 @@ public class ArrayReader<FieldType> implements FieldReader<FieldType[]> {
     while (buff.remaining() >= 1) {
       final int size = serializationHelper.readUnsignedInt(buff);
       if (size > 0) {
-        final byte[] bytes = new byte[size];
-        buff.get(bytes);
+        final byte[] bytes = ByteArrayUtils.safeRead(buff, size);
         result.add(serializationHelper.readField(reader, bytes));
       } else {
         result.add(null);

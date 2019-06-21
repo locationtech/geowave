@@ -31,8 +31,8 @@ public class CalendarArraySerializationProvider implements
 
   private static class CalendarArrayReader implements FieldReader<Calendar[]> {
     @Override
-    public Calendar[] readField(byte[] fieldData) {
-      return new ArrayReader<Calendar>(new CalendarReader()).readField(fieldData);
+    public Calendar[] readField(final byte[] fieldData) {
+      return new ArrayReader<>(new CalendarReader()).readField(fieldData);
     }
   }
 

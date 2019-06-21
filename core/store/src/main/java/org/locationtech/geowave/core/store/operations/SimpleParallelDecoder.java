@@ -36,17 +36,21 @@ public class SimpleParallelDecoder<T> extends ParallelDecoder<T> {
     consumerThread = new Thread(new Runnable() {
       @Override
       public void run() {
-        while (sourceIterator.hasNext()) {
-          final GeoWaveRow next = sourceIterator.next();
-          while (!consumedRows.offer(next)) {
-            // queue is full, wait for space
-            try {
-              Thread.sleep(1);
-            } catch (final InterruptedException e) {
-              isTerminating = true;
-              return;
+        try {
+          while (sourceIterator.hasNext()) {
+            final GeoWaveRow next = sourceIterator.next();
+            while (!consumedRows.offer(next)) {
+              // queue is full, wait for space
+              try {
+                Thread.sleep(1);
+              } catch (final InterruptedException e) {
+                isTerminating = true;
+                return;
+              }
             }
           }
+        } catch (final Exception e) {
+          setDecodeException(e);
         }
         isTerminating = true;
       }

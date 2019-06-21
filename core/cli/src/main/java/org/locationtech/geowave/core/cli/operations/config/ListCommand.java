@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.core.cli.operations.config;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
 import java.io.File;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -23,6 +20,9 @@ import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "list", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "List property name within cache")
@@ -73,7 +73,7 @@ public class ListCommand extends ServiceEnabledCommand<SortedMap<String, Object>
       super();
     }
 
-    public GeoWaveConfig(Map m) {
+    public GeoWaveConfig(final Map m) {
       super(m);
     }
   }

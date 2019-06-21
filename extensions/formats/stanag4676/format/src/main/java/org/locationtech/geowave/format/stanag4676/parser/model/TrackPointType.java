@@ -54,14 +54,14 @@ public enum TrackPointType {
   private String value;
 
   TrackPointType() {
-    this.value = "MEASURED";
+    value = "MEASURED";
   }
 
   TrackPointType(final String value) {
     this.value = value;
   }
 
-  public static TrackPointType fromString(String value) {
+  public static TrackPointType fromString(final String value) {
     for (final TrackPointType item : TrackPointType.values()) {
       if (item.toString().equals(value)) {
         return item;

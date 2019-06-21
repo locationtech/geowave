@@ -16,7 +16,7 @@ import org.locationtech.geowave.core.store.query.filter.FilterList;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 public class CompositeConstraints implements FilterableConstraints {
-  private final List<FilterableConstraints> constraints = new LinkedList<FilterableConstraints>();
+  private final List<FilterableConstraints> constraints = new LinkedList<>();
   private boolean intersect = false;
 
   public CompositeConstraints() {}
@@ -50,10 +50,10 @@ public class CompositeConstraints implements FilterableConstraints {
 
   @Override
   public QueryFilter getFilter() {
-    final List<QueryFilter> filters = new ArrayList<QueryFilter>();
+    final List<QueryFilter> filters = new ArrayList<>();
     for (final IndexConstraints constraint : constraints) {
       if (constraint instanceof FilterableConstraints) {
-        QueryFilter filter = ((FilterableConstraints) constraint).getFilter();
+        final QueryFilter filter = ((FilterableConstraints) constraint).getFilter();
         if (filter != null) {
           filters.add(filter);
         }

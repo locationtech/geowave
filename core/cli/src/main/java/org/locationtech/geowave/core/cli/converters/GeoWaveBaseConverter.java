@@ -9,10 +9,6 @@
 /** */
 package org.locationtech.geowave.core.cli.converters;
 
-import com.beust.jcommander.converters.BaseConverter;
-import com.beust.jcommander.internal.Console;
-import com.beust.jcommander.internal.DefaultConsole;
-import com.beust.jcommander.internal.JDK6Console;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.Properties;
@@ -21,6 +17,10 @@ import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions
 import org.locationtech.geowave.core.cli.utils.PropertiesUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.converters.BaseConverter;
+import com.beust.jcommander.internal.Console;
+import com.beust.jcommander.internal.DefaultConsole;
+import com.beust.jcommander.internal.JDK6Console;
 
 /**
  * Base value converter for handling field conversions of varying types
@@ -39,7 +39,7 @@ public abstract class GeoWaveBaseConverter<T> extends BaseConverter<T> {
     init();
   }
 
-  public GeoWaveBaseConverter(String optionName) {
+  public GeoWaveBaseConverter(final String optionName) {
     super(optionName);
     init();
   }
@@ -51,7 +51,7 @@ public abstract class GeoWaveBaseConverter<T> extends BaseConverter<T> {
     } else {
       propertyFile = ConfigOptions.getDefaultPropertyFile();
     }
-    if (propertyFile != null && propertyFile.exists()) {
+    if ((propertyFile != null) && propertyFile.exists()) {
       setProperties(ConfigOptions.loadProperties(propertyFile));
     }
   }
@@ -60,10 +60,10 @@ public abstract class GeoWaveBaseConverter<T> extends BaseConverter<T> {
     LOGGER.trace("ENTER :: getConsole()");
     if (console == null) {
       try {
-        Method consoleMethod = System.class.getDeclaredMethod("console");
-        Object consoleObj = consoleMethod.invoke(null);
+        final Method consoleMethod = System.class.getDeclaredMethod("console");
+        final Object consoleObj = consoleMethod.invoke(null);
         console = new JDK6Console(consoleObj);
-      } catch (Throwable t) {
+      } catch (final Throwable t) {
         LOGGER.error(
             "An error occurred getting declared method console. Defaulting to default console. Error message: "
                 + t.getLocalizedMessage(),
@@ -80,17 +80,17 @@ public abstract class GeoWaveBaseConverter<T> extends BaseConverter<T> {
    * @param promptMessage
    * @return
    */
-  public static String promptAndReadValue(String promptMessage) {
+  public static String promptAndReadValue(final String promptMessage) {
     LOGGER.trace("ENTER :: promptAndReadValue()");
-    PropertiesUtils propsUtils = new PropertiesUtils(getProperties());
-    boolean defaultEchoEnabled =
+    final PropertiesUtils propsUtils = new PropertiesUtils(getProperties());
+    final boolean defaultEchoEnabled =
         propsUtils.getBoolean(Constants.CONSOLE_DEFAULT_ECHO_ENABLED_KEY, false);
     LOGGER.debug(
         "Default console echo is {}",
         new Object[] {defaultEchoEnabled ? "enabled" : "disabled"});
     getConsole().print(promptMessage);
     char[] responseChars = getConsole().readPassword(defaultEchoEnabled);
-    String response = new String(responseChars);
+    final String response = new String(responseChars);
     responseChars = null;
 
     return response;
@@ -102,19 +102,19 @@ public abstract class GeoWaveBaseConverter<T> extends BaseConverter<T> {
    * @param promptMessage
    * @return
    */
-  public static String promptAndReadPassword(String promptMessage) {
+  public static String promptAndReadPassword(final String promptMessage) {
     LOGGER.trace("ENTER :: promptAndReadPassword()");
-    PropertiesUtils propsUtils = new PropertiesUtils(getProperties());
-    boolean defaultEchoEnabled =
+    final PropertiesUtils propsUtils = new PropertiesUtils(getProperties());
+    final boolean defaultEchoEnabled =
         propsUtils.getBoolean(Constants.CONSOLE_DEFAULT_ECHO_ENABLED_KEY, false);
-    boolean passwordEchoEnabled =
+    final boolean passwordEchoEnabled =
         propsUtils.getBoolean(Constants.CONSOLE_PASSWORD_ECHO_ENABLED_KEY, defaultEchoEnabled);
     LOGGER.debug(
         "Password console echo is {}",
         new Object[] {passwordEchoEnabled ? "enabled" : "disabled"});
     getConsole().print(promptMessage);
     char[] passwordChars = getConsole().readPassword(passwordEchoEnabled);
-    String strPassword = new String(passwordChars);
+    final String strPassword = new String(passwordChars);
     passwordChars = null;
 
     return strPassword;
@@ -126,7 +126,7 @@ public abstract class GeoWaveBaseConverter<T> extends BaseConverter<T> {
   }
 
   /** @param propertyKey the propertyKey to set */
-  public void setPropertyKey(String propertyKey) {
+  public void setPropertyKey(final String propertyKey) {
     this.propertyKey = propertyKey;
   }
 
@@ -155,7 +155,7 @@ public abstract class GeoWaveBaseConverter<T> extends BaseConverter<T> {
   }
 
   /** @param properties the properties to set */
-  private void setProperties(Properties props) {
+  private void setProperties(final Properties props) {
     properties = props;
   }
 }

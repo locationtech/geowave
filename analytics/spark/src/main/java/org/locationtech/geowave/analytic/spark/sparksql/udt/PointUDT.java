@@ -13,6 +13,11 @@ import org.locationtech.jts.geom.Point;
 /** Created by jwileczek on 7/20/18. */
 public class PointUDT extends AbstractGeometryUDT<Point> {
 
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+
   @Override
   public Class<Point> userClass() {
     return Point.class;

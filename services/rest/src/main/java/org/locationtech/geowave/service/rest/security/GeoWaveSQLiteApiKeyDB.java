@@ -22,6 +22,10 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 public class GeoWaveSQLiteApiKeyDB extends GeoWaveBaseApiKeyDB {
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveSQLiteApiKeyDB.class);
   /** An SQLite api-key database implementation. */
   private String dbFileName;
@@ -36,11 +40,11 @@ public class GeoWaveSQLiteApiKeyDB extends GeoWaveBaseApiKeyDB {
 
   @Override
   public void initApiKeyDatabase() {
-    String url = "jdbc:sqlite:" + dbPath + dbFileName;
+    final String url = "jdbc:sqlite:" + dbPath + dbFileName;
 
     try (Connection conn = DriverManager.getConnection(url)) {
       // SQL statement for creating a new table
-      String sql =
+      final String sql =
           "CREATE TABLE IF NOT EXISTS api_keys (\n"
               + "	id integer PRIMARY KEY,\n"
               + "	apiKey blob NOT NULL,\n"
@@ -50,20 +54,20 @@ public class GeoWaveSQLiteApiKeyDB extends GeoWaveBaseApiKeyDB {
       try (Statement stmnt = conn.createStatement()) {
         stmnt.execute(sql);
       }
-    } catch (SQLException e) {
+    } catch (final SQLException e) {
       LOGGER.error("Error SQLException: ", e.getMessage());
     }
   }
 
   @Override
-  public void setServletContext(ServletContext servletContext) {
+  public void setServletContext(final ServletContext servletContext) {
     super.setServletContext(servletContext);
     dbPath = servletContext.getRealPath("/");
     initApiKeyDatabase();
   }
 
   @Override
-  public boolean hasKey(String apiKey) {
+  public boolean hasKey(final String apiKey) {
     final String dbUrl = getDbUrl();
     boolean found = false;
     try (Connection conn = DriverManager.getConnection(dbUrl)) {
@@ -83,7 +87,7 @@ public class GeoWaveSQLiteApiKeyDB extends GeoWaveBaseApiKeyDB {
           }
         }
       }
-    } catch (SQLException e) {
+    } catch (final SQLException e) {
       LOGGER.error("Error SQLException: ", e.getMessage());
       return false;
     }
@@ -133,7 +137,7 @@ public class GeoWaveSQLiteApiKeyDB extends GeoWaveBaseApiKeyDB {
               }
             }
           }
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
           LOGGER.error("Error SQLException: ", e.getMessage());
         }
       }

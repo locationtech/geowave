@@ -124,15 +124,15 @@ public class NNJobRunnerTest {
 
     runTimeProperties.store(MRConfig.HDFS_BASE_DIR, "/");
 
-    DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
+    final DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
     GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
         "memory",
         new MemoryStoreFactoryFamily());
     pluginOptions.selectPlugin("memory");
-    MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
+    final MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
     final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
     opts.setGeoWaveNamespace(namespace);
-    PersistableStore store = new PersistableStore(pluginOptions);
+    final PersistableStore store = new PersistableStore(pluginOptions);
 
     runTimeProperties.store(StoreParam.INPUT_STORE, store);
 

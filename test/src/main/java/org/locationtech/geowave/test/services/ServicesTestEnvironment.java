@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.test.services;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.File;
 import java.io.IOException;
 import java.security.AccessController;
@@ -26,6 +25,7 @@ import org.locationtech.geowave.test.TestEnvironment;
 import org.locationtech.geowave.test.mapreduce.MapReduceTestEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class ServicesTestEnvironment implements TestEnvironment {
   private static final Logger LOGGER = LoggerFactory.getLogger(ServicesTestEnvironment.class);
@@ -177,7 +177,7 @@ public class ServicesTestEnvironment implements TestEnvironment {
         // classes (until hadoop updates guava support to a later
         // version, slated for hadoop 3.x)
         gsWebapp.setParentLoaderPriority(false);
-        File configFile = new File(GEOWAVE_CONFIG_FILE);
+        final File configFile = new File(GEOWAVE_CONFIG_FILE);
         if (configFile.exists()) {
           if (!configFile.delete()) {
             LOGGER.warn("Unable to delete config file");

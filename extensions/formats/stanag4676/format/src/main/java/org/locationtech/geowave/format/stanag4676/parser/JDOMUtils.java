@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.format.stanag4676.parser;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.awt.Color;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -43,6 +42,7 @@ import org.jdom.output.XMLOutputter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class JDOMUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(JDOMUtils.class);
@@ -719,7 +719,7 @@ public class JDOMUtils {
   }
 
   public static Element writePoint(final String tagName, final Point2d pt) {
-    final ArrayList<Element> v = new ArrayList<Element>();
+    final ArrayList<Element> v = new ArrayList<>();
 
     v.add(writeDoubleVal(JDOMUtils.tagLat, pt.y));
 
@@ -749,7 +749,7 @@ public class JDOMUtils {
   }
 
   public static ArrayList<Point2d> readPointList(final Element el) {
-    final ArrayList<Point2d> pts = new ArrayList<Point2d>();
+    final ArrayList<Point2d> pts = new ArrayList<>();
 
     final String ptStr = getStringVal(el);
     final StringTokenizer st = new StringTokenizer(ptStr, ",");
@@ -804,7 +804,7 @@ public class JDOMUtils {
     if (el == null) {
       return null;
     } else {
-      final ArrayList<Point3d> pts = new ArrayList<Point3d>();
+      final ArrayList<Point3d> pts = new ArrayList<>();
 
       final String ptStr = getStringVal(el);
       final StringTokenizer st = new StringTokenizer(ptStr, ",");
@@ -831,7 +831,7 @@ public class JDOMUtils {
   }
 
   public static Element writePoint2d(final String tagName, final Point2d pt) {
-    final ArrayList<Element> v = new ArrayList<Element>();
+    final ArrayList<Element> v = new ArrayList<>();
 
     v.add(writeDoubleVal(JDOMUtils.tagX, pt.x));
 
@@ -865,7 +865,7 @@ public class JDOMUtils {
   }
 
   public static Element writePoint3d(final String tagName, final Point3d pt) {
-    final ArrayList<Element> v = new ArrayList<Element>();
+    final ArrayList<Element> v = new ArrayList<>();
 
     v.add(writeDoubleVal(JDOMUtils.tagX, pt.x));
 
@@ -934,7 +934,7 @@ public class JDOMUtils {
   }
 
   public static Element writeBounds(final String tagName, final Point2d[] bounds) {
-    final ArrayList<Element> v = new ArrayList<Element>();
+    final ArrayList<Element> v = new ArrayList<>();
 
     if ((bounds != null) && (bounds[0] != null)) {
       v.add(writePoint(JDOMUtils.tagLL, bounds[0]));
@@ -947,7 +947,7 @@ public class JDOMUtils {
 
   public static ArrayList<Double> readDoubleList(final String tagName, final Element elList) {
     final List<?> doubleElementList = elList.getChildren(tagName);
-    final ArrayList<Double> doubleList = new ArrayList<Double>();
+    final ArrayList<Double> doubleList = new ArrayList<>();
 
     for (final Object doubleElement : doubleElementList) {
       doubleList.add(getDoubleVal((Element) doubleElement));
@@ -959,7 +959,7 @@ public class JDOMUtils {
   public static ArrayList<Element> writeDoubleList(
       final String tagName,
       final List<Double> doubleList) {
-    final ArrayList<Element> doubleElementList = new ArrayList<Element>();
+    final ArrayList<Element> doubleElementList = new ArrayList<>();
 
     for (final Double doubleVal : doubleList) {
       doubleElementList.add(writeDoubleVal(tagName, doubleVal));
@@ -970,7 +970,7 @@ public class JDOMUtils {
 
   public static ArrayList<Color> readColorList(final String tagName, final Element elList) {
     final List<?> colorElementList = elList.getChildren(tagName);
-    final ArrayList<Color> colorList = new ArrayList<Color>();
+    final ArrayList<Color> colorList = new ArrayList<>();
 
     for (final Object colorElement : colorElementList) {
       colorList.add(readColor((Element) colorElement));
@@ -982,7 +982,7 @@ public class JDOMUtils {
   public static ArrayList<Element> writeColorList(
       final String tagName,
       final List<Color> colorList) {
-    final ArrayList<Element> colorElementList = new ArrayList<Element>();
+    final ArrayList<Element> colorElementList = new ArrayList<>();
 
     for (final Color color : colorList) {
       colorElementList.add(writeColor(tagName, color));
@@ -1154,9 +1154,9 @@ public class JDOMUtils {
     }
 
     if (el == null) {
-      return new ArrayList<Element>();
+      return new ArrayList<>();
     }
-    final List<Element> elementList = new ArrayList<Element>();
+    final List<Element> elementList = new ArrayList<>();
     for (final Object element : el) {
       elementList.add((Element) element);
     }

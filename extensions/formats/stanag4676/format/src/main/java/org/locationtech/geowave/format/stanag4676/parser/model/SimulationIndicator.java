@@ -23,14 +23,14 @@ public enum SimulationIndicator {
   private String value;
 
   SimulationIndicator() {
-    this.value = "REAL";
+    value = "REAL";
   }
 
   SimulationIndicator(final String value) {
     this.value = value;
   }
 
-  public static SimulationIndicator fromString(String value) {
+  public static SimulationIndicator fromString(final String value) {
     for (final SimulationIndicator item : SimulationIndicator.values()) {
       if (item.toString().equals(value)) {
         return item;

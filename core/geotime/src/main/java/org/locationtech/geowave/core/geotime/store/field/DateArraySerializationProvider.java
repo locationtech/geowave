@@ -11,6 +11,7 @@ package org.locationtech.geowave.core.geotime.store.field;
 import java.nio.ByteBuffer;
 import java.util.Date;
 import org.locationtech.geowave.core.geotime.store.field.DateSerializationProvider.DateReader;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.field.ArrayReader;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
@@ -32,12 +33,13 @@ public class DateArraySerializationProvider implements FieldSerializationProvide
   // @see LongArraySerializationProvider.LongArrayReader
   private static class DateArrayReader implements FieldReader<Date[]> {
     @Override
-    public Date[] readField(byte[] fieldData) {
+    public Date[] readField(final byte[] fieldData) {
       if ((fieldData == null) || (fieldData.length == 0)) {
         return null;
       }
       final ByteBuffer buff = ByteBuffer.wrap(fieldData);
-      int count = VarintUtils.readUnsignedInt(buff);
+      final int count = VarintUtils.readUnsignedInt(buff);
+      ByteArrayUtils.verifyBufferSize(buff, count);
       final Date[] result = new Date[count];
       for (int i = 0; i < count; i++) {
         if (buff.get() > 0) {
@@ -50,9 +52,9 @@ public class DateArraySerializationProvider implements FieldSerializationProvide
     }
 
     @Override
-    public Date[] readField(byte[] fieldData, byte serializationVersion) {
+    public Date[] readField(final byte[] fieldData, final byte serializationVersion) {
       if (serializationVersion < FieldUtils.SERIALIZATION_VERSION) {
-        return new ArrayReader<Date>(new DateReader()).readField(fieldData, serializationVersion);
+        return new ArrayReader<>(new DateReader()).readField(fieldData, serializationVersion);
       } else {
         return readField(fieldData);
       }
@@ -62,7 +64,7 @@ public class DateArraySerializationProvider implements FieldSerializationProvide
   // @see LongArraySerializationProvider.LongArrayWriter
   private static class DateArrayWriter implements FieldWriter<Object, Date[]> {
     @Override
-    public byte[] writeField(Date[] fieldValue) {
+    public byte[] writeField(final Date[] fieldValue) {
       if (fieldValue == null) {
         return new byte[] {};
       }

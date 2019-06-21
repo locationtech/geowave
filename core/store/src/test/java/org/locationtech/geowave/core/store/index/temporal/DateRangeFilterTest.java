@@ -52,13 +52,13 @@ public class DateRangeFilterTest {
 
     // should match because date is in range
     final IndexedPersistenceEncoding<ByteArray> persistenceEncoding =
-        new IndexedPersistenceEncoding<ByteArray>(
+        new IndexedPersistenceEncoding<>(
             null,
             null,
             null,
             null,
             0,
-            new MultiFieldPersistentDataset<ByteArray>(
+            new MultiFieldPersistentDataset<>(
                 "myAttribute",
                 new ByteArray(
                     TemporalIndexStrategy.toIndexByte(format.get().parse("06-01-2014 11:01:01")))),
@@ -68,13 +68,13 @@ public class DateRangeFilterTest {
 
     // should not match because date is out of range
     final IndexedPersistenceEncoding<ByteArray> persistenceEncoding2 =
-        new IndexedPersistenceEncoding<ByteArray>(
+        new IndexedPersistenceEncoding<>(
             null,
             null,
             null,
             null,
             0,
-            new MultiFieldPersistentDataset<ByteArray>(
+            new MultiFieldPersistentDataset<>(
                 "myAttribute",
                 new ByteArray(
                     Lexicoders.LONG.toByteArray(
@@ -85,13 +85,13 @@ public class DateRangeFilterTest {
 
     // should not match because of attribute mismatch
     final IndexedPersistenceEncoding<ByteArray> persistenceEncoding3 =
-        new IndexedPersistenceEncoding<ByteArray>(
+        new IndexedPersistenceEncoding<>(
             null,
             null,
             null,
             null,
             0,
-            new MultiFieldPersistentDataset<ByteArray>(
+            new MultiFieldPersistentDataset<>(
                 "mismatch",
                 new ByteArray(
                     Lexicoders.LONG.toByteArray(

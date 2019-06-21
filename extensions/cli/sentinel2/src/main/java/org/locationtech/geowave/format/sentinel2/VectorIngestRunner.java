@@ -8,11 +8,9 @@
  */
 package org.locationtech.geowave.format.sentinel2;
 
-import com.beust.jcommander.ParameterException;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.TimeZone;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.core.cli.api.OperationParams;
@@ -29,6 +27,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.ParameterException;
 
 public class VectorIngestRunner extends AnalyzeRunner {
   private static final Logger LOGGER = LoggerFactory.getLogger(RasterIngestRunner.class);

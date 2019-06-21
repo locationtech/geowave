@@ -84,13 +84,13 @@ public class JobContextAdapterIndexMappingStore implements AdapterIndexMappingSt
   }
 
   @Override
-  public boolean remove(final short internalAdapterId, String indexName) {
+  public boolean remove(final short internalAdapterId, final String indexName) {
 
     if (!adapterCache.containsKey(internalAdapterId)) {
       return false;
     }
 
-    AdapterToIndexMapping mapping = adapterCache.get(internalAdapterId);
+    final AdapterToIndexMapping mapping = adapterCache.get(internalAdapterId);
     final String[] indexNames = mapping.getIndexNames();
     boolean found = false;
     for (int i = 0; i < indexNames.length; i++) {
@@ -106,7 +106,7 @@ public class JobContextAdapterIndexMappingStore implements AdapterIndexMappingSt
 
     if (indexNames.length > 1) {
       // update the mapping and reset it
-      String[] newIndices = new String[indexNames.length - 1];
+      final String[] newIndices = new String[indexNames.length - 1];
       int count = 0;
       for (int i = 0; i < indexNames.length; i++) {
         if (indexNames[i].compareTo(indexName) == 0) {

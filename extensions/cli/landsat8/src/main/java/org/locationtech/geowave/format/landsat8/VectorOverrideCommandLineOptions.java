@@ -31,11 +31,11 @@ public class VectorOverrideCommandLineOptions {
     return vectorIndex;
   }
 
-  public void setVectorStore(String vectorStore) {
+  public void setVectorStore(final String vectorStore) {
     this.vectorStore = vectorStore;
   }
 
-  public void setVectorIndex(String vectorIndex) {
+  public void setVectorIndex(final String vectorIndex) {
     this.vectorIndex = vectorIndex;
   }
 }

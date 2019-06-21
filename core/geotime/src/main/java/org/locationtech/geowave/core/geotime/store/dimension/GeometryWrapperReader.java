@@ -16,11 +16,11 @@ public class GeometryWrapperReader implements FieldReader<GeometryWrapper> {
 
   private Integer geometryPrecision = null;
 
-  public GeometryWrapperReader(@Nullable Integer geometryPrecision) {
+  public GeometryWrapperReader(@Nullable final Integer geometryPrecision) {
     this.geometryPrecision = geometryPrecision;
   }
 
-  public void setPrecision(@Nullable Integer geometryPrecision) {
+  public void setPrecision(@Nullable final Integer geometryPrecision) {
     this.geometryPrecision = geometryPrecision;
   }
 

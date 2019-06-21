@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.datastore.hbase.util;
 
-import com.google.common.base.Function;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Sets;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.Arrays;
@@ -27,6 +23,10 @@ import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.server.ServerOpConfig.ServerOpScope;
 import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
 
 @SuppressWarnings("rawtypes")
 public class HBaseUtils {
@@ -44,7 +44,7 @@ public class HBaseUtils {
     return tableNamespace + "_" + unqualifiedTableName;
   }
 
-  public static String writeTableNameAsConfigSafe(String tableName) {
+  public static String writeTableNameAsConfigSafe(final String tableName) {
     // '.' is a special separator character used by the coprocessor config,
     // and ':' should be safe to use in the coprocessor config because it is
     // a special HBase table character that cannot be used in a
@@ -53,7 +53,7 @@ public class HBaseUtils {
     return tableName.replaceAll("\\.", ":");
   }
 
-  public static String readConfigSafeTableName(String safeTableName) {
+  public static String readConfigSafeTableName(final String safeTableName) {
     // just reverse the replacement to ':' to return the table name to the
     // original
     return safeTableName.replaceAll(":", "\\.");

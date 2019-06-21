@@ -8,12 +8,12 @@
  */
 package org.locationtech.geowave.format.sentinel2;
 
-import static org.junit.Assert.*;
-import it.geosolutions.jaiext.JAIExt;
+import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.util.Date;
 import org.junit.Test;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
+import it.geosolutions.jaiext.JAIExt;
 
 public class DownloadRunnerTest {
   @Test
@@ -32,10 +32,10 @@ public class DownloadRunnerTest {
     testExecute("AWS", sceneDir);
   }
 
-  public void testExecute(String providerName, File sceneDir) throws Exception {
+  public void testExecute(final String providerName, final File sceneDir) throws Exception {
     JAIExt.initJAIEXT();
 
-    Sentinel2ImageryProvider provider = Sentinel2ImageryProvider.getProvider(providerName);
+    final Sentinel2ImageryProvider provider = Sentinel2ImageryProvider.getProvider(providerName);
     if (provider == null) {
       System.err.println(
           "Unable to find '"
@@ -44,14 +44,15 @@ public class DownloadRunnerTest {
       return;
     }
 
-    if (!Tests.authenticationSettingsAreValid(providerName))
+    if (!Tests.authenticationSettingsAreValid(providerName)) {
       return;
+    }
 
-    Date[] timePeriodSettings = Tests.timePeriodSettings(providerName);
-    Date startDate = timePeriodSettings[0];
-    Date endDate = timePeriodSettings[1];
+    final Date[] timePeriodSettings = Tests.timePeriodSettings(providerName);
+    final Date startDate = timePeriodSettings[0];
+    final Date endDate = timePeriodSettings[1];
 
-    Sentinel2BasicCommandLineOptions analyzeOptions = new Sentinel2BasicCommandLineOptions();
+    final Sentinel2BasicCommandLineOptions analyzeOptions = new Sentinel2BasicCommandLineOptions();
     analyzeOptions.setWorkspaceDir(Tests.WORKSPACE_DIR);
     analyzeOptions.setProviderName(providerName);
     analyzeOptions.setCollection(provider.collections()[0]);
@@ -61,11 +62,12 @@ public class DownloadRunnerTest {
     analyzeOptions.setCqlFilter(
         "BBOX(shape,-1.8274,42.3253,-1.6256,42.4735) AND location='T30TXN' AND (band='B4' OR band='B8')");
 
-    String[] settings = Tests.authenticationSettings(providerName);
-    String iden = settings[0];
-    String pass = settings[1];
+    final String[] settings = Tests.authenticationSettings(providerName);
+    final String iden = settings[0];
+    final String pass = settings[1];
 
-    Sentinel2DownloadCommandLineOptions downloadOptions = new Sentinel2DownloadCommandLineOptions();
+    final Sentinel2DownloadCommandLineOptions downloadOptions =
+        new Sentinel2DownloadCommandLineOptions();
     downloadOptions.setOverwriteIfExists(false);
     downloadOptions.setUserIdent(iden);
     downloadOptions.setPassword(pass);

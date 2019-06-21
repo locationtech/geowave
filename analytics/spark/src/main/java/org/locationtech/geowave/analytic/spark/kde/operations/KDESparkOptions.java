@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
@@ -58,7 +58,7 @@ public class KDESparkOptions {
     return outputIndex;
   }
 
-  public void setOutputIndex(String outputIndex) {
+  public void setOutputIndex(final String outputIndex) {
     this.outputIndex = outputIndex;
   }
 
@@ -66,7 +66,7 @@ public class KDESparkOptions {
     return appName;
   }
 
-  public void setAppName(String appName) {
+  public void setAppName(final String appName) {
     this.appName = appName;
   }
 
@@ -74,7 +74,7 @@ public class KDESparkOptions {
     return tileSize;
   }
 
-  public void setTileSize(Integer tileSize) {
+  public void setTileSize(final Integer tileSize) {
     this.tileSize = tileSize;
   }
 
@@ -82,7 +82,7 @@ public class KDESparkOptions {
     return indexName;
   }
 
-  public void setIndexName(String indexName) {
+  public void setIndexName(final String indexName) {
     this.indexName = indexName;
   }
 
@@ -90,7 +90,7 @@ public class KDESparkOptions {
     return minLevel;
   }
 
-  public void setMinLevel(Integer minLevel) {
+  public void setMinLevel(final Integer minLevel) {
     this.minLevel = minLevel;
   }
 
@@ -98,7 +98,7 @@ public class KDESparkOptions {
     return maxLevel;
   }
 
-  public void setMaxLevel(Integer maxLevel) {
+  public void setMaxLevel(final Integer maxLevel) {
     this.maxLevel = maxLevel;
   }
 
@@ -106,7 +106,7 @@ public class KDESparkOptions {
     return host;
   }
 
-  public void setHost(String host) {
+  public void setHost(final String host) {
     this.host = host;
   }
 
@@ -114,7 +114,7 @@ public class KDESparkOptions {
     return master;
   }
 
-  public void setMaster(String master) {
+  public void setMaster(final String master) {
     this.master = master;
   }
 
@@ -122,7 +122,7 @@ public class KDESparkOptions {
     return cqlFilter;
   }
 
-  public void setCqlFilter(String cqlFilter) {
+  public void setCqlFilter(final String cqlFilter) {
     this.cqlFilter = cqlFilter;
   }
 
@@ -130,7 +130,7 @@ public class KDESparkOptions {
     return typeName;
   }
 
-  public void setTypeName(String typeName) {
+  public void setTypeName(final String typeName) {
     this.typeName = typeName;
   }
 
@@ -138,7 +138,7 @@ public class KDESparkOptions {
     return minSplits;
   }
 
-  public void setMinSplits(Integer minSplits) {
+  public void setMinSplits(final Integer minSplits) {
     this.minSplits = minSplits;
   }
 
@@ -146,7 +146,7 @@ public class KDESparkOptions {
     return maxSplits;
   }
 
-  public void setMaxSplits(Integer maxSplits) {
+  public void setMaxSplits(final Integer maxSplits) {
     this.maxSplits = maxSplits;
   }
 
@@ -154,7 +154,7 @@ public class KDESparkOptions {
     return coverageName;
   }
 
-  public void setCoverageName(String coverageName) {
+  public void setCoverageName(final String coverageName) {
     this.coverageName = coverageName;
   }
 }

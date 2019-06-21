@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.format.sentinel2;
 
-import com.beust.jcommander.ParameterException;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -26,6 +25,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.ParameterException;
 
 public class IngestRunner extends RasterIngestRunner {
   private static final Logger LOGGER = LoggerFactory.getLogger(IngestRunner.class);

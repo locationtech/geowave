@@ -8,16 +8,16 @@
  */
 package org.locationtech.geowave.cli.geoserver;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "addcv", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Add a GeoServer coverage")
@@ -61,7 +61,7 @@ public class GeoServerAddCoverageCommand extends GeoServerCommand<String> {
           + cvgstore
           + "' on GeoServer: OK";
     }
-    String errorMessage =
+    final String errorMessage =
         "Error adding GeoServer coverage "
             + cvgName
             + ": "

@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.analytic.mapreduce.nn;
 
-import com.google.common.primitives.UnsignedBytes;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -55,6 +54,7 @@ import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.primitives.UnsignedBytes;
 
 /**
  * Find the nearest neighbors to a each item.
@@ -189,7 +189,7 @@ public class NNMapReduce {
         throws IOException, InterruptedException {
 
       final NNProcessor<Object, VALUEIN> processor =
-          new NNProcessor<Object, VALUEIN>(
+          new NNProcessor<>(
               partitioner,
               typeConverter,
               distanceProfileFn,
@@ -227,7 +227,7 @@ public class NNMapReduce {
 
     public NeighborListFactory<VALUEIN> createNeighborsListFactory(
         final PARTITION_SUMMARY summary) {
-      return new DefaultNeighborList.DefaultNeighborListFactory<VALUEIN>();
+      return new DefaultNeighborList.DefaultNeighborListFactory<>();
     }
 
     /**
@@ -259,7 +259,7 @@ public class NNMapReduce {
 
     /** allow the extending classes to return sets with constraints and management algorithms */
     protected Set<VALUEIN> createSetForNeighbors(final boolean isSetForPrimary) {
-      return new HashSet<VALUEIN>();
+      return new HashSet<>();
     }
 
     protected abstract void processNeighbors(
@@ -324,7 +324,7 @@ public class NNMapReduce {
         DistanceProfileGenerateFn<Object, VALUEIN> {
 
       // for GC concerns in the default NN case
-      DistanceProfile<Object> singleNotThreadSafeImage = new DistanceProfile<Object>();
+      DistanceProfile<Object> singleNotThreadSafeImage = new DistanceProfile<>();
 
       @Override
       public DistanceProfile<Object> computeProfile(final VALUEIN item1, final VALUEIN item2) {

@@ -8,8 +8,6 @@
  */
 package org.geotools.renderer.lite;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 import java.awt.Composite;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -28,6 +26,8 @@ import org.locationtech.geowave.adapter.vector.render.DistributedRenderResult;
 import org.locationtech.geowave.adapter.vector.render.DistributedRenderResult.CompositeGroupResult;
 import org.locationtech.geowave.adapter.vector.render.PersistableComposite;
 import org.locationtech.geowave.adapter.vector.render.PersistableRenderedImage;
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 
 public class DistributedRenderer extends StreamingRenderer {
   private final DistributedRenderOptions options;

@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.store.cli.remote.options;
 
-import com.beust.jcommander.ParameterException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
+import com.beust.jcommander.ParameterException;
 
 /**
  * This is a convenience class to load the desired indexes from either IndexPluginOptions or
@@ -42,7 +42,7 @@ public class IndexLoader {
    */
   public boolean loadFromConfig(final File configFile) {
 
-    loadedIndices = new HashMap<String, IndexPluginOptions>();
+    loadedIndices = new HashMap<>();
 
     // Properties (load them all)
     return loadFromConfig(ConfigOptions.loadProperties(configFile));
@@ -56,7 +56,7 @@ public class IndexLoader {
    */
   public boolean loadFromConfig(final Properties props) {
 
-    loadedIndices = new HashMap<String, IndexPluginOptions>();
+    loadedIndices = new HashMap<>();
 
     // Is there a comma?
     final String[] indices = indexName.split(",");
@@ -106,12 +106,12 @@ public class IndexLoader {
   }
 
   public List<IndexPluginOptions> getLoadedIndexes() {
-    return Collections.unmodifiableList(new ArrayList<IndexPluginOptions>(loadedIndices.values()));
+    return Collections.unmodifiableList(new ArrayList<>(loadedIndices.values()));
   }
 
   public void addIndex(final String indexName, final IndexPluginOptions option) {
     if (loadedIndices == null) {
-      loadedIndices = new HashMap<String, IndexPluginOptions>();
+      loadedIndices = new HashMap<>();
     }
     loadedIndices.put(indexName, option);
   }

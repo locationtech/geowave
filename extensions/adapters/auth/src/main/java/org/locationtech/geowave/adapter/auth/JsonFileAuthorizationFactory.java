@@ -15,7 +15,8 @@ import java.net.URL;
  * ["auth1","auth2"], "barney" : ["auth1","auth3"] } }
  */
 public class JsonFileAuthorizationFactory implements AuthorizationFactorySPI {
-  public AuthorizationSPI create(URL url) {
+  @Override
+  public AuthorizationSPI create(final URL url) {
     return new JsonFileAuthorizationProvider(url);
   }
 

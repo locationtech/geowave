@@ -278,15 +278,16 @@ public class DBScanIterationsJobRunner implements MapReduceJobRunner, Independen
       // comes only from users with OS-level access anyway
       inputLoadRunner.run(config, runTimeProperties);
     } finally {
-      if (fs != null)
+      if (fs != null) {
         fs.close();
+      }
     }
     return 0;
   }
 
   @Override
   public Collection<ParameterEnum<?>> getParameters() {
-    final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
+    final Set<ParameterEnum<?>> params = new HashSet<>();
     params.addAll(jobRunner.getParameters());
     params.addAll(inputLoadRunner.getParameters());
     params.add(Clustering.MAX_ITERATIONS);

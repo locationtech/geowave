@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.test;
 
-import com.jcraft.jsch.Logger;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -24,6 +23,7 @@ import org.apache.commons.io.IOUtils;
 import org.codehaus.plexus.archiver.tar.TarGZipUnArchiver;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.slf4j.LoggerFactory;
+import com.jcraft.jsch.Logger;
 
 public class DynamoDBLocal {
   private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(DynamoDBLocal.class);
@@ -38,15 +38,15 @@ public class DynamoDBLocal {
   private final File dynLocalDir;
   private ExecuteWatchdog watchdog;
 
-  public DynamoDBLocal(String localDir) {
+  public DynamoDBLocal(final String localDir) {
     if (TestUtils.isSet(localDir)) {
-      this.dynLocalDir = new File(localDir);
+      dynLocalDir = new File(localDir);
     } else {
-      this.dynLocalDir = new File(TestUtils.TEMP_DIR, "dynamodb");
+      dynLocalDir = new File(TestUtils.TEMP_DIR, "dynamodb");
     }
 
-    if (!this.dynLocalDir.exists() && !this.dynLocalDir.mkdirs()) {
-      LOGGER.warn("unable to create directory " + this.dynLocalDir.getAbsolutePath());
+    if (!dynLocalDir.exists() && !dynLocalDir.mkdirs()) {
+      LOGGER.warn("unable to create directory " + dynLocalDir.getAbsolutePath());
     }
   }
 
@@ -56,7 +56,7 @@ public class DynamoDBLocal {
         if (!install()) {
           return false;
         }
-      } catch (IOException e) {
+      } catch (final IOException e) {
         LOGGER.error(e.getMessage());
         return false;
       }
@@ -73,7 +73,7 @@ public class DynamoDBLocal {
   }
 
   public boolean isRunning() {
-    return (watchdog != null && watchdog.isWatching());
+    return ((watchdog != null) && watchdog.isWatching());
   }
 
   public void stop() {
@@ -89,7 +89,7 @@ public class DynamoDBLocal {
 
   protected boolean install() throws IOException {
     HttpURLConnection.setFollowRedirects(true);
-    URL url = new URL(DYNDB_URL + DYNDB_TAR);
+    final URL url = new URL(DYNDB_URL + DYNDB_TAR);
 
     final File downloadFile = new File(dynLocalDir, DYNDB_TAR);
     if (!downloadFile.exists()) {
@@ -130,7 +130,7 @@ public class DynamoDBLocal {
   private void startDynamoLocal() throws ExecuteException, IOException, InterruptedException {
     // java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar
     // -sharedDb
-    CommandLine cmdLine = new CommandLine("java");
+    final CommandLine cmdLine = new CommandLine("java");
 
     cmdLine.addArgument("-Djava.library.path=" + dynLocalDir + "/DynamoDBLocal_lib");
     cmdLine.addArgument("-jar");
@@ -143,11 +143,11 @@ public class DynamoDBLocal {
     System.setProperty("aws.secretKey", "dummy");
 
     // Using a result handler makes the emulator run async
-    DefaultExecuteResultHandler resultHandler = new DefaultExecuteResultHandler();
+    final DefaultExecuteResultHandler resultHandler = new DefaultExecuteResultHandler();
 
     // watchdog shuts down the emulator, later
     watchdog = new ExecuteWatchdog(ExecuteWatchdog.INFINITE_TIMEOUT);
-    Executor executor = new DefaultExecutor();
+    final Executor executor = new DefaultExecutor();
     executor.setWatchdog(watchdog);
     executor.execute(cmdLine, resultHandler);
 

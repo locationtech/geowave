@@ -8,13 +8,13 @@
  */
 package org.locationtech.geowave.adapter.vector.plugin.lock;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import org.geotools.data.Transaction;
 import org.geotools.data.Transaction.State;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * Instances of this class represent a the lock constraints associated with one or more feature
@@ -29,39 +29,41 @@ public class AuthorizedLock implements State, java.io.Serializable {
   /** */
   private static final long serialVersionUID = -1421146354351269795L;
 
-  private Set<String> authorizations = new HashSet<String>();
-  private String ID = UUID.randomUUID().toString();
+  private final Set<String> authorizations = new HashSet<>();
+  private final String ID = UUID.randomUUID().toString();
   private long expireTime = System.currentTimeMillis();
   private transient AbstractLockingManagement lockingManagement;
   private long expiryInMinutes;
 
   public AuthorizedLock() {}
 
-  public AuthorizedLock(AbstractLockingManagement lockingManagement, long expiryInMinutes) {
+  public AuthorizedLock(
+      final AbstractLockingManagement lockingManagement,
+      final long expiryInMinutes) {
     super();
-    expireTime = System.currentTimeMillis() + expiryInMinutes * 60000;
+    expireTime = System.currentTimeMillis() + (expiryInMinutes * 60000);
     this.expiryInMinutes = expiryInMinutes;
     this.lockingManagement = lockingManagement;
   }
 
   public AuthorizedLock(
-      AbstractLockingManagement lockingManagement,
-      String authorization,
-      long expiryInMinutes) {
+      final AbstractLockingManagement lockingManagement,
+      final String authorization,
+      final long expiryInMinutes) {
     super();
-    this.authorizations.add(authorization);
-    expireTime = System.currentTimeMillis() + expiryInMinutes * 60000;
+    authorizations.add(authorization);
+    expireTime = System.currentTimeMillis() + (expiryInMinutes * 60000);
     this.expiryInMinutes = expiryInMinutes;
     this.lockingManagement = lockingManagement;
   }
 
   public AuthorizedLock(
-      AbstractLockingManagement lockingManagement,
-      Set<String> authorizations,
-      long expiryInMinutes) {
+      final AbstractLockingManagement lockingManagement,
+      final Set<String> authorizations,
+      final long expiryInMinutes) {
     super();
     this.authorizations.addAll(authorizations);
-    expireTime = System.currentTimeMillis() + expiryInMinutes * 60000;
+    expireTime = System.currentTimeMillis() + (expiryInMinutes * 60000);
     this.expiryInMinutes = expiryInMinutes;
     this.lockingManagement = lockingManagement;
   }
@@ -70,36 +72,41 @@ public class AuthorizedLock implements State, java.io.Serializable {
     return lockingManagement;
   }
 
-  public void setLockingManagement(AbstractLockingManagement lockingManagement) {
+  public void setLockingManagement(final AbstractLockingManagement lockingManagement) {
     this.lockingManagement = lockingManagement;
   }
 
   public void resetExpireTime() {
-    expireTime = System.currentTimeMillis() + expiryInMinutes * 60000;
+    expireTime = System.currentTimeMillis() + (expiryInMinutes * 60000);
   }
 
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((ID == null) ? 0 : ID.hashCode());
+    result = (prime * result) + ((ID == null) ? 0 : ID.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
+  public boolean equals(final Object obj) {
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
-    AuthorizedLock other = (AuthorizedLock) obj;
+    }
+    final AuthorizedLock other = (AuthorizedLock) obj;
     if (ID == null) {
-      if (other.ID != null)
+      if (other.ID != null) {
         return false;
-    } else if (!ID.equals(other.ID))
+      }
+    } else if (!ID.equals(other.ID)) {
       return false;
+    }
     return true;
   }
 
@@ -112,38 +119,38 @@ public class AuthorizedLock implements State, java.io.Serializable {
   }
 
   @Override
-  public synchronized void setTransaction(Transaction transaction) {
+  public synchronized void setTransaction(final Transaction transaction) {
     if (transaction != null) {
-      this.resetExpireTime();
-      this.authorizations.addAll(transaction.getAuthorizations());
+      resetExpireTime();
+      authorizations.addAll(transaction.getAuthorizations());
     }
   }
 
   @Override
-  public synchronized void addAuthorization(String AuthID) throws IOException {
+  public synchronized void addAuthorization(final String AuthID) throws IOException {
     authorizations.add(AuthID);
   }
 
   public synchronized void invalidate() {
-    this.expireTime = 0;
-    this.notify();
+    expireTime = 0;
+    notify();
   }
 
-  public boolean isAuthorized(AuthorizedLock lock) {
+  public boolean isAuthorized(final AuthorizedLock lock) {
     boolean ok = false;
-    for (String auth : lock.authorizations) {
+    for (final String auth : lock.authorizations) {
       ok |= isAuthorized(auth);
     }
-    return ok || this.ID.equals(lock.ID);
+    return ok || ID.equals(lock.ID);
   }
 
-  public boolean isAuthorized(String authID) {
-    return this.authorizations.contains(authID);
+  public boolean isAuthorized(final String authID) {
+    return authorizations.contains(authID);
   }
 
   @Override
   public synchronized void commit() throws IOException {
-    this.authorizations.clear(); // need to remove authorizations to release
+    authorizations.clear(); // need to remove authorizations to release
     // only those
     // locks that this transaction created (same ID)
     lockingManagement.releaseAll(this);
@@ -152,7 +159,7 @@ public class AuthorizedLock implements State, java.io.Serializable {
 
   @Override
   public synchronized void rollback() {
-    this.authorizations.clear(); // need to remove authorizations to release
+    authorizations.clear(); // need to remove authorizations to release
     // only those
     // locks that this transaction created (same ID)
     lockingManagement.releaseAll(this);

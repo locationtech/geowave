@@ -9,21 +9,21 @@
 /** */
 package org.locationtech.geowave.cli.geoserver;
 
-import com.beust.jcommander.Parameter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Properties;
 import org.locationtech.geowave.core.cli.converters.OptionalPasswordConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.Parameter;
 
 /** */
 public abstract class StoreSSLConfigurationOptions {
   private static final Logger LOGGER = LoggerFactory.getLogger(StoreSSLConfigurationOptions.class);
 
-  private String configPrefix;
+  private final String configPrefix;
 
-  public StoreSSLConfigurationOptions(String configPrefix) {
+  public StoreSSLConfigurationOptions(final String configPrefix) {
     this.configPrefix = configPrefix;
   }
 
@@ -123,7 +123,7 @@ public abstract class StoreSSLConfigurationOptions {
   }
 
   /** @param sslSecurityProtocol the sslSecurityProtocol to set */
-  public void setSslSecurityProtocol(String sslSecurityProtocol) {
+  public void setSslSecurityProtocol(final String sslSecurityProtocol) {
     this.sslSecurityProtocol = sslSecurityProtocol;
   }
 
@@ -133,7 +133,7 @@ public abstract class StoreSSLConfigurationOptions {
   }
 
   /** @param sslTrustStorePath the sslTrustStorePath to set */
-  public void setSslTrustStorePath(String sslTrustStorePath) {
+  public void setSslTrustStorePath(final String sslTrustStorePath) {
     this.sslTrustStorePath = sslTrustStorePath;
   }
 
@@ -143,7 +143,7 @@ public abstract class StoreSSLConfigurationOptions {
   }
 
   /** @param sslTrustStorePassword the sslTrustStorePassword to set */
-  public void setSslTrustStorePassword(String sslTrustStorePassword) {
+  public void setSslTrustStorePassword(final String sslTrustStorePassword) {
     this.sslTrustStorePassword = sslTrustStorePassword;
   }
 
@@ -153,7 +153,7 @@ public abstract class StoreSSLConfigurationOptions {
   }
 
   /** @param sslTrustStoreType the sslTrustStoreType to set */
-  public void setSslTrustStoreType(String sslTrustStoreType) {
+  public void setSslTrustStoreType(final String sslTrustStoreType) {
     this.sslTrustStoreType = sslTrustStoreType;
   }
 
@@ -163,7 +163,7 @@ public abstract class StoreSSLConfigurationOptions {
   }
 
   /** @param sslTrustStoreProvider the sslTrustStoreProvider to set */
-  public void setSslTrustStoreProvider(String sslTrustStoreProvider) {
+  public void setSslTrustStoreProvider(final String sslTrustStoreProvider) {
     this.sslTrustStoreProvider = sslTrustStoreProvider;
   }
 
@@ -173,7 +173,7 @@ public abstract class StoreSSLConfigurationOptions {
   }
 
   /** @param sslTrustManagerAlgorithm the sslTrustManagerAlgorithm to set */
-  public void setSslTrustManagerAlgorithm(String sslTrustManagerAlgorithm) {
+  public void setSslTrustManagerAlgorithm(final String sslTrustManagerAlgorithm) {
     this.sslTrustManagerAlgorithm = sslTrustManagerAlgorithm;
   }
 
@@ -183,7 +183,7 @@ public abstract class StoreSSLConfigurationOptions {
   }
 
   /** @param sslTrustManagerProvider the sslTrustManagerProvider to set */
-  public void setSslTrustManagerProvider(String sslTrustManagerProvider) {
+  public void setSslTrustManagerProvider(final String sslTrustManagerProvider) {
     this.sslTrustManagerProvider = sslTrustManagerProvider;
   }
 
@@ -193,7 +193,7 @@ public abstract class StoreSSLConfigurationOptions {
   }
 
   /** @param sslKeyStorePath the sslKeyStorePath to set */
-  public void setSslKeyStorePath(String sslKeyStorePath) {
+  public void setSslKeyStorePath(final String sslKeyStorePath) {
     this.sslKeyStorePath = sslKeyStorePath;
   }
 
@@ -203,7 +203,7 @@ public abstract class StoreSSLConfigurationOptions {
   }
 
   /** @param sslKeyStorePassword the sslKeyStorePassword to set */
-  public void setSslKeyStorePassword(String sslKeyStorePassword) {
+  public void setSslKeyStorePassword(final String sslKeyStorePassword) {
     this.sslKeyStorePassword = sslKeyStorePassword;
   }
 
@@ -213,7 +213,7 @@ public abstract class StoreSSLConfigurationOptions {
   }
 
   /** @param sslKeyStoreProvider the sslKeyStoreProvider to set */
-  public void setSslKeyStoreProvider(String sslKeyStoreProvider) {
+  public void setSslKeyStoreProvider(final String sslKeyStoreProvider) {
     this.sslKeyStoreProvider = sslKeyStoreProvider;
   }
 
@@ -223,7 +223,7 @@ public abstract class StoreSSLConfigurationOptions {
   }
 
   /** @param sslKeyPassword the sslKeyPassword to set */
-  public void setSslKeyPassword(String sslKeyPassword) {
+  public void setSslKeyPassword(final String sslKeyPassword) {
     this.sslKeyPassword = sslKeyPassword;
   }
 
@@ -233,7 +233,7 @@ public abstract class StoreSSLConfigurationOptions {
   }
 
   /** @param sslKeyStoreType the sslKeyStoreType to set */
-  public void setSslKeyStoreType(String sslKeyStoreType) {
+  public void setSslKeyStoreType(final String sslKeyStoreType) {
     this.sslKeyStoreType = sslKeyStoreType;
   }
 
@@ -243,7 +243,7 @@ public abstract class StoreSSLConfigurationOptions {
   }
 
   /** @param sslKeyManagerAlgorithm the sslKeyManagerAlgorithm to set */
-  public void setSslKeyManagerAlgorithm(String sslKeyManagerAlgorithm) {
+  public void setSslKeyManagerAlgorithm(final String sslKeyManagerAlgorithm) {
     this.sslKeyManagerAlgorithm = sslKeyManagerAlgorithm;
   }
 
@@ -253,24 +253,24 @@ public abstract class StoreSSLConfigurationOptions {
   }
 
   /** @param sslKeyManagerProvider the sslKeyManagerProvider to set */
-  public void setSslKeyManagerProvider(String sslKeyManagerProvider) {
+  public void setSslKeyManagerProvider(final String sslKeyManagerProvider) {
     this.sslKeyManagerProvider = sslKeyManagerProvider;
   }
 
-  public boolean saveProperties(Properties existingProps) {
+  public boolean saveProperties(final Properties existingProps) {
     boolean updated = false;
-    Field[] fields = StoreSSLConfigurationOptions.class.getDeclaredFields();
-    if (fields != null && fields.length != 0) {
-      for (Field field : fields) {
+    final Field[] fields = StoreSSLConfigurationOptions.class.getDeclaredFields();
+    if ((fields != null) && (fields.length != 0)) {
+      for (final Field field : fields) {
         field.setAccessible(true); // HPFortify
         // "Access Specifier Manipulation"
         // False Positive: These fields are being modified by trusted
         // code,
         // in a way that is not influenced by user input
-        Annotation[] annotations = field.getAnnotations();
-        for (Annotation annotation : annotations) {
+        final Annotation[] annotations = field.getAnnotations();
+        for (final Annotation annotation : annotations) {
           if (annotation instanceof SSLOptionAnnotation) {
-            SSLOptionAnnotation sslOptionAnnotation = (SSLOptionAnnotation) annotation;
+            final SSLOptionAnnotation sslOptionAnnotation = (SSLOptionAnnotation) annotation;
             Object value = null;
             try {
               value = field.get(this);
@@ -279,7 +279,7 @@ public abstract class StoreSSLConfigurationOptions {
             }
             // only write to properties the values which have been
             // specified
-            if (value != null && sslOptionAnnotation.propertyBaseName() != null) {
+            if ((value != null) && (sslOptionAnnotation.propertyBaseName() != null)) {
               final String propertyKey =
                   String.format("%s.%s", configPrefix, sslOptionAnnotation.propertyBaseName());
               existingProps.put(propertyKey, value);

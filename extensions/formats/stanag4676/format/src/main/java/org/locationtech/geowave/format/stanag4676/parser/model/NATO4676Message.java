@@ -15,7 +15,7 @@ public class NATO4676Message {
   protected IDdata senderID;
   protected Long runId;
 
-  public void setFormatVersion(String formatVersion) {
+  public void setFormatVersion(final String formatVersion) {
     this.formatVersion = formatVersion;
   }
 
@@ -27,7 +27,7 @@ public class NATO4676Message {
     return messageTime;
   }
 
-  public void setMessageTime(long messageTime) {
+  public void setMessageTime(final long messageTime) {
     this.messageTime = messageTime;
   }
 
@@ -35,7 +35,7 @@ public class NATO4676Message {
     return security;
   }
 
-  public void setSecurity(Security security) {
+  public void setSecurity(final Security security) {
     this.security = security;
   }
 
@@ -43,7 +43,7 @@ public class NATO4676Message {
     return senderID;
   }
 
-  public void setSenderID(IDdata senderID) {
+  public void setSenderID(final IDdata senderID) {
     this.senderID = senderID;
   }
 
@@ -51,7 +51,7 @@ public class NATO4676Message {
     return runId;
   }
 
-  public void setRunId(Long id) {
-    this.runId = id;
+  public void setRunId(final Long id) {
+    runId = id;
   }
 }

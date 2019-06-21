@@ -9,10 +9,10 @@
 package org.locationtech.geowave.core.store.adapter.statistics;
 
 public class StatisticsId {
-  private StatisticsType<?, ?> type;
-  private String extendedId;
+  private final StatisticsType<?, ?> type;
+  private final String extendedId;
 
-  public StatisticsId(StatisticsType<?, ?> type, String extendedId) {
+  public StatisticsId(final StatisticsType<?, ?> type, final String extendedId) {
     super();
     this.type = type;
     this.extendedId = extendedId;
@@ -22,30 +22,37 @@ public class StatisticsId {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((extendedId == null) ? 0 : extendedId.hashCode());
-    result = prime * result + ((type == null) ? 0 : type.hashCode());
+    result = (prime * result) + ((extendedId == null) ? 0 : extendedId.hashCode());
+    result = (prime * result) + ((type == null) ? 0 : type.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
+  public boolean equals(final Object obj) {
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
-    StatisticsId other = (StatisticsId) obj;
+    }
+    final StatisticsId other = (StatisticsId) obj;
     if (extendedId == null) {
-      if (other.extendedId != null)
+      if (other.extendedId != null) {
         return false;
-    } else if (!extendedId.equals(other.extendedId))
+      }
+    } else if (!extendedId.equals(other.extendedId)) {
       return false;
+    }
     if (type == null) {
-      if (other.type != null)
+      if (other.type != null) {
         return false;
-    } else if (!type.equals(other.type))
+      }
+    } else if (!type.equals(other.type)) {
       return false;
+    }
     return true;
   }
 

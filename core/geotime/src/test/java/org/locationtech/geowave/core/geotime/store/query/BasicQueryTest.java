@@ -19,7 +19,6 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalit
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalOptions;
 import org.locationtech.geowave.core.geotime.store.dimension.Time.TimeRange;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.api.Index;
@@ -38,8 +37,7 @@ public class BasicQueryTest {
   SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssz");
 
   private CommonIndexedPersistenceEncoding createData(final Date start, final Date end) {
-    final PersistentDataset<CommonIndexValue> commonData =
-        new MultiFieldPersistentDataset<CommonIndexValue>();
+    final PersistentDataset<CommonIndexValue> commonData = new MultiFieldPersistentDataset<>();
 
     commonData.addValue(
         new TimeField(Unit.YEAR).getFieldName(),
@@ -58,13 +56,13 @@ public class BasicQueryTest {
   public void performOp(final BasicQueryCompareOperation op, final boolean[] expectedResults)
       throws ParseException {
     // query time range
-    ConstraintData constrainData =
+    final ConstraintData constrainData =
         new ConstraintData(
             new NumericRange(
                 df.parse("2017-02-22T12:00:00GMT-00:00").getTime(),
                 df.parse("2017-02-22T13:00:00GMT-00:00").getTime()),
             true);
-    ConstraintsByClass constaints =
+    final ConstraintsByClass constaints =
         new ConstraintsByClass(new ConstraintSet(TimeDefinition.class, constrainData));
     final BasicQueryByClass query = new BasicQueryByClass(constaints, op);
 

@@ -25,7 +25,7 @@ public class ExtractAttributesFilter extends DefaultFilterVisitor {
       ((Collection) data).add(expression.getPropertyName());
       return data;
     }
-    final Set<String> names = new HashSet<String>();
+    final Set<String> names = new HashSet<>();
     names.add(expression.getPropertyName());
     return names;
   }

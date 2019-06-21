@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.RangeDecomposition;
@@ -149,8 +150,7 @@ public class ZOrderSFC implements SpaceFillingCurve {
     final int numDimensions = VarintUtils.readUnsignedInt(buf);
     dimensionDefs = new SFCDimensionDefinition[numDimensions];
     for (int i = 0; i < numDimensions; i++) {
-      final byte[] dim = new byte[VarintUtils.readUnsignedInt(buf)];
-      buf.get(dim);
+      final byte[] dim = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
       dimensionDefs[i] = (SFCDimensionDefinition) PersistenceUtils.fromBinary(dim);
     }
     init(dimensionDefs);

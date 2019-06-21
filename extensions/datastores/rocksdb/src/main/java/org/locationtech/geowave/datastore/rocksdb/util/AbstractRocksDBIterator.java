@@ -34,7 +34,7 @@ public abstract class AbstractRocksDBIterator<T> implements CloseableIterator<T>
     if (closed) {
       throw new NoSuchElementException();
     }
-    T retVal = readRow(it.key(), it.value());
+    final T retVal = readRow(it.key(), it.value());
 
     it.next();
     return retVal;

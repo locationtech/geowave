@@ -39,24 +39,24 @@ public class OperationRegistry {
     return OperationRegistryHolder.instance;
   }
 
-  public OperationRegistry(List<OperationEntry> entries) {
-    operationMapByClass = new HashMap<Class<?>, OperationEntry>();
-    for (OperationEntry entry : entries) {
+  public OperationRegistry(final List<OperationEntry> entries) {
+    operationMapByClass = new HashMap<>();
+    for (final OperationEntry entry : entries) {
       operationMapByClass.put(entry.getOperationClass(), entry);
     }
   }
 
   private synchronized void init() {
     if (operationMapByClass == null) {
-      operationMapByClass = new HashMap<Class<?>, OperationEntry>();
+      operationMapByClass = new HashMap<>();
       // Load SPI elements
       final Iterator<CLIOperationProviderSpi> operationProviders =
           ServiceLoader.load(CLIOperationProviderSpi.class).iterator();
       while (operationProviders.hasNext()) {
         final CLIOperationProviderSpi operationProvider = operationProviders.next();
-        for (Class<?> clz : operationProvider.getOperations()) {
+        for (final Class<?> clz : operationProvider.getOperations()) {
           if (Operation.class.isAssignableFrom(clz)) {
-            OperationEntry entry = new OperationEntry(clz);
+            final OperationEntry entry = new OperationEntry(clz);
             operationMapByClass.put(clz, entry);
           } else {
             throw new RuntimeException(
@@ -67,9 +67,10 @@ public class OperationRegistry {
       }
 
       // Build a hierarchy.
-      for (OperationEntry entry : operationMapByClass.values()) {
+      for (final OperationEntry entry : operationMapByClass.values()) {
         if (!entry.isTopLevel()) {
-          OperationEntry parentEntry = operationMapByClass.get(entry.getParentOperationClass());
+          final OperationEntry parentEntry =
+              operationMapByClass.get(entry.getParentOperationClass());
           if (parentEntry == null) {
             throw new RuntimeException(
                 "Cannot find parent entry for " + entry.getOperationClass().getName());
@@ -99,7 +100,7 @@ public class OperationRegistry {
    * @param operationClass
    * @return
    */
-  public OperationEntry getOperation(Class<?> operationClass) {
+  public OperationEntry getOperation(final Class<?> operationClass) {
     return operationMapByClass.get(operationClass);
   }
 }

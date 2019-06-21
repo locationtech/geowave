@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.core.store.server;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,6 +20,8 @@ import org.locationtech.geowave.core.store.server.ServerOpConfig.OptionProvider;
 import org.locationtech.geowave.core.store.server.ServerOpConfig.ServerOpScope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 
 public class ServerOpHelper {
   private static final Logger LOGGER = LoggerFactory.getLogger(ServerOpHelper.class);

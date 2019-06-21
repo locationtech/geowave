@@ -85,27 +85,33 @@ public class GeoWaveOutputKey<T> implements
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + Arrays.hashCode(indexNames);
-    result = prime * result + ((typeName == null) ? 0 : typeName.hashCode());
+    result = (prime * result) + Arrays.hashCode(indexNames);
+    result = (prime * result) + ((typeName == null) ? 0 : typeName.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
+  public boolean equals(final Object obj) {
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
-    GeoWaveOutputKey other = (GeoWaveOutputKey) obj;
-    if (!Arrays.equals(indexNames, other.indexNames))
+    }
+    final GeoWaveOutputKey other = (GeoWaveOutputKey) obj;
+    if (!Arrays.equals(indexNames, other.indexNames)) {
       return false;
+    }
     if (typeName == null) {
-      if (other.typeName != null)
+      if (other.typeName != null) {
         return false;
-    } else if (!typeName.equals(other.typeName))
+      }
+    } else if (!typeName.equals(other.typeName)) {
       return false;
+    }
     return true;
   }
 

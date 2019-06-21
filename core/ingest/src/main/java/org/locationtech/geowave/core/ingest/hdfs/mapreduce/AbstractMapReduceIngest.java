@@ -186,7 +186,7 @@ public abstract class AbstractMapReduceIngest<T extends Persistable & DataAdapte
       AdapterIndexMappingStore adapterIndexMappingStore = null;
       InternalAdapterStore internalAdapterStore = null;
       for (final DataTypeAdapter<?> dataAdapter : dataAdapters) {
-        String typeName = dataAdapter.getTypeName();
+        final String typeName = dataAdapter.getTypeName();
         try (CloseableIterator<?> it =
             store.query(QueryBuilder.newBuilder().addTypeName(typeName).limit(1).build())) {
           if (!it.hasNext()) {

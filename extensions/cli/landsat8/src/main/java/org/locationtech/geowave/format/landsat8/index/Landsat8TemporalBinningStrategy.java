@@ -100,7 +100,7 @@ public class Landsat8TemporalBinningStrategy implements BinningStrategy {
     }
     final long startOfEpochFromOrigin = binId * BIN_SIZE_MILLIS;
     long epochIterator = startOfEpochFromOrigin + ORIGIN_MILLIS;
-    final List<BinRange> bins = new ArrayList<BinRange>();
+    final List<BinRange> bins = new ArrayList<>();
     // track this, so that we can easily declare a range to be the full
     // extent and use the information to perform a more efficient scan
     boolean firstBin = (millisFromOrigin != startOfEpochFromOrigin);

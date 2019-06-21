@@ -42,33 +42,39 @@ public class NNData<T> implements Comparable<NNData<T>> {
     int result = 1;
     long temp;
     temp = Double.doubleToLongBits(distance);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + ((neighbor == null) ? 0 : neighbor.hashCode());
+    result = (prime * result) + (int) (temp ^ (temp >>> 32));
+    result = (prime * result) + ((neighbor == null) ? 0 : neighbor.hashCode());
     return result;
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
+  public boolean equals(final Object obj) {
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
+    }
     @SuppressWarnings("unchecked")
-    NNData<T> other = (NNData<T>) obj;
-    if (Double.doubleToLongBits(distance) != Double.doubleToLongBits(other.distance))
+    final NNData<T> other = (NNData<T>) obj;
+    if (Double.doubleToLongBits(distance) != Double.doubleToLongBits(other.distance)) {
       return false;
+    }
     if (neighbor == null) {
-      if (other.neighbor != null)
+      if (other.neighbor != null) {
         return false;
-    } else if (!neighbor.equals(other.neighbor))
+      }
+    } else if (!neighbor.equals(other.neighbor)) {
       return false;
+    }
     return true;
   }
 
   @Override
-  public int compareTo(NNData<T> otherNNData) {
+  public int compareTo(final NNData<T> otherNNData) {
     final int dist = Double.compare(distance, otherNNData.distance);
     // do not care about the ordering based on the neighbor data.
     // just need to force some ordering if they are not the same.

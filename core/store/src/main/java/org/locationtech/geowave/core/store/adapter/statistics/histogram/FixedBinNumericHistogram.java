@@ -77,6 +77,7 @@ public class FixedBinNumericHistogram implements NumericHistogram {
     return result;
   }
 
+  @Override
   public double cdf(final double val) {
     return sum(val, false) / totalCount;
   }
@@ -87,8 +88,9 @@ public class FixedBinNumericHistogram implements NumericHistogram {
    * @param val
    * @return the number of estimated points
    */
-  public double sum(final double val, boolean inclusive) {
-    if (val < this.minValue) {
+  @Override
+  public double sum(final double val, final boolean inclusive) {
+    if (val < minValue) {
       return 0.0;
     }
     final double range = maxValue - minValue;
@@ -115,6 +117,7 @@ public class FixedBinNumericHistogram implements NumericHistogram {
     return (FloatCompareUtils.checkDoublesEqual(v, 0.0)) ? 1.0 : v;
   }
 
+  @Override
   public double quantile(final double percentage) {
     final double fractionOfTotal = percentage * totalCount;
     double countThisFar = 0;
@@ -144,8 +147,8 @@ public class FixedBinNumericHistogram implements NumericHistogram {
   public long[] count(final int bins) {
     final long[] result = new long[bins];
     double start = minValue;
-    double range = maxValue - minValue;
-    double increment = range / bins;
+    final double range = maxValue - minValue;
+    final double increment = range / bins;
     start += increment;
     long last = 0;
     for (int bin = 0; bin < bins; bin++, start += increment) {
@@ -156,9 +159,10 @@ public class FixedBinNumericHistogram implements NumericHistogram {
     return result;
   }
 
+  @Override
   public void merge(final NumericHistogram mergeable) {
 
-    FixedBinNumericHistogram myTypeOfHist = (FixedBinNumericHistogram) mergeable;
+    final FixedBinNumericHistogram myTypeOfHist = (FixedBinNumericHistogram) mergeable;
     final double newMinValue = Math.min(minValue, myTypeOfHist.minValue);
     final double newMaxValue = Math.max(maxValue, myTypeOfHist.maxValue);
     try {
@@ -177,6 +181,7 @@ public class FixedBinNumericHistogram implements NumericHistogram {
     totalCount += myTypeOfHist.totalCount;
   }
 
+  @Override
   public int bufferSize() {
     int bufferSize =
         VarintUtils.unsignedLongByteLength(totalCount)
@@ -188,7 +193,8 @@ public class FixedBinNumericHistogram implements NumericHistogram {
     return bufferSize;
   }
 
-  public void toBinary(ByteBuffer buffer) {
+  @Override
+  public void toBinary(final ByteBuffer buffer) {
     VarintUtils.writeUnsignedLong(totalCount, buffer);
     buffer.putDouble(minValue);
     buffer.putDouble(maxValue);
@@ -198,7 +204,8 @@ public class FixedBinNumericHistogram implements NumericHistogram {
     }
   }
 
-  public void fromBinary(ByteBuffer buffer) {
+  @Override
+  public void fromBinary(final ByteBuffer buffer) {
     totalCount = VarintUtils.readUnsignedLong(buffer);
     minValue = buffer.getDouble();
     maxValue = buffer.getDouble();
@@ -210,6 +217,7 @@ public class FixedBinNumericHistogram implements NumericHistogram {
   }
 
   /** @return the total number of consumed values */
+  @Override
   public long getTotalCount() {
     return totalCount;
   }
@@ -219,6 +227,7 @@ public class FixedBinNumericHistogram implements NumericHistogram {
     return count.length;
   }
 
+  @Override
   public void add(final double num) {
     add(1L, num);
   }
@@ -335,10 +344,12 @@ public class FixedBinNumericHistogram implements NumericHistogram {
     count = newCount;
   }
 
+  @Override
   public double getMaxValue() {
     return maxValue;
   };
 
+  @Override
   public double getMinValue() {
     return minValue;
   };
@@ -346,12 +357,12 @@ public class FixedBinNumericHistogram implements NumericHistogram {
   public static class FixedBinNumericHistogramFactory implements NumericHistogramFactory {
 
     @Override
-    public NumericHistogram create(int bins) {
+    public NumericHistogram create(final int bins) {
       return new FixedBinNumericHistogram(bins);
     }
 
     @Override
-    public NumericHistogram create(int bins, double minValue, double maxValue) {
+    public NumericHistogram create(final int bins, final double minValue, final double maxValue) {
       return new FixedBinNumericHistogram(bins, minValue, maxValue);
     }
   }

@@ -22,7 +22,7 @@ import org.opengis.feature.simple.SimpleFeature;
 public class ComparisonGaussianCellMapper extends GaussianCellMapper {
   protected static final String TIME_ATTRIBUTE_KEY = "TIME_ATTRIBUTE";
   private String timeAttribute;
-  private final Map<Integer, LevelStore> winterLevelStoreMap = new HashMap<Integer, LevelStore>();
+  private final Map<Integer, LevelStore> winterLevelStoreMap = new HashMap<>();
 
   @Override
   protected void setup(final Context context) throws IOException, InterruptedException {

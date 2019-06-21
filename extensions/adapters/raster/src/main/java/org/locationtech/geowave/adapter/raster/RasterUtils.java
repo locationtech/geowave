@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.adapter.raster;
 
-import com.google.common.collect.ImmutableMap;
-import com.sun.media.imageioimpl.common.BogusColorSpace;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -93,6 +90,9 @@ import org.opengis.referencing.operation.Matrix;
 import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.ImmutableMap;
+import com.sun.media.imageioimpl.common.BogusColorSpace;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class RasterUtils {
   private static final RenderingHints DEFAULT_RENDERING_HINTS =
@@ -202,7 +202,7 @@ public class RasterUtils {
     } else if (geometry2 == null) {
       return geometry1;
     }
-    final List<Geometry> geometry = new ArrayList<Geometry>();
+    final List<Geometry> geometry = new ArrayList<>();
     geometry.add(geometry1);
     geometry.add(geometry2);
     return DouglasPeuckerSimplifier.simplify(
@@ -601,7 +601,7 @@ public class RasterUtils {
     Hashtable<String, Object> properties = null;
 
     if (originalImage.getPropertyNames() != null) {
-      properties = new Hashtable<String, Object>();
+      properties = new Hashtable<>();
       for (final String name : originalImage.getPropertyNames()) {
         properties.put(name, originalImage.getProperty(name));
       }
@@ -836,12 +836,12 @@ public class RasterUtils {
     Envelope mapExtent;
 
     CoordinateReferenceSystem crs = null;
-    if (crsCode == null || crsCode.isEmpty() || crsCode.equals(GeometryUtils.DEFAULT_CRS_STR)) {
+    if ((crsCode == null) || crsCode.isEmpty() || crsCode.equals(GeometryUtils.DEFAULT_CRS_STR)) {
       crs = GeometryUtils.getDefaultCRS();
     } else {
       try {
         crs = CRS.decode(crsCode);
-      } catch (FactoryException e) {
+      } catch (final FactoryException e) {
         LOGGER.error("Unable to decode " + crsCode + " CRS", e);
         throw new RuntimeException("Unable to initialize " + crsCode + " object", e);
       }

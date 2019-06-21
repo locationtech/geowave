@@ -17,7 +17,7 @@ public class MissionSummaryMessage extends NATO4676Message {
   }
 
   /** @param missionSummary the missionSummary to set */
-  public void setMissionSummary(MissionSummary missionSummary) {
+  public void setMissionSummary(final MissionSummary missionSummary) {
     this.missionSummary = missionSummary;
   }
 }

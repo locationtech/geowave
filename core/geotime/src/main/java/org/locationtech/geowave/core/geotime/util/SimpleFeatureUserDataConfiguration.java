@@ -8,9 +8,9 @@
  */
 package org.locationtech.geowave.core.geotime.util;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.opengis.feature.simple.SimpleFeatureType;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /**
  * A type of configuration data associated with attributes of a simple features such as statistics,

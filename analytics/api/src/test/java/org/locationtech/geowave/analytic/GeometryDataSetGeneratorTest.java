@@ -37,8 +37,8 @@ public class GeometryDataSetGeneratorTest {
   public void test() {
     final GeometryDataSetGenerator dataGenerator =
         new GeometryDataSetGenerator(new FeatureCentroidDistanceFn(), getBuilder());
-    Geometry region = dataGenerator.getBoundingRegion();
-    Coordinate[] coordinates = region.getBoundary().getCoordinates();
+    final Geometry region = dataGenerator.getBoundingRegion();
+    final Coordinate[] coordinates = region.getBoundary().getCoordinates();
     assertEquals(5, coordinates.length);
     assertEquals("POLYGON ((-180 -90, 180 -90, 180 90, -180 90, -180 -90))", region.toString());
   }

@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.cli.osm.parser;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -41,19 +40,20 @@ import org.openstreetmap.osmosis.osmbinary.Osmformat;
 import org.openstreetmap.osmosis.osmbinary.file.BlockInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class OsmPbfParser {
 
   private static Logger LOGGER = LoggerFactory.getLogger(OsmPbfParser.class);
 
-  public Configuration stageData(OsmPbfParserOptions args) throws IOException {
+  public Configuration stageData(final OsmPbfParserOptions args) throws IOException {
     final OsmPbfParserOptions arg = args;
     final Configuration conf = new Configuration();
     conf.set("fs.default.name", args.getNameNode());
     conf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
 
-    FileSystem fs = FileSystem.get(conf);
-    Path basePath = new Path(arg.getHdfsBasePath());
+    final FileSystem fs = FileSystem.get(conf);
+    final Path basePath = new Path(arg.getHdfsBasePath());
 
     if (!fs.exists(basePath)) {
       if (!fs.mkdirs(basePath)) {
@@ -61,9 +61,9 @@ public class OsmPbfParser {
             "Unable to create staging directory: " + arg.getNameNode() + arg.getHdfsBasePath());
       }
     }
-    Path nodesPath = new Path(arg.getNodesBasePath());
-    Path waysPath = new Path(arg.getWaysBasePath());
-    Path relationsPath = new Path(arg.getRelationsBasePath());
+    final Path nodesPath = new Path(arg.getNodesBasePath());
+    final Path waysPath = new Path(arg.getWaysBasePath());
+    final Path relationsPath = new Path(arg.getRelationsBasePath());
 
     final DataFileWriter nodeWriter = new DataFileWriter(new GenericDatumWriter());
     final DataFileWriter wayWriter = new DataFileWriter(new GenericDatumWriter());
@@ -95,15 +95,16 @@ public class OsmPbfParser {
             // I couldn't figure out how to get rid of the findbugs
             // issue.
             @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE")
-            public FileVisitResult visitFile(java.nio.file.Path file, BasicFileAttributes attrs)
-                throws IOException {
+            public FileVisitResult visitFile(
+                final java.nio.file.Path file,
+                final BasicFileAttributes attrs) throws IOException {
               if (file.getFileName().toString().endsWith(arg.getExtension())) {
                 loadFileToHdfs(file, parser);
               }
               return FileVisitResult.CONTINUE;
             }
           });
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       LOGGER.error("Unable to crrate the FSDataOutputStream", ex);
     } finally {
       IOUtils.closeQuietly(nodeWriter);
@@ -118,15 +119,17 @@ public class OsmPbfParser {
     return conf;
   }
 
-  private static void loadFileToHdfs(java.nio.file.Path file, OsmAvroBinaryParser parser) {
+  private static void loadFileToHdfs(
+      final java.nio.file.Path file,
+      final OsmAvroBinaryParser parser) {
 
     InputStream is = null;
     try {
       is = new FileInputStream(file.toFile());
       new BlockInputStream(is, parser).process();
-    } catch (FileNotFoundException e) {
+    } catch (final FileNotFoundException e) {
       LOGGER.error("Unable to load file: " + file.toString(), e);
-    } catch (IOException e1) {
+    } catch (final IOException e1) {
       LOGGER.error("Unable to process file: " + file.toString(), e1);
     } finally {
       IOUtils.closeQuietly(is);
@@ -141,27 +144,27 @@ public class OsmPbfParser {
     private DataFileWriter relationWriter = null;
 
     public void setupWriter(
-        DataFileWriter nodeWriter,
-        DataFileWriter wayWriter,
-        DataFileWriter relationWriter) {
+        final DataFileWriter nodeWriter,
+        final DataFileWriter wayWriter,
+        final DataFileWriter relationWriter) {
       this.nodeWriter = nodeWriter;
       this.wayWriter = wayWriter;
       this.relationWriter = relationWriter;
     }
 
     @Override
-    protected void parseRelations(List<Osmformat.Relation> rels) {
-      for (Osmformat.Relation r : rels) {
-        AvroRelation r2 = new AvroRelation();
-        AvroPrimitive p = getPrimitive(r.getInfo());
+    protected void parseRelations(final List<Osmformat.Relation> rels) {
+      for (final Osmformat.Relation r : rels) {
+        final AvroRelation r2 = new AvroRelation();
+        final AvroPrimitive p = getPrimitive(r.getInfo());
         p.setId(r.getId());
         p.setTags(getTags(r.getKeysList(), r.getValsList()));
         r2.setCommon(p);
 
-        List<AvroRelationMember> members = new ArrayList<>(r.getRolesSidCount());
+        final List<AvroRelationMember> members = new ArrayList<>(r.getRolesSidCount());
 
         for (int i = 0; i < r.getRolesSidCount(); i++) {
-          AvroRelationMember rm = new AvroRelationMember();
+          final AvroRelationMember rm = new AvroRelationMember();
           rm.setMember(r.getMemids(i));
           rm.setRole(getStringById(r.getRolesSid(i)));
           switch (r.getTypes(i).toString()) {
@@ -184,14 +187,14 @@ public class OsmPbfParser {
         r2.setMembers(members);
         try {
           relationWriter.append(r2);
-        } catch (IOException e) {
+        } catch (final IOException e) {
           LOGGER.error("Unable to write relation", e);
         }
       }
     }
 
     @Override
-    protected void parseDense(Osmformat.DenseNodes nodes) {
+    protected void parseDense(final Osmformat.DenseNodes nodes) {
       long lastId = 0;
       long lastLat = 0;
       long lastLon = 0;
@@ -204,8 +207,8 @@ public class OsmPbfParser {
 
       for (int i = 0; i < nodes.getIdCount(); i++) {
 
-        AvroNode n = new AvroNode();
-        AvroPrimitive p = new AvroPrimitive();
+        final AvroNode n = new AvroNode();
+        final AvroPrimitive p = new AvroPrimitive();
 
         lastId += nodes.getId(i);
         lastLat += nodes.getLat(i);
@@ -218,11 +221,11 @@ public class OsmPbfParser {
         // Weird spec - keys and values are mashed sequentially, and end
         // of data for a particular node is denoted by a value of 0
         if (nodes.getKeysValsCount() > 0) {
-          Map<String, String> tags = new HashMap<>(nodes.getKeysValsCount());
+          final Map<String, String> tags = new HashMap<>(nodes.getKeysValsCount());
           while (nodes.getKeysVals(tagLocation) > 0) {
-            String k = getStringById(nodes.getKeysVals(tagLocation));
+            final String k = getStringById(nodes.getKeysVals(tagLocation));
             tagLocation++;
-            String v = getStringById(nodes.getKeysVals(tagLocation));
+            final String v = getStringById(nodes.getKeysVals(tagLocation));
             tagLocation++;
             tags.put(k, v);
           }
@@ -230,7 +233,7 @@ public class OsmPbfParser {
         }
 
         if (nodes.hasDenseinfo()) {
-          Osmformat.DenseInfo di = nodes.getDenseinfo();
+          final Osmformat.DenseInfo di = nodes.getDenseinfo();
           lastTimestamp += di.getTimestamp(i);
           lastChangeset += di.getChangeset(i);
           lastUid += di.getUid(i);
@@ -249,17 +252,17 @@ public class OsmPbfParser {
 
         try {
           nodeWriter.append(n);
-        } catch (IOException e) {
+        } catch (final IOException e) {
           LOGGER.error("Unable to write dense node", e);
         }
       }
     }
 
     @Override
-    protected void parseNodes(List<Osmformat.Node> nodes) {
-      for (Osmformat.Node n : nodes) {
-        AvroNode n2 = new AvroNode();
-        AvroPrimitive p = getPrimitive(n.getInfo());
+    protected void parseNodes(final List<Osmformat.Node> nodes) {
+      for (final Osmformat.Node n : nodes) {
+        final AvroNode n2 = new AvroNode();
+        final AvroPrimitive p = getPrimitive(n.getInfo());
         p.setId(n.getId());
         p.setTags(getTags(n.getKeysList(), n.getValsList()));
         n2.setCommon(p);
@@ -267,24 +270,24 @@ public class OsmPbfParser {
         n2.setLongitude(parseLon(n.getLon()));
         try {
           nodeWriter.append(n2);
-        } catch (IOException e) {
+        } catch (final IOException e) {
           LOGGER.error("Unable to write node", e);
         }
       }
     }
 
     @Override
-    protected void parseWays(List<Osmformat.Way> ways) {
-      for (Osmformat.Way w : ways) {
-        AvroWay w2 = new AvroWay();
-        AvroPrimitive p = getPrimitive(w.getInfo());
+    protected void parseWays(final List<Osmformat.Way> ways) {
+      for (final Osmformat.Way w : ways) {
+        final AvroWay w2 = new AvroWay();
+        final AvroPrimitive p = getPrimitive(w.getInfo());
         p.setId(w.getId());
         p.setTags(getTags(w.getKeysList(), w.getValsList()));
         w2.setCommon(p);
 
         long lastRef = 0;
-        List<Long> nodes = new ArrayList<>(w.getRefsCount());
-        for (Long ref : w.getRefsList()) {
+        final List<Long> nodes = new ArrayList<>(w.getRefsCount());
+        for (final Long ref : w.getRefsList()) {
           lastRef += ref;
           nodes.add(lastRef);
         }
@@ -292,35 +295,36 @@ public class OsmPbfParser {
 
         try {
           wayWriter.append(w2);
-        } catch (IOException e) {
+        } catch (final IOException e) {
           LOGGER.error("Unable to write way", e);
         }
       }
     }
 
     @Override
-    protected void parse(Osmformat.HeaderBlock header) {}
+    protected void parse(final Osmformat.HeaderBlock header) {}
 
+    @Override
     public void complete() {
       System.out.println("Complete!");
     }
 
-    private Map<String, String> getTags(List<Integer> k, List<Integer> v) {
-      Map<String, String> tags = new HashMap<String, String>(k.size());
+    private Map<String, String> getTags(final List<Integer> k, final List<Integer> v) {
+      final Map<String, String> tags = new HashMap<>(k.size());
       for (int i = 0; i < k.size(); i++) {
         tags.put(getStringById(k.get(i)), getStringById(v.get(i)));
       }
       return tags;
     }
 
-    private AvroPrimitive getPrimitive(Osmformat.Info info) {
-      AvroPrimitive p = new AvroPrimitive();
+    private AvroPrimitive getPrimitive(final Osmformat.Info info) {
+      final AvroPrimitive p = new AvroPrimitive();
       p.setVersion((long) info.getVersion());
       p.setTimestamp(info.getTimestamp());
       p.setUserId((long) info.getUid());
       try {
         p.setUserName(getStringById(info.getUid()));
-      } catch (Exception ex) {
+      } catch (final Exception ex) {
         LOGGER.warn(
             "Error, input file doesn't contain a valid string table for user id: " + info.getUid(),
             ex);

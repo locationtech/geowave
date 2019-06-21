@@ -33,23 +33,24 @@ public abstract class AbstractLockingManagement implements LockingManagement {
   public static final String LOCKING_MANAGEMENT_CLASS = "GEOWAVE_LM";
   public static final Object LOCKING_MANAGEMENT_CLASS_LCK = new Object();
 
-  public static AbstractLockingManagement getLockingManagement(GeoWavePluginConfig pluginConfig) {
+  public static AbstractLockingManagement getLockingManagement(
+      final GeoWavePluginConfig pluginConfig) {
     synchronized (LOCKING_MANAGEMENT_CLASS_LCK) {
-      String val = System.getenv(LOCKING_MANAGEMENT_CLASS);
+      final String val = System.getenv(LOCKING_MANAGEMENT_CLASS);
 
       if (val == null) {
         return new MemoryLockManager(pluginConfig);
       } else {
         try {
-          Class<? extends AbstractLockingManagement> lockManagerClass =
+          final Class<? extends AbstractLockingManagement> lockManagerClass =
               (Class<? extends AbstractLockingManagement>) Class.forName(val);
           if (!AbstractLockingManagement.class.isAssignableFrom(lockManagerClass)) {
             throw new IllegalArgumentException("Invalid LockManagement class " + val);
           } else {
-            Constructor cons = lockManagerClass.getConstructor(GeoWavePluginConfig.class);
+            final Constructor cons = lockManagerClass.getConstructor(GeoWavePluginConfig.class);
             return (AbstractLockingManagement) cons.newInstance(pluginConfig);
           }
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
           // HP Fortify "Log Forging" false positive
           // What Fortify considers "user input" comes only
           // from users with OS-level access anyway
@@ -60,10 +61,10 @@ public abstract class AbstractLockingManagement implements LockingManagement {
     }
   }
 
-  private static Set<String> EMPTY_SET = new HashSet<String>();
+  private static Set<String> EMPTY_SET = new HashSet<>();
 
   @Override
-  public void lock(Transaction transaction, String featureID) {
+  public void lock(final Transaction transaction, final String featureID) {
     lock(
         transaction,
         featureID,
@@ -72,73 +73,77 @@ public abstract class AbstractLockingManagement implements LockingManagement {
   }
 
   private void lock(
-      Transaction transaction,
-      String featureID,
-      Set<String> authorizations,
-      long expiryInMinutes) {
+      final Transaction transaction,
+      final String featureID,
+      final Set<String> authorizations,
+      final long expiryInMinutes) {
     AuthorizedLock lock =
         transaction == Transaction.AUTO_COMMIT ? null : (AuthorizedLock) transaction.getState(this);
     if (lock == null) {
       lock = new AuthorizedLock(this, authorizations, expiryInMinutes);
-      if (transaction != Transaction.AUTO_COMMIT)
+      if (transaction != Transaction.AUTO_COMMIT) {
         transaction.putState(this, lock);
+      }
     }
     lock(lock, featureID);
   }
 
   private void unlock(
-      Transaction transaction,
-      String featureID,
-      Set<String> authorizations,
-      long expiryInMinutes) {
+      final Transaction transaction,
+      final String featureID,
+      final Set<String> authorizations,
+      final long expiryInMinutes) {
     AuthorizedLock lock =
         transaction == Transaction.AUTO_COMMIT ? null : (AuthorizedLock) transaction.getState(this);
     if (lock == null) {
       lock = new AuthorizedLock(this, authorizations, expiryInMinutes);
-      if (transaction != Transaction.AUTO_COMMIT)
+      if (transaction != Transaction.AUTO_COMMIT) {
         transaction.putState(this, lock);
+      }
     }
     unlock(lock, featureID);
   }
 
   @Override
   public void lockFeatureID(
-      String typeName,
-      String featureID,
-      Transaction transaction,
-      FeatureLock featureLock) {
-    Set<String> set = new LinkedHashSet<String>();
+      final String typeName,
+      final String featureID,
+      final Transaction transaction,
+      final FeatureLock featureLock) {
+    final Set<String> set = new LinkedHashSet<>();
     set.add(featureLock.getAuthorization());
     this.lock(transaction, featureID, set, featureLock.getDuration());
   }
 
   @Override
   public void unLockFeatureID(
-      String typeName,
-      String featureID,
-      Transaction transaction,
-      FeatureLock featureLock) throws IOException {
-    Set<String> set = new LinkedHashSet<String>();
+      final String typeName,
+      final String featureID,
+      final Transaction transaction,
+      final FeatureLock featureLock) throws IOException {
+    final Set<String> set = new LinkedHashSet<>();
     set.add(featureLock.getAuthorization());
     this.unlock(transaction, featureID, set, featureLock.getDuration());
   }
 
   @Override
-  public boolean release(String authID, Transaction transaction) throws IOException {
+  public boolean release(final String authID, final Transaction transaction) throws IOException {
     AuthorizedLock lock =
         transaction == Transaction.AUTO_COMMIT ? null : (AuthorizedLock) transaction.getState(this);
-    if (lock == null)
+    if (lock == null) {
       lock = new AuthorizedLock(this, authID, 1 /* minutes */);
+    }
     releaseAll(lock);
     return true;
   }
 
   @Override
-  public boolean refresh(String authID, Transaction transaction) throws IOException {
+  public boolean refresh(final String authID, final Transaction transaction) throws IOException {
     AuthorizedLock lock =
         transaction == Transaction.AUTO_COMMIT ? null : (AuthorizedLock) transaction.getState(this);
-    if (lock == null)
+    if (lock == null) {
       lock = new AuthorizedLock(this, authID, 1 /* minutes */);
+    }
     resetAll(lock);
     return true;
   }

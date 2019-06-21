@@ -49,23 +49,24 @@ public class GeometryGenerator {
       public Geometry next() {
         // Thanks to Chris Bennight for the foundations of this code.
         currentCount++;
-        double cx = env.centre().x * distortationFn.distort();
-        double cy = env.centre().y * distortationFn.distort();
+        final double cx = env.centre().x * distortationFn.distort();
+        final double cy = env.centre().y * distortationFn.distort();
 
-        double dx = env.getWidth() * distortationFn.distort();
-        double dy = env.getHeight() * distortationFn.distort();
+        final double dx = env.getWidth() * distortationFn.distort();
+        final double dy = env.getHeight() * distortationFn.distort();
 
         // We will use a coordinate list to build the linear ring
-        CoordinateList clist = new CoordinateList();
+        final CoordinateList clist = new CoordinateList();
         double angle = 0.0;
-        for (int i = 0; angle < 360; angle += delta * distortationFn.distort() + delta, i++) {
-          double a = distanceactors.get(i % distanceactors.size()) * dx * distortationFn.distort();
+        for (int i = 0; angle < 360; angle += (delta * distortationFn.distort()) + delta, i++) {
+          final double a =
+              distanceactors.get(i % distanceactors.size()) * dx * distortationFn.distort();
           // double b = distanceactors.get(i % distanceactors.size())
           // * dy * distortationFn.distort();
           clist.add(
               new Coordinate(
-                  cx + a * Math.sin(Math.toRadians(angle)),
-                  cy + a * Math.cos(Math.toRadians(angle))));
+                  cx + (a * Math.sin(Math.toRadians(angle))),
+                  cy + (a * Math.cos(Math.toRadians(angle)))));
         }
 
         clist.add(clist.get(0));

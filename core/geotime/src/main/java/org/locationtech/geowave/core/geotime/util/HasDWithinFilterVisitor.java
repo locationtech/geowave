@@ -15,7 +15,7 @@ public class HasDWithinFilterVisitor extends NullFilterVisitor {
   private boolean hasDWithin = false;
 
   @Override
-  public Object visit(DWithin filter, Object data) {
+  public Object visit(final DWithin filter, final Object data) {
     hasDWithin = true;
     return super.visit(filter, data);
   }

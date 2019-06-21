@@ -20,7 +20,7 @@ public class MissionFrame {
   }
 
   /** @param missionId the missionId to set */
-  public void setMissionId(String missionId) {
+  public void setMissionId(final String missionId) {
     this.missionId = missionId;
   }
 
@@ -30,7 +30,7 @@ public class MissionFrame {
   }
 
   /** @param frameNumber the frameNumber to set */
-  public void setFrameNumber(Integer frameNumber) {
+  public void setFrameNumber(final Integer frameNumber) {
     this.frameNumber = frameNumber;
   }
 
@@ -40,7 +40,7 @@ public class MissionFrame {
   }
 
   /** @param frameTime the frameTime to set */
-  public void setFrameTime(long frameTime) {
+  public void setFrameTime(final long frameTime) {
     this.frameTime = frameTime;
   }
 
@@ -50,7 +50,7 @@ public class MissionFrame {
   }
 
   /** @param coverageArea the coverageArea to set */
-  public void setCoverageArea(Area coverageArea) {
+  public void setCoverageArea(final Area coverageArea) {
     this.coverageArea = coverageArea;
   }
 }

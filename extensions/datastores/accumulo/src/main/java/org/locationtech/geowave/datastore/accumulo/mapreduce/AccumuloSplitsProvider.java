@@ -118,7 +118,7 @@ public class AccumuloSplitsProvider extends SplitsProvider {
         }
       }
     } else {
-      ranges = new TreeSet<Range>();
+      ranges = new TreeSet<>();
       ranges.add(fullrange);
       if (LOGGER.isTraceEnabled()) {
         LOGGER.trace("Protected range: " + fullrange);
@@ -148,8 +148,8 @@ public class AccumuloSplitsProvider extends SplitsProvider {
       }
 
       final Range tabletRange = locator.toRange(tabletId);
-      final Map<String, SplitInfo> splitInfo = new HashMap<String, SplitInfo>();
-      final List<RangeLocationPair> rangeList = new ArrayList<RangeLocationPair>();
+      final Map<String, SplitInfo> splitInfo = new HashMap<>();
+      final List<RangeLocationPair> rangeList = new ArrayList<>();
 
       for (final Range range : tabletIdRanges.getValue()) {
         final Range clippedRange = tabletRange.clip(range);
@@ -187,14 +187,13 @@ public class AccumuloSplitsProvider extends SplitsProvider {
 
   /** Returns data structure to be filled by binnedRanges Extracted out to facilitate testing */
   public Map<String, Map<KeyExtent, List<Range>>> getBinnedRangesStructure() {
-    final Map<String, Map<KeyExtent, List<Range>>> tserverBinnedRanges =
-        new HashMap<String, Map<KeyExtent, List<Range>>>();
+    final Map<String, Map<KeyExtent, List<Range>>> tserverBinnedRanges = new HashMap<>();
     return tserverBinnedRanges;
   }
 
   /** Returns host name cache data structure Extracted out to facilitate testing */
   public HashMap<String, String> getHostNameCache() {
-    final HashMap<String, String> hostNameCache = new HashMap<String, String>();
+    final HashMap<String, String> hostNameCache = new HashMap<>();
     return hostNameCache;
   }
 

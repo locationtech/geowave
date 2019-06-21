@@ -8,6 +8,8 @@
  */
 package org.locationtech.geowave.datastore.kudu;
 
+import java.nio.ByteBuffer;
+import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.kudu.ColumnSchema;
 import org.apache.kudu.Type;
@@ -15,8 +17,6 @@ import org.apache.kudu.client.PartialRow;
 import org.apache.kudu.client.RowResult;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.datastore.kudu.util.KuduUtils;
-import java.nio.ByteBuffer;
-import java.util.List;
 
 public class KuduMetadataRow implements PersistentKuduRow {
   private final byte[] primaryId;
@@ -55,21 +55,21 @@ public class KuduMetadataRow implements PersistentKuduRow {
   }
 
   public KuduMetadataRow(final GeoWaveMetadata metadata) {
-    this.primaryId = metadata.getPrimaryId();
-    this.secondaryId = metadata.getSecondaryId();
-    this.visibility = metadata.getVisibility();
-    this.value = metadata.getValue();
-    ByteBuffer timestampBuffer = ByteBuffer.allocate(8);
+    primaryId = metadata.getPrimaryId();
+    secondaryId = metadata.getSecondaryId();
+    visibility = metadata.getVisibility();
+    value = metadata.getValue();
+    final ByteBuffer timestampBuffer = ByteBuffer.allocate(8);
     timestampBuffer.putLong(System.nanoTime());
-    this.timestamp = timestampBuffer.array();
+    timestamp = timestampBuffer.array();
   }
 
   public KuduMetadataRow(final RowResult result) {
-    this.primaryId = result.getBinaryCopy(KuduMetadataField.GW_PRIMARY_ID_KEY.getFieldName());
-    this.secondaryId = result.getBinaryCopy(KuduMetadataField.GW_SECONDARY_ID_KEY.getFieldName());
-    this.visibility = result.getBinaryCopy(KuduMetadataField.GW_VISIBILITY_KEY.getFieldName());
-    this.value = result.getBinaryCopy(KuduMetadataField.GW_VALUE_KEY.getFieldName());
-    this.timestamp = result.getBinaryCopy(KuduMetadataField.GW_TIMESTAMP_KEY.getFieldName());
+    primaryId = result.getBinaryCopy(KuduMetadataField.GW_PRIMARY_ID_KEY.getFieldName());
+    secondaryId = result.getBinaryCopy(KuduMetadataField.GW_SECONDARY_ID_KEY.getFieldName());
+    visibility = result.getBinaryCopy(KuduMetadataField.GW_VISIBILITY_KEY.getFieldName());
+    value = result.getBinaryCopy(KuduMetadataField.GW_VALUE_KEY.getFieldName());
+    timestamp = result.getBinaryCopy(KuduMetadataField.GW_TIMESTAMP_KEY.getFieldName());
   }
 
   public byte[] getPrimaryId() {
@@ -93,7 +93,7 @@ public class KuduMetadataRow implements PersistentKuduRow {
   }
 
   @Override
-  public void populatePartialRow(PartialRow partialRow) {
+  public void populatePartialRow(final PartialRow partialRow) {
     populatePartialRowPrimaryKey(partialRow);
     partialRow.addBinary(
         KuduMetadataField.GW_VISIBILITY_KEY.getFieldName(),
@@ -104,7 +104,7 @@ public class KuduMetadataRow implements PersistentKuduRow {
   }
 
   @Override
-  public void populatePartialRowPrimaryKey(PartialRow partialRow) {
+  public void populatePartialRowPrimaryKey(final PartialRow partialRow) {
     partialRow.addBinary(KuduMetadataField.GW_PRIMARY_ID_KEY.getFieldName(), primaryId);
     partialRow.addBinary(
         KuduMetadataField.GW_SECONDARY_ID_KEY.getFieldName(),

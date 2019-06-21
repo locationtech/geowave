@@ -95,10 +95,10 @@ public class LocalPluginFileVisitor<P extends LocalPluginBase, R> implements Fil
       final AbstractLocalFileDriver<P, R> driver,
       final R runData,
       final String[] userExtensions) {
-    pluginVisitors = new ArrayList<PluginVisitor<P>>(localPlugins.size());
+    pluginVisitors = new ArrayList<>(localPlugins.size());
     for (final Entry<String, P> localPluginBase : localPlugins.entrySet()) {
       pluginVisitors.add(
-          new PluginVisitor<P>(
+          new PluginVisitor<>(
               localPluginBase.getValue(),
               localPluginBase.getKey(),
               userExtensions));

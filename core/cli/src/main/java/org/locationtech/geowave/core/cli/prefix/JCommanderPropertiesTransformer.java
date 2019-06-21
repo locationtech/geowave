@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.cli.prefix;
 
-import com.beust.jcommander.JCommander;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -19,6 +18,7 @@ import java.util.Properties;
 import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.JCommander;
 
 /**
  * This class will translate a given set of ParameterDescription entries into a properties file or
@@ -33,9 +33,9 @@ public class JCommanderPropertiesTransformer {
   // to only retrieve properties that start with this
   // namespace.
   private final String propertyFormat;
-  private List<Object> objects = new ArrayList<Object>();
+  private final List<Object> objects = new ArrayList<>();
 
-  public JCommanderPropertiesTransformer(String namespace) {
+  public JCommanderPropertiesTransformer(final String namespace) {
     if (namespace == null) {
       propertyFormat = "%s";
     } else {
@@ -52,7 +52,7 @@ public class JCommanderPropertiesTransformer {
    *
    * @param object
    */
-  public void addObject(Object object) {
+  public void addObject(final Object object) {
     objects.add(object);
   }
 
@@ -62,11 +62,11 @@ public class JCommanderPropertiesTransformer {
    * @return
    */
   private Collection<TranslationEntry> generateEntries() {
-    JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
-    for (Object obj : objects) {
+    final JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
+    for (final Object obj : objects) {
       translator.addObject(obj);
     }
-    JCommanderTranslationMap map = translator.translate();
+    final JCommanderTranslationMap map = translator.translate();
     return map.getEntries().values();
   }
 
@@ -75,10 +75,10 @@ public class JCommanderPropertiesTransformer {
    *
    * @param properties
    */
-  public void transformToMap(Map<String, String> properties) {
-    Properties props = new Properties();
+  public void transformToMap(final Map<String, String> properties) {
+    final Properties props = new Properties();
     transformToProperties(props);
-    for (String prop : props.stringPropertyNames()) {
+    for (final String prop : props.stringPropertyNames()) {
       properties.put(prop, props.getProperty(prop));
     }
   }
@@ -88,9 +88,9 @@ public class JCommanderPropertiesTransformer {
    *
    * @param properties
    */
-  public void transformFromMap(Map<String, String> properties) {
-    Properties props = new Properties();
-    for (Entry<String, String> prop : properties.entrySet()) {
+  public void transformFromMap(final Map<String, String> properties) {
+    final Properties props = new Properties();
+    for (final Entry<String, String> prop : properties.entrySet()) {
       if (prop.getValue() != null) {
         props.setProperty(prop.getKey(), prop.getValue());
       }
@@ -103,9 +103,9 @@ public class JCommanderPropertiesTransformer {
    *
    * @param toProperties
    */
-  public void transformToProperties(Properties toProperties) {
+  public void transformToProperties(final Properties toProperties) {
     // Translate all fields.
-    for (TranslationEntry entry : generateEntries()) {
+    for (final TranslationEntry entry : generateEntries()) {
 
       // Get the Properties name.
       String propertyName = entry.getAsPropertyName();
@@ -115,7 +115,7 @@ public class JCommanderPropertiesTransformer {
       Object value = null;
       try {
         value = entry.getParam().get(entry.getObject());
-      } catch (Exception e) {
+      } catch (final Exception e) {
         LOGGER.warn("Unable to set value", e);
         continue;
       }
@@ -125,8 +125,8 @@ public class JCommanderPropertiesTransformer {
       // Dyn parameter, serialize map.
       if (entry.getParam().isDynamicParameter()) {
         @SuppressWarnings("unchecked")
-        Map<String, String> props = (Map<String, String>) value;
-        for (Map.Entry<String, String> prop : props.entrySet()) {
+        final Map<String, String> props = (Map<String, String>) value;
+        for (final Map.Entry<String, String> prop : props.entrySet()) {
           if (prop.getValue() != null) {
             toProperties.put(String.format("%s.%s", propertyName, prop.getKey()), prop.getValue());
           }
@@ -142,14 +142,14 @@ public class JCommanderPropertiesTransformer {
    *
    * @param fromProperties
    */
-  public void transformFromProperties(Properties fromProperties) {
+  public void transformFromProperties(final Properties fromProperties) {
 
     // This JCommander object is used strictly to use the 'convertValue'
     // function which happens to be public.
-    JCommander jc = new JCommander();
+    final JCommander jc = new JCommander();
 
     // Translate all fields.
-    for (TranslationEntry entry : generateEntries()) {
+    for (final TranslationEntry entry : generateEntries()) {
 
       // Get the Properties name.
       String propertyName = entry.getAsPropertyName();
@@ -157,19 +157,19 @@ public class JCommanderPropertiesTransformer {
 
       // Set the value.
       if (entry.getParam().isDynamicParameter()) {
-        Map<String, String> fromMap = new HashMap<String, String>();
-        Set<String> propNames = fromProperties.stringPropertyNames();
-        for (String propName : propNames) {
+        final Map<String, String> fromMap = new HashMap<>();
+        final Set<String> propNames = fromProperties.stringPropertyNames();
+        for (final String propName : propNames) {
           if (propName.startsWith(propertyName)) {
             // Parse
-            String parsedName = propName.substring(propertyName.length() + 1);
+            final String parsedName = propName.substring(propertyName.length() + 1);
             fromMap.put(parsedName, fromProperties.getProperty(propName));
           }
         }
         // Set the map.
         entry.getParam().set(entry.getObject(), fromMap);
       } else {
-        String value = fromProperties.getProperty(propertyName);
+        final String value = fromProperties.getProperty(propertyName);
         if (value != null) {
           // Convert the value to the expected format, and
           // set it on the original object.

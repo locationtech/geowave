@@ -8,9 +8,9 @@
  */
 package org.locationtech.geowave.core.store.ingest;
 
+import java.io.Serializable;
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
-import java.io.Serializable;
 
 /**
  * This class encapsulates all of the options and parsed values specific to directing the ingestion
@@ -19,6 +19,11 @@ import java.io.Serializable;
  * extensions if provided.
  */
 public class LocalInputCommandLineOptions implements Serializable {
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+
   @Parameter(
       names = {"-x", "--extension"},
       description = "individual or comma-delimited set of file extensions to accept (optional)",
@@ -40,16 +45,16 @@ public class LocalInputCommandLineOptions implements Serializable {
 
   public static class SplitConverter implements IStringConverter<String[]> {
     @Override
-    public String[] convert(String value) {
+    public String[] convert(final String value) {
       return value.trim().split(",");
     }
   }
 
-  public void setExtensions(String[] extensions) {
+  public void setExtensions(final String[] extensions) {
     this.extensions = extensions;
   }
 
-  public void setFormats(String formats) {
+  public void setFormats(final String formats) {
     this.formats = formats;
   }
 }

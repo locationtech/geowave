@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.cli.debug;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Objects;
@@ -26,6 +24,8 @@ import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "sparkcql", parentOperation = DebugSection.class)
 @Parameters(commandDescription = "spark cql query")
@@ -51,7 +51,7 @@ public class SparkQuery extends AbstractGeoWaveQuery {
       final String indexName,
       final DataStore dataStore,
       final boolean debug,
-      DataStorePluginOptions pluginOptions) {
+      final DataStorePluginOptions pluginOptions) {
     String jar = "";
     try {
       jar =
@@ -66,16 +66,16 @@ public class SparkQuery extends AbstractGeoWaveQuery {
       addonOptions = addonOptions.set("spark.driver.host", host);
     }
 
-    SparkSession session = GeoWaveSparkConf.createDefaultSession(addonOptions);
+    final SparkSession session = GeoWaveSparkConf.createDefaultSession(addonOptions);
     long count = 0;
-    VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
+    final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
     if (typeName != null) {
       bldr.addTypeName(typeName);
     }
     if (indexName != null) {
       bldr.indexName(indexName);
     }
-    RDDOptions rddOptions = new RDDOptions();
+    final RDDOptions rddOptions = new RDDOptions();
     rddOptions.setQuery(bldr.constraints(bldr.constraintsFactory().cqlConstraints(cqlStr)).build());
     try {
       count =
@@ -83,7 +83,7 @@ public class SparkQuery extends AbstractGeoWaveQuery {
               session.sparkContext(),
               pluginOptions,
               rddOptions).getRawRDD().count();
-    } catch (IOException e) {
+    } catch (final IOException e) {
       LOGGER.warn("Unable to load RDD", e);
     }
     return count;

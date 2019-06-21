@@ -82,7 +82,7 @@ public class KSamplerJobRunner extends GeoWaveAnalyticJobRunner implements MapRe
     final PersistentAdapterStore adapterStore = super.getAdapterStore(runTimeProperties);
 
     final InternalAdapterStore internalAdapterStore = getInternalAdapterStore(runTimeProperties);
-    Short sampleInternalAdapterId =
+    final Short sampleInternalAdapterId =
         internalAdapterStore.getAdapterId(
             runTimeProperties.getPropertyAsString(
                 SampleParameters.Sample.DATA_TYPE_NAME,
@@ -96,7 +96,7 @@ public class KSamplerJobRunner extends GeoWaveAnalyticJobRunner implements MapRe
   private Index getIndex(final PropertyManagement runTimeProperties) throws Exception {
     final IndexStore indexStore = super.getIndexStore(runTimeProperties);
 
-    return (Index) indexStore.getIndex(
+    return indexStore.getIndex(
         runTimeProperties.getPropertyAsString(SampleParameters.Sample.INDEX_NAME, "index"));
   }
 

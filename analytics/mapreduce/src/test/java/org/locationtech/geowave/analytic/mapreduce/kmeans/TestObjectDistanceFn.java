@@ -14,14 +14,19 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 
 public class TestObjectDistanceFn implements DistanceFn<TestObject> {
-  private DistanceFn<Coordinate> coordinateDistanceFunction = new CoordinateEuclideanDistanceFn();
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+  private final DistanceFn<Coordinate> coordinateDistanceFunction =
+      new CoordinateEuclideanDistanceFn();
 
-  private Geometry getGeometry(TestObject x) {
+  private Geometry getGeometry(final TestObject x) {
     return x.geo;
   }
 
   @Override
-  public double measure(TestObject x, TestObject y) {
+  public double measure(final TestObject x, final TestObject y) {
 
     return coordinateDistanceFunction.measure(
         getGeometry(x).getCentroid().getCoordinate(),

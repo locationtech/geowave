@@ -15,21 +15,21 @@ import org.redisson.api.RScoredSortedSet;
 import org.redisson.client.protocol.ScoredEntry;
 
 public class LazyPaginatedEntryRange<V> extends LazyIteratorChain<ScoredEntry<V>> {
-  private double startScore;
-  private boolean startScoreInclusive;
-  private double endScore;
-  private boolean endScoreInclusive;
-  private RScoredSortedSet<V> set;
+  private final double startScore;
+  private final boolean startScoreInclusive;
+  private final double endScore;
+  private final boolean endScoreInclusive;
+  private final RScoredSortedSet<V> set;
   private Collection<ScoredEntry<V>> currentResult;
   private int currentOffset = 0;
 
   public LazyPaginatedEntryRange(
-      double startScore,
-      boolean startScoreInclusive,
-      double endScore,
-      boolean endScoreInclusive,
-      RScoredSortedSet<V> set,
-      Collection<ScoredEntry<V>> currentResult) {
+      final double startScore,
+      final boolean startScoreInclusive,
+      final double endScore,
+      final boolean endScoreInclusive,
+      final RScoredSortedSet<V> set,
+      final Collection<ScoredEntry<V>> currentResult) {
     super();
     this.startScore = startScore;
     this.startScoreInclusive = startScoreInclusive;

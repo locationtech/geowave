@@ -14,13 +14,18 @@ import org.locationtech.jts.geom.Geometry;
 
 public class TestObjectDimExtractor extends EmptyDimensionExtractor<TestObject> implements
     DimensionExtractor<TestObject> {
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+
   @Override
-  public String getGroupID(TestObject anObject) {
+  public String getGroupID(final TestObject anObject) {
     return anObject.getGroupID();
   }
 
   @Override
-  public Geometry getGeometry(TestObject anObject) {
+  public Geometry getGeometry(final TestObject anObject) {
     return anObject.geo;
   }
 }

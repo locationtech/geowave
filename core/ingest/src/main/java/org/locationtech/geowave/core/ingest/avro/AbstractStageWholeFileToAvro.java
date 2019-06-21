@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.ingest.avro;
 
-import com.google.common.collect.Iterators;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.ByteBuffer;
@@ -17,6 +16,7 @@ import org.apache.commons.io.IOUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.Iterators;
 
 /**
  * This class can be sub-classed as a general-purpose recipe for parallelizing ingestion of files by
@@ -36,7 +36,7 @@ public abstract class AbstractStageWholeFileToAvro<O> implements
     try {
       // TODO: consider a streaming mechanism in case a single file is too
       // large
-      return new CloseableIterator.Wrapper<AvroWholeFile>(
+      return new CloseableIterator.Wrapper<>(
           Iterators.singletonIterator(
               new AvroWholeFile(ByteBuffer.wrap(IOUtils.toByteArray(f)), f.getPath())));
     } catch (final IOException e) {

@@ -17,16 +17,16 @@ public class GeoWaveAutoCommitTransactionState implements GeoWaveTransactionStat
 
   private final GeoWaveDataStoreComponents components;
 
-  public GeoWaveAutoCommitTransactionState(GeoWaveFeatureSource source) {
-    this.components = source.getComponents();
+  public GeoWaveAutoCommitTransactionState(final GeoWaveFeatureSource source) {
+    components = source.getComponents();
   }
 
   @Override
-  public void setTransaction(Transaction transaction) {}
+  public void setTransaction(final Transaction transaction) {}
 
   /** @see org.geotools.data.Transaction.State#addAuthorization(java.lang.String) */
   @Override
-  public void addAuthorization(String AuthID) throws IOException {
+  public void addAuthorization(final String AuthID) throws IOException {
     // not required for
   }
 
@@ -45,7 +45,7 @@ public class GeoWaveAutoCommitTransactionState implements GeoWaveTransactionStat
   public void rollback() throws IOException {}
 
   @Override
-  public GeoWaveTransaction getGeoWaveTransaction(String typeName) {
+  public GeoWaveTransaction getGeoWaveTransaction(final String typeName) {
     // TODO Auto-generated method stub
     return new GeoWaveEmptyTransaction(components);
   }

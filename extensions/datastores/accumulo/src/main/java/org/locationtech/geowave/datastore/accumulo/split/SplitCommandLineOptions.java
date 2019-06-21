@@ -30,11 +30,11 @@ public class SplitCommandLineOptions {
     return number;
   }
 
-  public void setIndexName(String indexName) {
+  public void setIndexName(final String indexName) {
     this.indexName = indexName;
   }
 
-  public void setNumber(long number) {
+  public void setNumber(final long number) {
     this.number = number;
   }
 }

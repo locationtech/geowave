@@ -25,6 +25,7 @@ public class SimpleFeatureProjection implements Projection<SimpleFeature> {
   @Override
   public void initialize(final JobContext context, final Class<?> scope) throws IOException {}
 
+  @Override
   public void setup(
       final PropertyManagement runTimeProperties,
       final Class<?> scope,

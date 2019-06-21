@@ -33,12 +33,12 @@ public class ConfigServiceClient implements ConfigService {
   }
 
   public ConfigServiceClient(final String baseUrl, final String user, final String password) {
-    WebTarget target = ClientBuilder.newClient().target(baseUrl);
+    final WebTarget target = ClientBuilder.newClient().target(baseUrl);
     configService = WebResourceFactory.newResource(ConfigService.class, target);
     addStoreTarget = createAddStoreTarget(target);
   }
 
-  private static WebTarget createAddStoreTarget(WebTarget baseTarget) {
+  private static WebTarget createAddStoreTarget(final WebTarget baseTarget) {
 
     WebTarget addStoreTarget = addPathFromAnnotation(ConfigService.class, baseTarget);
     try {
@@ -239,7 +239,7 @@ public class ConfigServiceClient implements ConfigService {
     return resp;
   }
 
-  public Response addDynamoDBStore(String name) {
+  public Response addDynamoDBStore(final String name) {
     return addDynamoDBStore(
         name,
         null,
@@ -262,23 +262,23 @@ public class ConfigServiceClient implements ConfigService {
 
   @Override
   public Response addDynamoDBStore(
-      String name,
-      Boolean makeDefault,
-      String endpoint,
-      String region,
-      Long writeCapacity,
-      Long readCapacity,
-      Integer maxConnections,
-      String protocol,
-      Boolean enableCacheResponseMetadata,
-      String geowaveNamespace,
-      Boolean persistAdapter,
-      Boolean persistIndex,
-      Boolean persistDataStatistics,
-      Boolean createTable,
-      Boolean useAltIndex,
-      Boolean enableBlockCache,
-      Boolean enableServerSideLibrary) {
+      final String name,
+      final Boolean makeDefault,
+      final String endpoint,
+      final String region,
+      final Long writeCapacity,
+      final Long readCapacity,
+      final Integer maxConnections,
+      final String protocol,
+      final Boolean enableCacheResponseMetadata,
+      final String geowaveNamespace,
+      final Boolean persistAdapter,
+      final Boolean persistIndex,
+      final Boolean persistDataStatistics,
+      final Boolean createTable,
+      final Boolean useAltIndex,
+      final Boolean enableBlockCache,
+      final Boolean enableServerSideLibrary) {
 
     final Response resp =
         configService.addDynamoDBStore(
@@ -302,7 +302,7 @@ public class ConfigServiceClient implements ConfigService {
     return resp;
   }
 
-  public Response addCassandraStore(String name) {
+  public Response addCassandraStore(final String name) {
     return addCassandraStore(
         name,
         null,
@@ -322,20 +322,20 @@ public class ConfigServiceClient implements ConfigService {
 
   @Override
   public Response addCassandraStore(
-      String name,
-      Boolean makeDefault,
-      String contactPoint,
-      Integer batchWriteSize,
-      Boolean durableWrites,
-      Integer replicationFactor,
-      String geowaveNamespace,
-      Boolean persistAdapter,
-      Boolean persistIndex,
-      Boolean persistDataStatistics,
-      Boolean createTable,
-      Boolean useAltIndex,
-      Boolean enableBlockCache,
-      Boolean enableServerSideLibrary) {
+      final String name,
+      final Boolean makeDefault,
+      final String contactPoint,
+      final Integer batchWriteSize,
+      final Boolean durableWrites,
+      final Integer replicationFactor,
+      final String geowaveNamespace,
+      final Boolean persistAdapter,
+      final Boolean persistIndex,
+      final Boolean persistDataStatistics,
+      final Boolean createTable,
+      final Boolean useAltIndex,
+      final Boolean enableBlockCache,
+      final Boolean enableServerSideLibrary) {
     final Response resp =
         configService.addCassandraStore(
             name,
@@ -558,16 +558,16 @@ public class ConfigServiceClient implements ConfigService {
 
   @Override
   public Response addStoreReRoute(
-      String name,
-      String type,
-      String geowaveNamespace,
-      Map<String, String> additionalQueryParams) {
+      final String name,
+      final String type,
+      final String geowaveNamespace,
+      final Map<String, String> additionalQueryParams) {
     WebTarget internalAddStoreTarget = addStoreTarget.resolveTemplate("type", type);
     internalAddStoreTarget = internalAddStoreTarget.queryParam("name", name);
-    if (geowaveNamespace != null && !geowaveNamespace.isEmpty()) {
+    if ((geowaveNamespace != null) && !geowaveNamespace.isEmpty()) {
       internalAddStoreTarget = internalAddStoreTarget.queryParam("geowaveNamespace", name);
     }
-    for (Entry<String, String> e : additionalQueryParams.entrySet()) {
+    for (final Entry<String, String> e : additionalQueryParams.entrySet()) {
       if (e.getKey().equals("protocol")) {
         internalAddStoreTarget =
             internalAddStoreTarget.queryParam(e.getKey(), e.getValue().toUpperCase());

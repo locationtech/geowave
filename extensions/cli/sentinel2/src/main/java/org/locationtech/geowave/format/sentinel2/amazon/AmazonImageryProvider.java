@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.format.sentinel2.amazon;
 
-import com.google.common.collect.Iterators;
-import it.geosolutions.imageio.plugins.jp2ecw.JP2GDALEcwImageReaderSpi;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,8 +22,6 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import javax.ws.rs.core.HttpHeaders;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.geotools.coverage.grid.GridCoverage2D;
@@ -46,6 +42,10 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.Iterators;
+import it.geosolutions.imageio.plugins.jp2ecw.JP2GDALEcwImageReaderSpi;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 /**
  * Sentinel2 imagery provider for Amazon Web Services (AWS) repository. See: http
@@ -70,9 +70,9 @@ public class AmazonImageryProvider extends Sentinel2ImageryProvider {
   private static final String AWS_RASTER_BANDS_NAMES =
       "B1;B2;B3;B4;B5;B6;B7;B8;B9;B10;B11;B12;B8A;TCI";
   // Map of interesting AWS resources.
-  private static final Map<String, String> AWS_SCENE_RESOURCE_NAMES = new HashMap<String, String>();
+  private static final Map<String, String> AWS_SCENE_RESOURCE_NAMES = new HashMap<>();
   // Map of AWS collection names.
-  private static final Map<String, String> AWS_COLLECTION_NAMES = new HashMap<String, String>();
+  private static final Map<String, String> AWS_COLLECTION_NAMES = new HashMap<>();
   // Flag to indicate whether the native JP2ECW plugin is properly setup.
   private static int JP2ECW_PLUGIN_AVAILABLE_FLAG = 0;
 
@@ -127,9 +127,9 @@ public class AmazonImageryProvider extends Sentinel2ImageryProvider {
           boolean available = new JP2GDALEcwImageReaderSpi().isAvailable();
 
           if (available) {
-            String ncs_env = System.getenv("NCS_USER_PREFS");
+            final String ncs_env = System.getenv("NCS_USER_PREFS");
 
-            if (ncs_env != null && ncs_env.length() == 0) {
+            if ((ncs_env != null) && (ncs_env.length() == 0)) {
               LOGGER.warn("NCS_USER_PREFS environment variable is empty, ignore JP2ECW plugin.");
               available = false;
             }
@@ -184,11 +184,12 @@ public class AmazonImageryProvider extends Sentinel2ImageryProvider {
       extraFilter = FF.equals(FF.property("platform"), FF.literal(platform));
     }
     if ((location != null) && (location.length() > 0)) {
-      Filter temp = FF.equals(FF.property("location"), FF.literal(location));
-      if (extraFilter.equals(Filter.INCLUDE))
+      final Filter temp = FF.equals(FF.property("location"), FF.literal(location));
+      if (extraFilter.equals(Filter.INCLUDE)) {
         extraFilter = temp;
-      else
+      } else {
         extraFilter = FF.and(extraFilter, temp);
+      }
     }
     if ((envelope != null) && (envelope.isNull() == false)) {
       searchUrl +=
@@ -233,28 +234,28 @@ public class AmazonImageryProvider extends Sentinel2ImageryProvider {
       final JSONObject response = JSONObject.fromObject(geoJson);
       final JSONArray features = response.getJSONArray("features");
 
-      SimpleFeatureTypeBuilder typeBuilder = sceneFeatureTypeBuilder();
-      SimpleFeatureType type = typeBuilder.buildFeatureType();
+      final SimpleFeatureTypeBuilder typeBuilder = sceneFeatureTypeBuilder();
+      final SimpleFeatureType type = typeBuilder.buildFeatureType();
 
       class AmazonJSONFeatureIterator extends JSONFeatureIterator {
         public AmazonJSONFeatureIterator(
-            Sentinel2ImageryProvider provider,
-            SimpleFeatureType featureType,
-            Iterator<?> iterator) {
+            final Sentinel2ImageryProvider provider,
+            final SimpleFeatureType featureType,
+            final Iterator<?> iterator) {
           super(provider, featureType, iterator);
         }
 
         @Override
         public SimpleFeature next() {
-          SimpleFeature feature = super.next();
+          final SimpleFeature feature = super.next();
           JSONObject jsonObject = null;
 
-          if (feature != null && (jsonObject = super.currentObject()) != null) {
+          if ((feature != null) && ((jsonObject = super.currentObject()) != null)) {
             final JSONObject properties = (JSONObject) jsonObject.get("properties");
 
             // Set missing basic values.
-            String s3Path = properties.getString("s3Path");
-            String[] path = s3Path.split("/");
+            final String s3Path = properties.getString("s3Path");
+            final String[] path = s3Path.split("/");
             feature.setAttribute(
                 SceneFeatureIterator.LOCATION_ATTRIBUTE_NAME,
                 "T" + path[1] + path[2] + path[3]);
@@ -300,7 +301,7 @@ public class AmazonImageryProvider extends Sentinel2ImageryProvider {
               } else if (platform.equalsIgnoreCase("S2B_")) {
                 feature.setAttribute(SceneFeatureIterator.PLATFORM_ATTRIBUTE_NAME, "SENTINEL2B");
               }
-            } catch (IOException e) {
+            } catch (final IOException e) {
               LOGGER.warn("Unable to get 'productInfo.json' of '" + s3Path + "'", e);
             } finally {
               if (outputStream != null) {
@@ -325,7 +326,7 @@ public class AmazonImageryProvider extends Sentinel2ImageryProvider {
         featureIterator = Iterators.filter(featureIterator, filterPredicate);
       }
       return featureIterator;
-    } catch (FactoryException e) {
+    } catch (final FactoryException e) {
       throw new IOException(e);
     } finally {
       if (outputStream != null) {
@@ -374,7 +375,7 @@ public class AmazonImageryProvider extends Sentinel2ImageryProvider {
       displaySize = FileUtils.byteCountToDisplaySize(resourceFile.length());
       System.out.println(" -> ok: (" + displaySize + ")");
       return true;
-    } catch (IOException e) {
+    } catch (final IOException e) {
       LOGGER.error("Unable to download '" + resourceUrl + "'", e);
       System.out.println(" -> error: " + e.getMessage());
       return false;

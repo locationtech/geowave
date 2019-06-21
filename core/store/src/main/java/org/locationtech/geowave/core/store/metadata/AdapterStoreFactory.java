@@ -15,7 +15,10 @@ import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 
 public class AdapterStoreFactory extends BaseStoreFactory<PersistentAdapterStore> {
 
-  public AdapterStoreFactory(String typeName, String description, StoreFactoryHelper helper) {
+  public AdapterStoreFactory(
+      final String typeName,
+      final String description,
+      final StoreFactoryHelper helper) {
     super(typeName, description, helper);
   }
 

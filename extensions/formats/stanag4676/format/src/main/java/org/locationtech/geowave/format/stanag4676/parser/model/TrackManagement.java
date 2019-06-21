@@ -61,7 +61,7 @@ public class TrackManagement extends TrackItem {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(final Long id) {
     this.id = id;
   }
 
@@ -69,7 +69,7 @@ public class TrackManagement extends TrackItem {
     return area;
   }
 
-  public void setArea(Area area) {
+  public void setArea(final Area area) {
     this.area = area;
   }
 
@@ -77,7 +77,7 @@ public class TrackManagement extends TrackItem {
     return sourceModality;
   }
 
-  public void setSourceModality(ModalityType sourceModality) {
+  public void setSourceModality(final ModalityType sourceModality) {
     this.sourceModality = sourceModality;
   }
 
@@ -85,7 +85,7 @@ public class TrackManagement extends TrackItem {
     return environment;
   }
 
-  public void setEnvironment(TrackEnvironment environment) {
+  public void setEnvironment(final TrackEnvironment environment) {
     this.environment = environment;
   }
 
@@ -93,7 +93,7 @@ public class TrackManagement extends TrackItem {
     return quality;
   }
 
-  public void setQuality(int quality) {
+  public void setQuality(final int quality) {
     this.quality = quality;
   }
 
@@ -101,7 +101,7 @@ public class TrackManagement extends TrackItem {
     return stationId;
   }
 
-  public void setStationId(String stationId) {
+  public void setStationId(final String stationId) {
     this.stationId = stationId;
   }
 
@@ -109,7 +109,7 @@ public class TrackManagement extends TrackItem {
     return nationality;
   }
 
-  public void setNationality(String nationality) {
+  public void setNationality(final String nationality) {
     this.nationality = nationality;
   }
 
@@ -117,7 +117,7 @@ public class TrackManagement extends TrackItem {
     return trackerType;
   }
 
-  public void setTrackerType(TrackerType trackerType) {
+  public void setTrackerType(final TrackerType trackerType) {
     this.trackerType = trackerType;
   }
 
@@ -125,7 +125,7 @@ public class TrackManagement extends TrackItem {
     return alertIndicator;
   }
 
-  public void setAlertIndicator(boolean alertIndicator) {
+  public void setAlertIndicator(final boolean alertIndicator) {
     this.alertIndicator = alertIndicator;
   }
 }

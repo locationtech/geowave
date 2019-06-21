@@ -19,11 +19,11 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public abstract class AbstractLexicoderTest<T extends Number & Comparable<T>> {
-  private NumberLexicoder<T> lexicoder;
-  private T expectedMin;
-  private T expectedMax;
-  private T[] unsortedVals;
-  private Comparator<byte[]> comparator;
+  private final NumberLexicoder<T> lexicoder;
+  private final T expectedMin;
+  private final T expectedMax;
+  private final T[] unsortedVals;
+  private final Comparator<byte[]> comparator;
 
   public AbstractLexicoderTest(
       final NumberLexicoder<T> lexicoder,

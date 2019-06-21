@@ -44,14 +44,15 @@ public class Tests {
    * @return
    * @throws IOException
    */
-  public static String[] authenticationSettings(String providerName) throws IOException {
+  public static String[] authenticationSettings(final String providerName) throws IOException {
     String resourceName;
-    if (providerName.toUpperCase() == "THEIA")
+    if (providerName.toUpperCase() == "THEIA") {
       resourceName = THEIA_AUTHENTICATION_FILE;
-    else
+    } else {
       return new String[] {"", ""};
+    }
 
-    URL authFile = Tests.class.getClassLoader().getResource(resourceName);
+    final URL authFile = Tests.class.getClassLoader().getResource(resourceName);
 
     BufferedReader inputReader = null;
     InputStream inputStream = null;
@@ -82,12 +83,12 @@ public class Tests {
    * @throws IOException
    */
   public static boolean authenticationSettingsAreValid(String providerName) throws IOException {
-    String[] settings = Tests.authenticationSettings(providerName);
+    final String[] settings = Tests.authenticationSettings(providerName);
     providerName = providerName.toUpperCase();
 
     // Did you configure your user/password?
-    if (providerName == "THEIA"
-        && (settings == null
+    if ((providerName == "THEIA")
+        && ((settings == null)
             || settings[0].equals("name.surname@domain.country")
             || settings[1].equals("password"))) {
       LOGGER.warn(

@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.core.geotime.index.sfc.hilbert;
 
-import com.google.uzaygezen.core.CompactHilbertCurve;
-import com.google.uzaygezen.core.MultiDimensionalSpec;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
@@ -24,6 +22,8 @@ import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.index.sfc.hilbert.PrimitiveHilbertSFCOperations;
 import org.locationtech.geowave.core.index.sfc.hilbert.UnboundedHilbertSFCOperations;
+import com.google.uzaygezen.core.CompactHilbertCurve;
+import com.google.uzaygezen.core.MultiDimensionalSpec;
 
 public class PrimitiveHilbertSFCTest {
   private static final NumericDimensionDefinition[] SPATIAL_DIMENSIONS =
@@ -34,7 +34,7 @@ public class PrimitiveHilbertSFCTest {
     final SFCDimensionDefinition[] sfcDimensions =
         new SFCDimensionDefinition[SPATIAL_DIMENSIONS.length];
     int totalPrecision = 0;
-    final List<Integer> bitsPerDimension = new ArrayList<Integer>();
+    final List<Integer> bitsPerDimension = new ArrayList<>();
     for (int d = 0; d < SPATIAL_DIMENSIONS.length; d++) {
       final int bitsOfPrecision = 31;
       sfcDimensions[d] = new SFCDimensionDefinition(SPATIAL_DIMENSIONS[d], bitsOfPrecision);
@@ -183,7 +183,7 @@ public class PrimitiveHilbertSFCTest {
   public void testGetId48BitsPerDimension() {
     final SFCDimensionDefinition[] sfcDimensions = new SFCDimensionDefinition[20];
 
-    final List<Integer> bitsPerDimension = new ArrayList<Integer>();
+    final List<Integer> bitsPerDimension = new ArrayList<>();
     for (int d = 0; d < sfcDimensions.length; d++) {
       final int bitsOfPrecision = 48;
       sfcDimensions[d] =

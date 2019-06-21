@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.geotime.index.sfc.hilbert;
 
-import com.google.common.primitives.SignedBytes;
 import java.nio.ByteBuffer;
 import org.junit.Assert;
 import org.junit.Test;
@@ -22,6 +21,7 @@ import org.locationtech.geowave.core.index.sfc.SpaceFillingCurve;
 import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
+import com.google.common.primitives.SignedBytes;
 
 public class HilbertSFCTest {
 

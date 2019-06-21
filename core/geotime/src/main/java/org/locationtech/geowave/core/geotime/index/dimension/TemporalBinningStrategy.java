@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.geotime.index.dimension;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.nio.ByteBuffer;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -23,6 +22,7 @@ import org.locationtech.geowave.core.index.dimension.bin.BinValue;
 import org.locationtech.geowave.core.index.dimension.bin.BinningStrategy;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * This class is useful for establishing a consistent binning strategy using a unit of time. Each
@@ -304,7 +304,7 @@ public class TemporalBinningStrategy implements BinningStrategy {
 
   @Override
   public BinRange[] getNormalizedRanges(final NumericData range) {
-    if (range == null || range.getMax() < range.getMin()) {
+    if ((range == null) || (range.getMax() < range.getMin())) {
       return new BinRange[] {};
     }
     final Calendar startEpoch = Calendar.getInstance(TimeZone.getTimeZone(timezone));
@@ -317,7 +317,7 @@ public class TemporalBinningStrategy implements BinningStrategy {
     // are covered
     final long startEpochMillis = startEpoch.getTimeInMillis();
     long epochIterator = startEpochMillis;
-    final List<BinRange> bins = new ArrayList<BinRange>();
+    final List<BinRange> bins = new ArrayList<>();
     // track this, so that we can easily declare a range to be the full
     // extent and use the information to perform a more efficient scan
     boolean firstBin = ((long) range.getMin() != startEpochMillis);

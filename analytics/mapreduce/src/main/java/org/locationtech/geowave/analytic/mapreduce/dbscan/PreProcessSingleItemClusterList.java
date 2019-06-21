@@ -22,17 +22,17 @@ import org.locationtech.geowave.core.index.ByteArray;
 public class PreProcessSingleItemClusterList extends SingleItemClusterList implements Cluster {
 
   public PreProcessSingleItemClusterList(
-      ByteArray centerId,
-      ClusterItem center,
-      NeighborListFactory<ClusterItem> factory,
-      Map<ByteArray, Cluster> index) {
+      final ByteArray centerId,
+      final ClusterItem center,
+      final NeighborListFactory<ClusterItem> factory,
+      final Map<ByteArray, Cluster> index) {
     super(centerId, center, factory, index);
   }
 
   @Override
   protected void mergeLinks(final boolean deleteNonLinks) {
-    for (ByteArray id : this.getLinkedClusters()) {
-      PreProcessSingleItemClusterList other = (PreProcessSingleItemClusterList) index.get(id);
+    for (final ByteArray id : this.getLinkedClusters()) {
+      final PreProcessSingleItemClusterList other = (PreProcessSingleItemClusterList) index.get(id);
       final long snapShot = getClusterPoints(false).size();
       if (other.clusterGeo != null) {
         getClusterPoints(true).addAll(Arrays.asList(other.clusterGeo.getCoordinates()));

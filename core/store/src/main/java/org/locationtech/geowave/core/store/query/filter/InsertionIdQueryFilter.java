@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.store.query.filter;
 
 import java.nio.ByteBuffer;
 import java.util.Objects;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
@@ -70,10 +71,8 @@ public class InsertionIdQueryFilter implements QueryFilter {
   @Override
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
-    partitionKey = new byte[VarintUtils.readUnsignedInt(buf)];
-    buf.get(partitionKey);
-    sortKey = new byte[VarintUtils.readUnsignedInt(buf)];
-    buf.get(sortKey);
+    partitionKey = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
+    sortKey = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
     dataId = new byte[buf.remaining()];
     buf.get(dataId);
   }

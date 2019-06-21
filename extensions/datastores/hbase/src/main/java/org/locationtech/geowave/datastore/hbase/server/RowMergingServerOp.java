@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.datastore.hbase.server;
 
-import com.google.common.base.Function;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Sets;
 import java.io.IOException;
 import java.util.Map;
 import org.apache.hadoop.hbase.Cell;
@@ -23,6 +19,10 @@ import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform;
 import org.locationtech.geowave.core.store.server.RowMergingAdapterOptionProvider;
 import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
+import com.google.common.base.Function;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
 
 public class RowMergingServerOp extends MergingServerOp {
   private RowTransform<Mergeable> rowTransform;

@@ -135,7 +135,7 @@ public class ConvexHullMapReduce {
 
       try {
         nestedGroupCentroidAssigner =
-            new NestedGroupCentroidAssignment<T>(
+            new NestedGroupCentroidAssignment<>(
                 context,
                 ConvexHullMapReduce.class,
                 ConvexHullMapReduce.LOGGER);
@@ -158,7 +158,7 @@ public class ConvexHullMapReduce {
     // absolute point cloud limit
     private final int pointCloudThreshold = 50000000;
 
-    private final List<Coordinate> batchCoords = new ArrayList<Coordinate>(10000);
+    private final List<Coordinate> batchCoords = new ArrayList<>(10000);
 
     @Override
     protected void reduceNativeValues(
@@ -251,7 +251,7 @@ public class ConvexHullMapReduce {
       super.setup(context);
       try {
         centroidManager =
-            new CentroidManagerGeoWave<T>(
+            new CentroidManagerGeoWave<>(
                 context,
                 ConvexHullMapReduce.class,
                 ConvexHullMapReduce.LOGGER);

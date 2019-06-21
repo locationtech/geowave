@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.adapter.vector;
 
-import com.google.common.base.Preconditions;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -34,6 +33,7 @@ import org.locationtech.jts.io.WKBReader;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
+import com.google.common.base.Preconditions;
 
 public class GeoWaveAvroFeatureUtils {
   private static final TWKBWriter WKB_WRITER = new TWKBWriter();
@@ -202,7 +202,7 @@ public class GeoWaveAvroFeatureUtils {
 
     // null values should still take a place in the array - check
     Preconditions.checkArgument(attributeTypes.size() == attributeValues.getValues().size());
-    byte serializationVersion = attributeValues.getSerializationVersion().get();
+    final byte serializationVersion = attributeValues.getSerializationVersion().get();
     WKBReader legacyReader = null;
     if (serializationVersion < FieldUtils.SERIALIZATION_VERSION) {
       legacyReader = new WKBReader();
@@ -228,7 +228,7 @@ public class GeoWaveAvroFeatureUtils {
     return simpleFeature;
   }
 
-  private static String jtsCompatibility(String attrTypeName) {
+  private static String jtsCompatibility(final String attrTypeName) {
     if (attrTypeName.startsWith("com.vividsolutions")) {
       return attrTypeName.replace("com.vividsolutions", "org.locationtech");
     }

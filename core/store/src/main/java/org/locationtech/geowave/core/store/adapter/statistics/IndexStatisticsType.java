@@ -15,11 +15,11 @@ public class IndexStatisticsType<R> extends StatisticsType<R, IndexStatisticsQue
     super();
   }
 
-  public IndexStatisticsType(byte[] id) {
+  public IndexStatisticsType(final byte[] id) {
     super(id);
   }
 
-  public IndexStatisticsType(String id) {
+  public IndexStatisticsType(final String id) {
     super(id);
   }
 

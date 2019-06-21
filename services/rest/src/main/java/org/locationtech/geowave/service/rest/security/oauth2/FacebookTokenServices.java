@@ -47,7 +47,7 @@ public class FacebookTokenServices extends RemoteTokenServices {
     ((RestTemplate) restTemplate).setErrorHandler(new DefaultResponseErrorHandler() {
       @Override
       // Ignore 400
-      public void handleError(ClientHttpResponse response) throws IOException {
+      public void handleError(final ClientHttpResponse response) throws IOException {
         if (response.getRawStatusCode() != 400) {
           super.handleError(response);
         }
@@ -55,38 +55,42 @@ public class FacebookTokenServices extends RemoteTokenServices {
     });
   }
 
-  public void setRestTemplate(RestOperations restTemplate) {
+  @Override
+  public void setRestTemplate(final RestOperations restTemplate) {
     this.restTemplate = restTemplate;
   }
 
-  public void setCheckTokenEndpointUrl(String checkTokenEndpointUrl) {
+  @Override
+  public void setCheckTokenEndpointUrl(final String checkTokenEndpointUrl) {
     this.checkTokenEndpointUrl = checkTokenEndpointUrl;
   }
 
-  public void setAccessTokenConverter(AccessTokenConverter accessTokenConverter) {
-    this.tokenConverter = accessTokenConverter;
+  @Override
+  public void setAccessTokenConverter(final AccessTokenConverter accessTokenConverter) {
+    tokenConverter = accessTokenConverter;
   }
 
-  public void setTokenName(String tokenName) {
+  @Override
+  public void setTokenName(final String tokenName) {
     this.tokenName = tokenName;
   }
 
   @Override
-  public OAuth2Authentication loadAuthentication(String accessToken)
+  public OAuth2Authentication loadAuthentication(final String accessToken)
       throws AuthenticationException, InvalidTokenException {
 
-    MultiValueMap<String, String> formData = new LinkedMultiValueMap<String, String>();
+    final MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
     formData.add(tokenName, accessToken);
 
-    HttpHeaders headers = new HttpHeaders();
+    final HttpHeaders headers = new HttpHeaders();
     String req = "";
     try {
       req = checkTokenEndpointUrl + "?access_token=" + URLEncoder.encode(accessToken, "UTF-8");
-    } catch (UnsupportedEncodingException e) {
+    } catch (final UnsupportedEncodingException e) {
       logger.error("Unsupported encoding", e);
     }
 
-    Map<String, Object> map = getForMap(req, formData, headers);
+    final Map<String, Object> map = getForMap(req, formData, headers);
 
     if (map.containsKey("error")) {
       logger.debug("check_token returned error: " + map.get("error"));
@@ -97,26 +101,26 @@ public class FacebookTokenServices extends RemoteTokenServices {
   }
 
   @Override
-  public OAuth2AccessToken readAccessToken(String accessToken) {
+  public OAuth2AccessToken readAccessToken(final String accessToken) {
     throw new UnsupportedOperationException("Not supported: read access token");
   }
 
   private Map<String, Object> getForMap(
-      String path,
-      MultiValueMap<String, String> formData,
-      HttpHeaders headers) {
+      final String path,
+      final MultiValueMap<String, String> formData,
+      final HttpHeaders headers) {
     if (headers.getContentType() == null) {
       headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
     }
     @SuppressWarnings("rawtypes")
-    Map map =
+    final Map map =
         restTemplate.exchange(
             path,
             HttpMethod.GET,
-            new HttpEntity<MultiValueMap<String, String>>(formData, headers),
+            new HttpEntity<>(formData, headers),
             Map.class).getBody();
     @SuppressWarnings("unchecked")
-    Map<String, Object> result = map;
+    final Map<String, Object> result = map;
     return result;
   }
 }

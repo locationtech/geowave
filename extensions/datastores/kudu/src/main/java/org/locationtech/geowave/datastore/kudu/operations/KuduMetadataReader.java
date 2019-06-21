@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
@@ -8,8 +8,9 @@
  */
 package org.locationtech.geowave.datastore.kudu.operations;
 
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Streams;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import org.apache.kudu.Schema;
 import org.apache.kudu.client.KuduException;
 import org.apache.kudu.client.KuduPredicate;
@@ -28,35 +29,34 @@ import org.locationtech.geowave.datastore.kudu.KuduMetadataRow.KuduMetadataField
 import org.locationtech.geowave.datastore.kudu.util.KuduUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Streams;
 
 public class KuduMetadataReader implements MetadataReader {
   private static final Logger LOGGER = LoggerFactory.getLogger(KuduMetadataReader.class);
   private final KuduOperations operations;
   private final MetadataType metadataType;
 
-  public KuduMetadataReader(KuduOperations operations, MetadataType metadataType) {
+  public KuduMetadataReader(final KuduOperations operations, final MetadataType metadataType) {
     this.operations = operations;
     this.metadataType = metadataType;
   }
 
   @Override
-  public CloseableIterator<GeoWaveMetadata> query(MetadataQuery query) {
-    List<RowResultIterator> queryResult = new ArrayList<>();
+  public CloseableIterator<GeoWaveMetadata> query(final MetadataQuery query) {
+    final List<RowResultIterator> queryResult = new ArrayList<>();
     final String tableName = operations.getMetadataTableName(metadataType);
     try {
-      KuduTable table = operations.getTable(tableName);
-      Schema schema = table.getSchema();
+      final KuduTable table = operations.getTable(tableName);
+      final Schema schema = table.getSchema();
       KuduScanner.KuduScannerBuilder scannerBuilder = operations.getScannerBuilder(table);
       if (query.hasPrimaryId()) {
-        KuduPredicate primaryLowerPred =
+        final KuduPredicate primaryLowerPred =
             KuduPredicate.newComparisonPredicate(
                 schema.getColumn(KuduMetadataField.GW_PRIMARY_ID_KEY.getFieldName()),
                 KuduPredicate.ComparisonOp.GREATER_EQUAL,
                 query.getPrimaryId());
-        KuduPredicate primaryUpperPred =
+        final KuduPredicate primaryUpperPred =
             KuduPredicate.newComparisonPredicate(
                 schema.getColumn(KuduMetadataField.GW_PRIMARY_ID_KEY.getFieldName()),
                 KuduPredicate.ComparisonOp.LESS,
@@ -65,19 +65,19 @@ public class KuduMetadataReader implements MetadataReader {
             scannerBuilder.addPredicate(primaryLowerPred).addPredicate(primaryUpperPred);
       }
       if (query.hasSecondaryId()) {
-        KuduPredicate secondaryPred =
+        final KuduPredicate secondaryPred =
             KuduPredicate.newComparisonPredicate(
                 schema.getColumn(KuduMetadataField.GW_SECONDARY_ID_KEY.getFieldName()),
                 KuduPredicate.ComparisonOp.EQUAL,
                 query.getSecondaryId());
         scannerBuilder = scannerBuilder.addPredicate(secondaryPred);
       }
-      KuduScanner scanner = scannerBuilder.build();
+      final KuduScanner scanner = scannerBuilder.build();
       KuduUtils.executeQuery(scanner, queryResult);
-    } catch (KuduException e) {
+    } catch (final KuduException e) {
       LOGGER.error("Encountered error while reading metadata row", e);
     }
-    Iterator<GeoWaveMetadata> temp =
+    final Iterator<GeoWaveMetadata> temp =
         Streams.stream(Iterators.concat(queryResult.iterator())).map(
             result -> new GeoWaveMetadata(
                 query.hasPrimaryId() ? query.getPrimaryId()
@@ -86,13 +86,13 @@ public class KuduMetadataReader implements MetadataReader {
                     : result.getBinaryCopy(KuduMetadataField.GW_SECONDARY_ID_KEY.getFieldName()),
                 getVisibility(result),
                 result.getBinaryCopy(KuduMetadataField.GW_VALUE_KEY.getFieldName()))).iterator();
-    CloseableIterator<GeoWaveMetadata> retVal = new CloseableIterator.Wrapper<>(temp);
+    final CloseableIterator<GeoWaveMetadata> retVal = new CloseableIterator.Wrapper<>(temp);
     return MetadataType.STATS.equals(metadataType)
         ? new StatisticsRowIterator(retVal, query.getAuthorizations())
         : retVal;
   }
 
-  private byte[] getVisibility(RowResult result) {
+  private byte[] getVisibility(final RowResult result) {
     if (MetadataType.STATS.equals(metadataType)) {
       return result.getBinaryCopy(KuduMetadataField.GW_VISIBILITY_KEY.getFieldName());
     }

@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.datastore.accumulo;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
 import java.io.IOException;
 import java.util.Map;
 import org.apache.accumulo.core.data.Key;
@@ -18,16 +16,18 @@ import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.IteratorEnvironment;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.accumulo.core.iterators.conf.ColumnSet;
-import org.apache.accumulo.core.iterators.user.TransformingIterator;
 import org.apache.accumulo.core.security.ColumnVisibility;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.hadoop.io.Text;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.operations.MetadataType;
+import org.locationtech.geowave.datastore.accumulo.iterators.ExceptionHandlingTransformingIterator;
 import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 
-public class MergingVisibilityCombiner extends TransformingIterator {
+public class MergingVisibilityCombiner extends ExceptionHandlingTransformingIterator {
   private static final byte[] AMPRISAND = StringUtils.stringToBinary("&");
 
   private ColumnSet combiners;
@@ -67,7 +67,7 @@ public class MergingVisibilityCombiner extends TransformingIterator {
   }
 
   @Override
-  protected void transformRange(
+  protected void transformRangeInternal(
       final SortedKeyValueIterator<Key, Value> input,
       final KVBuffer output) throws IOException {
     Mergeable currentMergeable = null;

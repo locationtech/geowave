@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.store.index.numeric;
 
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.store.index.FilterableConstraints;
@@ -93,14 +92,14 @@ public class NumericQueryConstraint implements FilterableConstraints {
       final boolean upperEquals = upperValue.equals(otherNumeric.upperValue);
       final boolean replaceMin = (lowerValue.doubleValue() < otherNumeric.lowerValue.doubleValue());
       final boolean replaceMax = (upperValue.doubleValue() > otherNumeric.upperValue.doubleValue());
-      double newMin =
-          Math.max(this.lowerValue.doubleValue(), otherNumeric.lowerValue.doubleValue());
-      double newMax =
-          Math.min(this.upperValue.doubleValue(), otherNumeric.upperValue.doubleValue());
-      boolean newIncLow =
+      final double newMin =
+          Math.max(lowerValue.doubleValue(), otherNumeric.lowerValue.doubleValue());
+      final double newMax =
+          Math.min(upperValue.doubleValue(), otherNumeric.upperValue.doubleValue());
+      final boolean newIncLow =
           lowEquals ? (otherNumeric.inclusiveLow & inclusiveLow)
               : (replaceMin ? otherNumeric.inclusiveLow : inclusiveLow);
-      boolean newIncHigh =
+      final boolean newIncHigh =
           upperEquals ? (otherNumeric.inclusiveHigh & inclusiveHigh)
               : (replaceMax ? otherNumeric.inclusiveHigh : inclusiveHigh);
 
@@ -128,15 +127,15 @@ public class NumericQueryConstraint implements FilterableConstraints {
       final boolean upperEquals = upperValue.equals(otherNumeric.upperValue);
       final boolean replaceMin = (lowerValue.doubleValue() > otherNumeric.lowerValue.doubleValue());
       final boolean replaceMax = (upperValue.doubleValue() < otherNumeric.upperValue.doubleValue());
-      double newMin =
-          Math.min(this.lowerValue.doubleValue(), otherNumeric.lowerValue.doubleValue());
-      double newMax =
-          Math.max(this.upperValue.doubleValue(), otherNumeric.upperValue.doubleValue());
+      final double newMin =
+          Math.min(lowerValue.doubleValue(), otherNumeric.lowerValue.doubleValue());
+      final double newMax =
+          Math.max(upperValue.doubleValue(), otherNumeric.upperValue.doubleValue());
 
-      boolean newIncLow =
+      final boolean newIncLow =
           lowEquals ? (otherNumeric.inclusiveLow | inclusiveLow)
               : (replaceMin ? otherNumeric.inclusiveLow : inclusiveLow);
-      boolean newIncHigh =
+      final boolean newIncHigh =
           upperEquals ? (otherNumeric.inclusiveHigh | inclusiveHigh)
               : (replaceMax ? otherNumeric.inclusiveHigh : inclusiveHigh);
 

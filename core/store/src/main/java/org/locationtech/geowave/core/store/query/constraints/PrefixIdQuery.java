@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.api.Index;
@@ -76,12 +77,11 @@ public class PrefixIdQuery implements QueryConstraints {
   @Override
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
-    final byte[] partitionKeyBinary = new byte[VarintUtils.readUnsignedInt(buf)];
-    if (partitionKeyBinary.length == 0) {
+    final int partitionKeyBinaryLength = VarintUtils.readUnsignedInt(buf);
+    if (partitionKeyBinaryLength == 0) {
       partitionKey = null;
     } else {
-      buf.get(partitionKeyBinary);
-      partitionKey = partitionKeyBinary;
+      partitionKey = ByteArrayUtils.safeRead(buf, partitionKeyBinaryLength);
     }
     final byte[] sortKeyPrefixBinary = new byte[buf.remaining()];
     if (sortKeyPrefixBinary.length == 0) {

@@ -15,13 +15,13 @@ import java.util.Map;
 
 public class StatsMap implements AnalyticStats {
 
-  Map<StatValue, List<Double>> stats = new HashMap<StatValue, List<Double>>();
+  Map<StatValue, List<Double>> stats = new HashMap<>();
 
   @Override
   public void notify(final StatValue stat, final double amount) {
     List<Double> list = stats.get(stat);
     if (list == null) {
-      list = new ArrayList<Double>();
+      list = new ArrayList<>();
       stats.put(stat, list);
     }
     list.add(amount);

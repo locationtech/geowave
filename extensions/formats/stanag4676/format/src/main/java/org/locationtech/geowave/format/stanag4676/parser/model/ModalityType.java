@@ -82,14 +82,14 @@ public enum ModalityType {
   private String value;
 
   ModalityType() {
-    this.value = ModalityType.values()[0].toString();
+    value = ModalityType.values()[0].toString();
   }
 
   ModalityType(final String value) {
     this.value = value;
   }
 
-  public static ModalityType fromString(String value) {
+  public static ModalityType fromString(final String value) {
     for (final ModalityType item : ModalityType.values()) {
       if (item.toString().equals(value)) {
         return item;

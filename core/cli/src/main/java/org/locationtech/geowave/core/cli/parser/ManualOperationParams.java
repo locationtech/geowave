@@ -15,11 +15,11 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 
 public class ManualOperationParams implements OperationParams {
 
-  private final Map<String, Object> context = new HashMap<String, Object>();
+  private final Map<String, Object> context = new HashMap<>();
 
   @Override
   public Map<String, Operation> getOperationMap() {
-    return new HashMap<String, Operation>();
+    return new HashMap<>();
   }
 
   @Override

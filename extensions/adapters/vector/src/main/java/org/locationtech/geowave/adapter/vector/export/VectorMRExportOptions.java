@@ -32,15 +32,15 @@ public class VectorMRExportOptions extends VectorExportOptions {
     return resourceManagerHostPort;
   }
 
-  public void setResourceManagerHostPort(String resourceManagerHostPort) {
+  public void setResourceManagerHostPort(final String resourceManagerHostPort) {
     this.resourceManagerHostPort = resourceManagerHostPort;
   }
 
-  public void setMinSplits(Integer minSplits) {
+  public void setMinSplits(final Integer minSplits) {
     this.minSplits = minSplits;
   }
 
-  public void setMaxSplits(Integer maxSplits) {
+  public void setMaxSplits(final Integer maxSplits) {
     this.maxSplits = maxSplits;
   }
 }

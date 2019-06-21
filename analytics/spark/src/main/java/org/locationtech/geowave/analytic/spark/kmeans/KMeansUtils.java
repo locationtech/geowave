@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.analytic.spark.kmeans;
 
-import com.google.common.collect.Iterables;
 import java.util.Date;
 import java.util.List;
 import org.apache.spark.api.java.JavaPairRDD;
@@ -42,6 +41,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.referencing.FactoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.Iterables;
 import scala.Tuple2;
 
 public class KMeansUtils {

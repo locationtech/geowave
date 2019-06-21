@@ -9,7 +9,12 @@
 package org.locationtech.geowave.core.store.adapter.exceptions;
 
 public class AdapterException extends Exception {
-  public AdapterException(String msg) {
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+
+  public AdapterException(final String msg) {
     super(msg);
   }
 }

@@ -10,7 +10,8 @@ package org.locationtech.geowave.format.sentinel2;
 
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.Every.everyItem;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.security.GeneralSecurityException;
@@ -37,30 +38,30 @@ public class SceneFeatureIteratorTest {
   private Matcher<SimpleFeature> hasProperties() {
     return new BaseMatcher<SimpleFeature>() {
       @Override
-      public boolean matches(Object item) {
-        SimpleFeature feature = (SimpleFeature) item;
+      public boolean matches(final Object item) {
+        final SimpleFeature feature = (SimpleFeature) item;
 
-        return feature.getProperty("shape") != null
-            && feature.getProperty("entityId") != null
-            && feature.getProperty("provider") != null
-            && feature.getProperty("location") != null
-            && feature.getProperty("productIdentifier") != null
-            && feature.getProperty("productType") != null
-            && feature.getProperty("collection") != null
-            && feature.getProperty("platform") != null
-            && feature.getProperty("processingLevel") != null
-            && feature.getProperty("startDate") != null
-            && feature.getProperty("quicklook") != null
-            && feature.getProperty("thumbnail") != null
-            && feature.getProperty("bands") != null
-            && feature.getProperty("resolution") != null
-            && feature.getProperty("cloudCover") != null
-            && feature.getProperty("snowCover") != null
-            && feature.getProperty("waterCover") != null;
+        return (feature.getProperty("shape") != null)
+            && (feature.getProperty("entityId") != null)
+            && (feature.getProperty("provider") != null)
+            && (feature.getProperty("location") != null)
+            && (feature.getProperty("productIdentifier") != null)
+            && (feature.getProperty("productType") != null)
+            && (feature.getProperty("collection") != null)
+            && (feature.getProperty("platform") != null)
+            && (feature.getProperty("processingLevel") != null)
+            && (feature.getProperty("startDate") != null)
+            && (feature.getProperty("quicklook") != null)
+            && (feature.getProperty("thumbnail") != null)
+            && (feature.getProperty("bands") != null)
+            && (feature.getProperty("resolution") != null)
+            && (feature.getProperty("cloudCover") != null)
+            && (feature.getProperty("snowCover") != null)
+            && (feature.getProperty("waterCover") != null);
       }
 
       @Override
-      public void describeTo(Description description) {
+      public void describeTo(final Description description) {
         description.appendText(
             "feature should have properties {"
                 + "shape, entityId, provider, location, productIdentifier, "
@@ -72,16 +73,16 @@ public class SceneFeatureIteratorTest {
     };
   }
 
-  private Matcher<SimpleFeature> inBounds(BoundingBox bounds) {
+  private Matcher<SimpleFeature> inBounds(final BoundingBox bounds) {
     return new BaseMatcher<SimpleFeature>() {
       @Override
-      public boolean matches(Object item) {
-        SimpleFeature feature = (SimpleFeature) item;
+      public boolean matches(final Object item) {
+        final SimpleFeature feature = (SimpleFeature) item;
         return feature.getBounds().intersects(bounds);
       }
 
       @Override
-      public void describeTo(Description description) {
+      public void describeTo(final Description description) {
         description.appendText("feature should be in bounds " + bounds);
       }
     };
@@ -91,31 +92,31 @@ public class SceneFeatureIteratorTest {
   public void testIterateProviders()
       throws IOException, CQLException, ParseException, NoSuchAuthorityCodeException,
       FactoryException, MalformedURLException, GeneralSecurityException {
-    for (Sentinel2ImageryProvider provider : Sentinel2ImageryProvider.getProviders()) {
+    for (final Sentinel2ImageryProvider provider : Sentinel2ImageryProvider.getProviders()) {
       testIterate(provider.providerName());
     }
   }
 
-  public void testIterate(String providerName)
+  public void testIterate(final String providerName)
       throws IOException, CQLException, ParseException, NoSuchAuthorityCodeException,
       FactoryException, MalformedURLException, GeneralSecurityException {
 
-    Sentinel2ImageryProvider provider = Sentinel2ImageryProvider.getProvider(providerName);
+    final Sentinel2ImageryProvider provider = Sentinel2ImageryProvider.getProvider(providerName);
     if (provider == null) {
       throw new RuntimeException("Unable to find '" + providerName + "' Sentinel2 provider");
     }
 
-    String collection = provider.collections()[0];
-    String platform = "";
-    String location = "T30TWM";
-    Date startDate = DateUtilities.parseISO("2018-01-28T00:00:00Z");
-    Date endDate = DateUtilities.parseISO("2018-01-30T00:00:00Z");
-    int orbitNumber = 0;
-    int relativeOrbitNumber = 0;
-    Filter cqlFilter = CQL.toFilter("BBOX(shape,-1.8274,42.3253,-1.6256,42.4735)");
-    String workspaceDir = Tests.WORKSPACE_DIR;
+    final String collection = provider.collections()[0];
+    final String platform = "";
+    final String location = "T30TWM";
+    final Date startDate = DateUtilities.parseISO("2018-01-28T00:00:00Z");
+    final Date endDate = DateUtilities.parseISO("2018-01-30T00:00:00Z");
+    final int orbitNumber = 0;
+    final int relativeOrbitNumber = 0;
+    final Filter cqlFilter = CQL.toFilter("BBOX(shape,-1.8274,42.3253,-1.6256,42.4735)");
+    final String workspaceDir = Tests.WORKSPACE_DIR;
 
-    List<SimpleFeature> features = new ArrayList<>();
+    final List<SimpleFeature> features = new ArrayList<>();
     try (SceneFeatureIterator iterator =
         new SceneFeatureIterator(
             providerName,

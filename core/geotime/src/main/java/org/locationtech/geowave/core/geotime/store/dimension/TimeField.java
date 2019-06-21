@@ -11,6 +11,7 @@ package org.locationtech.geowave.core.geotime.store.dimension;
 import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
@@ -137,8 +138,7 @@ public class TimeField implements NumericDimensionField<Time> {
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     final int fieldNameLength = VarintUtils.readUnsignedInt(buf);
-    final byte[] fieldNameBinary = new byte[fieldNameLength];
-    buf.get(fieldNameBinary);
+    final byte[] fieldNameBinary = ByteArrayUtils.safeRead(buf, fieldNameLength);
     fieldName = StringUtils.stringFromBinary(fieldNameBinary);
 
     final byte[] dimensionBinary = new byte[buf.remaining()];

@@ -32,7 +32,7 @@ public class CalendarSerializationProvider implements FieldSerializationProvider
 
   protected static class CalendarReader implements FieldReader<Calendar> {
     @Override
-    public Calendar readField(byte[] fieldData) {
+    public Calendar readField(final byte[] fieldData) {
       if ((fieldData == null) || (fieldData.length == 0)) {
         return null;
       }
@@ -42,7 +42,7 @@ public class CalendarSerializationProvider implements FieldSerializationProvider
     }
 
     @Override
-    public Calendar readField(byte[] fieldData, byte serializationVersion) {
+    public Calendar readField(final byte[] fieldData, final byte serializationVersion) {
       if ((fieldData == null) || (fieldData.length == 0)) {
         return null;
       }
@@ -62,7 +62,7 @@ public class CalendarSerializationProvider implements FieldSerializationProvider
       if (cal == null) {
         return new byte[] {};
       }
-      long time = TimeUtils.calendarToGMTMillis(cal);
+      final long time = TimeUtils.calendarToGMTMillis(cal);
       final ByteBuffer buf = ByteBuffer.allocate(VarintUtils.timeByteLength(time));
       VarintUtils.writeTime(time, buf);
       return buf.array();

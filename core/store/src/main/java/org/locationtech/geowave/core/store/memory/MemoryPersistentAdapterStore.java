@@ -58,8 +58,7 @@ public class MemoryPersistentAdapterStore implements PersistentAdapterStore, Ser
 
   @Override
   public CloseableIterator<InternalDataAdapter<?>> getAdapters() {
-    return new CloseableIterator.Wrapper<InternalDataAdapter<?>>(
-        new ArrayList<InternalDataAdapter<?>>(adapterMap.values()).iterator());
+    return new CloseableIterator.Wrapper<>(new ArrayList<>(adapterMap.values()).iterator());
   }
 
   @Override
@@ -89,5 +88,5 @@ public class MemoryPersistentAdapterStore implements PersistentAdapterStore, Ser
   }
 
   @Override
-  public void removeAdapter(Short adapterId) {}
+  public void removeAdapter(final Short adapterId) {}
 }

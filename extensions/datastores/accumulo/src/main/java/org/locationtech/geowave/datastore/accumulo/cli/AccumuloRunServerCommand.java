@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.datastore.accumulo.cli;
 
-import com.beust.jcommander.Parameters;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
@@ -16,6 +15,7 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.datastore.accumulo.minicluster.AccumuloMiniCluster;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "runserver", parentOperation = AccumuloSection.class)
 @Parameters(

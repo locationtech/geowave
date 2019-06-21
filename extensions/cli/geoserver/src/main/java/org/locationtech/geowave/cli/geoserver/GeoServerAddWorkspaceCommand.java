@@ -8,22 +8,22 @@
  */
 package org.locationtech.geowave.cli.geoserver;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "addws", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Add GeoServer workspace")
 public class GeoServerAddWorkspaceCommand extends GeoServerCommand<String> {
   @Parameter(description = "<workspace name>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   private String wsName = null;
 
@@ -44,7 +44,7 @@ public class GeoServerAddWorkspaceCommand extends GeoServerCommand<String> {
     if (addWorkspaceResponse.getStatus() == Status.CREATED.getStatusCode()) {
       return "Add workspace '" + wsName + "' to GeoServer: OK";
     }
-    String errorMessage =
+    final String errorMessage =
         "Error adding workspace '"
             + wsName
             + "' to GeoServer: "

@@ -15,8 +15,13 @@ import org.locationtech.jts.io.WKTReader;
 /** Created by jwileczek on 8/16/18. */
 public class GeomFromWKT implements UDF1<String, Geometry> {
 
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+
   @Override
-  public Geometry call(String o) throws Exception {
+  public Geometry call(final String o) throws Exception {
     return new WKTReader().read(o);
   }
 }

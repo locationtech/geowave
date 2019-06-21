@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.analytic.mapreduce.operations.options;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParametersDelegate;
 import org.locationtech.geowave.analytic.param.CommonParameters;
 import org.locationtech.geowave.analytic.param.ExtractParameters;
 import org.locationtech.geowave.analytic.param.InputParameters;
@@ -23,6 +21,8 @@ import org.locationtech.geowave.analytic.param.annotations.OutputParameter;
 import org.locationtech.geowave.core.cli.annotations.PrefixParameter;
 import org.locationtech.geowave.core.store.api.Query;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParametersDelegate;
 
 public class CommonOptions {
   @MapReduceParameter(MapReduceParameters.MRConfig.CONFIG_FILE)

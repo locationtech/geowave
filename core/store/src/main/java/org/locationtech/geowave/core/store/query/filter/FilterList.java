@@ -11,6 +11,7 @@ package org.locationtech.geowave.core.store.query.filter;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
@@ -28,7 +29,7 @@ public class FilterList implements QueryFilter {
 
   public FilterList() {}
 
-  protected FilterList(boolean logicalAnd) {
+  protected FilterList(final boolean logicalAnd) {
     this.logicalAnd = logicalAnd;
   }
 
@@ -36,7 +37,7 @@ public class FilterList implements QueryFilter {
     this.filters = filters;
   }
 
-  public FilterList(boolean logicalAnd, final List<QueryFilter> filters) {
+  public FilterList(final boolean logicalAnd, final List<QueryFilter> filters) {
     this.logicalAnd = logicalAnd;
     this.filters = filters;
   }
@@ -45,14 +46,17 @@ public class FilterList implements QueryFilter {
   public boolean accept(
       final CommonIndexModel indexModel,
       final IndexedPersistenceEncoding<?> entry) {
-    if (filters == null)
+    if (filters == null) {
       return true;
+    }
     for (final QueryFilter filter : filters) {
       final boolean ok = filter.accept(indexModel, entry);
-      if (!ok && logicalAnd)
+      if (!ok && logicalAnd) {
         return false;
-      if (ok && !logicalAnd)
+      }
+      if (ok && !logicalAnd) {
         return true;
+      }
     }
     return logicalAnd;
   }
@@ -60,7 +64,7 @@ public class FilterList implements QueryFilter {
   @Override
   public byte[] toBinary() {
     int byteBufferLength = VarintUtils.unsignedIntByteLength(filters.size()) + 1;
-    final List<byte[]> filterBinaries = new ArrayList<byte[]>(filters.size());
+    final List<byte[]> filterBinaries = new ArrayList<>(filters.size());
     for (final QueryFilter filter : filters) {
       final byte[] filterBinary = PersistenceUtils.toBinary(filter);
       byteBufferLength +=
@@ -82,10 +86,10 @@ public class FilterList implements QueryFilter {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     logicalAnd = buf.get() > 0;
     final int numFilters = VarintUtils.readUnsignedInt(buf);
+    ByteArrayUtils.verifyBufferSize(buf, numFilters);
     filters = new ArrayList<>(numFilters);
     for (int i = 0; i < numFilters; i++) {
-      final byte[] filter = new byte[VarintUtils.readUnsignedInt(buf)];
-      buf.get(filter);
+      final byte[] filter = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
       filters.add((QueryFilter) PersistenceUtils.fromBinary(filter));
     }
   }

@@ -103,11 +103,11 @@ public class ByteArray implements java.io.Serializable, Comparable<ByteArray> {
   public static ByteArray[] fromBytes(final byte[] idData) {
     final ByteBuffer buffer = ByteBuffer.wrap(idData);
     final int len = VarintUtils.readUnsignedInt(buffer);
+    ByteArrayUtils.verifyBufferSize(buffer, len);
     final ByteArray[] result = new ByteArray[len];
     for (int i = 0; i < len; i++) {
       final int idSize = VarintUtils.readUnsignedInt(buffer);
-      final byte[] id = new byte[idSize];
-      buffer.get(id);
+      final byte[] id = ByteArrayUtils.safeRead(buffer, idSize);
       result[i] = new ByteArray(id);
     }
     return result;

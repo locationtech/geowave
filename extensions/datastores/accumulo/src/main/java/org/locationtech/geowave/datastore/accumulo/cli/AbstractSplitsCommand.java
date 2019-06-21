@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.datastore.accumulo.cli;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.ParametersDelegate;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +16,14 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.geowave.datastore.accumulo.split.SplitCommandLineOptions;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.ParametersDelegate;
 
 public abstract class AbstractSplitsCommand extends DefaultOperation {
 
   @Parameter(description = "<storename>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate
   protected SplitCommandLineOptions splitOptions = new SplitCommandLineOptions();
@@ -32,19 +32,19 @@ public abstract class AbstractSplitsCommand extends DefaultOperation {
 
   public AbstractSplitsCommand() {}
 
-  public void execute(OperationParams params) throws Exception {
+  public void execute(final OperationParams params) throws Exception {
 
     // Ensure we have all the required arguments
     if (parameters.size() != 1) {
       throw new ParameterException("Requires arguments: <storename>");
     }
 
-    String inputStoreName = parameters.get(0);
+    final String inputStoreName = parameters.get(0);
 
     // Config file
-    File configFile = getGeoWaveConfigFile(params);
+    final File configFile = getGeoWaveConfigFile(params);
 
-    StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
+    final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
     if (!inputStoreLoader.loadFromConfig(configFile)) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
@@ -59,16 +59,16 @@ public abstract class AbstractSplitsCommand extends DefaultOperation {
     return parameters;
   }
 
-  public void setParameters(String storeName) {
-    this.parameters = new ArrayList<String>();
-    this.parameters.add(storeName);
+  public void setParameters(final String storeName) {
+    parameters = new ArrayList<>();
+    parameters.add(storeName);
   }
 
   public SplitCommandLineOptions getSplitOptions() {
     return splitOptions;
   }
 
-  public void setSplitOptions(SplitCommandLineOptions splitOptions) {
+  public void setSplitOptions(final SplitCommandLineOptions splitOptions) {
     this.splitOptions = splitOptions;
   }
 

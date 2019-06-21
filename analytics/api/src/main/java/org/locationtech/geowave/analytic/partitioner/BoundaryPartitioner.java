@@ -36,11 +36,11 @@ public class BoundaryPartitioner extends OrthodromicDistancePartitioner<Object> 
   }
 
   public BoundaryPartitioner(
-      CoordinateReferenceSystem crs,
-      CommonIndexModel indexModel,
+      final CoordinateReferenceSystem crs,
+      final CommonIndexModel indexModel,
       final DimensionExtractor<Object> dimensionExtractor,
-      double[] distancePerDimension,
-      Unit<Length> geometricDistanceUnit) {
+      final double[] distancePerDimension,
+      final Unit<Length> geometricDistanceUnit) {
     super(crs, indexModel, new EchoExtractor(), distancePerDimension, geometricDistanceUnit);
   }
 
@@ -51,25 +51,25 @@ public class BoundaryPartitioner extends OrthodromicDistancePartitioner<Object> 
     private static final long serialVersionUID = 1L;
 
     @Override
-    public Geometry getGeometry(Object anObject) {
+    public Geometry getGeometry(final Object anObject) {
       return (Geometry) anObject;
     }
 
     @Override
-    public String getGroupID(Object anObject) {
+    public String getGroupID(final Object anObject) {
       return "g";
     }
   }
 
   @Override
   public List<PartitionData> getCubeIdentifiers(final Object entry) {
-    Geometry geom = extractor.getGeometry((SimpleFeature) entry);
-    Coordinate[] coords = (geom.getCoordinates());
+    final Geometry geom = extractor.getGeometry((SimpleFeature) entry);
+    final Coordinate[] coords = (geom.getCoordinates());
     System.out.println(geom.toString());
-    if (coords.length < 2)
+    if (coords.length < 2) {
       return super.getCubeIdentifiers(geom);
-    else {
-      List<PartitionData> r = new ArrayList<PartitionData>();
+    } else {
+      final List<PartitionData> r = new ArrayList<>();
       for (int i = 0; i < (coords.length - 1); i++) {
         r.addAll(
             super.getCubeIdentifiers(
@@ -81,12 +81,12 @@ public class BoundaryPartitioner extends OrthodromicDistancePartitioner<Object> 
 
   @Override
   public void partition(final Object entry, final PartitionDataCallback callback) throws Exception {
-    Geometry geom = extractor.getGeometry((SimpleFeature) entry);
+    final Geometry geom = extractor.getGeometry((SimpleFeature) entry);
     System.out.println(geom.toString());
-    Coordinate[] coords = (geom.getCoordinates());
-    if (coords.length < 2)
+    final Coordinate[] coords = (geom.getCoordinates());
+    if (coords.length < 2) {
       super.partition(geom, callback);
-    else {
+    } else {
       for (int i = 0; i < (coords.length - 1); i++) {
 
         super.partition(
@@ -97,7 +97,7 @@ public class BoundaryPartitioner extends OrthodromicDistancePartitioner<Object> 
   }
 
   @Override
-  public void initialize(ScopedJobConfiguration config) throws IOException {
+  public void initialize(final ScopedJobConfiguration config) throws IOException {
     super.initialize(config);
     super.dimensionExtractor = new EchoExtractor();
   }

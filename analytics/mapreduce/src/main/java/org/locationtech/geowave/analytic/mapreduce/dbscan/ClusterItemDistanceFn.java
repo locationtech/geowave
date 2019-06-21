@@ -33,7 +33,7 @@ public class ClusterItemDistanceFn implements
       new ThreadLocal<DistanceProfile<ClusterProfileContext>>() {
         @Override
         protected DistanceProfile<ClusterProfileContext> initialValue() {
-          return new DistanceProfile<ClusterProfileContext>(0.0, new ClusterProfileContext());
+          return new DistanceProfile<>(0.0, new ClusterProfileContext());
         }
       };
 
@@ -58,30 +58,30 @@ public class ClusterItemDistanceFn implements
 
     final Geometry gx = x.getGeometry();
     final Geometry gy = y.getGeometry();
-    if (gx instanceof Point && gy instanceof Point) {
+    if ((gx instanceof Point) && (gy instanceof Point)) {
       return coordinateDistanceFunction.measure(gx.getCoordinate(), gy.getCoordinate());
     }
     final DistanceOp op = new DistanceOp(gx, gy);
-    Coordinate[] points = op.nearestPoints();
+    final Coordinate[] points = op.nearestPoints();
     return coordinateDistanceFunction.measure(points[0], points[1]);
   }
 
   @Override
   public DistanceProfile<ClusterProfileContext> computeProfile(
-      ClusterItem item1,
-      ClusterItem item2) {
-    DistanceProfile<ClusterProfileContext> localProfile = profile.get();
-    ClusterProfileContext context = localProfile.getContext();
+      final ClusterItem item1,
+      final ClusterItem item2) {
+    final DistanceProfile<ClusterProfileContext> localProfile = profile.get();
+    final ClusterProfileContext context = localProfile.getContext();
     final Geometry gx = item1.getGeometry();
     final Geometry gy = item2.getGeometry();
     context.setItem1(item1);
     context.setItem2(item2);
-    if (gx instanceof Point && gy instanceof Point) {
+    if ((gx instanceof Point) && (gy instanceof Point)) {
       context.setPoint1(gx.getCoordinate());
       context.setPoint2(gy.getCoordinate());
     } else {
       final DistanceOp op = new DistanceOp(gx, gy);
-      Coordinate[] points = op.nearestPoints();
+      final Coordinate[] points = op.nearestPoints();
       context.setPoint1(points[0]);
       context.setPoint2(points[1]);
     }
@@ -100,7 +100,7 @@ public class ClusterItemDistanceFn implements
       return point1;
     }
 
-    public void setPoint1(Coordinate point1) {
+    public void setPoint1(final Coordinate point1) {
       this.point1 = point1;
     }
 
@@ -108,7 +108,7 @@ public class ClusterItemDistanceFn implements
       return item1;
     }
 
-    public void setItem1(ClusterItem item1) {
+    public void setItem1(final ClusterItem item1) {
       this.item1 = item1;
     }
 
@@ -116,7 +116,7 @@ public class ClusterItemDistanceFn implements
       return point2;
     }
 
-    public void setPoint2(Coordinate point2) {
+    public void setPoint2(final Coordinate point2) {
       this.point2 = point2;
     }
 
@@ -124,7 +124,7 @@ public class ClusterItemDistanceFn implements
       return item2;
     }
 
-    public void setItem2(ClusterItem item2) {
+    public void setItem2(final ClusterItem item2) {
       this.item2 = item2;
     }
   }

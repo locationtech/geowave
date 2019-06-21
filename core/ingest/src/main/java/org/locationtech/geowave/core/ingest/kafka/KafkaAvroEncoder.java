@@ -8,10 +8,10 @@
  */
 package org.locationtech.geowave.core.ingest.kafka;
 
-import kafka.serializer.Encoder;
-import kafka.utils.VerifiableProperties;
 import org.apache.avro.specific.SpecificRecordBase;
 import org.locationtech.geowave.core.ingest.avro.GenericAvroSerializer;
+import kafka.serializer.Encoder;
+import kafka.utils.VerifiableProperties;
 
 /**
  * Default encoder used by Kafka to serialize Avro generated Java object to binary. This class is
@@ -24,7 +24,7 @@ import org.locationtech.geowave.core.ingest.avro.GenericAvroSerializer;
  * @param <T> - Base Avro class extended by all generated class files
  */
 public class KafkaAvroEncoder<T extends SpecificRecordBase> implements Encoder<T> {
-  private final GenericAvroSerializer<T> serializer = new GenericAvroSerializer<T>();
+  private final GenericAvroSerializer<T> serializer = new GenericAvroSerializer<>();
 
   public KafkaAvroEncoder(final VerifiableProperties verifiableProperties) {
     // This constructor must be present to avoid runtime errors
@@ -32,6 +32,6 @@ public class KafkaAvroEncoder<T extends SpecificRecordBase> implements Encoder<T
 
   @Override
   public byte[] toBytes(final T object) {
-    return serializer.serialize(object, object.getSchema());
+    return GenericAvroSerializer.serialize(object, object.getSchema());
   }
 }

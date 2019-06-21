@@ -40,8 +40,7 @@ public class WholeRowQueryFilterIterator extends WholeRowIterator {
   @Override
   protected boolean filter(final Text currentRow, final List<Key> keys, final List<Value> values) {
     if ((queryFilterIterator != null) && queryFilterIterator.isSet()) {
-      final PersistentDataset<CommonIndexValue> commonData =
-          new MultiFieldPersistentDataset<CommonIndexValue>();
+      final PersistentDataset<CommonIndexValue> commonData = new MultiFieldPersistentDataset<>();
       final List<FlattenedUnreadData> unreadData = new ArrayList<>();
       for (int i = 0; (i < keys.size()) && (i < values.size()); i++) {
         final Key key = keys.get(i);

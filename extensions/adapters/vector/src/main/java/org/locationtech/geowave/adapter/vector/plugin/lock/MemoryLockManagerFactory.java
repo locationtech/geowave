@@ -13,7 +13,7 @@ import org.locationtech.geowave.adapter.vector.plugin.GeoWavePluginConfig;
 public class MemoryLockManagerFactory implements LockingManagementFactory {
 
   @Override
-  public LockingManagement createLockingManager(GeoWavePluginConfig plugginData) {
+  public LockingManagement createLockingManager(final GeoWavePluginConfig plugginData) {
     return new MemoryLockManager(plugginData);
   }
 

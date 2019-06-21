@@ -8,11 +8,11 @@
  */
 package org.locationtech.geowave.core.store.cli.config;
 
-import com.beust.jcommander.Parameters;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.operations.config.ConfigSection;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexGroupPluginOptions;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "rmindexgrp", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Remove index group from Geowave configuration")

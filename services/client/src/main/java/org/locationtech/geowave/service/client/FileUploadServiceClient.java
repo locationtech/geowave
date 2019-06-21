@@ -24,7 +24,7 @@ public class FileUploadServiceClient {
     this(baseUrl, null, null);
   }
 
-  public FileUploadServiceClient(final String baseUrl, String user, String password) {
+  public FileUploadServiceClient(final String baseUrl, final String user, final String password) {
 
     fileUploadService =
         WebResourceFactory.newResource(

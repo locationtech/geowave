@@ -14,9 +14,9 @@ import org.restlet.data.Form;
 
 public class RequestParametersForm extends RequestParameters {
 
-  public RequestParametersForm(Form form) {
+  public RequestParametersForm(final Form form) {
     super();
-    for (String key : form.getNames()) {
+    for (final String key : form.getNames()) {
       // For each parameter in the form, add the parameter name and value
       // to the Map<String, Object>.
       keyValuePairs.put(key, form.getFirst(key).getValue());
@@ -24,13 +24,13 @@ public class RequestParametersForm extends RequestParameters {
   }
 
   @Override
-  public String getString(String parameter) {
+  public String getString(final String parameter) {
     return (String) getValue(parameter);
   }
 
   @Override
-  public List<?> getList(String parameter) {
-    String[] str = splitStringParameter(parameter);
+  public List<?> getList(final String parameter) {
+    final String[] str = splitStringParameter(parameter);
     if (str == null) {
       return null;
     }
@@ -38,7 +38,7 @@ public class RequestParametersForm extends RequestParameters {
   }
 
   @Override
-  public Object[] getArray(String parameter) {
+  public Object[] getArray(final String parameter) {
     return splitStringParameter(parameter);
   }
 }

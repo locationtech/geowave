@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.service.rest.operations;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +20,10 @@ import org.locationtech.geowave.core.cli.operations.config.ConfigSection;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.datastore.rocksdb.config.RocksDBOptions;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "addstore/rocksdb", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Create a store within Geowave")
@@ -33,7 +33,7 @@ public class AddRocksDBStoreCommand extends ServiceEnabledCommand<String> {
 
   // Default AddStore Options
   @Parameter(description = "<name>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   @Parameter(
       names = {"-d", "--default"},
@@ -86,9 +86,9 @@ public class AddRocksDBStoreCommand extends ServiceEnabledCommand<String> {
     // Write properties file
     ConfigOptions.writeProperties(propFile, existingProps);
 
-    StringBuilder builder = new StringBuilder();
-    for (Object key : existingProps.keySet()) {
-      String[] split = key.toString().split("\\.");
+    final StringBuilder builder = new StringBuilder();
+    for (final Object key : existingProps.keySet()) {
+      final String[] split = key.toString().split("\\.");
       if (split.length > 1) {
         if (split[1].equals(parameters.get(0))) {
           builder.append(key.toString() + "=" + existingProps.getProperty(key.toString()) + "\n");
@@ -125,7 +125,7 @@ public class AddRocksDBStoreCommand extends ServiceEnabledCommand<String> {
   }
 
   public void setParameters(final String storeName) {
-    parameters = new ArrayList<String>();
+    parameters = new ArrayList<>();
     parameters.add(storeName);
   }
 

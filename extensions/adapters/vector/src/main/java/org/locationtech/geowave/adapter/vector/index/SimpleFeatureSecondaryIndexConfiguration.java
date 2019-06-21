@@ -8,9 +8,9 @@
  */
 package org.locationtech.geowave.adapter.vector.index;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Set;
 import org.locationtech.geowave.core.geotime.util.SimpleFeatureUserDataConfiguration;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public interface SimpleFeatureSecondaryIndexConfiguration extends
     SimpleFeatureUserDataConfiguration {

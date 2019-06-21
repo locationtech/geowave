@@ -21,7 +21,7 @@ public class IngestServiceClient {
     this(baseUrl, null, null);
   }
 
-  public IngestServiceClient(final String baseUrl, String user, String password) {
+  public IngestServiceClient(final String baseUrl, final String user, final String password) {
 
     ingestService =
         WebResourceFactory.newResource(

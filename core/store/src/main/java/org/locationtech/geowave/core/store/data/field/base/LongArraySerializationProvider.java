@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.store.data.field.base;
 
 import java.nio.ByteBuffer;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.data.field.ArrayReader;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
@@ -32,12 +33,13 @@ public class LongArraySerializationProvider implements FieldSerializationProvide
   // @see PrimitiveLongArraySerializationProvider.PrimitiveLongArrayReader
   private static class LongArrayReader implements FieldReader<Long[]> {
     @Override
-    public Long[] readField(byte[] fieldData) {
+    public Long[] readField(final byte[] fieldData) {
       if ((fieldData == null) || (fieldData.length == 0)) {
         return null;
       }
       final ByteBuffer buff = ByteBuffer.wrap(fieldData);
-      int count = VarintUtils.readUnsignedInt(buff);
+      final int count = VarintUtils.readUnsignedInt(buff);
+      ByteArrayUtils.verifyBufferSize(buff, count);
       final Long[] result = new Long[count];
       for (int i = 0; i < count; i++) {
         if (buff.get() > 0) {
@@ -50,12 +52,12 @@ public class LongArraySerializationProvider implements FieldSerializationProvide
     }
 
     @Override
-    public Long[] readField(byte[] fieldData, byte serializationVersion) {
+    public Long[] readField(final byte[] fieldData, final byte serializationVersion) {
       if ((fieldData == null) || (fieldData.length == 0)) {
         return null;
       }
       if (serializationVersion < FieldUtils.SERIALIZATION_VERSION) {
-        return new ArrayReader<Long>(new LongReader()).readField(fieldData, serializationVersion);
+        return new ArrayReader<>(new LongReader()).readField(fieldData, serializationVersion);
       } else {
         return readField(fieldData);
       }
@@ -65,7 +67,7 @@ public class LongArraySerializationProvider implements FieldSerializationProvide
   // @see PrimitiveLongArraySerializationProvider.PrimitiveLongArrayWriter
   private static class LongArrayWriter implements FieldWriter<Object, Long[]> {
     @Override
-    public byte[] writeField(Long[] fieldValue) {
+    public byte[] writeField(final Long[] fieldValue) {
       if (fieldValue == null) {
         return new byte[] {};
       }

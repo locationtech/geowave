@@ -23,7 +23,7 @@ public class ScanCallbackList<T, R extends GeoWaveRow> implements ScanCallback<T
     this.callbacks = callbacks;
   }
 
-  public void addScanCallback(ScanCallback<T, R> callback) {
+  public void addScanCallback(final ScanCallback<T, R> callback) {
     callbacks.add(callback);
     if (lock != null) {
       lock.unlock();

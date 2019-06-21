@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.analytic.mapreduce.kde;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,6 +23,7 @@ import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.mapreduce.JobContextIndexStore;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
 import org.opengis.coverage.grid.GridCoverage;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class KDEReducer extends
     Reducer<DoubleWritable, LongWritable, GeoWaveOutputKey, GridCoverage> {

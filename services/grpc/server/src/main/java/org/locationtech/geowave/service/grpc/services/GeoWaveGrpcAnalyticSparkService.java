@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.service.grpc.services;
 
-import com.google.protobuf.Descriptors.FieldDescriptor;
-import io.grpc.BindableService;
-import io.grpc.stub.StreamObserver;
 import java.io.File;
 import java.util.Map;
 import org.locationtech.geowave.analytic.spark.kmeans.operations.KmeansSparkCommand;
@@ -28,6 +25,9 @@ import org.locationtech.geowave.service.grpc.protobuf.SparkSqlCommandParametersP
 import org.locationtech.geowave.service.grpc.protobuf.SpatialJoinCommandParametersProtos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.protobuf.Descriptors.FieldDescriptor;
+import io.grpc.BindableService;
+import io.grpc.stub.StreamObserver;
 
 public class GeoWaveGrpcAnalyticSparkService extends AnalyticSparkGrpc.AnalyticSparkImplBase
     implements
@@ -37,15 +37,15 @@ public class GeoWaveGrpcAnalyticSparkService extends AnalyticSparkGrpc.AnalyticS
 
   @Override
   public BindableService getBindableService() {
-    return (BindableService) this;
+    return this;
   }
 
   @Override
   public void kmeansSparkCommand(
-      KmeansSparkCommandParametersProtos request,
-      StreamObserver<VoidResponseProtos> responseObserver) {
-    KmeansSparkCommand cmd = new KmeansSparkCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+      final KmeansSparkCommandParametersProtos request,
+      final StreamObserver<VoidResponseProtos> responseObserver) {
+    final KmeansSparkCommand cmd = new KmeansSparkCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -56,7 +56,7 @@ public class GeoWaveGrpcAnalyticSparkService extends AnalyticSparkGrpc.AnalyticS
     LOGGER.info("Executing KmeansSparkCommand...");
     try {
       cmd.computeResults(params);
-      VoidResponseProtos resp = VoidResponseProtos.newBuilder().build();
+      final VoidResponseProtos resp = VoidResponseProtos.newBuilder().build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -67,10 +67,10 @@ public class GeoWaveGrpcAnalyticSparkService extends AnalyticSparkGrpc.AnalyticS
 
   @Override
   public void sparkSqlCommand(
-      SparkSqlCommandParametersProtos request,
-      StreamObserver<VoidResponseProtos> responseObserver) {
-    SparkSqlCommand cmd = new SparkSqlCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+      final SparkSqlCommandParametersProtos request,
+      final StreamObserver<VoidResponseProtos> responseObserver) {
+    final SparkSqlCommand cmd = new SparkSqlCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -81,7 +81,7 @@ public class GeoWaveGrpcAnalyticSparkService extends AnalyticSparkGrpc.AnalyticS
     LOGGER.info("Executing SparkSqlCommand...");
     try {
       cmd.computeResults(params);
-      VoidResponseProtos resp = VoidResponseProtos.newBuilder().build();
+      final VoidResponseProtos resp = VoidResponseProtos.newBuilder().build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 
@@ -92,10 +92,10 @@ public class GeoWaveGrpcAnalyticSparkService extends AnalyticSparkGrpc.AnalyticS
 
   @Override
   public void spatialJoinCommand(
-      SpatialJoinCommandParametersProtos request,
-      StreamObserver<VoidResponseProtos> responseObserver) {
-    SpatialJoinCommand cmd = new SpatialJoinCommand();
-    Map<FieldDescriptor, Object> m = request.getAllFields();
+      final SpatialJoinCommandParametersProtos request,
+      final StreamObserver<VoidResponseProtos> responseObserver) {
+    final SpatialJoinCommand cmd = new SpatialJoinCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
     final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
@@ -106,7 +106,7 @@ public class GeoWaveGrpcAnalyticSparkService extends AnalyticSparkGrpc.AnalyticS
     LOGGER.info("Executing SpatialJoinCommand...");
     try {
       cmd.computeResults(params);
-      VoidResponseProtos resp = VoidResponseProtos.newBuilder().build();
+      final VoidResponseProtos resp = VoidResponseProtos.newBuilder().build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 

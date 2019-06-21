@@ -9,10 +9,10 @@
 /** */
 package org.locationtech.geowave.core.cli.utils;
 
-import com.beust.jcommander.ParameterException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import com.beust.jcommander.ParameterException;
 
 /** Common file utilities, for performing common operations */
 public class FileUtils {
@@ -31,9 +31,9 @@ public class FileUtils {
       }
       if (filePath.indexOf("$") != -1) {
         int startIndex = 0;
-        while (startIndex != -1 && filePath.indexOf("$", startIndex) != -1) {
-          String variable = getVariable(filePath.substring(startIndex));
-          String resolvedValue = resolveVariableValue(variable);
+        while ((startIndex != -1) && (filePath.indexOf("$", startIndex) != -1)) {
+          final String variable = getVariable(filePath.substring(startIndex));
+          final String resolvedValue = resolveVariableValue(variable);
           // if variable was not resolved to a system property, no
           // need to perform string replace
           if (!variable.equals(resolvedValue)) {
@@ -53,12 +53,12 @@ public class FileUtils {
    * @param variable
    * @return
    */
-  private static String getVariable(String variable) {
-    StringBuilder sb = new StringBuilder();
+  private static String getVariable(final String variable) {
+    final StringBuilder sb = new StringBuilder();
     char nextChar;
     for (int index = 0; index < variable.length(); index++) {
       nextChar = variable.charAt(index);
-      if (nextChar == '$'
+      if ((nextChar == '$')
           || Character.isLetterOrDigit(nextChar)
           || (nextChar != File.separatorChar)) {
         sb.append(nextChar);
@@ -69,7 +69,7 @@ public class FileUtils {
     return sb.toString();
   }
 
-  private static String resolveVariableValue(String variable) {
+  private static String resolveVariableValue(final String variable) {
     if (System.getenv().containsKey(variable)) {
       return System.getenv(variable);
     } else if (System.getProperties().containsKey(variable)) {
@@ -84,12 +84,12 @@ public class FileUtils {
    * @param inputFile
    * @return
    */
-  public static String readFileContent(File inputFile) throws Exception {
+  public static String readFileContent(final File inputFile) throws Exception {
     Scanner scanner = null;
     try {
       scanner = new Scanner(inputFile, "UTF-8");
       return scanner.nextLine();
-    } catch (FileNotFoundException e) {
+    } catch (final FileNotFoundException e) {
       throw new ParameterException(e);
     } finally {
       if (scanner != null) {

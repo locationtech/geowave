@@ -33,19 +33,19 @@ public final class OperationEntry {
   private final boolean command;
   private final boolean topLevel;
 
-  public OperationEntry(Class<?> operationClass) {
+  public OperationEntry(final Class<?> operationClass) {
     this.operationClass = operationClass;
-    GeowaveOperation operation = this.operationClass.getAnnotation(GeowaveOperation.class);
+    final GeowaveOperation operation = this.operationClass.getAnnotation(GeowaveOperation.class);
     if (operation == null) {
       throw new RuntimeException(
           "Expected Operation class to use GeowaveOperation annotation: "
               + this.operationClass.getCanonicalName());
     }
-    this.operationName = operation.name();
-    this.parentOperationClass = operation.parentOperation();
-    this.command = Command.class.isAssignableFrom(operationClass);
-    this.topLevel = this.parentOperationClass == null || this.parentOperationClass == Object.class;
-    this.children = new HashMap<String, OperationEntry>();
+    operationName = operation.name();
+    parentOperationClass = operation.parentOperation();
+    command = Command.class.isAssignableFrom(operationClass);
+    topLevel = (parentOperationClass == null) || (parentOperationClass == Object.class);
+    children = new HashMap<>();
   }
 
   public Class<?> getParentOperationClass() {
@@ -64,18 +64,18 @@ public final class OperationEntry {
     return Collections.unmodifiableCollection(children.values());
   }
 
-  public void addChild(OperationEntry child) {
+  public void addChild(final OperationEntry child) {
     if (children.containsKey(child.getOperationName().toLowerCase(Locale.ENGLISH))) {
       throw new RuntimeException(
           "Duplicate operation name: "
               + child.getOperationName()
               + " for "
-              + this.getOperationClass().getName());
+              + getOperationClass().getName());
     }
     children.put(child.getOperationName().toLowerCase(Locale.ENGLISH), child);
   }
 
-  public OperationEntry getChild(String name) {
+  public OperationEntry getChild(final String name) {
     return children.get(name);
   }
 
@@ -89,7 +89,7 @@ public final class OperationEntry {
 
   public Operation createInstance() {
     try {
-      return (Operation) this.operationClass.newInstance();
+      return (Operation) operationClass.newInstance();
     } catch (InstantiationException | IllegalAccessException e) {
       LOGGER.error("Unable to create new instance", e);
       return null;

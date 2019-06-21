@@ -42,15 +42,15 @@ public class Sentinel2DownloadCommandLineOptions {
     return overwriteIfExists;
   }
 
-  public void setUserIdent(String userIdent) {
+  public void setUserIdent(final String userIdent) {
     this.userIdent = userIdent;
   }
 
-  public void setPassword(String password) {
+  public void setPassword(final String password) {
     this.password = password;
   }
 
-  public void setOverwriteIfExists(boolean overwriteIfExists) {
+  public void setOverwriteIfExists(final boolean overwriteIfExists) {
     this.overwriteIfExists = overwriteIfExists;
   }
 }

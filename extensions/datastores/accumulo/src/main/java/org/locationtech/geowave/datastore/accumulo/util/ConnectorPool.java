@@ -26,8 +26,7 @@ public class ConnectorPool {
     return singletonInstance;
   }
 
-  private final Map<ConnectorConfig, Connector> connectorCache =
-      new HashMap<ConnectorConfig, Connector>();
+  private final Map<ConnectorConfig, Connector> connectorCache = new HashMap<>();
 
   public synchronized Connector getConnector(
       final String zookeeperUrl,

@@ -22,7 +22,7 @@ public class IngestCallbackList<T> implements IngestCallback<T>, Flushable, Clos
   }
 
   @Override
-  public void entryIngested(final T entry, GeoWaveRow... kvs) {
+  public void entryIngested(final T entry, final GeoWaveRow... kvs) {
     for (final IngestCallback<T> callback : callbacks) {
       callback.entryIngested(entry, kvs);
     }

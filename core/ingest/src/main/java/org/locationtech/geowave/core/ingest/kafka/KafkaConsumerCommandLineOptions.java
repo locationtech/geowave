@@ -66,7 +66,7 @@ public class KafkaConsumerCommandLineOptions extends KafkaCommandLineOptions {
     return groupId;
   }
 
-  public void setGroupId(String groupId) {
+  public void setGroupId(final String groupId) {
     this.groupId = groupId;
   }
 
@@ -74,7 +74,7 @@ public class KafkaConsumerCommandLineOptions extends KafkaCommandLineOptions {
     return zookeeperConnect;
   }
 
-  public void setZookeeperConnect(String zookeeperConnect) {
+  public void setZookeeperConnect(final String zookeeperConnect) {
     this.zookeeperConnect = zookeeperConnect;
   }
 
@@ -82,7 +82,7 @@ public class KafkaConsumerCommandLineOptions extends KafkaCommandLineOptions {
     return autoOffsetReset;
   }
 
-  public void setAutoOffsetReset(String autoOffsetReset) {
+  public void setAutoOffsetReset(final String autoOffsetReset) {
     this.autoOffsetReset = autoOffsetReset;
   }
 
@@ -90,7 +90,7 @@ public class KafkaConsumerCommandLineOptions extends KafkaCommandLineOptions {
     return fetchMessageMaxBytes;
   }
 
-  public void setFetchMessageMaxBytes(String fetchMessageMaxBytes) {
+  public void setFetchMessageMaxBytes(final String fetchMessageMaxBytes) {
     this.fetchMessageMaxBytes = fetchMessageMaxBytes;
   }
 
@@ -98,7 +98,7 @@ public class KafkaConsumerCommandLineOptions extends KafkaCommandLineOptions {
     return consumerTimeoutMs;
   }
 
-  public void setConsumerTimeoutMs(String consumerTimeoutMs) {
+  public void setConsumerTimeoutMs(final String consumerTimeoutMs) {
     this.consumerTimeoutMs = consumerTimeoutMs;
   }
 
@@ -106,11 +106,11 @@ public class KafkaConsumerCommandLineOptions extends KafkaCommandLineOptions {
     return reconnectOnTimeout;
   }
 
-  public void setReconnectOnTimeout(boolean reconnectOnTimeout) {
+  public void setReconnectOnTimeout(final boolean reconnectOnTimeout) {
     this.reconnectOnTimeout = reconnectOnTimeout;
   }
 
-  public void setBatchSize(int batchSize) {
+  public void setBatchSize(final int batchSize) {
     this.batchSize = batchSize;
   }
 }

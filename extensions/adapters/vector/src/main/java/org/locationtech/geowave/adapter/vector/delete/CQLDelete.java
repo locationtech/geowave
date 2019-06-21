@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.adapter.vector.delete;
 
-import com.beust.jcommander.IStringConverter;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +31,10 @@ import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.IStringConverter;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "cqldelete", parentOperation = VectorSection.class)
 @Parameters(commandDescription = "Delete data that matches a CQL filter")

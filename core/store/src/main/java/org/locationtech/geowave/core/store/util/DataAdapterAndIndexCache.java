@@ -16,8 +16,7 @@ import java.util.Set;
 
 public class DataAdapterAndIndexCache {
 
-  private static Map<String, DataAdapterAndIndexCache> CACHE_MAP =
-      new HashMap<String, DataAdapterAndIndexCache>();
+  private static Map<String, DataAdapterAndIndexCache> CACHE_MAP = new HashMap<>();
 
   public static synchronized DataAdapterAndIndexCache getInstance(
       final String cacheId,
@@ -35,7 +34,7 @@ public class DataAdapterAndIndexCache {
     return instance;
   }
 
-  private final Set<DataAdapterAndIndex> cache = new HashSet<DataAdapterAndIndex>();
+  private final Set<DataAdapterAndIndex> cache = new HashSet<>();
 
   // TODO: there should techinically be a notion of geowave datastore in here,
   // as multiple different datastores (perhaps simply different gwNamespaces)
@@ -75,27 +74,33 @@ public class DataAdapterAndIndexCache {
     public int hashCode() {
       final int prime = 31;
       int result = 1;
-      result = prime * result + ((indexId == null) ? 0 : indexId.hashCode());
-      result = prime * result + internalAdapterId;
+      result = (prime * result) + ((indexId == null) ? 0 : indexId.hashCode());
+      result = (prime * result) + internalAdapterId;
       return result;
     }
 
     @Override
-    public boolean equals(Object obj) {
-      if (this == obj)
+    public boolean equals(final Object obj) {
+      if (this == obj) {
         return true;
-      if (obj == null)
+      }
+      if (obj == null) {
         return false;
-      if (getClass() != obj.getClass())
+      }
+      if (getClass() != obj.getClass()) {
         return false;
-      DataAdapterAndIndex other = (DataAdapterAndIndex) obj;
+      }
+      final DataAdapterAndIndex other = (DataAdapterAndIndex) obj;
       if (indexId == null) {
-        if (other.indexId != null)
+        if (other.indexId != null) {
           return false;
-      } else if (!indexId.equals(other.indexId))
+        }
+      } else if (!indexId.equals(other.indexId)) {
         return false;
-      if (internalAdapterId != other.internalAdapterId)
+      }
+      if (internalAdapterId != other.internalAdapterId) {
         return false;
+      }
       return true;
     }
   }

@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.datastore.accumulo.cli;
 
-import com.beust.jcommander.Parameters;
 import java.io.IOException;
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
@@ -21,6 +20,7 @@ import org.locationtech.geowave.datastore.accumulo.split.AbstractAccumuloSplitsO
 import org.locationtech.geowave.datastore.accumulo.util.AccumuloUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "splitequalinterval", parentOperation = AccumuloSection.class)
 @Parameters(

@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 public class GeoWaveGTRasterFormat extends AbstractGridFormat implements Format {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveGTRasterFormat.class);
   public static final ParameterDescriptor<Color> OUTPUT_TRANSPARENT_COLOR =
-      new DefaultParameterDescriptor<Color>("OutputTransparentColor", Color.class, null, null);
+      new DefaultParameterDescriptor<>("OutputTransparentColor", Color.class, null, null);
   public static final CoordinateReferenceSystem DEFAULT_CRS;
 
   static {
@@ -54,7 +54,7 @@ public class GeoWaveGTRasterFormat extends AbstractGridFormat implements Format 
 
   /** Sets the metadata information. */
   private void setInfo() {
-    final HashMap<String, String> info = new HashMap<String, String>();
+    final HashMap<String, String> info = new HashMap<>();
 
     info.put("name", "GeoWaveRasterFormat");
     info.put("description", "Image mosaicking and pyramiding in GeoWave");

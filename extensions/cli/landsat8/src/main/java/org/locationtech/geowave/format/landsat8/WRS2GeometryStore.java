@@ -80,7 +80,7 @@ public class WRS2GeometryStore {
   protected static final String WRS2_SHAPE_DIRECTORY = "WRS2_descending";
   private final File wrs2Shape;
   private final File wrs2Directory;
-  private final Map<WRS2Key, MultiPolygon> featureCache = new HashMap<WRS2Key, MultiPolygon>();
+  private final Map<WRS2Key, MultiPolygon> featureCache = new HashMap<>();
   private SimpleFeatureType wrs2Type;
 
   public WRS2GeometryStore(final String workspaceDirectory)
@@ -137,7 +137,7 @@ public class WRS2GeometryStore {
     // read the shapefile and cache the features for quick lookup by path
     // and row
     try {
-      final Map<String, Object> map = new HashMap<String, Object>();
+      final Map<String, Object> map = new HashMap<>();
       map.put("url", wrs2Shape.toURI().toURL());
       final DataStore dataStore = DataStoreFinder.getDataStore(map);
       if (dataStore == null) {

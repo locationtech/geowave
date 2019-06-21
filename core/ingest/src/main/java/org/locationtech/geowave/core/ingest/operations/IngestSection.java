@@ -8,10 +8,10 @@
  */
 package org.locationtech.geowave.core.ingest.operations;
 
-import com.beust.jcommander.Parameters;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.operations.GeowaveTopLevelSection;
+import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "ingest", parentOperation = GeowaveTopLevelSection.class)
 @Parameters(

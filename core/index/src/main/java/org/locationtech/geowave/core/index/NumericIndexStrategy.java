@@ -63,5 +63,6 @@ public interface NumericIndexStrategy extends
    *
    * @return the byte offset prior to the dimensional index
    */
+  @Override
   public int getPartitionKeyLength();
 }

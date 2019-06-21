@@ -8,13 +8,13 @@
  */
 package org.locationtech.geowave.test.kafka;
 
-import kafka.server.KafkaConfig;
-import kafka.server.KafkaServerStartable;
 import org.apache.commons.io.FileUtils;
 import org.locationtech.geowave.test.TestEnvironment;
 import org.locationtech.geowave.test.ZookeeperTestEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import kafka.server.KafkaConfig;
+import kafka.server.KafkaServerStartable;
 
 public class KafkaTestEnvironment implements TestEnvironment {
 

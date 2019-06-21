@@ -56,7 +56,7 @@ public class MinimalBinDistanceHistogram implements NumericHistogram {
     // init the RNG for breaking ties in histogram merging.
     prng = new Random(System.currentTimeMillis());
 
-    bins = new ArrayList<Bin>(nbins);
+    bins = new ArrayList<>(nbins);
   }
 
   /** Creates a new histogram object. */
@@ -66,7 +66,7 @@ public class MinimalBinDistanceHistogram implements NumericHistogram {
     // init the RNG for breaking ties in histogram merging.
     prng = new Random(System.currentTimeMillis());
 
-    bins = new ArrayList<Bin>(size);
+    bins = new ArrayList<>(size);
     nbins = size;
   }
 
@@ -103,7 +103,7 @@ public class MinimalBinDistanceHistogram implements NumericHistogram {
     maxValue = Math.max(myTypeOfHist.maxValue, maxValue);
     if ((nbins == 0) || (bins.size() == 0)) {
       // Just make a copy
-      bins = new ArrayList<Bin>(myTypeOfHist.bins.size());
+      bins = new ArrayList<>(myTypeOfHist.bins.size());
       for (final Bin coord : myTypeOfHist.bins) {
         bins.add(coord);
       }
@@ -114,8 +114,7 @@ public class MinimalBinDistanceHistogram implements NumericHistogram {
       // Merge using Algorithm #2 from the Ben-Haim and
       // Tom-Tov paper.
 
-      final ArrayList<Bin> mergedBins =
-          new ArrayList<Bin>(getNumBins() + myTypeOfHist.getNumBins());
+      final ArrayList<Bin> mergedBins = new ArrayList<>(getNumBins() + myTypeOfHist.getNumBins());
       mergedBins.addAll(bins);
       for (final Bin oldBin : myTypeOfHist.bins) {
         mergedBins.add(new Bin(oldBin.lowerBound, oldBin.count));
@@ -282,6 +281,7 @@ public class MinimalBinDistanceHistogram implements NumericHistogram {
    * @param val
    * @return the number of estimated points
    */
+  @Override
   public double sum(final double val, final boolean inclusive) {
     if (bins.isEmpty()) {
       return 0.0;

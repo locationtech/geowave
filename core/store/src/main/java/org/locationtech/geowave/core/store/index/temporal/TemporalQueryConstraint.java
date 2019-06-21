@@ -9,7 +9,6 @@
 package org.locationtech.geowave.core.store.index.temporal;
 
 import java.util.Date;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.store.index.FilterableConstraints;
@@ -85,18 +84,18 @@ public class TemporalQueryConstraint implements FilterableConstraints {
     if (constraints instanceof TemporalQueryConstraint) {
       final TemporalQueryConstraint filterConstraints = (TemporalQueryConstraint) constraints;
       if (fieldName.equals(filterConstraints.fieldName)) {
-        Date newStart =
+        final Date newStart =
             start.compareTo(filterConstraints.start) < 0 ? filterConstraints.start : start;
-        Date newEnd = end.compareTo(filterConstraints.end) > 0 ? filterConstraints.end : end;
+        final Date newEnd = end.compareTo(filterConstraints.end) > 0 ? filterConstraints.end : end;
         final boolean lowEquals = start.equals(filterConstraints.start);
         final boolean upperEquals = end.equals(filterConstraints.end);
         final boolean replaceMin = start.compareTo(filterConstraints.start) < 0;
         final boolean replaceMax = end.compareTo(filterConstraints.end) > 0;
 
-        boolean newInclusiveLow =
+        final boolean newInclusiveLow =
             lowEquals ? filterConstraints.inclusiveLow & inclusiveLow
                 : (replaceMin ? filterConstraints.inclusiveLow : inclusiveLow);
-        boolean newInclusiveHigh =
+        final boolean newInclusiveHigh =
             upperEquals ? filterConstraints.inclusiveHigh & inclusiveHigh
                 : (replaceMax ? filterConstraints.inclusiveHigh : inclusiveHigh);
 
@@ -126,18 +125,18 @@ public class TemporalQueryConstraint implements FilterableConstraints {
     if (constraints instanceof TemporalQueryConstraint) {
       final TemporalQueryConstraint filterConstraints = (TemporalQueryConstraint) constraints;
       if (fieldName.equals(filterConstraints.fieldName)) {
-        Date newStart =
+        final Date newStart =
             start.compareTo(filterConstraints.start) > 0 ? filterConstraints.start : start;
-        Date newEnd = end.compareTo(filterConstraints.end) < 0 ? filterConstraints.end : end;
+        final Date newEnd = end.compareTo(filterConstraints.end) < 0 ? filterConstraints.end : end;
         final boolean lowEquals = start.equals(filterConstraints.start);
         final boolean upperEquals = end.equals(filterConstraints.end);
         final boolean replaceMin = start.compareTo(filterConstraints.start) > 0;
         final boolean replaceMax = end.compareTo(filterConstraints.end) < 0;
 
-        boolean newInclusiveLow =
+        final boolean newInclusiveLow =
             lowEquals ? filterConstraints.inclusiveLow | inclusiveLow
                 : (replaceMin ? filterConstraints.inclusiveLow : inclusiveLow);
-        boolean newInclusiveHigh =
+        final boolean newInclusiveHigh =
             upperEquals ? filterConstraints.inclusiveHigh | inclusiveHigh
                 : (replaceMax ? filterConstraints.inclusiveHigh : inclusiveHigh);
 

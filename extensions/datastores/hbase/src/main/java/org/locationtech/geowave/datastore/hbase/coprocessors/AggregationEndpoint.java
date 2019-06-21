@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.datastore.hbase.coprocessors;
 
-import com.google.protobuf.ByteString;
-import com.google.protobuf.RpcCallback;
-import com.google.protobuf.RpcController;
-import com.google.protobuf.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +35,10 @@ import org.locationtech.geowave.datastore.hbase.filters.HBaseNumericIndexStrateg
 import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.protobuf.ByteString;
+import com.google.protobuf.RpcCallback;
+import com.google.protobuf.RpcController;
+import com.google.protobuf.Service;
 
 public class AggregationEndpoint extends AggregationProtosServer.AggregationService implements
     Coprocessor,
@@ -237,7 +237,7 @@ public class AggregationEndpoint extends AggregationProtosServer.AggregationServ
     }
     env.getRegion().getCoprocessorHost().preScannerOpen(scan);
     try (InternalScanner scanner = env.getRegion().getScanner(scan)) {
-      final List<Cell> results = new ArrayList<Cell>();
+      final List<Cell> results = new ArrayList<>();
       boolean hasNext;
       do {
         hasNext = scanner.next(results);

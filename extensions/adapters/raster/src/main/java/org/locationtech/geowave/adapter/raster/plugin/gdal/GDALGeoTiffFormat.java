@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.adapter.raster.plugin.gdal;
 
-import it.geosolutions.imageio.plugins.geotiff.GeoTiffImageReaderSpi;
 import java.util.Collections;
 import java.util.HashMap;
 import org.geotools.coverageio.gdal.BaseGDALGridFormat;
@@ -19,6 +18,7 @@ import org.geotools.parameter.ParameterGroup;
 import org.opengis.coverage.grid.Format;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.parameter.GeneralParameterDescriptor;
+import it.geosolutions.imageio.plugins.geotiff.GeoTiffImageReaderSpi;
 
 public class GDALGeoTiffFormat extends BaseGDALGridFormat implements Format {
 
@@ -32,7 +32,7 @@ public class GDALGeoTiffFormat extends BaseGDALGridFormat implements Format {
   /** Sets the metadata information. */
   @Override
   protected void setInfo() {
-    final HashMap<String, String> info = new HashMap<String, String>();
+    final HashMap<String, String> info = new HashMap<>();
     info.put("name", "GDALGeoTiff");
     info.put("description", "GDAL GeoTiff Coverage Format");
     info.put("vendor", "GeoWave");

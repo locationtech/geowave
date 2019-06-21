@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.datastore.bigtable.operations.config;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParametersDelegate;
 import org.apache.hadoop.hbase.HConstants;
 import org.locationtech.geowave.core.store.BaseDataStoreOptions;
 import org.locationtech.geowave.core.store.DataStoreOptions;
@@ -17,6 +15,8 @@ import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.datastore.bigtable.BigTableStoreFactoryFamily;
 import org.locationtech.geowave.datastore.hbase.cli.config.HBaseOptions;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParametersDelegate;
 
 public class BigTableOptions extends StoreFactoryOptions {
   public static final String DEFAULT_PROJECT_ID = "geowave-bigtable-project-id";
@@ -39,11 +39,11 @@ public class BigTableOptions extends StoreFactoryOptions {
   public BigTableOptions() {}
 
   public BigTableOptions(
-      int scanCacheSize,
-      String projectId,
-      String instanceId,
-      String gwNamespace,
-      BaseDataStoreOptions additionalOptions) {
+      final int scanCacheSize,
+      final String projectId,
+      final String instanceId,
+      final String gwNamespace,
+      final BaseDataStoreOptions additionalOptions) {
     super(gwNamespace);
     this.scanCacheSize = scanCacheSize;
     this.projectId = projectId;

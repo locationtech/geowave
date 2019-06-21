@@ -18,7 +18,7 @@ public class TemporalRangeTest {
 
   @Test
   public void test() {
-    TemporalRange range = new TemporalRange(new Date(100), new Date(1000));
+    final TemporalRange range = new TemporalRange(new Date(100), new Date(1000));
     assertFalse(range.isWithin(new Date(10)));
     assertFalse(range.isWithin(new Date(100000)));
     assertTrue(range.isWithin(new Date(800)));
@@ -58,9 +58,9 @@ public class TemporalRangeTest {
     assertTrue(check(new NumericRange(-1, 2), new NumericRange(1, 4)));
   }
 
-  public static boolean check(NumericRange r1, NumericRange r2) {
-    double t0 = r1.getMax() - r2.getMin();
-    double t1 = r2.getMax() - r1.getMin();
+  public static boolean check(final NumericRange r1, final NumericRange r2) {
+    final double t0 = r1.getMax() - r2.getMin();
+    final double t1 = r2.getMax() - r1.getMin();
     return !(Math.abs(t0 - t1) > (t0 + t1));
   }
 }

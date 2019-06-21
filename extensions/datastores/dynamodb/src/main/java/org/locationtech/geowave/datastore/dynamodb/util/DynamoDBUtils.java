@@ -8,12 +8,12 @@
  */
 package org.locationtech.geowave.datastore.dynamodb.util;
 
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.util.Base64;
 import java.io.Closeable;
 import java.util.Arrays;
 import java.util.Map;
 import org.locationtech.geowave.datastore.dynamodb.operations.DynamoDBOperations;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.util.Base64;
 
 public class DynamoDBUtils {
   public static class NoopClosableIteratorWrapper implements Closeable {

@@ -16,8 +16,7 @@ import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 
 public class MemoryFactoryHelper implements StoreFactoryHelper {
   // this operations cache is essential to re-using the same objects in memory
-  private static final Map<String, DataStoreOperations> OPERATIONS_CACHE =
-      new HashMap<String, DataStoreOperations>();
+  private static final Map<String, DataStoreOperations> OPERATIONS_CACHE = new HashMap<>();
 
   /**
    * Return the default options instance. This is actually a method that should be implemented by

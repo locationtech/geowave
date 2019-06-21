@@ -26,14 +26,14 @@ public enum LineageRelationType {
   private String value;
 
   LineageRelationType() {
-    this.value = LineageRelationType.values()[0].toString();
+    value = LineageRelationType.values()[0].toString();
   }
 
   LineageRelationType(final String value) {
     this.value = value;
   }
 
-  public static LineageRelationType fromString(String value) {
+  public static LineageRelationType fromString(final String value) {
     for (final LineageRelationType item : LineageRelationType.values()) {
       if (item.toString().equals(value)) {
         return item;

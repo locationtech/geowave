@@ -24,7 +24,7 @@ public class GeoToolsVectorDataStoreIngestFormat implements
     IngestFormatPluginProviderSpi<Object, SimpleFeature> {
   @Override
   public GeoWaveAvroFormatPlugin<Object, SimpleFeature> createAvroFormatPlugin(
-      IngestFormatOptions options) {
+      final IngestFormatOptions options) {
     // unsupported right now
     throw new UnsupportedOperationException(
         "GeoTools vector files cannot be ingested using intermediate avro files");
@@ -32,15 +32,15 @@ public class GeoToolsVectorDataStoreIngestFormat implements
 
   @Override
   public IngestFromHdfsPlugin<Object, SimpleFeature> createIngestFromHdfsPlugin(
-      IngestFormatOptions options) {
+      final IngestFormatOptions options) {
     // unsupported right now
     throw new UnsupportedOperationException("GeoTools vector files cannot be ingested from HDFS");
   }
 
   @Override
   public LocalFileIngestPlugin<SimpleFeature> createLocalFileIngestPlugin(
-      IngestFormatOptions options) {
-    GeoToolsVectorDataOptions vectorDataOptions = (GeoToolsVectorDataOptions) options;
+      final IngestFormatOptions options) {
+    final GeoToolsVectorDataOptions vectorDataOptions = (GeoToolsVectorDataOptions) options;
     return new GeoToolsVectorDataStoreIngestPlugin(
         new DateFieldRetypingPlugin(vectorDataOptions.getDateFieldOptionProvider()),
         vectorDataOptions.getCqlFilterOptionProvider(),

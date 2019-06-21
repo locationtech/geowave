@@ -26,7 +26,7 @@ public class GeoWavePluginConfigTest {
   @Test
   public void test() throws GeoWavePluginException, URISyntaxException {
     final List<Param> params = GeoWavePluginConfig.getPluginParams(new MemoryStoreFactoryFamily());
-    final HashMap<String, Serializable> paramValues = new HashMap<String, Serializable>();
+    final HashMap<String, Serializable> paramValues = new HashMap<>();
     for (final Param param : params) {
       if (param.getName().equals(GeoWavePluginConfig.LOCK_MGT_KEY)) {
         final List<String> options = (List<String>) param.metadata.get(Parameter.OPTIONS);

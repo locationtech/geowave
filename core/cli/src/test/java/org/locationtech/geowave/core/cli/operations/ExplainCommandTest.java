@@ -8,7 +8,7 @@
  */
 package org.locationtech.geowave.core.cli.operations;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.locationtech.geowave.core.cli.parser.CommandLineOperationParams;
 import org.locationtech.geowave.core.cli.parser.OperationParser;
@@ -18,12 +18,12 @@ public class ExplainCommandTest {
 
   @Test
   public void testPrepare() {
-    String[] args = {"explain"};
-    OperationRegistry registry = OperationRegistry.getInstance();
-    OperationParser parser = new OperationParser(registry);
-    CommandLineOperationParams params = parser.parse(GeowaveTopLevelSection.class, args);
+    final String[] args = {"explain"};
+    final OperationRegistry registry = OperationRegistry.getInstance();
+    final OperationParser parser = new OperationParser(registry);
+    final CommandLineOperationParams params = parser.parse(GeowaveTopLevelSection.class, args);
 
-    ExplainCommand expcommand = new ExplainCommand();
+    final ExplainCommand expcommand = new ExplainCommand();
     expcommand.prepare(params);
     assertEquals(false, params.isValidate());
     assertEquals(true, params.isAllowUnknown());

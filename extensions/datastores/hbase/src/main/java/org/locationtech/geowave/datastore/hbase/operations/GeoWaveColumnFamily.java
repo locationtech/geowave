@@ -19,9 +19,9 @@ public interface GeoWaveColumnFamily {
   }
 
   public static class StringColumnFamily implements GeoWaveColumnFamily {
-    private String columnFamily;
+    private final String columnFamily;
 
-    public StringColumnFamily(String columnFamily) {
+    public StringColumnFamily(final String columnFamily) {
       this.columnFamily = columnFamily;
     }
 
@@ -34,24 +34,29 @@ public interface GeoWaveColumnFamily {
     public int hashCode() {
       final int prime = 31;
       int result = 1;
-      result = prime * result + ((columnFamily == null) ? 0 : columnFamily.hashCode());
+      result = (prime * result) + ((columnFamily == null) ? 0 : columnFamily.hashCode());
       return result;
     }
 
     @Override
-    public boolean equals(Object obj) {
-      if (this == obj)
+    public boolean equals(final Object obj) {
+      if (this == obj) {
         return true;
-      if (obj == null)
+      }
+      if (obj == null) {
         return false;
-      if (getClass() != obj.getClass())
+      }
+      if (getClass() != obj.getClass()) {
         return false;
-      StringColumnFamily other = (StringColumnFamily) obj;
+      }
+      final StringColumnFamily other = (StringColumnFamily) obj;
       if (columnFamily == null) {
-        if (other.columnFamily != null)
+        if (other.columnFamily != null) {
           return false;
-      } else if (!columnFamily.equals(other.columnFamily))
+        }
+      } else if (!columnFamily.equals(other.columnFamily)) {
         return false;
+      }
       return true;
     }
   }
@@ -67,16 +72,16 @@ public interface GeoWaveColumnFamily {
     private StringColumnFamilyFactory() {}
 
     @Override
-    public GeoWaveColumnFamily fromColumnDescriptor(HColumnDescriptor column) {
+    public GeoWaveColumnFamily fromColumnDescriptor(final HColumnDescriptor column) {
 
       return new StringColumnFamily(column.getNameAsString());
     }
   }
 
   public static class ByteArrayColumnFamily implements GeoWaveColumnFamily {
-    private byte[] columnFamily;
+    private final byte[] columnFamily;
 
-    public ByteArrayColumnFamily(byte[] columnFamily) {
+    public ByteArrayColumnFamily(final byte[] columnFamily) {
       this.columnFamily = columnFamily;
     }
 
@@ -89,21 +94,25 @@ public interface GeoWaveColumnFamily {
     public int hashCode() {
       final int prime = 31;
       int result = 1;
-      result = prime * result + Arrays.hashCode(columnFamily);
+      result = (prime * result) + Arrays.hashCode(columnFamily);
       return result;
     }
 
     @Override
-    public boolean equals(Object obj) {
-      if (this == obj)
+    public boolean equals(final Object obj) {
+      if (this == obj) {
         return true;
-      if (obj == null)
+      }
+      if (obj == null) {
         return false;
-      if (getClass() != obj.getClass())
+      }
+      if (getClass() != obj.getClass()) {
         return false;
-      ByteArrayColumnFamily other = (ByteArrayColumnFamily) obj;
-      if (!Arrays.equals(columnFamily, other.columnFamily))
+      }
+      final ByteArrayColumnFamily other = (ByteArrayColumnFamily) obj;
+      if (!Arrays.equals(columnFamily, other.columnFamily)) {
         return false;
+      }
       return true;
     }
   }
@@ -119,7 +128,7 @@ public interface GeoWaveColumnFamily {
     private ByteArrayColumnFamilyFactory() {}
 
     @Override
-    public GeoWaveColumnFamily fromColumnDescriptor(HColumnDescriptor column) {
+    public GeoWaveColumnFamily fromColumnDescriptor(final HColumnDescriptor column) {
 
       return new ByteArrayColumnFamily(column.getName());
     }

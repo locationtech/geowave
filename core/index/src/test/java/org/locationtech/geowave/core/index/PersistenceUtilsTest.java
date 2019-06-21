@@ -26,14 +26,14 @@ public class PersistenceUtilsTest {
     }
 
     @Override
-    public void fromBinary(byte[] bytes) {
+    public void fromBinary(final byte[] bytes) {
       Assert.assertTrue(Arrays.equals(bytes, new byte[] {1, 2, 3}));
     }
   }
 
   @Test
   public void test() {
-    APersistable persistable = new APersistable();
+    final APersistable persistable = new APersistable();
     Assert.assertTrue(
         PersistenceUtils.fromBinaryAsList(
             PersistenceUtils.toBinary(new ArrayList<Persistable>())).isEmpty());

@@ -13,6 +13,11 @@ import org.locationtech.jts.geom.MultiLineString;
 /** Created by jwileczek on 7/20/18. */
 public class MultiLineStringUDT extends AbstractGeometryUDT<MultiLineString> {
 
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+
   @Override
   public Class<MultiLineString> userClass() {
     return MultiLineString.class;

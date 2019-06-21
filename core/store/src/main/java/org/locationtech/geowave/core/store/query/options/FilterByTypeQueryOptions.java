@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.store.query.options;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 
@@ -65,11 +66,11 @@ public class FilterByTypeQueryOptions<T> implements DataTypeQueryOptions<T> {
   @Override
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
-    final byte[] typeNamesBytes = new byte[VarintUtils.readUnsignedInt(buf)];
-    if (typeNamesBytes.length <= 0) {
+    final int typeNamesBytesLength = VarintUtils.readUnsignedInt(buf);
+    if (typeNamesBytesLength <= 0) {
       typeNames = new String[0];
     } else {
-      buf.get(typeNamesBytes);
+      final byte[] typeNamesBytes = ByteArrayUtils.safeRead(buf, typeNamesBytesLength);
       typeNames = StringUtils.stringsFromBinary(typeNamesBytes);
     }
     final byte[] fieldNamesBytes = new byte[buf.remaining()];

@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.datastore.hbase.coprocessors;
 
-import com.google.common.collect.ImmutableSet;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,6 +37,7 @@ import org.locationtech.geowave.datastore.hbase.server.ServerOpRegionScannerWrap
 import org.locationtech.geowave.datastore.hbase.server.ServerSideOperationStore;
 import org.locationtech.geowave.datastore.hbase.server.ServerSideOperationUtils;
 import org.locationtech.geowave.datastore.hbase.util.HBaseUtils;
+import com.google.common.collect.ImmutableSet;
 
 public class ServerSideOperationsObserver extends BaseRegionObserver {
 

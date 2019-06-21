@@ -65,7 +65,7 @@ public class HBaseStoreTestEnvironment extends StoreTestEnvironment {
 
   @Override
   protected void initOptions(final StoreFactoryOptions options) {
-    HBaseRequiredOptions hbaseRequiredOptions = (HBaseRequiredOptions) options;
+    final HBaseRequiredOptions hbaseRequiredOptions = (HBaseRequiredOptions) options;
     hbaseRequiredOptions.setZookeeper(zookeeper);
   }
 
@@ -87,8 +87,8 @@ public class HBaseStoreTestEnvironment extends StoreTestEnvironment {
         }
       }
 
-      ClassLoader prevCl = Thread.currentThread().getContextClassLoader();
-      ClassLoader hbaseMiniClusterCl = HBaseMiniClusterClassLoader.getInstance(prevCl);
+      final ClassLoader prevCl = Thread.currentThread().getContextClassLoader();
+      final ClassLoader hbaseMiniClusterCl = HBaseMiniClusterClassLoader.getInstance(prevCl);
       Thread.currentThread().setContextClassLoader(hbaseMiniClusterCl);
       if (!TestUtils.isSet(System.getProperty(ZookeeperTestEnvironment.ZK_PROPERTY_NAME))) {
         try {
@@ -122,7 +122,7 @@ public class HBaseStoreTestEnvironment extends StoreTestEnvironment {
 
             // Install the VisibilityController as a system
             // processor
-            VisibilityTestUtil.enableVisiblityLabels((Configuration) conf);
+            VisibilityTestUtil.enableVisiblityLabels(conf);
           }
 
           // HBaseTestingUtility must be loaded dynamically by the

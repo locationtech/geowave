@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.store.cli.remote.options;
 
-import com.beust.jcommander.ParametersDelegate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +16,7 @@ import java.util.Map.Entry;
 import org.apache.commons.lang3.StringUtils;
 import org.locationtech.geowave.core.cli.api.DefaultPluginOptions;
 import org.locationtech.geowave.core.cli.api.PluginOptions;
+import com.beust.jcommander.ParametersDelegate;
 
 /** Index group contains a list of indexes that are created from existing index configurations. */
 public class IndexGroupPluginOptions extends DefaultPluginOptions implements PluginOptions {
@@ -25,18 +25,17 @@ public class IndexGroupPluginOptions extends DefaultPluginOptions implements Plu
 
   /** This is indexed by index name, instead of what you'd expect, which would be index type. */
   @ParametersDelegate
-  private Map<String, IndexPluginOptions> dimensionalityPlugins =
-      new HashMap<String, IndexPluginOptions>();
+  private Map<String, IndexPluginOptions> dimensionalityPlugins = new HashMap<>();
 
   public IndexGroupPluginOptions() {}
 
   /** The name of this index group. */
   @Override
-  public void selectPlugin(String qualifier) {
+  public void selectPlugin(final String qualifier) {
     // This is specified as so: name=type,name=type,...
-    if (qualifier != null && qualifier.length() > 0) {
-      for (String name : qualifier.split(",")) {
-        String[] parts = name.split("=");
+    if ((qualifier != null) && (qualifier.length() > 0)) {
+      for (final String name : qualifier.split(",")) {
+        final String[] parts = name.split("=");
         addIndex(parts[0].trim(), parts[1].trim());
       }
     }
@@ -44,8 +43,8 @@ public class IndexGroupPluginOptions extends DefaultPluginOptions implements Plu
 
   @Override
   public String getType() {
-    List<String> typeString = new ArrayList<String>();
-    for (Entry<String, IndexPluginOptions> entry : getDimensionalityPlugins().entrySet()) {
+    final List<String> typeString = new ArrayList<>();
+    for (final Entry<String, IndexPluginOptions> entry : getDimensionalityPlugins().entrySet()) {
       typeString.add(String.format("%s=%s", entry.getKey(), entry.getValue().getType()));
     }
     if (typeString.isEmpty()) {
@@ -54,9 +53,9 @@ public class IndexGroupPluginOptions extends DefaultPluginOptions implements Plu
     return StringUtils.join(typeString, ",");
   }
 
-  public void addIndex(String name, String type) {
-    if (name != null && type != null) {
-      IndexPluginOptions indexOptions = new IndexPluginOptions();
+  public void addIndex(final String name, final String type) {
+    if ((name != null) && (type != null)) {
+      final IndexPluginOptions indexOptions = new IndexPluginOptions();
       indexOptions.selectPlugin(type);
       getDimensionalityPlugins().put(name, indexOptions);
     }
@@ -66,7 +65,7 @@ public class IndexGroupPluginOptions extends DefaultPluginOptions implements Plu
     return dimensionalityPlugins;
   }
 
-  public static String getIndexGroupNamespace(String groupName) {
+  public static String getIndexGroupNamespace(final String groupName) {
     return String.format("%s.%s", INDEXGROUP_PROPERTY_NAMESPACE, groupName);
   }
 }

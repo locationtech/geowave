@@ -8,13 +8,11 @@
  */
 package org.locationtech.geowave.core.store.data;
 
-import com.google.common.math.DoubleMath;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.apache.commons.lang3.ArrayUtils;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
@@ -25,6 +23,7 @@ import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
+import com.google.common.math.DoubleMath;
 
 /**
  * This class models all of the necessary information for persisting data in Accumulo (following the

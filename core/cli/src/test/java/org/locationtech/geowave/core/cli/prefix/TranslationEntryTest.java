@@ -8,10 +8,7 @@
  */
 package org.locationtech.geowave.core.cli.prefix;
 
-import static org.junit.Assert.*;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameterized;
-import com.beust.jcommander.ParametersDelegate;
+import static org.junit.Assert.fail;
 import java.lang.reflect.AnnotatedElement;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,6 +17,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.geowave.core.cli.annotations.PrefixParameter;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.Parameterized;
+import com.beust.jcommander.ParametersDelegate;
 
 public class TranslationEntryTest {
 
@@ -42,22 +42,23 @@ public class TranslationEntryTest {
   public void setUp() {
     try {
 
-      Arguments args = new Arguments();
-      ArrayList<Parameterized> params = (ArrayList<Parameterized>) Parameterized.parseArg(args);
+      final Arguments args = new Arguments();
+      final ArrayList<Parameterized> params =
+          (ArrayList<Parameterized>) Parameterized.parseArg(args);
       if (params.size() == 0) {
         fail("Could not find parameter");
       }
 
       param = params.get(0);
 
-    } catch (SecurityException e) {
+    } catch (final SecurityException e) {
       // Should never trigger
       e.printStackTrace();
     }
     obj = 4;
     prefix = "prefix";
     aElement = Integer.class;
-    entry = new TranslationEntry(param, (Object) obj, prefix, aElement);
+    entry = new TranslationEntry(param, obj, prefix, aElement);
   }
 
   @Test

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
@@ -191,12 +191,10 @@ public class BasicSFCIndexStrategy implements NumericIndexStrategy {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     final int numDimensions = VarintUtils.readUnsignedInt(buf);
     baseDefinitions = new NumericDimensionDefinition[numDimensions];
-    final byte[] sfcBinary = new byte[VarintUtils.readUnsignedInt(buf)];
-    buf.get(sfcBinary);
+    final byte[] sfcBinary = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
     sfc = (SpaceFillingCurve) PersistenceUtils.fromBinary(sfcBinary);
     for (int i = 0; i < numDimensions; i++) {
-      final byte[] dim = new byte[VarintUtils.readUnsignedInt(buf)];
-      buf.get(dim);
+      final byte[] dim = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
       baseDefinitions[i] = (NumericDimensionDefinition) PersistenceUtils.fromBinary(dim);
     }
   }

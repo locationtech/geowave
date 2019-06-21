@@ -8,10 +8,14 @@
  */
 package org.locationtech.geowave.core.store.cli.remote.options;
 
-import com.beust.jcommander.Parameter;
 import java.io.Serializable;
+import com.beust.jcommander.Parameter;
 
 public class VisibilityOptions implements Serializable {
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
   @Parameter(
       names = {"-v", "--visibility"},
       description = "The visibility of the data ingested (optional; default is 'public')")
@@ -21,7 +25,7 @@ public class VisibilityOptions implements Serializable {
     return visibility;
   }
 
-  public void setVisibility(String visibility) {
+  public void setVisibility(final String visibility) {
     this.visibility = visibility;
   }
 }

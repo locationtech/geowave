@@ -16,8 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class AttributeTypes {
-  private static final Map<Class, AttributeType> AttributeDefinitionCache =
-      new HashMap<Class, AttributeType>();
+  private static final Map<Class, AttributeType> AttributeDefinitionCache = new HashMap<>();
   private static final Logger log = LoggerFactory.getLogger(AttributeTypes.class);
 
   static {
@@ -31,7 +30,7 @@ public class AttributeTypes {
     AttributeDefinitionCache.put(Geometry.class, new GeometryAttributeType());
   }
 
-  public static AttributeType getAttributeType(String imposm3TypeName) {
+  public static AttributeType getAttributeType(final String imposm3TypeName) {
     switch (imposm3TypeName) {
       case "id": {
         return AttributeDefinitionCache.get(Long.class);
@@ -78,7 +77,7 @@ public class AttributeTypes {
 
   private static class StringAttributeType implements AttributeType<String> {
     @Override
-    public String convert(Object source) {
+    public String convert(final Object source) {
       if (source == null) {
         return null;
       }
@@ -93,7 +92,7 @@ public class AttributeTypes {
 
   private static class DoubleAttributeType implements AttributeType<Double> {
     @Override
-    public Double convert(Object source) {
+    public Double convert(final Object source) {
       if (source == null) {
         return null;
       }
@@ -111,7 +110,7 @@ public class AttributeTypes {
 
   private static class IntegerAttributeType implements AttributeType<Integer> {
     @Override
-    public Integer convert(Object source) {
+    public Integer convert(final Object source) {
       if (source == null) {
         return null;
       }
@@ -129,7 +128,7 @@ public class AttributeTypes {
 
   private static class LongAttributeType implements AttributeType<Long> {
     @Override
-    public Long convert(Object source) {
+    public Long convert(final Object source) {
       if (source == null) {
         return null;
       }
@@ -148,7 +147,7 @@ public class AttributeTypes {
   private static class GeometryAttributeType implements AttributeType<Geometry> {
 
     @Override
-    public Geometry convert(Object source) {
+    public Geometry convert(final Object source) {
       if (source instanceof Geometry) {
         return (Geometry) source;
       } else {
@@ -164,7 +163,7 @@ public class AttributeTypes {
 
   private static class ShortAttributeType implements AttributeType<Short> {
     @Override
-    public Short convert(Object source) {
+    public Short convert(final Object source) {
       if (source == null) {
         return null;
       }
@@ -182,14 +181,14 @@ public class AttributeTypes {
 
   private static class BooleanAttributeType implements AttributeType<Boolean> {
     @Override
-    public Boolean convert(Object source) {
+    public Boolean convert(final Object source) {
       if (source == null) {
         return false;
       }
       if (source instanceof Boolean) {
         return (Boolean) source;
       }
-      String val = String.valueOf(source).toLowerCase(Locale.ENGLISH).trim();
+      final String val = String.valueOf(source).toLowerCase(Locale.ENGLISH).trim();
 
       if (val.equals(
           "1") || val.equals("true") || val.equals("t") || val.equals("y") || val.equals("yes")) {

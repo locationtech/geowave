@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.cli.osm.operations;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,6 +24,10 @@ import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "stage", parentOperation = OSMSection.class)
 @Parameters(commandDescription = "Stage OSM data to HDFS")
@@ -49,12 +49,12 @@ public class StageOSMToHDFSCommand extends DefaultOperation implements Command {
     }
 
     final String inputPath = parameters.get(0);
-    String basePath = parameters.get(1);
+    final String basePath = parameters.get(1);
 
     // Config file
-    File configFile = getGeoWaveConfigFile(params);
-    Properties configProperties = ConfigOptions.loadProperties(configFile);
-    String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
+    final File configFile = getGeoWaveConfigFile(params);
+    final Properties configProperties = ConfigOptions.loadProperties(configFile);
+    final String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
 
     // These are set as main parameter arguments, to keep consistency with
     // GeoWave.

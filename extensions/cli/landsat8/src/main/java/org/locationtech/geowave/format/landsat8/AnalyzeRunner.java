@@ -77,11 +77,10 @@ public class AnalyzeRunner {
   }
 
   protected static class AnalysisInfo {
-    private final TreeMap<String, Float> bandIdToMbMap = new TreeMap<String, Float>();
-    private final TreeMap<String, SimpleFeature> entityBandIdToSimpleFeatureMap =
-        new TreeMap<String, SimpleFeature>();
+    private final TreeMap<String, Float> bandIdToMbMap = new TreeMap<>();
+    private final TreeMap<String, SimpleFeature> entityBandIdToSimpleFeatureMap = new TreeMap<>();
     private int sceneCount = 0;
-    private final Set<WRS2Key> wrs2Keys = new HashSet<WRS2Key>();
+    private final Set<WRS2Key> wrs2Keys = new HashSet<>();
     private int minRow = Integer.MAX_VALUE;
     private int minPath = Integer.MAX_VALUE;
     private int maxRow = Integer.MIN_VALUE;
@@ -95,7 +94,7 @@ public class AnalyzeRunner {
     private float totalCloudCover = 0f;
     private float minCloudCover = Float.MAX_VALUE;
     private float maxCloudCover = -Float.MAX_VALUE;
-    private final Map<String, Integer> processingLevelCounts = new HashMap<String, Integer>();
+    private final Map<String, Integer> processingLevelCounts = new HashMap<>();
 
     private void nextScene(final SimpleFeature currentBand) {
       printSceneInfo();

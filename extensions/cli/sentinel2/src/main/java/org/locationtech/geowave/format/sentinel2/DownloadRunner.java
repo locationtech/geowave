@@ -39,7 +39,7 @@ public class DownloadRunner extends AnalyzeRunner {
     final String userIdent = downloadOptions.getUserIdent();
     final String password = downloadOptions.getPassword();
 
-    Sentinel2ImageryProvider provider = Sentinel2ImageryProvider.getProvider(providerName);
+    final Sentinel2ImageryProvider provider = Sentinel2ImageryProvider.getProvider(providerName);
     if (provider == null) {
       throw new RuntimeException("Unable to find '" + providerName + "' Sentinel2 provider");
     }
@@ -61,7 +61,7 @@ public class DownloadRunner extends AnalyzeRunner {
     // Download files of scene
     try {
       provider.downloadScene(firstBandOfScene, workspaceDir, userIdent, password);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       LOGGER.error(
           "Unable to download scene '"
               + firstBandOfScene.getAttribute(SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME)

@@ -27,7 +27,7 @@ public class DateFieldRetypingPlugin implements RetypingVectorDataPlugin {
         dateFieldOptionProvider.getFieldToFormatMap();
 
     RetypingVectorDataSource retypingSource = null;
-    if (fieldNameToTimestampFormat != null && !fieldNameToTimestampFormat.isEmpty()) {
+    if ((fieldNameToTimestampFormat != null) && !fieldNameToTimestampFormat.isEmpty()) {
       retypingSource = new DateFieldRetypingSource(type, fieldNameToTimestampFormat);
     }
     return retypingSource;

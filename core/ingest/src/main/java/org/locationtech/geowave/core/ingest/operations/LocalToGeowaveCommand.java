@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.core.ingest.operations;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +24,10 @@ import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
 import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "localToGW", parentOperation = IngestSection.class)
 @Parameters(
@@ -35,7 +35,7 @@ import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
 public class LocalToGeowaveCommand extends ServiceEnabledCommand<Void> {
 
   @Parameter(description = "<file or directory> <storename> <comma delimited index/group list>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate
   private VisibilityOptions ingestOptions = new VisibilityOptions();
@@ -85,7 +85,7 @@ public class LocalToGeowaveCommand extends ServiceEnabledCommand<Void> {
       final String fileOrDirectory,
       final String storeName,
       final String commaDelimitedIndexes) {
-    parameters = new ArrayList<String>();
+    parameters = new ArrayList<>();
     parameters.add(fileOrDirectory);
     parameters.add(storeName);
     parameters.add(commaDelimitedIndexes);

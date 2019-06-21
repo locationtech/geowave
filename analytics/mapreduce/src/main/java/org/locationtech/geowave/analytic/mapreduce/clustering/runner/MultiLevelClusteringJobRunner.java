@@ -61,7 +61,7 @@ public abstract class MultiLevelClusteringJobRunner extends MapReduceJobControll
 
   @Override
   public Collection<ParameterEnum<?>> getParameters() {
-    final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
+    final Set<ParameterEnum<?>> params = new HashSet<>();
     params.addAll(jobExtractRunner.getParameters());
     params.addAll(hullRunner.getParameters());
     params.addAll(getClusteringRunner().getParameters());
@@ -186,8 +186,9 @@ public abstract class MultiLevelClusteringJobRunner extends MapReduceJobControll
       }
       return status;
     } finally {
-      if (fs != null)
+      if (fs != null) {
         fs.close();
+      }
     }
   }
 }

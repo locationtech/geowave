@@ -10,11 +10,16 @@ package org.locationtech.geowave.core.cli.exceptions;
 
 public class DuplicateEntryException extends Exception {
 
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+
   public DuplicateEntryException() {
     super();
   }
 
-  public DuplicateEntryException(String message) {
+  public DuplicateEntryException(final String message) {
     super(message);
   }
 }

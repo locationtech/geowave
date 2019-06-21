@@ -227,17 +227,9 @@ public class HBaseDistributableFilter extends FilterBase {
   }
 
   protected ReturnCode applyFilter(final GeoWaveKeyImpl rowKey) {
-
-    persistenceEncoding = null;
-
-    try {
-      persistenceEncoding = getPersistenceEncoding(rowKey, commonData, unreadData);
-
-      if (filterInternal(persistenceEncoding)) {
-        return ReturnCode.INCLUDE_AND_NEXT_COL;
-      }
-    } catch (final Exception e) {
-      LOGGER.error("Error applying distributed filter.", e);
+    persistenceEncoding = getPersistenceEncoding(rowKey, commonData, unreadData);
+    if (filterInternal(persistenceEncoding)) {
+      return ReturnCode.INCLUDE_AND_NEXT_COL;
     }
 
     return ReturnCode.SKIP;
@@ -321,7 +313,7 @@ public class HBaseDistributableFilter extends FilterBase {
 
   protected FlattenedUnreadData aggregateFieldData(
       final Cell cell,
-      final PersistentDataset<CommonIndexValue> commonData) {
+      final PersistentDataset<CommonIndexValue> commonData) throws IOException {
     final byte[] qualBuf = CellUtil.cloneQualifier(cell);
     final byte[] valBuf = CellUtil.cloneValue(cell);
 

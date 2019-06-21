@@ -20,6 +20,7 @@ import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilt
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.TWKBReader;
 import org.locationtech.geowave.core.geotime.util.TWKBWriter;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
@@ -341,11 +342,11 @@ public class ExplicitSpatialQuery extends BasicQueryByClass {
     compareOp = CompareOperation.values()[VarintUtils.readUnsignedInt(buf)];
     nonSpatialCompareOp = BasicQueryCompareOperation.values()[VarintUtils.readUnsignedInt(buf)];
 
-    final byte[] crsBinary = new byte[VarintUtils.readUnsignedInt(buf)];
-    final byte[] superBinary = new byte[VarintUtils.readUnsignedInt(buf)];
-    buf.get(crsBinary);
+    final int crsBinaryLength = VarintUtils.readUnsignedInt(buf);
+    final int superBinaryLength = VarintUtils.readUnsignedInt(buf);
+    final byte[] crsBinary = ByteArrayUtils.safeRead(buf, crsBinaryLength);
     crsCode = crsBinary.length > 0 ? StringUtils.stringFromBinary(crsBinary) : null;
-    buf.get(superBinary);
+    final byte[] superBinary = ByteArrayUtils.safeRead(buf, superBinaryLength);
     super.fromBinary(superBinary);
     final byte[] geometryBinary = new byte[buf.remaining()];
     buf.get(geometryBinary);

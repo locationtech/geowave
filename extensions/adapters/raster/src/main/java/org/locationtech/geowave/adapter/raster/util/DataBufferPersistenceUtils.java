@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.adapter.raster.util;
 
-import com.google.common.primitives.Doubles;
-import com.google.common.primitives.Floats;
-import com.google.common.primitives.Ints;
-import com.google.protobuf.ByteString;
 import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferDouble;
@@ -23,7 +19,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
-import me.lemire.integercompression.differential.IntegratedIntCompressor;
 import org.apache.commons.lang3.ArrayUtils;
 import org.locationtech.geowave.adapter.raster.protobuf.DataBufferProtos;
 import org.locationtech.geowave.adapter.raster.protobuf.DataBufferProtos.ByteDataBuffer;
@@ -33,6 +28,11 @@ import org.locationtech.geowave.adapter.raster.protobuf.DataBufferProtos.FloatAr
 import org.locationtech.geowave.adapter.raster.protobuf.DataBufferProtos.FloatDataBuffer;
 import org.locationtech.geowave.adapter.raster.protobuf.DataBufferProtos.SignedIntArray;
 import org.locationtech.geowave.adapter.raster.protobuf.DataBufferProtos.SignedIntDataBuffer;
+import com.google.common.primitives.Doubles;
+import com.google.common.primitives.Floats;
+import com.google.common.primitives.Ints;
+import com.google.protobuf.ByteString;
+import me.lemire.integercompression.differential.IntegratedIntCompressor;
 
 public class DataBufferPersistenceUtils {
   public static byte[] getDataBufferBinary(final DataBuffer dataBuffer) {
@@ -117,8 +117,10 @@ public class DataBufferPersistenceUtils {
     return bldr.build().toByteArray();
   }
 
-  private static void setBuilder(int[][] intBank, DataBufferProtos.DataBuffer.Builder bldr) {
-    IntegratedIntCompressor iic = new IntegratedIntCompressor();
+  private static void setBuilder(
+      final int[][] intBank,
+      final DataBufferProtos.DataBuffer.Builder bldr) {
+    final IntegratedIntCompressor iic = new IntegratedIntCompressor();
     final SignedIntDataBuffer.Builder intBldr = SignedIntDataBuffer.newBuilder();
     final Iterable<SignedIntArray> intIt = () -> new Iterator<SignedIntArray>() {
       private int index = 0;
@@ -131,7 +133,7 @@ public class DataBufferPersistenceUtils {
       @Override
       public SignedIntArray next() {
         final int[] internalArray = intBank[index++];
-        int[] compressed = iic.compress(internalArray);
+        final int[] compressed = iic.compress(internalArray);
         return SignedIntArray.newBuilder().addAllSamples(Ints.asList(compressed)).build();
       }
     };
@@ -142,14 +144,14 @@ public class DataBufferPersistenceUtils {
   public static DataBuffer getDataBuffer(final byte[] binary)
       throws IOException, ClassNotFoundException {
     // // Read serialized form from the stream.
-    DataBufferProtos.DataBuffer buffer = DataBufferProtos.DataBuffer.parseFrom(binary);
+    final DataBufferProtos.DataBuffer buffer = DataBufferProtos.DataBuffer.parseFrom(binary);
 
-    int[] offsets = ArrayUtils.toPrimitive(buffer.getOffsetsList().toArray(new Integer[] {}));
+    final int[] offsets = ArrayUtils.toPrimitive(buffer.getOffsetsList().toArray(new Integer[] {}));
     // Restore the transient DataBuffer.
     switch (buffer.getType()) {
       case DataBuffer.TYPE_BYTE:
         return new DataBufferByte(
-            (byte[][]) listToByte(buffer.getByteDb().getBanksList()),
+            listToByte(buffer.getByteDb().getBanksList()),
             buffer.getSize(),
             offsets);
       case DataBuffer.TYPE_SHORT:
@@ -183,48 +185,48 @@ public class DataBufferPersistenceUtils {
     }
   }
 
-  private static byte[][] listToByte(List<ByteString> list) {
-    byte[][] retVal = new byte[list.size()][];
+  private static byte[][] listToByte(final List<ByteString> list) {
+    final byte[][] retVal = new byte[list.size()][];
     for (int i = 0; i < list.size(); i++) {
       retVal[i] = list.get(i).toByteArray();
     }
     return retVal;
   }
 
-  private static float[][] listToFloat(List<FloatArray> list) {
-    float[][] retVal = new float[list.size()][];
+  private static float[][] listToFloat(final List<FloatArray> list) {
+    final float[][] retVal = new float[list.size()][];
     for (int i = 0; i < list.size(); i++) {
-      List<Float> internalList = list.get(i).getSamplesList();
+      final List<Float> internalList = list.get(i).getSamplesList();
       retVal[i] = ArrayUtils.toPrimitive(internalList.toArray(new Float[internalList.size()]));
     }
     return retVal;
   }
 
-  private static double[][] listToDouble(List<DoubleArray> list) {
-    double[][] retVal = new double[list.size()][];
+  private static double[][] listToDouble(final List<DoubleArray> list) {
+    final double[][] retVal = new double[list.size()][];
     for (int i = 0; i < list.size(); i++) {
-      List<Double> internalList = list.get(i).getSamplesList();
+      final List<Double> internalList = list.get(i).getSamplesList();
       retVal[i] = ArrayUtils.toPrimitive(internalList.toArray(new Double[internalList.size()]));
     }
     return retVal;
   }
 
-  private static int[][] listToInt(List<SignedIntArray> list) {
-    IntegratedIntCompressor iic = new IntegratedIntCompressor();
-    int[][] retVal = new int[list.size()][];
+  private static int[][] listToInt(final List<SignedIntArray> list) {
+    final IntegratedIntCompressor iic = new IntegratedIntCompressor();
+    final int[][] retVal = new int[list.size()][];
     for (int i = 0; i < list.size(); i++) {
-      List<Integer> internalList = list.get(i).getSamplesList();
+      final List<Integer> internalList = list.get(i).getSamplesList();
       retVal[i] = iic.uncompress(integerListToPrimitiveArray(internalList));
     }
     return retVal;
   }
 
-  protected static int[] integerListToPrimitiveArray(List<Integer> internalList) {
+  protected static int[] integerListToPrimitiveArray(final List<Integer> internalList) {
     return ArrayUtils.toPrimitive(internalList.toArray(new Integer[internalList.size()]));
   }
 
-  private static int[][] shortToInt(short[][] shortBank) {
-    int[][] intBank = new int[shortBank.length][];
+  private static int[][] shortToInt(final short[][] shortBank) {
+    final int[][] intBank = new int[shortBank.length][];
     for (int a = 0; a < shortBank.length; a++) {
       intBank[a] = new int[shortBank[a].length];
       for (int i = 0; i < shortBank[a].length; i++) {
@@ -235,8 +237,8 @@ public class DataBufferPersistenceUtils {
     return intBank;
   }
 
-  private static short[][] intToShort(int[][] intBank) {
-    short[][] shortBank = new short[intBank.length][];
+  private static short[][] intToShort(final int[][] intBank) {
+    final short[][] shortBank = new short[intBank.length][];
     for (int a = 0; a < intBank.length; a++) {
       shortBank[a] = new short[intBank[a].length];
       for (int i = 0; i < intBank[a].length; i++) {

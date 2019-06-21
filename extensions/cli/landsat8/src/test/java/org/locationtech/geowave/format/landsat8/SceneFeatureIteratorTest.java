@@ -10,7 +10,8 @@ package org.locationtech.geowave.format.landsat8;
 
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.Every.everyItem;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,36 +31,36 @@ public class SceneFeatureIteratorTest {
   private Matcher<SimpleFeature> hasProperties() {
     return new BaseMatcher<SimpleFeature>() {
       @Override
-      public boolean matches(Object item) {
-        SimpleFeature feature = (SimpleFeature) item;
+      public boolean matches(final Object item) {
+        final SimpleFeature feature = (SimpleFeature) item;
 
-        return feature.getProperty("entityId") != null
-            && feature.getProperty("acquisitionDate") != null
-            && feature.getProperty("cloudCover") != null
-            && feature.getProperty("processingLevel") != null
-            && feature.getProperty("path") != null
-            && feature.getProperty("row") != null
-            && feature.getProperty("sceneDownloadUrl") != null;
+        return (feature.getProperty("entityId") != null)
+            && (feature.getProperty("acquisitionDate") != null)
+            && (feature.getProperty("cloudCover") != null)
+            && (feature.getProperty("processingLevel") != null)
+            && (feature.getProperty("path") != null)
+            && (feature.getProperty("row") != null)
+            && (feature.getProperty("sceneDownloadUrl") != null);
       }
 
       @Override
-      public void describeTo(Description description) {
+      public void describeTo(final Description description) {
         description.appendText(
             "feature should have properties {entityId, acquisitionDate, cloudCover, processingLevel, path, row, sceneDownloadUrl}");
       }
     };
   }
 
-  private Matcher<SimpleFeature> inBounds(BoundingBox bounds) {
+  private Matcher<SimpleFeature> inBounds(final BoundingBox bounds) {
     return new BaseMatcher<SimpleFeature>() {
       @Override
-      public boolean matches(Object item) {
-        SimpleFeature feature = (SimpleFeature) item;
+      public boolean matches(final Object item) {
+        final SimpleFeature feature = (SimpleFeature) item;
         return feature.getBounds().intersects(bounds);
       }
 
       @Override
-      public void describeTo(Description description) {
+      public void describeTo(final Description description) {
         description.appendText("feature should be in bounds " + bounds);
       }
     };
@@ -67,14 +68,14 @@ public class SceneFeatureIteratorTest {
 
   @Test
   public void testIterate() throws IOException, CQLException {
-    boolean onlyScenesSinceLastRun = false;
-    boolean useCachedScenes = true;
-    boolean nBestScenesByPathRow = false;
-    int nBestScenes = 1;
-    Filter cqlFilter = CQL.toFilter("BBOX(shape,-76.6,42.34,-76.4,42.54) and band='BQA'");
-    String workspaceDir = Tests.WORKSPACE_DIR;
+    final boolean onlyScenesSinceLastRun = false;
+    final boolean useCachedScenes = true;
+    final boolean nBestScenesByPathRow = false;
+    final int nBestScenes = 1;
+    final Filter cqlFilter = CQL.toFilter("BBOX(shape,-76.6,42.34,-76.4,42.54) and band='BQA'");
+    final String workspaceDir = Tests.WORKSPACE_DIR;
 
-    List<SimpleFeature> features = new ArrayList<>();
+    final List<SimpleFeature> features = new ArrayList<>();
     try (SceneFeatureIterator iterator =
         new SceneFeatureIterator(
             onlyScenesSinceLastRun,

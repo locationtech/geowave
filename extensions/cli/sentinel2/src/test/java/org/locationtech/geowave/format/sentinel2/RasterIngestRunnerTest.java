@@ -8,9 +8,7 @@
  */
 package org.locationtech.geowave.format.sentinel2;
 
-import static org.junit.Assert.*;
-import com.beust.jcommander.ParameterException;
-import it.geosolutions.jaiext.JAIExt;
+import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -29,6 +27,8 @@ import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
+import com.beust.jcommander.ParameterException;
+import it.geosolutions.jaiext.JAIExt;
 
 public class RasterIngestRunnerTest {
   @BeforeClass
@@ -50,33 +50,34 @@ public class RasterIngestRunnerTest {
 
   @Test
   public void testIngestProviders() throws Exception {
-    for (Sentinel2ImageryProvider provider : Sentinel2ImageryProvider.getProviders()) {
+    for (final Sentinel2ImageryProvider provider : Sentinel2ImageryProvider.getProviders()) {
       testIngest(provider.providerName());
     }
   }
 
-  public void testIngest(String providerName) throws Exception {
+  public void testIngest(final String providerName) throws Exception {
     JAIExt.initJAIEXT();
 
-    if (providerName == "AWS" && !Tests.jp2ecwPluginIsWorking()) {
+    if ((providerName == "AWS") && !Tests.jp2ecwPluginIsWorking()) {
       System.out.println(
           "Unable to ingest Sentinel2 products with JP2 files, JP2ECW plugin is not working.");
       return;
     }
 
-    Sentinel2ImageryProvider provider = Sentinel2ImageryProvider.getProvider(providerName);
+    final Sentinel2ImageryProvider provider = Sentinel2ImageryProvider.getProvider(providerName);
     if (provider == null) {
       throw new RuntimeException("Unable to find '" + providerName + "' Sentinel2 provider");
     }
 
-    if (!Tests.authenticationSettingsAreValid(providerName))
+    if (!Tests.authenticationSettingsAreValid(providerName)) {
       return;
+    }
 
-    Date[] timePeriodSettings = Tests.timePeriodSettings(providerName);
-    Date startDate = timePeriodSettings[0];
-    Date endDate = timePeriodSettings[1];
+    final Date[] timePeriodSettings = Tests.timePeriodSettings(providerName);
+    final Date startDate = timePeriodSettings[0];
+    final Date endDate = timePeriodSettings[1];
 
-    Sentinel2BasicCommandLineOptions analyzeOptions = new Sentinel2BasicCommandLineOptions();
+    final Sentinel2BasicCommandLineOptions analyzeOptions = new Sentinel2BasicCommandLineOptions();
     analyzeOptions.setWorkspaceDir(Tests.WORKSPACE_DIR);
     analyzeOptions.setProviderName(providerName);
     analyzeOptions.setCollection(provider.collections()[0]);
@@ -86,30 +87,31 @@ public class RasterIngestRunnerTest {
     analyzeOptions.setCqlFilter(
         "BBOX(shape,-1.8274,42.3253,-1.6256,42.4735) AND location='T30TXN' AND (band='B4' OR band='B8')");
 
-    String[] settings = Tests.authenticationSettings(providerName);
-    String iden = settings[0];
-    String pass = settings[1];
+    final String[] settings = Tests.authenticationSettings(providerName);
+    final String iden = settings[0];
+    final String pass = settings[1];
 
-    Sentinel2DownloadCommandLineOptions downloadOptions = new Sentinel2DownloadCommandLineOptions();
+    final Sentinel2DownloadCommandLineOptions downloadOptions =
+        new Sentinel2DownloadCommandLineOptions();
     downloadOptions.setOverwriteIfExists(false);
     downloadOptions.setUserIdent(iden);
     downloadOptions.setPassword(pass);
 
-    Sentinel2RasterIngestCommandLineOptions ingestOptions =
+    final Sentinel2RasterIngestCommandLineOptions ingestOptions =
         new Sentinel2RasterIngestCommandLineOptions();
     ingestOptions.setRetainImages(true);
     ingestOptions.setCreatePyramid(false);
     ingestOptions.setScale(10);
     ingestOptions.setCreateHistogram(true);
 
-    RasterIngestRunner runner =
+    final RasterIngestRunner runner =
         new RasterIngestRunner(
             analyzeOptions,
             downloadOptions,
             ingestOptions,
             Arrays.asList("memorystore", "spatialindex"));
 
-    ManualOperationParams params = new ManualOperationParams();
+    final ManualOperationParams params = new ManualOperationParams();
     params.getContext().put(
         ConfigOptions.PROPERTIES_FILE_CONTEXT,
         new File(
@@ -126,15 +128,15 @@ public class RasterIngestRunnerTest {
     // Not sure what assertions can be made about the indexes.
   }
 
-  private DataStore getStore(OperationParams params) {
-    File configFile = (File) params.getContext().get(ConfigOptions.PROPERTIES_FILE_CONTEXT);
+  private DataStore getStore(final OperationParams params) {
+    final File configFile = (File) params.getContext().get(ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
-    StoreLoader inputStoreLoader = new StoreLoader("memorystore");
+    final StoreLoader inputStoreLoader = new StoreLoader("memorystore");
     if (!inputStoreLoader.loadFromConfig(configFile)) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
 
-    DataStorePluginOptions storeOptions = inputStoreLoader.getDataStorePlugin();
+    final DataStorePluginOptions storeOptions = inputStoreLoader.getDataStorePlugin();
     return storeOptions.createDataStore();
   }
 }

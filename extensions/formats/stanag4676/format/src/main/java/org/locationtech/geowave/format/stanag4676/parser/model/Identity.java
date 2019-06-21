@@ -57,14 +57,14 @@ public enum Identity {
   private String value;
 
   Identity() {
-    this.value = Identity.values()[0].toString();
+    value = Identity.values()[0].toString();
   }
 
   Identity(final String value) {
     this.value = value;
   }
 
-  public static Identity fromString(String value) {
+  public static Identity fromString(final String value) {
     for (final Identity item : Identity.values()) {
       if (item.toString().equals(value)) {
         return item;

@@ -44,7 +44,7 @@ public class FullAsyncPersistenceEncoding extends IndexedAdapterPersistenceEncod
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see
    * org.locationtech.geowave.core.store.adapter.AsyncPersistenceEncoding#getFieldValuesFuture()
    */

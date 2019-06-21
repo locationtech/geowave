@@ -58,8 +58,7 @@ public class MemoryAdapterStore implements TransientAdapterStore, Serializable {
 
   @Override
   public CloseableIterator<DataTypeAdapter<?>> getAdapters() {
-    return new CloseableIterator.Wrapper<DataTypeAdapter<?>>(
-        new ArrayList<DataTypeAdapter<?>>(adapterMap.values()).iterator());
+    return new CloseableIterator.Wrapper<>(new ArrayList<>(adapterMap.values()).iterator());
   }
 
   @Override
@@ -88,7 +87,8 @@ public class MemoryAdapterStore implements TransientAdapterStore, Serializable {
     }
   }
 
-  public void removeAdapter(String typeName) {
+  @Override
+  public void removeAdapter(final String typeName) {
     adapterMap.remove(typeName);
   }
 }

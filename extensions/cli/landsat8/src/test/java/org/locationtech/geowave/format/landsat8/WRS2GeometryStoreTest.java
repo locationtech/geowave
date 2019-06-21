@@ -9,7 +9,7 @@
 package org.locationtech.geowave.format.landsat8;
 
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import org.junit.Test;
@@ -17,7 +17,7 @@ import org.junit.Test;
 public class WRS2GeometryStoreTest {
   @Test
   public void testGetGeometry() throws MalformedURLException, IOException {
-    WRS2GeometryStore geometryStore = new WRS2GeometryStore(Tests.WORKSPACE_DIR);
+    final WRS2GeometryStore geometryStore = new WRS2GeometryStore(Tests.WORKSPACE_DIR);
     assertThat(geometryStore.getGeometry(1, 1), notNullValue());
   }
 }

@@ -40,7 +40,7 @@ public class AccumuloRowDeleter implements RowDeleter {
 
   @Override
   public synchronized void delete(final GeoWaveRow row) {
-    final List<Range> rowRanges = new ArrayList<Range>();
+    final List<Range> rowRanges = new ArrayList<>();
     rowRanges.add(Range.exact(new Text(GeoWaveKey.getCompositeId(row))));
     final BatchDeleter batchDeleter = getDeleter();
     batchDeleter.setRanges(rowRanges);

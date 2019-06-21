@@ -34,7 +34,7 @@ public class StripWeakCentroidsRunner<T> implements MapReduceJobRunner {
   private int minimum = 1;
   private int maximum = 1000;
   private int currentCentroidCount = 0;
-  private BreakStrategy<T> breakStrategy = new TailMaxBreakStrategy<T>();
+  private BreakStrategy<T> breakStrategy = new TailMaxBreakStrategy<>();
 
   public StripWeakCentroidsRunner() {}
 
@@ -60,7 +60,7 @@ public class StripWeakCentroidsRunner<T> implements MapReduceJobRunner {
   protected CentroidManager<T> constructCentroidManager(
       final Configuration config,
       final PropertyManagement runTimeProperties) throws IOException {
-    return new CentroidManagerGeoWave<T>(runTimeProperties);
+    return new CentroidManagerGeoWave<>(runTimeProperties);
   }
 
   @Override
@@ -197,7 +197,7 @@ public class StripWeakCentroidsRunner<T> implements MapReduceJobRunner {
       if (!(obj instanceof ChangeFromLast)) {
         return false;
       }
-      return this.compareTo((ChangeFromLast) obj) == 0;
+      return compareTo((ChangeFromLast) obj) == 0;
     }
 
     @Override
@@ -210,7 +210,7 @@ public class StripWeakCentroidsRunner<T> implements MapReduceJobRunner {
     @Override
     public int getBreakPoint(final List<AnalyticItemWrapper<T>> centroids) {
 
-      final List<ChangeFromLast> changes = new ArrayList<ChangeFromLast>(centroids.size());
+      final List<ChangeFromLast> changes = new ArrayList<>(centroids.size());
 
       final StandardDeviation st = new StandardDeviation();
       double prior = Double.NaN;

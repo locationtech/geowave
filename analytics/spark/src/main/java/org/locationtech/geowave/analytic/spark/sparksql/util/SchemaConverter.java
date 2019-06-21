@@ -31,7 +31,9 @@ import org.slf4j.LoggerFactory;
 public class SchemaConverter {
   private static final Logger LOGGER = LoggerFactory.getLogger(SchemaConverter.class);
 
-  public static SimpleFeatureType schemaToFeatureType(StructType schema, String typeName) {
+  public static SimpleFeatureType schemaToFeatureType(
+      final StructType schema,
+      final String typeName) {
     final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
     typeBuilder.setName(typeName);
     typeBuilder.setNamespaceURI(BasicFeatureTypes.DEFAULT_NAMESPACE);
@@ -43,8 +45,8 @@ public class SchemaConverter {
 
     final AttributeTypeBuilder attrBuilder = new AttributeTypeBuilder();
 
-    for (StructField field : schema.fields()) {
-      AttributeDescriptor attrDesc = attrDescFromStructField(attrBuilder, field);
+    for (final StructField field : schema.fields()) {
+      final AttributeDescriptor attrDesc = attrDescFromStructField(attrBuilder, field);
 
       typeBuilder.add(attrDesc);
     }
@@ -53,8 +55,8 @@ public class SchemaConverter {
   }
 
   private static AttributeDescriptor attrDescFromStructField(
-      AttributeTypeBuilder attrBuilder,
-      StructField field) {
+      final AttributeTypeBuilder attrBuilder,
+      final StructField field) {
     if (field.name().equals("geom")) {
       return attrBuilder.binding(Geometry.class).nillable(false).buildDescriptor("geom");
     }
@@ -77,15 +79,16 @@ public class SchemaConverter {
     return null;
   }
 
-  public static StructType schemaFromFeatureType(SimpleFeatureType featureType) {
-    List<StructField> fields = new ArrayList<>();
+  public static StructType schemaFromFeatureType(final SimpleFeatureType featureType) {
+    final List<StructField> fields = new ArrayList<>();
 
-    for (AttributeDescriptor attrDesc : featureType.getAttributeDescriptors()) {
-      SimpleFeatureDataType sfDataType = attrDescToDataType(attrDesc);
+    for (final AttributeDescriptor attrDesc : featureType.getAttributeDescriptors()) {
+      final SimpleFeatureDataType sfDataType = attrDescToDataType(attrDesc);
 
-      String fieldName = (sfDataType.isGeom() ? "geom" : attrDesc.getName().getLocalPart());
+      final String fieldName = (sfDataType.isGeom() ? "geom" : attrDesc.getName().getLocalPart());
 
-      StructField field = DataTypes.createStructField(fieldName, sfDataType.getDataType(), true);
+      final StructField field =
+          DataTypes.createStructField(fieldName, sfDataType.getDataType(), true);
 
       fields.add(field);
     }
@@ -98,7 +101,7 @@ public class SchemaConverter {
     return DataTypes.createStructType(fields);
   }
 
-  private static SimpleFeatureDataType attrDescToDataType(AttributeDescriptor attrDesc) {
+  private static SimpleFeatureDataType attrDescToDataType(final AttributeDescriptor attrDesc) {
     boolean isGeom = false;
     DataType dataTypeOut = DataTypes.NullType;
 

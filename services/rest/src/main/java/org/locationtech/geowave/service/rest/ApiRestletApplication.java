@@ -41,9 +41,9 @@ import org.slf4j.LoggerFactory;
 public class ApiRestletApplication extends Application {
   private static final Logger LOGGER = LoggerFactory.getLogger(ApiRestletApplication.class);
   private ArrayList<RestRoute> availableRoutes = null;
-  private ExecutorService asyncOperationPool = Executors.newFixedThreadPool(10);
-  private ConcurrentHashMap<String, Future> asyncOperationStatuses =
-      new ConcurrentHashMap<String, Future>();
+  private final ExecutorService asyncOperationPool = Executors.newFixedThreadPool(10);
+  private final ConcurrentHashMap<String, Future> asyncOperationStatuses =
+      new ConcurrentHashMap<>();
 
   public ApiRestletApplication() {
     super();
@@ -83,7 +83,7 @@ public class ApiRestletApplication extends Application {
    * including those that are unavailable
    */
   public void parseOperationsForApiRoutes() {
-    availableRoutes = new ArrayList<RestRoute>();
+    availableRoutes = new ArrayList<>();
 
     for (final Class<? extends ServiceEnabledCommand> operation : new Reflections(
         "org.locationtech.geowave").getSubTypesOf(ServiceEnabledCommand.class)) {
@@ -118,7 +118,7 @@ public class ApiRestletApplication extends Application {
       }
     }
 
-    String defaultConfigFile = servlet.getInitParameter("config_file");
+    final String defaultConfigFile = servlet.getInitParameter("config_file");
 
     final SwaggerApiParser apiParser =
         new SwaggerApiParser(

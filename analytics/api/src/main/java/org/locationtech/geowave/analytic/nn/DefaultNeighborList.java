@@ -15,7 +15,7 @@ import java.util.Map.Entry;
 import org.locationtech.geowave.core.index.ByteArray;
 
 public class DefaultNeighborList<NNTYPE> implements NeighborList<NNTYPE> {
-  private final Map<ByteArray, NNTYPE> list = new HashMap<ByteArray, NNTYPE>();
+  private final Map<ByteArray, NNTYPE> list = new HashMap<>();
 
   @Override
   public boolean add(
@@ -55,7 +55,7 @@ public class DefaultNeighborList<NNTYPE> implements NeighborList<NNTYPE> {
   public static class DefaultNeighborListFactory<NNTYPE> implements NeighborListFactory<NNTYPE> {
     @Override
     public NeighborList<NNTYPE> buildNeighborList(final ByteArray centerId, final NNTYPE center) {
-      return new DefaultNeighborList<NNTYPE>();
+      return new DefaultNeighborList<>();
     }
   }
 

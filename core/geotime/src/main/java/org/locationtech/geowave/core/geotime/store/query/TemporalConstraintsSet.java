@@ -15,8 +15,7 @@ import java.util.Set;
 
 /** Constraints per each property name referenced in a query. */
 public class TemporalConstraintsSet {
-  final Map<String, TemporalConstraints> constraintsSet =
-      new HashMap<String, TemporalConstraints>();
+  final Map<String, TemporalConstraints> constraintsSet = new HashMap<>();
   private boolean exact = true;
 
   public TemporalConstraintsSet() {}
@@ -25,7 +24,7 @@ public class TemporalConstraintsSet {
     return constraintsSet.containsKey(startName + "_" + endName);
   }
 
-  public void setExact(boolean exact) {
+  public void setExact(final boolean exact) {
     this.exact = exact;
   }
 
@@ -55,13 +54,13 @@ public class TemporalConstraintsSet {
   }
 
   public void removeConstraints(final String... names) {
-    for (String name : names)
+    for (final String name : names) {
       constraintsSet.remove(name);
+    }
   }
 
   public void removeAllConstraintsExcept(final String... names) {
-    final Map<String, TemporalConstraints> newConstraintsSet =
-        new HashMap<String, TemporalConstraints>();
+    final Map<String, TemporalConstraints> newConstraintsSet = new HashMap<>();
     for (final String name : names) {
       final TemporalConstraints constraints = constraintsSet.get(name);
       if (constraints != null) {

@@ -8,10 +8,6 @@
  */
 package org.locationtech.geowave.analytic.mapreduce.operations;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,13 +27,17 @@ import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "nn", parentOperation = AnalyticSection.class)
 @Parameters(commandDescription = "Nearest Neighbors")
 public class NearestNeighborCommand extends ServiceEnabledCommand<Void> {
 
   @Parameter(description = "<storename>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate
   private CommonOptions commonOptions = new CommonOptions();
@@ -63,7 +63,7 @@ public class NearestNeighborCommand extends ServiceEnabledCommand<Void> {
   }
 
   public void setParameters(final String storeName) {
-    parameters = new ArrayList<String>();
+    parameters = new ArrayList<>();
     parameters.add(storeName);
   }
 
@@ -101,8 +101,8 @@ public class NearestNeighborCommand extends ServiceEnabledCommand<Void> {
 
     if (commonOptions.getMapReduceHdfsHostPort() == null) {
 
-      Properties configProperties = ConfigOptions.loadProperties(configFile);
-      String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
+      final Properties configProperties = ConfigOptions.loadProperties(configFile);
+      final String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
       commonOptions.setMapReduceHdfsHostPort(hdfsFSUrl);
     }
 

@@ -8,16 +8,16 @@
  */
 package org.locationtech.geowave.cli.geoserver;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameters;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameters;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @GeowaveOperation(name = "listws", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "List GeoServer workspaces")
@@ -49,7 +49,7 @@ public class GeoServerListWorkspacesCommand extends GeoServerCommand<List<String
       results.add("---\n");
       return results;
     }
-    String errorMessage =
+    final String errorMessage =
         "Error getting GeoServer workspace list: "
             + getWorkspacesResponse.readEntity(String.class)
             + "\nGeoServer Response Code = "

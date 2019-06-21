@@ -24,12 +24,12 @@ package org.locationtech.geowave.core.cli.converters;
  * </ul>
  */
 public class OptionalPasswordConverter extends PasswordConverter {
-  public OptionalPasswordConverter(String optionName) {
+  public OptionalPasswordConverter(final String optionName) {
     super(optionName);
   }
 
   @Override
-  public String convert(String value) {
+  public String convert(final String value) {
     return super.convert(value);
   }
 

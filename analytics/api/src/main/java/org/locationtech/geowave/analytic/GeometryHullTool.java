@@ -78,7 +78,7 @@ public class GeometryHullTool {
 
     public TreeSet<NeighborData<Coordinate>> getPoints() {
       if (points == null) {
-        points = new TreeSet<NeighborData<Coordinate>>();
+        points = new TreeSet<>();
       }
       return points;
     }
@@ -156,13 +156,14 @@ public class GeometryHullTool {
    */
 
   public Geometry createHullFromGeometry(
-      Geometry clusterGeometry,
-      Collection<Coordinate> additionalPoints,
-      boolean fast) {
+      final Geometry clusterGeometry,
+      final Collection<Coordinate> additionalPoints,
+      final boolean fast) {
 
-    if (additionalPoints.isEmpty())
+    if (additionalPoints.isEmpty()) {
       return clusterGeometry;
-    final Set<Coordinate> batchCoords = new HashSet<Coordinate>();
+    }
+    final Set<Coordinate> batchCoords = new HashSet<>();
 
     if (clusterGeometry != null) {
       for (final Coordinate coordinate : clusterGeometry.getCoordinates()) {
@@ -173,7 +174,7 @@ public class GeometryHullTool {
       batchCoords.add(coordinate);
     }
 
-    GeometryFactory factory =
+    final GeometryFactory factory =
         clusterGeometry == null ? new GeometryFactory() : clusterGeometry.getFactory();
     final Coordinate[] actualCoords = batchCoords.toArray(new Coordinate[batchCoords.size()]);
 
@@ -188,14 +189,14 @@ public class GeometryHullTool {
     try {
       // does this shape benefit from concave hulling?
       // it cannot be a line string
-      if (batchCoords.size() > 5 && convexHullGeo.getArea() > 0.0) {
+      if ((batchCoords.size() > 5) && (convexHullGeo.getArea() > 0.0)) {
         final Geometry concaveHull =
             fast ? concaveHull(convexHullGeo, batchCoords)
-                : this.concaveHullParkOhMethod(convexHullGeo, batchCoords);
+                : concaveHullParkOhMethod(convexHullGeo, batchCoords);
         if (fast && !concaveHull.isSimple()) {
 
           LOGGER.warn("Produced non simple hull", concaveHull.toText());
-          return this.concaveHullParkOhMethod(convexHullGeo, batchCoords);
+          return concaveHullParkOhMethod(convexHullGeo, batchCoords);
         }
         return concaveHull;
       } else {
@@ -232,8 +233,8 @@ public class GeometryHullTool {
       final Geometry geometry,
       final Collection<Coordinate> providedInnerPoints) {
 
-    final Set<Coordinate> innerPoints = new HashSet<Coordinate>(providedInnerPoints);
-    final TreeSet<Edge> edges = new TreeSet<Edge>();
+    final Set<Coordinate> innerPoints = new HashSet<>(providedInnerPoints);
+    final TreeSet<Edge> edges = new TreeSet<>();
     final Coordinate[] geoCoordinateList = geometry.getCoordinates();
     final int s = geoCoordinateList.length - 1;
     final Edge firstEdge =
@@ -337,8 +338,8 @@ public class GeometryHullTool {
       final Collection<Coordinate> providedInnerPoints) {
     final Set<Coordinate> innerPoints =
         (providedInnerPoints instanceof Set) ? (Set<Coordinate>) providedInnerPoints
-            : new HashSet<Coordinate>(providedInnerPoints);
-    final TreeSet<Edge> edges = new TreeSet<Edge>();
+            : new HashSet<>(providedInnerPoints);
+    final TreeSet<Edge> edges = new TreeSet<>();
     final Coordinate[] geoCoordinateList = geometry.getCoordinates();
     final int s = geoCoordinateList.length - 1;
     final Edge firstEdge =
@@ -366,7 +367,7 @@ public class GeometryHullTool {
         }
       }
       if (bestEdge != null) {
-        bestEdge.getPoints().add(new NeighborData<Coordinate>(candidate, null, min));
+        bestEdge.getPoints().add(new NeighborData<>(candidate, null, min));
       }
     }
     while (!edges.isEmpty()) {
@@ -397,17 +398,17 @@ public class GeometryHullTool {
                   calcDistanceSegment(newEdge1.start, newEdge1.end, otherPoint.getElement());
               final double[] distProfile2 =
                   calcDistanceSegment(newEdge2.start, newEdge2.end, otherPoint.getElement());
-              if (distProfile1[0] >= 0.0 && distProfile1[0] <= 1.0) {
-                if (distProfile1[0] < 0.0
-                    || distProfile1[0] > 1.0
-                    || distProfile2[1] > distProfile1[1]) {
+              if ((distProfile1[0] >= 0.0) && (distProfile1[0] <= 1.0)) {
+                if ((distProfile1[0] < 0.0)
+                    || (distProfile1[0] > 1.0)
+                    || (distProfile2[1] > distProfile1[1])) {
                   otherPoint.setDistance(distProfile1[1]);
                   newEdge1.getPoints().add(otherPoint);
                 } else {
                   otherPoint.setDistance(distProfile2[1]);
                   newEdge2.getPoints().add(otherPoint);
                 }
-              } else if (distProfile2[0] >= 0.0 && distProfile2[0] <= 1.0) {
+              } else if ((distProfile2[0] >= 0.0) && (distProfile2[0] <= 1.0)) {
 
                 otherPoint.setDistance(distProfile2[1]);
                 newEdge2.getPoints().add(otherPoint);
@@ -456,7 +457,7 @@ public class GeometryHullTool {
   }
 
   private static Coordinate[] reassemble(final Edge lastEdge) {
-    final List<Coordinate> coordinates = new ArrayList<Coordinate>();
+    final List<Coordinate> coordinates = new ArrayList<>();
     coordinates.add(lastEdge.start);
     Edge nextEdge = lastEdge.next;
     while (nextEdge != lastEdge) {
@@ -474,7 +475,7 @@ public class GeometryHullTool {
       maxAngle = Math.max(calcAngle(hullCoordinates[0], coor, hullCoordinate), maxAngle);
     }
     // return 360 == Math.abs(maxAngle);
-    return (Math.abs(maxAngle) >= 359.999 && Math.abs(maxAngle) <= 360.0001);
+    return ((Math.abs(maxAngle) >= 359.999) && (Math.abs(maxAngle) <= 360.0001));
   }
 
   /**
@@ -489,10 +490,13 @@ public class GeometryHullTool {
   public Geometry connect(final Geometry shape1, final Geometry shape2) {
 
     try {
-      if (shape1 instanceof Polygon && shape2 instanceof Polygon && !shape1.intersects(shape2))
+      if ((shape1 instanceof Polygon)
+          && (shape2 instanceof Polygon)
+          && !shape1.intersects(shape2)) {
         return connect(shape1, shape2, getClosestPoints(shape1, shape2, distanceFnForCoordinate));
+      }
       return UnaryUnionOp.union(Arrays.asList(shape1, shape2));
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       LOGGER.warn("Exception caught in connect method", ex);
     }
     return createHullFromGeometry(shape1, Arrays.asList(shape2.getCoordinates()), false);
@@ -513,7 +517,7 @@ public class GeometryHullTool {
       startLeft = closestCoordinates.getRight();
       startRight = closestCoordinates.getLeft();
     }
-    final HashSet<Coordinate> visitedSet = new HashSet<Coordinate>();
+    final HashSet<Coordinate> visitedSet = new HashSet<>();
 
     visitedSet.add(leftCoords[startLeft]);
     visitedSet.add(rightCoords[startRight]);
@@ -553,7 +557,7 @@ public class GeometryHullTool {
           }
         });
 
-    final List<Coordinate> newCoordinateSet = new ArrayList<Coordinate>();
+    final List<Coordinate> newCoordinateSet = new ArrayList<>();
     final Direction leftSet =
         leftClockwise
             ? new IncreaseDirection(
@@ -702,8 +706,8 @@ public class GeometryHullTool {
       final Coordinate start,
       final Coordinate end,
       final Coordinate point) {
-    double[] p = calcDistanceSegment(start, end, point);
-    return (p[0] < 0.0 || p[0] > 1.0) ? -1 : p[1];
+    final double[] p = calcDistanceSegment(start, end, point);
+    return ((p[0] < 0.0) || (p[0] > 1.0)) ? -1 : p[1];
   }
 
   public static Pair<Integer, Integer> getClosestPoints(

@@ -20,10 +20,10 @@ public class BasicBinningStrategy implements BinningStrategy {
     super();
   }
 
-  public BasicBinningStrategy(double interval) {
+  public BasicBinningStrategy(final double interval) {
     super();
     this.interval = interval;
-    this.halfInterval = interval / 2;
+    halfInterval = interval / 2;
   }
 
   @Override
@@ -34,7 +34,7 @@ public class BasicBinningStrategy implements BinningStrategy {
   }
 
   @Override
-  public void fromBinary(byte[] bytes) {
+  public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     interval = buf.getDouble();
     halfInterval = interval / 2;
@@ -51,21 +51,21 @@ public class BasicBinningStrategy implements BinningStrategy {
   }
 
   @Override
-  public BinValue getBinnedValue(double value) {
-    double bin = Math.floor((value - halfInterval) / interval);
-    return new BinValue(intToBinary((int) bin), (value - interval * bin));
+  public BinValue getBinnedValue(final double value) {
+    final double bin = Math.floor((value - halfInterval) / interval);
+    return new BinValue(intToBinary((int) bin), (value - (interval * bin)));
   }
 
-  private static byte[] intToBinary(int bin) {
-    ByteBuffer buf = ByteBuffer.allocate(4);
-    buf.putInt((int) bin);
+  private static byte[] intToBinary(final int bin) {
+    final ByteBuffer buf = ByteBuffer.allocate(4);
+    buf.putInt(bin);
     return buf.array();
   }
 
   @Override
-  public BinRange[] getNormalizedRanges(NumericData index) {
+  public BinRange[] getNormalizedRanges(final NumericData index) {
     if (!index.isRange()) {
-      BinValue value = getBinnedValue(index.getMin());
+      final BinValue value = getBinnedValue(index.getMin());
       return new BinRange[] {
           new BinRange(
               value.getBinId(),
@@ -73,20 +73,20 @@ public class BasicBinningStrategy implements BinningStrategy {
               value.getNormalizedValue(),
               false)};
     }
-    int minBin = (int) Math.ceil((index.getMin() - halfInterval) / interval);
-    int maxBin = (int) Math.ceil((index.getMax() - halfInterval) / interval);
+    final int minBin = (int) Math.ceil((index.getMin() - halfInterval) / interval);
+    final int maxBin = (int) Math.ceil((index.getMax() - halfInterval) / interval);
     if (minBin == maxBin) {
-      double min = (index.getMin() - interval * minBin);
-      double max = (index.getMax() - interval * maxBin);
-      ByteBuffer buf = ByteBuffer.allocate(4);
-      buf.putInt((int) minBin);
+      final double min = (index.getMin() - (interval * minBin));
+      final double max = (index.getMax() - (interval * maxBin));
+      final ByteBuffer buf = ByteBuffer.allocate(4);
+      buf.putInt(minBin);
       return new BinRange[] {new BinRange(buf.array(), min, max, false)};
     }
-    BinRange[] retVal = new BinRange[maxBin - minBin + 1];
+    final BinRange[] retVal = new BinRange[(maxBin - minBin) + 1];
     retVal[0] =
         new BinRange(
             intToBinary(minBin),
-            (index.getMin() - interval * minBin),
+            (index.getMin() - (interval * minBin)),
             halfInterval,
             false);
     for (int b = minBin + 1; b < maxBin; b++) {
@@ -96,15 +96,15 @@ public class BasicBinningStrategy implements BinningStrategy {
         new BinRange(
             intToBinary(maxBin),
             -halfInterval,
-            (index.getMax() - interval * maxBin),
+            (index.getMax() - (interval * maxBin)),
             false);
     return retVal;
   }
 
   @Override
-  public NumericRange getDenormalizedRanges(BinRange binnedRange) {
-    int bin = ByteBuffer.wrap(binnedRange.getBinId()).getInt();
-    double center = bin * interval;
+  public NumericRange getDenormalizedRanges(final BinRange binnedRange) {
+    final int bin = ByteBuffer.wrap(binnedRange.getBinId()).getInt();
+    final double center = bin * interval;
     if (binnedRange.isFullExtent()) {
       return new NumericRange(center - halfInterval, center + halfInterval);
     }
