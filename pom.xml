@@ -97,8 +97,7 @@
 		<jacoco.version>0.7.4.201502262128</jacoco.version>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-		<test.args>-XX:CompressedClassSpaceSize=512m -XX:+UseSerialGC -Xms1g
-			-Xmx2g -XX:MaxMetaspaceSize=512m</test.args>
+		<test.args>-XX:CompressedClassSpaceSize=512m -XX:+UseSerialGC -Xms1g -Xmx2g -XX:MaxMetaspaceSize=512m</test.args>
 		<spotbugs.version>3.1.10</spotbugs.version>
 		<spotbugs.omitVisitors>MutableStaticFields,FindReturnRef</spotbugs.omitVisitors>
 		<spotbugs.effort>Max</spotbugs.effort>
