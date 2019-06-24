@@ -6,7 +6,7 @@ if [ "$TRAVIS_REPO_SLUG" == "locationtech/geowave" ] && [ "$BUILD_AND_PUBLISH" =
   pushd dev-resources
   # Build the dev-resources jar
   echo -e "Deploying dev-resources..."
-  mvn deploy --settings .utility/.maven.xml -DskipTests -Dspotbugs.skip -B -U -Prelease
+  mvn deploy --settings ../.utility/.maven.xml -DskipTests -Dspotbugs.skip -B -U -Prelease
   popd
   echo -e "Deploying geowave artifacts..."
   mvn deploy --settings .utility/.maven.xml -DskipTests -Dspotbugs.skip -B -U -Prelease
