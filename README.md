@@ -34,7 +34,6 @@ Basically, GeoWave is working to bridge geospatial software with modern key-valu
 * We have a [RPM repository](http://locationtech.github.io/geowave/packages.html)
   * This contains various packages including puppet modules, best used for distributed environments.
   * See [Documentation: Installation from RPM](http://locationtech.github.io/geowave/devguide.html#installation-from-rpm) for more info.
-  * Deb packages if enough people request them
 * Maven artifacts are available on Maven Central
 * And you can always [build from source](http://locationtech.github.io/geowave/devguide.html#development-setup)
 
