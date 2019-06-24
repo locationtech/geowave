@@ -35,9 +35,7 @@ Basically, GeoWave is working to bridge geospatial software with modern key-valu
   * This contains various packages including puppet modules, best used for distributed environments.
   * See [Documentation: Installation from RPM](http://locationtech.github.io/geowave/devguide.html#installation-from-rpm) for more info.
   * Deb packages if enough people request them
-* We have [Maven artifact repositories](http://locationtech.github.io/geowave/devguide.html#maven-pom-fragments) (indexes not enabled, but it works in a maven repo fragment)
-  * Releases: http://geowave-maven.s3-website-us-east-1.amazonaws.com/release
-  * Snapshots: http://geowave-maven.s3-website-us-east-1.amazonaws.com/snapshot (nightly)
+* Maven artifacts are available on Maven Central
 * And you can always [build from source](http://locationtech.github.io/geowave/devguide.html#development-setup)
 
 ## Community
@@ -65,30 +63,6 @@ You can use maven to reference pre-built GeoWave artifacts with the following po
 			<version>${geowave.version}</version>
 		</dependency>
 	</dependencies>
-    <repositories>
-		<repository>
-			<id>geowave-maven-snapshots</id>
-			<name>GeoWave AWS Snapshots Repository</name>
-			<url>http://geowave-maven.s3-website-us-east-1.amazonaws.com/snapshot</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>geowave-maven-releases</id>
-			<name>GeoWave AWS Release Repository</name>
-			<url>http://geowave-maven.s3-website-us-east-1.amazonaws.com/release</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
 ```
 
 Use the libraries available in the `api` package to leverage GeoWave's capabilities (where `<data store options>` might be `AccumuloRequiredOptions` or `HBaseRequiredOptions` and simple examples of creating the data type and index can be found in `SimpleIngest` within the `examples` directory):
