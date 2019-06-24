@@ -79,6 +79,7 @@ node ('master') {
       mavenLocalRepo: "${env.WORKSPACE}/docker-root/.m2/repository/",
       mavenOpts: "-Xmx2g -Xms1g",
       options: [junitPublisher(disabled: true), findbugsPublisher(disabled: true)]) {
+      sh "cd dev-resources;mvn ${params.build_type} -DskipTests -Dspotbugs.skip -Dformatter.skip;cd ../"
       sh "mvn ${params.build_type} -DskipTests -Dspotbugs.skip -Dformatter.skip"
      }
   }
