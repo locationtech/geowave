@@ -1294,32 +1294,8 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
-		<repository>
-			<id>geowave-maven-releases</id>
-			<name>GeoWave AWS Release Repository</name>
-			<url>http://geowave-maven.s3-website-us-east-1.amazonaws.com/release</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
 	</repositories>
 
-	<pluginRepositories>
-		<pluginRepository>
-			<id>geowave-maven-releases</id>
-			<name>GeoWave AWS Release Repository</name>
-			<url>http://geowave-maven.s3-website-us-east-1.amazonaws.com/release</url>
-			<releases>
-				<updatePolicy>never</updatePolicy>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
 	<reporting>
 		<plugins>
 			<plugin>
