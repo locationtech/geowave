@@ -149,8 +149,19 @@ public class ClasspathUtils {
 
     // do not include dirs containing hadoop or accumulo site files
     if (!containsSiteFile(file)) {
-      classpathBuilder.append(" ").append(
-          file.getAbsolutePath().replace("C:\\", "file:/C:/").replace("\\", "/"));
+      final int index = file.getAbsolutePath().indexOf(":\\");
+      String windowsFriendlyPath;
+      if (index > 0) {
+        windowsFriendlyPath =
+            "file:/"
+                + file.getAbsolutePath().substring(0, index)
+                + ":/"
+                + file.getAbsolutePath().substring(index + 2);
+      } else {
+        windowsFriendlyPath = file.getAbsolutePath();
+      }
+
+      classpathBuilder.append(" ").append(windowsFriendlyPath.replace("\\", "/"));
       if (file.isDirectory()) {
         classpathBuilder.append("/");
       }

@@ -9,14 +9,15 @@ node ('master') {
           [
             [$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5']],
             [$class: 'ParametersDefinitionProperty', parameterDefinitions: [
-              [$class: 'StringParameterDefinition', name: 'rpm_bucket', defaultValue: 'maxar-geowave-rpms', description: 'Bucket for rpms'],
-              [$class: 'StringParameterDefinition', name: 'cache_bucket', defaultValue: 'maxar-geowave', description: 'Root GeoWave Bucket'],
-              [$class: 'StringParameterDefinition', name: 'notebook_bucket', defaultValue: 'maxar-geowave-notebooks', description: 'Bucket for notebooks'],
-              [$class: 'StringParameterDefinition', name: 'third_party_deps_path', defaultValue: 'https://s3.amazonaws.com/maxar-geowave/3rd-party', description: 'URL to third party downloads directory (No trailing slash)'],
+              [$class: 'StringParameterDefinition', name: 'rpm_bucket', defaultValue: 'geowave-rpms', description: 'Bucket for rpms'],
+              [$class: 'StringParameterDefinition', name: 'cache_bucket', defaultValue: 'geowave', description: 'Root GeoWave Bucket'],
+              [$class: 'StringParameterDefinition', name: 'notebook_bucket', defaultValue: 'geowave-notebooks', description: 'Bucket for notebooks'],
+              [$class: 'StringParameterDefinition', name: 'third_party_deps_path', defaultValue: 'https://s3.amazonaws.com/geowave/third-party-downloads', description: 'URL to third party downloads directory (No trailing slash)'],
               [$class: 'StringParameterDefinition', name: 'LOCAL_REPO_DIR', defaultValue: '/jenkins/gw-repo/snapshots', description: 'Path on the local filesystem to the repo'],
               [$class: 'StringParameterDefinition', name: 'build_type', defaultValue: 'clean install', description: 'Maven build type. To publish to central change to deploy. Credentials must be added.'],
-              [$class: 'StringParameterDefinition', name: 'git_repo', defaultValue: 'https://github.com/scotlynhatt/geowave.git', description: 'Repo to clone'],
-              [$class: 'StringParameterDefinition', name: 'git_branch', defaultValue: 'devops/new-env-changes', description: 'Branch to build'],
+              [$class: 'StringParameterDefinition', name: 'git_repo', defaultValue: 'https://github.com/locationtech/geowave.git', description: 'Repo to clone'],
+              [$class: 'StringParameterDefinition', name: 'git_branch', defaultValue: 'master', description: 'Branch to build'],
+              [$class: 'StringParameterDefinition', name: 'install4j_home', defaultValue: '/opt/install4j7/', description: 'Home directory of install4j, required if building standalone installers'],
               [$class: 'ChoiceParameterDefinition', name: 'overwrite_parameters', choices: 'No\nYes', description: 'Set to yes to reset parameters to defaults'],
               ]
             ],
@@ -78,44 +79,42 @@ node ('master') {
       mavenLocalRepo: "${env.WORKSPACE}/docker-root/.m2/repository/",
       mavenOpts: "-Xmx2g -Xms1g",
       options: [junitPublisher(disabled: true), findbugsPublisher(disabled: true)]) {
-      sh "mvn ${params.build_type} -DskipTests -Dfindbugs.skip -Dformatter.skip"
+      sh "mvn ${params.build_type} -DskipTests -Dspotbugs.skip -Dformatter.skip"
      }
   }
-
-  // Mark the build artifacts 'stage'....
-  stage('Build and Publish RPMs'){
-    withEnv(["LOCAL_REPO_DIR=${ params.LOCAL_REPO_DIR }","GEOWAVE_BUCKET=${ params.cache_bucket }"]) {
-        sh "deploy/packaging/docker/docker-build-rpms.sh"
-    }
-  }
-  
-  stage('Clean bucket and local space'){
-    // Local Cleanup
-    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/snapshots/geowave/*"
     
+  stage('Clean bucket and local space'){
+    // Local Cleanup - cleanup all but noarch directories
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/dev-jars/*"
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/release-jars/*"
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/dev/SRPMS/*"
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/release/SRPMS/*"
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/dev/TARBALL/*"
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/release/TARBALL/*"
     // S3 Cleanup
     sh "python deploy/scripts/clean-up.py ${env.WORKSPACE}"
   }
   
-  stage("Generate EMR Scripts") {
-    withEnv(["GEOWAVE_BUCKET=${ params.cache_bucket }"]) {
-        def build_type = readFile('deploy/target/build-type.txt').trim()
-        def version  = readFile('deploy/target/version.txt').trim()
-        sh "deploy/packaging/emr/generate-emr-scripts.sh --build-type ${build_type} --version ${version} --workspace ${env.WORKSPACE} --bucket ${GEOWAVE_BUCKET}"
+  // Mark the build artifacts 'stage'....
+  stage('Build and Publish RPMs'){
+    withEnv(["INSTALL4J_HOME=${ params.install4j_home }","LOCAL_REPO_DIR=${ params.LOCAL_REPO_DIR }","GEOWAVE_RPM_BUCKET=${ params.rpm_bucket }","GEOWAVE_BUCKET=${ params.cache_bucket }"]) {
+    	sh "echo 'INSTALL4J_HOME=${INSTALL4J_HOME}'"
+    	sh "echo 'params.install4j_home=${params.install4j_home}'"
+        sh "deploy/packaging/docker/docker-build-rpms.sh"
     }
   }
-
+  
   // Deploy to geowave-rpms
   stage('Deploying to S3'){
     def build_type = readFile('deploy/target/build-type.txt').trim()
     if ( build_type == "dev" ) {
-      echo 'Build type determined as Dev. Sync will delete content on s3.'
-      sh "sudo cp ${params.LOCAL_REPO_DIR}/geowave-repo-dev-1.0-3.noarch.rpm ${params.LOCAL_REPO_DIR}/geowave/dev/noarch/geowave-repo-dev-1.0-3.noarch.rpm"
-      sh "aws s3 sync ${params.LOCAL_REPO_DIR}/geowave/ s3://${params.rpm_bucket}/ --delete"
+      echo 'Build type determined as Dev.'
+      sh "aws s3 sync --acl public-read ${params.LOCAL_REPO_DIR}/geowave/dev/ s3://${params.rpm_bucket}/dev/"
+      sh "aws s3 sync --acl public-read ${params.LOCAL_REPO_DIR}/geowave/dev-jars/ s3://${params.rpm_bucket}/dev-jars/"
     } else if (build_type == "release" ) {
-      echo 'Build type determined as Release. Sync will not delete content on s3.'
-      sh "sudo cp ${params.LOCAL_REPO_DIR}/geowave-repo-1.0-3.noarch.rpm ${params.LOCAL_REPO_DIR}/geowave/dev/noarch/geowave-repo-1.0-3.noarch.rpm"
-      sh "aws s3 sync ${params.LOCAL_REPO_DIR}/geowave/ s3://${params.rpm_bucket}/"
+      echo 'Build type determined as Release.'
+      sh "aws s3 sync --acl public-read ${params.LOCAL_REPO_DIR}/geowave/release/ s3://${params.rpm_bucket}/release/"
+      sh "aws s3 sync --acl public-read ${params.LOCAL_REPO_DIR}/geowave/release-jars/ s3://${params.rpm_bucket}/release-jars/"
     } else {
       error("ERROR: Could not determine build type. Unable to upload rpm's.")
     }
@@ -141,6 +140,11 @@ node ('master') {
   }
   
   stage("Local cleanup") {
-    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/snapshots/geowave/*"
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/dev-jars/*"
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/release-jars/*"
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/dev/SRPMS/*"
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/release/SRPMS/*"
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/dev/TARBALL/*"
+    sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/release/TARBALL/*"
   }
 }

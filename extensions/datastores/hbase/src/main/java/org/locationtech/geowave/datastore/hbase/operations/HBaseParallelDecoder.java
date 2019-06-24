@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Supplier;
 import org.apache.hadoop.hbase.HRegionInfo;
 import org.apache.hadoop.hbase.HRegionLocation;
 import org.apache.hadoop.hbase.TableName;
@@ -36,7 +37,6 @@ import org.locationtech.geowave.core.store.operations.ParallelDecoder;
 import org.locationtech.geowave.datastore.hbase.HBaseRow;
 import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Throwables;
-import com.google.inject.Provider;
 
 /**
  * HBase implementation of {@link ParallelDecoder} that creates a scanner for every
@@ -49,13 +49,13 @@ public class HBaseParallelDecoder<T> extends ParallelDecoder<T> {
   private Filter filter;
   private TableName tableName;
   private final HBaseOperations operations;
-  private final Provider<Scan> scanProvider;
+  private final Supplier<Scan> scanProvider;
   private final List<ByteArrayRange> ranges;
   private final int partitionKeyLength;
 
   public HBaseParallelDecoder(
       final GeoWaveRowIteratorTransformer<T> rowTransformer,
-      final Provider<Scan> scanProvider,
+      final Supplier<Scan> scanProvider,
       final HBaseOperations operations,
       final List<ByteArrayRange> ranges,
       final int partitionKeyLength) {

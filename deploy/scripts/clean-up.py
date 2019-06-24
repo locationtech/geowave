@@ -59,11 +59,11 @@ class CleanUp():
 
         for obj in resp['Contents']:
             key = obj['Key']
-            if key.endswith('.rpm') and key.startswith('dev/'):
-                if 'SRPMS' in key:
-                    artifact_date_str = os.path.basename(key).split('.')[2].split('-')[1]
-                else:
+            if ((key.endswith('.tar.gz') or key.endswith('.rpm')) and key.startswith('dev/')) or key.startswith('dev-jars/'):
+                if 'noarch' in key:
                     artifact_date_str = os.path.basename(key).split('.')[3]
+                else:
+                    artifact_date_str = os.path.basename(key).split('.')[2].split('-')[1]
                     
                 try:
                     date_time = datetime.strptime(artifact_date_str, "%Y%m%d%H%M%S")

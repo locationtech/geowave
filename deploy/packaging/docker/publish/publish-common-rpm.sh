@@ -30,6 +30,7 @@ echo "GEOWAVE_VERSION_URL=${GEOWAVE_VERSION_URL}"
 echo "BUILD_TYPE=${BUILD_TYPE}"
 echo "TIME_TAG=${TIME_TAG}"
 echo "GEOWAVE_BUCKET=${GEOWAVE_BUCKET}"
+echo "GEOWAVE_RPM_BUCKET=${GEOWAVE_RPM_BUCKET}"
 echo "---------------------------------------------------------------"
 
 
@@ -66,16 +67,23 @@ if command -v aws >/dev/null 2>&1 ; then
 		aws s3 rm --recursive s3://${GEOWAVE_BUCKET}/${GEOWAVE_VERSION_URL}/docs/ --quiet
 		aws s3 cp --acl public-read --recursive ${WORKSPACE}/target/site/ s3://${GEOWAVE_BUCKET}/${GEOWAVE_VERSION_URL}/docs/ --quiet
 		echo '###### Cleaning and copying scripts to S3'
-		${WORKSPACE}/deploy/packaging/emr/generate-emr-scripts.sh --buildtype ${BUILD_TYPE} --version ${GEOWAVE_VERSION} --workspace ${WORKSPACE}
-		${WORKSPACE}/deploy/packaging/sandbox/generate-sandbox-scripts.sh --version ${GEOWAVE_VERSION} --workspace ${WORKSPACE}
+		${WORKSPACE}/deploy/packaging/emr/generate-emr-scripts.sh --buildtype ${BUILD_TYPE} --version ${GEOWAVE_VERSION} --workspace ${WORKSPACE} --bucket ${GEOWAVE_BUCKET} --rpmbucket ${GEOWAVE_RPM_BUCKET}
+		${WORKSPACE}/deploy/packaging/sandbox/generate-sandbox-scripts.sh --version ${GEOWAVE_VERSION} --workspace ${WORKSPACE} --bucket ${GEOWAVE_BUCKET}
 		aws s3 rm --recursive s3://${GEOWAVE_BUCKET}/${GEOWAVE_VERSION_URL}/scripts/ --quiet
 		aws s3 cp --acl public-read --recursive ${WORKSPACE}/deploy/packaging/emr/generated/ s3://${GEOWAVE_BUCKET}/${GEOWAVE_VERSION_URL}/scripts/emr/ --quiet
 		aws s3 cp --acl public-read --recursive ${WORKSPACE}/deploy/packaging/sandbox/generated/ s3://${GEOWAVE_BUCKET}/${GEOWAVE_VERSION_URL}/scripts/sandbox/ --quiet
-
+		if [[ -d ${WORKSPACE}/deploy/target/install4j-output ]]; then
+			echo '###### Copying standalone installers to S3'
+			aws s3 cp --acl public-read --recursive ${WORKSPACE}/deploy/target/install4j-output/ s3://${GEOWAVE_BUCKET}/${GEOWAVE_VERSION_URL}/standalone-installers/ --quiet
+        fi 
 		aws s3 cp --acl public-read --recursive ${WORKSPACE}/examples/data/notebooks/ s3://${GEOWAVE_BUCKET}-notebooks/${GEOWAVE_VERSION_URL}/notebooks/ --quiet
 
 		# Copy built pyspark package to lib directory
 		aws s3 cp --acl public-read ${WORKSPACE}/analytics/pyspark/target/geowave_pyspark-${GEOWAVE_VERSION}.tar.gz s3://${GEOWAVE_BUCKET}/${GEOWAVE_VERSION_URL}/lib/geowave_pyspark-${GEOWAVE_VERSION}.tar.gz
+		
+		echo '###### Cleaning and copying documentation to S3'
+		
+        aws s3 sync s3://${GEOWAVE_RPM_BUCKET}/${BUILD_TYPE}/${ARGS[arch]}/ ${LOCAL_REPO_DIR}/${ARGS[repo]}/${BUILD_TYPE}/${ARGS[arch]}/ --delete
 	else
 		echo '###### Skipping publish to S3: GEOWAVE_VERSION_URL not defined'
 	fi

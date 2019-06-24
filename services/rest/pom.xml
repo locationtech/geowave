@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-service-parent</artifactId>
@@ -149,10 +151,10 @@
 			<version>2.3.3.RELEASE</version>
 		</dependency>
 		<dependency>
-   			<groupId>org.mockito</groupId>
-   			<artifactId>mockito-all</artifactId>
-   			<version>1.9.5</version>
-   			<scope>test</scope>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.9.5</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<profiles>
@@ -290,7 +292,8 @@
 										</filter>
 									</filters>
 									<transformers>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 											<manifestEntries>
 												<Specification-Title>GeoWave-REST-Services</Specification-Title>
 												<Specification-Vendor>LocationTech</Specification-Vendor>
@@ -300,33 +303,41 @@
 												<Implementation-Version>${project.version}</Implementation-Version>
 											</manifestEntries>
 										</transformer>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 
 										<!-- merge various spring files -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/spring.handlers</resource>
 										</transformer>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/spring.schemas</resource>
 										</transformer>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/spring.provides</resource>
 										</transformer>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/spring.factories</resource>
 										</transformer>
 
 										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
 											of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/javax.media.jai.registryFile.jai</resource>
 										</transformer>
 										<!-- merges META-INF/registryFile.jai entries instead of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/registryFile.jai</resource>
 										</transformer>
 										<!-- merges META-INF/registryFile.jaiext entries instead of overwriting -->
-										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/registryFile.jaiext</resource>
 										</transformer>
 									</transformers>
@@ -358,6 +369,16 @@
 								</goals>
 							</execution>
 						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>build-installer-plugin</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-assembly-plugin</artifactId>
 					</plugin>
 				</plugins>
 			</build>

@@ -14,7 +14,9 @@
 #
 # Source all our reusable functionality, argument is the location of this script.
 trap 'chmod -R 777 $WORKSPACE && exit' ERR
-
+echo "INSTALL4J_HOME=${INSTALL4J_HOME}"
+echo "GEOWAVE_BUCKET=${GEOWAVE_BUCKET}"
+echo "GEOWAVE_RPM_BUCKET=${GEOWAVE_RPM_BUCKET}"
 echo '###### Build Variables'
 declare -A ARGS
 while [ $# -gt 0 ]; do
@@ -28,7 +30,7 @@ BUILD_ARGS_MATRIX=${ARGS[buildargsmatrix]}
 DOCKER_ARGS=${ARGS[dockerargs]}
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 TIME_TAG=$(date +"%Y%m%d%H%M")
-SKIP_EXTRA="-Dfindbugs.skip -Dformatter.skip -DskipTests"
+SKIP_EXTRA="-Dspotbugs.skip -Dformatter.skip -DskipTests"
 cd "$SCRIPT_DIR/../../.."
 WORKSPACE="$(pwd)"
 DOCKER_ROOT=$WORKSPACE/docker-root
@@ -55,6 +57,29 @@ if [[ ! -d $DOCKER_ROOT ]]; then
   mkdir $DOCKER_ROOT
 fi
 
+if [ -z ${INSTALL4J_HOME} ]; then
+    echo "Setting INSTALL4J_HOME=/opt/install4j7"
+    INSTALL4J_HOME=/opt/install4j7
+fi
+
+if [ -z ${GEOWAVE_RPM_BUCKET} ]; then
+    echo "Setting GEOWAVE_RPM_BUCKET=geowave-rpms"
+    GEOWAVE_RPM_BUCKET=geowave-rpms
+fi
+
+if [ -z ${GEOWAVE_BUCKET} ]; then
+    echo "Setting GEOWAVE_BUCKET=geowave"
+    GEOWAVE_BUCKET=geowave
+fi
+
+if [ -f ~/.install4j ]; then
+   cp ~/.install4j $DOCKER_ROOT/
+fi
+
+if [ -d ~/.install4j7 ]; then
+   cp -R ~/.install4j7 $DOCKER_ROOT/
+fi
+
 $WORKSPACE/deploy/packaging/rpm/centos/7/rpm.sh --command clean
 
 docker run $DOCKER_ARGS --rm \
@@ -63,6 +88,7 @@ docker run $DOCKER_ARGS --rm \
   -e GEOWAVE_BUCKET="$GEOWAVE_BUCKET" \
   -v $DOCKER_ROOT:/root \
   -v $WORKSPACE:/usr/src/geowave \
+  -v $INSTALL4J_HOME:/opt/install4j7 \
   locationtech/geowave-centos7-java8-build \
   /bin/bash -c \
   "cd \$WORKSPACE && deploy/packaging/docker/build-src/build-geowave-common.sh $SKIP_EXTRA"
@@ -84,6 +110,7 @@ docker run $DOCKER_ARGS --rm \
   -e LOCK_DIR=/usr/src/lock \
   -e TIME_TAG="$TIME_TAG" \
   -e GEOWAVE_BUCKET="$GEOWAVE_BUCKET" \
+  -e GEOWAVE_RPM_BUCKET="$GEOWAVE_RPM_BUCKET" \
   -v $DOCKER_ROOT:/root \
   -v $WORKSPACE:/usr/src/geowave \
   -v $LOCAL_REPO_DIR:/usr/src/repo \

@@ -56,7 +56,7 @@ image::aws-gui-method-3.png[scaledwidth="100%",alt="select emr"]
 
 To properly run and visualize the results from the Jupyter notebook demo we need to first install python and a few additional packages. We've created a bootstrap script to do that for you that can be found here:
 
-- Jupyter Bootstrap: http://s3.amazonaws.com/geowave/latest/scripts/emr/jupyter/bootstrap-jupyter.sh
+- Jupyter Bootstrap: http://s3.amazonaws.com/geowave/${version_url}/scripts/emr/jupyter/bootstrap-jupyter.sh
 
 This bootstrap script will install python, all necessary packages needed for the demos, create the jupyter kernel, and run the jupyter notebook server on port 9000 of your cluster. This script needs to be run as a bootstrap action when creating the EMR cluster.
 
@@ -64,7 +64,7 @@ This bootstrap script will install python, all necessary packages needed for the
 ====
 It is recommended to use the Accumulo bootstrap script as the first bootstrap script to setup your cluster. Doing so will let you use both HBase and Accumulo as long as you select HBase as a default application (backed by S3) to add to your cluster from AWS. 
 
-- Accumulo Bootstrap: http://s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh
+- Accumulo Bootstrap: http://s3.amazonaws.com/geowave/${version_url}/scripts/emr/accumulo/bootstrap-geowave.sh
 
 For more information on setting up bootstrap actions visit this link:aws-env.html#[Amazon Web Services EMR]
 ====

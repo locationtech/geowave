@@ -29,7 +29,6 @@ public class GeoWaveMain {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveMain.class);
 
   public static void main(final String[] args) {
-
     // Take an initial stab at running geowave with the given arguments.
     final OperationParser parser = new OperationParser(prepRegistry());
     final CommandLineOperationParams params = parser.parse(GeowaveTopLevelSection.class, args);

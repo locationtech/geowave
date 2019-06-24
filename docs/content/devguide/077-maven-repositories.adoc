@@ -1,60 +1,39 @@
 [[maven-repositories]]
 <<<
-== Maven Repositories
+== Maven Artifacts
 
-=== Overview
+Both release and snapshot GeoWave artifacts are available on Maven Central.
 
-There are public maven repositories available for both release and snapshot GeoWave artifacts (no transitive dependencies). Automated deployment is available but requires a S3 access key (typically added to your ~/.m2/settings.xml).
-
-=== Maven POM fragments
-==== Releases
-[source, xml]
+You can use maven to reference pre-built GeoWave artifacts with the following pom.xml snippet (replacing `${keyvalue-datastore}` with your datastore of choice and `${geowave.version}` with the geowave version you'd like to use):
 ----
-    <repository>
-        <id>geowave-maven-releases</id>
-        <name>GeoWave AWS Release Repository</name>
-        <url>http://geowave-maven.s3-website-us-east-1.amazonaws.com/release</url>
-        <releases>
-            <enabled>true</enabled>
-        </releases>
-        <snapshots>
-            <enabled>false</enabled>
-        </snapshots>
-    </repository>
+	<dependencies>
+		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-datastore-${keyvalue-datastore}</artifactId>
+			<version>${geowave.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-adapter-vector</artifactId>
+			<version>${geowave.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-adapter-raster</artifactId>
+			<version>${geowave.version}</version>
+		</dependency>
+	</dependencies>
 ----
-
-==== Snapshots
-[source, xml]
+Also, to use GeoWave's snapshots add the following repository to your pom.xml:
 ----
-    <repository>
-        <id>geowave-maven-snapshot</id>
-        <name>GeoWave AWS Snapshot Repository</name>
-        <url>http://geowave-maven.s3-website-us-east-1.amazonaws.com/snapshot</url>
-        <releases>
-            <enabled>false</enabled>
-        </releases>
-        <snapshots>
-            <enabled>true</enabled>
-        </snapshots>
-    </repository>
-----
-
-=== Maven settings.xml fragments
-You probably don't need this unless you are deploying official GeoWave artifacts.
-
-==== Snapshots
-[source, xml]
-----
-  <servers>
-    <server>
-      <id>geowave-maven-releases</id>
-      <username>ACCESS_KEY_ID</username>
-      <password>SECRET_ACCESS_KEY</password>
-    </server>
-    <server>
-      <id>geowave-maven-snapshots</id>
-      <username>ACCESS_KEY_ID</username>
-      <password>SECRET_ACCESS_KEY</password>
-    </server>
-  </servers>
+	<repository>
+		<id>ossrh</id>
+		<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		<releases>
+			<enabled>false</enabled>
+		</releases>
+		<snapshots>
+			<enabled>true</enabled>
+		</snapshots>
+	</repository>
 ----

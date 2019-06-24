@@ -45,7 +45,7 @@ cache:
   - test/sentinel2
   - test/target/temp/gdal
 install:
-  - .utility/pull-dev-resources.sh
+  - .utility/build-dev-resources.sh
   # This will only run on master w/ BUILD_AND_PUBLISH=true
   - travis_wait 50 .utility/build.sh
 script:
@@ -65,9 +65,9 @@ before_install:
   # Check that jdk 8 is installed
   - java -version
   # This must match the dev-resources version from the parent pom:
-  - export DEV_RESOURCES_VERSION=1.4
+  - export DEV_RESOURCES_VERSION=1.5
   - export MAVEN_OPTS="-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2g -XX:MaxMetaspaceSize=512m -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"
-  - chmod +x .utility/pull-dev-resources.sh
+  - chmod +x .utility/build-dev-resources.sh
   - chmod +x .utility/run-tests.sh
   - chmod +x .utility/build.sh
   - chmod +x .utility/publish.sh
