@@ -108,6 +108,7 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>initial cut at simple standalone installer <a href="https://github.com/locationtech/geowave/pull/1580">#1580</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Add additional exception handling to avoid serverside issues. <a href="https://github.com/locationtech/geowave/pull/1579">#1579</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>fix for stats when adding indices <a href="https://github.com/locationtech/geowave/pull/1578">#1578</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Improvements to RPM publishing process <a href="https://github.com/locationtech/geowave/pull/1577">#1577</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
@@ -181,6 +182,7 @@
 <li>fixed issue with configurable geowave CRS's in geoserver <a href="https://github.com/locationtech/geowave/pull/1459">#1459</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Fix serverside libraries being disabled <a href="https://github.com/locationtech/geowave/pull/1458">#1458</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>added redis to deployment and updated geotools <a href="https://github.com/locationtech/geowave/pull/1457">#1457</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>Allow job parameters to be specified via command line. <a href="https://github.com/locationtech/geowave/pull/1456">#1456</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>implementation of redis datastore <a href="https://github.com/locationtech/geowave/pull/1454">#1454</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Update mergeData support. <a href="https://github.com/locationtech/geowave/pull/1453">#1453</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>GWAV-114: orfr initial commit of muting log spam for services IT tests <a href="https://github.com/locationtech/geowave/pull/1452">#1452</a> (<a href="https://github.com/russellorf">russellorf</a>)</li>
@@ -211,7 +213,6 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
-<li>Allow job parameters to be specified via command line. <a href="https://github.com/locationtech/geowave/pull/1456">#1456</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>update emr accumulo script to 1.9.2 <a href="https://github.com/locationtech/geowave/pull/1415">#1415</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>changed periodicity for unbounded crs <a href="https://github.com/locationtech/geowave/pull/1414">#1414</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Updated QuickStart Guide <a href="https://github.com/locationtech/geowave/pull/1413">#1413</a> (<a href="https://github.com/emacthecav">emacthecav</a>)</li>
@@ -289,7 +290,6 @@
 <li>completely removed jace <a href="https://github.com/locationtech/geowave/pull/1311">#1311</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>remove jace for now <a href="https://github.com/locationtech/geowave/pull/1310">#1310</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Refactor SparkSession &amp; SparkConf use. <a href="https://github.com/locationtech/geowave/pull/1309">#1309</a> (<a href="https://github.com/JWileczek">JWileczek</a>)</li>
-<li>revert minor changes to deploy scripts <a href="https://github.com/locationtech/geowave/pull/1308">#1308</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>ensure scripts are +x in git-index <a href="https://github.com/locationtech/geowave/pull/1307">#1307</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Relevant updates to fully support Cassandra and DynamoDB <a href="https://github.com/locationtech/geowave/pull/1305">#1305</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Fix accumulo restservices war copy <a href="https://github.com/locationtech/geowave/pull/1303">#1303</a> (<a href="https://github.com/gsoyka">gsoyka</a>)</li>
@@ -310,6 +310,7 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>revert minor changes to deploy scripts <a href="https://github.com/locationtech/geowave/pull/1308">#1308</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Small fixes to changes to master notebooks and jupyter bootstrap for release <a href="https://github.com/locationtech/geowave/pull/1301">#1301</a> (<a href="https://github.com/JWileczek">JWileczek</a>)</li>
 <li>added setCrs method <a href="https://github.com/locationtech/geowave/pull/1300">#1300</a> (<a href="https://github.com/mawhitby">mawhitby</a>)</li>
 <li>HP fortify Fals Positives <a href="https://github.com/locationtech/geowave/pull/1299">#1299</a> (<a href="https://github.com/mawhitby">mawhitby</a>)</li>
@@ -683,7 +684,6 @@
 <li>Fixed version # in POM <a href="https://github.com/locationtech/geowave/pull/874">#874</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
 <li>added geoserver cli to jacoco source directories <a href="https://github.com/locationtech/geowave/pull/873">#873</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Commits from 0.9.2.1 <a href="https://github.com/locationtech/geowave/pull/872">#872</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
-<li>Fixed errors in AccumuloConstraints Query and AggregationIterator <a href="https://github.com/locationtech/geowave/pull/842">#842</a> (<a href="https://github.com/emacthecav">emacthecav</a>)</li>
 </ul>
 <h2 id="v0.9.2.1-2016-07-22"><a href="https://github.com/locationtech/geowave/tree/v0.9.2.1">v0.9.2.1</a> (2016-07-22)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v0.9.2.2...v0.9.2.1">Full Changelog</a></p>
@@ -744,6 +744,7 @@
 <li>gs-cli-092: Corrected findbugs issues &amp; added geoserver cli to the extensions parent pom <a href="https://github.com/locationtech/geowave/pull/847">#847</a> (<a href="https://github.com/blastarr">blastarr</a>)</li>
 <li>Changes for the quick-start guide scripts <a href="https://github.com/locationtech/geowave/pull/846">#846</a> (<a href="https://github.com/mawhitby">mawhitby</a>)</li>
 <li>Add Release Plugin <a href="https://github.com/locationtech/geowave/pull/843">#843</a> (<a href="https://github.com/datasedai">datasedai</a>)</li>
+<li>Fixed errors in AccumuloConstraints Query and AggregationIterator <a href="https://github.com/locationtech/geowave/pull/842">#842</a> (<a href="https://github.com/emacthecav">emacthecav</a>)</li>
 <li>Initial create for geoserver cli <a href="https://github.com/locationtech/geowave/pull/841">#841</a> (<a href="https://github.com/blastarr">blastarr</a>)</li>
 <li>GEOWAVE-346: landsat8 utilities and raster support updates <a href="https://github.com/locationtech/geowave/pull/839">#839</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Fix: Computation of Raster Metadata Value Length <a href="https://github.com/locationtech/geowave/pull/836">#836</a> (<a href="https://github.com/jamesmcclain">jamesmcclain</a>)</li>
@@ -1314,6 +1315,7 @@
 <li>Reduce vagrant geowave clone depth <a href="https://github.com/locationtech/geowave/pull/324">#324</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</li>
 <li>added common jace dependency generation <a href="https://github.com/locationtech/geowave/pull/322">#322</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</li>
 <li>Cleaned up README <a href="https://github.com/locationtech/geowave/pull/319">#319</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</li>
+<li>Added deploy to S3 option+repo <a href="https://github.com/locationtech/geowave/pull/316">#316</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</li>
 <li>Roll to v0.8.5-SNAPSHOT <a href="https://github.com/locationtech/geowave/pull/314">#314</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 </ul>
 <h2 id="v0.8.4-2015-04-07"><a href="https://github.com/locationtech/geowave/tree/v0.8.4">v0.8.4</a> (2015-04-07)</h2>
@@ -1371,7 +1373,6 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
-<li>Added deploy to S3 option+repo <a href="https://github.com/locationtech/geowave/pull/316">#316</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</li>
 <li>release v0.8.4 <a href="https://github.com/locationtech/geowave/pull/313">#313</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Jacoco fix <a href="https://github.com/locationtech/geowave/pull/311">#311</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>need to set the mode to executable on the init.d service script <a href="https://github.com/locationtech/geowave/pull/310">#310</a> (<a href="https://github.com/kitplummer">kitplummer</a>)</li>

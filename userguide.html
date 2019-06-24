@@ -486,11 +486,10 @@ href="images/geowave-icon-logo-small.png">
 <li><a href="#geoserver-2">GeoServer</a></li>
 </ul>
 </li>
-<li><a href="#installation-from-rpm">Installation from RPM</a>
+<li><a href="#installation">Installation</a>
 <ul class="sectlevel2">
-<li><a href="#overview-5">Overview</a></li>
-<li><a href="#examples">Examples</a></li>
-<li><a href="#rpm-installation-notes">RPM Installation Notes</a></li>
+<li><a href="#standalone-installers">Standalone Installers</a></li>
+<li><a href="#installation-from-rpm">Installation from RPM</a></li>
 </ul>
 </li>
 <li><a href="#running-from-emr">Running from EMR</a></li>
@@ -2171,16 +2170,37 @@ FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig</a></p></td>
 </div>
 </div>
 <div class="sect1">
-<h2 id="installation-from-rpm"><a class="anchor" href="#installation-from-rpm"></a>Installation from RPM</h2>
+<h2 id="installation"><a class="anchor" href="#installation"></a>Installation</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="overview-5"><a class="anchor" href="#overview-5"></a>Overview</h3>
+<h3 id="standalone-installers"><a class="anchor" href="#standalone-installers"></a>Standalone Installers</h3>
+<div class="paragraph">
+<p>GeoWave provides installers to access the commandline tools.  It uses a multi-platform installer builder, <a href="https://www.ej-technologies.com/products/install4j/overview.html">Install4J</a>. The installers can be downloaded here:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://geowave.s3.amazonaws.com/latest/standalone-installers/geowave_windows-x64_1_0_0-SNAPSHOT.exe">Windows</a></p>
+</li>
+<li>
+<p><a href="https://geowave.s3.amazonaws.com/latest/standalone-installers/geowave_macos_1_0_0-SNAPSHOT.dmg">Mac</a></p>
+</li>
+<li>
+<p><a href="https://geowave.s3.amazonaws.com/latest/standalone-installers/geowave_unix_1_0_0-SNAPSHOT.sh">Linux</a></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="installation-from-rpm"><a class="anchor" href="#installation-from-rpm"></a>Installation from RPM</h3>
+<div class="sect3">
+<h4 id="overview-5"><a class="anchor" href="#overview-5"></a>Overview</h4>
 <div class="paragraph">
 <p>There is a public <a href="packages.html" target="_blank">GeoWave RPM Repo</a> available with the distribution packages and vendors listed below. As you&#8217;ll need to coordinate a restart of Accumulo to pick up changes to the GeoWave iterator classes the repos default to be disabled so you can keep auto updates enabled. When ready to do an update, simply add <code>--enablerepo=geowave</code> to your command. The packages are built for a number of different hadoop distributions (Cloudera, Hortonworks, and Apache). The RPMs have the vendor name embedded as the second portion of the rpm name (geowave-apache-accumulo, geowave-hdp2-accumulo, geowave-cdh5-accumulo, geowave-apache-hbase, etc.)</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="examples"><a class="anchor" href="#examples"></a>Examples</h3>
+<div class="sect3">
+<h4 id="examples"><a class="anchor" href="#examples"></a>Examples</h4>
 <div class="paragraph">
 <p>Use the GeoWave repo RPM to configure a host and search for GeoWave RPMs to install.</p>
 </div>
@@ -2330,13 +2350,13 @@ yum --enablerepo=geowave install geowave-$VERSION-$VENDOR-*</code></pre>
 </table>
 </div>
 </div>
-<div class="sect2">
-<h3 id="rpm-installation-notes"><a class="anchor" href="#rpm-installation-notes"></a>RPM Installation Notes</h3>
+<div class="sect3">
+<h4 id="rpm-installation-notes"><a class="anchor" href="#rpm-installation-notes"></a>RPM Installation Notes</h4>
 <div class="paragraph">
 <p>RPM names contain the version in the name so support concurrent installations of multiple GeoWave and/or vendor versions. A versioned /usr/local/geowave-$GEOWAVE_VERSION-$VENDOR_VERSION directory is linked to /usr/local/geowave using alternatives ex: /usr/local/geowave &#8594; /usr/local/geowave-0.9.3-hdp2, but there could also be another /usr/local/geowave-0.9.2.1-cdh5 still installed but not the current default.</p>
 </div>
-<div class="sect3">
-<h4 id="view-geowave-home-installed-and-default-using-alternatives"><a class="anchor" href="#view-geowave-home-installed-and-default-using-alternatives"></a>View geowave-home installed and default using alternatives</h4>
+<div class="sect4">
+<h5 id="view-geowave-home-installed-and-default-using-alternatives"><a class="anchor" href="#view-geowave-home-installed-and-default-using-alternatives"></a>View geowave-home installed and default using alternatives</h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">alternatives --display geowave-home
@@ -2369,6 +2389,7 @@ Current `best' version is /usr/local/geowave-0.9.3-hdp2.</code></pre>
 <p>With the exception of the Accumulo RPM mentioned above, there are no restrictions on where you install RPMs. You can install the rest of the RPMs all on a single node for development use or a mix of nodes depending on your cluster configuration.</p>
 </div>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 </div>
@@ -3101,7 +3122,7 @@ For configuring the password encryption enabled setting:</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-06-21 16:34:46 +00:00
+Last updated 2019-06-24 17:57:38 +00:00
 </div>
 </div>
 </body>

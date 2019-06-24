@@ -179,7 +179,6 @@ org.locationtech.geowave.datastore.accumulo.cli
 org.locationtech.geowave.datastore.accumulo.cli.config
 org.locationtech.geowave.datastore.accumulo.iterators
 org.locationtech.geowave.datastore.accumulo.mapreduce
-org.locationtech.geowave.datastore.accumulo.minicluster
 org.locationtech.geowave.datastore.accumulo.operations
 org.locationtech.geowave.datastore.accumulo.operations.config
 org.locationtech.geowave.datastore.accumulo.split
@@ -195,7 +194,8 @@ org.locationtech.geowave.datastore.dynamodb
 org.locationtech.geowave.datastore.dynamodb.operations
 org.locationtech.geowave.datastore.dynamodb.util
 org.locationtech.geowave.datastore.hbase
-org.locationtech.geowave.datastore.hbase.cli.config
+org.locationtech.geowave.datastore.hbase.cli
+org.locationtech.geowave.datastore.hbase.config
 org.locationtech.geowave.datastore.hbase.coprocessors
 org.locationtech.geowave.datastore.hbase.coprocessors.protobuf
 org.locationtech.geowave.datastore.hbase.filters
@@ -210,6 +210,7 @@ org.locationtech.geowave.datastore.kudu.config
 org.locationtech.geowave.datastore.kudu.operations
 org.locationtech.geowave.datastore.kudu.util
 org.locationtech.geowave.datastore.redis
+org.locationtech.geowave.datastore.redis.cli
 org.locationtech.geowave.datastore.redis.config
 org.locationtech.geowave.datastore.redis.operations
 org.locationtech.geowave.datastore.redis.util

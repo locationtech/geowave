@@ -504,13 +504,7 @@ href="images/geowave-icon-logo-small.png">
 </ul>
 </li>
 <li><a href="#installation-from-rpm">Installation from RPM</a></li>
-<li><a href="#maven-repositories-2">Maven Repositories</a>
-<ul class="sectlevel2">
-<li><a href="#overview-6">Overview</a></li>
-<li><a href="#maven-pom-fragments">Maven POM fragments</a></li>
-<li><a href="#maven-settings-xml-fragments">Maven settings.xml fragments</a></li>
-</ul>
-</li>
+<li><a href="#maven-artifacts">Maven Artifacts</a></li>
 <li><a href="#create-third-party-plugins">Create Third-Party Plugins</a>
 <ul class="sectlevel2">
 <li><a href="#geoserver-plugin">GeoServer Plugin</a></li>
@@ -528,7 +522,7 @@ href="images/geowave-icon-logo-small.png">
 </li>
 <li><a href="#documentation-2">Documentation</a>
 <ul class="sectlevel2">
-<li><a href="#overview-7">Overview</a></li>
+<li><a href="#overview-6">Overview</a></li>
 <li><a href="#ordering">Ordering</a></li>
 <li><a href="#preview">Preview</a></li>
 <li><a href="#site">Site</a></li>
@@ -2341,79 +2335,53 @@ Density of region is measured by a minimum cardinality of enclosed features with
 </div>
 </div>
 <div class="sect1">
-<h2 id="maven-repositories-2"><a class="anchor" href="#maven-repositories-2"></a>Maven Repositories</h2>
+<h2 id="maven-artifacts"><a class="anchor" href="#maven-artifacts"></a>Maven Artifacts</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="overview-6"><a class="anchor" href="#overview-6"></a>Overview</h3>
 <div class="paragraph">
-<p>There are public maven repositories available for both release and snapshot GeoWave artifacts (no transitive dependencies). Automated deployment is available but requires a S3 access key (typically added to your ~/.m2/settings.xml).</p>
+<p>Both release and snapshot GeoWave artifacts are available on Maven Central.</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="maven-pom-fragments"><a class="anchor" href="#maven-pom-fragments"></a>Maven POM fragments</h3>
-<div class="sect3">
-<h4 id="releases"><a class="anchor" href="#releases"></a>Releases</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">    &lt;repository&gt;
-        &lt;id&gt;geowave-maven-releases&lt;/id&gt;
-        &lt;name&gt;GeoWave AWS Release Repository&lt;/name&gt;
-        &lt;url&gt;http://geowave-maven.s3-website-us-east-1.amazonaws.com/release&lt;/url&gt;
-        &lt;releases&gt;
-            &lt;enabled&gt;true&lt;/enabled&gt;
-        &lt;/releases&gt;
-        &lt;snapshots&gt;
-            &lt;enabled&gt;false&lt;/enabled&gt;
-        &lt;/snapshots&gt;
-    &lt;/repository&gt;</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="snapshots"><a class="anchor" href="#snapshots"></a>Snapshots</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">    &lt;repository&gt;
-        &lt;id&gt;geowave-maven-snapshot&lt;/id&gt;
-        &lt;name&gt;GeoWave AWS Snapshot Repository&lt;/name&gt;
-        &lt;url&gt;http://geowave-maven.s3-website-us-east-1.amazonaws.com/snapshot&lt;/url&gt;
-        &lt;releases&gt;
-            &lt;enabled&gt;false&lt;/enabled&gt;
-        &lt;/releases&gt;
-        &lt;snapshots&gt;
-            &lt;enabled&gt;true&lt;/enabled&gt;
-        &lt;/snapshots&gt;
-    &lt;/repository&gt;</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="maven-settings-xml-fragments"><a class="anchor" href="#maven-settings-xml-fragments"></a>Maven settings.xml fragments</h3>
 <div class="paragraph">
-<p>You probably don&#8217;t need this unless you are deploying official GeoWave artifacts.</p>
+<p>You can use maven to reference pre-built GeoWave artifacts with the following pom.xml snippet (replacing <code>${keyvalue-datastore}</code> with your datastore of choice and <code>${geowave.version}</code> with the geowave version you&#8217;d like to use):</p>
 </div>
-<div class="sect3">
-<h4 id="snapshots-2"><a class="anchor" href="#snapshots-2"></a>Snapshots</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">  &lt;servers&gt;
-    &lt;server&gt;
-      &lt;id&gt;geowave-maven-releases&lt;/id&gt;
-      &lt;username&gt;ACCESS_KEY_ID&lt;/username&gt;
-      &lt;password&gt;SECRET_ACCESS_KEY&lt;/password&gt;
-    &lt;/server&gt;
-    &lt;server&gt;
-      &lt;id&gt;geowave-maven-snapshots&lt;/id&gt;
-      &lt;username&gt;ACCESS_KEY_ID&lt;/username&gt;
-      &lt;password&gt;SECRET_ACCESS_KEY&lt;/password&gt;
-    &lt;/server&gt;
-  &lt;/servers&gt;</code></pre>
+<pre>	&lt;dependencies&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.locationtech.geowave&lt;/groupId&gt;
+			&lt;artifactId&gt;geowave-datastore-${keyvalue-datastore}&lt;/artifactId&gt;
+			&lt;version&gt;${geowave.version}&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.locationtech.geowave&lt;/groupId&gt;
+			&lt;artifactId&gt;geowave-adapter-vector&lt;/artifactId&gt;
+			&lt;version&gt;${geowave.version}&lt;/version&gt;
+		&lt;/dependency&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.locationtech.geowave&lt;/groupId&gt;
+			&lt;artifactId&gt;geowave-adapter-raster&lt;/artifactId&gt;
+			&lt;version&gt;${geowave.version}&lt;/version&gt;
+		&lt;/dependency&gt;
+	&lt;/dependencies&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Also, to use GeoWave&#8217;s snapshots add the following repository to your pom.xml:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>	&lt;repository&gt;
+		&lt;id&gt;ossrh&lt;/id&gt;
+		&lt;url&gt;https://oss.sonatype.org/content/repositories/snapshots&lt;/url&gt;
+		&lt;releases&gt;
+			&lt;enabled&gt;false&lt;/enabled&gt;
+		&lt;/releases&gt;
+		&lt;snapshots&gt;
+			&lt;enabled&gt;true&lt;/enabled&gt;
+		&lt;/snapshots&gt;
+	&lt;/repository&gt;</pre>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
-</div>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -2754,7 +2722,7 @@ $ mvn clean package -pl deploy -am -P generate-geowave-jace -DskipTests</code></
 <h2 id="documentation-2"><a class="anchor" href="#documentation-2"></a>Documentation</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="overview-7"><a class="anchor" href="#overview-7"></a>Overview</h3>
+<h3 id="overview-6"><a class="anchor" href="#overview-6"></a>Overview</h3>
 <div class="paragraph">
 <p>The documentation is writen in <a href="http://www.methods.co.nz/asciidoc/index.html" target="_blank">AsciiDoc</a> which is a plain-text markup format that can be created using any text editor and read “as-is”, or rendered to several other formats like HTML, PDF or EPUB.</p>
 </div>
@@ -3316,7 +3284,7 @@ Examples of these include:</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-06-21 16:34:46 +00:00
+Last updated 2019-06-24 17:57:38 +00:00
 </div>
 </div>
 </body>
