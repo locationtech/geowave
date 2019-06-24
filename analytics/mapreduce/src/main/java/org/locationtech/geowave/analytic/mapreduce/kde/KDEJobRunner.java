@@ -42,6 +42,7 @@ import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import org.locationtech.geowave.core.cli.parser.OperationParser;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitor;
 import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitorResult;
@@ -257,9 +258,9 @@ public class KDEJobRunner extends Configured implements Tool {
 
     if (kdeCommandLineOptions.getCqlFilter() != null) {
       Geometry bbox = null;
-      if (adapter instanceof FeatureDataAdapter) {
+      if (adapter instanceof GeotoolsFeatureDataAdapter) {
         final String geometryAttribute =
-            ((FeatureDataAdapter) adapter).getFeatureType().getGeometryDescriptor().getLocalName();
+            ((GeotoolsFeatureDataAdapter) adapter).getFeatureType().getGeometryDescriptor().getLocalName();
         final Filter filter = ECQL.toFilter(kdeCommandLineOptions.getCqlFilter());
         final ExtractGeometryFilterVisitorResult geoAndCompareOpData =
             (ExtractGeometryFilterVisitorResult) filter.accept(

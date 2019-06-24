@@ -28,6 +28,7 @@ import org.locationtech.geowave.analytic.spark.GeoWaveRDDLoader;
 import org.locationtech.geowave.analytic.spark.GeoWaveSparkConf;
 import org.locationtech.geowave.analytic.spark.RDDOptions;
 import org.locationtech.geowave.analytic.spark.RDDUtils;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.ScaledTemporalRange;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitor;
@@ -158,9 +159,9 @@ public class KMeansRunner {
 
         final DataTypeAdapter<?> adapter = adapterStore.getAdapter(adapterId).getAdapter();
 
-        if (adapter instanceof FeatureDataAdapter) {
+        if (adapter instanceof GeotoolsFeatureDataAdapter) {
           final String geometryAttribute =
-              ((FeatureDataAdapter) adapter).getFeatureType().getGeometryDescriptor().getLocalName();
+              ((GeotoolsFeatureDataAdapter) adapter).getFeatureType().getGeometryDescriptor().getLocalName();
           Filter filter;
           filter = ECQL.toFilter(cqlFilter);
 

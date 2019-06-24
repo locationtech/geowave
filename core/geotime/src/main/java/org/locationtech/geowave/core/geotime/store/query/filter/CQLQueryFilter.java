@@ -81,7 +81,7 @@ public class CQLQueryFilter implements QueryFilter {
               adapterExtendedValues);
 
       final SimpleFeature feature =
-          adapter.decode(
+          (SimpleFeature) adapter.decode(
               encoding,
               new IndexImpl(
                   null, // because we
