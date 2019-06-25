@@ -1,47 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>geowave-dev-resources</artifactId>
-    <groupId>org.locationtech.geowave</groupId>
-    <version>1.5</version>
-    <name>GeoWave Development Resources</name>
-    <packaging>jar</packaging>
-    <description>Development resources and settings for geowave</description>
-    <url>https://github.com/locationtech/geowave</url>
-    <licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-    </licenses>
-    <distributionManagement>
-        <repository>
-            <id>geowave-maven-releases</id>
-            <name>GeoWave AWS Release Repository</name>
-            <url>s3://geowave-maven/release</url>
-        </repository>
-        <snapshotRepository>
-            <id>geowave-maven-snapshots</id>
-            <name>GeoWave AWS Snapshot Repository</name>
-            <url>s3://geowave-maven/snapshot</url>
-        </snapshotRepository>
-    </distributionManagement>
-    <scm>
-        <url>https://github.com/locationtech/geowave.git</url>
-        <connection>scm:git:git@github.com:locationtech/geowave.git</connection>
-    </scm>
-    <build>
-        <extensions>
-            <extension>
-                <groupId>org.springframework.build</groupId>
-                <artifactId>aws-maven</artifactId>
-                <version>5.0.0.RELEASE</version>
-            </extension>
-        </extensions>
-    </build>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>geowave-dev-resources</artifactId>
+	<groupId>org.locationtech.geowave</groupId>
+	<version>1.5</version>
+	<name>GeoWave Development Resources</name>
+	<packaging>jar</packaging>
+	<description>Development resources and settings for geowave</description>
+	<url>https://github.com/locationtech/geowave</url>
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
+	<scm>
+		<url>https://github.com/locationtech/geowave.git</url>
+		<connection>scm:git:git@github.com:locationtech/geowave.git</connection>
+	</scm>
+	<build>
+		<extensions>
+			<extension>
+				<groupId>org.springframework.build</groupId>
+				<artifactId>aws-maven</artifactId>
+				<version>5.0.0.RELEASE</version>
+			</extension>
+		</extensions>
+	</build>
 	<profiles>
-	<!-- Activate using the release property: mvn clean install -Prelease -->
+		<!-- Activate using the release property: mvn clean install -Prelease -->
 		<profile>
 			<id>release</id>
 
