@@ -26,6 +26,7 @@ import org.geotools.factory.Hints;
 import org.geotools.referencing.CRS;
 import org.locationtech.geowave.adapter.raster.RasterUtils;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
+import org.locationtech.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIterator.Wrapper;
@@ -76,8 +77,9 @@ public class GeoToolsRasterDataStoreIngestPlugin implements LocalFileIngestPlugi
     }
     // the null check is enough and we don't need to check the format
     // accepts this file because the finder should have previously validated
-    // this
-    return (format != null);
+    // this, also don't allwo ingest from geowave raster format because its URL validation is way
+    // too lenient (ie. the URL is probably not supported)
+    return (format != null && !(format instanceof GeoWaveGTRasterFormat));
   }
 
   private static AbstractGridFormat prioritizedFindFormat(final URL input) {
