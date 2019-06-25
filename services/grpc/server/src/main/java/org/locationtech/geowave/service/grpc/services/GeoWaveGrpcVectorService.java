@@ -52,6 +52,7 @@ import org.locationtech.geowave.service.grpc.protobuf.VectorIngestParametersProt
 import org.locationtech.geowave.service.grpc.protobuf.VectorQueryParametersProtos;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.WKBReader;
+import org.locationtech.jts.io.WKBWriter;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
@@ -59,6 +60,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.threeten.extra.Interval;
 import com.beust.jcommander.ParameterException;
+import com.google.protobuf.ByteString;
 import com.google.protobuf.util.Timestamps;
 import io.grpc.BindableService;
 import io.grpc.stub.StreamObserver;
@@ -115,7 +117,7 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase implemen
         final FeatureAttributeProtos.Builder attBuilder = FeatureAttributeProtos.newBuilder();
 
         for (int i = 0; i < type.getAttributeDescriptors().size(); i++) {
-          SetAttributeBuilderValue(simpleFeature.getAttribute(i), attBuilder);
+          setAttributeBuilderValue(simpleFeature.getAttribute(i), attBuilder);
           b.putAttributes(type.getAttributeDescriptors().get(i).getLocalName(), attBuilder.build());
           /*
            * b.putAttributes( type.getAttributeDescriptors().get( i).getLocalName(),
@@ -387,7 +389,7 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase implemen
         final FeatureAttributeProtos.Builder attBuilder = FeatureAttributeProtos.newBuilder();
 
         for (int i = 0; i < type.getAttributeDescriptors().size(); i++) {
-          SetAttributeBuilderValue(simpleFeature.getAttribute(i), attBuilder);
+          setAttributeBuilderValue(simpleFeature.getAttribute(i), attBuilder);
           b.putAttributes(type.getAttributeDescriptors().get(i).getLocalName(), attBuilder.build());
         }
         final FeatureProtos f = b.build();
@@ -448,7 +450,7 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase implemen
         final FeatureAttributeProtos.Builder attBuilder = FeatureAttributeProtos.newBuilder();
 
         for (int i = 0; i < type.getAttributeDescriptors().size(); i++) {
-          SetAttributeBuilderValue(simpleFeature.getAttribute(i), attBuilder);
+          setAttributeBuilderValue(simpleFeature.getAttribute(i), attBuilder);
           b.putAttributes(type.getAttributeDescriptors().get(i).getLocalName(), attBuilder.build());
         }
         final FeatureProtos f = b.build();
@@ -523,7 +525,7 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase implemen
         final FeatureAttributeProtos.Builder attBuilder = FeatureAttributeProtos.newBuilder();
 
         for (int i = 0; i < type.getAttributeDescriptors().size(); i++) {
-          SetAttributeBuilderValue(simpleFeature.getAttribute(i), attBuilder);
+          setAttributeBuilderValue(simpleFeature.getAttribute(i), attBuilder);
           b.putAttributes(type.getAttributeDescriptors().get(i).getLocalName(), attBuilder.build());
         }
         final FeatureProtos f = b.build();
@@ -533,38 +535,42 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase implemen
     }
   }
 
-  private void SetAttributeBuilderValue(
+  private void setAttributeBuilderValue(
       final Object simpleFeatureAttribute,
       final FeatureAttributeProtos.Builder attBuilder) {
     if (simpleFeatureAttribute != null) {
       switch (simpleFeatureAttribute.getClass().getSimpleName()) {
-        case "String": {
+        case "String":
           attBuilder.setValString((String) simpleFeatureAttribute);
           break;
-        }
-        case "Integer": {
+
+        case "Integer":
           attBuilder.setValInt32((Integer) simpleFeatureAttribute);
           break;
-        }
-        case "Long": {
+
+        case "Long":
           attBuilder.setValInt64((Long) simpleFeatureAttribute);
           break;
-        }
-        case "Float": {
+
+        case "Float":
           attBuilder.setValFloat((Float) simpleFeatureAttribute);
           break;
-        }
-        case "Double": {
+
+        case "Double":
           attBuilder.setValDouble((Double) simpleFeatureAttribute);
           break;
-        }
-        case "Date": {
+
+        case "Date":
           attBuilder.setValDate(Timestamps.fromMillis(((Date) simpleFeatureAttribute).getTime()));
           break;
-        }
-        case "Geoemetry": {
+        case "Geometry":
+        case "Point":
+        case "LineString":
+        case "Polygon":
+        case "GeometryCollection":
+          attBuilder.setValGeometry(
+              ByteString.copyFrom((new WKBWriter().write((Geometry) simpleFeatureAttribute))));
           break;
-        }
         default:
           break;
       };

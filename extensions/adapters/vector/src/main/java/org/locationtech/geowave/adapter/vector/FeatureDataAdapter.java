@@ -95,7 +95,7 @@ import com.google.common.collect.HashBiMap;
  * cannot be changed, as they are critical components to the efficiency of query processing.
  */
 public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature> implements
-    GeotoolsFeatureDataAdapter,
+    GeotoolsFeatureDataAdapter<SimpleFeature>,
     StatisticsProvider<SimpleFeature>,
     HadoopDataAdapter<SimpleFeature, FeatureWritable>,
     InitializeWithIndicesDataAdapter<SimpleFeature> {
