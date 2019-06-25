@@ -10,8 +10,6 @@
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<properties>
-		<!-- to maintain only one download of GDAL, re-use the IT build directory -->
-		<gdal.dir>${project.basedir}/../../../test/target/temp/gdal</gdal.dir>
 		<tools.scope>compile</tools.scope>
 	</properties>
 
