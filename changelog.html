@@ -108,7 +108,9 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
-<li>build dev-resources in pipeline <a href="https://github.com/locationtech/geowave/pull/1582">#1582</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>fixed issue releasing to maven central <a href="https://github.com/locationtech/geowave/pull/1585">#1585</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>updated feature adapter to allow different simplefeature impls <a href="https://github.com/locationtech/geowave/pull/1584">#1584</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>ignore geowave raster format for ingest <a href="https://github.com/locationtech/geowave/pull/1583">#1583</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>fixed issue deploy dev-resources <a href="https://github.com/locationtech/geowave/pull/1581">#1581</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>initial cut at simple standalone installer <a href="https://github.com/locationtech/geowave/pull/1580">#1580</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Add additional exception handling to avoid serverside issues. <a href="https://github.com/locationtech/geowave/pull/1579">#1579</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
@@ -602,7 +604,6 @@
 <li>Adding 0.9.3 <a href="https://github.com/locationtech/geowave/pull/977">#977</a> (<a href="https://github.com/mawhitby">mawhitby</a>)</li>
 <li>added the documentation images <a href="https://github.com/locationtech/geowave/pull/976">#976</a> (<a href="https://github.com/mawhitby">mawhitby</a>)</li>
 <li>adding previous versions of documentation <a href="https://github.com/locationtech/geowave/pull/975">#975</a> (<a href="https://github.com/mawhitby">mawhitby</a>)</li>
-<li>profile for extra pdfs <a href="https://github.com/locationtech/geowave/pull/969">#969</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 </ul>
 <h2 id="v0.9.3-2016-12-16"><a href="https://github.com/locationtech/geowave/tree/v0.9.3">v0.9.3</a> (2016-12-16)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v0.9.2.1...v0.9.3">Full Changelog</a></p>
@@ -624,6 +625,7 @@
 <li>fix to puppet issue, and quickstart guide <a href="https://github.com/locationtech/geowave/pull/972">#972</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Packages fix <a href="https://github.com/locationtech/geowave/pull/971">#971</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>doc fix <a href="https://github.com/locationtech/geowave/pull/970">#970</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>profile for extra pdfs <a href="https://github.com/locationtech/geowave/pull/969">#969</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>renaming geowave service in puppet <a href="https://github.com/locationtech/geowave/pull/968">#968</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>minor fix in puppet manifest; provided arg passing to docker run <a href="https://github.com/locationtech/geowave/pull/967">#967</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Added support for BigTable on Google Cloud Platform <a href="https://github.com/locationtech/geowave/pull/966">#966</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
@@ -682,6 +684,7 @@
 <li>Geowave 859: HBase Performance Improvments <a href="https://github.com/locationtech/geowave/pull/880">#880</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>updating emr scripts to reflect using a released version of 0.9.2.1 <a href="https://github.com/locationtech/geowave/pull/879">#879</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>caching landsat scenes/images and gdal for travis-ci <a href="https://github.com/locationtech/geowave/pull/878">#878</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>various updates to geowave raster support tied to geotrellis integration <a href="https://github.com/locationtech/geowave/pull/876">#876</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Fixed version # in POM <a href="https://github.com/locationtech/geowave/pull/874">#874</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
 <li>added geoserver cli to jacoco source directories <a href="https://github.com/locationtech/geowave/pull/873">#873</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Commits from 0.9.2.1 <a href="https://github.com/locationtech/geowave/pull/872">#872</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
@@ -736,7 +739,6 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
-<li>various updates to geowave raster support tied to geotrellis integration <a href="https://github.com/locationtech/geowave/pull/876">#876</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>added readme for landsat CLI <a href="https://github.com/locationtech/geowave/pull/866">#866</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>update travis matrix for latest current/previous versions of hadoop, hbase, accumulo <a href="https://github.com/locationtech/geowave/pull/864">#864</a> (<a href="https://github.com/blastarr">blastarr</a>)</li>
 <li>Geowave 833 <a href="https://github.com/locationtech/geowave/pull/863">#863</a> (<a href="https://github.com/mawhitby">mawhitby</a>)</li>
@@ -928,7 +930,6 @@
 <li>GEOWAVE-679: raster resize CLI fix <a href="https://github.com/locationtech/geowave/pull/680">#680</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Issue #659, #658, #660. Allow the index writer to to multiple indice… <a href="https://github.com/locationtech/geowave/pull/676">#676</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>GEOWAVE-673: added index as optional parameter to KDE <a href="https://github.com/locationtech/geowave/pull/674">#674</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
-<li>GEOWAVE-669: moved geowavedemoapp to exmaples so that it could use ad… <a href="https://github.com/locationtech/geowave/pull/671">#671</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>GEOWAVE-666: fixed an issue with subsampling and added integration te… <a href="https://github.com/locationtech/geowave/pull/670">#670</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Issue #662. Partition based on boundary of polygon <a href="https://github.com/locationtech/geowave/pull/665">#665</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>Geowave 615 <a href="https://github.com/locationtech/geowave/pull/663">#663</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
@@ -973,6 +974,7 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>GEOWAVE-669: moved geowavedemoapp to exmaples so that it could use ad… <a href="https://github.com/locationtech/geowave/pull/671">#671</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Issue #650. Multiple bugs with storing adapter preferences. Adapter … <a href="https://github.com/locationtech/geowave/pull/651">#651</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>fixed a npe if common data is null <a href="https://github.com/locationtech/geowave/pull/649">#649</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Issue #647 WholeFeatureDataAdapter persists time configuration <a href="https://github.com/locationtech/geowave/pull/648">#648</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>

@@ -93,7 +93,7 @@ var activeTableTab = "activeTableTab";
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle">org.locationtech.geowave.core.geotime.store</div>
-<h2 title="Interface GeotoolsFeatureDataAdapter" class="title">Interface GeotoolsFeatureDataAdapter</h2>
+<h2 title="Interface GeotoolsFeatureDataAdapter" class="title">Interface GeotoolsFeatureDataAdapter&lt;T extends org.opengis.feature.simple.SimpleFeature&gt;</h2>
 </div>
 <div class="contentContainer">
 <div class="description">
@@ -101,7 +101,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><a href="../../../../../../org/locationtech/geowave/core/store/data/DataReader.html" title="interface in org.locationtech.geowave.core.store.data">DataReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/data/DataWriter.html" title="interface in org.locationtech.geowave.core.store.data">DataWriter</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;, <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>, <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</dd>
+<dd><a href="../../../../../../org/locationtech/geowave/core/store/data/DataReader.html" title="interface in org.locationtech.geowave.core.store.data">DataReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/data/DataWriter.html" title="interface in org.locationtech.geowave.core.store.data">DataWriter</a>&lt;T,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;, <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>, <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;T&gt;</dd>
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
@@ -109,8 +109,8 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public interface <span class="typeNameLabel">GeotoolsFeatureDataAdapter</span>
-extends <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</pre>
+<pre>public interface <span class="typeNameLabel">GeotoolsFeatureDataAdapter&lt;T extends org.opengis.feature.simple.SimpleFeature&gt;</span>
+extends <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;T&gt;</pre>
 </li>
 </ul>
 </div>
