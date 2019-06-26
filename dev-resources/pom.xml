@@ -30,15 +30,17 @@
 		<url>https://github.com/locationtech/geowave.git</url>
 		<connection>scm:git:git@github.com:locationtech/geowave.git</connection>
 	</scm>
-	<build>
-		<extensions>
-			<extension>
-				<groupId>org.springframework.build</groupId>
-				<artifactId>aws-maven</artifactId>
-				<version>5.0.0.RELEASE</version>
-			</extension>
-		</extensions>
-	</build>
+	<developers>
+		<developer>
+			<id>rfecher</id>
+			<name>Rich Fecher</name>
+			<email>rfecher@gmail.com</email>
+			<roles>
+				<role>developer</role>
+				<role>architect</role>
+			</roles>
+		</developer>
+	</developers>
 	<profiles>
 		<!-- Activate using the release property: mvn clean install -Prelease -->
 		<profile>

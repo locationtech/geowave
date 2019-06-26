@@ -8,7 +8,8 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<name>GeoWave Parent POM</name>
 	<packaging>pom</packaging>
-	<description>Geowave adds spatio-temporal indexing to accumulo through geotools and geoserver</description>
+	<description>Geowave adds spatio-temporal indexing to keyvalue stores through geotools and geoserver</description>
+	<inceptionYear>2013</inceptionYear>
 	<url>https://github.com/locationtech/geowave</url>
 	<licenses>
 		<license>
@@ -31,6 +32,30 @@
 		<connection>scm:git:https://github.com/locationtech/geowave.git</connection>
 		<tag>HEAD</tag>
 	</scm>
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/locationtech/geowave/issues/</url>
+	</issueManagement>
+	<mailingLists>
+		<mailingList>
+			<name>Developer List</name>
+			<subscribe>geowave-dev-join@locationtech.org</subscribe>
+			<unsubscribe>https://dev.locationtech.org/mailman/listinfo/geowave-dev</unsubscribe>
+			<post>geowave-dev@locationtech.org</post>
+			<archive>http://locationtech.org/mhonarc/lists/geowave-dev</archive>
+		</mailingList>
+	</mailingLists>
+	<developers>
+		<developer>
+			<id>rfecher</id>
+			<name>Rich Fecher</name>
+			<email>rfecher@gmail.com</email>
+			<roles>
+				<role>developer</role>
+				<role>architect</role>
+			</roles>
+		</developer>
+	</developers>
 	<properties>
 		<spark.version>2.3.1</spark.version>
 		<geotools.version>20.0</geotools.version>
@@ -97,7 +122,8 @@
 		<jacoco.version>0.7.4.201502262128</jacoco.version>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-		<test.args>-XX:CompressedClassSpaceSize=512m -XX:+UseSerialGC -Xms1g -Xmx2g -XX:MaxMetaspaceSize=512m</test.args>
+		<test.args>-XX:CompressedClassSpaceSize=512m -XX:+UseSerialGC -Xms1g
+			-Xmx2g -XX:MaxMetaspaceSize=512m</test.args>
 		<spotbugs.version>3.1.10</spotbugs.version>
 		<spotbugs.omitVisitors>MutableStaticFields,FindReturnRef</spotbugs.omitVisitors>
 		<spotbugs.effort>Max</spotbugs.effort>
