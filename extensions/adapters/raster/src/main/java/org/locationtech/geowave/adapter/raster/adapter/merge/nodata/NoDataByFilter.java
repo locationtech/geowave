@@ -13,11 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.TWKBReader;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
+import org.locationtech.geowave.core.index.GeoWaveSerializationException;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.io.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -126,9 +129,11 @@ public class NoDataByFilter implements NoDataMetadata {
       }
     }
     if (geometryBinaryLength > 0) {
-      final byte[] geometryBinary = ByteArrayUtils.safeRead(buf, geometryBinaryLength);
-      shape =
-          GeometryUtils.geometryFromBinary(geometryBinary, GeometryUtils.MAX_GEOMETRY_PRECISION);
+      try {
+        shape = new TWKBReader().read(buf);
+      } catch (final ParseException e) {
+        throw new GeoWaveSerializationException("Unable to deserialize geometry data", e);
+      }
     } else {
       shape = null;
     }

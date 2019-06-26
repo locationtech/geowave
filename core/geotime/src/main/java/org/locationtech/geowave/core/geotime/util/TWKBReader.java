@@ -12,6 +12,8 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryCollection;
@@ -26,13 +28,57 @@ import org.locationtech.jts.io.ParseException;
 import com.clearspring.analytics.util.Varint;
 
 public class TWKBReader {
+  private static class ByteBufferInputStream extends InputStream {
+    private final ByteBuffer byteBuffer;
+
+    public ByteBufferInputStream(final ByteBuffer byteBuffer) {
+      this.byteBuffer = byteBuffer;
+    }
+
+    @Override
+    public int read() throws IOException {
+      if (!byteBuffer.hasRemaining()) {
+        return -1;
+      }
+      return byteBuffer.get() & 0xFF;
+    }
+
+    @Override
+    public int read(final byte[] bytes, final int offset, final int length) throws IOException {
+      if (length == 0) {
+        return 0;
+      }
+      final int count = Math.min(byteBuffer.remaining(), length);
+      if (count == 0) {
+        return -1;
+      }
+      byteBuffer.get(bytes, offset, count);
+      return count;
+    }
+
+    @Override
+    public int available() throws IOException {
+      return byteBuffer.remaining();
+    }
+  }
+
   public TWKBReader() {}
 
+  public Geometry read(final ByteBuffer bytes) throws ParseException {
+    try (ByteBufferInputStream in = new ByteBufferInputStream(bytes)) {
+      try (DataInputStream input = new DataInputStream(in)) {
+        return read(input);
+      }
+    } catch (final IOException e) {
+      throw new ParseException("Error reading TWKB geometry.", e);
+    }
+  }
+
   public Geometry read(final byte[] bytes) throws ParseException {
-    try {
-      final ByteArrayInputStream in = new ByteArrayInputStream(bytes);
-      final DataInput input = new DataInputStream(in);
-      return read(input);
+    try (ByteArrayInputStream in = new ByteArrayInputStream(bytes)) {
+      try (DataInputStream input = new DataInputStream(in)) {
+        return read(input);
+      }
     } catch (final IOException e) {
       throw new ParseException("Error reading TWKB geometry.", e);
     }

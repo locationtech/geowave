@@ -348,10 +348,8 @@ public class ExplicitSpatialQuery extends BasicQueryByClass {
     crsCode = crsBinary.length > 0 ? StringUtils.stringFromBinary(crsBinary) : null;
     final byte[] superBinary = ByteArrayUtils.safeRead(buf, superBinaryLength);
     super.fromBinary(superBinary);
-    final byte[] geometryBinary = new byte[buf.remaining()];
-    buf.get(geometryBinary);
     try {
-      queryGeometry = new TWKBReader().read(geometryBinary);
+      queryGeometry = new TWKBReader().read(buf);
     } catch (final ParseException e) {
       LOGGER.warn("Unable to read query geometry as well-known binary", e);
     }
