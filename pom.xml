@@ -8,7 +8,8 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<name>GeoWave Parent POM</name>
 	<packaging>pom</packaging>
-	<description>Geowave adds spatio-temporal indexing to accumulo through geotools and geoserver</description>
+	<description>Geowave adds spatio-temporal indexing to keyvalue stores through geotools and geoserver</description>
+	<inceptionYear>2013</inceptionYear>
 	<url>https://github.com/locationtech/geowave</url>
 	<licenses>
 		<license>
@@ -31,6 +32,30 @@
 		<connection>scm:git:https://github.com/locationtech/geowave.git</connection>
 		<tag>HEAD</tag>
 	</scm>
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/locationtech/geowave/issues/</url>
+	</issueManagement>
+	<mailingLists>
+		<mailingList>
+			<name>Developer List</name>
+			<subscribe>geowave-dev-join@locationtech.org</subscribe>
+			<unsubscribe>https://dev.locationtech.org/mailman/listinfo/geowave-dev</unsubscribe>
+			<post>geowave-dev@locationtech.org</post>
+			<archive>http://locationtech.org/mhonarc/lists/geowave-dev</archive>
+		</mailingList>
+	</mailingLists>
+	<developers>
+		<developer>
+			<id>rfecher</id>
+			<name>Rich Fecher</name>
+			<email>rfecher@gmail.com</email>
+			<roles>
+				<role>developer</role>
+				<role>architect</role>
+			</roles>
+		</developer>
+	</developers>
 	<properties>
 		<spark.version>2.3.1</spark.version>
 		<geotools.version>20.0</geotools.version>
@@ -1212,13 +1237,12 @@
 				the branch active in git you want to tag. If something goes wrong pushing, 
 				you will most likely have outstanding commits in your local repo you will 
 				have to revert/remove. 1. mvn release:prepare -DdryRun=true -Darguments="-DskipTests 
-				-Dfindbugs.skip" 2. Inspect and ensure the correct pom.xml files will be 
-				modified 3. mvn release:prepare -Darguments="-DskipTests -Dfindbugs.skip" 
+				-spotbugs.skip" 2. Inspect and ensure the correct pom.xml files will be 
+				modified 3. mvn release:prepare -Darguments="-DskipTests -spotbugs.skip" 
 				4. mvn release:clean -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
-				<version>2.5.3</version>
 				<configuration>
 					<tagNameFormat>v@{project.version}</tagNameFormat>
 					<autoVersionSubmodules>true</autoVersionSubmodules>

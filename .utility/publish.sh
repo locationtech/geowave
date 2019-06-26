@@ -3,11 +3,15 @@
 if [ "$TRAVIS_REPO_SLUG" == "locationtech/geowave" ] && [ "$BUILD_AND_PUBLISH" == "true" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then  
   echo $GPG_SECRET_KEYS | base64 --decode | $GPG_EXECUTABLE --import
   echo $GPG_OWNERTRUST | base64 --decode | $GPG_EXECUTABLE --import-ownertrust
-  pushd dev-resources
+  
   # Build the dev-resources jar
-  echo -e "Deploying dev-resources..."
-  mvn deploy --settings ../.utility/.maven.xml -DskipTests -Dspotbugs.skip -B -U -Prelease
-  popd
+  dev-resources-exists=$(curl -I -s https://oss.sonatype.org/service/local/repositories/releases/content/org/locationtech/geowave/geowave-dev-resources/${DEV_RESOURCES_VERSION}/geowave-dev-resources-${DEV_RESOURCES_VERSION}.pom | grep HTTP)
+  if [[ ${dev-resources-exists} != *"200"* ]];then
+    pushd dev-resources
+    echo -e "Deploying dev-resources..."
+    mvn deploy --settings ../.utility/.maven.xml -DskipTests -Dspotbugs.skip -B -U -Prelease
+    popd
+  fi
   echo -e "Deploying geowave artifacts..."
   mvn deploy --settings .utility/.maven.xml -DskipTests -Dspotbugs.skip -B -U -Prelease
   echo -e "Generating changelog...\n"
