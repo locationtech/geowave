@@ -110,6 +110,7 @@
 <ul>
 <li>updated poms with required properties <a href="https://github.com/locationtech/geowave/pull/1588">#1588</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>fixed maven repo for dev-resources <a href="https://github.com/locationtech/geowave/pull/1587">#1587</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>streamline build plugins for tests <a href="https://github.com/locationtech/geowave/pull/1586">#1586</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>fixed issue releasing to maven central <a href="https://github.com/locationtech/geowave/pull/1585">#1585</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>updated feature adapter to allow different simplefeature impls <a href="https://github.com/locationtech/geowave/pull/1584">#1584</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>ignore geowave raster format for ingest <a href="https://github.com/locationtech/geowave/pull/1583">#1583</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
@@ -126,6 +127,7 @@
 <li>Implement KDE and Raster Resize in Spark <a href="https://github.com/locationtech/geowave/pull/1566">#1566</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>time indexing updates and tests <a href="https://github.com/locationtech/geowave/pull/1560">#1560</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>travis publish to maven central <a href="https://github.com/locationtech/geowave/pull/1559">#1559</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>publish to maven central <a href="https://github.com/locationtech/geowave/pull/1557">#1557</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Python bindings <a href="https://github.com/locationtech/geowave/pull/1556">#1556</a> (<a href="https://github.com/nikmanG">nikmanG</a>)</li>
 <li>docs and file cleaning <a href="https://github.com/locationtech/geowave/pull/1555">#1555</a> (<a href="https://github.com/buman56">buman56</a>)</li>
 <li>async reader (#30) <a href="https://github.com/locationtech/geowave/pull/1554">#1554</a> (<a href="https://github.com/cyzhan1118">cyzhan1118</a>)</li>
@@ -293,7 +295,6 @@
 <li>fixed remote version command on hbase <a href="https://github.com/locationtech/geowave/pull/1316">#1316</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Fix and test issue with heuristic index matching. <a href="https://github.com/locationtech/geowave/pull/1314">#1314</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>remove unused server-side version classes <a href="https://github.com/locationtech/geowave/pull/1312">#1312</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
-<li>completely removed jace <a href="https://github.com/locationtech/geowave/pull/1311">#1311</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>remove jace for now <a href="https://github.com/locationtech/geowave/pull/1310">#1310</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Refactor SparkSession &amp; SparkConf use. <a href="https://github.com/locationtech/geowave/pull/1309">#1309</a> (<a href="https://github.com/JWileczek">JWileczek</a>)</li>
 <li>revert minor changes to deploy scripts <a href="https://github.com/locationtech/geowave/pull/1308">#1308</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
@@ -317,6 +318,7 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>completely removed jace <a href="https://github.com/locationtech/geowave/pull/1311">#1311</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Small fixes to changes to master notebooks and jupyter bootstrap for release <a href="https://github.com/locationtech/geowave/pull/1301">#1301</a> (<a href="https://github.com/JWileczek">JWileczek</a>)</li>
 <li>added setCrs method <a href="https://github.com/locationtech/geowave/pull/1300">#1300</a> (<a href="https://github.com/mawhitby">mawhitby</a>)</li>
 <li>HP fortify Fals Positives <a href="https://github.com/locationtech/geowave/pull/1299">#1299</a> (<a href="https://github.com/mawhitby">mawhitby</a>)</li>
@@ -514,6 +516,7 @@
 <li>minor fixes to build <a href="https://github.com/locationtech/geowave/pull/1090">#1090</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Geowave security fixes <a href="https://github.com/locationtech/geowave/pull/1089">#1089</a> (<a href="https://github.com/mcarrier7">mcarrier7</a>)</li>
 <li>GeoServer SSL Configuration Properties Encryption Support <a href="https://github.com/locationtech/geowave/pull/1088">#1088</a> (<a href="https://github.com/mcarrier7">mcarrier7</a>)</li>
+<li>fixed issue in agg param in debug cli <a href="https://github.com/locationtech/geowave/pull/1087">#1087</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 </ul>
 <h2 id="v0.9.4-2017-04-28"><a href="https://github.com/locationtech/geowave/tree/v0.9.4">v0.9.4</a> (2017-04-28)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v0.9.3...v0.9.4">Full Changelog</a></p>
@@ -554,7 +557,6 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
-<li>fixed issue in agg param in debug cli <a href="https://github.com/locationtech/geowave/pull/1087">#1087</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>minor fix to rpm <a href="https://github.com/locationtech/geowave/pull/1086">#1086</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>update rpm to use hbase 1.3.0 <a href="https://github.com/locationtech/geowave/pull/1085">#1085</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>added json translation for xzcurve metadata <a href="https://github.com/locationtech/geowave/pull/1084">#1084</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
@@ -939,6 +941,7 @@
 <li>Geowave 647 9.1 <a href="https://github.com/locationtech/geowave/pull/661">#661</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>Pathingjar <a href="https://github.com/locationtech/geowave/pull/656">#656</a> (<a href="https://github.com/andrewdmanning">andrewdmanning</a>)</li>
 <li>GEOWAVE-614 - Added multi-threading to Geowave Ingest <a href="https://github.com/locationtech/geowave/pull/654">#654</a> (<a href="https://github.com/datasedai">datasedai</a>)</li>
+<li>Doc and deployment script fixes for EMR bootstrap failures <a href="https://github.com/locationtech/geowave/pull/634">#634</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 </ul>
 <h2 id="v0.9.0.1-2016-03-01"><a href="https://github.com/locationtech/geowave/tree/v0.9.0.1">v0.9.0.1</a> (2016-03-01)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v0.9.0...v0.9.0.1">Full Changelog</a></p>
@@ -987,7 +990,6 @@
 <li>Fix to properly deduplicate results from DataIdQuery <a href="https://github.com/locationtech/geowave/pull/641">#641</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
 <li>Protect against NPE <a href="https://github.com/locationtech/geowave/pull/639">#639</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
 <li>Updated supported version #s of core libraries <a href="https://github.com/locationtech/geowave/pull/636">#636</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
-<li>Doc and deployment script fixes for EMR bootstrap failures <a href="https://github.com/locationtech/geowave/pull/634">#634</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>GEOWAVE-626: Address performance issue when querying multiple range c… <a href="https://github.com/locationtech/geowave/pull/631">#631</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>GEOWAVE-618: Adjust the index choosing heuristic to incorporate binning <a href="https://github.com/locationtech/geowave/pull/630">#630</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>GEOWAVE-581 - Updated README dead links <a href="https://github.com/locationtech/geowave/pull/628">#628</a> (<a href="https://github.com/binderparty">binderparty</a>)</li>
