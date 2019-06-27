@@ -1,0 +1,24 @@
+//:geowave-getcs(1)
+//:===================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave gs getcs - Get GeoServer CoverageStore info
+
+SYNOPSIS
+//:--------
+
+geowave gs getcs [options] <coverage store name>
+
+DESCRIPTION
+//:-----------
+
+This command will return GeoServer CoverageStore info
+
+OPTIONS
+//:-------
+
+- -ws, --workspace
+ * <workspace name>

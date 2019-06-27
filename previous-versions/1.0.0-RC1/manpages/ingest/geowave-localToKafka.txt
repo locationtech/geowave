@@ -1,0 +1,120 @@
+//:geowave-localToKafka(1)
+//:=======================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave ingest localToKafka - Stage supported files in local file system to a Kafka topic
+
+SYNOPSIS
+//:--------
+
+geowave ingest localToKafka [options] <file or directory>
+
+DESCRIPTION
+//:-----------
+
+The geowave ingest localToKafka operator will stage supported files in the local file system to a Kafka topic
+
+OPTIONS
+//:-------
+
+- --avro.avro
+ * A flag to indicate whether avro feature serialization should be used
+ * Default: false
+- --avro.cql
+ * A CQL filter, only data matching this filter will be ingested
+ * Default: <empty string>
+- --avro.typename
+ * A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)
+- -x, --extension
+ * individual or comma-delimited set of file extensions to accept (optional)
+- -f, --formats
+ * Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used
+- --gdelt.avro
+ * A flag to indicate whether avro feature serialization should be used
+ * Default: false
+- --gdelt.cql
+ * A CQL filter, only data matching this filter will be ingested
+ * Default: <empty string>
+- --gdelt.extended
+ * A flag to indicate whether extended data format should be used
+ * Default: false
+- --gdelt.typename
+ * A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)
+- --geolife.avro
+ * A flag to indicate whether avro feature serialization should be used
+ * Default: false
+- --geolife.cql
+ * A CQL filter, only data matching this filter will be ingested
+ * Default: <empty string>
+- --geolife.typename
+ * A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)
+- --geotools-raster.coverage
+ * Optional parameter to set the coverage name (default is the file name)
+- --geotools-raster.crs
+ * A CRS override for the provided raster file
+- --geotools-raster.histogram
+ * Build a histogram of samples per band on ingest for performing band equalization
+ * Default: false
+- --geotools-raster.mergeStrategy
+ * Optional parameter to choose a tile merge strategy used for mosaic. 
+ * Default behavior will be `none`.  Alternatively 'no-data' will mosaic the most recent tile over previous tiles, except where there are no data values.
+ * Default: none
+- --geotools-raster.nodata
+ * Optional parameter to set 'no data' values, if 1 value is giving it is applied for each band, if multiple are given then the first totalNoDataValues/totalBands are applied to the first band and so on, so each band can have multiple differing 'no data' values if needed
+ * Default: []
+- --geotools-raster.pyramid
+ * Build an image pyramid on ingest for quick reduced resolution query
+ * Default: false
+- --geotools-raster.separateBands
+ * Optional parameter to separate each band into its own coverage name. By default the coverage name will have '_Bn' appended to it where `n` is the band's index.
+ * Default: false
+- --geotools-raster.tileSize
+ * Optional parameter to set the tile size stored (default is 256)
+ * Default: 256
+- --geotools-vector.cql
+ * A CQL filter, only data matching this filter will be ingested
+ * Default: <empty string>
+- --geotools-vector.data
+ * A map of date field names to the date format of the file. Use commas to separate each entry, then the first ':' character will separate the field name from the format. Use '\,' to include a comma in the format. For example: "time:MM:dd:YYYY,time2:YYYY/MM/dd hh:mm:ss" configures fields 'time' and 'time2' as dates with different formats
+- --geotools-vector.type
+ * Optional parameter that specifies specific type name(s) from the source file
+ * Default: []
+- --gpx.avro
+ * A flag to indicate whether avro feature serialization should be used
+ * Default: false
+- --gpx.cql
+ * A CQL filter, only data matching this filter will be ingested
+ * Default: <empty string>
+- --gpx.typename
+ * A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)
+- * --kafkaprops
+ * Properties file containing Kafka properties
+- --metadataBrokerList
+ * This is for bootstrapping and the producer will only use it for getting metadata (topics, partitions and replicas). The socket connections for sending the actual data will be established based on the broker information returned in the metadata. The format is host1:port1,host2:port2, and the list can be a subset of brokers or a VIP pointing to a subset of brokers.
+- --producerType
+ * This parameter specifies whether the messages are sent asynchronously in a background thread. Valid values are (1) async for asynchronous send and (2) sync for synchronous send. By setting the producer to async we allow batching together of requests (which is great for throughput) but open the possibility of a failure of the client machine dropping unsent data.
+- --requestRequiredAcks
+ * This value controls when a produce request is considered completed. Specifically, how many other brokers must have committed the data to their log and acknowledged this to the leader?
+- --retryBackoffMs
+ * The amount of time to wait before attempting to retry a failed produce request to a given topic partition. This avoids repeated sending-and-failing in a tight loop.
+- --serializerClass
+ * The serializer class for messages. The default encoder takes a byte[] and returns the same byte[].
+- --tdrive.avro
+ * A flag to indicate whether avro feature serialization should be used
+ * Default: false
+- --tdrive.cql
+ * A CQL filter, only data matching this filter will be ingested
+ * Default: <empty string>
+- --tdrive.typename
+ * A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)
+- --twitter.avro
+ * A flag to indicate whether avro feature serialization should be used
+ * Default: false
+- --twitter.cql
+ * A CQL filter, only data matching this filter will be ingested
+ * Default: <empty string>
+- --twitter.typename
+ * A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)

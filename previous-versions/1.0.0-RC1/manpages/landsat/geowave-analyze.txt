@@ -1,0 +1,44 @@
+//:geowave-analyze(1)
+//:=====================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave landsat analyze - Print out basic aggregate statistics for available Landsat 8 imagery
+
+SYNOPSIS
+//:--------
+
+geowave landsat analyze [options]
+
+DESCRIPTION
+//:-----------
+
+This command will print out basic aggregate statistics that are for available Landsat 8 imagery
+
+OPTIONS
+//:-------
+
+- --cql
+ * An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: shape (Geometry), acquisitionDate (Date), cloudCover (double), processingLevel (String), path (int), row (int) and the feature ID is entityId for the scene.  Additionally attributes of the individuals band can be used such as band (String), sizeMB (double), and bandDownloadUrl (String)
+ * Default: <empty string>
+- --nbestbands
+ * An option to identify and only use a set number of bands with the best cloud cover
+ * Default: 0
+- --nbestperspatial
+ * A boolean flag, when applied with --nbestscenes or --nbestbands will aggregate scenes and/or bands by path/row
+ * Default: false
+- --nbestscenes
+ * An option to identify and only use a set number of scenes with the best cloud cover
+ * Default: 0
+- --sincelastrun
+ * An option to check the scenes list from the workspace and if it exists, to only ingest data since the last scene.
+ * Default: false
+- --usecachedscenes
+ * An option to run against the existing scenes catalog in the workspace directory if it exists.
+ * Default: false
+- -ws, --workspaceDir
+ * A local directory to write temporary files needed for landsat 8 ingest.
+ * Default is <TEMP_DIR>/landsat8
+ * Default: landsat8

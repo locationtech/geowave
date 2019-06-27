@@ -1,0 +1,21 @@
+//:geowave-aws
+//:===============
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave config aws - Create a local configuration for aws s3
+
+SYNOPSIS
+//:--------
+
+geowave config aws <AWS S3 endpoint URL> (for example s3.amazonaws.com) 
+
+DESCRIPTION
+//:-----------
+
+This command will create a local configuration for aws s3
+
+OPTIONS
+//:-------

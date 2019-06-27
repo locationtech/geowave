@@ -1,0 +1,26 @@
+//:geowave-addfl(1)
+//:===================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave gs addfl - Add a GeoServer feature layer
+
+SYNOPSIS
+//:--------
+
+geowave gs addfl [options] <layer name>
+
+DESCRIPTION
+//:-----------
+
+This command will add a GeoServer feature layer
+
+OPTIONS
+//:-------
+
+- * -ds, --datastore
+ * <datastore name>
+- -ws, --workspace
+ * <workspace name>

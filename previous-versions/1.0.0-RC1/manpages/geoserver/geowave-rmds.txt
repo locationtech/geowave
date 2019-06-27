@@ -1,0 +1,24 @@
+//:geowave-rmds(1)
+//:===================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave gs rmds - Remove GeoServer DataStore
+
+SYNOPSIS
+//:--------
+
+geowave gs rmds [options] <datastore name>
+
+DESCRIPTION
+//:-----------
+
+This command will remove a GeoServer DataStore
+
+OPTIONS
+//:-------
+
+- -ws, --workspace
+ * <workspace name>

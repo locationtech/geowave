@@ -1,0 +1,23 @@
+//:geowave-liststyles(1)
+//:===================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave gs liststyles - List GeoServer styles
+
+SYNOPSIS
+//:--------
+
+geowave gs liststyles [options]
+
+DESCRIPTION
+//:-----------
+
+This command will list all GeoServer styles
+
+OPTIONS
+//:-------
+
+There are currently no options available for this command

@@ -1,0 +1,22 @@
+body {
+	padding-bottom: 0;
+}
+
+#footer {
+    font-size: 16px;
+    font-weight: 400;
+    font-style: normal;
+	background-color: rgba(0,0,0,.8);
+    padding: 1.25em;
+}
+
+#footer-text { color:rgba(255,255,255,.8); line-height: 1.44; }
+
+.page-header h2 {margin-top:50px;}
+#header, #content { max-width:none; margin-top: 0px; }
+.navbar-wrapper { padding-top:0; margin-top:20px; }
+
+#content h1#geowave { display:none; }
+#content h2#geowave { display:none; }
+
+p { font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; font-size:14px; color: #5a5a5a; }

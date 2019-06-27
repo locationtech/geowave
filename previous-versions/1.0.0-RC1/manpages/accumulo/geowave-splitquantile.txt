@@ -1,0 +1,27 @@
+//:geowave-splitquantile(1)
+//:==============
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave accumulo splitquantile - Set Accumulo splits by providing the number of partitions based on a quantile distribution strategy
+
+SYNOPSIS
+//:--------
+
+geowave accumulo splitquantile [options] <storename>
+
+DESCRIPTION
+//:-----------
+
+This command will allow a user to set the accumulo datastore splits by providing the number of partitions based on a quantile distribution strategy.
+
+OPTIONS
+//:-------
+
+- --indexId
+ * The geowave index ID (optional; default is all indices)
+- --num
+ * The number of partitions (or entries)
+ * Default: 0

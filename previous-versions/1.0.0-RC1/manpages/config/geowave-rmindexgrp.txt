@@ -1,0 +1,23 @@
+//:geowave-rmindexgrp(1)
+//:=====================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave config rmindexgrp - removes an index group from GeoWave configuration
+
+SYNOPSIS
+//:--------
+
+geowave config rmindexgrp [options] <name>
+
+DESCRIPTION
+//:-----------
+
+The geowave config rmindexgrp operator will remove an index group from GeoWave configuration
+
+OPTIONS
+//:-------
+
+There are currently no options for this command

@@ -1,0 +1,26 @@
+//:geowave-addcv(1)
+//:===================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave gs addcv - Add a GeoServer coverage
+
+SYNOPSIS
+//:--------
+
+geowave gs addcv [options] <coverage name>
+
+DESCRIPTION
+//:-----------
+
+This command will add a GeoServer coverage
+
+OPTIONS
+//:-------
+
+- * -cs, --cvgstore
+ * <coverage store name>
+- -ws, --workspace
+ * <workspace name>

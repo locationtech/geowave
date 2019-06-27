@@ -1,0 +1,23 @@
+//:geowave-mergedata(1)
+//:================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave remote mergedata - Merge all rows for a given adapter and index
+
+SYNOPSIS
+//:--------
+
+geowave remote mergedata [options] <storename> <indexname>
+
+DESCRIPTION
+//:-----------
+
+This command will allow a user to merge all rows for a given adapter and index
+
+OPTIONS
+//:-------
+
+There are currently no options for this command

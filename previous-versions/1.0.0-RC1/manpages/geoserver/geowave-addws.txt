@@ -1,0 +1,23 @@
+//:geowave-addws(1)
+//:===================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave gs addws - Add GeoServer workspace
+
+SYNOPSIS
+//:--------
+
+geowave gs addws [options] <workspace name>
+
+DESCRIPTION
+//:-----------
+
+This command will add a GeoServer workspace
+
+OPTIONS
+//:-------
+
+There are currently no options available for this command

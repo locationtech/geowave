@@ -1,0 +1,64 @@
+//:geowave-geoserver(1)
+//:===============
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave config geoserver - Create a local configuration for GeoServer
+
+SYNOPSIS
+//:--------
+
+geowave config geoserver [options] <GeoServer URL (for example http://localhost:8080/geoserver or https://localhost:8443/geoserver), or simply host:port and appropriate assumptions are made>
+
+DESCRIPTION
+//:-----------
+
+This command will create a local configuration for connecting to GeoServer.
+
+OPTIONS
+//:-------
+
+- -p, --password
+ * GeoServer Password - Can be specified as 'pass:<password>', 'file:<local file containing the password>', 'propfile:<local properties file containing the password>:<property file key>', 'env:<variable containing the pass>', or stdin
+- -u, --username
+ * GeoServer User
+- -ws, --workspace
+ * GeoServer Default Workspace
+
+SSL CONFIGURATION OPTIONS
+//:-----------
+
+- --sslKeyManagerAlgorithm
+ * Specify the algorithm to use for the keystore.
+- --sslKeyManagerProvider
+ * Specify the key manager factory provider.
+- --sslKeyPassword
+ * Specify the password to be used to access the server certificate from the specified keystore file.
+ * Can be specified as 'pass:<password>', 'file:<local file containing the password>', 'propfile:<local properties file containing the password>:<property file key>', 'env:<variable containing the pass>', or stdin
+- --sslKeyStorePassword
+ * Specify the password to use to access the keystore file.
+ * Can be specified as 'pass:<password>', 'file:<local file containing the password>', 'propfile:<local properties file containing the password>:<property file key>', 'env:<variable containing the pass>', or stdin
+- --sslKeyStorePath
+ * Specify the absolute path to where the keystore file is located on system. The keystore contains the server certificate to be loaded.
+- --sslKeyStoreProvider
+ * Specify the name of the keystore provider to be used for the server certificate.
+- --sslKeyStoreType
+ * The type of keystore file to be used for the server certificate.
+- --sslSecurityProtocol
+ * Specify the Transport Layer Security (TLS) protocol to use when connecting to the server. By default, the system will use TLS.
+- --sslTrustManagerAlgorithm
+ * Specify the algorithm to use for the truststore.
+- --sslTrustManagerProvider
+ * Specify the trust manager factory provider.
+- --sslTrustStorePassword
+ * Specify the password to use to access the truststore file.
+ * Can be specified as 'pass:<password>', 'file:<local file containing the password>', 'propfile:<local properties file containing the password>:<property file key>', 'env:<variable containing the pass>', or stdin
+- --sslTrustStorePath
+ * Specify the absolute path to where truststore file is located on system.
+ * The truststore file is used to validate client certificates.
+- --sslTrustStoreProvider
+ * Specify the name of the truststore provider to be used for the server certificate.
+- --sslTrustStoreType
+ * Specify the type of key store used for the truststore, i.e. JKS (Java KeyStore).

@@ -1,0 +1,34 @@
+//:geowave-ingest(1)
+//:==============
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave osm ingest - Ingest and convert OSM data from HDFS to GeoWave
+
+SYNOPSIS
+//:--------
+
+geowave osm ingest [options] <hdfs host:port> <path to base directory to read from> <store name>
+
+DESCRIPTION
+//:-----------
+
+This command will ingest and convert OSM data from HDFS to GeoWave.
+
+OPTIONS
+//:-------
+
+- -jn, --jobName
+ * Name of mapreduce job
+ * Default: Ingest (mcarrier)
+- -m, --mappingFile
+ * Mapping file, imposm3 form
+- --table
+ * OSM Table name in GeoWave
+ * Default: OSM
+- * -t, --type
+ * Mapper type - one of node, way, or relation
+- -v, --visibility
+ * The visibility of the data ingested (optional; default is 'public')

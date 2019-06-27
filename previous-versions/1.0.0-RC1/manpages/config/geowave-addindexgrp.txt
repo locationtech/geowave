@@ -1,0 +1,23 @@
+//:geowave-addindexgrp(1)
+//:======================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave config addindexgrp - Create an index group for usage in GeoWave
+
+SYNOPSIS
+//:--------
+
+geowave config addindexgrp [options] <name> <comma separated list of indexes>
+
+DESCRIPTION
+//:-----------
+
+The geowave config addindexgrp operator will group multiple index configurations together given a name. This acts as a convenience for re-using multiple indices together on ingest.
+
+OPTIONS
+//:-------
+
+There are currently no options for this command

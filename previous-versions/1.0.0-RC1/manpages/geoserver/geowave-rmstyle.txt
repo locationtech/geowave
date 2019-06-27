@@ -1,0 +1,24 @@
+//:geowave-rmstyle(1)
+//:===================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave gs rmstyle - Remove GeoServer Style
+
+SYNOPSIS
+//:--------
+
+geowave gs rmstyle [options] <style name>
+
+DESCRIPTION
+//:-----------
+
+This command will remove a GeoServer Style
+
+OPTIONS
+//:-------
+
+There are currently no options available for this command
+

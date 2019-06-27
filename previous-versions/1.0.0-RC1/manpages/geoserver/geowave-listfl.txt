@@ -1,0 +1,29 @@
+//:geowave-listfl(1)
+//:===================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave gs listfl - List GeoServer feature layers
+
+SYNOPSIS
+//:--------
+
+geowave gs listfl [options]
+
+DESCRIPTION
+//:-----------
+
+This command will list all GeoServer feature layers
+
+OPTIONS
+//:-------
+
+- -ds, --datastore
+ * Datastore Name
+- -g, --geowaveOnly
+ * Show only GeoWave feature layers (default: false)
+ * Default: false
+- -ws, --workspace
+ * Workspace Name

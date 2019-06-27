@@ -1,0 +1,24 @@
+//:geowave-addstyle(1)
+//:===================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave gs addstyle - Add a GeoServer style
+
+SYNOPSIS
+//:--------
+
+geowave gs addstyle [options] <GeoWave style name>
+
+DESCRIPTION
+//:-----------
+
+This command will add a GeoServer style
+
+OPTIONS
+//:-------
+
+- * -sld, --stylesld
+ * <style sld file>

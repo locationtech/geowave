@@ -1,0 +1,32 @@
+//:geowave-localexport(1)
+//:==============
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave vector localexport - Export data directly
+
+SYNOPSIS
+//:--------
+
+geowave vector localexport [options] <store name>
+
+DESCRIPTION
+//:-----------
+
+This command will export data from a data store
+
+OPTIONS
+//:-------
+
+- --adapterIds
+ * Comma separated list of adapter Ids
+- --batchSize
+ * Records to process at a time
+ * Default: 10000
+- --cqlFilter
+ * Filter exported data based on CQL filter
+- --indexId
+ * The index to export from
+- * --outputFile

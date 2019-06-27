@@ -1,0 +1,31 @@
+//:geowave-addlayer(1)
+//:===================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave gs addlayer - Add a GeoServer layer from the given GeoWave store
+
+SYNOPSIS
+//:--------
+
+geowave gs addlayer [options] <GeoWave store name>
+
+DESCRIPTION
+//:-----------
+
+This command will add a GeoServer layer from the given GeoWave store
+
+OPTIONS
+//:-------
+
+- -id, --adapterId
+ * select just <adapter id> from the store
+- -a, --add
+ * For multiple layers, add (all | raster | vector)
+ * Possible Values: [ALL, RASTER, VECTOR]
+- -sld, --setStyle
+ * <default style sld>
+- -ws, --workspace
+ * <workspace name>

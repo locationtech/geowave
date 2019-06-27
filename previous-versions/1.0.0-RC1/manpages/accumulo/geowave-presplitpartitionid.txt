@@ -1,0 +1,27 @@
+//:geowave-presplitpartitionid(1)
+//:==============
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave accumulo presplitpartitionid - Pre-split Accumulo table by providing the number of partition IDs
+
+SYNOPSIS
+//:--------
+
+geowave accumulo presplitpartitionid [options] <storename>
+
+DESCRIPTION
+//:-----------
+
+This command will pre-split an accumulo table by providing the number of partition IDs
+
+OPTIONS
+//:-------
+
+- --indexId
+ * The geowave index ID (optional; default is all indices)
+- --num
+ * The number of partitions (or entries)
+ * Default: 0

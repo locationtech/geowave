@@ -1,0 +1,26 @@
+//:geowave-getcv(1)
+//:===================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave gs getcv - Get a GeoServer coverage's info
+
+SYNOPSIS
+//:--------
+
+geowave gs getcv [options] <coverage name>
+
+DESCRIPTION
+//:-----------
+
+This command will return a GeoServer coverage's info
+
+OPTIONS
+//:-------
+
+- -cs, --coverageStore
+ * <coverage store name>
+- -ws, --workspace
+ * <workspace name>

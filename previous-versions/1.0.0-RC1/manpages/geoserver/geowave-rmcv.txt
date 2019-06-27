@@ -1,0 +1,26 @@
+//:geowave-rmcv(1)
+//:===================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave gs rmcv - Remove a GeoServer coverage
+
+SYNOPSIS
+//:--------
+
+geowave gs rmcv [options] <coverage name>
+
+DESCRIPTION
+//:-----------
+
+This command will remove a GeoServer coverage
+
+OPTIONS
+//:-------
+
+- * -cs, --cvgstore
+ * <coverage store name>
+- -ws, --workspace
+ * <workspace name>

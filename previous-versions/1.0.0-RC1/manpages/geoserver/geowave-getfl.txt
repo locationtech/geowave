@@ -1,0 +1,23 @@
+//:geowave-getfl(1)
+//:===================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave gs getfl - Get GeoServer feature layer info
+
+SYNOPSIS
+//:--------
+
+geowave gs getfl [options] <layer name>
+
+DESCRIPTION
+//:-----------
+
+This command will return GeoServer feature layer info
+
+OPTIONS
+//:-------
+
+There are currently no options available for this command

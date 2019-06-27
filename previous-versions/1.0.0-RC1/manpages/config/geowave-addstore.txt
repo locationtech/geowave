@@ -1,0 +1,63 @@
+//:geowave-addstore(1)
+//:===================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave config addstore - Create a store within Geowave
+
+SYNOPSIS
+//:--------
+
+geowave config addstore [options] <name>
+
+DESCRIPTION
+//:-----------
+
+The geowave config addstore operator will create a new store in GeoWave.
+
+OPTIONS
+//:-------
+
+- -d, --default
+ * Make this the default store in all operations
+
+- *-t, --type <arg>
+ * The type of store, such as accumulo, memory, etc.
+ * Required!
+ * When -t accummulo option is used, additional options are:
+ 
+  ** --gwNamespace
+   *** The geowave namespace
+    **** Default is no namespace
+    
+  ** *-i, --instance
+   *** The Accumulo instance ID
+   *** Required!
+
+  ** *-p, --password
+   *** The password for the user
+   *** Required!
+
+  ** *-u, --user
+   *** A valid Accumulo user ID
+   *** Required!
+
+  ** *-z, --zookeeper
+   *** A comma-separated list of zookeeper servers that an Accumulo instance is using
+   *** Required!
+
+ * When -t, --type hbase option is used, additional options are:
+
+  ** -d, --default
+   *** Make this the default index creating stores
+
+  ** -np, --numPartitions
+   *** The number of partitions.
+   *** Default: 1
+
+  ** -ps, --partitionStrategy
+   *** The partition strategy to use.
+   *** Default: NONE
+   *** Possible Values: [NONE, HASH, ROUND_ROBIN]

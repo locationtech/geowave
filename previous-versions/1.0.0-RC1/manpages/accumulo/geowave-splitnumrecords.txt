@@ -1,0 +1,27 @@
+//:geowave-splitnumrecords(1)
+//:==============
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave accumulo splitnumrecords - Set Accumulo splits by providing the number of entries per split
+
+SYNOPSIS
+//:--------
+
+geowave accumulo splitnumrecords [options] <storename>
+
+DESCRIPTION
+//:-----------
+
+This command will set the accumulo datastore splits by providing the number of entries per split.
+
+OPTIONS
+//:-------
+
+- --indexId
+ * The geowave index ID (optional; default is all indices)
+- --num
+ * The number of partitions (or entries)
+ * Default: 0
