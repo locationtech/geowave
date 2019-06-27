@@ -36,11 +36,11 @@ public class TWKBWriter {
   }
 
   public byte[] write(final Geometry geom) {
-    try {
-      final ByteArrayOutputStream out = new ByteArrayOutputStream();
-      final DataOutput output = new DataOutputStream(out);
-      write(geom, output);
-      return out.toByteArray();
+    try (final ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+      try (final DataOutputStream output = new DataOutputStream(out)) {
+        write(geom, output);
+        return out.toByteArray();
+      }
     } catch (final IOException e) {
       throw new RuntimeException("Error writing TWKB geometry.", e);
     }
