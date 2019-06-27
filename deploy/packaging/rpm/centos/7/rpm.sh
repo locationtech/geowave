@@ -27,11 +27,13 @@ while [ $# -gt 0 ]; do
 done
 
 GEOWAVE_VERSION=${ARGS[geowave-version]}
+GEOWAVE_RPM_VERSION=${ARGS[geowave-rpm-version]}
 
 case ${ARGS[command]} in
     build-vendor) rpmbuild \
                 --define "_topdir $(pwd)" \
                 --define "_version $GEOWAVE_VERSION" \
+                --define "_rpm_version $GEOWAVE_RPM_VERSION" \
                 --define "_timestamp ${ARGS[time-tag]}" \
                 --define "_vendor_version ${ARGS[vendor-version]}" \
                 --define "_priority $(parsePriorityFromVersion $GEOWAVE_VERSION)" \
@@ -40,6 +42,7 @@ case ${ARGS[command]} in
     build-common) rpmbuild \
                 --define "_topdir $(pwd)" \
                 --define "_version $GEOWAVE_VERSION" \
+                --define "_rpm_version $GEOWAVE_RPM_VERSION" \
                 --define "_timestamp ${ARGS[time-tag]}" \
                 --define "_priority $(parsePriorityFromVersion $GEOWAVE_VERSION)" \
                 $(buildArg "${ARGS[buildarg]}") SPECS/*-common.spec ;;

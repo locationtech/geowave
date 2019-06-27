@@ -15,8 +15,6 @@ node ('master') {
               [$class: 'StringParameterDefinition', name: 'third_party_deps_path', defaultValue: 'https://s3.amazonaws.com/geowave/third-party-downloads', description: 'URL to third party downloads directory (No trailing slash)'],
               [$class: 'StringParameterDefinition', name: 'LOCAL_REPO_DIR', defaultValue: '/jenkins/gw-repo/snapshots', description: 'Path on the local filesystem to the repo'],
               [$class: 'StringParameterDefinition', name: 'build_type', defaultValue: 'clean install', description: 'Maven build type. To publish to central change to deploy. Credentials must be added.'],
-              [$class: 'StringParameterDefinition', name: 'git_repo', defaultValue: 'https://github.com/locationtech/geowave.git', description: 'Repo to clone'],
-              [$class: 'StringParameterDefinition', name: 'git_branch', defaultValue: 'master', description: 'Branch to build'],
               [$class: 'StringParameterDefinition', name: 'install4j_home', defaultValue: '/opt/install4j7/', description: 'Home directory of install4j, required if building standalone installers'],
               [$class: 'ChoiceParameterDefinition', name: 'overwrite_parameters', choices: 'No\nYes', description: 'Set to yes to reset parameters to defaults'],
               ]
@@ -53,8 +51,8 @@ node ('master') {
   }
 
   stage('Checkout'){
-    // Checkout branch from github
-    git branch: "${params.git_branch}", url: "${params.git_repo}"
+    // Get GeoWave source from SCM
+    checkout scm
   }
   // Mark the create docker image 'stage'
   stage('Create Docker Image'){

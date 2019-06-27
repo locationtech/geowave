@@ -1,5 +1,6 @@
 %define timestamp           %{?_timestamp}%{!?_timestamp: %(date +%Y%m%d%H%M)}
 %define version             %{?_version}%{!?_version: UNKNOWN}
+%define rpm_version         %{?_rpm_version}%{!?_rpm_version: UNKNOWN}
 %define vendor_version      %{?_vendor_version}%{!?_vendor_version: UNKNOWN}
 %define base_name           geowave
 %define name                %{base_name}-%{vendor_version}
@@ -21,11 +22,11 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Name:           %{base_name}
-Version:        %{version}
+Version:        %{rpm_version}
 Release:        %{timestamp}
 BuildRoot:      %{buildroot}
 BuildArch:      noarch
-Summary:        GeoWave provides geospatial and temporal indexing on top of Accumulo and HBase
+Summary:        GeoWave provides geospatial and temporal indexing on top of key-value stores
 License:        Apache2
 Group:          Applications/Internet
 Source0:        geowave-accumulo-%{version}-%{vendor_version}.jar
@@ -43,7 +44,7 @@ BuildRequires:  xmlto
 BuildRequires:  asciidoc
 
 %description
-GeoWave provides geospatial and temporal indexing on top of Accumulo and HBase.
+GeoWave provides geospatial and temporal indexing on top of key-value stores
 
 %prep
 rm -rf %{_rpmdir}/%{buildarch}/%{vendor_app_name}*
@@ -89,11 +90,11 @@ mkdir -p %{buildroot}%{geowave_plugins_home}
 %package -n     %{vendor_app_name}-single-host
 Summary:        All GeoWave Components
 Group:          Applications/Internet
-Requires:       %{vendor_app_name}-accumulo = %{version}
-Requires:       %{vendor_app_name}-hbase = %{version}
-Requires:       %{vendor_app_name}-gwgeoserver = %{version}
-Requires:       %{vendor_app_name}-restservices = %{version}
-Requires:       %{vendor_app_name}-tools = %{version}
+Requires:       %{vendor_app_name}-accumulo = %{rpm_version}
+Requires:       %{vendor_app_name}-hbase = %{rpm_version}
+Requires:       %{vendor_app_name}-gwgeoserver = %{rpm_version}
+Requires:       %{vendor_app_name}-restservices = %{rpm_version}
+Requires:       %{vendor_app_name}-tools = %{rpm_version}
 
 %description -n %{vendor_app_name}-single-host
 GeoWave provides geospatial and temporal indexing on top of Accumulo.
@@ -108,9 +109,9 @@ would likely be useful for dev environments
 %package -n     %{vendor_app_name}-accumulo
 Summary:        GeoWave Accumulo Components
 Group:          Applications/Internet
-Provides:       %{vendor_app_name}-accumulo = %{version}
-Requires:       %{vendor_app_name}-tools = %{version}
-Requires:       %{common_app_name}-core = %{version}
+Provides:       %{vendor_app_name}-accumulo = %{rpm_version}
+Requires:       %{vendor_app_name}-tools = %{rpm_version}
+Requires:       %{common_app_name}-core = %{rpm_version}
 
 %description -n %{vendor_app_name}-accumulo
 GeoWave provides geospatial and temporal indexing on top of Accumulo.
@@ -132,9 +133,9 @@ This package installs the Accumulo components of GeoWave
 %package -n     %{vendor_app_name}-hbase
 Summary:        GeoWave HBase Components
 Group:          Applications/Internet
-Provides:       %{vendor_app_name}-hbase = %{version}
-Requires:       %{vendor_app_name}-tools = %{version}
-Requires:       %{common_app_name}-core = %{version}
+Provides:       %{vendor_app_name}-hbase = %{rpm_version}
+Requires:       %{vendor_app_name}-tools = %{rpm_version}
+Requires:       %{common_app_name}-core = %{rpm_version}
 
 %description -n %{vendor_app_name}-hbase
 GeoWave provides geospatial and temporal indexing on top of HBase.
@@ -156,8 +157,8 @@ This package installs the HBase components of GeoWave
 %package -n     %{vendor_app_name}-tools
 Summary:        GeoWave Tools
 Group:          Applications/Internet
-Provides:       %{vendor_app_name}-tools = %{version}
-Requires:       %{common_app_name}-core = %{version}
+Provides:       %{vendor_app_name}-tools = %{rpm_version}
+Requires:       %{common_app_name}-core = %{rpm_version}
 
 %description -n %{vendor_app_name}-tools
 GeoWave provides geospatial and temporal indexing on top of Accumulo.

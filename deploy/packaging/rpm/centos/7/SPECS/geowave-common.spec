@@ -1,5 +1,6 @@
 %define timestamp           %{?_timestamp}%{!?_timestamp: %(date +%Y%m%d%H%M)}
 %define version             %{?_version}%{!?_version: UNKNOWN}
+%define rpm_version         %{?_rpm_version}%{!?_rpm_version: UNKNOWN}
 %define base_name           geowave
 %define name                %{base_name}
 %define common_app_name     %{base_name}-%{version}
@@ -15,7 +16,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Name:           %{base_name}
-Version:        %{version}
+Version:        %{rpm_version}
 Release:        %{timestamp}
 BuildRoot:      %{buildroot}
 BuildArch:      noarch
@@ -32,7 +33,7 @@ BuildRequires:  xmlto
 BuildRequires:  asciidoc
 
 %description
-GeoWave provides geospatial and temporal indexing on top of Accumulo and HBase.
+GeoWave provides geospatial and temporal indexing on top of key-value stores
 
 %install
 # Copy system service files into place

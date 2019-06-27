@@ -23,7 +23,9 @@ echo "---------------------------------------------------------------"
 mkdir -p $WORKSPACE/deploy/target
 GEOWAVE_VERSION_STR="$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive -f $WORKSPACE/pom.xml exec:exec)"
 GEOWAVE_VERSION="$(echo ${GEOWAVE_VERSION_STR} | sed -e 's/"//g' -e 's/-SNAPSHOT//g')"
+GEOWAVE_RPM_VERSION="$(echo ${GEOWAVE_VERSION} | sed -e 's/"//g' -e 's/-/~/g')"
 echo $GEOWAVE_VERSION > $WORKSPACE/deploy/target/version.txt
+echo $GEOWAVE_RPM_VERSION > $WORKSPACE/deploy/target/rpm_version.txt
 if [[ "$GEOWAVE_VERSION_STR" =~ "-SNAPSHOT" ]]
 then
 	#its a dev/latest build
