@@ -4,7 +4,7 @@
 		<artifactId>geowave-service-parent</artifactId>
 		<groupId>org.locationtech.geowave</groupId>
 		<relativePath>../../</relativePath>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>1.0.0-RC1</version>
 	</parent>
 	<artifactId>geowave-grpc-protobuf-generator</artifactId>
 	<name>GeoWave gRPC protobuf generator</name>
