@@ -1237,8 +1237,8 @@
 				the branch active in git you want to tag. If something goes wrong pushing, 
 				you will most likely have outstanding commits in your local repo you will 
 				have to revert/remove. 1. mvn release:prepare -DdryRun=true -Darguments="-DskipTests 
-				-spotbugs.skip" 2. Inspect and ensure the correct pom.xml files will be 
-				modified 3. mvn release:prepare -Darguments="-DskipTests -spotbugs.skip" 
+				-Dspotbugs.skip" 2. Inspect and ensure the correct pom.xml files will be 
+				modified 3. mvn release:prepare -Darguments="-DskipTests -Dspotbugs.skip" 
 				4. mvn release:clean -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
