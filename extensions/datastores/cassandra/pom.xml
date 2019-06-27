@@ -4,7 +4,7 @@
 		<artifactId>geowave-extension-parent</artifactId>
 		<groupId>org.locationtech.geowave</groupId>
 		<relativePath>../../</relativePath>
-		<version>1.0.0-RC1</version>
+		<version>1.0.0-RC2-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-datastore-cassandra</artifactId>
 	<name>GeoWave Cassandra</name>

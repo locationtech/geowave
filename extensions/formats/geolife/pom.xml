@@ -5,7 +5,7 @@
 		<groupId>org.locationtech.geowave</groupId>
 		<artifactId>geowave-extension-parent</artifactId>
 		<relativePath>../../</relativePath>
-		<version>1.0.0-RC1</version>
+		<version>1.0.0-RC2-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-format-geolife</artifactId>
 	<name>GeoWave GeoLife Format Support</name>
