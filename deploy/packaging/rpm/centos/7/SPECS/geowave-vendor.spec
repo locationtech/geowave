@@ -185,7 +185,9 @@ fi
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 %changelog
-* Fri Nov 23 2016 Rich Fecher <rfecher@gmail.com> - 0.9.3
+* Thu Jun 27 2019 Rich Fecher <rfecher@gmail.com> - 1.0.0
+- Enabled prerelease versioning
+* Wed Nov 23 2016 Rich Fecher <rfecher@gmail.com> - 0.9.3
 - Add geowave-hbase and refactor to separate vendor-specific and common rpms
 * Fri Jun 5 2015 Andrew Spohn <andrew.e.spohn.ctr@nga.mil> - 0.8.7-1
 - Add external config file
