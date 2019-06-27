@@ -1,8 +1,9 @@
 %define timestamp           %{?_timestamp}%{!?_timestamp: %(date +%Y%m%d%H%M)}
-%define version             %{?_version}%{!?_version: UNKNOWN}
+%define name_version             %{?_name_version}%{!?_name_version: UNKNOWN}
+%define rpm_version         %{?_rpm_version}%{!?_rpm_version: UNKNOWN}
 %define base_name           geowave
 %define name                %{base_name}
-%define common_app_name     %{base_name}-%{version}
+%define common_app_name     %{base_name}-%{name_version}
 %define buildroot           %{_topdir}/BUILDROOT/%{common_app_name}-root
 %define installpriority     %{_priority} # Used by alternatives for concurrent version installs
 %define __jar_repack        %{nil}
@@ -15,7 +16,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Name:           %{base_name}
-Version:        %{version}
+Version:        %{rpm_version}
 Release:        %{timestamp}
 BuildRoot:      %{buildroot}
 BuildArch:      noarch
@@ -23,16 +24,16 @@ Summary:        GeoWave provides geospatial and temporal indexing on top of Accu
 License:        Apache2
 Group:          Applications/Internet
 Source1:        bash_profile.sh
-Source2:        site-%{version}.tar.gz
-Source3:        manpages-%{version}.tar.gz
-Source4:        puppet-scripts-%{version}.tar.gz
+Source2:        site-%{name_version}.tar.gz
+Source3:        manpages-%{name_version}.tar.gz
+Source4:        puppet-scripts-%{name_version}.tar.gz
 BuildRequires:  unzip
 BuildRequires:  zip
 BuildRequires:  xmlto
 BuildRequires:  asciidoc
 
 %description
-GeoWave provides geospatial and temporal indexing on top of Accumulo and HBase.
+GeoWave provides geospatial and temporal indexing on top of key-value stores
 
 %install
 # Copy system service files into place
@@ -60,7 +61,7 @@ tar -xzf %{SOURCE4} -C %{buildroot}/etc/puppet/modules
 %package -n     %{common_app_name}-core
 Summary:        GeoWave Core
 Group:          Applications/Internet
-Provides:       %{common_app_name}-core = %{version}
+Provides:       %{common_app_name}-core = %{rpm_version}
 
 %description -n %{common_app_name}-core
 GeoWave provides geospatial and temporal indexing on top of Accumulo.
@@ -86,8 +87,8 @@ fi
 %package -n     %{common_app_name}-docs
 Summary:        GeoWave Documentation
 Group:          Applications/Internet
-Provides:       %{common_app_name}-docs = %{version}
-Requires:       %{common_app_name}-core = %{version}
+Provides:       %{common_app_name}-docs = %{rpm_version}
+Requires:       %{common_app_name}-core = %{rpm_version}
 
 %description -n %{common_app_name}-docs
 GeoWave provides geospatial and temporal indexing on top of Accumulo and HBase.

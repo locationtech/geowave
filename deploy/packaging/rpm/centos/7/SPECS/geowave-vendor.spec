@@ -1,10 +1,11 @@
 %define timestamp           %{?_timestamp}%{!?_timestamp: %(date +%Y%m%d%H%M)}
-%define version             %{?_version}%{!?_version: UNKNOWN}
+%define name_version        %{?_name_version}%{!?_name_version: UNKNOWN}
+%define rpm_version         %{?_rpm_version}%{!?_rpm_version: UNKNOWN}
 %define vendor_version      %{?_vendor_version}%{!?_vendor_version: UNKNOWN}
 %define base_name           geowave
 %define name                %{base_name}-%{vendor_version}
-%define common_app_name     %{base_name}-%{version}
-%define vendor_app_name     %{base_name}-%{version}-%{vendor_version}
+%define common_app_name     %{base_name}-%{name_version}
+%define vendor_app_name     %{base_name}-%{name_version}-%{vendor_version}
 %define buildroot           %{_topdir}/BUILDROOT/%{vendor_app_name}-root
 %define installpriority     %{_priority} # Used by alternatives for concurrent version installs
 %define __jar_repack        %{nil}
@@ -21,21 +22,21 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Name:           %{base_name}
-Version:        %{version}
+Version:        %{rpm_version}
 Release:        %{timestamp}
 BuildRoot:      %{buildroot}
 BuildArch:      noarch
-Summary:        GeoWave provides geospatial and temporal indexing on top of Accumulo and HBase
+Summary:        GeoWave provides geospatial and temporal indexing on top of key-value stores
 License:        Apache2
 Group:          Applications/Internet
-Source0:        geowave-accumulo-%{version}-%{vendor_version}.jar
+Source0:        geowave-accumulo-%{name_version}-%{vendor_version}.jar
 Source1:        deploy-geowave-accumulo-to-hdfs.sh
-Source2:        geowave-hbase-%{version}-%{vendor_version}.jar
+Source2:        geowave-hbase-%{name_version}-%{vendor_version}.jar
 Source3:        deploy-geowave-hbase-to-hdfs.sh
 Source8:        default.xml
 Source9:        namespace.xml
 Source10:       workspace.xml
-Source11:       geowave-tools-%{version}-%{vendor_version}.jar
+Source11:       geowave-tools-%{name_version}-%{vendor_version}.jar
 Source12:       %{geowave_tools_script}
 BuildRequires:  unzip
 BuildRequires:  zip
@@ -43,7 +44,7 @@ BuildRequires:  xmlto
 BuildRequires:  asciidoc
 
 %description
-GeoWave provides geospatial and temporal indexing on top of Accumulo and HBase.
+GeoWave provides geospatial and temporal indexing on top of key-value stores
 
 %prep
 rm -rf %{_rpmdir}/%{buildarch}/%{vendor_app_name}*
@@ -75,13 +76,13 @@ mkdir -p %{buildroot}%{geowave_tools_home}
 cp %{SOURCE11} %{buildroot}%{geowave_tools_home}
 cp %{buildroot}%{geowave_accumulo_home}/geowave-accumulo-build.properties %{buildroot}%{geowave_tools_home}/build.properties
 pushd %{buildroot}%{geowave_tools_home}
-zip -qg %{buildroot}%{geowave_tools_home}/geowave-tools-%{version}-%{vendor_version}.jar build.properties
+zip -qg %{buildroot}%{geowave_tools_home}/geowave-tools-%{name_version}-%{vendor_version}.jar build.properties
 popd
 mv %{buildroot}%{geowave_tools_home}/build.properties %{buildroot}%{geowave_tools_home}/geowave-tools-build.properties
 cp  %{SOURCE12} %{buildroot}%{geowave_tools_home}/%{geowave_tools_script}
 #replace vendor-version particular variables in geowave-tools.sh
 sed -i -e s~'$GEOWAVE_TOOLS_HOME'~%{geowave_tools_home}~g %{buildroot}%{geowave_tools_home}/%{geowave_tools_script}
-sed -i -e s/'$GEOWAVE_TOOLS_JAR'/geowave-tools-%{version}-%{vendor_version}.jar/g %{buildroot}%{geowave_tools_home}/%{geowave_tools_script}
+sed -i -e s/'$GEOWAVE_TOOLS_JAR'/geowave-tools-%{name_version}-%{vendor_version}.jar/g %{buildroot}%{geowave_tools_home}/%{geowave_tools_script}
 mkdir -p %{buildroot}%{geowave_plugins_home}
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -89,11 +90,11 @@ mkdir -p %{buildroot}%{geowave_plugins_home}
 %package -n     %{vendor_app_name}-single-host
 Summary:        All GeoWave Components
 Group:          Applications/Internet
-Requires:       %{vendor_app_name}-accumulo = %{version}
-Requires:       %{vendor_app_name}-hbase = %{version}
-Requires:       %{vendor_app_name}-gwgeoserver = %{version}
-Requires:       %{vendor_app_name}-restservices = %{version}
-Requires:       %{vendor_app_name}-tools = %{version}
+Requires:       %{vendor_app_name}-accumulo = %{rpm_version}
+Requires:       %{vendor_app_name}-hbase = %{rpm_version}
+Requires:       %{vendor_app_name}-gwgeoserver = %{rpm_version}
+Requires:       %{vendor_app_name}-restservices = %{rpm_version}
+Requires:       %{vendor_app_name}-tools = %{rpm_version}
 
 %description -n %{vendor_app_name}-single-host
 GeoWave provides geospatial and temporal indexing on top of Accumulo.
@@ -108,9 +109,9 @@ would likely be useful for dev environments
 %package -n     %{vendor_app_name}-accumulo
 Summary:        GeoWave Accumulo Components
 Group:          Applications/Internet
-Provides:       %{vendor_app_name}-accumulo = %{version}
-Requires:       %{vendor_app_name}-tools = %{version}
-Requires:       %{common_app_name}-core = %{version}
+Provides:       %{vendor_app_name}-accumulo = %{rpm_version}
+Requires:       %{vendor_app_name}-tools = %{rpm_version}
+Requires:       %{common_app_name}-core = %{rpm_version}
 
 %description -n %{vendor_app_name}-accumulo
 GeoWave provides geospatial and temporal indexing on top of Accumulo.
@@ -124,7 +125,7 @@ This package installs the Accumulo components of GeoWave
 %dir %{geowave_install}
 
 %attr(755, hdfs, hdfs) %{geowave_accumulo_home}
-%attr(644, hdfs, hdfs) %{geowave_accumulo_home}/geowave-accumulo-%{version}-%{vendor_version}.jar
+%attr(644, hdfs, hdfs) %{geowave_accumulo_home}/geowave-accumulo-%{name_version}-%{vendor_version}.jar
 %attr(755, hdfs, hdfs) %{geowave_accumulo_home}/deploy-geowave-accumulo-to-hdfs.sh
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -132,9 +133,9 @@ This package installs the Accumulo components of GeoWave
 %package -n     %{vendor_app_name}-hbase
 Summary:        GeoWave HBase Components
 Group:          Applications/Internet
-Provides:       %{vendor_app_name}-hbase = %{version}
-Requires:       %{vendor_app_name}-tools = %{version}
-Requires:       %{common_app_name}-core = %{version}
+Provides:       %{vendor_app_name}-hbase = %{rpm_version}
+Requires:       %{vendor_app_name}-tools = %{rpm_version}
+Requires:       %{common_app_name}-core = %{rpm_version}
 
 %description -n %{vendor_app_name}-hbase
 GeoWave provides geospatial and temporal indexing on top of HBase.
@@ -148,7 +149,7 @@ This package installs the HBase components of GeoWave
 %dir %{geowave_install}
 
 %attr(755, hdfs, hdfs) %{geowave_hbase_home}
-%attr(644, hdfs, hdfs) %{geowave_hbase_home}/geowave-hbase-%{version}-%{vendor_version}.jar
+%attr(644, hdfs, hdfs) %{geowave_hbase_home}/geowave-hbase-%{name_version}-%{vendor_version}.jar
 %attr(755, hdfs, hdfs) %{geowave_hbase_home}/deploy-geowave-hbase-to-hdfs.sh
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -156,8 +157,8 @@ This package installs the HBase components of GeoWave
 %package -n     %{vendor_app_name}-tools
 Summary:        GeoWave Tools
 Group:          Applications/Internet
-Provides:       %{vendor_app_name}-tools = %{version}
-Requires:       %{common_app_name}-core = %{version}
+Provides:       %{vendor_app_name}-tools = %{rpm_version}
+Requires:       %{common_app_name}-core = %{rpm_version}
 
 %description -n %{vendor_app_name}-tools
 GeoWave provides geospatial and temporal indexing on top of Accumulo.

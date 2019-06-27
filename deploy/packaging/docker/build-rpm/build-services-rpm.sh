@@ -34,6 +34,7 @@ while [ $# -gt 0 ]; do
 done
 
 GEOWAVE_VERSION=$(cat $WORKSPACE/deploy/target/version.txt)
+GEOWAVE_RPM_VERSION=$(cat $WORKSPACE/deploy/target/rpm_version.txt)
 FPM_SCRIPTS="${WORKSPACE}/deploy/packaging/docker/build-rpm/fpm_scripts"
 GEOWAVE_DIR="/usr/local/geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}"
 GEOSERVER_VERSION=$(cat $WORKSPACE/deploy/target/geoserver_version.txt)
@@ -42,6 +43,7 @@ echo "---------------------------------------------------------------"
 echo "      Building Services RPMS with the following settings"
 echo "---------------------------------------------------------------"
 echo "GEOWAVE_VERSION=${GEOWAVE_VERSION}"
+echo "GEOWAVE_RPM_VERSION=${GEOWAVE_RPM_VERSION}"
 echo "GEOSERVER_VERSION=${GEOSERVER_VERSION}"
 echo "TIME_TAG=${TIME_TAG}"
 echo "BUILD_ARGS=${BUILD_ARGS}"
@@ -99,7 +101,7 @@ cp ${FPM_SCRIPTS}/gwtomcat_tools.sh.template ${FPM_SCRIPTS}/gwtomcat_tools.sh
 sed -i -e s/GEOWAVE_VERSION=\"temp\"/GEOWAVE_VERSION=\"${GEOWAVE_VERSION}\"/g ${FPM_SCRIPTS}/gwtomcat_tools.sh
 sed -i -e s/VENDOR_VERSION=\"temp\"/VENDOR_VERSION=\"${VENDOR_VERSION}\"/g ${FPM_SCRIPTS}/gwtomcat_tools.sh
 
-fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwtomcat" -v ${GEOWAVE_VERSION} -a ${ARGS[arch]} \
+fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwtomcat" -v ${GEOWAVE_RPM_VERSION} -a ${ARGS[arch]} \
     -p geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwtomcat.$TIME_TAG.noarch.rpm --rpm-os linux --license "Apache Version 2.0" \
     -d java-1.8.0-openjdk \
     -d geowave-${GEOWAVE_VERSION}-core \
@@ -150,7 +152,7 @@ mv geoserver.war ../
 cd ..
 rm -rf tmp
 echo "Creating Geoserver and services rpm"
-fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwgeoserver" -v ${GEOWAVE_VERSION} -a ${ARGS[arch]}  \
+fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwgeoserver" -v ${GEOWAVE_RPM_VERSION} -a ${ARGS[arch]}  \
     -p geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwgeoserver.$TIME_TAG.noarch.rpm --rpm-os linux --license "GNU General Public License Version 2.0" \
     -d geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwtomcat \
     --iteration $TIME_TAG \
@@ -159,7 +161,7 @@ fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwgeoserver" 
     ${FPM_SCRIPTS}/gwgeoserver_logrotate=/etc/logrotate.d/gwgeoserver \
     geoserver.war=${GEOWAVE_DIR}/tomcat8/webapps/geoserver.war
 
-fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices" -v ${GEOWAVE_VERSION} -a ${ARGS[arch]} \
+fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices" -v ${GEOWAVE_RPM_VERSION} -a ${ARGS[arch]} \
     -p geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices.$TIME_TAG.noarch.rpm --rpm-os linux --license "Apache Version 2.0" \
     -d geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwtomcat \
     --iteration $TIME_TAG \
@@ -169,7 +171,7 @@ fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices"
 
 fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-grpc" -a ${ARGS[arch]} \
     -p geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-grpc.$TIME_TAG.noarch.rpm \
-    -v ${GEOWAVE_VERSION} \
+    -v ${GEOWAVE_RPM_VERSION} \
     -d java-1.8.0-openjdk \
     -d geowave-${GEOWAVE_VERSION}-core \
     -d geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-tools \

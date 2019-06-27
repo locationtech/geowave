@@ -25,11 +25,13 @@ if [ ! -z "$BUILD_ARGS" ]; then
 fi
 # Get the version
 GEOWAVE_VERSION=$(cat $WORKSPACE/deploy/target/version.txt)
+GEOWAVE_RPM_VERSION=$(cat $WORKSPACE/deploy/target/rpm_version.txt)
 
 echo "---------------------------------------------------------------"
 echo "             Building RPM with the following settings"
 echo "---------------------------------------------------------------"
 echo "GEOWAVE_VERSION=${GEOWAVE_VERSION}"
+echo "GEOWAVE_RPM_VERSION=${GEOWAVE_RPM_VERSION}"
 echo "BUILD_SUFFIX=${BUILD_SUFFIX}"
 echo "TIME_TAG=${TIME_TAG}"
 echo "BUILD_ARGS=${BUILD_ARGS}"
@@ -76,4 +78,4 @@ fi
 cd ..
 
 # Build
-$WORKSPACE/deploy/packaging/rpm/centos/7/rpm.sh --command build-${BUILD_SUFFIX} --vendor-version $VENDOR_VERSION --geowave-version $GEOWAVE_VERSION --time-tag $TIME_TAG
+$WORKSPACE/deploy/packaging/rpm/centos/7/rpm.sh --command build-${BUILD_SUFFIX} --vendor-version $VENDOR_VERSION --geowave-version $GEOWAVE_VERSION --geowave-rpm-version $GEOWAVE_RPM_VERSION --time-tag $TIME_TAG
