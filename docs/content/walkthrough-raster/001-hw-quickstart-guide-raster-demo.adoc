@@ -18,17 +18,6 @@ If you have already done this in the Vector Demo, you can skip this step.
 
 This script defines a number of the variables that will be used in future commands.
 
-. If running with the GeoWave Sandbox:
-+
-[source, bash]
-----
-cd /mnt
-
-sudo wget s3.amazonaws.com/geowave/${version_url}/scripts/sandbox/quickstart/geowave-env.sh
-
-source /mnt/geowave-env.sh
-----
-
 . If running with EMR:
 +
 [source, bash]
@@ -50,9 +39,9 @@ sudo mkdir /mnt/gdal
 
 cd /mnt/gdal
 
-sudo wget http://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.7/native/gdal/linux/gdal192-CentOS5.8-gcc4.1.2-x86_64.tar.gz
+sudo wget https://s3.amazonaws.com/geowave/third-party-downloads/gdal/windows/MSVC2010/gdal-1.9.2-MSVC2010-x64.zip
 
-sudo tar -xvf gdal192-CentOS5.8-gcc4.1.2-x86_64.tar.gz
+sudo unzip gdal-1.9.2-MSVC2010-x64.zip gdal
 ----
 
 Set the path to the GDAL libraries.
@@ -70,23 +59,14 @@ At this point, we should be ready to ingest the data.
 +
 We need to create two GeoWave stores for this ingest. landsat_raster will store the raster images, and landsat_vector stores the vector metadata associated with those images. The images come from the https://landsat.usgs.gov/landsat-8[Landsat 8 Satellite].
 
-.. If running with the GeoWave Sandbox:
-+
-[source, bash]
-----
-geowave config addstore -t hbase -z $HOSTNAME:2181 landsatraster --gwNamespace landsat_raster
-
-geowave config cpstore landsatraster landsatvector --gwNamespace landsat_vector
-----
-
 .. If running with EMR Accumulo:
 +
 [source, bash]
 ----
-geowave config addstore -t accumulo -z $HOSTNAME:2181 landsatraster --gwNamespace geowave.landsat_raster \
--i accumulo -u geowave -p geowave
+geowave config addstore -t accumulo -z $HOSTNAME:2181 landsatraster --gwNamespace geowave_landsat_raster \
+-i accumulo -u root -p secret
 
-geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat_vector
+geowave config cpstore landsatraster landsatvector --gwNamespace geowave_landsat_vector
 ----
 
 .. If running with EMR HBase

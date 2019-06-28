@@ -8,13 +8,6 @@ In order to view the images generated from the vector and raster demos, use the 
 
 === Configure GeoServer
 
-SandBox
-
-[source, bash]
-----
-geowave config geoserver sandbox.hortonworks.com:8993
-----
-
 EMR
 
 [source, bash]

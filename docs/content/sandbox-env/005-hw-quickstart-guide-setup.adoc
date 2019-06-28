@@ -2,36 +2,23 @@
 
 :linkattrs:
 
-== Setting Up the Environment
+== What you will need
 
-The virtual image provided for this demo https://s3.amazonaws.com/geowave-vm/${project.version}/VirtualBox_HDP_Geowave_Sandbox_${project.version}.ova[can be found here]. The image is a very large file (~15 GB) so make sure that you give yourself enough time to download it and that your machine has enough room to store it.
+- JDK/JRE 8
+- link:https://maven.apache.org/download.cgi[Apache Maven, window="_blank"]
+- link:https://github.com/steveloughran/winutils/tree/master/hadoop-2.8.3/[Apache Hadoop, window="_blank"] 
 
-=== Setting up the VirtualBox Image
+=== Setting up the Installer
 
-- Open up your VirtualBox manager. If you do not have VirtualBox downloaded, do so link:https://www.virtualbox.org/wiki/Downloads[here, window="_blank"]. This demo was tested against VirtualBox 5.2.8, you may experience trouble importing the virtual image on older versions.
+In order to use some of the feature required for ingesting and analyzation, Hadoop will be needed. Follow the this link link:https://github.com/steveloughran/winutils/tree/master/hadoop-2.8.3/[here, window="_blank"]. The same must be done for Apache Maven which can be downloaded link:https://maven.apache.org/download.cgi[here, window="_blank"]. You must create a PATH system variable to the Hadoop and Apache Maven bin.
 
-- Click "File" and select "Import Appliance" from the dropdown.
+After creating the PATHs for the tools you can begin the installation of GeoWave onto your machine. The installer has step by step instructions on how to properly install the software.
 
-image::sandbox/import-appliance.png[scaledwidth="100%",alt="select emr"]
+=== Demo Links
 
-- Click on the folder icon, and navigate to _VirtualBox_HDP_GeoWave_Sandbox_${project.version}.ova_ (the image that you downloaded).
+- link:walkthrough-vector.html[Vector Demo, window="_blank"]
+- link:walkthrough-raster.html[Raster Demo, window="_blank"]
+- link:integrate-geoserver.html[GeoServer Integration, window="_blank"]
+- link:interact-cluster.html[Interacting with the cluster, window="_blank"]
 
-- Select "Next" and then "Import"
-  * This should take a couple of minutes
-  
-Once the image has been imported, start it up from the manager. Every time you power the machine on it will ask you which version of Linux
-it should boot, pick the default/first option.
 
-image::sandbox/vb-image.png[scaledwidth="100%",alt="select emr"]
-
-The machine should power on shortly (this can take a few minutes). After it's powered on you should see the screen below. This is the last
-time that you will have to interact directly with the VirtualBox. Make sure that the virtual machine is active for the duration of this demo.
-
-image::sandbox/vb-image-2.png[scaledwidth="100%",alt="select emr"]
-
-[NOTE]
-=======
-VirtualBox Manager has a feature that allows Virtual Machines to be started and operated in headless ( non-Graphical-User-Interface(GUI) ) mode. Since the Sandbox was setup as a non-GUI VM, it is recommended that users' run their GeoWave Sandbox Virtual Machine in headless mode when possible.
-
-To start a VM in headless mode, within the VirtualBox Manager screen, right-click on the Sandbox VM image that was imported, and select _Start_ --> _Headless Start_. The VM status can be monitored through the _Preview_ pane within the dashboard, and once the VM has started, you can configure your machine and interface with the VM as outlined in the steps below.
-=======

@@ -9,15 +9,6 @@ In the Vector Demo, we use GeoWave to ingest and run a Kernel Density Estimation
 
 Download the GeoWave environment script. We will also download two .sld files to use later on in the guide.
 
-
-SandBox:
-
-[source, bash]
-----
-cd /mnt
-sudo wget s3.amazonaws.com/geowave/${version_url}/scripts/sandbox/quickstart/geowave-env.sh
-----
-
 EMR:
 
 [source, bash]
@@ -56,21 +47,13 @@ After the data has been downloaded, we are ready to set up the store and index u
 === Config and Ingest
 
 . Add a GeoWave store
-.. If using Sandbox
-+
-[source, bash]
-----
-geowave config addstore gdelt --gwNamespace geowave.gdelt -t hbase --zookeeper \
-sandbox.hortonworks.com:2181
-----
-
 .. If using EMR Accumulo
 +
 [source, bash]
 ----
 geowave config addstore gdelt --gwNamespace geowave.gdelt \
 -t accumulo --zookeeper $HOSTNAME:2181 --instance accumulo \
---user geowave --password geowave
+--user root --password secret
 ----
 
 .. If using EMR HBase
@@ -97,13 +80,6 @@ geowave config addindex -t spatial gdelt-spatial --partitionStrategy round_robin
 ----
 
 . Ingest the data into geowave
-.. If using Sandbox
-+
-[source, bash]
-----
-geowave ingest localtogw /mnt/gdelt gdelt gdelt-spatial -f gdelt --gdelt.cql "INTERSECTS(geometry,$GERMANY)"
-----
-
 .. If using EMR
 +
 [source, bash]
@@ -119,14 +95,6 @@ The ingest should take about ~3-5 minutes. Once the ingest has started, you can 
 Once the ingest has completed:
 
 . Add another store for the kde.
-.. If using Sandbox
-+
-[source, bash]
-----
-geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
--t hbase --zookeeper $HOSTNAME:2181
-----
-
 .. If using EMR Accumulo
 +
 [source, bash]
@@ -151,17 +119,6 @@ geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
 -t cassandra  --contactPoints localhost
 ----
 . Run the KDE analytic
-.. If using Sandbox
-+
-[source, bash]
-----
-geowave analytic kde --featureType gdeltevent --minLevel 5 --maxLevel 26 \
---minSplits $NUM_PARTITIONS --maxSplits $NUM_PARTITIONS --coverageName gdeltevent_kde  \
---hdfsHostPort sandbox.hortonworks.com:${HDFS_PORT} \
---jobSubmissionHostPort sandbox.hortonworks.com:${RESOURCE_MAN_PORT} \
---tileSize 1 gdelt gdelt-kde
-----
-
 .. If using EMR
 +
 [source, bash]
@@ -178,7 +135,7 @@ Once the KDE has run its course successfully, you should be able to view the hea
 
 === Raster Demo
 
-link:walkthrough-raster.html[Raster Demo, window="_blank"]
+- link:walkthrough-raster.html[Raster Demo, window="_blank"]
 
 === GeoServer Integration
 

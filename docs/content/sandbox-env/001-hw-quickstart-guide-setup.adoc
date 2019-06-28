@@ -1,0 +1,11 @@
+
+<<<
+
+_v${project.version}_
+
+= GeoWave Quickstart Guide Stand-Alone Installer Setup image:geowave-icon-logo-cropped.png[width="28%"]
+
+== Introduction
+
+The Stand-Alone Installer is meant to be a replacement for the Sandbox environemnt. The GeoWave Installer comes with many services such as Accumulo, Hbase, and Cassandra. These services are used as database management systems in order to handle large amounts of data. The installer doesnt come with services such as Apache Maven and Hadoop which are required for some of the commands needed in the Demos. These services can be installed and setup from the links below. The installer is continously being updated on a constant basis with the links provided in the User Guide.
+
