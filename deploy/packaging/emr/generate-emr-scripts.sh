@@ -107,6 +107,7 @@ do
 	cp $TARGET_ROOT/$datastore/bootstrap-geowave.sh $TARGET_ROOT/quickstart/$datastore/bootstrap-geowave.sh
 	sed -i -e s/'$QUICKSTART_BOOTSTRAP_TOKEN'//g $TARGET_ROOT/$datastore/bootstrap-geowave.sh
 	sed -e '/$QUICKSTART_BOOTSTRAP_TOKEN/ {' -e 'r '$TEMPLATE_ROOT/quickstart/QUICKSTART_BOOTSTRAP_TOKEN'' -e 'd' -e '}' -i $TARGET_ROOT/quickstart/$datastore/bootstrap-geowave.sh
+	sed -i -e s/'$GEOWAVE_BUCKET_TOKEN'/${GEOWAVE_BUCKET_TOKEN}/g $TARGET_ROOT/$datastore/bootstrap-geowave.sh
 	sed -i -e s/'$GEOWAVE_VERSION_URL_TOKEN'/$GEOWAVE_VERSION_URL_TOKEN/g $TARGET_ROOT/quickstart/$datastore/bootstrap-geowave.sh
 	sed -i -e s/'$DATASTORE_TOKEN'/$datastore/g $TARGET_ROOT/quickstart/$datastore/bootstrap-geowave.sh
 	
