@@ -27,4 +27,4 @@ geowave gs addstyle SubsamplePoints -sld /mnt/SubsamplePoints.sld
 
 # Set the kde layer default style to colormap
 geowave gs setls gdeltevent_kde --styleName kdecolormap
-
+geowave gs setls gdeltevent --styleName SubsamplePoints
