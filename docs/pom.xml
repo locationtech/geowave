@@ -315,22 +315,22 @@
 						</goals>
 					</execution>
 					<execution>
-						<id>generate-sandbox-env</id>
+						<id>generate-standalone-installer</id>
 						<phase>generate-sources</phase>
 						<configuration>
 							<target>
-								<fileset id="generate-index-file-sandbox-env"
-									dir="${project.basedir}/content/sandbox-env" includes="*.adoc" />
+								<fileset id="generate-index-file-standalone-installer"
+									dir="${project.basedir}/content/standalone-installer" includes="*.adoc" />
 								<!-- Abusing this a bit to do some simple templating, I have a file 
 									list and need a list of asciidoc includes that look like include::000-titlepage.adoc[] -->
 								<pathconvert pathsep="[]${line.separator}"
 									property="asciidoc-files"
-									refid="generate-index-file-sandbox-env">
-									<map from="${project.basedir}/content/sandbox-env/"
+									refid="generate-index-file-standalone-installer">
+									<map from="${project.basedir}/content/standalone-installer/"
 										to="include::" />
 								</pathconvert>
 								<echo
-									file="${project.build.directory}/content/sandbox-env/sandbox-env.adoc">${asciidoc-files}[]</echo>
+									file="${project.build.directory}/content/standalone-installer/standalone-installer.adoc">${asciidoc-files}[]</echo>
 							</target>
 						</configuration>
 						<goals>
@@ -623,14 +623,14 @@
 								</configuration>
 							</execution>
 							<execution>
-								<id>generate-pdf-sandbox-env</id>
+								<id>generate-pdf-standalone-installer</id>
 								<phase>generate-resources</phase>
 								<goals>
 									<goal>process-asciidoc</goal>
 								</goals>
 								<configuration>
-									<sourceDirectory>${project.build.directory}/content/sandbox-env</sourceDirectory>
-									<sourceDocumentName>sandbox-env.adoc</sourceDocumentName>
+									<sourceDirectory>${project.build.directory}/content/standalone-installer</sourceDirectory>
+									<sourceDocumentName>standalone-installer.adoc</sourceDocumentName>
 									<requires>
 										<require>asciidoctor-pdf</require>
 									</requires>
@@ -848,14 +848,14 @@
 								</configuration>
 							</execution>
 							<execution>
-								<id>generate-epub-sandbox-env</id>
+								<id>generate-epub-standalone-installer</id>
 								<phase>generate-resources</phase>
 								<goals>
 									<goal>process-asciidoc</goal>
 								</goals>
 								<configuration>
-									<sourceDirectory>${project.build.directory}/content/sandbox-env</sourceDirectory>
-									<sourceDocumentName>sandbox-env.adoc</sourceDocumentName>
+									<sourceDirectory>${project.build.directory}/content/standalone-installer</sourceDirectory>
+									<sourceDocumentName>standalone-installer.adoc</sourceDocumentName>
 									<backend>epub3</backend>
 									<sourceHighlighter>coderay</sourceHighlighter>
 								</configuration>
@@ -1311,14 +1311,14 @@
 								</configuration>
 							</execution>
 							<execution>
-								<id>generate-html-sandbox-env</id>
+								<id>generate-html-standalone-installer</id>
 								<phase>generate-resources</phase>
 								<goals>
 									<goal>process-asciidoc</goal>
 								</goals>
 								<configuration>
-									<sourceDirectory>${project.build.directory}/content/sandbox-env</sourceDirectory>
-									<sourceDocumentName>sandbox-env.adoc</sourceDocumentName>
+									<sourceDirectory>${project.build.directory}/content/standalone-installer</sourceDirectory>
+									<sourceDocumentName>standalone-installer.adoc</sourceDocumentName>
 									<backend>html5</backend>
 									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
