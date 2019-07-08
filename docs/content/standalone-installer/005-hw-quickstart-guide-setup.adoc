@@ -5,14 +5,13 @@
 == What you will need
 
 - JDK/JRE 8
-- link:https://maven.apache.org/download.cgi[Apache Maven, window="_blank"]
-- link:https://github.com/steveloughran/winutils/tree/master/hadoop-2.8.3/[Apache Hadoop, window="_blank"] 
+- link:https://github.com/steveloughran/winutils/tree/master/hadoop-2.8.3/[Apache Hadoop (Windows), window="_blank"] 
 
 === Setting up the Installer
 
-In order to use some of the feature required for ingesting and analyzation, Hadoop will be needed. Follow the this link link:https://github.com/steveloughran/winutils/tree/master/hadoop-2.8.3/[here, window="_blank"]. The same must be done for Apache Maven which can be downloaded link:https://maven.apache.org/download.cgi[here, window="_blank"]. You must create a PATH system variable to the Hadoop and Apache Maven bin.
+In order to use some of the features required for ingesting and analyzation in Windows, Hadoop will be needed. Follow this link in order to get the Hadoop binaries link:https://github.com/steveloughran/winutils/tree/master/hadoop-2.8.3/[here, window="_blank"]. You must create a PATH system variable to the Apache Hadoop bin. This step will be incorporated into the GeoWave installer in a later update so that it doesn't require this extra step.
 
-After creating the PATHs for the tools you can begin the installation of GeoWave onto your machine. The installer has step by step instructions on how to properly install the software.
+After creating the PATH for the tool you can begin the installation of GeoWave onto your machine. The installer has step-by-step instructions on how to properly install the software.
 
 === Demo Links
 

@@ -53,7 +53,7 @@ After the data has been downloaded, we are ready to set up the store and index u
 ----
 geowave config addstore gdelt --gwNamespace geowave.gdelt \
 -t accumulo --zookeeper $HOSTNAME:2181 --instance accumulo \
---user root --password secret
+--user geowave --password geowave
 ----
 
 .. If using EMR HBase
