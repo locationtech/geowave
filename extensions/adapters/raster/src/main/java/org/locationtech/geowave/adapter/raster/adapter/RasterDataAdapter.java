@@ -551,22 +551,6 @@ public class RasterDataAdapter implements
         final Entry<Double, SubStrategy> bestEntry = substrategyMap.higherEntry(1.0);
         pyramidLevels.add(bestEntry.getValue());
       }
-      final SubStrategy pyramidLevel = pyramidLevels.get(0);
-      final double[] idRangePerDimension =
-          pyramidLevel.getIndexStrategy().getHighestPrecisionIdRangePerDimension();
-      // to create a pyramid, ingest into each substrategy that is
-      // lower resolution than the sample set in at least one
-      // dimension and the one substrategy that is at least the same
-      // resolution or higher resolution to retain the original
-      // resolution as well as possible
-      double maxSubstrategyResToSampleSetRes = -Double.MAX_VALUE;
-
-      for (int d = 0; d < tileRangePerDimension.length; d++) {
-        final double substrategyResToSampleSetRes =
-            idRangePerDimension[d] / tileRangePerDimension[d];
-        maxSubstrategyResToSampleSetRes =
-            Math.max(maxSubstrategyResToSampleSetRes, substrategyResToSampleSetRes);
-      }
       return new IteratorWrapper<>(
           pyramidLevels.iterator(),
           new MosaicPerPyramidLevelBuilder(
