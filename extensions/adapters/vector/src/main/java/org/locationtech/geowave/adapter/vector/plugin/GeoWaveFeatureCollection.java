@@ -9,8 +9,6 @@
 package org.locationtech.geowave.adapter.vector.plugin;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import org.geotools.data.DataUtilities;
@@ -19,19 +17,13 @@ import org.geotools.data.Query;
 import org.geotools.data.store.DataFeatureCollection;
 import org.geotools.feature.FeatureIterator;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
-import org.geotools.feature.visitor.MaxVisitor;
-import org.geotools.feature.visitor.MinVisitor;
 import org.geotools.filter.spatial.BBOXImpl;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.locationtech.geowave.adapter.vector.render.DistributedRenderOptions;
 import org.locationtech.geowave.adapter.vector.render.DistributedRenderResult;
-import org.locationtech.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorStatisticsQueryBuilder;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
-import org.locationtech.geowave.core.geotime.store.statistics.FeatureTimeRangeStatistics;
-import org.locationtech.geowave.core.geotime.store.statistics.TimeRangeDataStatistics;
-import org.locationtech.geowave.core.geotime.util.ExtractAttributesFilter;
 import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitor;
 import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitorResult;
 import org.locationtech.geowave.core.geotime.util.ExtractTimeFilterVisitor;
@@ -39,7 +31,6 @@ import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.NumericRangeDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -312,63 +303,13 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
   public void accepts(
       final org.opengis.feature.FeatureVisitor visitor,
       final org.opengis.util.ProgressListener progress) throws IOException {
-
-    if ((visitor instanceof MinVisitor)) {
-      final ExtractAttributesFilter filter = new ExtractAttributesFilter();
-
-      final MinVisitor minVisitor = (MinVisitor) visitor;
-      final Collection<String> attrs =
-          (Collection<String>) minVisitor.getExpression().accept(filter, null);
-      int acceptedCount = 0;
-      for (final String attr : attrs) {
-        for (final InternalDataStatistics<SimpleFeature, ?, ?> stat : reader.getStatsFor(attr)) {
-          if (stat instanceof TimeRangeDataStatistics) {
-            minVisitor.setValue(
-                reader.convertToType(attr, new Date(((TimeRangeDataStatistics) stat).getMin())));
-            acceptedCount++;
-          } else if (stat instanceof NumericRangeDataStatistics) {
-            minVisitor.setValue(
-                reader.convertToType(attr, ((NumericRangeDataStatistics) stat).getMin()));
-            acceptedCount++;
-          }
-        }
-      }
-
-      if (acceptedCount > 0) {
-        if (progress != null) {
-          progress.complete();
-        }
-        return;
-      }
-    } else if ((visitor instanceof MaxVisitor)) {
-      final ExtractAttributesFilter filter = new ExtractAttributesFilter();
-
-      final MaxVisitor maxVisitor = (MaxVisitor) visitor;
-      final Collection<String> attrs =
-          (Collection<String>) maxVisitor.getExpression().accept(filter, null);
-      int acceptedCount = 0;
-      for (final String attr : attrs) {
-        for (final InternalDataStatistics<SimpleFeature, ?, ?> stat : reader.getStatsFor(attr)) {
-          if (stat instanceof TimeRangeDataStatistics) {
-            maxVisitor.setValue(
-                reader.convertToType(attr, new Date(((TimeRangeDataStatistics) stat).getMax())));
-            acceptedCount++;
-          } else if (stat instanceof NumericRangeDataStatistics) {
-            maxVisitor.setValue(
-                reader.convertToType(attr, ((NumericRangeDataStatistics) stat).getMax()));
-            acceptedCount++;
-          }
-        }
-      }
-
-      if (acceptedCount > 0) {
-        if (progress != null) {
-          progress.complete();
-        }
-        return;
-      }
+    if (!GeoWaveGTPluginUtils.accepts(
+        visitor,
+        progress,
+        reader.getFeatureType(),
+        reader.getTransaction().getDataStatistics())) {
+      DataUtilities.visit(this, visitor, progress);
     }
-    DataUtilities.visit(this, visitor, progress);
   }
 
   /**

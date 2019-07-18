@@ -12,20 +12,13 @@ import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.io.Closeable;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.TimeZone;
 import org.geotools.data.FeatureReader;
 import org.geotools.data.Query;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -47,7 +40,6 @@ import org.locationtech.geowave.core.geotime.store.query.OptimalCQLQuery;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorAggregationQueryBuilder;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
-import org.locationtech.geowave.core.geotime.store.statistics.FieldNameStatistic;
 import org.locationtech.geowave.core.geotime.util.ExtractAttributesFilter;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils.GeoConstraintsWrapper;
@@ -66,7 +58,6 @@ import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.filter.Filter;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.operation.MathTransform2D;
@@ -516,19 +507,6 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
     return transaction.interweaveTransaction(limit, filter, it);
   }
 
-  protected List<InternalDataStatistics<SimpleFeature, ?, ?>> getStatsFor(final String name) {
-    final List<InternalDataStatistics<SimpleFeature, ?, ?>> stats = new LinkedList<>();
-    final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap =
-        transaction.getDataStatistics();
-    for (final Map.Entry<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> stat : statsMap.entrySet()) {
-      if ((stat.getValue() instanceof FieldNameStatistic)
-          && ((FieldNameStatistic) stat.getValue()).getFieldName().endsWith(name)) {
-        stats.add(stat.getValue());
-      }
-    }
-    return stats;
-  }
-
   protected TemporalConstraintsSet clipIndexedTemporalConstraints(
       final TemporalConstraintsSet constraintsSet) {
     return QueryIndexHelper.clipIndexedTemporalConstraints(
@@ -570,57 +548,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
     // }
   }
 
-  public Object convertToType(final String attrName, final Object value) {
-    final SimpleFeatureType featureType = components.getAdapter().getFeatureType();
-    final AttributeDescriptor descriptor = featureType.getDescriptor(attrName);
-    if (descriptor == null) {
-      return value;
-    }
-    final Class<?> attrClass = descriptor.getType().getBinding();
-    if (attrClass.isInstance(value)) {
-      return value;
-    }
-    if (Number.class.isAssignableFrom(attrClass) && Number.class.isInstance(value)) {
-      if (Double.class.isAssignableFrom(attrClass)) {
-        return ((Number) value).doubleValue();
-      }
-      if (Float.class.isAssignableFrom(attrClass)) {
-        return ((Number) value).floatValue();
-      }
-      if (Long.class.isAssignableFrom(attrClass)) {
-        return ((Number) value).longValue();
-      }
-      if (Integer.class.isAssignableFrom(attrClass)) {
-        return ((Number) value).intValue();
-      }
-      if (Short.class.isAssignableFrom(attrClass)) {
-        return ((Number) value).shortValue();
-      }
-      if (Byte.class.isAssignableFrom(attrClass)) {
-        return ((Number) value).byteValue();
-      }
-      if (BigInteger.class.isAssignableFrom(attrClass)) {
-        return BigInteger.valueOf(((Number) value).longValue());
-      }
-      if (BigDecimal.class.isAssignableFrom(attrClass)) {
-        return BigDecimal.valueOf(((Number) value).doubleValue());
-      }
-    }
-    if (Calendar.class.isAssignableFrom(attrClass)) {
-      if (Date.class.isInstance(value)) {
-        final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        c.setTime((Date) value);
-        return c;
-      }
-    }
-    if (Timestamp.class.isAssignableFrom(attrClass)) {
-      if (Date.class.isInstance(value)) {
-        final Timestamp ts = new Timestamp(((Date) value).getTime());
-        return ts;
-      }
-    }
-    return value;
-  }
+
 
   private boolean subsetRequested() {
     if (query == null) {

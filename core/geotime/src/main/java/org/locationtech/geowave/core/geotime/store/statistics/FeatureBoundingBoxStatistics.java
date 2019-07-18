@@ -14,10 +14,8 @@ import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsTyp
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.GeometryFactory;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 
 public class FeatureBoundingBoxStatistics extends
@@ -60,12 +58,6 @@ public class FeatureBoundingBoxStatistics extends
   @Override
   public String getFieldName() {
     return extendedId;
-  }
-
-  public Geometry composeGeometry(final CoordinateReferenceSystem system) {
-    final Envelope bounds = new Envelope(getMinX(), getMaxX(), getMinY(), getMaxY());
-
-    return new GeometryFactory().toGeometry(bounds);
   }
 
   @Override

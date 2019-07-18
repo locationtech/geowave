@@ -196,7 +196,10 @@ public class GeoWaveGTDataStore extends ContentDataStore {
 
   private GeotoolsFeatureDataAdapter getAdapter(final String typeName) {
     final GeotoolsFeatureDataAdapter featureAdapter;
-    final short adapterId = internalAdapterStore.getAdapterId(typeName);
+    final Short adapterId = internalAdapterStore.getAdapterId(typeName);
+    if (adapterId == null) {
+      return null;
+    }
     final InternalDataAdapter<?> adapter = adapterStore.getAdapter(adapterId);
     if ((adapter == null) || !(adapter.getAdapter() instanceof GeotoolsFeatureDataAdapter)) {
       return null;
