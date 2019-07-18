@@ -10,6 +10,7 @@ package org.locationtech.geowave.adapter.vector.plugin;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import org.geotools.data.DataUtilities;
@@ -29,6 +30,7 @@ import org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorStatisticsQueryBuilder;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import org.locationtech.geowave.core.geotime.store.statistics.FeatureTimeRangeStatistics;
+import org.locationtech.geowave.core.geotime.store.statistics.TimeRangeDataStatistics;
 import org.locationtech.geowave.core.geotime.util.ExtractAttributesFilter;
 import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitor;
 import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitorResult;
@@ -37,6 +39,7 @@ import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.NumericRangeDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -319,13 +322,13 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
       int acceptedCount = 0;
       for (final String attr : attrs) {
         for (final InternalDataStatistics<SimpleFeature, ?, ?> stat : reader.getStatsFor(attr)) {
-          if (stat instanceof FeatureTimeRangeStatistics) {
+          if (stat instanceof TimeRangeDataStatistics) {
             minVisitor.setValue(
-                reader.convertToType(attr, ((FeatureTimeRangeStatistics) stat).getMinTime()));
+                reader.convertToType(attr, new Date(((TimeRangeDataStatistics) stat).getMin())));
             acceptedCount++;
-          } else if (stat instanceof FeatureNumericRangeStatistics) {
+          } else if (stat instanceof NumericRangeDataStatistics) {
             minVisitor.setValue(
-                reader.convertToType(attr, ((FeatureNumericRangeStatistics) stat).getMin()));
+                reader.convertToType(attr, ((NumericRangeDataStatistics) stat).getMin()));
             acceptedCount++;
           }
         }
@@ -346,13 +349,13 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
       int acceptedCount = 0;
       for (final String attr : attrs) {
         for (final InternalDataStatistics<SimpleFeature, ?, ?> stat : reader.getStatsFor(attr)) {
-          if (stat instanceof FeatureTimeRangeStatistics) {
+          if (stat instanceof TimeRangeDataStatistics) {
             maxVisitor.setValue(
-                reader.convertToType(attr, ((FeatureTimeRangeStatistics) stat).getMaxTime()));
+                reader.convertToType(attr, new Date(((TimeRangeDataStatistics) stat).getMax())));
             acceptedCount++;
-          } else if (stat instanceof FeatureNumericRangeStatistics) {
+          } else if (stat instanceof NumericRangeDataStatistics) {
             maxVisitor.setValue(
-                reader.convertToType(attr, ((FeatureNumericRangeStatistics) stat).getMax()));
+                reader.convertToType(attr, ((NumericRangeDataStatistics) stat).getMax()));
             acceptedCount++;
           }
         }
