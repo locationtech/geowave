@@ -206,9 +206,7 @@ public class GeoWaveGTDataStore extends ContentDataStore {
     }
     featureAdapter = (GeotoolsFeatureDataAdapter) adapter.getAdapter();
     if (featureNameSpaceURI != null) {
-      if (adapter.getAdapter() instanceof FeatureDataAdapter) {
-        ((FeatureDataAdapter) featureAdapter).setNamespace(featureNameSpaceURI.toString());
-      }
+      featureAdapter.setNamespace(featureNameSpaceURI.toString());
     }
     return featureAdapter;
   }
