@@ -74,7 +74,11 @@ public class AccumuloMetadataReader implements MetadataReader {
       }
       final Collection<Range> ranges = new ArrayList<>();
       if (query.hasPrimaryId()) {
-        ranges.add(Range.prefix(new Text(query.getPrimaryId())));
+        if (metadataType.equals(MetadataType.STATS)) {
+          ranges.add(Range.prefix(new Text(query.getPrimaryId())));
+        } else {
+          ranges.add(Range.exact(new Text(query.getPrimaryId())));
+        }
       } else {
         ranges.add(new Range());
       }

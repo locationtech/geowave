@@ -51,18 +51,27 @@ public class KuduMetadataReader implements MetadataReader {
       final Schema schema = table.getSchema();
       KuduScanner.KuduScannerBuilder scannerBuilder = operations.getScannerBuilder(table);
       if (query.hasPrimaryId()) {
-        final KuduPredicate primaryLowerPred =
-            KuduPredicate.newComparisonPredicate(
-                schema.getColumn(KuduMetadataField.GW_PRIMARY_ID_KEY.getFieldName()),
-                KuduPredicate.ComparisonOp.GREATER_EQUAL,
-                query.getPrimaryId());
-        final KuduPredicate primaryUpperPred =
-            KuduPredicate.newComparisonPredicate(
-                schema.getColumn(KuduMetadataField.GW_PRIMARY_ID_KEY.getFieldName()),
-                KuduPredicate.ComparisonOp.LESS,
-                ByteArrayUtils.getNextPrefix(query.getPrimaryId()));
-        scannerBuilder =
-            scannerBuilder.addPredicate(primaryLowerPred).addPredicate(primaryUpperPred);
+        if (metadataType.equals(MetadataType.STATS)) {
+          final KuduPredicate primaryLowerPred =
+              KuduPredicate.newComparisonPredicate(
+                  schema.getColumn(KuduMetadataField.GW_PRIMARY_ID_KEY.getFieldName()),
+                  KuduPredicate.ComparisonOp.GREATER_EQUAL,
+                  query.getPrimaryId());
+          final KuduPredicate primaryUpperPred =
+              KuduPredicate.newComparisonPredicate(
+                  schema.getColumn(KuduMetadataField.GW_PRIMARY_ID_KEY.getFieldName()),
+                  KuduPredicate.ComparisonOp.LESS,
+                  ByteArrayUtils.getNextPrefix(query.getPrimaryId()));
+          scannerBuilder =
+              scannerBuilder.addPredicate(primaryLowerPred).addPredicate(primaryUpperPred);
+        } else {
+          final KuduPredicate primaryEqualsPred =
+              KuduPredicate.newComparisonPredicate(
+                  schema.getColumn(KuduMetadataField.GW_PRIMARY_ID_KEY.getFieldName()),
+                  KuduPredicate.ComparisonOp.EQUAL,
+                  query.getPrimaryId());
+          scannerBuilder = scannerBuilder.addPredicate(primaryEqualsPred);
+        }
       }
       if (query.hasSecondaryId()) {
         final KuduPredicate secondaryPred =

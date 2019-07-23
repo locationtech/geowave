@@ -71,6 +71,7 @@ import org.locationtech.geowave.core.store.flatten.FlattenedUnreadDataSingleRow;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
+import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.operations.RangeReaderParams;
 import org.locationtech.geowave.core.store.operations.ReaderParamsBuilder;
 import org.locationtech.geowave.core.store.operations.RowDeleter;
@@ -150,6 +151,27 @@ public class DataStoreUtils {
       }
     }
     return dataSet.getFieldsDeferred();
+  }
+
+
+  public static boolean startsWithIfStats(
+      final byte[] source,
+      final byte[] match,
+      final MetadataType metadataType) {
+    if (!metadataType.equals(MetadataType.STATS)) {
+      if (match.length != (source.length)) {
+        return false;
+      }
+    } else if (match.length > (source.length)) {
+      return false;
+    }
+
+    for (int i = 0; i < match.length; i++) {
+      if (source[i] != match[i]) {
+        return false;
+      }
+    }
+    return true;
   }
 
   public static List<String> getUniqueDimensionFields(final CommonIndexModel model) {

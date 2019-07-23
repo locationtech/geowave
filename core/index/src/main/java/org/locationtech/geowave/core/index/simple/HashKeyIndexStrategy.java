@@ -92,15 +92,6 @@ public class HashKeyIndexStrategy implements
     return keys;
   }
 
-  private static long hashCode(final double a1[], final long start) {
-    long result = start;
-    for (final double element : a1) {
-      final long bits = Double.doubleToLongBits(element);
-      result = (31 * result) + (bits ^ (bits >>> 32));
-    }
-    return result;
-  }
-
   @Override
   public int getPartitionKeyLength() {
     if ((keys != null) && (keys.length > 0)) {
@@ -122,12 +113,10 @@ public class HashKeyIndexStrategy implements
       hashCode = insertionData.hashCode();
     } else {
       hashCode =
-          Math.abs(
-              hashCode(
-                  insertionData.getMaxValuesPerDimension(),
-                  hashCode(insertionData.getMinValuesPerDimension(), 1)));
+          Arrays.hashCode(insertionData.getMaxValuesPerDimension())
+              + (31 * Arrays.hashCode(insertionData.getMinValuesPerDimension()));
     }
-    final int position = (int) (hashCode % keys.length);
+    final int position = (int) (Math.abs(hashCode) % keys.length);
 
     return new byte[][] {keys[position]};
   }

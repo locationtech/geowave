@@ -16,6 +16,7 @@ import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
+import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.core.store.util.StatisticsRowIterator;
 import org.locationtech.geowave.datastore.rocksdb.util.RocksDBMetadataTable;
 import com.google.common.base.Predicate;
@@ -47,7 +48,11 @@ public class RocksDBMetadataReader implements MetadataReader {
 
         @Override
         public boolean apply(final GeoWaveMetadata input) {
-          if (query.hasPrimaryId() && !startsWith(input.getPrimaryId(), query.getPrimaryId())) {
+          if (query.hasPrimaryId()
+              && !DataStoreUtils.startsWithIfStats(
+                  input.getPrimaryId(),
+                  query.getPrimaryId(),
+                  metadataType)) {
             return false;
           }
           if (query.hasSecondaryId()
@@ -67,19 +72,5 @@ public class RocksDBMetadataReader implements MetadataReader {
   @Override
   public CloseableIterator<GeoWaveMetadata> query(final MetadataQuery query) {
     return query(query, true);
-  }
-
-  public static boolean startsWith(final byte[] source, final byte[] match) {
-
-    if (match.length > (source.length)) {
-      return false;
-    }
-
-    for (int i = 0; i < match.length; i++) {
-      if (source[i] != match[i]) {
-        return false;
-      }
-    }
-    return true;
   }
 }
