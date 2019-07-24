@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -288,6 +288,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/DataStoreUtils.html#rowIdsMatch-org.locationtech.geowave.core.store.entities.GeoWaveKey-org.locationtech.geowave.core.store.entities.GeoWaveKey-">rowIdsMatch</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveKey.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveKey</a>&nbsp;rowId1,
            <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveKey.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveKey</a>&nbsp;rowId2)</code>&nbsp;</td>
 </tr>
+<tr id="i17" class="rowColor">
+<td class="colFirst"><code>static boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/util/DataStoreUtils.html#startsWithIfStats-byte:A-byte:A-org.locationtech.geowave.core.store.operations.MetadataType-">startsWithIfStats</a></span>(byte[]&nbsp;source,
+                 byte[]&nbsp;match,
+                 <a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataType.html" title="enum in org.locationtech.geowave.core.store.operations">MetadataType</a>&nbsp;metadataType)</code>&nbsp;</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -427,6 +433,17 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                                      <a href="../../../../../../org/locationtech/geowave/core/store/data/PersistentDataset.html" title="interface in org.locationtech.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;commonData,
                                                      <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
                                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;commonIndexFieldIds)</pre>
+</li>
+</ul>
+<a name="startsWithIfStats-byte:A-byte:A-org.locationtech.geowave.core.store.operations.MetadataType-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>startsWithIfStats</h4>
+<pre>public static&nbsp;boolean&nbsp;startsWithIfStats(byte[]&nbsp;source,
+                                        byte[]&nbsp;match,
+                                        <a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataType.html" title="enum in org.locationtech.geowave.core.store.operations">MetadataType</a>&nbsp;metadataType)</pre>
 </li>
 </ul>
 <a name="getUniqueDimensionFields-org.locationtech.geowave.core.store.index.CommonIndexModel-">
