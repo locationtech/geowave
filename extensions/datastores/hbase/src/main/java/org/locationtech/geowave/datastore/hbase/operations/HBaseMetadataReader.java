@@ -65,8 +65,13 @@ public class HBaseMetadataReader implements MetadataReader {
       }
 
       if (query.hasPrimaryId()) {
-        scanner.setStartRow(query.getPrimaryId());
-        scanner.setStopRow(ByteArrayUtils.getNextPrefix(query.getPrimaryId()));
+        if (metadataType.equals(MetadataType.STATS)) {
+          scanner.setStartRow(query.getPrimaryId());
+          scanner.setStopRow(ByteArrayUtils.getNextPrefix(query.getPrimaryId()));
+        } else {
+          scanner.setStartRow(query.getPrimaryId());
+          scanner.setStopRow(query.getPrimaryId());
+        }
       }
       final boolean clientsideStatsMerge =
           (metadataType == MetadataType.STATS) && !options.isServerSideLibraryEnabled();

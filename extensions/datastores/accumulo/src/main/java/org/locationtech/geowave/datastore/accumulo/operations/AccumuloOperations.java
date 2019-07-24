@@ -553,19 +553,18 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
     final byte[] family = StringUtils.stringToBinary(ByteArrayUtils.shortToString(adapterId));
 
     // to have backwards compatibility before 1.8.0 we can assume BaseScanner is autocloseable
-    final BatchScanner batchScanner;
+    final Scanner scanner;
     try {
-      batchScanner =
-          createBatchScanner(DataIndexUtils.DATA_ID_INDEX.getName(), additionalAuthorizations);
-      batchScanner.setRanges(Collections.singleton(new Range()));
-      batchScanner.fetchColumnFamily(new Text(family));
+      scanner = createScanner(DataIndexUtils.DATA_ID_INDEX.getName(), additionalAuthorizations);
+      scanner.setRange(new Range());
+      scanner.fetchColumnFamily(new Text(family));
       return new CloseableIteratorWrapper(new Closeable() {
         @Override
         public void close() throws IOException {
-          batchScanner.close();
+          scanner.close();
         }
       },
-          Streams.stream(batchScanner).map(
+          Streams.stream(scanner).map(
               entry -> DataIndexUtils.deserializeDataIndexRow(
                   entry.getKey().getRow().getBytes(),
                   adapterId,

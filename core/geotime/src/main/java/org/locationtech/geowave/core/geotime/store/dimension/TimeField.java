@@ -37,6 +37,7 @@ public class TimeField implements NumericDimensionField<Time> {
   public TimeField() {
     reader = new TimeReader();
     writer = new TimeWriter();
+    fieldName = DEFAULT_FIELD_ID;
   }
 
   public TimeField(final Unit timeUnit) {

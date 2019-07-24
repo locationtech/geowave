@@ -725,16 +725,17 @@ public class BaseDataStore implements DataStore {
               adapterStore,
               indexMappingStore,
               indexStore)) {
-
-            for (final InternalDataAdapter adapter : indexAdapterPair.getRight()) {
-              try {
-                deleteEntries(
-                    adapter,
-                    indexAdapterPair.getLeft(),
-                    query.getCommonQueryOptions().getAuthorizations());
-              } catch (final IOException e) {
-                LOGGER.warn("Unable to delete by adapter", e);
-                return false;
+            if (indexAdapterPair.getLeft() != null) {
+              for (final InternalDataAdapter adapter : indexAdapterPair.getRight()) {
+                try {
+                  deleteEntries(
+                      adapter,
+                      indexAdapterPair.getLeft(),
+                      query.getCommonQueryOptions().getAuthorizations());
+                } catch (final IOException e) {
+                  LOGGER.warn("Unable to delete by adapter", e);
+                  return false;
+                }
               }
             }
           }
@@ -1571,7 +1572,7 @@ public class BaseDataStore implements DataStore {
             indexMappingStore.getIndicesForAdapter(dataAdapter.getAdapterId());
         final String[] indexNames = adapterIndexMap.getIndexNames();
         for (int i = 0; i < indexNames.length; i++) {
-          if (indexNames[i].equals(indexName)) {
+          if (indexNames[i].equals(indexName) && !baseOptions.isSecondaryIndexing()) {
             // check if it is the only index for the current adapter
             if (indexNames.length == 1) {
               throw new IllegalStateException(
@@ -1592,7 +1593,22 @@ public class BaseDataStore implements DataStore {
     for (int i = 0; i < markedAdapters.size(); i++) {
       final short adapterId = markedAdapters.get(i);
       baseOperations.deleteAll(indexName, internalAdapterStore.getTypeName(adapterId), adapterId);
-      statisticsStore.removeAllStatistics(adapterId);
+      // need to be careful only deleting stats for this index and not any others for the adapter
+      final List<InternalDataStatistics<?, ?, ?>> statsToRemove = new ArrayList<>();
+      try (CloseableIterator<InternalDataStatistics<?, ?, ?>> it =
+          statisticsStore.getDataStatistics(adapterId)) {
+        while (it.hasNext()) {
+          final InternalDataStatistics<?, ?, ?> stat = it.next();
+          if ((stat.getExtendedId() != null) && stat.getExtendedId().startsWith(indexName)) {
+            statsToRemove.add(stat);
+          }
+        }
+      }
+      statsToRemove.forEach(
+          stat -> statisticsStore.removeStatistics(
+              adapterId,
+              stat.getType(),
+              stat.getExtendedId()));
       indexMappingStore.remove(adapterId, indexName);
     }
     // remove the actual index
@@ -1615,7 +1631,7 @@ public class BaseDataStore implements DataStore {
     }
 
     final String[] indexNames = adapterIndexMap.getIndexNames();
-    if (indexNames.length == 1) {
+    if ((indexNames.length == 1) && !baseOptions.isSecondaryIndexing()) {
       throw new IllegalStateException("Index removal failed. Adapters require at least one index.");
     }
 
@@ -1647,6 +1663,9 @@ public class BaseDataStore implements DataStore {
       // remove all the data for each index paired to this adapter
       for (int i = 0; i < indexNames.length; i++) {
         baseOperations.deleteAll(indexNames[i], typeName, adapterId);
+      }
+      if (baseOptions.isSecondaryIndexing()) {
+        baseOperations.deleteAll(DataIndexUtils.DATA_ID_INDEX.getName(), typeName, adapterId);
       }
 
       statisticsStore.removeAllStatistics(adapterId);

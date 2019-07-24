@@ -123,13 +123,14 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
       final String... additionalAuthorizations) {
     final String prefix = RocksDBUtils.getTablePrefix(typeName, indexName);
     client.close(indexName, typeName);
-    Arrays.stream(new File(directory).list((dir, name) -> name.startsWith(prefix))).forEach(d -> {
-      try {
-        FileUtils.deleteDirectory(new File(d));
-      } catch (final IOException e) {
-        LOGGER.warn("Unable to delete directory '" + d + "'");
-      }
-    });
+    Arrays.stream(new File(directory).listFiles((dir, name) -> name.startsWith(prefix))).forEach(
+        f -> {
+          try {
+            FileUtils.deleteDirectory(f);
+          } catch (final IOException e) {
+            LOGGER.warn("Unable to delete directory '" + f.getAbsolutePath() + "'");
+          }
+        });
     return true;
   }
 

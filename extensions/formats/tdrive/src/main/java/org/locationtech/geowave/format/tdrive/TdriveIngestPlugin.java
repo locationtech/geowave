@@ -84,7 +84,7 @@ public class TdriveIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroTd
     try {
       final InputStream fis = input.openStream();
       final BufferedReader fr =
-          new BufferedReader(new InputStreamReader(fis, StringUtils.getGeoWaveCharset()));
+          new BufferedReader(new InputStreamReader(fis, StringUtils.UTF8_CHARSET));
       final BufferedReader br = new BufferedReader(fr);
       return new CloseableIterator<AvroTdrivePoint>() {
         AvroTdrivePoint next = null;
