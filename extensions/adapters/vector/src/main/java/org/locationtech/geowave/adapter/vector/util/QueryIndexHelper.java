@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.adapter.vector.util;
 
+import java.util.Date;
 import java.util.Map;
 import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialTemporalQuery;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraints;
@@ -15,8 +16,7 @@ import org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import org.locationtech.geowave.core.geotime.store.query.TemporalRange;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorStatisticsQueryBuilder;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
-import org.locationtech.geowave.core.geotime.store.statistics.FeatureBoundingBoxStatistics;
-import org.locationtech.geowave.core.geotime.store.statistics.FeatureTimeRangeStatistics;
+import org.locationtech.geowave.core.geotime.store.statistics.TimeRangeDataStatistics;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils.GeoConstraintsWrapper;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
@@ -26,6 +26,7 @@ import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintSet;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintsByClass;
 import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
@@ -37,13 +38,13 @@ public class QueryIndexHelper {
       final AttributeDescriptor attr) {
     final TemporalRange timeRange = new TemporalRange();
     if (attr != null) {
-      final FeatureTimeRangeStatistics stat =
-          ((FeatureTimeRangeStatistics) statsMap.get(
+      final TimeRangeDataStatistics stat =
+          ((TimeRangeDataStatistics) statsMap.get(
               VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
                   attr.getLocalName()).build().getId()));
       if (stat != null) {
-        timeRange.setStartTime(stat.getMinTime());
-        timeRange.setEndTime(stat.getMaxTime());
+        timeRange.setStartTime(new Date(stat.getMin()));
+        timeRange.setEndTime(new Date(stat.getMax()));
       }
     }
     return timeRange;
@@ -86,8 +87,8 @@ public class QueryIndexHelper {
     } else if ((timeDescriptors.getTime() != null)
         && constraintsSet.hasConstraintsFor(timeDescriptors.getTime().getLocalName())) {
       final String name = timeDescriptors.getTime().getLocalName();
-      final FeatureTimeRangeStatistics stats =
-          ((FeatureTimeRangeStatistics) statsMap.get(
+      final TimeRangeDataStatistics stats =
+          ((TimeRangeDataStatistics) statsMap.get(
               VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
                   name).build().getId()));
 
@@ -120,12 +121,9 @@ public class QueryIndexHelper {
     final StatisticsId statId =
         VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
             geoAttrName).build().getId();
-    final FeatureBoundingBoxStatistics bboxStats =
-        (FeatureBoundingBoxStatistics) statsMap.get(statId);
+    final BoundingBoxDataStatistics bboxStats = (BoundingBoxDataStatistics) statsMap.get(statId);
     if ((bboxStats != null) && bboxStats.isSet() && (bbox != null)) {
-      final Geometry geo =
-          bboxStats.composeGeometry(
-              featureType.getGeometryDescriptor().getType().getCoordinateReferenceSystem());
+      final Geometry geo = new GeometryFactory().toGeometry(bboxStats.getResult());
       // TODO if the query doesn't intersect the stats this will return an
       // empty geometry, it seems that'd be an opportunity to quickly
       // return no results rather than continuing on and hoping that an
@@ -140,15 +138,15 @@ public class QueryIndexHelper {
       final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> stats) {
 
     if ((timeDescriptors.getEndRange() != null) || (timeDescriptors.getStartRange() != null)) {
-      final FeatureTimeRangeStatistics endRange =
+      final TimeRangeDataStatistics endRange =
           (timeDescriptors.getEndRange() != null)
-              ? ((FeatureTimeRangeStatistics) stats.get(
+              ? ((TimeRangeDataStatistics) stats.get(
                   VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
                       timeDescriptors.getEndRange().getLocalName()).build().getId()))
               : null;
-      final FeatureTimeRangeStatistics startRange =
+      final TimeRangeDataStatistics startRange =
           (timeDescriptors.getStartRange() != null)
-              ? ((FeatureTimeRangeStatistics) stats.get(
+              ? ((TimeRangeDataStatistics) stats.get(
                   VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
                       timeDescriptors.getStartRange().getLocalName()).build().getId()))
               : null;
@@ -163,8 +161,8 @@ public class QueryIndexHelper {
         return ExplicitSpatialTemporalQuery.createConstraints(startRange.asTemporalRange(), true);
       }
     } else if (timeDescriptors.getTime() != null) {
-      final FeatureTimeRangeStatistics timeStat =
-          ((FeatureTimeRangeStatistics) stats.get(
+      final TimeRangeDataStatistics timeStat =
+          ((TimeRangeDataStatistics) stats.get(
               VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
                   timeDescriptors.getTime().getLocalName()).build().getId()));
       if (timeStat != null) {

@@ -26,10 +26,12 @@ import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
+import org.opengis.feature.FeatureVisitor;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 import org.opengis.geometry.BoundingBox;
+import org.opengis.util.ProgressListener;
 
 @SuppressWarnings("unchecked")
 public class GeoWaveFeatureSource extends ContentFeatureStore {
@@ -136,6 +138,21 @@ public class GeoWaveFeatureSource extends ContentFeatureStore {
         components,
         state.getGeoWaveTransaction(query.getTypeName()),
         (GeoWaveFeatureReader) getReaderInternal(query));
+  }
+
+  @Override
+  public void accepts(
+      final Query query,
+      final FeatureVisitor visitor,
+      final ProgressListener progress) throws IOException {
+    if (!GeoWaveGTPluginUtils.accepts(
+        visitor,
+        progress,
+        getFeatureType(),
+        getDataStore().getMyTransactionState(transaction, this).getGeoWaveTransaction(
+            getFeatureType().getTypeName()).getDataStatistics())) {
+      super.accepts(query, visitor, progress);
+    }
   }
 
   @Override
