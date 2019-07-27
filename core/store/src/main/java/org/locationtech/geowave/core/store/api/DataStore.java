@@ -181,9 +181,9 @@ public interface DataStore {
   void removeIndex(String typeName, String indexName) throws IllegalStateException;
 
   /**
-   * remove statistics for type
+   * Remove all data and statistics associated with the given type.
    *
-   * @param typeName
+   * @param typeName the type
    */
   void removeType(String typeName);
 

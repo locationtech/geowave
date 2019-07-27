@@ -427,7 +427,7 @@ public class BaseQueryOptions {
    * most dimensions of the given constraint.
    *
    */
-  public List<Pair<Index, List<InternalDataAdapter<?>>>> getBestQueryIndicies(
+  public List<Pair<Index, List<InternalDataAdapter<?>>>> getBestQueryIndices(
       final PersistentAdapterStore adapterStore,
       final AdapterIndexMappingStore adapterIndexMappingStore,
       final IndexStore indexStore,

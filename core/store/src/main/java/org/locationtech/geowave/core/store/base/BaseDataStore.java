@@ -401,7 +401,7 @@ public class BaseDataStore implements DataStore {
       final List<Pair<Index, List<InternalDataAdapter<?>>>> indexAdapterPairList =
           (deleteAllIndicesByConstraints)
               ? queryOptions.getIndicesForAdapters(tempAdapterStore, indexMappingStore, indexStore)
-              : queryOptions.getBestQueryIndicies(
+              : queryOptions.getBestQueryIndices(
                   tempAdapterStore,
                   indexMappingStore,
                   indexStore,
@@ -422,12 +422,12 @@ public class BaseDataStore implements DataStore {
             }
           }
           for (final InternalDataAdapter<?> adapter : allPair.getRight()) {
-            List<Index> indicies = additionalIndicesToDelete.get(adapter.getAdapterId());
-            if (indicies == null) {
-              indicies = new ArrayList<>();
-              additionalIndicesToDelete.put(adapter.getAdapterId(), indicies);
+            List<Index> indices = additionalIndicesToDelete.get(adapter.getAdapterId());
+            if (indices == null) {
+              indices = new ArrayList<>();
+              additionalIndicesToDelete.put(adapter.getAdapterId(), indices);
             }
-            indicies.add(allPair.getLeft());
+            indices.add(allPair.getLeft());
           }
         }
       }
@@ -1410,7 +1410,7 @@ public class BaseDataStore implements DataStore {
 
     final String[] typeNames = query.getDataTypeQueryOptions().getTypeNames();
     final String indexName = query.getIndexQueryOptions().getIndexName();
-    final boolean isAllIndices = query.getIndexQueryOptions().isAllIndicies();
+    final boolean isAllIndices = query.getIndexQueryOptions().isAllIndices();
     final List<DataTypeAdapter<?>> typesToCopy;
 
     // if typeNames are not specified, then it means 'everything' as well

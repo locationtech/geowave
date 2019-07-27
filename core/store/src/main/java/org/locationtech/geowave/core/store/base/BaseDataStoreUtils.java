@@ -665,12 +665,12 @@ public class BaseDataStoreUtils {
     final Map<T, List<Index>> indicesPerAdapter = new HashMap<>();
     for (final Pair<Index, List<T>> pair : indexAdapterPairList) {
       for (final T adapter : pair.getRight()) {
-        List<Index> indicies = indicesPerAdapter.get(adapter);
-        if (indicies == null) {
-          indicies = new ArrayList<>();
-          indicesPerAdapter.put(adapter, indicies);
+        List<Index> indices = indicesPerAdapter.get(adapter);
+        if (indices == null) {
+          indices = new ArrayList<>();
+          indicesPerAdapter.put(adapter, indices);
         }
-        indicies.add(pair.getLeft());
+        indices.add(pair.getLeft());
       }
     }
     final Map<Index, List<T>> retVal = new HashMap<>();

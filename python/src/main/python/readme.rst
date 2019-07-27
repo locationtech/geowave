@@ -1,5 +1,0 @@
-=========
-READ ME
-========
-
-Example readme

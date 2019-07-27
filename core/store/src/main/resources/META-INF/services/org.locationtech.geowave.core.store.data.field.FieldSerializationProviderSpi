@@ -2,6 +2,7 @@ org.locationtech.geowave.core.store.data.field.base.BigDecimalArraySerialization
 org.locationtech.geowave.core.store.data.field.base.BigDecimalSerializationProvider
 org.locationtech.geowave.core.store.data.field.base.BigIntegerArraySerializationProvider
 org.locationtech.geowave.core.store.data.field.base.BigIntegerSerializationProvider
+org.locationtech.geowave.core.store.data.field.base.BooleanArraySerializationProvider
 org.locationtech.geowave.core.store.data.field.base.BooleanSerializationProvider
 org.locationtech.geowave.core.store.data.field.base.ByteArraySerializationProvider
 org.locationtech.geowave.core.store.data.field.base.ByteSerializationProvider
@@ -13,6 +14,7 @@ org.locationtech.geowave.core.store.data.field.base.IntegerArraySerializationPro
 org.locationtech.geowave.core.store.data.field.base.IntegerSerializationProvider
 org.locationtech.geowave.core.store.data.field.base.LongArraySerializationProvider
 org.locationtech.geowave.core.store.data.field.base.LongSerializationProvider
+org.locationtech.geowave.core.store.data.field.base.PrimitiveBooleanArraySerializationProvider
 org.locationtech.geowave.core.store.data.field.base.PrimitiveByteArraySerializationProvider
 org.locationtech.geowave.core.store.data.field.base.PrimitiveDoubleArraySerializationProvider
 org.locationtech.geowave.core.store.data.field.base.PrimitiveFloatArraySerializationProvider
