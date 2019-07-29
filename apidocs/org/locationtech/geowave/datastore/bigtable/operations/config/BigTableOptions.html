@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -213,20 +213,28 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/StoreF
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/bigtable/operations/config/BigTableOptions.html#getProjectId--">getProjectId</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/bigtable/operations/config/BigTableOptions.html#getScanCacheSize--">getScanCacheSize</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in org.locationtech.geowave.core.store">StoreFactoryFamilySpi</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/bigtable/operations/config/BigTableOptions.html#getStoreFactory--">getStoreFactory</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/DataStoreOptions.html" title="interface in org.locationtech.geowave.core.store">DataStoreOptions</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/bigtable/operations/config/BigTableOptions.html#getStoreOptions--">getStoreOptions</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/bigtable/operations/config/BigTableOptions.html#setInstanceId-java.lang.String-">setInstanceId</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;instanceId)</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/bigtable/operations/config/BigTableOptions.html#setProjectId-java.lang.String-">setProjectId</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;projectId)</code>&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/bigtable/operations/config/BigTableOptions.html#setScanCacheSize-int-">setScanCacheSize</a></span>(int&nbsp;scanCacheSize)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -395,6 +403,24 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/StoreF
 <li class="blockList">
 <h4>setInstanceId</h4>
 <pre>public&nbsp;void&nbsp;setInstanceId(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;instanceId)</pre>
+</li>
+</ul>
+<a name="getScanCacheSize--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getScanCacheSize</h4>
+<pre>public&nbsp;int&nbsp;getScanCacheSize()</pre>
+</li>
+</ul>
+<a name="setScanCacheSize-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setScanCacheSize</h4>
+<pre>public&nbsp;void&nbsp;setScanCacheSize(int&nbsp;scanCacheSize)</pre>
 </li>
 </ul>
 <a name="getHBaseOptions--">

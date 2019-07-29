@@ -251,6 +251,8 @@ org.locationtech.geowave.mapreduce.operations
 org.locationtech.geowave.mapreduce.output
 org.locationtech.geowave.mapreduce.s3
 org.locationtech.geowave.mapreduce.splits
+org.locationtech.geowave.python
+org.locationtech.geowave.python.cli
 org.locationtech.geowave.service
 org.locationtech.geowave.service.client
 org.locationtech.geowave.service.grpc

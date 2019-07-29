@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -231,38 +231,62 @@ extends <a href="../../../../../org/locationtech/geowave/core/store/StoreFactory
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/datastore/dynamodb/DynamoDBOptions.html#getEndpoint--">getEndpoint</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/datastore/dynamodb/DynamoDBOptions.html#getMaxConnections--">getMaxConnections</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>com.amazonaws.Protocol</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/datastore/dynamodb/DynamoDBOptions.html#getProtocol--">getProtocol</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/datastore/dynamodb/DynamoDBOptions.html#getReadCapacity--">getReadCapacity</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>com.amazonaws.regions.Regions</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/datastore/dynamodb/DynamoDBOptions.html#getRegion--">getRegion</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in org.locationtech.geowave.core.store">StoreFactoryFamilySpi</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/datastore/dynamodb/DynamoDBOptions.html#getStoreFactory--">getStoreFactory</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/store/DataStoreOptions.html" title="interface in org.locationtech.geowave.core.store">DataStoreOptions</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/datastore/dynamodb/DynamoDBOptions.html#getStoreOptions--">getStoreOptions</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/datastore/dynamodb/DynamoDBOptions.html#getWriteCapacity--">getWriteCapacity</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/datastore/dynamodb/DynamoDBOptions.html#isEnableCacheResponseMetadata--">isEnableCacheResponseMetadata</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/datastore/dynamodb/DynamoDBOptions.html#setEnableCacheResponseMetadata-boolean-">setEnableCacheResponseMetadata</a></span>(boolean&nbsp;enableCacheResponseMetadata)</code>&nbsp;</td>
+</tr>
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/datastore/dynamodb/DynamoDBOptions.html#setEndpoint-java.lang.String-">setEndpoint</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;endpoint)</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i13" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/datastore/dynamodb/DynamoDBOptions.html#setMaxConnections-int-">setMaxConnections</a></span>(int&nbsp;maxConnections)</code>&nbsp;</td>
+</tr>
+<tr id="i14" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/datastore/dynamodb/DynamoDBOptions.html#setProtocol-com.amazonaws.Protocol-">setProtocol</a></span>(com.amazonaws.Protocol&nbsp;protocol)</code>&nbsp;</td>
+</tr>
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/datastore/dynamodb/DynamoDBOptions.html#setReadCapacity-long-">setReadCapacity</a></span>(long&nbsp;readCapacity)</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/datastore/dynamodb/DynamoDBOptions.html#setRegion-com.amazonaws.regions.Regions-">setRegion</a></span>(com.amazonaws.regions.Regions&nbsp;region)</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/datastore/dynamodb/DynamoDBOptions.html#setWriteCapacity-long-">setWriteCapacity</a></span>(long&nbsp;writeCapacity)</code>&nbsp;</td>
 </tr>
@@ -498,6 +522,60 @@ extends <a href="../../../../../org/locationtech/geowave/core/store/StoreFactory
 <li class="blockList">
 <h4>setReadCapacity</h4>
 <pre>public&nbsp;void&nbsp;setReadCapacity(long&nbsp;readCapacity)</pre>
+</li>
+</ul>
+<a name="setEnableCacheResponseMetadata-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setEnableCacheResponseMetadata</h4>
+<pre>public&nbsp;void&nbsp;setEnableCacheResponseMetadata(boolean&nbsp;enableCacheResponseMetadata)</pre>
+</li>
+</ul>
+<a name="isEnableCacheResponseMetadata--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isEnableCacheResponseMetadata</h4>
+<pre>public&nbsp;boolean&nbsp;isEnableCacheResponseMetadata()</pre>
+</li>
+</ul>
+<a name="setProtocol-com.amazonaws.Protocol-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setProtocol</h4>
+<pre>public&nbsp;void&nbsp;setProtocol(com.amazonaws.Protocol&nbsp;protocol)</pre>
+</li>
+</ul>
+<a name="getProtocol--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getProtocol</h4>
+<pre>public&nbsp;com.amazonaws.Protocol&nbsp;getProtocol()</pre>
+</li>
+</ul>
+<a name="setMaxConnections-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setMaxConnections</h4>
+<pre>public&nbsp;void&nbsp;setMaxConnections(int&nbsp;maxConnections)</pre>
+</li>
+</ul>
+<a name="getMaxConnections--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMaxConnections</h4>
+<pre>public&nbsp;int&nbsp;getMaxConnections()</pre>
 </li>
 </ul>
 <a name="getStoreFactory--">
