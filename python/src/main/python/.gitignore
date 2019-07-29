@@ -1,0 +1,5 @@
+build/
+dist/
+PyGw.egg-info/
+html/
+__pycache__/

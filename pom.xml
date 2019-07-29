@@ -102,6 +102,7 @@
 		<slf4j.version>1.7.21</slf4j.version>
 		<junit.version>4.11</junit.version>
 		<clearspring.version>2.9.6</clearspring.version>
+		<py4j.version>0.10.8.1</py4j.version>
 		<gdal.dir>${project.build.directory}/temp/gdal</gdal.dir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -1284,9 +1285,10 @@
 		<module>docs</module>
 		<module>examples/java-api</module>
 		<module>extensions</module>
+        <module>python</module>
 		<module>services</module>
 		<module>test</module>
-	</modules>
+    </modules>
 	<repositories>
 		<repository>
 			<snapshots>

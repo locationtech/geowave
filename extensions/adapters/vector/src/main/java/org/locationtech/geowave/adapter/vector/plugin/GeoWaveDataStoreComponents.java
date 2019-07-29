@@ -64,7 +64,7 @@ public class GeoWaveDataStoreComponents {
 
   public void initForWrite() {
     // this is ensuring the adapter is properly initialized with the
-    // indicies and writing it to the adapterStore, in cases where the
+    // indices and writing it to the adapterStore, in cases where the
     // featuredataadapter was created from geotools datastore's createSchema
     if (adapter instanceof InitializeWithIndicesDataAdapter) {
       ((InitializeWithIndicesDataAdapter) adapter).init(adapterIndices);

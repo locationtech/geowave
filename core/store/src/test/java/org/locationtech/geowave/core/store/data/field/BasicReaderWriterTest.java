@@ -17,6 +17,8 @@ import org.junit.Test;
 
 public class BasicReaderWriterTest {
   private Boolean booleanExpected;
+  private Boolean[] booleanArrayExpected;
+  private boolean[] primBooleanArrayExpected;
   private Boolean booleanNullExpected;
   private Byte byteExpected;
   private Short shortExpected;
@@ -51,6 +53,8 @@ public class BasicReaderWriterTest {
   @Before
   public void init() {
     booleanExpected = Boolean.TRUE;
+    booleanArrayExpected = new Boolean[] {Boolean.TRUE, null, Boolean.FALSE, null};
+    primBooleanArrayExpected = new boolean[] {Boolean.TRUE, Boolean.FALSE};
     booleanNullExpected = Boolean.FALSE;
     byteExpected = Byte.MIN_VALUE;
     shortExpected = Short.MIN_VALUE;
@@ -91,6 +95,23 @@ public class BasicReaderWriterTest {
         "FAILED test of Boolean reader/writer",
         booleanExpected.booleanValue(),
         booleanActual.booleanValue());
+
+    // test Boolean Array reader/writer
+    value = FieldUtils.getDefaultWriterForClass(Boolean[].class).writeField(booleanArrayExpected);
+    final Boolean[] booleanArrayActual =
+        FieldUtils.getDefaultReaderForClass(Boolean[].class).readField(value);
+    Assert.assertTrue(
+        "FAILED test of Boolean Array reader/writer",
+        Arrays.deepEquals(booleanArrayExpected, booleanArrayActual));
+
+    // test boolean Array reader/writer
+    value =
+        FieldUtils.getDefaultWriterForClass(boolean[].class).writeField(primBooleanArrayExpected);
+    final boolean[] primBooleanArrayActual =
+        FieldUtils.getDefaultReaderForClass(boolean[].class).readField(value);
+    Assert.assertTrue(
+        "FAILED test of boolean Array reader/writer",
+        Arrays.equals(primBooleanArrayExpected, primBooleanArrayActual));
 
     // test Byte reader/writer
     value = FieldUtils.getDefaultWriterForClass(Byte.class).writeField(byteExpected);

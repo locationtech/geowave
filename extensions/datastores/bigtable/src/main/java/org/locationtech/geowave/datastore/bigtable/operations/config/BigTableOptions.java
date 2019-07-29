@@ -72,6 +72,14 @@ public class BigTableOptions extends StoreFactoryOptions {
     this.instanceId = instanceId;
   }
 
+  public int getScanCacheSize() {
+    return scanCacheSize;
+  }
+
+  public void setScanCacheSize(final int scanCacheSize) {
+    this.scanCacheSize = scanCacheSize;
+  }
+
   public HBaseOptions getHBaseOptions() {
     return internalHBaseOptions;
   }

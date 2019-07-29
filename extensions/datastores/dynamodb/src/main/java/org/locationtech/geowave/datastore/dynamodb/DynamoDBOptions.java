@@ -166,6 +166,30 @@ public class DynamoDBOptions extends StoreFactoryOptions {
     this.readCapacity = readCapacity;
   }
 
+  public void setEnableCacheResponseMetadata(final boolean enableCacheResponseMetadata) {
+    this.enableCacheResponseMetadata = enableCacheResponseMetadata;
+  }
+
+  public boolean isEnableCacheResponseMetadata() {
+    return enableCacheResponseMetadata;
+  }
+
+  public void setProtocol(final Protocol protocol) {
+    this.protocol = protocol;
+  }
+
+  public Protocol getProtocol() {
+    return this.protocol;
+  }
+
+  public void setMaxConnections(final int maxConnections) {
+    this.maxConnections = maxConnections;
+  }
+
+  public int getMaxConnections() {
+    return maxConnections;
+  }
+
   @Override
   public StoreFactoryFamilySpi getStoreFactory() {
     return new DynamoDBStoreFactoryFamily();
