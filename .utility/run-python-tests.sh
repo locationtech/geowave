@@ -14,12 +14,12 @@ python3 -m venv tests-venv
 
 source ./tests-venv/bin/activate
 
+pip install wheel
 pip install -r requirements.txt
 
-pytest
+pytest --cov-report= --cov=pygw pygw/test/
 EXIT_CODE=$?
 
 deactivate
-rm -rf tests-venv
 
 exit $EXIT_CODE
