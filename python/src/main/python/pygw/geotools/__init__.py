@@ -7,7 +7,7 @@
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
 #===============================================================================================
 """
-This module contains the classes that are used to build and represent feature data and their feature types.
+This module contains classes that wrap the functionality of geotools SimpleFeatures and SimpleFeatureTypes.  These classes can be used to create feature types, features, and data adapters based on simple features.
 
 It contains the following import shortcuts:
 ```python

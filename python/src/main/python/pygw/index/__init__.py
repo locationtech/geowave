@@ -7,7 +7,7 @@
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
 #===============================================================================================
 """
-This module contains the classes needed for creating GeoWave indices.
+This module contains classes that are used in creating spatial and spatial/temporal indices.
 
 It contains the following import shortcuts:
 ```python

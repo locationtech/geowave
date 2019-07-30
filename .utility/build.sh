@@ -10,4 +10,7 @@ if [ "$TRAVIS_REPO_SLUG" == "locationtech/geowave" ] && [ "$BUILD_AND_PUBLISH" =
   
   echo -e "Building javadocs...\n"
   mvn -q javadoc:aggregate -DskipTests -Dspotbugs.skip
+  
+  echo -e "Building python docs...\n"
+  source .utility/build-python-docs.sh
 fi
