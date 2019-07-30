@@ -7,9 +7,7 @@
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
 #===============================================================================================
 """
-This module contains all of the classes used in the creation of a connection to a GeoWave data store.
-
-In general you would construct an instance of `pygw.store.data_store_options.DataStoreOptions` through one of the backend submodules such as `pygw.store.accumulo` or `pygw.store.rocksdb`.  You would then pass those options to `pygw.store.data_store_factory.DataStoreFactory.create_data_store`.
+This module contains classes that can be used to establish connections to the various GeoWave backends.  Each store type has a submodule which contains a class that can be used to connect to that store type.  For example `from pygw.store.accumulo import AccumuloOptions`.  The `DataStore` object can be constructed by passing the options object to the `DataStoreFactory.create_data_store(<options>)` method.
 
 This module contains the following import shortcuts:
 ```python
