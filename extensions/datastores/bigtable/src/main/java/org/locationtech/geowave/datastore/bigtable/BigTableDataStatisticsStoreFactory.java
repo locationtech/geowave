@@ -13,7 +13,7 @@ import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreFactory;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
-import org.locationtech.geowave.datastore.bigtable.operations.config.BigTableOptions;
+import org.locationtech.geowave.datastore.bigtable.config.BigTableOptions;
 
 /**
  * Big Table needs to safe guard its column qualifiers against control characters (rather than use

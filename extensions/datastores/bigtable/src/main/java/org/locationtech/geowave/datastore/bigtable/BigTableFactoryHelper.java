@@ -13,7 +13,7 @@ import org.locationtech.geowave.core.store.StoreFactoryHelper;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.datastore.bigtable.operations.BigTableOperations;
-import org.locationtech.geowave.datastore.bigtable.operations.config.BigTableOptions;
+import org.locationtech.geowave.datastore.bigtable.config.BigTableOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

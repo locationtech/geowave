@@ -16,7 +16,7 @@ class AccumuloOptions(DataStoreOptions):
     """
 
     def __init__(self):
-        super().__init__(geowave_pkg.datastore.accumulo.cli.config.AccumuloRequiredOptions())
+        super().__init__(geowave_pkg.datastore.accumulo.config.AccumuloRequiredOptions())
 
     def set_zookeeper(self, zookeeper):
         """

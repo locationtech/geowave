@@ -17,7 +17,7 @@ class DynamoDBOptions(DataStoreOptions):
     """
 
     def __init__(self):
-        super().__init__(geowave_pkg.datastore.dynamodb.DynamoDBOptions())
+        super().__init__(geowave_pkg.datastore.dynamodb.config.DynamoDBOptions())
 
     def set_region(self, region):
         """
@@ -27,7 +27,10 @@ class DynamoDBOptions(DataStoreOptions):
         Args:
             region (str): The AWS region to use.
         """
-        j_region = java_pkg.com.amazonaws.regions.Regions.fromName(region)
+        if region is None:
+            j_region = None
+        else:
+            j_region = java_pkg.com.amazonaws.regions.Regions.fromName(region)
         self._java_ref.setRegion(j_region)
 
     def get_region(self):
@@ -111,7 +114,10 @@ class DynamoDBOptions(DataStoreOptions):
         Args:
             protocol (str): The protocol to use.
         """
-        j_protocol = java_pkg.com.amazonaws.Protocol.valueOf(protocol.upper())
+        if protocol is None:
+            j_protocol = None
+        else:
+            j_protocol = java_pkg.com.amazonaws.Protocol.valueOf(protocol.upper())
         self._java_ref.setProtocol(j_protocol)
 
     def get_protocol(self):

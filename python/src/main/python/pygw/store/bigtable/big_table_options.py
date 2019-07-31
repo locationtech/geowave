@@ -16,7 +16,7 @@ class BigTableOptions(DataStoreOptions):
     """
 
     def __init__(self):
-        super().__init__(geowave_pkg.datastore.bigtable.operations.config.BigTableOptions())
+        super().__init__(geowave_pkg.datastore.bigtable.config.BigTableOptions())
 
     def set_scan_cache_size(self, scan_cache_size):
         """

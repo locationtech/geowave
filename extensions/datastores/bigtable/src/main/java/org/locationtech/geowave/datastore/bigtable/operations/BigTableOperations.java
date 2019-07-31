@@ -18,7 +18,7 @@ import org.apache.hadoop.hbase.client.Scan;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.datastore.bigtable.BigTableConnectionPool;
-import org.locationtech.geowave.datastore.bigtable.operations.config.BigTableOptions;
+import org.locationtech.geowave.datastore.bigtable.config.BigTableOptions;
 import org.locationtech.geowave.datastore.hbase.operations.HBaseOperations;
 import com.google.cloud.bigtable.hbase.BigtableRegionLocator;
 import com.google.common.collect.Sets;

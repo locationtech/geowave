@@ -6,12 +6,13 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.datastore.dynamodb;
+package org.locationtech.geowave.datastore.dynamodb.config;
 
 import org.locationtech.geowave.core.store.BaseDataStoreOptions;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
+import org.locationtech.geowave.datastore.dynamodb.DynamoDBStoreFactoryFamily;
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.Protocol;
 import com.amazonaws.regions.Regions;
@@ -21,7 +22,7 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.ParametersDelegate;
 
 /** Jcommander helper class for AWS Region */
-class RegionConvertor implements IStringConverter<Regions> {
+class RegionConverter implements IStringConverter<Regions> {
 
   @Override
   public Regions convert(final String regionName) {
@@ -31,12 +32,12 @@ class RegionConvertor implements IStringConverter<Regions> {
 
 
 /** JCommander helper class for Protocol */
-class ProtocolConvertor implements IStringConverter<Protocol> {
+class ProtocolConverter implements IStringConverter<Protocol> {
 
   @Override
   public Protocol convert(final String protocolName) {
-    final String protocolLowerCase = protocolName.toLowerCase();
-    if (!protocolLowerCase.equals("http") && !protocolLowerCase.equals("https")) {
+    final String protocolUpperCase = protocolName.toUpperCase();
+    if (!protocolUpperCase.equals("HTTP") && !protocolUpperCase.equals("HTTPS")) {
       throw new ParameterException(
           "Value "
               + protocolName
@@ -44,7 +45,7 @@ class ProtocolConvertor implements IStringConverter<Protocol> {
               + "Available values are: http and https.");
     }
 
-    return Protocol.valueOf(protocolLowerCase);
+    return Protocol.valueOf(protocolUpperCase);
   }
 }
 
@@ -58,7 +59,8 @@ public class DynamoDBOptions extends StoreFactoryOptions {
 
   @Parameter(
       names = "--region",
-      description = "The AWS region to use(specify either endpoint/region not both)")
+      description = "The AWS region to use(specify either endpoint/region not both)",
+      converter = RegionConverter.class)
   protected Regions region = null;
 
   @Parameter(names = "--initialWriteCapacity")
@@ -73,7 +75,10 @@ public class DynamoDBOptions extends StoreFactoryOptions {
       description = "The maximum number of open http(s) connections" + " active at any given time")
   protected int maxConnections = ClientConfiguration.DEFAULT_MAX_CONNECTIONS;
 
-  @Parameter(names = "--protocol", description = "The protocol to use. HTTP or HTTPS")
+  @Parameter(
+      names = "--protocol",
+      description = "The protocol to use. HTTP or HTTPS",
+      converter = ProtocolConverter.class)
   protected Protocol protocol = Protocol.HTTPS;
 
   @Parameter(
