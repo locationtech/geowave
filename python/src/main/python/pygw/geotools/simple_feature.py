@@ -16,6 +16,7 @@ class SimpleFeature(GeoWaveObject):
     """
     A Simple (Vector) Feature.
     """
+
     def __init__(self, feature_type, java_ref):
         assert isinstance(feature_type, SimpleFeatureType)
         self._feature_type = feature_type

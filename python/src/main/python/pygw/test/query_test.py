@@ -26,7 +26,6 @@ from .conftest import TEST_DATA
 from .conftest import write_test_data
 from .conftest import results_as_list
 
-
 # Test Deleting #
 def test_cql_query(test_ds):
     # given

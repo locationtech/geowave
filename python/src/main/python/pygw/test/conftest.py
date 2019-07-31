@@ -64,7 +64,6 @@ def test_ds():
     while os.path.isdir(TEST_DIR):
         time.sleep(0.01)
 
-
 def write_test_data(ds, *expected_indices):
     writer = ds.create_writer(POINT_TYPE_ADAPTER.get_type_name())
     results = None

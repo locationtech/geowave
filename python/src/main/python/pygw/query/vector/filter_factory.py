@@ -15,7 +15,6 @@ from pygw.config import java_gateway
 from pygw.config import java_pkg
 from pygw.config import reflection_util
 
-
 def _j_match_action(match_action):
     return java_pkg.org.opengis.filter.MultiValuedFilter.MatchAction.valueOf(match_action.upper())
 

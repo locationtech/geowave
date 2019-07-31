@@ -16,6 +16,7 @@ class SpatialIndexBuilder(IndexBuilder):
     """
     Index builder for a spatial index.
     """
+
     def __init__(self):
         super().__init__(geowave_pkg.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder())
 

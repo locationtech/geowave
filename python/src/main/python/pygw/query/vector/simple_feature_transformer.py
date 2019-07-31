@@ -13,7 +13,6 @@ from pygw.geotools import AttributeDescriptor
 
 from ..query_result_transformer import QueryResultTransformer
 
-
 class SimpleFeatureTransformer(QueryResultTransformer):
     """
     Transforms Java SimpleFeature query results into pgyw.geotools.SimpleFeature
