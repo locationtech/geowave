@@ -21,34 +21,6 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.ParametersDelegate;
 
-/** Jcommander helper class for AWS Region */
-class RegionConverter implements IStringConverter<Regions> {
-
-  @Override
-  public Regions convert(final String regionName) {
-    return Regions.fromName(regionName);
-  }
-}
-
-
-/** JCommander helper class for Protocol */
-class ProtocolConverter implements IStringConverter<Protocol> {
-
-  @Override
-  public Protocol convert(final String protocolName) {
-    final String protocolUpperCase = protocolName.toUpperCase();
-    if (!protocolUpperCase.equals("HTTP") && !protocolUpperCase.equals("HTTPS")) {
-      throw new ParameterException(
-          "Value "
-              + protocolName
-              + "can not be converted to Protocol. "
-              + "Available values are: http and https.");
-    }
-
-    return Protocol.valueOf(protocolUpperCase);
-  }
-}
-
 
 public class DynamoDBOptions extends StoreFactoryOptions {
   @Parameter(
@@ -203,5 +175,33 @@ public class DynamoDBOptions extends StoreFactoryOptions {
   @Override
   public DataStoreOptions getStoreOptions() {
     return baseOptions;
+  }
+
+  /** Jcommander helper class for AWS Region */
+  public static class RegionConverter implements IStringConverter<Regions> {
+
+    @Override
+    public Regions convert(final String regionName) {
+      return Regions.fromName(regionName);
+    }
+  }
+
+
+  /** JCommander helper class for Protocol */
+  public static class ProtocolConverter implements IStringConverter<Protocol> {
+
+    @Override
+    public Protocol convert(final String protocolName) {
+      final String protocolUpperCase = protocolName.toUpperCase();
+      if (!protocolUpperCase.equals("HTTP") && !protocolUpperCase.equals("HTTPS")) {
+        throw new ParameterException(
+            "Value "
+                + protocolName
+                + "can not be converted to Protocol. "
+                + "Available values are: http and https.");
+      }
+
+      return Protocol.valueOf(protocolUpperCase);
+    }
   }
 }
