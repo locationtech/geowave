@@ -34,6 +34,11 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-service-client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-server</artifactId>
             <scope>provided</scope>
@@ -68,7 +73,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.hbase</groupId>
-			<artifactId>hbase-shaded-client</artifactId>
+			<artifactId>hbase-client</artifactId>
 			<exclusions>
 				<exclusion>
 					<artifactId>jdk.tools</artifactId>
@@ -79,6 +84,10 @@
 					<artifactId>hadoop-core</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-protocol</artifactId>
 		</dependency>
 	</dependencies>
 	<build>
@@ -128,7 +137,7 @@
 						</goals>
 						<configuration>
 							<target>
-								<replace token="com.google.protobuf." value="org.apache.hadoop.hbase.shaded.com.google.protobuf." dir="src/main/java">
+								<replace token="com.google.protobuf." value="com.google.protobuf." dir="src/main/java">
 									<include name="**/*ProtosClient.java" />
 								</replace>
 								<delete>

@@ -77,8 +77,8 @@
 		<guice.version>3.0</guice.version>
 		<skipITs>true</skipITs>
 		<vfs2.version>2.1</vfs2.version>
-		<hbase.version>1.4.6</hbase.version>
-		<hadoop.version>2.8.4</hadoop.version>
+		<hbase.version>2.0.2</hbase.version>
+		<hadoop.version>3.1.1</hadoop.version>
 		<avro.version>1.7.6</avro.version>
 		<awssdk.version>1.11.281</awssdk.version>
 		<httpclient.version>4.5.2</httpclient.version>
@@ -358,6 +358,7 @@
 				<groupId>org.apache.hbase</groupId>
 				<artifactId>hbase-client</artifactId>
 				<version>${hbase.version}</version>
+				<scope>${hbase.scope}</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.hbase</groupId>
@@ -857,6 +858,7 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -1388,11 +1390,11 @@
 		<profile>
 			<id>cloudera</id>
 			<properties>
-				<accumulo.version>1.7.2-cdh5.5.0</accumulo.version>
-				<hbase.version>1.2.0-cdh5.14.0</hbase.version>
-				<hadoop.version>2.6.0-cdh5.14.0</hadoop.version>
-				<spark.version>2.2.0.cloudera2</spark.version>
-				<accumulo.api>1.7</accumulo.api>
+				<accumulo.version>1.9.2-cdh6.0.0</accumulo.version>
+				<hbase.version>2.0.0-cdh6.0.1</hbase.version>
+				<hadoop.version>3.0.0-cdh6.0.0</hadoop.version>
+				<spark.version>2.2.0-cdh6.0.0</spark.version>
+				<accumulo.api>1.9</accumulo.api>
 				<!-- accumulo 1.7 references com.google.common.net.HostAndPort.getHostText() 
 					which was removed in guava 22.0 -->
 				<guava.version>21.0</guava.version>
@@ -1430,12 +1432,12 @@
 			<id>hortonworks</id>
 			<properties>
 				<accumulo.version>1.7.0.2.6.5.35-1</accumulo.version>
-				<!-- this is used in place of 1.1.2.2.6.5.35-1 because the hbase-shaded-client 
+				<!-- this is used in place of 2.0.2.3.1.0.0-78 because the hbase-shaded-client
 					from hortonworks doesn't shade third party libraries like the apache one 
 					does -->
-				<hbase.version>1.1.2</hbase.version>
-				<hadoop.version>2.7.3.2.6.5.35-1</hadoop.version>
-				<spark.version>2.3.0.2.6.5.35-1</spark.version>
+				<hbase.version>2.0.2</hbase.version>
+				<hadoop.version>3.1.1.3.1.0.0-78</hadoop.version>
+				<spark.version>2.3.2.3.1.0.0-78</spark.version>
 				<accumulo.api>1.7</accumulo.api>
 				<!-- accumulo 1.7 references com.google.common.net.HostAndPort.getHostText() 
 					which was removed in guava 22.0 -->
@@ -1481,8 +1483,8 @@
 			<properties>
 				<accumulo.version>1.7.2</accumulo.version>
 				<accumulo.api>1.7</accumulo.api>
-				<hadoop.version>2.6.4</hadoop.version>
-				<hbase.version>1.3.1</hbase.version>
+				<hadoop.version>3.1.1</hadoop.version>
+				<hbase.version>2.0.2</hbase.version>
 				<geotools.version>20.0</geotools.version>
 				<geoserver.version>2.14.0</geoserver.version>
 				<imageio.ext.version>1.1.25</imageio.ext.version>

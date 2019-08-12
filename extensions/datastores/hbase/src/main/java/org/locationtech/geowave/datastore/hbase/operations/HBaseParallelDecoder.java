@@ -210,8 +210,8 @@ public class HBaseParallelDecoder<T> extends ParallelDecoder<T> {
 
     @Override
     public void close() throws IOException {
-      table.close();
       baseResults.close();
+      table.close();
     }
 
     @Override

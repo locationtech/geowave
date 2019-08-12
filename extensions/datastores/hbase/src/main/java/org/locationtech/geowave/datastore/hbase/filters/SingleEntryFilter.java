@@ -16,9 +16,9 @@ import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.exceptions.DeserializationException;
 import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.FilterBase;
-import org.apache.hadoop.hbase.shaded.com.google.protobuf.HBaseZeroCopyByteString;
 import org.locationtech.geowave.datastore.hbase.coprocessors.protobuf.FilterProtosClient;
 import org.locationtech.geowave.datastore.hbase.coprocessors.protobuf.FilterProtosServer;
+import com.google.protobuf.HBaseZeroCopyByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 /**

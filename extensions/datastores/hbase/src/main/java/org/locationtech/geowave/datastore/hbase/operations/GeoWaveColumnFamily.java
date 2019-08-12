@@ -9,13 +9,15 @@
 package org.locationtech.geowave.datastore.hbase.operations;
 
 import java.util.Arrays;
-import org.apache.hadoop.hbase.HColumnDescriptor;
+import org.apache.hadoop.hbase.client.ColumnFamilyDescriptor;
+import org.apache.hadoop.hbase.client.ColumnFamilyDescriptorBuilder;
+import org.apache.hadoop.hbase.util.Bytes;
 
 public interface GeoWaveColumnFamily {
-  public HColumnDescriptor toColumnDescriptor();
+  public ColumnFamilyDescriptor toColumnDescriptor(Boolean maxVersioning);
 
   public static interface GeoWaveColumnFamilyFactory {
-    public GeoWaveColumnFamily fromColumnDescriptor(HColumnDescriptor column);
+    public GeoWaveColumnFamily fromColumnDescriptor(ColumnFamilyDescriptor column);
   }
 
   public static class StringColumnFamily implements GeoWaveColumnFamily {
@@ -26,8 +28,13 @@ public interface GeoWaveColumnFamily {
     }
 
     @Override
-    public HColumnDescriptor toColumnDescriptor() {
-      return new HColumnDescriptor(columnFamily);
+    public ColumnFamilyDescriptor toColumnDescriptor(Boolean maxVersioning) {
+      ColumnFamilyDescriptorBuilder cf =
+          ColumnFamilyDescriptorBuilder.newBuilder(Bytes.toBytes(columnFamily));
+      if (maxVersioning) {
+        cf.setMaxVersions(Integer.MAX_VALUE);
+      }
+      return cf.build();
     }
 
     @Override
@@ -72,7 +79,7 @@ public interface GeoWaveColumnFamily {
     private StringColumnFamilyFactory() {}
 
     @Override
-    public GeoWaveColumnFamily fromColumnDescriptor(final HColumnDescriptor column) {
+    public GeoWaveColumnFamily fromColumnDescriptor(final ColumnFamilyDescriptor column) {
 
       return new StringColumnFamily(column.getNameAsString());
     }
@@ -86,8 +93,12 @@ public interface GeoWaveColumnFamily {
     }
 
     @Override
-    public HColumnDescriptor toColumnDescriptor() {
-      return new HColumnDescriptor(columnFamily);
+    public ColumnFamilyDescriptor toColumnDescriptor(Boolean maxVersioning) {
+      ColumnFamilyDescriptorBuilder cf = ColumnFamilyDescriptorBuilder.newBuilder(columnFamily);
+      if (maxVersioning) {
+        cf.setMaxVersions(Integer.MAX_VALUE);
+      }
+      return cf.build();
     }
 
     @Override
@@ -128,7 +139,7 @@ public interface GeoWaveColumnFamily {
     private ByteArrayColumnFamilyFactory() {}
 
     @Override
-    public GeoWaveColumnFamily fromColumnDescriptor(final HColumnDescriptor column) {
+    public GeoWaveColumnFamily fromColumnDescriptor(final ColumnFamilyDescriptor column) {
 
       return new ByteArrayColumnFamily(column.getName());
     }

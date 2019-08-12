@@ -11,13 +11,13 @@ package org.locationtech.geowave.datastore.hbase.coprocessors;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
-import org.apache.hadoop.hbase.Coprocessor;
 import org.apache.hadoop.hbase.CoprocessorEnvironment;
 import org.apache.hadoop.hbase.HConstants;
 import org.apache.hadoop.hbase.HConstants.OperationStatusCode;
@@ -25,12 +25,12 @@ import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Mutation;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.coprocessor.CoprocessorException;
-import org.apache.hadoop.hbase.coprocessor.CoprocessorService;
+import org.apache.hadoop.hbase.coprocessor.RegionCoprocessor;
 import org.apache.hadoop.hbase.coprocessor.RegionCoprocessorEnvironment;
 import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter;
+import org.apache.hadoop.hbase.regionserver.HRegion;
 import org.apache.hadoop.hbase.regionserver.OperationStatus;
-import org.apache.hadoop.hbase.regionserver.Region;
 import org.apache.hadoop.hbase.regionserver.RegionScanner;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.Logger;
@@ -47,17 +47,15 @@ import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
 import com.google.protobuf.Service;
 
-public class HBaseBulkDeleteEndpoint extends BulkDeleteService implements
-    CoprocessorService,
-    Coprocessor {
+public class HBaseBulkDeleteEndpoint extends BulkDeleteService implements RegionCoprocessor {
   private static final String NO_OF_VERSIONS_TO_DELETE = "noOfVersionsToDelete";
   private static final Logger LOGGER = Logger.getLogger(HBaseBulkDeleteEndpoint.class);
 
   private RegionCoprocessorEnvironment env;
 
   @Override
-  public Service getService() {
-    return this;
+  public Iterable<Service> getServices() {
+    return Collections.singleton(this);
   }
 
   @Override
@@ -157,7 +155,7 @@ public class HBaseBulkDeleteEndpoint extends BulkDeleteService implements
         }
       }
 
-      final Region region = env.getRegion();
+      final HRegion region = (HRegion) env.getRegion();
       scanner = region.getScanner(scan);
 
       boolean hasMore = true;

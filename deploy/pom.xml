@@ -588,6 +588,32 @@
 										<excludes>
 											<exclude>org.slf4j:*</exclude>
 											<exclude>com.google.protobuf:*</exclude>
+											<exclude>org.apache.hadoop:*</exclude>
+											<exclude>com.amazonaws:*</exclude>
+											<exclude>com.sun.jersey:*</exclude>
+											<exclude>io.dropwizard.metrics:*</exclude>
+											<exclude>io.netty:*</exclude>
+											<exclude>javax.servlet.jsp:*</exclude>
+											<exclude>javax.servlet:*</exclude>
+											<exclude>javax.ws.rs:*</exclude>
+											<exclude>org.apache.curator:*</exclude>
+											<exclude>org.apache.kerby:*</exclude>
+											<exclude>org.apache.spark:*</exclude>
+											<exclude>org.apache.xmlgraphics:*</exclude>
+											<exclude>org.eclipse.emf:*</exclude>
+											<exclude>org.eclipse.jetty:*</exclude>
+											<exclude>org.geoserver:*</exclude>
+											<exclude>org.glassfish.hk2:*</exclude>
+											<exclude>org.glassfish.hk2.external:*</exclude>
+											<exclude>org.glassfish.jersey.bundles.repackaged:*</exclude>
+											<exclude>org.glassfish.jersey.containers:*</exclude>
+											<exclude>org.glassfish.jersey.core:*</exclude>
+											<exclude>org.mortbay.jetty:*</exclude>
+											<exclude>org.scala-lang.modules:*</exclude>
+											<exclude>org.scala-lang:*</exclude>
+											<exclude>org.spark-project.spark:*</exclude>
+											<exclude>org.springframework.security:*</exclude>
+											<exclude>org.springframework:*</exclude>
 										</excludes>
 									</artifactSet>
 									<filters>

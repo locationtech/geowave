@@ -137,7 +137,7 @@ public class MergingServerOp implements HBaseServerOp {
             }
             // these have to stay in order and they can get out of
             // order when adding cells from 2 maps
-            rowCells.sort(new CellComparator());
+            rowCells.sort(CellComparator.getInstance());
           }
         }
       } while (!rowScanner.nextCellsInRow().isEmpty());

@@ -10,18 +10,19 @@ package org.locationtech.geowave.datastore.hbase.coprocessors;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.apache.hadoop.hbase.Cell;
-import org.apache.hadoop.hbase.Coprocessor;
 import org.apache.hadoop.hbase.CoprocessorEnvironment;
 import org.apache.hadoop.hbase.HConstants;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.coprocessor.CoprocessorException;
-import org.apache.hadoop.hbase.coprocessor.CoprocessorService;
+import org.apache.hadoop.hbase.coprocessor.RegionCoprocessor;
 import org.apache.hadoop.hbase.coprocessor.RegionCoprocessorEnvironment;
 import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter;
+import org.apache.hadoop.hbase.regionserver.HRegion;
 import org.apache.hadoop.hbase.regionserver.InternalScanner;
 import org.apache.hadoop.hbase.security.visibility.Authorizations;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
@@ -41,8 +42,7 @@ import com.google.protobuf.RpcController;
 import com.google.protobuf.Service;
 
 public class AggregationEndpoint extends AggregationProtosServer.AggregationService implements
-    Coprocessor,
-    CoprocessorService {
+    RegionCoprocessor {
   private static final Logger LOGGER = LoggerFactory.getLogger(AggregationEndpoint.class);
 
   private RegionCoprocessorEnvironment env;
@@ -62,8 +62,8 @@ public class AggregationEndpoint extends AggregationProtosServer.AggregationServ
   }
 
   @Override
-  public Service getService() {
-    return this;
+  public Iterable<Service> getServices() {
+    return Collections.singleton(this);
   }
 
   @Override
@@ -235,8 +235,11 @@ public class AggregationEndpoint extends AggregationProtosServer.AggregationServ
     if (authorizations != null) {
       scan.setAuthorizations(new Authorizations(authorizations));
     }
-    env.getRegion().getCoprocessorHost().preScannerOpen(scan);
-    try (InternalScanner scanner = env.getRegion().getScanner(scan)) {
+    HRegion region = ((HRegion) env.getRegion());
+    if (region.getCoprocessorHost() != null) {
+      region.getCoprocessorHost().preScannerOpen(scan);
+    }
+    try (InternalScanner scanner = region.getScanner(scan)) {
       final List<Cell> results = new ArrayList<>();
       boolean hasNext;
       do {
