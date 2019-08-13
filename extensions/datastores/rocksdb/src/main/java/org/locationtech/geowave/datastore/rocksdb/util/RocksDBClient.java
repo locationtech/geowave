@@ -295,7 +295,10 @@ public class RocksDBClient implements Closeable {
     final String prefix = RocksDBUtils.getTablePrefix(typeName, indexName);
     for (final Entry<String, CacheKey> e : keyCache.asMap().entrySet()) {
       final String key = e.getKey();
-      if (key.substring(subDirectory.length()).startsWith(prefix)) {
+      // BUGFIX: This string compare was failing due to a separator in the file path
+      // It seems like 'contains' is a better choice, but alternately could fix like this:
+      // if (key.substring(subDirectory.length()+1).startsWith(prefix)) {
+      if (key.contains(prefix)) {
         keyCache.invalidate(key);
         AbstractRocksDBTable indexTable = indexTableCache.getIfPresent(e.getValue());
         if (indexTable == null) {
