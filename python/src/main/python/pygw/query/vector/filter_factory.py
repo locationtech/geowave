@@ -7,6 +7,8 @@
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
 #===============================================================================================
 
+from datetime import datetime
+
 from shapely.geometry.base import BaseGeometry
 
 from pygw.base import GeoWaveObject
@@ -14,7 +16,6 @@ from pygw.base.type_conversions import GeometryType
 from pygw.config import java_gateway
 from pygw.config import java_pkg
 from pygw.config import reflection_util
-
 
 def _j_match_action(match_action):
     return java_pkg.org.opengis.filter.MultiValuedFilter.MatchAction.valueOf(match_action.upper())
@@ -114,6 +115,9 @@ class FilterFactory(GeoWaveObject):
         Returns:
             An Expression with the given literal value.
         """
+        if isinstance(value, datetime):
+            # Convert the date to a string
+            value = value.strftime("%Y-%m-%dT%H:%M:%S")
         if isinstance(value, str):
             # Prevent Py4J from assuming the string matches up with the char variant method
             filter_factory_class = self._java_ref.getClass()
@@ -393,8 +397,9 @@ class FilterFactory(GeoWaveObject):
         Args:
             expr (Expression): The expression to use.
             pattern (str): The pattern to match.
-            wildcard (str): The wildcard to use.  Default is None.
-            single_char (str): The single character to use.  Default is None.
+            wildcard (str): The string to use to match any characters.  Default is None.
+            single_char (str): The string to use to match a single character.  Default is None.
+            escape (str): The string to use to escape a wildcard.  Default is None.
             match_case (bool): Whether or not to match case with strings. Default is None.
             match_action (str): The match action to use.  Default is 'ANY'.
         Returns:

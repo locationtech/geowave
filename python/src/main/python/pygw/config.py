@@ -6,6 +6,17 @@
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
 #===============================================================================================
+"""
+The `config` module includes a singleton object of type GeoWaveConfiguration called `gw_config` that handles all communication between python and the Py4J Java Gateway.  The module includes several shortcut objects to make accessing the gateway more convenient.  These include:
+- *`java_gateway`* Py4J Gateway Object
+- *`java_pkg`*: Shortcut for `java_gateway.jvm`.  Can be used to construct JVM objects like `java_pkg.org.geotools.feature.simple.SimpleFeatureTypeBuilder()`
+- *`geowave_pkg`*: Similar to `java_pkg`, serves as a shortcut for `java_gateway.jvm.org.locationtech.geowave`.
+- *`reflection_util`*: Direct access to the Py4J reflection utility.
+
+These objects can be imported directly using `from pygw.config import <object_name>`.
+
+NOTE: the GeoWaveConfiguration has an `init()` method. This is INTENTIONALLY not an `__init__` method. Initialization is attempted when the configuration is imported.
+"""
 
 from py4j.java_gateway import JavaGateway
 from py4j.java_gateway import GatewayParameters
@@ -26,14 +37,17 @@ class GeoWaveConfiguration:
     def __init__(self):
         self.is_initialized = False
 
-    def init(self):
+    def init(self, gateway=None):
         """
         Sets up the Py4J Gateway, called automatically on import.
         """
         if not self.is_initialized:
             try:
                 # Set-up Main Gateway Connection to JVM
-                self.GATEWAY = JavaGateway(gateway_parameters=GatewayParameters(auto_field=True))
+                if gateway is None:
+                    self.GATEWAY = JavaGateway(gateway_parameters=GatewayParameters(auto_field=True))
+                else:
+                    self.GATEWAY = gateway
                 self.PKG = self.GATEWAY.jvm
                 self.GEOWAVE_PKG = self.GATEWAY.jvm.org.locationtech.geowave
 

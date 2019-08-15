@@ -11,6 +11,13 @@ import pytest
 import os
 
 from pygw.store import DataStoreFactory
+from pygw.store.accumulo import AccumuloOptions
+from pygw.store.bigtable import BigTableOptions
+from pygw.store.cassandra import CassandraOptions
+from pygw.store.dynamodb import DynamoDBOptions
+from pygw.store.hbase import HBaseOptions
+from pygw.store.kudu import KuduOptions
+from pygw.store.redis import RedisOptions
 from pygw.store.rocksdb import RocksDBOptions
 from pygw.index import SpatialIndexBuilder
 from pygw.query import VectorQueryBuilder
@@ -295,3 +302,138 @@ def test_write(test_ds):
 
     # then
     assert len(res) == len(TEST_DATA)
+
+def _test_base_options(options, server_side_possible=True):
+    options.set_geowave_namespace("test_namespace")
+    assert options.get_geowave_namespace() == "test_namespace"
+
+    persist_data_statistics = not options.is_persist_data_statistics()
+    options.set_persist_data_statistics(persist_data_statistics)
+    assert options.is_persist_data_statistics() == persist_data_statistics
+
+    secondary_indexing = not options.is_secondary_indexing()
+    options.set_secondary_indexing(secondary_indexing)
+    assert options.is_secondary_indexing() == secondary_indexing
+
+    block_cache = not options.is_enable_block_cache()
+    options.set_enable_block_cache(block_cache)
+    assert options.is_enable_block_cache() == block_cache
+
+    server_side_library = not options.is_server_side_library_enabled()
+    options.set_secondary_indexing(False)
+    options.set_server_side_library_enabled(server_side_library)
+    if server_side_possible:
+        assert options.is_server_side_library_enabled() == server_side_library
+    else:
+        assert options.is_server_side_library_enabled() == False
+
+    options.set_max_range_decomposition(42)
+    assert options.get_max_range_decomposition() == 42
+
+    options.set_aggregation_max_range_decomposition(43)
+    assert options.get_aggregation_max_range_decomposition() == 43
+
+    visibility = not options.is_visibility_enabled()
+    options.set_enable_visibility(visibility)
+    assert options.is_visibility_enabled() == visibility
+
+
+def test_accumulo_options():
+    options = AccumuloOptions()
+    options.set_zookeeper("test_zookeeper")
+    assert options.get_zookeeper() == "test_zookeeper"
+    options.set_instance("test_instance")
+    assert options.get_instance() == "test_instance"
+    options.set_user("test_user")
+    assert options.get_user() == "test_user"
+    options.set_password("test_password")
+    assert options.get_password() == "test_password"
+    locality_groups = not options.is_use_locality_groups()
+    options.set_use_locality_groups(locality_groups)
+    assert options.is_use_locality_groups() == locality_groups
+    _test_base_options(options)
+
+def test_bigtable_options():
+    options = BigTableOptions()
+    options.set_scan_cache_size(42)
+    assert options.get_scan_cache_size() == 42
+    options.set_project_id("test_project_id")
+    assert options.get_project_id() == "test_project_id"
+    options.set_instance_id("test_instance_id")
+    assert options.get_instance_id() == "test_instance_id"
+    _test_base_options(options)
+
+def test_cassandra_options():
+    options = CassandraOptions()
+    options.set_contact_point("test_contact_point")
+    assert options.get_contact_point() == "test_contact_point"
+    options.set_batch_write_size(42)
+    assert options.get_batch_write_size() == 42
+    durable_writes = not options.is_durable_writes()
+    options.set_durable_writes(durable_writes)
+    assert options.is_durable_writes() == durable_writes
+    options.set_replication_factor(43)
+    assert options.get_replication_factor() == 43
+    _test_base_options(options, False)
+
+def test_dynamodb_options():
+    options = DynamoDBOptions()
+    options.set_region("us-east-1")
+    assert options.get_region() == "us-east-1"
+    options.set_region(None)
+    assert options.get_region() is None
+    options.set_endpoint("test_endpoint")
+    assert options.get_endpoint() == "test_endpoint"
+    options.set_write_capacity(42)
+    assert options.get_write_capacity() == 42
+    options.set_read_capacity(43)
+    assert options.get_read_capacity() == 43
+    enable_cache_response_metadata = not options.is_enable_cache_response_metadata()
+    options.set_enable_cache_response_metadata(enable_cache_response_metadata)
+    assert options.is_enable_cache_response_metadata() == enable_cache_response_metadata
+    options.set_protocol("HTTP")
+    assert options.get_protocol() == "HTTP"
+    options.set_protocol(None)
+    assert options.get_protocol() is None
+    options.set_max_connections(44)
+    assert options.get_max_connections() == 44
+    _test_base_options(options, False)
+
+def test_hbase_options():
+    options = HBaseOptions()
+    options.set_zookeeper("test_zookeeper")
+    assert options.get_zookeeper() == "test_zookeeper"
+    options.set_scan_cache_size(42)
+    assert options.get_scan_cache_size() == 42
+    options.set_server_side_library_enabled(True)
+    verify_coprocessors = not options.is_verify_coprocessors()
+    options.set_verify_coprocessors(verify_coprocessors)
+    assert options.is_verify_coprocessors() == verify_coprocessors
+    options.set_coprocessor_jar("test_jar")
+    assert options.get_coprocessor_jar() == "test_jar"
+    _test_base_options(options)
+
+def test_kudu_options():
+    options = KuduOptions()
+    options.set_kudu_master("test_master")
+    assert options.get_kudu_master() == "test_master"
+    _test_base_options(options, False)
+
+def test_redis_options():
+    options = RedisOptions()
+    options.set_address("test_address")
+    assert options.get_address() == "test_address"
+    options.set_compression("L4Z")
+    assert options.get_compression() == "L4Z"
+    _test_base_options(options, False)
+
+def test_rocksdb_options():
+    options = RocksDBOptions()
+    options.set_directory("test_directory")
+    assert options.get_directory() == "test_directory"
+    compact_on_wriite = not options.is_compact_on_write()
+    options.set_compact_on_write(compact_on_wriite)
+    assert options.is_compact_on_write() == compact_on_wriite
+    options.set_batch_write_size(42)
+    assert options.get_batch_write_size() == 42
+    _test_base_options(options, False)

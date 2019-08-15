@@ -12,6 +12,7 @@ import java.io.IOException;
 import org.locationtech.geowave.core.store.StoreFactoryHelper;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
+import org.locationtech.geowave.datastore.dynamodb.config.DynamoDBOptions;
 import org.locationtech.geowave.datastore.dynamodb.operations.DynamoDBOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

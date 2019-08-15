@@ -29,7 +29,7 @@ import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
 import org.locationtech.geowave.datastore.accumulo.cli.MiniAccumuloClusterFactory;
-import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions;
+import org.locationtech.geowave.datastore.accumulo.config.AccumuloRequiredOptions;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

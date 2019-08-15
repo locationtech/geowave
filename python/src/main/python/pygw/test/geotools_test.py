@@ -159,3 +159,10 @@ def test_simple_feature():
     assert attrs[2] == "test value"
     assert attrs[3] == 38
     assert attrs[4] is None
+
+    feature_dict = feature.to_dict()
+    assert feature_dict["id"] == "fid1"
+    assert feature_dict["the_geom"] == Point(1, 1)
+    assert feature_dict["string"] == "test value"
+    assert feature_dict["byte"] == 38
+    assert feature_dict["big_int"] == big_number

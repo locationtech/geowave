@@ -13,7 +13,7 @@ This project aims to provide Python classes that allow users to interact with a 
 ## Usage
 In order to use `pygw`, you must have an instance of GeoWave Py4J Java Gateway Server running.  The gateway can be started by using the GeoWave command `geowave python rungateway`.
 
-You can import `pygw` classes into your Python environment.
+You can then import `pygw` classes into your Python environment.
 
 ## Example
 The following is an example of how `pygw` might be used to write and query some feature data:

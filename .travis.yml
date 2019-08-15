@@ -72,11 +72,12 @@ before_install:
   - chmod +x .utility/run-tests.sh
   - chmod +x .utility/build.sh
   - chmod +x .utility/publish.sh
+  - chmod +x .utility/coveralls.sh
   - chmod +x .utility/maven-coveralls-hack.sh
   - .utility/maven-coveralls-hack.sh
 after_success:
   - .utility/publish.sh
-  - cd test; mvn coveralls:report -P ${MAVEN_PROFILES}
+  - .utility/coveralls.sh
 notifications:
     urls:
       - https://webhooks.gitter.im/e/1dd2fadd07a92dcdc3d8

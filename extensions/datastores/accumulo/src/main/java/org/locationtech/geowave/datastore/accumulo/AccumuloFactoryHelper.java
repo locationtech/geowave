@@ -13,7 +13,7 @@ import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.locationtech.geowave.core.store.StoreFactoryHelper;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
-import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions;
+import org.locationtech.geowave.datastore.accumulo.config.AccumuloRequiredOptions;
 import org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

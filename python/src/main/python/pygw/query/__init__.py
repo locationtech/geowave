@@ -7,7 +7,7 @@
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
 #===============================================================================================
 """
-This module contains the classes required for constructing GeoWave queries.
+This module contains classes that are used in constructing queries and their constraints.
 
 It contains the following import shortcuts:
 ```python

@@ -8,7 +8,7 @@ nohup java -cp deploy/target/geowave-deploy-${GEOWAVE_VERSION}-tools.jar org.loc
 # Install pip and venv
 sudo apt-get install -yq python3-pip python3-venv
 
-# Run Python tests
+# Build Python docs
 cd python/src/main/python
 python3 -m venv tests-venv
 
@@ -17,8 +17,11 @@ source ./tests-venv/bin/activate
 pip install wheel
 pip install -r requirements.txt
 
-pytest --cov-report= --cov=pygw pygw/test/
+pdoc --html pygw
 EXIT_CODE=$?
+
+cd ../../../..
+mv python/src/main/python/html/pygw target/site/pydocs
 
 deactivate
 

@@ -44,3 +44,12 @@ class SimpleFeatureType(GeoWaveObject):
             return self.attribute_dict[attribute]
             pass
         return None
+
+    def get_attribute_descriptors(self):
+        """
+        Gets all of the attribute descriptors for this feature type.
+
+        Returns:
+            A list of `pygw.geotools.attribute_descriptor.AttributeDescriptor` for this feature type.
+        """
+        return self.attribute_list

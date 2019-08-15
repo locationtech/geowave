@@ -16,6 +16,7 @@ class SimpleFeature(GeoWaveObject):
     """
     A Simple (Vector) Feature.
     """
+
     def __init__(self, feature_type, java_ref):
         assert isinstance(feature_type, SimpleFeatureType)
         self._feature_type = feature_type
@@ -52,10 +53,10 @@ class SimpleFeature(GeoWaveObject):
             A list containing all attribute values of the feature.
         """
         j_values = self._java_ref.getAttributes()
+        descriptors = self._feature_type.get_attribute_descriptors()
         values = []
         for i in range(len(j_values)):
-            attr = self._feature_type.get_attribute(i)
-            values.append(attr.from_java(j_values[i]))
+            values.append(descriptors[i].from_java(j_values[i]))
         return values
 
     def get_attribute(self, attribute):
@@ -85,3 +86,20 @@ class SimpleFeature(GeoWaveObject):
         """
         j_geom = self._java_ref.getDefaultGeometry()
         return GeometryType().from_java(j_geom)
+
+    def to_dict(self, id_column="id"):
+        """
+        Convert this feature to a dictionary, including the feature ID.
+
+        Args:
+            id_column (str): The key for the feature ID. Default is "id".
+        Returns:
+            The attributes and feature ID of this feature in a dictionary.
+        """
+        j_values = self._java_ref.getAttributes()
+        descriptors = self._feature_type.get_attribute_descriptors()
+        feature_dict = {}
+        feature_dict[id_column] = self._java_ref.getID()
+        for i in range(len(j_values)):
+            feature_dict[descriptors[i].descriptor] = descriptors[i].from_java(j_values[i])
+        return feature_dict

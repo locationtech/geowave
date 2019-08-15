@@ -6,7 +6,7 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.datastore.bigtable.operations.config;
+package org.locationtech.geowave.datastore.bigtable.config;
 
 import org.apache.hadoop.hbase.HConstants;
 import org.locationtech.geowave.core.store.BaseDataStoreOptions;

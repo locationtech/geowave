@@ -21,7 +21,7 @@ import org.locationtech.geowave.core.store.metadata.IndexStoreImpl;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import org.locationtech.geowave.core.store.server.ServerOpHelper;
 import org.locationtech.geowave.core.store.server.ServerSideOperations;
-import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions;
+import org.locationtech.geowave.datastore.accumulo.config.AccumuloOptions;
 import org.locationtech.geowave.datastore.accumulo.mapreduce.AccumuloSplitsProvider;
 import org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations;
 import org.locationtech.geowave.mapreduce.BaseMapReduceDataStore;
