@@ -1,0 +1,2645 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>pygw.base.type_conversions API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>pygw.base.type_conversions</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">#
+# Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file distributed with this work for additional information regarding copyright
+# ownership. All rights reserved. This program and the accompanying materials are made available
+# under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+# available at http://www.apache.org/licenses/LICENSE-2.0.txt
+#===============================================================================================
+
+from decimal import Decimal
+from datetime import date
+from datetime import datetime
+
+from py4j.java_gateway import JavaClass
+from shapely.geometry.base import BaseGeometry
+from shapely.geometry import Point
+from shapely.geometry import LineString
+from shapely.geometry import Polygon
+from shapely.geometry import MultiPoint
+from shapely.geometry import MultiLineString
+from shapely.geometry import MultiPolygon
+from shapely.geometry import GeometryCollection
+from shapely.wkb import dumps
+from shapely.wkb import loads
+
+from pygw.config import java_pkg
+from pygw.config import java_gateway
+
+_wkb_reader = java_pkg.org.locationtech.jts.io.WKBReader()
+_wkb_writer = java_pkg.org.locationtech.jts.io.WKBWriter()
+
+def _type_to_string(py_type):
+    if (isinstance(py_type, tuple)):
+        return &#34;, &#34;.join(t.__name__ for t in py_type)
+    else:
+        return py_type.__name__
+
+
+class AttributeType():
+    &#34;&#34;&#34;
+    Base class for attributes that can be converted to and from Java variants.
+    &#34;&#34;&#34;
+
+    def __init__(self, binding, py_type):
+        self.binding = binding
+        self._py_type = py_type
+
+    def to_java(self, value):
+        &#34;&#34;&#34;
+        Convert a Python variable into its Java counterpart.
+
+        Args:
+            value (any): The Python variable to convert.
+        Returns:
+            The Java counterpart of the Python variable.
+        &#34;&#34;&#34;
+        if value is None:
+            return value
+        if isinstance(value, self._py_type):
+            return self._to_java(value)
+        else:
+            self._value_error(value, _type_to_string(self._py_type))
+
+    def _to_java(self, value):
+        return value
+
+    def from_java(self, value):
+        &#34;&#34;&#34;
+        Convert a Java variable into its Python counterpart.
+
+        Args:
+            value (any): The Java variable to convert.
+        Returns:
+            The Python counterpart of the Java variable.
+        &#34;&#34;&#34;
+        if value is None:
+            return value
+        else:
+            return self._from_java(value)
+
+    def _from_java(self, value):
+        return value
+
+    def _value_error(self, value, expected):
+        raise ValueError(&#34;Value[%s] should be of type %s.&#34; % (str(value), expected))
+
+
+class ArrayAttributeType(AttributeType):
+    &#34;&#34;&#34;
+    Base class for attributes that represent an array of values.
+    &#34;&#34;&#34;
+
+    def __init__(self, subtype, py_type=list):
+        self.subtype = subtype
+        self._j_class = JavaClass(self.subtype.binding, java_gateway._gateway_client)
+        super().__init__(&#34;[L%s;&#34; % self.subtype.binding, py_type)
+
+    def _to_java(self, value):
+        j_arr = java_gateway.new_array(self._j_class, len(value))
+        for i in range(len(value)):
+            if value[i] is None:
+                continue
+            j_arr[i] = self.subtype._to_java(value[i])
+        return j_arr
+
+    def _from_java(self, value):
+        py_array = []
+        for j_obj in value:
+            py_array.append(self.subtype.from_java(j_obj))
+        return py_array
+
+
+class BigDecimalType(AttributeType):
+    &#34;&#34;&#34;
+    Conversion class for BigDecimal.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;java.math.BigDecimal&#34;, Decimal)
+
+    def _to_java(self, value):
+        return java_pkg.java.math.BigDecimal(str(value))
+
+
+class BigDecimalArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for BigDecimal[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(BigDecimalType())
+
+
+class BigIntegerType(AttributeType):
+    &#34;&#34;&#34;
+    Conversion class for BigInteger.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;java.math.BigInteger&#34;, int)
+
+    def _to_java(self, value):
+        return java_pkg.java.math.BigInteger(str(value))
+
+    def _from_java(self, value):
+        return int(value.toString())
+
+
+class BigIntegerArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for BigInteger[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(BigIntegerType())
+
+
+class BooleanType(AttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Boolean.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;java.lang.Boolean&#34;, bool)
+
+
+class BooleanArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Boolean[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(BooleanType())
+
+
+class FloatType(AttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Float.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;java.lang.Float&#34;, (int, float))
+
+    def _to_java(self, value):
+        return value * 1.0
+
+
+class FloatArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Float[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(FloatType())
+
+
+class DoubleType(AttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Double.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;java.lang.Double&#34;, (int, float))
+
+    def _to_java(self, value):
+        return value * 1.0
+
+
+class DoubleArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Double[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(DoubleType())
+
+
+class ByteType(AttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Byte.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;java.lang.Byte&#34;, int)
+
+
+class ByteArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Byte[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(ByteType(), (list, bytes))
+
+    def _from_java(self, value):
+        if None in value:
+            return super()._from_java(value)
+        return bytes(super()._from_java(value))
+
+
+class ShortType(AttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Short.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;java.lang.Short&#34;, int)
+
+
+class ShortArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Short[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(ShortType())
+
+
+class IntegerType(AttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Integer.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;java.lang.Integer&#34;, int)
+
+
+class IntegerArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Integer[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(IntegerType())
+
+
+class LongType(AttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Long.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;java.lang.Long&#34;, int)
+
+
+class LongArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Long[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(LongType())
+
+
+class PrimitiveArrayType(AttributeType):
+    &#34;&#34;&#34;
+    Base class for arrays made up of Java primitives.
+    &#34;&#34;&#34;
+
+    def __init__(self, binding, j_class, py_element_type, py_type=list):
+        super().__init__(binding, py_type)
+        self._j_class = j_class
+        self._py_element_type = py_element_type
+
+    def _to_java(self, value):
+        j_arr = self._build_array(value)
+        for i in range(len(value)):
+            if value[i] is None:
+                raise ValueError(&#34;Value at index %d should not be None for primitive array.&#34; % i)
+            if isinstance(value[i], self._py_element_type):
+                j_arr[i] = self._value_to_java(value[i])
+            else:
+                self._value_error(value[i], _type_to_string(self._py_element_type))
+        return j_arr
+
+    def _from_java(self, value):
+        py_array = []
+        for j_obj in value:
+            py_array.append(self._value_from_java(j_obj))
+        return py_array
+
+    def _build_array(self, value):
+        return java_gateway.new_array(self._j_class, len(value))
+
+    def _value_to_java(self, value):
+        return value
+
+    def _value_from_java(self, value):
+        return value
+
+
+class PrimitiveBooleanArrayType(PrimitiveArrayType):
+    &#34;&#34;&#34;
+    Conversion class for boolean[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;[Z&#34;, java_gateway.jvm.boolean, bool)
+
+
+class PrimitiveFloatArrayType(PrimitiveArrayType):
+    &#34;&#34;&#34;
+    Conversion class for float[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;[F&#34;, java_gateway.jvm.float, (int, float))
+
+    def _value_to_java(self, value):
+        return value * 1.0
+
+
+class PrimitiveDoubleArrayType(PrimitiveArrayType):
+    &#34;&#34;&#34;
+    Conversion class for double[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;[D&#34;, java_gateway.jvm.double, (int, float))
+
+    def _value_to_java(self, value):
+        return value * 1.0
+
+
+class PrimitiveByteArrayType(PrimitiveArrayType):
+    &#34;&#34;&#34;
+    Conversion class for byte[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;[B&#34;, java_gateway.jvm.byte, int, (list, bytes))
+
+    def _to_java(self, value):
+        if isinstance(value, bytes):
+            return value
+        return bytes(super()._to_java(value))
+
+    def _from_java(self, value):
+        if isinstance(value, bytes):
+            return value
+        return bytes(super()._from_java(value))
+
+    def _value_to_java(self, value):
+        return value % 256
+
+    def _build_array(self, value):
+        return bytearray(super()._build_array(value))
+
+
+class PrimitiveShortArrayType(PrimitiveArrayType):
+    &#34;&#34;&#34;
+    Conversion class for short[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;[S&#34;, java_gateway.jvm.short, int)
+
+
+class PrimitiveIntArrayType(PrimitiveArrayType):
+    &#34;&#34;&#34;
+    Conversion class for int[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;[I&#34;, java_gateway.jvm.int, int)
+
+
+class PrimitiveLongArrayType(PrimitiveArrayType):
+    &#34;&#34;&#34;
+    Conversion class for long[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;[J&#34;, java_gateway.jvm.long, int)
+
+
+class StringType(AttributeType):
+    &#34;&#34;&#34;
+    Conversion class for String.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;java.lang.String&#34;, str)
+
+
+class StringArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for String[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(StringType())
+
+
+class DateType(AttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Date.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;java.util.Date&#34;, date)
+
+    def _to_java(self, value):
+        return java_pkg.java.util.Date(int(value.timestamp() * 1000))
+
+    def _from_java(self, value):
+        return datetime.fromtimestamp(value.getTime() / 1000)
+
+
+class DateArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Date[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(DateType())
+
+
+class CalendarType(AttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Calendar.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;java.util.Calendar&#34;, date)
+        self._date_type = DateType()
+
+    def _to_java(self, value):
+        j_timezone = java_pkg.java.util.TimeZone.getTimeZone(&#34;GMT&#34;)
+        j_calendar = java_pkg.java.util.Calendar.getInstance(j_timezone)
+        j_calendar.setTime(self._date_type._to_java(value))
+        return j_calendar
+
+    def _from_java(self, value):
+        return self._date_type._from_java(value.getTime())
+
+
+class CalendarArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Calendar[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(CalendarType())
+
+
+class BaseGeometryType(AttributeType):
+    &#34;&#34;&#34;
+    Base type for conversion between shapely geometries and JTS geometries.
+    &#34;&#34;&#34;
+
+    def __init__(self, binding, py_type):
+        super().__init__(binding, py_type)
+
+    def _to_java(self, value):
+        wkb = dumps(value)
+        return _wkb_reader.read(wkb)
+
+    def _from_java(self, value):
+        wkb = _wkb_writer.write(value)
+        return loads(wkb)
+
+
+class PointType(BaseGeometryType):
+    &#34;&#34;&#34;
+    Conversion class for Point.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;org.locationtech.jts.geom.Point&#34;, Point)
+
+
+class PointArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Point[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(PointType())
+
+
+class MultiPointType(BaseGeometryType):
+    &#34;&#34;&#34;
+    Conversion class for MultiPoint.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;org.locationtech.jts.geom.MultiPoint&#34;, MultiPoint)
+
+
+class MultiPointArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for MultiPoint[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(MultiPointType())
+
+
+class LineStringType(BaseGeometryType):
+    &#34;&#34;&#34;
+    Conversion class for LineString.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;org.locationtech.jts.geom.LineString&#34;, LineString)
+
+
+class LineStringArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for LineString[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(LineStringType())
+
+
+class MultiLineStringType(BaseGeometryType):
+    &#34;&#34;&#34;
+    Conversion class for MultiLineString.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;org.locationtech.jts.geom.MultiLineString&#34;, MultiLineString)
+
+
+class MultiLineStringArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for MultiLineString[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(MultiLineStringType())
+
+
+class PolygonType(BaseGeometryType):
+    &#34;&#34;&#34;
+    Conversion class for Polygon.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;org.locationtech.jts.geom.Polygon&#34;, Polygon)
+
+
+class PolygonArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Polygon[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(PolygonType())
+
+
+class MultiPolygonType(BaseGeometryType):
+    &#34;&#34;&#34;
+    Conversion class for MultiPolygon.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;org.locationtech.jts.geom.MultiPolygon&#34;, MultiPolygon)
+
+
+class MultiPolygonArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for MultiPolygon[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(MultiPolygonType())
+
+
+class GeometryCollectionType(BaseGeometryType):
+    &#34;&#34;&#34;
+    Conversion class for GeometryCollection.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;org.locationtech.jts.geom.GeometryCollection&#34;, GeometryCollection)
+
+
+class GeometryCollectionArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for GeometryCollection[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(GeometryCollectionType())
+
+
+class GeometryType(BaseGeometryType):
+    &#34;&#34;&#34;
+    Conversion class for Geometry.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;org.locationtech.jts.geom.Geometry&#34;, BaseGeometry)
+
+
+class GeometryArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Geometry[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(GeometryType())</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="pygw.base.type_conversions.ArrayAttributeType"><code class="flex name class">
+<span>class <span class="ident">ArrayAttributeType</span></span>
+<span>(</span><span>subtype, py_type=<class 'list'>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Base class for attributes that represent an array of values.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class ArrayAttributeType(AttributeType):
+    &#34;&#34;&#34;
+    Base class for attributes that represent an array of values.
+    &#34;&#34;&#34;
+
+    def __init__(self, subtype, py_type=list):
+        self.subtype = subtype
+        self._j_class = JavaClass(self.subtype.binding, java_gateway._gateway_client)
+        super().__init__(&#34;[L%s;&#34; % self.subtype.binding, py_type)
+
+    def _to_java(self, value):
+        j_arr = java_gateway.new_array(self._j_class, len(value))
+        for i in range(len(value)):
+            if value[i] is None:
+                continue
+            j_arr[i] = self.subtype._to_java(value[i])
+        return j_arr
+
+    def _from_java(self, value):
+        py_array = []
+        for j_obj in value:
+            py_array.append(self.subtype.from_java(j_obj))
+        return py_array</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.GeometryCollectionArrayType" href="#pygw.base.type_conversions.GeometryCollectionArrayType">GeometryCollectionArrayType</a></li>
+<li><a title="pygw.base.type_conversions.BigDecimalArrayType" href="#pygw.base.type_conversions.BigDecimalArrayType">BigDecimalArrayType</a></li>
+<li><a title="pygw.base.type_conversions.CalendarArrayType" href="#pygw.base.type_conversions.CalendarArrayType">CalendarArrayType</a></li>
+<li><a title="pygw.base.type_conversions.PolygonArrayType" href="#pygw.base.type_conversions.PolygonArrayType">PolygonArrayType</a></li>
+<li><a title="pygw.base.type_conversions.LongArrayType" href="#pygw.base.type_conversions.LongArrayType">LongArrayType</a></li>
+<li><a title="pygw.base.type_conversions.ShortArrayType" href="#pygw.base.type_conversions.ShortArrayType">ShortArrayType</a></li>
+<li><a title="pygw.base.type_conversions.IntegerArrayType" href="#pygw.base.type_conversions.IntegerArrayType">IntegerArrayType</a></li>
+<li><a title="pygw.base.type_conversions.DateArrayType" href="#pygw.base.type_conversions.DateArrayType">DateArrayType</a></li>
+<li><a title="pygw.base.type_conversions.MultiPolygonArrayType" href="#pygw.base.type_conversions.MultiPolygonArrayType">MultiPolygonArrayType</a></li>
+<li><a title="pygw.base.type_conversions.LineStringArrayType" href="#pygw.base.type_conversions.LineStringArrayType">LineStringArrayType</a></li>
+<li><a title="pygw.base.type_conversions.MultiPointArrayType" href="#pygw.base.type_conversions.MultiPointArrayType">MultiPointArrayType</a></li>
+<li><a title="pygw.base.type_conversions.BooleanArrayType" href="#pygw.base.type_conversions.BooleanArrayType">BooleanArrayType</a></li>
+<li><a title="pygw.base.type_conversions.StringArrayType" href="#pygw.base.type_conversions.StringArrayType">StringArrayType</a></li>
+<li><a title="pygw.base.type_conversions.DoubleArrayType" href="#pygw.base.type_conversions.DoubleArrayType">DoubleArrayType</a></li>
+<li><a title="pygw.base.type_conversions.GeometryArrayType" href="#pygw.base.type_conversions.GeometryArrayType">GeometryArrayType</a></li>
+<li><a title="pygw.base.type_conversions.PointArrayType" href="#pygw.base.type_conversions.PointArrayType">PointArrayType</a></li>
+<li><a title="pygw.base.type_conversions.ByteArrayType" href="#pygw.base.type_conversions.ByteArrayType">ByteArrayType</a></li>
+<li><a title="pygw.base.type_conversions.BigIntegerArrayType" href="#pygw.base.type_conversions.BigIntegerArrayType">BigIntegerArrayType</a></li>
+<li><a title="pygw.base.type_conversions.FloatArrayType" href="#pygw.base.type_conversions.FloatArrayType">FloatArrayType</a></li>
+<li><a title="pygw.base.type_conversions.MultiLineStringArrayType" href="#pygw.base.type_conversions.MultiLineStringArrayType">MultiLineStringArrayType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.AttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.AttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.AttributeType"><code class="flex name class">
+<span>class <span class="ident">AttributeType</span></span>
+<span>(</span><span>binding, py_type)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Base class for attributes that can be converted to and from Java variants.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class AttributeType():
+    &#34;&#34;&#34;
+    Base class for attributes that can be converted to and from Java variants.
+    &#34;&#34;&#34;
+
+    def __init__(self, binding, py_type):
+        self.binding = binding
+        self._py_type = py_type
+
+    def to_java(self, value):
+        &#34;&#34;&#34;
+        Convert a Python variable into its Java counterpart.
+
+        Args:
+            value (any): The Python variable to convert.
+        Returns:
+            The Java counterpart of the Python variable.
+        &#34;&#34;&#34;
+        if value is None:
+            return value
+        if isinstance(value, self._py_type):
+            return self._to_java(value)
+        else:
+            self._value_error(value, _type_to_string(self._py_type))
+
+    def _to_java(self, value):
+        return value
+
+    def from_java(self, value):
+        &#34;&#34;&#34;
+        Convert a Java variable into its Python counterpart.
+
+        Args:
+            value (any): The Java variable to convert.
+        Returns:
+            The Python counterpart of the Java variable.
+        &#34;&#34;&#34;
+        if value is None:
+            return value
+        else:
+            return self._from_java(value)
+
+    def _from_java(self, value):
+        return value
+
+    def _value_error(self, value, expected):
+        raise ValueError(&#34;Value[%s] should be of type %s.&#34; % (str(value), expected))</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.StringType" href="#pygw.base.type_conversions.StringType">StringType</a></li>
+<li><a title="pygw.base.type_conversions.BooleanType" href="#pygw.base.type_conversions.BooleanType">BooleanType</a></li>
+<li><a title="pygw.base.type_conversions.FloatType" href="#pygw.base.type_conversions.FloatType">FloatType</a></li>
+<li><a title="pygw.base.type_conversions.ShortType" href="#pygw.base.type_conversions.ShortType">ShortType</a></li>
+<li><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></li>
+<li><a title="pygw.base.type_conversions.DateType" href="#pygw.base.type_conversions.DateType">DateType</a></li>
+<li><a title="pygw.base.type_conversions.PrimitiveArrayType" href="#pygw.base.type_conversions.PrimitiveArrayType">PrimitiveArrayType</a></li>
+<li><a title="pygw.base.type_conversions.BigDecimalType" href="#pygw.base.type_conversions.BigDecimalType">BigDecimalType</a></li>
+<li><a title="pygw.base.type_conversions.DoubleType" href="#pygw.base.type_conversions.DoubleType">DoubleType</a></li>
+<li><a title="pygw.base.type_conversions.BaseGeometryType" href="#pygw.base.type_conversions.BaseGeometryType">BaseGeometryType</a></li>
+<li><a title="pygw.base.type_conversions.BigIntegerType" href="#pygw.base.type_conversions.BigIntegerType">BigIntegerType</a></li>
+<li><a title="pygw.base.type_conversions.IntegerType" href="#pygw.base.type_conversions.IntegerType">IntegerType</a></li>
+<li><a title="pygw.base.type_conversions.CalendarType" href="#pygw.base.type_conversions.CalendarType">CalendarType</a></li>
+<li><a title="pygw.base.type_conversions.LongType" href="#pygw.base.type_conversions.LongType">LongType</a></li>
+<li><a title="pygw.base.type_conversions.ByteType" href="#pygw.base.type_conversions.ByteType">ByteType</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="pygw.base.type_conversions.AttributeType.from_java"><code class="name flex">
+<span>def <span class="ident">from_java</span></span>(<span>self, value)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Convert a Java variable into its Python counterpart.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>value</code></strong> :&ensp;<code>any</code></dt>
+<dd>The Java variable to convert.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The Python counterpart of the Java variable.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def from_java(self, value):
+    &#34;&#34;&#34;
+    Convert a Java variable into its Python counterpart.
+
+    Args:
+        value (any): The Java variable to convert.
+    Returns:
+        The Python counterpart of the Java variable.
+    &#34;&#34;&#34;
+    if value is None:
+        return value
+    else:
+        return self._from_java(value)</code></pre>
+</details>
+</dd>
+<dt id="pygw.base.type_conversions.AttributeType.to_java"><code class="name flex">
+<span>def <span class="ident">to_java</span></span>(<span>self, value)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Convert a Python variable into its Java counterpart.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>value</code></strong> :&ensp;<code>any</code></dt>
+<dd>The Python variable to convert.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The Java counterpart of the Python variable.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def to_java(self, value):
+    &#34;&#34;&#34;
+    Convert a Python variable into its Java counterpart.
+
+    Args:
+        value (any): The Python variable to convert.
+    Returns:
+        The Java counterpart of the Python variable.
+    &#34;&#34;&#34;
+    if value is None:
+        return value
+    if isinstance(value, self._py_type):
+        return self._to_java(value)
+    else:
+        self._value_error(value, _type_to_string(self._py_type))</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="pygw.base.type_conversions.BaseGeometryType"><code class="flex name class">
+<span>class <span class="ident">BaseGeometryType</span></span>
+<span>(</span><span>binding, py_type)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Base type for conversion between shapely geometries and JTS geometries.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class BaseGeometryType(AttributeType):
+    &#34;&#34;&#34;
+    Base type for conversion between shapely geometries and JTS geometries.
+    &#34;&#34;&#34;
+
+    def __init__(self, binding, py_type):
+        super().__init__(binding, py_type)
+
+    def _to_java(self, value):
+        wkb = dumps(value)
+        return _wkb_reader.read(wkb)
+
+    def _from_java(self, value):
+        wkb = _wkb_writer.write(value)
+        return loads(wkb)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.MultiPointType" href="#pygw.base.type_conversions.MultiPointType">MultiPointType</a></li>
+<li><a title="pygw.base.type_conversions.MultiLineStringType" href="#pygw.base.type_conversions.MultiLineStringType">MultiLineStringType</a></li>
+<li><a title="pygw.base.type_conversions.LineStringType" href="#pygw.base.type_conversions.LineStringType">LineStringType</a></li>
+<li><a title="pygw.base.type_conversions.GeometryCollectionType" href="#pygw.base.type_conversions.GeometryCollectionType">GeometryCollectionType</a></li>
+<li><a title="pygw.base.type_conversions.PolygonType" href="#pygw.base.type_conversions.PolygonType">PolygonType</a></li>
+<li><a title="pygw.base.type_conversions.PointType" href="#pygw.base.type_conversions.PointType">PointType</a></li>
+<li><a title="pygw.base.type_conversions.GeometryType" href="#pygw.base.type_conversions.GeometryType">GeometryType</a></li>
+<li><a title="pygw.base.type_conversions.MultiPolygonType" href="#pygw.base.type_conversions.MultiPolygonType">MultiPolygonType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.AttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.AttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.BigDecimalArrayType"><code class="flex name class">
+<span>class <span class="ident">BigDecimalArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for BigDecimal[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class BigDecimalArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for BigDecimal[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(BigDecimalType())</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.BigDecimalType"><code class="flex name class">
+<span>class <span class="ident">BigDecimalType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for BigDecimal.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class BigDecimalType(AttributeType):
+    &#34;&#34;&#34;
+    Conversion class for BigDecimal.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;java.math.BigDecimal&#34;, Decimal)
+
+    def _to_java(self, value):
+        return java_pkg.java.math.BigDecimal(str(value))</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.AttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.AttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.BigIntegerArrayType"><code class="flex name class">
+<span>class <span class="ident">BigIntegerArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for BigInteger[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class BigIntegerArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for BigInteger[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(BigIntegerType())</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.BigIntegerType"><code class="flex name class">
+<span>class <span class="ident">BigIntegerType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for BigInteger.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class BigIntegerType(AttributeType):
+    &#34;&#34;&#34;
+    Conversion class for BigInteger.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;java.math.BigInteger&#34;, int)
+
+    def _to_java(self, value):
+        return java_pkg.java.math.BigInteger(str(value))
+
+    def _from_java(self, value):
+        return int(value.toString())</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.AttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.AttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.BooleanArrayType"><code class="flex name class">
+<span>class <span class="ident">BooleanArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for Boolean[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class BooleanArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Boolean[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(BooleanType())</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.BooleanType"><code class="flex name class">
+<span>class <span class="ident">BooleanType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for Boolean.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class BooleanType(AttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Boolean.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;java.lang.Boolean&#34;, bool)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.AttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.AttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.ByteArrayType"><code class="flex name class">
+<span>class <span class="ident">ByteArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for Byte[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class ByteArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Byte[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(ByteType(), (list, bytes))
+
+    def _from_java(self, value):
+        if None in value:
+            return super()._from_java(value)
+        return bytes(super()._from_java(value))</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.ByteType"><code class="flex name class">
+<span>class <span class="ident">ByteType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for Byte.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class ByteType(AttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Byte.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;java.lang.Byte&#34;, int)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.AttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.AttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.CalendarArrayType"><code class="flex name class">
+<span>class <span class="ident">CalendarArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for Calendar[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class CalendarArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Calendar[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(CalendarType())</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.CalendarType"><code class="flex name class">
+<span>class <span class="ident">CalendarType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for Calendar.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class CalendarType(AttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Calendar.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;java.util.Calendar&#34;, date)
+        self._date_type = DateType()
+
+    def _to_java(self, value):
+        j_timezone = java_pkg.java.util.TimeZone.getTimeZone(&#34;GMT&#34;)
+        j_calendar = java_pkg.java.util.Calendar.getInstance(j_timezone)
+        j_calendar.setTime(self._date_type._to_java(value))
+        return j_calendar
+
+    def _from_java(self, value):
+        return self._date_type._from_java(value.getTime())</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.AttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.AttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.DateArrayType"><code class="flex name class">
+<span>class <span class="ident">DateArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for Date[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class DateArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Date[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(DateType())</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.DateType"><code class="flex name class">
+<span>class <span class="ident">DateType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for Date.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class DateType(AttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Date.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;java.util.Date&#34;, date)
+
+    def _to_java(self, value):
+        return java_pkg.java.util.Date(int(value.timestamp() * 1000))
+
+    def _from_java(self, value):
+        return datetime.fromtimestamp(value.getTime() / 1000)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.AttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.AttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.DoubleArrayType"><code class="flex name class">
+<span>class <span class="ident">DoubleArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for Double[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class DoubleArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Double[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(DoubleType())</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.DoubleType"><code class="flex name class">
+<span>class <span class="ident">DoubleType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for Double.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class DoubleType(AttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Double.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;java.lang.Double&#34;, (int, float))
+
+    def _to_java(self, value):
+        return value * 1.0</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.AttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.AttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.FloatArrayType"><code class="flex name class">
+<span>class <span class="ident">FloatArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for Float[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class FloatArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Float[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(FloatType())</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.FloatType"><code class="flex name class">
+<span>class <span class="ident">FloatType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for Float.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class FloatType(AttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Float.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;java.lang.Float&#34;, (int, float))
+
+    def _to_java(self, value):
+        return value * 1.0</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.AttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.AttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.GeometryArrayType"><code class="flex name class">
+<span>class <span class="ident">GeometryArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for Geometry[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class GeometryArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Geometry[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(GeometryType())</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.GeometryCollectionArrayType"><code class="flex name class">
+<span>class <span class="ident">GeometryCollectionArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for GeometryCollection[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class GeometryCollectionArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for GeometryCollection[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(GeometryCollectionType())</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.GeometryCollectionType"><code class="flex name class">
+<span>class <span class="ident">GeometryCollectionType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for GeometryCollection.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class GeometryCollectionType(BaseGeometryType):
+    &#34;&#34;&#34;
+    Conversion class for GeometryCollection.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;org.locationtech.jts.geom.GeometryCollection&#34;, GeometryCollection)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.BaseGeometryType" href="#pygw.base.type_conversions.BaseGeometryType">BaseGeometryType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.BaseGeometryType" href="#pygw.base.type_conversions.BaseGeometryType">BaseGeometryType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.BaseGeometryType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.BaseGeometryType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.GeometryType"><code class="flex name class">
+<span>class <span class="ident">GeometryType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for Geometry.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class GeometryType(BaseGeometryType):
+    &#34;&#34;&#34;
+    Conversion class for Geometry.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;org.locationtech.jts.geom.Geometry&#34;, BaseGeometry)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.BaseGeometryType" href="#pygw.base.type_conversions.BaseGeometryType">BaseGeometryType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.BaseGeometryType" href="#pygw.base.type_conversions.BaseGeometryType">BaseGeometryType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.BaseGeometryType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.BaseGeometryType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.IntegerArrayType"><code class="flex name class">
+<span>class <span class="ident">IntegerArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for Integer[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class IntegerArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Integer[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(IntegerType())</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.IntegerType"><code class="flex name class">
+<span>class <span class="ident">IntegerType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for Integer.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class IntegerType(AttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Integer.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;java.lang.Integer&#34;, int)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.AttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.AttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.LineStringArrayType"><code class="flex name class">
+<span>class <span class="ident">LineStringArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for LineString[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class LineStringArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for LineString[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(LineStringType())</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.LineStringType"><code class="flex name class">
+<span>class <span class="ident">LineStringType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for LineString.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class LineStringType(BaseGeometryType):
+    &#34;&#34;&#34;
+    Conversion class for LineString.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;org.locationtech.jts.geom.LineString&#34;, LineString)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.BaseGeometryType" href="#pygw.base.type_conversions.BaseGeometryType">BaseGeometryType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.BaseGeometryType" href="#pygw.base.type_conversions.BaseGeometryType">BaseGeometryType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.BaseGeometryType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.BaseGeometryType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.LongArrayType"><code class="flex name class">
+<span>class <span class="ident">LongArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for Long[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class LongArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Long[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(LongType())</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.LongType"><code class="flex name class">
+<span>class <span class="ident">LongType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for Long.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class LongType(AttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Long.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;java.lang.Long&#34;, int)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.AttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.AttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.MultiLineStringArrayType"><code class="flex name class">
+<span>class <span class="ident">MultiLineStringArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for MultiLineString[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class MultiLineStringArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for MultiLineString[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(MultiLineStringType())</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.MultiLineStringType"><code class="flex name class">
+<span>class <span class="ident">MultiLineStringType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for MultiLineString.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class MultiLineStringType(BaseGeometryType):
+    &#34;&#34;&#34;
+    Conversion class for MultiLineString.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;org.locationtech.jts.geom.MultiLineString&#34;, MultiLineString)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.BaseGeometryType" href="#pygw.base.type_conversions.BaseGeometryType">BaseGeometryType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.BaseGeometryType" href="#pygw.base.type_conversions.BaseGeometryType">BaseGeometryType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.BaseGeometryType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.BaseGeometryType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.MultiPointArrayType"><code class="flex name class">
+<span>class <span class="ident">MultiPointArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for MultiPoint[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class MultiPointArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for MultiPoint[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(MultiPointType())</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.MultiPointType"><code class="flex name class">
+<span>class <span class="ident">MultiPointType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for MultiPoint.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class MultiPointType(BaseGeometryType):
+    &#34;&#34;&#34;
+    Conversion class for MultiPoint.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;org.locationtech.jts.geom.MultiPoint&#34;, MultiPoint)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.BaseGeometryType" href="#pygw.base.type_conversions.BaseGeometryType">BaseGeometryType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.BaseGeometryType" href="#pygw.base.type_conversions.BaseGeometryType">BaseGeometryType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.BaseGeometryType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.BaseGeometryType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.MultiPolygonArrayType"><code class="flex name class">
+<span>class <span class="ident">MultiPolygonArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for MultiPolygon[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class MultiPolygonArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for MultiPolygon[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(MultiPolygonType())</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.MultiPolygonType"><code class="flex name class">
+<span>class <span class="ident">MultiPolygonType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for MultiPolygon.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class MultiPolygonType(BaseGeometryType):
+    &#34;&#34;&#34;
+    Conversion class for MultiPolygon.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;org.locationtech.jts.geom.MultiPolygon&#34;, MultiPolygon)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.BaseGeometryType" href="#pygw.base.type_conversions.BaseGeometryType">BaseGeometryType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.BaseGeometryType" href="#pygw.base.type_conversions.BaseGeometryType">BaseGeometryType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.BaseGeometryType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.BaseGeometryType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.PointArrayType"><code class="flex name class">
+<span>class <span class="ident">PointArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for Point[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class PointArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Point[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(PointType())</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.PointType"><code class="flex name class">
+<span>class <span class="ident">PointType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for Point.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class PointType(BaseGeometryType):
+    &#34;&#34;&#34;
+    Conversion class for Point.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;org.locationtech.jts.geom.Point&#34;, Point)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.BaseGeometryType" href="#pygw.base.type_conversions.BaseGeometryType">BaseGeometryType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.BaseGeometryType" href="#pygw.base.type_conversions.BaseGeometryType">BaseGeometryType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.BaseGeometryType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.BaseGeometryType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.PolygonArrayType"><code class="flex name class">
+<span>class <span class="ident">PolygonArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for Polygon[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class PolygonArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Polygon[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(PolygonType())</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.PolygonType"><code class="flex name class">
+<span>class <span class="ident">PolygonType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for Polygon.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class PolygonType(BaseGeometryType):
+    &#34;&#34;&#34;
+    Conversion class for Polygon.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;org.locationtech.jts.geom.Polygon&#34;, Polygon)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.BaseGeometryType" href="#pygw.base.type_conversions.BaseGeometryType">BaseGeometryType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.BaseGeometryType" href="#pygw.base.type_conversions.BaseGeometryType">BaseGeometryType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.BaseGeometryType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.BaseGeometryType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.PrimitiveArrayType"><code class="flex name class">
+<span>class <span class="ident">PrimitiveArrayType</span></span>
+<span>(</span><span>binding, j_class, py_element_type, py_type=<class 'list'>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Base class for arrays made up of Java primitives.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class PrimitiveArrayType(AttributeType):
+    &#34;&#34;&#34;
+    Base class for arrays made up of Java primitives.
+    &#34;&#34;&#34;
+
+    def __init__(self, binding, j_class, py_element_type, py_type=list):
+        super().__init__(binding, py_type)
+        self._j_class = j_class
+        self._py_element_type = py_element_type
+
+    def _to_java(self, value):
+        j_arr = self._build_array(value)
+        for i in range(len(value)):
+            if value[i] is None:
+                raise ValueError(&#34;Value at index %d should not be None for primitive array.&#34; % i)
+            if isinstance(value[i], self._py_element_type):
+                j_arr[i] = self._value_to_java(value[i])
+            else:
+                self._value_error(value[i], _type_to_string(self._py_element_type))
+        return j_arr
+
+    def _from_java(self, value):
+        py_array = []
+        for j_obj in value:
+            py_array.append(self._value_from_java(j_obj))
+        return py_array
+
+    def _build_array(self, value):
+        return java_gateway.new_array(self._j_class, len(value))
+
+    def _value_to_java(self, value):
+        return value
+
+    def _value_from_java(self, value):
+        return value</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.PrimitiveFloatArrayType" href="#pygw.base.type_conversions.PrimitiveFloatArrayType">PrimitiveFloatArrayType</a></li>
+<li><a title="pygw.base.type_conversions.PrimitiveByteArrayType" href="#pygw.base.type_conversions.PrimitiveByteArrayType">PrimitiveByteArrayType</a></li>
+<li><a title="pygw.base.type_conversions.PrimitiveShortArrayType" href="#pygw.base.type_conversions.PrimitiveShortArrayType">PrimitiveShortArrayType</a></li>
+<li><a title="pygw.base.type_conversions.PrimitiveBooleanArrayType" href="#pygw.base.type_conversions.PrimitiveBooleanArrayType">PrimitiveBooleanArrayType</a></li>
+<li><a title="pygw.base.type_conversions.PrimitiveDoubleArrayType" href="#pygw.base.type_conversions.PrimitiveDoubleArrayType">PrimitiveDoubleArrayType</a></li>
+<li><a title="pygw.base.type_conversions.PrimitiveIntArrayType" href="#pygw.base.type_conversions.PrimitiveIntArrayType">PrimitiveIntArrayType</a></li>
+<li><a title="pygw.base.type_conversions.PrimitiveLongArrayType" href="#pygw.base.type_conversions.PrimitiveLongArrayType">PrimitiveLongArrayType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.AttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.AttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.PrimitiveBooleanArrayType"><code class="flex name class">
+<span>class <span class="ident">PrimitiveBooleanArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for boolean[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class PrimitiveBooleanArrayType(PrimitiveArrayType):
+    &#34;&#34;&#34;
+    Conversion class for boolean[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;[Z&#34;, java_gateway.jvm.boolean, bool)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.PrimitiveArrayType" href="#pygw.base.type_conversions.PrimitiveArrayType">PrimitiveArrayType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.PrimitiveArrayType" href="#pygw.base.type_conversions.PrimitiveArrayType">PrimitiveArrayType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.PrimitiveArrayType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.PrimitiveArrayType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.PrimitiveByteArrayType"><code class="flex name class">
+<span>class <span class="ident">PrimitiveByteArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for byte[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class PrimitiveByteArrayType(PrimitiveArrayType):
+    &#34;&#34;&#34;
+    Conversion class for byte[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;[B&#34;, java_gateway.jvm.byte, int, (list, bytes))
+
+    def _to_java(self, value):
+        if isinstance(value, bytes):
+            return value
+        return bytes(super()._to_java(value))
+
+    def _from_java(self, value):
+        if isinstance(value, bytes):
+            return value
+        return bytes(super()._from_java(value))
+
+    def _value_to_java(self, value):
+        return value % 256
+
+    def _build_array(self, value):
+        return bytearray(super()._build_array(value))</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.PrimitiveArrayType" href="#pygw.base.type_conversions.PrimitiveArrayType">PrimitiveArrayType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.PrimitiveArrayType" href="#pygw.base.type_conversions.PrimitiveArrayType">PrimitiveArrayType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.PrimitiveArrayType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.PrimitiveArrayType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.PrimitiveDoubleArrayType"><code class="flex name class">
+<span>class <span class="ident">PrimitiveDoubleArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for double[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class PrimitiveDoubleArrayType(PrimitiveArrayType):
+    &#34;&#34;&#34;
+    Conversion class for double[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;[D&#34;, java_gateway.jvm.double, (int, float))
+
+    def _value_to_java(self, value):
+        return value * 1.0</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.PrimitiveArrayType" href="#pygw.base.type_conversions.PrimitiveArrayType">PrimitiveArrayType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.PrimitiveArrayType" href="#pygw.base.type_conversions.PrimitiveArrayType">PrimitiveArrayType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.PrimitiveArrayType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.PrimitiveArrayType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.PrimitiveFloatArrayType"><code class="flex name class">
+<span>class <span class="ident">PrimitiveFloatArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for float[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class PrimitiveFloatArrayType(PrimitiveArrayType):
+    &#34;&#34;&#34;
+    Conversion class for float[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;[F&#34;, java_gateway.jvm.float, (int, float))
+
+    def _value_to_java(self, value):
+        return value * 1.0</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.PrimitiveArrayType" href="#pygw.base.type_conversions.PrimitiveArrayType">PrimitiveArrayType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.PrimitiveArrayType" href="#pygw.base.type_conversions.PrimitiveArrayType">PrimitiveArrayType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.PrimitiveArrayType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.PrimitiveArrayType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.PrimitiveIntArrayType"><code class="flex name class">
+<span>class <span class="ident">PrimitiveIntArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for int[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class PrimitiveIntArrayType(PrimitiveArrayType):
+    &#34;&#34;&#34;
+    Conversion class for int[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;[I&#34;, java_gateway.jvm.int, int)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.PrimitiveArrayType" href="#pygw.base.type_conversions.PrimitiveArrayType">PrimitiveArrayType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.PrimitiveArrayType" href="#pygw.base.type_conversions.PrimitiveArrayType">PrimitiveArrayType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.PrimitiveArrayType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.PrimitiveArrayType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.PrimitiveLongArrayType"><code class="flex name class">
+<span>class <span class="ident">PrimitiveLongArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for long[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class PrimitiveLongArrayType(PrimitiveArrayType):
+    &#34;&#34;&#34;
+    Conversion class for long[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;[J&#34;, java_gateway.jvm.long, int)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.PrimitiveArrayType" href="#pygw.base.type_conversions.PrimitiveArrayType">PrimitiveArrayType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.PrimitiveArrayType" href="#pygw.base.type_conversions.PrimitiveArrayType">PrimitiveArrayType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.PrimitiveArrayType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.PrimitiveArrayType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.PrimitiveShortArrayType"><code class="flex name class">
+<span>class <span class="ident">PrimitiveShortArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for short[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class PrimitiveShortArrayType(PrimitiveArrayType):
+    &#34;&#34;&#34;
+    Conversion class for short[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;[S&#34;, java_gateway.jvm.short, int)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.PrimitiveArrayType" href="#pygw.base.type_conversions.PrimitiveArrayType">PrimitiveArrayType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.PrimitiveArrayType" href="#pygw.base.type_conversions.PrimitiveArrayType">PrimitiveArrayType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.PrimitiveArrayType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.PrimitiveArrayType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.ShortArrayType"><code class="flex name class">
+<span>class <span class="ident">ShortArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for Short[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class ShortArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Short[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(ShortType())</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.ShortType"><code class="flex name class">
+<span>class <span class="ident">ShortType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for Short.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class ShortType(AttributeType):
+    &#34;&#34;&#34;
+    Conversion class for Short.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;java.lang.Short&#34;, int)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.AttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.AttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.StringArrayType"><code class="flex name class">
+<span>class <span class="ident">StringArrayType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for String[].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class StringArrayType(ArrayAttributeType):
+    &#34;&#34;&#34;
+    Conversion class for String[].
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(StringType())</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></li>
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.ArrayAttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.base.type_conversions.StringType"><code class="flex name class">
+<span>class <span class="ident">StringType</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Conversion class for String.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class StringType(AttributeType):
+    &#34;&#34;&#34;
+    Conversion class for String.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(&#34;java.lang.String&#34;, str)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.type_conversions.AttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.AttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pygw.base" href="index.html">pygw.base</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pygw.base.type_conversions.ArrayAttributeType" href="#pygw.base.type_conversions.ArrayAttributeType">ArrayAttributeType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.AttributeType" href="#pygw.base.type_conversions.AttributeType">AttributeType</a></code></h4>
+<ul class="">
+<li><code><a title="pygw.base.type_conversions.AttributeType.from_java" href="#pygw.base.type_conversions.AttributeType.from_java">from_java</a></code></li>
+<li><code><a title="pygw.base.type_conversions.AttributeType.to_java" href="#pygw.base.type_conversions.AttributeType.to_java">to_java</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.BaseGeometryType" href="#pygw.base.type_conversions.BaseGeometryType">BaseGeometryType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.BigDecimalArrayType" href="#pygw.base.type_conversions.BigDecimalArrayType">BigDecimalArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.BigDecimalType" href="#pygw.base.type_conversions.BigDecimalType">BigDecimalType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.BigIntegerArrayType" href="#pygw.base.type_conversions.BigIntegerArrayType">BigIntegerArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.BigIntegerType" href="#pygw.base.type_conversions.BigIntegerType">BigIntegerType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.BooleanArrayType" href="#pygw.base.type_conversions.BooleanArrayType">BooleanArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.BooleanType" href="#pygw.base.type_conversions.BooleanType">BooleanType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.ByteArrayType" href="#pygw.base.type_conversions.ByteArrayType">ByteArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.ByteType" href="#pygw.base.type_conversions.ByteType">ByteType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.CalendarArrayType" href="#pygw.base.type_conversions.CalendarArrayType">CalendarArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.CalendarType" href="#pygw.base.type_conversions.CalendarType">CalendarType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.DateArrayType" href="#pygw.base.type_conversions.DateArrayType">DateArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.DateType" href="#pygw.base.type_conversions.DateType">DateType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.DoubleArrayType" href="#pygw.base.type_conversions.DoubleArrayType">DoubleArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.DoubleType" href="#pygw.base.type_conversions.DoubleType">DoubleType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.FloatArrayType" href="#pygw.base.type_conversions.FloatArrayType">FloatArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.FloatType" href="#pygw.base.type_conversions.FloatType">FloatType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.GeometryArrayType" href="#pygw.base.type_conversions.GeometryArrayType">GeometryArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.GeometryCollectionArrayType" href="#pygw.base.type_conversions.GeometryCollectionArrayType">GeometryCollectionArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.GeometryCollectionType" href="#pygw.base.type_conversions.GeometryCollectionType">GeometryCollectionType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.GeometryType" href="#pygw.base.type_conversions.GeometryType">GeometryType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.IntegerArrayType" href="#pygw.base.type_conversions.IntegerArrayType">IntegerArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.IntegerType" href="#pygw.base.type_conversions.IntegerType">IntegerType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.LineStringArrayType" href="#pygw.base.type_conversions.LineStringArrayType">LineStringArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.LineStringType" href="#pygw.base.type_conversions.LineStringType">LineStringType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.LongArrayType" href="#pygw.base.type_conversions.LongArrayType">LongArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.LongType" href="#pygw.base.type_conversions.LongType">LongType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.MultiLineStringArrayType" href="#pygw.base.type_conversions.MultiLineStringArrayType">MultiLineStringArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.MultiLineStringType" href="#pygw.base.type_conversions.MultiLineStringType">MultiLineStringType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.MultiPointArrayType" href="#pygw.base.type_conversions.MultiPointArrayType">MultiPointArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.MultiPointType" href="#pygw.base.type_conversions.MultiPointType">MultiPointType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.MultiPolygonArrayType" href="#pygw.base.type_conversions.MultiPolygonArrayType">MultiPolygonArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.MultiPolygonType" href="#pygw.base.type_conversions.MultiPolygonType">MultiPolygonType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.PointArrayType" href="#pygw.base.type_conversions.PointArrayType">PointArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.PointType" href="#pygw.base.type_conversions.PointType">PointType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.PolygonArrayType" href="#pygw.base.type_conversions.PolygonArrayType">PolygonArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.PolygonType" href="#pygw.base.type_conversions.PolygonType">PolygonType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.PrimitiveArrayType" href="#pygw.base.type_conversions.PrimitiveArrayType">PrimitiveArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.PrimitiveBooleanArrayType" href="#pygw.base.type_conversions.PrimitiveBooleanArrayType">PrimitiveBooleanArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.PrimitiveByteArrayType" href="#pygw.base.type_conversions.PrimitiveByteArrayType">PrimitiveByteArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.PrimitiveDoubleArrayType" href="#pygw.base.type_conversions.PrimitiveDoubleArrayType">PrimitiveDoubleArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.PrimitiveFloatArrayType" href="#pygw.base.type_conversions.PrimitiveFloatArrayType">PrimitiveFloatArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.PrimitiveIntArrayType" href="#pygw.base.type_conversions.PrimitiveIntArrayType">PrimitiveIntArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.PrimitiveLongArrayType" href="#pygw.base.type_conversions.PrimitiveLongArrayType">PrimitiveLongArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.PrimitiveShortArrayType" href="#pygw.base.type_conversions.PrimitiveShortArrayType">PrimitiveShortArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.ShortArrayType" href="#pygw.base.type_conversions.ShortArrayType">ShortArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.ShortType" href="#pygw.base.type_conversions.ShortType">ShortType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.StringArrayType" href="#pygw.base.type_conversions.StringArrayType">StringArrayType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pygw.base.type_conversions.StringType" href="#pygw.base.type_conversions.StringType">StringType</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

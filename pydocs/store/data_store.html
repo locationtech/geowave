@@ -1,0 +1,973 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>pygw.store.data_store API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>pygw.store.data_store</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">#
+# Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file distributed with this work for additional information regarding copyright
+# ownership. All rights reserved. This program and the accompanying materials are made available
+# under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+# available at http://www.apache.org/licenses/LICENSE-2.0.txt
+#===============================================================================================
+
+from pygw.base import GeoWaveObject
+from pygw.base import CloseableIterator
+from pygw.base import Writer
+from pygw.base import DataTypeAdapter
+from pygw.config import java_gateway
+from pygw.config import geowave_pkg
+from pygw.query import Query
+from pygw.index import Index
+
+class DataStore(GeoWaveObject):
+    &#34;&#34;&#34;
+    This class models the DataStore interface methods.
+    &#34;&#34;&#34;
+
+    def __init__(self, java_ref):
+        super().__init__(java_ref)
+
+    def ingest(self, url, *indices, ingest_options=None):
+        &#34;&#34;&#34;
+        Ingest from URL.
+
+        If this is a directory, this method will recursively search for valid files to
+        ingest in the directory. This will iterate through registered IngestFormatPlugins to find one
+        that works for a given file.
+
+        Args:
+            url (str): The URL for data to read and ingest into this data store.
+            *indices (pygw.index.index.Index): Index to ingest into.
+            ingest_options: Options for ingest (Not yet supported).
+        &#34;&#34;&#34;
+        # TODO: Ingest Options
+        if ingest_options: raise NotImplementedError()
+
+        assert isinstance(url, str)
+
+        n = len(indices)
+        j_index_class = geowave_pkg.core.store.api.Index
+        j_index_arr = java_gateway.new_array(j_index_class, n)
+        for idx, name in enumerate(indices):
+                j_index_arr[idx] = name._java_ref
+        java_url = java_gateway.jvm.java.net.URL(url)
+        self._java_ref.ingest(java_url, ingest_options, j_index_arr)
+
+    def query(self, q):
+        &#34;&#34;&#34;
+        Returns all data in this data store that matches the query parameter. All data that matches the
+        query will be returned as an instance of the native data type. The Iterator must be closed when
+        it is no longer needed - this wraps the underlying scanner implementation and closes underlying
+        resources.
+
+        Args:
+            q (pygw.query.query.Query): The query to preform.
+        Returns:
+            A closeable iterable of results.  The `pygw.base.closeable_iterator.CloseableIterator.close` method should be called
+            on the iterator when it is done being used.
+        &#34;&#34;&#34;
+        assert isinstance(q, Query)
+        j_query = q._java_ref
+        return iter(CloseableIterator(self._java_ref.query(j_query), q.result_transformer))
+
+    def aggregate(self, q):
+        raise NotImplementedError
+
+    def get_types(self):
+        &#34;&#34;&#34;
+        Get all the data type adapters that have been used within this data store.
+
+        Returns:
+            List of `pygw.base.data_type_adapter.DataTypeAdapter` used in the data store.
+        &#34;&#34;&#34;
+        j_adapter_arr = self._java_ref.getTypes()
+        return [DataTypeAdapter(j_adpt) for j_adpt in j_adapter_arr]
+
+    def query_statistics(self, q):
+        raise NotImplementedError
+
+    def aggregate_statistics(self, q):
+        raise NotImplementedError
+
+    def get_indices(self, type_name=None):
+        &#34;&#34;&#34;
+        Get the indices that have been registered with this data store for a given type.
+
+        Gets all registered indices if `type_name` is None.
+
+        Args:
+            type_name (str): The name of the type.
+        Returns:
+            List of `pygw.index.index.Index` in the data store.
+        &#34;&#34;&#34;
+        if type_name:
+            j_indices = self._java_ref.getIndices(type_name)
+        else:
+            j_indices = self._java_ref.getIndices()
+        return [Index(j_index) for j_index in j_indices]
+
+    def copy_to(self, other, q=None):
+        &#34;&#34;&#34;
+        Copy data from this data store to another.
+
+        All data is copied if `q` is None, else only the data queried by `q`.
+
+        Args:
+            other (pygw.store.data_store.DataStore): The data store to copy to.
+            q (pygw.query.query.Query): Query filter for data to be copied.
+        &#34;&#34;&#34;
+        assert isinstance(other, DataStore)
+
+        if q:
+            assert isinstance(q, Query)
+            q = q._java_ref
+
+        self._java_ref.copyTo(other._java_ref, q)
+
+    def add_index(self, type_name, *indices):
+        &#34;&#34;&#34;
+        Add new indices for the given type. If there is data in other indices for this type, for
+        consistency it will need to copy all of the data into the new indices, which could be a long
+        process for lots of data.
+
+        Args:
+            type_name (str): Name of data type to register indices to.
+            *indices (pygw.index.index.Index): Index to add.
+        &#34;&#34;&#34;
+        assert isinstance(type_name,str)
+
+        n = len(indices)
+        j_index_class = geowave_pkg.core.store.api.Index
+        j_index_arr = java_gateway.new_array(j_index_class,n)
+        for idx, py_obj in enumerate(indices):
+                j_index_arr[idx] = py_obj._java_ref
+
+        self._java_ref.addIndex(type_name,j_index_arr)
+
+    def remove_index(self, index_name, type_name=None):
+        &#34;&#34;&#34;
+        Remove an index for a given data type.
+
+        If `type_name` is None, the specified index is removed for all types.
+
+        Args:
+            index_name (str): Name of the index to be removed.
+            type_name (str): Name of data type to remove.
+        Raises:
+            Exception: If the index was the last index of a type.
+        &#34;&#34;&#34;
+        if type_name:
+            self._java_ref.removeIndex(index_name,type_name)
+        else:
+            self._java_ref.removeIndex(index_name)
+
+
+    def remove_type(self, type_name):
+        &#34;&#34;&#34;
+        Remove all data and statistics associated with the given type.
+
+        Args:
+            type_name (str): Name of the data type.
+        &#34;&#34;&#34;
+        assert isinstance(type_name, str)
+
+        self._java_ref.removeType(type_name)
+
+
+    def delete(self, q):
+        &#34;&#34;&#34;
+        Delete all data in this data store that matches the query parameter.
+
+        Args:
+            q (pygw.query.query.Query): The query criteria to use for deletion.
+        Returns:
+            True on success, False on fail.
+        &#34;&#34;&#34;
+        assert isinstance(q, Query)
+
+        return self._java_ref.delete(q._java_ref)
+
+    def delete_all(self):
+        &#34;&#34;&#34;
+        Delete ALL data and ALL metadata for this datastore.
+
+        Returns:
+            True on success, False on fail.
+        &#34;&#34;&#34;
+
+        return self._java_ref.deleteAll()
+
+    def add_type(self, type_adapter, *initial_indices):
+        &#34;&#34;&#34;
+        Add this type to the data store. This only needs to be called one time per type.
+
+        Args:
+            type_adapter (pygw.base.data_type_adapter.DataTypeAdapter): The data type adapter to add to the data store.
+            *initial_indices (pygw.index.index.Index): The initial indices for this type.
+        &#34;&#34;&#34;
+        assert isinstance(type_adapter,DataTypeAdapter)
+
+        n = len(initial_indices)
+        j_index_class = geowave_pkg.core.store.api.Index
+        j_index_arr = java_gateway.new_array(j_index_class,n)
+        for idx, py_obj in enumerate(initial_indices):
+                j_index_arr[idx] = py_obj._java_ref
+
+        self._java_ref.addType(type_adapter._java_ref,j_index_arr)
+
+    def create_writer(self, type_adapter_name):
+        &#34;&#34;&#34;
+        Returns an index writer to perform batched write operations for the given data type name.
+
+        Assumes the type has already been used previously or added using `add_type` and assumes one or
+        more indices have been provided for this type.
+
+        Args:
+            type_name (str): The name of the type to write to.
+        Returns:
+            A `pygw.base.writer.Writer`, which can be used to write entries into the data store of the given type.
+        &#34;&#34;&#34;
+        j_writer = self._java_ref.createWriter(type_adapter_name)
+
+        if j_writer is None:
+            return None
+
+        return Writer(j_writer)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="pygw.store.data_store.DataStore"><code class="flex name class">
+<span>class <span class="ident">DataStore</span></span>
+<span>(</span><span>java_ref)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This class models the DataStore interface methods.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class DataStore(GeoWaveObject):
+    &#34;&#34;&#34;
+    This class models the DataStore interface methods.
+    &#34;&#34;&#34;
+
+    def __init__(self, java_ref):
+        super().__init__(java_ref)
+
+    def ingest(self, url, *indices, ingest_options=None):
+        &#34;&#34;&#34;
+        Ingest from URL.
+
+        If this is a directory, this method will recursively search for valid files to
+        ingest in the directory. This will iterate through registered IngestFormatPlugins to find one
+        that works for a given file.
+
+        Args:
+            url (str): The URL for data to read and ingest into this data store.
+            *indices (pygw.index.index.Index): Index to ingest into.
+            ingest_options: Options for ingest (Not yet supported).
+        &#34;&#34;&#34;
+        # TODO: Ingest Options
+        if ingest_options: raise NotImplementedError()
+
+        assert isinstance(url, str)
+
+        n = len(indices)
+        j_index_class = geowave_pkg.core.store.api.Index
+        j_index_arr = java_gateway.new_array(j_index_class, n)
+        for idx, name in enumerate(indices):
+                j_index_arr[idx] = name._java_ref
+        java_url = java_gateway.jvm.java.net.URL(url)
+        self._java_ref.ingest(java_url, ingest_options, j_index_arr)
+
+    def query(self, q):
+        &#34;&#34;&#34;
+        Returns all data in this data store that matches the query parameter. All data that matches the
+        query will be returned as an instance of the native data type. The Iterator must be closed when
+        it is no longer needed - this wraps the underlying scanner implementation and closes underlying
+        resources.
+
+        Args:
+            q (pygw.query.query.Query): The query to preform.
+        Returns:
+            A closeable iterable of results.  The `pygw.base.closeable_iterator.CloseableIterator.close` method should be called
+            on the iterator when it is done being used.
+        &#34;&#34;&#34;
+        assert isinstance(q, Query)
+        j_query = q._java_ref
+        return iter(CloseableIterator(self._java_ref.query(j_query), q.result_transformer))
+
+    def aggregate(self, q):
+        raise NotImplementedError
+
+    def get_types(self):
+        &#34;&#34;&#34;
+        Get all the data type adapters that have been used within this data store.
+
+        Returns:
+            List of `pygw.base.data_type_adapter.DataTypeAdapter` used in the data store.
+        &#34;&#34;&#34;
+        j_adapter_arr = self._java_ref.getTypes()
+        return [DataTypeAdapter(j_adpt) for j_adpt in j_adapter_arr]
+
+    def query_statistics(self, q):
+        raise NotImplementedError
+
+    def aggregate_statistics(self, q):
+        raise NotImplementedError
+
+    def get_indices(self, type_name=None):
+        &#34;&#34;&#34;
+        Get the indices that have been registered with this data store for a given type.
+
+        Gets all registered indices if `type_name` is None.
+
+        Args:
+            type_name (str): The name of the type.
+        Returns:
+            List of `pygw.index.index.Index` in the data store.
+        &#34;&#34;&#34;
+        if type_name:
+            j_indices = self._java_ref.getIndices(type_name)
+        else:
+            j_indices = self._java_ref.getIndices()
+        return [Index(j_index) for j_index in j_indices]
+
+    def copy_to(self, other, q=None):
+        &#34;&#34;&#34;
+        Copy data from this data store to another.
+
+        All data is copied if `q` is None, else only the data queried by `q`.
+
+        Args:
+            other (pygw.store.data_store.DataStore): The data store to copy to.
+            q (pygw.query.query.Query): Query filter for data to be copied.
+        &#34;&#34;&#34;
+        assert isinstance(other, DataStore)
+
+        if q:
+            assert isinstance(q, Query)
+            q = q._java_ref
+
+        self._java_ref.copyTo(other._java_ref, q)
+
+    def add_index(self, type_name, *indices):
+        &#34;&#34;&#34;
+        Add new indices for the given type. If there is data in other indices for this type, for
+        consistency it will need to copy all of the data into the new indices, which could be a long
+        process for lots of data.
+
+        Args:
+            type_name (str): Name of data type to register indices to.
+            *indices (pygw.index.index.Index): Index to add.
+        &#34;&#34;&#34;
+        assert isinstance(type_name,str)
+
+        n = len(indices)
+        j_index_class = geowave_pkg.core.store.api.Index
+        j_index_arr = java_gateway.new_array(j_index_class,n)
+        for idx, py_obj in enumerate(indices):
+                j_index_arr[idx] = py_obj._java_ref
+
+        self._java_ref.addIndex(type_name,j_index_arr)
+
+    def remove_index(self, index_name, type_name=None):
+        &#34;&#34;&#34;
+        Remove an index for a given data type.
+
+        If `type_name` is None, the specified index is removed for all types.
+
+        Args:
+            index_name (str): Name of the index to be removed.
+            type_name (str): Name of data type to remove.
+        Raises:
+            Exception: If the index was the last index of a type.
+        &#34;&#34;&#34;
+        if type_name:
+            self._java_ref.removeIndex(index_name,type_name)
+        else:
+            self._java_ref.removeIndex(index_name)
+
+
+    def remove_type(self, type_name):
+        &#34;&#34;&#34;
+        Remove all data and statistics associated with the given type.
+
+        Args:
+            type_name (str): Name of the data type.
+        &#34;&#34;&#34;
+        assert isinstance(type_name, str)
+
+        self._java_ref.removeType(type_name)
+
+
+    def delete(self, q):
+        &#34;&#34;&#34;
+        Delete all data in this data store that matches the query parameter.
+
+        Args:
+            q (pygw.query.query.Query): The query criteria to use for deletion.
+        Returns:
+            True on success, False on fail.
+        &#34;&#34;&#34;
+        assert isinstance(q, Query)
+
+        return self._java_ref.delete(q._java_ref)
+
+    def delete_all(self):
+        &#34;&#34;&#34;
+        Delete ALL data and ALL metadata for this datastore.
+
+        Returns:
+            True on success, False on fail.
+        &#34;&#34;&#34;
+
+        return self._java_ref.deleteAll()
+
+    def add_type(self, type_adapter, *initial_indices):
+        &#34;&#34;&#34;
+        Add this type to the data store. This only needs to be called one time per type.
+
+        Args:
+            type_adapter (pygw.base.data_type_adapter.DataTypeAdapter): The data type adapter to add to the data store.
+            *initial_indices (pygw.index.index.Index): The initial indices for this type.
+        &#34;&#34;&#34;
+        assert isinstance(type_adapter,DataTypeAdapter)
+
+        n = len(initial_indices)
+        j_index_class = geowave_pkg.core.store.api.Index
+        j_index_arr = java_gateway.new_array(j_index_class,n)
+        for idx, py_obj in enumerate(initial_indices):
+                j_index_arr[idx] = py_obj._java_ref
+
+        self._java_ref.addType(type_adapter._java_ref,j_index_arr)
+
+    def create_writer(self, type_adapter_name):
+        &#34;&#34;&#34;
+        Returns an index writer to perform batched write operations for the given data type name.
+
+        Assumes the type has already been used previously or added using `add_type` and assumes one or
+        more indices have been provided for this type.
+
+        Args:
+            type_name (str): The name of the type to write to.
+        Returns:
+            A `pygw.base.writer.Writer`, which can be used to write entries into the data store of the given type.
+        &#34;&#34;&#34;
+        j_writer = self._java_ref.createWriter(type_adapter_name)
+
+        if j_writer is None:
+            return None
+
+        return Writer(j_writer)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.geowave_object.GeoWaveObject" href="../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject">GeoWaveObject</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="pygw.store.data_store.DataStore.add_index"><code class="name flex">
+<span>def <span class="ident">add_index</span></span>(<span>self, type_name, *indices)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Add new indices for the given type. If there is data in other indices for this type, for
+consistency it will need to copy all of the data into the new indices, which could be a long
+process for lots of data.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>Name of data type to register indices to.</dd>
+<dt><strong><code>*indices</code></strong> :&ensp;<a title="pygw.index.index.Index" href="../index/index.m.html#pygw.index.index.Index"><code>Index</code></a></dt>
+<dd>Index to add.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_index(self, type_name, *indices):
+    &#34;&#34;&#34;
+    Add new indices for the given type. If there is data in other indices for this type, for
+    consistency it will need to copy all of the data into the new indices, which could be a long
+    process for lots of data.
+
+    Args:
+        type_name (str): Name of data type to register indices to.
+        *indices (pygw.index.index.Index): Index to add.
+    &#34;&#34;&#34;
+    assert isinstance(type_name,str)
+
+    n = len(indices)
+    j_index_class = geowave_pkg.core.store.api.Index
+    j_index_arr = java_gateway.new_array(j_index_class,n)
+    for idx, py_obj in enumerate(indices):
+            j_index_arr[idx] = py_obj._java_ref
+
+    self._java_ref.addIndex(type_name,j_index_arr)</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store.DataStore.add_type"><code class="name flex">
+<span>def <span class="ident">add_type</span></span>(<span>self, type_adapter, *initial_indices)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Add this type to the data store. This only needs to be called one time per type.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type_adapter</code></strong> :&ensp;<a title="pygw.base.data_type_adapter.DataTypeAdapter" href="../base/data_type_adapter.html#pygw.base.data_type_adapter.DataTypeAdapter"><code>DataTypeAdapter</code></a></dt>
+<dd>The data type adapter to add to the data store.</dd>
+<dt><strong><code>*initial_indices</code></strong> :&ensp;<a title="pygw.index.index.Index" href="../index/index.m.html#pygw.index.index.Index"><code>Index</code></a></dt>
+<dd>The initial indices for this type.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_type(self, type_adapter, *initial_indices):
+    &#34;&#34;&#34;
+    Add this type to the data store. This only needs to be called one time per type.
+
+    Args:
+        type_adapter (pygw.base.data_type_adapter.DataTypeAdapter): The data type adapter to add to the data store.
+        *initial_indices (pygw.index.index.Index): The initial indices for this type.
+    &#34;&#34;&#34;
+    assert isinstance(type_adapter,DataTypeAdapter)
+
+    n = len(initial_indices)
+    j_index_class = geowave_pkg.core.store.api.Index
+    j_index_arr = java_gateway.new_array(j_index_class,n)
+    for idx, py_obj in enumerate(initial_indices):
+            j_index_arr[idx] = py_obj._java_ref
+
+    self._java_ref.addType(type_adapter._java_ref,j_index_arr)</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store.DataStore.aggregate"><code class="name flex">
+<span>def <span class="ident">aggregate</span></span>(<span>self, q)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def aggregate(self, q):
+    raise NotImplementedError</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store.DataStore.aggregate_statistics"><code class="name flex">
+<span>def <span class="ident">aggregate_statistics</span></span>(<span>self, q)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def aggregate_statistics(self, q):
+    raise NotImplementedError</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store.DataStore.copy_to"><code class="name flex">
+<span>def <span class="ident">copy_to</span></span>(<span>self, other, q=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Copy data from this data store to another.</p>
+<p>All data is copied if <code>q</code> is None, else only the data queried by <code>q</code>.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>other</code></strong> :&ensp;<a title="pygw.store.data_store.DataStore" href="#pygw.store.data_store.DataStore"><code>DataStore</code></a></dt>
+<dd>The data store to copy to.</dd>
+<dt><strong><code>q</code></strong> :&ensp;<a title="pygw.query.query.Query" href="../query/query.html#pygw.query.query.Query"><code>Query</code></a></dt>
+<dd>Query filter for data to be copied.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def copy_to(self, other, q=None):
+    &#34;&#34;&#34;
+    Copy data from this data store to another.
+
+    All data is copied if `q` is None, else only the data queried by `q`.
+
+    Args:
+        other (pygw.store.data_store.DataStore): The data store to copy to.
+        q (pygw.query.query.Query): Query filter for data to be copied.
+    &#34;&#34;&#34;
+    assert isinstance(other, DataStore)
+
+    if q:
+        assert isinstance(q, Query)
+        q = q._java_ref
+
+    self._java_ref.copyTo(other._java_ref, q)</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store.DataStore.create_writer"><code class="name flex">
+<span>def <span class="ident">create_writer</span></span>(<span>self, type_adapter_name)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns an index writer to perform batched write operations for the given data type name.</p>
+<p>Assumes the type has already been used previously or added using <code>add_type</code> and assumes one or
+more indices have been provided for this type.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the type to write to.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A <a title="pygw.base.writer.Writer" href="../base/writer.html#pygw.base.writer.Writer"><code>Writer</code></a>, which can be used to write entries into the data store of the given type.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def create_writer(self, type_adapter_name):
+    &#34;&#34;&#34;
+    Returns an index writer to perform batched write operations for the given data type name.
+
+    Assumes the type has already been used previously or added using `add_type` and assumes one or
+    more indices have been provided for this type.
+
+    Args:
+        type_name (str): The name of the type to write to.
+    Returns:
+        A `pygw.base.writer.Writer`, which can be used to write entries into the data store of the given type.
+    &#34;&#34;&#34;
+    j_writer = self._java_ref.createWriter(type_adapter_name)
+
+    if j_writer is None:
+        return None
+
+    return Writer(j_writer)</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store.DataStore.delete"><code class="name flex">
+<span>def <span class="ident">delete</span></span>(<span>self, q)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Delete all data in this data store that matches the query parameter.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>q</code></strong> :&ensp;<a title="pygw.query.query.Query" href="../query/query.html#pygw.query.query.Query"><code>Query</code></a></dt>
+<dd>The query criteria to use for deletion.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>True on success, False on fail.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def delete(self, q):
+    &#34;&#34;&#34;
+    Delete all data in this data store that matches the query parameter.
+
+    Args:
+        q (pygw.query.query.Query): The query criteria to use for deletion.
+    Returns:
+        True on success, False on fail.
+    &#34;&#34;&#34;
+    assert isinstance(q, Query)
+
+    return self._java_ref.delete(q._java_ref)</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store.DataStore.delete_all"><code class="name flex">
+<span>def <span class="ident">delete_all</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Delete ALL data and ALL metadata for this datastore.</p>
+<h2 id="returns">Returns</h2>
+<p>True on success, False on fail.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def delete_all(self):
+    &#34;&#34;&#34;
+    Delete ALL data and ALL metadata for this datastore.
+
+    Returns:
+        True on success, False on fail.
+    &#34;&#34;&#34;
+
+    return self._java_ref.deleteAll()</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store.DataStore.get_indices"><code class="name flex">
+<span>def <span class="ident">get_indices</span></span>(<span>self, type_name=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get the indices that have been registered with this data store for a given type.</p>
+<p>Gets all registered indices if <code>type_name</code> is None.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the type.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>List of <a title="pygw.index.index.Index" href="../index/index.m.html#pygw.index.index.Index"><code>Index</code></a> in the data store.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_indices(self, type_name=None):
+    &#34;&#34;&#34;
+    Get the indices that have been registered with this data store for a given type.
+
+    Gets all registered indices if `type_name` is None.
+
+    Args:
+        type_name (str): The name of the type.
+    Returns:
+        List of `pygw.index.index.Index` in the data store.
+    &#34;&#34;&#34;
+    if type_name:
+        j_indices = self._java_ref.getIndices(type_name)
+    else:
+        j_indices = self._java_ref.getIndices()
+    return [Index(j_index) for j_index in j_indices]</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store.DataStore.get_types"><code class="name flex">
+<span>def <span class="ident">get_types</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get all the data type adapters that have been used within this data store.</p>
+<h2 id="returns">Returns</h2>
+<p>List of <a title="pygw.base.data_type_adapter.DataTypeAdapter" href="../base/data_type_adapter.html#pygw.base.data_type_adapter.DataTypeAdapter"><code>DataTypeAdapter</code></a> used in the data store.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_types(self):
+    &#34;&#34;&#34;
+    Get all the data type adapters that have been used within this data store.
+
+    Returns:
+        List of `pygw.base.data_type_adapter.DataTypeAdapter` used in the data store.
+    &#34;&#34;&#34;
+    j_adapter_arr = self._java_ref.getTypes()
+    return [DataTypeAdapter(j_adpt) for j_adpt in j_adapter_arr]</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store.DataStore.ingest"><code class="name flex">
+<span>def <span class="ident">ingest</span></span>(<span>self, url, *indices, ingest_options=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Ingest from URL.</p>
+<p>If this is a directory, this method will recursively search for valid files to
+ingest in the directory. This will iterate through registered IngestFormatPlugins to find one
+that works for a given file.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>url</code></strong> :&ensp;<code>str</code></dt>
+<dd>The URL for data to read and ingest into this data store.</dd>
+<dt><strong><code>*indices</code></strong> :&ensp;<a title="pygw.index.index.Index" href="../index/index.m.html#pygw.index.index.Index"><code>Index</code></a></dt>
+<dd>Index to ingest into.</dd>
+<dt><strong><code>ingest_options</code></strong></dt>
+<dd>Options for ingest (Not yet supported).</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def ingest(self, url, *indices, ingest_options=None):
+    &#34;&#34;&#34;
+    Ingest from URL.
+
+    If this is a directory, this method will recursively search for valid files to
+    ingest in the directory. This will iterate through registered IngestFormatPlugins to find one
+    that works for a given file.
+
+    Args:
+        url (str): The URL for data to read and ingest into this data store.
+        *indices (pygw.index.index.Index): Index to ingest into.
+        ingest_options: Options for ingest (Not yet supported).
+    &#34;&#34;&#34;
+    # TODO: Ingest Options
+    if ingest_options: raise NotImplementedError()
+
+    assert isinstance(url, str)
+
+    n = len(indices)
+    j_index_class = geowave_pkg.core.store.api.Index
+    j_index_arr = java_gateway.new_array(j_index_class, n)
+    for idx, name in enumerate(indices):
+            j_index_arr[idx] = name._java_ref
+    java_url = java_gateway.jvm.java.net.URL(url)
+    self._java_ref.ingest(java_url, ingest_options, j_index_arr)</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store.DataStore.query"><code class="name flex">
+<span>def <span class="ident">query</span></span>(<span>self, q)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns all data in this data store that matches the query parameter. All data that matches the
+query will be returned as an instance of the native data type. The Iterator must be closed when
+it is no longer needed - this wraps the underlying scanner implementation and closes underlying
+resources.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>q</code></strong> :&ensp;<a title="pygw.query.query.Query" href="../query/query.html#pygw.query.query.Query"><code>Query</code></a></dt>
+<dd>The query to preform.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A closeable iterable of results.
+The <a title="pygw.base.closeable_iterator.CloseableIterator.close" href="../base/closeable_iterator.html#pygw.base.closeable_iterator.CloseableIterator.close"><code>CloseableIterator.close()</code></a> method should be called
+on the iterator when it is done being used.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def query(self, q):
+    &#34;&#34;&#34;
+    Returns all data in this data store that matches the query parameter. All data that matches the
+    query will be returned as an instance of the native data type. The Iterator must be closed when
+    it is no longer needed - this wraps the underlying scanner implementation and closes underlying
+    resources.
+
+    Args:
+        q (pygw.query.query.Query): The query to preform.
+    Returns:
+        A closeable iterable of results.  The `pygw.base.closeable_iterator.CloseableIterator.close` method should be called
+        on the iterator when it is done being used.
+    &#34;&#34;&#34;
+    assert isinstance(q, Query)
+    j_query = q._java_ref
+    return iter(CloseableIterator(self._java_ref.query(j_query), q.result_transformer))</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store.DataStore.query_statistics"><code class="name flex">
+<span>def <span class="ident">query_statistics</span></span>(<span>self, q)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def query_statistics(self, q):
+    raise NotImplementedError</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store.DataStore.remove_index"><code class="name flex">
+<span>def <span class="ident">remove_index</span></span>(<span>self, index_name, type_name=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Remove an index for a given data type.</p>
+<p>If <code>type_name</code> is None, the specified index is removed for all types.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>index_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>Name of the index to be removed.</dd>
+<dt><strong><code>type_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>Name of data type to remove.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><strong><code>Exception</code></strong></dt>
+<dd>If the index was the last index of a type.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def remove_index(self, index_name, type_name=None):
+    &#34;&#34;&#34;
+    Remove an index for a given data type.
+
+    If `type_name` is None, the specified index is removed for all types.
+
+    Args:
+        index_name (str): Name of the index to be removed.
+        type_name (str): Name of data type to remove.
+    Raises:
+        Exception: If the index was the last index of a type.
+    &#34;&#34;&#34;
+    if type_name:
+        self._java_ref.removeIndex(index_name,type_name)
+    else:
+        self._java_ref.removeIndex(index_name)</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store.DataStore.remove_type"><code class="name flex">
+<span>def <span class="ident">remove_type</span></span>(<span>self, type_name)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Remove all data and statistics associated with the given type.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>Name of the data type.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def remove_type(self, type_name):
+    &#34;&#34;&#34;
+    Remove all data and statistics associated with the given type.
+
+    Args:
+        type_name (str): Name of the data type.
+    &#34;&#34;&#34;
+    assert isinstance(type_name, str)
+
+    self._java_ref.removeType(type_name)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.geowave_object.GeoWaveObject" href="../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject">GeoWaveObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.geowave_object.GeoWaveObject.is_instance_of" href="../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject.is_instance_of">is_instance_of</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pygw.store" href="index.html">pygw.store</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pygw.store.data_store.DataStore" href="#pygw.store.data_store.DataStore">DataStore</a></code></h4>
+<ul class="">
+<li><code><a title="pygw.store.data_store.DataStore.add_index" href="#pygw.store.data_store.DataStore.add_index">add_index</a></code></li>
+<li><code><a title="pygw.store.data_store.DataStore.add_type" href="#pygw.store.data_store.DataStore.add_type">add_type</a></code></li>
+<li><code><a title="pygw.store.data_store.DataStore.aggregate" href="#pygw.store.data_store.DataStore.aggregate">aggregate</a></code></li>
+<li><code><a title="pygw.store.data_store.DataStore.aggregate_statistics" href="#pygw.store.data_store.DataStore.aggregate_statistics">aggregate_statistics</a></code></li>
+<li><code><a title="pygw.store.data_store.DataStore.copy_to" href="#pygw.store.data_store.DataStore.copy_to">copy_to</a></code></li>
+<li><code><a title="pygw.store.data_store.DataStore.create_writer" href="#pygw.store.data_store.DataStore.create_writer">create_writer</a></code></li>
+<li><code><a title="pygw.store.data_store.DataStore.delete" href="#pygw.store.data_store.DataStore.delete">delete</a></code></li>
+<li><code><a title="pygw.store.data_store.DataStore.delete_all" href="#pygw.store.data_store.DataStore.delete_all">delete_all</a></code></li>
+<li><code><a title="pygw.store.data_store.DataStore.get_indices" href="#pygw.store.data_store.DataStore.get_indices">get_indices</a></code></li>
+<li><code><a title="pygw.store.data_store.DataStore.get_types" href="#pygw.store.data_store.DataStore.get_types">get_types</a></code></li>
+<li><code><a title="pygw.store.data_store.DataStore.ingest" href="#pygw.store.data_store.DataStore.ingest">ingest</a></code></li>
+<li><code><a title="pygw.store.data_store.DataStore.query" href="#pygw.store.data_store.DataStore.query">query</a></code></li>
+<li><code><a title="pygw.store.data_store.DataStore.query_statistics" href="#pygw.store.data_store.DataStore.query_statistics">query_statistics</a></code></li>
+<li><code><a title="pygw.store.data_store.DataStore.remove_index" href="#pygw.store.data_store.DataStore.remove_index">remove_index</a></code></li>
+<li><code><a title="pygw.store.data_store.DataStore.remove_type" href="#pygw.store.data_store.DataStore.remove_type">remove_type</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

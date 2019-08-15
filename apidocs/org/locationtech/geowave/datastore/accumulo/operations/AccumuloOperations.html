@@ -155,38 +155,38 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#AccumuloOperations-org.apache.accumulo.core.client.Connector-org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions-">AccumuloOperations</a></span>(org.apache.accumulo.core.client.Connector&nbsp;connector,
-                  <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloOptions</a>&nbsp;options)</code>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#AccumuloOperations-org.apache.accumulo.core.client.Connector-org.locationtech.geowave.datastore.accumulo.config.AccumuloOptions-">AccumuloOperations</a></span>(org.apache.accumulo.core.client.Connector&nbsp;connector,
+                  <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.config">AccumuloOptions</a>&nbsp;options)</code>
 <div class="block">This constructor uses reasonable defaults and only requires an Accumulo connector</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#AccumuloOperations-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions-">AccumuloOperations</a></span>(org.apache.accumulo.core.client.Connector&nbsp;connector,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#AccumuloOperations-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.datastore.accumulo.config.AccumuloOptions-">AccumuloOperations</a></span>(org.apache.accumulo.core.client.Connector&nbsp;connector,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableNamespace,
-                  <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloOptions</a>&nbsp;options)</code>
+                  <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.config">AccumuloOptions</a>&nbsp;options)</code>
 <div class="block">This constructor uses reasonable defaults and requires an Accumulo connector and table
  namespace</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#AccumuloOperations-int-long-long-java.lang.String-java.lang.String-org.apache.accumulo.core.client.Connector-org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions-">AccumuloOperations</a></span>(int&nbsp;numThreads,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#AccumuloOperations-int-long-long-java.lang.String-java.lang.String-org.apache.accumulo.core.client.Connector-org.locationtech.geowave.datastore.accumulo.config.AccumuloOptions-">AccumuloOperations</a></span>(int&nbsp;numThreads,
                   long&nbsp;timeoutMillis,
                   long&nbsp;byteBufferSize,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;authorization,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableNamespace,
                   org.apache.accumulo.core.client.Connector&nbsp;connector,
-                  <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloOptions</a>&nbsp;options)</code>
+                  <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.config">AccumuloOptions</a>&nbsp;options)</code>
 <div class="block">This is the full constructor for the operation factory and should be used if any of the
  defaults are insufficient.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#AccumuloOperations-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions-">AccumuloOperations</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;zookeeperUrl,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#AccumuloOperations-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-org.locationtech.geowave.datastore.accumulo.config.AccumuloOptions-">AccumuloOperations</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;zookeeperUrl,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;instanceName,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;userName,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;password,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableNamespace,
-                  <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloOptions</a>&nbsp;options)</code>
+                  <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.config">AccumuloOptions</a>&nbsp;options)</code>
 <div class="block">This is will create an Accumulo connector based on passed in connection information and
  credentials for convenience convenience.</div>
 </td>
@@ -307,7 +307,7 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 </tr>
 <tr id="i19" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html" title="class in org.locationtech.geowave.datastore.accumulo.operations">AccumuloOperations</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#createOperations-org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions-">createOperations</a></span>(<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloRequiredOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloRequiredOptions</a>&nbsp;options)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#createOperations-org.locationtech.geowave.datastore.accumulo.config.AccumuloRequiredOptions-">createOperations</a></span>(<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/config/AccumuloRequiredOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.config">AccumuloRequiredOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 <tr id="i20" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
@@ -419,7 +419,7 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 </tr>
 <tr id="i41" class="rowColor">
 <td class="colFirst"><code>static org.apache.accumulo.core.client.Connector</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#getConnector-org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions-">getConnector</a></span>(<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloRequiredOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloRequiredOptions</a>&nbsp;options)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#getConnector-org.locationtech.geowave.datastore.accumulo.config.AccumuloRequiredOptions-">getConnector</a></span>(<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/config/AccumuloRequiredOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.config">AccumuloRequiredOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 <tr id="i42" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
@@ -457,7 +457,7 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 </tr>
 <tr id="i49" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#getPassword-org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions-">getPassword</a></span>(<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloRequiredOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloRequiredOptions</a>&nbsp;options)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#getPassword-org.locationtech.geowave.datastore.accumulo.config.AccumuloRequiredOptions-">getPassword</a></span>(<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/config/AccumuloRequiredOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.config">AccumuloRequiredOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 <tr id="i50" class="altColor">
 <td class="colFirst"><code>long</code></td>
@@ -495,7 +495,7 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 </tr>
 <tr id="i57" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#getUsername-org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions-">getUsername</a></span>(<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloRequiredOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloRequiredOptions</a>&nbsp;options)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#getUsername-org.locationtech.geowave.datastore.accumulo.config.AccumuloRequiredOptions-">getUsername</a></span>(<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/config/AccumuloRequiredOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.config">AccumuloRequiredOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 <tr id="i58" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
@@ -617,7 +617,7 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="AccumuloOperations-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions-">
+<a name="AccumuloOperations-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-org.locationtech.geowave.datastore.accumulo.config.AccumuloOptions-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -628,7 +628,7 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;userName,
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;password,
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableNamespace,
-                          <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloOptions</a>&nbsp;options)
+                          <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.config">AccumuloOptions</a>&nbsp;options)
                    throws org.apache.accumulo.core.client.AccumuloException,
                           org.apache.accumulo.core.client.AccumuloSecurityException</pre>
 <div class="block">This is will create an Accumulo connector based on passed in connection information and
@@ -649,14 +649,14 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 </dl>
 </li>
 </ul>
-<a name="AccumuloOperations-org.apache.accumulo.core.client.Connector-org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions-">
+<a name="AccumuloOperations-org.apache.accumulo.core.client.Connector-org.locationtech.geowave.datastore.accumulo.config.AccumuloOptions-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>AccumuloOperations</h4>
 <pre>public&nbsp;AccumuloOperations(org.apache.accumulo.core.client.Connector&nbsp;connector,
-                          <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloOptions</a>&nbsp;options)</pre>
+                          <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.config">AccumuloOptions</a>&nbsp;options)</pre>
 <div class="block">This constructor uses reasonable defaults and only requires an Accumulo connector</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -664,7 +664,7 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 </dl>
 </li>
 </ul>
-<a name="AccumuloOperations-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions-">
+<a name="AccumuloOperations-org.apache.accumulo.core.client.Connector-java.lang.String-org.locationtech.geowave.datastore.accumulo.config.AccumuloOptions-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -672,7 +672,7 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 <h4>AccumuloOperations</h4>
 <pre>public&nbsp;AccumuloOperations(org.apache.accumulo.core.client.Connector&nbsp;connector,
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableNamespace,
-                          <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloOptions</a>&nbsp;options)</pre>
+                          <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.config">AccumuloOptions</a>&nbsp;options)</pre>
 <div class="block">This constructor uses reasonable defaults and requires an Accumulo connector and table
  namespace</div>
 <dl>
@@ -683,7 +683,7 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 </dl>
 </li>
 </ul>
-<a name="AccumuloOperations-int-long-long-java.lang.String-java.lang.String-org.apache.accumulo.core.client.Connector-org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions-">
+<a name="AccumuloOperations-int-long-long-java.lang.String-java.lang.String-org.apache.accumulo.core.client.Connector-org.locationtech.geowave.datastore.accumulo.config.AccumuloOptions-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -695,7 +695,7 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;authorization,
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableNamespace,
                           org.apache.accumulo.core.client.Connector&nbsp;connector,
-                          <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloOptions</a>&nbsp;options)</pre>
+                          <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.config">AccumuloOptions</a>&nbsp;options)</pre>
 <div class="block">This is the full constructor for the operation factory and should be used if any of the
  defaults are insufficient.</div>
 <dl>
@@ -1075,13 +1075,13 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 </dl>
 </li>
 </ul>
-<a name="createOperations-org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions-">
+<a name="createOperations-org.locationtech.geowave.datastore.accumulo.config.AccumuloRequiredOptions-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createOperations</h4>
-<pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html" title="class in org.locationtech.geowave.datastore.accumulo.operations">AccumuloOperations</a>&nbsp;createOperations(<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloRequiredOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloRequiredOptions</a>&nbsp;options)
+<pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html" title="class in org.locationtech.geowave.datastore.accumulo.operations">AccumuloOperations</a>&nbsp;createOperations(<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/config/AccumuloRequiredOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.config">AccumuloRequiredOptions</a>&nbsp;options)
                                            throws org.apache.accumulo.core.client.AccumuloException,
                                                   org.apache.accumulo.core.client.AccumuloSecurityException</pre>
 <dl>
@@ -1091,13 +1091,13 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 </dl>
 </li>
 </ul>
-<a name="getConnector-org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions-">
+<a name="getConnector-org.locationtech.geowave.datastore.accumulo.config.AccumuloRequiredOptions-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getConnector</h4>
-<pre>public static&nbsp;org.apache.accumulo.core.client.Connector&nbsp;getConnector(<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloRequiredOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloRequiredOptions</a>&nbsp;options)
+<pre>public static&nbsp;org.apache.accumulo.core.client.Connector&nbsp;getConnector(<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/config/AccumuloRequiredOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.config">AccumuloRequiredOptions</a>&nbsp;options)
                                                               throws org.apache.accumulo.core.client.AccumuloException,
                                                                      org.apache.accumulo.core.client.AccumuloSecurityException</pre>
 <dl>
@@ -1107,13 +1107,13 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 </dl>
 </li>
 </ul>
-<a name="getUsername-org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions-">
+<a name="getUsername-org.locationtech.geowave.datastore.accumulo.config.AccumuloRequiredOptions-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getUsername</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getUsername(<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloRequiredOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloRequiredOptions</a>&nbsp;options)
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getUsername(<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/config/AccumuloRequiredOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.config">AccumuloRequiredOptions</a>&nbsp;options)
                           throws org.apache.accumulo.core.client.AccumuloException,
                                  org.apache.accumulo.core.client.AccumuloSecurityException</pre>
 <dl>
@@ -1123,13 +1123,13 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 </dl>
 </li>
 </ul>
-<a name="getPassword-org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions-">
+<a name="getPassword-org.locationtech.geowave.datastore.accumulo.config.AccumuloRequiredOptions-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getPassword</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getPassword(<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/cli/config/AccumuloRequiredOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.cli.config">AccumuloRequiredOptions</a>&nbsp;options)
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getPassword(<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/config/AccumuloRequiredOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.config">AccumuloRequiredOptions</a>&nbsp;options)
                           throws org.apache.accumulo.core.client.AccumuloException,
                                  org.apache.accumulo.core.client.AccumuloSecurityException</pre>
 <dl>

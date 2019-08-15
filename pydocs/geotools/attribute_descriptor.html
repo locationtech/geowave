@@ -1,0 +1,3114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>pygw.geotools.attribute_descriptor API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>pygw.geotools.attribute_descriptor</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">#
+# Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file distributed with this work for additional information regarding copyright
+# ownership. All rights reserved. This program and the accompanying materials are made available
+# under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+# available at http://www.apache.org/licenses/LICENSE-2.0.txt
+#===============================================================================================
+
+from pygw.config import java_pkg
+from pygw.config import reflection_util
+from pygw.base import GeoWaveObject
+from pygw.base.type_conversions import *
+
+from enum import Enum
+
+_binding_map = {}
+
+class AttributeDescriptor(GeoWaveObject):
+    &#34;&#34;&#34;
+    Describes a single attribute of a feature type.
+    &#34;&#34;&#34;
+
+    def __init__(self, attribute_type, is_nilable, descriptor, j_attribute=None):
+        if not isinstance(attribute_type, AttributeDescriptor.Type):
+            raise AttributeDescriptor.UnknownTypeError(&#34;Invalid argument to `attribute_type`. Must be one of defined types in AttributeDescriptor.Type&#34;)
+        self.field = attribute_type.value()
+        self.is_nilable = is_nilable
+        self.descriptor = descriptor
+        if j_attribute is None:
+            j_builder = java_pkg.org.geotools.feature.AttributeTypeBuilder()
+            j_type_cls = reflection_util.classForName(self.field.binding)
+            j_builder.binding(j_type_cls)
+            j_builder.nillable(is_nilable)
+            j_attribute = j_builder.buildDescriptor(descriptor)
+        super().__init__(j_attribute)
+
+    def to_java(self, value):
+        &#34;&#34;&#34;
+        Converts a Python variable into its Java counterpart.
+
+        Args:
+            value (any): The Python variable to convert.
+        Retuurns:
+            The Java equivalent of the Python variable.
+        &#34;&#34;&#34;
+        return self.field.to_java(value)
+
+    def from_java(self, value):
+        &#34;&#34;&#34;
+        Converts a Java variable into its Python counterpart.
+
+        Args:
+            value (any): The Java variable to convert.
+        Retuurns:
+            The Python equivalent of the Java variable.
+        &#34;&#34;&#34;
+        return self.field.from_java(value)
+
+    @classmethod
+    def from_java_attribute_descriptor(cls, java_attribute_descriptor):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor from a Java geotools attribute descriptor.
+
+        Args:
+            java_attribute_descriptor (AttributeDescriptor): The Java attribute descriptor.
+        Retuurns:
+            A `pygw.geotools.attribute_descriptor.AttributeDescriptor` that matches the Java one.
+        &#34;&#34;&#34;
+        nilable = java_attribute_descriptor.isNillable()
+        descriptor = java_attribute_descriptor.getName().getLocalPart()
+        binding = java_attribute_descriptor.getType().getBinding().getName()
+        return cls(_binding_map[binding], nilable, descriptor, java_attribute_descriptor)
+
+    @classmethod
+    def big_decimal(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for BigDecimal values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A BigDecimal `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.BIG_DECIMAL, is_nilable, descriptor)
+
+    @classmethod
+    def big_decimal_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for BigDecimal[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A BigDecimal[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.BIG_DECIMAL_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def big_integer(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for BigInteger values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A BigInteger `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.BIG_INTEGER, is_nilable, descriptor)
+
+    @classmethod
+    def big_integer_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for BigInteger[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A BigInteger[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.BIG_INTEGER_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def boolean(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Boolean values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Boolean `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.BOOLEAN, is_nilable, descriptor)
+
+    @classmethod
+    def boolean_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Boolean[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Boolean[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.BOOLEAN_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def float(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Float values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Float `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.FLOAT, is_nilable, descriptor)
+
+    @classmethod
+    def float_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Float[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Float[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.FLOAT_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def double(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Double values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Double `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.DOUBLE, is_nilable, descriptor)
+
+    @classmethod
+    def double_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Double values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Double[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.DOUBLE_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def byte(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Byte values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Byte `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.BYTE, is_nilable, descriptor)
+
+    @classmethod
+    def byte_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Byte[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Byte[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.BYTE_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def short(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Short values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Short `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.SHORT, is_nilable, descriptor)
+
+    @classmethod
+    def short_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Short[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Short[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.SHORT_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def integer(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Integer values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Integer `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.INTEGER, is_nilable, descriptor)
+
+    @classmethod
+    def integer_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Integer[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Integer[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.INTEGER_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def long(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Long values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Long `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.LONG, is_nilable, descriptor)
+
+    @classmethod
+    def long_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Long[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Long[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.LONG_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def primitive_boolean_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for boolean[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A boolean[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.PRIMITIVE_BOOLEAN_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def primitive_float_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for float[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A float[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.PRIMITIVE_FLOAT_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def primitive_double_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for double[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A double[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.PRIMITIVE_DOUBLE_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def primitive_byte_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for byte[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A byte[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.PRIMITIVE_BYTE_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def primitive_short_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for short[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A short[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.PRIMITIVE_SHORT_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def primitive_int_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for int[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A int[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.PRIMITIVE_INT_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def primitive_long_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for long[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A long[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.PRIMITIVE_LONG_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def string(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for String values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A String `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.STRING, is_nilable, descriptor)
+
+    @classmethod
+    def string_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for String[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A String[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.STRING_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def date(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Date values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Date `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.DATE, is_nilable, descriptor)
+
+    @classmethod
+    def date_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Date[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Date[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.DATE_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def calendar(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Calendar values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Calendar `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.CALENDAR, is_nilable, descriptor)
+
+    @classmethod
+    def calendar_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Calendar[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Calendar[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.CALENDAR_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def point(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Point values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Point `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.POINT, is_nilable, descriptor)
+
+    @classmethod
+    def point_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Point[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Point[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.POINT_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def multi_point(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for MultiPoint values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A MultiPoint `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.MULTI_POINT, is_nilable, descriptor)
+
+    @classmethod
+    def multi_point_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for MultiPoint[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A MultiPoint[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.MULTI_POINT_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def line_string(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for LineString values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A LineString `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.LINE_STRING, is_nilable, descriptor)
+
+    @classmethod
+    def line_string_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for LineString[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A LineString[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.LINE_STRING_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def multi_line_string(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for MultiLineString values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A MultiLineString `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.MULTI_LINE_STRING, is_nilable, descriptor)
+
+    @classmethod
+    def multi_line_string_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for MultiLineString[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A MultiLineString[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.MULTI_LINE_STRING_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def polygon(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Polygon values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Polygon `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.POLYGON, is_nilable, descriptor)
+
+    @classmethod
+    def polygon_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Polygon[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Polygon[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.POLYGON_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def multi_polygon(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for MultiPolygon values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A MultiPolygon `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.MULTI_POLYGON, is_nilable, descriptor)
+
+    @classmethod
+    def multi_polygon_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for MultiPolygon[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A MultiPolygon[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.MULTI_POLYGON_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def geometry_collection(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for GeometryCollection values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A GeometryCollection `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.GEOMETRY_COLLECTION, is_nilable, descriptor)
+
+    @classmethod
+    def geometry_collection_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for GeometryCollection[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A GeometryCollection[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.GEOMETRY_COLLECTION_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def geometry(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Geometry values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Geometry `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.GEOMETRY, is_nilable, descriptor)
+
+    @classmethod
+    def geometry_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Geometry[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Geometry[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.GEOMETRY_ARRAY, is_nilable, descriptor)
+
+    class Type(Enum):
+        &#34;&#34;&#34;
+        The types of attributes that are available.
+        &#34;&#34;&#34;
+
+        BIG_DECIMAL = BigDecimalType
+        BIG_DECIMAL_ARRAY = BigDecimalArrayType
+        BIG_INTEGER = BigIntegerType
+        BIG_INTEGER_ARRAY = BigIntegerArrayType
+        BOOLEAN = BooleanType
+        BOOLEAN_ARRAY = BooleanArrayType
+        FLOAT = FloatType
+        FLOAT_ARRAY = FloatArrayType
+        DOUBLE = DoubleType
+        DOUBLE_ARRAY = DoubleArrayType
+        BYTE = ByteType
+        BYTE_ARRAY = ByteArrayType
+        SHORT = ShortType
+        SHORT_ARRAY = ShortArrayType
+        INTEGER = IntegerType
+        INTEGER_ARRAY = IntegerArrayType
+        LONG = LongType
+        LONG_ARRAY = LongArrayType
+        PRIMITIVE_BOOLEAN_ARRAY = PrimitiveBooleanArrayType
+        PRIMITIVE_FLOAT_ARRAY = PrimitiveFloatArrayType
+        PRIMITIVE_DOUBLE_ARRAY = PrimitiveDoubleArrayType
+        PRIMITIVE_BYTE_ARRAY = PrimitiveByteArrayType
+        PRIMITIVE_SHORT_ARRAY = PrimitiveShortArrayType
+        PRIMITIVE_INT_ARRAY = PrimitiveIntArrayType
+        PRIMITIVE_LONG_ARRAY = PrimitiveLongArrayType
+        STRING = StringType
+        STRING_ARRAY = StringArrayType
+        DATE = DateType
+        DATE_ARRAY = DateArrayType
+        CALENDAR = CalendarType
+        CALENDAR_ARRAY = CalendarArrayType
+        POINT = PointType
+        POINT_ARRAY = PointArrayType
+        MULTI_POINT = MultiPointType
+        MULTI_POINT_ARRAY = MultiPointArrayType
+        LINE_STRING = LineStringType
+        LINE_STRING_ARRAY = LineStringArrayType
+        MULTI_LINE_STRING = MultiLineStringType
+        MULTI_LINE_STRING_ARRAY = MultiLineStringArrayType
+        POLYGON = PolygonType
+        POLYGON_ARRAY = PolygonArrayType
+        MULTI_POLYGON = MultiPolygonType
+        MULTI_POLYGON_ARRAY = MultiPolygonArrayType
+        GEOMETRY_COLLECTION = GeometryCollectionType
+        GEOMETRY_COLLECTION_ARRAY = GeometryCollectionArrayType
+        GEOMETRY = GeometryType
+        GEOMETRY_ARRAY = GeometryArrayType
+
+    class UnknownTypeError(Exception): pass
+
+for attr in AttributeDescriptor.Type:
+    _binding_map[attr.value().binding]  = attr</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor"><code class="flex name class">
+<span>class <span class="ident">AttributeDescriptor</span></span>
+<span>(</span><span>attribute_type, is_nilable, descriptor, j_attribute=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Describes a single attribute of a feature type.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class AttributeDescriptor(GeoWaveObject):
+    &#34;&#34;&#34;
+    Describes a single attribute of a feature type.
+    &#34;&#34;&#34;
+
+    def __init__(self, attribute_type, is_nilable, descriptor, j_attribute=None):
+        if not isinstance(attribute_type, AttributeDescriptor.Type):
+            raise AttributeDescriptor.UnknownTypeError(&#34;Invalid argument to `attribute_type`. Must be one of defined types in AttributeDescriptor.Type&#34;)
+        self.field = attribute_type.value()
+        self.is_nilable = is_nilable
+        self.descriptor = descriptor
+        if j_attribute is None:
+            j_builder = java_pkg.org.geotools.feature.AttributeTypeBuilder()
+            j_type_cls = reflection_util.classForName(self.field.binding)
+            j_builder.binding(j_type_cls)
+            j_builder.nillable(is_nilable)
+            j_attribute = j_builder.buildDescriptor(descriptor)
+        super().__init__(j_attribute)
+
+    def to_java(self, value):
+        &#34;&#34;&#34;
+        Converts a Python variable into its Java counterpart.
+
+        Args:
+            value (any): The Python variable to convert.
+        Retuurns:
+            The Java equivalent of the Python variable.
+        &#34;&#34;&#34;
+        return self.field.to_java(value)
+
+    def from_java(self, value):
+        &#34;&#34;&#34;
+        Converts a Java variable into its Python counterpart.
+
+        Args:
+            value (any): The Java variable to convert.
+        Retuurns:
+            The Python equivalent of the Java variable.
+        &#34;&#34;&#34;
+        return self.field.from_java(value)
+
+    @classmethod
+    def from_java_attribute_descriptor(cls, java_attribute_descriptor):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor from a Java geotools attribute descriptor.
+
+        Args:
+            java_attribute_descriptor (AttributeDescriptor): The Java attribute descriptor.
+        Retuurns:
+            A `pygw.geotools.attribute_descriptor.AttributeDescriptor` that matches the Java one.
+        &#34;&#34;&#34;
+        nilable = java_attribute_descriptor.isNillable()
+        descriptor = java_attribute_descriptor.getName().getLocalPart()
+        binding = java_attribute_descriptor.getType().getBinding().getName()
+        return cls(_binding_map[binding], nilable, descriptor, java_attribute_descriptor)
+
+    @classmethod
+    def big_decimal(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for BigDecimal values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A BigDecimal `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.BIG_DECIMAL, is_nilable, descriptor)
+
+    @classmethod
+    def big_decimal_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for BigDecimal[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A BigDecimal[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.BIG_DECIMAL_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def big_integer(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for BigInteger values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A BigInteger `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.BIG_INTEGER, is_nilable, descriptor)
+
+    @classmethod
+    def big_integer_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for BigInteger[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A BigInteger[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.BIG_INTEGER_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def boolean(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Boolean values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Boolean `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.BOOLEAN, is_nilable, descriptor)
+
+    @classmethod
+    def boolean_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Boolean[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Boolean[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.BOOLEAN_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def float(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Float values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Float `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.FLOAT, is_nilable, descriptor)
+
+    @classmethod
+    def float_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Float[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Float[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.FLOAT_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def double(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Double values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Double `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.DOUBLE, is_nilable, descriptor)
+
+    @classmethod
+    def double_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Double values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Double[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.DOUBLE_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def byte(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Byte values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Byte `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.BYTE, is_nilable, descriptor)
+
+    @classmethod
+    def byte_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Byte[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Byte[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.BYTE_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def short(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Short values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Short `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.SHORT, is_nilable, descriptor)
+
+    @classmethod
+    def short_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Short[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Short[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.SHORT_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def integer(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Integer values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Integer `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.INTEGER, is_nilable, descriptor)
+
+    @classmethod
+    def integer_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Integer[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Integer[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.INTEGER_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def long(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Long values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Long `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.LONG, is_nilable, descriptor)
+
+    @classmethod
+    def long_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Long[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Long[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.LONG_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def primitive_boolean_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for boolean[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A boolean[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.PRIMITIVE_BOOLEAN_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def primitive_float_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for float[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A float[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.PRIMITIVE_FLOAT_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def primitive_double_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for double[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A double[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.PRIMITIVE_DOUBLE_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def primitive_byte_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for byte[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A byte[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.PRIMITIVE_BYTE_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def primitive_short_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for short[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A short[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.PRIMITIVE_SHORT_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def primitive_int_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for int[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A int[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.PRIMITIVE_INT_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def primitive_long_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for long[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A long[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.PRIMITIVE_LONG_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def string(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for String values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A String `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.STRING, is_nilable, descriptor)
+
+    @classmethod
+    def string_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for String[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A String[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.STRING_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def date(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Date values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Date `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.DATE, is_nilable, descriptor)
+
+    @classmethod
+    def date_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Date[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Date[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.DATE_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def calendar(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Calendar values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Calendar `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.CALENDAR, is_nilable, descriptor)
+
+    @classmethod
+    def calendar_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Calendar[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Calendar[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.CALENDAR_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def point(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Point values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Point `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.POINT, is_nilable, descriptor)
+
+    @classmethod
+    def point_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Point[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Point[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.POINT_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def multi_point(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for MultiPoint values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A MultiPoint `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.MULTI_POINT, is_nilable, descriptor)
+
+    @classmethod
+    def multi_point_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for MultiPoint[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A MultiPoint[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.MULTI_POINT_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def line_string(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for LineString values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A LineString `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.LINE_STRING, is_nilable, descriptor)
+
+    @classmethod
+    def line_string_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for LineString[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A LineString[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.LINE_STRING_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def multi_line_string(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for MultiLineString values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A MultiLineString `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.MULTI_LINE_STRING, is_nilable, descriptor)
+
+    @classmethod
+    def multi_line_string_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for MultiLineString[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A MultiLineString[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.MULTI_LINE_STRING_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def polygon(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Polygon values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Polygon `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.POLYGON, is_nilable, descriptor)
+
+    @classmethod
+    def polygon_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Polygon[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Polygon[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.POLYGON_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def multi_polygon(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for MultiPolygon values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A MultiPolygon `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.MULTI_POLYGON, is_nilable, descriptor)
+
+    @classmethod
+    def multi_polygon_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for MultiPolygon[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A MultiPolygon[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.MULTI_POLYGON_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def geometry_collection(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for GeometryCollection values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A GeometryCollection `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.GEOMETRY_COLLECTION, is_nilable, descriptor)
+
+    @classmethod
+    def geometry_collection_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for GeometryCollection[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A GeometryCollection[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.GEOMETRY_COLLECTION_ARRAY, is_nilable, descriptor)
+
+    @classmethod
+    def geometry(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Geometry values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Geometry `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.GEOMETRY, is_nilable, descriptor)
+
+    @classmethod
+    def geometry_array(cls, descriptor, is_nilable=False):
+        &#34;&#34;&#34;
+        Constructs an attribute descriptor for Geometry[] values.
+
+        Args:
+            descriptor (str): The name of the attribute.
+            is_nilable (bool): Whether or not the attribute can be None. Default is False.
+        Returns:
+            A Geometry[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+        &#34;&#34;&#34;
+        return cls(cls.Type.GEOMETRY_ARRAY, is_nilable, descriptor)
+
+    class Type(Enum):
+        &#34;&#34;&#34;
+        The types of attributes that are available.
+        &#34;&#34;&#34;
+
+        BIG_DECIMAL = BigDecimalType
+        BIG_DECIMAL_ARRAY = BigDecimalArrayType
+        BIG_INTEGER = BigIntegerType
+        BIG_INTEGER_ARRAY = BigIntegerArrayType
+        BOOLEAN = BooleanType
+        BOOLEAN_ARRAY = BooleanArrayType
+        FLOAT = FloatType
+        FLOAT_ARRAY = FloatArrayType
+        DOUBLE = DoubleType
+        DOUBLE_ARRAY = DoubleArrayType
+        BYTE = ByteType
+        BYTE_ARRAY = ByteArrayType
+        SHORT = ShortType
+        SHORT_ARRAY = ShortArrayType
+        INTEGER = IntegerType
+        INTEGER_ARRAY = IntegerArrayType
+        LONG = LongType
+        LONG_ARRAY = LongArrayType
+        PRIMITIVE_BOOLEAN_ARRAY = PrimitiveBooleanArrayType
+        PRIMITIVE_FLOAT_ARRAY = PrimitiveFloatArrayType
+        PRIMITIVE_DOUBLE_ARRAY = PrimitiveDoubleArrayType
+        PRIMITIVE_BYTE_ARRAY = PrimitiveByteArrayType
+        PRIMITIVE_SHORT_ARRAY = PrimitiveShortArrayType
+        PRIMITIVE_INT_ARRAY = PrimitiveIntArrayType
+        PRIMITIVE_LONG_ARRAY = PrimitiveLongArrayType
+        STRING = StringType
+        STRING_ARRAY = StringArrayType
+        DATE = DateType
+        DATE_ARRAY = DateArrayType
+        CALENDAR = CalendarType
+        CALENDAR_ARRAY = CalendarArrayType
+        POINT = PointType
+        POINT_ARRAY = PointArrayType
+        MULTI_POINT = MultiPointType
+        MULTI_POINT_ARRAY = MultiPointArrayType
+        LINE_STRING = LineStringType
+        LINE_STRING_ARRAY = LineStringArrayType
+        MULTI_LINE_STRING = MultiLineStringType
+        MULTI_LINE_STRING_ARRAY = MultiLineStringArrayType
+        POLYGON = PolygonType
+        POLYGON_ARRAY = PolygonArrayType
+        MULTI_POLYGON = MultiPolygonType
+        MULTI_POLYGON_ARRAY = MultiPolygonArrayType
+        GEOMETRY_COLLECTION = GeometryCollectionType
+        GEOMETRY_COLLECTION_ARRAY = GeometryCollectionArrayType
+        GEOMETRY = GeometryType
+        GEOMETRY_ARRAY = GeometryArrayType
+
+    class UnknownTypeError(Exception): pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.geowave_object.GeoWaveObject" href="../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject">GeoWaveObject</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.Type"><code class="name">var <span class="ident">Type</span></code></dt>
+<dd>
+<section class="desc"><p>The types of attributes that are available.</p></section>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.UnknownTypeError"><code class="name">var <span class="ident">UnknownTypeError</span></code></dt>
+<dd>
+<section class="desc"><p>Common base class for all non-exit exceptions.</p></section>
+</dd>
+</dl>
+<h3>Static methods</h3>
+<dl>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.big_decimal"><code class="name flex">
+<span>def <span class="ident">big_decimal</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for BigDecimal values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A BigDecimal <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def big_decimal(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for BigDecimal values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A BigDecimal `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.BIG_DECIMAL, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.big_decimal_array"><code class="name flex">
+<span>def <span class="ident">big_decimal_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for BigDecimal[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A BigDecimal[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def big_decimal_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for BigDecimal[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A BigDecimal[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.BIG_DECIMAL_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.big_integer"><code class="name flex">
+<span>def <span class="ident">big_integer</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for BigInteger values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A BigInteger <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def big_integer(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for BigInteger values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A BigInteger `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.BIG_INTEGER, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.big_integer_array"><code class="name flex">
+<span>def <span class="ident">big_integer_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for BigInteger[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A BigInteger[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def big_integer_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for BigInteger[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A BigInteger[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.BIG_INTEGER_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.boolean"><code class="name flex">
+<span>def <span class="ident">boolean</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for Boolean values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Boolean <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def boolean(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for Boolean values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A Boolean `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.BOOLEAN, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.boolean_array"><code class="name flex">
+<span>def <span class="ident">boolean_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for Boolean[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Boolean[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def boolean_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for Boolean[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A Boolean[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.BOOLEAN_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.byte"><code class="name flex">
+<span>def <span class="ident">byte</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for Byte values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Byte <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def byte(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for Byte values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A Byte `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.BYTE, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.byte_array"><code class="name flex">
+<span>def <span class="ident">byte_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for Byte[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Byte[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def byte_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for Byte[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A Byte[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.BYTE_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.calendar"><code class="name flex">
+<span>def <span class="ident">calendar</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for Calendar values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Calendar <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def calendar(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for Calendar values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A Calendar `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.CALENDAR, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.calendar_array"><code class="name flex">
+<span>def <span class="ident">calendar_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for Calendar[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Calendar[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def calendar_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for Calendar[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A Calendar[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.CALENDAR_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.date"><code class="name flex">
+<span>def <span class="ident">date</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for Date values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Date <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def date(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for Date values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A Date `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.DATE, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.date_array"><code class="name flex">
+<span>def <span class="ident">date_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for Date[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Date[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def date_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for Date[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A Date[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.DATE_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.double"><code class="name flex">
+<span>def <span class="ident">double</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for Double values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Double <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def double(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for Double values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A Double `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.DOUBLE, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.double_array"><code class="name flex">
+<span>def <span class="ident">double_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for Double values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Double[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def double_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for Double values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A Double[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.DOUBLE_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.float"><code class="name flex">
+<span>def <span class="ident">float</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for Float values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Float <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def float(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for Float values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A Float `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.FLOAT, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.float_array"><code class="name flex">
+<span>def <span class="ident">float_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for Float[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Float[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def float_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for Float[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A Float[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.FLOAT_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.from_java_attribute_descriptor"><code class="name flex">
+<span>def <span class="ident">from_java_attribute_descriptor</span></span>(<span>java_attribute_descriptor)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor from a Java geotools attribute descriptor.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>java_attribute_descriptor</code></strong> :&ensp;<a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a></dt>
+<dd>The Java attribute descriptor.</dd>
+</dl>
+<h2 id="retuurns">Retuurns</h2>
+<p>A <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a> that matches the Java one.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def from_java_attribute_descriptor(cls, java_attribute_descriptor):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor from a Java geotools attribute descriptor.
+
+    Args:
+        java_attribute_descriptor (AttributeDescriptor): The Java attribute descriptor.
+    Retuurns:
+        A `pygw.geotools.attribute_descriptor.AttributeDescriptor` that matches the Java one.
+    &#34;&#34;&#34;
+    nilable = java_attribute_descriptor.isNillable()
+    descriptor = java_attribute_descriptor.getName().getLocalPart()
+    binding = java_attribute_descriptor.getType().getBinding().getName()
+    return cls(_binding_map[binding], nilable, descriptor, java_attribute_descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.geometry"><code class="name flex">
+<span>def <span class="ident">geometry</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for Geometry values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Geometry <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def geometry(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for Geometry values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A Geometry `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.GEOMETRY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.geometry_array"><code class="name flex">
+<span>def <span class="ident">geometry_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for Geometry[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Geometry[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def geometry_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for Geometry[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A Geometry[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.GEOMETRY_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.geometry_collection"><code class="name flex">
+<span>def <span class="ident">geometry_collection</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for GeometryCollection values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A GeometryCollection <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def geometry_collection(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for GeometryCollection values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A GeometryCollection `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.GEOMETRY_COLLECTION, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.geometry_collection_array"><code class="name flex">
+<span>def <span class="ident">geometry_collection_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for GeometryCollection[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A GeometryCollection[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def geometry_collection_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for GeometryCollection[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A GeometryCollection[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.GEOMETRY_COLLECTION_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.integer"><code class="name flex">
+<span>def <span class="ident">integer</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for Integer values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Integer <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def integer(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for Integer values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A Integer `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.INTEGER, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.integer_array"><code class="name flex">
+<span>def <span class="ident">integer_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for Integer[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Integer[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def integer_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for Integer[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A Integer[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.INTEGER_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.line_string"><code class="name flex">
+<span>def <span class="ident">line_string</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for LineString values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A LineString <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def line_string(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for LineString values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A LineString `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.LINE_STRING, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.line_string_array"><code class="name flex">
+<span>def <span class="ident">line_string_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for LineString[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A LineString[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def line_string_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for LineString[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A LineString[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.LINE_STRING_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.long"><code class="name flex">
+<span>def <span class="ident">long</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for Long values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Long <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def long(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for Long values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A Long `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.LONG, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.long_array"><code class="name flex">
+<span>def <span class="ident">long_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for Long[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Long[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def long_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for Long[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A Long[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.LONG_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.multi_line_string"><code class="name flex">
+<span>def <span class="ident">multi_line_string</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for MultiLineString values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A MultiLineString <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def multi_line_string(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for MultiLineString values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A MultiLineString `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.MULTI_LINE_STRING, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.multi_line_string_array"><code class="name flex">
+<span>def <span class="ident">multi_line_string_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for MultiLineString[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A MultiLineString[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def multi_line_string_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for MultiLineString[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A MultiLineString[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.MULTI_LINE_STRING_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.multi_point"><code class="name flex">
+<span>def <span class="ident">multi_point</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for MultiPoint values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A MultiPoint <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def multi_point(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for MultiPoint values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A MultiPoint `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.MULTI_POINT, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.multi_point_array"><code class="name flex">
+<span>def <span class="ident">multi_point_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for MultiPoint[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A MultiPoint[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def multi_point_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for MultiPoint[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A MultiPoint[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.MULTI_POINT_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.multi_polygon"><code class="name flex">
+<span>def <span class="ident">multi_polygon</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for MultiPolygon values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A MultiPolygon <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def multi_polygon(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for MultiPolygon values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A MultiPolygon `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.MULTI_POLYGON, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.multi_polygon_array"><code class="name flex">
+<span>def <span class="ident">multi_polygon_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for MultiPolygon[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A MultiPolygon[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def multi_polygon_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for MultiPolygon[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A MultiPolygon[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.MULTI_POLYGON_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.point"><code class="name flex">
+<span>def <span class="ident">point</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for Point values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Point <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def point(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for Point values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A Point `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.POINT, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.point_array"><code class="name flex">
+<span>def <span class="ident">point_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for Point[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Point[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def point_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for Point[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A Point[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.POINT_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.polygon"><code class="name flex">
+<span>def <span class="ident">polygon</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for Polygon values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Polygon <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def polygon(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for Polygon values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A Polygon `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.POLYGON, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.polygon_array"><code class="name flex">
+<span>def <span class="ident">polygon_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for Polygon[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Polygon[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def polygon_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for Polygon[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A Polygon[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.POLYGON_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.primitive_boolean_array"><code class="name flex">
+<span>def <span class="ident">primitive_boolean_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for boolean[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A boolean[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def primitive_boolean_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for boolean[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A boolean[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.PRIMITIVE_BOOLEAN_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.primitive_byte_array"><code class="name flex">
+<span>def <span class="ident">primitive_byte_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for byte[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A byte[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def primitive_byte_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for byte[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A byte[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.PRIMITIVE_BYTE_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.primitive_double_array"><code class="name flex">
+<span>def <span class="ident">primitive_double_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for double[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A double[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def primitive_double_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for double[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A double[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.PRIMITIVE_DOUBLE_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.primitive_float_array"><code class="name flex">
+<span>def <span class="ident">primitive_float_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for float[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A float[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def primitive_float_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for float[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A float[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.PRIMITIVE_FLOAT_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.primitive_int_array"><code class="name flex">
+<span>def <span class="ident">primitive_int_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for int[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A int[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def primitive_int_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for int[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A int[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.PRIMITIVE_INT_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.primitive_long_array"><code class="name flex">
+<span>def <span class="ident">primitive_long_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for long[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A long[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def primitive_long_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for long[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A long[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.PRIMITIVE_LONG_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.primitive_short_array"><code class="name flex">
+<span>def <span class="ident">primitive_short_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for short[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A short[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def primitive_short_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for short[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A short[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.PRIMITIVE_SHORT_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.short"><code class="name flex">
+<span>def <span class="ident">short</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for Short values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Short <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def short(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for Short values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A Short `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.SHORT, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.short_array"><code class="name flex">
+<span>def <span class="ident">short_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for Short[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Short[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def short_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for Short[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A Short[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.SHORT_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.string"><code class="name flex">
+<span>def <span class="ident">string</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for String values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A String <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def string(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for String values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A String `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.STRING, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.string_array"><code class="name flex">
+<span>def <span class="ident">string_array</span></span>(<span>descriptor, is_nilable=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an attribute descriptor for String[] values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>descriptor</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the attribute.</dd>
+<dt><strong><code>is_nilable</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not the attribute can be None. Default is False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A String[] <a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@classmethod
+def string_array(cls, descriptor, is_nilable=False):
+    &#34;&#34;&#34;
+    Constructs an attribute descriptor for String[] values.
+
+    Args:
+        descriptor (str): The name of the attribute.
+        is_nilable (bool): Whether or not the attribute can be None. Default is False.
+    Returns:
+        A String[] `pygw.geotools.attribute_descriptor.AttributeDescriptor`.
+    &#34;&#34;&#34;
+    return cls(cls.Type.STRING_ARRAY, is_nilable, descriptor)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.from_java"><code class="name flex">
+<span>def <span class="ident">from_java</span></span>(<span>self, value)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Converts a Java variable into its Python counterpart.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>value</code></strong> :&ensp;<code>any</code></dt>
+<dd>The Java variable to convert.</dd>
+</dl>
+<h2 id="retuurns">Retuurns</h2>
+<p>The Python equivalent of the Java variable.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def from_java(self, value):
+    &#34;&#34;&#34;
+    Converts a Java variable into its Python counterpart.
+
+    Args:
+        value (any): The Java variable to convert.
+    Retuurns:
+        The Python equivalent of the Java variable.
+    &#34;&#34;&#34;
+    return self.field.from_java(value)</code></pre>
+</details>
+</dd>
+<dt id="pygw.geotools.attribute_descriptor.AttributeDescriptor.to_java"><code class="name flex">
+<span>def <span class="ident">to_java</span></span>(<span>self, value)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Converts a Python variable into its Java counterpart.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>value</code></strong> :&ensp;<code>any</code></dt>
+<dd>The Python variable to convert.</dd>
+</dl>
+<h2 id="retuurns">Retuurns</h2>
+<p>The Java equivalent of the Python variable.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def to_java(self, value):
+    &#34;&#34;&#34;
+    Converts a Python variable into its Java counterpart.
+
+    Args:
+        value (any): The Python variable to convert.
+    Retuurns:
+        The Java equivalent of the Python variable.
+    &#34;&#34;&#34;
+    return self.field.to_java(value)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.geowave_object.GeoWaveObject" href="../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject">GeoWaveObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.geowave_object.GeoWaveObject.is_instance_of" href="../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject.is_instance_of">is_instance_of</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pygw.geotools" href="index.html">pygw.geotools</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor">AttributeDescriptor</a></code></h4>
+<ul class="">
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.Type" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.Type">Type</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.UnknownTypeError" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.UnknownTypeError">UnknownTypeError</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.big_decimal" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.big_decimal">big_decimal</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.big_decimal_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.big_decimal_array">big_decimal_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.big_integer" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.big_integer">big_integer</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.big_integer_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.big_integer_array">big_integer_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.boolean" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.boolean">boolean</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.boolean_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.boolean_array">boolean_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.byte" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.byte">byte</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.byte_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.byte_array">byte_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.calendar" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.calendar">calendar</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.calendar_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.calendar_array">calendar_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.date" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.date">date</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.date_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.date_array">date_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.double" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.double">double</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.double_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.double_array">double_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.float" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.float">float</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.float_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.float_array">float_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.from_java" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.from_java">from_java</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.from_java_attribute_descriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.from_java_attribute_descriptor">from_java_attribute_descriptor</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.geometry" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.geometry">geometry</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.geometry_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.geometry_array">geometry_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.geometry_collection" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.geometry_collection">geometry_collection</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.geometry_collection_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.geometry_collection_array">geometry_collection_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.integer" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.integer">integer</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.integer_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.integer_array">integer_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.line_string" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.line_string">line_string</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.line_string_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.line_string_array">line_string_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.long" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.long">long</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.long_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.long_array">long_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.multi_line_string" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.multi_line_string">multi_line_string</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.multi_line_string_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.multi_line_string_array">multi_line_string_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.multi_point" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.multi_point">multi_point</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.multi_point_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.multi_point_array">multi_point_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.multi_polygon" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.multi_polygon">multi_polygon</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.multi_polygon_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.multi_polygon_array">multi_polygon_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.point" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.point">point</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.point_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.point_array">point_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.polygon" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.polygon">polygon</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.polygon_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.polygon_array">polygon_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.primitive_boolean_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.primitive_boolean_array">primitive_boolean_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.primitive_byte_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.primitive_byte_array">primitive_byte_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.primitive_double_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.primitive_double_array">primitive_double_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.primitive_float_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.primitive_float_array">primitive_float_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.primitive_int_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.primitive_int_array">primitive_int_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.primitive_long_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.primitive_long_array">primitive_long_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.primitive_short_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.primitive_short_array">primitive_short_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.short" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.short">short</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.short_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.short_array">short_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.string" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.string">string</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.string_array" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.string_array">string_array</a></code></li>
+<li><code><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor.to_java" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor.to_java">to_java</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

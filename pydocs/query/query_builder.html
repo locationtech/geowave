@@ -1,0 +1,990 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>pygw.query.query_builder API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>pygw.query.query_builder</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">#
+# Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file distributed with this work for additional information regarding copyright
+# ownership. All rights reserved. This program and the accompanying materials are made available
+# under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+# available at http://www.apache.org/licenses/LICENSE-2.0.txt
+#===============================================================================================
+
+from pygw.base import GeoWaveObject
+from pygw.base.type_conversions import StringArrayType
+
+from .query import Query
+from .query_hint_key import QueryHintKey
+from .query_constraints import QueryConstraints
+
+class QueryBuilder(GeoWaveObject):
+    &#34;&#34;&#34;
+    Base query builder for constructing GeoWave queries.  This class should not
+    be used directly.  Instead, use one of the derived classes such as
+    `pygw.query.vector.vector_query_builder.VectorQueryBuilder`.
+    &#34;&#34;&#34;
+
+    def __init__(self, java_ref, result_transformer):
+        self._result_transformer = result_transformer
+        super().__init__(java_ref)
+
+    def constraints_factory():
+        &#34;&#34;&#34;
+        Creates a constraints factory for the type of query that is being built.
+        This should be overridden by all derived query builders.
+
+        Raises:
+            NotImplementedError: This should be overridden by derived query builders.
+        Returns:
+            An appropriate `pygw.query.query_constraints_factory.QueryConstraintsFactory` for the query type.
+        &#34;&#34;&#34;
+        raise NotImplementedError
+
+    def all_types(self):
+        &#34;&#34;&#34;
+        Configure the query to get data from all types. This is the default.
+
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.allTypes()
+        return self
+
+    def add_type_name(self, type_name):
+        &#34;&#34;&#34;
+        Configure the query to get data from a specific type.
+
+        Args:
+            type_name (str): The type to get data from.
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.addTypeName(type_name)
+        return self
+
+    def set_type_names(self, type_names):
+        &#34;&#34;&#34;
+        Configure the query to get data from a set of types.
+
+        Args:
+            type_names (list of str): The types to get data from.
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.setTypeNames(StringArrayType().to_java(type_names))
+        return self
+
+    def subset_fields(self, type_name, field_names):
+        &#34;&#34;&#34;
+        Configure the query to get a specific set of fields from a given type.
+
+        Args:
+            type_name (str): The type to get from.
+            field_names (list of str): The fields to get.
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.subsetFields(type_name, StringArrayType().to_java(field_names))
+        return self
+
+    def all_fields(self):
+        &#34;&#34;&#34;
+        Configure the query to get all fields from the given type(s). This is the
+        default.
+
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.allFields()
+        return self
+
+    def all_indices(self):
+        &#34;&#34;&#34;
+        Configure the query to allow the use of all indices when getting data.
+        This is the default.
+
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.allIndices()
+        return self
+
+    def index_name(self, index_name):
+        &#34;&#34;&#34;
+        Configure the query to get data from a specific index.
+
+        Args:
+            index_name (str): The name of the index to get data from.
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.indexName(index_name)
+        return self
+
+    def add_authorization(self, authorization):
+        &#34;&#34;&#34;
+        Configure the query to get data using the given authorization.
+
+        Args:
+            authorization (str): The authorization to use in the query.
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.addAuthorization(authorization)
+        return self
+
+    def set_authorizations(self, authorizations):
+        &#34;&#34;&#34;
+        Configure the query to get data using the given set of authorizations.
+
+        Args:
+            authorizations (list of str): The authorizations to use in the query.
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.setAuthorizations(StringArrayType().to_java(authorizations))
+        return self
+
+    def no_authorizations(self):
+        &#34;&#34;&#34;
+        Configure the query to get data without using any authorizations.  This
+        is the default.
+
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.noAuthorizations()
+        return self
+
+    def no_limit(self):
+        &#34;&#34;&#34;
+        Configure the query to get all results that match the query constraints.
+        This is the default.
+
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.noLimit()
+        return self
+
+    def limit(self, limit):
+        &#34;&#34;&#34;
+        Configure the query to only return a limited number of results.
+
+        Args:
+            limit (int): The maximum number of results to get.
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.limit(limit)
+        return self
+
+    def add_hint(self, key, value):
+        &#34;&#34;&#34;
+        Adds a hint to the query.  Available query hints are defined by the
+        enumeration at `pygw.query.query_hint_key.QueryHintKey`.
+
+        Args:
+            key (pygw.query.query_hint_key.QueryHintKey): The key of the hint to set.
+            value (any): The value to use for the hint.
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        assert isinstance(key, QueryHintKey)
+        self._java_ref.addHint(QueryHintKey.get_key(key), value)
+        return self
+
+    def no_hints(self):
+        &#34;&#34;&#34;
+        Configure the query to use no query hints.  This is the default.
+
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.noHints()
+        return self
+
+    def constraints(self, constraints):
+        &#34;&#34;&#34;
+        Configure the query to be constrained by the given query constraints.
+        Constraints can be constructed using the factory provided by the
+        `pygw.query.query_builder.QueryBuilder.constraints_factory` method.
+
+        Args:
+            constraints (pygw.query.query_constraints.QueryConstraints): The constraints to use.
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        assert isinstance(constraints, QueryConstraints)
+        self._java_ref.constraints(constraints._java_ref)
+        return self
+
+    def build(self):
+        &#34;&#34;&#34;
+        Builds the configured query.
+
+        Returns:
+            The final constructed `pygw.query.query.Query`.
+        &#34;&#34;&#34;
+        return Query(self._java_ref.build(), self._result_transformer)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="pygw.query.query_builder.QueryBuilder"><code class="flex name class">
+<span>class <span class="ident">QueryBuilder</span></span>
+<span>(</span><span>java_ref, result_transformer)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Base query builder for constructing GeoWave queries.
+This class should not
+be used directly.
+Instead, use one of the derived classes such as
+<a title="pygw.query.vector.vector_query_builder.VectorQueryBuilder" href="vector/vector_query_builder.html#pygw.query.vector.vector_query_builder.VectorQueryBuilder"><code>VectorQueryBuilder</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class QueryBuilder(GeoWaveObject):
+    &#34;&#34;&#34;
+    Base query builder for constructing GeoWave queries.  This class should not
+    be used directly.  Instead, use one of the derived classes such as
+    `pygw.query.vector.vector_query_builder.VectorQueryBuilder`.
+    &#34;&#34;&#34;
+
+    def __init__(self, java_ref, result_transformer):
+        self._result_transformer = result_transformer
+        super().__init__(java_ref)
+
+    def constraints_factory():
+        &#34;&#34;&#34;
+        Creates a constraints factory for the type of query that is being built.
+        This should be overridden by all derived query builders.
+
+        Raises:
+            NotImplementedError: This should be overridden by derived query builders.
+        Returns:
+            An appropriate `pygw.query.query_constraints_factory.QueryConstraintsFactory` for the query type.
+        &#34;&#34;&#34;
+        raise NotImplementedError
+
+    def all_types(self):
+        &#34;&#34;&#34;
+        Configure the query to get data from all types. This is the default.
+
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.allTypes()
+        return self
+
+    def add_type_name(self, type_name):
+        &#34;&#34;&#34;
+        Configure the query to get data from a specific type.
+
+        Args:
+            type_name (str): The type to get data from.
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.addTypeName(type_name)
+        return self
+
+    def set_type_names(self, type_names):
+        &#34;&#34;&#34;
+        Configure the query to get data from a set of types.
+
+        Args:
+            type_names (list of str): The types to get data from.
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.setTypeNames(StringArrayType().to_java(type_names))
+        return self
+
+    def subset_fields(self, type_name, field_names):
+        &#34;&#34;&#34;
+        Configure the query to get a specific set of fields from a given type.
+
+        Args:
+            type_name (str): The type to get from.
+            field_names (list of str): The fields to get.
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.subsetFields(type_name, StringArrayType().to_java(field_names))
+        return self
+
+    def all_fields(self):
+        &#34;&#34;&#34;
+        Configure the query to get all fields from the given type(s). This is the
+        default.
+
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.allFields()
+        return self
+
+    def all_indices(self):
+        &#34;&#34;&#34;
+        Configure the query to allow the use of all indices when getting data.
+        This is the default.
+
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.allIndices()
+        return self
+
+    def index_name(self, index_name):
+        &#34;&#34;&#34;
+        Configure the query to get data from a specific index.
+
+        Args:
+            index_name (str): The name of the index to get data from.
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.indexName(index_name)
+        return self
+
+    def add_authorization(self, authorization):
+        &#34;&#34;&#34;
+        Configure the query to get data using the given authorization.
+
+        Args:
+            authorization (str): The authorization to use in the query.
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.addAuthorization(authorization)
+        return self
+
+    def set_authorizations(self, authorizations):
+        &#34;&#34;&#34;
+        Configure the query to get data using the given set of authorizations.
+
+        Args:
+            authorizations (list of str): The authorizations to use in the query.
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.setAuthorizations(StringArrayType().to_java(authorizations))
+        return self
+
+    def no_authorizations(self):
+        &#34;&#34;&#34;
+        Configure the query to get data without using any authorizations.  This
+        is the default.
+
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.noAuthorizations()
+        return self
+
+    def no_limit(self):
+        &#34;&#34;&#34;
+        Configure the query to get all results that match the query constraints.
+        This is the default.
+
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.noLimit()
+        return self
+
+    def limit(self, limit):
+        &#34;&#34;&#34;
+        Configure the query to only return a limited number of results.
+
+        Args:
+            limit (int): The maximum number of results to get.
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.limit(limit)
+        return self
+
+    def add_hint(self, key, value):
+        &#34;&#34;&#34;
+        Adds a hint to the query.  Available query hints are defined by the
+        enumeration at `pygw.query.query_hint_key.QueryHintKey`.
+
+        Args:
+            key (pygw.query.query_hint_key.QueryHintKey): The key of the hint to set.
+            value (any): The value to use for the hint.
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        assert isinstance(key, QueryHintKey)
+        self._java_ref.addHint(QueryHintKey.get_key(key), value)
+        return self
+
+    def no_hints(self):
+        &#34;&#34;&#34;
+        Configure the query to use no query hints.  This is the default.
+
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        self._java_ref.noHints()
+        return self
+
+    def constraints(self, constraints):
+        &#34;&#34;&#34;
+        Configure the query to be constrained by the given query constraints.
+        Constraints can be constructed using the factory provided by the
+        `pygw.query.query_builder.QueryBuilder.constraints_factory` method.
+
+        Args:
+            constraints (pygw.query.query_constraints.QueryConstraints): The constraints to use.
+        Returns:
+            This query builder.
+        &#34;&#34;&#34;
+        assert isinstance(constraints, QueryConstraints)
+        self._java_ref.constraints(constraints._java_ref)
+        return self
+
+    def build(self):
+        &#34;&#34;&#34;
+        Builds the configured query.
+
+        Returns:
+            The final constructed `pygw.query.query.Query`.
+        &#34;&#34;&#34;
+        return Query(self._java_ref.build(), self._result_transformer)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.geowave_object.GeoWaveObject" href="../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject">GeoWaveObject</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="pygw.query.vector.vector_query_builder.VectorQueryBuilder" href="vector/vector_query_builder.html#pygw.query.vector.vector_query_builder.VectorQueryBuilder">VectorQueryBuilder</a></li>
+<li><a title="pygw.query.statistics.vector_statistics_query_builder.VectorStatisticsQueryBuilder" href="statistics/vector_statistics_query_builder.html#pygw.query.statistics.vector_statistics_query_builder.VectorStatisticsQueryBuilder">VectorStatisticsQueryBuilder</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="pygw.query.query_builder.QueryBuilder.add_authorization"><code class="name flex">
+<span>def <span class="ident">add_authorization</span></span>(<span>self, authorization)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Configure the query to get data using the given authorization.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>authorization</code></strong> :&ensp;<code>str</code></dt>
+<dd>The authorization to use in the query.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>This query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_authorization(self, authorization):
+    &#34;&#34;&#34;
+    Configure the query to get data using the given authorization.
+
+    Args:
+        authorization (str): The authorization to use in the query.
+    Returns:
+        This query builder.
+    &#34;&#34;&#34;
+    self._java_ref.addAuthorization(authorization)
+    return self</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.query_builder.QueryBuilder.add_hint"><code class="name flex">
+<span>def <span class="ident">add_hint</span></span>(<span>self, key, value)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Adds a hint to the query.
+Available query hints are defined by the
+enumeration at <a title="pygw.query.query_hint_key.QueryHintKey" href="query_hint_key.html#pygw.query.query_hint_key.QueryHintKey"><code>QueryHintKey</code></a>.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>key</code></strong> :&ensp;<a title="pygw.query.query_hint_key.QueryHintKey" href="query_hint_key.html#pygw.query.query_hint_key.QueryHintKey"><code>QueryHintKey</code></a></dt>
+<dd>The key of the hint to set.</dd>
+<dt><strong><code>value</code></strong> :&ensp;<code>any</code></dt>
+<dd>The value to use for the hint.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>This query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_hint(self, key, value):
+    &#34;&#34;&#34;
+    Adds a hint to the query.  Available query hints are defined by the
+    enumeration at `pygw.query.query_hint_key.QueryHintKey`.
+
+    Args:
+        key (pygw.query.query_hint_key.QueryHintKey): The key of the hint to set.
+        value (any): The value to use for the hint.
+    Returns:
+        This query builder.
+    &#34;&#34;&#34;
+    assert isinstance(key, QueryHintKey)
+    self._java_ref.addHint(QueryHintKey.get_key(key), value)
+    return self</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.query_builder.QueryBuilder.add_type_name"><code class="name flex">
+<span>def <span class="ident">add_type_name</span></span>(<span>self, type_name)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Configure the query to get data from a specific type.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The type to get data from.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>This query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_type_name(self, type_name):
+    &#34;&#34;&#34;
+    Configure the query to get data from a specific type.
+
+    Args:
+        type_name (str): The type to get data from.
+    Returns:
+        This query builder.
+    &#34;&#34;&#34;
+    self._java_ref.addTypeName(type_name)
+    return self</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.query_builder.QueryBuilder.all_fields"><code class="name flex">
+<span>def <span class="ident">all_fields</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Configure the query to get all fields from the given type(s). This is the
+default.</p>
+<h2 id="returns">Returns</h2>
+<p>This query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def all_fields(self):
+    &#34;&#34;&#34;
+    Configure the query to get all fields from the given type(s). This is the
+    default.
+
+    Returns:
+        This query builder.
+    &#34;&#34;&#34;
+    self._java_ref.allFields()
+    return self</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.query_builder.QueryBuilder.all_indices"><code class="name flex">
+<span>def <span class="ident">all_indices</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Configure the query to allow the use of all indices when getting data.
+This is the default.</p>
+<h2 id="returns">Returns</h2>
+<p>This query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def all_indices(self):
+    &#34;&#34;&#34;
+    Configure the query to allow the use of all indices when getting data.
+    This is the default.
+
+    Returns:
+        This query builder.
+    &#34;&#34;&#34;
+    self._java_ref.allIndices()
+    return self</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.query_builder.QueryBuilder.all_types"><code class="name flex">
+<span>def <span class="ident">all_types</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Configure the query to get data from all types. This is the default.</p>
+<h2 id="returns">Returns</h2>
+<p>This query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def all_types(self):
+    &#34;&#34;&#34;
+    Configure the query to get data from all types. This is the default.
+
+    Returns:
+        This query builder.
+    &#34;&#34;&#34;
+    self._java_ref.allTypes()
+    return self</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.query_builder.QueryBuilder.build"><code class="name flex">
+<span>def <span class="ident">build</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Builds the configured query.</p>
+<h2 id="returns">Returns</h2>
+<p>The final constructed <a title="pygw.query.query.Query" href="query.html#pygw.query.query.Query"><code>Query</code></a>.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def build(self):
+    &#34;&#34;&#34;
+    Builds the configured query.
+
+    Returns:
+        The final constructed `pygw.query.query.Query`.
+    &#34;&#34;&#34;
+    return Query(self._java_ref.build(), self._result_transformer)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.query_builder.QueryBuilder.constraints"><code class="name flex">
+<span>def <span class="ident">constraints</span></span>(<span>self, constraints)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Configure the query to be constrained by the given query constraints.
+Constraints can be constructed using the factory provided by the
+<a title="pygw.query.query_builder.QueryBuilder.constraints_factory" href="#pygw.query.query_builder.QueryBuilder.constraints_factory"><code>QueryBuilder.constraints_factory()</code></a> method.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>constraints</code></strong> :&ensp;<a title="pygw.query.query_constraints.QueryConstraints" href="query_constraints.html#pygw.query.query_constraints.QueryConstraints"><code>QueryConstraints</code></a></dt>
+<dd>The constraints to use.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>This query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def constraints(self, constraints):
+    &#34;&#34;&#34;
+    Configure the query to be constrained by the given query constraints.
+    Constraints can be constructed using the factory provided by the
+    `pygw.query.query_builder.QueryBuilder.constraints_factory` method.
+
+    Args:
+        constraints (pygw.query.query_constraints.QueryConstraints): The constraints to use.
+    Returns:
+        This query builder.
+    &#34;&#34;&#34;
+    assert isinstance(constraints, QueryConstraints)
+    self._java_ref.constraints(constraints._java_ref)
+    return self</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.query_builder.QueryBuilder.constraints_factory"><code class="name flex">
+<span>def <span class="ident">constraints_factory</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Creates a constraints factory for the type of query that is being built.
+This should be overridden by all derived query builders.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><strong><code>NotImplementedError</code></strong></dt>
+<dd>This should be overridden by derived query builders.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>An appropriate <a title="pygw.query.query_constraints_factory.QueryConstraintsFactory" href="query_constraints_factory.html#pygw.query.query_constraints_factory.QueryConstraintsFactory"><code>QueryConstraintsFactory</code></a> for the query type.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def constraints_factory():
+    &#34;&#34;&#34;
+    Creates a constraints factory for the type of query that is being built.
+    This should be overridden by all derived query builders.
+
+    Raises:
+        NotImplementedError: This should be overridden by derived query builders.
+    Returns:
+        An appropriate `pygw.query.query_constraints_factory.QueryConstraintsFactory` for the query type.
+    &#34;&#34;&#34;
+    raise NotImplementedError</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.query_builder.QueryBuilder.index_name"><code class="name flex">
+<span>def <span class="ident">index_name</span></span>(<span>self, index_name)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Configure the query to get data from a specific index.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>index_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the index to get data from.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>This query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def index_name(self, index_name):
+    &#34;&#34;&#34;
+    Configure the query to get data from a specific index.
+
+    Args:
+        index_name (str): The name of the index to get data from.
+    Returns:
+        This query builder.
+    &#34;&#34;&#34;
+    self._java_ref.indexName(index_name)
+    return self</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.query_builder.QueryBuilder.limit"><code class="name flex">
+<span>def <span class="ident">limit</span></span>(<span>self, limit)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Configure the query to only return a limited number of results.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>limit</code></strong> :&ensp;<code>int</code></dt>
+<dd>The maximum number of results to get.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>This query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def limit(self, limit):
+    &#34;&#34;&#34;
+    Configure the query to only return a limited number of results.
+
+    Args:
+        limit (int): The maximum number of results to get.
+    Returns:
+        This query builder.
+    &#34;&#34;&#34;
+    self._java_ref.limit(limit)
+    return self</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.query_builder.QueryBuilder.no_authorizations"><code class="name flex">
+<span>def <span class="ident">no_authorizations</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Configure the query to get data without using any authorizations.
+This
+is the default.</p>
+<h2 id="returns">Returns</h2>
+<p>This query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def no_authorizations(self):
+    &#34;&#34;&#34;
+    Configure the query to get data without using any authorizations.  This
+    is the default.
+
+    Returns:
+        This query builder.
+    &#34;&#34;&#34;
+    self._java_ref.noAuthorizations()
+    return self</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.query_builder.QueryBuilder.no_hints"><code class="name flex">
+<span>def <span class="ident">no_hints</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Configure the query to use no query hints.
+This is the default.</p>
+<h2 id="returns">Returns</h2>
+<p>This query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def no_hints(self):
+    &#34;&#34;&#34;
+    Configure the query to use no query hints.  This is the default.
+
+    Returns:
+        This query builder.
+    &#34;&#34;&#34;
+    self._java_ref.noHints()
+    return self</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.query_builder.QueryBuilder.no_limit"><code class="name flex">
+<span>def <span class="ident">no_limit</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Configure the query to get all results that match the query constraints.
+This is the default.</p>
+<h2 id="returns">Returns</h2>
+<p>This query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def no_limit(self):
+    &#34;&#34;&#34;
+    Configure the query to get all results that match the query constraints.
+    This is the default.
+
+    Returns:
+        This query builder.
+    &#34;&#34;&#34;
+    self._java_ref.noLimit()
+    return self</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.query_builder.QueryBuilder.set_authorizations"><code class="name flex">
+<span>def <span class="ident">set_authorizations</span></span>(<span>self, authorizations)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Configure the query to get data using the given set of authorizations.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>authorizations</code></strong> :&ensp;<code>list</code> of <code>str</code></dt>
+<dd>The authorizations to use in the query.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>This query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_authorizations(self, authorizations):
+    &#34;&#34;&#34;
+    Configure the query to get data using the given set of authorizations.
+
+    Args:
+        authorizations (list of str): The authorizations to use in the query.
+    Returns:
+        This query builder.
+    &#34;&#34;&#34;
+    self._java_ref.setAuthorizations(StringArrayType().to_java(authorizations))
+    return self</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.query_builder.QueryBuilder.set_type_names"><code class="name flex">
+<span>def <span class="ident">set_type_names</span></span>(<span>self, type_names)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Configure the query to get data from a set of types.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type_names</code></strong> :&ensp;<code>list</code> of <code>str</code></dt>
+<dd>The types to get data from.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>This query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_type_names(self, type_names):
+    &#34;&#34;&#34;
+    Configure the query to get data from a set of types.
+
+    Args:
+        type_names (list of str): The types to get data from.
+    Returns:
+        This query builder.
+    &#34;&#34;&#34;
+    self._java_ref.setTypeNames(StringArrayType().to_java(type_names))
+    return self</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.query_builder.QueryBuilder.subset_fields"><code class="name flex">
+<span>def <span class="ident">subset_fields</span></span>(<span>self, type_name, field_names)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Configure the query to get a specific set of fields from a given type.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The type to get from.</dd>
+<dt><strong><code>field_names</code></strong> :&ensp;<code>list</code> of <code>str</code></dt>
+<dd>The fields to get.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>This query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def subset_fields(self, type_name, field_names):
+    &#34;&#34;&#34;
+    Configure the query to get a specific set of fields from a given type.
+
+    Args:
+        type_name (str): The type to get from.
+        field_names (list of str): The fields to get.
+    Returns:
+        This query builder.
+    &#34;&#34;&#34;
+    self._java_ref.subsetFields(type_name, StringArrayType().to_java(field_names))
+    return self</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.geowave_object.GeoWaveObject" href="../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject">GeoWaveObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.geowave_object.GeoWaveObject.is_instance_of" href="../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject.is_instance_of">is_instance_of</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pygw.query" href="index.html">pygw.query</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pygw.query.query_builder.QueryBuilder" href="#pygw.query.query_builder.QueryBuilder">QueryBuilder</a></code></h4>
+<ul class="two-column">
+<li><code><a title="pygw.query.query_builder.QueryBuilder.add_authorization" href="#pygw.query.query_builder.QueryBuilder.add_authorization">add_authorization</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.add_hint" href="#pygw.query.query_builder.QueryBuilder.add_hint">add_hint</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.add_type_name" href="#pygw.query.query_builder.QueryBuilder.add_type_name">add_type_name</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.all_fields" href="#pygw.query.query_builder.QueryBuilder.all_fields">all_fields</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.all_indices" href="#pygw.query.query_builder.QueryBuilder.all_indices">all_indices</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.all_types" href="#pygw.query.query_builder.QueryBuilder.all_types">all_types</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.build" href="#pygw.query.query_builder.QueryBuilder.build">build</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.constraints" href="#pygw.query.query_builder.QueryBuilder.constraints">constraints</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.constraints_factory" href="#pygw.query.query_builder.QueryBuilder.constraints_factory">constraints_factory</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.index_name" href="#pygw.query.query_builder.QueryBuilder.index_name">index_name</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.limit" href="#pygw.query.query_builder.QueryBuilder.limit">limit</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.no_authorizations" href="#pygw.query.query_builder.QueryBuilder.no_authorizations">no_authorizations</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.no_hints" href="#pygw.query.query_builder.QueryBuilder.no_hints">no_hints</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.no_limit" href="#pygw.query.query_builder.QueryBuilder.no_limit">no_limit</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.set_authorizations" href="#pygw.query.query_builder.QueryBuilder.set_authorizations">set_authorizations</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.set_type_names" href="#pygw.query.query_builder.QueryBuilder.set_type_names">set_type_names</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.subset_fields" href="#pygw.query.query_builder.QueryBuilder.subset_fields">subset_fields</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
