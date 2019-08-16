@@ -1,2 +1,3 @@
 org.locationtech.geowave.core.cli.operations.TopLevelOperationProvider
 org.locationtech.geowave.core.cli.operations.config.ConfigOperationProvider
+org.locationtech.geowave.core.cli.operations.util.UtilOperationProvider

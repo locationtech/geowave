@@ -15,6 +15,6 @@ import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "landsat", parentOperation = GeowaveTopLevelSection.class)
 @Parameters(
-    commandDescription = "Operations to analyze, download, and ingest Landsat 8 imagery publicly available on AWS")
+    commandDescription = "Commands to analyze, download, and ingest Landsat 8 imagery publicly available on AWS")
 public class Landsat8Section extends DefaultOperation {
 }

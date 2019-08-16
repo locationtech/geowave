@@ -15,7 +15,7 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "providers", parentOperation = Sentinel2Section.class)
-@Parameters(commandDescription = "Show info of supported Sentinel2 imagery providers.")
+@Parameters(commandDescription = "Show info of supported Sentinel2 imagery providers")
 public class Sentinel2ImageryProvidersCommand extends DefaultOperation implements Command {
 
   public Sentinel2ImageryProvidersCommand() {}

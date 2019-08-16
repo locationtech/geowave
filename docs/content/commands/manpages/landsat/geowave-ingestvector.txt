@@ -10,7 +10,7 @@ geowave landsat ingestvector - Ingest routine for searching landsat scenes that 
 SYNOPSIS
 //:--------
 
-geowave landsat ingestvector [options] <storename> <comma delimited index/group list>
+geowave landsat ingestvector [options] <store name> <comma delimited index list>
 
 DESCRIPTION
 //:-----------

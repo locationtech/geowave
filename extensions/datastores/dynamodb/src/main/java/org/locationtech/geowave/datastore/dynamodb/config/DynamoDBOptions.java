@@ -73,6 +73,11 @@ public class DynamoDBOptions extends StoreFactoryOptions {
     protected int defaultDataIndexBatchSize() {
       return 100;
     }
+
+    @Override
+    protected int defaultMaxRangeDecomposition() {
+      return 200;
+    }
   };
 
   public DynamoDBOptions() {}

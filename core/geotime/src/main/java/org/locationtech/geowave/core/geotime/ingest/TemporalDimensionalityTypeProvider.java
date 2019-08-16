@@ -21,11 +21,11 @@ import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.SFCFactory.SFCType;
 import org.locationtech.geowave.core.index.sfc.xz.XZHierarchicalIndexFactory;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions.BaseIndexBuilder;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.BasicIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.CustomNameIndex;
+import org.locationtech.geowave.core.store.index.BaseIndexBuilder;
 import org.locationtech.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.ParameterException;
@@ -38,7 +38,6 @@ public class TemporalDimensionalityTypeProvider implements
       new NumericDimensionDefinition[] {
           new TimeDefinition(SpatialTemporalOptions.DEFAULT_PERIODICITY)};
 
-  @SuppressWarnings("rawtypes")
   public static final NumericDimensionField<?>[] TEMPORAL_FIELDS =
       new NumericDimensionField[] {new TimeField(SpatialTemporalOptions.DEFAULT_PERIODICITY)};
 

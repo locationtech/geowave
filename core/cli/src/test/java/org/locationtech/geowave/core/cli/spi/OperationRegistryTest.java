@@ -23,7 +23,7 @@ public class OperationRegistryTest {
     entries.add(optentry);
     final OperationRegistry optreg = new OperationRegistry(entries);
 
-    assertEquals("explain", optreg.getOperation(ExplainCommand.class).getOperationName());
+    assertEquals("explain", optreg.getOperation(ExplainCommand.class).getOperationNames()[0]);
     assertEquals(true, optreg.getAllOperations().contains(optentry));
   }
 }

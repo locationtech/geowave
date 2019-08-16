@@ -28,16 +28,16 @@ class IndexBuilder(GeoWaveObject):
         self._java_ref.setNumPartitions(num_partitions)
         return self
 
-    def set_name_override(self, name_override):
+    def set_name(self, index_name):
         """
         Set the name of the index to the given value.
 
         Args:
-            name_override (str): The name to use.
+            index_name (str): The name to use.
         Returns:
             This index builder.
         """
-        self._java_ref.setNameOverride(name_override)
+        self._java_ref.setName(index_name)
         return self
 
     def create_index(self):

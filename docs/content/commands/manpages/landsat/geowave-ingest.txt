@@ -10,7 +10,7 @@ geowave landsat ingest - Ingest routine for locally downloading Landsat 8 imager
 SYNOPSIS
 //:--------
 
-geowave landsat ingest [options] <storename> <comma delimited index/group list>
+geowave landsat ingest [options] <store name> <comma delimited index list>
 
 DESCRIPTION
 //:-----------

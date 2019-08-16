@@ -105,8 +105,15 @@ public class AccumuloUtils {
   public static String getQualifiedTableName(
       final String tableNamespace,
       final String unqualifiedTableName) {
-    return ((tableNamespace == null) || tableNamespace.isEmpty()) ? unqualifiedTableName
-        : tableNamespace + "_" + unqualifiedTableName;
+    final String safeTableName = getAccumuloSafeName(unqualifiedTableName);
+    return ((tableNamespace == null) || tableNamespace.isEmpty()) ? safeTableName
+        : tableNamespace + "_" + safeTableName;
+  }
+
+  private static String getAccumuloSafeName(final String name) {
+    // valid characters are alphanumeric or underscore
+    // replace invalid characters with an underscore
+    return name.replaceAll("[^a-zA-Z\\d_]", "_");
   }
 
   /**

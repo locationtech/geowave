@@ -15,6 +15,6 @@ import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "sentinel2", parentOperation = GeowaveTopLevelSection.class)
 @Parameters(
-    commandDescription = "Operations to analyze, download, and ingest Sentinel2 imagery publicly available on either Theia (https://theia.cnes.fr) or Amazon Web Services (AWS)")
+    commandDescription = "Commands to analyze, download, and ingest Sentinel2 imagery publicly available on either Theia (https://theia.cnes.fr) or Amazon Web Services (AWS)")
 public class Sentinel2Section extends DefaultOperation {
 }

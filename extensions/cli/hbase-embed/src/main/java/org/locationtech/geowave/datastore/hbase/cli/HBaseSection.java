@@ -10,11 +10,11 @@ package org.locationtech.geowave.datastore.hbase.cli;
 
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
-import org.locationtech.geowave.core.cli.operations.GeowaveTopLevelSection;
+import org.locationtech.geowave.core.cli.operations.util.UtilSection;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "hbase", parentOperation = GeowaveTopLevelSection.class)
-@Parameters(commandDescription = "Command to run HBase standalone environment")
+@GeowaveOperation(name = "hbase", parentOperation = UtilSection.class)
+@Parameters(commandDescription = "HBase utility commands")
 public class HBaseSection extends DefaultOperation {
 
 }

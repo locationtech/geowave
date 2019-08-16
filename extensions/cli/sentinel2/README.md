@@ -92,7 +92,7 @@ Usage: geowave sentinel2 analyze [options]
 ```
 
 ```
-Usage: geowave sentinel2 ingestraster [options] <storename> <comma delimited index/group list>
+Usage: geowave sentinel2 ingestraster [options] <store name> <comma delimited index list>
   Options:
     --provider
        Name of Sentinel2 provider from which to ingest the imagery. 
@@ -189,7 +189,7 @@ Usage: geowave sentinel2 ingestraster [options] <storename> <comma delimited ind
 ```
 
 ```
-Usage: geowave sentinel2 ingestvector [options] <storename> <comma delimited index/group list>
+Usage: geowave sentinel2 ingestvector [options] <store name> <comma delimited index list>
   Options:
     --provider
        Name of Sentinel2 provider from which to ingest the imagery. 
@@ -238,7 +238,7 @@ Usage: geowave sentinel2 ingestvector [options] <storename> <comma delimited ind
 ```
 
 ```
-Usage: geowave sentinel2 ingest [options] <rasterstorename> <vectorstorename> <comma delimited index/group list>
+Usage: geowave sentinel2 ingest [options] <rasterstorename> <vectorstorename> <comma delimited index list>
   Options:
     --provider
        Name of Sentinel2 provider from which to ingest the imagery. 

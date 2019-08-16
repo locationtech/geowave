@@ -29,7 +29,7 @@ from .conftest import results_as_list
 # Test Deleting #
 def test_cql_query(test_ds):
     # given
-    index = SpatialIndexBuilder().set_name_override("idx1").create_index()
+    index = SpatialIndexBuilder().set_name("idx1").create_index()
     adapter = POINT_TYPE_ADAPTER
     test_ds.add_type(adapter, index)
     write_test_data(test_ds, index)
@@ -47,7 +47,7 @@ def test_cql_query(test_ds):
 
 def test_query_spatial(test_ds):
     # given
-    index = SpatialIndexBuilder().set_name_override("idx1").create_index()
+    index = SpatialIndexBuilder().set_name("idx1").create_index()
     adapter = POINT_TYPE_ADAPTER
     test_ds.add_type(adapter, index)
     write_test_data(test_ds, index)
@@ -66,7 +66,7 @@ def test_query_spatial(test_ds):
 
 def test_query_temporal(test_ds):
     # given
-    index = SpatialIndexBuilder().set_name_override("idx1").create_index()
+    index = SpatialIndexBuilder().set_name("idx1").create_index()
     adapter = POINT_TYPE_ADAPTER
     test_ds.add_type(adapter, index)
     write_test_data(test_ds, index)
@@ -87,7 +87,7 @@ def test_query_temporal(test_ds):
 
 def test_query_spatial_temporal(test_ds):
     # given
-    index = SpatialIndexBuilder().set_name_override("idx1").create_index()
+    index = SpatialIndexBuilder().set_name("idx1").create_index()
     adapter = POINT_TYPE_ADAPTER
     test_ds.add_type(adapter, index)
     write_test_data(test_ds, index)
@@ -108,7 +108,7 @@ def test_query_spatial_temporal(test_ds):
 
 def test_query_filter(test_ds):
     # given
-    index = SpatialIndexBuilder().set_name_override("idx1").create_index()
+    index = SpatialIndexBuilder().set_name("idx1").create_index()
     adapter = POINT_TYPE_ADAPTER
     test_ds.add_type(adapter, index)
     write_test_data(test_ds, index)

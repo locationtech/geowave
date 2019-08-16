@@ -14,6 +14,6 @@ import org.locationtech.geowave.core.cli.operations.GeowaveTopLevelSection;
 import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "osm", parentOperation = GeowaveTopLevelSection.class)
-@Parameters(commandDescription = "Operations to ingest OSM nodes, ways and relations to GeoWave")
+@Parameters(commandDescription = "Commands to ingest OSM nodes, ways and relations to GeoWave")
 public class OSMSection extends DefaultOperation {
 }

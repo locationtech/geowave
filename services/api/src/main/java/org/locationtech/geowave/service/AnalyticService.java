@@ -24,7 +24,7 @@ public interface AnalyticService {
   @Consumes(MediaType.MULTIPART_FORM_DATA)
   @Path("/dbscan")
   public Response dbScan(
-      @QueryParam("storename") String storename,
+      @QueryParam("storeName") String storeName,
       @QueryParam("mapReduceHdfsBaseDir") String mapReduceHdfsBaseDir,
       @QueryParam("extractMaxInputSplit") String extractMaxInputSplit,
       @QueryParam("extractMinInputSplit") String extractMinInputSplit,
@@ -65,8 +65,8 @@ public interface AnalyticService {
   @Consumes(MediaType.MULTIPART_FORM_DATA)
   @Path("/kde")
   public Response kde(
-      @QueryParam("input_storename") String input_storename,
-      @QueryParam("output_storename") String output_storename,
+      @QueryParam("inputStoreName") String inputStoreName,
+      @QueryParam("outputStoreName") String outputStoreName,
       @QueryParam("featuretype") String featuretype,
       @QueryParam("minLevel") Integer minLevel,
       @QueryParam("maxLevel") Integer maxLevel,
@@ -84,8 +84,8 @@ public interface AnalyticService {
   @Consumes(MediaType.MULTIPART_FORM_DATA)
   @Path("/kmeansspark")
   public Response kmeansSpark(
-      @QueryParam("input_storename") String input_storename,
-      @QueryParam("output_storename") String output_storename,
+      @QueryParam("inputStoreName") String inputStoreName,
+      @QueryParam("outputStoreName") String outputStoreName,
       @QueryParam("appName") String appName,
       @QueryParam("host") String host,
       @QueryParam("master") String master,
@@ -107,7 +107,7 @@ public interface AnalyticService {
   @Consumes(MediaType.MULTIPART_FORM_DATA)
   @Path("/nn")
   public Response nearestNeighbor(
-      @QueryParam("storename") String storename,
+      @QueryParam("storeName") String storeName,
       @QueryParam("mapReduceHdfsBaseDir") String mapReduceHdfsBaseDir,
       @QueryParam("extractMaxInputSplit") String extractMaxInputSplit,
       @QueryParam("extractMinInputSplit") String extractMinInputSplit,

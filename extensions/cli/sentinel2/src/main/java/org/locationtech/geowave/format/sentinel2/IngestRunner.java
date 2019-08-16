@@ -9,7 +9,6 @@
 package org.locationtech.geowave.format.sentinel2;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.core.cli.api.OperationParams;
@@ -17,10 +16,9 @@ import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexLoader;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.StoreLoader;
+import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
@@ -79,22 +77,8 @@ public class IngestRunner extends RasterIngestRunner {
       final String vectorIndexList = vectorOverrideOptions.getVectorIndex();
 
       // Load the Indices
-      final IndexLoader indexLoader = new IndexLoader(vectorIndexList);
-      if (!indexLoader.loadFromConfig(configFile)) {
-        throw new ParameterException("Cannot find index(s) by name: " + vectorIndexList);
-      }
-
-      final List<IndexPluginOptions> indexOptions = indexLoader.getLoadedIndexes();
-      vectorIndices = new Index[indexOptions.size()];
-      int i = 0;
-      for (final IndexPluginOptions dimensionType : indexOptions) {
-        final Index primaryIndex = dimensionType.createIndex();
-        if (primaryIndex == null) {
-          LOGGER.error("Could not get index instance, getIndex() returned null;");
-          throw new IOException("Could not get index instance, getIndex() returned null");
-        }
-        vectorIndices[i++] = primaryIndex;
-      }
+      vectorIndices =
+          DataStoreUtils.loadIndices(vectorStore, vectorIndexList).toArray(new Index[0]);
     } else {
       vectorIndices = indices;
     }

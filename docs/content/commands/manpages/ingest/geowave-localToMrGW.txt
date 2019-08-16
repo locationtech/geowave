@@ -10,7 +10,7 @@ geowave ingest localToMrGW - Copy supported files from local file system to HDFS
 SYNOPSIS
 //:--------
 
-geowave ingest localToMrGW [options] <file or directory> <hdfs host:port> <path to base directory to write to> <store name> <comma delimited index/group list>
+geowave ingest localToMrGW [options] <file or directory> <hdfs host:port> <path to base directory to write to> <store name> <comma delimited index list>
 
 DESCRIPTION
 //:-----------

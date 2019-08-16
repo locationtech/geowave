@@ -24,17 +24,17 @@ import org.locationtech.geowave.analytic.store.PersistableStore;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "spatialjoin", parentOperation = AnalyticSection.class)
-@Parameters(commandDescription = "Spatial Join using Spark ")
+@Parameters(commandDescription = "Spatial join using Spark ")
 public class SpatialJoinCommand extends ServiceEnabledCommand<Void> {
-  @Parameter(description = "<left storename> <right storename> <output storename>")
+  @Parameter(description = "<left store name> <right store name> <output store name>")
   private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate

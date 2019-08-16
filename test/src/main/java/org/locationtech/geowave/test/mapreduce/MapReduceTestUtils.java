@@ -21,10 +21,10 @@ import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import org.locationtech.geowave.core.ingest.operations.LocalToMapReduceToGeowaveCommand;
 import org.locationtech.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
-import org.locationtech.geowave.core.store.cli.config.AddIndexCommand;
-import org.locationtech.geowave.core.store.cli.config.AddStoreCommand;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
+import org.locationtech.geowave.core.store.cli.store.AddStoreCommand;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.index.IndexPluginOptions;
+import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.TestUtils.DimensionalityType;
@@ -149,13 +149,16 @@ public class MapReduceTestUtils {
     addStore.setPluginOptions(dataStore);
     addStore.execute(operationParams);
 
+    final IndexStore indexStore = dataStore.createIndexStore();
+
     final StringBuilder indexParam = new StringBuilder();
     for (int i = 0; i < indexOptions.size(); i++) {
-      final AddIndexCommand addIndex = new AddIndexCommand();
-      addIndex.setParameters("test-index" + i);
-      addIndex.setPluginOptions(indexOptions.get(i));
-      addIndex.execute(operationParams);
-      indexParam.append("test-index" + i + ",");
+      String indexName = "testIndex" + i;
+      if (indexStore.getIndex(indexName) == null) {
+        indexOptions.get(i).setName(indexName);
+        indexStore.addIndex(indexOptions.get(i).createIndex());
+      }
+      indexParam.append(indexName + ",");
     }
 
     mrGw.setPluginFormats(ingestFormatOptions);

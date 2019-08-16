@@ -539,6 +539,11 @@ public class MockComponents {
     }
 
     @Override
+    public boolean isCompatibleWith(Class<? extends CommonIndexValue> clazz) {
+      return TestIndexFieldType.class.isAssignableFrom(clazz);
+    }
+
+    @Override
     public double getRange() {
       return 0;
     }

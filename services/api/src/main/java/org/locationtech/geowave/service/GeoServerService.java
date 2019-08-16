@@ -22,61 +22,61 @@ public interface GeoServerService {
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/getcs")
+  @Path("/cs/get")
   public Response getCoverageStore(
-      @QueryParam("coverage_store_name") String coverage_store_name,
+      @QueryParam("coverageStoreName") String coverageStoreName,
       @QueryParam("workspace") String workspace);
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/getcv")
+  @Path("/cv/get")
   public Response getCoverage(
-      @QueryParam("cvg_store") String cvgstore,
-      @QueryParam("coverage_name") String coverage_name,
+      @QueryParam("cvgStore") String cvgStore,
+      @QueryParam("coverageName") String coverageName,
       @QueryParam("workspace") String workspace);
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/getds")
+  @Path("/ds/get")
   public Response getDataStore(
-      @QueryParam("datastore_name") String datastore_name,
+      @QueryParam("datastoreName") String datastoreName,
       @QueryParam("workspace") String workspace);
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/getfl")
-  public Response getFeatureLayer(@QueryParam("layer_name") String layer_name);
+  @Path("/fl/get")
+  public Response getFeatureLayer(@QueryParam("layerName") String layerName);
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/getsa")
-  public Response getStoreAdapters(@QueryParam("store_name") String store_name);
+  @Path("/sa/get")
+  public Response getStoreAdapters(@QueryParam("storeName") String storeName);
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/getstyle")
-  public Response getStyle(@QueryParam("style_name") String style_name);
+  @Path("/style/get")
+  public Response getStyle(@QueryParam("styleName") String styleName);
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/listcs")
+  @Path("/cs/list")
   public Response listCoverageStores(@QueryParam("workspace") String workspace);
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/listcv")
+  @Path("/cv/list")
   public Response listCoverages(
-      @QueryParam("coverage_store_name") String coverage_store_name,
+      @QueryParam("coverageStoreName") String coverageStoreName,
       @QueryParam("workspace") String workspace);
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/listds")
+  @Path("/ds/list")
   public Response listDataStores(@QueryParam("workspace") String workspace);
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/listfl")
+  @Path("/fl/list")
   public Response listFeatureLayers(
       @QueryParam("workspace") String workspace,
       @QueryParam("datastore") String datastore,
@@ -84,19 +84,19 @@ public interface GeoServerService {
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/liststyles")
+  @Path("/style/list")
   public Response listStyles();
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/listws")
+  @Path("/ws/list")
   public Response listWorkspaces();
 
   @POST
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/addcs")
+  @Path("/cs/add")
   public Response addCoverageStore(
-      @QueryParam("GeoWave_store_name") String GeoWave_store_name,
+      @QueryParam("GeoWaveStoreName") String geoWaveStoreName,
       @QueryParam("workspace") String workspace,
       @QueryParam("equalizerHistogramOverride") Boolean equalizerHistogramOverride,
       @QueryParam("interpolationOverride") String interpolationOverride,
@@ -104,33 +104,33 @@ public interface GeoServerService {
 
   @POST
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/addcv")
+  @Path("/cv/add")
   public Response addCoverage(
       @QueryParam("cvgstore") String cvgstore,
-      @QueryParam("coverage_name") String coverage_name,
+      @QueryParam("coverageName") String coverageName,
       @QueryParam("workspace") String workspace);
 
   @POST
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/addds")
+  @Path("/ds/add")
   public Response addDataStore(
-      @QueryParam("GeoWave_store_name") String GeoWave_store_name,
+      @QueryParam("GeoWaveStoreName") String geoWaveStoreName,
       @QueryParam("workspace") String workspace,
       @QueryParam("datastore") String datastore);
 
   @POST
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/addfl")
+  @Path("/fl/add")
   public Response addFeatureLayer(
       @QueryParam("datastore") String datastore,
-      @QueryParam("layer_name") String layer_name,
+      @QueryParam("layerName") String layerName,
       @QueryParam("workspace") String workspace);
 
   @POST
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/addlayer")
+  @Path("/layer/add")
   public Response addLayer(
-      @QueryParam("GeoWave_store_name") String GeoWave_store_name,
+      @QueryParam("GeoWaveStoreName") String geoWaveStoreName,
       @QueryParam("workspace") String workspace,
       @QueryParam("addOption") String addOption,
       @QueryParam("adapterId") String adapterId,
@@ -138,57 +138,57 @@ public interface GeoServerService {
 
   @POST
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/addstyle")
+  @Path("/style/add")
   public Response addStyle(
       @QueryParam("stylesld") String stylesld,
-      @QueryParam("GeoWave_style_name") String GeoWave_style_name);
+      @QueryParam("GeoWaveStyleName") String geoWaveStyleName);
 
   @POST
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/addws")
-  public Response addWorkspace(@QueryParam("workspace_name") String workspace_name);
+  @Path("/ws/add")
+  public Response addWorkspace(@QueryParam("workspaceName") String workspaceName);
 
   @POST
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/rmcs")
+  @Path("/cs/rm")
   public Response removeCoverageStore(
-      @QueryParam("coverage_store_name") String coverage_store_name,
+      @QueryParam("coverageStoreName") String coverageStoreName,
       @QueryParam("workspace") String workspace);
 
   @POST
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/rmcv")
+  @Path("/cv/rm")
   public Response removeCoverage(
       @QueryParam("cvgstore") String cvgstore,
-      @QueryParam("coverage_name") String coverage_name,
+      @QueryParam("coverageName") String coverageName,
       @QueryParam("workspace") String workspace);
 
   @POST
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/rmds")
+  @Path("/ds/rm")
   public Response removeDataStore(
-      @QueryParam("datastore_name") String datastore_name,
+      @QueryParam("datastoreName") String datastoreName,
       @QueryParam("workspace") String workspace);
 
   @POST
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/rmfl")
-  public Response removeFeatureLayer(@QueryParam("layer_name") String layer_name);
+  @Path("/fl/rm")
+  public Response removeFeatureLayer(@QueryParam("layerName") String layerName);
 
   @POST
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/rmstyle")
-  public Response removeStyle(@QueryParam("style_name") String style_name);
+  @Path("/style/rm")
+  public Response removeStyle(@QueryParam("styleName") String styleName);
 
   @POST
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/rmws")
-  public Response removeWorkspace(@QueryParam("workspace_name") String workspace_name);
+  @Path("/ws/rm")
+  public Response removeWorkspace(@QueryParam("workspaceName") String workspaceName);
 
   @POST
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/setls")
+  @Path("/style/set")
   public Response setLayerStyle(
       @QueryParam("styleName") String styleName,
-      @QueryParam("layer_name") String layer_name);
+      @QueryParam("layerName") String layerName);
 }

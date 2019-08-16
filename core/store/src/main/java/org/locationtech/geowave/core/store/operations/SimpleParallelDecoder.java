@@ -37,7 +37,7 @@ public class SimpleParallelDecoder<T> extends ParallelDecoder<T> {
       @Override
       public void run() {
         try {
-          while (sourceIterator.hasNext()) {
+          while (sourceIterator.hasNext() && !Thread.interrupted()) {
             final GeoWaveRow next = sourceIterator.next();
             while (!consumedRows.offer(next)) {
               // queue is full, wait for space

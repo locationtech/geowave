@@ -17,17 +17,17 @@ import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
-import org.locationtech.geowave.core.store.cli.remote.RemoteSection;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.StoreLoader;
+import org.locationtech.geowave.core.store.cli.store.StoreSection;
 import org.locationtech.geowave.mapreduce.copy.StoreCopyJobRunner;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
-@GeowaveOperation(name = "mrcopy", parentOperation = RemoteSection.class)
-@Parameters(commandDescription = "Copy a data store")
+@GeowaveOperation(name = "copymr", parentOperation = StoreSection.class)
+@Parameters(commandDescription = "Copy all data from one data store to another using MapReduce")
 public class CopyCommand extends DefaultOperation implements Command {
   @Parameter(description = "<input store name> <output store name>")
   private List<String> parameters = new ArrayList<>();

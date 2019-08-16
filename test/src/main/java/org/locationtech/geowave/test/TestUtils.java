@@ -66,12 +66,12 @@ import org.locationtech.geowave.core.ingest.spark.SparkIngestDriver;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
-import org.locationtech.geowave.core.store.cli.config.AddIndexCommand;
-import org.locationtech.geowave.core.store.cli.config.AddStoreCommand;
-import org.locationtech.geowave.core.store.cli.remote.ListStatsCommand;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
+import org.locationtech.geowave.core.store.cli.VisibilityOptions;
+import org.locationtech.geowave.core.store.cli.stats.ListStatsCommand;
+import org.locationtech.geowave.core.store.cli.store.AddStoreCommand;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.index.IndexPluginOptions;
+import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
@@ -261,13 +261,24 @@ public class TestUtils {
     final ManualOperationParams params = new ManualOperationParams();
 
     params.getContext().put(ConfigOptions.PROPERTIES_FILE_CONTEXT, configFile);
+
+    // Add Store
+    final AddStoreCommand addStore = new AddStoreCommand();
+    addStore.setParameters("test-store");
+    addStore.setPluginOptions(dataStore);
+    addStore.execute(params);
+
+    IndexStore indexStore = dataStore.createIndexStore();
+
+    // Add indices
     final StringBuilder indexParam = new StringBuilder();
     for (int i = 0; i < indexOptions.size(); i++) {
-      final AddIndexCommand addIndex = new AddIndexCommand();
-      addIndex.setParameters("test-index" + i);
-      addIndex.setPluginOptions(indexOptions.get(i));
-      addIndex.execute(params);
-      indexParam.append("test-index" + i + ",");
+      String indexName = "test-index" + i;
+      if (indexStore.getIndex(indexName) == null) {
+        indexOptions.get(i).setName(indexName);
+        indexStore.addIndex(indexOptions.get(i).createIndex());
+      }
+      indexParam.append(indexName + ",");
     }
     // Create the command and execute.
     final LocalToGeowaveCommand localIngester = new LocalToGeowaveCommand();
@@ -275,10 +286,6 @@ public class TestUtils {
     localIngester.setParameters(ingestFilePath, "test-store", indexParam.toString());
     localIngester.setThreads(nthreads);
 
-    final AddStoreCommand addStore = new AddStoreCommand();
-    addStore.setParameters("test-store");
-    addStore.setPluginOptions(dataStore);
-    addStore.execute(params);
     localIngester.execute(params);
     verifyStats(dataStore);
   }
@@ -311,13 +318,21 @@ public class TestUtils {
     final ManualOperationParams operationParams = new ManualOperationParams();
     operationParams.getContext().put(ConfigOptions.PROPERTIES_FILE_CONTEXT, configFile);
 
+    final AddStoreCommand addStore = new AddStoreCommand();
+    addStore.setParameters("test-store");
+    addStore.setPluginOptions(dataStore);
+    addStore.execute(operationParams);
+
+    final IndexStore indexStore = dataStore.createIndexStore();
+
     final StringBuilder indexParam = new StringBuilder();
     for (int i = 0; i < indexOptions.size(); i++) {
-      final AddIndexCommand addIndex = new AddIndexCommand();
-      addIndex.setParameters("test-index" + i);
-      addIndex.setPluginOptions(indexOptions.get(i));
-      addIndex.execute(operationParams);
-      indexParam.append("test-index" + i + ",");
+      String indexName = "test-index" + i;
+      if (indexStore.getIndex(indexName) == null) {
+        indexOptions.get(i).setName(indexName);
+        indexStore.addIndex(indexOptions.get(i).createIndex());
+      }
+      indexParam.append(indexName + ",");
     }
 
     final ConfigAWSCommand configS3 = new ConfigAWSCommand();
@@ -329,11 +344,6 @@ public class TestUtils {
     localIngester.setPluginFormats(ingestFormatOptions);
     localIngester.setParameters(ingestFilePath, "test-store", indexParam.toString());
     localIngester.setThreads(nthreads);
-
-    final AddStoreCommand addStore = new AddStoreCommand();
-    addStore.setParameters("test-store");
-    addStore.setPluginOptions(dataStore);
-    addStore.execute(operationParams);
     localIngester.execute(operationParams);
 
     verifyStats(dataStore);
@@ -383,15 +393,18 @@ public class TestUtils {
     addStore.setPluginOptions(dataStore);
     addStore.execute(operationParams);
 
+    final IndexStore indexStore = dataStore.createIndexStore();
+
     final String[] indexTypes = dimensionalityType.getDimensionalityArg().split(",");
     for (final String indexType : indexTypes) {
-      final IndexPluginOptions pluginOptions = new IndexPluginOptions();
-      pluginOptions.selectPlugin(indexType);
-      pluginOptions.save(props, IndexPluginOptions.getIndexNamespace(indexType));
-      final AddIndexCommand addIndex = new AddIndexCommand();
-      addIndex.setParameters(indexType);
-      addIndex.setPluginOptions(pluginOptions);
-      addIndex.execute(operationParams);
+      if (indexStore.getIndex(indexType) == null) {
+        final IndexPluginOptions pluginOptions = new IndexPluginOptions();
+        pluginOptions.selectPlugin(indexType);
+        pluginOptions.setName(indexType);
+        pluginOptions.save(props, IndexPluginOptions.getIndexNamespace(indexType));
+        indexStore.addIndex(pluginOptions.createIndex());
+      }
+
     }
     props.setProperty(ConfigAWSCommand.AWS_S3_ENDPOINT_URL, s3Url);
 

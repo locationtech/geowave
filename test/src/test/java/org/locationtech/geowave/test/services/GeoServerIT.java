@@ -57,9 +57,10 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.service.client.ConfigServiceClient;
 import org.locationtech.geowave.service.client.GeoServerServiceClient;
+import org.locationtech.geowave.service.client.StoreServiceClient;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.Environments;
@@ -86,6 +87,7 @@ public class GeoServerIT extends AbstractGeoWaveIT {
 
   private GeoServerServiceClient geoServerServiceClient;
   private ConfigServiceClient configServiceClient;
+  private StoreServiceClient storeServiceClient;
   private String geostuff_layer;
   private String insert;
   private String lock;
@@ -153,6 +155,11 @@ public class GeoServerIT extends AbstractGeoWaveIT {
             ServicesTestEnvironment.GEOWAVE_BASE_URL,
             ServicesTestEnvironment.GEOSERVER_USER,
             ServicesTestEnvironment.GEOSERVER_PASS);
+    storeServiceClient =
+        new StoreServiceClient(
+            ServicesTestEnvironment.GEOWAVE_BASE_URL,
+            ServicesTestEnvironment.GEOSERVER_USER,
+            ServicesTestEnvironment.GEOSERVER_PASS);
 
     boolean success = true;
     configServiceClient.configGeoServer("localhost:9011");
@@ -167,7 +174,7 @@ public class GeoServerIT extends AbstractGeoWaveIT {
     success &= enableWfs();
     success &= enableWms();
     // create the datastore
-    configServiceClient.addStoreReRoute(
+    storeServiceClient.addStoreReRoute(
         dataStoreOptions.getGeoWaveNamespace(),
         dataStoreOptions.getType(),
         dataStoreOptions.getGeoWaveNamespace(),

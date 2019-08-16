@@ -16,7 +16,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.core.store.api.IngestOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.format.geotools.vector.GeoToolsVectorDataOptions;
 import org.locationtech.geowave.format.geotools.vector.GeoToolsVectorDataStoreIngestFormat;
 import org.locationtech.geowave.test.GeoWaveITRunner;

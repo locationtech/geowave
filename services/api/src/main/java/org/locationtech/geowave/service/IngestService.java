@@ -29,8 +29,8 @@ public interface IngestService {
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/kafkaToGW")
   public Response kafkaToGW(
-      @QueryParam("store_name") String store_name,
-      @QueryParam("index_group_list") String index_group_list, // Array of
+      @QueryParam("storeName") String storeName,
+      @QueryParam("indexList") String indexList, // Array of
       // Strings
       @QueryParam("kafkaPropertyFile") String kafkaPropertyFile,
       @QueryParam("visibility") String visibility,
@@ -50,9 +50,9 @@ public interface IngestService {
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/localToGW")
   public Response localToGW(
-      @QueryParam("file_or_directory") String file_or_directory,
-      @QueryParam("storename") String storename,
-      @QueryParam("index_group_list") String index_group_list, // Array of
+      @QueryParam("fileOrDirectory") String fileOrDirectory,
+      @QueryParam("storeName") String storeName,
+      @QueryParam("indexList") String indexList, // Array of
       // Strings
       @QueryParam("threads") Integer threads,
       @QueryParam("visibility") String visibility,
@@ -63,8 +63,8 @@ public interface IngestService {
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/localToHdfs")
   public Response localToHdfs(
-      @QueryParam("file_or_directory") String file_or_directory,
-      @QueryParam("path_to_base_directory_to_write_to") String path_to_base_directory_to_write_to,
+      @QueryParam("fileOrDirectory") String fileOrDirectory,
+      @QueryParam("pathToBaseDirectoryToWriteTo") String pathToBaseDirectoryToWriteTo,
       @QueryParam("extensions") String extensions, // Array of Strings
       @QueryParam("formats") String formats);
 
@@ -72,7 +72,7 @@ public interface IngestService {
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/localToKafka")
   public Response localToKafka(
-      @QueryParam("file_or_directory") String file_or_directory,
+      @QueryParam("fileOrDirectory") String fileOrDirectory,
       @QueryParam("kafkaPropertyFile") String kafkaPropertyFile,
       @QueryParam("metadataBrokerList") String metadataBrokerList,
       @QueryParam("requestRequiredAcks") String requestRequiredAcks,
@@ -86,10 +86,10 @@ public interface IngestService {
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/localToMrGW")
   public Response localToMrGW(
-      @QueryParam("file_or_directory") String file_or_directory,
-      @QueryParam("path_to_base_directory_to_write_to") String path_to_base_directory_to_write_to,
-      @QueryParam("store_name") String store_name,
-      @QueryParam("index_group_list") String index_group_list, // Array of
+      @QueryParam("fileOrDirectory") String fileOrDirectory,
+      @QueryParam("pathToBaseDirectoryToWriteTo") String pathToBaseDirectoryToWriteTo,
+      @QueryParam("storeName") String storeName,
+      @QueryParam("indexList") String indexList, // Array of
       // Strings
       @QueryParam("visibility") String visibility,
       @QueryParam("jobTrackerHostPort") String jobTrackerHostPort,
@@ -101,9 +101,9 @@ public interface IngestService {
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/mrToGW")
   public Response mrToGW(
-      @QueryParam("path_to_base_directory_to_write_to") String path_to_base_directory_to_write_to,
-      @QueryParam("store_name") String store_name,
-      @QueryParam("index_group_list") String index_group_list, // Array of
+      @QueryParam("pathToBaseDirectoryToWriteTo") String pathToBaseDirectoryToWriteTo,
+      @QueryParam("storeName") String storeName,
+      @QueryParam("indexList") String indexList, // Array of
       // Strings
       @QueryParam("visibility") String visibility,
       @QueryParam("jobTrackerHostPort") String jobTrackerHostPort,
@@ -115,9 +115,9 @@ public interface IngestService {
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/sparkToGW")
   public Response sparkToGW(
-      @QueryParam("input_directory") String input_directory,
-      @QueryParam("store_name") String store_name,
-      @QueryParam("index_group_list") String index_group_list, // Array of
+      @QueryParam("inputDirectory") String inputDirectory,
+      @QueryParam("storeName") String storeName,
+      @QueryParam("indexList") String indexList, // Array of
       // Strings
       @QueryParam("visibility") String visibility,
       @QueryParam("appName") String appName,

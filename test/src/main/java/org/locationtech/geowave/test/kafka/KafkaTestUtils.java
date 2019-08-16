@@ -17,10 +17,10 @@ import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import org.locationtech.geowave.core.ingest.operations.KafkaToGeowaveCommand;
 import org.locationtech.geowave.core.ingest.operations.LocalToKafkaCommand;
 import org.locationtech.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
-import org.locationtech.geowave.core.store.cli.config.AddIndexCommand;
-import org.locationtech.geowave.core.store.cli.config.AddStoreCommand;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
+import org.locationtech.geowave.core.store.cli.store.AddStoreCommand;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.index.IndexPluginOptions;
+import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.ZookeeperTestEnvironment;
 import org.slf4j.Logger;
@@ -88,15 +88,16 @@ public class KafkaTestUtils {
     final ManualOperationParams params = new ManualOperationParams();
 
     params.getContext().put(ConfigOptions.PROPERTIES_FILE_CONTEXT, configFile);
-    final AddIndexCommand addIndex = new AddIndexCommand();
-    addIndex.setParameters("test-index");
-    addIndex.setPluginOptions(indexOption);
-    addIndex.execute(params);
-
     final AddStoreCommand addStore = new AddStoreCommand();
     addStore.setParameters("test-store");
     addStore.setPluginOptions(options);
     addStore.execute(params);
+
+    final IndexStore indexStore = options.createIndexStore();
+    if (indexStore.getIndex("testIndex") == null) {
+      indexOption.setName("testIndex");
+      indexStore.addIndex(indexOption.createIndex());
+    }
 
     kafkaToGeowave.setPluginFormats(ingestFormatOptions);
 
@@ -107,7 +108,7 @@ public class KafkaTestUtils {
     kafkaToGeowave.getKafkaOptions().setFetchMessageMaxBytes(MAX_MESSAGE_BYTES);
     kafkaToGeowave.getKafkaOptions().setZookeeperConnect(
         ZookeeperTestEnvironment.getInstance().getZookeeper());
-    kafkaToGeowave.setParameters("test-store", "test-index");
+    kafkaToGeowave.setParameters("test-store", "testIndex");
 
     kafkaToGeowave.execute(params);
 

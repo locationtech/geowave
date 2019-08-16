@@ -15,7 +15,7 @@ import java.util.Properties;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 
 public class PersistableStore implements Persistable {
   // Using this here instead of raw DataStorePluginOptions, so we can

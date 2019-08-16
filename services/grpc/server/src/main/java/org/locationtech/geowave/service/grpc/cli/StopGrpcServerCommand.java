@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "stop", parentOperation = GrpcSection.class)
-@Parameters(commandDescription = "terminates the GeoWave grpc server")
+@Parameters(commandDescription = "Terminates the GeoWave gRPC server")
 public class StopGrpcServerCommand extends DefaultOperation implements Command {
   private static final Logger LOGGER = LoggerFactory.getLogger(StartGrpcServerCommand.class);
 

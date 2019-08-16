@@ -35,9 +35,8 @@ import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexLoader;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
+import org.locationtech.geowave.core.store.cli.store.StoreLoader;
+import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceOptions;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceSpi;
 import org.locationtech.geowave.service.grpc.protobuf.CQLQueryParametersProtos;
@@ -236,14 +235,11 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase implemen
           }
 
           // Load the Indexes
-          final IndexLoader indexLoader = new IndexLoader(indexName);
-          if (!indexLoader.loadFromConfig(GeoWaveGrpcServiceOptions.geowaveConfigFile)) {
-            throw new ParameterException("Cannot find index(s) by name: " + indexName.toString());
-          }
-          final List<IndexPluginOptions> indexOptions = indexLoader.getLoadedIndexes();
+          final List<Index> indices =
+              DataStoreUtils.loadIndices(storeLoader.createIndexStore(), indexName);
 
           // assuming one index for now
-          pIndex = indexOptions.get(0).createIndex(); // (PrimaryIndex)
+          pIndex = indices.get(0); // (PrimaryIndex)
           // indexStore.getIndex(indexId);
           if (pIndex == null) {
             throw new ParameterException("Failed to instantiate primary index");

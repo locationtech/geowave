@@ -11,7 +11,7 @@ package org.locationtech.geowave.test.basic;
 import java.io.IOException;
 import org.junit.After;
 import org.junit.Before;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.test.TestUtils;
 
 public abstract class AbstractGeoWaveIT {

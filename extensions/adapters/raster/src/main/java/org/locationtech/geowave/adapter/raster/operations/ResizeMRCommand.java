@@ -19,8 +19,8 @@ import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
 import org.locationtech.geowave.mapreduce.operations.HdfsHostPortConverter;
 import com.beust.jcommander.Parameter;
@@ -29,7 +29,7 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "resizemr", parentOperation = RasterSection.class)
-@Parameters(commandDescription = "Resize Raster Tiles in MapReduce")
+@Parameters(commandDescription = "Use MapReduce to resize raster tiles")
 public class ResizeMRCommand extends DefaultOperation implements Command {
 
   @Parameter(description = "<input store name> <output store name>")
