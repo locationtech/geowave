@@ -267,6 +267,9 @@ public class ExtractTimeFilterVisitor extends NullFilterVisitor {
         constraints.removeConstraints(range[0], range[1]);
         // TODO: make this logic more robust
         if (start.getEndRange().getEndTime().after(end.getStartRange().getStartTime())) {
+          // does this really make sense? seems like start should always be the start time and end
+          // should always be the end time, but perhaps with multiple and's and or's it probably
+          // gets complicated such that this is the only working logic
           constraints.getConstraintsForRange(range[0], range[1]).add(
               new TemporalRange(
                   end.getStartRange().getStartTime(),

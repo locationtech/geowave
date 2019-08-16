@@ -75,13 +75,31 @@ public class TimeUtils {
       final String startTimeField,
       final String endTimeField) {
     final FilterFactory2 factory = CommonFactoryFinder.getFilterFactory2();
+    if (startTimeField.equals(endTimeField)) {
+      return factory.and(
+          factory.greaterOrEqual(
+              factory.property(startTimeField),
+              factory.literal(new Date(startTimeMillis))),
+          factory.lessOrEqual(
+              factory.property(endTimeField),
+              factory.literal(new Date(endTimeMillis))));
+    }
+    // this looks redundant to use both start and end time fields, but it helps parsing logic
     return factory.and(
-        factory.greaterOrEqual(
-            factory.property(startTimeField),
-            factory.literal(new Date(startTimeMillis))),
-        factory.lessOrEqual(
-            factory.property(endTimeField),
-            factory.literal(new Date(endTimeMillis))));
+        factory.and(
+            factory.greaterOrEqual(
+                factory.property(startTimeField),
+                factory.literal(new Date(startTimeMillis))),
+            factory.lessOrEqual(
+                factory.property(startTimeField),
+                factory.literal(new Date(endTimeMillis)))),
+        factory.and(
+            factory.greaterOrEqual(
+                factory.property(endTimeField),
+                factory.literal(new Date(startTimeMillis))),
+            factory.lessOrEqual(
+                factory.property(endTimeField),
+                factory.literal(new Date(endTimeMillis)))));
   }
 
   /**
