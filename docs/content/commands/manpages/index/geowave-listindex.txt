@@ -5,17 +5,17 @@
 NAME
 //:----
 
-geowave remote listindex - Display all indices in this remote store
+geowave index list - Display all indices in a data store
 
 SYNOPSIS
 //:--------
 
-geowave remote listindex [options] <store name>
+geowave index list [options] <store name>
 
 DESCRIPTION
 //:-----------
 
-The geowave remote listindex operator will display all indices in a specific remote store
+The geowave index list operator will display all indices in a data store
 
 OPTIONS
 //:-------

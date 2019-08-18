@@ -59,19 +59,36 @@ Example:
 $ geowave --config-file {path to configuration file override} --debug --version
 ----
 
-==== Accumulo
-Utility operations to set accumulo splits
-[source, bash]
-----
-$ geowave accumulo
-----
-
 ==== Analytic
 Commands that run mapreduce or spark processing to enhance an existing GeoWave dataset
 
 [source, bash]
 ----
 $ geowave analytic
+----
+
+==== Store
+Commands for managing GeoWave data stores
+
+[source, bash]
+----
+$ geowave store
+----
+
+==== Index
+Commands for managing GeoWave indices
+
+[source, bash]
+----
+$ geowave index
+----
+
+==== Statistics
+Commands for managing statistics
+
+[source, bash]
+----
+$ geowave stat
 ----
 
 ==== Config
@@ -98,12 +115,28 @@ Commands that manage geoserver data stores and layers
 $ geowave gs
 ----
 
-==== HBase
-Utility operations to combine statistics in hbase
+==== Accumulo
+Accumulo utility commands
 
 [source, bash]
 ----
-$ geowave hbase
+$ geowave util accumulo
+----
+
+==== HBase
+HBase utility commands
+
+[source, bash]
+----
+$ geowave util hbase
+----
+
+==== Python
+Utility commands for python integration
+
+[source, bash]
+----
+$ geowave util python
 ----
 
 ==== Help
@@ -144,14 +177,6 @@ Operations to perform transformations on raster data in GeoWave
 [source, bash]
 ----
 $ geowave raster
-----
-
-==== Remote
-Operations to manage a remote store
-
-[source, bash]
-----
-$ geowave remote
 ----
 
 ==== Vector

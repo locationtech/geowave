@@ -5,17 +5,17 @@
 NAME
 //:----
 
-geowave remote calcstat - Calculate a specific statistic in the remote store, given adapter ID and statistic ID
+geowave stat calc - Calculate a specific statistic in the remote store, given adapter ID and statistic ID
 
 SYNOPSIS
 //:--------
 
-geowave remote calcstat [options] <store name> <adapterId> <statId>
+geowave stat calc [options] <store name> <type name> <stat type>
 
 DESCRIPTION
 //:-----------
 
-The geowave remote calcstat operator will calculate a specific statistic in the remote store, given adapter ID and statistic ID.
+The geowave stat calc operator will calculate a specific statistic in the remote store, given type name and statistic type.
 
 OPTIONS
 //:-------

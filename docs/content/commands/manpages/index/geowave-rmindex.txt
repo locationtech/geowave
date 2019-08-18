@@ -5,17 +5,17 @@
 NAME
 //:----
 
-geowave config rmindex - Remove index configuration from Geowave configuration
+geowave index rm - Remove an index and all associated data from a data store
 
 SYNOPSIS
 //:--------
 
-geowave config rmindex [options] <name>
+geowave index rm [options] <store name> <index name>
 
 DESCRIPTION
 //:-----------
 
-The geowave config rmindex operator will remove an index configuration from GeoWave configuration
+The geowave index rm operator will remove an index and all of its data from a data store
 
 OPTIONS
 //:-------

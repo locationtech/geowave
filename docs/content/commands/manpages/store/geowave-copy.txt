@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave remote copy - Copy a data store
+geowave store copy - Copy a data store
 
 SYNOPSIS
 //:--------
 
-geowave remote copy [options] <input store name> <output store name>
+geowave store copy [options] <input store name> <output store name>
 
 DESCRIPTION
 //:-----------

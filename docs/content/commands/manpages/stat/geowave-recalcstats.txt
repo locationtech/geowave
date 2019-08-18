@@ -5,17 +5,17 @@
 NAME
 //:----
 
-geowave remote recalcstats - Calculate the statistics of an existing GeoWave dataset
+geowave stat recalc - Calculate the statistics of an existing GeoWave dataset
 
 SYNOPSIS
 //:--------
 
-geowave remote recalcstats [options] <store name> [<adapter name>]
+geowave stat recalc [options] <store name> [<type name>]
 
 DESCRIPTION
 //:-----------
 
-The geowave remote recalcstats operator will calculate the statistics of an existing GeoWave dataset
+The geowave stat recalc operator will calculate the statistics of an existing GeoWave dataset
 
 OPTIONS
 //:-------

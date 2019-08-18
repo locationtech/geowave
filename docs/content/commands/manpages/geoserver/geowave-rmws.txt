@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave gs rmws - Remove GeoServer workspace
+geowave gs ws rm - Remove GeoServer workspace
 
 SYNOPSIS
 //:--------
 
-geowave gs rmws [options] <workspace name>
+geowave gs ws rm [options] <workspace name>
 
 DESCRIPTION
 //:-----------

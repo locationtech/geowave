@@ -74,37 +74,37 @@ We need to create two GeoWave stores for this ingest. landsat_raster will store 
 +
 [source, bash]
 ----
-geowave config addstore -t hbase -z $HOSTNAME:2181 landsatraster --gwNamespace landsat_raster
+geowave store add -t hbase -z $HOSTNAME:2181 landsatraster --gwNamespace landsat_raster
 
-geowave config cpstore landsatraster landsatvector --gwNamespace landsat_vector
+geowave store copycfg landsatraster landsatvector --gwNamespace landsat_vector
 ----
 
 .. If running with EMR Accumulo:
 +
 [source, bash]
 ----
-geowave config addstore -t accumulo -z $HOSTNAME:2181 landsatraster --gwNamespace geowave.landsat_raster \
+geowave store add -t accumulo -z $HOSTNAME:2181 landsatraster --gwNamespace geowave.landsat_raster \
 -i accumulo -u geowave -p geowave
 
-geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat_vector
+geowave store copycfg landsatraster landsatvector --gwNamespace geowave.landsat_vector
 ----
 
 .. If running with EMR HBase
 +
 [source, bash]
 ----
-geowave config addstore -t hbase -z $HOSTNAME:2181 landsatraster --gwNamespace geowave.landsat_raster
+geowave store add -t hbase -z $HOSTNAME:2181 landsatraster --gwNamespace geowave.landsat_raster
 
-geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat_vector
+geowave store copycfg landsatraster landsatvector --gwNamespace geowave.landsat_vector
 ----
 
 .. If running with EMR Cassandra
 +
 [source, bash]
 ----
-geowave config addstore -t cassandra --contactPoints localhost landsatraster --gwNamespace geowave.landsat_raster --batchWriteSize 15
+geowave store add -t cassandra --contactPoints localhost landsatraster --gwNamespace geowave.landsat_raster --batchWriteSize 15
 
-geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat_vector
+geowave store copycfg landsatraster landsatvector --gwNamespace geowave.landsat_vector
 ----
 
 . Add a spatial index.
@@ -113,7 +113,8 @@ We're going to project this data over the Web Mercator Coordinate Reference Syst
 +
 [source, bash]
 ----
-geowave config addindex -t spatial spatial -c EPSG:3857
+geowave index add landsatraster spatial -t spatial -c EPSG:3857
+geowave index add landsatvector spatial -t spatial -c EPSG:3857
 ----
 
 . Show available data by calling analyze. 

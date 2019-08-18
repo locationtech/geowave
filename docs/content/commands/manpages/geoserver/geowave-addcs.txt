@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave gs addcs - Add a GeoServer coverage store
+geowave gs cs add - Add a GeoServer coverage store
 
 SYNOPSIS
 //:--------
 
-geowave gs addcs [options] <GeoWave store name>
+geowave gs cs add [options] <GeoWave store name>
 
 DESCRIPTION
 //:-----------

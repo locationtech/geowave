@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave gs rmstyle - Remove GeoServer Style
+geowave gs style rm - Remove GeoServer Style
 
 SYNOPSIS
 //:--------
 
-geowave gs rmstyle [options] <style name>
+geowave gs style rm [options] <style name>
 
 DESCRIPTION
 //:-----------

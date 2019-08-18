@@ -5,18 +5,17 @@
 NAME
 //:----
 
-geowave remote rmstat - Remove a statistic from the remote store
+geowave stat rm - Remove a statistic from the remote store
 
 SYNOPSIS
 //:--------
 
-geowave remote rmstat [options] <store name> <adapterId> <statId>
+geowave stat rm [options] <store name> <type name> <stat type>
 
 DESCRIPTION
 //:-----------
 
-The geowave remote rmstat operator will Remove a statistic from the remote store.
-You will be prompted with "Are you sure?"
+The geowave stat rm operator will Remove a statistic from the remote store.
 
 OPTIONS
 //:-------

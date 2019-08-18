@@ -5,17 +5,17 @@
 NAME
 //:----
 
-geowave remote clear - Clear ALL data from a GeoWave store and delete tables
+geowave store clear - Clear ALL data from a GeoWave store and delete tables
 
 SYNOPSIS
 //:--------
 
-geowave remote clear [options] <store name>
+geowave store clear [options] <store name>
 
 DESCRIPTION
 //:-----------
 
-The geowave remote clear operator will clear ALL data from a GeoWave store and delete tables
+The geowave store clear operator will clear ALL data from a GeoWave store and delete tables
 
 OPTIONS
 //:-------

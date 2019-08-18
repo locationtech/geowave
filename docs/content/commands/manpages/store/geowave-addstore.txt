@@ -5,17 +5,17 @@
 NAME
 //:----
 
-geowave config addstore - Create a store within Geowave
+geowave store add - Create a store within Geowave
 
 SYNOPSIS
 //:--------
 
-geowave config addstore [options] <name>
+geowave store add [options] <name>
 
 DESCRIPTION
 //:-----------
 
-The geowave config addstore operator will create a new store in GeoWave.
+The geowave store add operator will create a new store in GeoWave.
 
 OPTIONS
 //:-------

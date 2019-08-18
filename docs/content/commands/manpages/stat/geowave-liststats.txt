@@ -5,17 +5,17 @@
 NAME
 //:----
 
-geowave remote liststats - Print statistics of an existing GeoWave dataset to standard output
+geowave stat list - Print statistics of an existing GeoWave dataset to standard output
 
 SYNOPSIS
 //:--------
 
-geowave remote liststats [options] <store name> [<adapter name>]
+geowave stat list [options] <store name> [<type name>]
 
 DESCRIPTION
 //:-----------
 
-The geowave remote liststats operator will print statistics of an existing GeoWave dataset to standard output
+The geowave stat list operator will print statistics of an existing GeoWave dataset to standard output
 
 OPTIONS
 //:-------

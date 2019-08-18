@@ -5,17 +5,17 @@
 NAME
 //:----
 
-geowave remote version - Get the version of GeoWave running on the instance of a remote datastore
+geowave store version - Get the version of GeoWave used by a data store
 
 SYNOPSIS
 //:--------
 
-geowave remote version [options] <storename>
+geowave store version [options] <store name>
 
 DESCRIPTION
 //:-----------
 
-This command will return the version of GeoWave running on the instance of a remote datastore.
+This command will return the version of GeoWave used by a data store.
 
 OPTIONS
 //:-------

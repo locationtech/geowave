@@ -5,17 +5,17 @@
 NAME
 //:----
 
-geowave config addindex - Configure an index for usage in GeoWave
+geowave index add - Add an index to a data store
 
 SYNOPSIS
 //:--------
 
-geowave config addindex [options] <name>
+geowave index add [options] <store name> <index name>
 
 DESCRIPTION
 //:-----------
 
-The geowave config addindex operator will create a local index configuration that can be reused but is not associated with a store until data is ingested.
+The geowave index add operator will create an index in a data store if it does not already exist.
 
 OPTIONS
 //:-------
@@ -23,10 +23,6 @@ OPTIONS
 - -c --crs (will only be shown if you have already defined spatial or satial_temporal as your type)
  * The native Coordinate Reference System used within the index.  All spatial data will be projected into this CRS for appropriate indexing as needed.
  * Default: EPSG:4326
-- --d, --default
- * Make this the default index creating stores
-- --indexName
- * A custom name can be given to this index. Default name will be the based on configuration parameters.
 - -np, --numPartitions
  * The number of partitions.  Default partitions will be 1.
  * Default: 1

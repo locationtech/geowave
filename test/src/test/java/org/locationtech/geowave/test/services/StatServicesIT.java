@@ -46,7 +46,7 @@ public class StatServicesIT extends BaseServiceIT {
 
   private final String store_name = "test_store";
 
-  private static final String testName = "RemoteIT";
+  private static final String testName = "StatServicesIT";
 
   @GeoWaveTestStore(
       value = {

@@ -1,21 +1,21 @@
-//:geowave-listadapter(1)
+//:geowave-listtypes(1)
 //:======================
 //::doctype: manpage
 
 NAME
 //:----
 
-geowave remote listadapter - display all adapters in this remote store
+geowave store listtypes - display all types in this remote store
 
 SYNOPSIS
 //:--------
 
-geowave remote listadapter [options] <store name>
+geowave store listtypes [options] <store name>
 
 DESCRIPTION
 //:-----------
 
-The geowave remote listadapter operator will display all adapters in this remote store.
+The geowave store listtypes operator will display all types in this remote store.
 
 OPTIONS
 //:-------

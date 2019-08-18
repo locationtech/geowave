@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave gs getfl - Get GeoServer feature layer info
+geowave gs fl get - Get GeoServer feature layer info
 
 SYNOPSIS
 //:--------
 
-geowave gs getfl [options] <layer name>
+geowave gs fl get [options] <layer name>
 
 DESCRIPTION
 //:-----------

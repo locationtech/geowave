@@ -1,21 +1,21 @@
-//:geowave-rmadapter(1)
+//:geowave-rmtype(1)
 //:====================
 //::doctype: manpage
 
 NAME
 //:----
 
-geowave remote rmadapter - Remove an adapter from the remote store and all associated data for the adapter
+geowave store rmtype - Remove a type and all associated data from a data store
 
 SYNOPSIS
 //:--------
 
-geowave remote rmadapter [options] <store name> <adapterId>
+geowave store rmtype [options] <store name> <type name>
 
 DESCRIPTION
 //:-----------
 
-The geowave remote rmadapter operator will remove an adapter from the remote store and all associated data for the adapter.
+The geowave store rmtype operator will remove a type and all associated data from a data store
 
 OPTIONS
 //:-------

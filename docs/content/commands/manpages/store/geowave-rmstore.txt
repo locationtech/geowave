@@ -5,17 +5,17 @@
 NAME
 //:----
 
-geowave config rmstore - removes an existing store from GeoWave configuration
+geowave store rm - removes an existing store from GeoWave configuration
 
 SYNOPSIS
 //:--------
 
-geowave config rmstore [options] <name>
+geowave store rm [options] <store name>
 
 DESCRIPTION
 //:-----------
 
-The geowave config rmstore operator will remove an existing store from GeoWave configuration GeoWave store
+The geowave store rm operator will remove an existing store from GeoWave configuration
 
 OPTIONS
 //:-------

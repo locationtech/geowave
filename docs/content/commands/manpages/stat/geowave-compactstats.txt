@@ -1,16 +1,17 @@
-//:geowave-combinestats(1)
+//:geowave-compactstats(1)
 //:===============
 //::doctype: manpage
 
 NAME
 //:----
 
-geowave remote combinestats - Combine all statistics in GeoWave namespace, can be useful for making a datastore more efficient
+geowave stat compact - Combine all statistics in GeoWave namespace, can be useful for making a datastore more efficient
 
 SYNOPSIS
 //:--------
 
-geowave remote combinestats [options] <storename>
+geowave stat compact [options] <storename>
+
 DESCRIPTION
 //:-----------
 

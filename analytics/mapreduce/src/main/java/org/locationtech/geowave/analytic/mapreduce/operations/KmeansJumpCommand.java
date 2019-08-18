@@ -35,7 +35,7 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "kmeansjump", parentOperation = AnalyticSection.class)
-@Parameters(commandDescription = "KMeans clustering using jump Method")
+@Parameters(commandDescription = "KMeans clustering using jump method")
 public class KmeansJumpCommand extends DefaultOperation implements Command {
 
   @Parameter(description = "<store name>")

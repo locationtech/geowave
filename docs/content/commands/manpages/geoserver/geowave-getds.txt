@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave gs getds - Get GeoServer DataStore info
+geowave gs ds get - Get GeoServer DataStore info
 
 SYNOPSIS
 //:--------
 
-geowave gs getds [options] <datastore name>
+geowave gs ds get [options] <datastore name>
 
 DESCRIPTION
 //:-----------
