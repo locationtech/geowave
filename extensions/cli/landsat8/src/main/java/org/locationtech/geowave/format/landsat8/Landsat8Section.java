@@ -10,10 +10,10 @@ package org.locationtech.geowave.format.landsat8;
 
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
-import org.locationtech.geowave.core.cli.operations.GeowaveTopLevelSection;
+import org.locationtech.geowave.core.cli.operations.util.UtilSection;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "landsat", parentOperation = GeowaveTopLevelSection.class)
+@GeowaveOperation(name = "landsat", parentOperation = UtilSection.class)
 @Parameters(
     commandDescription = "Commands to analyze, download, and ingest Landsat 8 imagery publicly available on AWS")
 public class Landsat8Section extends DefaultOperation {

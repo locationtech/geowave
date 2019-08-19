@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave landsat ingestvector - Ingest routine for searching landsat scenes that match certain criteria and ingesting the scene and band metadata into GeoWave's vector store.
+geowave util landsat ingestvector - Ingest routine for searching landsat scenes that match certain criteria and ingesting the scene and band metadata into GeoWave's vector store.
 
 SYNOPSIS
 //:--------
 
-geowave landsat ingestvector [options] <store name> <comma delimited index list>
+geowave util landsat ingestvector [options] <store name> <comma delimited index list>
 
 DESCRIPTION
 //:-----------

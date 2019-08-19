@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave landsat analyze - Print out basic aggregate statistics for available Landsat 8 imagery
+geowave util landsat analyze - Print out basic aggregate statistics for available Landsat 8 imagery
 
 SYNOPSIS
 //:--------
 
-geowave landsat analyze [options]
+geowave util landsat analyze [options]
 
 DESCRIPTION
 //:-----------

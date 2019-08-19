@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave landsat download - Download Landsat 8 imagery to a local directory
+geowave util landsat download - Download Landsat 8 imagery to a local directory
 
 SYNOPSIS
 //:--------
 
-geowave landsat download [options]
+geowave util landsat download [options]
 
 DESCRIPTION
 //:-----------

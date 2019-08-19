@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave osm stage - Stage OSM data to HDFS
+geowave util osm stage - Stage OSM data to HDFS
 
 SYNOPSIS
 //:--------
 
-geowave osm stage [options] <file or directory> <hdfs host:port> <path to base directory to write to>
+geowave util osm stage [options] <file or directory> <hdfs host:port> <path to base directory to write to>
 
 DESCRIPTION
 //:-----------

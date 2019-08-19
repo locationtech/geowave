@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave grpc stop - Stop the GeoWave gRPC server
+geowave util grpc stop - Stop the GeoWave gRPC server
 
 SYNOPSIS
 //:--------
 
-geowave grpc stop
+geowave util grpc stop
 
 DESCRIPTION
 //:-----------

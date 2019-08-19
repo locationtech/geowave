@@ -5,17 +5,17 @@
 NAME
 //:----
 
-geowave grpc start - Start the GeoWave gRPC server
+geowave util grpc start - Start the GeoWave gRPC server
 
 SYNOPSIS
 //:--------
 
-geowave grpc start [options]
+geowave util grpc start [options]
 
 DESCRIPTION
 //:-----------
 
-The geowave grpc start operator will start the GeoWave gRPC server on a given port number. Remote gRPC clients can interact with GeoWave from this service.
+The geowave util grpc start operator will start the GeoWave gRPC server on a given port number. Remote gRPC clients can interact with GeoWave from this service.
 
 OPTIONS
 //:-------

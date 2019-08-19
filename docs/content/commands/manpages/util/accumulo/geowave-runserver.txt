@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave accumulo runserver - Runs a standalone mini Accumulo server for test and debug with GeoWave
+geowave util accumulo runserver - Runs a standalone mini Accumulo server for test and debug with GeoWave
 
 SYNOPSIS
 //:--------
 
-geowave accumulo runserver [options]
+geowave util accumulo runserver [options]
 
 DESCRIPTION
 //:-----------

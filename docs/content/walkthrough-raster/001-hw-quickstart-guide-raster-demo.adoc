@@ -123,9 +123,9 @@ In this example we look for Band 8 images that are in Berlin.
 +
 [source, bash]
 ----
-geowave landsat analyze --nbestperspatial --nbestscenes 1 --usecachedscenes --cql  "INTERSECTS(shape,$GERMANY) AND band='B8' AND cloudCover>0" -ws /mnt/landsat
+geowave util landsat analyze --nbestperspatial --nbestscenes 1 --usecachedscenes --cql  "INTERSECTS(shape,$GERMANY) AND band='B8' AND cloudCover>0" -ws /mnt/landsat
 
-geowave landsat analyze --nbestperspatial --nbestscenes 1 --usecachedscenes --cql "$BERLIN_BBOX AND band='B8' AND cloudCover>0" -ws /mnt/landsat
+geowave util landsat analyze --nbestperspatial --nbestscenes 1 --usecachedscenes --cql "$BERLIN_BBOX AND band='B8' AND cloudCover>0" -ws /mnt/landsat
 ----
 
 . Ingest the data into geowave
@@ -135,7 +135,7 @@ More information on the landsat ingest and analyze commands can be found https:/
 +
 [source, bash]
 ----
-geowave landsat ingest --nbestperspatial --nbestscenes 1 --usecachedscenes --cql "$BERLIN_BBOX AND band='B8' AND cloudCover>0" --crop --retainimages -ws /mnt/landsat --vectorstore landsatvector --pyramid --coverage berlin_mosaic  landsatraster spatial
+geowave util landsat ingest --nbestperspatial --nbestscenes 1 --usecachedscenes --cql "$BERLIN_BBOX AND band='B8' AND cloudCover>0" --crop --retainimages -ws /mnt/landsat --vectorstore landsatvector --pyramid --coverage berlin_mosaic  landsatraster spatial
 ----
 
 === Vector Demo

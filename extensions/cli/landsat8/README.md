@@ -1,7 +1,7 @@
 
 # GeoWave's LandSat8 Commandline Utility
 
-This module complements GeoWave commandline tools with direct access to landsat public imagery.  To use, ensure the module is on the classpath for your geowave commandline tools and then you should have `geowave landsat` options available to you.  `analyze` and `download` are completely separate from storage within GeoWave. The ingest routines wrap download with the additional step of ingesting into GeoWave.  If you want to ingest data that you have already downloaded just use `--retainimages`.  `ingestraster` and `ingestvector` are fairly self-explanatory and `ingest` just wraps both in a single command so for all of the scenes and bands you have ingested into your grid coverage (raster) layer, you will have the vector layers of `scenes` and `bands` with associated metadata. 
+This module complements GeoWave commandline tools with direct access to landsat public imagery.  To use, ensure the module is on the classpath for your geowave commandline tools and then you should have `geowave util landsat` options available to you.  `analyze` and `download` are completely separate from storage within GeoWave. The ingest routines wrap download with the additional step of ingesting into GeoWave.  If you want to ingest data that you have already downloaded just use `--retainimages`.  `ingestraster` and `ingestvector` are fairly self-explanatory and `ingest` just wraps both in a single command so for all of the scenes and bands you have ingested into your grid coverage (raster) layer, you will have the vector layers of `scenes` and `bands` with associated metadata. 
 For all of the commands, the scenes and bands can be filtered using a CQL expression.  The list of the scene attributes that the CQL expression can be applied towards is this: shape (Geometry), acquisitionDate (Date), cloudCover (double), processingLevel (String), path (int), row (int) and the feature ID is entityId for the scene.  Additionally attributes of the individual bands can be used such as band (String), sizeMB (double), and bandDownloadUrl (String).  Also for all commands, you can grab only the N best cloud cover scenes or bands using `--nbestscenes` or `--nbestbands` (likely want to use nbestscenes because cloud cover is the same for a scene except for some very specific use cases).  With that, you may also want to `--nbestperspatial` which is a boolean flag that will tell the operation to maintain the N best cloud cover scenes by path and row so that overlapping scenes are minimized (for example `--nbestscenes 1 --nbestperspatial` would grab the best non-overlapping cloud cover scenes matching the filter criteria which would be an excellent choice if the goal is to produce a mosaic).  Using SPI (with a class matching the `Landsat8BandConverterSpi` interface provided on the classpath), a developer can even provide the raster ingest utility with a converter which will run through custom conversion code prior to GeoWave ingest to massage the data in any way.
 
 ## Examples
@@ -18,7 +18,7 @@ landsat ingest --cql "BBOX(shape,2.08679,48.658291,2.63791,49.04694) AND (path=1
 The following is the commandline usage help listing the set of available commands and options:
 
 ```
-Usage: geowave landsat [options]
+Usage: geowave util landsat [options]
 
   Commands:
     analyze
@@ -38,7 +38,7 @@ Usage: geowave landsat [options]
 ```
       
 ```
-Usage: geowave landsat analyze [options]
+Usage: geowave util landsat analyze [options]
   Options:
     --cql
        An optional CQL expression to filter the ingested imagery. The feature
@@ -75,7 +75,7 @@ Usage: geowave landsat analyze [options]
 ```
 
 ```     
-Usage: geowave landsat ingestraster [options] <storename> <comma delimited index/group list>
+Usage: geowave util landsat ingestraster [options] <storename> <comma delimited index/group list>
   Options:
     --converter
        Prior to ingesting an image, this converter will be used to massage the
@@ -150,7 +150,7 @@ Usage: geowave landsat ingestraster [options] <storename> <comma delimited index
 ```
 
 ```       
-Usage: geowave landsat ingestvector [options] <storename> <comma delimited index/group list>
+Usage: geowave util landsat ingestvector [options] <storename> <comma delimited index/group list>
   Options:
     --cql
        An optional CQL expression to filter the ingested imagery. The feature
@@ -187,7 +187,7 @@ Usage: geowave landsat ingestvector [options] <storename> <comma delimited index
 ```
 
 ```       
-Usage: geowave landsat ingest [options] <rasterstorename> <vectorstorename> <comma delimited index/group list>
+Usage: geowave util landsat ingest [options] <rasterstorename> <vectorstorename> <comma delimited index/group list>
   Options:
     --converter
        Prior to ingesting an image, this converter will be used to massage the

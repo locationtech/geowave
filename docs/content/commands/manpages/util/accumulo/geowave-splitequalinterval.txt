@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave accumulo splitequalinterval - Set Accumulo splits by providing the number of partitions based on an equal interval strategy
+geowave util accumulo splitequalinterval - Set Accumulo splits by providing the number of partitions based on an equal interval strategy
 
 SYNOPSIS
 //:--------
 
-geowave accumulo splitequalinterval [options] <storename>
+geowave util accumulo splitequalinterval [options] <storename>
 
 DESCRIPTION
 //:-----------

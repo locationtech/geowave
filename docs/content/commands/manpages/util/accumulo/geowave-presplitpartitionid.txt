@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave accumulo presplitpartitionid - Pre-split Accumulo table by providing the number of partition IDs
+geowave util accumulo presplitpartitionid - Pre-split Accumulo table by providing the number of partition IDs
 
 SYNOPSIS
 //:--------
 
-geowave accumulo presplitpartitionid [options] <storename>
+geowave util accumulo presplitpartitionid [options] <storename>
 
 DESCRIPTION
 //:-----------
