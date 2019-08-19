@@ -34,7 +34,7 @@
 <li><a href="org/locationtech/geowave/analytic/partitioner/AbstractPartitioner.html" title="class in org.locationtech.geowave.analytic.partitioner">AbstractPartitioner</a></li>
 <li><a href="org/locationtech/geowave/analytic/partitioner/AbstractPartitioner.NumericDataHolder.html" title="class in org.locationtech.geowave.analytic.partitioner">AbstractPartitioner.NumericDataHolder</a></li>
 <li><a href="org/locationtech/geowave/datastore/redis/util/AbstractRedisSetWrapper.html" title="class in org.locationtech.geowave.datastore.redis.util">AbstractRedisSetWrapper</a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/config/AbstractRemoveCommand.html" title="class in org.locationtech.geowave.core.store.cli.config">AbstractRemoveCommand</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/store/AbstractRemoveCommand.html" title="class in org.locationtech.geowave.core.store.cli.store">AbstractRemoveCommand</a></li>
 <li><a href="org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBIterator.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">AbstractRocksDBIterator</a></li>
 <li><a href="org/locationtech/geowave/datastore/rocksdb/util/AbstractRocksDBTable.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">AbstractRocksDBTable</a></li>
 <li><a href="org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestFormat.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestFormat</a></li>
@@ -42,7 +42,7 @@
 <li><a href="org/locationtech/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.AbstractIngestSimpleFeatureWithMapper.html" title="class in org.locationtech.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin.AbstractIngestSimpleFeatureWithMapper</a></li>
 <li><a href="org/locationtech/geowave/datastore/accumulo/cli/AbstractSplitsCommand.html" title="class in org.locationtech.geowave.datastore.accumulo.cli">AbstractSplitsCommand</a></li>
 <li><a href="org/locationtech/geowave/core/ingest/avro/AbstractStageWholeFileToAvro.html" title="class in org.locationtech.geowave.core.ingest.avro">AbstractStageWholeFileToAvro</a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/remote/AbstractStatsCommand.html" title="class in org.locationtech.geowave.core.store.cli.remote">AbstractStatsCommand</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/stats/AbstractStatsCommand.html" title="class in org.locationtech.geowave.core.store.cli.stats">AbstractStatsCommand</a></li>
 <li><a href="org/locationtech/geowave/adapter/vector/plugin/transaction/AbstractTransactionManagement.html" title="class in org.locationtech.geowave.adapter.vector.plugin.transaction">AbstractTransactionManagement</a></li>
 <li><a href="org/locationtech/geowave/core/geotime/store/query/AbstractVectorConstraints.html" title="class in org.locationtech.geowave.core.geotime.store.query">AbstractVectorConstraints</a></li>
 <li><a href="org/locationtech/geowave/datastore/accumulo/operations/AccumuloDataIndexWriter.html" title="class in org.locationtech.geowave.datastore.accumulo.operations">AccumuloDataIndexWriter</a></li>
@@ -93,20 +93,16 @@
 <li><a href="org/locationtech/geowave/service/rest/operations/AddCassandraStoreCommand.html" title="class in org.locationtech.geowave.service.rest.operations">AddCassandraStoreCommand</a></li>
 <li><a href="org/locationtech/geowave/service/rest/operations/AddDynamoDBStoreCommand.html" title="class in org.locationtech.geowave.service.rest.operations">AddDynamoDBStoreCommand</a></li>
 <li><a href="org/locationtech/geowave/service/rest/operations/AddHBaseStoreCommand.html" title="class in org.locationtech.geowave.service.rest.operations">AddHBaseStoreCommand</a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/config/AddIndexCommand.html" title="class in org.locationtech.geowave.core.store.cli.config">AddIndexCommand</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/index/AddIndexCommand.html" title="class in org.locationtech.geowave.core.store.cli.index">AddIndexCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/AddIndexCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">AddIndexCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/AddIndexCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">AddIndexCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/AddIndexCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">AddIndexCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/config/AddIndexGroupCommand.html" title="class in org.locationtech.geowave.core.store.cli.config">AddIndexGroupCommand</a></li>
-<li><a href="org/locationtech/geowave/service/grpc/protobuf/AddIndexGroupCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">AddIndexGroupCommandParametersProtos</a></li>
-<li><a href="org/locationtech/geowave/service/grpc/protobuf/AddIndexGroupCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">AddIndexGroupCommandParametersProtos.Builder</a></li>
-<li><a href="org/locationtech/geowave/service/grpc/protobuf/AddIndexGroupCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">AddIndexGroupCommandParametersProtosOrBuilder</span></a></li>
 <li><a href="org/locationtech/geowave/service/rest/operations/AddKuduStoreCommand.html" title="class in org.locationtech.geowave.service.rest.operations">AddKuduStoreCommand</a></li>
 <li><a href="org/locationtech/geowave/service/rest/operations/AddRedisStoreCommand.html" title="class in org.locationtech.geowave.service.rest.operations">AddRedisStoreCommand</a></li>
 <li><a href="org/locationtech/geowave/service/rest/operations/AddRocksDBStoreCommand.html" title="class in org.locationtech.geowave.service.rest.operations">AddRocksDBStoreCommand</a></li>
 <li><a href="org/locationtech/geowave/service/rest/operations/AddSpatialIndexCommand.html" title="class in org.locationtech.geowave.service.rest.operations">AddSpatialIndexCommand</a></li>
 <li><a href="org/locationtech/geowave/service/rest/operations/AddSpatialTemporalIndexCommand.html" title="class in org.locationtech.geowave.service.rest.operations">AddSpatialTemporalIndexCommand</a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/config/AddStoreCommand.html" title="class in org.locationtech.geowave.core.store.cli.config">AddStoreCommand</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/store/AddStoreCommand.html" title="class in org.locationtech.geowave.core.store.cli.store">AddStoreCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/AddStoreCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">AddStoreCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/AddStoreCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">AddStoreCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/AddStoreCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">AddStoreCommandParametersProtosOrBuilder</span></a></li>
@@ -245,6 +241,7 @@
 <li><a href="org/locationtech/geowave/core/store/BaseDataStoreOptions.html" title="class in org.locationtech.geowave.core.store">BaseDataStoreOptions</a></li>
 <li><a href="org/locationtech/geowave/core/store/base/BaseDataStoreUtils.html" title="class in org.locationtech.geowave.core.store.base">BaseDataStoreUtils</a></li>
 <li><a href="org/locationtech/geowave/core/cli/operations/config/security/crypto/BaseEncryption.html" title="class in org.locationtech.geowave.core.cli.operations.config.security.crypto">BaseEncryption</a></li>
+<li><a href="org/locationtech/geowave/core/store/index/BaseIndexBuilder.html" title="class in org.locationtech.geowave.core.store.index">BaseIndexBuilder</a></li>
 <li><a href="org/locationtech/geowave/mapreduce/BaseMapReduceDataStore.html" title="class in org.locationtech.geowave.mapreduce">BaseMapReduceDataStore</a></li>
 <li><a href="org/locationtech/geowave/core/geotime/store/query/aggregate/BaseOptimalVectorAggregation.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">BaseOptimalVectorAggregation</a></li>
 <li><a href="org/locationtech/geowave/core/store/query/BaseQuery.html" title="class in org.locationtech.geowave.core.store.query">BaseQuery</a></li>
@@ -336,7 +333,7 @@
 <li><a href="org/locationtech/geowave/core/store/data/field/base/ByteSerializationProvider.html" title="class in org.locationtech.geowave.core.store.data.field.base">ByteSerializationProvider</a></li>
 <li><a href="org/locationtech/geowave/core/store/data/field/base/ByteSerializationProvider.ByteWriter.html" title="class in org.locationtech.geowave.core.store.data.field.base">ByteSerializationProvider.ByteWriter</a></li>
 <li><a href="org/locationtech/geowave/core/store/adapter/statistics/histogram/ByteUtils.html" title="class in org.locationtech.geowave.core.store.adapter.statistics.histogram">ByteUtils</a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/remote/CalculateStatCommand.html" title="class in org.locationtech.geowave.core.store.cli.remote">CalculateStatCommand</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/stats/CalculateStatCommand.html" title="class in org.locationtech.geowave.core.store.cli.stats">CalculateStatCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/CalculateStatCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">CalculateStatCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/CalculateStatCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">CalculateStatCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/CalculateStatCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">CalculateStatCommandParametersProtosOrBuilder</span></a></li>
@@ -385,10 +382,10 @@
 <li><a href="org/locationtech/geowave/format/stanag4676/parser/model/ClassificationLevel.html" title="enum in org.locationtech.geowave.format.stanag4676.parser.model">ClassificationLevel</a></li>
 <li><a href="org/locationtech/geowave/core/store/spi/ClassLoaderTransformerSpi.html" title="interface in org.locationtech.geowave.core.store.spi"><span class="interfaceName">ClassLoaderTransformerSpi</span></a></li>
 <li><a href="org/locationtech/geowave/core/store/util/ClasspathUtils.html" title="class in org.locationtech.geowave.core.store.util">ClasspathUtils</a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/remote/ClearCommand.html" title="class in org.locationtech.geowave.core.store.cli.remote">ClearCommand</a></li>
-<li><a href="org/locationtech/geowave/service/grpc/protobuf/ClearCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ClearCommandParametersProtos</a></li>
-<li><a href="org/locationtech/geowave/service/grpc/protobuf/ClearCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ClearCommandParametersProtos.Builder</a></li>
-<li><a href="org/locationtech/geowave/service/grpc/protobuf/ClearCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">ClearCommandParametersProtosOrBuilder</span></a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/store/ClearStoreCommand.html" title="class in org.locationtech.geowave.core.store.cli.store">ClearStoreCommand</a></li>
+<li><a href="org/locationtech/geowave/service/grpc/protobuf/ClearStoreCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ClearStoreCommandParametersProtos</a></li>
+<li><a href="org/locationtech/geowave/service/grpc/protobuf/ClearStoreCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ClearStoreCommandParametersProtos.Builder</a></li>
+<li><a href="org/locationtech/geowave/service/grpc/protobuf/ClearStoreCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">ClearStoreCommandParametersProtosOrBuilder</span></a></li>
 <li><a href="org/locationtech/geowave/adapter/raster/adapter/ClientMergeableRasterTile.html" title="class in org.locationtech.geowave.adapter.raster.adapter">ClientMergeableRasterTile</a></li>
 <li><a href="org/locationtech/geowave/datastore/kudu/util/ClientPool.html" title="class in org.locationtech.geowave.datastore.kudu.util">ClientPool</a></li>
 <li><a href="org/locationtech/geowave/cli/debug/ClientSideCQLQuery.html" title="class in org.locationtech.geowave.cli.debug">ClientSideCQLQuery</a></li>
@@ -420,7 +417,6 @@
 <li><a href="org/locationtech/geowave/cli/osm/accumulo/osmschema/ColumnFamily.html" title="class in org.locationtech.geowave.cli.osm.accumulo.osmschema">ColumnFamily</a></li>
 <li><a href="org/locationtech/geowave/cli/osm/accumulo/osmschema/ColumnQualifier.html" title="class in org.locationtech.geowave.cli.osm.accumulo.osmschema">ColumnQualifier</a></li>
 <li><a href="org/locationtech/geowave/adapter/vector/plugin/visibility/ColumnVisibilityManagementSpi.html" title="interface in org.locationtech.geowave.adapter.vector.plugin.visibility"><span class="interfaceName">ColumnVisibilityManagementSpi</span></a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/remote/CombineStatsCommand.html" title="class in org.locationtech.geowave.core.store.cli.remote">CombineStatsCommand</a></li>
 <li><a href="org/locationtech/geowave/core/cli/api/Command.html" title="interface in org.locationtech.geowave.core.cli.api"><span class="interfaceName">Command</span></a></li>
 <li><a href="org/locationtech/geowave/core/cli/parser/CommandLineOperationParams.html" title="class in org.locationtech.geowave.core.cli.parser">CommandLineOperationParams</a></li>
 <li><a href="org/locationtech/geowave/core/store/query/aggregate/CommonIndexAggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate"><span class="interfaceName">CommonIndexAggregation</span></a></li>
@@ -436,6 +432,8 @@
 <li><a href="org/locationtech/geowave/core/store/query/options/CommonQueryOptions.html" title="class in org.locationtech.geowave.core.store.query.options">CommonQueryOptions</a></li>
 <li><a href="org/locationtech/geowave/core/store/query/options/CommonQueryOptions.HintKey.html" title="class in org.locationtech.geowave.core.store.query.options">CommonQueryOptions.HintKey</a></li>
 <li><a href="org/locationtech/geowave/core/geotime/ingest/CommonSpatialOptions.html" title="class in org.locationtech.geowave.core.geotime.ingest">CommonSpatialOptions</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/index/CompactIndexCommand.html" title="class in org.locationtech.geowave.core.store.cli.index">CompactIndexCommand</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/stats/CompactStatsCommand.html" title="class in org.locationtech.geowave.core.store.cli.stats">CompactStatsCommand</a></li>
 <li><a href="org/locationtech/geowave/format/stanag4676/ComparatorStanag4676EventWritable.html" title="class in org.locationtech.geowave.format.stanag4676">ComparatorStanag4676EventWritable</a></li>
 <li><a href="org/locationtech/geowave/analytic/mapreduce/kde/compare/ComparisonAccumuloStatsReducer.html" title="class in org.locationtech.geowave.analytic.mapreduce.kde.compare">ComparisonAccumuloStatsReducer</a></li>
 <li><a href="org/locationtech/geowave/analytic/mapreduce/kde/compare/ComparisonCellData.html" title="class in org.locationtech.geowave.analytic.mapreduce.kde.compare">ComparisonCellData</a></li>
@@ -465,7 +463,6 @@
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/ConfigHDFSCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ConfigHDFSCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/ConfigHDFSCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">ConfigHDFSCommandParametersProtosOrBuilder</span></a></li>
 <li><a href="org/locationtech/geowave/core/cli/operations/config/ConfigOperationProvider.html" title="class in org.locationtech.geowave.core.cli.operations.config">ConfigOperationProvider</a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/config/ConfigOperationProvider.html" title="class in org.locationtech.geowave.core.store.cli.config">ConfigOperationProvider</a></li>
 <li><a href="org/locationtech/geowave/core/store/config/ConfigOption.html" title="class in org.locationtech.geowave.core.store.config">ConfigOption</a></li>
 <li><a href="org/locationtech/geowave/core/cli/operations/config/options/ConfigOptions.html" title="class in org.locationtech.geowave.core.cli.operations.config.options">ConfigOptions</a></li>
 <li><a href="org/locationtech/geowave/core/cli/operations/config/ConfigSection.html" title="class in org.locationtech.geowave.core.cli.operations.config">ConfigSection</a></li>
@@ -494,8 +491,8 @@
 <li><a href="org/locationtech/geowave/datastore/hbase/util/CoprocessorClassLoaderTransformer.html" title="class in org.locationtech.geowave.datastore.hbase.util">CoprocessorClassLoaderTransformer</a></li>
 <li><a href="org/locationtech/geowave/mapreduce/operations/CopyCommand.html" title="class in org.locationtech.geowave.mapreduce.operations">CopyCommand</a></li>
 <li><a href="org/locationtech/geowave/mapreduce/operations/CopyCommandOptions.html" title="class in org.locationtech.geowave.mapreduce.operations">CopyCommandOptions</a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/config/CopyIndexCommand.html" title="class in org.locationtech.geowave.core.store.cli.config">CopyIndexCommand</a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/config/CopyStoreCommand.html" title="class in org.locationtech.geowave.core.store.cli.config">CopyStoreCommand</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/store/CopyConfigStoreCommand.html" title="class in org.locationtech.geowave.core.store.cli.store">CopyConfigStoreCommand</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/store/CopyStoreCommand.html" title="class in org.locationtech.geowave.core.store.cli.store">CopyStoreCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/CoreCliGrpc.html" title="class in org.locationtech.geowave.service.grpc.protobuf">CoreCliGrpc</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/CoreCliGrpc.CoreCliBlockingStub.html" title="class in org.locationtech.geowave.service.grpc.protobuf">CoreCliGrpc.CoreCliBlockingStub</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/CoreCliGrpc.CoreCliFutureStub.html" title="class in org.locationtech.geowave.service.grpc.protobuf">CoreCliGrpc.CoreCliFutureStub</a></li>
@@ -525,6 +522,10 @@
 <li><a href="org/locationtech/geowave/analytic/mapreduce/CountofDoubleWritable.html" title="class in org.locationtech.geowave.analytic.mapreduce">CountofDoubleWritable</a></li>
 <li><a href="org/locationtech/geowave/analytic/mapreduce/CountofDoubleWritable.Comparator.html" title="class in org.locationtech.geowave.analytic.mapreduce">CountofDoubleWritable.Comparator</a></li>
 <li><a href="org/locationtech/geowave/format/stanag4676/parser/model/CovarianceMatrix.html" title="class in org.locationtech.geowave.format.stanag4676.parser.model">CovarianceMatrix</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/coverage/CoverageOperationProvider.html" title="class in org.locationtech.geowave.cli.geoserver.coverage">CoverageOperationProvider</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/coverage/CoverageSection.html" title="class in org.locationtech.geowave.cli.geoserver.coverage">CoverageSection</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/cvstore/CoverageStoreOperationProvider.html" title="class in org.locationtech.geowave.cli.geoserver.cvstore">CoverageStoreOperationProvider</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/cvstore/CoverageStoreSection.html" title="class in org.locationtech.geowave.cli.geoserver.cvstore">CoverageStoreSection</a></li>
 <li><a href="org/locationtech/geowave/adapter/vector/delete/CQLDelete.html" title="class in org.locationtech.geowave.adapter.vector.delete">CQLDelete</a></li>
 <li><a href="org/locationtech/geowave/adapter/vector/delete/CQLDelete.StringToByteArrayConverter.html" title="class in org.locationtech.geowave.adapter.vector.delete">CQLDelete.StringToByteArrayConverter</a></li>
 <li><a href="org/locationtech/geowave/adapter/vector/ingest/CQLFilterOptionProvider.html" title="class in org.locationtech.geowave.adapter.vector.ingest">CQLFilterOptionProvider</a></li>
@@ -537,6 +538,8 @@
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/CQLQueryParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">CQLQueryParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/CQLQueryParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">CQLQueryParametersProtosOrBuilder</span></a></li>
 <li><a href="org/locationtech/geowave/core/geotime/store/dimension/CustomCRSBoundedSpatialDimension.html" title="class in org.locationtech.geowave.core.geotime.store.dimension">CustomCRSBoundedSpatialDimension</a></li>
+<li><a href="org/locationtech/geowave/core/geotime/store/dimension/CustomCRSBoundedSpatialDimensionX.html" title="class in org.locationtech.geowave.core.geotime.store.dimension">CustomCRSBoundedSpatialDimensionX</a></li>
+<li><a href="org/locationtech/geowave/core/geotime/store/dimension/CustomCRSBoundedSpatialDimensionY.html" title="class in org.locationtech.geowave.core.geotime.store.dimension">CustomCRSBoundedSpatialDimensionY</a></li>
 <li><a href="org/locationtech/geowave/core/geotime/store/dimension/CustomCrsIndexModel.html" title="class in org.locationtech.geowave.core.geotime.store.dimension">CustomCrsIndexModel</a></li>
 <li><a href="org/locationtech/geowave/core/geotime/store/dimension/CustomCRSSpatialDimension.html" title="interface in org.locationtech.geowave.core.geotime.store.dimension"><span class="interfaceName">CustomCRSSpatialDimension</span></a></li>
 <li><a href="org/locationtech/geowave/core/geotime/store/dimension/CustomCRSSpatialField.html" title="class in org.locationtech.geowave.core.geotime.store.dimension">CustomCRSSpatialField</a></li>
@@ -595,10 +598,12 @@
 <li><a href="org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api"><span class="interfaceName">DataStore</span></a></li>
 <li><a href="org/locationtech/geowave/core/store/base/DataStoreCallbackManager.html" title="class in org.locationtech.geowave.core.store.base">DataStoreCallbackManager</a></li>
 <li><a href="org/locationtech/geowave/core/store/api/DataStoreFactory.html" title="class in org.locationtech.geowave.core.store.api">DataStoreFactory</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/datastore/DatastoreOperationProvider.html" title="class in org.locationtech.geowave.cli.geoserver.datastore">DatastoreOperationProvider</a></li>
 <li><a href="org/locationtech/geowave/core/store/operations/DataStoreOperations.html" title="interface in org.locationtech.geowave.core.store.operations"><span class="interfaceName">DataStoreOperations</span></a></li>
 <li><a href="org/locationtech/geowave/core/store/operations/DataStoreOperationsFactory.html" title="class in org.locationtech.geowave.core.store.operations">DataStoreOperationsFactory</a></li>
 <li><a href="org/locationtech/geowave/core/store/DataStoreOptions.html" title="interface in org.locationtech.geowave.core.store"><span class="interfaceName">DataStoreOptions</span></a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/datastore/DatastoreSection.html" title="class in org.locationtech.geowave.cli.geoserver.datastore">DatastoreSection</a></li>
 <li><a href="org/locationtech/geowave/core/store/DataStoreStatisticsProvider.html" title="class in org.locationtech.geowave.core.store">DataStoreStatisticsProvider</a></li>
 <li><a href="org/locationtech/geowave/core/store/util/DataStoreUtils.html" title="class in org.locationtech.geowave.core.store.util">DataStoreUtils</a></li>
 <li><a href="org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api"><span class="interfaceName">DataTypeAdapter</span></a></li>
@@ -759,6 +764,8 @@
 <li><a href="org/locationtech/geowave/adapter/vector/util/FeatureGeometryUtils.html" title="class in org.locationtech.geowave.adapter.vector.util">FeatureGeometryUtils</a></li>
 <li><a href="org/locationtech/geowave/adapter/vector/stats/FeatureHyperLogLogStatistics.html" title="class in org.locationtech.geowave.adapter.vector.stats">FeatureHyperLogLogStatistics</a></li>
 <li><a href="org/locationtech/geowave/adapter/vector/stats/FeatureHyperLogLogStatistics.FeatureHyperLogLogConfig.html" title="class in org.locationtech.geowave.adapter.vector.stats">FeatureHyperLogLogStatistics.FeatureHyperLogLogConfig</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/featurelayer/FeatureLayerOperationProvider.html" title="class in org.locationtech.geowave.cli.geoserver.featurelayer">FeatureLayerOperationProvider</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/featurelayer/FeatureLayerSection.html" title="class in org.locationtech.geowave.cli.geoserver.featurelayer">FeatureLayerSection</a></li>
 <li><a href="org/locationtech/geowave/adapter/vector/stats/FeatureNumericHistogramStatistics.html" title="class in org.locationtech.geowave.adapter.vector.stats">FeatureNumericHistogramStatistics</a></li>
 <li><a href="org/locationtech/geowave/adapter/vector/stats/FeatureNumericHistogramStatistics.FeatureNumericHistogramConfig.html" title="class in org.locationtech.geowave.adapter.vector.stats">FeatureNumericHistogramStatistics.FeatureNumericHistogramConfig</a></li>
 <li><a href="org/locationtech/geowave/adapter/vector/stats/FeatureNumericHistogramStatistics.LocalDoubleHistogram.html" title="class in org.locationtech.geowave.adapter.vector.stats">FeatureNumericHistogramStatistics.LocalDoubleHistogram</a></li>
@@ -887,110 +894,110 @@
 <li><a href="org/locationtech/geowave/examples/ingest/bulk/GeonamesDataFileInputFormat.html" title="class in org.locationtech.geowave.examples.ingest.bulk">GeonamesDataFileInputFormat</a></li>
 <li><a href="org/locationtech/geowave/examples/ingest/bulk/GeonamesSimpleFeatureType.html" title="class in org.locationtech.geowave.examples.ingest.bulk">GeonamesSimpleFeatureType</a></li>
 <li><a href="org/locationtech/geowave/analytic/GeoObjectDimensionValues.html" title="class in org.locationtech.geowave.analytic">GeoObjectDimensionValues</a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerAddCoverageCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerAddCoverageCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/coverage/GeoServerAddCoverageCommand.html" title="class in org.locationtech.geowave.cli.geoserver.coverage">GeoServerAddCoverageCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerAddCoverageCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerAddCoverageCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerAddCoverageCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerAddCoverageCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerAddCoverageCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerAddCoverageCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerAddCoverageStoreCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerAddCoverageStoreCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/cvstore/GeoServerAddCoverageStoreCommand.html" title="class in org.locationtech.geowave.cli.geoserver.cvstore">GeoServerAddCoverageStoreCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerAddCoverageStoreCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerAddCoverageStoreCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerAddCoverageStoreCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerAddCoverageStoreCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerAddCoverageStoreCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerAddCoverageStoreCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerAddDatastoreCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerAddDatastoreCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/datastore/GeoServerAddDatastoreCommand.html" title="class in org.locationtech.geowave.cli.geoserver.datastore">GeoServerAddDatastoreCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerAddDatastoreCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerAddDatastoreCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerAddDatastoreCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerAddDatastoreCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerAddDatastoreCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerAddDatastoreCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerAddFeatureLayerCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerAddFeatureLayerCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/featurelayer/GeoServerAddFeatureLayerCommand.html" title="class in org.locationtech.geowave.cli.geoserver.featurelayer">GeoServerAddFeatureLayerCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerAddFeatureLayerCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerAddFeatureLayerCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerAddFeatureLayerCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerAddFeatureLayerCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerAddFeatureLayerCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerAddFeatureLayerCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerAddLayerCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerAddLayerCommand</a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerAddLayerCommand.AddOption.html" title="enum in org.locationtech.geowave.cli.geoserver">GeoServerAddLayerCommand.AddOption</a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerAddLayerCommand.AddOptionConverter.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerAddLayerCommand.AddOptionConverter</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/layer/GeoServerAddLayerCommand.html" title="class in org.locationtech.geowave.cli.geoserver.layer">GeoServerAddLayerCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/layer/GeoServerAddLayerCommand.AddOption.html" title="enum in org.locationtech.geowave.cli.geoserver.layer">GeoServerAddLayerCommand.AddOption</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/layer/GeoServerAddLayerCommand.AddOptionConverter.html" title="class in org.locationtech.geowave.cli.geoserver.layer">GeoServerAddLayerCommand.AddOptionConverter</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerAddLayerCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerAddLayerCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerAddLayerCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerAddLayerCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerAddLayerCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerAddLayerCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerAddStyleCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerAddStyleCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/style/GeoServerAddStyleCommand.html" title="class in org.locationtech.geowave.cli.geoserver.style">GeoServerAddStyleCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerAddStyleCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerAddStyleCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerAddStyleCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerAddStyleCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerAddStyleCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerAddStyleCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerAddWorkspaceCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerAddWorkspaceCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/workspace/GeoServerAddWorkspaceCommand.html" title="class in org.locationtech.geowave.cli.geoserver.workspace">GeoServerAddWorkspaceCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerAddWorkspaceCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerAddWorkspaceCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerAddWorkspaceCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerAddWorkspaceCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerAddWorkspaceCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerAddWorkspaceCommandParametersProtosOrBuilder</span></a></li>
 <li><a href="org/locationtech/geowave/cli/geoserver/GeoServerCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerCommand</a></li>
 <li><a href="org/locationtech/geowave/cli/geoserver/GeoServerConfig.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerConfig</a></li>
 <li><a href="org/locationtech/geowave/cli/geoserver/constants/GeoServerConstants.html" title="interface in org.locationtech.geowave.cli.geoserver.constants"><span class="interfaceName">GeoServerConstants</span></a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerGetCoverageCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerGetCoverageCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/coverage/GeoServerGetCoverageCommand.html" title="class in org.locationtech.geowave.cli.geoserver.coverage">GeoServerGetCoverageCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerGetCoverageCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerGetCoverageCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerGetCoverageCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerGetCoverageCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerGetCoverageCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerGetCoverageCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerGetCoverageStoreCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerGetCoverageStoreCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/cvstore/GeoServerGetCoverageStoreCommand.html" title="class in org.locationtech.geowave.cli.geoserver.cvstore">GeoServerGetCoverageStoreCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerGetCoverageStoreCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerGetCoverageStoreCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerGetCoverageStoreCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerGetCoverageStoreCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerGetCoverageStoreCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerGetCoverageStoreCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerGetDatastoreCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerGetDatastoreCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/datastore/GeoServerGetDatastoreCommand.html" title="class in org.locationtech.geowave.cli.geoserver.datastore">GeoServerGetDatastoreCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerGetDatastoreCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerGetDatastoreCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerGetDatastoreCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerGetDatastoreCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerGetDatastoreCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerGetDatastoreCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerGetFeatureLayerCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerGetFeatureLayerCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/featurelayer/GeoServerGetFeatureLayerCommand.html" title="class in org.locationtech.geowave.cli.geoserver.featurelayer">GeoServerGetFeatureLayerCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerGetFeatureLayerCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerGetFeatureLayerCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerGetFeatureLayerCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerGetFeatureLayerCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerGetFeatureLayerCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerGetFeatureLayerCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerGetStoreAdapterCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerGetStoreAdapterCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/datastore/GeoServerGetStoreAdapterCommand.html" title="class in org.locationtech.geowave.cli.geoserver.datastore">GeoServerGetStoreAdapterCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerGetStoreAdapterCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerGetStoreAdapterCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerGetStoreAdapterCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerGetStoreAdapterCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerGetStoreAdapterCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerGetStoreAdapterCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerGetStyleCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerGetStyleCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/style/GeoServerGetStyleCommand.html" title="class in org.locationtech.geowave.cli.geoserver.style">GeoServerGetStyleCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerGetStyleCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerGetStyleCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerGetStyleCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerGetStyleCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerGetStyleCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerGetStyleCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerListCoveragesCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerListCoveragesCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/coverage/GeoServerListCoveragesCommand.html" title="class in org.locationtech.geowave.cli.geoserver.coverage">GeoServerListCoveragesCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerListCoveragesCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerListCoveragesCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerListCoveragesCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerListCoveragesCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerListCoveragesCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerListCoveragesCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerListCoverageStoresCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerListCoverageStoresCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/cvstore/GeoServerListCoverageStoresCommand.html" title="class in org.locationtech.geowave.cli.geoserver.cvstore">GeoServerListCoverageStoresCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerListCoverageStoresCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerListCoverageStoresCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerListCoverageStoresCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerListCoverageStoresCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerListCoverageStoresCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerListCoverageStoresCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerListDatastoresCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerListDatastoresCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/datastore/GeoServerListDatastoresCommand.html" title="class in org.locationtech.geowave.cli.geoserver.datastore">GeoServerListDatastoresCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerListDatastoresCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerListDatastoresCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerListDatastoresCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerListDatastoresCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerListDatastoresCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerListDatastoresCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerListFeatureLayersCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerListFeatureLayersCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/featurelayer/GeoServerListFeatureLayersCommand.html" title="class in org.locationtech.geowave.cli.geoserver.featurelayer">GeoServerListFeatureLayersCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerListFeatureLayersCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerListFeatureLayersCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerListFeatureLayersCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerListFeatureLayersCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerListFeatureLayersCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerListFeatureLayersCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerListStylesCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerListStylesCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/style/GeoServerListStylesCommand.html" title="class in org.locationtech.geowave.cli.geoserver.style">GeoServerListStylesCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerListStylesCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerListStylesCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerListStylesCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerListStylesCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerListStylesCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerListStylesCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerListWorkspacesCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerListWorkspacesCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/workspace/GeoServerListWorkspacesCommand.html" title="class in org.locationtech.geowave.cli.geoserver.workspace">GeoServerListWorkspacesCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerListWorkspacesCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerListWorkspacesCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerListWorkspacesCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerListWorkspacesCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerListWorkspacesCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerListWorkspacesCommandParametersProtosOrBuilder</span></a></li>
 <li><a href="org/locationtech/geowave/cli/geoserver/GeoServerOperationProvider.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerOperationProvider</a></li>
 <li><a href="org/locationtech/geowave/cli/geoserver/GeoServerRemoveCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerRemoveCommand</a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerRemoveCoverageCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerRemoveCoverageCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/coverage/GeoServerRemoveCoverageCommand.html" title="class in org.locationtech.geowave.cli.geoserver.coverage">GeoServerRemoveCoverageCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerRemoveCoverageCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerRemoveCoverageCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerRemoveCoverageCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerRemoveCoverageCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerRemoveCoverageCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerRemoveCoverageCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerRemoveCoverageStoreCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerRemoveCoverageStoreCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/cvstore/GeoServerRemoveCoverageStoreCommand.html" title="class in org.locationtech.geowave.cli.geoserver.cvstore">GeoServerRemoveCoverageStoreCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerRemoveCoverageStoreCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerRemoveCoverageStoreCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerRemoveCoverageStoreCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerRemoveCoverageStoreCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerRemoveCoverageStoreCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerRemoveCoverageStoreCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerRemoveDatastoreCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerRemoveDatastoreCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/datastore/GeoServerRemoveDatastoreCommand.html" title="class in org.locationtech.geowave.cli.geoserver.datastore">GeoServerRemoveDatastoreCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerRemoveDatastoreCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerRemoveDatastoreCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerRemoveDatastoreCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerRemoveDatastoreCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerRemoveDatastoreCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerRemoveDatastoreCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerRemoveFeatureLayerCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerRemoveFeatureLayerCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/featurelayer/GeoServerRemoveFeatureLayerCommand.html" title="class in org.locationtech.geowave.cli.geoserver.featurelayer">GeoServerRemoveFeatureLayerCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerRemoveFeatureLayerCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerRemoveFeatureLayerCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerRemoveFeatureLayerCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerRemoveFeatureLayerCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerRemoveFeatureLayerCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerRemoveFeatureLayerCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerRemoveStyleCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerRemoveStyleCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/style/GeoServerRemoveStyleCommand.html" title="class in org.locationtech.geowave.cli.geoserver.style">GeoServerRemoveStyleCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerRemoveStyleCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerRemoveStyleCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerRemoveStyleCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerRemoveStyleCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerRemoveStyleCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerRemoveStyleCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerRemoveWorkspaceCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerRemoveWorkspaceCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/workspace/GeoServerRemoveWorkspaceCommand.html" title="class in org.locationtech.geowave.cli.geoserver.workspace">GeoServerRemoveWorkspaceCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerRemoveWorkspaceCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerRemoveWorkspaceCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerRemoveWorkspaceCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerRemoveWorkspaceCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerRemoveWorkspaceCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerRemoveWorkspaceCommandParametersProtosOrBuilder</span></a></li>
@@ -998,7 +1005,7 @@
 <li><a href="org/locationtech/geowave/cli/geoserver/GeoServerSection.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerSection</a></li>
 <li><a href="org/locationtech/geowave/service/GeoServerService.html" title="interface in org.locationtech.geowave.service"><span class="interfaceName">GeoServerService</span></a></li>
 <li><a href="org/locationtech/geowave/service/client/GeoServerServiceClient.html" title="class in org.locationtech.geowave.service.client">GeoServerServiceClient</a></li>
-<li><a href="org/locationtech/geowave/cli/geoserver/GeoServerSetLayerStyleCommand.html" title="class in org.locationtech.geowave.cli.geoserver">GeoServerSetLayerStyleCommand</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/style/GeoServerSetLayerStyleCommand.html" title="class in org.locationtech.geowave.cli.geoserver.style">GeoServerSetLayerStyleCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerSetLayerStyleCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerSetLayerStyleCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerSetLayerStyleCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoServerSetLayerStyleCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/GeoServerSetLayerStyleCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">GeoServerSetLayerStyleCommandParametersProtosOrBuilder</span></a></li>
@@ -1275,7 +1282,7 @@
 <li><a href="org/locationtech/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="class in org.locationtech.geowave.core.store.index.writer">IndependentAdapterIndexWriter</a></li>
 <li><a href="org/locationtech/geowave/analytic/IndependentJobRunner.html" title="interface in org.locationtech.geowave.analytic"><span class="interfaceName">IndependentJobRunner</span></a></li>
 <li><a href="org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api"><span class="interfaceName">Index</span></a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/remote/options/IndexBuilder.html" title="interface in org.locationtech.geowave.core.store.cli.remote.options"><span class="interfaceName">IndexBuilder</span></a></li>
+<li><a href="org/locationtech/geowave/core/store/index/IndexBuilder.html" title="interface in org.locationtech.geowave.core.store.index"><span class="interfaceName">IndexBuilder</span></a></li>
 <li><a href="org/locationtech/geowave/core/store/index/writer/IndexCompositeWriter.html" title="class in org.locationtech.geowave.core.store.index.writer">IndexCompositeWriter</a></li>
 <li><a href="org/locationtech/geowave/core/index/IndexConstraints.html" title="interface in org.locationtech.geowave.core.index"><span class="interfaceName">IndexConstraints</span></a></li>
 <li><a href="org/locationtech/geowave/core/store/operations/config/IndexDefaultConfigProvider.html" title="class in org.locationtech.geowave.core.store.operations.config">IndexDefaultConfigProvider</a></li>
@@ -1283,22 +1290,23 @@
 <li><a href="org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a></li>
 <li><a href="org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">IndexedPersistenceEncoding</a></li>
 <li><a href="org/locationtech/geowave/core/store/adapter/IndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter"><span class="interfaceName">IndexFieldHandler</span></a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/remote/options/IndexGroupPluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">IndexGroupPluginOptions</a></li>
 <li><a href="org/locationtech/geowave/core/store/index/IndexImpl.html" title="class in org.locationtech.geowave.core.store.index">IndexImpl</a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/remote/options/IndexLoader.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">IndexLoader</a></li>
 <li><a href="org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index"><span class="interfaceName">IndexMetaData</span></a></li>
 <li><a href="org/locationtech/geowave/core/store/index/IndexMetaDataSet.html" title="class in org.locationtech.geowave.core.store.index">IndexMetaDataSet</a></li>
 <li><a href="org/locationtech/geowave/analytic/model/IndexModelBuilder.html" title="interface in org.locationtech.geowave.analytic.model"><span class="interfaceName">IndexModelBuilder</span></a></li>
 <li><a href="org/locationtech/geowave/core/geotime/store/query/IndexOnlySpatialQuery.html" title="class in org.locationtech.geowave.core.geotime.store.query">IndexOnlySpatialQuery</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/index/IndexOperationProvider.html" title="class in org.locationtech.geowave.core.store.cli.index">IndexOperationProvider</a></li>
 <li><a href="org/locationtech/geowave/core/geotime/util/IndexOptimizationUtils.html" title="class in org.locationtech.geowave.core.geotime.util">IndexOptimizationUtils</a></li>
 <li><a href="org/locationtech/geowave/core/index/IndexPersistableRegistry.html" title="class in org.locationtech.geowave.core.index">IndexPersistableRegistry</a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/remote/options/IndexPluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">IndexPluginOptions</a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/remote/options/IndexPluginOptions.BaseIndexBuilder.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">IndexPluginOptions.BaseIndexBuilder</a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/remote/options/IndexPluginOptions.PartitionStrategy.html" title="enum in org.locationtech.geowave.core.store.cli.remote.options">IndexPluginOptions.PartitionStrategy</a></li>
+<li><a href="org/locationtech/geowave/core/store/index/IndexPluginOptions.html" title="class in org.locationtech.geowave.core.store.index">IndexPluginOptions</a></li>
+<li><a href="org/locationtech/geowave/core/store/index/IndexPluginOptions.PartitionStrategy.html" title="enum in org.locationtech.geowave.core.store.index">IndexPluginOptions.PartitionStrategy</a></li>
 <li><a href="org/locationtech/geowave/core/store/ingest/IndexProvider.html" title="interface in org.locationtech.geowave.core.store.ingest"><span class="interfaceName">IndexProvider</span></a></li>
 <li><a href="org/locationtech/geowave/core/store/query/options/IndexQueryOptions.html" title="interface in org.locationtech.geowave.core.store.query.options"><span class="interfaceName">IndexQueryOptions</span></a></li>
 <li><a href="org/locationtech/geowave/adapter/vector/index/IndexQueryStrategySPI.html" title="interface in org.locationtech.geowave.adapter.vector.index"><span class="interfaceName">IndexQueryStrategySPI</span></a></li>
 <li><a href="org/locationtech/geowave/adapter/vector/index/IndexQueryStrategySPI.QueryHint.html" title="enum in org.locationtech.geowave.adapter.vector.index">IndexQueryStrategySPI.QueryHint</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/index/IndexSection.html" title="class in org.locationtech.geowave.core.store.cli.index">IndexSection</a></li>
+<li><a href="org/locationtech/geowave/service/IndexService.html" title="interface in org.locationtech.geowave.service"><span class="interfaceName">IndexService</span></a></li>
+<li><a href="org/locationtech/geowave/service/client/IndexServiceClient.html" title="class in org.locationtech.geowave.service.client">IndexServiceClient</a></li>
 <li><a href="org/locationtech/geowave/core/store/adapter/statistics/IndexStatisticsQueryBuilder.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">IndexStatisticsQueryBuilder</a></li>
 <li><a href="org/locationtech/geowave/core/store/adapter/statistics/IndexStatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">IndexStatisticsType</a></li>
 <li><a href="org/locationtech/geowave/core/store/index/IndexStore.html" title="interface in org.locationtech.geowave.core.store.index"><span class="interfaceName">IndexStore</span></a></li>
@@ -1492,6 +1500,8 @@
 <li><a href="org/locationtech/geowave/format/landsat8/index/Landsat8TemporalBinningStrategy.html" title="class in org.locationtech.geowave.format.landsat8.index">Landsat8TemporalBinningStrategy</a></li>
 <li><a href="org/locationtech/geowave/core/geotime/index/dimension/LatitudeDefinition.html" title="class in org.locationtech.geowave.core.geotime.index.dimension">LatitudeDefinition</a></li>
 <li><a href="org/locationtech/geowave/core/geotime/store/dimension/LatitudeField.html" title="class in org.locationtech.geowave.core.geotime.store.dimension">LatitudeField</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/layer/LayerOperationProvider.html" title="class in org.locationtech.geowave.cli.geoserver.layer">LayerOperationProvider</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/layer/LayerSection.html" title="class in org.locationtech.geowave.cli.geoserver.layer">LayerSection</a></li>
 <li><a href="org/locationtech/geowave/datastore/redis/util/LazyPaginatedEntryRange.html" title="class in org.locationtech.geowave.datastore.redis.util">LazyPaginatedEntryRange</a></li>
 <li><a href="org/locationtech/geowave/datastore/dynamodb/util/LazyPaginatedQuery.html" title="class in org.locationtech.geowave.datastore.dynamodb.util">LazyPaginatedQuery</a></li>
 <li><a href="org/locationtech/geowave/datastore/dynamodb/util/LazyPaginatedScan.html" title="class in org.locationtech.geowave.datastore.dynamodb.util">LazyPaginatedScan</a></li>
@@ -1508,7 +1518,7 @@
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/ListCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ListCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/ListCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ListCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/ListCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">ListCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/remote/ListIndicesCommand.html" title="class in org.locationtech.geowave.core.store.cli.remote">ListIndicesCommand</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/index/ListIndicesCommand.html" title="class in org.locationtech.geowave.core.store.cli.index">ListIndicesCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/ListIndicesCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ListIndicesCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/ListIndicesCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ListIndicesCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/ListIndicesCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">ListIndicesCommandParametersProtosOrBuilder</span></a></li>
@@ -1517,11 +1527,11 @@
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/ListPluginsCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ListPluginsCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/ListPluginsCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ListPluginsCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/ListPluginsCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">ListPluginsCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/remote/ListStatsCommand.html" title="class in org.locationtech.geowave.core.store.cli.remote">ListStatsCommand</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/stats/ListStatsCommand.html" title="class in org.locationtech.geowave.core.store.cli.stats">ListStatsCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/ListStatsCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ListStatsCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/ListStatsCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ListStatsCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/ListStatsCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">ListStatsCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/remote/ListTypesCommand.html" title="class in org.locationtech.geowave.core.store.cli.remote">ListTypesCommand</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/store/ListTypesCommand.html" title="class in org.locationtech.geowave.core.store.cli.store">ListTypesCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/ListTypesCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ListTypesCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/ListTypesCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ListTypesCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/ListTypesCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">ListTypesCommandParametersProtosOrBuilder</span></a></li>
@@ -1607,7 +1617,6 @@
 <li><a href="org/locationtech/geowave/adapter/vector/plugin/transaction/MemoryTransactionsAllocator.html" title="class in org.locationtech.geowave.adapter.vector.plugin.transaction">MemoryTransactionsAllocator</a></li>
 <li><a href="org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index"><span class="interfaceName">Mergeable</span></a></li>
 <li><a href="org/locationtech/geowave/core/store/entities/MergeableGeoWaveRow.html" title="class in org.locationtech.geowave.core.store.entities">MergeableGeoWaveRow</a></li>
-<li><a href="org/locationtech/geowave/core/store/operations/remote/MergeDataCommand.html" title="class in org.locationtech.geowave.core.store.operations.remote">MergeDataCommand</a></li>
 <li><a href="org/locationtech/geowave/core/store/query/aggregate/MergingAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">MergingAggregation</a></li>
 <li><a href="org/locationtech/geowave/datastore/accumulo/MergingCombiner.html" title="class in org.locationtech.geowave.datastore.accumulo">MergingCombiner</a></li>
 <li><a href="org/locationtech/geowave/core/store/util/MergingEntryIterator.html" title="class in org.locationtech.geowave.core.store.util">MergingEntryIterator</a></li>
@@ -1871,7 +1880,7 @@
 <li><a href="org/locationtech/geowave/analytic/spark/RDDUtils.html" title="class in org.locationtech.geowave.analytic.spark">RDDUtils</a></li>
 <li><a href="org/locationtech/geowave/core/store/operations/ReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParams</a></li>
 <li><a href="org/locationtech/geowave/core/store/operations/ReaderParamsBuilder.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParamsBuilder</a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/remote/RecalculateStatsCommand.html" title="class in org.locationtech.geowave.core.store.cli.remote">RecalculateStatsCommand</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/stats/RecalculateStatsCommand.html" title="class in org.locationtech.geowave.core.store.cli.stats">RecalculateStatsCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/RecalculateStatsCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RecalculateStatsCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/RecalculateStatsCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RecalculateStatsCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/RecalculateStatsCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">RecalculateStatsCommandParametersProtosOrBuilder</span></a></li>
@@ -1899,29 +1908,19 @@
 <li><a href="org/locationtech/geowave/test/RedisStoreTestEnvironment.html" title="class in org.locationtech.geowave.test">RedisStoreTestEnvironment</a></li>
 <li><a href="org/locationtech/geowave/datastore/redis/util/RedisUtils.html" title="class in org.locationtech.geowave.datastore.redis.util">RedisUtils</a></li>
 <li><a href="org/locationtech/geowave/datastore/redis/operations/RedisWriter.html" title="class in org.locationtech.geowave.datastore.redis.operations">RedisWriter</a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/remote/RemoteCopyCommand.html" title="class in org.locationtech.geowave.core.store.cli.remote">RemoteCopyCommand</a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/remote/RemoteOperationProvider.html" title="class in org.locationtech.geowave.core.store.cli.remote">RemoteOperationProvider</a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/remote/RemoteSection.html" title="class in org.locationtech.geowave.core.store.cli.remote">RemoteSection</a></li>
-<li><a href="org/locationtech/geowave/service/RemoteService.html" title="interface in org.locationtech.geowave.service"><span class="interfaceName">RemoteService</span></a></li>
-<li><a href="org/locationtech/geowave/service/client/RemoteServiceClient.html" title="class in org.locationtech.geowave.service.client">RemoteServiceClient</a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/config/RemoveIndexCommand.html" title="class in org.locationtech.geowave.core.store.cli.config">RemoveIndexCommand</a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/remote/RemoveIndexCommand.html" title="class in org.locationtech.geowave.core.store.cli.remote">RemoveIndexCommand</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/index/RemoveIndexCommand.html" title="class in org.locationtech.geowave.core.store.cli.index">RemoveIndexCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/RemoveIndexCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveIndexCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/RemoveIndexCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveIndexCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/RemoveIndexCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">RemoveIndexCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/config/RemoveIndexGroupCommand.html" title="class in org.locationtech.geowave.core.store.cli.config">RemoveIndexGroupCommand</a></li>
-<li><a href="org/locationtech/geowave/service/grpc/protobuf/RemoveIndexGroupCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveIndexGroupCommandParametersProtos</a></li>
-<li><a href="org/locationtech/geowave/service/grpc/protobuf/RemoveIndexGroupCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveIndexGroupCommandParametersProtos.Builder</a></li>
-<li><a href="org/locationtech/geowave/service/grpc/protobuf/RemoveIndexGroupCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">RemoveIndexGroupCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/remote/RemoveStatCommand.html" title="class in org.locationtech.geowave.core.store.cli.remote">RemoveStatCommand</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/stats/RemoveStatCommand.html" title="class in org.locationtech.geowave.core.store.cli.stats">RemoveStatCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">RemoveStatCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/config/RemoveStoreCommand.html" title="class in org.locationtech.geowave.core.store.cli.config">RemoveStoreCommand</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/store/RemoveStoreCommand.html" title="class in org.locationtech.geowave.core.store.cli.store">RemoveStoreCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/RemoveStoreCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStoreCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/RemoveStoreCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStoreCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/RemoveStoreCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">RemoveStoreCommandParametersProtosOrBuilder</span></a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/remote/RemoveTypeCommand.html" title="class in org.locationtech.geowave.core.store.cli.remote">RemoveTypeCommand</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/store/RemoveTypeCommand.html" title="class in org.locationtech.geowave.core.store.cli.store">RemoveTypeCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/RemoveTypeCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveTypeCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/RemoveTypeCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveTypeCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/RemoveTypeCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">RemoveTypeCommandParametersProtosOrBuilder</span></a></li>
@@ -2214,13 +2213,17 @@
 <li><a href="org/locationtech/geowave/core/store/adapter/statistics/StatisticsQueryBuilderImpl.QueryByStatisticsTypeFactoryImpl.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsQueryBuilderImpl.QueryByStatisticsTypeFactoryImpl</a></li>
 <li><a href="org/locationtech/geowave/core/store/util/StatisticsRowIterator.html" title="class in org.locationtech.geowave.core.store.util">StatisticsRowIterator</a></li>
 <li><a href="org/locationtech/geowave/core/store/adapter/statistics/StatisticsType.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsType</a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/remote/options/StatsCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">StatsCommandLineOptions</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/stats/StatsCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.cli.stats">StatsCommandLineOptions</a></li>
 <li><a href="org/locationtech/geowave/core/store/adapter/statistics/StatsCompositionTool.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatsCompositionTool</a></li>
 <li><a href="org/locationtech/geowave/adapter/vector/stats/StatsConfig.html" title="interface in org.locationtech.geowave.adapter.vector.stats"><span class="interfaceName">StatsConfig</span></a></li>
 <li><a href="org/locationtech/geowave/adapter/vector/stats/StatsConfigurationCollection.html" title="class in org.locationtech.geowave.adapter.vector.stats">StatsConfigurationCollection</a></li>
 <li><a href="org/locationtech/geowave/adapter/vector/stats/StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection.html" title="class in org.locationtech.geowave.adapter.vector.stats">StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection</a></li>
+<li><a href="org/locationtech/geowave/service/StatService.html" title="interface in org.locationtech.geowave.service"><span class="interfaceName">StatService</span></a></li>
+<li><a href="org/locationtech/geowave/service/client/StatServiceClient.html" title="class in org.locationtech.geowave.service.client">StatServiceClient</a></li>
 <li><a href="org/locationtech/geowave/adapter/vector/stats/StatsManager.html" title="class in org.locationtech.geowave.adapter.vector.stats">StatsManager</a></li>
 <li><a href="org/locationtech/geowave/analytic/kmeans/serial/StatsMap.html" title="class in org.locationtech.geowave.analytic.kmeans.serial">StatsMap</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/stats/StatsOperationProvider.html" title="class in org.locationtech.geowave.core.store.cli.stats">StatsOperationProvider</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/stats/StatsSection.html" title="class in org.locationtech.geowave.core.store.cli.stats">StatsSection</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/cli/StopGrpcServerCommand.html" title="class in org.locationtech.geowave.service.grpc.cli">StopGrpcServerCommand</a></li>
 <li><a href="org/locationtech/geowave/mapreduce/copy/StoreCopyJobRunner.html" title="class in org.locationtech.geowave.mapreduce.copy">StoreCopyJobRunner</a></li>
 <li><a href="org/locationtech/geowave/mapreduce/copy/StoreCopyMapper.html" title="class in org.locationtech.geowave.mapreduce.copy">StoreCopyMapper</a></li>
@@ -2228,10 +2231,14 @@
 <li><a href="org/locationtech/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in org.locationtech.geowave.core.store"><span class="interfaceName">StoreFactoryFamilySpi</span></a></li>
 <li><a href="org/locationtech/geowave/core/store/StoreFactoryHelper.html" title="interface in org.locationtech.geowave.core.store"><span class="interfaceName">StoreFactoryHelper</span></a></li>
 <li><a href="org/locationtech/geowave/core/store/StoreFactoryOptions.html" title="class in org.locationtech.geowave.core.store">StoreFactoryOptions</a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/remote/options/StoreLoader.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">StoreLoader</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/store/StoreLoader.html" title="class in org.locationtech.geowave.core.store.cli.store">StoreLoader</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/store/StoreOperationProvider.html" title="class in org.locationtech.geowave.core.store.cli.store">StoreOperationProvider</a></li>
 <li><a href="org/locationtech/geowave/analytic/param/StoreParameters.html" title="class in org.locationtech.geowave.analytic.param">StoreParameters</a></li>
 <li><a href="org/locationtech/geowave/analytic/param/StoreParameters.StoreParam.html" title="enum in org.locationtech.geowave.analytic.param">StoreParameters.StoreParam</a></li>
 <li><a href="org/locationtech/geowave/core/store/StorePersistableRegistry.html" title="class in org.locationtech.geowave.core.store">StorePersistableRegistry</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/store/StoreSection.html" title="class in org.locationtech.geowave.core.store.cli.store">StoreSection</a></li>
+<li><a href="org/locationtech/geowave/service/StoreService.html" title="interface in org.locationtech.geowave.service"><span class="interfaceName">StoreService</span></a></li>
+<li><a href="org/locationtech/geowave/service/client/StoreServiceClient.html" title="class in org.locationtech.geowave.service.client">StoreServiceClient</a></li>
 <li><a href="org/locationtech/geowave/cli/geoserver/StoreSSLConfigurationOptions.html" title="class in org.locationtech.geowave.cli.geoserver">StoreSSLConfigurationOptions</a></li>
 <li><a href="org/locationtech/geowave/test/StoreTestEnvironment.html" title="class in org.locationtech.geowave.test">StoreTestEnvironment</a></li>
 <li><a href="org/locationtech/geowave/core/store/data/field/base/StringArraySerializationProvider.html" title="class in org.locationtech.geowave.core.store.data.field.base">StringArraySerializationProvider</a></li>
@@ -2246,6 +2253,8 @@
 <li><a href="org/locationtech/geowave/analytic/mapreduce/kmeans/runner/StripWeakCentroidsRunner.StableChangeBreakStrategy.html" title="class in org.locationtech.geowave.analytic.mapreduce.kmeans.runner">StripWeakCentroidsRunner.StableChangeBreakStrategy</a></li>
 <li><a href="org/locationtech/geowave/analytic/mapreduce/kmeans/runner/StripWeakCentroidsRunner.TailMaxBreakStrategy.html" title="class in org.locationtech.geowave.analytic.mapreduce.kmeans.runner">StripWeakCentroidsRunner.TailMaxBreakStrategy</a></li>
 <li><a href="org/locationtech/geowave/analytic/mapreduce/kmeans/runner/StripWeakCentroidsRunner.TailStableChangeBreakStrategy.html" title="class in org.locationtech.geowave.analytic.mapreduce.kmeans.runner">StripWeakCentroidsRunner.TailStableChangeBreakStrategy</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/style/StyleOperationProvider.html" title="class in org.locationtech.geowave.cli.geoserver.style">StyleOperationProvider</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/style/StyleSection.html" title="class in org.locationtech.geowave.cli.geoserver.style">StyleSection</a></li>
 <li><a href="org/locationtech/geowave/adapter/vector/plugin/SubsampleProcess.html" title="class in org.locationtech.geowave.adapter.vector.plugin">SubsampleProcess</a></li>
 <li><a href="org/locationtech/geowave/service/rest/SwaggerApiParser.html" title="class in org.locationtech.geowave.service.rest">SwaggerApiParser</a></li>
 <li><a href="org/locationtech/geowave/service/rest/SwaggerOperationParser.html" title="class in org.locationtech.geowave.service.rest">SwaggerOperationParser</a></li>
@@ -2356,6 +2365,8 @@
 <li><a href="org/locationtech/geowave/core/ingest/URLIngestUtils.html" title="class in org.locationtech.geowave.core.ingest">URLIngestUtils</a></li>
 <li><a href="org/locationtech/geowave/core/ingest/URLIngestUtils.URLTYPE.html" title="enum in org.locationtech.geowave.core.ingest">URLIngestUtils.URLTYPE</a></li>
 <li><a href="org/locationtech/geowave/core/cli/utils/URLUtils.html" title="class in org.locationtech.geowave.core.cli.utils">URLUtils</a></li>
+<li><a href="org/locationtech/geowave/core/cli/operations/util/UtilOperationProvider.html" title="class in org.locationtech.geowave.core.cli.operations.util">UtilOperationProvider</a></li>
+<li><a href="org/locationtech/geowave/core/cli/operations/util/UtilSection.html" title="class in org.locationtech.geowave.core.cli.operations.util">UtilSection</a></li>
 <li><a href="org/locationtech/geowave/core/cli/utils/ValueConverter.html" title="class in org.locationtech.geowave.core.cli.utils">ValueConverter</a></li>
 <li><a href="org/locationtech/geowave/core/index/VarintUtils.html" title="class in org.locationtech.geowave.core.index">VarintUtils</a></li>
 <li><a href="org/locationtech/geowave/core/geotime/store/query/api/VectorAggregationQueryBuilder.html" title="interface in org.locationtech.geowave.core.geotime.store.query.api"><span class="interfaceName">VectorAggregationQueryBuilder</span></a></li>
@@ -2398,7 +2409,7 @@
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/VectorStoreParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">VectorStoreParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/VectorStoreParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">VectorStoreParametersProtosOrBuilder</span></a></li>
 <li><a href="org/locationtech/geowave/core/geotime/store/query/aggregate/VectorTimeRangeAggregation.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">VectorTimeRangeAggregation</a></li>
-<li><a href="org/locationtech/geowave/core/store/operations/remote/VersionCommand.html" title="class in org.locationtech.geowave.core.store.operations.remote">VersionCommand</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/store/VersionCommand.html" title="class in org.locationtech.geowave.core.store.cli.store">VersionCommand</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/VersionCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">VersionCommandParametersProtos</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/VersionCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf">VersionCommandParametersProtos.Builder</a></li>
 <li><a href="org/locationtech/geowave/service/grpc/protobuf/VersionCommandParametersProtosOrBuilder.html" title="interface in org.locationtech.geowave.service.grpc.protobuf"><span class="interfaceName">VersionCommandParametersProtosOrBuilder</span></a></li>
@@ -2432,12 +2443,14 @@
 <li><a href="org/locationtech/geowave/core/store/util/VisibilityExpression.html" title="class in org.locationtech.geowave.core.store.util">VisibilityExpression</a></li>
 <li><a href="org/locationtech/geowave/core/store/data/visibility/VisibilityManagement.html" title="interface in org.locationtech.geowave.core.store.data.visibility"><span class="interfaceName">VisibilityManagement</span></a></li>
 <li><a href="org/locationtech/geowave/adapter/vector/plugin/visibility/VisibilityManagementHelper.html" title="class in org.locationtech.geowave.adapter.vector.plugin.visibility">VisibilityManagementHelper</a></li>
-<li><a href="org/locationtech/geowave/core/store/cli/remote/options/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">VisibilityOptions</a></li>
+<li><a href="org/locationtech/geowave/core/store/cli/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli">VisibilityOptions</a></li>
 <li><a href="org/locationtech/geowave/core/store/data/VisibilityWriter.html" title="interface in org.locationtech.geowave.core.store.data"><span class="interfaceName">VisibilityWriter</span></a></li>
 <li><a href="org/locationtech/geowave/adapter/raster/adapter/warp/WarpOpImage.html" title="class in org.locationtech.geowave.adapter.raster.adapter.warp">WarpOpImage</a></li>
 <li><a href="org/locationtech/geowave/adapter/raster/adapter/warp/WarpRIF.html" title="class in org.locationtech.geowave.adapter.raster.adapter.warp">WarpRIF</a></li>
 <li><a href="org/locationtech/geowave/datastore/accumulo/iterators/WholeRowAggregationIterator.html" title="class in org.locationtech.geowave.datastore.accumulo.iterators">WholeRowAggregationIterator</a></li>
 <li><a href="org/locationtech/geowave/datastore/accumulo/iterators/WholeRowQueryFilterIterator.html" title="class in org.locationtech.geowave.datastore.accumulo.iterators">WholeRowQueryFilterIterator</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/workspace/WorkspaceOperationProvider.html" title="class in org.locationtech.geowave.cli.geoserver.workspace">WorkspaceOperationProvider</a></li>
+<li><a href="org/locationtech/geowave/cli/geoserver/workspace/WorkspaceSection.html" title="class in org.locationtech.geowave.cli.geoserver.workspace">WorkspaceSection</a></li>
 <li><a href="org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api"><span class="interfaceName">Writer</span></a></li>
 <li><a href="org/locationtech/geowave/core/store/api/WriteResults.html" title="class in org.locationtech.geowave.core.store.api">WriteResults</a></li>
 <li><a href="org/locationtech/geowave/format/landsat8/WRS2GeometryStore.html" title="class in org.locationtech.geowave.format.landsat8">WRS2GeometryStore</a></li>

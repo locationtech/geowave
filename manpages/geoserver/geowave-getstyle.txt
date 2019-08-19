@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave gs getstyle - Get GeoServer Style info
+geowave gs style get - Get GeoServer Style info
 
 SYNOPSIS
 //:--------
 
-geowave gs getstyle [options] <style name>
+geowave gs style get [options] <style name>
 
 DESCRIPTION
 //:-----------

@@ -1169,17 +1169,6 @@ href="images/geowave-icon-logo-small.png">
 </div>
 </div>
 <div class="sect3">
-<h4 id="accumulo"><a class="anchor" href="#accumulo"></a>Accumulo</h4>
-<div class="paragraph">
-<p>Utility operations to set accumulo splits</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave accumulo</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
 <h4 id="analytic"><a class="anchor" href="#analytic"></a>Analytic</h4>
 <div class="paragraph">
 <p>Commands that run mapreduce or spark processing to enhance an existing GeoWave dataset</p>
@@ -1187,6 +1176,39 @@ href="images/geowave-icon-logo-small.png">
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave analytic</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="store"><a class="anchor" href="#store"></a>Store</h4>
+<div class="paragraph">
+<p>Commands for managing GeoWave data stores</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave store</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="index"><a class="anchor" href="#index"></a>Index</h4>
+<div class="paragraph">
+<p>Commands for managing GeoWave indices</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave index</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="statistics-3"><a class="anchor" href="#statistics-3"></a>Statistics</h4>
+<div class="paragraph">
+<p>Commands for managing statistics</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave stat</code></pre>
 </div>
 </div>
 </div>
@@ -1224,13 +1246,35 @@ href="images/geowave-icon-logo-small.png">
 </div>
 </div>
 <div class="sect3">
-<h4 id="hbase"><a class="anchor" href="#hbase"></a>HBase</h4>
+<h4 id="accumulo"><a class="anchor" href="#accumulo"></a>Accumulo</h4>
 <div class="paragraph">
-<p>Utility operations to combine statistics in hbase</p>
+<p>Accumulo utility commands</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave hbase</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave util accumulo</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="hbase"><a class="anchor" href="#hbase"></a>HBase</h4>
+<div class="paragraph">
+<p>HBase utility commands</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave util hbase</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="python"><a class="anchor" href="#python"></a>Python</h4>
+<div class="paragraph">
+<p>Utility commands for python integration</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave util python</code></pre>
 </div>
 </div>
 </div>
@@ -1263,7 +1307,7 @@ href="images/geowave-icon-logo-small.png">
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave landsat</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave util landsat</code></pre>
 </div>
 </div>
 </div>
@@ -1274,7 +1318,7 @@ href="images/geowave-icon-logo-small.png">
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave osm</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave util osm</code></pre>
 </div>
 </div>
 </div>
@@ -1286,17 +1330,6 @@ href="images/geowave-icon-logo-small.png">
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave raster</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="remote"><a class="anchor" href="#remote"></a>Remote</h4>
-<div class="paragraph">
-<p>Operations to manage a remote store</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave remote</code></pre>
 </div>
 </div>
 </div>
@@ -1719,7 +1752,7 @@ FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig</a></p></td>
 </div>
 </div>
 <div class="paragraph">
-<p>The above command will execute &lt;algorithm&gt; (such as dbscan), sourcing the data from the &lt;store&gt; datastore (see config addstore).</p>
+<p>The above command will execute &lt;algorithm&gt; (such as dbscan), sourcing the data from the &lt;store&gt; datastore (see store add).</p>
 </div>
 </div>
 <div class="sect2">
@@ -3127,7 +3160,7 @@ For configuring the password encryption enabled setting:</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-08-15 12:58:23 +00:00
+Last updated 2019-08-19 20:19:26 +00:00
 </div>
 </div>
 </body>

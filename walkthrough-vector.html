@@ -509,7 +509,7 @@ cd $STAGING_DIR</code></pre>
 <p>If using Sandbox</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore gdelt --gwNamespace geowave.gdelt -t hbase --zookeeper \
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave store add gdelt --gwNamespace geowave.gdelt -t hbase --zookeeper \
 sandbox.hortonworks.com:2181</code></pre>
 </div>
 </div>
@@ -518,7 +518,7 @@ sandbox.hortonworks.com:2181</code></pre>
 <p>If using EMR Accumulo</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore gdelt --gwNamespace geowave.gdelt \
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave store add gdelt --gwNamespace geowave.gdelt \
 -t accumulo --zookeeper $HOSTNAME:2181 --instance accumulo \
 --user geowave --password geowave</code></pre>
 </div>
@@ -528,7 +528,7 @@ sandbox.hortonworks.com:2181</code></pre>
 <p>If using EMR HBase</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore gdelt --gwNamespace geowave.gdelt \
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave store add gdelt --gwNamespace geowave.gdelt \
 -t hbase --zookeeper $HOSTNAME:2181</code></pre>
 </div>
 </div>
@@ -537,7 +537,7 @@ sandbox.hortonworks.com:2181</code></pre>
 <p>If using EMR Cassandra</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore gdelt --gwNamespace geowave.gdelt \
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave store add gdelt --gwNamespace geowave.gdelt \
 -t cassandra  --contactPoints localhost</code></pre>
 </div>
 </div>
@@ -549,7 +549,7 @@ sandbox.hortonworks.com:2181</code></pre>
 <p>Add a spatial index</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addindex -t spatial gdelt-spatial --partitionStrategy round_robin \
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave index add gdelt spatial -t spatial --partitionStrategy round_robin \
 --numPartitions $NUM_PARTITIONS</code></pre>
 </div>
 </div>
@@ -599,7 +599,7 @@ sandbox.hortonworks.com:2181</code></pre>
 <p>If using Sandbox</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave store add gdelt-kde --gwNamespace geowave.kde_gdelt \
 -t hbase --zookeeper $HOSTNAME:2181</code></pre>
 </div>
 </div>
@@ -608,7 +608,7 @@ sandbox.hortonworks.com:2181</code></pre>
 <p>If using EMR Accumulo</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave store add gdelt-kde --gwNamespace geowave.kde_gdelt \
 -t accumulo --zookeeper $HOSTNAME:2181 --instance accumulo --user geowave --password geowave</code></pre>
 </div>
 </div>
@@ -617,7 +617,7 @@ sandbox.hortonworks.com:2181</code></pre>
 <p>If using EMR HBase</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave store add gdelt-kde --gwNamespace geowave.kde_gdelt \
 -t hbase --zookeeper $HOSTNAME:2181</code></pre>
 </div>
 </div>
@@ -626,7 +626,7 @@ sandbox.hortonworks.com:2181</code></pre>
 <p>If using EMR Cassandra</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave store add gdelt-kde --gwNamespace geowave.kde_gdelt \
 -t cassandra  --contactPoints localhost</code></pre>
 </div>
 </div>
@@ -704,7 +704,7 @@ sandbox.hortonworks.com:2181</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-08-15 12:58:23 +00:00
+Last updated 2019-08-19 20:19:26 +00:00
 </div>
 </div>
 </body>

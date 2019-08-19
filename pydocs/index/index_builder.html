@@ -52,16 +52,16 @@ class IndexBuilder(GeoWaveObject):
         self._java_ref.setNumPartitions(num_partitions)
         return self
 
-    def set_name_override(self, name_override):
+    def set_name(self, index_name):
         &#34;&#34;&#34;
         Set the name of the index to the given value.
 
         Args:
-            name_override (str): The name to use.
+            index_name (str): The name to use.
         Returns:
             This index builder.
         &#34;&#34;&#34;
-        self._java_ref.setNameOverride(name_override)
+        self._java_ref.setName(index_name)
         return self
 
     def create_index(self):
@@ -109,16 +109,16 @@ class IndexBuilder(GeoWaveObject):
         self._java_ref.setNumPartitions(num_partitions)
         return self
 
-    def set_name_override(self, name_override):
+    def set_name(self, index_name):
         &#34;&#34;&#34;
         Set the name of the index to the given value.
 
         Args:
-            name_override (str): The name to use.
+            index_name (str): The name to use.
         Returns:
             This index builder.
         &#34;&#34;&#34;
-        self._java_ref.setNameOverride(name_override)
+        self._java_ref.setName(index_name)
         return self
 
     def create_index(self):
@@ -162,30 +162,30 @@ class IndexBuilder(GeoWaveObject):
     return Index(j_idx)</code></pre>
 </details>
 </dd>
-<dt id="pygw.index.index_builder.IndexBuilder.set_name_override"><code class="name flex">
-<span>def <span class="ident">set_name_override</span></span>(<span>self, name_override)</span>
+<dt id="pygw.index.index_builder.IndexBuilder.set_name"><code class="name flex">
+<span>def <span class="ident">set_name</span></span>(<span>self, index_name)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Set the name of the index to the given value.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>name_override</code></strong> :&ensp;<code>str</code></dt>
+<dt><strong><code>index_name</code></strong> :&ensp;<code>str</code></dt>
 <dd>The name to use.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>This index builder.</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def set_name_override(self, name_override):
+<pre><code class="python">def set_name(self, index_name):
     &#34;&#34;&#34;
     Set the name of the index to the given value.
 
     Args:
-        name_override (str): The name to use.
+        index_name (str): The name to use.
     Returns:
         This index builder.
     &#34;&#34;&#34;
-    self._java_ref.setNameOverride(name_override)
+    self._java_ref.setName(index_name)
     return self</code></pre>
 </details>
 </dd>
@@ -246,7 +246,7 @@ class IndexBuilder(GeoWaveObject):
 <h4><code><a title="pygw.index.index_builder.IndexBuilder" href="#pygw.index.index_builder.IndexBuilder">IndexBuilder</a></code></h4>
 <ul class="">
 <li><code><a title="pygw.index.index_builder.IndexBuilder.create_index" href="#pygw.index.index_builder.IndexBuilder.create_index">create_index</a></code></li>
-<li><code><a title="pygw.index.index_builder.IndexBuilder.set_name_override" href="#pygw.index.index_builder.IndexBuilder.set_name_override">set_name_override</a></code></li>
+<li><code><a title="pygw.index.index_builder.IndexBuilder.set_name" href="#pygw.index.index_builder.IndexBuilder.set_name">set_name</a></code></li>
 <li><code><a title="pygw.index.index_builder.IndexBuilder.set_num_partitions" href="#pygw.index.index_builder.IndexBuilder.set_num_partitions">set_num_partitions</a></code></li>
 </ul>
 </li>

@@ -160,7 +160,7 @@ implements org.apache.hadoop.util.Tool</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/KDEJobRunner.html#INPUT_CRSCODE_KEY">INPUT_CRSCODE_KEY</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/KDEJobRunner.html#inputDataStoreOptions">inputDataStoreOptions</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -180,7 +180,7 @@ implements org.apache.hadoop.util.Tool</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/KDEJobRunner.html#OUTPUT_CRSCODE_KEY">OUTPUT_CRSCODE_KEY</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/KDEJobRunner.html#outputDataStoreOptions">outputDataStoreOptions</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -222,9 +222,9 @@ implements org.apache.hadoop.util.Tool</pre>
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/KDEJobRunner.html#KDEJobRunner-org.locationtech.geowave.analytic.mapreduce.kde.KDECommandLineOptions-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-java.io.File-org.locationtech.geowave.core.store.api.Index-">KDEJobRunner</a></span>(<a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/KDECommandLineOptions.html" title="class in org.locationtech.geowave.analytic.mapreduce.kde">KDECommandLineOptions</a>&nbsp;kdeCommandLineOptions,
-            <a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;inputDataStoreOptions,
-            <a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;outputDataStoreOptions,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/KDEJobRunner.html#KDEJobRunner-org.locationtech.geowave.analytic.mapreduce.kde.KDECommandLineOptions-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-java.io.File-org.locationtech.geowave.core.store.api.Index-">KDEJobRunner</a></span>(<a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/KDECommandLineOptions.html" title="class in org.locationtech.geowave.analytic.mapreduce.kde">KDECommandLineOptions</a>&nbsp;kdeCommandLineOptions,
+            <a href="../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;inputDataStoreOptions,
+            <a href="../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;outputDataStoreOptions,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile,
             <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;outputIndex)</code>&nbsp;</td>
 </tr>
@@ -444,7 +444,7 @@ implements org.apache.hadoop.util.Tool</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>inputDataStoreOptions</h4>
-<pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a> inputDataStoreOptions</pre>
+<pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a> inputDataStoreOptions</pre>
 </li>
 </ul>
 <a name="outputDataStoreOptions">
@@ -453,7 +453,7 @@ implements org.apache.hadoop.util.Tool</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>outputDataStoreOptions</h4>
-<pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a> outputDataStoreOptions</pre>
+<pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a> outputDataStoreOptions</pre>
 </li>
 </ul>
 <a name="configFile">
@@ -560,15 +560,15 @@ implements org.apache.hadoop.util.Tool</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="KDEJobRunner-org.locationtech.geowave.analytic.mapreduce.kde.KDECommandLineOptions-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-java.io.File-org.locationtech.geowave.core.store.api.Index-">
+<a name="KDEJobRunner-org.locationtech.geowave.analytic.mapreduce.kde.KDECommandLineOptions-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-java.io.File-org.locationtech.geowave.core.store.api.Index-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>KDEJobRunner</h4>
 <pre>public&nbsp;KDEJobRunner(<a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/KDECommandLineOptions.html" title="class in org.locationtech.geowave.analytic.mapreduce.kde">KDECommandLineOptions</a>&nbsp;kdeCommandLineOptions,
-                    <a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;inputDataStoreOptions,
-                    <a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;outputDataStoreOptions,
+                    <a href="../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;inputDataStoreOptions,
+                    <a href="../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;outputDataStoreOptions,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile,
                     <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;outputIndex)</pre>
 </li>

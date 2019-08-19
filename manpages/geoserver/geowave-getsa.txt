@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave config getsa - Get GeoWave store adapters
+geowave gs sa get - Get GeoWave store adapters
 
 SYNOPSIS
 //:--------
 
-geowave gs getsa [options] <store name>
+geowave gs sa get [options] <store name>
 
 DESCRIPTION
 //:-----------

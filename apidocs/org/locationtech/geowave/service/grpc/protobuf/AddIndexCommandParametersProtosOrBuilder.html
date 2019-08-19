@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AddIndexCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AddIndexGroupCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AddStoreCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/locationtech/geowave/service/grpc/protobuf/AddIndexCommandParametersProtosOrBuilder.html" target="_top">Frames</a></li>
@@ -130,75 +130,57 @@ extends com.google.protobuf.MessageOrBuilder</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AddIndexCommandParametersProtosOrBuilder.html#getMakeDefault--">getMakeDefault</a></span>()</code>
-<div class="block"><code>bool makeDefault = 2;</code></div>
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AddIndexCommandParametersProtosOrBuilder.html#getNumPartitions--">getNumPartitions</a></span>()</code>
+<div class="block"><code>int32 numPartitions = 3;</code></div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AddIndexCommandParametersProtosOrBuilder.html#getNameOverride--">getNameOverride</a></span>()</code>
-<div class="block"><code>string nameOverride = 4;</code></div>
-</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>com.google.protobuf.ByteString</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AddIndexCommandParametersProtosOrBuilder.html#getNameOverrideBytes--">getNameOverrideBytes</a></span>()</code>
-<div class="block"><code>string nameOverride = 4;</code></div>
-</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AddIndexCommandParametersProtosOrBuilder.html#getNumPartitions--">getNumPartitions</a></span>()</code>
-<div class="block"><code>int32 numPartitions = 5;</code></div>
-</td>
-</tr>
-<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AddIndexCommandParametersProtosOrBuilder.html#getParameters-int-">getParameters</a></span>(int&nbsp;index)</code>
 <div class="block"><code>repeated string parameters = 1;</code></div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>com.google.protobuf.ByteString</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AddIndexCommandParametersProtosOrBuilder.html#getParametersBytes-int-">getParametersBytes</a></span>(int&nbsp;index)</code>
 <div class="block"><code>repeated string parameters = 1;</code></div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AddIndexCommandParametersProtosOrBuilder.html#getParametersCount--">getParametersCount</a></span>()</code>
 <div class="block"><code>repeated string parameters = 1;</code></div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AddIndexCommandParametersProtosOrBuilder.html#getParametersList--">getParametersList</a></span>()</code>
 <div class="block"><code>repeated string parameters = 1;</code></div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AddIndexCommandParametersProtosOrBuilder.html#getPartitionStrategy--">getPartitionStrategy</a></span>()</code>
-<div class="block"><code>string partitionStrategy = 6;</code></div>
+<div class="block"><code>string partitionStrategy = 4;</code></div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>com.google.protobuf.ByteString</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AddIndexCommandParametersProtosOrBuilder.html#getPartitionStrategyBytes--">getPartitionStrategyBytes</a></span>()</code>
-<div class="block"><code>string partitionStrategy = 6;</code></div>
+<div class="block"><code>string partitionStrategy = 4;</code></div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AddIndexCommandParametersProtosOrBuilder.html#getType--">getType</a></span>()</code>
-<div class="block"><code>string type = 3;</code></div>
+<div class="block"><code>string type = 2;</code></div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>com.google.protobuf.ByteString</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AddIndexCommandParametersProtosOrBuilder.html#getTypeBytes--">getTypeBytes</a></span>()</code>
-<div class="block"><code>string type = 3;</code></div>
+<div class="block"><code>string type = 2;</code></div>
 </td>
 </tr>
 </table>
@@ -270,16 +252,6 @@ extends com.google.protobuf.MessageOrBuilder</pre>
 <div class="block"><code>repeated string parameters = 1;</code></div>
 </li>
 </ul>
-<a name="getMakeDefault--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getMakeDefault</h4>
-<pre>boolean&nbsp;getMakeDefault()</pre>
-<div class="block"><code>bool makeDefault = 2;</code></div>
-</li>
-</ul>
 <a name="getType--">
 <!--   -->
 </a>
@@ -287,7 +259,7 @@ extends com.google.protobuf.MessageOrBuilder</pre>
 <li class="blockList">
 <h4>getType</h4>
 <pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getType()</pre>
-<div class="block"><code>string type = 3;</code></div>
+<div class="block"><code>string type = 2;</code></div>
 </li>
 </ul>
 <a name="getTypeBytes--">
@@ -297,27 +269,7 @@ extends com.google.protobuf.MessageOrBuilder</pre>
 <li class="blockList">
 <h4>getTypeBytes</h4>
 <pre>com.google.protobuf.ByteString&nbsp;getTypeBytes()</pre>
-<div class="block"><code>string type = 3;</code></div>
-</li>
-</ul>
-<a name="getNameOverride--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getNameOverride</h4>
-<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getNameOverride()</pre>
-<div class="block"><code>string nameOverride = 4;</code></div>
-</li>
-</ul>
-<a name="getNameOverrideBytes--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getNameOverrideBytes</h4>
-<pre>com.google.protobuf.ByteString&nbsp;getNameOverrideBytes()</pre>
-<div class="block"><code>string nameOverride = 4;</code></div>
+<div class="block"><code>string type = 2;</code></div>
 </li>
 </ul>
 <a name="getNumPartitions--">
@@ -327,7 +279,7 @@ extends com.google.protobuf.MessageOrBuilder</pre>
 <li class="blockList">
 <h4>getNumPartitions</h4>
 <pre>int&nbsp;getNumPartitions()</pre>
-<div class="block"><code>int32 numPartitions = 5;</code></div>
+<div class="block"><code>int32 numPartitions = 3;</code></div>
 </li>
 </ul>
 <a name="getPartitionStrategy--">
@@ -337,7 +289,7 @@ extends com.google.protobuf.MessageOrBuilder</pre>
 <li class="blockList">
 <h4>getPartitionStrategy</h4>
 <pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getPartitionStrategy()</pre>
-<div class="block"><code>string partitionStrategy = 6;</code></div>
+<div class="block"><code>string partitionStrategy = 4;</code></div>
 </li>
 </ul>
 <a name="getPartitionStrategyBytes--">
@@ -347,7 +299,7 @@ extends com.google.protobuf.MessageOrBuilder</pre>
 <li class="blockList">
 <h4>getPartitionStrategyBytes</h4>
 <pre>com.google.protobuf.ByteString&nbsp;getPartitionStrategyBytes()</pre>
-<div class="block"><code>string partitionStrategy = 6;</code></div>
+<div class="block"><code>string partitionStrategy = 4;</code></div>
 </li>
 </ul>
 </li>
@@ -379,7 +331,7 @@ extends com.google.protobuf.MessageOrBuilder</pre>
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AddIndexCommandParametersProtos.Builder.html" title="class in org.locationtech.geowave.service.grpc.protobuf"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AddIndexGroupCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AddStoreCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/locationtech/geowave/service/grpc/protobuf/AddIndexCommandParametersProtosOrBuilder.html" target="_top">Frames</a></li>

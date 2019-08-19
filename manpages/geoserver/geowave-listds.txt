@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave gs listds - List GeoServer datastores
+geowave gs ds list - List GeoServer datastores
 
 SYNOPSIS
 //:--------
 
-geowave gs listds [options]
+geowave gs ds list [options]
 
 DESCRIPTION
 //:-----------

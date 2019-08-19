@@ -165,21 +165,21 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/spark/SparkIngestDriver.html#processInput-java.io.File-org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions-java.util.Properties-java.util.Iterator-">processInput</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/spark/SparkIngestDriver.html#processInput-java.io.File-org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.cli.VisibilityOptions-java.util.Properties-java.util.Iterator-">processInput</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile,
             <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalInputCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.ingest">LocalInputCommandLineOptions</a>&nbsp;localInput,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;inputStoreName,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexList,
-            <a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">VisibilityOptions</a>&nbsp;ingestOptions,
+            <a href="../../../../../../org/locationtech/geowave/core/store/cli/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli">VisibilityOptions</a>&nbsp;ingestOptions,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;configProperties,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URI.html?is-external=true" title="class or interface in java.net">URI</a>&gt;&nbsp;inputFiles)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/spark/SparkIngestDriver.html#runOperation-java.io.File-org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions-org.locationtech.geowave.core.ingest.spark.SparkCommandLineOptions-java.lang.String-">runOperation</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/spark/SparkIngestDriver.html#runOperation-java.io.File-org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.cli.VisibilityOptions-org.locationtech.geowave.core.ingest.spark.SparkCommandLineOptions-java.lang.String-">runOperation</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile,
             <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalInputCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.ingest">LocalInputCommandLineOptions</a>&nbsp;localInput,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;inputStoreName,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexList,
-            <a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">VisibilityOptions</a>&nbsp;ingestOptions,
+            <a href="../../../../../../org/locationtech/geowave/core/store/cli/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli">VisibilityOptions</a>&nbsp;ingestOptions,
             <a href="../../../../../../org/locationtech/geowave/core/ingest/spark/SparkCommandLineOptions.html" title="class in org.locationtech.geowave.core.ingest.spark">SparkCommandLineOptions</a>&nbsp;sparkOptions,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;basePath)</code>&nbsp;</td>
 </tr>
@@ -232,7 +232,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="runOperation-java.io.File-org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions-org.locationtech.geowave.core.ingest.spark.SparkCommandLineOptions-java.lang.String-">
+<a name="runOperation-java.io.File-org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.cli.VisibilityOptions-org.locationtech.geowave.core.ingest.spark.SparkCommandLineOptions-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -242,7 +242,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
                             <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalInputCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.ingest">LocalInputCommandLineOptions</a>&nbsp;localInput,
                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;inputStoreName,
                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexList,
-                            <a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">VisibilityOptions</a>&nbsp;ingestOptions,
+                            <a href="../../../../../../org/locationtech/geowave/core/store/cli/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli">VisibilityOptions</a>&nbsp;ingestOptions,
                             <a href="../../../../../../org/locationtech/geowave/core/ingest/spark/SparkCommandLineOptions.html" title="class in org.locationtech.geowave.core.ingest.spark">SparkCommandLineOptions</a>&nbsp;sparkOptions,
                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;basePath)
                      throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
@@ -252,7 +252,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 </dl>
 </li>
 </ul>
-<a name="processInput-java.io.File-org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions-java.util.Properties-java.util.Iterator-">
+<a name="processInput-java.io.File-org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.cli.VisibilityOptions-java.util.Properties-java.util.Iterator-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -262,7 +262,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
                          <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalInputCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.ingest">LocalInputCommandLineOptions</a>&nbsp;localInput,
                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;inputStoreName,
                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexList,
-                         <a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">VisibilityOptions</a>&nbsp;ingestOptions,
+                         <a href="../../../../../../org/locationtech/geowave/core/store/cli/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli">VisibilityOptions</a>&nbsp;ingestOptions,
                          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;configProperties,
                          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URI.html?is-external=true" title="class or interface in java.net">URI</a>&gt;&nbsp;inputFiles)
                   throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>

@@ -142,11 +142,11 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/ingest/Ab
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/IndexPluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">IndexPluginOptions</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestCLIDriver.html#indexOptions">indexOptions</a></span></code>&nbsp;</td>
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestCLIDriver.html#indices">indices</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">VisibilityOptions</a></code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/cli/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli">VisibilityOptions</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestCLIDriver.html#ingestOptions">ingestOptions</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -154,7 +154,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/ingest/Ab
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestCLIDriver.html#ingestPlugins">ingestPlugins</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestCLIDriver.html#storeOptions">storeOptions</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -190,10 +190,10 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/ingest/Ab
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestCLIDriver.html#LocalFileIngestCLIDriver-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-java.util.List-java.util.Map-org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions-org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions-int-">LocalFileIngestCLIDriver</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
-                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/IndexPluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">IndexPluginOptions</a>&gt;&nbsp;indexOptions,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/local/LocalFileIngestCLIDriver.html#LocalFileIngestCLIDriver-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-java.util.List-java.util.Map-org.locationtech.geowave.core.store.cli.VisibilityOptions-org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions-int-">LocalFileIngestCLIDriver</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;storeOptions,
+                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;&nbsp;indices,
                         <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;?&gt;&gt;&nbsp;ingestPlugins,
-                        <a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">VisibilityOptions</a>&nbsp;ingestOptions,
+                        <a href="../../../../../../org/locationtech/geowave/core/store/cli/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli">VisibilityOptions</a>&nbsp;ingestOptions,
                         <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalInputCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.ingest">LocalInputCommandLineOptions</a>&nbsp;inputOptions,
                         int&nbsp;threads)</code>&nbsp;</td>
 </tr>
@@ -250,7 +250,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/ingest/Ab
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.store.ingest.<a href="../../../../../../org/locationtech/geowave/core/store/ingest/AbstractLocalFileDriver.html" title="class in org.locationtech.geowave.core.store.ingest">AbstractLocalFileDriver</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/core/store/ingest/AbstractLocalFileDriver.html#checkIndexesAgainstProvider-java.lang.String-org.locationtech.geowave.core.store.ingest.DataAdapterProvider-java.util.List-">checkIndexesAgainstProvider</a>, <a href="../../../../../../org/locationtech/geowave/core/store/ingest/AbstractLocalFileDriver.html#getExtensions--">getExtensions</a>, <a href="../../../../../../org/locationtech/geowave/core/store/ingest/AbstractLocalFileDriver.html#isCompatible-org.locationtech.geowave.core.store.ingest.DataAdapterProvider-org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions-">isCompatible</a>, <a href="../../../../../../org/locationtech/geowave/core/store/ingest/AbstractLocalFileDriver.html#processInput-java.lang.String-java.io.File-java.util.Map-R-">processInput</a></code></li>
+<code><a href="../../../../../../org/locationtech/geowave/core/store/ingest/AbstractLocalFileDriver.html#checkIndexesAgainstProvider-java.lang.String-org.locationtech.geowave.core.store.ingest.DataAdapterProvider-java.util.List-">checkIndexesAgainstProvider</a>, <a href="../../../../../../org/locationtech/geowave/core/store/ingest/AbstractLocalFileDriver.html#getExtensions--">getExtensions</a>, <a href="../../../../../../org/locationtech/geowave/core/store/ingest/AbstractLocalFileDriver.html#isCompatible-org.locationtech.geowave.core.store.ingest.DataAdapterProvider-org.locationtech.geowave.core.store.api.Index-">isCompatible</a>, <a href="../../../../../../org/locationtech/geowave/core/store/ingest/AbstractLocalFileDriver.html#processInput-java.lang.String-java.io.File-java.util.Map-R-">processInput</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -279,16 +279,16 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/ingest/Ab
 <ul class="blockList">
 <li class="blockList">
 <h4>storeOptions</h4>
-<pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a> storeOptions</pre>
+<pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a> storeOptions</pre>
 </li>
 </ul>
-<a name="indexOptions">
+<a name="indices">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>indexOptions</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/IndexPluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">IndexPluginOptions</a>&gt; indexOptions</pre>
+<h4>indices</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt; indices</pre>
 </li>
 </ul>
 <a name="ingestOptions">
@@ -297,7 +297,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/ingest/Ab
 <ul class="blockList">
 <li class="blockList">
 <h4>ingestOptions</h4>
-<pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">VisibilityOptions</a> ingestOptions</pre>
+<pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/cli/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli">VisibilityOptions</a> ingestOptions</pre>
 </li>
 </ul>
 <a name="ingestPlugins">
@@ -326,16 +326,16 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/ingest/Ab
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="LocalFileIngestCLIDriver-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-java.util.List-java.util.Map-org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions-org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions-int-">
+<a name="LocalFileIngestCLIDriver-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-java.util.List-java.util.Map-org.locationtech.geowave.core.store.cli.VisibilityOptions-org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions-int-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>LocalFileIngestCLIDriver</h4>
-<pre>public&nbsp;LocalFileIngestCLIDriver(<a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
-                                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/IndexPluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">IndexPluginOptions</a>&gt;&nbsp;indexOptions,
+<pre>public&nbsp;LocalFileIngestCLIDriver(<a href="../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;storeOptions,
+                                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;&nbsp;indices,
                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalFileIngestPlugin.html" title="interface in org.locationtech.geowave.core.store.ingest">LocalFileIngestPlugin</a>&lt;?&gt;&gt;&nbsp;ingestPlugins,
-                                <a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">VisibilityOptions</a>&nbsp;ingestOptions,
+                                <a href="../../../../../../org/locationtech/geowave/core/store/cli/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli">VisibilityOptions</a>&nbsp;ingestOptions,
                                 <a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalInputCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.ingest">LocalInputCommandLineOptions</a>&nbsp;inputOptions,
                                 int&nbsp;threads)</pre>
 </li>

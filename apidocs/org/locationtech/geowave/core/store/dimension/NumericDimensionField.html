@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -166,6 +166,12 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/dimension
 <div class="block">Get a writer that can handle serializing values for this field</div>
 </td>
 </tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html#isCompatibleWith-java.lang.Class-">isCompatibleWith</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;clazz)</code>
+<div class="block">Determines if the given field type is compatible with this field.</div>
+</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition">
@@ -259,7 +265,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/dimension
 <a name="getBaseDefinition--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getBaseDefinition</h4>
 <pre><a href="../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>&nbsp;getBaseDefinition()</pre>
@@ -267,6 +273,22 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/dimension
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the base index definition for this dimension</dd>
+</dl>
+</li>
+</ul>
+<a name="isCompatibleWith-java.lang.Class-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>isCompatibleWith</h4>
+<pre>boolean&nbsp;isCompatibleWith(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;clazz)</pre>
+<div class="block">Determines if the given field type is compatible with this field.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>clazz</code> - the field type to check</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the given field type is assignable</dd>
 </dl>
 </li>
 </ul>

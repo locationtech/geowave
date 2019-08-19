@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../org/locationtech/geowave/service/client/FileUploadServiceClient.html" title="class in org.locationtech.geowave.service.client"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../org/locationtech/geowave/service/client/IngestServiceClient.html" title="class in org.locationtech.geowave.service.client"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../org/locationtech/geowave/service/client/IndexServiceClient.html" title="class in org.locationtech.geowave.service.client"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../index.html?org/locationtech/geowave/service/client/GeoServerServiceClient.html" target="_top">Frames</a></li>
@@ -154,21 +154,21 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#addCoverage-java.lang.String-java.lang.String-">addCoverage</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvgstore,
-           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverage_name)</code>&nbsp;</td>
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#addCoverage-java.lang.String-java.lang.String-java.lang.String-">addCoverage</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvgstore,
-           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverage_name,
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#addCoverageStore-java.lang.String-">addCoverageStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;GeoWave_store_name)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#addCoverageStore-java.lang.String-">addCoverageStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;GeoWaveStoreName)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#addCoverageStore-java.lang.String-java.lang.String-java.lang.Boolean-java.lang.String-java.lang.Boolean-">addCoverageStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;GeoWave_store_name,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#addCoverageStore-java.lang.String-java.lang.String-java.lang.Boolean-java.lang.String-java.lang.Boolean-">addCoverageStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geoWaveStoreName,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;equalizerHistogramOverride,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;interpolationOverride,
@@ -176,32 +176,32 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#addDataStore-java.lang.String-">addDataStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;GeoWave_store_name)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#addDataStore-java.lang.String-">addDataStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geoWaveStoreName)</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#addDataStore-java.lang.String-java.lang.String-java.lang.String-">addDataStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;GeoWave_store_name,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#addDataStore-java.lang.String-java.lang.String-java.lang.String-">addDataStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geoWaveStoreName,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastore)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#addFeatureLayer-java.lang.String-java.lang.String-">addFeatureLayer</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastore,
-               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layer_name)</code>&nbsp;</td>
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName)</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#addFeatureLayer-java.lang.String-java.lang.String-java.lang.String-">addFeatureLayer</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastore,
-               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layer_name,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</code>&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#addLayer-java.lang.String-">addLayer</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;GeoWave_store_name)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#addLayer-java.lang.String-">addLayer</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geoWaveStoreName)</code>&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#addLayer-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-">addLayer</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;GeoWave_store_name,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#addLayer-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-">addLayer</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geoWaveStoreName,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;addOption,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;adapterId,
@@ -210,60 +210,60 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#addStyle-java.lang.String-java.lang.String-">addStyle</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;stylesld,
-        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;GeoWave_style_name)</code>&nbsp;</td>
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geoWaveStyleName)</code>&nbsp;</td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#addWorkspace-java.lang.String-">addWorkspace</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace_name)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#addWorkspace-java.lang.String-">addWorkspace</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName)</code>&nbsp;</td>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#getCoverage-java.lang.String-java.lang.String-">getCoverage</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvgstore,
-           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverage_name)</code>&nbsp;</td>
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</code>&nbsp;</td>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#getCoverage-java.lang.String-java.lang.String-java.lang.String-">getCoverage</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvgstore,
-           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverage_name,
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</code>&nbsp;</td>
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#getCoverageStore-java.lang.String-">getCoverageStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverage_store_name)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#getCoverageStore-java.lang.String-">getCoverageStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageStoreName)</code>&nbsp;</td>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#getCoverageStore-java.lang.String-java.lang.String-">getCoverageStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverage_store_name,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#getCoverageStore-java.lang.String-java.lang.String-">getCoverageStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageStoreName,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</code>&nbsp;</td>
 </tr>
 <tr id="i16" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#getDataStore-java.lang.String-">getDataStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastore_name)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#getDataStore-java.lang.String-">getDataStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastoreName)</code>&nbsp;</td>
 </tr>
 <tr id="i17" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#getDataStore-java.lang.String-java.lang.String-">getDataStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastore_name,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#getDataStore-java.lang.String-java.lang.String-">getDataStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastoreName,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</code>&nbsp;</td>
 </tr>
 <tr id="i18" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#getFeatureLayer-java.lang.String-">getFeatureLayer</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layer_name)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#getFeatureLayer-java.lang.String-">getFeatureLayer</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName)</code>&nbsp;</td>
 </tr>
 <tr id="i19" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#getStoreAdapters-java.lang.String-">getStoreAdapters</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#getStoreAdapters-java.lang.String-">getStoreAdapters</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;storeName)</code>&nbsp;</td>
 </tr>
 <tr id="i20" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#getStyle-java.lang.String-">getStyle</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;style_name)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#getStyle-java.lang.String-">getStyle</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;styleName)</code>&nbsp;</td>
 </tr>
 <tr id="i21" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#listCoverages-java.lang.String-">listCoverages</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverage_store_name)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#listCoverages-java.lang.String-">listCoverages</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageStoreName)</code>&nbsp;</td>
 </tr>
 <tr id="i22" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#listCoverages-java.lang.String-java.lang.String-">listCoverages</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverage_store_name,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#listCoverages-java.lang.String-java.lang.String-">listCoverages</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageStoreName,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</code>&nbsp;</td>
 </tr>
 <tr id="i23" class="rowColor">
@@ -303,48 +303,48 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr id="i31" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#removeCoverage-java.lang.String-java.lang.String-">removeCoverage</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvgstore,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverage_name)</code>&nbsp;</td>
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</code>&nbsp;</td>
 </tr>
 <tr id="i32" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#removeCoverage-java.lang.String-java.lang.String-java.lang.String-">removeCoverage</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvgstore,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverage_name,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</code>&nbsp;</td>
 </tr>
 <tr id="i33" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#removeCoverageStore-java.lang.String-">removeCoverageStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverage_store_name)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#removeCoverageStore-java.lang.String-">removeCoverageStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageStoreName)</code>&nbsp;</td>
 </tr>
 <tr id="i34" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#removeCoverageStore-java.lang.String-java.lang.String-">removeCoverageStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverage_store_name,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#removeCoverageStore-java.lang.String-java.lang.String-">removeCoverageStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageStoreName,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</code>&nbsp;</td>
 </tr>
 <tr id="i35" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#removeDataStore-java.lang.String-">removeDataStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastore_name)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#removeDataStore-java.lang.String-">removeDataStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastoreName)</code>&nbsp;</td>
 </tr>
 <tr id="i36" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#removeDataStore-java.lang.String-java.lang.String-">removeDataStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastore_name,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#removeDataStore-java.lang.String-java.lang.String-">removeDataStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastoreName,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</code>&nbsp;</td>
 </tr>
 <tr id="i37" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#removeFeatureLayer-java.lang.String-">removeFeatureLayer</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layer_name)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#removeFeatureLayer-java.lang.String-">removeFeatureLayer</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName)</code>&nbsp;</td>
 </tr>
 <tr id="i38" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#removeStyle-java.lang.String-">removeStyle</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;style_name)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#removeStyle-java.lang.String-">removeStyle</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;styleName)</code>&nbsp;</td>
 </tr>
 <tr id="i39" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#removeWorkspace-java.lang.String-">removeWorkspace</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace_name)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#removeWorkspace-java.lang.String-">removeWorkspace</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName)</code>&nbsp;</td>
 </tr>
 <tr id="i40" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/service/client/GeoServerServiceClient.html#setLayerStyle-java.lang.String-java.lang.String-">setLayerStyle</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;styleName,
-             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layer_name)</code>&nbsp;</td>
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -402,7 +402,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getCoverageStore</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getCoverageStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverage_store_name,
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getCoverageStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageStoreName,
                                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</pre>
 </li>
 </ul>
@@ -412,7 +412,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getCoverageStore</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getCoverageStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverage_store_name)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getCoverageStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageStoreName)</pre>
 </li>
 </ul>
 <a name="getCoverage-java.lang.String-java.lang.String-java.lang.String-">
@@ -422,7 +422,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getCoverage</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getCoverage(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvgstore,
-                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverage_name,
+                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
                                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</pre>
 </li>
 </ul>
@@ -433,7 +433,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getCoverage</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getCoverage(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvgstore,
-                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverage_name)</pre>
+                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</pre>
 </li>
 </ul>
 <a name="getDataStore-java.lang.String-java.lang.String-">
@@ -442,7 +442,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getDataStore</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getDataStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastore_name,
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getDataStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastoreName,
                                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</pre>
 </li>
 </ul>
@@ -452,7 +452,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getDataStore</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getDataStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastore_name)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getDataStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastoreName)</pre>
 </li>
 </ul>
 <a name="getFeatureLayer-java.lang.String-">
@@ -461,7 +461,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getFeatureLayer</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getFeatureLayer(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layer_name)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getFeatureLayer(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName)</pre>
 </li>
 </ul>
 <a name="getStoreAdapters-java.lang.String-">
@@ -470,7 +470,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getStoreAdapters</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getStoreAdapters(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getStoreAdapters(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;storeName)</pre>
 </li>
 </ul>
 <a name="getStyle-java.lang.String-">
@@ -479,7 +479,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getStyle</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getStyle(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;style_name)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;getStyle(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;styleName)</pre>
 </li>
 </ul>
 <a name="listCoverageStores-java.lang.String-">
@@ -506,7 +506,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>listCoverages</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;listCoverages(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverage_store_name,
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;listCoverages(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageStoreName,
                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</pre>
 </li>
 </ul>
@@ -516,7 +516,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>listCoverages</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;listCoverages(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverage_store_name)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;listCoverages(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageStoreName)</pre>
 </li>
 </ul>
 <a name="listDataStores-java.lang.String-">
@@ -581,7 +581,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>addCoverageStore</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addCoverageStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;GeoWave_store_name,
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addCoverageStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geoWaveStoreName,
                                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace,
                                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;equalizerHistogramOverride,
                                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;interpolationOverride,
@@ -594,7 +594,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>addCoverageStore</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addCoverageStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;GeoWave_store_name)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addCoverageStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;GeoWaveStoreName)</pre>
 </li>
 </ul>
 <a name="addCoverage-java.lang.String-java.lang.String-java.lang.String-">
@@ -604,7 +604,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>addCoverage</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addCoverage(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvgstore,
-                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverage_name,
+                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
                                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</pre>
 </li>
 </ul>
@@ -615,7 +615,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>addCoverage</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addCoverage(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvgstore,
-                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverage_name)</pre>
+                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</pre>
 </li>
 </ul>
 <a name="addDataStore-java.lang.String-java.lang.String-java.lang.String-">
@@ -624,7 +624,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>addDataStore</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addDataStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;GeoWave_store_name,
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addDataStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geoWaveStoreName,
                                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace,
                                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastore)</pre>
 </li>
@@ -635,7 +635,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>addDataStore</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addDataStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;GeoWave_store_name)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addDataStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geoWaveStoreName)</pre>
 </li>
 </ul>
 <a name="addFeatureLayer-java.lang.String-java.lang.String-java.lang.String-">
@@ -645,7 +645,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>addFeatureLayer</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addFeatureLayer(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastore,
-                                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layer_name,
+                                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName,
                                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</pre>
 </li>
 </ul>
@@ -656,7 +656,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>addFeatureLayer</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addFeatureLayer(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastore,
-                                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layer_name)</pre>
+                                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName)</pre>
 </li>
 </ul>
 <a name="addLayer-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-">
@@ -665,7 +665,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>addLayer</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addLayer(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;GeoWave_store_name,
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addLayer(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geoWaveStoreName,
                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace,
                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;addOption,
                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;adapterId,
@@ -678,7 +678,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>addLayer</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addLayer(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;GeoWave_store_name)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addLayer(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geoWaveStoreName)</pre>
 </li>
 </ul>
 <a name="addStyle-java.lang.String-java.lang.String-">
@@ -688,7 +688,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>addStyle</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addStyle(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;stylesld,
-                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;GeoWave_style_name)</pre>
+                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geoWaveStyleName)</pre>
 </li>
 </ul>
 <a name="addWorkspace-java.lang.String-">
@@ -697,7 +697,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>addWorkspace</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addWorkspace(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace_name)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;addWorkspace(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName)</pre>
 </li>
 </ul>
 <a name="removeCoverageStore-java.lang.String-java.lang.String-">
@@ -706,7 +706,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>removeCoverageStore</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;removeCoverageStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverage_store_name,
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;removeCoverageStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageStoreName,
                                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</pre>
 </li>
 </ul>
@@ -716,7 +716,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>removeCoverageStore</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;removeCoverageStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverage_store_name)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;removeCoverageStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageStoreName)</pre>
 </li>
 </ul>
 <a name="removeCoverage-java.lang.String-java.lang.String-java.lang.String-">
@@ -726,7 +726,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>removeCoverage</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;removeCoverage(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvgstore,
-                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverage_name,
+                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
                                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</pre>
 </li>
 </ul>
@@ -737,7 +737,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>removeCoverage</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;removeCoverage(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;cvgstore,
-                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverage_name)</pre>
+                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</pre>
 </li>
 </ul>
 <a name="removeDataStore-java.lang.String-java.lang.String-">
@@ -746,7 +746,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>removeDataStore</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;removeDataStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastore_name,
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;removeDataStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastoreName,
                                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</pre>
 </li>
 </ul>
@@ -756,7 +756,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>removeDataStore</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;removeDataStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastore_name)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;removeDataStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;datastoreName)</pre>
 </li>
 </ul>
 <a name="removeFeatureLayer-java.lang.String-">
@@ -765,7 +765,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>removeFeatureLayer</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;removeFeatureLayer(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layer_name)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;removeFeatureLayer(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName)</pre>
 </li>
 </ul>
 <a name="removeStyle-java.lang.String-">
@@ -774,7 +774,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>removeStyle</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;removeStyle(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;style_name)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;removeStyle(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;styleName)</pre>
 </li>
 </ul>
 <a name="removeWorkspace-java.lang.String-">
@@ -783,7 +783,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>removeWorkspace</h4>
-<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;removeWorkspace(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace_name)</pre>
+<pre>public&nbsp;javax.ws.rs.core.Response&nbsp;removeWorkspace(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceName)</pre>
 </li>
 </ul>
 <a name="setLayerStyle-java.lang.String-java.lang.String-">
@@ -793,7 +793,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>setLayerStyle</h4>
 <pre>public&nbsp;javax.ws.rs.core.Response&nbsp;setLayerStyle(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;styleName,
-                                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layer_name)</pre>
+                                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;layerName)</pre>
 </li>
 </ul>
 </li>
@@ -825,7 +825,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../org/locationtech/geowave/service/client/FileUploadServiceClient.html" title="class in org.locationtech.geowave.service.client"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../org/locationtech/geowave/service/client/IngestServiceClient.html" title="class in org.locationtech.geowave.service.client"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../org/locationtech/geowave/service/client/IndexServiceClient.html" title="class in org.locationtech.geowave.service.client"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../index.html?org/locationtech/geowave/service/client/GeoServerServiceClient.html" target="_top">Frames</a></li>

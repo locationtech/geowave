@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave gs listws - List GeoServer workspaces
+geowave gs ws list - List GeoServer workspaces
 
 SYNOPSIS
 //:--------
 
-geowave gs listws [options]
+geowave gs ws list [options]
 
 DESCRIPTION
 //:-----------

@@ -10,7 +10,7 @@ geowave ingest kafkaToGW - Subscribe to a Kafka topic and ingest into GeoWave
 SYNOPSIS
 //:--------
 
-geowave ingest kafkaToGW [options] <store name> <comma delimited index/group list>
+geowave ingest kafkaToGW [options] <store name> <comma delimited index list>
 
 DESCRIPTION
 //:-----------

@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave gs addstyle - Add a GeoServer style
+geowave gs style add - Add a GeoServer style
 
 SYNOPSIS
 //:--------
 
-geowave gs addstyle [options] <GeoWave style name>
+geowave gs style add [options] <GeoWave style name>
 
 DESCRIPTION
 //:-----------

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -130,15 +130,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/operations/remote/options/BasicIndexOptions.html#nameOverride">nameOverride</a></span></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>protected int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/operations/remote/options/BasicIndexOptions.html#numPartitions">numPartitions</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/IndexPluginOptions.PartitionStrategy.html" title="enum in org.locationtech.geowave.core.store.cli.remote.options">IndexPluginOptions.PartitionStrategy</a></code></td>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../../org/locationtech/geowave/core/store/index/IndexPluginOptions.PartitionStrategy.html" title="enum in org.locationtech.geowave.core.store.index">IndexPluginOptions.PartitionStrategy</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/operations/remote/options/BasicIndexOptions.html#partitionStrategy">partitionStrategy</a></span></code>&nbsp;</td>
 </tr>
 </table>
@@ -174,28 +170,20 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/operations/remote/options/BasicIndexOptions.html#getNameOverride--">getNameOverride</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i1" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/operations/remote/options/BasicIndexOptions.html#getNumPartitions--">getNumPartitions</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/IndexPluginOptions.PartitionStrategy.html" title="enum in org.locationtech.geowave.core.store.cli.remote.options">IndexPluginOptions.PartitionStrategy</a></code></td>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/index/IndexPluginOptions.PartitionStrategy.html" title="enum in org.locationtech.geowave.core.store.index">IndexPluginOptions.PartitionStrategy</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/operations/remote/options/BasicIndexOptions.html#getPartitionStrategy--">getPartitionStrategy</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/operations/remote/options/BasicIndexOptions.html#setNameOverride-java.lang.String-">setNameOverride</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;nameOverride)</code>&nbsp;</td>
-</tr>
-<tr id="i4" class="altColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/operations/remote/options/BasicIndexOptions.html#setNumPartitions-int-">setNumPartitions</a></span>(int&nbsp;numPartitions)</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/operations/remote/options/BasicIndexOptions.html#setPartitionStrategy-org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions.PartitionStrategy-">setPartitionStrategy</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/IndexPluginOptions.PartitionStrategy.html" title="enum in org.locationtech.geowave.core.store.cli.remote.options">IndexPluginOptions.PartitionStrategy</a>&nbsp;partitionStrategy)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/operations/remote/options/BasicIndexOptions.html#setPartitionStrategy-org.locationtech.geowave.core.store.index.IndexPluginOptions.PartitionStrategy-">setPartitionStrategy</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/index/IndexPluginOptions.PartitionStrategy.html" title="enum in org.locationtech.geowave.core.store.index">IndexPluginOptions.PartitionStrategy</a>&nbsp;partitionStrategy)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -219,15 +207,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Field Detail</h3>
-<a name="nameOverride">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>nameOverride</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> nameOverride</pre>
-</li>
-</ul>
 <a name="numPartitions">
 <!--   -->
 </a>
@@ -243,7 +222,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>partitionStrategy</h4>
-<pre>protected&nbsp;<a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/IndexPluginOptions.PartitionStrategy.html" title="enum in org.locationtech.geowave.core.store.cli.remote.options">IndexPluginOptions.PartitionStrategy</a> partitionStrategy</pre>
+<pre>protected&nbsp;<a href="../../../../../../../../org/locationtech/geowave/core/store/index/IndexPluginOptions.PartitionStrategy.html" title="enum in org.locationtech.geowave.core.store.index">IndexPluginOptions.PartitionStrategy</a> partitionStrategy</pre>
 </li>
 </ul>
 </li>
@@ -271,24 +250,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getNameOverride--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getNameOverride</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getNameOverride()</pre>
-</li>
-</ul>
-<a name="setNameOverride-java.lang.String-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setNameOverride</h4>
-<pre>public&nbsp;void&nbsp;setNameOverride(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;nameOverride)</pre>
-</li>
-</ul>
 <a name="getNumPartitions--">
 <!--   -->
 </a>
@@ -313,16 +274,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getPartitionStrategy</h4>
-<pre>public&nbsp;<a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/IndexPluginOptions.PartitionStrategy.html" title="enum in org.locationtech.geowave.core.store.cli.remote.options">IndexPluginOptions.PartitionStrategy</a>&nbsp;getPartitionStrategy()</pre>
+<pre>public&nbsp;<a href="../../../../../../../../org/locationtech/geowave/core/store/index/IndexPluginOptions.PartitionStrategy.html" title="enum in org.locationtech.geowave.core.store.index">IndexPluginOptions.PartitionStrategy</a>&nbsp;getPartitionStrategy()</pre>
 </li>
 </ul>
-<a name="setPartitionStrategy-org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions.PartitionStrategy-">
+<a name="setPartitionStrategy-org.locationtech.geowave.core.store.index.IndexPluginOptions.PartitionStrategy-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>setPartitionStrategy</h4>
-<pre>public&nbsp;void&nbsp;setPartitionStrategy(<a href="../../../../../../../../org/locationtech/geowave/core/store/cli/remote/options/IndexPluginOptions.PartitionStrategy.html" title="enum in org.locationtech.geowave.core.store.cli.remote.options">IndexPluginOptions.PartitionStrategy</a>&nbsp;partitionStrategy)</pre>
+<pre>public&nbsp;void&nbsp;setPartitionStrategy(<a href="../../../../../../../../org/locationtech/geowave/core/store/index/IndexPluginOptions.PartitionStrategy.html" title="enum in org.locationtech.geowave.core.store.index">IndexPluginOptions.PartitionStrategy</a>&nbsp;partitionStrategy)</pre>
 </li>
 </ul>
 </li>

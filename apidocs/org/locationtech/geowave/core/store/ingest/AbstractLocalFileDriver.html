@@ -188,7 +188,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colFirst"><code>protected static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/ingest/AbstractLocalFileDriver.html#checkIndexesAgainstProvider-java.lang.String-org.locationtech.geowave.core.store.ingest.DataAdapterProvider-java.util.List-">checkIndexesAgainstProvider</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;providerName,
                            <a href="../../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">DataAdapterProvider</a>&lt;?&gt;&nbsp;adapterProvider,
-                           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/IndexPluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">IndexPluginOptions</a>&gt;&nbsp;indexOptions)</code>&nbsp;</td>
+                           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;&nbsp;indices)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]</code></td>
@@ -196,8 +196,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>protected static boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/ingest/AbstractLocalFileDriver.html#isCompatible-org.locationtech.geowave.core.store.ingest.DataAdapterProvider-org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions-">isCompatible</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">DataAdapterProvider</a>&lt;?&gt;&nbsp;adapterProvider,
-            <a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/IndexPluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">IndexPluginOptions</a>&nbsp;dimensionalityProvider)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/ingest/AbstractLocalFileDriver.html#isCompatible-org.locationtech.geowave.core.store.ingest.DataAdapterProvider-org.locationtech.geowave.core.store.api.Index-">isCompatible</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">DataAdapterProvider</a>&lt;?&gt;&nbsp;adapterProvider,
+            <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>
 <div class="block">Determine whether an index is compatible with the visitor</div>
 </td>
 </tr>
@@ -297,17 +297,17 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>checkIndexesAgainstProvider</h4>
 <pre>protected static&nbsp;boolean&nbsp;checkIndexesAgainstProvider(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;providerName,
                                                      <a href="../../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">DataAdapterProvider</a>&lt;?&gt;&nbsp;adapterProvider,
-                                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/IndexPluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">IndexPluginOptions</a>&gt;&nbsp;indexOptions)</pre>
+                                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;&nbsp;indices)</pre>
 </li>
 </ul>
-<a name="isCompatible-org.locationtech.geowave.core.store.ingest.DataAdapterProvider-org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions-">
+<a name="isCompatible-org.locationtech.geowave.core.store.ingest.DataAdapterProvider-org.locationtech.geowave.core.store.api.Index-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>isCompatible</h4>
 <pre>protected static&nbsp;boolean&nbsp;isCompatible(<a href="../../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">DataAdapterProvider</a>&lt;?&gt;&nbsp;adapterProvider,
-                                      <a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/IndexPluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">IndexPluginOptions</a>&nbsp;dimensionalityProvider)</pre>
+                                      <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</pre>
 <div class="block">Determine whether an index is compatible with the visitor</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

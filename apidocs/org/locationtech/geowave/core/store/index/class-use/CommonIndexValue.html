@@ -170,6 +170,10 @@
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/IndexFieldHandler.html" title="interface in org.locationtech.geowave.core.store.adapter">IndexFieldHandler</a>&lt;org.opengis.feature.simple.SimpleFeature,? extends <a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">FeatureDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/FeatureDataAdapter.html#getFieldHandler-org.locationtech.geowave.core.store.dimension.NumericDimensionField-">getFieldHandler</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;? extends <a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;dimension)</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">FeatureAttributeDimensionField.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/FeatureAttributeDimensionField.html#isCompatibleWith-java.lang.Class-">isCompatibleWith</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;clazz)</code>&nbsp;</td>
+</tr>
 </tbody>
 </table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
@@ -246,6 +250,23 @@
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/Time.Timestamp.html" title="class in org.locationtech.geowave.core.geotime.store.dimension">Time.Timestamp</a></span></code>
 <div class="block">An instant of time in milliseconds wrapped with a visibility tag for the field value.</div>
 </td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Method parameters in <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/package-summary.html">org.locationtech.geowave.core.geotime.store.dimension</a> with type arguments of type <a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">TimeField.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/TimeField.html#isCompatibleWith-java.lang.Class-">isCompatibleWith</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;clazz)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">SpatialField.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#isCompatibleWith-java.lang.Class-">isCompatibleWith</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;clazz)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -481,6 +502,25 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/dimension/ArrayWrapper.html" title="class in org.locationtech.geowave.core.store.dimension">ArrayWrapper</a>&lt;T&gt;</span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Method parameters in <a href="../../../../../../../org/locationtech/geowave/core/store/dimension/package-summary.html">org.locationtech.geowave.core.store.dimension</a> with type arguments of type <a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">NumericDimensionField.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html#isCompatibleWith-java.lang.Class-">isCompatibleWith</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;clazz)</code>
+<div class="block">Determines if the given field type is compatible with this field.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">ArrayField.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/dimension/ArrayField.html#isCompatibleWith-java.lang.Class-">isCompatibleWith</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;clazz)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

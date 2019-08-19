@@ -201,15 +201,15 @@ extends <a href="../../../../../../org/locationtech/geowave/core/cli/api/Service
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">VisibilityOptions</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/cli/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli">VisibilityOptions</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/operations/MapReduceToGeowaveCommand.html#getIngestOptions--">getIngestOptions</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/IndexPluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">IndexPluginOptions</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/operations/MapReduceToGeowaveCommand.html#getInputIndexOptions--">getInputIndexOptions</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/operations/MapReduceToGeowaveCommand.html#getInputIndices--">getInputIndices</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/operations/MapReduceToGeowaveCommand.html#getInputStoreOptions--">getInputStoreOptions</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -243,7 +243,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/cli/api/Service
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/operations/MapReduceToGeowaveCommand.html#setIngestOptions-org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions-">setIngestOptions</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">VisibilityOptions</a>&nbsp;ingestOptions)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/operations/MapReduceToGeowaveCommand.html#setIngestOptions-org.locationtech.geowave.core.store.cli.VisibilityOptions-">setIngestOptions</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/cli/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli">VisibilityOptions</a>&nbsp;ingestOptions)</code>&nbsp;</td>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
@@ -400,16 +400,16 @@ extends <a href="../../../../../../org/locationtech/geowave/core/cli/api/Service
 <ul class="blockList">
 <li class="blockList">
 <h4>getIngestOptions</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">VisibilityOptions</a>&nbsp;getIngestOptions()</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/cli/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli">VisibilityOptions</a>&nbsp;getIngestOptions()</pre>
 </li>
 </ul>
-<a name="setIngestOptions-org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions-">
+<a name="setIngestOptions-org.locationtech.geowave.core.store.cli.VisibilityOptions-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setIngestOptions</h4>
-<pre>public&nbsp;void&nbsp;setIngestOptions(<a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">VisibilityOptions</a>&nbsp;ingestOptions)</pre>
+<pre>public&nbsp;void&nbsp;setIngestOptions(<a href="../../../../../../org/locationtech/geowave/core/store/cli/VisibilityOptions.html" title="class in org.locationtech.geowave.core.store.cli">VisibilityOptions</a>&nbsp;ingestOptions)</pre>
 </li>
 </ul>
 <a name="getMapReduceOptions--">
@@ -472,16 +472,16 @@ extends <a href="../../../../../../org/locationtech/geowave/core/cli/api/Service
 <ul class="blockList">
 <li class="blockList">
 <h4>getInputStoreOptions</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;getInputStoreOptions()</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;getInputStoreOptions()</pre>
 </li>
 </ul>
-<a name="getInputIndexOptions--">
+<a name="getInputIndices--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getInputIndexOptions</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/cli/remote/options/IndexPluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">IndexPluginOptions</a>&gt;&nbsp;getInputIndexOptions()</pre>
+<h4>getInputIndices</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;&nbsp;getInputIndices()</pre>
 </li>
 </ul>
 <a name="computeResults-org.locationtech.geowave.core.cli.api.OperationParams-">

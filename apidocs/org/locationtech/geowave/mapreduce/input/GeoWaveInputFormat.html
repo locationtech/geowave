@@ -228,7 +228,7 @@ extends org.apache.hadoop.mapreduce.InputFormat&lt;<a href="../../../../../org/l
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputFormat.html#getSplits-org.apache.hadoop.mapreduce.JobContext-">getSplits</a></span>(org.apache.hadoop.mapreduce.JobContext&nbsp;context)</code>&nbsp;</td>
 </tr>
 <tr id="i14" class="altColor">
-<td class="colFirst"><code>static <a href="../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
+<td class="colFirst"><code>static <a href="../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputFormat.html#getStoreOptions-org.apache.hadoop.mapreduce.JobContext-">getStoreOptions</a></span>(org.apache.hadoop.mapreduce.JobContext&nbsp;context)</code>&nbsp;</td>
 </tr>
 <tr id="i15" class="rowColor">
@@ -287,8 +287,8 @@ extends org.apache.hadoop.mapreduce.InputFormat&lt;<a href="../../../../../org/l
 </tr>
 <tr id="i25" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputFormat.html#setStoreOptions-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-">setStoreOptions</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
-               <a href="../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputFormat.html#setStoreOptions-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-">setStoreOptions</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
+               <a href="../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;storeOptions)</code>&nbsp;</td>
 </tr>
 <tr id="i26" class="altColor">
 <td class="colFirst"><code>static void</code></td>
@@ -368,14 +368,14 @@ extends org.apache.hadoop.mapreduce.InputFormat&lt;<a href="../../../../../org/l
                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;storeConfigOptions)</pre>
 </li>
 </ul>
-<a name="setStoreOptions-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions-">
+<a name="setStoreOptions-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setStoreOptions</h4>
 <pre>public static&nbsp;void&nbsp;setStoreOptions(org.apache.hadoop.conf.Configuration&nbsp;config,
-                                   <a href="../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions)</pre>
+                                   <a href="../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;storeOptions)</pre>
 </li>
 </ul>
 <a name="getJobContextIndexStore-org.apache.hadoop.mapreduce.JobContext-">
@@ -626,7 +626,7 @@ extends org.apache.hadoop.mapreduce.InputFormat&lt;<a href="../../../../../org/l
 <ul class="blockList">
 <li class="blockList">
 <h4>getStoreOptions</h4>
-<pre>public static&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;getStoreOptions(org.apache.hadoop.mapreduce.JobContext&nbsp;context)</pre>
+<pre>public static&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;getStoreOptions(org.apache.hadoop.mapreduce.JobContext&nbsp;context)</pre>
 </li>
 </ul>
 <a name="getStoreOptionsMap-org.apache.hadoop.mapreduce.JobContext-">

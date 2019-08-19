@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave gs getcs - Get GeoServer CoverageStore info
+geowave gs cs get - Get GeoServer CoverageStore info
 
 SYNOPSIS
 //:--------
 
-geowave gs getcs [options] <coverage store name>
+geowave gs cs get [options] <coverage store name>
 
 DESCRIPTION
 //:-----------

@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave gs addds - Add a GeoServer datastore
+geowave gs ds add - Add a GeoServer datastore
 
 SYNOPSIS
 //:--------
 
-geowave gs addds [options] <GeoWave store name>
+geowave gs ds add [options] <GeoWave store name>
 
 DESCRIPTION
 //:-----------

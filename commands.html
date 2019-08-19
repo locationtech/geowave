@@ -436,13 +436,16 @@ href="images/geowave-icon-logo-small.png">
 <ul class="sectlevel2">
 <li><a href="#helpful-commands-flags">Helpful Commands &amp; Flags</a></li>
 <li><a href="#config-commands">Config Commands</a></li>
+<li><a href="#store-commands">Store Commands</a></li>
+<li><a href="#index-commands">Index Commands</a></li>
+<li><a href="#stat-commands">Statistics Commands</a></li>
 <li><a href="#ingest-commands">Ingest Commands</a></li>
-<li><a href="#remote-commands">Remote Commands</a></li>
 <li><a href="#analytic-commands">Analytic Commands</a></li>
 <li><a href="#accumulo-commands">Accumulo Commands</a></li>
 <li><a href="#geoserver-commands">GeoServer Commands</a></li>
 <li><a href="#landsat-commands">Landsat8 Commands</a></li>
 <li><a href="#osm-commands">OSM Commands</a></li>
+<li><a href="#python-commands">Python Commands</a></li>
 <li><a href="#raster-commands">Raster Commands</a></li>
 <li><a href="#vector-commands">Vector Commands</a></li>
 <li><a href="#services-commands">Services Commands</a></li>
@@ -564,7 +567,7 @@ their values, if there are any. An example would be additional Accumulo options:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave explain config addstore -t accumulo</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave explain store add -t accumulo</code></pre>
 </div>
 </div>
 <hr>
@@ -580,22 +583,13 @@ their values, if there are any. An example would be additional Accumulo options:
 <div class="title">Commands:</div>
 <ul>
 <li>
-<p><a href="#config-addindex">AddIndex</a></p>
-</li>
-<li>
-<p><a href="#config-addindexgrp">AddIndexGrp</a></p>
-</li>
-<li>
-<p><a href="#config-addstore">AddStore</a></p>
-</li>
-<li>
-<p><a href="#config-cpindex">CpIndex</a></p>
-</li>
-<li>
-<p><a href="#config-cpstore">CpStore</a></p>
+<p><a href="#config-aws">AWS</a></p>
 </li>
 <li>
 <p><a href="#config-geoserver">GeoServer</a></p>
+</li>
+<li>
+<p><a href="#config-hdfs">HDFS</a></p>
 </li>
 <li>
 <p><a href="#config-list">List</a></p>
@@ -604,318 +598,9 @@ their values, if there are any. An example would be additional Accumulo options:
 <p><a href="#config-newcryptokey">NewCryptoKey</a></p>
 </li>
 <li>
-<p><a href="#config-rmindex">RmIndex</a></p>
-</li>
-<li>
-<p><a href="#config-rmindexgrp">RmIndexGrp</a></p>
-</li>
-<li>
-<p><a href="#config-rmstore">RmStore</a></p>
-</li>
-<li>
 <p><a href="#config-set">Set</a></p>
 </li>
 </ul>
-</div>
-<div class="sect3">
-<h4 id="config-addindex"><a class="anchor" href="#config-addindex"></a><strong>geowave config addindex</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave config addindex - Configure an index for usage in GeoWave</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave config addindex [options] &lt;name&gt;</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>The geowave config addindex operator will create a local index configuration that can be reused but is not associated with a store until data is ingested.</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>-c --crs (will only be shown if you have already defined spatial or satial_temporal as your type)</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The native Coordinate Reference System used within the index.  All spatial data will be projected into this CRS for appropriate indexing as needed.</p>
-</li>
-<li>
-<p>Default: EPSG:4326</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>--d, --default</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Make this the default index creating stores</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>--indexName</p>
-<div class="ulist">
-<ul>
-<li>
-<p>A custom name can be given to this index. Default name will be the based on configuration parameters.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-np, --numPartitions</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The number of partitions.  Default partitions will be 1.</p>
-</li>
-<li>
-<p>Default: 1</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-ps, --partitionStrategy</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The partition strategy to use.  Default will be none.</p>
-</li>
-<li>
-<p>Default: NONE</p>
-</li>
-<li>
-<p>Possible Values: [NONE, HASH, ROUND_ROBIN]</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>* -t, --type</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The type of index, such as spatial, or spatial_temporal</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="config-addindexgrp"><a class="anchor" href="#config-addindexgrp"></a><strong>geowave config addindexgrp</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave config addindexgrp - Create an index group for usage in GeoWave</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave config addindexgrp [options] &lt;name&gt; &lt;comma separated list of indexes&gt;</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>The geowave config addindexgrp operator will group multiple index configurations together given a name. This acts as a convenience for re-using multiple indices together on ingest.</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="paragraph">
-<p>There are currently no options for this command</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="config-addstore"><a class="anchor" href="#config-addstore"></a><strong>geowave config addstore</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave config addstore - Create a store within Geowave</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave config addstore [options] &lt;name&gt;</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>The geowave config addstore operator will create a new store in GeoWave.</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>-d, --default</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Make this the default store in all operations</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>*-t, --type &lt;arg&gt;</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The type of store, such as accumulo, memory, etc.</p>
-</li>
-<li>
-<p>Required!</p>
-</li>
-<li>
-<p>When -t accummulo option is used, additional options are:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>--gwNamespace</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The geowave namespace</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Default is no namespace</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>*-i, --instance</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The Accumulo instance ID</p>
-</li>
-<li>
-<p>Required!</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>*-p, --password</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The password for the user</p>
-</li>
-<li>
-<p>Required!</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>*-u, --user</p>
-<div class="ulist">
-<ul>
-<li>
-<p>A valid Accumulo user ID</p>
-</li>
-<li>
-<p>Required!</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>*-z, --zookeeper</p>
-<div class="ulist">
-<ul>
-<li>
-<p>A comma-separated list of zookeeper servers that an Accumulo instance is using</p>
-</li>
-<li>
-<p>Required!</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>When -t, --type hbase option is used, additional options are:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>-d, --default</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Make this the default index creating stores</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-np, --numPartitions</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The number of partitions.</p>
-</li>
-<li>
-<p>Default: 1</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-ps, --partitionStrategy</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The partition strategy to use.</p>
-</li>
-<li>
-<p>Default: NONE</p>
-</li>
-<li>
-<p>Possible Values: [NONE, HASH, ROUND_ROBIN]</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
 </div>
 <div class="sect3">
 <h4 id="config-aws"><a class="anchor" href="#config-aws"></a><strong>geowave config aws</strong></h4>
@@ -939,113 +624,6 @@ their values, if there are any. An example would be additional Accumulo options:
 </div>
 <div class="paragraph">
 <p>OPTIONS</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="config-cpindex"><a class="anchor" href="#config-cpindex"></a><strong>geowave config cpindex</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave config cpindex - Copy and modify existing index configuration</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave config cpindex [options] &lt;name&gt; &lt;new name&gt;</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>The geowave config cpindex operator will copy and modify an existing index configuration.
-It is possible to override values as you copy, such as cpindex old new --gwNamespace new_namespace.</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>-d, --default</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Make this the default index creating stores</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-np, numPartitions</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The number of partitions.</p>
-</li>
-<li>
-<p>Default: 1</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>-ps, --partitionStrategy</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The partition strategy to use.</p>
-</li>
-<li>
-<p>Default: NONE</p>
-</li>
-<li>
-<p>Possible Values: [NONE, HASH, ROUND ROBIN]</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="config-cpstore"><a class="anchor" href="#config-cpstore"></a><strong>geowave config cpstore</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave config cpstore - Copy and modify existing store configuration</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave config cpstore [options] &lt;name&gt; &lt;new name&gt;</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>The geowave cpstore operator will copy and modify an existing GeoWave store.
-It is possible to override values as you copy, such as cpstore old new --gwNamespace new_namespace.</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>-d, --default</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Makes this the default store in all operations</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
 </div>
 </div>
 <div class="sect3">
@@ -1358,87 +936,6 @@ the other or a particular store/index name to further isolate the list).</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="config-rmindex"><a class="anchor" href="#config-rmindex"></a><strong>geowave config rmindex</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave config rmindex - Remove index configuration from Geowave configuration</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave config rmindex [options] &lt;name&gt;</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>The geowave config rmindex operator will remove an index configuration from GeoWave configuration</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="paragraph">
-<p>There are currently no options for this command</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="config-rmindexgrp"><a class="anchor" href="#config-rmindexgrp"></a><strong>geowave config rmindexgrp</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave config rmindexgrp - removes an index group from GeoWave configuration</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave config rmindexgrp [options] &lt;name&gt;</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>The geowave config rmindexgrp operator will remove an index group from GeoWave configuration</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="paragraph">
-<p>There are currently no options for this command</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="config-rmstore"><a class="anchor" href="#config-rmstore"></a><strong>geowave config rmstore</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave config rmstore - removes an existing store from GeoWave configuration</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave config rmstore [options] &lt;name&gt;</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>The geowave config rmstore operator will remove an existing store from GeoWave configuration GeoWave store</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="paragraph">
-<p>There are currently no options for this command</p>
-</div>
-</div>
-<div class="sect3">
 <h4 id="config-set"><a class="anchor" href="#config-set"></a><strong>geowave config set</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
@@ -1464,6 +961,916 @@ This can be useful if you want to update a particular property of a index or sto
 </div>
 <div class="paragraph">
 <p>There are currently no options for this command</p>
+</div>
+<hr>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="store-commands"><a class="anchor" href="#store-commands"></a>Store Commands</h3>
+<div class="paragraph">
+<p>Commands for managing GeoWave data stores.</p>
+</div>
+<div class="ulist">
+<div class="title">Commands:</div>
+<ul>
+<li>
+<p><a href="#store-add">AddStore</a></p>
+</li>
+<li>
+<p><a href="#store-clear">ClearStore</a></p>
+</li>
+<li>
+<p><a href="#store-copy">CopyStore</a></p>
+</li>
+<li>
+<p><a href="#store-copystorecfg">CpStoreCfg</a></p>
+</li>
+<li>
+<p><a href="#store-rm">RmStore</a></p>
+</li>
+<li>
+<p><a href="#store-listtypes">ListTypes</a></p>
+</li>
+<li>
+<p><a href="#store-rmtype">RmType</a></p>
+</li>
+<li>
+<p><a href="#store-version">Version</a></p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="store-add"><a class="anchor" href="#store-add"></a><strong>geowave store add</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave store add - Create a store within Geowave</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave store add [options] &lt;name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave store add operator will create a new store in GeoWave.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>-d, --default</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Make this the default store in all operations</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>*-t, --type &lt;arg&gt;</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The type of store, such as accumulo, memory, etc.</p>
+</li>
+<li>
+<p>Required!</p>
+</li>
+<li>
+<p>When -t accummulo option is used, additional options are:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>--gwNamespace</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The geowave namespace</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Default is no namespace</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>*-i, --instance</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The Accumulo instance ID</p>
+</li>
+<li>
+<p>Required!</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>*-p, --password</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The password for the user</p>
+</li>
+<li>
+<p>Required!</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>*-u, --user</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A valid Accumulo user ID</p>
+</li>
+<li>
+<p>Required!</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>*-z, --zookeeper</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A comma-separated list of zookeeper servers that an Accumulo instance is using</p>
+</li>
+<li>
+<p>Required!</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>When -t, --type hbase option is used, additional options are:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>-d, --default</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Make this the default index creating stores</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-np, --numPartitions</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The number of partitions.</p>
+</li>
+<li>
+<p>Default: 1</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ps, --partitionStrategy</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The partition strategy to use.</p>
+</li>
+<li>
+<p>Default: NONE</p>
+</li>
+<li>
+<p>Possible Values: [NONE, HASH, ROUND_ROBIN]</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="store-clear"><a class="anchor" href="#store-clear"></a><strong>geowave store clear</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave store clear - Clear ALL data from a GeoWave store and delete tables</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave store clear [options] &lt;store name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave store clear operator will clear ALL data from a GeoWave store and delete tables</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="store-copy"><a class="anchor" href="#store-copy"></a><strong>geowave store copy</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave store copy - Copy a data store</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave store copy [options] &lt;input store name&gt; &lt;output store name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will allow a user to copy a data store</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>* --hdfsHostPort</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The hdfs host port</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>* --jobSubmissionHostPort</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The job submission tracker</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--maxSplits</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The max partitions for the input data</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--minSplits</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The min partitions for the input data</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--numReducers</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Number of threads writing at a time (default: 8)</p>
+</li>
+<li>
+<p>Default: 8</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="store-copystorecfg"><a class="anchor" href="#store-copystorecfg"></a><strong>geowave store copycfg</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave store copycfg - Copy and modify existing store configuration</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave store copycfg [options] &lt;name&gt; &lt;new name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave store copycfg operator will copy and modify an existing GeoWave store.
+It is possible to override values as you copy, such as cpstore old new --gwNamespace new_namespace.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>-d, --default</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Makes this the default store in all operations</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="store-rm"><a class="anchor" href="#store-rm"></a><strong>geowave store rm</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave store rm - removes an existing store from GeoWave configuration</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave store rm [options] &lt;store name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave store rm operator will remove an existing store from GeoWave configuration</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="store-listtypes"><a class="anchor" href="#store-listtypes"></a><strong>geowave store listtypes</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave store listtypes - display all types in this remote store</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave store listtypes [options] &lt;store name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave store listtypes operator will display all types in this remote store.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="store-rmtype"><a class="anchor" href="#store-rmtype"></a><strong>geowave store rmtype</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave store rmtype - Remove a type and all associated data from a data store</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave store rmtype [options] &lt;store name&gt; &lt;type name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave store rmtype operator will remove a type and all associated data from a data store</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="store-version"><a class="anchor" href="#store-version"></a><strong>geowave store version</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave store version - Get the version of GeoWave used by a data store</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave store version [options] &lt;store name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will return the version of GeoWave used by a data store.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options for this command</p>
+</div>
+<hr>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="index-commands"><a class="anchor" href="#index-commands"></a>Index Commands</h3>
+<div class="paragraph">
+<p>Commands for managing GeoWave indices.</p>
+</div>
+<div class="ulist">
+<div class="title">Commands:</div>
+<ul>
+<li>
+<p><a href="#index-add">AddIndex</a></p>
+</li>
+<li>
+<p><a href="#index-compact">CompactIndex</a></p>
+</li>
+<li>
+<p><a href="#index-list">ListIndex</a></p>
+</li>
+<li>
+<p><a href="#index-rm">RmIndex</a></p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="index-add"><a class="anchor" href="#index-add"></a><strong>geowave index add</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave index add - Add an index to a data store</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave index add [options] &lt;store name&gt; &lt;index name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave index add operator will create an index in a data store if it does not already exist.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>-c --crs (will only be shown if you have already defined spatial or satial_temporal as your type)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The native Coordinate Reference System used within the index.  All spatial data will be projected into this CRS for appropriate indexing as needed.</p>
+</li>
+<li>
+<p>Default: EPSG:4326</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-np, --numPartitions</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The number of partitions.  Default partitions will be 1.</p>
+</li>
+<li>
+<p>Default: 1</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ps, --partitionStrategy</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The partition strategy to use.  Default will be none.</p>
+</li>
+<li>
+<p>Default: NONE</p>
+</li>
+<li>
+<p>Possible Values: [NONE, HASH, ROUND_ROBIN]</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>* -t, --type</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The type of index, such as spatial, or spatial_temporal</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="index-compact"><a class="anchor" href="#index-compact"></a><strong>geowave index compact</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave index compact - Compact all rows for a given index</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave index compact [options] &lt;store name&gt; &lt;index name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will allow a user to compact all rows for a given index</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="index-list"><a class="anchor" href="#index-list"></a><strong>geowave index list</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave index list - Display all indices in a data store</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave index list [options] &lt;store name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave index list operator will display all indices in a data store</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="index-rm"><a class="anchor" href="#index-rm"></a><strong>geowave index rm</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave index rm - Remove an index and all associated data from a data store</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave index rm [options] &lt;store name&gt; &lt;index name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave index rm operator will remove an index and all of its data from a data store</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options for this command</p>
+</div>
+<hr>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="stat-commands"><a class="anchor" href="#stat-commands"></a>Statistics Commands</h3>
+<div class="paragraph">
+<p>Commands to manage GeoWave statistics.</p>
+</div>
+<div class="ulist">
+<div class="title">Commands:</div>
+<ul>
+<li>
+<p><a href="#stat-calc">Calcstat</a></p>
+</li>
+<li>
+<p><a href="#stat-list">ListStats</a></p>
+</li>
+<li>
+<p><a href="#stat-compact">CompactStats</a></p>
+</li>
+<li>
+<p><a href="#stat-recalc">ReCalcStats</a></p>
+</li>
+<li>
+<p><a href="#stat-rm">RmStat</a></p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="stat-calc"><a class="anchor" href="#stat-calc"></a><strong>geowave stat calc</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave stat calc - Calculate a specific statistic in the remote store, given adapter ID and statistic ID</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave stat calc [options] &lt;store name&gt; &lt;type name&gt; &lt;stat type&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave stat calc operator will calculate a specific statistic in the remote store, given type name and statistic type.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--auth</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The authorizations used for the statistics calculation as a subset of the accumulo user authorization; by default all authorizations are used.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--json</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Output in JSON format.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="stat-list"><a class="anchor" href="#stat-list"></a><strong>geowave stat list</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave stat list - Print statistics of an existing GeoWave dataset to standard output</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave stat list [options] &lt;store name&gt; [&lt;type name&gt;]</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave stat list operator will print statistics of an existing GeoWave dataset to standard output</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--auth</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The authorizations used for the statistics calculation as a subset of the accumulo user authorization; by default all authorizations are used.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--json</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Output in JSON format.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="stat-compact"><a class="anchor" href="#stat-compact"></a><strong>geowave stat compact</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave stat compact - Combine all statistics in GeoWave namespace, can be useful for making a datastore more efficient</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave stat compact [options] &lt;storename&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will combine all statistics in a GeoWave namespace</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options for this command</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="stat-recalc"><a class="anchor" href="#stat-recalc"></a><strong>geowave stat recalc</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave stat recalc - Calculate the statistics of an existing GeoWave dataset</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave stat recalc [options] &lt;store name&gt; [&lt;type name&gt;]</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave stat recalc operator will calculate the statistics of an existing GeoWave dataset</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--auth</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The authorizations used for the statistics calculation as a subset of the accumulo user authorization; by default all authorizations are used.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--json</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Output in JSON format.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="stat-rm"><a class="anchor" href="#stat-rm"></a><strong>geowave stat rm</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave stat rm - Remove a statistic from the remote store</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave stat rm [options] &lt;store name&gt; &lt;type name&gt; &lt;stat type&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave stat rm operator will Remove a statistic from the remote store.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--auth</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The authorizations used for the statistics calculation as a subset of the accumulo user authorization; by default all authorizations are used.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--json</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Output in JSON format.</p>
+</li>
+<li>
+<p>Default: false</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
 </div>
 <hr>
 <div style="page-break-after: always;"></div>
@@ -1515,7 +1922,7 @@ This can be useful if you want to update a particular property of a index or sto
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave ingest kafkaToGW [options] &lt;store name&gt; &lt;comma delimited index/group list&gt;</p>
+<p>geowave ingest kafkaToGW [options] &lt;store name&gt; &lt;comma delimited index list&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -2065,7 +2472,7 @@ This can be useful if you want to update a particular property of a index or sto
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave ingest localToGW [options] &lt;file or directory&gt; &lt;storename&gt; &lt;comma delimited index/group list&gt;</p>
+<p>geowave ingest localToGW [options] &lt;file or directory&gt; &lt;storename&gt; &lt;comma delimited index list&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -3390,7 +3797,7 @@ This can be useful if you want to update a particular property of a index or sto
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave ingest localToMrGW [options] &lt;file or directory&gt; &lt;hdfs host:port&gt; &lt;path to base directory to write to&gt; &lt;store name&gt; &lt;comma delimited index/group list&gt;</p>
+<p>geowave ingest localToMrGW [options] &lt;file or directory&gt; &lt;hdfs host:port&gt; &lt;path to base directory to write to&gt; &lt;store name&gt; &lt;comma delimited index list&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -3834,7 +4241,7 @@ This can be useful if you want to update a particular property of a index or sto
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave ingest mrToGW [options] &lt;hdfs host:port&gt; &lt;path to base directory to write to&gt; &lt;store name&gt; &lt;comma delimited index/group list&gt;</p>
+<p>geowave ingest mrToGW [options] &lt;hdfs host:port&gt; &lt;path to base directory to write to&gt; &lt;store name&gt; &lt;comma delimited index list&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -4278,7 +4685,7 @@ This can be useful if you want to update a particular property of a index or sto
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave ingest sparkToGW [options] &lt;input directory&gt; &lt;store name&gt; &lt;comma delimited index/group list&gt;</p>
+<p>geowave ingest sparkToGW [options] &lt;input directory&gt; &lt;store name&gt; &lt;comma delimited index list&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -4377,498 +4784,6 @@ Default: -1</p>
 </div>
 </li>
 </ul>
-</div>
-<hr>
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="remote-commands"><a class="anchor" href="#remote-commands"></a>Remote Commands</h3>
-<div class="paragraph">
-<p>Operations to manage a remote store (Required options are designated with an *)</p>
-</div>
-<div class="ulist">
-<div class="title">Commands:</div>
-<ul>
-<li>
-<p><a href="#remote-calcstat">Calcstat</a></p>
-</li>
-<li>
-<p><a href="#remote-clear">Clear</a></p>
-</li>
-<li>
-<p><a href="#remote-copy">Copy</a></p>
-</li>
-<li>
-<p><a href="#remote-listadapter">ListAdapter</a></p>
-</li>
-<li>
-<p><a href="#remote-listindex">ListIndex</a></p>
-</li>
-<li>
-<p><a href="#remote-liststats">ListStats</a></p>
-</li>
-<li>
-<p><a href="#remote-mergedata">MergeData</a></p>
-</li>
-<li>
-<p><a href="#remote-combinestats">CombineStats</a></p>
-</li>
-<li>
-<p><a href="#remote-recalcstats">ReCalcStats</a></p>
-</li>
-<li>
-<p><a href="#remote-rmstat">RmStat</a></p>
-</li>
-<li>
-<p><a href="#remote-version">Version</a></p>
-</li>
-</ul>
-</div>
-<div class="sect3">
-<h4 id="remote-calcstat"><a class="anchor" href="#remote-calcstat"></a><strong>geowave remote calcstat</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave remote calcstat - Calculate a specific statistic in the remote store, given adapter ID and statistic ID</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave remote calcstat [options] &lt;store name&gt; &lt;adapterId&gt; &lt;statId&gt;</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>The geowave remote calcstat operator will calculate a specific statistic in the remote store, given adapter ID and statistic ID.</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>--auth</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The authorizations used for the statistics calculation as a subset of the accumulo user authorization; by default all authorizations are used.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>--json</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Output in JSON format.</p>
-</li>
-<li>
-<p>Default: false</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="remote-clear"><a class="anchor" href="#remote-clear"></a><strong>geowave remote clear</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave remote clear - Clear ALL data from a GeoWave store and delete tables</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave remote clear [options] &lt;store name&gt;</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>The geowave remote clear operator will clear ALL data from a GeoWave store and delete tables</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="paragraph">
-<p>There are currently no options for this command</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="remote-copy"><a class="anchor" href="#remote-copy"></a><strong>geowave remote copy</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave remote copy - Copy a data store</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave remote copy [options] &lt;input store name&gt; &lt;output store name&gt;</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>This command will allow a user to copy a data store</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>* --hdfsHostPort</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The hdfs host port</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>* --jobSubmissionHostPort</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The job submission tracker</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>--maxSplits</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The max partitions for the input data</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>--minSplits</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The min partitions for the input data</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>--numReducers</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Number of threads writing at a time (default: 8)</p>
-</li>
-<li>
-<p>Default: 8</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="remote-listadapter"><a class="anchor" href="#remote-listadapter"></a><strong>geowave remote listadapter</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave remote listadapter - display all adapters in this remote store</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave remote listadapter [options] &lt;store name&gt;</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>The geowave remote listadapter operator will display all adapters in this remote store.</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="paragraph">
-<p>There are currently no options for this command</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="remote-listindex"><a class="anchor" href="#remote-listindex"></a><strong>geowave remote listindex</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave remote listindex - Display all indices in this remote store</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave remote listindex [options] &lt;store name&gt;</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>The geowave remote listindex operator will display all indices in a specific remote store</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="paragraph">
-<p>There are currently no options for this command</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="remote-liststats"><a class="anchor" href="#remote-liststats"></a><strong>geowave remote liststats</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave remote liststats - Print statistics of an existing GeoWave dataset to standard output</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave remote liststats [options] &lt;store name&gt; [&lt;adapter name&gt;]</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>The geowave remote liststats operator will print statistics of an existing GeoWave dataset to standard output</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>--auth</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The authorizations used for the statistics calculation as a subset of the accumulo user authorization; by default all authorizations are used.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>--json</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Output in JSON format.</p>
-</li>
-<li>
-<p>Default: false</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="remote-combinestats"><a class="anchor" href="#remote-combinestats"></a><strong>geowave remote combinestats</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave remote combinestats - Combine all statistics in GeoWave namespace, can be useful for making a datastore more efficient</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave remote combinestats [options] &lt;storename&gt;
-DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>This command will combine all statistics in a GeoWave namespace</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="paragraph">
-<p>There are currently no options for this command</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="remote-mergedata"><a class="anchor" href="#remote-mergedata"></a><strong>geowave remote mergedata</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave remote mergedata - Merge all rows for a given adapter and index</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave remote mergedata [options] &lt;storename&gt; &lt;indexname&gt;</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>This command will allow a user to merge all rows for a given adapter and index</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="paragraph">
-<p>There are currently no options for this command</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="remote-recalcstats"><a class="anchor" href="#remote-recalcstats"></a><strong>geowave remote recalcstats</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave remote recalcstats - Calculate the statistics of an existing GeoWave dataset</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave remote recalcstats [options] &lt;store name&gt; [&lt;adapter name&gt;]</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>The geowave remote recalcstats operator will calculate the statistics of an existing GeoWave dataset</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>--auth</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The authorizations used for the statistics calculation as a subset of the accumulo user authorization; by default all authorizations are used.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>--json</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Output in JSON format.</p>
-</li>
-<li>
-<p>Default: false</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="remote-rmstat"><a class="anchor" href="#remote-rmstat"></a><strong>geowave remote rmstat</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave remote rmstat - Remove a statistic from the remote store</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave remote rmstat [options] &lt;store name&gt; &lt;adapterId&gt; &lt;statId&gt;</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>The geowave remote rmstat operator will Remove a statistic from the remote store.
-You will be prompted with "Are you sure?"</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>--auth</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The authorizations used for the statistics calculation as a subset of the accumulo user authorization; by default all authorizations are used.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>--json</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Output in JSON format.</p>
-</li>
-<li>
-<p>Default: false</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="remote-version"><a class="anchor" href="#remote-version"></a><strong>geowave remote version</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave remote version - Get the version of GeoWave running on the instance of a remote datastore</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave remote version [options] &lt;storename&gt;</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>This command will return the version of GeoWave running on the instance of a remote datastore.</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="paragraph">
-<p>There are currently no options for this command</p>
 </div>
 <hr>
 <div style="page-break-after: always;"></div>
@@ -6739,18 +6654,18 @@ another point.</p>
 </ul>
 </div>
 <div class="sect3">
-<h4 id="accumulo-presplitpartitionid"><a class="anchor" href="#accumulo-presplitpartitionid"></a><strong>geowave accumulo dbscan</strong></h4>
+<h4 id="accumulo-presplitpartitionid"><a class="anchor" href="#accumulo-presplitpartitionid"></a><strong>geowave util accumulo dbscan</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave accumulo presplitpartitionid - Pre-split Accumulo table by providing the number of partition IDs</p>
+<p>geowave util accumulo presplitpartitionid - Pre-split Accumulo table by providing the number of partition IDs</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave accumulo presplitpartitionid [options] &lt;storename&gt;</p>
+<p>geowave util accumulo presplitpartitionid [options] &lt;storename&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -6790,18 +6705,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="accumulo-runserver"><a class="anchor" href="#accumulo-runserver"></a><strong>geowave accumulo runserver</strong></h4>
+<h4 id="accumulo-runserver"><a class="anchor" href="#accumulo-runserver"></a><strong>geowave util accumulo runserver</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave accumulo runserver - Runs a standalone mini Accumulo server for test and debug with GeoWave</p>
+<p>geowave util accumulo runserver - Runs a standalone mini Accumulo server for test and debug with GeoWave</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave accumulo runserver [options]</p>
+<p>geowave util accumulo runserver [options]</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -6817,18 +6732,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="accumulo-splitequalinterval"><a class="anchor" href="#accumulo-splitequalinterval"></a><strong>geowave accumulo splitequalinterval</strong></h4>
+<h4 id="accumulo-splitequalinterval"><a class="anchor" href="#accumulo-splitequalinterval"></a><strong>geowave util accumulo splitequalinterval</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave accumulo splitequalinterval - Set Accumulo splits by providing the number of partitions based on an equal interval strategy</p>
+<p>geowave util accumulo splitequalinterval - Set Accumulo splits by providing the number of partitions based on an equal interval strategy</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave accumulo splitequalinterval [options] &lt;storename&gt;</p>
+<p>geowave util accumulo splitequalinterval [options] &lt;storename&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -6868,18 +6783,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="accumulo-splitnumrecords"><a class="anchor" href="#accumulo-splitnumrecords"></a><strong>geowave accumulo splitnumrecords</strong></h4>
+<h4 id="accumulo-splitnumrecords"><a class="anchor" href="#accumulo-splitnumrecords"></a><strong>geowave util accumulo splitnumrecords</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave accumulo splitnumrecords - Set Accumulo splits by providing the number of entries per split</p>
+<p>geowave util accumulo splitnumrecords - Set Accumulo splits by providing the number of entries per split</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave accumulo splitnumrecords [options] &lt;storename&gt;</p>
+<p>geowave util accumulo splitnumrecords [options] &lt;storename&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -6919,18 +6834,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="accumulo-splitquantile"><a class="anchor" href="#accumulo-splitquantile"></a><strong>geowave accumulo splitquantile</strong></h4>
+<h4 id="accumulo-splitquantile"><a class="anchor" href="#accumulo-splitquantile"></a><strong>geowave util accumulo splitquantile</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave accumulo splitquantile - Set Accumulo splits by providing the number of partitions based on a quantile distribution strategy</p>
+<p>geowave util accumulo splitquantile - Set Accumulo splits by providing the number of partitions based on a quantile distribution strategy</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave accumulo splitquantile [options] &lt;storename&gt;</p>
+<p>geowave util accumulo splitquantile [options] &lt;storename&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -7061,18 +6976,18 @@ another point.</p>
 </ul>
 </div>
 <div class="sect3">
-<h4 id="geoserver-addcs"><a class="anchor" href="#geoserver-addcs"></a><strong>geowave gs addcs</strong></h4>
+<h4 id="geoserver-addcs"><a class="anchor" href="#geoserver-addcs"></a><strong>geowave gs cs add</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave gs addcs - Add a GeoServer coverage store</p>
+<p>geowave gs cs add - Add a GeoServer coverage store</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs addcs [options] &lt;GeoWave store name&gt;</p>
+<p>geowave gs cs add [options] &lt;GeoWave store name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -7145,18 +7060,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoserver-addcv"><a class="anchor" href="#geoserver-addcv"></a><strong>geowave gs addcvs</strong></h4>
+<h4 id="geoserver-addcv"><a class="anchor" href="#geoserver-addcv"></a><strong>geowave gs cv add</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave gs addcv - Add a GeoServer coverage</p>
+<p>geowave gs cv add - Add a GeoServer coverage</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs addcv [options] &lt;coverage name&gt;</p>
+<p>geowave gs cv add [options] &lt;coverage name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -7193,18 +7108,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoserver-addds"><a class="anchor" href="#geoserver-addds"></a><strong>geowave gs addds</strong></h4>
+<h4 id="geoserver-addds"><a class="anchor" href="#geoserver-addds"></a><strong>geowave gs ds add</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave gs addds - Add a GeoServer datastore</p>
+<p>geowave gs ds add - Add a GeoServer datastore</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs addds [options] &lt;GeoWave store name&gt;</p>
+<p>geowave gs ds add [options] &lt;GeoWave store name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -7241,18 +7156,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoserver-addfl"><a class="anchor" href="#geoserver-addfl"></a><strong>geowave gs addfl</strong></h4>
+<h4 id="geoserver-addfl"><a class="anchor" href="#geoserver-addfl"></a><strong>geowave gs fl add</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave gs addfl - Add a GeoServer feature layer</p>
+<p>geowave gs fl add - Add a GeoServer feature layer</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs addfl [options] &lt;layer name&gt;</p>
+<p>geowave gs fl add [options] &lt;layer name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -7289,18 +7204,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoserver-addlayer"><a class="anchor" href="#geoserver-addlayer"></a><strong>geowave gs addlayer</strong></h4>
+<h4 id="geoserver-addlayer"><a class="anchor" href="#geoserver-addlayer"></a><strong>geowave gs layer add</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave gs addlayer - Add a GeoServer layer from the given GeoWave store</p>
+<p>geowave gs layer add - Add a GeoServer layer from the given GeoWave store</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs addlayer [options] &lt;GeoWave store name&gt;</p>
+<p>geowave gs layer add [options] &lt;GeoWave store name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -7360,18 +7275,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoserver-addstyle"><a class="anchor" href="#geoserver-addstyle"></a><strong>geowave gs addstyle</strong></h4>
+<h4 id="geoserver-addstyle"><a class="anchor" href="#geoserver-addstyle"></a><strong>geowave gs style add</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave gs addstyle - Add a GeoServer style</p>
+<p>geowave gs style add - Add a GeoServer style</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs addstyle [options] &lt;GeoWave style name&gt;</p>
+<p>geowave gs style add [options] &lt;GeoWave style name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -7398,18 +7313,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoserver-addws"><a class="anchor" href="#geoserver-addws"></a><strong>geowave gs addws</strong></h4>
+<h4 id="geoserver-addws"><a class="anchor" href="#geoserver-addws"></a><strong>geowave gs ws add</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave gs addws - Add GeoServer workspace</p>
+<p>geowave gs ws add - Add GeoServer workspace</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs addws [options] &lt;workspace name&gt;</p>
+<p>geowave gs ws add [options] &lt;workspace name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -7425,18 +7340,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoserver-getcs"><a class="anchor" href="#geoserver-getcs"></a><strong>geowave gs getcs</strong></h4>
+<h4 id="geoserver-getcs"><a class="anchor" href="#geoserver-getcs"></a><strong>geowave gs cs get</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave gs getcs - Get GeoServer CoverageStore info</p>
+<p>geowave gs cs get - Get GeoServer CoverageStore info</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs getcs [options] &lt;coverage store name&gt;</p>
+<p>geowave gs cs get [options] &lt;coverage store name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -7463,18 +7378,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoserver-getcv"><a class="anchor" href="#geoserver-getcv"></a><strong>geowave gs getcv</strong></h4>
+<h4 id="geoserver-getcv"><a class="anchor" href="#geoserver-getcv"></a><strong>geowave gs cv get</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave gs getcv - Get a GeoServer coverage&#8217;s info</p>
+<p>geowave gs cv get - Get a GeoServer coverage&#8217;s info</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs getcv [options] &lt;coverage name&gt;</p>
+<p>geowave gs cv get [options] &lt;coverage name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -7511,18 +7426,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoserver-getds"><a class="anchor" href="#geoserver-getds"></a><strong>geowave gs getds</strong></h4>
+<h4 id="geoserver-getds"><a class="anchor" href="#geoserver-getds"></a><strong>geowave gs ds get</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave gs getds - Get GeoServer DataStore info</p>
+<p>geowave gs ds get - Get GeoServer DataStore info</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs getds [options] &lt;datastore name&gt;</p>
+<p>geowave gs ds get [options] &lt;datastore name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -7549,18 +7464,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoserver-getfl"><a class="anchor" href="#geoserver-getfl"></a><strong>geowave gs getfl</strong></h4>
+<h4 id="geoserver-getfl"><a class="anchor" href="#geoserver-getfl"></a><strong>geowave gs fl get</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave gs getfl - Get GeoServer feature layer info</p>
+<p>geowave gs fl get - Get GeoServer feature layer info</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs getfl [options] &lt;layer name&gt;</p>
+<p>geowave gs fl get [options] &lt;layer name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -7576,18 +7491,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoserver-getsa"><a class="anchor" href="#geoserver-getsa"></a><strong>geowave gs getsa</strong></h4>
+<h4 id="geoserver-getsa"><a class="anchor" href="#geoserver-getsa"></a><strong>geowave gs sa get</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave config getsa - Get GeoWave store adapters</p>
+<p>geowave gs sa get - Get GeoWave store adapters</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs getsa [options] &lt;store name&gt;</p>
+<p>geowave gs sa get [options] &lt;store name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -7603,18 +7518,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoserver-getstyle"><a class="anchor" href="#geoserver-getstyle"></a><strong>geowave gs getstyle</strong></h4>
+<h4 id="geoserver-getstyle"><a class="anchor" href="#geoserver-getstyle"></a><strong>geowave gs style get</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave gs getstyle - Get GeoServer Style info</p>
+<p>geowave gs style get - Get GeoServer Style info</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs getstyle [options] &lt;style name&gt;</p>
+<p>geowave gs style get [options] &lt;style name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -7630,18 +7545,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoserver-listcs"><a class="anchor" href="#geoserver-listcs"></a><strong>geowave gs listcs</strong></h4>
+<h4 id="geoserver-listcs"><a class="anchor" href="#geoserver-listcs"></a><strong>geowave gs cs list</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave gs listcs - List GeoServer coverage stores</p>
+<p>geowave gs cs list - List GeoServer coverage stores</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs listcs [options]</p>
+<p>geowave gs cs list [options]</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -7668,18 +7583,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoserver-listcv"><a class="anchor" href="#geoserver-listcv"></a><strong>geowave gs listcv</strong></h4>
+<h4 id="geoserver-listcv"><a class="anchor" href="#geoserver-listcv"></a><strong>geowave gs cv list</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave gs listcv - List GeoServer Coverages</p>
+<p>geowave gs cv list - List GeoServer Coverages</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs listcv [options] &lt;coverage store name&gt;</p>
+<p>geowave gs cv list [options] &lt;coverage store name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -7706,18 +7621,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoserver-listds"><a class="anchor" href="#geoserver-listds"></a><strong>geowave gs listds</strong></h4>
+<h4 id="geoserver-listds"><a class="anchor" href="#geoserver-listds"></a><strong>geowave gs ds list</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave gs listds - List GeoServer datastores</p>
+<p>geowave gs ds list - List GeoServer datastores</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs listds [options]</p>
+<p>geowave gs ds list [options]</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -7744,18 +7659,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoserver-listfl"><a class="anchor" href="#geoserver-listfl"></a><strong>geowave gs listfl</strong></h4>
+<h4 id="geoserver-listfl"><a class="anchor" href="#geoserver-listfl"></a><strong>geowave gs fl list</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave gs listfl - List GeoServer feature layers</p>
+<p>geowave gs fl list - List GeoServer feature layers</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs listfl [options]</p>
+<p>geowave gs fl list [options]</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -7805,18 +7720,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoserver-liststyles"><a class="anchor" href="#geoserver-liststyles"></a><strong>geowave gs liststyles</strong></h4>
+<h4 id="geoserver-liststyles"><a class="anchor" href="#geoserver-liststyles"></a><strong>geowave gs style list</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave gs liststyles - List GeoServer styles</p>
+<p>geowave gs style list - List GeoServer styles</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs liststyles [options]</p>
+<p>geowave gs style list [options]</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -7832,18 +7747,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoserver-listws"><a class="anchor" href="#geoserver-listws"></a><strong>geowave gs listws</strong></h4>
+<h4 id="geoserver-listws"><a class="anchor" href="#geoserver-listws"></a><strong>geowave gs ws list</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave gs listws - List GeoServer workspaces</p>
+<p>geowave gs ws list - List GeoServer workspaces</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs listws [options]</p>
+<p>geowave gs ws list [options]</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -7859,18 +7774,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoserver-rmcs"><a class="anchor" href="#geoserver-rmcs"></a><strong>geowave gs rmcs</strong></h4>
+<h4 id="geoserver-rmcs"><a class="anchor" href="#geoserver-rmcs"></a><strong>geowave gs cs rm</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave gs rmcs - Remove GeoServer Coverage Store</p>
+<p>geowave gs cs rm - Remove GeoServer Coverage Store</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs rmcs [options] &lt;coverage store name&gt;</p>
+<p>geowave gs cs rm [options] &lt;coverage store name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -7897,18 +7812,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoserver-rmcv"><a class="anchor" href="#geoserver-rmcv"></a><strong>geowave gs rmcv</strong></h4>
+<h4 id="geoserver-rmcv"><a class="anchor" href="#geoserver-rmcv"></a><strong>geowave gs cv rm</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave gs rmcv - Remove a GeoServer coverage</p>
+<p>geowave gs cv rm - Remove a GeoServer coverage</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs rmcv [options] &lt;coverage name&gt;</p>
+<p>geowave gs cv rm [options] &lt;coverage name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -7945,18 +7860,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoserver-rmds"><a class="anchor" href="#geoserver-rmds"></a><strong>geowave gs rmds</strong></h4>
+<h4 id="geoserver-rmds"><a class="anchor" href="#geoserver-rmds"></a><strong>geowave gs ds rm</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave gs rmds - Remove GeoServer DataStore</p>
+<p>geowave gs ds rm - Remove GeoServer DataStore</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs rmds [options] &lt;datastore name&gt;</p>
+<p>geowave gs ds rm [options] &lt;datastore name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -7983,18 +7898,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoserver-rmfl"><a class="anchor" href="#geoserver-rmfl"></a><strong>geowave gs rmfl</strong></h4>
+<h4 id="geoserver-rmfl"><a class="anchor" href="#geoserver-rmfl"></a><strong>geowave gs fl rm</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave gs rmfl - Remove GeoServer feature Layer</p>
+<p>geowave gs fl rm - Remove GeoServer feature Layer</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs rmfl [options] &lt;layer name&gt;</p>
+<p>geowave gs fl rm [options] &lt;layer name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -8010,18 +7925,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoserver-rmstyle"><a class="anchor" href="#geoserver-rmstyle"></a><strong>geowave gs rmstyle</strong></h4>
+<h4 id="geoserver-rmstyle"><a class="anchor" href="#geoserver-rmstyle"></a><strong>geowave gs style rm</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave gs rmstyle - Remove GeoServer Style</p>
+<p>geowave gs style rm - Remove GeoServer Style</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs rmstyle [options] &lt;style name&gt;</p>
+<p>geowave gs style rm [options] &lt;style name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -8037,18 +7952,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoserver-rmws"><a class="anchor" href="#geoserver-rmws"></a><strong>geowave gs rmws</strong></h4>
+<h4 id="geoserver-rmws"><a class="anchor" href="#geoserver-rmws"></a><strong>geowave gs ws rm</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave gs rmws - Remove GeoServer workspace</p>
+<p>geowave gs ws rm - Remove GeoServer workspace</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs rmws [options] &lt;workspace name&gt;</p>
+<p>geowave gs ws rm [options] &lt;workspace name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -8064,18 +7979,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="geoserver-setls"><a class="anchor" href="#geoserver-setls"></a><strong>geowave gs setls</strong></h4>
+<h4 id="geoserver-setls"><a class="anchor" href="#geoserver-setls"></a><strong>geowave gs style set</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave gs setls - Set GeoServer Layer Style</p>
+<p>geowave gs style set - Set GeoServer Layer Style</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave gs setls [options] &lt;layer name&gt;</p>
+<p>geowave gs style set [options] &lt;layer name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -8130,18 +8045,18 @@ another point.</p>
 </ul>
 </div>
 <div class="sect3">
-<h4 id="landsat-analyze"><a class="anchor" href="#landsat-analyze"></a><strong>geowave landsat analyze</strong></h4>
+<h4 id="landsat-analyze"><a class="anchor" href="#landsat-analyze"></a><strong>geowave util landsat analyze</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave landsat analyze - Print out basic aggregate statistics for available Landsat 8 imagery</p>
+<p>geowave util landsat analyze - Print out basic aggregate statistics for available Landsat 8 imagery</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave landsat analyze [options]</p>
+<p>geowave util landsat analyze [options]</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -8252,18 +8167,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="landsat-download"><a class="anchor" href="#landsat-download"></a><strong>geowave landsat download</strong></h4>
+<h4 id="landsat-download"><a class="anchor" href="#landsat-download"></a><strong>geowave util landsat download</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave landsat download - Download Landsat 8 imagery to a local directory</p>
+<p>geowave util landsat download - Download Landsat 8 imagery to a local directory</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave landsat download [options]</p>
+<p>geowave util landsat download [options]</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -8374,18 +8289,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="landsat-ingest"><a class="anchor" href="#landsat-ingest"></a><strong>geowave landsat ingest</strong></h4>
+<h4 id="landsat-ingest"><a class="anchor" href="#landsat-ingest"></a><strong>geowave util landsat ingest</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave landsat ingest - Ingest routine for locally downloading Landsat 8 imagery and ingesting it into GeoWave&#8217;s raster store and in parallel ingesting the scene metadata into GeoWave&#8217;s vector store. These two stores can actually be the same or they can be different.</p>
+<p>geowave util landsat ingest - Ingest routine for locally downloading Landsat 8 imagery and ingesting it into GeoWave&#8217;s raster store and in parallel ingesting the scene metadata into GeoWave&#8217;s vector store. These two stores can actually be the same or they can be different.</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave landsat ingest [options] &lt;storename&gt; &lt;comma delimited index/group list&gt;</p>
+<p>geowave util landsat ingest [options] &lt;store name&gt; &lt;comma delimited index list&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -8640,18 +8555,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="landsat-ingestraster"><a class="anchor" href="#landsat-ingestraster"></a><strong>geowave landsat ingestraster</strong></h4>
+<h4 id="landsat-ingestraster"><a class="anchor" href="#landsat-ingestraster"></a><strong>geowave util landsat ingestraster</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave landsat ingestraster - Ingest routine for locally downloading Landsat 8 imagery and ingesting it into GeoWave</p>
+<p>geowave util landsat ingestraster - Ingest routine for locally downloading Landsat 8 imagery and ingesting it into GeoWave</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave landsat analyze [options]</p>
+<p>geowave util landsat analyze [options]</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -8886,18 +8801,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="landsat-ingestvector"><a class="anchor" href="#landsat-ingestvector"></a><strong>geowave landsat ingestvector</strong></h4>
+<h4 id="landsat-ingestvector"><a class="anchor" href="#landsat-ingestvector"></a><strong>geowave util landsat ingestvector</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave landsat ingestvector - Ingest routine for searching landsat scenes that match certain criteria and ingesting the scene and band metadata into GeoWave&#8217;s vector store.</p>
+<p>geowave util landsat ingestvector - Ingest routine for searching landsat scenes that match certain criteria and ingesting the scene and band metadata into GeoWave&#8217;s vector store.</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave landsat ingestvector [options] &lt;storename&gt; &lt;comma delimited index/group list&gt;</p>
+<p>geowave util landsat ingestvector [options] &lt;store name&gt; &lt;comma delimited index list&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -9024,18 +8939,18 @@ another point.</p>
 </ul>
 </div>
 <div class="sect3">
-<h4 id="osm-ingest"><a class="anchor" href="#osm-ingest"></a><strong>geowave osm ingest</strong></h4>
+<h4 id="osm-ingest"><a class="anchor" href="#osm-ingest"></a><strong>geowave util osm ingest</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave osm ingest - Ingest and convert OSM data from HDFS to GeoWave</p>
+<p>geowave util osm ingest - Ingest and convert OSM data from HDFS to GeoWave</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave osm ingest [options] &lt;hdfs host:port&gt; &lt;path to base directory to read from&gt; &lt;store name&gt;</p>
+<p>geowave util osm ingest [options] &lt;hdfs host:port&gt; &lt;path to base directory to read from&gt; &lt;store name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -9108,18 +9023,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="osm-stage"><a class="anchor" href="#osm-stage"></a><strong>geowave osm stage</strong></h4>
+<h4 id="osm-stage"><a class="anchor" href="#osm-stage"></a><strong>geowave util osm stage</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave osm stage - Stage OSM data to HDFS</p>
+<p>geowave util osm stage - Stage OSM data to HDFS</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave osm stage [options] &lt;file or directory&gt; &lt;hdfs host:port&gt; &lt;path to base directory to write to&gt;</p>
+<p>geowave util osm stage [options] &lt;file or directory&gt; &lt;hdfs host:port&gt; &lt;path to base directory to write to&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -9146,6 +9061,49 @@ another point.</p>
 </div>
 </li>
 </ul>
+</div>
+<hr>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="python-commands"><a class="anchor" href="#python-commands"></a>Python Commands</h3>
+<div class="paragraph">
+<p>Operations to ingest Open Street Map (OSM) nodes, ways and relations to GeoWave (Required options are designated with an *)</p>
+</div>
+<div class="ulist">
+<div class="title">Commands:</div>
+<ul>
+<li>
+<p><a href="#python-rungateway">RunGateway</a></p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="python-rungateway"><a class="anchor" href="#python-rungateway"></a><strong>geowave util python rungateway</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave util python rungateway - Runs a Py4J java gateway</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave util python rungateway [options]</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave util python rungateway operator will start the Py4J java gateway required by pygw.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options for this command</p>
 </div>
 <hr>
 <div style="page-break-after: always;"></div>
@@ -9553,24 +9511,24 @@ another point.</p>
 </ul>
 </div>
 <div class="sect3">
-<h4 id="grpc-start"><a class="anchor" href="#grpc-start"></a><strong>geowave grpc start</strong></h4>
+<h4 id="grpc-start"><a class="anchor" href="#grpc-start"></a><strong>geowave util grpc start</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave grpc start - Start the GeoWave gRPC server</p>
+<p>geowave util grpc start - Start the GeoWave gRPC server</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave grpc start [options]</p>
+<p>geowave util grpc start [options]</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
 </div>
 <div class="paragraph">
-<p>The geowave grpc start operator will start the GeoWave gRPC server on a given port number. Remote gRPC clients can interact with GeoWave from this service.</p>
+<p>The geowave util grpc start operator will start the GeoWave gRPC server on a given port number. Remote gRPC clients can interact with GeoWave from this service.</p>
 </div>
 <div class="paragraph">
 <p>OPTIONS</p>
@@ -9607,18 +9565,18 @@ another point.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="grpc-stop"><a class="anchor" href="#grpc-stop"></a><strong>geowave grpc stop</strong></h4>
+<h4 id="grpc-stop"><a class="anchor" href="#grpc-stop"></a><strong>geowave util grpc stop</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave grpc stop - Stop the GeoWave gRPC server</p>
+<p>geowave util grpc stop - Stop the GeoWave gRPC server</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave grpc stop</p>
+<p>geowave util grpc stop</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
@@ -9640,7 +9598,7 @@ another point.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-08-15 12:58:24 +00:00
+Last updated 2019-08-19 20:19:26 +00:00
 </div>
 </div>
 </body>

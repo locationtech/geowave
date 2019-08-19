@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -252,13 +252,19 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dim
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/TimeField.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i15" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/TimeField.html#isCompatibleWith-java.lang.Class-">isCompatibleWith</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;clazz)</code>
+<div class="block">Determines if the given field type is compatible with this field.</div>
+</td>
+</tr>
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/TimeField.html#normalize-double-">normalize</a></span>(double&nbsp;value)</code>
 <div class="block">Used to normalize a value within the bounds of the range to a percentage of the range between 0
  and 1</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/TimeField.html#toBinary--">toBinary</a></span>()</code>
 <div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
@@ -539,6 +545,25 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dim
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html#getReader--">getReader</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/Time.html" title="interface in org.locationtech.geowave.core.geotime.store.dimension">Time</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the field reader for this field</dd>
+</dl>
+</li>
+</ul>
+<a name="isCompatibleWith-java.lang.Class-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isCompatibleWith</h4>
+<pre>public&nbsp;boolean&nbsp;isCompatibleWith(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;clazz)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html#isCompatibleWith-java.lang.Class-">NumericDimensionField</a></code></span></div>
+<div class="block">Determines if the given field type is compatible with this field.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html#isCompatibleWith-java.lang.Class-">isCompatibleWith</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/dimension/NumericDimensionField.html" title="interface in org.locationtech.geowave.core.store.dimension">NumericDimensionField</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/Time.html" title="interface in org.locationtech.geowave.core.geotime.store.dimension">Time</a>&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>clazz</code> - the field type to check</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the given field type is assignable</dd>
 </dl>
 </li>
 </ul>

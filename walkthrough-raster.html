@@ -540,9 +540,9 @@ sudo tar -xvf gdal192-CentOS5.8-gcc4.1.2-x86_64.tar.gz</code></pre>
 <p>If running with the GeoWave Sandbox:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore -t hbase -z $HOSTNAME:2181 landsatraster --gwNamespace landsat_raster
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave store add -t hbase -z $HOSTNAME:2181 landsatraster --gwNamespace landsat_raster
 
-geowave config cpstore landsatraster landsatvector --gwNamespace landsat_vector</code></pre>
+geowave store copycfg landsatraster landsatvector --gwNamespace landsat_vector</code></pre>
 </div>
 </div>
 </li>
@@ -550,10 +550,10 @@ geowave config cpstore landsatraster landsatvector --gwNamespace landsat_vector<
 <p>If running with EMR Accumulo:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore -t accumulo -z $HOSTNAME:2181 landsatraster --gwNamespace geowave.landsat_raster \
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave store add -t accumulo -z $HOSTNAME:2181 landsatraster --gwNamespace geowave.landsat_raster \
 -i accumulo -u geowave -p geowave
 
-geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat_vector</code></pre>
+geowave store copycfg landsatraster landsatvector --gwNamespace geowave.landsat_vector</code></pre>
 </div>
 </div>
 </li>
@@ -561,9 +561,9 @@ geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat
 <p>If running with EMR HBase</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore -t hbase -z $HOSTNAME:2181 landsatraster --gwNamespace geowave.landsat_raster
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave store add -t hbase -z $HOSTNAME:2181 landsatraster --gwNamespace geowave.landsat_raster
 
-geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat_vector</code></pre>
+geowave store copycfg landsatraster landsatvector --gwNamespace geowave.landsat_vector</code></pre>
 </div>
 </div>
 </li>
@@ -571,9 +571,9 @@ geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat
 <p>If running with EMR Cassandra</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore -t cassandra --contactPoints localhost landsatraster --gwNamespace geowave.landsat_raster --batchWriteSize 15
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave store add -t cassandra --contactPoints localhost landsatraster --gwNamespace geowave.landsat_raster --batchWriteSize 15
 
-geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat_vector</code></pre>
+geowave store copycfg landsatraster landsatvector --gwNamespace geowave.landsat_vector</code></pre>
 </div>
 </div>
 </li>
@@ -587,7 +587,8 @@ geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addindex -t spatial spatial -c EPSG:3857</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave index add landsatraster spatial -t spatial -c EPSG:3857
+geowave index add landsatvector spatial -t spatial -c EPSG:3857</code></pre>
 </div>
 </div>
 </li>
@@ -598,9 +599,9 @@ geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave landsat analyze --nbestperspatial --nbestscenes 1 --usecachedscenes --cql  "INTERSECTS(shape,$GERMANY) AND band='B8' AND cloudCover&gt;0" -ws /mnt/landsat
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave util landsat analyze --nbestperspatial --nbestscenes 1 --usecachedscenes --cql  "INTERSECTS(shape,$GERMANY) AND band='B8' AND cloudCover&gt;0" -ws /mnt/landsat
 
-geowave landsat analyze --nbestperspatial --nbestscenes 1 --usecachedscenes --cql "$BERLIN_BBOX AND band='B8' AND cloudCover&gt;0" -ws /mnt/landsat</code></pre>
+geowave util landsat analyze --nbestperspatial --nbestscenes 1 --usecachedscenes --cql "$BERLIN_BBOX AND band='B8' AND cloudCover&gt;0" -ws /mnt/landsat</code></pre>
 </div>
 </div>
 </li>
@@ -612,7 +613,7 @@ More information on the landsat ingest and analyze commands can be found <a href
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave landsat ingest --nbestperspatial --nbestscenes 1 --usecachedscenes --cql "$BERLIN_BBOX AND band='B8' AND cloudCover&gt;0" --crop --retainimages -ws /mnt/landsat --vectorstore landsatvector --pyramid --coverage berlin_mosaic  landsatraster spatial</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave util landsat ingest --nbestperspatial --nbestscenes 1 --usecachedscenes --cql "$BERLIN_BBOX AND band='B8' AND cloudCover&gt;0" --crop --retainimages -ws /mnt/landsat --vectorstore landsatvector --pyramid --coverage berlin_mosaic  landsatraster spatial</code></pre>
 </div>
 </div>
 </li>
@@ -654,7 +655,7 @@ More information on the landsat ingest and analyze commands can be found <a href
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-08-15 12:58:23 +00:00
+Last updated 2019-08-19 20:19:26 +00:00
 </div>
 </div>
 </body>

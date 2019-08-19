@@ -1,0 +1,23 @@
+//:geowave-rmstore(1)
+//:==================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave store rm - removes an existing store from GeoWave configuration
+
+SYNOPSIS
+//:--------
+
+geowave store rm [options] <store name>
+
+DESCRIPTION
+//:-----------
+
+The geowave store rm operator will remove an existing store from GeoWave configuration
+
+OPTIONS
+//:-------
+
+There are currently no options for this command

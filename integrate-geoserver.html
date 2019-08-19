@@ -478,8 +478,8 @@ href="images/geowave-icon-logo-small.png">
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave gs addlayer gdelt
-geowave gs addlayer gdelt-kde</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave gs layer add gdelt
+geowave gs layer add gdelt-kde</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -511,8 +511,8 @@ geowave gs addlayer gdelt-kde</code></pre>
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">cd /mnt
 sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/KDEColorMap.sld
 sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/SubsamplePoints.sld
-geowave gs addstyle kdecolormap -sld /mnt/KDEColorMap.sld
-geowave gs addstyle SubsamplePoints -sld /mnt/SubsamplePoints.sld</code></pre>
+geowave gs style add kdecolormap -sld /mnt/KDEColorMap.sld
+geowave gs style add SubsamplePoints -sld /mnt/SubsamplePoints.sld</code></pre>
 </div>
 </div>
 <div class="ulist">
@@ -524,8 +524,8 @@ geowave gs addstyle SubsamplePoints -sld /mnt/SubsamplePoints.sld</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave gs setls gdeltevent_kde --styleName kdecolormap
-geowave gs setls gdeltevent --styleName SubsamplePoints</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave gs style set gdeltevent_kde --styleName kdecolormap
+geowave gs style set gdeltevent --styleName SubsamplePoints</code></pre>
 </div>
 </div>
 </div>
@@ -540,8 +540,8 @@ geowave gs setls gdeltevent --styleName SubsamplePoints</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave gs addlayer landsatraster
-geowave gs addlayer landsatvector --add ALL</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave gs layer add landsatraster
+geowave gs layer add landsatvector --add ALL</code></pre>
 </div>
 </div>
 </div>
@@ -574,7 +574,7 @@ geowave gs addlayer landsatvector --add ALL</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-08-15 12:58:23 +00:00
+Last updated 2019-08-19 20:19:26 +00:00
 </div>
 </div>
 </body>
