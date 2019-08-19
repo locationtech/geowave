@@ -24,7 +24,7 @@ import it.geosolutions.jaiext.JAIExt;
     commandDescription = "Ingest routine for locally downloading Landsat 8 imagery and ingesting it into GeoWave's raster store and in parallel ingesting the scene metadata into GeoWave's vector store.  These two stores can actually be the same or they can be different.")
 public class Landsat8IngestCommand extends DefaultOperation implements Command {
 
-  @Parameter(description = "<storename> <comma delimited index/group list>")
+  @Parameter(description = "<store name> <comma delimited index list>")
   private List<String> parameters = new ArrayList<String>();
 
   @ParametersDelegate

@@ -14,7 +14,7 @@ import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.util.Tool;
 import org.locationtech.geowave.core.store.api.Query;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.options.CommonQueryOptions;
 import org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions;

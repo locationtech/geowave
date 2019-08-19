@@ -10,10 +10,10 @@ package org.locationtech.geowave.python.cli;
 
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
-import org.locationtech.geowave.core.cli.operations.GeowaveTopLevelSection;
+import org.locationtech.geowave.core.cli.operations.util.UtilSection;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "python", parentOperation = GeowaveTopLevelSection.class)
-@Parameters(commandDescription = "Utility operations for python integration")
+@GeowaveOperation(name = "python", parentOperation = UtilSection.class)
+@Parameters(commandDescription = "Utility commands for python integration")
 public class PythonSection extends DefaultOperation {
 }

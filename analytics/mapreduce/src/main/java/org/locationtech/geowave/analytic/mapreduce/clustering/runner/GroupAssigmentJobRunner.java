@@ -28,7 +28,7 @@ import org.locationtech.geowave.analytic.param.ParameterEnum;
 import org.locationtech.geowave.analytic.param.StoreParameters;
 import org.locationtech.geowave.analytic.param.StoreParameters.StoreParam;
 import org.locationtech.geowave.analytic.store.PersistableStore;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputFormat;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 

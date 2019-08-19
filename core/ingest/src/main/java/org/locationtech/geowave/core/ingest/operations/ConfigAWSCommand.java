@@ -24,7 +24,7 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "aws", parentOperation = ConfigSection.class)
-@Parameters(commandDescription = "Create a local configuration for aws s3")
+@Parameters(commandDescription = "Create a local configuration for AWS S3")
 public class ConfigAWSCommand extends DefaultOperation implements Command {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ConfigAWSCommand.class);

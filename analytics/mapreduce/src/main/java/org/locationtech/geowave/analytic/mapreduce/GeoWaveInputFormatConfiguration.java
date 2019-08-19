@@ -21,7 +21,7 @@ import org.locationtech.geowave.analytic.store.PersistableStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Query;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputFormat;
 
 public class GeoWaveInputFormatConfiguration implements FormatConfiguration {

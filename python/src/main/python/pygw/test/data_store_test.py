@@ -68,8 +68,8 @@ def test_add_existing_type(test_ds):
 # Test Removing #
 def test_remove_index(test_ds):
     # given
-    index = SpatialIndexBuilder().set_name_override("idx1").create_index()
-    index2 = SpatialIndexBuilder().set_name_override("idx2").create_index()
+    index = SpatialIndexBuilder().set_name("idx1").create_index()
+    index2 = SpatialIndexBuilder().set_name("idx2").create_index()
 
     adapter = POINT_TYPE_ADAPTER
     test_ds.add_type(adapter, index)
@@ -134,8 +134,8 @@ def test_remove_type(test_ds):
 # Test Deleting #
 def test_delete(test_ds):
     # given
-    index = SpatialIndexBuilder().set_name_override("idx1").create_index()
-    index2 = SpatialIndexBuilder().set_name_override("idx2").create_index()
+    index = SpatialIndexBuilder().set_name("idx1").create_index()
+    index2 = SpatialIndexBuilder().set_name("idx2").create_index()
     adapter = POINT_TYPE_ADAPTER
     test_ds.add_type(adapter, index)
     test_ds.add_type(adapter, index2)
@@ -160,8 +160,8 @@ def test_delete(test_ds):
 # Test Delete All #
 def test_delete_all(test_ds):
     # given
-    index = SpatialIndexBuilder().set_name_override("idx1").create_index()
-    index2 = SpatialIndexBuilder().set_name_override("idx2").create_index()
+    index = SpatialIndexBuilder().set_name("idx1").create_index()
+    index2 = SpatialIndexBuilder().set_name("idx2").create_index()
     adapter = POINT_TYPE_ADAPTER
     test_ds.add_type(adapter, index)
     test_ds.add_type(adapter, index2)

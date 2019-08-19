@@ -27,9 +27,8 @@ import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
+import org.locationtech.geowave.core.store.cli.VisibilityOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.ingest.IndexProvider;
 import org.locationtech.geowave.core.store.ingest.IngestPluginBase;
@@ -47,7 +46,7 @@ public class IngestFromKafkaDriver {
   private static final Logger LOGGER = LoggerFactory.getLogger(IngestFromKafkaDriver.class);
 
   private final DataStorePluginOptions storeOptions;
-  private final List<IndexPluginOptions> indexOptions;
+  private final List<Index> indices;
   private final Map<String, GeoWaveAvroFormatPlugin<?, ?>> ingestPlugins;
   private final KafkaConsumerCommandLineOptions kafkaOptions;
   private final VisibilityOptions ingestOptions;
@@ -55,12 +54,12 @@ public class IngestFromKafkaDriver {
 
   public IngestFromKafkaDriver(
       final DataStorePluginOptions storeOptions,
-      final List<IndexPluginOptions> indexOptions,
+      final List<Index> indices,
       final Map<String, GeoWaveAvroFormatPlugin<?, ?>> ingestPlugins,
       final KafkaConsumerCommandLineOptions kafkaOptions,
       final VisibilityOptions ingestOptions) {
     this.storeOptions = storeOptions;
-    this.indexOptions = indexOptions;
+    this.indices = indices;
     this.ingestPlugins = ingestPlugins;
     this.kafkaOptions = kafkaOptions;
     this.ingestOptions = ingestOptions;
@@ -268,13 +267,8 @@ public class IngestFromKafkaDriver {
     final Map<String, Writer> writerMap = new HashMap<>();
     final Map<String, Index> indexMap = new HashMap<>();
 
-    for (final IndexPluginOptions indexOption : indexOptions) {
-      final Index primaryIndex = indexOption.createIndex();
-      if (primaryIndex == null) {
-        LOGGER.error("Could not get index instance, getIndex() returned null;");
-        throw new IOException("Could not get index instance, getIndex() returned null");
-      }
-      indexMap.put(primaryIndex.getName(), primaryIndex);
+    for (final Index index : indices) {
+      indexMap.put(index.getName(), index);
     }
 
     final Index[] requiredIndices = indexProvider.getRequiredIndices();

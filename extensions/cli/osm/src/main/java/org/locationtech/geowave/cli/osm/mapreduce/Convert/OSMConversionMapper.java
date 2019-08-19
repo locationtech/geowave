@@ -17,7 +17,7 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.locationtech.geowave.cli.osm.mapreduce.Convert.OsmProvider.OsmProvider;
 import org.locationtech.geowave.cli.osm.operations.options.OSMIngestCommandArgs;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.AbstractMapReduceIngest;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.datastore.accumulo.config.AccumuloRequiredOptions;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputFormat;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;

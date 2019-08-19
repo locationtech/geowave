@@ -10,7 +10,7 @@ geowave ingest mrToGW - Ingest supported files that already exist in HDFS
 SYNOPSIS
 //:--------
 
-geowave ingest mrToGW [options] <hdfs host:port> <path to base directory to write to> <store name> <comma delimited index/group list>
+geowave ingest mrToGW [options] <hdfs host:port> <path to base directory to write to> <store name> <comma delimited index list>
 
 DESCRIPTION
 //:-----------

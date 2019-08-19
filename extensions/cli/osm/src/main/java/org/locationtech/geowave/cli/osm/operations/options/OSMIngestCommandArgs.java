@@ -14,7 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.regex.Pattern;
 import org.locationtech.geowave.cli.osm.accumulo.osmschema.Constants;
-import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
+import org.locationtech.geowave.core.store.cli.VisibilityOptions;
 import org.locationtech.geowave.datastore.accumulo.util.AccumuloUtils;
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;

@@ -15,28 +15,28 @@ Utility operations to set accumulo splits and run a test server (Required option
 
 
 [[accumulo-presplitpartitionid]]
-==== *geowave accumulo dbscan*
+==== *geowave util accumulo dbscan*
 
-include::manpages/accumulo/geowave-presplitpartitionid.txt[]
+include::manpages/util/accumulo/geowave-presplitpartitionid.txt[]
 
 [[accumulo-runserver]]
-==== *geowave accumulo runserver*
+==== *geowave util accumulo runserver*
 
-include::manpages/accumulo/geowave-runserver.txt[]
+include::manpages/util/accumulo/geowave-runserver.txt[]
 
 [[accumulo-splitequalinterval]]
-==== *geowave accumulo splitequalinterval*
+==== *geowave util accumulo splitequalinterval*
 
-include::manpages/accumulo/geowave-splitequalinterval.txt[]
+include::manpages/util/accumulo/geowave-splitequalinterval.txt[]
 
 [[accumulo-splitnumrecords]]
-==== *geowave accumulo splitnumrecords*
+==== *geowave util accumulo splitnumrecords*
 
-include::manpages/accumulo/geowave-splitnumrecords.txt[]
+include::manpages/util/accumulo/geowave-splitnumrecords.txt[]
 
 [[accumulo-splitquantile]]
-==== *geowave accumulo splitquantile*
+==== *geowave util accumulo splitquantile*
 
-include::manpages/accumulo/geowave-splitquantile.txt[]
+include::manpages/util/accumulo/geowave-splitquantile.txt[]
 
 '''

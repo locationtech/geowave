@@ -23,14 +23,13 @@ import java.util.TimeZone;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
-import org.locationtech.geowave.service.grpc.protobuf.AddIndexGroupCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.AnalyticMapreduceGrpc;
 import org.locationtech.geowave.service.grpc.protobuf.AnalyticMapreduceGrpc.AnalyticMapreduceBlockingStub;
 import org.locationtech.geowave.service.grpc.protobuf.AnalyticSparkGrpc;
 import org.locationtech.geowave.service.grpc.protobuf.AnalyticSparkGrpc.AnalyticSparkBlockingStub;
 import org.locationtech.geowave.service.grpc.protobuf.CQLQueryParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.CalculateStatCommandParametersProtos;
-import org.locationtech.geowave.service.grpc.protobuf.ClearCommandParametersProtos;
+import org.locationtech.geowave.service.grpc.protobuf.ClearStoreCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.CliGeoserverGrpc;
 import org.locationtech.geowave.service.grpc.protobuf.CliGeoserverGrpc.CliGeoserverBlockingStub;
 import org.locationtech.geowave.service.grpc.protobuf.ConfigGeoServerCommandParametersProtos;
@@ -90,7 +89,6 @@ import org.locationtech.geowave.service.grpc.protobuf.MapReduceToGeowaveCommandP
 import org.locationtech.geowave.service.grpc.protobuf.NearestNeighborCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.RecalculateStatsCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.RemoveIndexCommandParametersProtos;
-import org.locationtech.geowave.service.grpc.protobuf.RemoveIndexGroupCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.RemoveStatCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.RemoveStoreCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.RemoveTypeCommandParametersProtos;
@@ -449,6 +447,7 @@ public class GeoWaveGrpcTestClient {
 
   public String RemoveIndexCommand() {
     final ArrayList<String> params = new ArrayList<>();
+    params.add(GeoWaveGrpcTestUtils.storeName);
     params.add(GeoWaveGrpcTestUtils.indexName);
     final RemoveIndexCommandParametersProtos request =
         RemoveIndexCommandParametersProtos.newBuilder().addAllParameters(params).build();
@@ -483,22 +482,12 @@ public class GeoWaveGrpcTestClient {
     return resp.getResponseValue();
   }
 
-  public String AddIndexGroupCommand() {
-    final ArrayList<String> params = new ArrayList<>();
-    params.add(GeoWaveGrpcTestUtils.indexName + "-group");
-    params.add(GeoWaveGrpcTestUtils.indexName);
-    final AddIndexGroupCommandParametersProtos request =
-        AddIndexGroupCommandParametersProtos.newBuilder().addAllParameters(params).build();
-    final StringResponseProtos resp = coreStoreBlockingStub.addIndexGroupCommand(request);
-    return resp.getResponseValue();
-  }
-
   public boolean ClearCommand() {
     final ArrayList<String> params = new ArrayList<>();
     params.add(GeoWaveGrpcTestUtils.storeName);
-    final ClearCommandParametersProtos request =
-        ClearCommandParametersProtos.newBuilder().addAllParameters(params).build();
-    coreStoreBlockingStub.clearCommand(request);
+    final ClearStoreCommandParametersProtos request =
+        ClearStoreCommandParametersProtos.newBuilder().addAllParameters(params).build();
+    coreStoreBlockingStub.clearStoreCommand(request);
     return true;
   }
 
@@ -552,15 +541,6 @@ public class GeoWaveGrpcTestClient {
             "geometry").build();
     coreStoreBlockingStub.calculateStatCommand(request);
     return true;
-  }
-
-  public String RemoveIndexGroupCommand() {
-    final ArrayList<String> params = new ArrayList<>();
-    params.add(GeoWaveGrpcTestUtils.indexName + "-group");
-    final RemoveIndexGroupCommandParametersProtos request =
-        RemoveIndexGroupCommandParametersProtos.newBuilder().addAllParameters(params).build();
-    final StringResponseProtos resp = coreStoreBlockingStub.removeIndexGroupCommand(request);
-    return resp.getResponseValue();
   }
 
   // Cli GeoServer

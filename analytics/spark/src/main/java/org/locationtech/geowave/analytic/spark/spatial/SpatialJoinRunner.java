@@ -31,7 +31,7 @@ import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

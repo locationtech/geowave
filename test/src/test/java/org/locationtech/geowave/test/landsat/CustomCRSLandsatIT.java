@@ -35,7 +35,7 @@ import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.format.landsat8.BandFeatureIterator;
 import org.locationtech.geowave.format.landsat8.Landsat8BasicCommandLineOptions;
 import org.locationtech.geowave.format.landsat8.Landsat8DownloadCommandLineOptions;

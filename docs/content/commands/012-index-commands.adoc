@@ -1,0 +1,36 @@
+[[index-commands]]
+<<<
+
+[[index-commands]]
+=== Index Commands
+
+Commands for managing GeoWave indices.
+
+.Commands:
+* <<012-index-commands.adoc#index-add, AddIndex>>
+* <<012-index-commands.adoc#index-compact, CompactIndex>>
+* <<012-index-commands.adoc#index-list, ListIndex>>
+* <<012-index-commands.adoc#index-rm, RmIndex>>
+
+[[index-add]]
+==== *geowave index add*
+
+include::manpages/index/geowave-addindex.txt[]
+
+[[index-compact]]
+==== *geowave index compact*
+
+include::manpages/index/geowave-compactindex.txt[]
+
+[[index-list]]
+==== *geowave index list*
+
+include::manpages/index/geowave-listindex.txt[]
+
+[[index-rm]]
+==== *geowave index rm*
+
+include::manpages/index/geowave-rmindex.txt[]
+
+'''
+

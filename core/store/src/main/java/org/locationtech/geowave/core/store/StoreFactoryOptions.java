@@ -15,7 +15,7 @@ import java.util.Properties;
 import org.locationtech.geowave.core.cli.Constants;
 import org.locationtech.geowave.core.cli.utils.JCommanderParameterUtils;
 import org.locationtech.geowave.core.cli.utils.PropertiesUtils;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.beust.jcommander.JCommander;

@@ -1,2 +1,3 @@
-org.locationtech.geowave.core.store.cli.remote.RemoteOperationProvider
-org.locationtech.geowave.core.store.cli.config.ConfigOperationProvider
+org.locationtech.geowave.core.store.cli.store.StoreOperationProvider
+org.locationtech.geowave.core.store.cli.index.IndexOperationProvider
+org.locationtech.geowave.core.store.cli.stats.StatsOperationProvider

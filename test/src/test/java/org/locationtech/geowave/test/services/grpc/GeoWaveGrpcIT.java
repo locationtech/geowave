@@ -22,12 +22,11 @@ import org.junit.runner.RunWith;
 import org.locationtech.geowave.adapter.raster.util.ZipUtils;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
+import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.ingest.operations.ConfigAWSCommand;
-import org.locationtech.geowave.core.store.cli.config.AddIndexCommand;
-import org.locationtech.geowave.core.store.cli.config.AddStoreCommand;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions.PartitionStrategy;
-import org.locationtech.geowave.core.store.operations.remote.options.BasicIndexOptions;
+import org.locationtech.geowave.core.store.cli.store.AddStoreCommand;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceOptions;
 import org.locationtech.geowave.service.grpc.cli.StartGrpcServerCommand;
 import org.locationtech.geowave.service.grpc.cli.StartGrpcServerCommandOptions;
@@ -118,6 +117,15 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     // Ensure empty datastore
     TestUtils.deleteAll(dataStore);
 
+    // Create the index
+    SpatialDimensionalityTypeProvider.SpatialIndexBuilder indexBuilder =
+        new SpatialDimensionalityTypeProvider.SpatialIndexBuilder();
+    indexBuilder.setName(GeoWaveGrpcTestUtils.indexName);
+
+    IndexStore indexStore = dataStore.createIndexStore();
+    indexStore.addIndex(indexBuilder.createIndex());
+
+
     // variables for storing results and test returns
     String result = "";
     Map<String, String> map = null;
@@ -134,7 +142,7 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     Assert.assertTrue(client.LocalToHdfsCommand());
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
-    LOGGER.warn("* FINISHED LocalToHdfsCommand  *");
+    LOGGER.warn("*  FINISHED LocalToHdfsCommand          *");
     LOGGER.warn(
         "*         "
             + ((System.currentTimeMillis() - startMillis) / 1000)
@@ -145,7 +153,7 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     Assert.assertTrue(client.LocalToGeoWaveCommand());
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
-    LOGGER.warn("* FINISHED LocalToGeoWaveCommand  *");
+    LOGGER.warn("*  FINISHED LocalToGeoWaveCommand       *");
     LOGGER.warn(
         "*         "
             + ((System.currentTimeMillis() - startMillis) / 1000)
@@ -156,7 +164,7 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     Assert.assertTrue(client.LocalToKafkaCommand());
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
-    LOGGER.warn("* FINISHED LocalToKafkaCommand  *");
+    LOGGER.warn("*  FINISHED LocalToKafkaCommand         *");
     LOGGER.warn(
         "*         "
             + ((System.currentTimeMillis() - startMillis) / 1000)
@@ -167,7 +175,7 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     Assert.assertTrue(client.KafkaToGeoWaveCommand());
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
-    LOGGER.warn("* FINISHED KafkaToGeoWaveCommand  *");
+    LOGGER.warn("*  FINISHED KafkaToGeoWaveCommand       *");
     LOGGER.warn(
         "*         "
             + ((System.currentTimeMillis() - startMillis) / 1000)
@@ -178,7 +186,7 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     Assert.assertTrue(client.MapReduceToGeoWaveCommand());
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
-    LOGGER.warn("* FINISHED MapReduceToGeoWaveCommand  *");
+    LOGGER.warn("*  FINISHED MapReduceToGeoWaveCommand   *");
     LOGGER.warn(
         "*         "
             + ((System.currentTimeMillis() - startMillis) / 1000)
@@ -189,7 +197,7 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     final String plugins = client.ListPluginsCommand();
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
-    LOGGER.warn("* FINISHED ListPluginsCommand  *");
+    LOGGER.warn("*  FINISHED ListPluginsCommand          *");
     LOGGER.warn(
         "*         "
             + ((System.currentTimeMillis() - startMillis) / 1000)
@@ -199,20 +207,20 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
 
     Assert.assertTrue("several plugins expected", countLines(plugins) > 10);
     Assert.assertTrue(client.LocalToMapReduceToGeoWaveCommand());
-    LOGGER.warn("-----------------------------------------");
-    LOGGER.warn("*                                       *");
-    LOGGER.warn("* FINISHED LocalToMapReduceToGeoWaveCommand  *");
+    LOGGER.warn("-----------------------------------------------");
+    LOGGER.warn("*                                             *");
+    LOGGER.warn("*  FINISHED LocalToMapReduceToGeoWaveCommand  *");
     LOGGER.warn(
         "*         "
             + ((System.currentTimeMillis() - startMillis) / 1000)
-            + "s elapsed.                 *");
-    LOGGER.warn("*                                       *");
-    LOGGER.warn("-----------------------------------------");
+            + "s elapsed.                       *");
+    LOGGER.warn("*                                             *");
+    LOGGER.warn("-----------------------------------------------");
 
     Assert.assertTrue(client.SparkToGeoWaveCommand());
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
-    LOGGER.warn("* FINISHED SparkToGeoWaveCommand  *");
+    LOGGER.warn("*  FINISHED SparkToGeoWaveCommand       *");
     LOGGER.warn(
         "*         "
             + ((System.currentTimeMillis() - startMillis) / 1000)
@@ -221,11 +229,11 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     LOGGER.warn("-----------------------------------------");
 
     // Vector Service Tests
-    client.vectorIngest(-90, 90, -180, 180, 5, 5);
+    client.vectorIngest(0, 10, 0, 10, 5, 5);
 
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
-    LOGGER.warn("* FINISHED vectorIngest  *");
+    LOGGER.warn("*  FINISHED vectorIngest                *");
     LOGGER.warn(
         "*         "
             + ((System.currentTimeMillis() - startMillis) / 1000)
@@ -236,9 +244,11 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     Assert.assertNotEquals(0, client.numFeaturesProcessed);
 
     ArrayList<FeatureProtos> features = client.vectorQuery();
+    Assert.assertTrue(features.size() > 0);
+    features.clear();
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
-    LOGGER.warn("* FINISHED vectorQuery  *");
+    LOGGER.warn("*  FINISHED vectorQuery                 *");
     LOGGER.warn(
         "*         "
             + ((System.currentTimeMillis() - startMillis) / 1000)
@@ -246,27 +256,12 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     LOGGER.warn("*                                       *");
     LOGGER.warn("-----------------------------------------");
 
-    Assert.assertNotEquals(0, features.size());
-
-    features.clear();
     features = client.cqlQuery();
-    LOGGER.warn("-----------------------------------------");
-    LOGGER.warn("*                                       *");
-    LOGGER.warn("* FINISHED cqlQuery  *");
-    LOGGER.warn(
-        "*         "
-            + ((System.currentTimeMillis() - startMillis) / 1000)
-            + "s elapsed.                 *");
-    LOGGER.warn("*                                       *");
-    LOGGER.warn("-----------------------------------------");
-
-    Assert.assertNotEquals(0, features.size());
-
+    Assert.assertTrue(features.size() > 0);
     features.clear();
-    features = client.spatialQuery();
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
-    LOGGER.warn("* FINISHED spatialQuery  *");
+    LOGGER.warn("*  FINISHED cqlQuery                    *");
     LOGGER.warn(
         "*         "
             + ((System.currentTimeMillis() - startMillis) / 1000)
@@ -274,25 +269,35 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     LOGGER.warn("*                                       *");
     LOGGER.warn("-----------------------------------------");
 
-    Assert.assertNotEquals(0, features.size());
+    features = client.spatialQuery();
+    Assert.assertTrue(features.size() > 0);
+    features.clear();
+    LOGGER.warn("-----------------------------------------");
+    LOGGER.warn("*                                       *");
+    LOGGER.warn("*  FINISHED spatialQuery                *");
+    LOGGER.warn(
+        "*         "
+            + ((System.currentTimeMillis() - startMillis) / 1000)
+            + "s elapsed.                 *");
+    LOGGER.warn("*                                       *");
+    LOGGER.warn("-----------------------------------------");
 
     // This test doesn't actually use time as part of the query but we just
     // want to make sure grpc gets data back
     // it does use CONTAINS as part of query though so features on any
     // geometry borders will be discarded
-    features.clear();
     features = client.spatialTemporalQuery();
+    Assert.assertTrue(features.size() > 0);
+    features.clear();
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
-    LOGGER.warn("* FINISHED spatialTemporalQuery  *");
+    LOGGER.warn("*  FINISHED spatialTemporalQuery        *");
     LOGGER.warn(
         "*         "
             + ((System.currentTimeMillis() - startMillis) / 1000)
             + "s elapsed.                 *");
     LOGGER.warn("*                                       *");
     LOGGER.warn("-----------------------------------------");
-
-    Assert.assertNotEquals(0, features.size());
 
     // Core Cli Tests
     client.setCommand("TEST_KEY", "TEST_VAL");
@@ -300,7 +305,7 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     Assert.assertEquals("TEST_VAL", map.get("TEST_KEY"));
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
-    LOGGER.warn("* FINISHED core cli tests  *");
+    LOGGER.warn("*  FINISHED core cli tests              *");
     LOGGER.warn(
         "*         "
             + ((System.currentTimeMillis() - startMillis) / 1000)
@@ -311,6 +316,12 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     // clear out the stores and ingest a smaller sample
     // set for the more demanding operations
     TestUtils.deleteAll(dataStore);
+
+    // Add the index again
+    // Index store could be invalid after running deleteAll, so recreate it
+    indexStore = dataStore.createIndexStore();
+    indexStore.addIndex(indexBuilder.createIndex());
+
     client.vectorIngest(0, 10, 0, 10, 5, 5);
 
     // Analytic Mapreduce Tests
@@ -319,7 +330,7 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     Assert.assertTrue(client.dbScanCommand());
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
-    LOGGER.warn("* FINISHED analytic mapreduce tests  *");
+    LOGGER.warn("*  FINISHED analytic mapreduce tests    *");
     LOGGER.warn(
         "*         "
             + ((System.currentTimeMillis() - startMillis) / 1000)
@@ -331,7 +342,7 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     Assert.assertTrue(client.KmeansSparkCommand());
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
-    LOGGER.warn("* FINISHED spark kmeans *");
+    LOGGER.warn("*  FINISHED spark kmeans                *");
     LOGGER.warn(
         "*         "
             + ((System.currentTimeMillis() - startMillis) / 1000)
@@ -342,7 +353,7 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     Assert.assertTrue(client.SparkSqlCommand());
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
-    LOGGER.warn("* FINISHED spark sql *");
+    LOGGER.warn("*  FINISHED spark sql                   *");
     LOGGER.warn(
         "*         "
             + ((System.currentTimeMillis() - startMillis) / 1000)
@@ -353,7 +364,7 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     Assert.assertTrue(client.SpatialJoinCommand());
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
-    LOGGER.warn("* FINISHED spatial join  *");
+    LOGGER.warn("*  FINISHED spatial join                *");
     LOGGER.warn(
         "*         "
             + ((System.currentTimeMillis() - startMillis) / 1000)
@@ -373,15 +384,6 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     result = client.ListStatsCommand();
     Assert.assertTrue(!result.equalsIgnoreCase(""));
 
-    result = client.AddIndexGroupCommand();
-    Assert.assertTrue(
-        result.contains(
-            "indexgroup."
-                + GeoWaveGrpcTestUtils.indexName
-                + "-group.opts."
-                + GeoWaveGrpcTestUtils.indexName
-                + ".numPartitions=1"));
-
     Assert.assertTrue(client.CalculateStatCommand());
     Assert.assertTrue(client.RecalculateStatsCommand());
 
@@ -389,10 +391,10 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
 
     Assert.assertTrue(client.ClearCommand());
 
-    result = client.RemoveIndexGroupCommand();
-    Assert.assertEquals(
-        "indexgroup." + GeoWaveGrpcTestUtils.indexName + "-group successfully removed",
-        result);
+    // Re-add the index
+    // Index store could be invalid after running deleteAll, so recreate it
+    indexStore = dataStore.createIndexStore();
+    indexStore.addIndex(indexBuilder.createIndex());
 
     result = client.RemoveIndexCommand();
     Assert.assertEquals(
@@ -407,7 +409,7 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
         result);
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
-    LOGGER.warn("* FINISHED core store tests *");
+    LOGGER.warn("*  FINISHED core store tests            *");
     LOGGER.warn(
         "*         "
             + ((System.currentTimeMillis() - startMillis) / 1000)
@@ -450,16 +452,6 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     command.setParameters(GeoWaveGrpcTestUtils.storeName);
     command.setPluginOptions(dataStore);
     command.execute(operationParams);
-
-    final AddIndexCommand indexCommand = new AddIndexCommand();
-    indexCommand.setType("spatial");
-    indexCommand.setParameters(GeoWaveGrpcTestUtils.indexName);
-    final BasicIndexOptions basicIndexOpts = new BasicIndexOptions();
-    basicIndexOpts.setNumPartitions(32);
-    basicIndexOpts.setPartitionStrategy(PartitionStrategy.ROUND_ROBIN);
-    indexCommand.getPluginOptions().setBasicIndexOptions(basicIndexOpts);
-    indexCommand.prepare(operationParams);
-    indexCommand.execute(operationParams);
 
     // finally add an output store for things like KDE etc
     final AddStoreCommand commandOut = new AddStoreCommand();

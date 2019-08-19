@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave gs rmfl - Remove GeoServer feature Layer
+geowave gs fl rm - Remove GeoServer feature Layer
 
 SYNOPSIS
 //:--------
 
-geowave gs rmfl [options] <layer name>
+geowave gs fl rm [options] <layer name>
 
 DESCRIPTION
 //:-----------

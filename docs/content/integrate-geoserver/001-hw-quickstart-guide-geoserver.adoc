@@ -32,8 +32,8 @@ Add the layers for the demo(s) that you have completed.
 
 [source, bash]
 ----
-geowave gs addlayer gdelt
-geowave gs addlayer gdelt-kde
+geowave gs layer add gdelt
+geowave gs layer add gdelt-kde
 ----
 
 - Download and add the KDEColorMap and SubsamplePoints styles.
@@ -50,16 +50,16 @@ You could use the default GeoServer points style, however the SubsamplePoints st
 cd /mnt
 sudo wget s3.amazonaws.com/geowave/${version_url}/scripts/emr/quickstart/KDEColorMap.sld
 sudo wget s3.amazonaws.com/geowave/${version_url}/scripts/emr/quickstart/SubsamplePoints.sld
-geowave gs addstyle kdecolormap -sld /mnt/KDEColorMap.sld
-geowave gs addstyle SubsamplePoints -sld /mnt/SubsamplePoints.sld
+geowave gs style add kdecolormap -sld /mnt/KDEColorMap.sld
+geowave gs style add SubsamplePoints -sld /mnt/SubsamplePoints.sld
 ----
 
 - Set the styles of these layers.
 
 [source, bash]
 ----
-geowave gs setls gdeltevent_kde --styleName kdecolormap
-geowave gs setls gdeltevent --styleName SubsamplePoints
+geowave gs style set gdeltevent_kde --styleName kdecolormap
+geowave gs style set gdeltevent --styleName SubsamplePoints
 ----
 
 ==== Raster Demo Layers
@@ -68,8 +68,8 @@ geowave gs setls gdeltevent --styleName SubsamplePoints
 
 [source, bash]
 ----
-geowave gs addlayer landsatraster
-geowave gs addlayer landsatvector --add ALL
+geowave gs layer add landsatraster
+geowave gs layer add landsatvector --add ALL
 ----
 
 === Cluster Interaction

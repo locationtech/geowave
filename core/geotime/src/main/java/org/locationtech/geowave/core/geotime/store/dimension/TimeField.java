@@ -22,6 +22,7 @@ import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
+import org.locationtech.geowave.core.store.index.CommonIndexValue;
 
 /**
  * This field definition can be used for temporal data (either as a time range or a single instant
@@ -113,6 +114,11 @@ public class TimeField implements NumericDimensionField<Time> {
   @Override
   public FieldReader<Time> getReader() {
     return reader;
+  }
+
+  @Override
+  public boolean isCompatibleWith(Class<? extends CommonIndexValue> clazz) {
+    return Time.class.isAssignableFrom(clazz);
   }
 
   @Override

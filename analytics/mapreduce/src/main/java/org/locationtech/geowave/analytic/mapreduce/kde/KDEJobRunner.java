@@ -55,9 +55,9 @@ import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
-import org.locationtech.geowave.core.store.cli.config.AddStoreCommand;
-import org.locationtech.geowave.core.store.cli.remote.ClearCommand;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.AddStoreCommand;
+import org.locationtech.geowave.core.store.cli.store.ClearStoreCommand;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.config.ConfigUtils;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
@@ -389,7 +389,7 @@ public class KDEJobRunner extends Configured implements Tool {
         if (resizeStatus == 0) {
           // delegate to clear command to clean up with tmp namespace
           // after successful resize
-          final ClearCommand clearCommand = new ClearCommand();
+          final ClearStoreCommand clearCommand = new ClearStoreCommand();
           clearCommand.setParameters("temp-out");
           clearCommand.execute(params);
         } else {

@@ -37,7 +37,7 @@ import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.filter.Filter;
 import org.slf4j.Logger;

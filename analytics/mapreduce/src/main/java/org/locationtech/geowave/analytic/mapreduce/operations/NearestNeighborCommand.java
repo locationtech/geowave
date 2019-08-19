@@ -24,8 +24,8 @@ import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -33,10 +33,10 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "nn", parentOperation = AnalyticSection.class)
-@Parameters(commandDescription = "Nearest Neighbors")
+@Parameters(commandDescription = "Nearest neighbors")
 public class NearestNeighborCommand extends ServiceEnabledCommand<Void> {
 
-  @Parameter(description = "<storename>")
+  @Parameter(description = "<store name>")
   private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate

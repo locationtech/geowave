@@ -24,8 +24,8 @@ import org.locationtech.geowave.analytic.spark.sparksql.SqlResultsWriter;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.jts.util.Stopwatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ import com.beust.jcommander.ParametersDelegate;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 @GeowaveOperation(name = "sql", parentOperation = AnalyticSection.class)
-@Parameters(commandDescription = "SparkSQL queries")
+@Parameters(commandDescription = "Execute query using SparkSQL")
 public class SparkSqlCommand extends ServiceEnabledCommand<Void> {
   private static final Logger LOGGER = LoggerFactory.getLogger(SparkSqlCommand.class);
   private static final String STORE_ADAPTER_DELIM = "|";

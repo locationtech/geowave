@@ -13,19 +13,17 @@ import java.util.Map;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
-import org.locationtech.geowave.core.store.cli.config.AddIndexGroupCommand;
-import org.locationtech.geowave.core.store.cli.config.RemoveIndexCommand;
-import org.locationtech.geowave.core.store.cli.config.RemoveIndexGroupCommand;
-import org.locationtech.geowave.core.store.cli.config.RemoveStoreCommand;
-import org.locationtech.geowave.core.store.cli.remote.CalculateStatCommand;
-import org.locationtech.geowave.core.store.cli.remote.ClearCommand;
-import org.locationtech.geowave.core.store.cli.remote.ListIndicesCommand;
-import org.locationtech.geowave.core.store.cli.remote.ListStatsCommand;
-import org.locationtech.geowave.core.store.cli.remote.ListTypesCommand;
-import org.locationtech.geowave.core.store.cli.remote.RecalculateStatsCommand;
-import org.locationtech.geowave.core.store.cli.remote.RemoveStatCommand;
-import org.locationtech.geowave.core.store.cli.remote.RemoveTypeCommand;
-import org.locationtech.geowave.core.store.operations.remote.VersionCommand;
+import org.locationtech.geowave.core.store.cli.store.RemoveStoreCommand;
+import org.locationtech.geowave.core.store.cli.store.RemoveTypeCommand;
+import org.locationtech.geowave.core.store.cli.store.ClearStoreCommand;
+import org.locationtech.geowave.core.store.cli.index.ListIndicesCommand;
+import org.locationtech.geowave.core.store.cli.index.RemoveIndexCommand;
+import org.locationtech.geowave.core.store.cli.store.ListTypesCommand;
+import org.locationtech.geowave.core.store.cli.stats.CalculateStatCommand;
+import org.locationtech.geowave.core.store.cli.stats.ListStatsCommand;
+import org.locationtech.geowave.core.store.cli.stats.RecalculateStatsCommand;
+import org.locationtech.geowave.core.store.cli.stats.RemoveStatCommand;
+import org.locationtech.geowave.core.store.cli.store.VersionCommand;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceOptions;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceSpi;
 import org.locationtech.geowave.service.grpc.protobuf.CoreStoreGrpc.CoreStoreImplBase;
@@ -157,34 +155,6 @@ public class GeoWaveGrpcCoreStoreService extends CoreStoreImplBase implements
   }
 
   @Override
-  public void removeIndexGroupCommand(
-      final org.locationtech.geowave.service.grpc.protobuf.RemoveIndexGroupCommandParametersProtos request,
-      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
-
-    final RemoveIndexGroupCommand cmd = new RemoveIndexGroupCommand();
-    final Map<FieldDescriptor, Object> m = request.getAllFields();
-    GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
-
-    final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
-    final OperationParams params = new ManualOperationParams();
-    params.getContext().put(ConfigOptions.PROPERTIES_FILE_CONTEXT, configFile);
-
-    cmd.prepare(params);
-
-    LOGGER.info("Executing RemoveIndexGroupCommand...");
-    try {
-      final String result = cmd.computeResults(params);
-      final StringResponseProtos resp =
-          StringResponseProtos.newBuilder().setResponseValue(result).build();
-      responseObserver.onNext(resp);
-      responseObserver.onCompleted();
-
-    } catch (final Exception e) {
-      LOGGER.error("Exception encountered executing command", e);
-    }
-  }
-
-  @Override
   public void recalculateStatsCommand(
       final org.locationtech.geowave.service.grpc.protobuf.RecalculateStatsCommandParametersProtos request,
       final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.VoidResponseProtos> responseObserver) {
@@ -267,10 +237,10 @@ public class GeoWaveGrpcCoreStoreService extends CoreStoreImplBase implements
   }
 
   @Override
-  public void clearCommand(
-      final org.locationtech.geowave.service.grpc.protobuf.ClearCommandParametersProtos request,
+  public void clearStoreCommand(
+      final org.locationtech.geowave.service.grpc.protobuf.ClearStoreCommandParametersProtos request,
       final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.VoidResponseProtos> responseObserver) {
-    final ClearCommand cmd = new ClearCommand();
+    final ClearStoreCommand cmd = new ClearStoreCommand();
     final Map<FieldDescriptor, Object> m = request.getAllFields();
     GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
 
@@ -311,34 +281,6 @@ public class GeoWaveGrpcCoreStoreService extends CoreStoreImplBase implements
     try {
       cmd.computeResults(params);
       final StringResponseProtos resp = StringResponseProtos.newBuilder().build();
-      responseObserver.onNext(resp);
-      responseObserver.onCompleted();
-
-    } catch (final Exception e) {
-      LOGGER.error("Exception encountered executing command", e);
-    }
-  }
-
-  @Override
-  public void addIndexGroupCommand(
-      final org.locationtech.geowave.service.grpc.protobuf.AddIndexGroupCommandParametersProtos request,
-      final StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
-
-    final AddIndexGroupCommand cmd = new AddIndexGroupCommand();
-    final Map<FieldDescriptor, Object> m = request.getAllFields();
-    GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
-
-    final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
-    final OperationParams params = new ManualOperationParams();
-    params.getContext().put(ConfigOptions.PROPERTIES_FILE_CONTEXT, configFile);
-
-    cmd.prepare(params);
-
-    LOGGER.info("Executing AddIndexGroupCommand...");
-    try {
-      final String result = cmd.computeResults(params);
-      final StringResponseProtos resp =
-          StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 

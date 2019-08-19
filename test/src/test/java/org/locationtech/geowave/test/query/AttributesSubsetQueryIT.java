@@ -35,7 +35,7 @@ import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.api.Writer;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;

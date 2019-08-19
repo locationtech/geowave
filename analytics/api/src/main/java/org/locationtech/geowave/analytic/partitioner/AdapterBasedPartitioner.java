@@ -36,7 +36,7 @@ import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

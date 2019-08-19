@@ -34,6 +34,7 @@ import org.locationtech.geowave.adapter.raster.RasterUtils;
 import org.locationtech.geowave.adapter.raster.adapter.ClientMergeableRasterTile;
 import org.locationtech.geowave.adapter.raster.adapter.GridCoverageWritable;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
+import org.locationtech.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import org.locationtech.geowave.adapter.vector.util.FeatureDataUtils;
 import org.locationtech.geowave.analytic.mapreduce.kde.CellCounter;
 import org.locationtech.geowave.analytic.mapreduce.kde.GaussianFilter;
@@ -49,7 +50,7 @@ import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.mapreduce.HadoopWritableSerializer;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.locationtech.jts.geom.Geometry;
@@ -222,7 +223,7 @@ public class KDERunner {
             MINS_PER_BAND,
             MAXES_PER_BAND,
             NAME_PER_BAND,
-            null);
+            new NoDataMergeStrategy());
     outputDataStore.createDataStore().addType(adapter, outputPrimaryIndex);
 
     // The following "inner" variables are created to give access to member
@@ -255,7 +256,7 @@ public class KDERunner {
                   cells.rdd(),
                   true,
                   scala.math.Ordering.Double$.MODULE$,
-                  scala.reflect.ClassTag$.MODULE$.apply(Double.class))).sortByKey(true).cache();
+                  scala.reflect.ClassTag$.MODULE$.apply(Double.class))).sortByKey(false).cache();
       final long count = cells.count();
       if (count == 0) {
         LOGGER.warn("No cells produced by KDE");
@@ -283,7 +284,7 @@ public class KDERunner {
         // isn't always completely reproducible as Double equals does not
         // take into account an epsilon
 
-        final double percentile = (count - 1 - t._2) / ((double) count - 1);
+        final double percentile = (count - t._2) / ((double) count);
         raster.setSample(tileInfo.x, tileInfo.y, 0, t._1._1);
         raster.setSample(tileInfo.x, tileInfo.y, 1, normalizedValue);
 
@@ -567,9 +568,9 @@ public class KDERunner {
 
     private void readObject(final ObjectInputStream aInputStream)
         throws ClassNotFoundException, IOException {
-      final byte[] adapterBytes = new byte[aInputStream.readUnsignedShort()];
+      final byte[] adapterBytes = new byte[aInputStream.readShort()];
       aInputStream.readFully(adapterBytes);
-      final byte[] indexBytes = new byte[aInputStream.readUnsignedShort()];
+      final byte[] indexBytes = new byte[aInputStream.readShort()];
       aInputStream.readFully(indexBytes);
       newAdapter = (RasterDataAdapter) PersistenceUtils.fromBinary(adapterBytes);
       index = (Index) PersistenceUtils.fromBinary(indexBytes);
@@ -640,9 +641,9 @@ public class KDERunner {
 
     private void readObject(final ObjectInputStream aInputStream)
         throws ClassNotFoundException, IOException {
-      final byte[] adapterBytes = new byte[aInputStream.readUnsignedShort()];
+      final byte[] adapterBytes = new byte[aInputStream.readShort()];
       aInputStream.readFully(adapterBytes);
-      final byte[] indexBytes = new byte[aInputStream.readUnsignedShort()];
+      final byte[] indexBytes = new byte[aInputStream.readShort()];
       aInputStream.readFully(indexBytes);
       newAdapter = (RasterDataAdapter) PersistenceUtils.fromBinary(adapterBytes);
       index = (Index) PersistenceUtils.fromBinary(indexBytes);

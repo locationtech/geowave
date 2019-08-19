@@ -14,7 +14,7 @@ import org.apache.accumulo.core.client.Connector;
 import org.apache.commons.cli.ParseException;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.index.NullIndex;
 import org.locationtech.geowave.datastore.accumulo.config.AccumuloRequiredOptions;

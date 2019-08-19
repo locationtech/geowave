@@ -35,53 +35,53 @@ public class GeoServerServiceClient {
             ClientBuilder.newClient().register(MultiPartFeature.class).target(baseUrl));
   }
 
-  public Response getCoverageStore(final String coverage_store_name, final String workspace) {
+  public Response getCoverageStore(final String coverageStoreName, final String workspace) {
 
-    final Response resp = geoServerService.getCoverageStore(coverage_store_name, workspace);
+    final Response resp = geoServerService.getCoverageStore(coverageStoreName, workspace);
     return resp;
   }
 
-  public Response getCoverageStore(final String coverage_store_name) {
-    return getCoverageStore(coverage_store_name, null);
+  public Response getCoverageStore(final String coverageStoreName) {
+    return getCoverageStore(coverageStoreName, null);
   }
 
   public Response getCoverage(
       final String cvgstore,
-      final String coverage_name,
+      final String coverageName,
       final String workspace) {
 
-    final Response resp = geoServerService.getCoverage(cvgstore, coverage_name, workspace);
+    final Response resp = geoServerService.getCoverage(cvgstore, coverageName, workspace);
     return resp;
   }
 
-  public Response getCoverage(final String cvgstore, final String coverage_name) {
-    return getCoverage(cvgstore, coverage_name, null);
+  public Response getCoverage(final String cvgstore, final String coverageName) {
+    return getCoverage(cvgstore, coverageName, null);
   }
 
-  public Response getDataStore(final String datastore_name, final String workspace) {
-    final Response resp = geoServerService.getDataStore(datastore_name, workspace);
+  public Response getDataStore(final String datastoreName, final String workspace) {
+    final Response resp = geoServerService.getDataStore(datastoreName, workspace);
     return resp;
   }
 
-  public Response getDataStore(final String datastore_name) {
-    return getDataStore(datastore_name, null);
+  public Response getDataStore(final String datastoreName) {
+    return getDataStore(datastoreName, null);
   }
 
-  public Response getFeatureLayer(final String layer_name) {
+  public Response getFeatureLayer(final String layerName) {
 
-    final Response resp = geoServerService.getFeatureLayer(layer_name);
+    final Response resp = geoServerService.getFeatureLayer(layerName);
     return resp;
   }
 
-  public Response getStoreAdapters(final String store_name) {
+  public Response getStoreAdapters(final String storeName) {
 
-    final Response resp = geoServerService.getStoreAdapters(store_name);
+    final Response resp = geoServerService.getStoreAdapters(storeName);
     return resp;
   }
 
-  public Response getStyle(final String style_name) {
+  public Response getStyle(final String styleName) {
 
-    final Response resp = geoServerService.getStyle(style_name);
+    final Response resp = geoServerService.getStyle(styleName);
     return resp;
   }
 
@@ -95,13 +95,13 @@ public class GeoServerServiceClient {
     return listCoverageStores(null);
   }
 
-  public Response listCoverages(final String coverage_store_name, final String workspace) {
-    final Response resp = geoServerService.listCoverages(coverage_store_name, workspace);
+  public Response listCoverages(final String coverageStoreName, final String workspace) {
+    final Response resp = geoServerService.listCoverages(coverageStoreName, workspace);
     return resp;
   }
 
-  public Response listCoverages(final String coverage_store_name) {
-    return listCoverages(coverage_store_name, null);
+  public Response listCoverages(final String coverageStoreName) {
+    return listCoverages(coverageStoreName, null);
   }
 
   public Response listDataStores(final String workspace) {
@@ -136,7 +136,7 @@ public class GeoServerServiceClient {
 
   // POST Requests
   public Response addCoverageStore(
-      final String GeoWave_store_name,
+      final String geoWaveStoreName,
       final String workspace,
       final Boolean equalizerHistogramOverride,
       final String interpolationOverride,
@@ -144,7 +144,7 @@ public class GeoServerServiceClient {
 
     final Response resp =
         geoServerService.addCoverageStore(
-            GeoWave_store_name,
+            geoWaveStoreName,
             workspace,
             equalizerHistogramOverride,
             interpolationOverride,
@@ -152,131 +152,131 @@ public class GeoServerServiceClient {
     return resp;
   }
 
-  public Response addCoverageStore(final String GeoWave_store_name) {
-    return addCoverageStore(GeoWave_store_name, null, null, null, null);
+  public Response addCoverageStore(final String GeoWaveStoreName) {
+    return addCoverageStore(GeoWaveStoreName, null, null, null, null);
   }
 
   public Response addCoverage(
       final String cvgstore,
-      final String coverage_name,
+      final String coverageName,
       final String workspace) {
 
-    final Response resp = geoServerService.addCoverage(cvgstore, coverage_name, workspace);
+    final Response resp = geoServerService.addCoverage(cvgstore, coverageName, workspace);
     return resp;
   }
 
-  public Response addCoverage(final String cvgstore, final String coverage_name) {
-    return addCoverage(cvgstore, coverage_name, null);
+  public Response addCoverage(final String cvgstore, final String coverageName) {
+    return addCoverage(cvgstore, coverageName, null);
   }
 
   public Response addDataStore(
-      final String GeoWave_store_name,
+      final String geoWaveStoreName,
       final String workspace,
       final String datastore) {
 
-    final Response resp = geoServerService.addDataStore(GeoWave_store_name, workspace, datastore);
+    final Response resp = geoServerService.addDataStore(geoWaveStoreName, workspace, datastore);
     return resp;
   }
 
-  public Response addDataStore(final String GeoWave_store_name) {
-    return addDataStore(GeoWave_store_name, null, null);
+  public Response addDataStore(final String geoWaveStoreName) {
+    return addDataStore(geoWaveStoreName, null, null);
   }
 
   public Response addFeatureLayer(
       final String datastore,
-      final String layer_name,
+      final String layerName,
       final String workspace) {
 
-    final Response resp = geoServerService.addFeatureLayer(datastore, layer_name, workspace);
+    final Response resp = geoServerService.addFeatureLayer(datastore, layerName, workspace);
     return resp;
   }
 
-  public Response addFeatureLayer(final String datastore, final String layer_name) {
-    return addFeatureLayer(datastore, layer_name, null);
+  public Response addFeatureLayer(final String datastore, final String layerName) {
+    return addFeatureLayer(datastore, layerName, null);
   }
 
   public Response addLayer(
-      final String GeoWave_store_name,
+      final String geoWaveStoreName,
       final String workspace,
       final String addOption,
       final String adapterId,
       final String style) {
 
     final Response resp =
-        geoServerService.addLayer(GeoWave_store_name, workspace, addOption, adapterId, style);
+        geoServerService.addLayer(geoWaveStoreName, workspace, addOption, adapterId, style);
     return resp;
   }
 
-  public Response addLayer(final String GeoWave_store_name) {
-    return addLayer(GeoWave_store_name, null, null, null, null);
+  public Response addLayer(final String geoWaveStoreName) {
+    return addLayer(geoWaveStoreName, null, null, null, null);
   }
 
-  public Response addStyle(final String stylesld, final String GeoWave_style_name) {
+  public Response addStyle(final String stylesld, final String geoWaveStyleName) {
 
-    final Response resp = geoServerService.addStyle(stylesld, GeoWave_style_name);
+    final Response resp = geoServerService.addStyle(stylesld, geoWaveStyleName);
     return resp;
   }
 
-  public Response addWorkspace(final String workspace_name) {
+  public Response addWorkspace(final String workspaceName) {
 
-    final Response resp = geoServerService.addWorkspace(workspace_name);
+    final Response resp = geoServerService.addWorkspace(workspaceName);
     return resp;
   }
 
-  public Response removeCoverageStore(final String coverage_store_name, final String workspace) {
+  public Response removeCoverageStore(final String coverageStoreName, final String workspace) {
 
-    final Response resp = geoServerService.removeCoverageStore(coverage_store_name, workspace);
+    final Response resp = geoServerService.removeCoverageStore(coverageStoreName, workspace);
     return resp;
   }
 
-  public Response removeCoverageStore(final String coverage_store_name) {
-    return removeCoverageStore(coverage_store_name, null);
+  public Response removeCoverageStore(final String coverageStoreName) {
+    return removeCoverageStore(coverageStoreName, null);
   }
 
   public Response removeCoverage(
       final String cvgstore,
-      final String coverage_name,
+      final String coverageName,
       final String workspace) {
 
-    final Response resp = geoServerService.removeCoverage(cvgstore, coverage_name, workspace);
+    final Response resp = geoServerService.removeCoverage(cvgstore, coverageName, workspace);
     return resp;
   }
 
-  public Response removeCoverage(final String cvgstore, final String coverage_name) {
-    return removeCoverage(cvgstore, coverage_name, null);
+  public Response removeCoverage(final String cvgstore, final String coverageName) {
+    return removeCoverage(cvgstore, coverageName, null);
   }
 
-  public Response removeDataStore(final String datastore_name, final String workspace) {
+  public Response removeDataStore(final String datastoreName, final String workspace) {
 
-    final Response resp = geoServerService.removeDataStore(datastore_name, workspace);
+    final Response resp = geoServerService.removeDataStore(datastoreName, workspace);
     return resp;
   }
 
-  public Response removeDataStore(final String datastore_name) {
-    return removeDataStore(datastore_name, null);
+  public Response removeDataStore(final String datastoreName) {
+    return removeDataStore(datastoreName, null);
   }
 
-  public Response removeFeatureLayer(final String layer_name) {
+  public Response removeFeatureLayer(final String layerName) {
 
-    final Response resp = geoServerService.removeFeatureLayer(layer_name);
+    final Response resp = geoServerService.removeFeatureLayer(layerName);
     return resp;
   }
 
-  public Response removeStyle(final String style_name) {
+  public Response removeStyle(final String styleName) {
 
-    final Response resp = geoServerService.removeStyle(style_name);
+    final Response resp = geoServerService.removeStyle(styleName);
     return resp;
   }
 
-  public Response removeWorkspace(final String workspace_name) {
+  public Response removeWorkspace(final String workspaceName) {
 
-    final Response resp = geoServerService.removeWorkspace(workspace_name);
+    final Response resp = geoServerService.removeWorkspace(workspaceName);
     return resp;
   }
 
-  public Response setLayerStyle(final String styleName, final String layer_name) {
+  public Response setLayerStyle(final String styleName, final String layerName) {
 
-    final Response resp = geoServerService.setLayerStyle(styleName, layer_name);
+    final Response resp = geoServerService.setLayerStyle(styleName, layerName);
     return resp;
   }
 }

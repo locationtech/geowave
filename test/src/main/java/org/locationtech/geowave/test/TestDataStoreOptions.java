@@ -8,7 +8,7 @@
  */
 package org.locationtech.geowave.test;
 
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
 public class TestDataStoreOptions extends DataStorePluginOptions {

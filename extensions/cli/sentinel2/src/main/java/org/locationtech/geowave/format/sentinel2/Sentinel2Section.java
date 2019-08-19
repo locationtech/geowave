@@ -11,10 +11,11 @@ package org.locationtech.geowave.format.sentinel2;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.operations.GeowaveTopLevelSection;
+import org.locationtech.geowave.core.cli.operations.util.UtilSection;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "sentinel2", parentOperation = GeowaveTopLevelSection.class)
+@GeowaveOperation(name = "sentinel2", parentOperation = UtilSection.class)
 @Parameters(
-    commandDescription = "Operations to analyze, download, and ingest Sentinel2 imagery publicly available on either Theia (https://theia.cnes.fr) or Amazon Web Services (AWS)")
+    commandDescription = "Commands to analyze, download, and ingest Sentinel2 imagery publicly available on either Theia (https://theia.cnes.fr) or Amazon Web Services (AWS)")
 public class Sentinel2Section extends DefaultOperation {
 }

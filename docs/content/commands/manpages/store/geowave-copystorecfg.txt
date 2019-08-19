@@ -1,0 +1,25 @@
+//:geowave-copystorecfg(1)
+//:==================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave store copycfg - Copy and modify existing store configuration
+
+SYNOPSIS
+//:--------
+
+geowave store copycfg [options] <name> <new name>
+
+DESCRIPTION
+//:----------- 
+
+The geowave store copycfg operator will copy and modify an existing GeoWave store.
+It is possible to override values as you copy, such as cpstore old new --gwNamespace new_namespace.
+
+OPTIONS
+//:-------
+
+- -d, --default
+ * Makes this the default store in all operations

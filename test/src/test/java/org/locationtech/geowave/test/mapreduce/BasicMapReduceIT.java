@@ -46,7 +46,7 @@ import org.locationtech.geowave.core.store.adapter.InitializeWithIndicesDataAdap
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.format.gpx.GpxIngestPlugin;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;

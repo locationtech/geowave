@@ -21,12 +21,13 @@ import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsDriver;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.MapReduceCommandLineOptions;
 import org.locationtech.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexLoader;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
-import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.cli.VisibilityOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.StoreLoader;
+import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
+import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -38,7 +39,7 @@ import com.beust.jcommander.ParametersDelegate;
 public class MapReduceToGeowaveCommand extends ServiceEnabledCommand<Void> {
 
   @Parameter(
-      description = "<path to base directory to write to> <store name> <comma delimited index/group list>")
+      description = "<path to base directory to write to> <store name> <comma delimited index list>")
   private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate
@@ -57,7 +58,7 @@ public class MapReduceToGeowaveCommand extends ServiceEnabledCommand<Void> {
 
   private DataStorePluginOptions inputStoreOptions = null;
 
-  private List<IndexPluginOptions> inputIndexOptions = null;
+  private List<Index> inputIndices = null;
 
   @Override
   public boolean prepare(final OperationParams params) {
@@ -82,7 +83,7 @@ public class MapReduceToGeowaveCommand extends ServiceEnabledCommand<Void> {
     // Ensure we have all the required arguments
     if (parameters.size() != 3) {
       throw new ParameterException(
-          "Requires arguments: <path to base directory to write to> <store name> <comma delimited index/group list>");
+          "Requires arguments: <path to base directory to write to> <store name> <comma delimited index list>");
     }
 
     computeResults(params);
@@ -143,8 +144,8 @@ public class MapReduceToGeowaveCommand extends ServiceEnabledCommand<Void> {
     return inputStoreOptions;
   }
 
-  public List<IndexPluginOptions> getInputIndexOptions() {
-    return inputIndexOptions;
+  public List<Index> getInputIndices() {
+    return inputIndices;
   }
 
   @Override
@@ -169,11 +170,8 @@ public class MapReduceToGeowaveCommand extends ServiceEnabledCommand<Void> {
     }
     inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
-    final IndexLoader indexLoader = new IndexLoader(indexList);
-    if (!indexLoader.loadFromConfig(configFile)) {
-      throw new ParameterException("Cannot find index(s) by name: " + indexList);
-    }
-    inputIndexOptions = indexLoader.getLoadedIndexes();
+    final IndexStore indexStore = inputStoreOptions.createIndexStore();
+    inputIndices = DataStoreUtils.loadIndices(indexStore, indexList);
 
     // Ingest Plugins
     final Map<String, IngestFromHdfsPlugin<?, ?>> ingestPlugins =
@@ -183,7 +181,7 @@ public class MapReduceToGeowaveCommand extends ServiceEnabledCommand<Void> {
     final IngestFromHdfsDriver driver =
         new IngestFromHdfsDriver(
             inputStoreOptions,
-            inputIndexOptions,
+            inputIndices,
             ingestOptions,
             mapReduceOptions,
             ingestPlugins,

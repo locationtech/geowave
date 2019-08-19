@@ -23,7 +23,7 @@ import org.locationtech.geowave.analytic.param.ClusteringParameters;
 import org.locationtech.geowave.analytic.param.GlobalParameters;
 import org.locationtech.geowave.analytic.param.JumpParameters;
 import org.locationtech.geowave.analytic.param.ParameterEnum;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputFormat;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputFormat;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;

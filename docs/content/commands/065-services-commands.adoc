@@ -11,13 +11,13 @@ Services operations (Required options are designated with an *)
 * <<065-services-commands.adoc#grpc-stop, grpc stop>>
 
 [[grpc-start]]
-==== *geowave grpc start*
+==== *geowave util grpc start*
 
-include::manpages/services/geowave-grpc-start.txt[]
+include::manpages/util/grpc/geowave-grpc-start.txt[]
 
 [[grpc-stop]]
-==== *geowave grpc stop*
+==== *geowave util grpc stop*
 
-include::manpages/services/geowave-grpc-stop.txt[]
+include::manpages/util/grpc/geowave-grpc-stop.txt[]
 
 '''

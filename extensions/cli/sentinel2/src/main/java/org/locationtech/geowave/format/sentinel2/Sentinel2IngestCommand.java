@@ -23,7 +23,7 @@ import it.geosolutions.jaiext.JAIExt;
 @Parameters(
     commandDescription = "Ingest routine for locally downloading Sentinel2 imagery and ingesting it into GeoWave's raster store and in parallel ingesting the scene metadata into GeoWave's vector store.  These two stores can actually be the same or they can be different.")
 public class Sentinel2IngestCommand extends DefaultOperation implements Command {
-  @Parameter(description = "<storename> <comma delimited index/group list>")
+  @Parameter(description = "<store name> <comma delimited index list>")
   private List<String> parameters = new ArrayList<String>();
 
   @ParametersDelegate

@@ -11,7 +11,7 @@ This project aims to provide Python classes that allow users to interact with a 
 - Install requirements: `pip install -r requirements.txt`
 
 ## Usage
-In order to use `pygw`, you must have an instance of GeoWave Py4J Java Gateway Server running.  The gateway can be started by using the GeoWave command `geowave python rungateway`.
+In order to use `pygw`, you must have an instance of GeoWave Py4J Java Gateway Server running.  The gateway can be started by using the GeoWave command `geowave util python rungateway`.
 
 You can then import `pygw` classes into your Python environment.
 
@@ -91,7 +91,7 @@ To build a wheel file for `pygw`, simply execute the command `python setup.py bd
 
 ### Building API documentation
 This project has been documented using Python docstrings.  These can be used to generate full API documentation in HTML form. To generate the documentation, perform the following steps:
- - Ensure that the GeoWave Py4J Java Gateway Server is running: `geowave python rungateway`
+ - Ensure that the GeoWave Py4J Java Gateway Server is running: `geowave util python rungateway`
  - Generate documentation: `pdoc --html pygw`
 
  Note: This command requires that the python virtual environment is active and that the `pygw` requirements have been installed.  This will generate API documentation in the `html/pygw` directory.

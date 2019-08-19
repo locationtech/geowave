@@ -39,10 +39,11 @@ import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.examples.ingest.SimpleIngest;
 import org.locationtech.geowave.service.client.ConfigServiceClient;
 import org.locationtech.geowave.service.client.GeoServerServiceClient;
+import org.locationtech.geowave.service.client.StoreServiceClient;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.Environments;
@@ -63,6 +64,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoServerIngestIT.class);
   private static GeoServerServiceClient geoServerServiceClient;
   private static ConfigServiceClient configServiceClient;
+  private static StoreServiceClient storeServiceClient;
   private static final String WORKSPACE = "testomatic";
   private static final String WMS_VERSION = "1.3";
   private static final String WMS_URL_PREFIX = "/geoserver/wms";
@@ -97,6 +99,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
     geoServerServiceClient = new GeoServerServiceClient(ServicesTestEnvironment.GEOWAVE_BASE_URL);
 
     configServiceClient = new ConfigServiceClient(ServicesTestEnvironment.GEOWAVE_BASE_URL);
+    storeServiceClient = new StoreServiceClient(ServicesTestEnvironment.GEOWAVE_BASE_URL);
     startMillis = System.currentTimeMillis();
     TestUtils.printStartOfTest(LOGGER, testName);
   }
@@ -179,7 +182,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
         "Should Create 'testomatic' Workspace",
         201,
         geoServerServiceClient.addWorkspace("testomatic"));
-    configServiceClient.addStoreReRoute(
+    storeServiceClient.addStoreReRoute(
         dataStorePluginOptions.getGeoWaveNamespace(),
         dataStorePluginOptions.getType(),
         dataStorePluginOptions.getGeoWaveNamespace(),

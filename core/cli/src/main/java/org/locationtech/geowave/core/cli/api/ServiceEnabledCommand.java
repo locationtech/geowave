@@ -89,7 +89,7 @@ public abstract class ServiceEnabledCommand<T> extends DefaultOperation implemen
 
     if (getClass().isAnnotationPresent(GeowaveOperation.class)) {
       final GeowaveOperation op = getClass().getAnnotation(GeowaveOperation.class);
-      return op.parentOperation().getName() + "." + op.name();
+      return op.parentOperation().getName() + "." + op.name()[0];
     } else if ((getName() != null) && !getName().trim().isEmpty()) {
       return getName();
     }
@@ -123,7 +123,7 @@ public abstract class ServiceEnabledCommand<T> extends DefaultOperation implemen
     final GeowaveOperation operationInfo = operation.getAnnotation(GeowaveOperation.class);
     return pathFor(operationInfo.parentOperation(), null)
         + "/"
-        + resolveName(operationInfo.name(), resourcePathOverride);
+        + resolveName(operationInfo.name()[0], resourcePathOverride);
   }
 
   private static String resolveName(final String operationName, final String resourcePathOverride) {

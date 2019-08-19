@@ -17,13 +17,14 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.ingest.local.LocalFileIngestCLIDriver;
 import org.locationtech.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexLoader;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
-import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.cli.VisibilityOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.StoreLoader;
+import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
+import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -31,10 +32,10 @@ import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "localToGW", parentOperation = IngestSection.class)
 @Parameters(
-    commandDescription = "Ingest supported files in local file system directly, from S3 or from HDFS ")
+    commandDescription = "Ingest supported files in local file system directly, from S3 or from HDFS")
 public class LocalToGeowaveCommand extends ServiceEnabledCommand<Void> {
 
-  @Parameter(description = "<file or directory> <storename> <comma delimited index/group list>")
+  @Parameter(description = "<file or directory> <store name> <comma delimited index list>")
   private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate
@@ -55,7 +56,7 @@ public class LocalToGeowaveCommand extends ServiceEnabledCommand<Void> {
 
   private DataStorePluginOptions inputStoreOptions = null;
 
-  private List<IndexPluginOptions> inputIndexOptions = null;
+  private List<Index> inputIndices = null;
 
   @Override
   public boolean prepare(final OperationParams params) {
@@ -127,8 +128,8 @@ public class LocalToGeowaveCommand extends ServiceEnabledCommand<Void> {
     return inputStoreOptions;
   }
 
-  public List<IndexPluginOptions> getInputIndexOptions() {
-    return inputIndexOptions;
+  public List<Index> getInputIndices() {
+    return inputIndices;
   }
 
   @Override
@@ -136,7 +137,7 @@ public class LocalToGeowaveCommand extends ServiceEnabledCommand<Void> {
     // Ensure we have all the required arguments
     if (parameters.size() != 3) {
       throw new ParameterException(
-          "Requires arguments: <file or directory> <storename> <comma delimited index/group list>");
+          "Requires arguments: <file or directory> <storename> <comma delimited index list>");
     }
 
     final String inputPath = parameters.get(0);
@@ -152,11 +153,9 @@ public class LocalToGeowaveCommand extends ServiceEnabledCommand<Void> {
     }
     inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
-    final IndexLoader indexLoader = new IndexLoader(indexList);
-    if (!indexLoader.loadFromConfig(configFile)) {
-      throw new ParameterException("Cannot find index(s) by name: " + indexList);
-    }
-    inputIndexOptions = indexLoader.getLoadedIndexes();
+    IndexStore indexStore = inputStoreOptions.createIndexStore();
+
+    inputIndices = DataStoreUtils.loadIndices(indexStore, indexList);
 
     // Ingest Plugins
     final Map<String, LocalFileIngestPlugin<?>> ingestPlugins =
@@ -166,7 +165,7 @@ public class LocalToGeowaveCommand extends ServiceEnabledCommand<Void> {
     final LocalFileIngestCLIDriver driver =
         new LocalFileIngestCLIDriver(
             inputStoreOptions,
-            inputIndexOptions,
+            inputIndices,
             ingestPlugins,
             ingestOptions,
             localInputOptions,

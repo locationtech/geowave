@@ -21,6 +21,7 @@ import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
+import org.locationtech.geowave.core.store.index.CommonIndexValue;
 
 /** A base class for EPSG:4326 latitude/longitude fields that use JTS geometry */
 public abstract class SpatialField implements NumericDimensionField<GeometryWrapper> {
@@ -116,6 +117,11 @@ public abstract class SpatialField implements NumericDimensionField<GeometryWrap
   @Override
   public NumericDimensionDefinition getBaseDefinition() {
     return baseDefinition;
+  }
+
+  @Override
+  public boolean isCompatibleWith(Class<? extends CommonIndexValue> clazz) {
+    return GeometryWrapper.class.isAssignableFrom(clazz);
   }
 
   @Override

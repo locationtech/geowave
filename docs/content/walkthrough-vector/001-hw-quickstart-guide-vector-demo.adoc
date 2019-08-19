@@ -60,7 +60,7 @@ After the data has been downloaded, we are ready to set up the store and index u
 +
 [source, bash]
 ----
-geowave config addstore gdelt --gwNamespace geowave.gdelt -t hbase --zookeeper \
+geowave store add gdelt --gwNamespace geowave.gdelt -t hbase --zookeeper \
 sandbox.hortonworks.com:2181
 ----
 
@@ -68,7 +68,7 @@ sandbox.hortonworks.com:2181
 +
 [source, bash]
 ----
-geowave config addstore gdelt --gwNamespace geowave.gdelt \
+geowave store add gdelt --gwNamespace geowave.gdelt \
 -t accumulo --zookeeper $HOSTNAME:2181 --instance accumulo \
 --user geowave --password geowave
 ----
@@ -77,7 +77,7 @@ geowave config addstore gdelt --gwNamespace geowave.gdelt \
 +
 [source, bash]
 ----
-geowave config addstore gdelt --gwNamespace geowave.gdelt \
+geowave store add gdelt --gwNamespace geowave.gdelt \
 -t hbase --zookeeper $HOSTNAME:2181
 ----
 
@@ -85,14 +85,14 @@ geowave config addstore gdelt --gwNamespace geowave.gdelt \
 +
 [source, bash]
 ----
-geowave config addstore gdelt --gwNamespace geowave.gdelt \
+geowave store add gdelt --gwNamespace geowave.gdelt \
 -t cassandra  --contactPoints localhost
 ----
 . Add a spatial index
 +
 [source, bash]
 ----
-geowave config addindex -t spatial gdelt-spatial --partitionStrategy round_robin \
+geowave index add gdelt spatial -t spatial --partitionStrategy round_robin \
 --numPartitions $NUM_PARTITIONS
 ----
 
@@ -123,7 +123,7 @@ Once the ingest has completed:
 +
 [source, bash]
 ----
-geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
+geowave store add gdelt-kde --gwNamespace geowave.kde_gdelt \
 -t hbase --zookeeper $HOSTNAME:2181
 ----
 
@@ -131,7 +131,7 @@ geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
 +
 [source, bash]
 ----
-geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
+geowave store add gdelt-kde --gwNamespace geowave.kde_gdelt \
 -t accumulo --zookeeper $HOSTNAME:2181 --instance accumulo --user geowave --password geowave
 ----
 
@@ -139,7 +139,7 @@ geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
 +
 [source, bash]
 ----
-geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
+geowave store add gdelt-kde --gwNamespace geowave.kde_gdelt \
 -t hbase --zookeeper $HOSTNAME:2181
 ----
 
@@ -147,7 +147,7 @@ geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
 +
 [source, bash]
 ----
-geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
+geowave store add gdelt-kde --gwNamespace geowave.kde_gdelt \
 -t cassandra  --contactPoints localhost
 ----
 . Run the KDE analytic

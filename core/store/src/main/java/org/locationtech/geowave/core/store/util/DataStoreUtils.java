@@ -11,6 +11,7 @@ package org.locationtech.geowave.core.store.util;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -47,10 +48,11 @@ import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStor
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
+import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.visibility.UnconstrainedVisibilityHandler;
@@ -70,6 +72,7 @@ import org.locationtech.geowave.core.store.flatten.FlattenedUnreadData;
 import org.locationtech.geowave.core.store.flatten.FlattenedUnreadDataSingleRow;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
+import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.operations.RangeReaderParams;
@@ -80,6 +83,8 @@ import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.core.store.query.options.CommonQueryOptions.HintKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.ParameterException;
+import com.clearspring.analytics.util.Lists;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Maps;
 
@@ -585,5 +590,40 @@ public class DataStoreUtils {
       final boolean visibilityEnabled) {
     return readerParams.isClientsideRowMerging()
         || (readerParams.isMixedVisibility() && visibilityEnabled);
+  }
+
+  public static List<Index> loadIndices(final IndexStore indexStore, final String indexNames) {
+    List<Index> loadedIndices = Lists.newArrayList();
+    // Is there a comma?
+    final String[] indices = indexNames.split(",");
+    for (final String idxName : indices) {
+      Index index = indexStore.getIndex(idxName);
+      if (index == null) {
+        throw new ParameterException("Unable to find index with name: " + idxName);
+      }
+      loadedIndices.add(index);
+    }
+    return Collections.unmodifiableList(loadedIndices);
+  }
+
+  public static List<Index> loadIndices(final DataStore dataStore, final String indexNames) {
+    List<Index> loadedIndices = Lists.newArrayList();
+    // Is there a comma?
+    final String[] indices = indexNames.split(",");
+    final Index[] dataStoreIndices = dataStore.getIndices();
+    for (final String idxName : indices) {
+      boolean found = false;
+      for (Index index : dataStoreIndices) {
+        if (index.getName().equals(idxName)) {
+          loadedIndices.add(index);
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        throw new ParameterException("Unable to find index with name: " + idxName);
+      }
+    }
+    return Collections.unmodifiableList(loadedIndices);
   }
 }

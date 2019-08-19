@@ -18,11 +18,11 @@ import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
+import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexLoader;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.StoreLoader;
+import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.beust.jcommander.Parameter;
@@ -31,7 +31,7 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "kdespark", parentOperation = AnalyticSection.class)
-@Parameters(commandDescription = "Kernel Density Estimate via Spark")
+@Parameters(commandDescription = "Kernel density estimate using Spark")
 public class KDESparkCommand extends ServiceEnabledCommand<Void> implements Command {
   private static final Logger LOGGER = LoggerFactory.getLogger(KDESparkCommand.class);
   @Parameter(description = "<input storename> <output storename>")
@@ -42,7 +42,6 @@ public class KDESparkCommand extends ServiceEnabledCommand<Void> implements Comm
 
   private DataStorePluginOptions inputDataStore = null;
   private DataStorePluginOptions outputDataStore = null;
-  private List<IndexPluginOptions> outputIndexOptions = null;
 
   @Override
   public void execute(final OperationParams params) throws Exception {
@@ -85,26 +84,18 @@ public class KDESparkCommand extends ServiceEnabledCommand<Void> implements Comm
     runner.setIndexName(kdeSparkOptions.getIndexName());
     runner.setMinLevel(kdeSparkOptions.getMinLevel());
     runner.setMaxLevel(kdeSparkOptions.getMaxLevel());
-    runner.setTileSize(kdeSparkOptions.getTileSize());
+    runner.setTileSize((int) Math.sqrt(kdeSparkOptions.getTileSize()));
 
     if ((kdeSparkOptions.getOutputIndex() != null)
         && !kdeSparkOptions.getOutputIndex().trim().isEmpty()) {
       final String outputIndex = kdeSparkOptions.getOutputIndex();
 
       // Load the Indices
-      final IndexLoader indexLoader = new IndexLoader(outputIndex);
-      if (!indexLoader.loadFromConfig(configFile)) {
-        throw new ParameterException("Cannot find index(s) by name: " + outputIndex);
-      }
-      outputIndexOptions = indexLoader.getLoadedIndexes();
+      List<Index> outputIndices =
+          DataStoreUtils.loadIndices(outputStoreLoader.createIndexStore(), outputIndex);
 
-      for (final IndexPluginOptions dimensionType : outputIndexOptions) {
-        if (dimensionType.getType().equals("spatial")) {
-          final Index primaryIndex = dimensionType.createIndex();
-          if (primaryIndex == null) {
-            LOGGER.error("Could not get index instance, getIndex() returned null;");
-            throw new IOException("Could not get index instance, getIndex() returned null");
-          }
+      for (final Index primaryIndex : outputIndices) {
+        if (SpatialDimensionalityTypeProvider.isSpatial(primaryIndex)) {
           runner.setOutputIndex(primaryIndex);
         } else {
           LOGGER.error(
@@ -127,10 +118,6 @@ public class KDESparkCommand extends ServiceEnabledCommand<Void> implements Comm
     }
 
     return null;
-  }
-
-  public void setOutputIndexOptions(final List<IndexPluginOptions> outputIndexOptions) {
-    this.outputIndexOptions = outputIndexOptions;
   }
 
   public List<String> getParameters() {

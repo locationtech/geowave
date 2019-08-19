@@ -58,4 +58,12 @@ public interface NumericDimensionField<T extends CommonIndexValue> extends
    * @return the base index definition for this dimension
    */
   public NumericDimensionDefinition getBaseDefinition();
+
+  /**
+   * Determines if the given field type is compatible with this field.
+   * 
+   * @param clazz the field type to check
+   * @return true if the given field type is assignable
+   */
+  public boolean isCompatibleWith(Class<? extends CommonIndexValue> clazz);
 }

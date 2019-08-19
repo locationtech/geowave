@@ -11,6 +11,8 @@ package org.locationtech.geowave.core.cli.spi;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
@@ -26,10 +28,11 @@ import org.slf4j.LoggerFactory;
 public final class OperationEntry {
   private static Logger LOGGER = LoggerFactory.getLogger(OperationEntry.class);
 
-  private final String operationName;
+  private final String[] operationNames;
   private final Class<?> operationClass;
   private final Class<?> parentOperationClass;
-  private final Map<String, OperationEntry> children;
+  private final Map<String, OperationEntry> childrenMap;
+  private final List<OperationEntry> children;
   private final boolean command;
   private final boolean topLevel;
 
@@ -41,19 +44,20 @@ public final class OperationEntry {
           "Expected Operation class to use GeowaveOperation annotation: "
               + this.operationClass.getCanonicalName());
     }
-    operationName = operation.name();
+    operationNames = operation.name();
     parentOperationClass = operation.parentOperation();
     command = Command.class.isAssignableFrom(operationClass);
     topLevel = (parentOperationClass == null) || (parentOperationClass == Object.class);
-    children = new HashMap<>();
+    childrenMap = new HashMap<>();
+    children = new LinkedList<>();
   }
 
   public Class<?> getParentOperationClass() {
     return parentOperationClass;
   }
 
-  public String getOperationName() {
-    return operationName;
+  public String[] getOperationNames() {
+    return operationNames;
   }
 
   public Class<?> getOperationClass() {
@@ -61,22 +65,22 @@ public final class OperationEntry {
   }
 
   public Collection<OperationEntry> getChildren() {
-    return Collections.unmodifiableCollection(children.values());
+    return Collections.unmodifiableCollection(children);
   }
 
   public void addChild(final OperationEntry child) {
-    if (children.containsKey(child.getOperationName().toLowerCase(Locale.ENGLISH))) {
-      throw new RuntimeException(
-          "Duplicate operation name: "
-              + child.getOperationName()
-              + " for "
-              + getOperationClass().getName());
+    for (final String name : child.getOperationNames()) {
+      if (childrenMap.containsKey(name.toLowerCase(Locale.ENGLISH))) {
+        throw new RuntimeException(
+            "Duplicate operation name: " + name + " for " + getOperationClass().getName());
+      }
+      childrenMap.put(name.toLowerCase(Locale.ENGLISH), child);
     }
-    children.put(child.getOperationName().toLowerCase(Locale.ENGLISH), child);
+    children.add(child);
   }
 
   public OperationEntry getChild(final String name) {
-    return children.get(name);
+    return childrenMap.get(name);
   }
 
   public boolean isCommand() {

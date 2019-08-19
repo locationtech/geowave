@@ -16,7 +16,7 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.ingest.spark.SparkCommandLineOptions;
 import org.locationtech.geowave.core.ingest.spark.SparkIngestDriver;
-import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
+import org.locationtech.geowave.core.store.cli.VisibilityOptions;
 import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -27,7 +27,7 @@ import com.beust.jcommander.ParametersDelegate;
 @Parameters(commandDescription = "Ingest supported files that already exist in HDFS or S3")
 public class SparkToGeowaveCommand extends ServiceEnabledCommand<Void> {
 
-  @Parameter(description = "<input directory> <store name> <comma delimited index/group list>")
+  @Parameter(description = "<input directory> <store name> <comma delimited index list>")
   private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate
@@ -56,7 +56,7 @@ public class SparkToGeowaveCommand extends ServiceEnabledCommand<Void> {
     // Ensure we have all the required arguments
     if (parameters.size() != 3) {
       throw new ParameterException(
-          "Requires arguments: <input directory> <store name> <comma delimited index/group list>");
+          "Requires arguments: <input directory> <store name> <comma delimited index list>");
     }
 
     computeResults(params);
@@ -105,7 +105,7 @@ public class SparkToGeowaveCommand extends ServiceEnabledCommand<Void> {
     // Ensure we have all the required arguments
     if (parameters.size() != 3) {
       throw new ParameterException(
-          "Requires arguments: <file or directory> <storename> <comma delimited index/group list>");
+          "Requires arguments: <file or directory> <store name> <comma delimited index list>");
     }
 
     final String inputPath = parameters.get(0);

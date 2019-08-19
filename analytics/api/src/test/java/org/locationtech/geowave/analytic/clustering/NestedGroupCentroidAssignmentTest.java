@@ -30,7 +30,7 @@ import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import org.locationtech.jts.geom.Coordinate;

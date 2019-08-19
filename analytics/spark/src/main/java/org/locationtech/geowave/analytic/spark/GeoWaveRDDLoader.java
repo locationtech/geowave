@@ -16,7 +16,7 @@ import org.apache.spark.broadcast.Broadcast;
 import org.apache.spark.rdd.RDD;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputFormat;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.opengis.coverage.grid.GridCoverage;

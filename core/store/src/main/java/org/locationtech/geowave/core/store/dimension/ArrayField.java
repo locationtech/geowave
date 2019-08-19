@@ -102,6 +102,11 @@ public abstract class ArrayField<T extends CommonIndexValue> implements
   }
 
   @Override
+  public boolean isCompatibleWith(Class<? extends CommonIndexValue> clazz) {
+    return false;
+  }
+
+  @Override
   public int getFixedBinIdSize() {
     return elementField.getFixedBinIdSize();
   }

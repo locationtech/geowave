@@ -14,28 +14,28 @@ Operations to analyze, download, and ingest Landsat 8 imagery publicly available
 * <<045-landsat-commands.adoc#landsat-ingestvector, IngestVector>>
 
 [[landsat-analyze]]
-==== *geowave landsat analyze*
+==== *geowave util landsat analyze*
 
-include::manpages/landsat/geowave-analyze.txt[]
+include::manpages/util/landsat/geowave-analyze.txt[]
 
 [[landsat-download]]
-==== *geowave landsat download*
+==== *geowave util landsat download*
 
-include::manpages/landsat/geowave-download.txt[]
+include::manpages/util/landsat/geowave-download.txt[]
 
 [[landsat-ingest]]
-==== *geowave landsat ingest*
+==== *geowave util landsat ingest*
 
-include::manpages/landsat/geowave-ingest.txt[]
+include::manpages/util/landsat/geowave-ingest.txt[]
 
 [[landsat-ingestraster]]
-==== *geowave landsat ingestraster*
+==== *geowave util landsat ingestraster*
 
-include::manpages/landsat/geowave-ingestraster.txt[]
+include::manpages/util/landsat/geowave-ingestraster.txt[]
 
 [[landsat-ingestvector]]
-==== *geowave landsat ingestvector*
+==== *geowave util landsat ingestvector*
 
-include::manpages/landsat/geowave-ingestvector.txt[]
+include::manpages/util/landsat/geowave-ingestvector.txt[]
 
 '''

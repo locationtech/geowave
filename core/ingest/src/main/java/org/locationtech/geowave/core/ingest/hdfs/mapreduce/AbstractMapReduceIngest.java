@@ -29,9 +29,8 @@ import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
+import org.locationtech.geowave.core.store.cli.VisibilityOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.ingest.DataAdapterProvider;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputFormat;
@@ -52,7 +51,7 @@ public abstract class AbstractMapReduceIngest<T extends Persistable & DataAdapte
   public static final String INDEX_NAMES_KEY = "INDEX_NAMES";
   private static String JOB_NAME = "%s ingest from %s to namespace %s (%s)";
   protected final DataStorePluginOptions dataStoreOptions;
-  protected final List<IndexPluginOptions> indexOptions;
+  protected final List<Index> indices;
   protected final VisibilityOptions ingestOptions;
   protected final Path inputFile;
   protected final String formatPluginName;
@@ -61,14 +60,14 @@ public abstract class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 
   public AbstractMapReduceIngest(
       final DataStorePluginOptions dataStoreOptions,
-      final List<IndexPluginOptions> indexOptions,
+      final List<Index> indices,
       final VisibilityOptions ingestOptions,
       final Path inputFile,
       final String formatPluginName,
       final IngestFromHdfsPlugin<?, ?> parentPlugin,
       final T ingestPlugin) {
     this.dataStoreOptions = dataStoreOptions;
-    this.indexOptions = indexOptions;
+    this.indices = indices;
     this.ingestOptions = ingestOptions;
     this.inputFile = inputFile;
     this.formatPluginName = formatPluginName;
@@ -107,8 +106,7 @@ public abstract class AbstractMapReduceIngest<T extends Persistable & DataAdapte
     final Job job = new Job(conf, getJobName());
     final StringBuilder indexNames = new StringBuilder();
     final List<Index> indexes = new ArrayList<>();
-    for (final IndexPluginOptions indexOption : indexOptions) {
-      final Index primaryIndex = indexOption.createIndex();
+    for (final Index primaryIndex : indices) {
       indexes.add(primaryIndex);
       if (primaryIndex != null) {
         // add index

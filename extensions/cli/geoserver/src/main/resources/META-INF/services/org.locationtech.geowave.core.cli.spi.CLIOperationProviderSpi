@@ -1,1 +1,8 @@
 org.locationtech.geowave.cli.geoserver.GeoServerOperationProvider
+org.locationtech.geowave.cli.geoserver.coverage.CoverageOperationProvider
+org.locationtech.geowave.cli.geoserver.cvstore.CoverageStoreOperationProvider
+org.locationtech.geowave.cli.geoserver.datastore.DatastoreOperationProvider
+org.locationtech.geowave.cli.geoserver.featurelayer.FeatureLayerOperationProvider
+org.locationtech.geowave.cli.geoserver.layer.LayerOperationProvider
+org.locationtech.geowave.cli.geoserver.style.StyleOperationProvider
+org.locationtech.geowave.cli.geoserver.workspace.WorkspaceOperationProvider

@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave gs rmcv - Remove a GeoServer coverage
+geowave gs cv rm - Remove a GeoServer coverage
 
 SYNOPSIS
 //:--------
 
-geowave gs rmcv [options] <coverage name>
+geowave gs cv rm [options] <coverage name>
 
 DESCRIPTION
 //:-----------

@@ -18,7 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,18 +40,18 @@ public abstract class AbstractLocalFileDriver<P extends LocalPluginBase, R> {
   protected static boolean checkIndexesAgainstProvider(
       final String providerName,
       final DataAdapterProvider<?> adapterProvider,
-      final List<IndexPluginOptions> indexOptions) {
+      final List<Index> indices) {
     boolean valid = true;
-    for (final IndexPluginOptions option : indexOptions) {
-      if (!isCompatible(adapterProvider, option)) {
+    for (final Index index : indices) {
+      if (!isCompatible(adapterProvider, index)) {
         // HP Fortify "Log Forging" false positive
         // What Fortify considers "user input" comes only
         // from users with OS-level access anyway
         LOGGER.warn(
             "Local file ingest plugin for ingest type '"
                 + providerName
-                + "' does not support dimensionality '"
-                + option.getType()
+                + "' is not supported by index '"
+                + index.getName()
                 + "'");
         valid = false;
       }
@@ -66,18 +67,18 @@ public abstract class AbstractLocalFileDriver<P extends LocalPluginBase, R> {
    */
   protected static boolean isCompatible(
       final DataAdapterProvider<?> adapterProvider,
-      final IndexPluginOptions dimensionalityProvider) {
+      final Index index) {
     final Class<? extends CommonIndexValue>[] supportedTypes =
         adapterProvider.getSupportedIndexableTypes();
     if ((supportedTypes == null) || (supportedTypes.length == 0)) {
       return false;
     }
-    final Class<? extends CommonIndexValue>[] requiredTypes =
-        dimensionalityProvider.getIndexPlugin().getRequiredIndexTypes();
-    for (final Class<? extends CommonIndexValue> requiredType : requiredTypes) {
+    final NumericDimensionField<? extends CommonIndexValue>[] requiredDimensions =
+        index.getIndexModel().getDimensions();
+    for (final NumericDimensionField<? extends CommonIndexValue> requiredDimension : requiredDimensions) {
       boolean fieldFound = false;
       for (final Class<? extends CommonIndexValue> supportedType : supportedTypes) {
-        if (requiredType.isAssignableFrom(supportedType)) {
+        if (requiredDimension.isCompatibleWith(supportedType)) {
           fieldFound = true;
           break;
         }

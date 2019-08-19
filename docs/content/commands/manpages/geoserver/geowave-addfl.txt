@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave gs addfl - Add a GeoServer feature layer
+geowave gs fl add - Add a GeoServer feature layer
 
 SYNOPSIS
 //:--------
 
-geowave gs addfl [options] <layer name>
+geowave gs fl add [options] <layer name>
 
 DESCRIPTION
 //:-----------

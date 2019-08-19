@@ -31,7 +31,7 @@ import org.locationtech.geowave.cli.osm.types.avro.AvroRelation;
 import org.locationtech.geowave.cli.osm.types.avro.AvroWay;
 import org.locationtech.geowave.core.cli.parser.CommandLineOperationParams;
 import org.locationtech.geowave.core.cli.parser.OperationParser;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
 import org.locationtech.geowave.datastore.accumulo.config.AccumuloOptions;
 import org.locationtech.geowave.datastore.accumulo.config.AccumuloRequiredOptions;

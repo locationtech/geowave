@@ -44,16 +44,17 @@ import org.locationtech.geowave.core.ingest.operations.ConfigAWSCommand;
 import org.locationtech.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexLoader;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
-import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.cli.VisibilityOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.StoreLoader;
+import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.ingest.IngestUtils;
 import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.locationtech.geowave.core.store.ingest.LocalIngestRunData;
 import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
 import org.locationtech.geowave.core.store.ingest.LocalPluginFileVisitor.PluginVisitor;
+import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
 import org.locationtech.geowave.mapreduce.s3.GeoWaveAmazonS3Factory;
 import org.slf4j.Logger;
@@ -223,7 +224,7 @@ public class SparkIngestDriver implements Serializable {
     // Based on the selected formats, select the format plugins
     pluginFormats.selectPlugin(localInput.getFormats());
     DataStorePluginOptions inputStoreOptions = null;
-    List<IndexPluginOptions> indexOptions = null;
+    List<Index> indices = null;
 
     // Ingest Plugins
     final Map<String, LocalFileIngestPlugin<?>> ingestPlugins =
@@ -238,11 +239,8 @@ public class SparkIngestDriver implements Serializable {
     }
     inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
-    final IndexLoader indexLoader = new IndexLoader(indexList);
-    if (!indexLoader.loadFromConfig(configProperties)) {
-      throw new ParameterException("Cannot find index(s) by name: " + indexList);
-    }
-    indexOptions = indexLoader.getLoadedIndexes();
+    final IndexStore indexStore = inputStoreOptions.createIndexStore();
+    indices = DataStoreUtils.loadIndices(indexStore, indexList);
 
     // first collect the local file ingest plugins
     final Map<String, LocalFileIngestPlugin<?>> localFileIngestPlugins = new HashMap<>();
@@ -252,7 +250,7 @@ public class SparkIngestDriver implements Serializable {
       if (!IngestUtils.checkIndexesAgainstProvider(
           pluginEntry.getKey(),
           pluginEntry.getValue(),
-          indexOptions)) {
+          indices)) {
         continue;
       }
 
@@ -265,7 +263,7 @@ public class SparkIngestDriver implements Serializable {
     final LocalFileIngestCLIDriver localIngestDriver =
         new LocalFileIngestCLIDriver(
             inputStoreOptions,
-            indexOptions,
+            indices,
             localFileIngestPlugins,
             ingestOptions,
             localInput,

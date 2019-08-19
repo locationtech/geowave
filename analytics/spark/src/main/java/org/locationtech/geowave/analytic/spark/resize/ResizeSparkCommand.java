@@ -17,15 +17,15 @@ import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "resizespark", parentOperation = RasterSection.class)
-@Parameters(commandDescription = "Resize Raster Tiles in MapReduce")
+@Parameters(commandDescription = "Resize raster tiles using Spark")
 public class ResizeSparkCommand extends DefaultOperation implements Command {
 
   @Parameter(description = "<input store name> <output store name>")

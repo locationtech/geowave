@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 public @interface GeowaveOperation {
-  String name();
+  String[] name();
 
   Class<?> parentOperation() default Object.class;
 }

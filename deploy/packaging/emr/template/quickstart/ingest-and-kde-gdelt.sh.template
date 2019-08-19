@@ -24,12 +24,12 @@ cd $STAGING_DIR
 geowave config set geowave.encryption.enabled=false
 
 # Ingest the data. Indexed spatial only in this example. It can also be indexed using spatial-temporal
-geowave config addstore gdelt --gwNamespace geowave.gdelt \
+geowave store add gdelt --gwNamespace geowave.gdelt \
 $DATASTORE_PARAMS_TOKEN
 
-geowave config addindex -t spatial gdelt-spatial --partitionStrategy round_robin --numPartitions $NUM_PARTITIONS
+geowave index add gdelt gdelt-spatial -t spatial --partitionStrategy round_robin --numPartitions $NUM_PARTITIONS
 geowave ingest localtogw $STAGING_DIR/gdelt gdelt gdelt-spatial -f gdelt --gdelt.cql "BBOX(geometry,${WEST},${SOUTH},${EAST},${NORTH})"
-geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
+geowave store add gdelt-kde --gwNamespace geowave.kde_gdelt \
 $DATASTORE_PARAMS_TOKEN
 
 

@@ -56,7 +56,7 @@ their values, if there are any. An example would be additional Accumulo options:
 
 [source, bash]
 ----
-geowave explain config addstore -t accumulo
+geowave explain store add -t accumulo
 ----
 
 '''

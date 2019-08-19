@@ -19,9 +19,9 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.util.ToolRunner;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.cli.VisibilityOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.ingest.DataAdapterProvider;
 import org.locationtech.geowave.core.store.ingest.IngestUtils;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
@@ -37,7 +37,7 @@ public class IngestFromHdfsDriver {
   private static final int NUM_CONCURRENT_JOBS = 5;
   private static final int DAYS_TO_AWAIT_COMPLETION = 999;
   protected final DataStorePluginOptions storeOptions;
-  protected final List<IndexPluginOptions> indexOptions;
+  protected final List<Index> indices;
   protected final VisibilityOptions ingestOptions;
   private final MapReduceCommandLineOptions mapReduceOptions;
   private final Map<String, IngestFromHdfsPlugin<?, ?>> ingestPlugins;
@@ -48,14 +48,14 @@ public class IngestFromHdfsDriver {
 
   public IngestFromHdfsDriver(
       final DataStorePluginOptions storeOptions,
-      final List<IndexPluginOptions> indexOptions,
+      final List<Index> indices,
       final VisibilityOptions ingestOptions,
       final MapReduceCommandLineOptions mapReduceOptions,
       final Map<String, IngestFromHdfsPlugin<?, ?>> ingestPlugins,
       final String hdfsHostPort,
       final String basePath) {
     this.storeOptions = storeOptions;
-    this.indexOptions = indexOptions;
+    this.indices = indices;
     this.ingestOptions = ingestOptions;
     this.mapReduceOptions = mapReduceOptions;
     this.ingestPlugins = ingestPlugins;
@@ -74,16 +74,16 @@ public class IngestFromHdfsDriver {
       final String providerName,
       final DataAdapterProvider<?> adapterProvider) {
     boolean valid = true;
-    for (final IndexPluginOptions option : indexOptions) {
-      if (!IngestUtils.isCompatible(adapterProvider, option)) {
+    for (final Index index : indices) {
+      if (!IngestUtils.isCompatible(adapterProvider, index)) {
         // HP Fortify "Log Forging" false positive
         // What Fortify considers "user input" comes only
         // from users with OS-level access anyway
         LOGGER.warn(
             "HDFS file ingest plugin for ingest type '"
                 + providerName
-                + "' does not support dimensionality '"
-                + option.getType()
+                + "' is not supported by index '"
+                + index.getName()
                 + "'");
         valid = false;
       }
@@ -166,7 +166,7 @@ public class IngestFromHdfsDriver {
             jobRunner =
                 new IngestWithReducerJobRunner(
                     storeOptions,
-                    indexOptions,
+                    indices,
                     ingestOptions,
                     inputFile,
                     pluginProvider.getKey(),
@@ -180,7 +180,7 @@ public class IngestFromHdfsDriver {
             jobRunner =
                 new IngestWithMapperJobRunner(
                     storeOptions,
-                    indexOptions,
+                    indices,
                     ingestOptions,
                     inputFile,
                     pluginProvider.getKey(),

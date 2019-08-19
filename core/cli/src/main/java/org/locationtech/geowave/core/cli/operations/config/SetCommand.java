@@ -27,7 +27,7 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "set", parentOperation = ConfigSection.class)
-@Parameters(commandDescription = "Set property name within cache")
+@Parameters(commandDescription = "Set GeoWave configuration property directly")
 public class SetCommand extends ServiceEnabledCommand<Object> {
   /** Return "200 OK" for the set command. */
   @Override

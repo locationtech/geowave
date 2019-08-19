@@ -24,7 +24,7 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
 import org.locationtech.geowave.mapreduce.JobContextAdapterIndexMappingStore;
 import org.locationtech.geowave.mapreduce.JobContextInternalAdapterStore;

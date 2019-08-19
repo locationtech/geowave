@@ -20,10 +20,10 @@ import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "ingestvector", parentOperation = Landsat8Section.class)
 @Parameters(
-    commandDescription = "Ingest routine for searching landsat scenes that match certain criteria and ingesting the scene and band metadata into GeoWave's vector store.")
+    commandDescription = "Ingest routine for searching landsat scenes that match certain criteria and ingesting the scene and band metadata into GeoWave's vector store")
 public class Landsat8IngestVectorCommand extends DefaultOperation implements Command {
 
-  @Parameter(description = "<storename> <comma delimited index/group list>")
+  @Parameter(description = "<store name> <comma delimited index list>")
   private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate

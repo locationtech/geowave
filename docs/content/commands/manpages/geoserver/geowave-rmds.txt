@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave gs rmds - Remove GeoServer DataStore
+geowave gs ds rm - Remove GeoServer DataStore
 
 SYNOPSIS
 //:--------
 
-geowave gs rmds [options] <datastore name>
+geowave gs ds rm [options] <datastore name>
 
 DESCRIPTION
 //:-----------

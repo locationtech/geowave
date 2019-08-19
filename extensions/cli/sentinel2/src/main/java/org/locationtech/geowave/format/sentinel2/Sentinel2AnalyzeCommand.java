@@ -17,7 +17,7 @@ import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "analyze", parentOperation = Sentinel2Section.class)
 @Parameters(
-    commandDescription = "Print out basic aggregate statistics for available Sentinel2 imagery.")
+    commandDescription = "Print out basic aggregate statistics for available Sentinel2 imagery")
 public class Sentinel2AnalyzeCommand extends DefaultOperation implements Command {
   @ParametersDelegate
   protected Sentinel2BasicCommandLineOptions analyzeOptions =

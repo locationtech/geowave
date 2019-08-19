@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.core.cli.parser;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -43,7 +44,7 @@ public class OperationParser {
     final CommandLineOperationParams params = new CommandLineOperationParams(args);
     final OperationEntry topLevelEntry = registry.getOperation(operation.getClass());
     // Populate the operation map.
-    params.getOperationMap().put(topLevelEntry.getOperationName(), operation);
+    params.getOperationMap().put(topLevelEntry.getOperationNames()[0], operation);
     parseInternal(params, topLevelEntry);
     return params;
   }
@@ -174,28 +175,36 @@ public class OperationParser {
     public void initialize(final PrefixedJCommander commander) {
       commander.setCaseSensitiveOptions(false);
 
+      final String[] opNames = operationEntry.getOperationNames();
+      String opName = opNames[0];
+      for (int i = 1; i < opNames.length; i++) {
+        for (final String arg : params.getArgs()) {
+          if (arg.equals(opNames[i])) {
+            opName = arg;
+            break;
+          }
+        }
+      }
       // Add myself.
-      if (params.getOperationMap().containsKey(operationEntry.getOperationName())) {
-        operation = params.getOperationMap().get(operationEntry.getOperationName());
+      if (params.getOperationMap().containsKey(opName)) {
+        operation = params.getOperationMap().get(opName);
       } else {
         operation = operationEntry.createInstance();
-        params.addOperation(
-            operationEntry.getOperationName(),
-            operation,
-            operationEntry.isCommand());
+        params.addOperation(opName, operation, operationEntry.isCommand());
       }
       commander.addPrefixedObject(operation);
 
       // initialize the commander by adding child operations.
       for (final OperationEntry child : operationEntry.getChildren()) {
-        commander.addCommand(child.getOperationName(), null);
+        final String[] names = child.getOperationNames();
+        commander.addCommand(names[0], null, Arrays.copyOfRange(names, 1, names.length));
       }
 
       // Update each command to add an initializer.
       final Map<String, JCommander> childCommanders = commander.getCommands();
       for (final OperationEntry child : operationEntry.getChildren()) {
         final PrefixedJCommander pCommander =
-            (PrefixedJCommander) childCommanders.get(child.getOperationName());
+            (PrefixedJCommander) childCommanders.get(child.getOperationNames()[0]);
         pCommander.setInitializer(new OperationContext(child, params));
       }
     }
