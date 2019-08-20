@@ -14,7 +14,6 @@ import org.locationtech.geowave.core.geotime.index.dimension.SimpleTimeDefinitio
 import org.locationtech.geowave.core.geotime.index.dimension.SimpleTimeIndexStrategy;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
-import org.locationtech.geowave.core.geotime.store.dimension.Time;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
@@ -22,10 +21,9 @@ import org.locationtech.geowave.core.index.sfc.SFCFactory.SFCType;
 import org.locationtech.geowave.core.index.sfc.xz.XZHierarchicalIndexFactory;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
-import org.locationtech.geowave.core.store.index.BasicIndexModel;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.CustomNameIndex;
 import org.locationtech.geowave.core.store.index.BaseIndexBuilder;
+import org.locationtech.geowave.core.store.index.BasicIndexModel;
+import org.locationtech.geowave.core.store.index.CustomNameIndex;
 import org.locationtech.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.ParameterException;
@@ -85,11 +83,6 @@ public class TemporalDimensionalityTypeProvider implements
           combinedArrayID);
     }
     return new CustomNameIndex(new SimpleTimeIndexStrategy(), indexModel, DEFAULT_TEMPORAL_ID_STR);
-  }
-
-  @Override
-  public Class<? extends CommonIndexValue>[] getRequiredIndexTypes() {
-    return new Class[] {Time.class};
   }
 
   public static class UnitConverter implements IStringConverter<Unit> {
