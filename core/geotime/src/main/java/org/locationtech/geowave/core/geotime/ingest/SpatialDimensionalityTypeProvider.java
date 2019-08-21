@@ -247,11 +247,6 @@ public class SpatialDimensionalityTypeProvider implements
     return crs;
   }
 
-  @Override
-  public Class<? extends CommonIndexValue>[] getRequiredIndexTypes() {
-    return new Class[] {GeometryWrapper.class};
-  }
-
   public static class SpatialIndexBuilder extends BaseIndexBuilder<SpatialIndexBuilder> {
     private final SpatialOptions options;
 
