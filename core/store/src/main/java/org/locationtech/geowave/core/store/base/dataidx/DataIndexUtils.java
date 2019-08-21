@@ -9,6 +9,8 @@
 package org.locationtech.geowave.core.store.base.dataidx;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
@@ -222,17 +224,30 @@ public class DataIndexUtils {
     // TODO within the datastores delete by range is not supported (the deletion logic expect Data
     // IDs to be non-null within reader params and deletions don't have logic for handling ranges
 
-    // GEOWAVE Issue #1575 documents this
+    // for now, although less efficient, let's query by prefix and then delete by the returned IDs
 
-    LOGGER.warn("Deletion by Data ID Range is currently unsupported.  See Github Issue #1575.");
-    // final DataIndexReaderParams readerParams =
-    // new DataIndexReaderParamsBuilder<>(
-    // adapterStore,
-    // internalAdapterStore).additionalAuthorizations(
-    // additionalAuthorizations).isAuthorizationsLimiting(false).adapterId(
-    // adapterId).dataIdsByRange(startDataId, endDataId).fieldSubsets(
-    // fieldSubsets).aggregation(aggregation).build();
-    // operations.delete(readerParams);
+    final DataIndexReaderParams readerParams =
+        new DataIndexReaderParamsBuilder<>(
+            adapterStore,
+            internalAdapterStore).additionalAuthorizations(
+                additionalAuthorizations).isAuthorizationsLimiting(false).adapterId(
+                    adapterId).dataIdsByRange(startDataId, endDataId).fieldSubsets(
+                        fieldSubsets).aggregation(aggregation).build();
+    final List<byte[]> dataIds = new ArrayList<>();
+    try (RowReader<GeoWaveRow> reader = operations.createReader(readerParams)) {
+      while (reader.hasNext()) {
+        dataIds.add(reader.next().getDataId());
+      }
+    }
+    delete(
+        operations,
+        adapterStore,
+        internalAdapterStore,
+        fieldSubsets,
+        aggregation,
+        additionalAuthorizations,
+        adapterId,
+        dataIds.toArray(new byte[dataIds.size()][]));
   }
 
   public static RowReader<GeoWaveRow> getRowReader(
