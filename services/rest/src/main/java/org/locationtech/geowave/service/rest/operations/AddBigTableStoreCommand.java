@@ -15,10 +15,10 @@ import java.util.Properties;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.cli.exceptions.DuplicateEntryException;
-import org.locationtech.geowave.core.cli.operations.config.ConfigSection;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.datastore.bigtable.operations.config.BigTableOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.StoreSection;
+import org.locationtech.geowave.datastore.bigtable.config.BigTableOptions;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -100,12 +100,12 @@ public class AddBigTableStoreCommand extends ServiceEnabledCommand<String> {
 
   @Override
   public String getId() {
-    return ConfigSection.class.getName() + ".addstore/bigtable";
+    return StoreSection.class.getName() + ".add/bigtable";
   }
 
   @Override
   public String getPath() {
-    return "v0/config/addstore/bigtable";
+    return "v0/store/add/bigtable";
   }
 
   public DataStorePluginOptions getPluginOptions() {

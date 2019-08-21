@@ -17,9 +17,11 @@ import org.opengis.feature.simple.SimpleFeatureType;
 public interface GeotoolsFeatureDataAdapter<T extends SimpleFeature> extends
     DataTypeAdapter<T>,
     StatisticsProvider<T> {
-  public SimpleFeatureType getFeatureType();
+  SimpleFeatureType getFeatureType();
 
-  public TimeDescriptors getTimeDescriptors();
+  TimeDescriptors getTimeDescriptors();
 
-  public boolean hasTemporalConstraints();
+  boolean hasTemporalConstraints();
+
+  void setNamespace(final String namespaceURI);
 }

@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave gs getcv - Get a GeoServer coverage's info
+geowave gs cv get - Get a GeoServer coverage's info
 
 SYNOPSIS
 //:--------
 
-geowave gs getcv [options] <coverage name>
+geowave gs cv get [options] <coverage name>
 
 DESCRIPTION
 //:-----------

@@ -20,12 +20,13 @@ import org.locationtech.geowave.adapter.raster.plugin.gdal.InstallGdal;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
+import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
-import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.StoreLoader;
+import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import com.beust.jcommander.ParameterException;
 import it.geosolutions.jaiext.JAIExt;
@@ -118,17 +119,18 @@ public class RasterIngestRunnerTest {
             RasterIngestRunnerTest.class.getClassLoader().getResource(
                 "geowave-config.properties").toURI()));
 
+    createIndices(params);
     runner.runInternal(params);
 
     try (CloseableIterator<Object> results =
-        getStore(params).query(QueryBuilder.newBuilder().build())) {
+        getStorePluginOptions(params).createDataStore().query(QueryBuilder.newBuilder().build())) {
       assertTrue("Store is not empty", results.hasNext());
     }
 
     // Not sure what assertions can be made about the indexes.
   }
 
-  private DataStore getStore(final OperationParams params) {
+  private DataStorePluginOptions getStorePluginOptions(final OperationParams params) {
     final File configFile = (File) params.getContext().get(ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
     final StoreLoader inputStoreLoader = new StoreLoader("memorystore");
@@ -136,7 +138,17 @@ public class RasterIngestRunnerTest {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
 
-    final DataStorePluginOptions storeOptions = inputStoreLoader.getDataStorePlugin();
-    return storeOptions.createDataStore();
+    return inputStoreLoader.getDataStorePlugin();
+  }
+
+  private void createIndices(final OperationParams params) {
+    IndexStore indexStore = getStorePluginOptions(params).createIndexStore();
+    // Create the spatial index
+    SpatialDimensionalityTypeProvider.SpatialIndexBuilder builder =
+        new SpatialDimensionalityTypeProvider.SpatialIndexBuilder();
+    builder.setName("spatialindex");
+    builder.setNumPartitions(1);
+    builder.setIncludeTimeInCommonIndexModel(false);
+    indexStore.addIndex(builder.createIndex());
   }
 }

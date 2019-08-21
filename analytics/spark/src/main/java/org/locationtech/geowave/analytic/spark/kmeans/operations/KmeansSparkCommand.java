@@ -22,8 +22,8 @@ import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.jts.util.Stopwatch;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -31,7 +31,7 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "kmeansspark", parentOperation = AnalyticSection.class)
-@Parameters(commandDescription = "KMeans Clustering via Spark ML")
+@Parameters(commandDescription = "KMeans clustering using Spark ML")
 public class KmeansSparkCommand extends ServiceEnabledCommand<Void> implements Command {
   @Parameter(description = "<input storename> <output storename>")
   private List<String> parameters = new ArrayList<>();

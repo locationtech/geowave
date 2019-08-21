@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave gs listfl - List GeoServer feature layers
+geowave gs fl list - List GeoServer feature layers
 
 SYNOPSIS
 //:--------
 
-geowave gs listfl [options]
+geowave gs fl list [options]
 
 DESCRIPTION
 //:-----------

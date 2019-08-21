@@ -44,8 +44,8 @@ public class QuerySingleIndex implements IndexQueryOptions {
   }
 
   @Override
-  public boolean isAllIndicies() {
-    return indexName != null;
+  public boolean isAllIndices() {
+    return indexName == null || indexName.isEmpty();
   }
 
   @Override

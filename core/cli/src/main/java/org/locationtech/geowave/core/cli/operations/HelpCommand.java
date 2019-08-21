@@ -28,7 +28,7 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "help", parentOperation = GeowaveTopLevelSection.class)
-@Parameters(commandDescription = "Get descriptions of arguments for " + "any GeoWave command")
+@Parameters(commandDescription = "Get descriptions of arguments for any GeoWave command")
 public class HelpCommand extends DefaultOperation implements Command {
 
   @Override
@@ -113,7 +113,10 @@ public class HelpCommand extends DefaultOperation implements Command {
 
             // If not hidden, then output it.
             if ((p == null) || !p.hidden()) {
-              builder.append(String.format("    %s%n", childEntry.getOperationName()));
+              builder.append(
+                  String.format(
+                      "    %s%n",
+                      StringUtils.join(childEntry.getOperationNames(), ", ")));
               if (p != null) {
                 final String description = p.commandDescription();
                 builder.append(String.format("      %s%n", description));
@@ -142,7 +145,7 @@ public class HelpCommand extends DefaultOperation implements Command {
     return new Comparator<OperationEntry>() {
       @Override
       public int compare(final OperationEntry o1, final OperationEntry o2) {
-        return o1.getOperationName().compareTo(o2.getOperationName());
+        return o1.getOperationNames()[0].compareTo(o2.getOperationNames()[0]);
       }
     };
   }

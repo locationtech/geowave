@@ -10,6 +10,7 @@ env:
     # The rest skip the unit tests and run ITs only
     - NAME='Publish Maven Artifacts and Docs' MAVEN_PROFILES='""' BUILD_AND_PUBLISH=true   IT_ONLY=false
     - NAME='Unit Tests on Latest ASF Versions' MAVEN_PROFILES='""' BUILD_AND_PUBLISH=false   IT_ONLY=false
+    - NAME='Python Bindings Tests' MAVEN_PROFILES='""' BUILD_AND_PUBLISH=false IT_ONLY=false PYTHON_BUILD=true
     - NAME='Redis IT on Latest ASF Versions' MAVEN_PROFILES='redis-it' BUILD_AND_PUBLISH=false  IT_ONLY=true
     - NAME='RocksDB IT on Latest ASF Versions' MAVEN_PROFILES='rocksdb-it' BUILD_AND_PUBLISH=false  IT_ONLY=true
     - NAME='Accumulo Client IT on Latest ASF Versions' MAVEN_PROFILES='accumulo-it-client' BUILD_AND_PUBLISH=false  IT_ONLY=true
@@ -71,11 +72,12 @@ before_install:
   - chmod +x .utility/run-tests.sh
   - chmod +x .utility/build.sh
   - chmod +x .utility/publish.sh
+  - chmod +x .utility/coveralls.sh
   - chmod +x .utility/maven-coveralls-hack.sh
   - .utility/maven-coveralls-hack.sh
 after_success:
   - .utility/publish.sh
-  - cd test; mvn coveralls:report -P ${MAVEN_PROFILES}
+  - .utility/coveralls.sh
 notifications:
     urls:
       - https://webhooks.gitter.im/e/1dd2fadd07a92dcdc3d8

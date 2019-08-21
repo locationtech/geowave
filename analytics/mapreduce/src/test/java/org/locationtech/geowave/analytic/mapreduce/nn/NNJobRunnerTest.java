@@ -37,7 +37,7 @@ import org.locationtech.geowave.analytic.partitioner.OrthodromicDistancePartitio
 import org.locationtech.geowave.analytic.partitioner.Partitioner;
 import org.locationtech.geowave.analytic.store.PersistableStore;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.memory.MemoryRequiredOptions;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 

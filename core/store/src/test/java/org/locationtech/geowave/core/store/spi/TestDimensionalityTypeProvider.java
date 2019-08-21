@@ -9,14 +9,8 @@
 package org.locationtech.geowave.core.store.spi;
 
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 
 public class TestDimensionalityTypeProvider implements DimensionalityTypeProviderSpi {
-
-  @Override
-  public Class<? extends CommonIndexValue>[] getRequiredIndexTypes() {
-    return null;
-  }
 
   @Override
   public String getDimensionalityTypeName() {

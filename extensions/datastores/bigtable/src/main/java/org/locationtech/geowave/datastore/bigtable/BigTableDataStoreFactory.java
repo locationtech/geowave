@@ -17,7 +17,7 @@ import org.locationtech.geowave.core.store.metadata.AdapterStoreImpl;
 import org.locationtech.geowave.core.store.metadata.IndexStoreImpl;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import org.locationtech.geowave.datastore.bigtable.operations.BigTableOperations;
-import org.locationtech.geowave.datastore.bigtable.operations.config.BigTableOptions;
+import org.locationtech.geowave.datastore.bigtable.config.BigTableOptions;
 import org.locationtech.geowave.datastore.hbase.HBaseDataStore;
 import org.locationtech.geowave.datastore.hbase.config.HBaseOptions;
 

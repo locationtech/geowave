@@ -8,15 +8,10 @@
  */
 package org.locationtech.geowave.core.store.operations.remote.options;
 
-import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions.PartitionStrategy;
+import org.locationtech.geowave.core.store.index.IndexPluginOptions.PartitionStrategy;
 import com.beust.jcommander.Parameter;
 
 public class BasicIndexOptions {
-
-  @Parameter(
-      names = {"--indexName"},
-      description = "A custom name can be given to this index. Default name will be the based on configuration parameters.")
-  protected String nameOverride = null;
 
   @Parameter(
       names = {"-np", "--numPartitions"},
@@ -27,14 +22,6 @@ public class BasicIndexOptions {
       names = {"-ps", "--partitionStrategy"},
       description = "The partition strategy to use.  Default will be none.")
   protected PartitionStrategy partitionStrategy = PartitionStrategy.NONE;
-
-  public String getNameOverride() {
-    return nameOverride;
-  }
-
-  public void setNameOverride(final String nameOverride) {
-    this.nameOverride = nameOverride;
-  }
 
   public int getNumPartitions() {
     return numPartitions;

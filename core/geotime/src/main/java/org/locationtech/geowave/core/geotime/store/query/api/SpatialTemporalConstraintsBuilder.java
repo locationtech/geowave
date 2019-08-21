@@ -60,8 +60,8 @@ public interface SpatialTemporalConstraintsBuilder {
   /**
    * add a time range
    *
-   * @param startTime the start of the range
-   * @param endTime the end of the range
+   * @param startTime the start of the range (inclusive)
+   * @param endTime the end of the range (exclusive)
    * @return this builder
    */
   SpatialTemporalConstraintsBuilder addTimeRange(Date startTime, Date endTime);

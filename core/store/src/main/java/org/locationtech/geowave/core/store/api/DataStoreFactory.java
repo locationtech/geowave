@@ -9,7 +9,7 @@
 package org.locationtech.geowave.core.store.api;
 
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 
 /**
  * This is a very simple way to create a data store given an instance of that particular data

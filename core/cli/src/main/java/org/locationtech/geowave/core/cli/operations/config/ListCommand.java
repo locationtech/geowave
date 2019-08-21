@@ -25,7 +25,7 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "list", parentOperation = ConfigSection.class)
-@Parameters(commandDescription = "List property name within cache")
+@Parameters(commandDescription = "List GeoWave configuration properties")
 public class ListCommand extends ServiceEnabledCommand<SortedMap<String, Object>> {
 
   @Parameter(names = {"-f", "--filter"})

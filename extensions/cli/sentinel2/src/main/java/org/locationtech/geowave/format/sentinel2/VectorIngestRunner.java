@@ -9,7 +9,6 @@
 package org.locationtech.geowave.format.sentinel2;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
@@ -18,10 +17,9 @@ import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexLoader;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.StoreLoader;
+import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
@@ -50,7 +48,7 @@ public class VectorIngestRunner extends AnalyzeRunner {
       // Ensure we have all the required arguments
       if (parameters.size() != 2) {
         throw new ParameterException(
-            "Requires arguments: <storename> <comma delimited index/group list>");
+            "Requires arguments: <store name> <comma delimited index list>");
       }
 
       final String providerName = sentinel2Options.providerName();
@@ -76,22 +74,9 @@ public class VectorIngestRunner extends AnalyzeRunner {
       final DataStore store = storeOptions.createDataStore();
 
       // Load the Indices
-      final IndexLoader indexLoader = new IndexLoader(indexList);
-      if (!indexLoader.loadFromConfig(configFile)) {
-        throw new ParameterException("Cannot find index(s) by name: " + indexList);
-      }
-
-      final List<IndexPluginOptions> indexOptions = indexLoader.getLoadedIndexes();
-      final Index[] indices = new Index[indexOptions.size()];
-      int i = 0;
-      for (final IndexPluginOptions dimensionType : indexOptions) {
-        final Index primaryIndex = dimensionType.createIndex();
-        if (primaryIndex == null) {
-          LOGGER.error("Could not get index instance, getIndex() returned null;");
-          throw new IOException("Could not get index instance, getIndex() returned null");
-        }
-        indices[i++] = primaryIndex;
-      }
+      final Index[] indices =
+          DataStoreUtils.loadIndices(storeOptions.createIndexStore(), indexList).toArray(
+              new Index[0]);
 
       sceneType = provider.sceneFeatureTypeBuilder().buildFeatureType();
       final FeatureDataAdapter sceneAdapter = new FeatureDataAdapter(sceneType);

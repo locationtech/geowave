@@ -20,6 +20,7 @@ import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.dimension.AbstractNumericDimensionField;
+import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.opengis.feature.type.AttributeDescriptor;
 
 public class FeatureAttributeDimensionField extends
@@ -72,6 +73,11 @@ public class FeatureAttributeDimensionField extends
   @Override
   public FieldReader<FeatureAttributeCommonIndexValue> getReader() {
     return reader;
+  }
+
+  @Override
+  public boolean isCompatibleWith(Class<? extends CommonIndexValue> clazz) {
+    return FeatureAttributeCommonIndexValue.class.isAssignableFrom(clazz);
   }
 
   @Override

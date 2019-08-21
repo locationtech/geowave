@@ -18,8 +18,8 @@ import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -27,7 +27,7 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "mrexport", parentOperation = VectorSection.class)
-@Parameters(commandDescription = "Export data using map-reduce")
+@Parameters(commandDescription = "Export data using MapReduce")
 public class VectorMRExportCommand extends DefaultOperation implements Command {
 
   @Parameter(description = "<path to base directory to write to> <store name>")

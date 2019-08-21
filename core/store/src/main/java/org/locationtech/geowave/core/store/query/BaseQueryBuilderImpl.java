@@ -28,7 +28,7 @@ public abstract class BaseQueryBuilderImpl<T, Q extends BaseQuery<T, ?>, R exten
   protected QueryConstraints constraints = new EverythingQuery();
 
   @Override
-  public R allIndicies() {
+  public R allIndices() {
     this.indexName = null;
     return (R) this;
   }

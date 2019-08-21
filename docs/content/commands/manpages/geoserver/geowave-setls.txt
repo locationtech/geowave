@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave gs setls - Set GeoServer Layer Style
+geowave gs style set - Set GeoServer Layer Style
 
 SYNOPSIS
 //:--------
 
-geowave gs setls [options] <layer name>
+geowave gs style set [options] <layer name>
 
 DESCRIPTION
 //:-----------

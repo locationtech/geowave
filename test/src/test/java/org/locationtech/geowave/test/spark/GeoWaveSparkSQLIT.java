@@ -23,7 +23,7 @@ import org.locationtech.geowave.analytic.spark.GeoWaveRDDLoader;
 import org.locationtech.geowave.analytic.spark.RDDOptions;
 import org.locationtech.geowave.analytic.spark.sparksql.SqlQueryRunner;
 import org.locationtech.geowave.analytic.spark.sparksql.SqlResultsWriter;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;

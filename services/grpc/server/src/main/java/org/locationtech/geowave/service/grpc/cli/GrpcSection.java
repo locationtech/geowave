@@ -10,10 +10,10 @@ package org.locationtech.geowave.service.grpc.cli;
 
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
-import org.locationtech.geowave.core.cli.operations.GeowaveTopLevelSection;
+import org.locationtech.geowave.core.cli.operations.util.UtilSection;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "grpc", parentOperation = GeowaveTopLevelSection.class)
+@GeowaveOperation(name = "grpc", parentOperation = UtilSection.class)
 @Parameters(commandDescription = "Commands to start/stop/restart gRPC services")
 public class GrpcSection extends DefaultOperation {
 }

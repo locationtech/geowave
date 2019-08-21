@@ -23,10 +23,12 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.adapter.raster.util.ZipUtils;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.service.client.BaseServiceClient;
 import org.locationtech.geowave.service.client.ConfigServiceClient;
+import org.locationtech.geowave.service.client.IndexServiceClient;
 import org.locationtech.geowave.service.client.IngestServiceClient;
+import org.locationtech.geowave.service.client.StoreServiceClient;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.ZookeeperTestEnvironment;
@@ -49,10 +51,12 @@ public class IngestIT extends BaseServiceIT {
 
   private static IngestServiceClient ingestServiceClient;
   private static ConfigServiceClient configServiceClient;
+  private static StoreServiceClient storeServiceClient;
+  private static IndexServiceClient indexServiceClient;
   private static BaseServiceClient baseServiceClient;
 
   private final String storeName = "existent-store";
-  private final String spatialIndex = "spatial-index";
+  private final String spatialIndex = "spatialIndex";
   private static JSONParser parser;
 
   private static final String testName = "IngestIT";
@@ -76,6 +80,8 @@ public class IngestIT extends BaseServiceIT {
     startMillis = System.currentTimeMillis();
     TestUtils.printStartOfTest(LOGGER, testName);
     configServiceClient = new ConfigServiceClient(ServicesTestEnvironment.GEOWAVE_BASE_URL);
+    storeServiceClient = new StoreServiceClient(ServicesTestEnvironment.GEOWAVE_BASE_URL);
+    indexServiceClient = new IndexServiceClient(ServicesTestEnvironment.GEOWAVE_BASE_URL);
     ingestServiceClient = new IngestServiceClient(ServicesTestEnvironment.GEOWAVE_BASE_URL);
     baseServiceClient = new BaseServiceClient(ServicesTestEnvironment.GEOWAVE_BASE_URL);
     parser = new JSONParser();
@@ -102,19 +108,19 @@ public class IngestIT extends BaseServiceIT {
 
   @Before
   public void initialize() {
-    configServiceClient.addStoreReRoute(
+    storeServiceClient.addStoreReRoute(
         storeName,
         dataStoreOptions.getType(),
         null,
         dataStoreOptions.getOptionsAsMap());
-    configServiceClient.addSpatialIndex(spatialIndex);
+    indexServiceClient.addSpatialIndex(storeName, spatialIndex);
     configServiceClient.configHDFS(MapReduceTestEnvironment.getInstance().getHdfs());
   }
 
   @After
   public void cleanupWorkspace() {
-    configServiceClient.removeStore(storeName);
-    configServiceClient.removeIndex(spatialIndex);
+    indexServiceClient.removeIndex(storeName, spatialIndex);
+    storeServiceClient.removeStore(storeName);
   }
 
   public static void assertFinalIngestStatus(

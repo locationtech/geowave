@@ -10,7 +10,7 @@ geowave ingest sparkToGW - Ingest supported files that already exist in HDFS or 
 SYNOPSIS
 //:--------
 
-geowave ingest sparkToGW [options] <input directory> <store name> <comma delimited index/group list>
+geowave ingest sparkToGW [options] <input directory> <store name> <comma delimited index list>
 
 DESCRIPTION
 //:-----------

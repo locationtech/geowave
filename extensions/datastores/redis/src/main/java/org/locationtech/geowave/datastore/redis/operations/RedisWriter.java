@@ -96,6 +96,7 @@ public class RedisWriter implements RowWriter {
   @Override
   public void close() throws Exception {
     for (final RedisScoredSetWrapper<GeoWaveRedisPersistedRow> set : setCache.asMap().values()) {
+      set.flush();
       set.close();
     }
   }

@@ -186,6 +186,11 @@
 					<artifactId>geowave-grpc-server</artifactId>
 					<version>${project.version}</version>
 				</dependency>
+				<dependency>
+					<groupId>org.locationtech.geowave</groupId>
+					<artifactId>geowave-python</artifactId>
+					<version>${project.version}</version>
+				</dependency>
 			</dependencies>
 			<build>
 				<plugins>

@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave gs addws - Add GeoServer workspace
+geowave gs ws add - Add GeoServer workspace
 
 SYNOPSIS
 //:--------
 
-geowave gs addws [options] <workspace name>
+geowave gs ws add [options] <workspace name>
 
 DESCRIPTION
 //:-----------

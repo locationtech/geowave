@@ -11,9 +11,9 @@ package org.locationtech.geowave.core.ingest.hdfs.mapreduce;
 import java.util.List;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.Job;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.cli.VisibilityOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.util.GenericTypeResolver;
 
 /**
@@ -24,20 +24,13 @@ public class IngestWithReducerJobRunner extends
     AbstractMapReduceIngest<IngestWithReducer<?, ?, ?, ?>> {
   public IngestWithReducerJobRunner(
       final DataStorePluginOptions storeOptions,
-      final List<IndexPluginOptions> indexOptions,
+      final List<Index> indices,
       final VisibilityOptions ingestOptions,
       final Path inputFile,
       final String typeName,
       final IngestFromHdfsPlugin parentPlugin,
       final IngestWithReducer ingestPlugin) {
-    super(
-        storeOptions,
-        indexOptions,
-        ingestOptions,
-        inputFile,
-        typeName,
-        parentPlugin,
-        ingestPlugin);
+    super(storeOptions, indices, ingestOptions, inputFile, typeName, parentPlugin, ingestPlugin);
   }
 
   @Override

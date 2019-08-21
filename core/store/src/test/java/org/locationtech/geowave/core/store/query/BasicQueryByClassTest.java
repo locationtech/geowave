@@ -412,6 +412,11 @@ public class BasicQueryByClassTest {
     public NumericDimensionDefinition getBaseDefinition() {
       return this;
     }
+
+    @Override
+    public boolean isCompatibleWith(Class<? extends CommonIndexValue> clazz) {
+      return ConstrainedIndexValue.class.isAssignableFrom(clazz);
+    }
   }
 
   public static class ExampleDimensionTwo extends ExampleDimensionOne {

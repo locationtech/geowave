@@ -1,7 +1,7 @@
 
 # GeoWave's Sentinel2 Commandline Utility
 
-This module complements GeoWave commandline tools with direct access to Sentinel2 public imagery.  To use, ensure the module is on the classpath for your geowave commandline tools and then you should have `geowave sentinel2` options available to you.  `analyze` and `download` are completely separate from storage within GeoWave. The ingest routines wrap download with the additional step of ingesting into GeoWave.  If you want to ingest data that you have already downloaded just use `--retainimages`.  `ingestraster` and `ingestvector` are fairly self-explanatory and `ingest` just wraps both in a single command so for all of the scenes and bands you have ingested into your grid coverage (raster) layer, you will have the vector layers of `scenes` and `bands` with associated metadata. 
+This module complements GeoWave commandline tools with direct access to Sentinel2 public imagery.  To use, ensure the module is on the classpath for your geowave commandline tools and then you should have `geowave util sentinel2` options available to you.  `analyze` and `download` are completely separate from storage within GeoWave. The ingest routines wrap download with the additional step of ingesting into GeoWave.  If you want to ingest data that you have already downloaded just use `--retainimages`.  `ingestraster` and `ingestvector` are fairly self-explanatory and `ingest` just wraps both in a single command so for all of the scenes and bands you have ingested into your grid coverage (raster) layer, you will have the vector layers of `scenes` and `bands` with associated metadata. 
 For all of the commands, the scenes and bands can be filtered using a CQL expression.  The list of the scene attributes that the CQL expression can be applied towards is this: shape (Geometry), location (String), provider (String), productIdentifier (String), productType (String), collection (String), platform (String), processingLevel (String), startDate (Date), quicklook (String), thumbnail (String), bands (String), resolution (int), cloudCover (int), snowCover (int), waterCover (int), orbitNumber (int), relativeOrbitNumber (int) and the feature ID is entityId for the scene.  Additionally attributes of the individual bands can be used such as band (String).  Using SPI (with a class matching the `Sentinel2BandConverterSpi` interface provided on the classpath), a developer can even provide the raster ingest utility with a converter which will run through custom conversion code prior to GeoWave ingest to massage the data in any way.
 
 ### Warning:
@@ -21,7 +21,7 @@ sentinel2 ingest --provider "THEIA" --startDate "2018-01-28" --endDate "2018-01-
 The following is the commandline usage help listing the set of available commands and options:
 
 ```
-Usage: geowave sentinel2 [options]
+Usage: geowave util sentinel2 [options]
   Commands:
 	providers
 	  Show info of supported Sentinel2 providers
@@ -43,7 +43,7 @@ Usage: geowave sentinel2 [options]
 ```
 
 ```
-Usage: geowave sentinel2 analyze [options]
+Usage: geowave util sentinel2 analyze [options]
   Options:
     --provider
        Name of Sentinel2 provider from which to ingest the imagery. 
@@ -92,7 +92,7 @@ Usage: geowave sentinel2 analyze [options]
 ```
 
 ```
-Usage: geowave sentinel2 ingestraster [options] <storename> <comma delimited index/group list>
+Usage: geowave util sentinel2 ingestraster [options] <store name> <comma delimited index list>
   Options:
     --provider
        Name of Sentinel2 provider from which to ingest the imagery. 
@@ -189,7 +189,7 @@ Usage: geowave sentinel2 ingestraster [options] <storename> <comma delimited ind
 ```
 
 ```
-Usage: geowave sentinel2 ingestvector [options] <storename> <comma delimited index/group list>
+Usage: geowave util sentinel2 ingestvector [options] <store name> <comma delimited index list>
   Options:
     --provider
        Name of Sentinel2 provider from which to ingest the imagery. 
@@ -238,7 +238,7 @@ Usage: geowave sentinel2 ingestvector [options] <storename> <comma delimited ind
 ```
 
 ```
-Usage: geowave sentinel2 ingest [options] <rasterstorename> <vectorstorename> <comma delimited index/group list>
+Usage: geowave util sentinel2 ingest [options] <rasterstorename> <vectorstorename> <comma delimited index list>
   Options:
     --provider
        Name of Sentinel2 provider from which to ingest the imagery. 

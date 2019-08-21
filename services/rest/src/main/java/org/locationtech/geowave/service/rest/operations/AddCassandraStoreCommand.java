@@ -12,20 +12,18 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.cli.exceptions.DuplicateEntryException;
-import org.locationtech.geowave.core.cli.operations.config.ConfigSection;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.StoreSection;
 import org.locationtech.geowave.datastore.cassandra.config.CassandraRequiredOptions;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
-@GeowaveOperation(name = "addstore/cassandra", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Create a store within Geowave")
 public class AddCassandraStoreCommand extends ServiceEnabledCommand<String> {
   /** A REST Operation for the AddStoreCommand where --type=cassandra */
@@ -101,12 +99,12 @@ public class AddCassandraStoreCommand extends ServiceEnabledCommand<String> {
 
   @Override
   public String getId() {
-    return ConfigSection.class.getName() + ".addstore/cassandra";
+    return StoreSection.class.getName() + ".add/cassandra";
   }
 
   @Override
   public String getPath() {
-    return "v0/config/addstore/cassandra";
+    return "v0/store/add/cassandra";
   }
 
   public DataStorePluginOptions getPluginOptions() {

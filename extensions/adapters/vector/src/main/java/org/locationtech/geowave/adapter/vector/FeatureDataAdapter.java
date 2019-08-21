@@ -445,6 +445,7 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature> imple
    *
    * @param namespaceURI - new namespace URI
    */
+  @Override
   public void setNamespace(final String namespaceURI) {
     final SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
     builder.init(reprojectedFeatureType);

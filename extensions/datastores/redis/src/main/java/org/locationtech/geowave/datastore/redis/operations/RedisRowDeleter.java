@@ -86,6 +86,7 @@ public class RedisRowDeleter implements RowDeleter {
                   row.getDataId(),
                   v)));
     }
+    set.flush();
   }
 
   @Override

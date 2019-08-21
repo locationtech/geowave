@@ -13,6 +13,7 @@ import org.locationtech.geowave.core.store.StoreFactoryHelper;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
+import org.locationtech.geowave.datastore.dynamodb.config.DynamoDBOptions;
 import org.locationtech.geowave.datastore.dynamodb.operations.DynamoDBOperations;
 
 public class DynamoDBDataStoreFactory extends BaseDataStoreFactory {

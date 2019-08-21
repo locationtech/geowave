@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave gs liststyles - List GeoServer styles
+geowave gs style list - List GeoServer styles
 
 SYNOPSIS
 //:--------
 
-geowave gs liststyles [options]
+geowave gs style list [options]
 
 DESCRIPTION
 //:-----------

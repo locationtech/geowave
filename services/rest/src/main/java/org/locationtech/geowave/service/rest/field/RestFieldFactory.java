@@ -232,13 +232,19 @@ public class RestFieldFactory {
   public static String toURLFriendlyString(final String str) {
     boolean needToChange = false;
     final StringBuffer out = new StringBuffer(str.length());
+    boolean capsNext = false;
     for (int i = 0; i < str.length(); i++) {
       final int c = str.charAt(i);
       if (UNESCAPED_CHARS.get(c)) {
-        out.append((char) c);
+        if (capsNext) {
+          out.append(Character.toUpperCase((char) c));
+          capsNext = false;
+        } else {
+          out.append((char) c);
+        }
       } else {
         needToChange = true;
-        out.append('_');
+        capsNext = true;
       }
     }
     return (needToChange ? out.toString() : str);

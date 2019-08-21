@@ -21,9 +21,9 @@ import it.geosolutions.jaiext.JAIExt;
 
 @GeowaveOperation(name = "ingestraster", parentOperation = Sentinel2Section.class)
 @Parameters(
-    commandDescription = "Ingest routine for locally downloading Sentinel2 imagery and ingesting it into GeoWave.")
+    commandDescription = "Ingest routine for locally downloading Sentinel2 imagery and ingesting it into GeoWave")
 public class Sentinel2IngestRasterCommand extends DefaultOperation implements Command {
-  @Parameter(description = "<storename> <comma delimited index/group list>")
+  @Parameter(description = "<store name> <comma delimited index list>")
   private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate

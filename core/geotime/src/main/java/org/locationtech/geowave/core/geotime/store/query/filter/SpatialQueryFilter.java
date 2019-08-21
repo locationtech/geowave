@@ -195,7 +195,9 @@ public class SpatialQueryFilter extends BasicQueryFilter {
         nonSpatialCompareOp);
     preparedGeometryImage = new GeometryImage(FACTORY.create(queryGeometry));
     geometryFieldNames = strippedGeometry.geometryFieldNames;
-    compareOperation = compareOp;
+    if (compareOp != null) {
+      compareOperation = compareOp;
+    }
   }
 
   private static class StrippedGeometry {

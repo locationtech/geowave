@@ -35,6 +35,8 @@ import org.geotools.referencing.GeodeticCalculator;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
+import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSBoundedSpatialDimensionX;
+import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSBoundedSpatialDimensionY;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSUnboundedSpatialDimensionX;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSUnboundedSpatialDimensionY;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
@@ -233,6 +235,8 @@ public class GeometryUtils {
     final ConstraintData yRange = new ConstraintData(rangeLatitude, false);
     constraintsPerDimension.put(CustomCRSUnboundedSpatialDimensionX.class, xRange);
     constraintsPerDimension.put(CustomCRSUnboundedSpatialDimensionY.class, yRange);
+    constraintsPerDimension.put(CustomCRSBoundedSpatialDimensionX.class, xRange);
+    constraintsPerDimension.put(CustomCRSBoundedSpatialDimensionY.class, yRange);
     constraintsPerDimension.put(LongitudeDefinition.class, xRange);
     constraintsPerDimension.put(LatitudeDefinition.class, yRange);
 

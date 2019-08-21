@@ -12,7 +12,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.locationtech.geowave.analytic.PropertyManagement;
 import org.locationtech.geowave.analytic.store.PersistableStore;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -75,6 +75,10 @@ public class KDECommandLineOptions {
     return indexName;
   }
 
+  public void setIndexName(final String inputIndex) {
+    this.indexName = inputIndex;
+  }
+
   public String getFeatureType() {
     return featureType;
   }
@@ -117,10 +121,6 @@ public class KDECommandLineOptions {
 
   public void setFeatureType(final String featureType) {
     this.featureType = featureType;
-  }
-
-  public void setIndexId(final String indexId) {
-    indexName = indexId;
   }
 
   public void setMinLevel(final Integer minLevel) {

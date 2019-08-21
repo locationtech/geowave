@@ -25,7 +25,7 @@ public class BooleanSerializationProvider implements FieldSerializationProviderS
     return new BooleanWriter();
   }
 
-  private static class BooleanReader implements FieldReader<Boolean> {
+  protected static class BooleanReader implements FieldReader<Boolean> {
     @SuppressFBWarnings(
         value = {"NP_BOOLEAN_RETURN_NULL"},
         justification = "matches pattern of other read* methods")
@@ -38,7 +38,7 @@ public class BooleanSerializationProvider implements FieldSerializationProviderS
     }
   }
 
-  private static class BooleanWriter implements FieldWriter<Object, Boolean> {
+  protected static class BooleanWriter implements FieldWriter<Object, Boolean> {
     @Override
     public byte[] writeField(final Boolean fieldValue) {
       return new byte[] {((fieldValue == null) || !fieldValue) ? (byte) 0 : (byte) 1};

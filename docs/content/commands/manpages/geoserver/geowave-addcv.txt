@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave gs addcv - Add a GeoServer coverage
+geowave gs cv add - Add a GeoServer coverage
 
 SYNOPSIS
 //:--------
 
-geowave gs addcv [options] <coverage name>
+geowave gs cv add [options] <coverage name>
 
 DESCRIPTION
 //:-----------

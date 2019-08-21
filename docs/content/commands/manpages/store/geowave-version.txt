@@ -1,0 +1,23 @@
+//:geowave-version(1)
+//:================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave store version - Get the version of GeoWave used by a data store
+
+SYNOPSIS
+//:--------
+
+geowave store version [options] <store name>
+
+DESCRIPTION
+//:-----------
+
+This command will return the version of GeoWave used by a data store.
+
+OPTIONS
+//:-------
+
+There are currently no options for this command

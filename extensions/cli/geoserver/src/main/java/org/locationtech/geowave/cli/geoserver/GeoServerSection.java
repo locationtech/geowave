@@ -13,7 +13,7 @@ import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.operations.GeowaveTopLevelSection;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "gs", parentOperation = GeowaveTopLevelSection.class)
+@GeowaveOperation(name = {"gs", "geoserver"}, parentOperation = GeowaveTopLevelSection.class)
 @Parameters(commandDescription = "Commands that manage geoserver data stores and layers")
 public class GeoServerSection extends DefaultOperation {
 }

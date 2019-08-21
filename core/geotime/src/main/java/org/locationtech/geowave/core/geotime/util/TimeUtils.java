@@ -58,12 +58,18 @@ public class TimeUtils {
     return time;
   }
 
+  /**
+   * @param startTimeMillis start time (inclusive)
+   * @param endTimeMillis end time (exclusive)
+   * @param singleTimeField
+   * @return
+   */
   public static Filter toDuringFilter(
       final long startTimeMillis,
       final long endTimeMillis,
       final String singleTimeField) {
     final FilterFactory2 factory = CommonFactoryFinder.getFilterFactory2();
-    final Position ip1 = new DefaultPosition(new Date(startTimeMillis));
+    final Position ip1 = new DefaultPosition(new Date(startTimeMillis - 1));
     final Position ip2 = new DefaultPosition(new Date(endTimeMillis));
     final Period period = new DefaultPeriod(new DefaultInstant(ip1), new DefaultInstant(ip2));
     return factory.during(factory.property(singleTimeField), factory.literal(period));

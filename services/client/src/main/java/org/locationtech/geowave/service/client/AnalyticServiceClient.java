@@ -30,7 +30,7 @@ public class AnalyticServiceClient {
   }
 
   public Response dbScan(
-      final String storename,
+      final String storeName,
       final String mapReduceHdfsBaseDir,
       final String extractMaxInputSplit,
       final String extractMinInputSplit,
@@ -71,7 +71,7 @@ public class AnalyticServiceClient {
 
     final Response resp =
         analyticService.dbScan(
-            storename,
+            storeName,
             mapReduceHdfsBaseDir,
             extractMaxInputSplit,
             extractMinInputSplit,
@@ -113,7 +113,7 @@ public class AnalyticServiceClient {
   }
 
   public Response dbScan(
-      final String storename,
+      final String storeName,
       final String mapReduceHdfsBaseDir,
       final String extractMaxInputSplit,
       final String extractMinInputSplit,
@@ -125,7 +125,7 @@ public class AnalyticServiceClient {
       final String partitionMaxDistance) {
 
     return dbScan(
-        storename,
+        storeName,
         mapReduceHdfsBaseDir,
         extractMaxInputSplit,
         extractMinInputSplit,
@@ -162,8 +162,8 @@ public class AnalyticServiceClient {
   }
 
   public Response kde(
-      final String input_storename,
-      final String output_storename,
+      final String inputStoreName,
+      final String outputStoreName,
       final String featuretype,
       final Integer minLevel,
       final Integer maxLevel,
@@ -178,8 +178,8 @@ public class AnalyticServiceClient {
 
     final Response resp =
         analyticService.kde(
-            input_storename,
-            output_storename,
+            inputStoreName,
+            outputStoreName,
             featuretype,
             minLevel,
             maxLevel,
@@ -195,8 +195,8 @@ public class AnalyticServiceClient {
   }
 
   public Response kde(
-      final String input_storename,
-      final String output_storename,
+      final String inputStoreName,
+      final String outputStoreName,
       final String featuretype,
       final Integer minLevel,
       final Integer maxLevel,
@@ -204,8 +204,8 @@ public class AnalyticServiceClient {
       final String jobTrackerOrResourceManHostPort) {
 
     return kde(
-        input_storename,
-        output_storename,
+        inputStoreName,
+        outputStoreName,
         featuretype,
         minLevel,
         maxLevel,
@@ -220,8 +220,8 @@ public class AnalyticServiceClient {
   }
 
   public Response kmeansSpark(
-      final String input_storename,
-      final String output_storename,
+      final String inputStoreName,
+      final String outputStoreName,
       final String appName,
       final String host,
       final String master,
@@ -240,8 +240,8 @@ public class AnalyticServiceClient {
 
     final Response resp =
         analyticService.kmeansSpark(
-            input_storename,
-            output_storename,
+            inputStoreName,
+            outputStoreName,
             appName,
             host,
             master,
@@ -260,11 +260,11 @@ public class AnalyticServiceClient {
     return resp;
   }
 
-  public Response kmeansSpark(final String input_storename, final String output_storename) {
+  public Response kmeansSpark(final String inputStoreName, final String outputStoreName) {
 
     return kmeansSpark(
-        input_storename,
-        output_storename,
+        inputStoreName,
+        outputStoreName,
         null,
         null,
         null,
@@ -283,7 +283,7 @@ public class AnalyticServiceClient {
   }
 
   public Response nearestNeighbor(
-      final String storename,
+      final String storeName,
       final String mapReduceHdfsBaseDir,
       final String extractMaxInputSplit,
       final String extractMinInputSplit,
@@ -313,7 +313,7 @@ public class AnalyticServiceClient {
 
     final Response resp =
         analyticService.nearestNeighbor(
-            storename,
+            storeName,
             mapReduceHdfsBaseDir,
             extractMaxInputSplit,
             extractMinInputSplit,
@@ -344,7 +344,7 @@ public class AnalyticServiceClient {
   }
 
   public Response nearestNeighbor(
-      final String storename,
+      final String storeName,
       final String mapReduceHdfsBaseDir,
       final String extractMaxInputSplit,
       final String extractMinInputSplit,
@@ -354,7 +354,7 @@ public class AnalyticServiceClient {
       final String outputHdfsOutputPath,
       final String partitionMaxDistance) {
     return nearestNeighbor(
-        storename,
+        storeName,
         mapReduceHdfsBaseDir,
         extractMaxInputSplit,
         extractMinInputSplit,

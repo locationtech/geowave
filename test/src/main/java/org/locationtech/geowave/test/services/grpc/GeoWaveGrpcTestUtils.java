@@ -16,7 +16,7 @@ import org.locationtech.jts.io.WKTReader;
 
 public class GeoWaveGrpcTestUtils {
   public static final String typeName = "TestGeometry";
-  public static final String indexName = "grpc-spatial";
+  public static final String indexName = "grpcspatial";
   public static final String storeName = "grpc";
   public static final String outputStoreName = "grpc-output";
   public static final String cqlSpatialQuery = "BBOX(geometry,0.0,0.0, 25.0, 25.0)";

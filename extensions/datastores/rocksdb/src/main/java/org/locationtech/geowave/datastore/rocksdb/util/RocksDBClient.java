@@ -295,7 +295,7 @@ public class RocksDBClient implements Closeable {
     final String prefix = RocksDBUtils.getTablePrefix(typeName, indexName);
     for (final Entry<String, CacheKey> e : keyCache.asMap().entrySet()) {
       final String key = e.getKey();
-      if (key.substring(subDirectory.length()).startsWith(prefix)) {
+      if (key.substring(subDirectory.length() + 1).startsWith(prefix)) {
         keyCache.invalidate(key);
         AbstractRocksDBTable indexTable = indexTableCache.getIfPresent(e.getValue());
         if (indexTable == null) {
@@ -303,6 +303,7 @@ public class RocksDBClient implements Closeable {
         }
         if (indexTable != null) {
           indexTableCache.invalidate(e.getValue());
+          dataIndexTableCache.invalidate(e.getValue());
           indexTable.close();
         }
       }

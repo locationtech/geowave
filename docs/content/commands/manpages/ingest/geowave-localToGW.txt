@@ -10,7 +10,7 @@ geowave ingest localToGW - Ingest supported files in local file system directly,
 SYNOPSIS
 //:--------
 
-geowave ingest localToGW [options] <file or directory> <storename> <comma delimited index/group list>
+geowave ingest localToGW [options] <file or directory> <storename> <comma delimited index list>
 
 DESCRIPTION
 //:-----------

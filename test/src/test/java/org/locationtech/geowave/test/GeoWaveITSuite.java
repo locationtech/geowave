@@ -39,8 +39,10 @@ import org.locationtech.geowave.test.services.ConfigServicesIT;
 import org.locationtech.geowave.test.services.FileUploadIT;
 import org.locationtech.geowave.test.services.GeoServerIT;
 import org.locationtech.geowave.test.services.GeoServerIngestIT;
+import org.locationtech.geowave.test.services.IndexServicesIT;
 import org.locationtech.geowave.test.services.IngestIT;
-import org.locationtech.geowave.test.services.RemoteIT;
+import org.locationtech.geowave.test.services.StatServicesIT;
+import org.locationtech.geowave.test.services.StoreServicesIT;
 import org.locationtech.geowave.test.services.grpc.GeoWaveGrpcIT;
 import org.locationtech.geowave.test.spark.GeoWaveBasicSparkIT;
 import org.locationtech.geowave.test.spark.GeoWaveSparkKMeansIT;
@@ -89,7 +91,9 @@ import org.locationtech.geowave.test.stability.GeoWaveStabilityIT;
     CustomCRSKDERasterResizeIT.class,
     GeoWaveGrpcIT.class,
     ConfigServicesIT.class,
-    RemoteIT.class,
+    StoreServicesIT.class,
+    IndexServicesIT.class,
+    StatServicesIT.class,
     IngestIT.class,
     FileUploadIT.class,
     SplitsProviderIT.class})

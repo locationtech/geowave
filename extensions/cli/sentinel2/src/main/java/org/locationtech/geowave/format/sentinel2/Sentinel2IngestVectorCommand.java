@@ -20,9 +20,9 @@ import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "ingestvector", parentOperation = Sentinel2Section.class)
 @Parameters(
-    commandDescription = "Ingest routine for searching Sentinel2 scenes that match certain criteria and ingesting the scene and band metadata into GeoWave's vector store.")
+    commandDescription = "Ingest routine for searching Sentinel2 scenes that match certain criteria and ingesting the scene and band metadata into GeoWave's vector store")
 public class Sentinel2IngestVectorCommand extends DefaultOperation implements Command {
-  @Parameter(description = "<storename> <comma delimited index/group list>")
+  @Parameter(description = "<store name> <comma delimited index list>")
   private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate

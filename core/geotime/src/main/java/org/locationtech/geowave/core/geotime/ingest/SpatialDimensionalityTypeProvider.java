@@ -14,6 +14,8 @@ import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSBoundedSpatialDimension;
+import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSBoundedSpatialDimensionX;
+import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSBoundedSpatialDimensionY;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSSpatialField;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSUnboundedSpatialDimension;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSUnboundedSpatialDimensionX;
@@ -29,11 +31,11 @@ import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.SFCFactory.SFCType;
 import org.locationtech.geowave.core.index.sfc.xz.XZHierarchicalIndexFactory;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions.BaseIndexBuilder;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.BasicIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.CustomNameIndex;
+import org.locationtech.geowave.core.store.index.BaseIndexBuilder;
 import org.locationtech.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -150,15 +152,26 @@ public class SpatialDimensionalityTypeProvider implements
         for (int d = 0; d < dimensions.length; d++) {
           final CoordinateSystemAxis csa = cs.getAxis(d);
           if (!isUnbounded(csa)) {
-            dimensions[d] =
-                new CustomCRSBoundedSpatialDimension(
-                    (byte) d,
-                    csa.getMinimumValue(),
-                    csa.getMaximumValue());
-            fields[d] =
-                new CustomCRSSpatialField(
-                    (CustomCRSBoundedSpatialDimension) dimensions[d],
-                    geometryPrecision);
+            if (d == 0) {
+              dimensions[d] =
+                  new CustomCRSBoundedSpatialDimensionX(
+                      csa.getMinimumValue(),
+                      csa.getMaximumValue());
+              fields[d] =
+                  new CustomCRSSpatialField(
+                      (CustomCRSBoundedSpatialDimensionX) dimensions[d],
+                      geometryPrecision);
+            }
+            if (d == 1) {
+              dimensions[d] =
+                  new CustomCRSBoundedSpatialDimensionY(
+                      csa.getMinimumValue(),
+                      csa.getMaximumValue());
+              fields[d] =
+                  new CustomCRSSpatialField(
+                      (CustomCRSBoundedSpatialDimensionY) dimensions[d],
+                      geometryPrecision);
+            }
           } else {
             if (d == 0) {
               dimensions[d] =
@@ -234,11 +247,6 @@ public class SpatialDimensionalityTypeProvider implements
     return crs;
   }
 
-  @Override
-  public Class<? extends CommonIndexValue>[] getRequiredIndexTypes() {
-    return new Class[] {GeometryWrapper.class};
-  }
-
   public static class SpatialIndexBuilder extends BaseIndexBuilder<SpatialIndexBuilder> {
     private final SpatialOptions options;
 
@@ -292,10 +300,12 @@ public class SpatialDimensionalityTypeProvider implements
     boolean hasLat = false, hasLon = false;
     for (final NumericDimensionDefinition definition : dimensions) {
       if ((definition instanceof LatitudeDefinition)
-          || (definition instanceof CustomCRSUnboundedSpatialDimensionY)) {
+          || (definition instanceof CustomCRSUnboundedSpatialDimensionY)
+          || (definition instanceof CustomCRSBoundedSpatialDimensionY)) {
         hasLat = true;
       } else if ((definition instanceof LongitudeDefinition)
-          || (definition instanceof CustomCRSUnboundedSpatialDimensionX)) {
+          || (definition instanceof CustomCRSUnboundedSpatialDimensionX)
+          || (definition instanceof CustomCRSBoundedSpatialDimensionX)) {
         hasLon = true;
       }
     }

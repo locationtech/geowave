@@ -52,7 +52,7 @@ import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.datastore.accumulo.AccumuloDataStore;
-import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions;
+import org.locationtech.geowave.datastore.accumulo.config.AccumuloOptions;
 import org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;

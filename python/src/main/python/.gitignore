@@ -1,0 +1,6 @@
+build/
+dist/
+PyGw.egg-info/
+html/
+__pycache__/
+.coverage

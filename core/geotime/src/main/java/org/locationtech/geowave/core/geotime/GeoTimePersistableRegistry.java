@@ -15,6 +15,8 @@ import org.locationtech.geowave.core.geotime.index.dimension.SimpleTimeIndexStra
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSBoundedSpatialDimension;
+import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSBoundedSpatialDimensionX;
+import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSBoundedSpatialDimensionY;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSSpatialField;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSUnboundedSpatialDimension;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSUnboundedSpatialDimensionX;
@@ -86,7 +88,9 @@ public class GeoTimePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 332, SpatialTemporalQuery::new),
         new PersistableIdAndConstructor((short) 333, TemporalQuery::new),
         new PersistableIdAndConstructor((short) 334, SimpleTimeDefinition::new),
-        new PersistableIdAndConstructor((short) 335, SimpleTimeIndexStrategy::new)};
+        new PersistableIdAndConstructor((short) 335, SimpleTimeIndexStrategy::new),
+        new PersistableIdAndConstructor((short) 336, CustomCRSBoundedSpatialDimensionX::new),
+        new PersistableIdAndConstructor((short) 337, CustomCRSBoundedSpatialDimensionY::new)};
 
   }
 }

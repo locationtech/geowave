@@ -20,19 +20,12 @@ import org.junit.Test;
 import org.locationtech.geowave.core.cli.operations.config.SetCommand;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
-import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
-import org.locationtech.geowave.core.store.cli.config.AddIndexCommand;
-import org.locationtech.geowave.core.store.cli.config.AddIndexGroupCommand;
-import org.locationtech.geowave.core.store.cli.config.AddStoreCommand;
-import org.locationtech.geowave.core.store.cli.config.CopyIndexCommand;
-import org.locationtech.geowave.core.store.cli.config.CopyStoreCommand;
-import org.locationtech.geowave.core.store.cli.config.RemoveIndexCommand;
-import org.locationtech.geowave.core.store.cli.config.RemoveIndexGroupCommand;
-import org.locationtech.geowave.core.store.cli.config.RemoveStoreCommand;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
+import org.locationtech.geowave.core.store.cli.store.AddStoreCommand;
+import org.locationtech.geowave.core.store.cli.store.CopyConfigStoreCommand;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.RemoveStoreCommand;
 import org.locationtech.geowave.core.store.memory.MemoryRequiredOptions;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import org.slf4j.Logger;
@@ -147,7 +140,7 @@ public class ConfigCacheIT {
     addStore();
 
     // Now make from default
-    final CopyStoreCommand command = new CopyStoreCommand();
+    final CopyConfigStoreCommand command = new CopyConfigStoreCommand();
     command.setParameters("abc", "abc2");
 
     // This will load the params via SPI.
@@ -173,113 +166,6 @@ public class ConfigCacheIT {
 
     final Properties props = ConfigOptions.loadProperties(configFile);
 
-    Assert.assertEquals(1, props.size());
-  }
-
-  @Test
-  public void addIndex() {
-    final String spatialType = new SpatialDimensionalityTypeProvider().getDimensionalityTypeName();
-
-    final AddIndexCommand command = new AddIndexCommand();
-    command.setParameters("abc");
-    command.setMakeDefault(true);
-    command.setType(spatialType);
-
-    // This will load the params via SPI.
-    command.prepare(operationParams);
-    command.execute(operationParams);
-
-    final Properties props = ConfigOptions.loadProperties(configFile);
-
-    Assert.assertEquals(spatialType, props.getProperty("index.abc.type"));
-    Assert.assertEquals("abc", props.getProperty(IndexPluginOptions.DEFAULT_PROPERTY_NAMESPACE));
-  }
-
-  @Test
-  public void addIndexFromDefault() {
-    addIndex();
-
-    final String spatialType = new SpatialDimensionalityTypeProvider().getDimensionalityTypeName();
-
-    final AddIndexCommand command = new AddIndexCommand();
-    command.setParameters("abc2");
-    command.setMakeDefault(false);
-
-    // This will load the params via SPI.
-    command.prepare(operationParams);
-    command.execute(operationParams);
-
-    final Properties props = ConfigOptions.loadProperties(configFile);
-
-    Assert.assertEquals(spatialType, props.getProperty("index.abc2.type"));
-  }
-
-  @Test
-  public void copyIndex() {
-    addIndex();
-
-    final String spatialType = new SpatialDimensionalityTypeProvider().getDimensionalityTypeName();
-
-    final CopyIndexCommand command = new CopyIndexCommand();
-    command.setParameters("abc", "abc2");
-
-    // This will load the params via SPI.
-    command.prepare(operationParams);
-    command.execute(operationParams);
-
-    final Properties props = ConfigOptions.loadProperties(configFile);
-
-    Assert.assertEquals(spatialType, props.getProperty("index.abc2.type"));
-  }
-
-  @Test
-  public void removeIndex() throws Exception {
-    addIndex();
-
-    final RemoveIndexCommand command = new RemoveIndexCommand();
-    command.setEntryName("abc");
-
-    command.prepare(operationParams);
-    command.execute(operationParams);
-
-    final Properties props = ConfigOptions.loadProperties(configFile);
-
-    Assert.assertEquals(1, props.size());
-  }
-
-  @Test
-  public void addIndexGroup() throws Exception {
-    addIndex();
-
-    final AddIndexGroupCommand command = new AddIndexGroupCommand();
-    command.setParameters("ig1", "abc");
-
-    command.prepare(operationParams);
-    command.execute(operationParams);
-
-    final Properties props = ConfigOptions.loadProperties(configFile);
-
-    Assert.assertEquals("abc=spatial", props.getProperty("indexgroup.ig1.type"));
-  }
-
-  @Test
-  public void removeIndexGroup() throws Exception {
-    addIndexGroup();
-
-    // BELOW: Just to remove the index
-    final RemoveIndexCommand commandRemove = new RemoveIndexCommand();
-    commandRemove.setEntryName("abc");
-    commandRemove.prepare(operationParams);
-    commandRemove.execute(operationParams);
-    // ABOVE: Just to remove the index
-
-    final RemoveIndexGroupCommand command = new RemoveIndexGroupCommand();
-    command.setEntryName("ig1");
-
-    command.prepare(operationParams);
-    command.execute(operationParams);
-
-    final Properties props = ConfigOptions.loadProperties(configFile);
     Assert.assertEquals(1, props.size());
   }
 

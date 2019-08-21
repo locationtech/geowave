@@ -11,13 +11,13 @@ Operations to ingest Open Street Map (OSM) nodes, ways and relations to GeoWave 
 * <<050-osm-commands.adoc#osm-stage, Stage>>
 
 [[osm-ingest]]
-==== *geowave osm ingest*
+==== *geowave util osm ingest*
 
-include::manpages/osm/geowave-ingest.txt[]
+include::manpages/util/osm/geowave-ingest.txt[]
 
 [[osm-stage]]
-==== *geowave osm stage*
+==== *geowave util osm stage*
 
-include::manpages/osm/geowave-stage.txt[]
+include::manpages/util/osm/geowave-stage.txt[]
 
 '''

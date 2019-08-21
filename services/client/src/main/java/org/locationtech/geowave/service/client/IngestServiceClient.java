@@ -35,11 +35,11 @@ public class IngestServiceClient {
     return resp;
   }
 
-  public Response kafkaToGW(final String store_name, final String index_group_list) {
+  public Response kafkaToGW(final String storeName, final String indexList) {
 
     return kafkaToGW(
-        store_name,
-        index_group_list,
+        storeName,
+        indexList,
         null,
         null,
         null,
@@ -54,8 +54,8 @@ public class IngestServiceClient {
   }
 
   public Response kafkaToGW(
-      final String store_name,
-      final String index_group_list,
+      final String storeName,
+      final String indexList,
       final String kafkaPropertyFile,
       final String visibility,
       final String groupId,
@@ -70,8 +70,8 @@ public class IngestServiceClient {
 
     final Response resp =
         ingestService.kafkaToGW(
-            store_name,
-            index_group_list,
+            storeName,
+            indexList,
             kafkaPropertyFile,
             visibility,
             groupId,
@@ -87,17 +87,17 @@ public class IngestServiceClient {
   }
 
   public Response localToGW(
-      final String file_or_directory,
-      final String storename,
-      final String index_group_list) {
+      final String fileOrDirectory,
+      final String storeName,
+      final String indexList) {
 
-    return localToGW(file_or_directory, storename, index_group_list, null, null, null, null);
+    return localToGW(fileOrDirectory, storeName, indexList, null, null, null, null);
   }
 
   public Response localToGW(
-      final String file_or_directory,
-      final String storename,
-      final String index_group_list,
+      final String fileOrDirectory,
+      final String storeName,
+      final String indexList,
       final Integer threads,
       final String visibility,
       final String extensions,
@@ -105,9 +105,9 @@ public class IngestServiceClient {
 
     final Response resp =
         ingestService.localToGW(
-            file_or_directory,
-            storename,
-            index_group_list,
+            fileOrDirectory,
+            storeName,
+            indexList,
             threads,
             visibility,
             extensions,
@@ -116,29 +116,29 @@ public class IngestServiceClient {
   }
 
   public Response localToHdfs(
-      final String file_or_directory,
-      final String path_to_base_directory_to_write_to) {
+      final String fileOrDirectory,
+      final String pathToBaseDirectoryToWriteTo) {
 
-    return localToHdfs(file_or_directory, path_to_base_directory_to_write_to, null, null);
+    return localToHdfs(fileOrDirectory, pathToBaseDirectoryToWriteTo, null, null);
   }
 
   public Response localToHdfs(
-      final String file_or_directory,
-      final String path_to_base_directory_to_write_to,
+      final String fileOrDirectory,
+      final String pathToBaseDirectoryToWriteTo,
       final String extensions,
       final String formats) {
 
     final Response resp =
         ingestService.localToHdfs(
-            file_or_directory,
-            path_to_base_directory_to_write_to,
+            fileOrDirectory,
+            pathToBaseDirectoryToWriteTo,
             extensions,
             formats);
     return resp;
   }
 
   public Response localToKafka(
-      final String file_or_directory,
+      final String fileOrDirectory,
       final String kafkaPropertyFile,
       final String metadataBrokerList,
       final String requestRequiredAcks,
@@ -150,7 +150,7 @@ public class IngestServiceClient {
 
     final Response resp =
         ingestService.localToKafka(
-            file_or_directory,
+            fileOrDirectory,
             kafkaPropertyFile,
             metadataBrokerList,
             requestRequiredAcks,
@@ -162,16 +162,16 @@ public class IngestServiceClient {
     return resp;
   }
 
-  public Response localToKafka(final String file_or_directory) {
+  public Response localToKafka(final String fileOrDirectory) {
 
-    return localToKafka(file_or_directory, null, null, null, null, null, null, null, null);
+    return localToKafka(fileOrDirectory, null, null, null, null, null, null, null, null);
   }
 
   public Response localToMrGW(
-      final String file_or_directory,
-      final String path_to_base_directory_to_write_to,
-      final String store_name,
-      final String index_group_list,
+      final String fileOrDirectory,
+      final String pathToBaseDirectoryToWriteTo,
+      final String storeName,
+      final String indexList,
       final String visibility,
       final String jobTrackerHostPort,
       final String resourceManger,
@@ -180,10 +180,10 @@ public class IngestServiceClient {
 
     final Response resp =
         ingestService.localToMrGW(
-            file_or_directory,
-            path_to_base_directory_to_write_to,
-            store_name,
-            index_group_list,
+            fileOrDirectory,
+            pathToBaseDirectoryToWriteTo,
+            storeName,
+            indexList,
             visibility,
             jobTrackerHostPort,
             resourceManger,
@@ -193,16 +193,16 @@ public class IngestServiceClient {
   }
 
   public Response localToMrGW(
-      final String file_or_directory,
-      final String path_to_base_directory_to_write_to,
-      final String store_name,
-      final String index_group_list) {
+      final String fileOrDirectory,
+      final String pathToBaseDirectoryToWriteTo,
+      final String storeName,
+      final String indexList) {
 
     return localToMrGW(
-        file_or_directory,
-        path_to_base_directory_to_write_to,
-        store_name,
-        index_group_list,
+        fileOrDirectory,
+        pathToBaseDirectoryToWriteTo,
+        storeName,
+        indexList,
         null,
         null,
         null,
@@ -211,9 +211,9 @@ public class IngestServiceClient {
   }
 
   public Response mrToGW(
-      final String path_to_base_directory_to_write_to,
-      final String store_name,
-      final String index_group_list,
+      final String pathToBaseDirectoryToWriteTo,
+      final String storeName,
+      final String indexList,
       final String visibility,
       final String jobTrackerHostPort,
       final String resourceManger,
@@ -222,9 +222,9 @@ public class IngestServiceClient {
 
     final Response resp =
         ingestService.mrToGW(
-            path_to_base_directory_to_write_to,
-            store_name,
-            index_group_list,
+            pathToBaseDirectoryToWriteTo,
+            storeName,
+            indexList,
             visibility,
             jobTrackerHostPort,
             resourceManger,
@@ -234,25 +234,17 @@ public class IngestServiceClient {
   }
 
   public Response mrToGW(
-      final String path_to_base_directory_to_write_to,
-      final String store_name,
-      final String index_group_list) {
+      final String pathToBaseDirectoryToWriteTo,
+      final String storeName,
+      final String indexList) {
 
-    return mrToGW(
-        path_to_base_directory_to_write_to,
-        store_name,
-        index_group_list,
-        null,
-        null,
-        null,
-        null,
-        null);
+    return mrToGW(pathToBaseDirectoryToWriteTo, storeName, indexList, null, null, null, null, null);
   }
 
   public Response sparkToGW(
-      final String input_directory,
-      final String store_name,
-      final String index_group_list,
+      final String inputDirectory,
+      final String storeName,
+      final String indexList,
       final String visibility,
       final String appName,
       final String host,
@@ -264,9 +256,9 @@ public class IngestServiceClient {
 
     final Response resp =
         ingestService.sparkToGW(
-            input_directory,
-            store_name,
-            index_group_list,
+            inputDirectory,
+            storeName,
+            indexList,
             visibility,
             appName,
             host,
@@ -279,13 +271,13 @@ public class IngestServiceClient {
   }
 
   public Response sparkToGW(
-      final String input_directory,
-      final String store_name,
-      final String index_group_list) {
+      final String inputDirectory,
+      final String storeName,
+      final String indexList) {
     return sparkToGW(
-        input_directory,
-        store_name,
-        index_group_list,
+        inputDirectory,
+        storeName,
+        indexList,
         null,
         null,
         null,

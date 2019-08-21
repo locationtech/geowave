@@ -1,0 +1,60 @@
+[[store-commands]]
+<<<
+
+[[store-commands]]
+=== Store Commands
+
+Commands for managing GeoWave data stores.
+
+.Commands:
+* <<011-store-commands.adoc#store-add, AddStore>>
+* <<011-store-commands.adoc#store-clear, ClearStore>>
+* <<011-store-commands.adoc#store-copy, CopyStore>>
+* <<011-store-commands.adoc#store-copystorecfg, CpStoreCfg>>
+* <<011-store-commands.adoc#store-rm, RmStore>>
+* <<011-store-commands.adoc#store-listtypes, ListTypes>>
+* <<011-store-commands.adoc#store-rmtype, RmType>>
+* <<011-store-commands.adoc#store-version, Version>>
+
+[[store-add]]
+==== *geowave store add*
+
+include::manpages/store/geowave-addstore.txt[]
+
+[[store-clear]]
+==== *geowave store clear*
+
+include::manpages/store/geowave-clear.txt[]
+
+[[store-copy]]
+==== *geowave store copy*
+
+include::manpages/store/geowave-copy.txt[]
+
+[[store-copystorecfg]]
+==== *geowave store copycfg*
+
+include::manpages/store/geowave-copystorecfg.txt[]
+
+[[store-rm]]
+==== *geowave store rm*
+
+include::manpages/store/geowave-rmstore.txt[]
+
+[[store-listtypes]]
+==== *geowave store listtypes*
+
+include::manpages/store/geowave-listtypes.txt[]
+
+[[store-rmtype]]
+==== *geowave store rmtype*
+
+include::manpages/store/geowave-rmtype.txt[]
+
+[[store-version]]
+==== *geowave store version*
+
+include::manpages/store/geowave-version.txt[]
+
+'''
+

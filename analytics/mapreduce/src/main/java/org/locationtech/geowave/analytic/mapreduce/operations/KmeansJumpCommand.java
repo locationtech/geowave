@@ -26,8 +26,8 @@ import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -35,10 +35,10 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "kmeansjump", parentOperation = AnalyticSection.class)
-@Parameters(commandDescription = "KMeans Clustering using Jump Method")
+@Parameters(commandDescription = "KMeans clustering using jump method")
 public class KmeansJumpCommand extends DefaultOperation implements Command {
 
-  @Parameter(description = "<storename>")
+  @Parameter(description = "<store name>")
   private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate

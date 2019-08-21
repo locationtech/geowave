@@ -5,12 +5,12 @@
 NAME
 //:----
 
-geowave gs listcv - List GeoServer Coverages
+geowave gs cv list - List GeoServer Coverages
 
 SYNOPSIS
 //:--------
 
-geowave gs listcv [options] <coverage store name>
+geowave gs cv list [options] <coverage store name>
 
 DESCRIPTION
 //:-----------

@@ -11,30 +11,26 @@ package org.locationtech.geowave.service.rest.operations;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
-import org.locationtech.geowave.core.cli.exceptions.DuplicateEntryException;
-import org.locationtech.geowave.core.cli.operations.config.ConfigSection;
-import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.cli.index.IndexSection;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.StoreLoader;
+import org.locationtech.geowave.core.store.index.IndexPluginOptions;
+import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.operations.remote.options.BasicIndexOptions;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
-@Parameters(commandDescription = "Configure an index for usage in GeoWave")
+@Parameters(commandDescription = "Add a spatial temporal index to a GeoWave store")
 public class AddSpatialTemporalIndexCommand extends ServiceEnabledCommand<String> {
   /** A REST Operation for the AddIndexCommand where --type=spatial_temporal */
-  @Parameter(description = "<name>", required = true)
+  @Parameter(description = "<store name> <index name>", required = true)
   private List<String> parameters = new ArrayList<>();
-
-  @Parameter(
-      names = {"-d", "--default"},
-      description = "Make this the default index creating stores")
-  private Boolean makeDefault;
 
   @ParametersDelegate
   private BasicIndexOptions basicIndexOptions = new BasicIndexOptions();
@@ -50,7 +46,6 @@ public class AddSpatialTemporalIndexCommand extends ServiceEnabledCommand<String
     pluginOptions.selectPlugin("spatial_temporal");
     pluginOptions.setBasicIndexOptions(basicIndexOptions);
     pluginOptions.setDimensionalityTypeOptions(opts);
-    // Successfully prepared.
     return true;
   }
 
@@ -61,12 +56,12 @@ public class AddSpatialTemporalIndexCommand extends ServiceEnabledCommand<String
 
   @Override
   public String getId() {
-    return ConfigSection.class.getName() + ".addindex/spatial_temporal";
+    return IndexSection.class.getName() + ".add/spatial_temporal";
   }
 
   @Override
   public String getPath() {
-    return "v0/config/addindex/spatial_temporal";
+    return "v0/index/add/spatial_temporal";
   }
 
   public IndexPluginOptions getPluginOptions() {
@@ -85,17 +80,10 @@ public class AddSpatialTemporalIndexCommand extends ServiceEnabledCommand<String
     return parameters;
   }
 
-  public void setParameters(final String indexName) {
+  public void setParameters(final String storeName, final String indexName) {
     parameters = new ArrayList<>();
+    parameters.add(storeName);
     parameters.add(indexName);
-  }
-
-  public Boolean getMakeDefault() {
-    return makeDefault;
-  }
-
-  public void setMakeDefault(final Boolean makeDefault) {
-    this.makeDefault = makeDefault;
   }
 
   public String getType() {
@@ -110,45 +98,34 @@ public class AddSpatialTemporalIndexCommand extends ServiceEnabledCommand<String
   public String computeResults(final OperationParams params) throws Exception {
 
     // Ensure that a name is chosen.
-    if (getParameters().size() < 1) {
+    if (getParameters().size() < 2) {
       System.out.println(getParameters());
-      throw new ParameterException("Must specify index name");
+      throw new ParameterException("Must specify store name and index name");
     }
 
-    if (getType() == null) {
-      throw new ParameterException("No type could be infered");
+    final String storeName = getParameters().get(0);
+    final String indexName = getParameters().get(1);
+    pluginOptions.setName(indexName);
+    final Index newIndex = pluginOptions.createIndex();
+
+    // Attempt to load store.
+    final File configFile = getGeoWaveConfigFile(params);
+
+    final StoreLoader inputStoreLoader = new StoreLoader(storeName);
+    if (!inputStoreLoader.loadFromConfig(configFile)) {
+      throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
+    }
+    DataStorePluginOptions storeOptions = inputStoreLoader.getDataStorePlugin();
+
+    IndexStore indexStore = storeOptions.createIndexStore();
+
+    Index existingIndex = indexStore.getIndex(newIndex.getName());
+    if (existingIndex != null) {
+      throw new ParameterException("That index already exists: " + newIndex.getName());
     }
 
-    final File propFile = getGeoWaveConfigFile(params);
+    indexStore.addIndex(newIndex);
 
-    final Properties existingProps = ConfigOptions.loadProperties(propFile);
-
-    // Make sure we're not already in the index.
-    final IndexPluginOptions existPlugin = new IndexPluginOptions();
-    if (existPlugin.load(existingProps, getNamespace())) {
-      throw new DuplicateEntryException("That store already exists: " + getPluginName());
-    }
-
-    pluginOptions.save(existingProps, getNamespace());
-
-    // Make default?
-    if (Boolean.TRUE.equals(makeDefault)) {
-
-      existingProps.setProperty(IndexPluginOptions.DEFAULT_PROPERTY_NAMESPACE, getPluginName());
-    }
-
-    // Write properties file
-    ConfigOptions.writeProperties(propFile, existingProps);
-
-    final StringBuilder builder = new StringBuilder();
-    for (final Object key : existingProps.keySet()) {
-      final String[] split = key.toString().split("\\.");
-      if (split.length > 1) {
-        if (split[1].equals(parameters.get(0))) {
-          builder.append(key.toString() + "=" + existingProps.getProperty(key.toString()) + "\n");
-        }
-      }
-    }
-    return builder.toString();
+    return newIndex.getName();
   }
 }

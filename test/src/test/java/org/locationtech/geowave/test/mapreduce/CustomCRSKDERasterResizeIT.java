@@ -15,7 +15,6 @@ import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
 import javax.media.jai.Interpolation;
@@ -42,10 +41,11 @@ import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
-import org.locationtech.geowave.core.store.cli.config.AddIndexCommand;
-import org.locationtech.geowave.core.store.cli.config.AddStoreCommand;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.cli.store.AddStoreCommand;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.index.IndexPluginOptions;
+import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.TestUtils.DimensionalityType;
@@ -158,15 +158,16 @@ public class CustomCRSKDERasterResizeIT {
     addStore.setPluginOptions(outputDataStorePluginOptions);
     addStore.execute(params);
 
-    final String outputIndex = "raster-spatial";
+    final String outputIndexName = "raster-spatial-idx";
     final IndexPluginOptions outputIndexOptions = new IndexPluginOptions();
     outputIndexOptions.selectPlugin("spatial");
+    outputIndexOptions.setName(outputIndexName);
     ((SpatialOptions) outputIndexOptions.getDimensionalityOptions()).setCrs("EPSG:4240");
 
-    final AddIndexCommand addIndex = new AddIndexCommand();
-    addIndex.setParameters("raster-spatial");
-    addIndex.setPluginOptions(outputIndexOptions);
-    addIndex.execute(params);
+    final IndexStore outputIndexStore = outputDataStorePluginOptions.createIndexStore();
+    final Index outputIndex = outputIndexOptions.createIndex();
+    outputIndexStore.addIndex(outputIndex);
+
     // use the min level to define the request boundary because it is the
     // most coarse grain
     final double decimalDegreesPerCellMinLevel = 180.0 / Math.pow(2, BASE_MIN_LEVEL);
@@ -209,7 +210,7 @@ public class CustomCRSKDERasterResizeIT {
       final KdeCommand command = new KdeCommand();
       command.setParameters("test-in", "raster-spatial");
       command.getKdeOptions().setCqlFilter(cqlStr);
-      command.getKdeOptions().setOutputIndex(outputIndex);
+      command.getKdeOptions().setOutputIndex(outputIndexName);
       command.getKdeOptions().setFeatureType(KDE_FEATURE_TYPE_NAME);
       command.getKdeOptions().setMinLevel(BASE_MIN_LEVEL);
       command.getKdeOptions().setMaxLevel(BASE_MAX_LEVEL);
@@ -219,7 +220,6 @@ public class CustomCRSKDERasterResizeIT {
       command.getKdeOptions().setHdfsHostPort(env.getHdfs());
       command.getKdeOptions().setJobTrackerOrResourceManHostPort(env.getJobtracker());
       command.getKdeOptions().setTileSize((int) Math.pow(2, i));
-      command.setOutputIndexOptions(Collections.singletonList(outputIndexOptions));
 
       ToolRunner.run(command.createRunner(params), new String[] {});
     }
@@ -247,7 +247,7 @@ public class CustomCRSKDERasterResizeIT {
       // We're going to override these anyway.
       command.setParameters("test-in", "raster-spatial");
 
-      command.getKDESparkOptions().setOutputIndex(outputIndex);
+      command.getKDESparkOptions().setOutputIndex(outputIndexName);
       command.getKDESparkOptions().setCqlFilter(cqlStr);
       command.getKDESparkOptions().setTypeName(KDE_FEATURE_TYPE_NAME);
       command.getKDESparkOptions().setMinLevel(BASE_MIN_LEVEL);
@@ -257,7 +257,6 @@ public class CustomCRSKDERasterResizeIT {
       command.getKDESparkOptions().setCoverageName(tileSizeCoverageName);
       command.getKDESparkOptions().setMaster("local[*]");
       command.getKDESparkOptions().setTileSize((int) Math.pow(2, i));
-      command.setOutputIndexOptions(Collections.singletonList(outputIndexOptions));
       command.execute(params);
     }
     LOGGER.warn("testing spark kdes");
@@ -417,8 +416,9 @@ public class CustomCRSKDERasterResizeIT {
             expectedResults[0][0].length,
             rasters[i].getNumBands());
       }
-      for (int x = 0; x < rasters[i].getWidth(); x++) {
-        for (int y = 0; y < rasters[i].getHeight(); y++) {
+      long mismatchedSamples = 0;
+      for (int y = 0; y < rasters[i].getHeight(); y++) {
+        for (int x = 0; x < rasters[i].getWidth(); x++) {
           for (int b = 0; b < rasters[i].getNumBands(); b++) {
             final double sample = rasters[i].getSampleDouble(x, y, b);
             if (initialResults) {
@@ -427,26 +427,25 @@ public class CustomCRSKDERasterResizeIT {
                 atLeastOneResult = true;
               }
             } else {
-              Assert.assertEquals(
-                  "The sample does not match the expected sample value for the coverage "
-                      + i
-                      + " at x="
-                      + x
-                      + ",y="
-                      + y
-                      + ",b="
-                      + b,
-                  new Double(expectedResults[x][y][b]),
-                  new Double(sample));
+              if ((Double.isNaN(sample) && !Double.isNaN(expectedResults[x][y][b]))
+                  || (!Double.isNaN(sample) && Double.isNaN(expectedResults[x][y][b]))
+                  || (Math.abs(expectedResults[x][y][b] - sample) > TestUtils.DOUBLE_EPSILON)) {
+                mismatchedSamples++;
+              }
             }
           }
         }
       }
+      final double percentMismatch =
+          mismatchedSamples
+              / (double) (rasters[i].getWidth()
+                  * rasters[i].getHeight()
+                  * rasters[i].getNumBands());
+      Assert.assertTrue(
+          (percentMismatch * 100) + "% mismatch is less than 1%",
+          percentMismatch < 0.01);
     }
-    // TODO figure out why essentially this IT is testing for no data and is
-    // meaningless
-    // Assert.assertTrue("There should be at least one value that is not black",
-    // atLeastOneResult);
+    Assert.assertTrue("There should be at least one value that is not black", atLeastOneResult);
     return expectedResults;
   }
 }

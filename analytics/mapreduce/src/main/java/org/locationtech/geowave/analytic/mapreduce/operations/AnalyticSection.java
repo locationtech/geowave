@@ -14,7 +14,6 @@ import org.locationtech.geowave.core.cli.operations.GeowaveTopLevelSection;
 import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "analytic", parentOperation = GeowaveTopLevelSection.class)
-@Parameters(
-    commandDescription = "Commands that run mapreduce or spark processing to enhance an existing GeoWave dataset")
+@Parameters(commandDescription = "Commands to run analytics on GeoWave data sets")
 public class AnalyticSection extends DefaultOperation {
 }

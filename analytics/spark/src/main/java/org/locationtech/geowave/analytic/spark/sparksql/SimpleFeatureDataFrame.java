@@ -17,7 +17,7 @@ import org.locationtech.geowave.adapter.vector.util.FeatureDataUtils;
 import org.locationtech.geowave.analytic.spark.GeoWaveRDD;
 import org.locationtech.geowave.analytic.spark.sparksql.udf.GeomFunctionRegistry;
 import org.locationtech.geowave.analytic.spark.sparksql.util.SchemaConverter;
-import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

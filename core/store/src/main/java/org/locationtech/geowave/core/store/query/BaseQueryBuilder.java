@@ -26,7 +26,7 @@ public interface BaseQueryBuilder<T, Q extends BaseQuery<T, ?>, R extends BaseQu
    *
    * @return this builder
    */
-  R allIndicies();
+  R allIndices();
 
   /**
    * Query only using the specified index

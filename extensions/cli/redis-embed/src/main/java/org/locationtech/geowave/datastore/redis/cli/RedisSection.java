@@ -10,11 +10,11 @@ package org.locationtech.geowave.datastore.redis.cli;
 
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
-import org.locationtech.geowave.core.cli.operations.GeowaveTopLevelSection;
+import org.locationtech.geowave.core.cli.operations.util.UtilSection;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "redis", parentOperation = GeowaveTopLevelSection.class)
-@Parameters(commandDescription = "Utility operations such as to run an embedded redis")
+@GeowaveOperation(name = "redis", parentOperation = UtilSection.class)
+@Parameters(commandDescription = "Redis utility commands")
 public class RedisSection extends DefaultOperation {
 
 }

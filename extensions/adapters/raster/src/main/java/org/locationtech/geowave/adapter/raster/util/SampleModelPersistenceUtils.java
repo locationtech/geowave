@@ -179,7 +179,7 @@ public class SampleModelPersistenceUtils {
       throw new IllegalArgumentException(
           "Band Offsets "
               + bandOffsets.length
-              + " doesn't match Bank Indicies "
+              + " doesn't match Bank Indices "
               + bankIndices.length);
     }
     return new InternalComponentSampleModelJAI(
