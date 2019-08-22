@@ -292,35 +292,6 @@
               <component id="102" />
             </dependencies>
           </component>
-          <component name="Embedded Cassandra" id="107" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
-            <description />
-            <include all="false" />
-            <dependencies>
-              <component id="59" />
-              <component id="106" />
-            </dependencies>
-          </component>
-          <component name="Embedded Kudu" id="136" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
-            <description />
-            <include all="false" />
-            <dependencies>
-              <component id="59" />
-              <component id="105" />
-            </dependencies>
-          </component>
-          <component name="Embedded DynamoDB" id="137" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
-            <description />
-            <include all="false" />
-            <dependencies>
-              <component id="59" />
-              <component id="104" />
-            </dependencies>
-          </component>
-          <component name="Embedded BigTable" id="199" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
-            <description />
-            <include all="false" />
-            <dependencies />
-          </component>
         </components>
       </folder>
       <folder name="Data Store Support" id="127" customizedId="" displayDescription="false" hideHelpButton="false" expanded="true">
