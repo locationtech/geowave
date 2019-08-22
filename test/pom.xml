@@ -103,6 +103,10 @@
 					<groupId>org.mortbay.jetty</groupId>
 					<artifactId>servlet-api</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>net.jpountz.lz4</groupId>
+					<artifactId>lz4</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -339,6 +343,10 @@
 				<exclusion>
 					<groupId>org.hibernate</groupId>
 					<artifactId>hibernate-validator</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>net.jpountz.lz4</groupId>
+					<artifactId>lz4</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
