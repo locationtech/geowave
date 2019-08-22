@@ -76,7 +76,7 @@ public class GeoWavePluginConfig {
       new Param(
           TRANSACTION_BUFFER_SIZE,
           Integer.class,
-          "Number of buffered feature insertions before flushing to the datastore.",
+          "Number of buffered feature insertions before flushing to the datastore when writing using WFS-T (advanced option, for basic usage leave as default).",
           false);
 
   private static final Param FEATURE_NAMESPACE =
@@ -90,8 +90,8 @@ public class GeoWavePluginConfig {
       new Param(
           LOCK_MGT_KEY,
           String.class,
-          "WFS-T Locking Support.",
-          true,
+          "WFS-T Locking Support (advanced option, for basic usage leave as default).",
+          false,
           null,
           getLockMgtOptions());
 
@@ -99,20 +99,24 @@ public class GeoWavePluginConfig {
       new Param(
           AUTH_MGT_KEY,
           String.class,
-          "The provider to obtain authorization given a user.",
+          "The provider to obtain authorization given a user (advanced option, for basic usage leave as default).",
           true,
           null,
           getAuthSPIOptions());
 
   private static final Param AUTH_URL =
-      new Param(AUTH_URL_KEY, String.class, "The providers data URL.", false);
+      new Param(
+          AUTH_URL_KEY,
+          String.class,
+          "The providers data URL (advanced option, for basic usage leave as default).",
+          false);
 
   private static final Param QUERY_INDEX_STRATEGY =
       new Param(
           QUERY_INDEX_STRATEGY_KEY,
           String.class,
-          "Strategy to choose an index during query processing.",
-          true,
+          "Strategy to choose an index during query processing (advanced option, for basic usage leave as default).",
+          false,
           null,
           getIndexQueryStrategyOptions());
 
@@ -186,7 +190,7 @@ public class GeoWavePluginConfig {
 
     param = params.get(FEATURE_NAMESPACE_KEY);
     URI namespaceURI = null;
-    if (param != null) {
+    if ((param != null) && !param.toString().trim().isEmpty()) {
       try {
         namespaceURI = param instanceof String ? new URI(param.toString()) : (URI) param;
       } catch (final URISyntaxException e) {
@@ -196,7 +200,7 @@ public class GeoWavePluginConfig {
     featureNameSpaceURI = namespaceURI;
     param = params.get(TRANSACTION_BUFFER_SIZE);
     Integer bufferSizeFromParam = 10000;
-    if (param != null) {
+    if ((param != null) && !param.toString().trim().isEmpty()) {
       try {
         bufferSizeFromParam =
             param instanceof Integer ? (Integer) param : Integer.parseInt(param.toString());
@@ -212,7 +216,9 @@ public class GeoWavePluginConfig {
     LockingManagementFactory factory = null;
     while (it.hasNext()) {
       factory = it.next();
-      if ((param == null) || param.toString().equals(factory.toString())) {
+      if ((param == null)
+          || param.toString().trim().isEmpty()
+          || param.toString().equals(factory.toString())) {
         break;
       }
     }
@@ -250,7 +256,9 @@ public class GeoWavePluginConfig {
     AuthorizationFactorySPI authFactory = new EmptyAuthorizationFactory();
     while (authIt.hasNext()) {
       authFactory = authIt.next();
-      if ((param == null) || param.toString().equals(authFactory.toString())) {
+      if ((param == null)
+          || param.toString().trim().isEmpty()
+          || param.toString().equals(authFactory.toString())) {
         break;
       }
     }
@@ -292,7 +300,9 @@ public class GeoWavePluginConfig {
   public static IndexQueryStrategySPI getIndexQueryStrategy(final Map<String, Serializable> params)
       throws GeoWavePluginException {
     final Serializable param = params.get(QUERY_INDEX_STRATEGY_KEY);
-    final String strategy = param == null ? DEFAULT_QUERY_INDEX_STRATEGY : param.toString();
+    final String strategy =
+        ((param == null) || param.toString().trim().isEmpty()) ? DEFAULT_QUERY_INDEX_STRATEGY
+            : param.toString();
     final Iterator<IndexQueryStrategySPI> it = getInxexQueryStrategyList();
     while (it.hasNext()) {
       final IndexQueryStrategySPI spi = it.next();
@@ -306,11 +316,9 @@ public class GeoWavePluginConfig {
 
   public static URL getAuthorizationURL(final Map<String, Serializable> params)
       throws GeoWavePluginException {
-
     final Serializable param = params.get(AUTH_URL_KEY);
-    if (param == null) {
+    if ((param == null) || param.toString().trim().isEmpty()) {
       return null;
-
     } else {
       try {
         return new URL(param.toString());
