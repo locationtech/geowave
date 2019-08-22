@@ -9118,29 +9118,35 @@ another point.</p>
 <div class="title">Commands:</div>
 <ul>
 <li>
-<p><a href="#raster-resize">ReSize</a></p>
+<p><a href="#raster-resizemr">ResizeMR</a></p>
+</li>
+<li>
+<p><a href="#raster-resizespark">ResizeSpark</a></p>
+</li>
+<li>
+<p><a href="#raster-installgdal">InstallGDAL</a></p>
 </li>
 </ul>
 </div>
 <div class="sect3">
-<h4 id="raster-resize"><a class="anchor" href="#raster-resize"></a><strong>geowave raster resize</strong></h4>
+<h4 id="raster-resizemr"><a class="anchor" href="#raster-resizemr"></a><strong>geowave raster resizemr</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave raster resize - Resize Raster Tiles</p>
+<p>geowave raster resizemr - Resize Raster Tiles using MapReduce</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
 </div>
 <div class="paragraph">
-<p>geowave raster resize [options] &lt;input store name&gt; &lt;output store name&gt;</p>
+<p>geowave raster resizemr [options] &lt;input store name&gt; &lt;output store name&gt;</p>
 </div>
 <div class="paragraph">
 <p>DESCRIPTION</p>
 </div>
 <div class="paragraph">
-<p>This command will resize raster tiles that are stored in a GeoWave datastore, and write the resized tiles to a new output store.</p>
+<p>This command will resize raster tiles that are stored in a GeoWave datastore using MapReduce, and write the resized tiles to a new output store.</p>
 </div>
 <div class="paragraph">
 <p>OPTIONS</p>
@@ -9152,13 +9158,13 @@ another point.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>the hdfs host port</p>
+<p>The hdfs host port</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>--indexId</p>
+<p>--indexName</p>
 <div class="ulist">
 <ul>
 <li>
@@ -9229,8 +9235,166 @@ another point.</p>
 </li>
 </ul>
 </div>
-<hr>
-<div style="page-break-after: always;"></div>
+</div>
+<div class="sect3">
+<h4 id="raster-resizespark"><a class="anchor" href="#raster-resizespark"></a><strong>geowave raster resizespark</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave raster resizespark - Resize Raster Tiles using Spark</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave raster resizespark [options] &lt;input store name&gt; &lt;output store name&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will resize raster tiles that are stored in a GeoWave datastore using Spark, and write the resized tiles to a new output store.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>-ho, --host</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The spark driver host</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--indexName</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The index that the input raster is stored in</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>* --inputCoverageName</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The name of the input raster coverage</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-m, --master</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The spark master designation</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--maxSplits</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The max partitions for the input data</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--minSplits</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The min partitions for the input data</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>* -n, --name</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The spark application name</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>* --outputCoverageName</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The out output raster coverage name</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>* --outputTileSize</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The tile size to output</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="raster-installgdal"><a class="anchor" href="#raster-installgdal"></a><strong>geowave raster installgdal</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave raster installgdal - Install GDAL by downloading native libraries</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave raster installgdal [options]</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will download GDAL to a directory.  Mac OS users should use 'brew install --with-swig-java gdal' instead.  The directory should be added to the PATH and Linux users should set LD_LIBRARY_PATH to the directory.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--dir</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The download directory
+'''</p>
+<div id="vector-commands" class="paragraph">
+<p>&lt;&lt;&lt;</p>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -9598,7 +9762,7 @@ another point.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-08-21 18:54:02 +00:00
+Last updated 2019-08-22 20:03:48 +00:00
 </div>
 </div>
 </body>
