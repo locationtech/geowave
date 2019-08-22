@@ -79,8 +79,12 @@ public abstract class NumericRangeDataStatistics<T, B extends StatisticsQueryBui
   public void entryIngested(final T entry, final GeoWaveRow... kvs) {
     final NumericRange range = getRange(entry);
     if (range != null) {
-      min = Math.min(min, range.getMin());
-      max = Math.max(max, range.getMax());
+      if (!Double.isNaN(range.getMin())) {
+        min = Math.min(min, range.getMin());
+      }
+      if (!Double.isNaN(range.getMax())) {
+        max = Math.max(max, range.getMax());
+      }
     }
   }
 
