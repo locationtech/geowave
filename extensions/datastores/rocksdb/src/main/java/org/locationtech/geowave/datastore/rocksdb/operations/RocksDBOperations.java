@@ -128,7 +128,7 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
           try {
             FileUtils.deleteDirectory(f);
           } catch (final IOException e) {
-            LOGGER.warn("Unable to delete directory '" + f.getAbsolutePath() + "'");
+            LOGGER.warn("Unable to delete directory '" + f.getAbsolutePath() + "'", e);
           }
         });
     return true;

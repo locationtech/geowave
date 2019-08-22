@@ -36,6 +36,11 @@ public class InstallGdal {
       "https://s3.amazonaws.com/geowave/third-party-downloads/gdal";
 
   public static void main(final String[] args) throws IOException {
+    if (isMac()) {
+      LOGGER.warn(
+          "Mac OS GDAL native binaries unavailable for download. Run 'brew install --with-swig-java gdal' instead.");
+      return;
+    }
     File gdalDir = null;
     if ((args != null) && (args.length > 0) && (args[0] != null) && !args[0].trim().isEmpty()) {
       gdalDir = new File(args[0]);
@@ -66,6 +71,11 @@ public class InstallGdal {
   }
 
   private static void install(final File gdalDir) throws IOException {
+    if (isMac()) {
+      LOGGER.warn(
+          "Mac OS GDAL native binaries unavailable for download. Run 'brew install --with-swig-java gdal' instead.");
+      return;
+    }
     URL url;
     String file;
     String gdalEnv = System.getProperty(GDAL_ENV);
@@ -141,4 +151,11 @@ public class InstallGdal {
     final String OS = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH);
     return (OS.indexOf("win") > -1);
   }
+
+  private static boolean isMac() {
+    final String OS = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH);
+    return (OS.indexOf("mac") >= 0);
+
+  }
+
 }

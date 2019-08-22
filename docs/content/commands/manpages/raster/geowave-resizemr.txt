@@ -1,28 +1,28 @@
-//:geowave-resize(1)
+//:geowave-resizemr(1)
 //:==============
 //::doctype: manpage
 
 NAME
 //:----
 
-geowave raster resize - Resize Raster Tiles
+geowave raster resizemr - Resize Raster Tiles using MapReduce
 
 SYNOPSIS
 //:--------
 
-geowave raster resize [options] <input store name> <output store name>
+geowave raster resizemr [options] <input store name> <output store name>
 
 DESCRIPTION
 //:-----------
 
-This command will resize raster tiles that are stored in a GeoWave datastore, and write the resized tiles to a new output store.
+This command will resize raster tiles that are stored in a GeoWave datastore using MapReduce, and write the resized tiles to a new output store.
 
 OPTIONS
 //:-------
 
 - * --hdfsHostPort
- * the hdfs host port
-- --indexId
+ * The hdfs host port
+- --indexName
  * The index that the input raster is stored in
 - * --inputCoverageName
  * The name of the input raster coverage
