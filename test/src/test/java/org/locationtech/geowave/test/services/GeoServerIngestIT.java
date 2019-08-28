@@ -83,12 +83,11 @@ public class GeoServerIngestIT extends BaseServiceIT {
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
-      // GeoServer and this thread have different class
-      // loaders so the RocksDB "singleton" instances are not shared in
-      // this JVM and GeoServer, for file-based geoserver data sources, using the REST "importer"
-      // will be more handy than adding a layer by referencing the local file system
-      // GeoWaveStoreType.ROCKSDB
-      },
+          // GeoServer and this thread have different class
+          // loaders so the RocksDB "singleton" instances are not shared in
+          // this JVM and GeoServer, for file-based geoserver data sources, using the REST
+          // "importer" will be more handy than adding a layer by referencing the local file system
+          GeoWaveStoreType.ROCKSDB},
       namespace = testName)
   protected DataStorePluginOptions dataStorePluginOptions;
 
