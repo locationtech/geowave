@@ -19,9 +19,9 @@ import com.beust.jcommander.ParametersDelegate;
 
 public class RocksDBOptions extends StoreFactoryOptions {
   @Parameter(
-      names = "--directory",
+      names = "--dir",
       description = "The directory to read/write to.  Defaults to \"rocksdb\" in the working directory.")
-  private String directory = "rocksdb";
+  private String dir = "rocksdb";
   @Parameter(
       names = "--compactOnWrite",
       description = "Whether to compact on every write, if false it will only compact on merge. Defaults to true",
@@ -72,12 +72,12 @@ public class RocksDBOptions extends StoreFactoryOptions {
     this.compactOnWrite = compactOnWrite;
   }
 
-  public void setDirectory(final String directory) {
-    this.directory = directory;
+  public void setDirectory(final String dir) {
+    this.dir = dir;
   }
 
   public String getDirectory() {
-    return directory;
+    return dir;
   }
 
   @Override

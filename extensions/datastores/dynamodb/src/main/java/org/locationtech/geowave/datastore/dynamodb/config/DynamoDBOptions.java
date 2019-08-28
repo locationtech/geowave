@@ -44,7 +44,7 @@ public class DynamoDBOptions extends StoreFactoryOptions {
   /** List of client configuration that the user can tweak */
   @Parameter(
       names = "--maxConnections",
-      description = "The maximum number of open http(s) connections" + " active at any given time")
+      description = "The maximum number of open http(s) connections active at any given time")
   protected int maxConnections = ClientConfiguration.DEFAULT_MAX_CONNECTIONS;
 
   @Parameter(

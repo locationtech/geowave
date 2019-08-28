@@ -83,12 +83,11 @@ public class GeoServerIngestIT extends BaseServiceIT {
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
-      // GeoServer and this thread have different class
-      // loaders so the RocksDB "singleton" instances are not shared in
-      // this JVM and GeoServer, for file-based geoserver data sources, using the REST "importer"
-      // will be more handy than adding a layer by referencing the local file system
-      // GeoWaveStoreType.ROCKSDB
-      },
+          // GeoServer and this thread have different class
+          // loaders so the RocksDB "singleton" instances are not shared in
+          // this JVM and GeoServer, for file-based geoserver data sources, using the REST
+          // "importer" will be more handy than adding a layer by referencing the local file system
+          GeoWaveStoreType.ROCKSDB},
       namespace = testName)
   protected DataStorePluginOptions dataStorePluginOptions;
 
@@ -187,6 +186,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
         dataStorePluginOptions.getType(),
         dataStorePluginOptions.getGeoWaveNamespace(),
         dataStorePluginOptions.getOptionsAsMap());
+
     TestUtils.assertStatusCode(
         "Should Add " + dataStorePluginOptions.getGeoWaveNamespace() + " Datastore",
         201,
@@ -194,7 +194,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
             dataStorePluginOptions.getGeoWaveNamespace(),
             "testomatic",
             dataStorePluginOptions.getGeoWaveNamespace()));
-
     TestUtils.assertStatusCode(
         "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE + "' Style",
         201,

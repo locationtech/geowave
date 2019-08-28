@@ -18,8 +18,6 @@ GeoWave is an open source set of software that:
   * Provides Map-Reduce input and output formats for distributed processing and analysis of geospatial data
 * Geospatial software plugins
   * [GeoServer](http://geoserver.org/) plugin to allow geospatial data in various key-value stores to be shared and visualized via OGC standard services
-  * [PDAL](http://www.pdal.io/) plugin for working with point cloud data
-  * [Mapnik](http://mapnik.org/) plugin for generating map tiles and generally making good looking maps. 
   
 Basically, GeoWave is working to bridge geospatial software with modern key-value stores and distributed compute systems.
 
@@ -82,7 +80,7 @@ try(CloseableIterator it = store.query(QueryBuilder.newBuilder().build())){
 }
 ```
 ### Commandline Access
-Alternatively, you can always use the GeoWave commandline to access the same capabilities. Install the `geowave-$VERSION-apache-tools` RPM as instructed [here](http://locationtech.github.io/geowave/packages.html).  Then `geowave config addstore ...` and `geowave config addindex ...` are used to create named configurations for connecting to a key-value store (addstore) and describing how you want the data indexed (addindex).  You can use `--help` at any time such as `geowave config addstore --help` or furthermore get additional help after specifying the type with `-t` such as `geowave config addstore -t accumulo --help` to understand accumulo specific parameters. Once you have the indexing and store specified you can use `geowave ingest localtogw <file or directory> <store name> <index name(s)>` to ingest data into the key-value store. For the most basic walkthrough with minimal setup, run through the [quickstart guide](http://locationtech.github.io/geowave/quickstart.html) locally using RocksDB.
+Alternatively, you can always use the GeoWave commandline to access the same capabilities. Install the `geowave-$VERSION-apache-tools` RPM as instructed [here](http://locationtech.github.io/geowave/packages.html).  Then `geowave store add ...` and `geowave index add ...` are used to create named configurations for connecting to a key-value store (geowave store add) and describing how you want the data indexed (geowave index add).  You can use `--help` at any time such as `geowave store add --help` or furthermore get additional help after specifying the type with `-t` such as `geowave store add -t accumulo --help` to understand accumulo specific parameters. Once you have the indexing and store specified you can use `geowave ingest localtogw <file or directory> <store name> <index name(s)>` to ingest data into the key-value store. For the most basic walkthrough with minimal setup, run through the [quickstart guide](http://locationtech.github.io/geowave/quickstart.html) locally using RocksDB.
 
 ## Some GeoWave rendered eye candy
 
@@ -99,31 +97,22 @@ See [Screenshots](http://locationtech.github.io/geowave/userguide.html#example-s
 
 We work to maintain a N and N-1 tested and supported version pace for the following core libraries.
 
-| Geoserver | Geotools | Accumulo | HBase | Hadoop | PDAL | Mapnik | Java |
-|:---------:|:--------:|:--------:|:-----:|:------:|:----:|:------:|:----:|
-| 2.14.x | 20.x | [1.7.x,1.9.x] | [1.1.x,1.4.x] | 2.x | 0.9.9 |  3.x | Java8 |
+| Geoserver | Geotools | Accumulo | HBase | Hadoop | Java |
+|:---------:|:--------:|:--------:|:-----:|:------:|:----:|
+| 2.14.x | 20.x | [1.7.x,1.9.x] | [1.1.x,1.4.x] | 2.x | Java8 |
 
 * [Apache Maven](http://maven.apache.org/) 3.x or greater is required for building
-* [Java Advanced Imaging](http://download.java.net/media/jai/builds/release/1_1_3/INSTALL.html) and [Java Image I/O](http://download.java.net/media/jai-imageio/builds/release/1.1/INSTALL-jai_imageio.html) should both be installed on Geoserver for GeoWave versions 0.9.2.1 and below (licensing prohibits us redistributing)
-   * At the time of writing, Oracle is migrating Java projects around and these links are subject to change.  Read the INSTALL files to determine the download file name for different operating systems and architectures.  They are stored in the same directory as the INSTALL file.  Here are some common download locations.
-   * Java Advanced Imaging
-      * Linux ([32-bit](http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-i586.tar.gz) and [64-bit](http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-amd64.tar.gz))
-      * Windows ([32-bit](http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-windows-i586.exe))
-   * Java Image I/O
-      * Linux ([32-bit](http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-i586.tar.gz) and [64-bit](http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-amd64.tar.gz))
-      * Windows ([32-bit](http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-windows-i586.exe))
 * See our [.travis.yml](https://github.com/locationtech/geowave/blob/master/.travis.yml) file for the currently tested build matrix. 
 
 
 
 ## Origin
 
-GeoWave was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with [RadiantBlue Technologies](http://www.radiantblue.com/) (Now Maxar Technologies) and [Booz Allen Hamilton](http://www.boozallen.com/).  The government has ["unlimited rights"](https://github.com/locationtech/geowave/blob/master/NOTICE) and is releasing this software to increase the impact of government investments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.html) license.  
+GeoWave was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with [RadiantBlue Technologies](http://www.radiantblue.com/) (now Maxar Technologies) and [Booz Allen Hamilton](http://www.boozallen.com/).  The government has ["unlimited rights"](https://github.com/locationtech/geowave/blob/master/NOTICE) and is releasing this software to increase the impact of government investments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.html) license.  
 
 
 ## Contributing
 
-All pull request contributions to this project will be released under the Apache 2.0 or compatible license.
-Software source code previously released under an open source license and then modified by NGA staff is considered a "joint work" (see 17 USC § 101); it is partially copyrighted, partially public domain, and as a whole is protected by the copyrights of the non-government authors and must be released according to the terms of the original open source license.
+All pull request contributions to this project will be released under the Apache 2.0 or compatible license. Contributions are welcome and guidelines are provided [here](http://locationtech.github.io/geowave/devguide.html#contributions).
 
 Did I mention our [documentation!](http://locationtech.github.io/geowave/)

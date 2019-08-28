@@ -43,7 +43,8 @@ public class AccumuloMiniCluster {
             ? Boolean.parseBoolean(System.getProperty("interactive"))
             : true;
 
-    final String password = System.getProperty("password", "secret");
+    final String password = System.getProperty("password", "geowave");
+    final String user = System.getProperty("rootUser", "geowave");
 
     final File tempDir = Files.createTempDir();
     final String instanceName = System.getProperty("instanceName", "accumulo");
@@ -51,7 +52,9 @@ public class AccumuloMiniCluster {
         new MiniAccumuloConfigImpl(tempDir, password).setNumTservers(2).setInstanceName(
             instanceName).setZooKeeperPort(2181);
 
-    miniAccumuloConfig.setProperty(Property.MONITOR_PORT, "50095");
+    miniAccumuloConfig.setRootUserName(user);
+
+    miniAccumuloConfig.setProperty(Property.MONITOR_PORT, "9995");
 
     final MiniAccumuloClusterImpl accumulo =
         MiniAccumuloClusterFactory.newAccumuloCluster(
@@ -65,9 +68,13 @@ public class AccumuloMiniCluster {
     Thread.sleep(3000);
 
     System.out.println(
-        "cluster running with instance name "
+        "cluster running with root user "
+            + user
+            + ", password "
+            + password
+            + ", instance name "
             + accumulo.getInstanceName()
-            + " and zookeepers "
+            + ", and zookeeper "
             + accumulo.getZooKeepers());
 
     if (interactive) {

@@ -19,6 +19,7 @@ import com.beust.jcommander.Parameter;
 import redis.embedded.RedisExecProvider;
 import redis.embedded.RedisServer;
 import redis.embedded.RedisServerBuilder;
+import redis.embedded.util.OsArchitecture;
 
 public class RunRedisServerOptions {
   private static final Logger LOGGER = LoggerFactory.getLogger(RunRedisServerOptions.class);
@@ -33,8 +34,8 @@ public class RunRedisServerOptions {
   private String directory = null;
   @Parameter(
       names = {"--maxMemory", "-m"},
-      description = "The maximum memory to use (in the form such as 512M)")
-  private String memory = "512M";
+      description = "The maximum memory to use (in the form such as 512M or 1G)")
+  private String memory = "1G";
 
   @Parameter(
       names = {"--setting", "-s"},
@@ -54,7 +55,8 @@ public class RunRedisServerOptions {
       }
     }
     if ((directory != null) && (directory.trim().length() > 0)) {
-      final File f = RedisExecProvider.defaultProvider().get();
+      RedisExecProvider execProvider = RedisExecProvider.defaultProvider();
+      final File f = execProvider.get();
 
       final File directoryFile = new File(directory);
       if (!directoryFile.exists() && !directoryFile.mkdirs()) {
@@ -62,11 +64,27 @@ public class RunRedisServerOptions {
       }
 
       final File newExecFile = new File(directoryFile, f.getName());
-      FileUtils.moveFile(f, newExecFile);
+      boolean exists = false;
+      if (newExecFile.exists()) {
+        if (newExecFile.length() != f.length()) {
+          if (!newExecFile.delete()) {
+            LOGGER.warn("Unable to delete redis exec '" + newExecFile.getAbsolutePath() + "'");
+          }
+        } else {
+          exists = true;
+        }
+      }
+      if (!exists) {
+        FileUtils.moveFile(f, newExecFile);
+      }
       if (!appendOnlySet) {
         bldr.setting("appendonly yes");
         bldr.setting("appendfsync everysec");
       }
+
+      final OsArchitecture osArch = OsArchitecture.detect();
+      execProvider.override(osArch.os(), osArch.arch(), newExecFile.getAbsolutePath());
+      bldr.redisExecProvider(execProvider);
     }
     bldr.setting("maxmemory " + memory.trim());
     return bldr.build();
