@@ -24,7 +24,7 @@ OPTIONS
  * Make this the default store in all operations
 
 - *-t, --type <arg>
- * The type of store, such as accumulo, memory, etc.
+ * The type of store, such as accumulo, hbase, rocksdb, redis, cassandra, bigtable, dynamodb, kudu, etc.
  * Required!
  * When -t accummulo option is used, additional options are:
  
@@ -49,15 +49,77 @@ OPTIONS
    *** Required!
 
  * When -t, --type hbase option is used, additional options are:
+  ** *-z, --zookeeper
+   *** A comma-separated list of zookeeper servers that an Accumulo instance is using
+   *** Required!
+   
+  ** --coprocessorJar
+   *** Path (HDFS URL) to the jar containing coprocessor classes
 
-  ** -d, --default
-   *** Make this the default index creating stores
+  ** --disableVerifyCoprocessors
 
-  ** -np, --numPartitions
-   *** The number of partitions.
-   *** Default: 1
+  ** --scanCacheSize
 
-  ** -ps, --partitionStrategy
-   *** The partition strategy to use.
-   *** Default: NONE
-   *** Possible Values: [NONE, HASH, ROUND_ROBIN]
+ * When -t, --type redis option is used, additional options are:
+  ** *-a, --address
+   *** The address to connect to, such as redis://127.0.0.1:6379
+   *** Required!
+   
+  ** --compression
+   *** Can be "snappy","lz4", or "none". Defaults to snappy.
+
+ * When -t, --type rocksdb option is used, additional options are:
+  ** --dir
+   *** The directory to read/write to.  Defaults to "rocksdb" in the working directory.
+   
+  ** --compactOnWrite
+   *** Whether to compact on every write, if false it will only compact on merge. Defaults to true
+
+  ** --batchWriteSize
+   *** The size (in records) for each batched write. Anything <= 1 will use synchronous single record writes without batching. Defaults to 1000.
+
+ * When -t, --type cassandra option is used, additional options are:
+  ** --contactPoints
+   *** A single contact point or a comma delimited set of contact points to connect to the Cassandra cluster.
+   *** Required!
+   
+  ** --replicas
+   *** The number of replicas to use when creating a new keyspace.
+   
+  ** --durableWrites
+   *** Whether to write to commit log for durability, configured only on creation of new keyspace.
+
+  ** --batchWriteSize
+   *** The number of inserts in a batch write.
+ 
+ * When -t, --type dynamodb option is used, additional options are:
+  ** --endpoint
+   *** The endpoint to connect to(specify either endpoint/region not both)
+   
+  ** --region
+   *** The AWS region to use(specify either endpoint/region not both)
+   
+  ** --initialWriteCapacity
+
+  ** --initialReadCapacity
+  
+  ** --maxConnections
+   *** The maximum number of open http(s) connections active at any given time
+  
+  ** --protocol
+   *** The protocol to use. HTTP or HTTPS
+  
+  ** --cacheResponseMetadata
+   *** Whether to cache responses from aws(true or false). High performance systems can disable this but debugging will be more difficult.
+ 
+ * When -t, --type kudu option is used, additional options are:
+  ** --kuduMaster
+   *** An URL for the Kudu master node
+   *** Required!
+
+ * When -t, --type bigtable option is used, additional options are:
+  ** --projectId
+  
+  ** --instanceId
+
+  ** --scanCacheSize

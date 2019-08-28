@@ -186,6 +186,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
         dataStorePluginOptions.getType(),
         dataStorePluginOptions.getGeoWaveNamespace(),
         dataStorePluginOptions.getOptionsAsMap());
+
     TestUtils.assertStatusCode(
         "Should Add " + dataStorePluginOptions.getGeoWaveNamespace() + " Datastore",
         201,
@@ -193,7 +194,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
             dataStorePluginOptions.getGeoWaveNamespace(),
             "testomatic",
             dataStorePluginOptions.getGeoWaveNamespace()));
-
     TestUtils.assertStatusCode(
         "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE + "' Style",
         201,
