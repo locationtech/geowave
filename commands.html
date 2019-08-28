@@ -1040,7 +1040,7 @@ This can be useful if you want to update a particular property of a index or sto
 <div class="ulist">
 <ul>
 <li>
-<p>The type of store, such as accumulo, memory, etc.</p>
+<p>The type of store, such as accumulo, hbase, rocksdb, redis, cassandra, bigtable, dynamodb, kudu, etc.</p>
 </li>
 <li>
 <p>Required!</p>
@@ -1126,43 +1126,249 @@ This can be useful if you want to update a particular property of a index or sto
 <div class="ulist">
 <ul>
 <li>
-<p>-d, --default</p>
+<p>*-z, --zookeeper</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Make this the default index creating stores</p>
+<p>A comma-separated list of zookeeper servers that an Accumulo instance is using</p>
+</li>
+<li>
+<p>Required!</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>-np, --numPartitions</p>
+<p>--coprocessorJar</p>
 <div class="ulist">
 <ul>
 <li>
-<p>The number of partitions.</p>
-</li>
-<li>
-<p>Default: 1</p>
+<p>Path (HDFS URL) to the jar containing coprocessor classes</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>-ps, --partitionStrategy</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The partition strategy to use.</p>
+<p>--disableVerifyCoprocessors</p>
 </li>
 <li>
-<p>Default: NONE</p>
-</li>
-<li>
-<p>Possible Values: [NONE, HASH, ROUND_ROBIN]</p>
+<p>--scanCacheSize</p>
 </li>
 </ul>
 </div>
+</li>
+<li>
+<p>When -t, --type redis option is used, additional options are:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>*-a, --address</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The address to connect to, such as redis://127.0.0.1:6379</p>
+</li>
+<li>
+<p>Required!</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--compression</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Can be "snappy","lz4", or "none". Defaults to snappy.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>When -t, --type rocksdb option is used, additional options are:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>--dir</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The directory to read/write to.  Defaults to "rocksdb" in the working directory.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--compactOnWrite</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Whether to compact on every write, if false it will only compact on merge. Defaults to true</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--batchWriteSize</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The size (in records) for each batched write. Anything &#8656; 1 will use synchronous single record writes without batching. Defaults to 1000.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>When -t, --type cassandra option is used, additional options are:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>--contactPoints</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A single contact point or a comma delimited set of contact points to connect to the Cassandra cluster.</p>
+</li>
+<li>
+<p>Required!</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--replicas</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The number of replicas to use when creating a new keyspace.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--durableWrites</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Whether to write to commit log for durability, configured only on creation of new keyspace.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--batchWriteSize</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The number of inserts in a batch write.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>When -t, --type dynamodb option is used, additional options are:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>--endpoint</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The endpoint to connect to(specify either endpoint/region not both)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--region</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The AWS region to use(specify either endpoint/region not both)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--initialWriteCapacity</p>
+</li>
+<li>
+<p>--initialReadCapacity</p>
+</li>
+<li>
+<p>--maxConnections</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The maximum number of open http(s) connections active at any given time</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--protocol</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The protocol to use. HTTP or HTTPS</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>--cacheResponseMetadata</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Whether to cache responses from aws(true or false). High performance systems can disable this but debugging will be more difficult.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>When -t, --type kudu option is used, additional options are:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>--kuduMaster</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An URL for the Kudu master node</p>
+</li>
+<li>
+<p>Required!</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>When -t, --type bigtable option is used, additional options are:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>--projectId</p>
+</li>
+<li>
+<p>--instanceId</p>
+</li>
+<li>
+<p>--scanCacheSize</p>
 </li>
 </ul>
 </div>
@@ -9762,7 +9968,7 @@ another point.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-08-22 20:03:48 +00:00
+Last updated 2019-08-28 20:32:07 +00:00
 </div>
 </div>
 </body>

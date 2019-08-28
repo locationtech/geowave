@@ -19,6 +19,7 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>Minor fixes and updates to docs <a href="https://github.com/locationtech/geowave/pull/1615">#1615</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>installgdal command and defaults for geoserver options <a href="https://github.com/locationtech/geowave/pull/1614">#1614</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Minor fixes to CQL time range constraints and NaN handling for Numeric Range Stats <a href="https://github.com/locationtech/geowave/pull/1613">#1613</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>GEOWAVE-1575: support for deleting from Data Index by Data ID Range <a href="https://github.com/locationtech/geowave/pull/1612">#1612</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
@@ -386,7 +387,6 @@
 <li>Zeppelin changes <a href="https://github.com/locationtech/geowave/pull/1257">#1257</a> (<a href="https://github.com/JWileczek">JWileczek</a>)</li>
 <li>Updating packages and asciidocs links in documentation <a href="https://github.com/locationtech/geowave/pull/1254">#1254</a> (<a href="https://github.com/mcarrier7">mcarrier7</a>)</li>
 <li>Updating documentation to add 0.9.6 to the releases tab <a href="https://github.com/locationtech/geowave/pull/1253">#1253</a> (<a href="https://github.com/mcarrier7">mcarrier7</a>)</li>
-<li>Removing scala spark project and consolidating dependencies <a href="https://github.com/locationtech/geowave/pull/1228">#1228</a> (<a href="https://github.com/JWileczek">JWileczek</a>)</li>
 </ul>
 <h2 id="v0.9.6-2017-11-21"><a href="https://github.com/locationtech/geowave/tree/v0.9.6">v0.9.6</a> (2017-11-21)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v0.9.5...v0.9.6">Full Changelog</a></p>
@@ -428,6 +428,7 @@
 <li>Addressed Threadfix true-positives for REST webapp <a href="https://github.com/locationtech/geowave/pull/1234">#1234</a> (<a href="https://github.com/richard3d">richard3d</a>)</li>
 <li>HP Fortify false positives <a href="https://github.com/locationtech/geowave/pull/1232">#1232</a> (<a href="https://github.com/mawhitby">mawhitby</a>)</li>
 <li>Fixed geoserver config command for rest calls and added a response <a href="https://github.com/locationtech/geowave/pull/1231">#1231</a> (<a href="https://github.com/emacthecav">emacthecav</a>)</li>
+<li>Removing scala spark project and consolidating dependencies <a href="https://github.com/locationtech/geowave/pull/1228">#1228</a> (<a href="https://github.com/JWileczek">JWileczek</a>)</li>
 <li>Fixed hbase splits w/ stats disabled <a href="https://github.com/locationtech/geowave/pull/1227">#1227</a> (<a href="https://github.com/blastarr">blastarr</a>)</li>
 <li>Ingest URLs, HDFS and S3 <a href="https://github.com/locationtech/geowave/pull/1226">#1226</a> (<a href="https://github.com/srinivasreddyv2">srinivasreddyv2</a>)</li>
 <li>Added puppet notify in template <a href="https://github.com/locationtech/geowave/pull/1225">#1225</a> (<a href="https://github.com/ayk33">ayk33</a>)</li>
@@ -542,7 +543,6 @@
 <li>Adding a few security-related fixes and enhancements. Biggest ones in… <a href="https://github.com/locationtech/geowave/pull/1092">#1092</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>minor fixes to build <a href="https://github.com/locationtech/geowave/pull/1090">#1090</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Geowave security fixes <a href="https://github.com/locationtech/geowave/pull/1089">#1089</a> (<a href="https://github.com/mcarrier7">mcarrier7</a>)</li>
-<li>GeoServer SSL Configuration Properties Encryption Support <a href="https://github.com/locationtech/geowave/pull/1088">#1088</a> (<a href="https://github.com/mcarrier7">mcarrier7</a>)</li>
 </ul>
 <h2 id="v0.9.4-2017-04-28"><a href="https://github.com/locationtech/geowave/tree/v0.9.4">v0.9.4</a> (2017-04-28)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v0.9.3...v0.9.4">Full Changelog</a></p>
@@ -583,6 +583,7 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>GeoServer SSL Configuration Properties Encryption Support <a href="https://github.com/locationtech/geowave/pull/1088">#1088</a> (<a href="https://github.com/mcarrier7">mcarrier7</a>)</li>
 <li>fixed issue in agg param in debug cli <a href="https://github.com/locationtech/geowave/pull/1087">#1087</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>minor fix to rpm <a href="https://github.com/locationtech/geowave/pull/1086">#1086</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>update rpm to use hbase 1.3.0 <a href="https://github.com/locationtech/geowave/pull/1085">#1085</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
@@ -1330,6 +1331,7 @@
 <li>fixed coveralls to report both integration and unit tests (#263) <a href="https://github.com/locationtech/geowave/pull/329">#329</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Updated Jace/PDAL/Mapnik documentation <a href="https://github.com/locationtech/geowave/pull/328">#328</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</li>
 <li>0.8.6-SNAPSHOT <a href="https://github.com/locationtech/geowave/pull/327">#327</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</li>
+<li>Roll to v0.8.5-SNAPSHOT <a href="https://github.com/locationtech/geowave/pull/314">#314</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 </ul>
 <h2 id="v0.8.5-2015-04-10"><a href="https://github.com/locationtech/geowave/tree/v0.8.5">v0.8.5</a> (2015-04-10)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v0.8.4...v0.8.5">Full Changelog</a></p>
@@ -1351,7 +1353,6 @@
 <li>added common jace dependency generation <a href="https://github.com/locationtech/geowave/pull/322">#322</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</li>
 <li>Cleaned up README <a href="https://github.com/locationtech/geowave/pull/319">#319</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</li>
 <li>Added deploy to S3 option+repo <a href="https://github.com/locationtech/geowave/pull/316">#316</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</li>
-<li>Roll to v0.8.5-SNAPSHOT <a href="https://github.com/locationtech/geowave/pull/314">#314</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 </ul>
 <h2 id="v0.8.4-2015-04-07"><a href="https://github.com/locationtech/geowave/tree/v0.8.4">v0.8.4</a> (2015-04-07)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v0.8.3...v0.8.4">Full Changelog</a></p>
@@ -1454,7 +1455,6 @@
 <li>Relocate geowave-accumulo.jar HDFS location to /accumulo/classpath/geowave <a href="https://github.com/locationtech/geowave/issues/186">#186</a></li>
 <li>Create man pages for geowave-ingest <a href="https://github.com/locationtech/geowave/issues/164">#164</a></li>
 <li>Implement OSM ingest plugin <a href="https://github.com/locationtech/geowave/issues/158">#158</a></li>
-<li>Add data adapter and index caching to improve performance <a href="https://github.com/locationtech/geowave/issues/54">#54</a></li>
 <li>Create PDAL driver <a href="https://github.com/locationtech/geowave/issues/14">#14</a></li>
 </ul>
 <p><strong>Fixed bugs:</strong></p>
