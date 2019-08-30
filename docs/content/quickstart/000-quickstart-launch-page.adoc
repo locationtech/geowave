@@ -5,7 +5,11 @@ _v${project.version}_
 
 :linkattrs:
 
-= GeoWave Quickstart Guide image:geowave-icon-logo-cropped.png[width="28%"]
+image:images/geowave-icon-logo-cropped.png[width="28%",align="left"]
+
+= GeoWave Quickstart Guide 
+
+// image:images/geowave-icon-logo-cropped.png[width="28%"]
 
 The GeoWave quickstart guide is designed to allow a new user to walkthrough a simple use case using the tools built 
 into the GeoWave framework. We currently have both a vector and raster walkthough which can be run in and AWS EMR environment 
@@ -14,7 +18,7 @@ looking try out GeoWave in that manner.
 
 == Environment Options
 - link:aws-env.html#[Amazon Web Services EMR]
-- link:sandbox-env.html#[Sandbox VirtualBox Image]
+- link:sandbox-env.html#[GeoWave Standalone Installer]
 
 == Walkthroughs
 - link:walkthrough-vector.html#[Vector Demo]

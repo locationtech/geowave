@@ -18,24 +18,11 @@ If you have already done this in the Vector Demo, you can skip this step.
 
 This script defines a number of the variables that will be used in future commands.
 
-. If running with the GeoWave Sandbox:
-+
 [source, bash]
 ----
 cd /mnt
 
 sudo wget s3.amazonaws.com/geowave/${version_url}/scripts/sandbox/quickstart/geowave-env.sh
-
-source /mnt/geowave-env.sh
-----
-
-. If running with EMR:
-+
-[source, bash]
-----
-cd /mnt
-
-sudo wget s3.amazonaws.com/geowave/${version_url}/scripts/emr/quickstart/geowave-env.sh
 
 source /mnt/geowave-env.sh
 ----
@@ -68,13 +55,13 @@ At this point, we should be ready to ingest the data.
 
 . Add a GeoWave store
 +
-We need to create two GeoWave stores for this ingest. landsat_raster will store the raster images, and landsat_vector stores the vector metadata associated with those images. The images come from the https://landsat.usgs.gov/landsat-8[Landsat 8 Satellite].
+We need to create two GeoWave stores for this ingest. landsat_raster will store the raster images, and landsat_vector stores the vector metadata associated with those images. The images come from the http://www.usgs.gov/landsat[Landsat 8 Satellite].
 
-.. If running with the GeoWave Sandbox:
+.. If running with the GeoWave Standalone Installer:
 +
 [source, bash]
 ----
-geowave store add -t hbase -z $HOSTNAME:2181 landsatraster --gwNamespace landsat_raster
+geowave store add -t redis --address redis://127.0.0.1:6379 landsatraster --gwNamespace landsat_raster
 
 geowave store copycfg landsatraster landsatvector --gwNamespace landsat_vector
 ----

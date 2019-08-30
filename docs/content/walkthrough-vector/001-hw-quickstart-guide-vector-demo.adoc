@@ -1,24 +1,14 @@
 
 :linkattrs:
 
-== GeoWave Quickstart Guide Vector Demo image:geowave-icon-logo-cropped.png[width="28%"]
+image::geowave-icon-logo-cropped.png[width="28%"]
+== GeoWave Quickstart Guide Vector Demo 
 
 In the Vector Demo, we use GeoWave to ingest and run a Kernel Density Estimation on a large set of media/broadcast data provided by the GDELT Project.
 
 === Set-Up Environment Variables
 
 Download the GeoWave environment script. We will also download two .sld files to use later on in the guide.
-
-
-SandBox:
-
-[source, bash]
-----
-cd /mnt
-sudo wget s3.amazonaws.com/geowave/${version_url}/scripts/sandbox/quickstart/geowave-env.sh
-----
-
-EMR:
 
 [source, bash]
 ----
@@ -56,12 +46,12 @@ After the data has been downloaded, we are ready to set up the store and index u
 === Config and Ingest
 
 . Add a GeoWave store
-.. If using Sandbox
+.. If using Standalone Installer
 +
 [source, bash]
 ----
-geowave store add gdelt --gwNamespace geowave.gdelt -t hbase --zookeeper \
-sandbox.hortonworks.com:2181
+geowave util redis run -m 2048M
+
 ----
 
 .. If using EMR Accumulo
@@ -90,6 +80,16 @@ geowave store add gdelt --gwNamespace geowave.gdelt \
 ----
 . Add a spatial index
 +
+
+.. If using Standalone Installer
++
+[source, bash]
+----
+geowave index add -t spatial gdelt gdelt-spatial
+----
+
+.. If using EMR
++
 [source, bash]
 ----
 geowave index add gdelt spatial -t spatial --partitionStrategy round_robin \
@@ -97,7 +97,7 @@ geowave index add gdelt spatial -t spatial --partitionStrategy round_robin \
 ----
 
 . Ingest the data into geowave
-.. If using Sandbox
+.. If using Standalone Installer
 +
 [source, bash]
 ----
@@ -112,19 +112,18 @@ geowave ingest localtogw $STAGING_DIR/gdelt gdelt gdelt-spatial -f gdelt \
 --gdelt.cql "BBOX(geometry,${WEST},${SOUTH},${EAST},${NORTH})"
 ----
 
-The ingest should take about ~3-5 minutes. Once the ingest has started, you can monitor HBase status at the link:interact-cluster.html#hbase-master-view[HBase web interface, window="_blank"], or the Accumulo status at the link:interact-cluster.html#accumulo-view[Accumulo web interface, window="_blank"]. The ingest is complete when your terminal will accept user input.
+The ingest should take about ~3-5 minutes. Once the ingest has started, you can monitor HBase status at the link:interact-cluster.html#hbase-master-view[HBase web interface, window="_blank"], or the Accumulo status at the link:interact-cluster.html#accumulo-view[Accumulo web interface, window="_blank"]. The ingest is complete when your terminal will accept user input.  If you would like to view the results of the vector ingest, you can proceed to the link:integrate-geoserver.html[GeoServer Integration, window="_blank"] steps and follow the steps only for the Vector Demo Layers.
 
 === Kernel Density Estimation (KDE)
 
 Once the ingest has completed:
 
 . Add another store for the kde.
-.. If using Sandbox
+.. If using Standalone Installer
 +
 [source, bash]
 ----
-geowave store add gdelt-kde --gwNamespace geowave.kde_gdelt \
--t hbase --zookeeper $HOSTNAME:2181
+geowave store add gdelt-kde --gwNamespace geowave.gdelt -t redis --address redis://127.0.0.1:6379
 ----
 
 .. If using EMR Accumulo
@@ -151,15 +150,11 @@ geowave store add gdelt-kde --gwNamespace geowave.kde_gdelt \
 -t cassandra  --contactPoints localhost
 ----
 . Run the KDE analytic
-.. If using Sandbox
+.. If using Standalone Installer
 +
 [source, bash]
 ----
-geowave analytic kde --featureType gdeltevent --minLevel 5 --maxLevel 26 \
---minSplits $NUM_PARTITIONS --maxSplits $NUM_PARTITIONS --coverageName gdeltevent_kde  \
---hdfsHostPort sandbox.hortonworks.com:${HDFS_PORT} \
---jobSubmissionHostPort sandbox.hortonworks.com:${RESOURCE_MAN_PORT} \
---tileSize 1 gdelt gdelt-kde
+geowave analytic kdespark --featureType gdeltevent -m local[*] --minLevel 5 --maxLevel 26 --coverageName gdeltevent_kde gdelt gdelt-kde
 ----
 
 .. If using EMR

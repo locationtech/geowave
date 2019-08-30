@@ -5,7 +5,9 @@ _v${project.version}_
 
 :linkattrs:
 
-= GeoWave User Guide image:geowave-icon-logo-cropped.png[width="28%"]
+image:images/geowave-icon-logo-cropped.png[width="28%"]
+
+= GeoWave User Guide 
 
 ////
 PDF Generation gives an error if you try to use icons
