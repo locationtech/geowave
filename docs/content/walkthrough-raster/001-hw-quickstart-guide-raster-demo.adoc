@@ -2,7 +2,9 @@
 
 :linkattrs:
 
-== GeoWave Quickstart Guide Raster Demo image:geowave-icon-logo-cropped.png[width="28%"]
+image::geowave-icon-logo-cropped-v2.png[width="28%"]
+
+== GeoWave Quickstart Guide Raster Demo 
 
 In the Raster Demo, the Geowave Service creates a mosaic image from a set of raster images. The analyze commands prints out the metadata of available imagery matching your criteria to select ones that meet parameters of interest, and the ingest command
 downloads those images and combines them to create a mosaic.
@@ -31,6 +33,11 @@ source /mnt/geowave-env.sh
 
 GDAL (Geospatial Data Abstraction Library) is an image processing library. We need to download the proper GDAL files to process the raster data. More info on GDAL can be found link:http://www.gdal.org[here, window="_blank"].
 
+[NOTE]
+====
+Make sure the */mnt/gdal* directory matches your install path
+====
+
 [source, bash]
 ----
 sudo mkdir /mnt/gdal
@@ -51,7 +58,7 @@ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/mnt/gdal
 
 At this point, we should be ready to ingest the data.
 
-=== Config and Ingest.
+=== Config and Ingest
 
 . Add a GeoWave store
 +
@@ -124,6 +131,8 @@ More information on the landsat ingest and analyze commands can be found https:/
 ----
 geowave util landsat ingest --nbestperspatial --nbestscenes 1 --usecachedscenes --cql "$BERLIN_BBOX AND band='B8' AND cloudCover>0" --crop --retainimages -ws /mnt/landsat --vectorstore landsatvector --pyramid --coverage berlin_mosaic  landsatraster spatial
 ----
+
+Proceed to link:integrate-geoserver.html[GeoServer Integration, window="_blank"] to walkthrough visualizing the ingested data.
 
 === Vector Demo
 

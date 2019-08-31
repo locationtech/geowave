@@ -914,6 +914,7 @@
 										<idprefix />
 										<idseparator>-</idseparator>
 										<docinfo1>true</docinfo1>
+										<toc>left</toc>
 									</attributes>
 								</configuration>
 							</execution>

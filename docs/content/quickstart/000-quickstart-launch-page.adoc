@@ -5,7 +5,7 @@ _v${project.version}_
 
 :linkattrs:
 
-image:images/geowave-icon-logo-cropped.png[width="28%",align="left"]
+image:geowave-icon-logo-cropped-v2.png[width="28%"]
 
 = GeoWave Quickstart Guide 
 
@@ -18,7 +18,7 @@ looking try out GeoWave in that manner.
 
 == Environment Options
 - link:aws-env.html#[Amazon Web Services EMR]
-- link:sandbox-env.html#[GeoWave Standalone Installer]
+- link:standalone-installer.html#[GeoWave Standalone Installer]
 
 == Walkthroughs
 - link:walkthrough-vector.html#[Vector Demo]

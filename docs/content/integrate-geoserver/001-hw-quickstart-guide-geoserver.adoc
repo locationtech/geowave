@@ -2,25 +2,16 @@
 
 :linkattrs:
 
-image::images/geowave-icon-logo-cropped.png[width="28%"]
+image::geowave-icon-logo-cropped.png[width="28%"]
 == GeoWave Quickstart Guide Integrate with GeoServer 
 
 In order to view the images generated from the vector and raster demos, use the GeoServer web interface. The following command configures and restarts GeoServer.
 
 === Configure GeoServer
 
-SandBox
-
 [source, bash]
 ----
-geowave config geoserver sandbox.hortonworks.com:8993
-----
-
-EMR
-
-[source, bash]
-----
-geowave config geoserver "$HOSTNAME:8000"
+geowave gs run
 ----
 
 === Add Layers and Styles
@@ -62,19 +53,19 @@ geowave gs style set gdeltevent --styleName SubsamplePoints
 
 In a browser go to http://localhost:8080/geoserver/ -  and you should see the GeoServer Welcome page
 
-image::images/sandbox/geoserver-only-cropped.png[width="75%"]
+image::sandbox/geoserver-only-cropped.png[width="75%"]
 
 Click on the Layer Preview link and you should see the gdeltevent and gdeltevent_kde layers in the Layer List table
 
 .GeoServer Layer Preview List with Vector Demo Layers
-image::images/sandbox/geoserver-vector-points-kde-layers-cropped.png[]
+image::sandbox/geoserver-vector-points-kde-layers-cropped.png[]
 
 Click on the OpenLayers link and you will see the layers
 
 .gdeltevent layer
-image::images/sandbox/point-view.png[width="60%"]
+image::sandbox/point-view.png[width="60%"]
 .gdeltevent_kde layer
-image::images/sandbox/kde-view.png[width="65%"]
+image::sandbox/kde-view.png[width="65%"]
 
 ==== Raster Demo Layers
 
@@ -88,12 +79,12 @@ geowave gs layer add landsatvector --add ALL
 Click on the Layer Preview link and you should see the scene and berlin_mosaic layers in the Layer List table
 
 .GeoServer Layer Preview List with Raster Demo Layers
-image::images/sandbox/geoserver-raster-layers-cropped.png[width="75%]
+image::sandbox/geoserver-raster-layers-cropped.png[width="75%]
 
 .scene layer
-image::images/sandbox/scene-view.png[width="60%"]
+image::sandbox/scene-view.png[width="60%"]
 .berlin_mosaic layer
-image::images/sandbox/berlin-mosaic-view.png[width="65%"]
+image::sandbox/berlin-mosaic-view.png[width="65%"]
 
 
 === Cluster Interaction

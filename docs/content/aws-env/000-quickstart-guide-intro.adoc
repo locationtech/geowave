@@ -3,7 +3,8 @@
 
 _v${project.version}_
 
-= GeoWave Quickstart Guide AWS EMR Environment Setup image:geowave-icon-logo-cropped.png[width="28%"]
+image::geowave-icon-logo-cropped-v2.png[width="28%"]
+= GeoWave Quickstart Guide AWS EMR Environment Setup 
 
 [[quickstart-guide-intro]]
 == What you will need

@@ -5,7 +5,8 @@ _v${project.version}_
 
 :linkattrs:
 
-= GeoWave Quickstart Guide: Spatial Join Jupyter Notebook image:geowave-icon-logo-cropped.png[width="28%"]
+image::geowave-icon-logo-cropped-v2.png[width="28%"]
+= GeoWave Quickstart Guide: Spatial Join Jupyter Notebook
 
 == Assumptions
 

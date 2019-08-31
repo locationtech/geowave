@@ -2,7 +2,8 @@
 
 :linkattrs:
 
-== GeoWave Quickstart Guide Interacting with the Cluster image:geowave-icon-logo-cropped.png[width="28%"]
+image::geowave-icon-logo-cropped-v2.png[width="28%"]
+== GeoWave Quickstart Guide Interacting with the Cluster
 
 [NOTE]
 ====

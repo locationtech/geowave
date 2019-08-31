@@ -1,14 +1,19 @@
 
 :linkattrs:
 
-image::geowave-icon-logo-cropped.png[width="28%"]
+image::geowave-icon-logo-cropped-v2.png[width="28%"]
 == GeoWave Quickstart Guide Vector Demo 
 
 In the Vector Demo, we use GeoWave to ingest and run a Kernel Density Estimation on a large set of media/broadcast data provided by the GDELT Project.
 
 === Set-Up Environment Variables
 
-Download the GeoWave environment script. We will also download two .sld files to use later on in the guide.
+Download the GeoWave environment script.
+
+[NOTE]
+====
+In this walkthrough, /mnt will be used as the install path, make sure you modify the command to match your install location
+====
 
 [source, bash]
 ----
