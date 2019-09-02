@@ -1,9 +1,0 @@
-<<<
-
-:linkattrs:
-
-== Downloading the Installer
-
-The installer for this https://geowave.s3.amazonaws.com/${project.version}/standalone-installers/geowave_windows-x64_${project.version}.exe[can be found here]. The installer is about ~600Mb in size.
-
-

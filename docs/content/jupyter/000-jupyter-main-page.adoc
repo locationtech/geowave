@@ -5,7 +5,7 @@ _v${project.version}_
 
 :linkattrs:
 
-image::geowave-icon-logo-cropped-v2.png[width="28%"]
+image::geowave-icon-logo-cropped-v2.png[width="15%"]
 = GeoWave Quickstart Guide: Jupyter Notebook
 
 == Assumptions

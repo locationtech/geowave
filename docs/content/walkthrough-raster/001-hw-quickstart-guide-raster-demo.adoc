@@ -2,9 +2,9 @@
 
 :linkattrs:
 
-image::geowave-icon-logo-cropped-v2.png[width="28%"]
+image::geowave-icon-logo-cropped-v2.png[width="15%"]
 
-== GeoWave Quickstart Guide Raster Demo 
+== GeoWave Quickstart Guide - Raster Demo 
 
 In the Raster Demo, the Geowave Service creates a mosaic image from a set of raster images. The analyze commands prints out the metadata of available imagery matching your criteria to select ones that meet parameters of interest, and the ingest command
 downloads those images and combines them to create a mosaic.
@@ -64,7 +64,7 @@ At this point, we should be ready to ingest the data.
 +
 We need to create two GeoWave stores for this ingest. landsat_raster will store the raster images, and landsat_vector stores the vector metadata associated with those images. The images come from the http://www.usgs.gov/landsat[Landsat 8 Satellite].
 
-.. If running with the GeoWave Standalone Installer:
+.. If running with the GeoWave Standalone Installer Redis:
 +
 [source, bash]
 ----

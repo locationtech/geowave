@@ -5,7 +5,7 @@ _v${project.version}_
 
 :linkattrs:
 
-image:images/geowave-icon-logo-cropped.png[width="28%"]
+image:geowave-icon-logo-cropped.png[width="18%"]
 
 = GeoWave User Guide 
 

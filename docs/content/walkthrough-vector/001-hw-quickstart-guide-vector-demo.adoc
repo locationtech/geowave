@@ -1,8 +1,8 @@
 
 :linkattrs:
 
-image::geowave-icon-logo-cropped-v2.png[width="28%"]
-== GeoWave Quickstart Guide Vector Demo 
+image::geowave-icon-logo-cropped-v2.png[width="15%"]
+== GeoWave Quickstart Guide - Vector Demo 
 
 In the Vector Demo, we use GeoWave to ingest and run a Kernel Density Estimation on a large set of media/broadcast data provided by the GDELT Project.
 
@@ -12,7 +12,7 @@ Download the GeoWave environment script.
 
 [NOTE]
 ====
-In this walkthrough, /mnt will be used as the install path, make sure you modify the command to match your install location
+In this walkthrough, */mnt* will be used as the install path, make sure you modify the command to match your install location
 ====
 
 [source, bash]
@@ -51,7 +51,7 @@ After the data has been downloaded, we are ready to set up the store and index u
 === Config and Ingest
 
 . Add a GeoWave store
-.. If using Standalone Installer
+.. If using Standalone Installer Redis
 +
 [source, bash]
 ----
@@ -124,7 +124,7 @@ The ingest should take about ~3-5 minutes. Once the ingest has started, you can 
 Once the ingest has completed:
 
 . Add another store for the kde.
-.. If using Standalone Installer
+.. If using Standalone Installer Redis
 +
 [source, bash]
 ----
@@ -178,7 +178,7 @@ Once the KDE has run its course successfully, you should be able to view the hea
 
 === Raster Demo
 
-link:walkthrough-raster.html[Raster Demo, window="_blank"]
+- link:walkthrough-raster.html[Raster Demo, window="_blank"]
 
 === GeoServer Integration
 

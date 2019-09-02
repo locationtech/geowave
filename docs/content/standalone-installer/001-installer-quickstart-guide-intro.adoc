@@ -3,7 +3,7 @@
 
 _v${project.version}_
 
-image:geowave-icon-logo-cropped-v2.png[width="28%"]
+image:geowave-icon-logo-cropped-v2.png[width="15%"]
  
 = GeoWave Standalone Installer 
 
@@ -14,21 +14,21 @@ The Standalone Installer is designed to allow a user to run end-to-end tests of 
 image:redis.png[width="20%"]
 image:rocksdb.png[width="25%"]
 image:hbase.png[width="20%"]
-image:images/accumulo.png[width="20%"]
+image:accumulo-logo.png[width="20%"]
 
 The Standalone installer uses https://www.ej-technologies.com/products/install4j/overview.html[Install4J] to build multi-platform installers.  Installation requires ~900Mb of disk space and 8Gb of memory.
 
 * link:https://geowave.s3.amazonaws.com/${version_url}/standalone-installers/geowave_windows-x64_${tag.version}.exe[Windows]
 * link:https://geowave.s3.amazonaws.com/${version_url}/standalone-installers/geowave_macos_${tag.version}.dmg[Mac]
-* link:https://geowave.s3.amazonaws.com/${version_url}/standalone-installers/geowave_unix_${tag.version}.sh[Linux].
+* link:https://geowave.s3.amazonaws.com/${version_url}/standalone-installers/geowave_unix_${tag.version}.sh[Linux]
 
 After you have successfully installed GeoWave, you can proceed to the walkthough demos.
 
-== Walkthrough Demo Links
-- link:walkthrough-vector.html[Vector Demo, window="_blank"]
-- link:walkthrough-raster.html[Raster Demo, window="_blank"]
-- link:integrate-geoserver.html[GeoServer Integration, window="_blank"]
-- link:interact-cluster.html[Interacting with the cluster, window="_blank"]
+== Demo Links
+- link:walkthrough-vector.html[Vector Demo]
+- link:walkthrough-raster.html[Raster Demo]
+- link:integrate-geoserver.html[GeoServer Integration]
+- link:interact-cluster.html[Interacting with the cluster]
 
 
 

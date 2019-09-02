@@ -5,15 +5,14 @@ _v${project.version}_
 
 :linkattrs:
 
-image:geowave-icon-logo-cropped-v2.png[width="28%"]
+image:geowave-icon-logo-cropped-v2.png[width="15%"]
 
 = GeoWave Quickstart Guide 
 
 // image:images/geowave-icon-logo-cropped.png[width="28%"]
 
-The GeoWave quickstart guide is designed to allow a new user to walkthrough a simple use case using the tools built 
-into the GeoWave framework. We currently have both a vector and raster walkthough which can be run in and AWS EMR environment 
-or on your local machine in a single node sandbox using VirtualBox. There are also Jupyter and Zeppelin Notebook examples for users 
+The GeoWave quickstart guide is designed to allow a new user to run through a simple use case with the GeoWave framework. We currently have both a vector and raster walkthough which can be run in an AWS EMR environment 
+or on your local machine as a single node through the Standalone Installer. There are also Jupyter and Zeppelin Notebook examples for users 
 looking try out GeoWave in that manner.   
 
 == Environment Options
