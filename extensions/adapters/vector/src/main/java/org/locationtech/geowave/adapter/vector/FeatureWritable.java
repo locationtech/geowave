@@ -27,6 +27,7 @@ import org.locationtech.geowave.adapter.vector.util.FeatureDataUtils;
 import org.locationtech.geowave.core.geotime.util.TWKBReader;
 import org.locationtech.geowave.core.geotime.util.TWKBWriter;
 import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
@@ -154,6 +155,7 @@ public class FeatureWritable implements Writable, java.io.Serializable {
       } else if (Geometry.class.isAssignableFrom(binding)) {
         final TWKBWriter writer = new TWKBWriter();
         final byte[] buffer = writer.write((Geometry) value);
+        Varint.writeUnsignedVarInt(buffer.length, output);
         output.write(buffer);
       } else {
         // can't optimize, in this case we use an ObjectOutputStream to
@@ -209,8 +211,11 @@ public class FeatureWritable implements Writable, java.io.Serializable {
       } else if (Geometry.class.isAssignableFrom(binding)) {
         final TWKBReader reader = new TWKBReader();
         try {
-          return reader.read(input);
-        } catch (final IOException e) {
+          final int length = Varint.readUnsignedVarInt(input);
+          final byte[] buffer = new byte[length];
+          input.readFully(buffer);
+          return reader.read(buffer);
+        } catch (final IOException | ParseException e) {
           throw new IOException("Failed to read the geometry WKB", e);
         }
       } else {
