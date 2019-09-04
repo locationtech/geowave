@@ -86,6 +86,14 @@
 					<artifactId>gt-epsg-hsql</artifactId>
 					<groupId>org.geotools</groupId>
 				</exclusion>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-beanutils</groupId>
+					<artifactId>commons-beanutils</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
