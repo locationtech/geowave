@@ -88,7 +88,7 @@ public class IndexPluginOptions extends DefaultPluginOptions implements PluginOp
     return basicIndexOptions.getNumPartitions();
   }
 
-  public void setName(String indexName) {
+  public void setName(final String indexName) {
     this.indexName = indexName;
   }
 
@@ -160,5 +160,17 @@ public class IndexPluginOptions extends DefaultPluginOptions implements PluginOp
 
   public static enum PartitionStrategy {
     NONE, HASH, ROUND_ROBIN;
+
+    // converter that will be used later
+    public static PartitionStrategy fromString(final String code) {
+
+      for (final PartitionStrategy output : PartitionStrategy.values()) {
+        if (output.toString().equalsIgnoreCase(code)) {
+          return output;
+        }
+      }
+
+      return null;
+    }
   }
 }
