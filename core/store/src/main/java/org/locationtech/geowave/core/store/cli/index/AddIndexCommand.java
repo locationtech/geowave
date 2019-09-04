@@ -85,12 +85,11 @@ public class AddIndexCommand extends ServiceEnabledCommand<String> {
     if (!inputStoreLoader.loadFromConfig(configFile)) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
-    DataStorePluginOptions storeOptions = inputStoreLoader.getDataStorePlugin();
+    final DataStorePluginOptions storeOptions = inputStoreLoader.getDataStorePlugin();
 
-    IndexStore indexStore = storeOptions.createIndexStore();
+    final IndexStore indexStore = storeOptions.createIndexStore();
 
-    Index existingIndex = indexStore.getIndex(newIndex.getName());
-    if (existingIndex != null) {
+    if (indexStore.indexExists(newIndex.getName())) {
       throw new ParameterException("That index already exists: " + newIndex.getName());
     }
 
