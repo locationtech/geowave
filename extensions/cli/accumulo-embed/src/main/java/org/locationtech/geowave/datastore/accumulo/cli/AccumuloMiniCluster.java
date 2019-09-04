@@ -43,8 +43,8 @@ public class AccumuloMiniCluster {
             ? Boolean.parseBoolean(System.getProperty("interactive"))
             : true;
 
-    final String password = System.getProperty("password", "geowave");
-    final String user = System.getProperty("rootUser", "geowave");
+    final String password = System.getProperty("password", "secret");
+    final String user = System.getProperty("rootUser", "root");
 
     final File tempDir = Files.createTempDir();
     final String instanceName = System.getProperty("instanceName", "accumulo");
