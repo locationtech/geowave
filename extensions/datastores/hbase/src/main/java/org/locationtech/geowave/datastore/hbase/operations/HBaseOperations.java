@@ -782,54 +782,6 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
   }
 
   @Override
-  public boolean mergeData(
-      final Index index,
-      final PersistentAdapterStore adapterStore,
-      final InternalAdapterStore internalAdapterStore,
-      final AdapterIndexMappingStore adapterIndexMappingStore,
-      final Integer maxRangeDecomposition) {
-    if (options.isServerSideLibraryEnabled()) {
-      final TableName tableName = getTableName(index.getName());
-      try (Admin admin = conn.getAdmin()) {
-        admin.compact(tableName);
-        // wait for table compaction to finish
-        while (!admin.getCompactionState(tableName).equals(CompactionState.NONE)) {
-          Thread.sleep(100);
-        }
-      } catch (final Exception e) {
-        LOGGER.error("Cannot compact table '" + index.getName() + "'", e);
-        return false;
-      }
-    } else {
-      return DataStoreUtils.mergeData(
-          this,
-          maxRangeDecomposition,
-          index,
-          adapterStore,
-          internalAdapterStore,
-          adapterIndexMappingStore);
-    }
-    return true;
-  }
-
-  @Override
-  public boolean mergeStats(
-      final DataStatisticsStore store,
-      final InternalAdapterStore internalAdapterStore) {
-//    if (options.isServerSideLibraryEnabled()) {
-//      try (Admin admin = conn.getAdmin()) {
-//        admin.compact(getTableName(AbstractGeoWavePersistence.METADATA_TABLE));
-//      } catch (final IOException e) {
-//        LOGGER.error("Cannot compact table '" + AbstractGeoWavePersistence.METADATA_TABLE + "'", e);
-//        return false;
-//      }
-//    } else {
-      return DataStoreUtils.mergeStats(store, internalAdapterStore);
-//    }
-//    return true;
-  }
-
-  @Override
   public boolean ensureAuthorizations(final String clientUser, final String... authorizations) {
     return true;
   }
