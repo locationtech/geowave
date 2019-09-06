@@ -64,7 +64,7 @@ At this point, we should be ready to ingest the data.
 +
 We need to create two GeoWave stores for this ingest. landsat_raster will store the raster images, and landsat_vector stores the vector metadata associated with those images. The images come from the http://www.usgs.gov/landsat[Landsat 8 Satellite].
 
-.. If running the Standalone Installer:
+.. If using the Standalone Installer:
 ... Redis
 +
 [source, bash]

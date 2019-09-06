@@ -51,7 +51,7 @@ After the data has been downloaded, we are ready to set up the store and index u
 === Config and Ingest
 
 . Add a GeoWave store
-.. If using Standalone Installer
+.. If using the Standalone Installer
 ... Redis
 +
 [source, bash]
@@ -105,7 +105,7 @@ geowave store add gdelt --gwNamespace geowave.gdelt \
 . Add a spatial index
 +
 
-.. If using Standalone Installer
+.. If using the Standalone Installer
 +
 [source, bash]
 ----
@@ -121,7 +121,7 @@ geowave index add gdelt spatial -t spatial --partitionStrategy round_robin \
 ----
 
 . Ingest the data into geowave
-.. If using Standalone Installer
+.. If using the Standalone Installer
 +
 [source, bash]
 ----
@@ -143,7 +143,7 @@ The ingest should take about ~3-5 minutes. Once the ingest has started, you can 
 Once the ingest has completed:
 
 . Add another store for the kde.
-.. If using Standalone Installer 
+.. If using the Standalone Installer 
 ... Redis
 +
 [source, bash]
@@ -192,7 +192,7 @@ geowave store add gdelt-kde --gwNamespace geowave.kde_gdelt \
 -t cassandra  --contactPoints localhost
 ----
 . Run the KDE analytic
-.. If using Standalone Installer
+.. If using the Standalone Installer
 +
 [source, bash]
 ----
