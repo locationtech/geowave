@@ -64,7 +64,8 @@ At this point, we should be ready to ingest the data.
 +
 We need to create two GeoWave stores for this ingest. landsat_raster will store the raster images, and landsat_vector stores the vector metadata associated with those images. The images come from the http://www.usgs.gov/landsat[Landsat 8 Satellite].
 
-.. If running with the GeoWave Standalone Installer Redis:
+.. If running the Standalone Installer:
+... Redis
 +
 [source, bash]
 ----
@@ -73,7 +74,33 @@ geowave store add -t redis --address redis://127.0.0.1:6379 landsatraster --gwNa
 geowave store copycfg landsatraster landsatvector --gwNamespace landsat_vector
 ----
 
-.. If running with EMR Accumulo:
+... RocksDB
++
+[source, bash]
+----
+geowave store add -t rocksdb landsatraster --gwNamespace landsat_raster
+
+geowave store copycfg landsatraster landsatvector --gwNamespace landsat_vector
+----
+... HBase
++
+[source, bash]
+----
+geowave store add landsatraster --gwNamespace landsat_raster -t hbase -z localhost:2181 
+
+geowave store copycfg landsatraster landsatvector --gwNamespace landsat_vector
+----
+... Accumulo
++
+[source, bash]
+----
+geowave store add -t accumulo -z localhost:2181 landsatraster -instance accumulo -u root -p secret
+
+geowave store copycfg landsatraster landsatvector
+----
+
+.. If running with EMR 
+... Accumulo
 +
 [source, bash]
 ----
@@ -83,7 +110,7 @@ geowave store add -t accumulo -z $HOSTNAME:2181 landsatraster --gwNamespace geow
 geowave store copycfg landsatraster landsatvector --gwNamespace geowave.landsat_vector
 ----
 
-.. If running with EMR HBase
+... HBase
 +
 [source, bash]
 ----
@@ -92,7 +119,7 @@ geowave store add -t hbase -z $HOSTNAME:2181 landsatraster --gwNamespace geowave
 geowave store copycfg landsatraster landsatvector --gwNamespace geowave.landsat_vector
 ----
 
-.. If running with EMR Cassandra
+... Cassandra
 +
 [source, bash]
 ----

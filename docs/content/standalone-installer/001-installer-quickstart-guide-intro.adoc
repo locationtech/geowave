@@ -24,6 +24,34 @@ The Standalone installer uses https://www.ej-technologies.com/products/install4j
 
 After you have successfully installed GeoWave, you can proceed to the walkthough demos.
 
+== Running the Embedded Stores
+Before diving into the demo links, you will need to start up the store of your choosing.
+
+. Redis
++
+[source, bash]
+----
+geowave util redis run -m 2048M
+----
+. RocksDB
++
+[NOTE]
+====
+RocksDB is file based and does not run as a service
+====
+. HBase
++
+[source, bash]
+----
+geowave util hbase run
+----
+. Accumulo
++
+[source, bash]
+----
+geowave util accumulo run
+----
+
 == Demo Links
 - link:walkthrough-vector.html[Vector Demo]
 - link:walkthrough-raster.html[Raster Demo]

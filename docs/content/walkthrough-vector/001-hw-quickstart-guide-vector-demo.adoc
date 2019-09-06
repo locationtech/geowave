@@ -51,15 +51,34 @@ After the data has been downloaded, we are ready to set up the store and index u
 === Config and Ingest
 
 . Add a GeoWave store
-.. If using Standalone Installer Redis
+.. If using Standalone Installer
+... Redis
 +
 [source, bash]
 ----
-geowave util redis run -m 2048M
-
+geowave store add gdelt -t redis --gwNamespace geowave.gdelt --address redis://127.0.0.1:6379
+----
+... RocksDB
++
+[source, bash]
+----
+geowave store add gdelt -t rocksdb --gwNamespace geowave.gdelt
+----
+... HBase
++
+[source, bash]
+----
+geowave store add gdelt --gwNamespace geowave.gdelt -t hbase --zookeeper localhost:2181
+----
+... Accumulo
++
+[source, bash]
+----
+geowave store add gdelt --gwNamespace geowave.gdelt -t accumulo --zookeeper localhost:2181 --instance accumulo --user root --password secret
 ----
 
-.. If using EMR Accumulo
+.. If using EMR
+... Accumulo
 +
 [source, bash]
 ----
@@ -68,7 +87,7 @@ geowave store add gdelt --gwNamespace geowave.gdelt \
 --user geowave --password geowave
 ----
 
-.. If using EMR HBase
+... HBase
 +
 [source, bash]
 ----
@@ -76,7 +95,7 @@ geowave store add gdelt --gwNamespace geowave.gdelt \
 -t hbase --zookeeper $HOSTNAME:2181
 ----
 
-.. If using EMR Cassandra
+... Cassandra
 +
 [source, bash]
 ----
@@ -124,30 +143,48 @@ The ingest should take about ~3-5 minutes. Once the ingest has started, you can 
 Once the ingest has completed:
 
 . Add another store for the kde.
-.. If using Standalone Installer Redis
+.. If using Standalone Installer 
+... Redis
 +
 [source, bash]
 ----
 geowave store add gdelt-kde --gwNamespace geowave.gdelt -t redis --address redis://127.0.0.1:6379
 ----
+... RockDB
++
+[source, bash]
+----
+geowave store add gdelt-kde --gwNamespace geowave.gdelt -t rocksdb
+----
+... HBase
++
+[source, bash]
+----
+geowave store add gdelt-kde --gwNamespace geowave.gdelt -t hbase -z localhost:2181
+----
+... Accumulo
++
+[source, bash]
+----
+geowave store add gdelt -t accumulo --zookeeper localhost:2181 --instance accumulo --user root --password secret
+----
 
-.. If using EMR Accumulo
+.. If using EMR 
+... Accumulo
 +
 [source, bash]
 ----
 geowave store add gdelt-kde --gwNamespace geowave.kde_gdelt \
 -t accumulo --zookeeper $HOSTNAME:2181 --instance accumulo --user geowave --password geowave
 ----
-
-.. If using EMR HBase
+... HBase
 +
 [source, bash]
 ----
 geowave store add gdelt-kde --gwNamespace geowave.kde_gdelt \
 -t hbase --zookeeper $HOSTNAME:2181
 ----
-
-.. If using EMR Cassandra
+... Cassandra
 +
 [source, bash]
 ----
