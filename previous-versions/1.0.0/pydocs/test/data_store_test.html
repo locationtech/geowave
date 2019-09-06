@@ -1,0 +1,1059 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>pygw.test.data_store_test API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>pygw.test.data_store_test</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">#
+# Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file distributed with this work for additional information regarding copyright
+# ownership. All rights reserved. This program and the accompanying materials are made available
+# under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+# available at http://www.apache.org/licenses/LICENSE-2.0.txt
+#===============================================================================================
+
+import pytest
+import os
+
+from pygw.store import DataStoreFactory
+from pygw.store.accumulo import AccumuloOptions
+from pygw.store.bigtable import BigTableOptions
+from pygw.store.cassandra import CassandraOptions
+from pygw.store.dynamodb import DynamoDBOptions
+from pygw.store.hbase import HBaseOptions
+from pygw.store.kudu import KuduOptions
+from pygw.store.redis import RedisOptions
+from pygw.store.rocksdb import RocksDBOptions
+from pygw.index import SpatialIndexBuilder
+from pygw.query import VectorQueryBuilder
+
+from .conftest import TEST_DIR
+from .conftest import POINT_TYPE_ADAPTER
+from .conftest import TEST_DATA
+from .conftest import write_test_data
+from .conftest import results_as_list
+
+# Test Additions #
+def test_add_type(test_ds):
+    # given
+    index = SpatialIndexBuilder().create_index()
+    adapter = POINT_TYPE_ADAPTER
+
+    # when
+    test_ds.add_type(adapter, index)
+    indices = test_ds.get_indices()
+    types = test_ds.get_types()
+
+    # then
+    assert len(indices) == 1
+    assert indices[0].get_name() == index.get_name()
+    assert indices[0].get_index_strategy() == index.get_index_strategy()
+    assert indices[0].get_index_model() == index.get_index_model()
+    assert len(types) == 1
+    assert types[0].get_type_name() == adapter.get_type_name()
+
+
+def test_add_existing_type(test_ds):
+    # given
+    index = SpatialIndexBuilder().create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    test_ds.add_type(adapter, index)
+    indices = test_ds.get_indices(adapter.get_type_name())
+
+    # then
+    assert len(indices) == 1
+    assert indices[0].get_name() == index.get_name()
+    assert indices[0].get_index_strategy() == index.get_index_strategy()
+    assert indices[0].get_index_model() == index.get_index_model()
+
+
+# Test Removing #
+def test_remove_index(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(&#34;idx1&#34;).create_index()
+    index2 = SpatialIndexBuilder().set_name(&#34;idx2&#34;).create_index()
+
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+    test_ds.add_type(adapter, index2)
+
+    # when
+    test_ds.remove_index(adapter.get_type_name(), index.get_name())
+    indices = test_ds.get_indices()
+
+    # then
+    assert len(indices) == 1
+    assert indices[0].get_name() == index2.get_name()
+    assert indices[0].get_index_strategy() == index2.get_index_strategy()
+    assert indices[0].get_index_model() == index2.get_index_model()
+
+
+def test_remove_index_last(test_ds):
+    with pytest.raises(Exception) as exec:
+        # given
+        index = SpatialIndexBuilder().create_index()
+        adapter = POINT_TYPE_ADAPTER
+        test_ds.add_type(adapter, index)
+
+        # when
+        test_ds.remove_index(index.get_name())
+
+    # then
+    assert &#39;Adapters require at least one index&#39; in str(exec.value)
+
+
+def test_remove_index_non_exist(test_ds):
+    # given
+    index = SpatialIndexBuilder().create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    test_ds.remove_index(&#34;Corgi&#34;)
+
+    # then
+    assert len(test_ds.get_indices()) == 1
+
+
+def test_remove_type(test_ds):
+    # given
+    index = SpatialIndexBuilder().create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+    write_test_data(test_ds, index)
+
+    # when
+    test_ds.remove_type(adapter.get_type_name())
+    query = VectorQueryBuilder().build()
+    res = results_as_list(test_ds.query(query))
+
+    # then
+    assert len(test_ds.get_indices(adapter.get_type_name())) == 0
+    assert len(test_ds.get_indices()) == 1
+    assert len(res) == 0
+
+
+# Test Deleting #
+def test_delete(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(&#34;idx1&#34;).create_index()
+    index2 = SpatialIndexBuilder().set_name(&#34;idx2&#34;).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+    test_ds.add_type(adapter, index2)
+    write_test_data(test_ds, index, index2)
+
+    # when
+    qbldr = VectorQueryBuilder()
+    constraints_factory = qbldr.constraints_factory()
+    # filter encompasses 10 features (1, 1) - (10, 10)
+    constraints = constraints_factory.cql_constraints(&#34;BBOX(the_geom, 0.5, 0.5, 10.5, 10.5)&#34;)
+    qbldr.constraints(constraints)
+    test_ds.delete(qbldr.build())
+
+    query = VectorQueryBuilder().build()
+    res = results_as_list(test_ds.query(query))
+
+    # then
+    assert len(test_ds.get_indices()) == 2
+    assert len(test_ds.get_types()) == 1
+    assert len(res) == (len(TEST_DATA) - 10)
+
+# Test Delete All #
+def test_delete_all(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(&#34;idx1&#34;).create_index()
+    index2 = SpatialIndexBuilder().set_name(&#34;idx2&#34;).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+    test_ds.add_type(adapter, index2)
+    write_test_data(test_ds, index, index2)
+
+    # when
+    test_ds.delete_all()
+
+    query = VectorQueryBuilder().build()
+    res = results_as_list(test_ds.query(query))
+
+    # then
+    assert len(test_ds.get_indices()) == 0
+    assert len(test_ds.get_types()) == 0
+    assert len(res) == 0
+
+
+# Test Copy #
+def test_copy(test_ds):
+    # given
+    options = RocksDBOptions()
+    options.set_geowave_namespace(&#34;geowave.tests&#34;)
+    options.set_directory(os.path.join(TEST_DIR, &#34;datastore2&#34;))
+    ds2 = DataStoreFactory.create_data_store(options)
+
+    adapter = POINT_TYPE_ADAPTER
+    index = SpatialIndexBuilder().create_index()
+    test_ds.add_type(adapter, index)
+
+    write_test_data(test_ds, index)
+
+    # when
+    test_ds.copy_to(ds2)
+
+    indices = ds2.get_indices()
+    types = ds2.get_types()
+    query = VectorQueryBuilder().build()
+    res = results_as_list(ds2.query(query))
+
+    # then
+    assert len(test_ds.get_indices()) == 1
+    assert len(indices) == 1
+    assert indices[0].get_name() == index.get_name()
+    assert indices[0].get_index_strategy() == index.get_index_strategy()
+    assert indices[0].get_index_model() == index.get_index_model()
+    assert len(types) == 1
+    assert types[0].get_type_name() == adapter.get_type_name()
+    assert len(res) == len(TEST_DATA)
+
+    ds2.delete_all()
+
+def test_copy_by_query(test_ds):
+    # given
+    options = RocksDBOptions()
+    options.set_geowave_namespace(&#34;geowave.tests&#34;)
+    options.set_directory(os.path.join(TEST_DIR, &#34;datastore2&#34;))
+    ds2 = DataStoreFactory.create_data_store(options)
+
+    adapter = POINT_TYPE_ADAPTER
+    index = SpatialIndexBuilder().create_index()
+    test_ds.add_type(adapter, index)
+
+    write_test_data(test_ds, index)
+
+    # when
+    qbldr = VectorQueryBuilder()
+    constraints_factory = qbldr.constraints_factory()
+    # filter encompasses 10 features (1, 1) - (10, 10)
+    constraints = constraints_factory.cql_constraints(&#34;BBOX(the_geom, 0.5, 0.5, 10.5, 10.5)&#34;)
+    qbldr.all_indices().constraints(constraints)
+    test_ds.copy_to(ds2, qbldr.build())
+
+    indices = ds2.get_indices()
+    types = ds2.get_types()
+    query = VectorQueryBuilder().build()
+    res = results_as_list(ds2.query(query))
+
+    # then
+    assert len(test_ds.get_indices()) == 1
+    assert len(indices) == 1
+    assert indices[0].get_name() == index.get_name()
+    assert indices[0].get_index_strategy() == index.get_index_strategy()
+    assert indices[0].get_index_model() == index.get_index_model()
+    assert len(types) == 1
+    assert types[0].get_type_name() == adapter.get_type_name()
+    assert len(res) == 10
+
+    ds2.delete_all()
+
+# Test Writer #
+def test_create_writer(test_ds):
+    # given
+    adapter = POINT_TYPE_ADAPTER
+    index = SpatialIndexBuilder().create_index()
+    test_ds.add_type(adapter, index)
+
+    # when
+    writer = test_ds.create_writer(adapter.get_type_name())
+
+    # then
+    assert writer is not None
+
+
+def test_create_writer_null(test_ds):
+    # when
+    writer = test_ds.create_writer(&#34;Corgi&#34;)
+
+    # then
+    assert writer is None
+
+
+def test_create_writer_null_other(test_ds):
+    # given
+    adapter = POINT_TYPE_ADAPTER
+    index = SpatialIndexBuilder().create_index()
+    test_ds.add_type(adapter, index)
+    test_ds.create_writer(adapter.get_type_name())
+
+    # when
+    writer = test_ds.create_writer(&#34;Corgi&#34;)
+
+    # then
+    assert writer is None
+
+
+def test_write(test_ds):
+    # given
+    adapter = POINT_TYPE_ADAPTER
+    index = SpatialIndexBuilder().create_index()
+    test_ds.add_type(adapter, index)
+
+    # when
+    write_test_data(test_ds, index)
+
+    query = VectorQueryBuilder().build()
+
+    res = results_as_list(test_ds.query(query))
+
+    # then
+    assert len(res) == len(TEST_DATA)
+
+def _test_base_options(options, server_side_possible=True):
+    options.set_geowave_namespace(&#34;test_namespace&#34;)
+    assert options.get_geowave_namespace() == &#34;test_namespace&#34;
+
+    persist_data_statistics = not options.is_persist_data_statistics()
+    options.set_persist_data_statistics(persist_data_statistics)
+    assert options.is_persist_data_statistics() == persist_data_statistics
+
+    secondary_indexing = not options.is_secondary_indexing()
+    options.set_secondary_indexing(secondary_indexing)
+    assert options.is_secondary_indexing() == secondary_indexing
+
+    block_cache = not options.is_enable_block_cache()
+    options.set_enable_block_cache(block_cache)
+    assert options.is_enable_block_cache() == block_cache
+
+    server_side_library = not options.is_server_side_library_enabled()
+    options.set_secondary_indexing(False)
+    options.set_server_side_library_enabled(server_side_library)
+    if server_side_possible:
+        assert options.is_server_side_library_enabled() == server_side_library
+    else:
+        assert options.is_server_side_library_enabled() == False
+
+    options.set_max_range_decomposition(42)
+    assert options.get_max_range_decomposition() == 42
+
+    options.set_aggregation_max_range_decomposition(43)
+    assert options.get_aggregation_max_range_decomposition() == 43
+
+    visibility = not options.is_visibility_enabled()
+    options.set_enable_visibility(visibility)
+    assert options.is_visibility_enabled() == visibility
+
+
+def test_accumulo_options():
+    options = AccumuloOptions()
+    options.set_zookeeper(&#34;test_zookeeper&#34;)
+    assert options.get_zookeeper() == &#34;test_zookeeper&#34;
+    options.set_instance(&#34;test_instance&#34;)
+    assert options.get_instance() == &#34;test_instance&#34;
+    options.set_user(&#34;test_user&#34;)
+    assert options.get_user() == &#34;test_user&#34;
+    options.set_password(&#34;test_password&#34;)
+    assert options.get_password() == &#34;test_password&#34;
+    locality_groups = not options.is_use_locality_groups()
+    options.set_use_locality_groups(locality_groups)
+    assert options.is_use_locality_groups() == locality_groups
+    _test_base_options(options)
+
+def test_bigtable_options():
+    options = BigTableOptions()
+    options.set_scan_cache_size(42)
+    assert options.get_scan_cache_size() == 42
+    options.set_project_id(&#34;test_project_id&#34;)
+    assert options.get_project_id() == &#34;test_project_id&#34;
+    options.set_instance_id(&#34;test_instance_id&#34;)
+    assert options.get_instance_id() == &#34;test_instance_id&#34;
+    _test_base_options(options)
+
+def test_cassandra_options():
+    options = CassandraOptions()
+    options.set_contact_point(&#34;test_contact_point&#34;)
+    assert options.get_contact_point() == &#34;test_contact_point&#34;
+    options.set_batch_write_size(42)
+    assert options.get_batch_write_size() == 42
+    durable_writes = not options.is_durable_writes()
+    options.set_durable_writes(durable_writes)
+    assert options.is_durable_writes() == durable_writes
+    options.set_replication_factor(43)
+    assert options.get_replication_factor() == 43
+    _test_base_options(options, False)
+
+def test_dynamodb_options():
+    options = DynamoDBOptions()
+    options.set_region(&#34;us-east-1&#34;)
+    assert options.get_region() == &#34;us-east-1&#34;
+    options.set_region(None)
+    assert options.get_region() is None
+    options.set_endpoint(&#34;test_endpoint&#34;)
+    assert options.get_endpoint() == &#34;test_endpoint&#34;
+    options.set_write_capacity(42)
+    assert options.get_write_capacity() == 42
+    options.set_read_capacity(43)
+    assert options.get_read_capacity() == 43
+    enable_cache_response_metadata = not options.is_enable_cache_response_metadata()
+    options.set_enable_cache_response_metadata(enable_cache_response_metadata)
+    assert options.is_enable_cache_response_metadata() == enable_cache_response_metadata
+    options.set_protocol(&#34;HTTP&#34;)
+    assert options.get_protocol() == &#34;HTTP&#34;
+    options.set_protocol(None)
+    assert options.get_protocol() is None
+    options.set_max_connections(44)
+    assert options.get_max_connections() == 44
+    _test_base_options(options, False)
+
+def test_hbase_options():
+    options = HBaseOptions()
+    options.set_zookeeper(&#34;test_zookeeper&#34;)
+    assert options.get_zookeeper() == &#34;test_zookeeper&#34;
+    options.set_scan_cache_size(42)
+    assert options.get_scan_cache_size() == 42
+    options.set_server_side_library_enabled(True)
+    verify_coprocessors = not options.is_verify_coprocessors()
+    options.set_verify_coprocessors(verify_coprocessors)
+    assert options.is_verify_coprocessors() == verify_coprocessors
+    options.set_coprocessor_jar(&#34;test_jar&#34;)
+    assert options.get_coprocessor_jar() == &#34;test_jar&#34;
+    _test_base_options(options)
+
+def test_kudu_options():
+    options = KuduOptions()
+    options.set_kudu_master(&#34;test_master&#34;)
+    assert options.get_kudu_master() == &#34;test_master&#34;
+    _test_base_options(options, False)
+
+def test_redis_options():
+    options = RedisOptions()
+    options.set_address(&#34;test_address&#34;)
+    assert options.get_address() == &#34;test_address&#34;
+    options.set_compression(&#34;L4Z&#34;)
+    assert options.get_compression() == &#34;L4Z&#34;
+    _test_base_options(options, False)
+
+def test_rocksdb_options():
+    options = RocksDBOptions()
+    options.set_directory(&#34;test_directory&#34;)
+    assert options.get_directory() == &#34;test_directory&#34;
+    compact_on_wriite = not options.is_compact_on_write()
+    options.set_compact_on_write(compact_on_wriite)
+    assert options.is_compact_on_write() == compact_on_wriite
+    options.set_batch_write_size(42)
+    assert options.get_batch_write_size() == 42
+    _test_base_options(options, False)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="pygw.test.data_store_test.test_accumulo_options"><code class="name flex">
+<span>def <span class="ident">test_accumulo_options</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_accumulo_options():
+    options = AccumuloOptions()
+    options.set_zookeeper(&#34;test_zookeeper&#34;)
+    assert options.get_zookeeper() == &#34;test_zookeeper&#34;
+    options.set_instance(&#34;test_instance&#34;)
+    assert options.get_instance() == &#34;test_instance&#34;
+    options.set_user(&#34;test_user&#34;)
+    assert options.get_user() == &#34;test_user&#34;
+    options.set_password(&#34;test_password&#34;)
+    assert options.get_password() == &#34;test_password&#34;
+    locality_groups = not options.is_use_locality_groups()
+    options.set_use_locality_groups(locality_groups)
+    assert options.is_use_locality_groups() == locality_groups
+    _test_base_options(options)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.data_store_test.test_add_existing_type"><code class="name flex">
+<span>def <span class="ident">test_add_existing_type</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_add_existing_type(test_ds):
+    # given
+    index = SpatialIndexBuilder().create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    test_ds.add_type(adapter, index)
+    indices = test_ds.get_indices(adapter.get_type_name())
+
+    # then
+    assert len(indices) == 1
+    assert indices[0].get_name() == index.get_name()
+    assert indices[0].get_index_strategy() == index.get_index_strategy()
+    assert indices[0].get_index_model() == index.get_index_model()</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.data_store_test.test_add_type"><code class="name flex">
+<span>def <span class="ident">test_add_type</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_add_type(test_ds):
+    # given
+    index = SpatialIndexBuilder().create_index()
+    adapter = POINT_TYPE_ADAPTER
+
+    # when
+    test_ds.add_type(adapter, index)
+    indices = test_ds.get_indices()
+    types = test_ds.get_types()
+
+    # then
+    assert len(indices) == 1
+    assert indices[0].get_name() == index.get_name()
+    assert indices[0].get_index_strategy() == index.get_index_strategy()
+    assert indices[0].get_index_model() == index.get_index_model()
+    assert len(types) == 1
+    assert types[0].get_type_name() == adapter.get_type_name()</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.data_store_test.test_bigtable_options"><code class="name flex">
+<span>def <span class="ident">test_bigtable_options</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_bigtable_options():
+    options = BigTableOptions()
+    options.set_scan_cache_size(42)
+    assert options.get_scan_cache_size() == 42
+    options.set_project_id(&#34;test_project_id&#34;)
+    assert options.get_project_id() == &#34;test_project_id&#34;
+    options.set_instance_id(&#34;test_instance_id&#34;)
+    assert options.get_instance_id() == &#34;test_instance_id&#34;
+    _test_base_options(options)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.data_store_test.test_cassandra_options"><code class="name flex">
+<span>def <span class="ident">test_cassandra_options</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_cassandra_options():
+    options = CassandraOptions()
+    options.set_contact_point(&#34;test_contact_point&#34;)
+    assert options.get_contact_point() == &#34;test_contact_point&#34;
+    options.set_batch_write_size(42)
+    assert options.get_batch_write_size() == 42
+    durable_writes = not options.is_durable_writes()
+    options.set_durable_writes(durable_writes)
+    assert options.is_durable_writes() == durable_writes
+    options.set_replication_factor(43)
+    assert options.get_replication_factor() == 43
+    _test_base_options(options, False)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.data_store_test.test_copy"><code class="name flex">
+<span>def <span class="ident">test_copy</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_copy(test_ds):
+    # given
+    options = RocksDBOptions()
+    options.set_geowave_namespace(&#34;geowave.tests&#34;)
+    options.set_directory(os.path.join(TEST_DIR, &#34;datastore2&#34;))
+    ds2 = DataStoreFactory.create_data_store(options)
+
+    adapter = POINT_TYPE_ADAPTER
+    index = SpatialIndexBuilder().create_index()
+    test_ds.add_type(adapter, index)
+
+    write_test_data(test_ds, index)
+
+    # when
+    test_ds.copy_to(ds2)
+
+    indices = ds2.get_indices()
+    types = ds2.get_types()
+    query = VectorQueryBuilder().build()
+    res = results_as_list(ds2.query(query))
+
+    # then
+    assert len(test_ds.get_indices()) == 1
+    assert len(indices) == 1
+    assert indices[0].get_name() == index.get_name()
+    assert indices[0].get_index_strategy() == index.get_index_strategy()
+    assert indices[0].get_index_model() == index.get_index_model()
+    assert len(types) == 1
+    assert types[0].get_type_name() == adapter.get_type_name()
+    assert len(res) == len(TEST_DATA)
+
+    ds2.delete_all()</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.data_store_test.test_copy_by_query"><code class="name flex">
+<span>def <span class="ident">test_copy_by_query</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_copy_by_query(test_ds):
+    # given
+    options = RocksDBOptions()
+    options.set_geowave_namespace(&#34;geowave.tests&#34;)
+    options.set_directory(os.path.join(TEST_DIR, &#34;datastore2&#34;))
+    ds2 = DataStoreFactory.create_data_store(options)
+
+    adapter = POINT_TYPE_ADAPTER
+    index = SpatialIndexBuilder().create_index()
+    test_ds.add_type(adapter, index)
+
+    write_test_data(test_ds, index)
+
+    # when
+    qbldr = VectorQueryBuilder()
+    constraints_factory = qbldr.constraints_factory()
+    # filter encompasses 10 features (1, 1) - (10, 10)
+    constraints = constraints_factory.cql_constraints(&#34;BBOX(the_geom, 0.5, 0.5, 10.5, 10.5)&#34;)
+    qbldr.all_indices().constraints(constraints)
+    test_ds.copy_to(ds2, qbldr.build())
+
+    indices = ds2.get_indices()
+    types = ds2.get_types()
+    query = VectorQueryBuilder().build()
+    res = results_as_list(ds2.query(query))
+
+    # then
+    assert len(test_ds.get_indices()) == 1
+    assert len(indices) == 1
+    assert indices[0].get_name() == index.get_name()
+    assert indices[0].get_index_strategy() == index.get_index_strategy()
+    assert indices[0].get_index_model() == index.get_index_model()
+    assert len(types) == 1
+    assert types[0].get_type_name() == adapter.get_type_name()
+    assert len(res) == 10
+
+    ds2.delete_all()</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.data_store_test.test_create_writer"><code class="name flex">
+<span>def <span class="ident">test_create_writer</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_create_writer(test_ds):
+    # given
+    adapter = POINT_TYPE_ADAPTER
+    index = SpatialIndexBuilder().create_index()
+    test_ds.add_type(adapter, index)
+
+    # when
+    writer = test_ds.create_writer(adapter.get_type_name())
+
+    # then
+    assert writer is not None</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.data_store_test.test_create_writer_null"><code class="name flex">
+<span>def <span class="ident">test_create_writer_null</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_create_writer_null(test_ds):
+    # when
+    writer = test_ds.create_writer(&#34;Corgi&#34;)
+
+    # then
+    assert writer is None</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.data_store_test.test_create_writer_null_other"><code class="name flex">
+<span>def <span class="ident">test_create_writer_null_other</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_create_writer_null_other(test_ds):
+    # given
+    adapter = POINT_TYPE_ADAPTER
+    index = SpatialIndexBuilder().create_index()
+    test_ds.add_type(adapter, index)
+    test_ds.create_writer(adapter.get_type_name())
+
+    # when
+    writer = test_ds.create_writer(&#34;Corgi&#34;)
+
+    # then
+    assert writer is None</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.data_store_test.test_delete"><code class="name flex">
+<span>def <span class="ident">test_delete</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_delete(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(&#34;idx1&#34;).create_index()
+    index2 = SpatialIndexBuilder().set_name(&#34;idx2&#34;).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+    test_ds.add_type(adapter, index2)
+    write_test_data(test_ds, index, index2)
+
+    # when
+    qbldr = VectorQueryBuilder()
+    constraints_factory = qbldr.constraints_factory()
+    # filter encompasses 10 features (1, 1) - (10, 10)
+    constraints = constraints_factory.cql_constraints(&#34;BBOX(the_geom, 0.5, 0.5, 10.5, 10.5)&#34;)
+    qbldr.constraints(constraints)
+    test_ds.delete(qbldr.build())
+
+    query = VectorQueryBuilder().build()
+    res = results_as_list(test_ds.query(query))
+
+    # then
+    assert len(test_ds.get_indices()) == 2
+    assert len(test_ds.get_types()) == 1
+    assert len(res) == (len(TEST_DATA) - 10)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.data_store_test.test_delete_all"><code class="name flex">
+<span>def <span class="ident">test_delete_all</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_delete_all(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(&#34;idx1&#34;).create_index()
+    index2 = SpatialIndexBuilder().set_name(&#34;idx2&#34;).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+    test_ds.add_type(adapter, index2)
+    write_test_data(test_ds, index, index2)
+
+    # when
+    test_ds.delete_all()
+
+    query = VectorQueryBuilder().build()
+    res = results_as_list(test_ds.query(query))
+
+    # then
+    assert len(test_ds.get_indices()) == 0
+    assert len(test_ds.get_types()) == 0
+    assert len(res) == 0</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.data_store_test.test_dynamodb_options"><code class="name flex">
+<span>def <span class="ident">test_dynamodb_options</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_dynamodb_options():
+    options = DynamoDBOptions()
+    options.set_region(&#34;us-east-1&#34;)
+    assert options.get_region() == &#34;us-east-1&#34;
+    options.set_region(None)
+    assert options.get_region() is None
+    options.set_endpoint(&#34;test_endpoint&#34;)
+    assert options.get_endpoint() == &#34;test_endpoint&#34;
+    options.set_write_capacity(42)
+    assert options.get_write_capacity() == 42
+    options.set_read_capacity(43)
+    assert options.get_read_capacity() == 43
+    enable_cache_response_metadata = not options.is_enable_cache_response_metadata()
+    options.set_enable_cache_response_metadata(enable_cache_response_metadata)
+    assert options.is_enable_cache_response_metadata() == enable_cache_response_metadata
+    options.set_protocol(&#34;HTTP&#34;)
+    assert options.get_protocol() == &#34;HTTP&#34;
+    options.set_protocol(None)
+    assert options.get_protocol() is None
+    options.set_max_connections(44)
+    assert options.get_max_connections() == 44
+    _test_base_options(options, False)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.data_store_test.test_hbase_options"><code class="name flex">
+<span>def <span class="ident">test_hbase_options</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_hbase_options():
+    options = HBaseOptions()
+    options.set_zookeeper(&#34;test_zookeeper&#34;)
+    assert options.get_zookeeper() == &#34;test_zookeeper&#34;
+    options.set_scan_cache_size(42)
+    assert options.get_scan_cache_size() == 42
+    options.set_server_side_library_enabled(True)
+    verify_coprocessors = not options.is_verify_coprocessors()
+    options.set_verify_coprocessors(verify_coprocessors)
+    assert options.is_verify_coprocessors() == verify_coprocessors
+    options.set_coprocessor_jar(&#34;test_jar&#34;)
+    assert options.get_coprocessor_jar() == &#34;test_jar&#34;
+    _test_base_options(options)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.data_store_test.test_kudu_options"><code class="name flex">
+<span>def <span class="ident">test_kudu_options</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_kudu_options():
+    options = KuduOptions()
+    options.set_kudu_master(&#34;test_master&#34;)
+    assert options.get_kudu_master() == &#34;test_master&#34;
+    _test_base_options(options, False)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.data_store_test.test_redis_options"><code class="name flex">
+<span>def <span class="ident">test_redis_options</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_redis_options():
+    options = RedisOptions()
+    options.set_address(&#34;test_address&#34;)
+    assert options.get_address() == &#34;test_address&#34;
+    options.set_compression(&#34;L4Z&#34;)
+    assert options.get_compression() == &#34;L4Z&#34;
+    _test_base_options(options, False)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.data_store_test.test_remove_index"><code class="name flex">
+<span>def <span class="ident">test_remove_index</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_remove_index(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(&#34;idx1&#34;).create_index()
+    index2 = SpatialIndexBuilder().set_name(&#34;idx2&#34;).create_index()
+
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+    test_ds.add_type(adapter, index2)
+
+    # when
+    test_ds.remove_index(adapter.get_type_name(), index.get_name())
+    indices = test_ds.get_indices()
+
+    # then
+    assert len(indices) == 1
+    assert indices[0].get_name() == index2.get_name()
+    assert indices[0].get_index_strategy() == index2.get_index_strategy()
+    assert indices[0].get_index_model() == index2.get_index_model()</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.data_store_test.test_remove_index_last"><code class="name flex">
+<span>def <span class="ident">test_remove_index_last</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_remove_index_last(test_ds):
+    with pytest.raises(Exception) as exec:
+        # given
+        index = SpatialIndexBuilder().create_index()
+        adapter = POINT_TYPE_ADAPTER
+        test_ds.add_type(adapter, index)
+
+        # when
+        test_ds.remove_index(index.get_name())
+
+    # then
+    assert &#39;Adapters require at least one index&#39; in str(exec.value)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.data_store_test.test_remove_index_non_exist"><code class="name flex">
+<span>def <span class="ident">test_remove_index_non_exist</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_remove_index_non_exist(test_ds):
+    # given
+    index = SpatialIndexBuilder().create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    test_ds.remove_index(&#34;Corgi&#34;)
+
+    # then
+    assert len(test_ds.get_indices()) == 1</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.data_store_test.test_remove_type"><code class="name flex">
+<span>def <span class="ident">test_remove_type</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_remove_type(test_ds):
+    # given
+    index = SpatialIndexBuilder().create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+    write_test_data(test_ds, index)
+
+    # when
+    test_ds.remove_type(adapter.get_type_name())
+    query = VectorQueryBuilder().build()
+    res = results_as_list(test_ds.query(query))
+
+    # then
+    assert len(test_ds.get_indices(adapter.get_type_name())) == 0
+    assert len(test_ds.get_indices()) == 1
+    assert len(res) == 0</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.data_store_test.test_rocksdb_options"><code class="name flex">
+<span>def <span class="ident">test_rocksdb_options</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_rocksdb_options():
+    options = RocksDBOptions()
+    options.set_directory(&#34;test_directory&#34;)
+    assert options.get_directory() == &#34;test_directory&#34;
+    compact_on_wriite = not options.is_compact_on_write()
+    options.set_compact_on_write(compact_on_wriite)
+    assert options.is_compact_on_write() == compact_on_wriite
+    options.set_batch_write_size(42)
+    assert options.get_batch_write_size() == 42
+    _test_base_options(options, False)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.data_store_test.test_write"><code class="name flex">
+<span>def <span class="ident">test_write</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_write(test_ds):
+    # given
+    adapter = POINT_TYPE_ADAPTER
+    index = SpatialIndexBuilder().create_index()
+    test_ds.add_type(adapter, index)
+
+    # when
+    write_test_data(test_ds, index)
+
+    query = VectorQueryBuilder().build()
+
+    res = results_as_list(test_ds.query(query))
+
+    # then
+    assert len(res) == len(TEST_DATA)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pygw.test" href="index.html">pygw.test</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="pygw.test.data_store_test.test_accumulo_options" href="#pygw.test.data_store_test.test_accumulo_options">test_accumulo_options</a></code></li>
+<li><code><a title="pygw.test.data_store_test.test_add_existing_type" href="#pygw.test.data_store_test.test_add_existing_type">test_add_existing_type</a></code></li>
+<li><code><a title="pygw.test.data_store_test.test_add_type" href="#pygw.test.data_store_test.test_add_type">test_add_type</a></code></li>
+<li><code><a title="pygw.test.data_store_test.test_bigtable_options" href="#pygw.test.data_store_test.test_bigtable_options">test_bigtable_options</a></code></li>
+<li><code><a title="pygw.test.data_store_test.test_cassandra_options" href="#pygw.test.data_store_test.test_cassandra_options">test_cassandra_options</a></code></li>
+<li><code><a title="pygw.test.data_store_test.test_copy" href="#pygw.test.data_store_test.test_copy">test_copy</a></code></li>
+<li><code><a title="pygw.test.data_store_test.test_copy_by_query" href="#pygw.test.data_store_test.test_copy_by_query">test_copy_by_query</a></code></li>
+<li><code><a title="pygw.test.data_store_test.test_create_writer" href="#pygw.test.data_store_test.test_create_writer">test_create_writer</a></code></li>
+<li><code><a title="pygw.test.data_store_test.test_create_writer_null" href="#pygw.test.data_store_test.test_create_writer_null">test_create_writer_null</a></code></li>
+<li><code><a title="pygw.test.data_store_test.test_create_writer_null_other" href="#pygw.test.data_store_test.test_create_writer_null_other">test_create_writer_null_other</a></code></li>
+<li><code><a title="pygw.test.data_store_test.test_delete" href="#pygw.test.data_store_test.test_delete">test_delete</a></code></li>
+<li><code><a title="pygw.test.data_store_test.test_delete_all" href="#pygw.test.data_store_test.test_delete_all">test_delete_all</a></code></li>
+<li><code><a title="pygw.test.data_store_test.test_dynamodb_options" href="#pygw.test.data_store_test.test_dynamodb_options">test_dynamodb_options</a></code></li>
+<li><code><a title="pygw.test.data_store_test.test_hbase_options" href="#pygw.test.data_store_test.test_hbase_options">test_hbase_options</a></code></li>
+<li><code><a title="pygw.test.data_store_test.test_kudu_options" href="#pygw.test.data_store_test.test_kudu_options">test_kudu_options</a></code></li>
+<li><code><a title="pygw.test.data_store_test.test_redis_options" href="#pygw.test.data_store_test.test_redis_options">test_redis_options</a></code></li>
+<li><code><a title="pygw.test.data_store_test.test_remove_index" href="#pygw.test.data_store_test.test_remove_index">test_remove_index</a></code></li>
+<li><code><a title="pygw.test.data_store_test.test_remove_index_last" href="#pygw.test.data_store_test.test_remove_index_last">test_remove_index_last</a></code></li>
+<li><code><a title="pygw.test.data_store_test.test_remove_index_non_exist" href="#pygw.test.data_store_test.test_remove_index_non_exist">test_remove_index_non_exist</a></code></li>
+<li><code><a title="pygw.test.data_store_test.test_remove_type" href="#pygw.test.data_store_test.test_remove_type">test_remove_type</a></code></li>
+<li><code><a title="pygw.test.data_store_test.test_rocksdb_options" href="#pygw.test.data_store_test.test_rocksdb_options">test_rocksdb_options</a></code></li>
+<li><code><a title="pygw.test.data_store_test.test_write" href="#pygw.test.data_store_test.test_write">test_write</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

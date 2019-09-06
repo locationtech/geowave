@@ -1,0 +1,23 @@
+//:geowave-listplugins(1)
+//:=====================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave ingest listplugins - List supported data store types, index types, and ingest formats
+
+SYNOPSIS
+//:--------
+
+geowave ingest listplugins [options]
+
+DESCRIPTION
+//:-----------
+
+This command will list all the data store types, index types, and ingest formats supported by the version of GeoWave being run.
+
+OPTIONS
+//:-------
+
+There are currently no options for this command

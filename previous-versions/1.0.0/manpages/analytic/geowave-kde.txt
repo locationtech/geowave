@@ -1,0 +1,45 @@
+//:geowave-kde(1)
+//:==============
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave analytic kde - Kernel Density Estimate
+
+SYNOPSIS
+//:--------
+
+geowave analytic kde [options] <input storename> <output storename>
+
+DESCRIPTION
+//:-----------
+
+The geowave analytic kde operator will run a Kernel Density Estimate analytic on GeoWave data
+
+OPTIONS
+//:-------
+
+- * --coverageName
+ * The coverage name
+- --cqlFilter
+ * An optional CQL filter applied to the input data
+- * --featureType
+ * The name of the feature type to run a KDE on
+- * --hdfsHostPort
+ * The hdfs host port
+- --indexId
+ * An optional index ID to filter the input data
+- * --jobSubmissionHostPort
+ * The job submission tracker
+- * --maxLevel
+ * The max level to run a KDE at
+- —maxSplits
+ * The max partitions for the input data
+- * --minLevel
+ * The min level to run a KDE at
+- --minSplits
+ * The min partitions for the input data
+- --tileSize
+ * The tile size
+ * Default: 1

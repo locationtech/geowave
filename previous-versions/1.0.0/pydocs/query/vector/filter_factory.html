@@ -1,0 +1,3695 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>pygw.query.vector.filter_factory API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>pygw.query.vector.filter_factory</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">#
+# Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file distributed with this work for additional information regarding copyright
+# ownership. All rights reserved. This program and the accompanying materials are made available
+# under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+# available at http://www.apache.org/licenses/LICENSE-2.0.txt
+#===============================================================================================
+
+from datetime import datetime
+
+from shapely.geometry.base import BaseGeometry
+
+from pygw.base import GeoWaveObject
+from pygw.base.type_conversions import GeometryType
+from pygw.config import java_gateway
+from pygw.config import java_pkg
+from pygw.config import reflection_util
+
+def _j_match_action(match_action):
+    return java_pkg.org.opengis.filter.MultiValuedFilter.MatchAction.valueOf(match_action.upper())
+
+# These functions are needed in order to invoke java methods that are named with
+# reserved python keywords such as and, or, and not
+def _invoke_filter_list_method_by_name(j_filter_factory, name, filters):
+    filter_factory_class = j_filter_factory.getClass()
+    list_class = reflection_util.classForName(&#34;java.util.List&#34;)
+    class_array = java_gateway.new_array(java_pkg.java.lang.Class, 1)
+    class_array[0] = list_class
+    method = filter_factory_class.getMethod(name, class_array)
+    filter_list = java_pkg.java.util.ArrayList()
+    for filter in filters:
+        filter_list.append(filter)
+    objects_array = java_gateway.new_array(java_pkg.java.lang.Object, 1)
+    objects_array[0] = filter_list
+    return method.invoke(j_filter_factory, objects_array)
+
+def _invoke_filter_method_by_name(j_filter_factory, name, filter):
+    filter_factory_class = j_filter_factory.getClass()
+    filter_class = reflection_util.classForName(&#34;org.opengis.filter.Filter&#34;)
+    class_array = java_gateway.new_array(java_pkg.java.lang.Class, 1)
+    class_array[0] = filter_class
+    method = filter_factory_class.getMethod(name, class_array)
+    objects_array = java_gateway.new_array(java_pkg.java.lang.Object, 1)
+    objects_array[0] = filter
+    return method.invoke(j_filter_factory, objects_array)
+
+class FilterFactory(GeoWaveObject):
+    &#34;&#34;&#34;
+    Filter factory for constructing filters to be used in vector queries. Methods
+    of this factory generally return either a Filter or Expression which can be used
+    in additional method calls.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        j_filter_factory = java_pkg.org.geotools.filter.FilterFactoryImpl()
+        super().__init__(j_filter_factory)
+
+    def id(self, fids):
+        &#34;&#34;&#34;
+        Constructs a filter that matches a set of feature IDs.
+
+        Args:
+            fids (list of str): The list of feature IDs to match.
+        Returns:
+            A Filter with the given feature IDs.
+        &#34;&#34;&#34;
+        j_fids = java_gateway.new_array(java_pkg.org.opengis.filter.identity.FeatureId, len(fids))
+        for idx, fid in enumerate(fids):
+            if isinstance(fid, str):
+                j_fids[idx] = self.feature_id(fid)
+            else:
+                j_fids[idx] = fid
+        return self._java_ref.id(j_fids)
+
+    def feature_id(self, id):
+        &#34;&#34;&#34;
+        Constructs a filter that matches a specific feature ID.
+
+        Args:
+            id (str): The feature ID.
+        Returns:
+            A Filter with the given feature ID.
+        &#34;&#34;&#34;
+        return self._java_ref.featureId(id)
+
+    def gml_object_id(self, id):
+        &#34;&#34;&#34;
+        Constructs a filter that matches a specific gml object ID.
+
+        Args:
+            id (str): The gml object ID.
+        Returns:
+            A Filter with the given gml object ID.
+        &#34;&#34;&#34;
+        return self._java_ref.gmlObjectId(id)
+
+    def property(self, name):
+        &#34;&#34;&#34;
+        Constructs an expression that references the given property name.
+
+        Args:
+            name (str): The property name.
+        Returns:
+            An Expression with the given property name.
+        &#34;&#34;&#34;
+        return self._java_ref.property(name)
+
+    def literal(self, value):
+        &#34;&#34;&#34;
+        Constructs an expression with the given literal value.
+
+        Args:
+            value (any): The literal value to use.
+        Returns:
+            An Expression with the given literal value.
+        &#34;&#34;&#34;
+        if isinstance(value, datetime):
+            # Convert the date to a string
+            value = value.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;)
+        if isinstance(value, str):
+            # Prevent Py4J from assuming the string matches up with the char variant method
+            filter_factory_class = self._java_ref.getClass()
+            object_class = reflection_util.classForName(&#34;java.lang.Object&#34;)
+            class_array = java_gateway.new_array(java_pkg.java.lang.Class, 1)
+            class_array[0] = object_class
+            method = filter_factory_class.getMethod(&#34;literal&#34;, class_array)
+            objects_array = java_gateway.new_array(java_pkg.java.lang.Object, 1)
+            objects_array[0] = value
+            return method.invoke(self._java_ref, objects_array)
+        if isinstance(value, BaseGeometry):
+            return self._java_ref.literal(GeometryType().to_java(value))
+        return self._java_ref.literal(value)
+
+    def add(self, expr1, expr2):
+        &#34;&#34;&#34;
+        Constructs an expression which adds two other expressions.
+
+        Args:
+            expr1 (Expression): The first expression.
+            expr2 (Expression): The second expression.
+        Returns:
+            An Expression which represents [expr1 + expr2].
+        &#34;&#34;&#34;
+        return self._java_ref.add(expr1, expr2)
+
+    def subtract(self, expr1, expr2):
+        &#34;&#34;&#34;
+        Constructs an expression which subtracts one expression from another.
+
+        Args:
+            expr1 (Expression): The expression to subtract from.
+            expr2 (Expression): The expression to subtract.
+        Returns:
+            An Expression which represents [expr1 - expr2].
+        &#34;&#34;&#34;
+        return self._java_ref.subtract(expr1, expr2)
+
+    def multiply(self, expr1, expr2):
+        &#34;&#34;&#34;
+        Constructs an expression which multiplies two other expressions.
+
+        Args:
+            expr1 (Expression): The first expression.
+            expr2 (Expression): The second expression.
+        Returns:
+            An Expression which represents [expr1 * expr2].
+        &#34;&#34;&#34;
+        return self._java_ref.multiply(expr1, expr2)
+
+    def divide(self, expr1, expr2):
+        &#34;&#34;&#34;
+        Constructs an expression which divides one expression by another.
+
+        Args:
+            expr1 (Expression): The expression to divide.
+            expr2 (Expression): The expression to divide by.
+        Returns:
+            An Expression which represents [expr1 / expr2].
+        &#34;&#34;&#34;
+        return self._java_ref.divide(expr1, expr2)
+
+    def function(self, name, expressions):
+        &#34;&#34;&#34;
+        Constructs an expression by passing a set of expressions to an expression function.
+
+        Args:
+            name (str): The name of the function.
+            expressions (list of Expression): The expressions to use in the function.
+        Returns:
+            An Expression which represents the result of the function.
+        &#34;&#34;&#34;
+        j_expressions = java_gateway.new_array(java_pkg.org.opengis.filter.expression.Expression, len(expressions))
+        for idx, expression in enumerate(expressions):
+            j_expressions[idx] = expression
+        return self._java_ref.function(name, j_expressions)
+
+    def and_(self, filters):
+        &#34;&#34;&#34;
+        Constructs a filter which passes when all given filters pass.
+
+        Args:
+            filters (list of Filter): The filters to check.
+        Returns:
+            A Filter that passes when all given Filters pass.
+        &#34;&#34;&#34;
+        return _invoke_filter_list_method_by_name(self._java_ref, &#34;and&#34;, filters)
+
+    def or_(self, filters):
+        &#34;&#34;&#34;
+        Constructs a filter which passes when any of the given filters pass.
+
+        Args:
+            filters (list of Filter): The filters to check.
+        Returns:
+            A Filter that passes when one of the given Filters pass.
+        &#34;&#34;&#34;
+        return _invoke_filter_list_method_by_name(self._java_ref, &#34;or&#34;, filters)
+
+    def not_(self, filter):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the given filter does NOT pass.
+
+        Args:
+            filter (Filter): The filter to check.
+        Returns:
+            A Filter that passes when the given filter does NOT pass.
+        &#34;&#34;&#34;
+        return _invoke_filter_method_by_name(self._java_ref, &#34;not&#34;, filter)
+
+    def between(self, expr, lower, upper, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the given expression falls between a
+        lower and upper expression.
+
+        Args:
+            expr (Expression): The expression to check.
+            lower (Expression): The lower bound.
+            upper (Expression): The upper bound.
+            match_action (str): The match action to use. Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when the given expression falls between a
+            lower and upper expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.between(expr, lower, upper)
+        else:
+            return self._java_ref.between(expr, lower, upper, _j_match_action(match_action))
+
+    def equals(self, expr1, expr2):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the given expressions are equal.
+
+        Args:
+            expr1 (Expression): The first expression.
+            expr2 (Expression): The second expression.
+        Returns:
+            A Filter that passes when the given expressions are equal.
+        &#34;&#34;&#34;
+        return self._java_ref.equals(expr1, expr2)
+
+    def equal(self, expr1, expr2, match_case, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the given expressions are equal.
+
+        Args:
+            expr1 (Expression): The first expression.
+            expr2 (Expression): The second expression.
+            match_case (bool): Whether or not to match case with strings.
+            match_action (str): The match action to use. Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when the given expressions are equal.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.equal(expr1, expr2, match_case)
+        else:
+            return self._java_ref.equal(expr1, expr2, match_case, _j_match_action(match_action))
+
+    def not_equals(self, expr1, expr2):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the given expressions are NOT equal.
+
+        Args:
+            expr1 (Expression): The first expression.
+            expr2 (Expression): The second expression.
+        Returns:
+            A Filter that passes when the given expressions are NOT equal.
+        &#34;&#34;&#34;
+        return self._java_ref.notEqual(expr1, expr2)
+
+    def not_equal(self, expr1, expr2, match_case, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the given expressions are NOT equal.
+
+        Args:
+            expr1 (Expression): The first expression.
+            expr2 (Expression): The second expression.
+            match_case (bool): Whether or not to match case with strings.
+            match_action (str): The match action to use. Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when the given expressions are NOT equal.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.notEqual(expr1, expr2, match_case)
+        else:
+            return self._java_ref.notEqual(expr1, expr2, match_case, _j_match_action(match_action))
+
+    def greater(self, expr1, expr2, match_case=None, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the first expression is greater than
+        the second.
+
+        Args:
+            expr1 (Expression): The first expression.
+            expr2 (Expression): The second expression.
+            match_case (bool): Whether or not to match case with strings. Default is None.
+            match_action (str): The match action to use. Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when the first expression is greater than the
+            second.
+        &#34;&#34;&#34;
+        if match_case is None:
+            return self._java_ref.greater(expr1, expr2)
+        elif match_action is None:
+            return self._java_ref.greater(expr1, expr2, match_case)
+        else:
+            return self._java_ref.greater(expr1, expr2, match_case, _j_match_action(match_action))
+
+    def greater_or_equal(self, expr1, expr2, match_case=None, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the first expression is greater than
+        or equal to the second.
+
+        Args:
+            expr1 (Expression): The first expression.
+            expr2 (Expression): The second expression.
+            match_case (bool): Whether or not to match case with strings. Default is None.
+            match_action (str): The match action to use. Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when the first expression is greater than or equal
+            to the second.
+        &#34;&#34;&#34;
+        if match_case is None:
+            return self._java_ref.greaterOrEqual(expr1, expr2)
+        elif match_action is None:
+            return self._java_ref.greaterOrEqual(expr1, expr2, match_case)
+        else:
+            return self._java_ref.greaterOrEqual(expr1, expr2, match_case, _j_match_action(match_action))
+
+    def less(self, expr1, expr2, match_case=None, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the first expression is less than
+        the second.
+
+        Args:
+            expr1 (Expression): The first expression.
+            expr2 (Expression): The second expression.
+            match_case (bool): Whether or not to match case with strings. Default is None.
+            match_action (str): The match action to use. Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when the first expression is less than the
+            second.
+        &#34;&#34;&#34;
+        if match_case is None:
+            return self._java_ref.less(expr1, expr2)
+        elif match_action is None:
+            return self._java_ref.less(expr1, expr2, match_case)
+        else:
+            return self._java_ref.less(expr1, expr2, match_case, _j_match_action(match_action))
+
+    def less_or_equal(self, expr1, expr2, match_case=None, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the first expression is les than
+        or equal to the second.
+
+        Args:
+            expr1 (Expression): The first expression.
+            expr2 (Expression): The second expression.
+            match_case (bool): Whether or not to match case with strings. Default is None.
+            match_action (str): The match action to use. Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when the first expression is less than or equal
+            to the second.
+        &#34;&#34;&#34;
+        if match_case is None:
+            return self._java_ref.lessOrEqual(expr1, expr2)
+        elif match_action is None:
+            return self._java_ref.lessOrEqual(expr1, expr2, match_case)
+        else:
+            return self._java_ref.lessOrEqual(expr1, expr2, match_case, _j_match_action(match_action))
+
+    def like(self, expr, pattern, wildcard=None, single_char=None, escape=None, match_case=None, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter with character string comparison operator with pattern
+        matching and specified wildcards.
+
+        Args:
+            expr (Expression): The expression to use.
+            pattern (str): The pattern to match.
+            wildcard (str): The string to use to match any characters.  Default is None.
+            single_char (str): The string to use to match a single character.  Default is None.
+            escape (str): The string to use to escape a wildcard.  Default is None.
+            match_case (bool): Whether or not to match case with strings. Default is None.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when the first expression is greater than the
+            second.
+        &#34;&#34;&#34;
+        if wildcard is None:
+            return self._java_ref.like(expr, pattern)
+        elif match_case is None:
+            return self._java_ref.like(expr, pattern, wildcard, single_char, escape)
+        elif match_action is None:
+            return self._java_ref.like(expr, pattern, wildcard, single_char, escape, match_case)
+        else:
+            return self._java_ref.like(expr, pattern, wildcard, single_char, escape, match_case, _j_match_action(match_action))
+
+    def is_null(self, expr):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the given expression is null.
+
+        Args:
+            expr (Expression): The expression to check.
+        Returns:
+            A Filter that passes when the given epxression is null.
+        &#34;&#34;&#34;
+        return self._java_ref.isNull(expr)
+
+    def bbox(self, geometry_expr, minx, miny, maxx, maxy, srs, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the given geometry expression is within
+        the given bounding box.
+
+        Args:
+            geometry_expr (Expression): An expression which represents a geometry.
+            minx (float): The minimum X value of the bounding box.
+            miny (float): The minimum Y value of the bounding box.
+            maxx (float): The maximum X value of the bounding box.
+            maxy (float): The maximum Y value of the bounding box.
+            srs (str): The spatial reference system of the geometry.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when the given geometry is within the bounding box.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.bbox(geometry_expr, minx*1.0, miny*1.0, maxx*1.0, maxy*1.0, srs)
+        else:
+            return self._java_ref.bbox(geometry_expr, minx*1.0, miny*1.0, maxx*1.0, maxy*1.0, srs, _j_match_action(match_action))
+
+    def bbox_expr(self, geometry_expr, bbox_expr):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the given geometry expression is within the
+        given bounding box expression.
+
+        Args:
+            geometry_expr (Expression): An expression which represents a geometry.
+            bbox_expr (Expression): An expression which represents a bounding box.
+        Returns:
+            A Filter that passes when the given geometry is within the bounding box.
+        &#34;&#34;&#34;
+        return self._java_ref.bbox(geometry_expr, bbox_expr)
+
+    def beyond(self, geometry_expr1, geometry_expr2, distance, units, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given geometry is beyond a certain distance from
+        a second given geometry.
+
+        Args:
+            geometry_expr1 (Expression): An expression which represents a geometry.
+            geometry_expr2 (Expression): An expression which represents a geometry.
+            distance (float): The distance to use.
+            units (str): The distance unit.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when the geometry is beyond the distance from the second
+            geometry.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.beyond(geometry_expr1, geometry_expr2, distance*1.0, units)
+        else:
+            return self._java_ref.beyond(geometry_expr1, geometry_expr2, distance*1.0, units, _j_match_action(match_action))
+
+    def contains(self, geometry_expr1, geometry_expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the first geometry expression contains the
+        second geometry expression.
+
+        Args:
+            geometry_expr1 (Expression): An expression which represents the geometry to check against.
+            geometry_expr2 (Expression): An expression which represents the geometry to check.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when the second geometry is contained by the first.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.contains(geometry_expr1, geometry_expr2)
+        else:
+            return self._java_ref.contains(geometry_expr1, geometry_expr2, _j_match_action(match_action))
+
+    def crosses(self, geometry_expr1, geometry_expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given geometry crosses another given geometry.
+
+        Args:
+            geometry_expr1 (Expression): An expression which represents a geometry.
+            geometry_expr2 (Expression): An expression which represents a geometry.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given geometry crosses another given geometry.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.crosses(geometry_expr1, geometry_expr2)
+        else:
+            return self._java_ref.crosses(geometry_expr1, geometry_expr2, _j_match_action(match_action))
+
+    def disjoint(self, geometry_expr1, geometry_expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given geometry is disjoint to another given geometry.
+
+        Args:
+            geometry_expr1 (Expression): An expression which represents a geometry.
+            geometry_expr2 (Expression): An expression which represents a geometry.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given geometry is disjoint to another given geometry.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.disjoint(geometry_expr1, geometry_expr2)
+        else:
+            return self._java_ref.disjoint(geometry_expr1, geometry_expr2, _j_match_action(match_action))
+
+    def intersects(self, geometry_expr1, geometry_expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given geometry intersects another given geometry.
+
+        Args:
+            geometry_expr1 (Expression): An expression which represents a geometry.
+            geometry_expr2 (Expression): An expression which represents a geometry.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given geometry intersects another given geometry.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.intersects(geometry_expr1, geometry_expr2)
+        else:
+            return self._java_ref.intersects(geometry_expr1, geometry_expr2, _j_match_action(match_action))
+
+    def overlaps(self, geometry_expr1, geometry_expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given geometry overlaps another given geometry.
+
+        Args:
+            geometry_expr1 (Expression): An expression which represents a geometry.
+            geometry_expr2 (Expression): An expression which represents a geometry.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given geometry overlaps another given geometry.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.overlaps(geometry_expr1, geometry_expr2)
+        else:
+            return self._java_ref.overlaps(geometry_expr1, geometry_expr2, _j_match_action(match_action))
+
+    def touches(self, geometry_expr1, geometry_expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given geometry touches another given geometry.
+
+        Args:
+            geometry_expr1 (Expression): An expression which represents a geometry.
+            geometry_expr2 (Expression): An expression which represents a geometry.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given geometry touches another given geometry.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.touches(geometry_expr1, geometry_expr2)
+        else:
+            return self._java_ref.touches(geometry_expr1, geometry_expr2, _j_match_action(match_action))
+
+    def within(self, geometry_expr1, geometry_expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given geometry is within another given geometry.
+
+        Args:
+            geometry_expr1 (Expression): An expression which represents a geometry.
+            geometry_expr2 (Expression): An expression which represents a geometry.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given geometry is within another given geometry.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.within(geometry_expr1, geometry_expr2)
+        else:
+            return self._java_ref.within(geometry_expr1, geometry_expr2, _j_match_action(match_action))
+
+    def dwithin(self, geometry_expr1, geometry_expr2, distance, units, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given geometry is within the specified distance
+        of the second geometry.
+
+        Args:
+            geometry_expr1 (Expression): An expression which represents a geometry.
+            geometry_expr2 (Expression): An expression which represents a geometry.
+            distance (float): The distance to use.
+            units (str): The unit of distance.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given geometry is within the specified distance of the
+            second geometry.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.dwithin(geometry_expr1, geometry_expr2, distance*1.0, units)
+        else:
+            return self._java_ref.dwithin(geometry_expr1, geometry_expr2, distance*1.0, units, _j_match_action(match_action))
+
+    def after(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression occurs after
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression occurs after the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.after(expr1, expr2)
+        else:
+            return self._java_ref.after(expr1, expr2, _j_match_action(match_action))
+
+    def any_interacts(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression interacts with
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression interacts with the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.anyInteracts(expr1, expr2)
+        else:
+            return self._java_ref.anyInteracts(expr1, expr2, _j_match_action(match_action))
+
+    def before(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression occurs before
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression occurs before the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.before(expr1, expr2)
+        else:
+            return self._java_ref.before(expr1, expr2, _j_match_action(match_action))
+
+    def begins(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression begins
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression begins the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.begins(expr1, expr2)
+        else:
+            return self._java_ref.begins(expr1, expr2, _j_match_action(match_action))
+
+    def begun_by(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression is begun by
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression is begun by the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.begunBy(expr1, expr2)
+        else:
+            return self._java_ref.begunBy(expr1, expr2, _j_match_action(match_action))
+
+    def during(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression occurs during
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression occurs during the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.during(expr1, expr2)
+        else:
+            return self._java_ref.during(expr1, expr2, _j_match_action(match_action))
+
+    def ended_by(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression is ended by
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression is ended by the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.endedBy(expr1, expr2)
+        else:
+            return self._java_ref.endedBy(expr1, expr2, _j_match_action(match_action))
+
+    def ends(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression ends
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression ends the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.ends(expr1, expr2)
+        else:
+            return self._java_ref.ends(expr1, expr2, _j_match_action(match_action))
+
+    def meets(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression meets
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression meets the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.meets(expr1, expr2)
+        else:
+            return self._java_ref.meets(expr1, expr2, _j_match_action(match_action))
+
+    def met_by(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression is met by
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression is met by the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.metBy(expr1, expr2)
+        else:
+            return self._java_ref.metBy(expr1, expr2, _j_match_action(match_action))
+
+    def overlapped_by(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression is overlapped by
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression is overlapped by the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.overlappedBy(expr1, expr2)
+        else:
+            return self._java_ref.overlappedBy(expr1, expr2, _j_match_action(match_action))
+
+    def tcontains(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression contains
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression contains the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.tcontains(expr1, expr2)
+        else:
+            return self._java_ref.tcontains(expr1, expr2, _j_match_action(match_action))
+
+    def tequals(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression equals
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression equals the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.tequals(expr1, expr2)
+        else:
+            return self._java_ref.tequals(expr1, expr2, _j_match_action(match_action))
+
+    def toverlaps(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression overlaps
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression overlaps the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.toverlaps(expr1, expr2)
+        else:
+            return self._java_ref.toverlaps(expr1, expr2, _j_match_action(match_action))</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="pygw.query.vector.filter_factory.FilterFactory"><code class="flex name class">
+<span>class <span class="ident">FilterFactory</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>Filter factory for constructing filters to be used in vector queries. Methods
+of this factory generally return either a Filter or Expression which can be used
+in additional method calls.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class FilterFactory(GeoWaveObject):
+    &#34;&#34;&#34;
+    Filter factory for constructing filters to be used in vector queries. Methods
+    of this factory generally return either a Filter or Expression which can be used
+    in additional method calls.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        j_filter_factory = java_pkg.org.geotools.filter.FilterFactoryImpl()
+        super().__init__(j_filter_factory)
+
+    def id(self, fids):
+        &#34;&#34;&#34;
+        Constructs a filter that matches a set of feature IDs.
+
+        Args:
+            fids (list of str): The list of feature IDs to match.
+        Returns:
+            A Filter with the given feature IDs.
+        &#34;&#34;&#34;
+        j_fids = java_gateway.new_array(java_pkg.org.opengis.filter.identity.FeatureId, len(fids))
+        for idx, fid in enumerate(fids):
+            if isinstance(fid, str):
+                j_fids[idx] = self.feature_id(fid)
+            else:
+                j_fids[idx] = fid
+        return self._java_ref.id(j_fids)
+
+    def feature_id(self, id):
+        &#34;&#34;&#34;
+        Constructs a filter that matches a specific feature ID.
+
+        Args:
+            id (str): The feature ID.
+        Returns:
+            A Filter with the given feature ID.
+        &#34;&#34;&#34;
+        return self._java_ref.featureId(id)
+
+    def gml_object_id(self, id):
+        &#34;&#34;&#34;
+        Constructs a filter that matches a specific gml object ID.
+
+        Args:
+            id (str): The gml object ID.
+        Returns:
+            A Filter with the given gml object ID.
+        &#34;&#34;&#34;
+        return self._java_ref.gmlObjectId(id)
+
+    def property(self, name):
+        &#34;&#34;&#34;
+        Constructs an expression that references the given property name.
+
+        Args:
+            name (str): The property name.
+        Returns:
+            An Expression with the given property name.
+        &#34;&#34;&#34;
+        return self._java_ref.property(name)
+
+    def literal(self, value):
+        &#34;&#34;&#34;
+        Constructs an expression with the given literal value.
+
+        Args:
+            value (any): The literal value to use.
+        Returns:
+            An Expression with the given literal value.
+        &#34;&#34;&#34;
+        if isinstance(value, datetime):
+            # Convert the date to a string
+            value = value.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;)
+        if isinstance(value, str):
+            # Prevent Py4J from assuming the string matches up with the char variant method
+            filter_factory_class = self._java_ref.getClass()
+            object_class = reflection_util.classForName(&#34;java.lang.Object&#34;)
+            class_array = java_gateway.new_array(java_pkg.java.lang.Class, 1)
+            class_array[0] = object_class
+            method = filter_factory_class.getMethod(&#34;literal&#34;, class_array)
+            objects_array = java_gateway.new_array(java_pkg.java.lang.Object, 1)
+            objects_array[0] = value
+            return method.invoke(self._java_ref, objects_array)
+        if isinstance(value, BaseGeometry):
+            return self._java_ref.literal(GeometryType().to_java(value))
+        return self._java_ref.literal(value)
+
+    def add(self, expr1, expr2):
+        &#34;&#34;&#34;
+        Constructs an expression which adds two other expressions.
+
+        Args:
+            expr1 (Expression): The first expression.
+            expr2 (Expression): The second expression.
+        Returns:
+            An Expression which represents [expr1 + expr2].
+        &#34;&#34;&#34;
+        return self._java_ref.add(expr1, expr2)
+
+    def subtract(self, expr1, expr2):
+        &#34;&#34;&#34;
+        Constructs an expression which subtracts one expression from another.
+
+        Args:
+            expr1 (Expression): The expression to subtract from.
+            expr2 (Expression): The expression to subtract.
+        Returns:
+            An Expression which represents [expr1 - expr2].
+        &#34;&#34;&#34;
+        return self._java_ref.subtract(expr1, expr2)
+
+    def multiply(self, expr1, expr2):
+        &#34;&#34;&#34;
+        Constructs an expression which multiplies two other expressions.
+
+        Args:
+            expr1 (Expression): The first expression.
+            expr2 (Expression): The second expression.
+        Returns:
+            An Expression which represents [expr1 * expr2].
+        &#34;&#34;&#34;
+        return self._java_ref.multiply(expr1, expr2)
+
+    def divide(self, expr1, expr2):
+        &#34;&#34;&#34;
+        Constructs an expression which divides one expression by another.
+
+        Args:
+            expr1 (Expression): The expression to divide.
+            expr2 (Expression): The expression to divide by.
+        Returns:
+            An Expression which represents [expr1 / expr2].
+        &#34;&#34;&#34;
+        return self._java_ref.divide(expr1, expr2)
+
+    def function(self, name, expressions):
+        &#34;&#34;&#34;
+        Constructs an expression by passing a set of expressions to an expression function.
+
+        Args:
+            name (str): The name of the function.
+            expressions (list of Expression): The expressions to use in the function.
+        Returns:
+            An Expression which represents the result of the function.
+        &#34;&#34;&#34;
+        j_expressions = java_gateway.new_array(java_pkg.org.opengis.filter.expression.Expression, len(expressions))
+        for idx, expression in enumerate(expressions):
+            j_expressions[idx] = expression
+        return self._java_ref.function(name, j_expressions)
+
+    def and_(self, filters):
+        &#34;&#34;&#34;
+        Constructs a filter which passes when all given filters pass.
+
+        Args:
+            filters (list of Filter): The filters to check.
+        Returns:
+            A Filter that passes when all given Filters pass.
+        &#34;&#34;&#34;
+        return _invoke_filter_list_method_by_name(self._java_ref, &#34;and&#34;, filters)
+
+    def or_(self, filters):
+        &#34;&#34;&#34;
+        Constructs a filter which passes when any of the given filters pass.
+
+        Args:
+            filters (list of Filter): The filters to check.
+        Returns:
+            A Filter that passes when one of the given Filters pass.
+        &#34;&#34;&#34;
+        return _invoke_filter_list_method_by_name(self._java_ref, &#34;or&#34;, filters)
+
+    def not_(self, filter):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the given filter does NOT pass.
+
+        Args:
+            filter (Filter): The filter to check.
+        Returns:
+            A Filter that passes when the given filter does NOT pass.
+        &#34;&#34;&#34;
+        return _invoke_filter_method_by_name(self._java_ref, &#34;not&#34;, filter)
+
+    def between(self, expr, lower, upper, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the given expression falls between a
+        lower and upper expression.
+
+        Args:
+            expr (Expression): The expression to check.
+            lower (Expression): The lower bound.
+            upper (Expression): The upper bound.
+            match_action (str): The match action to use. Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when the given expression falls between a
+            lower and upper expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.between(expr, lower, upper)
+        else:
+            return self._java_ref.between(expr, lower, upper, _j_match_action(match_action))
+
+    def equals(self, expr1, expr2):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the given expressions are equal.
+
+        Args:
+            expr1 (Expression): The first expression.
+            expr2 (Expression): The second expression.
+        Returns:
+            A Filter that passes when the given expressions are equal.
+        &#34;&#34;&#34;
+        return self._java_ref.equals(expr1, expr2)
+
+    def equal(self, expr1, expr2, match_case, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the given expressions are equal.
+
+        Args:
+            expr1 (Expression): The first expression.
+            expr2 (Expression): The second expression.
+            match_case (bool): Whether or not to match case with strings.
+            match_action (str): The match action to use. Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when the given expressions are equal.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.equal(expr1, expr2, match_case)
+        else:
+            return self._java_ref.equal(expr1, expr2, match_case, _j_match_action(match_action))
+
+    def not_equals(self, expr1, expr2):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the given expressions are NOT equal.
+
+        Args:
+            expr1 (Expression): The first expression.
+            expr2 (Expression): The second expression.
+        Returns:
+            A Filter that passes when the given expressions are NOT equal.
+        &#34;&#34;&#34;
+        return self._java_ref.notEqual(expr1, expr2)
+
+    def not_equal(self, expr1, expr2, match_case, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the given expressions are NOT equal.
+
+        Args:
+            expr1 (Expression): The first expression.
+            expr2 (Expression): The second expression.
+            match_case (bool): Whether or not to match case with strings.
+            match_action (str): The match action to use. Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when the given expressions are NOT equal.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.notEqual(expr1, expr2, match_case)
+        else:
+            return self._java_ref.notEqual(expr1, expr2, match_case, _j_match_action(match_action))
+
+    def greater(self, expr1, expr2, match_case=None, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the first expression is greater than
+        the second.
+
+        Args:
+            expr1 (Expression): The first expression.
+            expr2 (Expression): The second expression.
+            match_case (bool): Whether or not to match case with strings. Default is None.
+            match_action (str): The match action to use. Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when the first expression is greater than the
+            second.
+        &#34;&#34;&#34;
+        if match_case is None:
+            return self._java_ref.greater(expr1, expr2)
+        elif match_action is None:
+            return self._java_ref.greater(expr1, expr2, match_case)
+        else:
+            return self._java_ref.greater(expr1, expr2, match_case, _j_match_action(match_action))
+
+    def greater_or_equal(self, expr1, expr2, match_case=None, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the first expression is greater than
+        or equal to the second.
+
+        Args:
+            expr1 (Expression): The first expression.
+            expr2 (Expression): The second expression.
+            match_case (bool): Whether or not to match case with strings. Default is None.
+            match_action (str): The match action to use. Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when the first expression is greater than or equal
+            to the second.
+        &#34;&#34;&#34;
+        if match_case is None:
+            return self._java_ref.greaterOrEqual(expr1, expr2)
+        elif match_action is None:
+            return self._java_ref.greaterOrEqual(expr1, expr2, match_case)
+        else:
+            return self._java_ref.greaterOrEqual(expr1, expr2, match_case, _j_match_action(match_action))
+
+    def less(self, expr1, expr2, match_case=None, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the first expression is less than
+        the second.
+
+        Args:
+            expr1 (Expression): The first expression.
+            expr2 (Expression): The second expression.
+            match_case (bool): Whether or not to match case with strings. Default is None.
+            match_action (str): The match action to use. Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when the first expression is less than the
+            second.
+        &#34;&#34;&#34;
+        if match_case is None:
+            return self._java_ref.less(expr1, expr2)
+        elif match_action is None:
+            return self._java_ref.less(expr1, expr2, match_case)
+        else:
+            return self._java_ref.less(expr1, expr2, match_case, _j_match_action(match_action))
+
+    def less_or_equal(self, expr1, expr2, match_case=None, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the first expression is les than
+        or equal to the second.
+
+        Args:
+            expr1 (Expression): The first expression.
+            expr2 (Expression): The second expression.
+            match_case (bool): Whether or not to match case with strings. Default is None.
+            match_action (str): The match action to use. Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when the first expression is less than or equal
+            to the second.
+        &#34;&#34;&#34;
+        if match_case is None:
+            return self._java_ref.lessOrEqual(expr1, expr2)
+        elif match_action is None:
+            return self._java_ref.lessOrEqual(expr1, expr2, match_case)
+        else:
+            return self._java_ref.lessOrEqual(expr1, expr2, match_case, _j_match_action(match_action))
+
+    def like(self, expr, pattern, wildcard=None, single_char=None, escape=None, match_case=None, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter with character string comparison operator with pattern
+        matching and specified wildcards.
+
+        Args:
+            expr (Expression): The expression to use.
+            pattern (str): The pattern to match.
+            wildcard (str): The string to use to match any characters.  Default is None.
+            single_char (str): The string to use to match a single character.  Default is None.
+            escape (str): The string to use to escape a wildcard.  Default is None.
+            match_case (bool): Whether or not to match case with strings. Default is None.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when the first expression is greater than the
+            second.
+        &#34;&#34;&#34;
+        if wildcard is None:
+            return self._java_ref.like(expr, pattern)
+        elif match_case is None:
+            return self._java_ref.like(expr, pattern, wildcard, single_char, escape)
+        elif match_action is None:
+            return self._java_ref.like(expr, pattern, wildcard, single_char, escape, match_case)
+        else:
+            return self._java_ref.like(expr, pattern, wildcard, single_char, escape, match_case, _j_match_action(match_action))
+
+    def is_null(self, expr):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the given expression is null.
+
+        Args:
+            expr (Expression): The expression to check.
+        Returns:
+            A Filter that passes when the given epxression is null.
+        &#34;&#34;&#34;
+        return self._java_ref.isNull(expr)
+
+    def bbox(self, geometry_expr, minx, miny, maxx, maxy, srs, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the given geometry expression is within
+        the given bounding box.
+
+        Args:
+            geometry_expr (Expression): An expression which represents a geometry.
+            minx (float): The minimum X value of the bounding box.
+            miny (float): The minimum Y value of the bounding box.
+            maxx (float): The maximum X value of the bounding box.
+            maxy (float): The maximum Y value of the bounding box.
+            srs (str): The spatial reference system of the geometry.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when the given geometry is within the bounding box.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.bbox(geometry_expr, minx*1.0, miny*1.0, maxx*1.0, maxy*1.0, srs)
+        else:
+            return self._java_ref.bbox(geometry_expr, minx*1.0, miny*1.0, maxx*1.0, maxy*1.0, srs, _j_match_action(match_action))
+
+    def bbox_expr(self, geometry_expr, bbox_expr):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the given geometry expression is within the
+        given bounding box expression.
+
+        Args:
+            geometry_expr (Expression): An expression which represents a geometry.
+            bbox_expr (Expression): An expression which represents a bounding box.
+        Returns:
+            A Filter that passes when the given geometry is within the bounding box.
+        &#34;&#34;&#34;
+        return self._java_ref.bbox(geometry_expr, bbox_expr)
+
+    def beyond(self, geometry_expr1, geometry_expr2, distance, units, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given geometry is beyond a certain distance from
+        a second given geometry.
+
+        Args:
+            geometry_expr1 (Expression): An expression which represents a geometry.
+            geometry_expr2 (Expression): An expression which represents a geometry.
+            distance (float): The distance to use.
+            units (str): The distance unit.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when the geometry is beyond the distance from the second
+            geometry.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.beyond(geometry_expr1, geometry_expr2, distance*1.0, units)
+        else:
+            return self._java_ref.beyond(geometry_expr1, geometry_expr2, distance*1.0, units, _j_match_action(match_action))
+
+    def contains(self, geometry_expr1, geometry_expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when the first geometry expression contains the
+        second geometry expression.
+
+        Args:
+            geometry_expr1 (Expression): An expression which represents the geometry to check against.
+            geometry_expr2 (Expression): An expression which represents the geometry to check.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when the second geometry is contained by the first.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.contains(geometry_expr1, geometry_expr2)
+        else:
+            return self._java_ref.contains(geometry_expr1, geometry_expr2, _j_match_action(match_action))
+
+    def crosses(self, geometry_expr1, geometry_expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given geometry crosses another given geometry.
+
+        Args:
+            geometry_expr1 (Expression): An expression which represents a geometry.
+            geometry_expr2 (Expression): An expression which represents a geometry.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given geometry crosses another given geometry.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.crosses(geometry_expr1, geometry_expr2)
+        else:
+            return self._java_ref.crosses(geometry_expr1, geometry_expr2, _j_match_action(match_action))
+
+    def disjoint(self, geometry_expr1, geometry_expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given geometry is disjoint to another given geometry.
+
+        Args:
+            geometry_expr1 (Expression): An expression which represents a geometry.
+            geometry_expr2 (Expression): An expression which represents a geometry.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given geometry is disjoint to another given geometry.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.disjoint(geometry_expr1, geometry_expr2)
+        else:
+            return self._java_ref.disjoint(geometry_expr1, geometry_expr2, _j_match_action(match_action))
+
+    def intersects(self, geometry_expr1, geometry_expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given geometry intersects another given geometry.
+
+        Args:
+            geometry_expr1 (Expression): An expression which represents a geometry.
+            geometry_expr2 (Expression): An expression which represents a geometry.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given geometry intersects another given geometry.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.intersects(geometry_expr1, geometry_expr2)
+        else:
+            return self._java_ref.intersects(geometry_expr1, geometry_expr2, _j_match_action(match_action))
+
+    def overlaps(self, geometry_expr1, geometry_expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given geometry overlaps another given geometry.
+
+        Args:
+            geometry_expr1 (Expression): An expression which represents a geometry.
+            geometry_expr2 (Expression): An expression which represents a geometry.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given geometry overlaps another given geometry.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.overlaps(geometry_expr1, geometry_expr2)
+        else:
+            return self._java_ref.overlaps(geometry_expr1, geometry_expr2, _j_match_action(match_action))
+
+    def touches(self, geometry_expr1, geometry_expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given geometry touches another given geometry.
+
+        Args:
+            geometry_expr1 (Expression): An expression which represents a geometry.
+            geometry_expr2 (Expression): An expression which represents a geometry.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given geometry touches another given geometry.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.touches(geometry_expr1, geometry_expr2)
+        else:
+            return self._java_ref.touches(geometry_expr1, geometry_expr2, _j_match_action(match_action))
+
+    def within(self, geometry_expr1, geometry_expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given geometry is within another given geometry.
+
+        Args:
+            geometry_expr1 (Expression): An expression which represents a geometry.
+            geometry_expr2 (Expression): An expression which represents a geometry.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given geometry is within another given geometry.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.within(geometry_expr1, geometry_expr2)
+        else:
+            return self._java_ref.within(geometry_expr1, geometry_expr2, _j_match_action(match_action))
+
+    def dwithin(self, geometry_expr1, geometry_expr2, distance, units, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given geometry is within the specified distance
+        of the second geometry.
+
+        Args:
+            geometry_expr1 (Expression): An expression which represents a geometry.
+            geometry_expr2 (Expression): An expression which represents a geometry.
+            distance (float): The distance to use.
+            units (str): The unit of distance.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given geometry is within the specified distance of the
+            second geometry.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.dwithin(geometry_expr1, geometry_expr2, distance*1.0, units)
+        else:
+            return self._java_ref.dwithin(geometry_expr1, geometry_expr2, distance*1.0, units, _j_match_action(match_action))
+
+    def after(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression occurs after
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression occurs after the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.after(expr1, expr2)
+        else:
+            return self._java_ref.after(expr1, expr2, _j_match_action(match_action))
+
+    def any_interacts(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression interacts with
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression interacts with the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.anyInteracts(expr1, expr2)
+        else:
+            return self._java_ref.anyInteracts(expr1, expr2, _j_match_action(match_action))
+
+    def before(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression occurs before
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression occurs before the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.before(expr1, expr2)
+        else:
+            return self._java_ref.before(expr1, expr2, _j_match_action(match_action))
+
+    def begins(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression begins
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression begins the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.begins(expr1, expr2)
+        else:
+            return self._java_ref.begins(expr1, expr2, _j_match_action(match_action))
+
+    def begun_by(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression is begun by
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression is begun by the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.begunBy(expr1, expr2)
+        else:
+            return self._java_ref.begunBy(expr1, expr2, _j_match_action(match_action))
+
+    def during(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression occurs during
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression occurs during the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.during(expr1, expr2)
+        else:
+            return self._java_ref.during(expr1, expr2, _j_match_action(match_action))
+
+    def ended_by(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression is ended by
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression is ended by the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.endedBy(expr1, expr2)
+        else:
+            return self._java_ref.endedBy(expr1, expr2, _j_match_action(match_action))
+
+    def ends(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression ends
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression ends the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.ends(expr1, expr2)
+        else:
+            return self._java_ref.ends(expr1, expr2, _j_match_action(match_action))
+
+    def meets(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression meets
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression meets the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.meets(expr1, expr2)
+        else:
+            return self._java_ref.meets(expr1, expr2, _j_match_action(match_action))
+
+    def met_by(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression is met by
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression is met by the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.metBy(expr1, expr2)
+        else:
+            return self._java_ref.metBy(expr1, expr2, _j_match_action(match_action))
+
+    def overlapped_by(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression is overlapped by
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression is overlapped by the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.overlappedBy(expr1, expr2)
+        else:
+            return self._java_ref.overlappedBy(expr1, expr2, _j_match_action(match_action))
+
+    def tcontains(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression contains
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression contains the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.tcontains(expr1, expr2)
+        else:
+            return self._java_ref.tcontains(expr1, expr2, _j_match_action(match_action))
+
+    def tequals(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression equals
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression equals the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.tequals(expr1, expr2)
+        else:
+            return self._java_ref.tequals(expr1, expr2, _j_match_action(match_action))
+
+    def toverlaps(self, expr1, expr2, match_action=None):
+        &#34;&#34;&#34;
+        Constructs a filter that passes when a given temporal expression overlaps
+        a second temporal expression.
+
+        Args:
+            expr1 (Expression): The first temporal expression.
+            expr2 (Expression): The second temporal expression.
+            match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+        Returns:
+            A Filter that passes when a given temporal expression overlaps the
+            second temporal expression.
+        &#34;&#34;&#34;
+        if match_action is None:
+            return self._java_ref.toverlaps(expr1, expr2)
+        else:
+            return self._java_ref.toverlaps(expr1, expr2, _j_match_action(match_action))</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.geowave_object.GeoWaveObject" href="../../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject">GeoWaveObject</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.add"><code class="name flex">
+<span>def <span class="ident">add</span></span>(<span>self, expr1, expr2)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an expression which adds two other expressions.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The first expression.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The second expression.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>An Expression which represents [expr1 + expr2].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add(self, expr1, expr2):
+    &#34;&#34;&#34;
+    Constructs an expression which adds two other expressions.
+
+    Args:
+        expr1 (Expression): The first expression.
+        expr2 (Expression): The second expression.
+    Returns:
+        An Expression which represents [expr1 + expr2].
+    &#34;&#34;&#34;
+    return self._java_ref.add(expr1, expr2)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.after"><code class="name flex">
+<span>def <span class="ident">after</span></span>(<span>self, expr1, expr2, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when a given temporal expression occurs after
+a second temporal expression.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The first temporal expression.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The second temporal expression.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use.
+Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>Filter</code> <code>that</code> <code>passes</code> <code>when</code> <code>a</code> <code>given</code> <code>temporal</code> <code>expression</code> <code>occurs</code> <code>after</code> <code>the</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>second temporal expression.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def after(self, expr1, expr2, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when a given temporal expression occurs after
+    a second temporal expression.
+
+    Args:
+        expr1 (Expression): The first temporal expression.
+        expr2 (Expression): The second temporal expression.
+        match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when a given temporal expression occurs after the
+        second temporal expression.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.after(expr1, expr2)
+    else:
+        return self._java_ref.after(expr1, expr2, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.and_"><code class="name flex">
+<span>def <span class="ident">and_</span></span>(<span>self, filters)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter which passes when all given filters pass.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>filters</code></strong> :&ensp;<code>list</code> of <code>Filter</code></dt>
+<dd>The filters to check.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Filter that passes when all given Filters pass.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def and_(self, filters):
+    &#34;&#34;&#34;
+    Constructs a filter which passes when all given filters pass.
+
+    Args:
+        filters (list of Filter): The filters to check.
+    Returns:
+        A Filter that passes when all given Filters pass.
+    &#34;&#34;&#34;
+    return _invoke_filter_list_method_by_name(self._java_ref, &#34;and&#34;, filters)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.any_interacts"><code class="name flex">
+<span>def <span class="ident">any_interacts</span></span>(<span>self, expr1, expr2, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when a given temporal expression interacts with
+a second temporal expression.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The first temporal expression.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The second temporal expression.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use.
+Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>Filter</code> <code>that</code> <code>passes</code> <code>when</code> <code>a</code> <code>given</code> <code>temporal</code> <code>expression</code> <code>interacts</code> <code>with</code> <code>the</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>second temporal expression.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def any_interacts(self, expr1, expr2, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when a given temporal expression interacts with
+    a second temporal expression.
+
+    Args:
+        expr1 (Expression): The first temporal expression.
+        expr2 (Expression): The second temporal expression.
+        match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when a given temporal expression interacts with the
+        second temporal expression.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.anyInteracts(expr1, expr2)
+    else:
+        return self._java_ref.anyInteracts(expr1, expr2, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.bbox"><code class="name flex">
+<span>def <span class="ident">bbox</span></span>(<span>self, geometry_expr, minx, miny, maxx, maxy, srs, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when the given geometry expression is within
+the given bounding box.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>geometry_expr</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>An expression which represents a geometry.</dd>
+<dt><strong><code>minx</code></strong> :&ensp;<code>float</code></dt>
+<dd>The minimum X value of the bounding box.</dd>
+<dt><strong><code>miny</code></strong> :&ensp;<code>float</code></dt>
+<dd>The minimum Y value of the bounding box.</dd>
+<dt><strong><code>maxx</code></strong> :&ensp;<code>float</code></dt>
+<dd>The maximum X value of the bounding box.</dd>
+<dt><strong><code>maxy</code></strong> :&ensp;<code>float</code></dt>
+<dd>The maximum Y value of the bounding box.</dd>
+<dt><strong><code>srs</code></strong> :&ensp;<code>str</code></dt>
+<dd>The spatial reference system of the geometry.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use.
+Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Filter that passes when the given geometry is within the bounding box.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def bbox(self, geometry_expr, minx, miny, maxx, maxy, srs, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when the given geometry expression is within
+    the given bounding box.
+
+    Args:
+        geometry_expr (Expression): An expression which represents a geometry.
+        minx (float): The minimum X value of the bounding box.
+        miny (float): The minimum Y value of the bounding box.
+        maxx (float): The maximum X value of the bounding box.
+        maxy (float): The maximum Y value of the bounding box.
+        srs (str): The spatial reference system of the geometry.
+        match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when the given geometry is within the bounding box.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.bbox(geometry_expr, minx*1.0, miny*1.0, maxx*1.0, maxy*1.0, srs)
+    else:
+        return self._java_ref.bbox(geometry_expr, minx*1.0, miny*1.0, maxx*1.0, maxy*1.0, srs, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.bbox_expr"><code class="name flex">
+<span>def <span class="ident">bbox_expr</span></span>(<span>self, geometry_expr, bbox_expr)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when the given geometry expression is within the
+given bounding box expression.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>geometry_expr</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>An expression which represents a geometry.</dd>
+<dt><strong><code>bbox_expr</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>An expression which represents a bounding box.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Filter that passes when the given geometry is within the bounding box.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def bbox_expr(self, geometry_expr, bbox_expr):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when the given geometry expression is within the
+    given bounding box expression.
+
+    Args:
+        geometry_expr (Expression): An expression which represents a geometry.
+        bbox_expr (Expression): An expression which represents a bounding box.
+    Returns:
+        A Filter that passes when the given geometry is within the bounding box.
+    &#34;&#34;&#34;
+    return self._java_ref.bbox(geometry_expr, bbox_expr)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.before"><code class="name flex">
+<span>def <span class="ident">before</span></span>(<span>self, expr1, expr2, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when a given temporal expression occurs before
+a second temporal expression.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The first temporal expression.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The second temporal expression.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use.
+Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>Filter</code> <code>that</code> <code>passes</code> <code>when</code> <code>a</code> <code>given</code> <code>temporal</code> <code>expression</code> <code>occurs</code> <code>before</code> <code>the</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>second temporal expression.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def before(self, expr1, expr2, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when a given temporal expression occurs before
+    a second temporal expression.
+
+    Args:
+        expr1 (Expression): The first temporal expression.
+        expr2 (Expression): The second temporal expression.
+        match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when a given temporal expression occurs before the
+        second temporal expression.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.before(expr1, expr2)
+    else:
+        return self._java_ref.before(expr1, expr2, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.begins"><code class="name flex">
+<span>def <span class="ident">begins</span></span>(<span>self, expr1, expr2, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when a given temporal expression begins
+a second temporal expression.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The first temporal expression.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The second temporal expression.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use.
+Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>Filter</code> <code>that</code> <code>passes</code> <code>when</code> <code>a</code> <code>given</code> <code>temporal</code> <code>expression</code> <code>begins</code> <code>the</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>second temporal expression.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def begins(self, expr1, expr2, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when a given temporal expression begins
+    a second temporal expression.
+
+    Args:
+        expr1 (Expression): The first temporal expression.
+        expr2 (Expression): The second temporal expression.
+        match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when a given temporal expression begins the
+        second temporal expression.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.begins(expr1, expr2)
+    else:
+        return self._java_ref.begins(expr1, expr2, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.begun_by"><code class="name flex">
+<span>def <span class="ident">begun_by</span></span>(<span>self, expr1, expr2, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when a given temporal expression is begun by
+a second temporal expression.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The first temporal expression.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The second temporal expression.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use.
+Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>Filter</code> <code>that</code> <code>passes</code> <code>when</code> <code>a</code> <code>given</code> <code>temporal</code> <code>expression</code> <code>is</code> <code>begun</code> <code>by</code> <code>the</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>second temporal expression.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def begun_by(self, expr1, expr2, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when a given temporal expression is begun by
+    a second temporal expression.
+
+    Args:
+        expr1 (Expression): The first temporal expression.
+        expr2 (Expression): The second temporal expression.
+        match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when a given temporal expression is begun by the
+        second temporal expression.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.begunBy(expr1, expr2)
+    else:
+        return self._java_ref.begunBy(expr1, expr2, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.between"><code class="name flex">
+<span>def <span class="ident">between</span></span>(<span>self, expr, lower, upper, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when the given expression falls between a
+lower and upper expression.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The expression to check.</dd>
+<dt><strong><code>lower</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The lower bound.</dd>
+<dt><strong><code>upper</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The upper bound.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use. Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>Filter</code> <code>that</code> <code>passes</code> <code>when</code> <code>the</code> <code>given</code> <code>expression</code> <code>falls</code> <code>between</code> <code>a</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>lower and upper expression.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def between(self, expr, lower, upper, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when the given expression falls between a
+    lower and upper expression.
+
+    Args:
+        expr (Expression): The expression to check.
+        lower (Expression): The lower bound.
+        upper (Expression): The upper bound.
+        match_action (str): The match action to use. Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when the given expression falls between a
+        lower and upper expression.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.between(expr, lower, upper)
+    else:
+        return self._java_ref.between(expr, lower, upper, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.beyond"><code class="name flex">
+<span>def <span class="ident">beyond</span></span>(<span>self, geometry_expr1, geometry_expr2, distance, units, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when a given geometry is beyond a certain distance from
+a second given geometry.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>geometry_expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>An expression which represents a geometry.</dd>
+<dt><strong><code>geometry_expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>An expression which represents a geometry.</dd>
+<dt><strong><code>distance</code></strong> :&ensp;<code>float</code></dt>
+<dd>The distance to use.</dd>
+<dt><strong><code>units</code></strong> :&ensp;<code>str</code></dt>
+<dd>The distance unit.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use.
+Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>Filter</code> <code>that</code> <code>passes</code> <code>when</code> <code>the</code> <code>geometry</code> <code>is</code> <code>beyond</code> <code>the</code> <code>distance</code> <code>from</code> <code>the</code> <code>second</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>geometry.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def beyond(self, geometry_expr1, geometry_expr2, distance, units, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when a given geometry is beyond a certain distance from
+    a second given geometry.
+
+    Args:
+        geometry_expr1 (Expression): An expression which represents a geometry.
+        geometry_expr2 (Expression): An expression which represents a geometry.
+        distance (float): The distance to use.
+        units (str): The distance unit.
+        match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when the geometry is beyond the distance from the second
+        geometry.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.beyond(geometry_expr1, geometry_expr2, distance*1.0, units)
+    else:
+        return self._java_ref.beyond(geometry_expr1, geometry_expr2, distance*1.0, units, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.contains"><code class="name flex">
+<span>def <span class="ident">contains</span></span>(<span>self, geometry_expr1, geometry_expr2, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when the first geometry expression contains the
+second geometry expression.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>geometry_expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>An expression which represents the geometry to check against.</dd>
+<dt><strong><code>geometry_expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>An expression which represents the geometry to check.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use.
+Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Filter that passes when the second geometry is contained by the first.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def contains(self, geometry_expr1, geometry_expr2, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when the first geometry expression contains the
+    second geometry expression.
+
+    Args:
+        geometry_expr1 (Expression): An expression which represents the geometry to check against.
+        geometry_expr2 (Expression): An expression which represents the geometry to check.
+        match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when the second geometry is contained by the first.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.contains(geometry_expr1, geometry_expr2)
+    else:
+        return self._java_ref.contains(geometry_expr1, geometry_expr2, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.crosses"><code class="name flex">
+<span>def <span class="ident">crosses</span></span>(<span>self, geometry_expr1, geometry_expr2, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when a given geometry crosses another given geometry.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>geometry_expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>An expression which represents a geometry.</dd>
+<dt><strong><code>geometry_expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>An expression which represents a geometry.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use.
+Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Filter that passes when a given geometry crosses another given geometry.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def crosses(self, geometry_expr1, geometry_expr2, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when a given geometry crosses another given geometry.
+
+    Args:
+        geometry_expr1 (Expression): An expression which represents a geometry.
+        geometry_expr2 (Expression): An expression which represents a geometry.
+        match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when a given geometry crosses another given geometry.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.crosses(geometry_expr1, geometry_expr2)
+    else:
+        return self._java_ref.crosses(geometry_expr1, geometry_expr2, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.disjoint"><code class="name flex">
+<span>def <span class="ident">disjoint</span></span>(<span>self, geometry_expr1, geometry_expr2, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when a given geometry is disjoint to another given geometry.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>geometry_expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>An expression which represents a geometry.</dd>
+<dt><strong><code>geometry_expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>An expression which represents a geometry.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use.
+Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Filter that passes when a given geometry is disjoint to another given geometry.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def disjoint(self, geometry_expr1, geometry_expr2, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when a given geometry is disjoint to another given geometry.
+
+    Args:
+        geometry_expr1 (Expression): An expression which represents a geometry.
+        geometry_expr2 (Expression): An expression which represents a geometry.
+        match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when a given geometry is disjoint to another given geometry.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.disjoint(geometry_expr1, geometry_expr2)
+    else:
+        return self._java_ref.disjoint(geometry_expr1, geometry_expr2, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.divide"><code class="name flex">
+<span>def <span class="ident">divide</span></span>(<span>self, expr1, expr2)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an expression which divides one expression by another.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The expression to divide.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The expression to divide by.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>An Expression which represents [expr1 / expr2].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def divide(self, expr1, expr2):
+    &#34;&#34;&#34;
+    Constructs an expression which divides one expression by another.
+
+    Args:
+        expr1 (Expression): The expression to divide.
+        expr2 (Expression): The expression to divide by.
+    Returns:
+        An Expression which represents [expr1 / expr2].
+    &#34;&#34;&#34;
+    return self._java_ref.divide(expr1, expr2)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.during"><code class="name flex">
+<span>def <span class="ident">during</span></span>(<span>self, expr1, expr2, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when a given temporal expression occurs during
+a second temporal expression.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The first temporal expression.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The second temporal expression.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use.
+Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>Filter</code> <code>that</code> <code>passes</code> <code>when</code> <code>a</code> <code>given</code> <code>temporal</code> <code>expression</code> <code>occurs</code> <code>during</code> <code>the</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>second temporal expression.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def during(self, expr1, expr2, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when a given temporal expression occurs during
+    a second temporal expression.
+
+    Args:
+        expr1 (Expression): The first temporal expression.
+        expr2 (Expression): The second temporal expression.
+        match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when a given temporal expression occurs during the
+        second temporal expression.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.during(expr1, expr2)
+    else:
+        return self._java_ref.during(expr1, expr2, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.dwithin"><code class="name flex">
+<span>def <span class="ident">dwithin</span></span>(<span>self, geometry_expr1, geometry_expr2, distance, units, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when a given geometry is within the specified distance
+of the second geometry.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>geometry_expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>An expression which represents a geometry.</dd>
+<dt><strong><code>geometry_expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>An expression which represents a geometry.</dd>
+<dt><strong><code>distance</code></strong> :&ensp;<code>float</code></dt>
+<dd>The distance to use.</dd>
+<dt><strong><code>units</code></strong> :&ensp;<code>str</code></dt>
+<dd>The unit of distance.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use.
+Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>Filter</code> <code>that</code> <code>passes</code> <code>when</code> <code>a</code> <code>given</code> <code>geometry</code> <code>is</code> <code>within</code> <code>the</code> <code>specified</code> <code>distance</code> of <code>the</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>second geometry.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def dwithin(self, geometry_expr1, geometry_expr2, distance, units, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when a given geometry is within the specified distance
+    of the second geometry.
+
+    Args:
+        geometry_expr1 (Expression): An expression which represents a geometry.
+        geometry_expr2 (Expression): An expression which represents a geometry.
+        distance (float): The distance to use.
+        units (str): The unit of distance.
+        match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when a given geometry is within the specified distance of the
+        second geometry.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.dwithin(geometry_expr1, geometry_expr2, distance*1.0, units)
+    else:
+        return self._java_ref.dwithin(geometry_expr1, geometry_expr2, distance*1.0, units, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.ended_by"><code class="name flex">
+<span>def <span class="ident">ended_by</span></span>(<span>self, expr1, expr2, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when a given temporal expression is ended by
+a second temporal expression.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The first temporal expression.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The second temporal expression.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use.
+Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>Filter</code> <code>that</code> <code>passes</code> <code>when</code> <code>a</code> <code>given</code> <code>temporal</code> <code>expression</code> <code>is</code> <code>ended</code> <code>by</code> <code>the</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>second temporal expression.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def ended_by(self, expr1, expr2, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when a given temporal expression is ended by
+    a second temporal expression.
+
+    Args:
+        expr1 (Expression): The first temporal expression.
+        expr2 (Expression): The second temporal expression.
+        match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when a given temporal expression is ended by the
+        second temporal expression.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.endedBy(expr1, expr2)
+    else:
+        return self._java_ref.endedBy(expr1, expr2, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.ends"><code class="name flex">
+<span>def <span class="ident">ends</span></span>(<span>self, expr1, expr2, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when a given temporal expression ends
+a second temporal expression.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The first temporal expression.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The second temporal expression.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use.
+Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>Filter</code> <code>that</code> <code>passes</code> <code>when</code> <code>a</code> <code>given</code> <code>temporal</code> <code>expression</code> <code>ends</code> <code>the</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>second temporal expression.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def ends(self, expr1, expr2, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when a given temporal expression ends
+    a second temporal expression.
+
+    Args:
+        expr1 (Expression): The first temporal expression.
+        expr2 (Expression): The second temporal expression.
+        match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when a given temporal expression ends the
+        second temporal expression.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.ends(expr1, expr2)
+    else:
+        return self._java_ref.ends(expr1, expr2, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.equal"><code class="name flex">
+<span>def <span class="ident">equal</span></span>(<span>self, expr1, expr2, match_case, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when the given expressions are equal.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The first expression.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The second expression.</dd>
+<dt><strong><code>match_case</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not to match case with strings.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use. Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Filter that passes when the given expressions are equal.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def equal(self, expr1, expr2, match_case, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when the given expressions are equal.
+
+    Args:
+        expr1 (Expression): The first expression.
+        expr2 (Expression): The second expression.
+        match_case (bool): Whether or not to match case with strings.
+        match_action (str): The match action to use. Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when the given expressions are equal.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.equal(expr1, expr2, match_case)
+    else:
+        return self._java_ref.equal(expr1, expr2, match_case, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.equals"><code class="name flex">
+<span>def <span class="ident">equals</span></span>(<span>self, expr1, expr2)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when the given expressions are equal.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The first expression.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The second expression.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Filter that passes when the given expressions are equal.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def equals(self, expr1, expr2):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when the given expressions are equal.
+
+    Args:
+        expr1 (Expression): The first expression.
+        expr2 (Expression): The second expression.
+    Returns:
+        A Filter that passes when the given expressions are equal.
+    &#34;&#34;&#34;
+    return self._java_ref.equals(expr1, expr2)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.feature_id"><code class="name flex">
+<span>def <span class="ident">feature_id</span></span>(<span>self, id)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that matches a specific feature ID.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>id</code></strong> :&ensp;<code>str</code></dt>
+<dd>The feature ID.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Filter with the given feature ID.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def feature_id(self, id):
+    &#34;&#34;&#34;
+    Constructs a filter that matches a specific feature ID.
+
+    Args:
+        id (str): The feature ID.
+    Returns:
+        A Filter with the given feature ID.
+    &#34;&#34;&#34;
+    return self._java_ref.featureId(id)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.function"><code class="name flex">
+<span>def <span class="ident">function</span></span>(<span>self, name, expressions)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an expression by passing a set of expressions to an expression function.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the function.</dd>
+<dt><strong><code>expressions</code></strong> :&ensp;<code>list</code> of <code>Expression</code></dt>
+<dd>The expressions to use in the function.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>An Expression which represents the result of the function.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def function(self, name, expressions):
+    &#34;&#34;&#34;
+    Constructs an expression by passing a set of expressions to an expression function.
+
+    Args:
+        name (str): The name of the function.
+        expressions (list of Expression): The expressions to use in the function.
+    Returns:
+        An Expression which represents the result of the function.
+    &#34;&#34;&#34;
+    j_expressions = java_gateway.new_array(java_pkg.org.opengis.filter.expression.Expression, len(expressions))
+    for idx, expression in enumerate(expressions):
+        j_expressions[idx] = expression
+    return self._java_ref.function(name, j_expressions)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.gml_object_id"><code class="name flex">
+<span>def <span class="ident">gml_object_id</span></span>(<span>self, id)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that matches a specific gml object ID.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>id</code></strong> :&ensp;<code>str</code></dt>
+<dd>The gml object ID.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Filter with the given gml object ID.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def gml_object_id(self, id):
+    &#34;&#34;&#34;
+    Constructs a filter that matches a specific gml object ID.
+
+    Args:
+        id (str): The gml object ID.
+    Returns:
+        A Filter with the given gml object ID.
+    &#34;&#34;&#34;
+    return self._java_ref.gmlObjectId(id)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.greater"><code class="name flex">
+<span>def <span class="ident">greater</span></span>(<span>self, expr1, expr2, match_case=None, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when the first expression is greater than
+the second.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The first expression.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The second expression.</dd>
+<dt><strong><code>match_case</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not to match case with strings. Default is None.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use. Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>Filter</code> <code>that</code> <code>passes</code> <code>when</code> <code>the</code> <code>first</code> <code>expression</code> <code>is</code> <code>greater</code> <code>than</code> <code>the</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>second.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def greater(self, expr1, expr2, match_case=None, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when the first expression is greater than
+    the second.
+
+    Args:
+        expr1 (Expression): The first expression.
+        expr2 (Expression): The second expression.
+        match_case (bool): Whether or not to match case with strings. Default is None.
+        match_action (str): The match action to use. Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when the first expression is greater than the
+        second.
+    &#34;&#34;&#34;
+    if match_case is None:
+        return self._java_ref.greater(expr1, expr2)
+    elif match_action is None:
+        return self._java_ref.greater(expr1, expr2, match_case)
+    else:
+        return self._java_ref.greater(expr1, expr2, match_case, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.greater_or_equal"><code class="name flex">
+<span>def <span class="ident">greater_or_equal</span></span>(<span>self, expr1, expr2, match_case=None, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when the first expression is greater than
+or equal to the second.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The first expression.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The second expression.</dd>
+<dt><strong><code>match_case</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not to match case with strings. Default is None.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use. Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>Filter</code> <code>that</code> <code>passes</code> <code>when</code> <code>the</code> <code>first</code> <code>expression</code> <code>is</code> <code>greater</code> <code>than</code> or <code>equal</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>to the second.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def greater_or_equal(self, expr1, expr2, match_case=None, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when the first expression is greater than
+    or equal to the second.
+
+    Args:
+        expr1 (Expression): The first expression.
+        expr2 (Expression): The second expression.
+        match_case (bool): Whether or not to match case with strings. Default is None.
+        match_action (str): The match action to use. Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when the first expression is greater than or equal
+        to the second.
+    &#34;&#34;&#34;
+    if match_case is None:
+        return self._java_ref.greaterOrEqual(expr1, expr2)
+    elif match_action is None:
+        return self._java_ref.greaterOrEqual(expr1, expr2, match_case)
+    else:
+        return self._java_ref.greaterOrEqual(expr1, expr2, match_case, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.id"><code class="name flex">
+<span>def <span class="ident">id</span></span>(<span>self, fids)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that matches a set of feature IDs.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>fids</code></strong> :&ensp;<code>list</code> of <code>str</code></dt>
+<dd>The list of feature IDs to match.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Filter with the given feature IDs.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def id(self, fids):
+    &#34;&#34;&#34;
+    Constructs a filter that matches a set of feature IDs.
+
+    Args:
+        fids (list of str): The list of feature IDs to match.
+    Returns:
+        A Filter with the given feature IDs.
+    &#34;&#34;&#34;
+    j_fids = java_gateway.new_array(java_pkg.org.opengis.filter.identity.FeatureId, len(fids))
+    for idx, fid in enumerate(fids):
+        if isinstance(fid, str):
+            j_fids[idx] = self.feature_id(fid)
+        else:
+            j_fids[idx] = fid
+    return self._java_ref.id(j_fids)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.intersects"><code class="name flex">
+<span>def <span class="ident">intersects</span></span>(<span>self, geometry_expr1, geometry_expr2, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when a given geometry intersects another given geometry.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>geometry_expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>An expression which represents a geometry.</dd>
+<dt><strong><code>geometry_expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>An expression which represents a geometry.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use.
+Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Filter that passes when a given geometry intersects another given geometry.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def intersects(self, geometry_expr1, geometry_expr2, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when a given geometry intersects another given geometry.
+
+    Args:
+        geometry_expr1 (Expression): An expression which represents a geometry.
+        geometry_expr2 (Expression): An expression which represents a geometry.
+        match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when a given geometry intersects another given geometry.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.intersects(geometry_expr1, geometry_expr2)
+    else:
+        return self._java_ref.intersects(geometry_expr1, geometry_expr2, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.is_null"><code class="name flex">
+<span>def <span class="ident">is_null</span></span>(<span>self, expr)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when the given expression is null.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The expression to check.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Filter that passes when the given epxression is null.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_null(self, expr):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when the given expression is null.
+
+    Args:
+        expr (Expression): The expression to check.
+    Returns:
+        A Filter that passes when the given epxression is null.
+    &#34;&#34;&#34;
+    return self._java_ref.isNull(expr)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.less"><code class="name flex">
+<span>def <span class="ident">less</span></span>(<span>self, expr1, expr2, match_case=None, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when the first expression is less than
+the second.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The first expression.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The second expression.</dd>
+<dt><strong><code>match_case</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not to match case with strings. Default is None.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use. Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>Filter</code> <code>that</code> <code>passes</code> <code>when</code> <code>the</code> <code>first</code> <code>expression</code> <code>is</code> <code>less</code> <code>than</code> <code>the</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>second.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def less(self, expr1, expr2, match_case=None, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when the first expression is less than
+    the second.
+
+    Args:
+        expr1 (Expression): The first expression.
+        expr2 (Expression): The second expression.
+        match_case (bool): Whether or not to match case with strings. Default is None.
+        match_action (str): The match action to use. Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when the first expression is less than the
+        second.
+    &#34;&#34;&#34;
+    if match_case is None:
+        return self._java_ref.less(expr1, expr2)
+    elif match_action is None:
+        return self._java_ref.less(expr1, expr2, match_case)
+    else:
+        return self._java_ref.less(expr1, expr2, match_case, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.less_or_equal"><code class="name flex">
+<span>def <span class="ident">less_or_equal</span></span>(<span>self, expr1, expr2, match_case=None, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when the first expression is les than
+or equal to the second.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The first expression.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The second expression.</dd>
+<dt><strong><code>match_case</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not to match case with strings. Default is None.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use. Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>Filter</code> <code>that</code> <code>passes</code> <code>when</code> <code>the</code> <code>first</code> <code>expression</code> <code>is</code> <code>less</code> <code>than</code> or <code>equal</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>to the second.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def less_or_equal(self, expr1, expr2, match_case=None, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when the first expression is les than
+    or equal to the second.
+
+    Args:
+        expr1 (Expression): The first expression.
+        expr2 (Expression): The second expression.
+        match_case (bool): Whether or not to match case with strings. Default is None.
+        match_action (str): The match action to use. Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when the first expression is less than or equal
+        to the second.
+    &#34;&#34;&#34;
+    if match_case is None:
+        return self._java_ref.lessOrEqual(expr1, expr2)
+    elif match_action is None:
+        return self._java_ref.lessOrEqual(expr1, expr2, match_case)
+    else:
+        return self._java_ref.lessOrEqual(expr1, expr2, match_case, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.like"><code class="name flex">
+<span>def <span class="ident">like</span></span>(<span>self, expr, pattern, wildcard=None, single_char=None, escape=None, match_case=None, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter with character string comparison operator with pattern
+matching and specified wildcards.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The expression to use.</dd>
+<dt><strong><code>pattern</code></strong> :&ensp;<code>str</code></dt>
+<dd>The pattern to match.</dd>
+<dt><strong><code>wildcard</code></strong> :&ensp;<code>str</code></dt>
+<dd>The string to use to match any characters.
+Default is None.</dd>
+<dt><strong><code>single_char</code></strong> :&ensp;<code>str</code></dt>
+<dd>The string to use to match a single character.
+Default is None.</dd>
+<dt><strong><code>escape</code></strong> :&ensp;<code>str</code></dt>
+<dd>The string to use to escape a wildcard.
+Default is None.</dd>
+<dt><strong><code>match_case</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not to match case with strings. Default is None.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use.
+Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>Filter</code> <code>that</code> <code>passes</code> <code>when</code> <code>the</code> <code>first</code> <code>expression</code> <code>is</code> <code>greater</code> <code>than</code> <code>the</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>second.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def like(self, expr, pattern, wildcard=None, single_char=None, escape=None, match_case=None, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter with character string comparison operator with pattern
+    matching and specified wildcards.
+
+    Args:
+        expr (Expression): The expression to use.
+        pattern (str): The pattern to match.
+        wildcard (str): The string to use to match any characters.  Default is None.
+        single_char (str): The string to use to match a single character.  Default is None.
+        escape (str): The string to use to escape a wildcard.  Default is None.
+        match_case (bool): Whether or not to match case with strings. Default is None.
+        match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when the first expression is greater than the
+        second.
+    &#34;&#34;&#34;
+    if wildcard is None:
+        return self._java_ref.like(expr, pattern)
+    elif match_case is None:
+        return self._java_ref.like(expr, pattern, wildcard, single_char, escape)
+    elif match_action is None:
+        return self._java_ref.like(expr, pattern, wildcard, single_char, escape, match_case)
+    else:
+        return self._java_ref.like(expr, pattern, wildcard, single_char, escape, match_case, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.literal"><code class="name flex">
+<span>def <span class="ident">literal</span></span>(<span>self, value)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an expression with the given literal value.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>value</code></strong> :&ensp;<code>any</code></dt>
+<dd>The literal value to use.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>An Expression with the given literal value.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def literal(self, value):
+    &#34;&#34;&#34;
+    Constructs an expression with the given literal value.
+
+    Args:
+        value (any): The literal value to use.
+    Returns:
+        An Expression with the given literal value.
+    &#34;&#34;&#34;
+    if isinstance(value, datetime):
+        # Convert the date to a string
+        value = value.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;)
+    if isinstance(value, str):
+        # Prevent Py4J from assuming the string matches up with the char variant method
+        filter_factory_class = self._java_ref.getClass()
+        object_class = reflection_util.classForName(&#34;java.lang.Object&#34;)
+        class_array = java_gateway.new_array(java_pkg.java.lang.Class, 1)
+        class_array[0] = object_class
+        method = filter_factory_class.getMethod(&#34;literal&#34;, class_array)
+        objects_array = java_gateway.new_array(java_pkg.java.lang.Object, 1)
+        objects_array[0] = value
+        return method.invoke(self._java_ref, objects_array)
+    if isinstance(value, BaseGeometry):
+        return self._java_ref.literal(GeometryType().to_java(value))
+    return self._java_ref.literal(value)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.meets"><code class="name flex">
+<span>def <span class="ident">meets</span></span>(<span>self, expr1, expr2, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when a given temporal expression meets
+a second temporal expression.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The first temporal expression.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The second temporal expression.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use.
+Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>Filter</code> <code>that</code> <code>passes</code> <code>when</code> <code>a</code> <code>given</code> <code>temporal</code> <code>expression</code> <code>meets</code> <code>the</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>second temporal expression.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def meets(self, expr1, expr2, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when a given temporal expression meets
+    a second temporal expression.
+
+    Args:
+        expr1 (Expression): The first temporal expression.
+        expr2 (Expression): The second temporal expression.
+        match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when a given temporal expression meets the
+        second temporal expression.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.meets(expr1, expr2)
+    else:
+        return self._java_ref.meets(expr1, expr2, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.met_by"><code class="name flex">
+<span>def <span class="ident">met_by</span></span>(<span>self, expr1, expr2, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when a given temporal expression is met by
+a second temporal expression.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The first temporal expression.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The second temporal expression.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use.
+Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>Filter</code> <code>that</code> <code>passes</code> <code>when</code> <code>a</code> <code>given</code> <code>temporal</code> <code>expression</code> <code>is</code> <code>met</code> <code>by</code> <code>the</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>second temporal expression.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def met_by(self, expr1, expr2, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when a given temporal expression is met by
+    a second temporal expression.
+
+    Args:
+        expr1 (Expression): The first temporal expression.
+        expr2 (Expression): The second temporal expression.
+        match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when a given temporal expression is met by the
+        second temporal expression.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.metBy(expr1, expr2)
+    else:
+        return self._java_ref.metBy(expr1, expr2, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.multiply"><code class="name flex">
+<span>def <span class="ident">multiply</span></span>(<span>self, expr1, expr2)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an expression which multiplies two other expressions.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The first expression.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The second expression.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>An Expression which represents [expr1 * expr2].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def multiply(self, expr1, expr2):
+    &#34;&#34;&#34;
+    Constructs an expression which multiplies two other expressions.
+
+    Args:
+        expr1 (Expression): The first expression.
+        expr2 (Expression): The second expression.
+    Returns:
+        An Expression which represents [expr1 * expr2].
+    &#34;&#34;&#34;
+    return self._java_ref.multiply(expr1, expr2)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.not_"><code class="name flex">
+<span>def <span class="ident">not_</span></span>(<span>self, filter)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when the given filter does NOT pass.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>filter</code></strong> :&ensp;<code>Filter</code></dt>
+<dd>The filter to check.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Filter that passes when the given filter does NOT pass.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def not_(self, filter):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when the given filter does NOT pass.
+
+    Args:
+        filter (Filter): The filter to check.
+    Returns:
+        A Filter that passes when the given filter does NOT pass.
+    &#34;&#34;&#34;
+    return _invoke_filter_method_by_name(self._java_ref, &#34;not&#34;, filter)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.not_equal"><code class="name flex">
+<span>def <span class="ident">not_equal</span></span>(<span>self, expr1, expr2, match_case, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when the given expressions are NOT equal.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The first expression.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The second expression.</dd>
+<dt><strong><code>match_case</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not to match case with strings.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use. Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Filter that passes when the given expressions are NOT equal.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def not_equal(self, expr1, expr2, match_case, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when the given expressions are NOT equal.
+
+    Args:
+        expr1 (Expression): The first expression.
+        expr2 (Expression): The second expression.
+        match_case (bool): Whether or not to match case with strings.
+        match_action (str): The match action to use. Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when the given expressions are NOT equal.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.notEqual(expr1, expr2, match_case)
+    else:
+        return self._java_ref.notEqual(expr1, expr2, match_case, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.not_equals"><code class="name flex">
+<span>def <span class="ident">not_equals</span></span>(<span>self, expr1, expr2)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when the given expressions are NOT equal.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The first expression.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The second expression.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Filter that passes when the given expressions are NOT equal.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def not_equals(self, expr1, expr2):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when the given expressions are NOT equal.
+
+    Args:
+        expr1 (Expression): The first expression.
+        expr2 (Expression): The second expression.
+    Returns:
+        A Filter that passes when the given expressions are NOT equal.
+    &#34;&#34;&#34;
+    return self._java_ref.notEqual(expr1, expr2)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.or_"><code class="name flex">
+<span>def <span class="ident">or_</span></span>(<span>self, filters)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter which passes when any of the given filters pass.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>filters</code></strong> :&ensp;<code>list</code> of <code>Filter</code></dt>
+<dd>The filters to check.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Filter that passes when one of the given Filters pass.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def or_(self, filters):
+    &#34;&#34;&#34;
+    Constructs a filter which passes when any of the given filters pass.
+
+    Args:
+        filters (list of Filter): The filters to check.
+    Returns:
+        A Filter that passes when one of the given Filters pass.
+    &#34;&#34;&#34;
+    return _invoke_filter_list_method_by_name(self._java_ref, &#34;or&#34;, filters)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.overlapped_by"><code class="name flex">
+<span>def <span class="ident">overlapped_by</span></span>(<span>self, expr1, expr2, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when a given temporal expression is overlapped by
+a second temporal expression.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The first temporal expression.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The second temporal expression.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use.
+Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>Filter</code> <code>that</code> <code>passes</code> <code>when</code> <code>a</code> <code>given</code> <code>temporal</code> <code>expression</code> <code>is</code> <code>overlapped</code> <code>by</code> <code>the</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>second temporal expression.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def overlapped_by(self, expr1, expr2, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when a given temporal expression is overlapped by
+    a second temporal expression.
+
+    Args:
+        expr1 (Expression): The first temporal expression.
+        expr2 (Expression): The second temporal expression.
+        match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when a given temporal expression is overlapped by the
+        second temporal expression.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.overlappedBy(expr1, expr2)
+    else:
+        return self._java_ref.overlappedBy(expr1, expr2, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.overlaps"><code class="name flex">
+<span>def <span class="ident">overlaps</span></span>(<span>self, geometry_expr1, geometry_expr2, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when a given geometry overlaps another given geometry.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>geometry_expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>An expression which represents a geometry.</dd>
+<dt><strong><code>geometry_expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>An expression which represents a geometry.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use.
+Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Filter that passes when a given geometry overlaps another given geometry.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def overlaps(self, geometry_expr1, geometry_expr2, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when a given geometry overlaps another given geometry.
+
+    Args:
+        geometry_expr1 (Expression): An expression which represents a geometry.
+        geometry_expr2 (Expression): An expression which represents a geometry.
+        match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when a given geometry overlaps another given geometry.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.overlaps(geometry_expr1, geometry_expr2)
+    else:
+        return self._java_ref.overlaps(geometry_expr1, geometry_expr2, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.property"><code class="name flex">
+<span>def <span class="ident">property</span></span>(<span>self, name)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an expression that references the given property name.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The property name.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>An Expression with the given property name.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def property(self, name):
+    &#34;&#34;&#34;
+    Constructs an expression that references the given property name.
+
+    Args:
+        name (str): The property name.
+    Returns:
+        An Expression with the given property name.
+    &#34;&#34;&#34;
+    return self._java_ref.property(name)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.subtract"><code class="name flex">
+<span>def <span class="ident">subtract</span></span>(<span>self, expr1, expr2)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs an expression which subtracts one expression from another.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The expression to subtract from.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The expression to subtract.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>An Expression which represents [expr1 - expr2].</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def subtract(self, expr1, expr2):
+    &#34;&#34;&#34;
+    Constructs an expression which subtracts one expression from another.
+
+    Args:
+        expr1 (Expression): The expression to subtract from.
+        expr2 (Expression): The expression to subtract.
+    Returns:
+        An Expression which represents [expr1 - expr2].
+    &#34;&#34;&#34;
+    return self._java_ref.subtract(expr1, expr2)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.tcontains"><code class="name flex">
+<span>def <span class="ident">tcontains</span></span>(<span>self, expr1, expr2, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when a given temporal expression contains
+a second temporal expression.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The first temporal expression.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The second temporal expression.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use.
+Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>Filter</code> <code>that</code> <code>passes</code> <code>when</code> <code>a</code> <code>given</code> <code>temporal</code> <code>expression</code> <code>contains</code> <code>the</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>second temporal expression.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def tcontains(self, expr1, expr2, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when a given temporal expression contains
+    a second temporal expression.
+
+    Args:
+        expr1 (Expression): The first temporal expression.
+        expr2 (Expression): The second temporal expression.
+        match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when a given temporal expression contains the
+        second temporal expression.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.tcontains(expr1, expr2)
+    else:
+        return self._java_ref.tcontains(expr1, expr2, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.tequals"><code class="name flex">
+<span>def <span class="ident">tequals</span></span>(<span>self, expr1, expr2, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when a given temporal expression equals
+a second temporal expression.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The first temporal expression.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The second temporal expression.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use.
+Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>Filter</code> <code>that</code> <code>passes</code> <code>when</code> <code>a</code> <code>given</code> <code>temporal</code> <code>expression</code> <code>equals</code> <code>the</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>second temporal expression.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def tequals(self, expr1, expr2, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when a given temporal expression equals
+    a second temporal expression.
+
+    Args:
+        expr1 (Expression): The first temporal expression.
+        expr2 (Expression): The second temporal expression.
+        match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when a given temporal expression equals the
+        second temporal expression.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.tequals(expr1, expr2)
+    else:
+        return self._java_ref.tequals(expr1, expr2, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.touches"><code class="name flex">
+<span>def <span class="ident">touches</span></span>(<span>self, geometry_expr1, geometry_expr2, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when a given geometry touches another given geometry.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>geometry_expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>An expression which represents a geometry.</dd>
+<dt><strong><code>geometry_expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>An expression which represents a geometry.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use.
+Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Filter that passes when a given geometry touches another given geometry.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def touches(self, geometry_expr1, geometry_expr2, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when a given geometry touches another given geometry.
+
+    Args:
+        geometry_expr1 (Expression): An expression which represents a geometry.
+        geometry_expr2 (Expression): An expression which represents a geometry.
+        match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when a given geometry touches another given geometry.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.touches(geometry_expr1, geometry_expr2)
+    else:
+        return self._java_ref.touches(geometry_expr1, geometry_expr2, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.toverlaps"><code class="name flex">
+<span>def <span class="ident">toverlaps</span></span>(<span>self, expr1, expr2, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when a given temporal expression overlaps
+a second temporal expression.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The first temporal expression.</dd>
+<dt><strong><code>expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>The second temporal expression.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use.
+Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>A</code> <code>Filter</code> <code>that</code> <code>passes</code> <code>when</code> <code>a</code> <code>given</code> <code>temporal</code> <code>expression</code> <code>overlaps</code> <code>the</code></dt>
+<dd>&nbsp;</dd>
+</dl>
+<p>second temporal expression.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def toverlaps(self, expr1, expr2, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when a given temporal expression overlaps
+    a second temporal expression.
+
+    Args:
+        expr1 (Expression): The first temporal expression.
+        expr2 (Expression): The second temporal expression.
+        match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when a given temporal expression overlaps the
+        second temporal expression.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.toverlaps(expr1, expr2)
+    else:
+        return self._java_ref.toverlaps(expr1, expr2, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.vector.filter_factory.FilterFactory.within"><code class="name flex">
+<span>def <span class="ident">within</span></span>(<span>self, geometry_expr1, geometry_expr2, match_action=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Constructs a filter that passes when a given geometry is within another given geometry.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>geometry_expr1</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>An expression which represents a geometry.</dd>
+<dt><strong><code>geometry_expr2</code></strong> :&ensp;<code>Expression</code></dt>
+<dd>An expression which represents a geometry.</dd>
+<dt><strong><code>match_action</code></strong> :&ensp;<code>str</code></dt>
+<dd>The match action to use.
+Default is 'ANY'.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A Filter that passes when a given geometry is within another given geometry.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def within(self, geometry_expr1, geometry_expr2, match_action=None):
+    &#34;&#34;&#34;
+    Constructs a filter that passes when a given geometry is within another given geometry.
+
+    Args:
+        geometry_expr1 (Expression): An expression which represents a geometry.
+        geometry_expr2 (Expression): An expression which represents a geometry.
+        match_action (str): The match action to use.  Default is &#39;ANY&#39;.
+    Returns:
+        A Filter that passes when a given geometry is within another given geometry.
+    &#34;&#34;&#34;
+    if match_action is None:
+        return self._java_ref.within(geometry_expr1, geometry_expr2)
+    else:
+        return self._java_ref.within(geometry_expr1, geometry_expr2, _j_match_action(match_action))</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.geowave_object.GeoWaveObject" href="../../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject">GeoWaveObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.geowave_object.GeoWaveObject.is_instance_of" href="../../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject.is_instance_of">is_instance_of</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pygw.query.vector" href="index.html">pygw.query.vector</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pygw.query.vector.filter_factory.FilterFactory" href="#pygw.query.vector.filter_factory.FilterFactory">FilterFactory</a></code></h4>
+<ul class="two-column">
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.add" href="#pygw.query.vector.filter_factory.FilterFactory.add">add</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.after" href="#pygw.query.vector.filter_factory.FilterFactory.after">after</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.and_" href="#pygw.query.vector.filter_factory.FilterFactory.and_">and_</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.any_interacts" href="#pygw.query.vector.filter_factory.FilterFactory.any_interacts">any_interacts</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.bbox" href="#pygw.query.vector.filter_factory.FilterFactory.bbox">bbox</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.bbox_expr" href="#pygw.query.vector.filter_factory.FilterFactory.bbox_expr">bbox_expr</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.before" href="#pygw.query.vector.filter_factory.FilterFactory.before">before</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.begins" href="#pygw.query.vector.filter_factory.FilterFactory.begins">begins</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.begun_by" href="#pygw.query.vector.filter_factory.FilterFactory.begun_by">begun_by</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.between" href="#pygw.query.vector.filter_factory.FilterFactory.between">between</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.beyond" href="#pygw.query.vector.filter_factory.FilterFactory.beyond">beyond</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.contains" href="#pygw.query.vector.filter_factory.FilterFactory.contains">contains</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.crosses" href="#pygw.query.vector.filter_factory.FilterFactory.crosses">crosses</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.disjoint" href="#pygw.query.vector.filter_factory.FilterFactory.disjoint">disjoint</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.divide" href="#pygw.query.vector.filter_factory.FilterFactory.divide">divide</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.during" href="#pygw.query.vector.filter_factory.FilterFactory.during">during</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.dwithin" href="#pygw.query.vector.filter_factory.FilterFactory.dwithin">dwithin</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.ended_by" href="#pygw.query.vector.filter_factory.FilterFactory.ended_by">ended_by</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.ends" href="#pygw.query.vector.filter_factory.FilterFactory.ends">ends</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.equal" href="#pygw.query.vector.filter_factory.FilterFactory.equal">equal</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.equals" href="#pygw.query.vector.filter_factory.FilterFactory.equals">equals</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.feature_id" href="#pygw.query.vector.filter_factory.FilterFactory.feature_id">feature_id</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.function" href="#pygw.query.vector.filter_factory.FilterFactory.function">function</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.gml_object_id" href="#pygw.query.vector.filter_factory.FilterFactory.gml_object_id">gml_object_id</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.greater" href="#pygw.query.vector.filter_factory.FilterFactory.greater">greater</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.greater_or_equal" href="#pygw.query.vector.filter_factory.FilterFactory.greater_or_equal">greater_or_equal</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.id" href="#pygw.query.vector.filter_factory.FilterFactory.id">id</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.intersects" href="#pygw.query.vector.filter_factory.FilterFactory.intersects">intersects</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.is_null" href="#pygw.query.vector.filter_factory.FilterFactory.is_null">is_null</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.less" href="#pygw.query.vector.filter_factory.FilterFactory.less">less</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.less_or_equal" href="#pygw.query.vector.filter_factory.FilterFactory.less_or_equal">less_or_equal</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.like" href="#pygw.query.vector.filter_factory.FilterFactory.like">like</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.literal" href="#pygw.query.vector.filter_factory.FilterFactory.literal">literal</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.meets" href="#pygw.query.vector.filter_factory.FilterFactory.meets">meets</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.met_by" href="#pygw.query.vector.filter_factory.FilterFactory.met_by">met_by</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.multiply" href="#pygw.query.vector.filter_factory.FilterFactory.multiply">multiply</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.not_" href="#pygw.query.vector.filter_factory.FilterFactory.not_">not_</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.not_equal" href="#pygw.query.vector.filter_factory.FilterFactory.not_equal">not_equal</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.not_equals" href="#pygw.query.vector.filter_factory.FilterFactory.not_equals">not_equals</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.or_" href="#pygw.query.vector.filter_factory.FilterFactory.or_">or_</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.overlapped_by" href="#pygw.query.vector.filter_factory.FilterFactory.overlapped_by">overlapped_by</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.overlaps" href="#pygw.query.vector.filter_factory.FilterFactory.overlaps">overlaps</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.property" href="#pygw.query.vector.filter_factory.FilterFactory.property">property</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.subtract" href="#pygw.query.vector.filter_factory.FilterFactory.subtract">subtract</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.tcontains" href="#pygw.query.vector.filter_factory.FilterFactory.tcontains">tcontains</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.tequals" href="#pygw.query.vector.filter_factory.FilterFactory.tequals">tequals</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.touches" href="#pygw.query.vector.filter_factory.FilterFactory.touches">touches</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.toverlaps" href="#pygw.query.vector.filter_factory.FilterFactory.toverlaps">toverlaps</a></code></li>
+<li><code><a title="pygw.query.vector.filter_factory.FilterFactory.within" href="#pygw.query.vector.filter_factory.FilterFactory.within">within</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

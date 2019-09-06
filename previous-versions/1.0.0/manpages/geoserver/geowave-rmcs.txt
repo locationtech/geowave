@@ -1,0 +1,24 @@
+//:geowave-rmcs(1)
+//:===================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave gs cs rm - Remove GeoServer Coverage Store
+
+SYNOPSIS
+//:--------
+
+geowave gs cs rm [options] <coverage store name>
+
+DESCRIPTION
+//:-----------
+
+This command will remove a GeoServer Coverage Store
+
+OPTIONS
+//:-------
+
+- -ws, --workspace
+ * Workspace Name

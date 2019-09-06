@@ -1,0 +1,32 @@
+//:geowave-sql(1)
+//:=========================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave analytic sql - SparkSQL queries
+
+SYNOPSIS
+//:--------
+
+geowave analytic sql [options] <sql query> - e.g. 'select * from storename[|adaptername] where condition...'
+
+DESCRIPTION
+//:-----------
+
+The geowave analytic sql operator will execute a SparkSQL query
+
+
+OPTIONS
+//:-------
+
+- --csv
+ * The output CSV file name
+- --out
+ * The output datastore name
+- --outtype
+ * The output feature type (adapter) name
+- -s, --show
+ * Number of result rows to display
+ * Default: 20
