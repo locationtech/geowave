@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.2">
-<title>GeoWave Quickstart Guide Raster Demo</title>
+<title>GeoWave Quickstart Guide - Raster Demo</title>
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
 @import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400";
@@ -415,16 +415,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 type="image/png"
 href="images/geowave-icon-logo-small.png">
 </head>
-<body class="book toc2 toc-right">
+<body class="book toc2 toc-left">
 <div id="header">
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#geowave-quickstart-guide-raster-demo-span-class-image-img-src-images-geowave-icon-logo-cropped-png-alt-geowave-icon-logo-cropped-width-28-span">GeoWave Quickstart Guide Raster Demo <span class="image"><img src="./images/geowave-icon-logo-cropped.png" alt="geowave-icon-logo-cropped" width="28%"></span></a>
+<li><a href="#geowave-quickstart-guide-raster-demo">GeoWave Quickstart Guide - Raster Demo</a>
 <ul class="sectlevel2">
 <li><a href="#set-up-environment-variables">Set-Up Environment Variables</a></li>
 <li><a href="#download-and-unpack-the-gdal-library">Download and Unpack the GDAL Library</a></li>
-<li><a href="#config-and-ingest">Config and Ingest.</a></li>
+<li><a href="#config-and-ingest">Config and Ingest</a></li>
 <li><a href="#vector-demo">Vector Demo</a></li>
 <li><a href="#geoserver-integration">GeoServer Integration</a></li>
 <li><a href="#interacting-with-the-cluster">Interacting with the cluster</a></li>
@@ -437,10 +437,15 @@ href="images/geowave-icon-logo-small.png">
 <div id="preamble">
 <div class="sectionbody">
 <div style="page-break-after: always;"></div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/geowave-icon-logo-cropped-v2.png" alt="geowave icon logo cropped v2" width="15%">
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="geowave-quickstart-guide-raster-demo-span-class-image-img-src-images-geowave-icon-logo-cropped-png-alt-geowave-icon-logo-cropped-width-28-span"><a class="anchor" href="#geowave-quickstart-guide-raster-demo-span-class-image-img-src-images-geowave-icon-logo-cropped-png-alt-geowave-icon-logo-cropped-width-28-span"></a>GeoWave Quickstart Guide Raster Demo <span class="image"><img src="./images/geowave-icon-logo-cropped.png" alt="geowave-icon-logo-cropped" width="28%"></span></h2>
+<h2 id="geowave-quickstart-guide-raster-demo"><a class="anchor" href="#geowave-quickstart-guide-raster-demo"></a>GeoWave Quickstart Guide - Raster Demo</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>In the Raster Demo, the Geowave Service creates a mosaic image from a set of raster images. The analyze commands prints out the metadata of available imagery matching your criteria to select ones that meet parameters of interest, and the ingest command
@@ -468,10 +473,6 @@ downloads those images and combines them to create a mosaic.</p>
 <div class="paragraph">
 <p>This script defines a number of the variables that will be used in future commands.</p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>If running with the GeoWave Sandbox:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">cd /mnt
@@ -481,26 +482,25 @@ sudo wget s3.amazonaws.com/geowave/latest/scripts/sandbox/quickstart/geowave-env
 source /mnt/geowave-env.sh</code></pre>
 </div>
 </div>
-</li>
-<li>
-<p>If running with EMR:</p>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">cd /mnt
-
-sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/geowave-env.sh
-
-source /mnt/geowave-env.sh</code></pre>
-</div>
-</div>
-</li>
-</ol>
-</div>
 </div>
 <div class="sect2">
 <h3 id="download-and-unpack-the-gdal-library"><a class="anchor" href="#download-and-unpack-the-gdal-library"></a>Download and Unpack the GDAL Library</h3>
 <div class="paragraph">
 <p>GDAL (Geospatial Data Abstraction Library) is an image processing library. We need to download the proper GDAL files to process the raster data. More info on GDAL can be found <a href="http://www.gdal.org" target="_blank">here</a>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Make sure the <strong>/mnt/gdal</strong> directory matches your install path</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -526,28 +526,69 @@ sudo tar -xvf gdal192-CentOS5.8-gcc4.1.2-x86_64.tar.gz</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="config-and-ingest"><a class="anchor" href="#config-and-ingest"></a>Config and Ingest.</h3>
+<h3 id="config-and-ingest"><a class="anchor" href="#config-and-ingest"></a>Config and Ingest</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
 <p>Add a GeoWave store</p>
 <div class="paragraph">
-<p>We need to create two GeoWave stores for this ingest. landsat_raster will store the raster images, and landsat_vector stores the vector metadata associated with those images. The images come from the <a href="https://landsat.usgs.gov/landsat-8">Landsat 8 Satellite</a>.</p>
+<p>We need to create two GeoWave stores for this ingest. landsat_raster will store the raster images, and landsat_vector stores the vector metadata associated with those images. The images come from the <a href="http://www.usgs.gov/landsat">Landsat 8 Satellite</a>.</p>
 </div>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>If running with the GeoWave Sandbox:</p>
+<p>If using the Standalone Installer:</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>Redis</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave store add -t hbase -z $HOSTNAME:2181 landsatraster --gwNamespace landsat_raster
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave store add -t redis --address redis://127.0.0.1:6379 landsatraster --gwNamespace landsat_raster
 
 geowave store copycfg landsatraster landsatvector --gwNamespace landsat_vector</code></pre>
 </div>
 </div>
 </li>
 <li>
-<p>If running with EMR Accumulo:</p>
+<p>RocksDB</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave store add -t rocksdb landsatraster --gwNamespace landsat_raster
+
+geowave store copycfg landsatraster landsatvector --gwNamespace landsat_vector</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>HBase</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave store add landsatraster --gwNamespace landsat_raster -t hbase -z localhost:2181
+
+geowave store copycfg landsatraster landsatvector --gwNamespace landsat_vector</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Accumulo</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave store add -t accumulo -z localhost:2181 landsatraster -instance accumulo -u root -p secret
+
+geowave store copycfg landsatraster landsatvector</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>If running with EMR</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>Accumulo</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave store add -t accumulo -z $HOSTNAME:2181 landsatraster --gwNamespace geowave.landsat_raster \
@@ -558,7 +599,7 @@ geowave store copycfg landsatraster landsatvector --gwNamespace geowave.landsat_
 </div>
 </li>
 <li>
-<p>If running with EMR HBase</p>
+<p>HBase</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave store add -t hbase -z $HOSTNAME:2181 landsatraster --gwNamespace geowave.landsat_raster
@@ -568,13 +609,16 @@ geowave store copycfg landsatraster landsatvector --gwNamespace geowave.landsat_
 </div>
 </li>
 <li>
-<p>If running with EMR Cassandra</p>
+<p>Cassandra</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave store add -t cassandra --contactPoints localhost landsatraster --gwNamespace geowave.landsat_raster --batchWriteSize 15
 
 geowave store copycfg landsatraster landsatvector --gwNamespace geowave.landsat_vector</code></pre>
 </div>
+</div>
+</li>
+</ol>
 </div>
 </li>
 </ol>
@@ -619,6 +663,9 @@ More information on the landsat ingest and analyze commands can be found <a href
 </li>
 </ol>
 </div>
+<div class="paragraph">
+<p>Proceed to <a href="integrate-geoserver.html" target="_blank">GeoServer Integration</a> to walkthrough visualizing the ingested data.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="vector-demo"><a class="anchor" href="#vector-demo"></a>Vector Demo</h3>
@@ -655,7 +702,7 @@ More information on the landsat ingest and analyze commands can be found <a href
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-09-03 15:45:57 +00:00
+Last updated 2019-09-06 16:31:24 +00:00
 </div>
 </div>
 </body>
