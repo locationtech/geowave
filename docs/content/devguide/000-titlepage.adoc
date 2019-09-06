@@ -5,7 +5,9 @@
 
 _v${project.version}_
 
-= GeoWave Developer Guide image:geowave-icon-logo-cropped.png[width="28%"]
+image::geowave-icon-logo-cropped-v2.png[width="15%"]
+
+= GeoWave Developer Guide
 
 ////
 PDF Generation gives an error if you try to use icons
