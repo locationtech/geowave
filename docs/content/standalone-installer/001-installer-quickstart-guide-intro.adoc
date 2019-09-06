@@ -41,10 +41,10 @@ RocksDB is file based and does not run as a service
 ====
 . HBase
 
-**If you are running on a Windows OS**, then you will need to setup Hadoop for the Windows.
+.. Apache(TM) Hadoop(R) for Windows
 
-.. Download Hadoop binaries for Windows https://github.com/steveloughran/winutils/tree/master/hadoop-2.8.3/bin
-.. Set HADOOP_HOME as a global environment variable and add the bin to your Path (%HADOOP_HOME%\bin)
+... Download the Hadoop binaries for Windows https://github.com/steveloughran/winutils/tree/master/hadoop-2.8.3/bin
+... Set HADOOP_HOME as a global environment variable
 
 +
 [source, bash]
