@@ -5,7 +5,7 @@
 		<groupId>org.locationtech.geowave</groupId>
 		<artifactId>geowave-extension-parent</artifactId>
 		<relativePath>../../</relativePath>
-		<version>1.0.0-RC2-SNAPSHOT</version>
+		<version>1.0.0</version>
 	</parent>
 	<properties>
 		<!-- to maintain only one download of GDAL, re-use the IT build directory -->

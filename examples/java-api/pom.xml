@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.locationtech.geowave</groupId>
 		<artifactId>geowave-parent</artifactId>
-		<version>1.0.0-RC2-SNAPSHOT</version>
+		<version>1.0.0</version>
 		<relativePath>../../</relativePath>
 	</parent>
 	<artifactId>geowave-example</artifactId>
