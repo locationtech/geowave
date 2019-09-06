@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.locationtech.geowave</groupId>
 	<artifactId>geowave-parent</artifactId>
-	<version>1.0.0</version>
+	<version>1.1.0-SNAPSHOT</version>
 	<name>GeoWave Parent POM</name>
 	<packaging>pom</packaging>
 	<description>Geowave adds spatio-temporal indexing to keyvalue stores through geotools and geoserver</description>
@@ -28,7 +28,7 @@
 	<scm>
 		<url>https://github.com/locationtech/geowave.git</url>
 		<connection>scm:git:https://github.com/locationtech/geowave.git</connection>
-		<tag>v1.0.0</tag>
+		<tag>HEAD</tag>
 	</scm>
 	<issueManagement>
 		<system>GitHub</system>
