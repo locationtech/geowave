@@ -7,7 +7,7 @@
 <script>
 $( document ).ready(function() {
 		/* NOTE :: The first release version will be denoted with '(Current)' appended to the version label */
-		var releases = [ "0.9.8", "0.9.7", "0.9.6", "0.9.5", "0.9.4.1", "0.9.4", "0.9.3" ];
+		var releases = [ "1.0.0", "0.9.8", "0.9.7", "0.9.6", "0.9.5", "0.9.4.1", "0.9.4", "0.9.3" ];
 
 		var mainDocs = { 
 				"userguide.html"		: "User Guide", 
