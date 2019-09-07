@@ -15,16 +15,16 @@ source geowave-env.sh
 geowave config geoserver "$HOSTNAME:8000"
 
 # Add the gdelt datastore 
-geowave gs addds gdelt --datastore "gdelt" # Do we need this??
+geowave gs ds add gdelt --datastore "gdelt" # Do we need this??
 
 # Add layers for the point and kde representations of the data
-geowave gs addlayer gdelt
-geowave gs addlayer gdelt-kde
+geowave gs layer add gdelt
+geowave gs layer add gdelt-kde
 
 # Add the colormap and DecimatePoints style
-geowave gs addstyle kdecolormap -sld /mnt/KDEColorMap.sld
-geowave gs addstyle SubsamplePoints -sld /mnt/SubsamplePoints.sld
+geowave gs style add kdecolormap -sld /mnt/KDEColorMap.sld
+geowave gs style add SubsamplePoints -sld /mnt/SubsamplePoints.sld
 
 # Set the kde layer default style to colormap
-geowave gs setls gdeltevent_kde --styleName kdecolormap
-geowave gs setls gdeltevent --styleName SubsamplePoints
+geowave gs style set gdeltevent_kde --styleName kdecolormap
+geowave gs style set gdeltevent --styleName SubsamplePoints
