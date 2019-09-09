@@ -9,10 +9,19 @@ In order to view the images generated from the vector and raster demos, use the 
 
 === Configure GeoServer
 
+If using EMR, GeoServer is on non-standard port 8000, so the client must be configured (for standalone installer, GeoServer runs on default port so this step is unnecessary).
+
+[source, bash]
+----
+geowave config geoserver "$HOSTNAME:8000"
+----
+
+When using the standalone installer, however, we do need to run GeoServer.
 [source, bash]
 ----
 geowave gs run
 ----
+
 
 === Add Layers and Styles
 
