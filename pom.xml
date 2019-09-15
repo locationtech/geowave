@@ -69,6 +69,7 @@
 		<cassandra.version>3.11.3</cassandra.version>
 		<redisson.version>3.8.2</redisson.version>
 		<rocksdb.version>5.15.10</rocksdb.version>
+		<foundationdb.version>6.1.9</foundationdb.version>
 		<cassandraclient.version>3.5.1</cassandraclient.version>
 		<kuduclient.version>1.8.0</kuduclient.version>
 		<grpc.version>1.13.1</grpc.version>
@@ -307,6 +308,11 @@
 				<groupId>org.rocksdb</groupId>
 				<artifactId>rocksdbjni</artifactId>
 				<version>${rocksdb.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.foundationdb</groupId>
+				<artifactId>fdb-java</artifactId>
+				<version>${foundationdb.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.accumulo</groupId>
