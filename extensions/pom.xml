@@ -19,6 +19,7 @@
 		<module>datastores/bigtable</module>
 		<module>datastores/cassandra</module>
 		<module>datastores/dynamodb</module>
+		<module>datastores/foundationdb</module>
 		<module>datastores/redis</module>
 		<module>datastores/rocksdb</module>
 		<module>datastores/kudu</module>
