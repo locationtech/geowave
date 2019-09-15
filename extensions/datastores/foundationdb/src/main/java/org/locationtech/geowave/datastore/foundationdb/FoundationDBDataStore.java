@@ -4,7 +4,6 @@ import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.metadata.*;
 import org.locationtech.geowave.mapreduce.BaseMapReduceDataStore;
 import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
-
 import java.io.Closeable;
 import java.io.IOException;
 
