@@ -1,12 +1,19 @@
 package org.locationtech.geowave.datastore.foundationdb.util;
 
 import com.apple.foundationdb.Database;
+import com.apple.foundationdb.KeyValue;
+import com.apple.foundationdb.Transaction;
+import com.apple.foundationdb.async.AsyncIterable;
+import com.google.common.collect.Iterators;
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.Longs;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
+import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.Closeable;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,6 +33,13 @@ public class FoundationDBMetadataTable implements Closeable {
     this.requiresTimestamp = requiresTimestamp;
     this.visibilityEnabled = visibilityEnabled;
     this.writes = new LinkedList<>();
+  }
+
+  private CloseableIterator<GeoWaveMetadata> prefixIterator(final byte[] prefix) {
+    Transaction txn = db.createTransaction();
+    AsyncIterable<KeyValue> iterable = txn.getRange(prefix, ByteArrayUtils.getNextPrefix(prefix));
+    // TODO: can this class be asynchronous?
+    return new FoundationDBMetadataIterator(iterable.iterator());
   }
 
   public void add(final GeoWaveMetadata value) {
