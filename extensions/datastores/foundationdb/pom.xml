@@ -24,7 +24,6 @@
         <dependency>
             <groupId>org.foundationdb</groupId>
             <artifactId>fdb-java</artifactId>
-            <version>6.1.9</version>
         </dependency>
     </dependencies>
     <profiles>
