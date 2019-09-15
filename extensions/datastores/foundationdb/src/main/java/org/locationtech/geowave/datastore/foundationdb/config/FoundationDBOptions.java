@@ -8,13 +8,11 @@ import org.locationtech.geowave.core.store.StoreFactoryOptions;
 public class FoundationDBOptions extends StoreFactoryOptions {
   @Override
   public StoreFactoryFamilySpi getStoreFactory() {
-    // TODO
     return null;
   }
 
   @Override
   public DataStoreOptions getStoreOptions() {
-    // TODO
     return null;
   }
 }
