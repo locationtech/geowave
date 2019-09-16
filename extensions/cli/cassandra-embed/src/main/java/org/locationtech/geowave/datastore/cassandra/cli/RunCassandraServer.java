@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.datastore.cassandra.cli;
 
-import java.io.File;
 import java.util.concurrent.TimeUnit;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;

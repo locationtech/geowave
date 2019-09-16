@@ -1,1 +1,1 @@
-org.locationtech.geowave.datastore.redis.cli.RedisOperationProvider
+org.locationtech.geowave.datastore.cassandra.cli.CassandraOperationProvider

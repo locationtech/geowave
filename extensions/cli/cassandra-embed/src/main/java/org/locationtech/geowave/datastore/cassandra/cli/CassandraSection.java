@@ -13,8 +13,8 @@ import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.operations.util.UtilSection;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "redis", parentOperation = UtilSection.class)
-@Parameters(commandDescription = "Redis utility commands")
+@GeowaveOperation(name = "cassandra", parentOperation = UtilSection.class)
+@Parameters(commandDescription = "Cassandra embedded server commands")
 public class CassandraSection extends DefaultOperation {
 
 }
