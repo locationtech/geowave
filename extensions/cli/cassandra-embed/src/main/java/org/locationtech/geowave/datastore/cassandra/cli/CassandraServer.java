@@ -31,6 +31,7 @@ public class CassandraServer {
   public CassandraServer(final RunCassandraServerOptions options) {
     this.options = options;
   }
+
   public CassandraServer(final int numNodes, final int memory, final String directory) {
     this.options = new RunCassandraServerOptions();
     options.setClusterSize(numNodes);
