@@ -195,6 +195,7 @@ org.locationtech.geowave.datastore.bigtable
 org.locationtech.geowave.datastore.bigtable.config
 org.locationtech.geowave.datastore.bigtable.operations
 org.locationtech.geowave.datastore.cassandra
+org.locationtech.geowave.datastore.cassandra.cli
 org.locationtech.geowave.datastore.cassandra.config
 org.locationtech.geowave.datastore.cassandra.operations
 org.locationtech.geowave.datastore.cassandra.util
