@@ -38,6 +38,7 @@
 		<module>cli/redis-embed</module>
 		<module>cli/hbase-embed</module>
 		<module>cli/accumulo-embed</module>
+		<module>cli/cassandra-embed</module>
 		<module>cli/osm</module>
 		<module>cli/landsat8</module>
 		<module>cli/sentinel2</module>

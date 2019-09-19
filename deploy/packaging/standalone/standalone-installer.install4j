@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="7.0.10" transformSequenceNumber="7">
+<install4j version="7.0.12" transformSequenceNumber="7">
   <directoryPresets config="../../../target" />
-  <application name="GeoWave" distributionSourceDir="" applicationId="5520-1479-3644-9667" mediaDir="../../target/install4j-output" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="geowave" publisher="" publisherWeb="" version="1.0.0" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" macVolumeId="54e94e574843f5f8" javaMinVersion="1.8" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
+  <application name="GeoWave" distributionSourceDir="" applicationId="5520-1479-3644-9667" mediaDir="../../target/install4j-output" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="geowave" publisher="" publisherWeb="" version="1.1.0" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" macVolumeId="54e94e574843f5f8" javaMinVersion="1.8" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -61,6 +61,7 @@
       <mountPoint id="194" root="" location="lib/services/third-party/embedded-geoserver" mode="755" />
       <mountPoint id="195" root="" location="lib/services/third-party/embedded-geoserver/geoserver" mode="755" />
       <mountPoint id="196" root="" location="lib/services/third-party/embedded-accumulo" mode="755" />
+      <mountPoint id="478" root="" location="lib/services/third-party/embedded-cassandra" mode="755" />
       <mountPoint id="197" root="" location="lib/services/grpc" mode="755" />
       <mountPoint id="198" root="" location="lib/services/rest" mode="755" />
       <mountPoint id="340" root="" location="examples" mode="755" />
@@ -152,6 +153,9 @@
         <exclude />
       </dirEntry>
       <dirEntry mountPoint="196" file="../../../extensions/cli/accumulo-embed/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="478" file="../../../extensions/cli/cassandra-embed/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="" excludeSuffixes="" dirMode="755" overrideDirMode="false">
         <exclude />
       </dirEntry>
       <dirEntry mountPoint="197" file="../../../services/grpc/server/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
@@ -291,6 +295,13 @@
               <component id="59" />
               <component id="102" />
             </dependencies>
+          </component>
+          <component name="Embedded Cassandra" id="479" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
+            <description />
+            <include all="false">
+              <entry location="lib/services/third-party/embedded-cassandra" fileType="regular" />
+            </include>
+            <dependencies />
           </component>
         </components>
       </folder>

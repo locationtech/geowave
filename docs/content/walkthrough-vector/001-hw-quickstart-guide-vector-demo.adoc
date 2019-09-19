@@ -2,7 +2,7 @@
 :linkattrs:
 
 image::geowave-icon-logo-cropped-v2.png[width="15%"]
-== GeoWave Quickstart Guide - Vector Demo 
+== GeoWave Quickstart Guide - Vector Demo
 
 In the Vector Demo, we use GeoWave to ingest and run a Kernel Density Estimation on a large set of media/broadcast data provided by the GDELT Project.
 
@@ -95,7 +95,7 @@ geowave store add gdelt --gwNamespace geowave.gdelt \
 -t hbase --zookeeper $HOSTNAME:2181
 ----
 
-... Cassandra
+... Cassandra (EMR or standalone installer)
 +
 [source, bash]
 ----
@@ -143,7 +143,7 @@ The ingest should take about ~3-5 minutes. Once the ingest has started, you can 
 Once the ingest has completed:
 
 . Add another store for the kde.
-.. If using the Standalone Installer 
+.. If using the Standalone Installer
 ... Redis
 +
 [source, bash]
@@ -169,7 +169,7 @@ geowave store add gdelt-kde --gwNamespace geowave.gdelt -t hbase -z localhost:21
 geowave store add gdelt -t accumulo --zookeeper localhost:2181 --instance accumulo --user root --password secret
 ----
 
-.. If using EMR 
+.. If using EMR
 ... Accumulo
 +
 [source, bash]
@@ -184,7 +184,7 @@ geowave store add gdelt-kde --gwNamespace geowave.kde_gdelt \
 geowave store add gdelt-kde --gwNamespace geowave.kde_gdelt \
 -t hbase --zookeeper $HOSTNAME:2181
 ----
-... Cassandra
+... Cassandra (EMR or standalone installer)
 +
 [source, bash]
 ----
