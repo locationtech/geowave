@@ -20,9 +20,9 @@ public class FoundationDBMetadataIterator extends AbstractFoundationDBIterator<G
   }
 
   @Override
-  protected GeoWaveMetadata readRow(KeyValue keyValue) {
+  protected GeoWaveMetadata readRow(final KeyValue keyValue) {
     final byte[] key = keyValue.getKey();
-    byte[] value = keyValue.getValue();
+    final byte[] value = keyValue.getValue();
     final ByteBuffer buf = ByteBuffer.wrap(key);
     final byte[] primaryId = new byte[Byte.toUnsignedInt(key[key.length - 1])];
     final byte[] visibility;
