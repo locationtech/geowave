@@ -39,7 +39,7 @@ public class FoundationDBMetadataTable implements Closeable {
     Transaction txn = db.createTransaction();
     AsyncIterable<KeyValue> iterable = txn.getRange(prefix, ByteArrayUtils.getNextPrefix(prefix));
     // TODO: can this class be asynchronous?
-    return new FoundationDBMetadataIterator(iterable.iterator());
+    return new FoundationDBMetadataIterator(iterable.iterator(), requiresTimestamp, visibilityEnabled);
   }
 
   public void add(final GeoWaveMetadata value) {
