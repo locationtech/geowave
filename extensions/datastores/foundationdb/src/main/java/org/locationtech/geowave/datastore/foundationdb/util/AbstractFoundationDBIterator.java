@@ -2,7 +2,6 @@ package org.locationtech.geowave.datastore.foundationdb.util;
 
 import com.apple.foundationdb.KeyValue;
 import org.locationtech.geowave.core.store.CloseableIterator;
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 

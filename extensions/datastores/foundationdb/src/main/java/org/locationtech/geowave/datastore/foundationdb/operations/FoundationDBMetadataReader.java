@@ -11,7 +11,9 @@ public class FoundationDBMetadataReader implements MetadataReader {
   private final FoundationDBMetadataTable table;
   private final MetadataType metadataType;
 
-  public FoundationDBMetadataReader(final FoundationDBMetadataTable table, final MetadataType metadataType) {
+  public FoundationDBMetadataReader(
+      final FoundationDBMetadataTable table,
+      final MetadataType metadataType) {
     this.table = table;
     this.metadataType = metadataType;
   }
