@@ -7,9 +7,14 @@
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
 #===============================================================================================
 import subprocess
+import re
 
 def get_maven_version():
     version = subprocess.check_output([
         "mvn", "-q", "-Dexec.executable=echo", "-Dexec.args='${project.version}'", "-f", "../../..", "exec:exec"
-    ]).strip()
-    return version.decode().replace("-", "+").lower()
+    ]).strip().decode().replace("-", ".")
+    if ("SNAPSHOT" in version):
+        git_description = subprocess.check_output(["git", "describe"]).strip().decode()
+        dev_count = re.search("-(.*)-", git_description).group(1)
+        version = version.replace("SNAPSHOT", "dev" + dev_count)
+    return version.lower()

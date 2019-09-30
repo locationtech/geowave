@@ -4,8 +4,11 @@ This project aims to provide Python classes that allow users to interact with a 
 ## Environment
 - Python >=3,<=3.7
 - A virtualenv with `requirements.txt` installed
+- A running GeoWave Java Gateway
 
-### Installation
+### Installation From Source
+- Clone GeoWave: `git clone https://github.com/locationtech/geowave.git`
+- Navigate to python directory: `cd geowave/python/src/main/python`
 - Set up virtualenv: `virtualenv -p python3 venv`
 - Activate virtualenv: `source venv/bin/activate`
 - Install requirements: `pip install -r requirements.txt`
