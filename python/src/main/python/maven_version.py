@@ -11,10 +11,14 @@ import re
 
 def get_maven_version():
     version = subprocess.check_output([
-        "mvn", "-q", "-Dexec.executable=echo", "-Dexec.args='${project.version}'", "-f", "../../..", "exec:exec"
+        "mvn", "-q", "-Dexec.executable=echo", "-Dexec.args='${project.version}'", "-f", "../../../..", "--non-recursive", "exec:exec"
     ]).strip().decode().replace("-", ".")
     if ("SNAPSHOT" in version):
-        git_description = subprocess.check_output(["git", "describe"]).strip().decode()
-        dev_count = re.search("-(.*)-", git_description).group(1)
+        git_description = subprocess.check_output(["git", "describe", "--always"]).strip().decode()
+        count_search = re.search("-(.*)-", git_description)
+        if (count_search is not None):
+            dev_count = count_search.group(1)
+        else:
+            dev_count = "0"
         version = version.replace("SNAPSHOT", "dev" + dev_count)
     return version.lower()
