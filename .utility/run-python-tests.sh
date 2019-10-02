@@ -19,6 +19,7 @@ source ./tests-venv/bin/activate
 pip install wheel
 pip install -r requirements.txt
 
+mvn -Dexec.executable=echo -Dexec.args='${project.version}' -f ../../../.. --non-recursive exec:exec
 pytest --cov-report= --cov=pygw pygw/test/
 EXIT_CODE=$?
 

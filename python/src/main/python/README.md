@@ -4,8 +4,11 @@ This project aims to provide Python classes that allow users to interact with a 
 ## Environment
 - Python >=3,<=3.7
 - A virtualenv with `requirements.txt` installed
+- A running GeoWave Java Gateway
 
-### Installation
+### Installation From Source
+- Clone GeoWave: `git clone https://github.com/locationtech/geowave.git`
+- Navigate to python directory: `cd geowave/python/src/main/python`
 - Set up virtualenv: `virtualenv -p python3 venv`
 - Activate virtualenv: `source venv/bin/activate`
 - Install requirements: `pip install -r requirements.txt`
@@ -87,7 +90,7 @@ results.close()
 ## Dev Notes:
 
 ### Building a distributable wheel
-To build a wheel file for `pygw`, simply execute the command `python setup.py bdist_wheel` under the active virtual environment.  This will create a distributable wheel under the `dist` directory.
+To build a wheel file for `pygw`, simply execute the command `python setup.py bdist_wheel --python-tag=py3` under the active virtual environment.  This will create a distributable wheel under the `dist` directory.
 
 ### Building API documentation
 This project has been documented using Python docstrings.  These can be used to generate full API documentation in HTML form. To generate the documentation, perform the following steps:

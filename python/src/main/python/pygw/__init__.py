@@ -93,5 +93,13 @@ for feature in results:
 results.close()
 ```
 """
+from pkg_resources import get_distribution
+from pkg_resources import DistributionNotFound
 
-__version__ = "1.0.0-RC2-SNAPSHOT"
+try:
+    version = get_distribution('pygw').version
+except DistributionNotFound:
+    from maven_version import get_maven_version
+    version = get_maven_version();
+
+__version__ = version
