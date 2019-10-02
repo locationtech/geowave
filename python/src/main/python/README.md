@@ -90,7 +90,7 @@ results.close()
 ## Dev Notes:
 
 ### Building a distributable wheel
-To build a wheel file for `pygw`, simply execute the command `python setup.py bdist_wheel` under the active virtual environment.  This will create a distributable wheel under the `dist` directory.
+To build a wheel file for `pygw`, simply execute the command `python setup.py bdist_wheel --python-tag=py3` under the active virtual environment.  This will create a distributable wheel under the `dist` directory.
 
 ### Building API documentation
 This project has been documented using Python docstrings.  These can be used to generate full API documentation in HTML form. To generate the documentation, perform the following steps:
