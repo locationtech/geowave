@@ -563,6 +563,7 @@
 			<properties>
 				<hbase.scope>provided</hbase.scope>
 				<container.extension>-hbase-container</container.extension>
+				<guava.version>12.0.1</guava.version>
 			</properties>
 			<dependencies>
 				<dependency>
