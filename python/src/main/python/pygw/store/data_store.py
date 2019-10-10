@@ -84,7 +84,7 @@ class DataStore(GeoWaveObject):
         raise NotImplementedError
 
     def aggregate_statistics(self, q):
-        raise NotImplementedError
+        return self._java_ref.aggregateStatistics(q)
 
     def get_indices(self, type_name=None):
         """

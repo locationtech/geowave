@@ -9,3 +9,4 @@
 """
 This module contains the classes needed for querying statistics.  This module has not been fully implemented.
 """
+from .vector_statistics_query_builder import VectorStatisticsQueryBuilder
