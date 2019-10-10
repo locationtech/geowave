@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.store;
 
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
+import org.locationtech.geowave.core.store.adapter.BinaryDataAdapter;
 import org.locationtech.geowave.core.store.adapter.SimpleRowTransform;
 import org.locationtech.geowave.core.store.adapter.statistics.BaseStatisticsType;
 import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
@@ -128,6 +129,7 @@ public class StorePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 257, ConstraintsByClass::new),
         new PersistableIdAndConstructor((short) 258, OrderedConstraints::new),
         new PersistableIdAndConstructor((short) 259, BasicOrderedConstraintQuery::new),
-        new PersistableIdAndConstructor((short) 260, BasicQuery::new)};
+        new PersistableIdAndConstructor((short) 260, BasicQuery::new),
+        new PersistableIdAndConstructor((short) 261, BinaryDataAdapter::new)};
   }
 }
