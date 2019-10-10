@@ -14,16 +14,36 @@ if [ "$TRAVIS_REPO_SLUG" == "locationtech/geowave" ] && [ "$BUILD_AND_PUBLISH" =
   fi
   echo -e "Deploying geowave artifacts..."
   mvn deploy --settings .utility/.maven.xml -DskipTests -Dspotbugs.skip -B -U -Prelease
+  
+  # Get the version from the build.properties file
+  filePath=deploy/target/classes/build.properties
+  GEOWAVE_VERSION=$(grep project.version $filePath|  awk -F= '{print $2}')
+  
+  # Don't publish snapshots to PyPi
+  if [[ ! "$GEOWAVE_VERSION" =~ "SNAPSHOT" ]] ; then
+    if [[ -z "${PYPI_CREDENTIALS}" ]]; then
+  	  echo -e "No PyPi credentials, skipping PyPi distribution..."
+    else
+      echo -e "Deploying pygw to PyPi..."
+      pushd python/src/main/python
+      pyenv global 3.7.1
+      python -m venv publish-venv
+      source ./publish-venv/bin/activate
+    
+      pip install --upgrade pip wheel setuptools twine
+      python setup.py bdist_wheel --python-tag=py3 sdist
+      twine upload --skip-existing -u geowave -p $PYPI_CREDENTIALS dist/*
+      deactivate
+      popd
+    fi
+  fi 
+  
   echo -e "Generating changelog...\n"
   export CHANGELOG_GITHUB_TOKEN=$GH_TOKEN
   gem install github_changelog_generator
   github_changelog_generator
   pandoc -f markdown -t html -s -c stylesheets/changelog.css CHANGELOG.md > changelog.html
   cp changelog.html target/site/
-  
-  # Get the version from the build.properties file
-  filePath=deploy/target/classes/build.properties
-  GEOWAVE_VERSION=$(grep project.version $filePath|  awk -F= '{print $2}')
 
   echo -e "Publishing site ...\n"
   cp -R target/site $HOME/site
