@@ -859,7 +859,8 @@ public class BaseDataStoreUtils {
     if (adapter instanceof InternalDataAdapter) {
       return isRowMerging(((InternalDataAdapter) adapter).getAdapter());
     }
-    return adapter instanceof RowMergingDataAdapter;
+    return adapter instanceof RowMergingDataAdapter
+        && ((RowMergingDataAdapter) adapter).getTransform() != null;
   }
 
   public static boolean isRowMerging(

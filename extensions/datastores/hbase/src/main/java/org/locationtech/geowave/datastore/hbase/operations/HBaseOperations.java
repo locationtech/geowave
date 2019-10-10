@@ -1174,7 +1174,7 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
       } else {
         final List<MultiDimensionalCoordinateRangesArray> coords =
             readerParams.getCoordinateRanges();
-        if (!coords.isEmpty()) {
+        if (coords != null && !coords.isEmpty()) {
           final byte[] filterBytes =
               new HBaseNumericIndexStrategyFilter(
                   readerParams.getIndex().getIndexStrategy(),
