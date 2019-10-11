@@ -16,6 +16,7 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
+import org.geotools.filter.text.ecql.ECQL;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
 import org.locationtech.geowave.analytic.mapreduce.kde.GaussianFilter.ValueRange;
@@ -63,7 +64,7 @@ public class GaussianCellMapper extends
     final String cql = context.getConfiguration().get(CQL_FILTER_KEY);
     if ((cql != null) && !cql.isEmpty()) {
       try {
-        filter = CQL.toFilter(cql);
+        filter = ECQL.toFilter(cql);
       } catch (final CQLException e) {
         LOGGER.warn("Unable to parse CQL filter", e);
       }

@@ -24,6 +24,7 @@ import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
+import org.geotools.filter.text.ecql.ECQL;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -475,7 +476,7 @@ public class SpatialTemporalQueryIT {
     // now make sure geotools results match
     try (final SimpleFeatureIterator features =
         geowaveGtDataStore.getFeatureSource(adapterId).getFeatures(
-            CQL.toFilter(cqlPredicate)).features()) {
+            ECQL.toFilter(cqlPredicate)).features()) {
       while (features.hasNext()) {
         final SimpleFeature feature = features.next();
         geotoolsFidResults.add(feature.getID());
