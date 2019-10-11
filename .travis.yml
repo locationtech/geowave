@@ -76,7 +76,7 @@ before_install:
   - chmod +x .utility/maven-coveralls-hack.sh
   - .utility/maven-coveralls-hack.sh
 after_success:
-  - .utility/publish.sh
+  - travis_wait 50 .utility/publish.sh
   - .utility/coveralls.sh
 notifications:
     urls:
