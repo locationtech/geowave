@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.adapter.vector.ingest;
 
-import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
 import org.locationtech.geowave.core.cli.converters.GeoWaveBaseConverter;
