@@ -44,7 +44,7 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "localexport", parentOperation = VectorSection.class)
-@Parameters(commandDescription = "Export data directly")
+@Parameters(commandDescription = "Export data directly to Avro file")
 public class VectorLocalExportCommand extends DefaultOperation implements Command {
   @Parameter(description = "<store name>")
   private List<String> parameters = new ArrayList<>();
