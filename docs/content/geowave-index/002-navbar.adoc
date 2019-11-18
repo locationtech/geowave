@@ -34,7 +34,7 @@
                                 </ul>
                             </li>
                             <li><a href="userguide.html#example-screenshots">Screenshots</a></li>
-                            <li><a href="userguide.html#installation-from-rpm">Installation</a></li>
+                            <li><a href="userguide.html#installation">Installation</a></li>
                             <li><a href="devguide.html#building-code">Building</a></li>
                             <li><a href="userguide.html#ingest">Ingest</a></li>
                             <li><a href="userguide.html#what-is-geowave">About</a></li>

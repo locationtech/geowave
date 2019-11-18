@@ -38,10 +38,7 @@ public abstract class BoundingBoxAggregation<P extends Persistable, T> implement
   public void setParameters(final P parameters) {}
 
   public boolean isSet() {
-    if ((minX == Double.MAX_VALUE)
-        || (minY == Double.MAX_VALUE)
-        || (maxX == -Double.MAX_VALUE)
-        || (maxY == -Double.MAX_VALUE)) {
+    if (minX > maxX || minY > maxY) {
       return false;
     }
     return true;
@@ -71,7 +68,7 @@ public abstract class BoundingBoxAggregation<P extends Persistable, T> implement
 
   @Override
   public byte[] resultToBinary(final Envelope result) {
-    final ByteBuffer buffer = ByteBuffer.allocate(32);
+    final ByteBuffer buffer = ByteBuffer.allocate(Double.BYTES * 4);
     buffer.putDouble(minX);
     buffer.putDouble(minY);
     buffer.putDouble(maxX);
@@ -86,6 +83,11 @@ public abstract class BoundingBoxAggregation<P extends Persistable, T> implement
     final double minY = buffer.getDouble();
     final double maxX = buffer.getDouble();
     final double maxY = buffer.getDouble();
+    if (minX > maxX || minY > maxY) {
+      // The Envelope implementation will swap min and max if min is greater than max, use a null
+      // Envelope in this case to avoid an invalid result.
+      return new Envelope();
+    }
     return new Envelope(minX, maxX, minY, maxY);
   }
 

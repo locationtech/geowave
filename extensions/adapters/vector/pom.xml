@@ -19,6 +19,11 @@
 			<artifactId>commons-math</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-csv</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-adapter-auth</artifactId>
 			<version>${project.version}</version>
@@ -54,6 +59,10 @@
 			<artifactId>gt-shapefile</artifactId>
 		</dependency>
 		<dependency>
+  			<groupId>org.geotools</groupId>
+			<artifactId>gt-geojson</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.geoserver</groupId>
 			<artifactId>gs-wms</artifactId>
 			<exclusions>
@@ -76,6 +85,11 @@
 			<artifactId>cyclops-react</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.antlr</groupId>
+			<artifactId>antlr4-runtime</artifactId>
+			<version>4.7.2</version>
+		</dependency>
+		<dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-render</artifactId>
 		</dependency>
@@ -94,6 +108,22 @@
 			<version>2.5.0</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-core-store</artifactId>
+			<classifier>tests</classifier>
+			<type>test-jar</type>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-core-geotime</artifactId>
+			<classifier>tests</classifier>
+			<type>test-jar</type>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -101,6 +131,19 @@
 				<groupId>org.apache.avro</groupId>
 				<artifactId>avro-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+		        <groupId>org.antlr</groupId>
+		        <artifactId>antlr4-maven-plugin</artifactId>
+		        <version>4.7.2</version>
+		        <executions>
+		            <execution>
+		                <id>antlr</id>
+			            <goals>
+			                <goal>antlr4</goal>
+			            </goals>
+		            </execution>
+		        </executions>
+	        </plugin>
 		</plugins>
 	</build>
 </project>

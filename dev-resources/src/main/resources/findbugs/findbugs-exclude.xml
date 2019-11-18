@@ -4,6 +4,7 @@
 		<Or>
 			<Package name="~.*\.avro" />
 			<Package name="~.*\.protobuf" />
+			<Package name="~.*\.gwql.parse" />
 		</Or>
 	</Match>
 </FindBugsFilter>

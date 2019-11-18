@@ -42,7 +42,7 @@ public class FieldNameParam implements Persistable {
     }
   }
 
-  protected boolean isEmpty() {
+  public boolean isEmpty() {
     return (fieldName == null) || fieldName.isEmpty();
   }
 

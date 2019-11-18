@@ -8,6 +8,8 @@
  */
 package org.locationtech.geowave.core.store.adapter;
 
+import java.nio.ByteBuffer;
+import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
@@ -37,7 +39,11 @@ public class InternalDataAdapterWrapper<T> implements InternalDataAdapter<T> {
 
   @Override
   public byte[] toBinary() {
-    return adapter.toBinary();
+    byte[] adapterBytes = PersistenceUtils.toBinary(adapter);
+    ByteBuffer buffer = ByteBuffer.allocate(adapterBytes.length + 2);
+    buffer.putShort(adapterId);
+    buffer.put(adapterBytes);
+    return buffer.array();
   }
 
   @Override
@@ -45,9 +51,14 @@ public class InternalDataAdapterWrapper<T> implements InternalDataAdapter<T> {
     return adapter.getReader(fieldName);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public void fromBinary(final byte[] bytes) {
-    adapter.fromBinary(bytes);
+    ByteBuffer buffer = ByteBuffer.wrap(bytes);
+    adapterId = buffer.getShort();
+    byte[] adapterBytes = new byte[buffer.remaining()];
+    buffer.get(adapterBytes);
+    adapter = (DataTypeAdapter<T>) PersistenceUtils.fromBinary(adapterBytes);
   }
 
   @Override
