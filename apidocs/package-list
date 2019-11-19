@@ -26,6 +26,12 @@ org.locationtech.geowave.adapter.vector.plugin
 org.locationtech.geowave.adapter.vector.plugin.lock
 org.locationtech.geowave.adapter.vector.plugin.transaction
 org.locationtech.geowave.adapter.vector.plugin.visibility
+org.locationtech.geowave.adapter.vector.query
+org.locationtech.geowave.adapter.vector.query.aggregation
+org.locationtech.geowave.adapter.vector.query.gwql
+org.locationtech.geowave.adapter.vector.query.gwql.function
+org.locationtech.geowave.adapter.vector.query.gwql.parse
+org.locationtech.geowave.adapter.vector.query.gwql.statement
 org.locationtech.geowave.adapter.vector.render
 org.locationtech.geowave.adapter.vector.stats
 org.locationtech.geowave.adapter.vector.util

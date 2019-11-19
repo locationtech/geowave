@@ -83,6 +83,14 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.query.aggregation">org.locationtech.geowave.adapter.vector.query.aggregation</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.query.gwql.function">org.locationtech.geowave.adapter.vector.query.gwql.function</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.render">org.locationtech.geowave.adapter.vector.render</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -123,6 +131,124 @@
 </li>
 <li class="blockList">
 <ul class="blockList">
+<li class="blockList"><a name="org.locationtech.geowave.adapter.vector.query.aggregation">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a> in <a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/aggregation/package-summary.html">org.locationtech.geowave.adapter.vector.query.aggregation</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/aggregation/package-summary.html">org.locationtech.geowave.adapter.vector.query.aggregation</a> that implement <a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/aggregation/CompositeVectorAggregation.html" title="class in org.locationtech.geowave.adapter.vector.query.aggregation">CompositeVectorAggregation</a></span></code>
+<div class="block">Aggregation class that allows multiple aggregations to be performed in a single aggregation
+ query.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/aggregation/VectorCountAggregation.html" title="class in org.locationtech.geowave.adapter.vector.query.aggregation">VectorCountAggregation</a></span></code>
+<div class="block">Counts non-null values of a simple feature attribute.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/aggregation/VectorMathAggregation.html" title="class in org.locationtech.geowave.adapter.vector.query.aggregation">VectorMathAggregation</a></span></code>
+<div class="block">Base aggregation class for performing math operations on numeric simple feature attributes.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/aggregation/VectorMaxAggregation.html" title="class in org.locationtech.geowave.adapter.vector.query.aggregation">VectorMaxAggregation</a></span></code>
+<div class="block">Aggregates to find the maximum value of a given numeric attribute.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/aggregation/VectorMinAggregation.html" title="class in org.locationtech.geowave.adapter.vector.query.aggregation">VectorMinAggregation</a></span></code>
+<div class="block">Aggregates to find the minimum value of a given numeric attribute.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/aggregation/VectorSumAggregation.html" title="class in org.locationtech.geowave.adapter.vector.query.aggregation">VectorSumAggregation</a></span></code>
+<div class="block">Calculates the sum of all value of a given numeric attribute.</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/aggregation/package-summary.html">org.locationtech.geowave.adapter.vector.query.aggregation</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">CompositeVectorAggregation.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/aggregation/CompositeVectorAggregation.html#add-org.locationtech.geowave.core.store.api.Aggregation-">add</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;?,?,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;aggregation)</code>
+<div class="block">Add an aggregation to this composite aggregation.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.adapter.vector.query.gwql.function">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a> in <a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.function</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.function</a> that return <a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;?,?,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">MinFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/MinFunction.html#aggregation-org.locationtech.geowave.core.geotime.store.query.aggregate.FieldNameParam-">aggregation</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/FieldNameParam.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">FieldNameParam</a>&nbsp;columnName)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;?,?,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">MaxFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/MaxFunction.html#aggregation-org.locationtech.geowave.core.geotime.store.query.aggregate.FieldNameParam-">aggregation</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/FieldNameParam.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">FieldNameParam</a>&nbsp;columnName)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected abstract <a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;?,?,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">MathAggregationFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/MathAggregationFunction.html#aggregation-org.locationtech.geowave.core.geotime.store.query.aggregate.FieldNameParam-">aggregation</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/FieldNameParam.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">FieldNameParam</a>&nbsp;columnName)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;?,?,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">SumFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/SumFunction.html#aggregation-org.locationtech.geowave.core.geotime.store.query.aggregate.FieldNameParam-">aggregation</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/FieldNameParam.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">FieldNameParam</a>&nbsp;columnName)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;?,?,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">CountFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/CountFunction.html#getAggregation-org.opengis.feature.simple.SimpleFeatureType-java.lang.String:A-">getAggregation</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;functionArgs)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;?,?,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">BboxFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/BboxFunction.html#getAggregation-org.opengis.feature.simple.SimpleFeatureType-java.lang.String:A-">getAggregation</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;functionArgs)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;?,?,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">MathAggregationFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/MathAggregationFunction.html#getAggregation-org.opengis.feature.simple.SimpleFeatureType-java.lang.String:A-">getAggregation</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;functionArgs)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;?,?,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">QLVectorAggregationFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/QLVectorAggregationFunction.html#getAggregation-org.opengis.feature.simple.SimpleFeatureType-java.lang.String:A-">getAggregation</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;featureType,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;functionArgs)</code>
+<div class="block">Gets the  associated with this function.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="org.locationtech.geowave.adapter.vector.render">
 <!--   -->
 </a>
