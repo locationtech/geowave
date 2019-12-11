@@ -11,11 +11,25 @@ package org.locationtech.geowave.core.store.operations;
 import java.io.Closeable;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
+/**
+ * Provides an interface for deleting GeoWave data rows.
+ */
 public interface RowDeleter extends Closeable {
+  /**
+   * Delete a GeoWave row from the DB.
+   *
+   * Preconditions: <ul> <li>The deleter is not closed</li> </ul>
+   *
+   * @param row The row to delete.
+   */
   void delete(GeoWaveRow row);
 
+  /**
+   * Flush the deleter, committing all pending changes. Note that the changes may already be
+   * committed - this method just establishes that they *must* be committed after the method
+   * returns.
+   *
+   * Preconditions: <ul> <li>The deleter is not closed</li> </ul>
+   */
   void flush();
-
-  @Override
-  void close();
 }
