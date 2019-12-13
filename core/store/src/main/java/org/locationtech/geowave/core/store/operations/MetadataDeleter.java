@@ -9,7 +9,7 @@
 package org.locationtech.geowave.core.store.operations;
 
 /**
- * TProvides an interface for deleting GeoWave metadata. A {@link MetadataQuery} is used to specify the metadata to be deleted.
+ * Provides an interface for deleting GeoWave metadata. A {@link MetadataQuery} is used to specify the metadata to be deleted.
  *
  * Delete queries may only be performed if the deleter is not closed.
  */
