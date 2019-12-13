@@ -32,4 +32,11 @@ public interface RowDeleter extends Closeable {
    * Preconditions: <ul> <li>The deleter is not closed</li> </ul>
    */
   void flush();
+  
+  /**
+   * Close the deleter, committing all pending changes.
+   * This method is overridden because it does not throw an IOException.
+   */
+  @Override
+  void close();
 }
