@@ -15,13 +15,59 @@ import org.locationtech.geowave.core.index.dimension.bin.BinRange;
 import org.locationtech.geowave.core.index.lexicoder.NumberLexicoder;
 import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
+import org.locationtech.geowave.core.index.sfc.data.NumericValue;
 import org.locationtech.geowave.core.index.simple.SimpleNumericIndexStrategy;
 
 public class IndexUtils {
   public static MultiDimensionalNumericData getFullBounds(
       final NumericIndexStrategy indexStrategy) {
     return getFullBounds(indexStrategy.getOrderedDimensionDefinitions());
+  }
+
+  public static MultiDimensionalNumericData clampAtIndexBounds(
+      MultiDimensionalNumericData data,
+      final NumericIndexStrategy indexStrategy) {
+    NumericDimensionDefinition[] dimensions = indexStrategy.getOrderedDimensionDefinitions();
+    NumericData[] dataPerDimension = data.getDataPerDimension();
+    boolean clamped = false;
+    for (int d = 0; d < dimensions.length; d++) {
+      NumericRange dimensionBounds = dimensions[d].getBounds();
+
+      if (dataPerDimension[d].isRange()) {
+        boolean dimensionClamped = false;
+        double min, max;
+        if (dataPerDimension[d].getMin() < dimensionBounds.getMin()) {
+          min = dimensionBounds.getMin();
+          dimensionClamped = true;
+        } else {
+          min = dataPerDimension[d].getMin();
+        }
+        if (dataPerDimension[d].getMax() > dimensionBounds.getMax()) {
+          max = dimensionBounds.getMax();
+          dimensionClamped = true;
+        } else {
+          max = dataPerDimension[d].getMax();
+        }
+        if (dimensionClamped) {
+          dataPerDimension[d] = new NumericRange(min, max);
+          clamped = true;
+        }
+      } else if (dataPerDimension[d].getMin() < dimensionBounds.getMin()
+          || dataPerDimension[d].getMin() > dimensionBounds.getMax()) {
+        dataPerDimension[d] =
+            new NumericValue(
+                Math.max(
+                    Math.min(dataPerDimension[d].getMin(), dimensionBounds.getMax()),
+                    dimensionBounds.getMin()));
+        clamped = true;
+      }
+    }
+    if (clamped) {
+      return new BasicNumericDataset(dataPerDimension);
+    }
+    return data;
   }
 
   /**
