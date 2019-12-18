@@ -13,6 +13,7 @@ import org.locationtech.geowave.core.store.GenericStoreFactory;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.datastore.bigtable.BigTableStoreFactoryFamily;
+import org.locationtech.geowave.datastore.bigtable.cli.BigtableEmulator;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,10 +82,7 @@ public class BigtableStoreTestEnvironment extends StoreTestEnvironment {
       }
 
       emulator =
-          new BigtableEmulator(
-              null, // null uses tmp dir
-              sdkDownloadUrl,
-              sdkFile);
+          new BigtableEmulator(BigtableEmulator.DEFAULT_DIR.getPath(), sdkDownloadUrl, sdkFile);
 
       // Make sure we clean up any old processes first
       if (emulator.isRunning()) {

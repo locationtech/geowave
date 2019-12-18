@@ -6,7 +6,7 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.test;
+package org.locationtech.geowave.datastore.bigtable.cli;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -47,6 +47,7 @@ public class BigtableEmulator {
   public static final String INTERNAL_PROPERTY = "bigtable.emulator.internal";
   public static final String DOWNLOAD_URL_PROPERTY = "bigtable.sdk.url";
   public static final String DOWNLOAD_FILE_PROPERTY = "bigtable.sdk.file";
+  public static final File DEFAULT_DIR = new File("./target/temp");
 
   // Download and executable paths
   private final String downloadUrl;
@@ -61,19 +62,21 @@ public class BigtableEmulator {
   private final File sdkDir;
   private ExecuteWatchdog watchdog;
 
+  public BigtableEmulator(final RunBigtableEmulatorOptions options) {
+    this(options.getDirectory(), options.getUrl(), options.getSdk());
+  }
+
   public BigtableEmulator(
       final String sdkDir,
       final String sdkDownloadUrl,
       final String sdkFileName) {
-    if (TestUtils.isSet(sdkDir)) {
+    if (sdkDir != null && !sdkDir.isEmpty()) {
       this.sdkDir = new File(sdkDir);
     } else {
-      this.sdkDir = new File(TestUtils.TEMP_DIR, "gcloud");
+      this.sdkDir = new File(DEFAULT_DIR, "gcloud");
     }
-
     downloadUrl = sdkDownloadUrl;
     fileName = sdkFileName;
-
     if (!this.sdkDir.exists() && !this.sdkDir.mkdirs()) {
       LOGGER.warn("unable to create directory " + this.sdkDir.getAbsolutePath());
     }
@@ -115,7 +118,7 @@ public class BigtableEmulator {
     final String KILL_CMD_2 =
         "for i in $(ps -ef | grep -i \"[c]btemulator\" | awk '{print $2}'); do kill -9 $i; done";
 
-    final File bashFile = new File(TestUtils.TEMP_DIR, "kill-bigtable.sh");
+    final File bashFile = new File(DEFAULT_DIR, "kill-bigtable.sh");
 
     PrintWriter scriptWriter;
     try {
@@ -332,10 +335,11 @@ public class BigtableEmulator {
           }
         });
 
-    LOGGER.warn("Starting BigTable Emulator: " + cmdLine.toString());
+    LOGGER.warn("Starting Bigtable Emulator: " + cmdLine.toString());
     synchronized (STARTUP_LOCK) {
       executor.execute(cmdLine, resultHandler);
       STARTUP_LOCK.wait(MAX_STARTUP_WAIT);
     }
   }
 }
+
