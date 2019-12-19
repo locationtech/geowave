@@ -300,6 +300,11 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-cli-bigtable-embed</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.accumulo</groupId>
 			<artifactId>accumulo-minicluster</artifactId>
 			<exclusions>
