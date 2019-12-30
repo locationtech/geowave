@@ -13,7 +13,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * A reusable generic facility for displaying console results  
+ * A reusable generic facility for displaying console results
  */
 public class ConsolePrinter {
   private static final int PADDING = 2;
