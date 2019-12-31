@@ -322,7 +322,7 @@ public class BaseConstraintsQuery extends BaseFilteredIndexQuery {
       final double[] targetResolutionPerDimensionForHierarchicalIndex) {
     return DataStoreUtils.constraintsToQueryRanges(
         constraints,
-        index.getIndexStrategy(),
+        index,
         targetResolutionPerDimensionForHierarchicalIndex,
         maxRangeDecomposition,
         indexMetaData);

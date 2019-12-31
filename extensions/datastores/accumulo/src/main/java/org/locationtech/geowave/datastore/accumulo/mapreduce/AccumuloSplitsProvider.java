@@ -70,10 +70,8 @@ public class AccumuloSplitsProvider extends SplitsProvider {
       LOGGER.error("AccumuloSplitsProvider requires AccumuloOperations object.");
       return splits;
     }
-
+    int partitionKeyLength = index.getIndexStrategy().getPartitionKeyLength();
     Range fullrange;
-    final NumericIndexStrategy indexStrategy = index.getIndexStrategy();
-    final int partitionKeyLength = indexStrategy.getPartitionKeyLength();
     try {
       fullrange =
           toAccumuloRange(new GeoWaveRowRange(null, null, null, true, true), partitionKeyLength);
@@ -96,7 +94,7 @@ public class AccumuloSplitsProvider extends SplitsProvider {
             AccumuloUtils.byteArrayRangesToAccumuloRanges(
                 DataStoreUtils.constraintsToQueryRanges(
                     indexConstraints,
-                    indexStrategy,
+                    index,
                     targetResolutionPerDimensionForHierarchicalIndex,
                     maxSplits,
                     indexMetadata).getCompositeQueryRanges());
@@ -105,7 +103,7 @@ public class AccumuloSplitsProvider extends SplitsProvider {
             AccumuloUtils.byteArrayRangesToAccumuloRanges(
                 DataStoreUtils.constraintsToQueryRanges(
                     indexConstraints,
-                    indexStrategy,
+                    index,
                     targetResolutionPerDimensionForHierarchicalIndex,
                     -1,
                     indexMetadata).getCompositeQueryRanges());

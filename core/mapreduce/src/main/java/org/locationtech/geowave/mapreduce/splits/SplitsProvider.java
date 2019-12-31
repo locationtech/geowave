@@ -236,9 +236,6 @@ public class SplitsProvider {
       final IndexMetaData[] indexMetadata,
       final String[] authorizations) throws IOException {
 
-    final NumericIndexStrategy indexStrategy = index.getIndexStrategy();
-    final int partitionKeyLength = indexStrategy.getPartitionKeyLength();
-
     // Build list of row ranges from query
     List<ByteArrayRange> ranges = null;
     if (constraints != null) {
@@ -248,7 +245,7 @@ public class SplitsProvider {
         ranges =
             DataStoreUtils.constraintsToQueryRanges(
                 indexConstraints,
-                indexStrategy,
+                index,
                 targetResolutionPerDimensionForHierarchicalIndex,
                 maxSplits,
                 indexMetadata).getCompositeQueryRanges();
@@ -256,7 +253,7 @@ public class SplitsProvider {
         ranges =
             DataStoreUtils.constraintsToQueryRanges(
                 indexConstraints,
-                indexStrategy,
+                index,
                 targetResolutionPerDimensionForHierarchicalIndex,
                 -1,
                 indexMetadata).getCompositeQueryRanges();
@@ -297,7 +294,8 @@ public class SplitsProvider {
       }
     } else {
       for (final ByteArrayRange range : ranges) {
-        final GeoWaveRowRange gwRange = SplitsProvider.toRowRange(range, partitionKeyLength);
+        final GeoWaveRowRange gwRange =
+            SplitsProvider.toRowRange(range, index.getIndexStrategy().getPartitionKeyLength());
 
         final double cardinality =
             getCardinality(

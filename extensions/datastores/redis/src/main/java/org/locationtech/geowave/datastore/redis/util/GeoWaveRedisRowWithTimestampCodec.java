@@ -9,6 +9,7 @@
 package org.locationtech.geowave.datastore.redis.util;
 
 import java.io.IOException;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveValueImpl;
 import org.redisson.client.codec.BaseCodec;
 import org.redisson.client.handler.State;
@@ -62,7 +63,8 @@ public class GeoWaveRedisRowWithTimestampCodec extends BaseCodec {
             dataId,
             new GeoWaveValueImpl(fieldMask, visibility, value),
             Integer.toUnsignedLong(Varint.readSignedVarInt(in)),
-            Varint.readSignedVarInt(in));
+            Varint.readSignedVarInt(in),
+            in.available() > 0 ? (short) in.readUnsignedByte() : null);
       }
     }
   };
@@ -77,6 +79,9 @@ public class GeoWaveRedisRowWithTimestampCodec extends BaseCodec {
           GeoWaveRedisRowCodec.encodeRow(out, row, visibilityEnabled);
           Varint.writeSignedVarInt((int) row.getSecondsSinceEpic(), out);
           Varint.writeSignedVarInt(row.getNanoOfSecond(), out);
+          if (row.getDuplicateId() != null) {
+            out.writeByte(row.getDuplicateId());
+          }
           out.flush();
           return out.buffer();
         }
