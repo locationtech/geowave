@@ -122,46 +122,6 @@ public class DeletePyramidLevelCommand extends DefaultOperation implements Comma
       LOGGER.error("Store has no indices supporting pyramids.");
       return;
     }
-    // delete the resolution from the overview, delete the partitions, and delete the data
-    store.queryStatistics(
-        OverviewStatistics.STATS_TYPE.newBuilder().dataType(adapter.getTypeName()).build());
-    final DataStatisticsStore statsStore = inputStoreLoader.createDataStatisticsStore();
-    final InternalAdapterStore adapterIdStore = inputStoreLoader.createInternalAdapterStore();
-    OverviewStatistics ovStats = null;
-    PartitionStatistics<?> pStats = null;
-    try (CloseableIterator<InternalDataStatistics<?, ?, ?>> it =
-        statsStore.getDataStatistics(
-            adapterIdStore.getAdapterId(adapter.getTypeName()),
-            OverviewStatistics.STATS_TYPE)) {
-      while (it.hasNext()) {
-        final InternalDataStatistics<?, ?, ?> next = it.next();
-        if (next instanceof OverviewStatistics) {
-          ovStats = (OverviewStatistics) next;
-          break;
-        }
-      }
-    }
-    if (ovStats == null) {
-      LOGGER.error("Unable to find overview stats for coverage " + adapter.getTypeName());
-      return;
-    }
-    if (!ovStats.removeResolution(res)) {
-      LOGGER.error("Unable to remove resolution for pyramid level " + level);
-      return;
-    }
-    try (CloseableIterator<InternalDataStatistics<?, ?, ?>> it =
-        statsStore.getDataStatistics(
-            adapterIdStore.getAdapterId(adapter.getTypeName()),
-            i.getName(),
-            PartitionStatistics.STATS_TYPE)) {
-      while (it.hasNext()) {
-        final InternalDataStatistics<?, ?, ?> next = it.next();
-        if (next instanceof PartitionStatistics) {
-          pStats = (PartitionStatistics) next;
-          break;
-        }
-      }
-    }
     final byte[][] predefinedSplits = i.getIndexStrategy().getPredefinedSplits();
     // this should account for hash partitioning if used
     final List<ByteArray> partitions = new ArrayList<>();
@@ -172,24 +132,63 @@ public class DeletePyramidLevelCommand extends DefaultOperation implements Comma
     } else {
       partitions.add(new ByteArray(new byte[] {level.byteValue()}));
     }
-    if (pStats == null) {
-      LOGGER.error(
-          "Unable to find partition stats for coverage "
-              + adapter.getTypeName()
-              + " and index "
-              + i.getName());
-      return;
-    }
-    for (final ByteArray p : partitions) {
-      if (!pStats.getPartitionKeys().remove(p)) {
-        LOGGER.error(
-            "Unable to remove partition " + p.getHexString() + " for pyramid level " + level);
+    // delete the resolution from the overview, delete the partitions, and delete the data
+    if (inputStoreOptions.getFactoryOptions().getStoreOptions().isPersistDataStatistics()) {
+      final DataStatisticsStore statsStore = inputStoreLoader.createDataStatisticsStore();
+      final InternalAdapterStore adapterIdStore = inputStoreLoader.createInternalAdapterStore();
+      OverviewStatistics ovStats = null;
+      PartitionStatistics<?> pStats = null;
+      try (CloseableIterator<InternalDataStatistics<?, ?, ?>> it =
+          statsStore.getDataStatistics(
+              adapterIdStore.getAdapterId(adapter.getTypeName()),
+              OverviewStatistics.STATS_TYPE)) {
+        while (it.hasNext()) {
+          final InternalDataStatistics<?, ?, ?> next = it.next();
+          if (next instanceof OverviewStatistics) {
+            ovStats = (OverviewStatistics) next;
+            break;
+          }
+        }
+      }
+      if (ovStats == null) {
+        LOGGER.error("Unable to find overview stats for coverage " + adapter.getTypeName());
         return;
       }
+      if (!ovStats.removeResolution(res)) {
+        LOGGER.error("Unable to remove resolution for pyramid level " + level);
+        return;
+      }
+      try (CloseableIterator<InternalDataStatistics<?, ?, ?>> it =
+          statsStore.getDataStatistics(
+              adapterIdStore.getAdapterId(adapter.getTypeName()),
+              i.getName(),
+              PartitionStatistics.STATS_TYPE)) {
+        while (it.hasNext()) {
+          final InternalDataStatistics<?, ?, ?> next = it.next();
+          if (next instanceof PartitionStatistics) {
+            pStats = (PartitionStatistics) next;
+            break;
+          }
+        }
+      }
+      if (pStats == null) {
+        LOGGER.error(
+            "Unable to find partition stats for coverage "
+                + adapter.getTypeName()
+                + " and index "
+                + i.getName());
+        return;
+      }
+      for (final ByteArray p : partitions) {
+        if (!pStats.getPartitionKeys().remove(p)) {
+          LOGGER.error(
+              "Unable to remove partition " + p.getHexString() + " for pyramid level " + level);
+          return;
+        }
+      }
+      statsStore.setStatistics(ovStats);
+      statsStore.setStatistics(pStats);
     }
-    statsStore.setStatistics(ovStats);
-    statsStore.setStatistics(pStats);
-
     for (final ByteArray p : partitions) {
       store.delete(
           QueryBuilder.newBuilder().constraints(
@@ -210,10 +209,9 @@ public class DeletePyramidLevelCommand extends DefaultOperation implements Comma
     return parameters;
   }
 
-  public void setParameters(final String inputStore, final String outputStore) {
+  public void setParameters(final String inputStore) {
     parameters = new ArrayList<>();
     parameters.add(inputStore);
-    parameters.add(outputStore);
   }
 
   public DataStorePluginOptions getInputStoreOptions() {
