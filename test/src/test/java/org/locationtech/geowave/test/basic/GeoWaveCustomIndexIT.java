@@ -78,7 +78,7 @@ public class GeoWaveCustomIndexIT {
     startMillis = System.currentTimeMillis();
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
-    LOGGER.warn("*    RUNNING GeoWaveBasicCustomCRSRasterIT       *");
+    LOGGER.warn("*    RUNNING GeoWaveCustomIndexIT       *");
     LOGGER.warn("*                                       *");
     LOGGER.warn("-----------------------------------------");
   }
@@ -87,11 +87,11 @@ public class GeoWaveCustomIndexIT {
   public static void reportTest() {
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
-    LOGGER.warn("*      FINISHED GeoWaveBasicCustomCRSRasterIT         *");
+    LOGGER.warn("*      FINISHED GeoWaveCustomIndexIT    *");
     LOGGER.warn(
         "*         "
             + ((System.currentTimeMillis() - startMillis) / 1000)
-            + "s elapsed.                 *");
+            + "s elapsed.                  *");
     LOGGER.warn("*                                       *");
     LOGGER.warn("-----------------------------------------");
   }
@@ -178,6 +178,53 @@ public class GeoWaveCustomIndexIT {
                         TEST_ENUM_INDEX_NAME).build())) {
       Assert.assertEquals(8103 / 5, Iterators.size(it));
     }
+    // TODO There's an issue with deletion where the IndexMetadataSet delete callback assumes the
+    // GeoWaveRows are from that index (such as spatial/spatial-temporal, when in this case they're
+    // coming from the custom enum index, so it seems the index metadata stat can become
+    // inconsistent, in this case it should throw an ArrayIndexOutOfBoundsException
+    // See Issue #1655
+    //@formatter:off
+//    dataStore.delete(
+//        bldr.constraints(
+//            bldr.constraintsFactory().customConstraints(
+//                new TestEnumConstraints(TestEnum.C))).indexName(TEST_ENUM_INDEX_NAME).build());
+//    try (CloseableIterator<SimpleFeature> it =
+//        dataStore.query(
+//            bldr.constraints(
+//                bldr.constraintsFactory().customConstraints(
+//                    new TestEnumConstraints(TestEnum.C))).indexName(
+//                        TEST_ENUM_INDEX_NAME).build())) {
+//      Assert.assertEquals(0, Iterators.size(it));
+//    }
+//    try (CloseableIterator<SimpleFeature> it =
+//        dataStore.query(
+//            bldr.constraints(
+//                bldr.constraintsFactory().customConstraints(
+//                    new TestEnumConstraints(TestEnum.A))).indexName(
+//                        TEST_ENUM_INDEX_NAME).build())) {
+//      Assert.assertTrue((8103 / 2) > Iterators.size(it));
+//    }
+//    dataStore.delete(
+//        bldr.constraints(
+//            bldr.constraintsFactory().customConstraints(
+//                new TestEnumConstraints(TestEnum.B))).indexName(TEST_ENUM_INDEX_NAME).build());
+//    try (CloseableIterator<SimpleFeature> it =
+//        dataStore.query(
+//            bldr.constraints(
+//                bldr.constraintsFactory().customConstraints(
+//                    new TestEnumConstraints(TestEnum.B))).indexName(
+//                        TEST_ENUM_INDEX_NAME).build())) {
+//      Assert.assertEquals(0, Iterators.size(it));
+//    }
+//    try (CloseableIterator<SimpleFeature> it =
+//        dataStore.query(
+//            bldr.constraints(
+//                bldr.constraintsFactory().customConstraints(
+//                    new TestEnumConstraints(TestEnum.A))).indexName(
+//                        TEST_ENUM_INDEX_NAME).build())) {
+//      Assert.assertTrue((8103 / 2) > Iterators.size(it));
+//    }
+  //@formatter:on
   }
 
   private static CustomIndexImpl<SimpleFeature, TestEnumConstraints> getTestEnumIndex() {
