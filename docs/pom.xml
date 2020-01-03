@@ -22,36 +22,6 @@
 		<jruby.version>1.7.20.1</jruby.version>
 	</properties>
 
-	<repositories>
-		<repository>
-			<id>rubygems-proxy-releases</id>
-			<name>RubyGems.org Proxy (Releases)</name>
-			<url>http://rubygems-proxy.torquebox.org/releases</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-
-	<dependencies>
-		<dependency>
-			<groupId>rubygems</groupId>
-			<artifactId>asciidoctor-pdf</artifactId>
-			<version>${asciidoctor.pdf.version}</version>
-			<type>gem</type>
-			<scope>provided</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>rubygems</groupId>
-					<artifactId>asciidoctor</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
