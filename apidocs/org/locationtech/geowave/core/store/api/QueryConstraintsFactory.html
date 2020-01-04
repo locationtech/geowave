@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -151,24 +151,32 @@ var activeTableTab = "activeTableTab";
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html#customConstraints-org.locationtech.geowave.core.index.persist.Persistable-">customConstraints</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>&nbsp;customConstraints)</code>
+<div class="block">constrain using a custom persistable object NOTE: this only applies to an index that is a
+ <a href="../../../../../../org/locationtech/geowave/core/store/index/CustomIndexImpl.html" title="class in org.locationtech.geowave.core.store.index"><code>CustomIndexImpl</code></a> and the instance of these custom constraints must match the generic of
+ the custom index's strategy</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html#dataIds-byte:A...-">dataIds</a></span>(byte[]...&nbsp;dataIds)</code>
 <div class="block">constrain a query by data IDs</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html#dataIdsByRange-byte:A-byte:A-">dataIdsByRange</a></span>(byte[]&nbsp;startDataIdInclusive,
               byte[]&nbsp;endDataIdInclusive)</code>
 <div class="block">constrain a query using a range of data IDs, assuming big endian ordering</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html#noConstraints--">noConstraints</a></span>()</code>
 <div class="block">no query constraints, meaning wide open query (this is the default)</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html#prefix-byte:A-byte:A-">prefix</a></span>(byte[]&nbsp;partitionKey,
       byte[]&nbsp;sortKeyPrefix)</code>
@@ -294,6 +302,24 @@ var activeTableTab = "activeTableTab";
 </dl>
 </li>
 </ul>
+<a name="customConstraints-org.locationtech.geowave.core.index.persist.Persistable-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>customConstraints</h4>
+<pre><a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>&nbsp;customConstraints(<a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>&nbsp;customConstraints)</pre>
+<div class="block">constrain using a custom persistable object NOTE: this only applies to an index that is a
+ <a href="../../../../../../org/locationtech/geowave/core/store/index/CustomIndexImpl.html" title="class in org.locationtech.geowave.core.store.index"><code>CustomIndexImpl</code></a> and the instance of these custom constraints must match the generic of
+ the custom index's strategy</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>customConstraints</code> - the instance of custom constraints</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the query constraints</dd>
+</dl>
+</li>
+</ul>
 <a name="noConstraints--">
 <!--   -->
 </a>
@@ -377,6 +403,6 @@ var activeTableTab = "activeTableTab";
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2013&#x2013;2019. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2013&#x2013;2020. All rights reserved.</small></p>
 </body>
 </html>

@@ -2485,6 +2485,23 @@
 </tr>
 </tbody>
 </table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/core/store/api/package-summary.html">org.locationtech.geowave.core.store.api</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
+<td class="colLast"><span class="typeNameLabel">QueryConstraintsFactory.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html#customConstraints-org.locationtech.geowave.core.index.persist.Persistable-">customConstraints</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>&nbsp;customConstraints)</code>
+<div class="block">constrain using a custom persistable object NOTE: this only applies to an index that is a
+ <a href="../../../../../../../org/locationtech/geowave/core/store/index/CustomIndexImpl.html" title="class in org.locationtech.geowave.core.store.index"><code>CustomIndexImpl</code></a> and the instance of these custom constraints must match the generic of
+ the custom index's strategy</div>
+</td>
+</tr>
+</tbody>
+</table>
 </li>
 <li class="blockList"><a name="org.locationtech.geowave.core.store.base">
 <!--   -->
@@ -2590,6 +2607,28 @@
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a> in <a href="../../../../../../../org/locationtech/geowave/core/store/index/package-summary.html">org.locationtech.geowave.core.store.index</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../org/locationtech/geowave/core/store/index/package-summary.html">org.locationtech.geowave.core.store.index</a> with type parameters of type <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/CustomIndexImpl.html" title="class in org.locationtech.geowave.core.store.index">CustomIndexImpl</a>&lt;E,C extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>&gt;</span></code>
+<div class="block">This is a basic wrapper around a custom index strategy</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>interface&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/CustomIndexStrategy.html" title="interface in org.locationtech.geowave.core.store.index">CustomIndexStrategy</a>&lt;E,C extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>&gt;</span></code>
+<div class="block">This interface is the most straightforward mechanism to add custom indexing of any arbitrary
+ logic to a GeoWave datastore.</div>
+</td>
+</tr>
+</tbody>
+</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subinterfaces, and an explanation">
 <caption><span>Subinterfaces of <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a> in <a href="../../../../../../../org/locationtech/geowave/core/store/index/package-summary.html">org.locationtech.geowave.core.store.index</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -2604,6 +2643,13 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>interface&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/CustomIndexStrategy.html" title="interface in org.locationtech.geowave.core.store.index">CustomIndexStrategy</a>&lt;E,C extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>&gt;</span></code>
+<div class="block">This interface is the most straightforward mechanism to add custom indexing of any arbitrary
+ logic to a GeoWave datastore.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>interface&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/FieldIndexStrategy.html" title="interface in org.locationtech.geowave.core.store.index">FieldIndexStrategy</a>&lt;ConstraintType extends <a href="../../../../../../../org/locationtech/geowave/core/store/index/FilterableConstraints.html" title="interface in org.locationtech.geowave.core.store.index">FilterableConstraints</a>,FieldType&gt;</span></code>
 <div class="block">Interface which defines an index strategy.</div>
@@ -2626,19 +2672,25 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/CustomNameIndex.html" title="class in org.locationtech.geowave.core.store.index">CustomNameIndex</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/CustomIndexImpl.html" title="class in org.locationtech.geowave.core.store.index">CustomIndexImpl</a>&lt;E,C extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>&gt;</span></code>
+<div class="block">This is a basic wrapper around a custom index strategy</div>
+</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/CustomNameIndex.html" title="class in org.locationtech.geowave.core.store.index">CustomNameIndex</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/IndexImpl.html" title="class in org.locationtech.geowave.core.store.index">IndexImpl</a></span></code>
 <div class="block">This class fully describes everything necessary to index data within GeoWave.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/IndexMetaDataSet.html" title="class in org.locationtech.geowave.core.store.index">IndexMetaDataSet</a>&lt;T&gt;</span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/NullIndex.html" title="class in org.locationtech.geowave.core.store.index">NullIndex</a></span></code>
 <div class="block">This can be used as a pass-through for an index.</div>
@@ -2854,6 +2906,23 @@
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a> in <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/package-summary.html">org.locationtech.geowave.core.store.query.constraints</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/package-summary.html">org.locationtech.geowave.core.store.query.constraints</a> with type parameters of type <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/CustomQueryConstraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">CustomQueryConstraints</a>&lt;C extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/CustomQueryConstraints.InternalCustomConstraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">CustomQueryConstraints.InternalCustomConstraints</a>&lt;C extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subinterfaces, and an explanation">
 <caption><span>Subinterfaces of <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a> in <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/package-summary.html">org.locationtech.geowave.core.store.query.constraints</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -2917,6 +2986,14 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/CustomQueryConstraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">CustomQueryConstraints</a>&lt;C extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/CustomQueryConstraints.InternalCustomConstraints.html" title="class in org.locationtech.geowave.core.store.query.constraints">CustomQueryConstraints.InternalCustomConstraints</a>&lt;C extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/DataIdQuery.html" title="class in org.locationtech.geowave.core.store.query.constraints">DataIdQuery</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -2938,6 +3015,19 @@
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/SimpleNumericQuery.html" title="class in org.locationtech.geowave.core.store.query.constraints">SimpleNumericQuery</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/package-summary.html">org.locationtech.geowave.core.store.query.constraints</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
+<td class="colLast"><span class="typeNameLabel">QueryConstraintsFactoryImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraintsFactoryImpl.html#customConstraints-org.locationtech.geowave.core.index.persist.Persistable-">customConstraints</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>&nbsp;customConstraints)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -3485,6 +3575,6 @@
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2013&#x2013;2019. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2013&#x2013;2020. All rights reserved.</small></p>
 </body>
 </html>

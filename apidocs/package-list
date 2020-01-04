@@ -198,6 +198,7 @@ org.locationtech.geowave.datastore.accumulo.operations.config
 org.locationtech.geowave.datastore.accumulo.split
 org.locationtech.geowave.datastore.accumulo.util
 org.locationtech.geowave.datastore.bigtable
+org.locationtech.geowave.datastore.bigtable.cli
 org.locationtech.geowave.datastore.bigtable.config
 org.locationtech.geowave.datastore.bigtable.operations
 org.locationtech.geowave.datastore.cassandra
