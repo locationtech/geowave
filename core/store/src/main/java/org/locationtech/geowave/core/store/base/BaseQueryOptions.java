@@ -433,7 +433,8 @@ public class BaseQueryOptions {
       final IndexStore indexStore,
       final QueryConstraints query) {
     return BaseDataStoreUtils.chooseBestIndex(
-        getAdaptersWithMinimalSetOfIndices(adapterStore, adapterIndexMappingStore, indexStore),
+        BaseDataStoreUtils.combineByIndex(
+            compileIndicesForAdapters(adapterStore, adapterIndexMappingStore, indexStore, true)),
         query);
   }
 

@@ -58,7 +58,8 @@ public class GeoWaveRedisRowCodec extends BaseCodec {
         return new GeoWaveRedisPersistedRow(
             (short) numDuplicates,
             dataId,
-            new GeoWaveValueImpl(fieldMask, visibility, value));
+            new GeoWaveValueImpl(fieldMask, visibility, value),
+            in.available() > 0 ? (short) in.readUnsignedByte() : null);
       }
     }
   };
@@ -71,6 +72,9 @@ public class GeoWaveRedisRowCodec extends BaseCodec {
 
         try (final ByteBufOutputStream out = new ByteBufOutputStream(buf)) {
           encodeRow(out, row, visibilityEnabled);
+          if (row.getDuplicateId() != null) {
+            out.writeByte(row.getDuplicateId());
+          }
           out.flush();
           return out.buffer();
         }

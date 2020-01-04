@@ -98,7 +98,7 @@ public class ChooseBestMatchIndexQueryStrategy implements IndexQueryStrategySPI 
             final QueryRanges ranges =
                 DataStoreUtils.constraintsToQueryRanges(
                     constraints,
-                    nextIdx.getIndexStrategy(),
+                    nextIdx,
                     null,
                     maxRangeDecomposition);
             final long temp = DataStoreUtils.cardinality(nextIdx, stats, ranges);

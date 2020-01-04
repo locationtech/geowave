@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.store.query.constraints;
 
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
+import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.api.QueryConstraintsFactory;
 import org.locationtech.geowave.core.store.query.constraints.BasicOrderedConstraintQuery.OrderedConstraints;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintsByClass;
@@ -34,6 +35,10 @@ public class QueryConstraintsFactoryImpl implements QueryConstraintsFactory {
       final NumericIndexStrategy indexStrategy,
       final MultiDimensionalCoordinateRangesArray[] coordinateRanges) {
     return new CoordinateRangeQuery(indexStrategy, coordinateRanges);
+  }
+
+  public QueryConstraints customConstraints(final Persistable customConstraints) {
+    return new CustomQueryConstraints<>(customConstraints);
   }
 
   @Override

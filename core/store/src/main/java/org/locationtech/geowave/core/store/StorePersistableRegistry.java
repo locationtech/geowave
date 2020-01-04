@@ -27,6 +27,7 @@ import org.locationtech.geowave.core.store.api.Query;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
 import org.locationtech.geowave.core.store.index.BasicIndexModel;
+import org.locationtech.geowave.core.store.index.CustomIndexImpl;
 import org.locationtech.geowave.core.store.index.CustomNameIndex;
 import org.locationtech.geowave.core.store.index.IndexImpl;
 import org.locationtech.geowave.core.store.index.IndexMetaDataSet;
@@ -45,7 +46,9 @@ import org.locationtech.geowave.core.store.query.constraints.BasicOrderedConstra
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintsByClass;
+import org.locationtech.geowave.core.store.query.constraints.CustomQueryConstraints.InternalCustomConstraints;
 import org.locationtech.geowave.core.store.query.constraints.CoordinateRangeQuery;
+import org.locationtech.geowave.core.store.query.constraints.CustomQueryConstraints;
 import org.locationtech.geowave.core.store.query.constraints.DataIdQuery;
 import org.locationtech.geowave.core.store.query.constraints.DataIdRangeQuery;
 import org.locationtech.geowave.core.store.query.constraints.EverythingQuery;
@@ -132,6 +135,9 @@ public class StorePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 259, BasicOrderedConstraintQuery::new),
         new PersistableIdAndConstructor((short) 260, BasicQuery::new),
         new PersistableIdAndConstructor((short) 261, BinaryDataAdapter::new),
-        new PersistableIdAndConstructor((short) 262, InternalDataAdapterWrapper::new)};
+        new PersistableIdAndConstructor((short) 262, InternalDataAdapterWrapper::new),
+        new PersistableIdAndConstructor((short) 263, CustomIndexImpl::new),
+        new PersistableIdAndConstructor((short) 264, CustomQueryConstraints::new),
+        new PersistableIdAndConstructor((short) 265, InternalCustomConstraints::new)};
   }
 }
