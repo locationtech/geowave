@@ -16,6 +16,7 @@ import org.locationtech.geowave.datastore.kudu.config.KuduRequiredOptions;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.locationtech.geowave.datastore.kudu.cli.KuduLocal;
 
 public class KuduStoreTestEnvironment extends StoreTestEnvironment {
 
