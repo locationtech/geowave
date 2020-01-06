@@ -317,7 +317,7 @@ public class GeoServerRestClient {
     if ((adapterInfoList.size() > 1) && (adapterId == null)) {
       LOGGER.debug("addlayer doesn't know how to deal with multiple adapters");
 
-      final String descr = "Please use -a, or choose one of these with -id:";
+      final String descr = "Failed to add layer(s). Please use -a, or choose one of these layers with -id:";
       final JSONObject jsonObj = getJsonFromAdapters(adapterInfoList, descr);
 
       LOGGER.debug(jsonObj.toString());
