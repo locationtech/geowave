@@ -64,7 +64,7 @@ public class DataBufferPersistenceUtils {
         bldr.setByteDb(byteBldr.build());
         break;
       case DataBuffer.TYPE_SHORT:
-        setBuilder(shortToInt(((DataBufferUShort) dataBuffer).getBankData()), bldr);
+        setBuilder(shortToInt(((DataBufferShort) dataBuffer).getBankData()), bldr);
         break;
       case DataBuffer.TYPE_USHORT:
         setBuilder(shortToInt(((DataBufferUShort) dataBuffer).getBankData()), bldr);

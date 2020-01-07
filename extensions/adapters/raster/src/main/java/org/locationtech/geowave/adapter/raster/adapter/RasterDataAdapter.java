@@ -91,6 +91,7 @@ import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.CompoundIndexStrategy;
 import org.locationtech.geowave.core.index.HierarchicalNumericIndexStrategy;
 import org.locationtech.geowave.core.index.HierarchicalNumericIndexStrategy.SubStrategy;
+import org.locationtech.geowave.core.index.IndexUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
@@ -495,10 +496,15 @@ public class RasterDataAdapter implements
       final MultiDimensionalNumericData bounds;
       if (indexCrs.equals(GeometryUtils.getDefaultCRS())) {
         bounds =
-            GeometryUtils.basicConstraintSetFromEnvelope(
-                projectedReferenceEnvelope).getIndexConstraints(indexStrategy);
+            IndexUtils.clampAtIndexBounds(
+                GeometryUtils.basicConstraintSetFromEnvelope(
+                    projectedReferenceEnvelope).getIndexConstraints(indexStrategy),
+                indexStrategy);
       } else {
-        bounds = GeometryUtils.getBoundsFromEnvelope(projectedReferenceEnvelope);
+        bounds =
+            IndexUtils.clampAtIndexBounds(
+                GeometryUtils.getBoundsFromEnvelope(projectedReferenceEnvelope),
+                indexStrategy);
       }
 
       final GridEnvelope gridEnvelope = gridCoverage.getGridGeometry().getGridRange();
@@ -1137,7 +1143,8 @@ public class RasterDataAdapter implements
     final List<byte[]> entryBinaries = new ArrayList<>();
     for (final Entry<String, String> e : metadata.entrySet()) {
       final byte[] keyBytes = StringUtils.stringToBinary(e.getKey());
-      final byte[] valueBytes = StringUtils.stringToBinary(e.getValue());
+      final byte[] valueBytes =
+          e.getValue() == null ? new byte[0] : StringUtils.stringToBinary(e.getValue());
 
       final int entryBinaryLength =
           VarintUtils.unsignedIntByteLength(keyBytes.length) + valueBytes.length + keyBytes.length;

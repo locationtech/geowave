@@ -153,7 +153,12 @@ public class GeoToolsRasterDataStoreIngestPlugin implements LocalFileIngestPlugi
           final String[] mdNames = reader.getMetadataNames(coverageName);
           if ((mdNames != null) && (mdNames.length > 0)) {
             for (final String mdName : mdNames) {
-              metadata.put(mdName, reader.getMetadataValue(coverageName, mdName));
+              if (mdName != null) {
+                String value = reader.getMetadataValue(coverageName, mdName);
+                if (value != null) {
+                  metadata.put(mdName, value);
+                }
+              }
             }
           }
         } catch (final Exception e) {
