@@ -207,6 +207,7 @@ org.locationtech.geowave.datastore.cassandra.config
 org.locationtech.geowave.datastore.cassandra.operations
 org.locationtech.geowave.datastore.cassandra.util
 org.locationtech.geowave.datastore.dynamodb
+org.locationtech.geowave.datastore.dynamodb.cli
 org.locationtech.geowave.datastore.dynamodb.config
 org.locationtech.geowave.datastore.dynamodb.operations
 org.locationtech.geowave.datastore.dynamodb.util
@@ -223,6 +224,7 @@ org.locationtech.geowave.datastore.hbase.query.protobuf
 org.locationtech.geowave.datastore.hbase.server
 org.locationtech.geowave.datastore.hbase.util
 org.locationtech.geowave.datastore.kudu
+org.locationtech.geowave.datastore.kudu.cli
 org.locationtech.geowave.datastore.kudu.config
 org.locationtech.geowave.datastore.kudu.operations
 org.locationtech.geowave.datastore.kudu.util
