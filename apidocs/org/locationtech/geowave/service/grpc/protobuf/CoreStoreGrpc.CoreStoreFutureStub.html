@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -160,38 +160,46 @@ extends io.grpc.stub.AbstractStub&lt;<a href="../../../../../../org/locationtech
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/CoreStoreGrpc.CoreStoreFutureStub.html#clearStoreCommand-org.locationtech.geowave.service.grpc.protobuf.ClearStoreCommandParametersProtos-">clearStoreCommand</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/ClearStoreCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ClearStoreCommandParametersProtos</a>&nbsp;request)</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code>com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.StringResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.StringResponseProtos</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/CoreStoreGrpc.CoreStoreFutureStub.html#listIndicesCommand-org.locationtech.geowave.service.grpc.protobuf.ListIndicesCommandParametersProtos-">listIndicesCommand</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/ListIndicesCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ListIndicesCommandParametersProtos</a>&nbsp;request)</code>&nbsp;</td>
+<td class="colFirst"><code>com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.MapStringStringResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.MapStringStringResponseProtos</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/CoreStoreGrpc.CoreStoreFutureStub.html#describeStoreCommand-org.locationtech.geowave.service.grpc.protobuf.DescribeStoreCommandParametersProtos-">describeStoreCommand</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/DescribeStoreCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">DescribeStoreCommandParametersProtos</a>&nbsp;request)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.StringResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.StringResponseProtos</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/CoreStoreGrpc.CoreStoreFutureStub.html#listStatsCommand-org.locationtech.geowave.service.grpc.protobuf.ListStatsCommandParametersProtos-">listStatsCommand</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/ListStatsCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ListStatsCommandParametersProtos</a>&nbsp;request)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/CoreStoreGrpc.CoreStoreFutureStub.html#listIndicesCommand-org.locationtech.geowave.service.grpc.protobuf.ListIndicesCommandParametersProtos-">listIndicesCommand</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/ListIndicesCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ListIndicesCommandParametersProtos</a>&nbsp;request)</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.StringResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.StringResponseProtos</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/CoreStoreGrpc.CoreStoreFutureStub.html#listTypesCommand-org.locationtech.geowave.service.grpc.protobuf.ListTypesCommandParametersProtos-">listTypesCommand</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/ListTypesCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ListTypesCommandParametersProtos</a>&nbsp;request)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/CoreStoreGrpc.CoreStoreFutureStub.html#listStatsCommand-org.locationtech.geowave.service.grpc.protobuf.ListStatsCommandParametersProtos-">listStatsCommand</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/ListStatsCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ListStatsCommandParametersProtos</a>&nbsp;request)</code>&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
-<td class="colFirst"><code>com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.VoidResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.VoidResponseProtos</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/CoreStoreGrpc.CoreStoreFutureStub.html#recalculateStatsCommand-org.locationtech.geowave.service.grpc.protobuf.RecalculateStatsCommandParametersProtos-">recalculateStatsCommand</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RecalculateStatsCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RecalculateStatsCommandParametersProtos</a>&nbsp;request)</code>&nbsp;</td>
+<td class="colFirst"><code>com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.MapStringStringResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.MapStringStringResponseProtos</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/CoreStoreGrpc.CoreStoreFutureStub.html#listStoresCommand-org.locationtech.geowave.service.grpc.protobuf.ListStoresCommandParametersProtos-">listStoresCommand</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/ListStoresCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ListStoresCommandParametersProtos</a>&nbsp;request)</code>&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.StringResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.StringResponseProtos</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/CoreStoreGrpc.CoreStoreFutureStub.html#removeIndexCommand-org.locationtech.geowave.service.grpc.protobuf.RemoveIndexCommandParametersProtos-">removeIndexCommand</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveIndexCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveIndexCommandParametersProtos</a>&nbsp;request)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/CoreStoreGrpc.CoreStoreFutureStub.html#listTypesCommand-org.locationtech.geowave.service.grpc.protobuf.ListTypesCommandParametersProtos-">listTypesCommand</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/ListTypesCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ListTypesCommandParametersProtos</a>&nbsp;request)</code>&nbsp;</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.VoidResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.VoidResponseProtos</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/CoreStoreGrpc.CoreStoreFutureStub.html#removeStatCommand-org.locationtech.geowave.service.grpc.protobuf.RemoveStatCommandParametersProtos-">removeStatCommand</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParametersProtos</a>&nbsp;request)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/CoreStoreGrpc.CoreStoreFutureStub.html#recalculateStatsCommand-org.locationtech.geowave.service.grpc.protobuf.RecalculateStatsCommandParametersProtos-">recalculateStatsCommand</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RecalculateStatsCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RecalculateStatsCommandParametersProtos</a>&nbsp;request)</code>&nbsp;</td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.StringResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.StringResponseProtos</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/CoreStoreGrpc.CoreStoreFutureStub.html#removeStoreCommand-org.locationtech.geowave.service.grpc.protobuf.RemoveStoreCommandParametersProtos-">removeStoreCommand</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStoreCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStoreCommandParametersProtos</a>&nbsp;request)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/CoreStoreGrpc.CoreStoreFutureStub.html#removeIndexCommand-org.locationtech.geowave.service.grpc.protobuf.RemoveIndexCommandParametersProtos-">removeIndexCommand</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveIndexCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveIndexCommandParametersProtos</a>&nbsp;request)</code>&nbsp;</td>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.VoidResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.VoidResponseProtos</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/CoreStoreGrpc.CoreStoreFutureStub.html#removeTypeCommand-org.locationtech.geowave.service.grpc.protobuf.RemoveTypeCommandParametersProtos-">removeTypeCommand</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveTypeCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveTypeCommandParametersProtos</a>&nbsp;request)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/CoreStoreGrpc.CoreStoreFutureStub.html#removeStatCommand-org.locationtech.geowave.service.grpc.protobuf.RemoveStatCommandParametersProtos-">removeStatCommand</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParametersProtos</a>&nbsp;request)</code>&nbsp;</td>
 </tr>
 <tr id="i13" class="rowColor">
+<td class="colFirst"><code>com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.StringResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.StringResponseProtos</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/CoreStoreGrpc.CoreStoreFutureStub.html#removeStoreCommand-org.locationtech.geowave.service.grpc.protobuf.RemoveStoreCommandParametersProtos-">removeStoreCommand</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStoreCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStoreCommandParametersProtos</a>&nbsp;request)</code>&nbsp;</td>
+</tr>
+<tr id="i14" class="altColor">
+<td class="colFirst"><code>com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.VoidResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.VoidResponseProtos</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/CoreStoreGrpc.CoreStoreFutureStub.html#removeTypeCommand-org.locationtech.geowave.service.grpc.protobuf.RemoveTypeCommandParametersProtos-">removeTypeCommand</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveTypeCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveTypeCommandParametersProtos</a>&nbsp;request)</code>&nbsp;</td>
+</tr>
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.StringResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.StringResponseProtos</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/CoreStoreGrpc.CoreStoreFutureStub.html#versionCommand-org.locationtech.geowave.service.grpc.protobuf.VersionCommandParametersProtos-">versionCommand</a></span>(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/VersionCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">VersionCommandParametersProtos</a>&nbsp;request)</code>&nbsp;</td>
 </tr>
@@ -238,58 +246,13 @@ extends io.grpc.stub.AbstractStub&lt;<a href="../../../../../../org/locationtech
 </dl>
 </li>
 </ul>
-<a name="calculateStatCommand-org.locationtech.geowave.service.grpc.protobuf.CalculateStatCommandParametersProtos-">
+<a name="listStoresCommand-org.locationtech.geowave.service.grpc.protobuf.ListStoresCommandParametersProtos-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>calculateStatCommand</h4>
-<pre>public&nbsp;com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.VoidResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.VoidResponseProtos</a>&gt;&nbsp;calculateStatCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/CalculateStatCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">CalculateStatCommandParametersProtos</a>&nbsp;request)</pre>
-</li>
-</ul>
-<a name="addIndexCommand-org.locationtech.geowave.service.grpc.protobuf.AddIndexCommandParametersProtos-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>addIndexCommand</h4>
-<pre>public&nbsp;com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.StringResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.StringResponseProtos</a>&gt;&nbsp;addIndexCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AddIndexCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">AddIndexCommandParametersProtos</a>&nbsp;request)</pre>
-</li>
-</ul>
-<a name="listStatsCommand-org.locationtech.geowave.service.grpc.protobuf.ListStatsCommandParametersProtos-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>listStatsCommand</h4>
-<pre>public&nbsp;com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.StringResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.StringResponseProtos</a>&gt;&nbsp;listStatsCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/ListStatsCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ListStatsCommandParametersProtos</a>&nbsp;request)</pre>
-</li>
-</ul>
-<a name="listIndicesCommand-org.locationtech.geowave.service.grpc.protobuf.ListIndicesCommandParametersProtos-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>listIndicesCommand</h4>
-<pre>public&nbsp;com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.StringResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.StringResponseProtos</a>&gt;&nbsp;listIndicesCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/ListIndicesCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ListIndicesCommandParametersProtos</a>&nbsp;request)</pre>
-</li>
-</ul>
-<a name="removeIndexCommand-org.locationtech.geowave.service.grpc.protobuf.RemoveIndexCommandParametersProtos-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>removeIndexCommand</h4>
-<pre>public&nbsp;com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.StringResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.StringResponseProtos</a>&gt;&nbsp;removeIndexCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveIndexCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveIndexCommandParametersProtos</a>&nbsp;request)</pre>
-</li>
-</ul>
-<a name="listTypesCommand-org.locationtech.geowave.service.grpc.protobuf.ListTypesCommandParametersProtos-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>listTypesCommand</h4>
-<pre>public&nbsp;com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.StringResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.StringResponseProtos</a>&gt;&nbsp;listTypesCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/ListTypesCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ListTypesCommandParametersProtos</a>&nbsp;request)</pre>
+<h4>listStoresCommand</h4>
+<pre>public&nbsp;com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.MapStringStringResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.MapStringStringResponseProtos</a>&gt;&nbsp;listStoresCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/ListStoresCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ListStoresCommandParametersProtos</a>&nbsp;request)</pre>
 </li>
 </ul>
 <a name="removeStatCommand-org.locationtech.geowave.service.grpc.protobuf.RemoveStatCommandParametersProtos-">
@@ -301,22 +264,22 @@ extends io.grpc.stub.AbstractStub&lt;<a href="../../../../../../org/locationtech
 <pre>public&nbsp;com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.VoidResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.VoidResponseProtos</a>&gt;&nbsp;removeStatCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStatCommandParametersProtos</a>&nbsp;request)</pre>
 </li>
 </ul>
-<a name="addStoreCommand-org.locationtech.geowave.service.grpc.protobuf.AddStoreCommandParametersProtos-">
+<a name="addIndexCommand-org.locationtech.geowave.service.grpc.protobuf.AddIndexCommandParametersProtos-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>addStoreCommand</h4>
-<pre>public&nbsp;com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.StringResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.StringResponseProtos</a>&gt;&nbsp;addStoreCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AddStoreCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">AddStoreCommandParametersProtos</a>&nbsp;request)</pre>
+<h4>addIndexCommand</h4>
+<pre>public&nbsp;com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.StringResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.StringResponseProtos</a>&gt;&nbsp;addIndexCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AddIndexCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">AddIndexCommandParametersProtos</a>&nbsp;request)</pre>
 </li>
 </ul>
-<a name="recalculateStatsCommand-org.locationtech.geowave.service.grpc.protobuf.RecalculateStatsCommandParametersProtos-">
+<a name="listTypesCommand-org.locationtech.geowave.service.grpc.protobuf.ListTypesCommandParametersProtos-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>recalculateStatsCommand</h4>
-<pre>public&nbsp;com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.VoidResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.VoidResponseProtos</a>&gt;&nbsp;recalculateStatsCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RecalculateStatsCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RecalculateStatsCommandParametersProtos</a>&nbsp;request)</pre>
+<h4>listTypesCommand</h4>
+<pre>public&nbsp;com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.StringResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.StringResponseProtos</a>&gt;&nbsp;listTypesCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/ListTypesCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ListTypesCommandParametersProtos</a>&nbsp;request)</pre>
 </li>
 </ul>
 <a name="removeTypeCommand-org.locationtech.geowave.service.grpc.protobuf.RemoveTypeCommandParametersProtos-">
@@ -337,22 +300,85 @@ extends io.grpc.stub.AbstractStub&lt;<a href="../../../../../../org/locationtech
 <pre>public&nbsp;com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.StringResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.StringResponseProtos</a>&gt;&nbsp;removeStoreCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveStoreCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveStoreCommandParametersProtos</a>&nbsp;request)</pre>
 </li>
 </ul>
-<a name="clearStoreCommand-org.locationtech.geowave.service.grpc.protobuf.ClearStoreCommandParametersProtos-">
+<a name="removeIndexCommand-org.locationtech.geowave.service.grpc.protobuf.RemoveIndexCommandParametersProtos-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>clearStoreCommand</h4>
-<pre>public&nbsp;com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.VoidResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.VoidResponseProtos</a>&gt;&nbsp;clearStoreCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/ClearStoreCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ClearStoreCommandParametersProtos</a>&nbsp;request)</pre>
+<h4>removeIndexCommand</h4>
+<pre>public&nbsp;com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.StringResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.StringResponseProtos</a>&gt;&nbsp;removeIndexCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RemoveIndexCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RemoveIndexCommandParametersProtos</a>&nbsp;request)</pre>
+</li>
+</ul>
+<a name="addStoreCommand-org.locationtech.geowave.service.grpc.protobuf.AddStoreCommandParametersProtos-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addStoreCommand</h4>
+<pre>public&nbsp;com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.StringResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.StringResponseProtos</a>&gt;&nbsp;addStoreCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/AddStoreCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">AddStoreCommandParametersProtos</a>&nbsp;request)</pre>
+</li>
+</ul>
+<a name="calculateStatCommand-org.locationtech.geowave.service.grpc.protobuf.CalculateStatCommandParametersProtos-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>calculateStatCommand</h4>
+<pre>public&nbsp;com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.VoidResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.VoidResponseProtos</a>&gt;&nbsp;calculateStatCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/CalculateStatCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">CalculateStatCommandParametersProtos</a>&nbsp;request)</pre>
+</li>
+</ul>
+<a name="describeStoreCommand-org.locationtech.geowave.service.grpc.protobuf.DescribeStoreCommandParametersProtos-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>describeStoreCommand</h4>
+<pre>public&nbsp;com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.MapStringStringResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.MapStringStringResponseProtos</a>&gt;&nbsp;describeStoreCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/DescribeStoreCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">DescribeStoreCommandParametersProtos</a>&nbsp;request)</pre>
+</li>
+</ul>
+<a name="listStatsCommand-org.locationtech.geowave.service.grpc.protobuf.ListStatsCommandParametersProtos-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>listStatsCommand</h4>
+<pre>public&nbsp;com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.StringResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.StringResponseProtos</a>&gt;&nbsp;listStatsCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/ListStatsCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ListStatsCommandParametersProtos</a>&nbsp;request)</pre>
 </li>
 </ul>
 <a name="versionCommand-org.locationtech.geowave.service.grpc.protobuf.VersionCommandParametersProtos-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>versionCommand</h4>
 <pre>public&nbsp;com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.StringResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.StringResponseProtos</a>&gt;&nbsp;versionCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/VersionCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">VersionCommandParametersProtos</a>&nbsp;request)</pre>
+</li>
+</ul>
+<a name="recalculateStatsCommand-org.locationtech.geowave.service.grpc.protobuf.RecalculateStatsCommandParametersProtos-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>recalculateStatsCommand</h4>
+<pre>public&nbsp;com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.VoidResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.VoidResponseProtos</a>&gt;&nbsp;recalculateStatsCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/RecalculateStatsCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">RecalculateStatsCommandParametersProtos</a>&nbsp;request)</pre>
+</li>
+</ul>
+<a name="listIndicesCommand-org.locationtech.geowave.service.grpc.protobuf.ListIndicesCommandParametersProtos-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>listIndicesCommand</h4>
+<pre>public&nbsp;com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.StringResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.StringResponseProtos</a>&gt;&nbsp;listIndicesCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/ListIndicesCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ListIndicesCommandParametersProtos</a>&nbsp;request)</pre>
+</li>
+</ul>
+<a name="clearStoreCommand-org.locationtech.geowave.service.grpc.protobuf.ClearStoreCommandParametersProtos-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>clearStoreCommand</h4>
+<pre>public&nbsp;com.google.common.util.concurrent.ListenableFuture&lt;<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/GeoWaveReturnTypesProtos.VoidResponseProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">GeoWaveReturnTypesProtos.VoidResponseProtos</a>&gt;&nbsp;clearStoreCommand(<a href="../../../../../../org/locationtech/geowave/service/grpc/protobuf/ClearStoreCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ClearStoreCommandParametersProtos</a>&nbsp;request)</pre>
 </li>
 </ul>
 </li>
