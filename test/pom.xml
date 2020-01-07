@@ -194,6 +194,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-datastore-redis</artifactId>
@@ -302,6 +303,16 @@
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-cli-bigtable-embed</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-cli-dynamodb-embed</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-cli-kudu-embed</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
