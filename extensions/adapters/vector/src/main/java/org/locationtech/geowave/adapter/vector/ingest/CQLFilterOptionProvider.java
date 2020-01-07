@@ -8,8 +8,8 @@
  */
 package org.locationtech.geowave.adapter.vector.ingest;
 
-import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
+import org.geotools.filter.text.ecql.ECQL;
 import org.locationtech.geowave.core.cli.converters.GeoWaveBaseConverter;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
@@ -79,7 +79,7 @@ public class CQLFilterOptionProvider implements Filter, Persistable {
   }
 
   private static Filter asFilter(final String cqlPredicate) throws CQLException {
-    return CQL.toFilter(cqlPredicate);
+    return ECQL.toFilter(cqlPredicate);
   }
 
   /** This class will ensure that as the CQLFilterString is read in and converted to a filter. */
