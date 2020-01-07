@@ -359,28 +359,33 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
-<td class="colLast"><span class="typeNameLabel">IndexUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/IndexUtils.html#getFullBounds-org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition:A-">getFullBounds</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">IndexUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/IndexUtils.html#clampAtIndexBounds-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.NumericIndexStrategy-">clampAtIndexBounds</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;data,
+                  <a href="../../../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
-<td class="colLast"><span class="typeNameLabel">IndexUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/IndexUtils.html#getFullBounds-org.locationtech.geowave.core.index.NumericIndexStrategy-">getFullBounds</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">IndexUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/IndexUtils.html#getFullBounds-org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition:A-">getFullBounds</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
+<td class="colLast"><span class="typeNameLabel">IndexUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/IndexUtils.html#getFullBounds-org.locationtech.geowave.core.index.NumericIndexStrategy-">getFullBounds</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
 <td class="colLast"><span class="typeNameLabel">PartitionIndexStrategyWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategyWrapper.html#getRangeForId-byte:A-byte:A-">getRangeForId</a></span>(byte[]&nbsp;partitionKey,
              byte[]&nbsp;sortKey)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
 <td class="colLast"><span class="typeNameLabel">NullNumericIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/NullNumericIndexStrategy.html#getRangeForId-byte:A-byte:A-">getRangeForId</a></span>(byte[]&nbsp;partitionKey,
              byte[]&nbsp;sortKey)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CompoundIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/CompoundIndexStrategy.html#getRangeForId-byte:A-byte:A-">getRangeForId</a></span>(byte[]&nbsp;partitionKey,
              byte[]&nbsp;sortKey)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
 <td class="colLast"><span class="typeNameLabel">NumericIndexStrategyWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategyWrapper.html#getRangeForId-byte:A-byte:A-">getRangeForId</a></span>(byte[]&nbsp;partitionKey,
              byte[]&nbsp;sortKey)</code>&nbsp;</td>
@@ -412,21 +417,26 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
+<td class="colLast"><span class="typeNameLabel">IndexUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/IndexUtils.html#clampAtIndexBounds-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.NumericIndexStrategy-">clampAtIndexBounds</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;data,
+                  <a href="../../../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/MultiDimensionalCoordinateRanges.html" title="class in org.locationtech.geowave.core.index">MultiDimensionalCoordinateRanges</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">PartitionIndexStrategyWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategyWrapper.html#getCoordinateRangesPerDimension-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.IndexMetaData...-">getCoordinateRangesPerDimension</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;dataRange,
                                <a href="../../../../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/MultiDimensionalCoordinateRanges.html" title="class in org.locationtech.geowave.core.index">MultiDimensionalCoordinateRanges</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">NullNumericIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/NullNumericIndexStrategy.html#getCoordinateRangesPerDimension-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.IndexMetaData...-">getCoordinateRangesPerDimension</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;dataRange,
                                <a href="../../../../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/MultiDimensionalCoordinateRanges.html" title="class in org.locationtech.geowave.core.index">MultiDimensionalCoordinateRanges</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">CompoundIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/CompoundIndexStrategy.html#getCoordinateRangesPerDimension-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.IndexMetaData...-">getCoordinateRangesPerDimension</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;dataRange,
                                <a href="../../../../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/MultiDimensionalCoordinateRanges.html" title="class in org.locationtech.geowave.core.index">MultiDimensionalCoordinateRanges</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">NumericIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html#getCoordinateRangesPerDimension-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.IndexMetaData...-">getCoordinateRangesPerDimension</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;dataRange,
                                <a href="../../../../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</code>
@@ -434,133 +444,133 @@
  that dimension is continuous</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/MultiDimensionalCoordinateRanges.html" title="class in org.locationtech.geowave.core.index">MultiDimensionalCoordinateRanges</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">NumericIndexStrategyWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategyWrapper.html#getCoordinateRangesPerDimension-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.IndexMetaData...-">getCoordinateRangesPerDimension</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;dataRange,
                                <a href="../../../../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
 <td class="colLast"><span class="typeNameLabel">PartitionIndexStrategyWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategyWrapper.html#getInsertionIds-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-">getInsertionIds</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedData)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
 <td class="colLast"><span class="typeNameLabel">NullNumericIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/NullNumericIndexStrategy.html#getInsertionIds-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-">getInsertionIds</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedData)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CompoundIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/CompoundIndexStrategy.html#getInsertionIds-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-">getInsertionIds</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedData)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
 <td class="colLast"><span class="typeNameLabel">NumericIndexStrategyWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategyWrapper.html#getInsertionIds-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-">getInsertionIds</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedData)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
 <td class="colLast"><span class="typeNameLabel">PartitionIndexStrategyWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategyWrapper.html#getInsertionIds-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-int-">getInsertionIds</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedData,
                int&nbsp;maxEstimatedDuplicateIds)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
 <td class="colLast"><span class="typeNameLabel">NullNumericIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/NullNumericIndexStrategy.html#getInsertionIds-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-int-">getInsertionIds</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedData,
                int&nbsp;maxDuplicateInsertionIds)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CompoundIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/CompoundIndexStrategy.html#getInsertionIds-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-int-">getInsertionIds</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedData,
                int&nbsp;maxEstimatedDuplicateIds)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
 <td class="colLast"><span class="typeNameLabel">NumericIndexStrategyWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategyWrapper.html#getInsertionIds-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-int-">getInsertionIds</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedData,
                int&nbsp;maxDuplicateInsertionIds)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>byte[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">PartitionIndexStrategyWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategyWrapper.html#getInsertionPartitionKeys-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-">getInsertionPartitionKeys</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;insertionData)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>byte[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">NullNumericIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/NullNumericIndexStrategy.html#getInsertionPartitionKeys-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-">getInsertionPartitionKeys</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;insertionData)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>byte[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">CompoundIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/CompoundIndexStrategy.html#getInsertionPartitionKeys-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-">getInsertionPartitionKeys</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;insertionData)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>byte[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">NumericIndexStrategyWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategyWrapper.html#getInsertionPartitionKeys-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-">getInsertionPartitionKeys</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;insertionData)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static byte[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">IndexUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/IndexUtils.html#getInsertionPartitionKeys-org.locationtech.geowave.core.index.NumericIndexStrategy-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-">getInsertionPartitionKeys</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;strategy,
                          <a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;insertionData)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>byte[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">PartitionIndexStrategyWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategyWrapper.html#getQueryPartitionKeys-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.IndexMetaData...-">getQueryPartitionKeys</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;queryData,
                      <a href="../../../../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>byte[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">NullNumericIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/NullNumericIndexStrategy.html#getQueryPartitionKeys-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.IndexMetaData...-">getQueryPartitionKeys</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;queryData,
                      <a href="../../../../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>byte[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">CompoundIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/CompoundIndexStrategy.html#getQueryPartitionKeys-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.IndexMetaData...-">getQueryPartitionKeys</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;queryData,
                      <a href="../../../../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>byte[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">NumericIndexStrategyWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategyWrapper.html#getQueryPartitionKeys-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.IndexMetaData...-">getQueryPartitionKeys</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;queryData,
                      <a href="../../../../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static byte[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">IndexUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/IndexUtils.html#getQueryPartitionKeys-org.locationtech.geowave.core.index.NumericIndexStrategy-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.IndexMetaData...-">getQueryPartitionKeys</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a>&nbsp;strategy,
                      <a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;queryData,
                      <a href="../../../../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a></code></td>
 <td class="colLast"><span class="typeNameLabel">PartitionIndexStrategyWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategyWrapper.html#getQueryRanges-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.IndexMetaData...-">getQueryRanges</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedRange,
               <a href="../../../../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a></code></td>
 <td class="colLast"><span class="typeNameLabel">NullNumericIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/NullNumericIndexStrategy.html#getQueryRanges-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.IndexMetaData...-">getQueryRanges</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedRange,
               <a href="../../../../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CompoundIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/CompoundIndexStrategy.html#getQueryRanges-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.IndexMetaData...-">getQueryRanges</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedRange,
               <a href="../../../../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a></code></td>
 <td class="colLast"><span class="typeNameLabel">NumericIndexStrategyWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategyWrapper.html#getQueryRanges-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.IndexMetaData...-">getQueryRanges</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedRange,
               <a href="../../../../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a></code></td>
 <td class="colLast"><span class="typeNameLabel">PartitionIndexStrategyWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategyWrapper.html#getQueryRanges-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-int-org.locationtech.geowave.core.index.IndexMetaData...-">getQueryRanges</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedRange,
               int&nbsp;maxEstimatedRangeDecomposition,
               <a href="../../../../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a></code></td>
 <td class="colLast"><span class="typeNameLabel">NullNumericIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/NullNumericIndexStrategy.html#getQueryRanges-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-int-org.locationtech.geowave.core.index.IndexMetaData...-">getQueryRanges</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedRange,
               int&nbsp;maxRangeDecomposition,
               <a href="../../../../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CompoundIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/CompoundIndexStrategy.html#getQueryRanges-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-int-org.locationtech.geowave.core.index.IndexMetaData...-">getQueryRanges</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedRange,
               int&nbsp;maxEstimatedRangeDecomposition,
               <a href="../../../../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>...&nbsp;hints)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a></code></td>
 <td class="colLast"><span class="typeNameLabel">NumericIndexStrategyWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/NumericIndexStrategyWrapper.html#getQueryRanges-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-int-org.locationtech.geowave.core.index.IndexMetaData...-">getQueryRanges</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexedRange,
               int&nbsp;maxRangeDecomposition,
