@@ -10,10 +10,12 @@ package org.locationtech.geowave.adapter.raster.stats;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
+import org.apache.commons.lang3.ArrayUtils;
 import org.locationtech.geowave.adapter.raster.FitToIndexGridCoverage;
 import org.locationtech.geowave.adapter.raster.Resolution;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
@@ -123,6 +125,25 @@ public class OverviewStatistics extends
   public Resolution[] getResolutions() {
     synchronized (this) {
       return resolutions;
+    }
+  }
+
+  public boolean removeResolution(Resolution res) {
+    synchronized (this) {
+      int index = -1;
+      for (int i = 0; i < resolutions.length; i++) {
+        if (Arrays.equals(
+            resolutions[i].getResolutionPerDimension(),
+            res.getResolutionPerDimension())) {
+          index = i;
+          break;
+        }
+      }
+      if (index >= 0) {
+        resolutions = ArrayUtils.remove(resolutions, index);
+        return true;
+      }
+      return false;
     }
   }
 
