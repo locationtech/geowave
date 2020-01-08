@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -210,14 +210,18 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/adapter/s
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/stats/OverviewStatistics.html#merge-org.locationtech.geowave.core.index.Mergeable-">merge</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>&nbsp;statistics)</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/stats/OverviewStatistics.html#removeResolution-org.locationtech.geowave.adapter.raster.Resolution-">removeResolution</a></span>(<a href="../../../../../../org/locationtech/geowave/adapter/raster/Resolution.html" title="class in org.locationtech.geowave.adapter.raster">Resolution</a>&nbsp;res)</code>&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/stats/OverviewStatistics.html#resultsName--">resultsName</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/stats/OverviewStatistics.html#resultsValue--">resultsValue</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/raster/stats/OverviewStatistics.html#toBinary--">toBinary</a></span>()</code>
 <div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
@@ -361,6 +365,15 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/adapter/s
 <li class="blockList">
 <h4>getResolutions</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/adapter/raster/Resolution.html" title="class in org.locationtech.geowave.adapter.raster">Resolution</a>[]&nbsp;getResolutions()</pre>
+</li>
+</ul>
+<a name="removeResolution-org.locationtech.geowave.adapter.raster.Resolution-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>removeResolution</h4>
+<pre>public&nbsp;boolean&nbsp;removeResolution(<a href="../../../../../../org/locationtech/geowave/adapter/raster/Resolution.html" title="class in org.locationtech.geowave.adapter.raster">Resolution</a>&nbsp;res)</pre>
 </li>
 </ul>
 <a name="getResult--">
