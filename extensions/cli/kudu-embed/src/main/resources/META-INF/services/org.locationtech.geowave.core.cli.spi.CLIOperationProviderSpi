@@ -1,1 +1,1 @@
-org.locationtech.geowave.datastore.bigtable.cli.KuduOperationProvider
+org.locationtech.geowave.datastore.kudu.cli.KuduOperationProvider

@@ -53,8 +53,8 @@ public class RunBigtableEmulator extends DefaultOperation implements Command {
             try {
               server.stop();
             } catch (final Exception e) {
-              LOGGER.warn("Unable to shutdown redis", e);
-              System.out.println("Error shutting down redis.");
+              LOGGER.warn("Unable to shutdown Bigtable", e);
+              System.out.println("Error shutting down Bigtable.");
             }
             System.out.println("Shutting down!");
           }
@@ -66,7 +66,7 @@ public class RunBigtableEmulator extends DefaultOperation implements Command {
       }
 
     } catch (final Exception e) {
-      LOGGER.error("Unable to run embedded Redis server", e);
+      LOGGER.error("Unable to run embedded Bigtable server", e);
     }
 
   }
