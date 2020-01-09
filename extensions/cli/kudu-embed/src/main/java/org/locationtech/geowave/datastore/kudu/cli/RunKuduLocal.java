@@ -52,8 +52,8 @@ public class RunKuduLocal extends DefaultOperation implements Command {
             try {
               server.stop();
             } catch (final Exception e) {
-              LOGGER.warn("Unable to shutdown kudu", e);
-              System.out.println("Error shutting down kudu server.");
+              LOGGER.warn("Unable to shutdown Kudu", e);
+              System.out.println("Error shutting down Kudu server.");
             }
             System.out.println("Shutting down!");
           }
@@ -65,7 +65,7 @@ public class RunKuduLocal extends DefaultOperation implements Command {
       }
 
     } catch (final Exception e) {
-      LOGGER.error("Unable to run embedded kudu server", e);
+      LOGGER.error("Unable to run embedded Kudu server", e);
     }
 
   }
