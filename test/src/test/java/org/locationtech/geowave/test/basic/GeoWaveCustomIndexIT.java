@@ -69,7 +69,7 @@ public class GeoWaveCustomIndexIT {
   protected DataStorePluginOptions dataStoreOptions;
 
   private static enum TestEnum {
-    A(i -> (i % 2) == 0), B(i -> (i % 3) == 0), C(i -> (i % 5) == 0);
+    A(i -> (i % 2) == 0), B(i -> (i % 3) == 0), C(i -> (i % 5) == 0), NOT_A(i -> (i + 1) % 2 == 0);
     private final IntPredicate ingestLogic;
 
     private TestEnum(final IntPredicate ingestLogic) {
@@ -104,19 +104,22 @@ public class GeoWaveCustomIndexIT {
     LOGGER.warn("-----------------------------------------");
   }
 
-  @Before
-  public void init() {
+  public void ingest(boolean addSpatialTemporal) {
     final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
     final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
     final List<SimpleFeature> features =
         getGriddedTemporalFeaturesWithEnumString(new SimpleFeatureBuilder(sft), 6001);
     TestUtils.deleteAll(dataStoreOptions);
     final DataStore dataStore = dataStoreOptions.createDataStore();
-    dataStore.addType(
-        fda,
-        new SpatialIndexBuilder().createIndex(),
-        new SpatialTemporalIndexBuilder().createIndex(),
-        getTestEnumIndex());
+    if (addSpatialTemporal) {
+      dataStore.addType(
+          fda,
+          new SpatialIndexBuilder().createIndex(),
+          new SpatialTemporalIndexBuilder().createIndex(),
+          getTestEnumIndex());
+    } else {
+      dataStore.addType(fda, getTestEnumIndex());
+    }
     try (Writer<SimpleFeature> writer = dataStore.createWriter(sft.getTypeName())) {
       features.stream().forEach(f -> writer.write(f));
     }
@@ -128,9 +131,27 @@ public class GeoWaveCustomIndexIT {
   }
 
   @Test
-  public void testCustomIndexing() {
-    // first make sure spatial and spatial temporal work fine
+  public void testCustomIndexingWithSpatialTemporal() {
+    ingest(true);
+    testQueries(true);
+    // TODO There's an issue with deletion where the IndexMetadataSet delete callback assumes the
+    // GeoWaveRows are from that index (such as spatial/spatial-temporal, when in this case they're
+    // coming from the custom enum index, so it seems the index metadata stat can become
+    // inconsistent, in this case it should throw an ArrayIndexOutOfBoundsException
+    // See Issue #1655
+    // testDeleteByCustomIndex();
 
+  }
+
+
+  @Test
+  public void testCustomIndexingAsOnlyIndex() {
+    ingest(false);
+    testQueries(false);
+    testDeleteByCustomIndex();
+  }
+
+  private void testQueries(boolean spatialTemporal) {
     final DataStore dataStore = dataStoreOptions.createDataStore();
     final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
     final Calendar cal = Calendar.getInstance();
@@ -138,18 +159,25 @@ public class GeoWaveCustomIndexIT {
     final Date startQueryTime = cal.getTime();
     cal.set(1996, Calendar.JUNE, 16, 1, 1, 1);
     Assert.assertEquals(
-        8103L,
+        513L,
         (long) dataStore.aggregateStatistics(
             VectorStatisticsQueryBuilder.newBuilder().factory().count().build()));
     final Date endQueryTime = cal.getTime();
+    if (spatialTemporal) {
+      // if spatial/temporal indexing exists explicitly set the appropriate one
+      bldr.indexName(new SpatialIndexBuilder().createIndex().getName());
+    }
     try (CloseableIterator<SimpleFeature> it =
         dataStore.query(
             bldr.constraints(
                 bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(
                     GeometryUtils.GEOMETRY_FACTORY.toGeometry(
-                        new Envelope(0, 2, 0, 2))).build()).indexName(
-                            new SpatialIndexBuilder().createIndex().getName()).build())) {
+                        new Envelope(0, 2, 0, 2))).build()).build())) {
       Assert.assertEquals(27, Iterators.size(it));
+    }
+    if (spatialTemporal) {
+      // if spatial/temporal indexing exists explicitly set the appropriate one
+      bldr.indexName(new SpatialTemporalIndexBuilder().createIndex().getName());
     }
     try (CloseableIterator<SimpleFeature> it =
         dataStore.query(
@@ -158,8 +186,7 @@ public class GeoWaveCustomIndexIT {
                     GeometryUtils.GEOMETRY_FACTORY.toGeometry(
                         new Envelope(0, 2, 0, 2))).addTimeRange(
                             startQueryTime,
-                            endQueryTime).build()).indexName(
-                                new SpatialTemporalIndexBuilder().createIndex().getName()).build())) {
+                            endQueryTime).build()).build())) {
       Assert.assertEquals(9, Iterators.size(it));
     }
     try (CloseableIterator<SimpleFeature> it =
@@ -168,7 +195,7 @@ public class GeoWaveCustomIndexIT {
                 bldr.constraintsFactory().customConstraints(
                     new TestEnumConstraints(TestEnum.A))).indexName(
                         TEST_ENUM_INDEX_NAME).build())) {
-      Assert.assertEquals(8103 / 2, Iterators.size(it));
+      Assert.assertEquals(513 / 2, Iterators.size(it));
     }
     try (CloseableIterator<SimpleFeature> it =
         dataStore.query(
@@ -176,7 +203,7 @@ public class GeoWaveCustomIndexIT {
                 bldr.constraintsFactory().customConstraints(
                     new TestEnumConstraints(TestEnum.B))).indexName(
                         TEST_ENUM_INDEX_NAME).build())) {
-      Assert.assertEquals(8103 / 3, Iterators.size(it));
+      Assert.assertEquals(513 / 3, Iterators.size(it));
     }
     try (CloseableIterator<SimpleFeature> it =
         dataStore.query(
@@ -184,55 +211,53 @@ public class GeoWaveCustomIndexIT {
                 bldr.constraintsFactory().customConstraints(
                     new TestEnumConstraints(TestEnum.C))).indexName(
                         TEST_ENUM_INDEX_NAME).build())) {
-      Assert.assertEquals(8103 / 5, Iterators.size(it));
+      Assert.assertEquals(513 / 5, Iterators.size(it));
     }
-    // TODO There's an issue with deletion where the IndexMetadataSet delete callback assumes the
-    // GeoWaveRows are from that index (such as spatial/spatial-temporal, when in this case they're
-    // coming from the custom enum index, so it seems the index metadata stat can become
-    // inconsistent, in this case it should throw an ArrayIndexOutOfBoundsException
-    // See Issue #1655
-    //@formatter:off
-//    dataStore.delete(
-//        bldr.constraints(
-//            bldr.constraintsFactory().customConstraints(
-//                new TestEnumConstraints(TestEnum.C))).indexName(TEST_ENUM_INDEX_NAME).build());
-//    try (CloseableIterator<SimpleFeature> it =
-//        dataStore.query(
-//            bldr.constraints(
-//                bldr.constraintsFactory().customConstraints(
-//                    new TestEnumConstraints(TestEnum.C))).indexName(
-//                        TEST_ENUM_INDEX_NAME).build())) {
-//      Assert.assertEquals(0, Iterators.size(it));
-//    }
-//    try (CloseableIterator<SimpleFeature> it =
-//        dataStore.query(
-//            bldr.constraints(
-//                bldr.constraintsFactory().customConstraints(
-//                    new TestEnumConstraints(TestEnum.A))).indexName(
-//                        TEST_ENUM_INDEX_NAME).build())) {
-//      Assert.assertTrue((8103 / 2) > Iterators.size(it));
-//    }
-//    dataStore.delete(
-//        bldr.constraints(
-//            bldr.constraintsFactory().customConstraints(
-//                new TestEnumConstraints(TestEnum.B))).indexName(TEST_ENUM_INDEX_NAME).build());
-//    try (CloseableIterator<SimpleFeature> it =
-//        dataStore.query(
-//            bldr.constraints(
-//                bldr.constraintsFactory().customConstraints(
-//                    new TestEnumConstraints(TestEnum.B))).indexName(
-//                        TEST_ENUM_INDEX_NAME).build())) {
-//      Assert.assertEquals(0, Iterators.size(it));
-//    }
-//    try (CloseableIterator<SimpleFeature> it =
-//        dataStore.query(
-//            bldr.constraints(
-//                bldr.constraintsFactory().customConstraints(
-//                    new TestEnumConstraints(TestEnum.A))).indexName(
-//                        TEST_ENUM_INDEX_NAME).build())) {
-//      Assert.assertTrue((8103 / 2) > Iterators.size(it));
-//    }
-  //@formatter:on
+  }
+
+  private void testDeleteByCustomIndex() {
+    final DataStore dataStore = dataStoreOptions.createDataStore();
+    final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
+    dataStore.delete(
+        bldr.constraints(
+            bldr.constraintsFactory().customConstraints(
+                new TestEnumConstraints(TestEnum.C))).indexName(TEST_ENUM_INDEX_NAME).build());
+    try (CloseableIterator<SimpleFeature> it =
+        dataStore.query(
+            bldr.constraints(
+                bldr.constraintsFactory().customConstraints(
+                    new TestEnumConstraints(TestEnum.C))).indexName(
+                        TEST_ENUM_INDEX_NAME).build())) {
+      Assert.assertEquals(0, Iterators.size(it));
+    }
+    try (CloseableIterator<SimpleFeature> it =
+        dataStore.query(
+            bldr.constraints(
+                bldr.constraintsFactory().customConstraints(
+                    new TestEnumConstraints(TestEnum.A))).indexName(
+                        TEST_ENUM_INDEX_NAME).build())) {
+      Assert.assertTrue((513 / 2) > Iterators.size(it));
+    }
+    dataStore.delete(
+        bldr.constraints(
+            bldr.constraintsFactory().customConstraints(
+                new TestEnumConstraints(TestEnum.B))).indexName(TEST_ENUM_INDEX_NAME).build());
+    try (CloseableIterator<SimpleFeature> it =
+        dataStore.query(
+            bldr.constraints(
+                bldr.constraintsFactory().customConstraints(
+                    new TestEnumConstraints(TestEnum.B))).indexName(
+                        TEST_ENUM_INDEX_NAME).build())) {
+      Assert.assertEquals(0, Iterators.size(it));
+    }
+    try (CloseableIterator<SimpleFeature> it =
+        dataStore.query(
+            bldr.constraints(
+                bldr.constraintsFactory().customConstraints(
+                    new TestEnumConstraints(TestEnum.A))).indexName(
+                        TEST_ENUM_INDEX_NAME).build())) {
+      Assert.assertTrue((513 / 2) > Iterators.size(it));
+    }
   }
 
   private static CustomIndexImpl<SimpleFeature, TestEnumConstraints> getTestEnumIndex() {
@@ -308,8 +333,8 @@ public class GeoWaveCustomIndexIT {
     dates[2] = cal.getTime();
     // put 3 points on each grid location with different temporal attributes
     final List<SimpleFeature> feats = new ArrayList<>();
-    for (int longitude = -36; longitude <= 36; longitude++) {
-      for (int latitude = -18; latitude <= 18; latitude++) {
+    for (int longitude = -9; longitude <= 9; longitude++) {
+      for (int latitude = -4; latitude <= 4; latitude++) {
         for (int date = 0; date < dates.length; date++) {
           pointBuilder.set(
               "geometry",
@@ -320,7 +345,7 @@ public class GeoWaveCustomIndexIT {
           pointBuilder.set("Comment", getCommentValue(featureId));
           // Note since trajectoryID and comment are marked as
           // nillable we
-          // don't need to set them (they default ot null).
+          // don't need to set them (they default to null).
 
           final SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
           feats.add(sft);
@@ -345,4 +370,3 @@ public class GeoWaveCustomIndexIT {
     return null;
   }
 }
-
