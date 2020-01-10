@@ -6,23 +6,17 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.core.store.cli.store;
+package org.locationtech.geowave.core.store.cli.type;
 
 import org.locationtech.geowave.core.cli.spi.CLIOperationProviderSpi;
 
-public class StoreOperationProvider implements CLIOperationProviderSpi {
-
+public class TypeOperationProvider implements CLIOperationProviderSpi {
   private static final Class<?>[] OPERATIONS =
       new Class<?>[] {
-          StoreSection.class,
-          AddStoreCommand.class,
-          ClearStoreCommand.class,
-          CopyStoreCommand.class,
-          CopyConfigStoreCommand.class,
-          DescribeStoreCommand.class,
-          ListStoresCommand.class,
-          RemoveStoreCommand.class,
-          VersionCommand.class};
+          ListTypesCommand.class,
+          RemoveTypeCommand.class,
+          DescribeTypeCommand.class,
+          TypeSection.class};
 
   @Override
   public Class<?>[] getOperations() {

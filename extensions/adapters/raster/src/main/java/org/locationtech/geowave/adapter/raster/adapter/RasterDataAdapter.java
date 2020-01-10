@@ -1884,4 +1884,13 @@ public class RasterDataAdapter implements
       final StatisticsId statisticsId) {
     return visibilityHandler;
   }
+
+  @Override
+  public Map<String, String> describe() {
+    Map<String, String> description = new HashMap<>();
+    description.put("tile size", String.valueOf(tileSize));
+    return description;
+  }
+
+
 }
