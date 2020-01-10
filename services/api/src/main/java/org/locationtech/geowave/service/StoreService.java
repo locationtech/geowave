@@ -23,21 +23,6 @@ import javax.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/v0/store")
 public interface StoreService {
-
-  @GET
-  @Produces(MediaType.APPLICATION_JSON)
-  @Consumes(MediaType.MULTIPART_FORM_DATA)
-  @Path("/listtypes")
-  public Response listTypes(@QueryParam("storeName") final String storeName);
-
-  @POST
-  @Produces(MediaType.APPLICATION_JSON)
-  @Consumes(MediaType.MULTIPART_FORM_DATA)
-  @Path("/rmtype")
-  public Response removeType(
-      @QueryParam("storeName") String storeName,
-      @QueryParam("datatypeName") String typeName);
-
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.MULTIPART_FORM_DATA)

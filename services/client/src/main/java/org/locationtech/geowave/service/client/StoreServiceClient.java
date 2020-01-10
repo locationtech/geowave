@@ -67,16 +67,6 @@ public class StoreServiceClient implements StoreService {
     return target;
   }
 
-  public Response listTypes(final String storeName) {
-    final Response resp = storeService.listTypes(storeName);
-    return resp;
-  }
-
-  public Response removeType(final String storeName, final String typeName) {
-    final Response resp = storeService.removeType(storeName, typeName);
-    return resp;
-  }
-
   public Response version(final String storeName) {
     final Response resp = storeService.version(storeName);
     return resp;

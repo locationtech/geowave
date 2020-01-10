@@ -43,6 +43,7 @@ import org.locationtech.geowave.service.grpc.protobuf.CoreMapreduceGrpc.CoreMapr
 import org.locationtech.geowave.service.grpc.protobuf.CoreStoreGrpc;
 import org.locationtech.geowave.service.grpc.protobuf.CoreStoreGrpc.CoreStoreBlockingStub;
 import org.locationtech.geowave.service.grpc.protobuf.DBScanCommandParametersProtos;
+import org.locationtech.geowave.service.grpc.protobuf.DescribeTypeCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.FeatureAttributeProtos;
 import org.locationtech.geowave.service.grpc.protobuf.FeatureProtos;
 import org.locationtech.geowave.service.grpc.protobuf.GeoServerAddCoverageCommandParametersProtos;
@@ -73,6 +74,7 @@ import org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveWorkspaceCo
 import org.locationtech.geowave.service.grpc.protobuf.GeoServerSetLayerStyleCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.MapStringStringResponseProtos;
 import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos;
+import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.VoidResponseProtos;
 import org.locationtech.geowave.service.grpc.protobuf.KafkaToGeowaveCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.KdeCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.KmeansSparkCommandParametersProtos;
@@ -498,6 +500,16 @@ public class GeoWaveGrpcTestClient {
         ListTypesCommandParametersProtos.newBuilder().addAllParameters(params).build();
     final StringResponseProtos resp = coreStoreBlockingStub.listTypesCommand(request);
     return resp.getResponseValue();
+  }
+
+  public boolean DescribeAdapterCommand() {
+    final ArrayList<String> params = new ArrayList<>();
+    params.add(GeoWaveGrpcTestUtils.storeName);
+    params.add(GeoWaveGrpcTestUtils.typeName);
+    final DescribeTypeCommandParametersProtos request =
+        DescribeTypeCommandParametersProtos.newBuilder().addAllParameters(params).build();
+    coreStoreBlockingStub.describeTypeCommand(request);
+    return true;
   }
 
   public String RemoveStoreCommand() {

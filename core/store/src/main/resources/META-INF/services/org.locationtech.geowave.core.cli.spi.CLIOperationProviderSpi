@@ -1,3 +1,4 @@
 org.locationtech.geowave.core.store.cli.store.StoreOperationProvider
 org.locationtech.geowave.core.store.cli.index.IndexOperationProvider
 org.locationtech.geowave.core.store.cli.stats.StatsOperationProvider
+org.locationtech.geowave.core.store.cli.type.TypeOperationProvider

@@ -8,6 +8,8 @@
  */
 package org.locationtech.geowave.core.store.api;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
@@ -77,4 +79,13 @@ public interface DataTypeAdapter<T> extends DataReader<Object>, DataWriter<T, Ob
    *         name
    */
   public String getFieldNameForPosition(CommonIndexModel model, int position);
+
+  /**
+   * Get the Description of the data type this adapater is for
+   * 
+   * @return The description as a String to String map
+   */
+  public default Map<String, String> describe() {
+    return new HashMap<String, String>();
+  }
 }
