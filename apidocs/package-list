@@ -161,6 +161,7 @@ org.locationtech.geowave.core.store.cli
 org.locationtech.geowave.core.store.cli.index
 org.locationtech.geowave.core.store.cli.stats
 org.locationtech.geowave.core.store.cli.store
+org.locationtech.geowave.core.store.cli.type
 org.locationtech.geowave.core.store.config
 org.locationtech.geowave.core.store.data
 org.locationtech.geowave.core.store.data.field
