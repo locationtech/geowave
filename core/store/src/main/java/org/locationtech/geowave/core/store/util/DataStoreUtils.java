@@ -299,7 +299,7 @@ public class DataStoreUtils {
           final ByteBuffer input = ByteBuffer.wrap(flattenedValue);
           for (int i = 0; i < fieldPositions.size(); i++) {
             final Integer fieldPosition = fieldPositions.get(i);
-            if ((maxFieldPosition > -1) && (fieldPosition > maxFieldPosition)) {
+            if ((maxFieldPosition > -2) && (fieldPosition > maxFieldPosition)) {
               return new FlattenedDataSet(
                   fieldInfoList,
                   new FlattenedUnreadDataSingleRow(input, i, fieldPositions));

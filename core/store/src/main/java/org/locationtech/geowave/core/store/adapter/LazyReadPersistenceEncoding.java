@@ -166,7 +166,7 @@ public class LazyReadPersistenceEncoding extends IndexedAdapterPersistenceEncodi
               value.getFieldMask(),
               value.getValue(),
               value.getVisibility(),
-              -1).getFieldsRead();
+              -2).getFieldsRead();
       for (final FlattenedFieldInfo fieldInfo : fieldInfos) {
         final String fieldName =
             dataAdapter.getFieldNameForPosition(
