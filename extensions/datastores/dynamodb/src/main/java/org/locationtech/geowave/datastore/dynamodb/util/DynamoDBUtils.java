@@ -16,11 +16,24 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.util.Base64;
 
 public class DynamoDBUtils {
+  // because DynamoDB requires a hash key, if the geowave partition key is
+  // empty, we need a non-empty constant alternative
+  public static final byte[] EMPTY_PARTITION_KEY = new byte[] {-1};
+
   public static class NoopClosableIteratorWrapper implements Closeable {
     public NoopClosableIteratorWrapper() {}
 
     @Override
     public void close() {}
+  }
+
+  public static byte[] getDynamoDBSafePartitionKey(final byte[] partitionKey) {
+    // DynamoDB requires a non-empty partition key so we need to use a reserved byte array to
+    // indicate an empty partition key
+    if ((partitionKey == null) || (partitionKey.length == 0)) {
+      return EMPTY_PARTITION_KEY;
+    }
+    return partitionKey;
   }
 
   public static byte[] getPrimaryId(final Map<String, AttributeValue> map) {

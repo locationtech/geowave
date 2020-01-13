@@ -88,20 +88,24 @@ public class DuplicateDeletionCallback<T> implements DeleteCallback<T, GeoWaveRo
           final InsertionIds ids = DataStoreUtils.getInsertionIdsForEntry(entry, adapter, index);
           for (final SinglePartitionInsertionIds insertId : ids.getPartitionKeys()) {
             for (final byte[] sortKey : insertId.getSortKeys()) {
+              byte[] partitionKey = insertId.getPartitionKey();
               insertionIds.add(
                   new InsertionIdData(
-                      insertId.getPartitionKey() == null ? new byte[0] : insertId.getPartitionKey(),
+                      partitionKey == null ? new byte[0] : partitionKey,
                       sortKey == null ? new byte[0] : sortKey));
             }
           }
         }
         final Set<InsertionIdData> i = insertionIds;
         // we need to do is remove the rows in this callback. marking them as deleted
-        Arrays.stream(rows).forEach(
-            row -> i.remove(
-                new InsertionIdData(
-                    row.getPartitionKey() == null ? new byte[0] : row.getPartitionKey(),
-                    row.getSortKey() == null ? new byte[0] : row.getSortKey())));
+        Arrays.stream(rows).forEach(row -> {
+          byte[] partitionKey = row.getPartitionKey();
+          byte[] sortKey = row.getSortKey();
+          i.remove(
+              new InsertionIdData(
+                  partitionKey == null ? new byte[0] : partitionKey,
+                  sortKey == null ? new byte[0] : sortKey));
+        });
       }
     }
   }

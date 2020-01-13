@@ -24,6 +24,7 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBRow;
+import org.locationtech.geowave.datastore.dynamodb.util.DynamoDBUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.amazonaws.AmazonWebServiceRequest;
@@ -41,9 +42,6 @@ public class DynamoDBWriter implements RowWriter {
   private static final Logger LOGGER = LoggerFactory.getLogger(DynamoDBWriter.class);
   private static final int NUM_ITEMS = DynamoDBOperations.MAX_ROWS_FOR_BATCHWRITER;
   private static final boolean ASYNC_WRITE = false;
-  // because DynamoDB requires a hash key, if the geowave partition key is
-  // empty, we need a non-empty constant alternative
-  protected static final byte[] EMPTY_PARTITION_KEY = new byte[] {0};
   private final List<WriteRequest> batchedItems = new ArrayList<>();
   private final String tableName;
   private final AmazonDynamoDBAsync client;
@@ -221,10 +219,7 @@ public class DynamoDBWriter implements RowWriter {
       final GeoWaveRow row,
       final boolean isDataIndex) {
     if (isDataIndex) {
-      byte[] partitionKey = row.getDataId();
-      if ((partitionKey == null) || (partitionKey.length == 0)) {
-        partitionKey = EMPTY_PARTITION_KEY;
-      }
+      byte[] partitionKey = DynamoDBUtils.getDynamoDBSafePartitionKey(row.getDataId());
       final Map<String, AttributeValue> map = new HashMap<>();
       map.put(
           DynamoDBRow.GW_PARTITION_ID_KEY,
@@ -247,10 +242,7 @@ public class DynamoDBWriter implements RowWriter {
       return Collections.singletonList(new WriteRequest(new PutRequest(map)));
     } else {
       final ArrayList<WriteRequest> mutations = new ArrayList<>();
-      byte[] partitionKey = row.getPartitionKey();
-      if ((partitionKey == null) || (partitionKey.length == 0)) {
-        partitionKey = EMPTY_PARTITION_KEY;
-      }
+      byte[] partitionKey = DynamoDBUtils.getDynamoDBSafePartitionKey(row.getPartitionKey());
 
       for (final GeoWaveValue value : row.getFieldValues()) {
         final byte[] rowId = DynamoDBRow.getRangeKey(row);

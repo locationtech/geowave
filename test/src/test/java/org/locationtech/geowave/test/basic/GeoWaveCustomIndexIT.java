@@ -166,28 +166,28 @@ public class GeoWaveCustomIndexIT {
     if (spatialTemporal) {
       // if spatial/temporal indexing exists explicitly set the appropriate one
       bldr.indexName(new SpatialIndexBuilder().createIndex().getName());
-    }
-    try (CloseableIterator<SimpleFeature> it =
-        dataStore.query(
-            bldr.constraints(
-                bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(
-                    GeometryUtils.GEOMETRY_FACTORY.toGeometry(
-                        new Envelope(0, 2, 0, 2))).build()).build())) {
-      Assert.assertEquals(27, Iterators.size(it));
-    }
-    if (spatialTemporal) {
+
+      try (CloseableIterator<SimpleFeature> it =
+          dataStore.query(
+              bldr.constraints(
+                  bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(
+                      GeometryUtils.GEOMETRY_FACTORY.toGeometry(
+                          new Envelope(0, 2, 0, 2))).build()).build())) {
+        Assert.assertEquals(27, Iterators.size(it));
+      }
       // if spatial/temporal indexing exists explicitly set the appropriate one
       bldr.indexName(new SpatialTemporalIndexBuilder().createIndex().getName());
-    }
-    try (CloseableIterator<SimpleFeature> it =
-        dataStore.query(
-            bldr.constraints(
-                bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(
-                    GeometryUtils.GEOMETRY_FACTORY.toGeometry(
-                        new Envelope(0, 2, 0, 2))).addTimeRange(
-                            startQueryTime,
-                            endQueryTime).build()).build())) {
-      Assert.assertEquals(9, Iterators.size(it));
+
+      try (CloseableIterator<SimpleFeature> it =
+          dataStore.query(
+              bldr.constraints(
+                  bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(
+                      GeometryUtils.GEOMETRY_FACTORY.toGeometry(
+                          new Envelope(0, 2, 0, 2))).addTimeRange(
+                              startQueryTime,
+                              endQueryTime).build()).build())) {
+        Assert.assertEquals(9, Iterators.size(it));
+      }
     }
     try (CloseableIterator<SimpleFeature> it =
         dataStore.query(

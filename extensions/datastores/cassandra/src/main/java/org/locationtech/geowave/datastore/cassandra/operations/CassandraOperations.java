@@ -55,6 +55,7 @@ import org.locationtech.geowave.datastore.cassandra.CassandraRow;
 import org.locationtech.geowave.datastore.cassandra.CassandraRow.CassandraField;
 import org.locationtech.geowave.datastore.cassandra.config.CassandraOptions;
 import org.locationtech.geowave.datastore.cassandra.config.CassandraRequiredOptions;
+import org.locationtech.geowave.datastore.cassandra.util.CassandraUtils;
 import org.locationtech.geowave.datastore.cassandra.util.KeyspaceStatePool;
 import org.locationtech.geowave.datastore.cassandra.util.KeyspaceStatePool.KeyspaceState;
 import org.locationtech.geowave.datastore.cassandra.util.SessionPool;
@@ -302,20 +303,21 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
               QueryBuilder.delete().from(gwNamespace, getCassandraSafeName(tableName)).where(
                   QueryBuilder.eq(
                       CassandraField.GW_PARTITION_ID_KEY.getFieldName(),
-                      ByteBuffer.wrap(row.getPartitionKey()))).and(
-                          QueryBuilder.eq(
-                              CassandraField.GW_SORT_KEY.getFieldName(),
-                              ByteBuffer.wrap(row.getSortKey()))).and(
-                                  QueryBuilder.eq(
-                                      CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
-                                      row.getAdapterId())).and(
-                                          QueryBuilder.eq(
-                                              CassandraField.GW_DATA_ID_KEY.getFieldName(),
-                                              ByteBuffer.wrap(row.getDataId()))).and(
-                                                  QueryBuilder.eq(
-                                                      CassandraField.GW_FIELD_VISIBILITY_KEY.getFieldName(),
-                                                      ByteBuffer.wrap(
-                                                          row.getFieldValues()[i].getVisibility()))));
+                      ByteBuffer.wrap(
+                          CassandraUtils.getCassandraSafePartitionKey(row.getPartitionKey())))).and(
+                              QueryBuilder.eq(
+                                  CassandraField.GW_SORT_KEY.getFieldName(),
+                                  ByteBuffer.wrap(row.getSortKey()))).and(
+                                      QueryBuilder.eq(
+                                          CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
+                                          row.getAdapterId())).and(
+                                              QueryBuilder.eq(
+                                                  CassandraField.GW_DATA_ID_KEY.getFieldName(),
+                                                  ByteBuffer.wrap(row.getDataId()))).and(
+                                                      QueryBuilder.eq(
+                                                          CassandraField.GW_FIELD_VISIBILITY_KEY.getFieldName(),
+                                                          ByteBuffer.wrap(
+                                                              row.getFieldValues()[i].getVisibility()))));
       exhausted &= rs.isExhausted();
     }
 

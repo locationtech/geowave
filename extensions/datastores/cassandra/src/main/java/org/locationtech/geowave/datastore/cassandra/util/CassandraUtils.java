@@ -20,7 +20,16 @@ public class CassandraUtils {
 
   // because Cassandra requires a partition key, if the geowave partition key is
   // empty, we need a non-empty constant alternative
-  public static final byte[] EMPTY_PARTITION_KEY = new byte[] {0};
+  public static final byte[] EMPTY_PARTITION_KEY = new byte[] {-1};
+
+  public static byte[] getCassandraSafePartitionKey(final byte[] partitionKey) {
+    // Cassandra requires a non-empty partition key so we need to use a reserved byte array to
+    // indicate an empty partition key
+    if ((partitionKey == null) || (partitionKey.length == 0)) {
+      return EMPTY_PARTITION_KEY;
+    }
+    return partitionKey;
+  }
 
   public static BoundStatement[] bindInsertion(
       final PreparedStatement insertionStatement,
@@ -36,10 +45,7 @@ public class CassandraUtils {
       final GeoWaveRow row,
       final boolean visibilityEnabled) {
     // the data ID becomes the partition key and the only other fields are the value and adapter ID
-    byte[] partitionKey = row.getDataId();
-    if ((partitionKey == null) || (partitionKey.length == 0)) {
-      partitionKey = EMPTY_PARTITION_KEY;
-    }
+    byte[] partitionKey = getCassandraSafePartitionKey(row.getDataId());
     final BoundStatement[] retVal = new BoundStatement[row.getFieldValues().length];
     int i = 0;
     for (final GeoWaveValue value : row.getFieldValues()) {
@@ -66,10 +72,7 @@ public class CassandraUtils {
   public static BoundStatement[] bindInsertion(
       final PreparedStatement insertionStatement,
       final GeoWaveRow row) {
-    byte[] partitionKey = row.getPartitionKey();
-    if ((partitionKey == null) || (partitionKey.length == 0)) {
-      partitionKey = EMPTY_PARTITION_KEY;
-    }
+    byte[] partitionKey = getCassandraSafePartitionKey(row.getPartitionKey());
     final BoundStatement[] retVal = new BoundStatement[row.getFieldValues().length];
     int i = 0;
     for (final GeoWaveValue value : row.getFieldValues()) {
