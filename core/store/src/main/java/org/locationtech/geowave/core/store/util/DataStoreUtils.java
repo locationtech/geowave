@@ -73,6 +73,7 @@ import org.locationtech.geowave.core.store.flatten.FlattenedUnreadDataSingleRow;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.CustomIndexImpl;
+import org.locationtech.geowave.core.store.index.CustomIndexStrategy;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.MetadataType;
@@ -217,8 +218,12 @@ public class DataStoreUtils {
       final T entry,
       final InternalDataAdapter adapter,
       final Index index) {
-    final AdapterPersistenceEncoding encoding = adapter.encode(entry, index.getIndexModel());
-    return encoding.getInsertionIds(index);
+    if (index instanceof CustomIndexStrategy) {
+      return ((CustomIndexStrategy) index).getInsertionIds(entry);
+    } else {
+      final AdapterPersistenceEncoding encoding = adapter.encode(entry, index.getIndexModel());
+      return encoding.getInsertionIds(index);
+    }
   }
 
   public static InsertionIds keysToInsertionIds(final GeoWaveKey... geoWaveKeys) {
@@ -294,7 +299,7 @@ public class DataStoreUtils {
           final ByteBuffer input = ByteBuffer.wrap(flattenedValue);
           for (int i = 0; i < fieldPositions.size(); i++) {
             final Integer fieldPosition = fieldPositions.get(i);
-            if ((maxFieldPosition > -1) && (fieldPosition > maxFieldPosition)) {
+            if ((maxFieldPosition > -2) && (fieldPosition > maxFieldPosition)) {
               return new FlattenedDataSet(
                   fieldInfoList,
                   new FlattenedUnreadDataSingleRow(input, i, fieldPositions));

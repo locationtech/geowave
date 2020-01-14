@@ -347,10 +347,7 @@ public class DynamoDBReader<T> implements RowReader<T> {
       short[] adapterIds,
       final InternalAdapterStore adapterStore) {
     final List<QueryRequest> retVal = new ArrayList<>();
-    final byte[] partitionKey =
-        ((r.getPartitionKey() == null) || (r.getPartitionKey().length == 0))
-            ? DynamoDBWriter.EMPTY_PARTITION_KEY
-            : r.getPartitionKey();
+    final byte[] partitionKey = DynamoDBUtils.getDynamoDBSafePartitionKey(r.getPartitionKey());
     if (((adapterIds == null) || (adapterIds.length == 0)) && (adapterStore != null)) {
       adapterIds = adapterStore.getAdapterIds();
     }

@@ -11,9 +11,11 @@ package org.locationtech.geowave.datastore.cassandra;
 import java.util.function.BiConsumer;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
+import org.bouncycastle.util.Arrays;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.entities.GeoWaveValueImpl;
 import org.locationtech.geowave.core.store.entities.MergeableGeoWaveRow;
+import org.locationtech.geowave.datastore.cassandra.util.CassandraUtils;
 import com.datastax.driver.core.DataType;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.schemabuilder.Create;
@@ -121,7 +123,12 @@ public class CassandraRow extends MergeableGeoWaveRow {
 
   @Override
   public byte[] getPartitionKey() {
-    return row.getBytes(CassandraField.GW_PARTITION_ID_KEY.getFieldName()).array();
+    byte[] partitionKey = row.getBytes(CassandraField.GW_PARTITION_ID_KEY.getFieldName()).array();
+    if (Arrays.areEqual(CassandraUtils.EMPTY_PARTITION_KEY, partitionKey)) {
+      // we shouldn't expose the reserved "empty" partition key externally
+      return new byte[0];
+    }
+    return partitionKey;
   }
 
   @Override

@@ -83,10 +83,7 @@ public class BatchedRangeRead<T> {
   public CloseableIterator<T> results() {
     final List<BoundStatement> statements = new ArrayList<>();
     for (final SinglePartitionQueryRanges r : ranges) {
-      final byte[] partitionKey =
-          ((r.getPartitionKey() == null) || (r.getPartitionKey().length == 0))
-              ? CassandraUtils.EMPTY_PARTITION_KEY
-              : r.getPartitionKey();
+      final byte[] partitionKey = CassandraUtils.getCassandraSafePartitionKey(r.getPartitionKey());
       for (final ByteArrayRange range : r.getSortKeyRanges()) {
         final BoundStatement boundRead = new BoundStatement(preparedRead);
         final byte[] start = range.getStart() != null ? range.getStart() : new byte[0];

@@ -27,9 +27,9 @@ public class InsertionIdQuery implements QueryConstraints {
   public InsertionIdQuery() {}
 
   public InsertionIdQuery(final byte[] partitionKey, final byte[] sortKey, final byte[] dataId) {
-    this.partitionKey = partitionKey;
-    this.sortKey = sortKey;
-    this.dataId = dataId;
+    this.partitionKey = partitionKey == null ? new byte[0] : partitionKey;
+    this.sortKey = sortKey == null ? new byte[0] : sortKey;
+    this.dataId = dataId == null ? new byte[0] : dataId;
   }
 
   public byte[] getPartitionKey() {
