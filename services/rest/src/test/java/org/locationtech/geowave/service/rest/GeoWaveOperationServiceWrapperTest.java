@@ -9,6 +9,8 @@
 package org.locationtech.geowave.service.rest;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+import org.apache.log4j.BasicConfigurator;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -16,14 +18,19 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand.HttpMethod;
+import org.locationtech.geowave.service.rest.cli.StartRestServerCommand;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
+import org.restlet.Component;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
+import org.restlet.data.Protocol;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GeoWaveOperationServiceWrapperTest {
 
@@ -117,5 +124,37 @@ public class GeoWaveOperationServiceWrapperTest {
     Assert.assertEquals(
         successStatusIs200,
         classUnderTest.getResponse().getStatus().equals(Status.SUCCESS_OK));
+  }
+
+  @Test
+  public void restletApplicationTest() {
+    try {
+      final Component component = new Component();
+      
+      component.getServers().add(Protocol.HTTP, 8182);
+      component.getDefaultHost().attach("", new ApiRestletApplicationCLI("8182"));
+      component.start();
+      Assert.assertTrue(true);
+      Runtime.getRuntime().addShutdownHook(new Thread() {
+        @Override
+        public void run() {
+          try {
+            component.stop();
+          } catch (final Exception e) {
+            System.out.println("Error shutting down rest server.");
+          }
+          System.out.println("Shutting down!");
+        }
+      });
+
+      //TODO: Comment this out when compiling with mvn clean install
+      //Or else it will stick here. This section is for manual testing without full compilation
+      while (true) {
+        Thread.sleep(TimeUnit.MILLISECONDS.convert(Long.MAX_VALUE, TimeUnit.DAYS));
+      }
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 }

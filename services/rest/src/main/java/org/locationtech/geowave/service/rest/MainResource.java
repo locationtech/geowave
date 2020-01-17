@@ -31,28 +31,28 @@ public class MainResource extends ServerResource {
       final ServletContext servletContext =
           (ServletContext) getContext().getAttributes().get(
               "org.restlet.ext.servlet.ServletContext");
-      final String userName = (String) servletContext.getAttribute("userName");
-      final String apiKey = (String) servletContext.getAttribute("apiKey");
+      if (servletContext != null) {
+        final String userName = (String) servletContext.getAttribute("userName");
+        final String apiKey = (String) servletContext.getAttribute("apiKey");
+        
+        if ((userName != null) && !userName.equals("")) {
+            output =
+                "<b>Welcome "
+                    + userName
+                    + "!</b><br><b>API key:</b> "
+                    + apiKey
+                    + "<br><br>"
+                    + routeStringBuilder.toString();
+         }
+      }
       final ArrayList<RestRoute> availableRoutes =
-          (ArrayList<RestRoute>) getContext().getAttributes().get("availableRoutes");
+        (ArrayList<RestRoute>) getContext().getAttributes().get("availableRoutes");
 
       routeStringBuilder.append("Available Routes:<br>");
-
-      for (final RestRoute route : availableRoutes) {
+        for (final RestRoute route : availableRoutes) {
         routeStringBuilder.append(route.getPath() + " --> " + route.getOperation() + "<br>");
       }
-
-      if ((userName != null) && !userName.equals("")) {
-        output =
-            "<b>Welcome "
-                + userName
-                + "!</b><br><b>API key:</b> "
-                + apiKey
-                + "<br><br>"
-                + routeStringBuilder.toString();
-      } else {
-        output = routeStringBuilder.toString();
-      }
+      output += routeStringBuilder.toString();
     } catch (final Exception e) {
       LOGGER.error("Error listing resources", e);
     }
