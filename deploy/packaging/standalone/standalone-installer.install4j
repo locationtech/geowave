@@ -53,15 +53,18 @@
       <mountPoint id="177" root="" location="lib/analytics/mapreduce" mode="755" />
       <mountPoint id="187" root="" location="lib/services" mode="755" />
       <mountPoint id="188" root="" location="lib/services/third-party" mode="755" />
-      <mountPoint id="189" root="" location="lib/services/third-party/embedded-redis" mode="755" />
+      <mountPoint id="194" root="" location="lib/services/third-party/embedded-geoserver" mode="755" />
+      <mountPoint id="195" root="" location="lib/services/third-party/embedded-geoserver/geoserver" mode="755" />
+      <mountPoint id="196" root="" location="lib/services/third-party/embedded-accumulo" mode="755" />
+      <mountPoint id="621" root="" location="lib/services/third-party/embedded-bigtable" mode="755" />
+      <mountPoint id="478" root="" location="lib/services/third-party/embedded-cassandra" mode="755" />
+      <mountPoint id="622" root="" location="lib/services/third-party/embedded-dynamodb" mode="755" />
       <mountPoint id="190" root="" location="lib/services/third-party/embedded-hbase" mode="755" />
       <mountPoint id="191" root="" location="lib/services/third-party/embedded-hbase/lib" mode="755" />
       <mountPoint id="192" root="" location="lib/services/third-party/embedded-hbase/data" mode="755" />
       <mountPoint id="193" root="" location="lib/services/third-party/embedded-hbase/zookeeper" mode="755" />
-      <mountPoint id="194" root="" location="lib/services/third-party/embedded-geoserver" mode="755" />
-      <mountPoint id="195" root="" location="lib/services/third-party/embedded-geoserver/geoserver" mode="755" />
-      <mountPoint id="196" root="" location="lib/services/third-party/embedded-accumulo" mode="755" />
-      <mountPoint id="478" root="" location="lib/services/third-party/embedded-cassandra" mode="755" />
+      <mountPoint id="623" root="" location="lib/services/third-party/embedded-kudu" mode="755" />
+      <mountPoint id="189" root="" location="lib/services/third-party/embedded-redis" mode="755" />
       <mountPoint id="197" root="" location="lib/services/grpc" mode="755" />
       <mountPoint id="198" root="" location="lib/services/rest" mode="755" />
       <mountPoint id="340" root="" location="examples" mode="755" />
@@ -137,15 +140,6 @@
       <dirEntry mountPoint="177" file="../../../analytics/mapreduce/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
         <exclude />
       </dirEntry>
-      <dirEntry mountPoint="189" file="../../../extensions/cli/redis-embed/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
-        <exclude />
-      </dirEntry>
-      <dirEntry mountPoint="191" file="../../../extensions/cli/hbase-embed/target/hbase/lib" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="lib" excludeSuffixes="" dirMode="755" overrideDirMode="false">
-        <exclude />
-      </dirEntry>
-      <dirEntry mountPoint="190" file="../../../extensions/cli/hbase-embed/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
-        <exclude />
-      </dirEntry>
       <dirEntry mountPoint="195" file="../../../extensions/cli/geoserver-embed/target/geoserver" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="geoserver" excludeSuffixes="" dirMode="755" overrideDirMode="false">
         <exclude />
       </dirEntry>
@@ -155,7 +149,25 @@
       <dirEntry mountPoint="196" file="../../../extensions/cli/accumulo-embed/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
         <exclude />
       </dirEntry>
+      <dirEntry mountPoint="621" file="../../../extensions/cli/bigtable-embed/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
       <dirEntry mountPoint="478" file="../../../extensions/cli/cassandra-embed/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="622" file="../../../extensions/cli/dynamodb-embed/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="191" file="../../../extensions/cli/hbase-embed/target/hbase/lib" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="lib" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="190" file="../../../extensions/cli/hbase-embed/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="623" file="../../../extensions/cli/kudu-embed/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="189" file="../../../extensions/cli/redis-embed/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
         <exclude />
       </dirEntry>
       <dirEntry mountPoint="197" file="../../../services/grpc/server/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
@@ -253,70 +265,9 @@
           </component>
         </components>
       </folder>
-      <folder name="Third-party Services" id="135" customizedId="" displayDescription="false" hideHelpButton="false" expanded="true">
-        <description />
-        <components>
-          <component name="Embedded GeoServer" id="60" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
-            <description>GeoServer is an open source software server written in Java that allows users to share and edit geospatial data. GeoServer is licensed under the GPLv2.</description>
-            <include all="false">
-              <entry location="lib/services/third-party/embedded-geoserver" fileType="regular" />
-            </include>
-            <dependencies>
-              <component id="59" />
-              <component id="68" />
-            </dependencies>
-          </component>
-          <component name="Embedded HBase" id="72" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
-            <description />
-            <include all="false">
-              <entry location="lib/services/third-party/embedded-hbase" fileType="regular" />
-            </include>
-            <dependencies>
-              <component id="59" />
-              <component id="61" />
-            </dependencies>
-          </component>
-          <component name="Embedded Redis" id="100" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
-            <description />
-            <include all="false">
-              <entry location="lib/services/third-party/embedded-redis" fileType="regular" />
-            </include>
-            <dependencies>
-              <component id="59" />
-              <component id="82" />
-            </dependencies>
-          </component>
-          <component name="Embedded Accumulo" id="103" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
-            <description />
-            <include all="false">
-              <entry location="lib/services/third-party/embedded-accumulo" fileType="regular" />
-            </include>
-            <dependencies>
-              <component id="59" />
-              <component id="102" />
-            </dependencies>
-          </component>
-          <component name="Embedded Cassandra" id="479" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
-            <description />
-            <include all="false">
-              <entry location="lib/services/third-party/embedded-cassandra" fileType="regular" />
-            </include>
-            <dependencies />
-          </component>
-        </components>
-      </folder>
       <folder name="Data Store Support" id="127" customizedId="" displayDescription="false" hideHelpButton="false" expanded="true">
         <description />
         <components>
-          <component name="HBase" id="61" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
-            <description />
-            <include all="false">
-              <entry location="lib/datastores/hbase" fileType="regular" />
-            </include>
-            <dependencies>
-              <component id="59" />
-            </dependencies>
-          </component>
           <component name="Accumulo" id="102" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
             <description />
             <include all="false">
@@ -326,19 +277,10 @@
               <component id="59" />
             </dependencies>
           </component>
-          <component name="RocksDB" id="81" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
+          <component name="Bigtable" id="108" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
             <description />
             <include all="false">
-              <entry location="lib/datastores/rocksdb" fileType="regular" />
-            </include>
-            <dependencies>
-              <component id="59" />
-            </dependencies>
-          </component>
-          <component name="Redis" id="82" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
-            <description />
-            <include all="false">
-              <entry location="lib/datastores/redis" fileType="regular" />
+              <entry location="lib/datastores/bigtable" fileType="regular" />
             </include>
             <dependencies>
               <component id="59" />
@@ -353,15 +295,6 @@
               <component id="59" />
             </dependencies>
           </component>
-          <component name="Kudu" id="105" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
-            <description />
-            <include all="false">
-              <entry location="lib/datastores/kudu" fileType="regular" />
-            </include>
-            <dependencies>
-              <component id="59" />
-            </dependencies>
-          </component>
           <component name="DynamoDB" id="104" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
             <description />
             <include all="false">
@@ -371,10 +304,37 @@
               <component id="59" />
             </dependencies>
           </component>
-          <component name="BigTable" id="108" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
+          <component name="HBase" id="61" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
             <description />
             <include all="false">
-              <entry location="lib/datastores/bigtable" fileType="regular" />
+              <entry location="lib/datastores/hbase" fileType="regular" />
+            </include>
+            <dependencies>
+              <component id="59" />
+            </dependencies>
+          </component>
+          <component name="Kudu" id="105" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
+            <description />
+            <include all="false">
+              <entry location="lib/datastores/kudu" fileType="regular" />
+            </include>
+            <dependencies>
+              <component id="59" />
+            </dependencies>
+          </component>
+          <component name="Redis" id="82" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
+            <description />
+            <include all="false">
+              <entry location="lib/datastores/redis" fileType="regular" />
+            </include>
+            <dependencies>
+              <component id="59" />
+            </dependencies>
+          </component>
+          <component name="RocksDB" id="81" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
+            <description />
+            <include all="false">
+              <entry location="lib/datastores/rocksdb" fileType="regular" />
             </include>
             <dependencies>
               <component id="59" />
@@ -468,6 +428,79 @@
           </component>
         </components>
       </folder>
+      <folder name="Third-party Services" id="135" customizedId="" displayDescription="false" hideHelpButton="false" expanded="true">
+        <description />
+        <components>
+          <component name="Embedded GeoServer" id="60" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
+            <description>GeoServer is an open source software server written in Java that allows users to share and edit geospatial data. GeoServer is licensed under the GPLv2.</description>
+            <include all="false">
+              <entry location="lib/services/third-party/embedded-geoserver" fileType="regular" />
+            </include>
+            <dependencies>
+              <component id="59" />
+              <component id="68" />
+            </dependencies>
+          </component>
+          <component name="Embedded Accumulo" id="103" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
+            <description />
+            <include all="false">
+              <entry location="lib/services/third-party/embedded-accumulo" fileType="regular" />
+            </include>
+            <dependencies>
+              <component id="59" />
+              <component id="102" />
+            </dependencies>
+          </component>
+          <component name="Embedded Bigtable" id="624" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
+            <description />
+            <include all="false">
+              <entry location="lib/services/third-party/embedded-bigtable" fileType="regular" />
+            </include>
+            <dependencies />
+          </component>
+          <component name="Embedded Cassandra" id="479" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
+            <description />
+            <include all="false">
+              <entry location="lib/services/third-party/embedded-cassandra" fileType="regular" />
+            </include>
+            <dependencies />
+          </component>
+          <component name="Embedded DynamoDB" id="625" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
+            <description />
+            <include all="false">
+              <entry location="lib/services/third-party/embedded-dynamodb" fileType="regular" />
+            </include>
+            <dependencies />
+          </component>
+          <component name="Embedded HBase" id="72" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
+            <description />
+            <include all="false">
+              <entry location="lib/services/third-party/embedded-hbase" fileType="regular" />
+            </include>
+            <dependencies>
+              <component id="59" />
+              <component id="61" />
+            </dependencies>
+          </component>
+          <component name="Embedded Kudu" id="626" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
+            <description />
+            <include all="false">
+              <entry location="lib/services/third-party/embedded-kudu" fileType="regular" />
+            </include>
+            <dependencies />
+          </component>
+          <component name="Embedded Redis" id="100" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
+            <description />
+            <include all="false">
+              <entry location="lib/services/third-party/embedded-redis" fileType="regular" />
+            </include>
+            <dependencies>
+              <component id="59" />
+              <component id="82" />
+            </dependencies>
+          </component>
+        </components>
+      </folder>
       <folder name="Analytics" id="129" customizedId="" displayDescription="false" hideHelpButton="false" expanded="true">
         <description />
         <components>
@@ -508,21 +541,17 @@
       <java mainClass="org.locationtech.geowave.core.cli.GeoWaveMain" mainMode="1" vmParameters="-Djava.util.logging.config.file=jul-geowave-cli.properties" arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
         <classPath>
           <scanDirectory location="lib/core" failOnError="false" />
+          <scanDirectory location="lib/analytics/mapreduce" failOnError="false" />
           <scanDirectory location="lib/analytics/spark" failOnError="false" />
-          <scanDirectory location="lib/services/third-party/embedded-geoserver" failOnError="false" />
-          <scanDirectory location="lib/datastores/hbase" failOnError="false" />
-          <scanDirectory location="lib/services/third-party/embedded-hbase" failOnError="false" />
-          <scanDirectory location="lib/datastores/rocksdb" failOnError="false" />
-          <scanDirectory location="lib/datastores/redis" failOnError="false" />
-          <scanDirectory location="lib/services/third-party/embedded-redis" failOnError="false" />
           <scanDirectory location="lib/plugins" failOnError="false" />
-          <scanDirectory location="lib/utilities/geoserver" failOnError="false" />
           <scanDirectory location="lib/datastores/accumulo" failOnError="false" />
           <scanDirectory location="lib/datastores/bigtable" failOnError="false" />
           <scanDirectory location="lib/datastores/cassandra" failOnError="false" />
           <scanDirectory location="lib/datastores/dynamodb" failOnError="false" />
+          <scanDirectory location="lib/datastores/hbase" failOnError="false" />
           <scanDirectory location="lib/datastores/kudu" failOnError="false" />
-          <scanDirectory location="lib/services/third-party/embedded-accumulo" failOnError="false" />
+          <scanDirectory location="lib/datastores/redis" failOnError="false" />
+          <scanDirectory location="lib/datastores/rocksdb" failOnError="false" />
           <scanDirectory location="lib/ingest-formats/stanag4676" failOnError="false" />
           <scanDirectory location="lib/ingest-formats/avro" failOnError="false" />
           <scanDirectory location="lib/ingest-formats/gdelt" failOnError="false" />
@@ -532,11 +561,19 @@
           <scanDirectory location="lib/ingest-formats/gpx" failOnError="false" />
           <scanDirectory location="lib/ingest-formats/tdrive" failOnError="false" />
           <scanDirectory location="lib/ingest-formats/twitter" failOnError="false" />
-          <scanDirectory location="lib/services/grpc" failOnError="false" />
-          <scanDirectory location="lib/analytics/mapreduce" failOnError="false" />
-          <scanDirectory location="lib/services/rest" failOnError="false" />
+          <scanDirectory location="lib/utilities/geoserver" failOnError="false" />
           <scanDirectory location="lib/utilities/landsat8" failOnError="false" />
           <scanDirectory location="lib/utilities/sentinel2" failOnError="false" />
+          <scanDirectory location="lib/services/grpc" failOnError="false" />
+          <scanDirectory location="lib/services/rest" failOnError="false" />
+          <scanDirectory location="lib/services/third-party/embedded-geoserver" failOnError="false" />
+          <scanDirectory location="lib/services/third-party/embedded-accumulo" failOnError="false" />
+          <scanDirectory location="lib/services/third-party/embedded-bigtable" failOnError="false" />
+          <scanDirectory location="lib/services/third-party/embedded-cassandra" failOnError="false" />
+          <scanDirectory location="lib/services/third-party/embedded-dynamodb" failOnError="false" />
+          <scanDirectory location="lib/services/third-party/embedded-hbase" failOnError="false" />
+          <scanDirectory location="lib/services/third-party/embedded-kudu" failOnError="false" />
+          <scanDirectory location="lib/services/third-party/embedded-redis" failOnError="false" />
         </classPath>
         <modulePath />
         <nativeLibraryDirectories>
