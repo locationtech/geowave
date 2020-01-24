@@ -39,7 +39,10 @@ public class DataStatisticsBuilder<T, R, B extends StatisticsQueryBuilder<R, B>>
     this.statisticsProvider = statisticsProvider;
     this.statisticsId = statisticsId;
     this.visibilityHandler =
-        statisticsProvider.getVisibilityHandler(index.getIndexModel(), adapter, statisticsId);
+        statisticsProvider.getVisibilityHandler(
+            index != null ? index.getIndexModel() : null,
+            adapter,
+            statisticsId);
   }
 
   @Override

@@ -324,7 +324,7 @@ public class BaseDataStoreUtils {
     return -1;
   }
 
-  protected static byte[] getFieldBitmask(
+  public static byte[] getFieldBitmask(
       final Pair<String[], InternalDataAdapter<?>> fieldIdsAdapterPair,
       final Index index) {
     if ((fieldIdsAdapterPair != null) && (fieldIdsAdapterPair.getLeft() != null)) {
