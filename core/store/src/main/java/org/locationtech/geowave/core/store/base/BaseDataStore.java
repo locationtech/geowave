@@ -441,7 +441,28 @@ public class BaseDataStore implements DataStore {
           if (dataIdIndexIsBest) {
             // and in fact this must be a deletion operation otherwise it would have been caught in
             // prior logic for !delete
-            for (final InternalDataAdapter<?> adapter : indexAdapterPair.getRight()) {
+            for (final InternalDataAdapter adapter : indexAdapterPair.getRight()) {
+              // this must be a data index only adapter, just worry about updating statistics and
+              // not other indices or duplicates
+              final ScanCallback callback = queryOptions.getScanCallback();
+              ScanCallback scanCallback = callback;
+              if (baseOptions.isPersistDataStatistics()) {
+                final DataStoreCallbackManager callbackCache =
+                    new DataStoreCallbackManager(
+                        statisticsStore,
+                        queriedAdapters.add(adapter.getAdapterId()));
+                deleteCallbacks.add(callbackCache);
+                scanCallback = new ScanCallback<Object, GeoWaveRow>() {
+
+                  @Override
+                  public void entryScanned(final Object entry, final GeoWaveRow row) {
+                    if (callback != null) {
+                      callback.entryScanned(entry, row);
+                    }
+                    callbackCache.getDeleteCallback(adapter, null).entryDeleted(entry, row);
+                  }
+                };
+              }
               if (sanitizedConstraints instanceof DataIdQuery) {
                 DataIndexUtils.delete(
                     baseOperations,
@@ -450,6 +471,7 @@ public class BaseDataStore implements DataStore {
                     queryOptions.getFieldIdsAdapterPair(),
                     queryOptions.getAggregation(),
                     queryOptions.getAuthorizations(),
+                    scanCallback,
                     adapter.getAdapterId(),
                     ((DataIdQuery) sanitizedConstraints).getDataIds());
               } else if (sanitizedConstraints instanceof DataIdRangeQuery) {
@@ -460,6 +482,7 @@ public class BaseDataStore implements DataStore {
                     queryOptions.getFieldIdsAdapterPair(),
                     queryOptions.getAggregation(),
                     queryOptions.getAuthorizations(),
+                    scanCallback,
                     adapter.getAdapterId(),
                     ((DataIdRangeQuery) sanitizedConstraints).getStartDataIdInclusive(),
                     ((DataIdRangeQuery) sanitizedConstraints).getEndDataIdInclusive());
@@ -471,6 +494,7 @@ public class BaseDataStore implements DataStore {
                     queryOptions.getFieldIdsAdapterPair(),
                     queryOptions.getAggregation(),
                     queryOptions.getAuthorizations(),
+                    scanCallback,
                     adapter.getAdapterId());
               }
             }

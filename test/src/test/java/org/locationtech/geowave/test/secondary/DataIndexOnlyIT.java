@@ -22,6 +22,7 @@ import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorAggregationQueryBuilder;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorStatisticsQueryBuilder;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
@@ -124,14 +125,30 @@ public class DataIndexOnlyIT extends AbstractSecondaryIndexIT {
     count = dataIdxStore.aggregateStatistics(bldr.factory().count().build());
     Assert.assertEquals(originalCount, count);
     count = 0L;
+    String[] idsToRemove = new String[3];
+    int idsToRemoveIdx = 0;
     try (CloseableIterator<SimpleFeature> it =
         store.query(VectorQueryBuilder.newBuilder().build())) {
       while (it.hasNext()) {
-        it.next();
+        if (idsToRemoveIdx < 3) {
+          idsToRemove[idsToRemoveIdx++] = it.next().getID();
+        } else {
+          it.next();
+        }
         count++;
       }
     }
     Assert.assertEquals(originalCount, count);
+    for (String id : idsToRemove) {
+      VectorQueryBuilder idBldr = VectorQueryBuilder.newBuilder();
+      Assert.assertTrue(
+          dataIdxStore.delete(
+              idBldr.constraints(
+                  idBldr.constraintsFactory().dataIds(StringUtils.stringToBinary(id))).build()));
+    }
+    count = dataIdxStore.aggregateStatistics(bldr.factory().count().build());
+    Assert.assertEquals((long) originalCount - 3, (long) count);
+
     TestUtils.deleteAll(dataStoreOptions);
     TestUtils.deleteAll(dataIdxOnlyDataStoreOptions);
   }
