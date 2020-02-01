@@ -1,0 +1,24 @@
+//:= geowave-type-describe(1)
+:doctype: manpage
+
+[[type-describe-name]]
+==== NAME
+
+geowave-type-describe - List attributes of a type in a data store
+
+[[type-describe-synopsis]]
+==== SYNOPSIS
+
+  geowave type describe <store name> <type name>
+
+[[type-describe-description]]
+==== DESCRIPTION
+
+This command lists attributes of types in a GeoWave data store.  For vector types, each attribute and their class are listed.  For raster types, only the tile size is listed.
+
+[[type-describe-examples]]
+==== EXAMPLES
+
+Describe the `hail` type in the `example` data store:
+
+  geowave type describe example hail

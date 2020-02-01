@@ -1,28 +1,33 @@
-//:geowave-grpc-start
-//:====================
-//::doctype: manpage
+//:= geowave-util-grpc-start(1)
+:doctype: manpage
 
-NAME
-//:----
+[[util-grpc-start-name]]
+==== NAME
 
-geowave util grpc start - Start the GeoWave gRPC server
+geowave-util-grpc-start - Start the GeoWave gRPC server
 
-SYNOPSIS
-//:--------
+[[util-grpc-start-synopsis]]
+==== SYNOPSIS
 
-geowave util grpc start [options]
+  geowave util grpc start [options]
 
-DESCRIPTION
-//:-----------
+[[util-grpc-start-description]]
+==== DESCRIPTION
 
-The geowave util grpc start operator will start the GeoWave gRPC server on a given port number. Remote gRPC clients can interact with GeoWave from this service.
+This command starts the GeoWave gRPC server on a given port number. Remote gRPC clients can interact with GeoWave from this service.
 
-OPTIONS
-//:-------
+[[util-grpc-start-options]]
+==== OPTIONS
 
-- --port
- * The port number the server should run on
- * Default: 8980
-- --nonBlocking
- * Runs the server in non-blocking mode
- * Default: false
+*-p, --port* _<port>_::
+  The port number the server should run on.  Default is 8980.
+
+*-n, --nonBlocking*::
+  If specified, runs the server in non-blocking mode.
+  
+[[util-grpc-start-examples]]
+==== EXAMPLE
+
+Run a gRPC server on port 8980:
+
+  geowave util grpc start -p 8980

@@ -1,24 +1,34 @@
-//:geowave-set(1)
-//:==============
-//::doctype: manpage
+//:= geowave-config-set(1)
+:doctype: manpage
 
-NAME
-//:----
+[[config-set-name]]
+==== NAME
 
-geowave config set - will set a valid property name within the cache
+geowave-config-set - sets a property in the local configuration
 
-SYNOPSIS
-//:--------
+[[config-set-synopsis]]
+==== SYNOPSIS
 
-geowave config set [options]
+  geowave config set [options] <name> <value>
 
-DESCRIPTION
-//:-----------
+[[config-set-description]]
+==== DESCRIPTION
 
-The geowave config set operator will set a valid property name within the cache.
-This can be useful if you want to update a particular property of a index or store.
+This command sets a property in the local configuration. This can be used to update a particular configured property of a data store.
 
-OPTIONS
-//:-------
+[[config-set-options]]
+==== OPTIONS
 
-There are currently no options for this command
+*--password*::
+  Specify that the value being set is a password and should be encrypted in the configuration.
+  
+[[config-set-examples]]
+==== EXAMPLES
+
+Update the batch write size of a RocksDB data store named `example`:
+
+  geowave config set store.example.opts.batchWriteSize 1000
+  
+Update the password for an Accumulo data store named `example`:
+
+  geowave config set --password store.example.opts.password someNewPassword

@@ -1,23 +1,24 @@
-//:geowave-compactstats(1)
-//:===============
-//::doctype: manpage
+//:= geowave-stat-compact(1)
+:doctype: manpage
 
-NAME
-//:----
+[[stat-compact-name]]
+==== NAME
 
-geowave stat compact - Combine all statistics in GeoWave namespace, can be useful for making a datastore more efficient
+geowave-stat-compact - Combine all statistics in a data store
 
-SYNOPSIS
-//:--------
+[[stat-compact-synopsis]]
+==== SYNOPSIS
 
-geowave stat compact [options] <storename>
+  geowave stat compact <store name>
 
-DESCRIPTION
-//:-----------
+[[stat-compact-description]]
+==== DESCRIPTION
 
-This command will combine all statistics in a GeoWave namespace
+This command combines all statistics in a GeoWave data store, which can make the data store more efficient.
 
-OPTIONS
-//:-------
+[[stat-compact-examples]]
+==== EXAMPLES
 
-There are currently no options for this command
+Compact all statistics in the `example` data store:
+
+  geowave stat compact example

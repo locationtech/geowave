@@ -1,44 +1,48 @@
-//:geowave-download(1)
-//:=====================
-//::doctype: manpage
+//:= geowave-util-landsat-download(1)
+:doctype: manpage
 
-NAME
-//:----
+[[util-landsat-download-name]]
+==== NAME
 
-geowave util landsat download - Download Landsat 8 imagery to a local directory
+geowave-util-landsat-download - Download Landsat 8 imagery to a local directory
 
-SYNOPSIS
-//:--------
+[[util-landsat-download-synopsis]]
+==== SYNOPSIS
 
-geowave util landsat download [options]
+  geowave util landsat download [options]
 
-DESCRIPTION
-//:-----------
+[[util-landsat-download-description]]
+==== DESCRIPTION
 
-This command will download the Landsat 8 imagery to a local directory
+This command downloads Landsat 8 imagery to a local directory.
 
-OPTIONS
-//:-------
+[[util-landsat-download-options]]
+==== OPTIONS
 
-- --cql
- * An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: shape (Geometry), acquisitionDate (Date), cloudCover (double), processingLevel (String), path (int), row (int) and the feature ID is entityId for the scene. Additionally attributes of the individuals band can be used such as band (String), sizeMB (double), and bandDownloadUrl (String)
- * Default: <empty string>
-- --nbestbands
- * An option to identify and only use a set number of bands with the best cloud cover
- * Default: 0
-- --nbestperspatial
- * A boolean flag, when applied with --nbestscenes or --nbestbands will aggregate scenes and/or bands by path/row
- * Default: false
-- --nbestscenes
- * An option to identify and only use a set number of scenes with the best cloud cover
- * Default: 0
-- --sincelastrun
- * An option to check the scenes list from the workspace and if it exists, to only ingest data since the last scene.
- * Default: false
-- --usecachedscenes
- * An option to run against the existing scenes catalog in the workspace directory if it exists.
- * Default: false
-- -ws, --workspaceDir
- * A local directory to write temporary files needed for landsat 8 ingest.
- * Default is <TEMP_DIR>/landsat8
- * Default: landsat8
+*--cql* _<filter>_::
+  An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: `shape` (Geometry), `acquisitionDate` (Date), `cloudCover` (double), `processingLevel` (String), `path` (int), `row` (int) and the feature ID is `entityId` for the scene.  Additionally attributes of the individuals band can be used such as `band` (String), `sizeMB` (double), and `bandDownloadUrl` (String).
+
+*--nbestbands* _<count>_::
+  An option to identify and only use a set number of bands with the best cloud cover.
+
+*--nbestperspatial*::
+  A flag that when applied with `--nbestscenes` or `--nbestbands` will aggregate scenes and/or bands by path/row.
+
+*--nbestscenes* _<count>_::
+  An option to identify and only use a set number of scenes with the best cloud cover.
+
+*--sincelastrun*::
+  If specified, check the scenes list from the workspace and if it exists, only ingest data since the last scene.
+
+*--usecachedscenes*::
+  If specified, run against the existing scenes catalog in the workspace directory if it exists.
+
+*-ws, --workspaceDir* _<path>_::
+  A local directory to write temporary files needed for landsat 8 ingest.  Default is `landsat8`.
+
+[[util-landsat-download-examples]]
+==== EXAMPLES
+
+Download the B8 band of Landsat raster data over a bounding box that roughly surrounds Berlin, Germany:
+
+  geowave util landsat download --nbestperspatial --nbestscenes 1 --cql "BBOX(shape,13.0535,52.3303,13.7262,52.6675) AND band='B8' AND cloudCover>0" -ws ./landsat

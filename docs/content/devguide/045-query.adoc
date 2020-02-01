@@ -1,0 +1,50 @@
+[[query]]
+<<<
+
+== Query
+
+A query in GeoWave is composed of a set of filters and index constraints. Index constraints are the portions of the query filter that affect the index dimensions. For example, the geometry from a spatial filter can be used as index constraints when querying a spatial index.
+
+[[query-overview]]
+=== Overview
+
+image::query.svg[scaledwidth="100%",width="100%",alt="Query Architecture", title="Query Architecture"]
+
+When a query is performed, GeoWave extracts index constraints from the provided query filter.  These index constraints are then decomposed into a set of range queries according to the index strategy that is used by the index.  See the <<125-appendix-theory.adoc#theory, Theory>> section for information about how ranges are decomposed for multi-dimensional data.  These range queries represent the coarse grain filtering of the query.
+
+The query filter is broken down into two types of filters: distributable and client. Distributable filters are filters that operate on the common index data while client filters are filters that operate on the extended data of the feature. Distributable filters are serialized and sent to the data store in order to filter the results of the range queries server-side. An example of a distributable filter is a geometry filter.  The index constraints extracted from the geometry filter are generally loser than the actual geometry to simplify the number of range queries that need to be performed. Because of this, results from the range queries must pass through the actual geometry filter to remove any entries that do not match exactly.
+
+All results that pass the distributable filters are then returned to the client which decodes each entry using the data adapter and discards any entries that do not pass the remaining client filters.
+
+NOTE: Currently only HBase and Accumulo data stores support distributable filters. All other data store types will perform all filtering on the client.
+
+=== Query Builders
+
+Queries are created in GeoWave through the use of query builders. These builders are used to set all the things needed to create a query, such as the type names, indices, authorizations, and query constraints. While the base {core-store}/core/store/api/QueryBuilder.java[`QueryBuilder`] can be used as a general way to query data, GeoWave also provides an implementation of the query builder that is specific to vector queries with the {core-geotime}/core/geotime/store/query/api/VectorQueryBuilder.java[`VectorQueryBuilder`]. It also provides a query builder for vector aggregation queries with the {core-geotime}/core/geotime/store/query/api/VectorAggregationQueryBuilder.java[`VectorAggregationQueryBuilder`]. These vector query builders provide a constraints factory that has additional constraints that are specific to vector queries, such as CQL filters.  See the <<075-programmatic-api.adoc#querying-data, programmatic API examples>> for examples of these query builders in action.
+
+=== Contextual Query Language (CQL)
+
+One of the most common ways to filter vector data in a query is by using CQL, also known as Common Query Language. CQL makes query filters more human readable and understandable while still maintaining the complexity that is often necessary. The constraints factory that is provided by the {core-geotime}/core/geotime/store/query/api/VectorQueryBuilder.java[`VectorQueryBuilder`] contains a helper function for creating query constraints using a CQL expression. CQL query constraints are used through the programmatic API, the GeoServer plugin, and through the GeoWave Query Lanaguage. For an overview on using CQL, please refer to the link:http://docs.geoserver.org/latest/en/user/tutorials/cql/cql_tutorial.html[GeoServer tutorials, window="_blank"].
+
+=== GeoWave Query Language
+
+In order to simplify vector queries, GeoWave provides a simple query language for vector data that is roughly based on SQL. This is discussed in the link:userguide.html#vector-queries[User Guide, window="_blank"].  While the user guide discusses the language from the context of the CLI, it is also possible to execute these queries programmatically by using the `GWQLParser` class and then executing the statement that is returned.  For example, the following statement would execute an everything query on the `countries` type in the `example` data store:
+
+[source, java]
+----
+Statement stmt = GWQLParser.parse("SELECT * FROM example.countries");
+ResultSet results = stmt.execute(dataStore);
+----
+
+As you can see in this example, the statement is executed on the provided data store. This means that when executing statements programmatically, the `<storeName>` part of the query is irrelevant and can be any value (though it is still expected by the syntax). If there are multiple data stores, the store name can be retrieved from the parsed statement with the `stmt.getStoreName()` function.
+
+Querying GeoWave using the GeoWave Query Language will return results in the form of a {adapter-vector}/adapter/vector/query/gwql/ResultSet.java[`ResultSet`], which is less like the results that would be obtained from a standard GeoWave query (`SimpleFeatures`) and more like the results that you would expect from querying a relational database (Rows).
+
+==== Output Formats
+
+New output formats are discovered using Service Provider Interface (SPI)-based injection. In order to install a new output format, implement {adapter-vector}/adapter/vector/query/QueryOutputFormatSpi.java[`QueryOutputFormatSpi`] and make sure your JAR is on the classpath when running GeoWave. For more information on using SPI, see the link:https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html[Oracle documentation, window="_blank"].
+
+==== Aggregation Functions
+
+New aggregation functions can also be added to the query language using SPI. Aggregation functions should implement the {adapter-vector}/adapter/vector/query/gwql/function/QLVectorAggregationFunction.java[`QLVectorAggregationFunction`] interface and register it by implementing the {adapter-vector}/adapter/vector/query/gwql/function/QLFunctionRegistrySpi.java[`QLFunctionRegistrySpi`] interface.  Once both of these are implemented, make sure your JAR is on the classpath when running GeoWave. For more information on using SPI, see the link:https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html[Oracle documentation, window="_blank"].
+

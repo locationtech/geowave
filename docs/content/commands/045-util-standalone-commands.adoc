@@ -1,0 +1,43 @@
+<<<
+
+[[standalone-commands]]
+=== *Standalone Store Commands*
+
+Commands that stand up standalone stores for testing and debug purposes.
+
+[[accumulo-runserver]]
+=== Run Standalone Accumulo
+
+include::manpages/util/accumulo/geowave-runserver.txt[]
+
+[[bigtable-runserver]]
+=== Run Standalone Bigtable
+
+include::manpages/util/bigtable/geowave-runbigtable.txt[]
+
+[[cassandra-runserver]]
+=== Run Standalone Cassandra
+
+include::manpages/util/cassandra/geowave-runcassandra.txt[]
+
+[[dynamodb-runserver]]
+=== Run Standalone DynamoDB
+
+include::manpages/util/dynamodb/geowave-rundynamodb.txt[]
+
+[[hbase-runserver]]
+=== Run Standalone HBase
+
+include::manpages/util/hbase/geowave-runhbase.txt[]
+
+[[kudu-runserver]]
+=== Run Standalone Kudu
+
+include::manpages/util/kudu/geowave-runkudu.txt[]
+
+[[redis-runserver]]
+=== Run Standalone Redis
+
+include::manpages/util/redis/geowave-runredis.txt[]
+'''
+

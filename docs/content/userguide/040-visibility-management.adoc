@@ -1,0 +1,62 @@
+<<<
+
+:linkattrs:
+
+== Visibility Management
+
+[[visibility-overview]]
+=== Overview
+
+When data is written to GeoWave, it may contain visibility constraints. By default, the visibility expression attached to each attribute is empty, which means that the data is visible regardless of which authorizations are present. If a visibility expression is set for an attribute, only queries that supply the appropriate authorizations will be able to see it.
+
+The only provided visibility management strategy is {adapter-vector}/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.java[`JsonDefinitionColumnVisibilityManagement`], which expects each feature to have an attribute that contains a JSON string describing the visibility for each attribute of the feature instance. This approach allows each feature to determine its own visibility criteria.
+
+Each name/value pair within the JSON structure defines the visibility for the associated attribute. In the following example, the `geometry` attribute is given a visibility `S` and the `eventName` attribute is given a visibility `TS`.  This means that a user with an authorization set of `["S","TS"]` would be able to see both attributes, while a user with only `["S"]` would only be able to see the `geometry` attribute.
+
+[source, json]
+----
+{ "geometry" : "S", "eventName": "TS" }
+----
+
+JSON attributes can be regular expressions matching more than one feature property name. In the example, all attributes except for those that start with `geo` have visibility `TS`.
+
+[source, json]
+----
+{ "geo.*" : "S", ".*" : "TS" }
+----
+
+The order of the name/value pairs must be considered if one rule is more general than another, as shown in the example. The rule `.$$*$$` matches all properties. The more specific rule `geo.$$*$$` must be ordered first.
+
+By default, the system extracts the JSON visibility string from an attribute named `GEOWAVE_VISIBILITY`, however, selection of an alternate attribute can be achieved in two ways.
+
+* It can be done programatically by setting the UserData property `visibility` to `TRUE` on the attribute that contains the visibility information in the SimpleFeatureType.
+* It can be done through ingest configuration as described in the <<025-ingest.adoc#visibility-configuration, Visibility Configuration>> section of this document.
+
+NOTE: Additional visibility management strategies can be registered through the Java Service Provider Interface (SPI) model by implementing the {adapter-vector}/adapter/vector/plugin/visibility/ColumnVisibilityManagementSpi.java[`ColumnVisibilityManagement`] interface. For more information on using SPI, see the link:https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html[Oracle documentation, window="_blank"].
+
+=== Visbility Expressions
+
+It is sometimes necessary to provide more complex visibility constraints on a particular attribute.  For example if you wanted to allow two different authorizations to view a particular attribute.  GeoWave handles this by using visibility expressions.  These expressions support AND and OR operations through the symbols `&` and `|`.  It also supports parentheses for situations where more complex expressions are required.
+
+==== Examples
+
+.Visibility expression that allows both `A` and `B` authorizations to see the data:
+....
+A|B
+....
+
+.Visibility expression that only shows data if both `A` and `B` authorizations are provided:
+....
+A&B
+....
+
+.Visibility expression that shows data if both `A` and `B` are provided, but also if only `C` is provided:
+....
+(A&B)|C
+....
+
+.Visibility expression that shows data if `A` and one of `B` or `C` are provided:
+....
+A&(B|C)
+....
+

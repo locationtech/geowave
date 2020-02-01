@@ -1,0 +1,204 @@
+/*! ===================================
+    GeoWave Documetation Styles
+ ====================================== */
+
+/* Header */
+
+@media only screen and (max-width: 768px) {
+    #header {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+/* Navbar */
+
+.navbar-docs {
+    background-color: rgb(23, 33, 46) !important;
+    padding: 0 1rem;
+    box-shadow: 0 0.15rem 1.5rem rgba(0, 0, 0, 0.7) !important;
+}
+
+.navbar-docs .navbar-brand {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    margin-right: .25rem;
+}
+
+.navbar-docs .navbar-brand>img {
+    max-width: 9rem;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    font-weight: 500;
+}
+
+.navbar-docs .navbar-brand+span {
+    color: white;
+    font-size: 1rem;
+    margin: 0 .45rem;
+}
+
+.navbar-docs .navbar-brand+span+a {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #33BCCB;
+    position: relative;
+    top: 1px;
+    margin-right: auto;
+}
+
+/* Body */
+
+body.toc2 {
+    overflow-x: hidden;
+}
+
+@media only screen and (min-width: 1280px) {
+    body.toc2 {
+        top: 66px;
+    }
+}
+
+/* Typography Adjustments */
+
+#header, #content, #footnotes, #footer {
+    font-family: 'Lato', sans-serif;
+}
+
+h1, h2, h3, #toctitle, .sidebarblock>.content>.title, h4, h5, h6 {
+    color: #212529;
+    margin-top: 2rem;
+    font-family: 'Lato', sans-serif;
+}
+
+.subheader, .admonitionblock td.content>.title, .audioblock>.title, .exampleblock>.title, .imageblock>.title, .listingblock>.title, .literalblock>.title, .stemblock>.title, .openblock>.title, .paragraph>.title, .quoteblock>.title, table.tableblock>.title, .verseblock>.title, .videoblock>.title, .dlist>.title, .olist>.title, .ulist>.title, .qlist>.title, .hdlist>.title {
+    color: #212529;
+}
+
+h3, .h3 {
+    font-size: 1.6rem;
+}
+
+h4 {
+    font-weight: 400;
+}
+
+#content h1 {
+    font-weight: 900;
+}
+
+.openblock.partintro {
+    margin-bottom: 2rem;
+    font-size: 1.25rem;
+    opacity: .7;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #efefed;
+}
+
+h1 strong, h2 strong, h3 strong, #toctitle strong, .sidebarblock>.content>.title strong, h4 strong, h5 strong, h6 strong {
+    font-weight: 500;
+}
+
+/* Table of Contents */
+
+#header .toc2 {
+    background-color: #17212e;
+    /* background-color: #f4f4f5 */
+    max-width: 18em;
+    padding: .75em 1.5em 66px;
+    top: 66px;
+}
+
+@media only screen and (max-width: 768px) {
+    #header .toc2 {
+        max-width: initial;
+    }
+}
+
+.toc2 #toctitle, #toc ul.sectlevel0>li>a {
+    display: none;
+    color: white;
+    /* color: #212529; */
+}
+
+#toc.toc2 ul ul {
+    margin-bottom: 1rem;
+}
+
+/* Section */
+
+.sect1+.sect1 {
+    padding-top: 1.25rem;
+}
+
+.sectlevel1 li {
+    font-size: 0.9rem;
+}
+
+.sectlevel1 li>a {
+    color: white;
+    display: inline-block;
+    font-family: 'Lato', sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.01rem;
+    margin: 0.75rem 0;
+    opacity: 0.9;
+    text-transform: uppercase;
+}
+
+.sectlevel2 li a {
+    font-size: 1rem;
+    font-weight: normal;
+    text-transform: initial;
+    margin: 0.5rem 0 0;
+}
+
+.sectlevel2 li a .icon {
+    font-size: 1.25rem;
+    margin-right: 0.5rem;
+}
+
+#header ul a:hover {
+    opacity: .65;
+}
+
+#header a.subheader {
+    font-style: normal !important;
+    font-weight: 600;
+}
+
+#header small {
+    position: absolute;
+    bottom: 20px;
+}
+
+/* Footer */
+
+#footer {
+    background-color: transparent;
+}
+
+#footer-text {
+    color: #878585;
+    text-align: center;
+    font-size: 14px;
+}
+
+.navbar-packages {
+    margin: 0 auto;
+    width: 100%;
+    background-color: white;
+    z-index: 10;
+    padding: 4rem 0 0;
+}
+
+pre {
+    background-color: #f3f4f4;
+    border: 1px solid #dee0e0;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(233, 236, 239, 0.4);
+}

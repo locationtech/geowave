@@ -1,0 +1,7 @@
+<<<
+
+[[quickstart-enable-jupyter]]
+=== Enabling Jupyter Support
+
+GeoWave also supports Jupyter notebook development which you can enable by following the steps link:jupyter.html[here, window="_blank"] before creating the cluster.
+

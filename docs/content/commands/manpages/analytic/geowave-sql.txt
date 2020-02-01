@@ -1,32 +1,48 @@
-//:geowave-sql(1)
-//:=========================
-//::doctype: manpage
+//:= geowave-analytic-sql(1)
+:doctype: manpage
 
-NAME
-//:----
+[[analytic-sql-name]]
+==== NAME
 
-geowave analytic sql - SparkSQL queries
+geowave-analytic-sql - SparkSQL queries
 
-SYNOPSIS
-//:--------
+[[analytic-sql-synopsis]]
+==== SYNOPSIS
 
-geowave analytic sql [options] <sql query> - e.g. 'select * from storename[|adaptername] where condition...'
+  geowave analytic sql [options] <sql query>
 
-DESCRIPTION
-//:-----------
+[[analytic-sql-description]]
+==== DESCRIPTION
 
-The geowave analytic sql operator will execute a SparkSQL query
+This command executes a Spark SQL query against a given data store, e.g. `select * from <store name>[|<type name>] where <condition>`.  An alternate way of querying vector data is by using the `vector query` command, which does not use Spark, but provides a more robust set of querying capabilities.
 
+[[analytic-sql-options]]
+==== OPTIONS
 
-OPTIONS
-//:-------
+*-n, --name* _<name>_::
+  The Spark application name.  Default is `GeoWave Spark SQL`.
 
-- --csv
- * The output CSV file name
-- --out
- * The output datastore name
-- --outtype
- * The output feature type (adapter) name
-- -s, --show
- * Number of result rows to display
- * Default: 20
+*-ho, --host* _<host>_::
+  The Spark driver host.  Default is `localhost`.
+
+*-m, --master* _<designation>_::
+  The Spark master designation.  Default is `yarn`.
+
+*--csv* _<file>_::
+  The output CSV file name.
+
+*--out* _<store name>_::
+  The output data store name.
+
+*--outtype* _<type>_::
+  The output type to output results to.
+
+*-s, --show* _<count>_::
+  Number of result rows to display.  Default is 20.
+  
+[[analytic-sql-examples]]
+==== EXAMPLES
+
+Select all features from the `hail` type in the `my_store` data store using a local Spark cluster:
+
+  geowave analytic sql -m local "select * from my_store|hail"

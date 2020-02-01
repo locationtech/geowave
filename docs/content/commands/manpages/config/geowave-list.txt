@@ -1,27 +1,35 @@
-//:geowave-list(1)
-//:===============
-//::doctype: manpage
+//:= geowave-config-list(1)
+:doctype: manpage
 
-NAME
-//:----
+[[config-list-name]]
+==== NAME
 
-geowave config list - List property name within cache
+geowave-config-list - list all configured properties
 
-SYNOPSIS
-//:--------
+[[config-list-synopsis]]
+==== SYNOPSIS
 
-geowave config list [options]
+  geowave config list [options]
 
-DESCRIPTION
-//:-----------
+[[config-list-description]]
+==== DESCRIPTION
 
-The geowave config list operator will list all properties in local config.
--f or --filter will allow you to give a regex to filter the list by
-(useful regexes may be 'store' or 'index' to isolate properties for one or 
-the other or a particular store/index name to further isolate the list).
+This command will list all properties in the local configuration. This list can be filtered with a regular expression using the `-f` or `--filter` options.  A useful regular expression might be a store name, to see all of the configured properties for a particular data store.
 
-OPTIONS
-//:-------
+[[config-list-options]]
+==== OPTIONS
 
-- -f or --filter <arg>
- * Filter list by a regex
+*-f, --filter* _<regex>_::
+  Filter list by a regular expression.
+ 
+[[config-list-examples]]
+==== EXAMPLES
+
+List all configuration properties:
+
+  geowave config list
+  
+List all configuration properties on a data store called `example`:
+
+  geowave config list -f example
+ 

@@ -1,0 +1,24 @@
+//:= geowave-store-describe(1)
+:doctype: manpage
+
+[[store-describe-name]]
+==== NAME
+
+geowave-store-describe - List properties of a data store
+
+[[store-describe-synopsis]]
+==== SYNOPSIS
+
+  geowave store describe <store name>
+
+[[store-describe-description]]
+==== DESCRIPTION
+
+This command displays all configuration properties of a given GeoWave data store.
+
+[[store-describe-examples]]
+==== EXAMPLES
+
+List all configuration properties of the `example` data store:
+
+  geowave store describe example

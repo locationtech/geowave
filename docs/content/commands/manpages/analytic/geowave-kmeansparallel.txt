@@ -1,142 +1,157 @@
-//:geowave-kmeansparallel(1)
-//:=========================
-//::doctype: manpage
+//:= geowave-analytic-kmeansparallel(1)
+:doctype: manpage
 
-NAME
-//:----
+[[analytic-kmeansparallel-name]]
+==== NAME
 
-geowave analytic kmeansparallel - KMeans Parallel Clustering
+geowave-analytic-kmeansparallel - K-means Parallel Clustering
 
-SYNOPSIS
-//:--------
+[[analytic-kmeansparallel-synopsis]]
+==== SYNOPSIS
 
-geowave analytic kmeansparallel [options] <storename>
+  geowave analytic kmeansparallel [options] <store name>
 
-DESCRIPTION
-//:-----------
+[[analytic-kmeansparallel-description]]
+==== DESCRIPTION
 
-The geowave analytic kmeansparallel operator will execute a KMeans Parallel Clustering analytic
+This command executes a K-means Parallel Clustering analytic.
 
-EXAMPLE
-//:-----------
+[[analytic-kmeansparallel-options]]
+==== OPTIONS
 
-[source, bash]
-----
-yarn jar geowave-tools.jar analytic kmeansparallel -cmi 15 -zl 1 -emx 4000 -emn 100 -hdfsbase /usr/rwgdrummer/temp_dir_kmeans 
--hdfs localhost:53000 -jobtracker localhost:8032 --query.adapters hail -sms 4 -sxs 8 -ssi 10 my_store
-----
+*-conf, --mapReduceConfigFile* _<file>_::
+  MapReduce configuration file.
 
-The min clustering iterations is 15 (cmi), the zoomlevel is 1 (zl), the max hdfs input split is 4000 (emx), the min hdfs input split is 100 (emn),
-the temporary files needed by this job are stored in hdfs:/host:port/user/rwgdrummer/temp_dir_kmeans (hdfsbase),
-the hdfs ipc port is localhost:53000 (hdfs), the yarn job tracker is at localhost:8032 (-jobtracker),
-the data executed against is 'hail' (query.adapters), the min sample size is 4 (sms, which is kmin),
-the max sample size is 8 (which is kmax), the minimum number of sampling iterations is 10. 
-The accumulo connection parameters are loaded from my_store.
+*$$*$$ -hdfsbase, --mapReduceHdfsBaseDir* _<path>_::
+  Fully qualified path to the base directory in HDFS.
 
-EXECUTION
-//:-----------
+*$$*$$ -jobtracker, --mapReduceJobtrackerHostPort* _<host>_::
+  [REQUIRED (or `-resourceman`)] Hadoop job tracker hostname and port in the format `hostname:port`.
 
-KMeansParallel tries to identify the optimal k (sms, smx) for a set of zoom levels (1 -> zl).  When zoom level is 1,
-it will perform a normal kmeans and find k clusters.  If zoomlevel is 2 or higher, it will take each cluster found,
-and then try to create sub-clusters (bounded by that cluster), identifying a new optimal k for that sub-cluster.  As 
-such, without powerful infrastucture, this approach could take a significant amount of time to complete with zoom levels
-higher than 1.
+*$$*$$ -resourceman, --mapReduceYarnResourceManager* _<host>_::
+  [REQUIRED (or `-jobtracker`)] Yarn resource manager hostname and port in the format `hostname:port`.
+  
+*-hdfs, --mapReduceHdfsHostPort* _<host>_::
+  HDFS hostname and port in the format `hostname:port`.
 
-KMeansParallel executes by first executing an extraction and de-duplication on data received via 
-GeoWaveInputFormat.  The data is copied to HDFS for faster processing.  The K-Sampler job is used to pick sample
-centroid points.  These centroids are then assigned a cost, and then weak centroids are stripped before the 
-K-Sampler is executed again.  This process iterates several times, before the best centroid locations are found,
-which are fed into the real K-Means algorithm as initial guesses.  K-Means iterates until the tolerance is 
-reached (-cct, which defaults to 0.0001) or the max iterations is met (-cmi).
+*--cdf, --commonDistanceFunctionClass* _<class>_::
+  Distance function class that implements `org.locationtech.geowave.analytics.distance.DistanceFn`.
+  
+*$$*$$ --query.typeNames* _<types>_::
+  The comma-separated list of types to query; by default all types are used.
 
-After execution, KMeansParallel writes the centroids to an output data type (-eot, defaults to centroid), and then
-creates an informational set of convex hulls which you can plot in GeoServer to visually identify cluster groups
-(-hdt, defaults to convex_hull).
+*--query.auth* _<auths>_::
+  The comma-separated list of authorizations used during extract; by default all authorizations are used.
 
-For tuning performance, you can set the number of reducers used in each step.  Extraction/Dedupe reducer count is
--crc, Clustering reducer count is -erc, Convex Hull reducer count is -hrc, and Output reducer count is -orc).
+*--query.index* _<index>_::
+  The specific index to query; by default one is chosen for each adapter.
+  
+*$$*$$ -emx, --extractMaxInputSplit* _<size>_::
+  Maximum HDFS input split size.
 
-If you would like to run the algorithm multiple times, it may be useful to set the batch id (-b), which can
-be used to distinguish between multiple batches (runs).
+*$$*$$ -emn, --extractMinInputSplit* _<size>_::
+  Minimum HDFS input split size.
 
-OPTIONS
-//:-------
+*-eq, --extractQuery* _<query>_::
+  Query
+  
+*-ofc, --outputOutputFormat* _<class>_::
+  Output format class.
+  
+*-ifc, --inputFormatClass* _<class>_::
+  Input format class.
 
-- -cce, --centroidExtractorClass
- * Centroid Exractor Class implements _org.locationtech.geowave.analytics.extract.CentroidExtractor_
-- -cid, --centroidIndexId
- * Index Identifier for Centroids
-- -cfc, --centroidWrapperFactoryClass
- * A factory class that implements _org.locationtech.geowave.analytics.tools.AnalyticItemWrapperFactory_
-- -czl, --centroidZoomLevel
- * Zoom Level Number
-- -cct, --clusteringConverganceTolerance
- * Convergence Tolerance
-- * -cmi, --clusteringMaxIterations
- * Maximum number of iterations when finding optimal clusters
-- -crc, --clusteringMaxReducerCount
- * Maximum Clustering Reducer Count
-- * -zl, --clusteringZoomLevels
- * Number of Zoom Levels to Process
-- -dde, --commonDimensionExtractClass
- * Dimension Extractor Class implements _org.locationtech.geowave.analytics.extract.DimensionExtractor_
-- -cdf, --commonDistanceFunctionClass
- * Distance Function Class implements _org.locationtech.geowave.analytics.distance.DistanceFn_
-- -ens, --extractDataNamespaceUri
- * Output Data Namespace URI
-- -ede, --extractDimensionExtractClass
- * Class to extract dimensions into a simple feature output
-- * -emx, --extractMaxInputSplit
- * Maximum hdfs input split size
-- * -emn, --extractMinInputSplit
- * Minimum hdfs input split size
-- -eot, --extractOutputDataTypeId
- * Output Data Type ID
-- -eq, --extractQuery
- * Query
-- -erc, --extractReducerCount
- * Number of Reducers For initial data extraction and de-duplication
-- -b, --globalBatchId
- * Batch ID
-- -pb, --globalParentBatchId
- * Batch ID
-- -hns, --hullDataNamespaceUri
- * Data Type Namespace for a centroid item
-- -hdt, --hullDataTypeId
- * Data Type ID for a centroid item
-- -hid, --hullIndexId
- * Index Identifier for Centroids
-- -hpe, --hullProjectionClass
- * Class to project on to 2D space. Implements _org.locationtech.geowave.analytics.tools.Projection_
-- -hrc, --hullReducerCount
- * Centroid Reducer Count
-- -hfc, --hullWrapperFactoryClass
- * Class to create analytic item to capture hulls. Implements _org.locationtech.geowave.analytics.tools.AnalyticItemWrapperFactory_
-- -ifc, --inputFormatClass
- * Input Format Class
-- -conf, --mapReduceConfigFile
- * MapReduce Configuration
-- * -hdfsbase, --mapReduceHdfsBaseDir
- * Fully qualified path to the base directory in hdfs
-- * -hdfs, --mapReduceHdfsHostPort
- * HDFS hostname and port in the format hostname:port
-- -jobtracker, --mapReduceJobtrackerHostPort
- * [REQUIRED (or resourceman)] Hadoop job tracker hostname and port in the format hostname:port
-- -resourceman, --mapReduceYarnResourceManager
- * [REQUIRED (or jobtracker)] Yarn resource manager hostname and port in the format hostname:port
-- -ofc, --outputOutputFormat
- * Output Format Class
-- -orc, --outputReducerCount
- * Number of Reducers For Output
-- * --query.adapters
- * The comma-separated list of data adapters to query; by default all adapters are used.
-- --query.auth
- * The comma-separated list of authorizations used during extract; by default all authorizations are used.
-- --query.index
- * The specific index to query; by default one is chosen for each adapter.
-- * -sxs, --sampleMaxSampleSize
- * Max Sample Size
-- * -sms, --sampleMinSampleSize
- * Minimum Sample Size
-- * -ssi, --sampleSampleIterations
- * Minimum number of sample iterations
+*-orc, --outputReducerCount* _<count>_::
+  Number of reducers For output.
+
+*-cce, --centroidExtractorClass* _<class>_::
+  Centroid exractor class that implements `org.locationtech.geowave.analytics.extract.CentroidExtractor`.
+
+*-cid, --centroidIndexId* _<index>_::
+  Index to use for centroids.
+
+*-cfc, --centroidWrapperFactoryClass* _<class>_::
+  A factory class that implements `org.locationtech.geowave.analytics.tools.AnalyticItemWrapperFactory`.
+
+*-czl, --centroidZoomLevel* _<level>_::
+  Zoom level for centroids.
+
+*-cct, --clusteringConverganceTolerance* _<tolerance>_::
+  Convergence tolerance.
+
+*$$*$$ -cmi, --clusteringMaxIterations* _<count>_::
+  Maximum number of iterations when finding optimal clusters.
+
+*-crc, --clusteringMaxReducerCount* _<count>_::
+  Maximum clustering reducer count.
+
+*$$*$$ -zl, --clusteringZoomLevels* _<count>_::
+  Number of zoom levels to process.
+
+*-dde, --commonDimensionExtractClass* _<class>_::
+  Dimension extractor class that implements `org.locationtech.geowave.analytics.extract.DimensionExtractor`.
+
+*-ens, --extractDataNamespaceUri* _<namespace>_::
+  Output data namespace URI.
+
+*-ede, --extractDimensionExtractClass* _<class>_::
+  Class to extract dimensions into a simple feature output.
+
+*-eot, --extractOutputDataTypeId* _<type>_::
+  Output data type ID.
+
+*-erc, --extractReducerCount* _<count>_::
+  Number of reducers For initial data extraction and de-duplication.
+
+*-b, --globalBatchId* _<id>_::
+  Batch ID.
+
+*-pb, --globalParentBatchId* _<id>_::
+  Parent Batch ID.
+
+*-hns, --hullDataNamespaceUri* _<namespace>_::
+  Data type namespace for a centroid item.
+
+*-hdt, --hullDataTypeId* _<type>_::
+  Data type ID for a centroid item.
+
+*-hid, --hullIndexId* _<index>_::
+  Index to use for centroids.
+
+*-hpe, --hullProjectionClass* _<class>_::
+  Class to project on to 2D space. Implements `org.locationtech.geowave.analytics.tools.Projection`.
+
+*-hrc, --hullReducerCount* _<count>_::
+  Centroid reducer count.
+
+*-hfc, --hullWrapperFactoryClass* _<class>_::
+  Class to create analytic item to capture hulls. Implements `org.locationtech.geowave.analytics.tools.AnalyticItemWrapperFactory`.
+
+*$$*$$ -sxs, --sampleMaxSampleSize* _<size>_::
+  Maximum sample size.
+  
+*$$*$$ -sms, --sampleMinSampleSize* _<size>_::
+  Minimum sample size.
+  
+*$$*$$ -ssi, --sampleSampleIterations* _<count>_::
+  Minimum number of sample iterations.
+
+[[analytic-kmeansparallel-examples]]
+==== EXAMPLES
+
+The minimum clustering iterations is 15 (`-cmi`), the zoom level is 1 (`-zl`), the maximum HDFS input split is 4000 (`-emx`), the minimum HDFS input split is 100 (`-emn`), the temporary files needed by this job are stored in `hdfs:/host:port/user/rwgdrummer/temp_dir_kmeans` (`-hdfsbase`), the HDFS IPC port is `localhost:53000` (`-hdfs`), the Yarn job tracker is at `localhost:8032` (`-jobtracker`), the type used is 'hail' (`-query.typeNames`), the minimum sample size is 4 (`-sms`, which is kmin), the maximum sample size is 8 (`-sxs`, which is kmax), the minimum number of sampling iterations is 10 (`-ssi`), and the data store parameters are loaded from `my_store`.
+
+  geowave analytic kmeansparallel -cmi 15 -zl 1 -emx 4000 -emn 100 -hdfsbase /usr/rwgdrummer/temp_dir_kmeans -hdfs localhost:53000 -jobtracker localhost:8032 --query.typeNames hail -sms 4 -sxs 8 -ssi 10 my_store
+
+[[analytic-kmeansparallel-execution]]
+==== EXECUTION
+
+K-means parallel tries to identify the optimal K (between `-sms` and `-sxs`) for a set of zoom levels (1 -> `-zl`).  When the zoom level is 1, it will perform a normal K-means and find K clusters.  If the zoom level is 2 or higher, it will take each cluster found, and then try to create sub-clusters (bounded by that cluster), identifying a new optimal K for that sub-cluster.  As such, without powerful infrastucture, this approach could take a significant amount of time to complete with zoom levels higher than 1.
+
+K-means parallel executes by first executing an extraction and de-duplication on data received via `GeoWaveInputFormat`.  The data is copied to HDFS for faster processing.  The K-sampler job is used to pick sample centroid points.  These centroids are then assigned a cost, and then weak centroids are stripped before the K-sampler is executed again.  This process iterates several times, before the best centroid locations are found, which are fed into the real K-means algorithm as initial guesses.  K-means iterates until the tolerance is reached (`-cct`, which defaults to 0.0001) or the max iterations is met (`-cmi`).
+
+After execution, K-means parallel writes the centroids to an output data type (`-eot`, defaults to `centroid`), and then creates an informational set of convex hulls which you can plot in GeoServer to visually identify cluster groups (`-hdt`, defaults to `convex_hull`).
+
+For tuning performance, you can set the number of reducers used in each step.  Extraction/dedupe reducer count is `-crc`, clustering reducer count is `-erc`, convex Hull reducer count is `-hrc`, and output reducer count is `-orc`).
+
+If you would like to run the algorithm multiple times, it may be useful to set the batch id (`-b`), which can be used to distinguish between multiple batches (runs).

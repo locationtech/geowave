@@ -1,0 +1,33 @@
+//:= geowave-util-dynamodb-run(1)
+:doctype: manpage
+
+[[util-dynamodb-run-name]]
+==== NAME
+
+geowave-util-dynamodb-run - Runs a standalone DynamoDB instance for test and debug with GeoWave
+
+[[util-dynamodb-run-synopsis]]
+==== SYNOPSIS
+
+  geowave util dynamodb run [options]
+
+[[util-dynamodb-run-description]]
+==== DESCRIPTION
+
+This command runs a standalone DynamoDB instance, which can be used locally for testing and debugging GeoWave, without needing to set up a full instance.
+
+[[util-dynamodb-run-options]]
+==== OPTIONS
+
+*-d, --directory* _<path>_::
+  The directory to use for DynamoDB.
+  
+*-i, --interactive* _<enabled>_::
+  Whether to prompt for user input to end the process. Default is `true`.
+
+[[util-dynamodb-run-examples]]
+==== EXAMPLES
+
+Run a standalone DynamoDB instance:
+
+  geowave util dynamodb run -d .

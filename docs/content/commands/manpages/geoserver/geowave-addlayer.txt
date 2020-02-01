@@ -1,31 +1,48 @@
-//:geowave-addlayer(1)
-//:===================
-//::doctype: manpage
+//:= geowave-gs-layer-add(1)
+:doctype: manpage
 
-NAME
-//:----
+[[gs-layer-add-name]]
+==== NAME
 
-geowave gs layer add - Add a GeoServer layer from the given GeoWave store
+geowave-gs-layer-add - Add a GeoServer layer from the given GeoWave data store
 
-SYNOPSIS
-//:--------
+[[gs-layer-add-synopsis]]
+==== SYNOPSIS
 
-geowave gs layer add [options] <GeoWave store name>
+  geowave gs layer add [options] <data store name>
+  geowave geoserver layer add [options] <data store name>
 
-DESCRIPTION
-//:-----------
+[[gs-layer-add-description]]
+==== DESCRIPTION
 
-This command will add a GeoServer layer from the given GeoWave store
+This command adds a layer from the given GeoWave data store to the configured GeoServer instance.  Unlike `gs fl add`, this command adds a layer directly from a GeoWave data store, automatically creating the GeoWave store for it in GeoServer.
 
-OPTIONS
-//:-------
+[[gs-layer-add-options]]
+==== OPTIONS
 
-- -id, --adapterId
- * select just <adapter id> from the store
-- -a, --add
- * For multiple layers, add (all | raster | vector)
- * Possible Values: [ALL, RASTER, VECTOR]
-- -sld, --setStyle
- * <default style sld>
-- -ws, --workspace
- * <workspace name>
+*-t, --typeName* _<type>_::
+  Add the type with the given name to GeoServer.
+
+*-a, --add* _<layer type>_::
+  Add all layers of the given type to GeoServer.  Possible values are `ALL`, `RASTER`, and `VECTOR`.
+
+*-sld, --setStyle* _<style>_::
+  The default style to use for the added layers.
+
+*-ws, --workspace* _<workspace>_::
+  The GeoServer workspace to use.
+
+[[gs-layer-add-examples]]
+==== EXAMPLES
+
+Add a type called `hail` from the `example` data store to GeoServer:
+
+  geowave gs layer add -t hail example
+  
+Add all types from the `example` data store to GeoServer:
+
+  geowave gs layer add --add ALL example
+  
+Add all vector types from the `example` data store to GeoServer:
+
+  geowave gs layer add --add VECTOR example

@@ -1,0 +1,117 @@
+[[packaging]]
+<<<
+
+:linkattrs:
+
+== Packaging GeoWave Builds
+
+GeoWave can be packaged in several different ways.  Prior to packaging GeoWave, make sure that the build process has completed.
+
+=== GeoWave CLI Tools
+
+GeoWave artifacts can be packaged into a single JAR that can be used to execute CLI commands by running the following Maven command from the GeoWave root directory:
+
+[source, bash]
+----
+$ mvn package -P geowave-tools-singlejar -Dfindbugs.skip -Dspotbugs.skip -DskipTests
+----
+
+After the packaging process is complete, the resulting JAR will be available in the `deploy/target` directory with a name like `geowave-deploy-<version>-geoserver.jar`.  To use this jar for CLI commands you can execute it using the following java command:
+
+[source, bash]
+----
+$ java -cp java -cp <geowave_home>/deploy/target/geowave-deploy-${project.version}-tools.jar org.locationtech.geowave.core.cli.GeoWaveMain <command> <options>
+----
+
+NOTE: Replace `<geowave_home>` with the GeoWave home directory, or use an environment variable.
+
+As you can see, using GeoWave in this way can be fairly cumbersome.  To make things easier, this command can be wrapped up in an alias.
+
+.Linux, Mac, Windows w/ Git Bash
+[source, bash]
+----
+$ alias geowave="java -cp $GEOWAVE_HOME/deploy/target/geowave-deploy-${project.version}-tools.jar org.locationtech.geowave.core.cli.GeoWaveMain"
+----
+
+.Windows Command Prompt
+[source, bash]
+----
+$ doskey geowave=java -cp %GEOWAVE_HOME%/deploy/target/geowave-deploy-${project.version}-tools.jar org.locationtech.geowave.core.cli.GeoWaveMain $*
+----
+
+After the alias has been created, you will be able to use the GeoWave CLI with the `geowave` command. For a full list of these commands, please see the link:commands.html[GeoWave CLI Appendix, window="_blank"].
+
+=== GeoServer Plugin
+
+GeoWave artifacts can be packaged into a single JAR to be used in a GeoServer installation by running the following Maven command from the GeoWave root directory:
+
+[source, bash]
+----
+$ mvn package -P geotools-container-singlejar -Dfindbugs.skip -Dspotbugs.skip -DskipTests
+----
+
+After the packaging process is complete, the resulting JAR will be available in the `deploy/target` directory with a name like `geowave-deploy-<version>-geoserver.jar`. To use this jar with a GeoServer installation, simply copy it to the `WEB-INF/lib` directory of GeoServer's installation and restart the web service that GeoServer is running on.
+
+=== Accumulo JAR
+
+GeoWave artifacts can be packaged into a JAR to be used by Accumulo for server-side operations by running the following Maven command from the GeoWave root directory:
+
+[source, bash]
+----
+$ mvn package -P accumulo-container-singlejar -Dfindbugs.skip -Dspotbugs.skip -DskipTests
+----
+
+After the packaging process is complete, the resulting JAR will be available in the `deploy/target` directory with a name like `geowave-deploy-<version>-accumulo.jar`. See link:userguide.html#accumulo-config[Accumulo Configuration, window="_blank"] in the User Guide for more information about using this jar.
+
+=== HBase Coprocessor JAR
+
+GeoWave artifacts can be packaged into a coprocessor JAR for HBase server-side operations by running the following Maven command from the GeoWave root directory:
+
+[source, bash]
+----
+$ mvn package -P hbase-container-singlejar -Dfindbugs.skip -Dspotbugs.skip -DskipTests
+----
+
+After the packaging process is complete, the resulting JAR will be available in the `deploy/target` directory with a name like `geowave-deploy-<version>-hbase.jar`. In order to use this jar, copy it to an HDFS location that is accessible to HBase. When configuring the GeoWave HBase data store (either through the GeoServer plugin or the CLI), set the `coprocessorJar` option to the HDFS location of the jar.
+
+=== Standalone Installers
+
+Standalone installers for Linux, Mac, and Windows can be built using link:https://www.ej-technologies.com/products/install4j/overview.html[Install4J, window="_blank"].
+
+IMPORTANT: Installers are built using Install4J, which requires an active license to use. This section of the guide assumes that Install4J has been installed on the system and has a valid license.
+
+Several things need to be done in order to successfully build the standalone installers, each of which are outlined below.
+
+==== Build GeoWave Artifacts
+
+The installers require all of the GeoWave artifacts to be built prior to packaging.  See <<015-building.adoc#build-geowave, Building GeoWave>> for help with building the artifacts.
+
+==== Build GeoWave Documentation
+
+The installers provide an option to the user to install documentation, because of this, all documentation should be built prior to packaging the installers.  See<<015-building.adoc#build-docs, Building Documentation>> for help with building all of the documentation.
+
+IMPORTANT: After building the Python documentation, move the `python/src/main/python/html/pygw` directory to the `target/site` directory and rename it to `pydocs`.  This will prevent broken links in the generated documentation.
+
+NOTE: This step can be skipped, but the the documentation directory of the GeoWave installation will be empty. This can save some time if the installer is only intended to be used for testing purposes.
+
+==== Package Installer Plugins
+
+The installers provide several ways for users to customize their installation of GeoWave.  This is handled by packaging GeoWave extensions and optional components as installer plugins. All installer plugins in the GeoWave codebase can be packaged using the following Maven command:
+
+[source, bash]
+----
+$ mvn package -P build-installer-plugin -DskipTests -Dfindbugs.skip -Dspotbugs.skip
+----
+
+This will package all of the installer plugins and put them into directories expected by the Install4J build process.
+
+==== Build Installers
+
+Once all of the above steps have been completed, the GeoWave standalone installers can be built using the following Maven command:
+
+[source, bash]
+----
+$ mvn package -pl deploy -P build-installer-main -Dinstall4j.home=$INSTALL4J_HOME -DskipTests -Dfindbugs.skip -Dspotbugs.skip
+----
+
+This command expects an environment variable `$INSTALL4J_HOME` that points to the root directory of the Install4J installation.  Once the command is complete, standalone installers for Linux, Mac, and Windows will be available in the `deploy/target/install4j-output` directory.

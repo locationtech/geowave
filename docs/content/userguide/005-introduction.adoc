@@ -1,0 +1,30 @@
+<<<
+
+:linkattrs:
+
+== Introduction
+
+=== Purpose of this Guide
+
+This user guide focuses on the various ways a user can interact with GeoWave without writing code. It covers the Command-Line Interface (CLI), the ingest process, the vector query language, analytics, visibility management, as well as the GeoServer plugin.
+
+=== Assumptions
+
+This guide assumes that the reader is familiar with the basics of GeoWave discussed in the link:overview.html[Overview]. It also assumes that GeoWave has already been installed and is available on the command-line.  See the link:installation-guide.html[Installation Guide^, window="_blank"] for help with the installation process.
+
+=== External Components
+
+Some commands in this guide are intended to be used alongside external third party components.  The following are *not* required, but the versions supported by GeoWave are listed below. The installation and configuration of these external components is outside the scope of this document.
+
+[frame="topbot", width="100%", grid="rows", options="header"]
+|=========================================================
+| Component | Supported Version(s) | 
+| link:http://geoserver.org/[GeoServer, window="_blank"] | 2.14.x |
+| link:https://accumulo.apache.org/[Apache Accumulo, window="_blank"] | [ 1.7.x, 1.9.x ] |
+| link:https://hbase.apache.org/[Apache HBase, window="_blank"] | [ 1.1.x, 1.4.x ] |
+| link:http://hadoop.apache.org/[Apache Hadoop, window="_blank"] | 2.x |
+| link:https://gdal.org/[GDAL, window="_blank"] | 1.9.2 | 
+| link:http://cloudera.com/content/cloudera/en/home.html[Cloudera CDH5, window="_blank"] | 5.9 |
+| link:http://hortonworks.com/hdp/[Hortonworks Data Platform, window="_blank"] | 2.6+ |
+|=========================================================
+

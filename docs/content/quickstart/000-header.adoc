@@ -1,0 +1,16 @@
+<<<
+
+:linkattrs:
+
+= GeoWave Quickstart Guide
+
+The GeoWave quickstart guide is designed to allow a new user to run through a few simple use cases with the GeoWave framework using the Command-Line Interface.  While this guide uses a local key/value store, a version of the guide is available link:quickstart-emr.html[here, window="_blank"] which utilizes EMR on AWS.  
+
+ifdef::backend-html5[]
+++++
+<script>
+var doc_name = "Quickstart Guide";
+</script>
+++++
+endif::backend-html5[]
+

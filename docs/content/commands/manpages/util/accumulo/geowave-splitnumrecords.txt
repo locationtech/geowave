@@ -1,27 +1,33 @@
-//:geowave-splitnumrecords(1)
-//:==============
-//::doctype: manpage
+//:= geowave-util-accumulo-splitnumrecords(1)
+:doctype: manpage
 
-NAME
-//:----
+[[util-accumulo-splitnumrecords-name]]
+==== NAME
 
-geowave util accumulo splitnumrecords - Set Accumulo splits by providing the number of entries per split
+geowave-util-accumulo-splitnumrecords - Set Accumulo splits by providing the number of entries per split
 
-SYNOPSIS
-//:--------
+[[util-accumulo-splitnumrecords-synopsis]]
+==== SYNOPSIS
 
-geowave util accumulo splitnumrecords [options] <storename>
+  geowave util accumulo splitnumrecords [options] <storename>
 
-DESCRIPTION
-//:-----------
+[[util-accumulo-splitnumrecords-description]]
+==== DESCRIPTION
 
-This command will set the accumulo datastore splits by providing the number of entries per split.
+This command sets the Accumulo data store splits by providing the number of entries per split.
 
-OPTIONS
-//:-------
+[[util-accumulo-splitnumrecords-options]]
+==== OPTIONS
 
-- --indexId
- * The geowave index ID (optional; default is all indices)
-- --num
- * The number of partitions (or entries)
- * Default: 0
+*--indexName* _<name>_::
+  The GeoWave index.  Default is all indices.
+
+*--num* _<count>_::
+  The number of entries.
+  
+[[util-accumulo-splitnumrecords-examples]]
+==== EXAMPLES
+
+Set the number of entries per split to 1000 on the `spatial_idx` index of the `example` data store:
+
+  geowave util accumulo splitnumrecords --indexName spatial_idx --num 1000 example

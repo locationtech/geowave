@@ -1,0 +1,103 @@
+[[dev-setup]]
+<<<
+
+:linkattrs:
+
+== Development Setup
+
+=== Retrieving the Code
+
+Users have two options for retrieving the GeoWave source code: either by cloning the repository or by directly downloading the code repository as a ZIP archive.
+
+[[cloning-repo]]
+==== Cloning the GeoWave Git Repository
+The GeoWave code source can be cloned using the Git command-line interface. Using a Git clone allows the developer to easily compare different revisions of the codebase, as well as to prepare changes for a pull request.
+
+NOTE: For developers who wish to make contributions to the GeoWave project, it is recommended that a fork of the main GeoWave repository be created.  By submitting code contributions to a fork of GeoWave, pull requests can be submitted to the main repository. See the link:https://guides.github.com/activities/forking/[GitHub Forking, window="_blank"] documentation for more details.
+
+. Navigate to the system directory where the GeoWave project code is to be located. The clone process will copy all of the repository's contents to a directory called `geowave`, it is therefore important to make sure that a directory called `geowave` does not already exist at the desired location.
+
+. Clone the git repository by running the command:
++
+[source, bash]
+----
+$ git clone https://github.com/locationtech/geowave.git
+----
++
+[NOTE]
+====
+If you do not need the complete history, and want to speed up the clone, you can limit the depth of the checkout process by appending `-depth 1` to the clone command above.
+====
++
+The clone process can take several minutes and should produce output similar to the following:
++
+....
+Cloning into 'geowave'...
+remote: Counting objects: 1311924, done.
+remote: Compressing objects: 100% (196/196), done.
+remote: Total 1311924 (delta 68), reused 0 (delta 0), pack-reused 1311657
+Receiving objects: 100% (1311924/1311924), 784.52 MiB | 6.18 MiB/s, done.
+Resolving deltas: 100% (1159959/1159959), done.
+....
+
+[start=3]
+. Confirm that the GeoWave contents were properly downloaded by examining the contents of the `geowave` directory. The contents of the directory should be identical to the listings in the link:https://github.com/locationtech/geowave[GeoWave GitHub repository].
+
+[[downloading-repo]]
+==== Downloading the Code as ZIP Archive
+
+This option is for users who do not intend to contribute to the GeoWave project source, but still would like to build or explore the source code. This is by far the simplest and most direct way to access the code.
+
+[options="compact"]
+To download a read-only version of the code repository:
+
+. Open a web browser and navigate to the https://github.com/locationtech/geowave[GeoWave GitHub repository, window="_blank"] where the different projects and latest changes can be viewed.
+
+. If interested in a particular branch, select the branch of choice. Otherwise, leave on the default master branch for the latest tested changes.
+
+. Locate the green “Clone or download” button near the top right of the file navigation section.
+
+image::Clone_Download_Repo.png[scaledwidth="100%",width="100%",alt="Clone_Download_Repo.png", title="Clone & Download GeoWave Repository"]
+
+[start=4]
+. Expand the “Clone or download” pane by clicking on the green button labeled "Clone or download".
+
+image::Clone_Download_Expand.png[scaledwidth="50%",width="50%",alt="Clone_Download_Expand.png", title="Clone & Download GeoWave Source Expanded"]
+
+[start=5]
+. Download the code by clicking on the “Download ZIP” button. Depending on browser settings, the code will either download automatically to the user account’s downloads directory or a prompt will ask for the download destination. If the ZIP file is automatically downloaded to the downloads directory, manually move the ZIP file to the intended destination directory.
+
+. Navigate to the system directory where the ZIP file is located and unzip the contents.
+
+=== Eclipse IDE Setup
+
+The recommended Integrated Development Environment (IDE) for GeoWave is Eclipse. This section will walk you through importing the GeoWave Maven projects into the Eclipse IDE.
+
+[NOTE]
+====
+Setup and configuration of IDEs other than Eclipse are outside the scope of this document. If you do not wish to use Eclipse, there are likely guides available that discuss importing Maven projects into the IDE of your choice.
+====
+
+Using the link:http://www.eclipse.org/m2e/[Eclipse Maven M2Eclipse plugin, window="_blank"], we can import Maven projects into Eclipse. When importing Maven projects, Eclipse will automatically resolve and download dependencies listed in the `pom.xml` file for each project.
+
+[NOTE]
+====
+If a project's `pom.xml` dependencies are changed, Eclipse will detect the change, pull in the updated dependencies, and update any downstream projects.
+====
+
+. Import the Maven GeoWave projects into the Eclipse workspace.
+
+.. Within Eclipse, select File -> Import.
++
+image::Eclipse-File-Import.png[scaledwidth="35%","width="35%",alt="Eclipse-File-Import.png", title="Eclipse File Import Menu"]
+
+.. From the "Import" window, select the option under "Maven" for "Existing Maven Projects" and select the "Next" button.
++
+image::import-maven-eclipse-projects.png[scaledwidth="30%",width="30%",alt="import-maven-eclipse-projects.png" title="Existing Maven Projects Wizard"]
+
+.. From the "Import Maven Projects" window, select the “Browse” button and navigate to the root directory where the GeoWave source is located on the file system. Once found, select the _geowave_ directory and select the "Open" button.
+.. Within the "Import Maven Projects" window, the “Projects” pane should now be populated with all of the GeoWave projects. Select the "Finish" button to exit.
+.. Upon returning to the workspace in Eclipse, the _Project Explorer_ pane should now be populated with all of the GeoWave projects.
++
+image::EclipseWorkspace.png[scaledwidth="25%",width="25%", alt="EclipseWorkspace.png", title="Eclipse Workspace"]
+

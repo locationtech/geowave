@@ -1,27 +1,36 @@
-//:geowave-rmstat(1)
-//:=================
-//::doctype: manpage
+//:= geowave-stat-rm(1)
+:doctype: manpage
 
-NAME
-//:----
+[[stat-rm-name]]
+==== NAME
 
-geowave stat rm - Remove a statistic from the remote store
+geowave-stat-rm - Remove a statistic from a data store
 
-SYNOPSIS
-//:--------
+[[stat-rm-synopsis]]
+==== SYNOPSIS
 
-geowave stat rm [options] <store name> <type name> <stat type>
+  geowave stat rm [options] <store name> <type name> <stat type>
 
-DESCRIPTION
-//:-----------
+[[stat-rm-description]]
+==== DESCRIPTION
 
-The geowave stat rm operator will Remove a statistic from the remote store.
+This command removes a statistic from a GeoWave data store.
 
-OPTIONS
-//:-------
+[[stat-rm-options]]
+==== OPTIONS
 
-- --auth
- * The authorizations used for the statistics calculation as a subset of the accumulo user authorization; by default all authorizations are used.
-- --json
- * Output in JSON format.
- * Default: false
+*--fieldName*::
+  The field name for the statistic, if the statistic is maintained per field.
+
+*--auth* _<authorizations>_::
+  The authorizations used for the statistics calculation.  By default all authorizations are used.
+
+*--json*::
+  If specified, output will be formatted in JSON.
+
+[[stat-rm-examples]]
+==== EXAMPLES
+
+Remove the `BOUNDING_BOX` statistic of the `hail` type in the `example` data store:
+
+  geowave stat rm example hail BOUNDING_BOX

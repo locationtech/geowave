@@ -1,0 +1,15 @@
+ifdef::backend-html5[]
+[subs="attributes"]
+++++
+<script>
+var geowave_version = '${project.version}';
+</script>
+
+<div id="geowave-footer" class="col-md-12 docs-footer">
+  <div class="py-4 d-flex justify-content-center align-items-center">
+    <small><p class="footer-text">This page was generated on {revdate}<br><a href="https://github.com/locationtech/geowave/tree/${buildNumber}">View the commit it was generated from on GitHub</a></p></small>
+  </div>
+</div>
+++++
+endif::backend-html5[]
+

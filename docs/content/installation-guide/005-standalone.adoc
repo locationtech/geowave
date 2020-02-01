@@ -1,0 +1,65 @@
+<<<
+
+:linkattrs:
+
+== Standalone Installers
+In order to make installation of the GeoWave Command-Line Interface (CLI) as simple as possible, installers are provided for Windows, Mac, and Linux. 
+
+* link:https://geowave.s3.amazonaws.com/${version_url}/standalone-installers/geowave_windows-x64_${tag.version}.exe[Windows]
+* link:https://geowave.s3.amazonaws.com/${version_url}/standalone-installers/geowave_macos_${tag.version}.dmg[Mac]
+* link:https://geowave.s3.amazonaws.com/${version_url}/standalone-installers/geowave_unix_${tag.version}.sh[Linux]
+
+These installers allow you to customize your GeoWave installation by including or excluding support for various utilities, data stores, third party services, analytics, and ingest formats.  If you aren't sure which of these to include in your installation, we recommend keeping them all to avoid any confusion later on.
+
+Once the installation has been completed, verify that the GeoWave CLI has been installed by opening up a new terminal or command prompt and issuing the `geowave help` command:
+
+[source, bash]
+----
+$ geowave help
+Usage: geowave [options]
+  Options:
+    -cf, --config-file
+       Override configuration file (default is
+       <home>/.geowave/config.properties)
+    --debug
+       Verbose output
+    --version
+       Output Geowave build version information
+
+  Commands:
+    analytic
+      Commands to run analytics on GeoWave data sets
+
+    config
+      Commands that affect local configuration only
+
+    explain
+      See what arguments are missing and what values will be used for GeoWave commands
+
+    gs, geoserver
+      Commands that manage geoserver data stores and layers
+
+    help
+      Get descriptions of arguments for any GeoWave command
+
+    index
+      Commands to manage indices
+
+    ingest
+      Commands that ingest data directly into GeoWave or stage data to be ingested into GeoWave
+
+    raster
+      Operations to perform transformations on raster data in GeoWave
+
+    stat, statistics
+      Commands to manage statistics
+
+    store
+      Commands to manage GeoWave data stores
+
+    util, utility
+      GeoWave utility commands
+
+    vector
+      Vector data operations
+----

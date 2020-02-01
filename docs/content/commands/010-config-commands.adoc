@@ -1,46 +1,41 @@
-[[config-commands]]
 <<<
 
-[[config-commands]]
-=== Config Commands
+== Config Commands
 
-Commands that affect local configuration only (Required options are designated with an *)
-
-.Commands:
-* <<010-config-commands.adoc#config-aws, AWS>>
-* <<010-config-commands.adoc#config-geoserver, GeoServer>>
-* <<010-config-commands.adoc#config-hdfs, HDFS>>
-* <<010-config-commands.adoc#config-list, List>>
-* <<010-config-commands.adoc#config-newcryptokey, NewCryptoKey>>
-* <<010-config-commands.adoc#config-set, Set>>
+Commands that affect the local GeoWave configuration.
 
 [[config-aws]]
-==== *geowave config aws*
+=== Configure AWS
 
 include::manpages/config/geowave-aws.txt[]
 
+'''
 [[config-geoserver]]
-==== *geowave config geoserver*
+=== Configure GeoServer
 
 include::manpages/config/geowave-geoserver.txt[]
 
+'''
 [[config-hdfs]]
-==== *geowave config hdfs*
+=== Configure HDFS
 
 include::manpages/config/geowave-hdfs.txt[]
 
+'''
 [[config-list]]
-==== *geowave config list*
+=== List Configured Properties
 
 include::manpages/config/geowave-list.txt[]
 
+'''
 [[config-newcryptokey]]
-==== *geowave config newcryptokey*
+=== Configure Cryptography Key
 
 include::manpages/config/geowave-newcryptokey.txt[]
 
+'''
 [[config-set]]
-==== *geowave config set*
+=== Set Configuration Property
 
 include::manpages/config/geowave-set.txt[]
 

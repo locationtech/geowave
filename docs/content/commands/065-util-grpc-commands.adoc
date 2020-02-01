@@ -1,0 +1,19 @@
+<<<
+
+[[grpc-commands]]
+=== *gRPC Commands*
+
+Commands for working with the gRPC service.
+
+[[grpc-start]]
+=== Start gRPC Server
+
+include::manpages/util/grpc/geowave-grpc-start.txt[]
+
+[[grpc-stop]]
+=== Stop gRPC Server
+
+include::manpages/util/grpc/geowave-grpc-stop.txt[]
+
+'''
+

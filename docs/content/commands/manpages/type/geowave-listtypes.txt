@@ -1,0 +1,24 @@
+//:= geowave-type-list(1)
+:doctype: manpage
+
+[[type-list-name]]
+==== NAME
+
+geowave-type-list - Display all types in a data store
+
+[[type-list-synopsis]]
+==== SYNOPSIS
+
+  geowave type list <store name>
+
+[[type-list-description]]
+==== DESCRIPTION
+
+This command displays all types in a GeoWave data store.
+
+[[type-list-examples]]
+==== EXAMPLES
+
+Display all types in the `example` data store:
+
+  geowave type list example

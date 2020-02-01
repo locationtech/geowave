@@ -1,0 +1,14 @@
+<<<
+
+:linkattrs:
+
+= GeoWave Command-Line Interface
+
+ifdef::backend-html5[]
+++++
+<script>
+var doc_name = "Command-Line Interface";
+</script>
+++++
+endif::backend-html5[]
+

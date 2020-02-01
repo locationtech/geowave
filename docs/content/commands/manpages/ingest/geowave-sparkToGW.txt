@@ -1,43 +1,45 @@
-//:geowave-sparkToGW
-//:=================
-//::doctype: manpage
+//:= geowave-ingest-sparkToGW(1)
+:doctype: manpage
 
-NAME
-//:----
+[[ingest-sparkToGW-name]]
+==== NAME
 
-geowave ingest sparkToGW - Ingest supported files that already exist in HDFS or S3
+geowave-ingest-sparkToGW - Ingest supported files that already exist in HDFS or S3 using Spark
 
-SYNOPSIS
-//:--------
+[[ingest-sparkToGW-synopsis]]
+==== SYNOPSIS
 
-geowave ingest sparkToGW [options] <input directory> <store name> <comma delimited index list>
+  geowave ingest sparkToGW [options] <input directory> <store name> <comma delimited index list>
 
-DESCRIPTION
-//:-----------
+[[ingest-sparkToGW-description]]
+==== DESCRIPTION
 
-Ingest supported files that already exist in HDFS or S3
+This command ingests supported files that already exist in HDFS or S3 using Spark.
 
-OPTIONS
-//:-------
+[[ingest-sparkToGW-options]]
+==== OPTIONS
 
-- -x, --extension
- * individual or comma-delimited set of file extensions to accept (optional)
-- -f, --formats
- * Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used
-- -ho, --hosts
- * The spark driver host
-   Default: localhost
-- -m, --master
- * The spark master designation
-   Default: local
-- -n, --name
- * The spark application name
-   Default: Spark Ingest
-- -c, --numcores
- * Number of cores
-   Default: -1
-- -e, --numexecutors
- * Number of executors
-   Default: -1
-- -v, --visibility
- * The visibility of the data ingested (optional; default is 'public')
+*-ho, --hosts* _<host>_::
+  The spark driver host.  Default is `localhost`.
+
+*-m, --master* _<designation>_::
+  The spark master designation.  Default is `local`.
+  
+*-n, --name* _<name>_::
+  The spark application name.  Default is `Spark Ingest`.
+
+*-c, --numcores* _<count>_::
+  The number of cores to use.
+
+*-e, --numexecutors* _<count>_::
+  The number of executors to use.
+   
+*-x, --extension* _<extensions>_::
+  Individual or comma-delimited set of file extensions to accept.
+
+*-f, --formats* _<formats>_::
+  Explicitly set the ingest formats by name (or multiple comma-delimited formats).  If not set, all available ingest formats will be used.
+
+*-v, --visibility* _<visibility>_::
+  The visibility of the data ingested.  Default is `public`.
+

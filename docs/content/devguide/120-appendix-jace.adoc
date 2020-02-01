@@ -1,0 +1,57 @@
+[[jace-jni-proxies]]
+<<<
+
+:linkattrs:
+
+=== Jace JNI Proxies
+
+Using Jace, we are able to create JNI proxy classes for GeoWave that can be used in C/C++ applications.
+
+Boost is required when using the Jace bindings.
+
+[[proxies]]
+==== Prepackaged Source and Binaries
+
+There is a public link:packages.html[GeoWave RPM Repo, window="_blank"] where you can download a tarball for the GeoWave Jace bindings for your desired platform. If your platform is not available, there is a source tarball that can be used in conjunction with CMake to build the GeoWave Jace bindings for your desired platform.
+
+==== Generate Proxies and Build from Source
+
+If you want, you can generate and build the Jace proxies yourself.
+
+===== Step 1 - Checkout Jace and GeoWave
+
+First, we need to clone Jace and GeoWave.
+
+[source, bash]
+----
+$ git clone git@github.com:jwomeara/jace.git
+$ git clone git@github.com:locationtech/geowave.git
+----
+
+Note: We are using a non-standard Jace implementation.
+
+===== Step 2 - Install Jace
+
+First, we need to install Jace v1.3.0.  This is the software that is used to generate the C++ proxy classes.
+
+[source, bash]
+----
+$ cd jace
+$ git checkout tags/v1.3.0
+$ mvn clean install -Dsources
+----
+
+===== Step 3 - Generate GeoWave Jace Proxies
+
+Here, we will specify a Maven profile that specifies that we are building jace proxies.
+
+[source, bash]
+----
+$ cd geowave
+$ mvn clean package -pl deploy -am -P generate-geowave-jace -DskipTests
+----
+
+This generates the source and header files required to build GeoWave.  To build the library, simply run cmake, followed by make.
+
+Note: To build static libraries, use "-DBUILD_SHARED_LIBS=OFF". Otherwise use "-DBUILD_SHARED_LIBS=ON" (no quotes).
+

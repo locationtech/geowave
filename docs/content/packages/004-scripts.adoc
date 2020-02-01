@@ -4,10 +4,15 @@
 :linkattrs:
 
 ++++
-<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-<script src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 <script>
+    var bucketMap = {
+      "#release-rpm": "release/",
+      "#dev-rpm": "dev/",
+      "#release-jar": "release-jars/JAR/",
+      "#dev-jar": "dev-jars/JAR/"
+    };
     // Pasted here just so we only have a single file to deploy
     var S3List = (function () {
 
@@ -31,43 +36,37 @@
             var _cache = { content: {}, timestamp: 0 };
             var _cacheTimeout;
             var _table = null;
+            var _bucketPrefix = null;
 
             this.load = function() { this.load(false); };
             this.load = function(noCache) {
-                if(noCache || new Date().getTime() - _cache.timestamp > _cacheTimeout) {
-                    $.ajax({
-                        url: _url, type: "GET", dataType: "xml", async: false, success: this.loadCache
-                    });
-                }
+              if(noCache || new Date().getTime() - _cache.timestamp > _cacheTimeout) {
+                var url = _url + '?prefix=' + _bucketPrefix;
+                $.ajax({
+                    url: url, type: "GET", dataType: "xml", success: this.loadCache
+                });
+              }
             };
 
             this.loadCache = function(data) {
                 _cache.content = data;
                 _cache.timestamp = new Date().getTime();
-            };
-
-            this.refresh = function(eventHash) { this.refresh(eventHash, false); };
-            this.refresh = function(eventHash, nocache) {
-                this.load(nocache);
                 var buffer = [];
                 $(_cache.content).find("Contents").each(function () {
                     var fileName = $(this).find('Key').text();
                     var fileSize = $(this).find('Size').text();
                     if (fileSize !== '0' && !isInSkipList(fileName, _skipList)) {
-                        if(startsWith(fileName, eventHash.substring(1) + '/')) {
                             buffer.push([
                                 '<a href="' + _url + fileName + '" download="' + baseName(fileName)  + '" target="_blank">' + baseName(fileName) + '</a>',
                                 $(this).find('LastModified').text(),
                                 filesize($(this).find('Size').text())
                             ]);
-                        }
                     }
                 });
-
-                if(_table !== null) _table.api().destroy(); // Can't reload, have to recreate each time
-                _table = $('.file-listing').dataTable({
+                _table = $('.file-listing').DataTable({
                     "destroy": true,
                     "lengthMenu": [[-1, 10, 25, 50], ["All", 10, 25, 50]],
+                    "pageLength": 25,
                     "order": [[1, "desc"]],
                     "columnDefs": [
                         {"targets": 0, "width": "50%"},
@@ -75,7 +74,17 @@
                     ],
                     "data": buffer
                 });
-                $('.timestamp').html("Last Updated: " + new Date(_cache.timestamp).toISOString());
+                var date = new Date(_cache.timestamp);
+                $('.timestamp').html("Last Updated: " + date.toLocaleString());
+            };
+
+            this.refresh = function(bucketPrefix) { this.refresh(bucketPrefix, false); };
+            this.refresh = function(bucketPrefix, nocache) {
+                _bucketPrefix = bucketPrefix;
+                if (_table !== null && nocache) {
+                  _table.clear().draw();
+                }
+                this.load(nocache);
             };
 
             _url = opts.url || '';
@@ -85,20 +94,20 @@
     })();
 
     $(function () {
-        var currentTab, REFRESH_INTERVAL = 900000;
+        var bucketPrefix, REFRESH_INTERVAL = 900000;
 
         var list = new S3List({
-            url: '//s3.amazonaws.com/geowave-rpms/',
+            url: 'https://s3.amazonaws.com/geowave-rpms',
             list: ['repodata', '.html'],
             cache: REFRESH_INTERVAL - 1
         });
 
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-            currentTab = e.target.hash;
-            list.refresh(currentTab); // #dev or #release etc.
+            bucketPrefix = bucketMap[e.target.hash];
+            list.refresh(bucketPrefix, true);
         });
-        $('.refresh').on('click', function() { list.refresh(currentTab, true); });
-        setInterval(function () { list.refresh(currentTab); }, REFRESH_INTERVAL);
+        $('.refresh').on('click', function() { list.refresh(bucketPrefix, true); });
+        setInterval(function () { list.refresh(bucketPrefix); }, REFRESH_INTERVAL);
     });
 </script>
 ++++
@@ -107,5 +116,3 @@
 </body>
 </html>
 ++++
-
-

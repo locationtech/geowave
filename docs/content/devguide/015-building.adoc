@@ -1,0 +1,190 @@
+[[building]]
+<<<
+
+:linkattrs:
+
+== Building the Source
+
+[[build-geowave]]
+=== Building GeoWave
+
+To build the project source, navigate to the root directory of the GeoWave project using a command-line tool and execute the following maven command:
+
+[source, bash]
+----
+$ mvn clean install <1>
+----
+<1> You can speed up the build by skipping unit tests and bug checks by adding `-Dfindbugs.skip -Dspotbugs.skip -DskipTests`
+
+After executing the command, Maven will search for all of the projects that need to be built and begin the build process.  The initial output of the command should look something like the following:
+
+----
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO]
+[INFO] GeoWave Parent POM
+[INFO] GeoWave Core Parent POM
+[INFO] GeoWave CLI
+[INFO] GeoWave Index
+[INFO] GeoWave Store
+.
+.
+.
+----
+
+The build process can take several minutes, but once this is completed, the compiled artifacts for each project will be installed to your local Maven repository. They will also be available in each project's `target` directory.
+
+=== Running Integration Tests
+
+By default, integration tests are not run as part of the normal build process.  This is because integration tests can be run for a multitude of key/value store backends, and tests for a single backend can take a significant amount of time to complete.  Usually these integration tests are run as part of the link:travis-ci.org/locationtech/geowave[Travis CI, window="_blank"] build process, but it can be useful to run them locally when working on code that could potentially impact one of the tests.
+
+Integration tests are all written in the `geowave-tests` project and are run using a series of Maven profiles.  The following table shows the various profiles available along with a description of the tests that are run:
+
+[options="header", cols="25%,75%"]
+|======================
+| Maven Profile      | Description 
+| accumulo-it-client | Run integration tests on Accumulo with server-side libraries disabled
+| accumulo-it-server | Run integration tests on Accumulo with server-side libraries enabled
+| accumulo-it-all    | Run integration tests on Accumulo with server-side libraries enabled and disabled
+| bigtable-it        | Run integration tests on Bigtable
+| cassandra-it       | Run integration tests on Cassandra
+| dynamodb-it        | Run integration tests on DynamoDB
+| hbase-it-client    | Run integration tests on HBase with server-side libraries disabled
+| hbase-it-server    | Run integration tests on HBase with server-side libraries enabled
+| hbase-it-all       | Run integration tests on HBase with server-side libraries enabled and disabled
+| kudu-it            | Run integration tests on Kudu
+| redis-it           | Run integration tests on Redis
+| rocksdb-it         | Run integration tests on RocksDB
+| secondary-index-it | Run integration tests with secondary indexing enabled, this profile can be used with any of the previous profiles
+|======================
+
+In order to use one of these profiles to run integration tests, use the same command that was used to build the source, but add the appropriate profile to the end.  For example, if you wanted to run integration tests for RocksDB, the command would look like the following:
+
+[source, bash]
+----
+$ mvn clean install -Procksdb-it
+----
+
+If you have already built GeoWave, you can skip straight to the integration tests:
+
+[source, bash]
+----
+$ mvn clean install -rf :geowave-test -Procksdb-it
+----
+
+[[build-python-bindings]]
+=== Building Python Bindings
+
+The Python bindings for GeoWave (`pygw`) use a different build process than the Java component. The Python source code for `pygw` can be found in the `python/src/main/python` directory.  In order to install `pygw` from source, you will need link:python.org[Python 3, window="_blank"] (up to Python 3.7) and link:virtualenv.pypa.io/en/stable[Virtualenv, window="_blank"].
+
+==== Building the Wheel
+
+Navigate to Python source directory `python/src/main/python` in your command-line tool and perform the following steps.
+
+Create the virtual environment:
+
+[source, bash]
+----
+$ virtualenv -p python3.7 venv
+----
+
+Activate the environment:
+
+[source, bash]
+----
+$ source venv/bin/activate
+----
+
+Install necessary build tools:
+
+[source, bash]
+----
+$ pip install --upgrade pip wheel setuptools twine
+----
+
+Build the wheel:
+
+[source, bash]
+----
+$ python setup.py bdist_wheel --python-tag=py3 sdist
+----
+
+==== Installing the Wheel
+
+After performing the steps in the build step, a `.whl` file should be written to the `dist` directory.  To install it, simply perform the `pip install` command on that file:
+
+[source, bash]
+----
+$ pip install dist/pygw-*.whl
+----
+
+NOTE: If you have multiple wheel builds in the `dist` directory, use the full filename of the `.whl` you wish to install.
+
+==== Running Tests
+
+In order to run tests for `pygw`, a GeoWave Py4J Java Gateway needs to be running.  GeoWave offers a simple CLI command to run a gateway.  In a separate window, execute the following command:
+
+[source, bash]
+----
+$ geowave util python rungateway 
+----
+
+NOTE: If GeoWave was installed using the standalone installer, this command is only available if the `Python Tools` component was included.
+
+While this gateway is running, execute the following command to run the tests:
+
+[source, bash]
+----
+$ python -m pytest
+----
+
+[[build-docs]]
+=== Building Docs
+
+GeoWave documentation consists of several different parts, the main documentation, which includes this guide, the Javadocs, and the Python bindings documentation.
+
+==== GeoWave Documentation
+
+GeoWave documentation is primarily written with link:asciidoctor.org[Asciidoctor] and can be built using a single Maven command from the GeoWave root directory:
+
+[source, bash]
+----
+$ mvn -P html -pl docs install -DskipTests -Dspotbugs.skip
+----
+
+This command compiles all documentation as HTML and outputs it to the `target/site` directory.
+
+NOTE: PDF output is also supported by replacing `-P html` in the above command with `-P pdf`.
+
+==== Javadocs
+
+Javadocs for all projects can be built using the following command:
+
+[source, bash]
+----
+$ mvn -q javadoc:aggregate -DskipTests -Dspotbugs.skip
+----
+
+This command will output all of the Javadocs to the `target/site/apidocs` directory.
+
+==== Python Bindings Documentation
+
+They GeoWave Python bindings been documented using Python docstrings. In order to generate this documentation, a Python environment should be set up and the GeoWave Py4J Java Gateway should be running, see <<015-building.adoc#build-python-bindings, Build Python Bindings>> for help with this.  Once the environment is activated an the gateway is running, execute the following command from the `python/src/main/python` directory to generate the documentation:
+
+[source, bash]
+----
+$ pdoc --html pygw
+----
+
+This will generate the Python API documentation in the `python/src/main/python/html/pygw` directory.
+
+=== Docker Build Process
+
+We have support for building both the GeoWave JAR artifacts and RPMs from Docker containers. This capability is useful for a number of different situations:
+
+* Jenkins build workers can run Docker on a variety of host-operating systems and build for others
+* Anyone running Docker will be able to duplicate our build and packaging environments
+* Will allow us to build on existing container clusters instead of single purpose build VMs
+
+If building artifacts using Docker containers interests you, check out the README in link:https://github.com/locationtech/geowave/tree/master/deploy/packaging/docker[`deploy/packaging/docker`, window="_blank"].

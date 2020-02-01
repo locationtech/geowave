@@ -1,23 +1,25 @@
-//:geowave-liststyles(1)
-//:===================
-//::doctype: manpage
+//:= geowave-gs-style-list(1)
+:doctype: manpage
 
-NAME
-//:----
+[[gs-style-list-name]]
+==== NAME
 
-geowave gs style list - List GeoServer styles
+geowave-gs-style-list - List GeoServer styles
 
-SYNOPSIS
-//:--------
+[[gs-style-list-synopsis]]
+==== SYNOPSIS
 
-geowave gs style list [options]
+  geowave gs style list
+  geowave geoserver style list
 
-DESCRIPTION
-//:-----------
+[[gs-style-list-description]]
+==== DESCRIPTION
 
-This command will list all GeoServer styles
+This command lists all styles in the configured GeoServer instance.
 
-OPTIONS
-//:-------
+[[gs-style-list-examples]]
+==== EXAMPLES
 
-There are currently no options available for this command
+List all styles in GeoServer:
+
+  geowave gs style list

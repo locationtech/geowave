@@ -1,38 +1,51 @@
-//:geowave-resizemr(1)
-//:==============
-//::doctype: manpage
+//:= geowave-raster-resizemr(1)
+:doctype: manpage
 
-NAME
-//:----
+[[raster-resizemr-name]]
+==== NAME
 
-geowave raster resizemr - Resize Raster Tiles using MapReduce
+geowave-raster-resizemr - Resize Raster Tiles using MapReduce
 
-SYNOPSIS
-//:--------
+[[raster-resizemr-synopsis]]
+==== SYNOPSIS
 
-geowave raster resizemr [options] <input store name> <output store name>
+  geowave raster resizemr [options] <input store name> <output store name>
 
-DESCRIPTION
-//:-----------
+[[raster-resizemr-description]]
+==== DESCRIPTION
 
-This command will resize raster tiles that are stored in a GeoWave datastore using MapReduce, and write the resized tiles to a new output store.
+This command will resize raster tiles that are stored in a GeoWave data store using MapReduce, and write the resized tiles to a new output store.
 
-OPTIONS
-//:-------
+[[raster-resizemr-options]]
+==== OPTIONS
 
-- * --hdfsHostPort
- * The hdfs host port
-- --indexName
- * The index that the input raster is stored in
-- * --inputCoverageName
- * The name of the input raster coverage
-- * --jobSubmissionHostPort
- * The job submission tracker
-- --maxSplits
- * The max partitions for the input data
-- --minSplits
- * The min partitions for the input data
-- * --outputCoverageName
- * The out output raster coverage name
-- * --outputTileSize
- * The tile size to output
+*$$*$$ --hdfsHostPort* _<host>_::
+  The HDFS host and port.
+
+*--indexName* _<index>_::
+  The index that the input raster is stored in.
+
+*$$*$$ --inputCoverageName*::
+  The name of the input raster coverage.
+
+*$$*$$ --jobSubmissionHostPort* _<host>_::
+  The job submission tracker host and port.
+
+*--maxSplits* _<count>_::
+  The maximum partitions for the input data.
+
+*--minSplits* _<count>_::
+  The minimum partitions for the input data.
+
+*$$*$$ --outputCoverageName* _<name>_::
+  The output raster coverage name.
+  
+*$$*$$ --outputTileSize* _<size>_::
+  The tile size to output.
+
+[[raster-resizemr-examples]]
+==== EXAMPLES
+
+Resize the `cov` raster in the `example` data store to 256 and name the resulting raster `cov_resized`:
+
+   geowave raster resizemr --hdfsHostPort localhost:53000 --jobSubmissionHostPort localhost:8032 --inputCoverageName cov --outputCoverageName cov_resized --outputTileSize 256 example example

@@ -1,32 +1,42 @@
-//:geowave-localexport(1)
-//:==============
-//::doctype: manpage
+//:= geowave-vector-localexport(1)
+:doctype: manpage
 
-NAME
-//:----
+[[vector-localexport-name]]
+==== NAME
 
-geowave vector localexport - Export data directly
+geowave-vector-localexport - Export vector data from a data store to Avro
 
-SYNOPSIS
-//:--------
+[[vector-localexport-synopsis]]
+==== SYNOPSIS
 
-geowave vector localexport [options] <store name>
+  geowave vector localexport [options] <store name>
 
-DESCRIPTION
-//:-----------
+[[vector-localexport-description]]
+==== DESCRIPTION
 
-This command will export data from a data store
+This command exports vector data from a GeoWave data store to an Avro file.
 
-OPTIONS
-//:-------
+[[vector-localexport-options]]
+==== OPTIONS
 
-- --adapterIds
- * Comma separated list of adapter Ids
-- --batchSize
- * Records to process at a time
- * Default: 10000
-- --cqlFilter
- * Filter exported data based on CQL filter
-- --indexId
- * The index to export from
-- * --outputFile
+*--typeNames* _<types>_::
+  Comma separated list of types to export.
+
+*--batchSize* _<size>_::
+  Records to process at a time.  Default is 10,000.
+
+*--cqlFilter* _<filter>_::
+  Filter exported data based on CQL filter.
+
+*--indexName* _<index>_::
+  The name of the index to export from.
+
+*$$*$$ --outputFile* _<file>_::
+  The file to export data to.
+
+[[vector-localexport-examples]]
+==== EXAMPLES
+
+Export all data from the `hail` type in the `example` data store to an Avro file:
+
+  geowave vector localexport --typeNames hail  --outputFile out.avro example

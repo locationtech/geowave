@@ -40,13 +40,14 @@ if [ "$TRAVIS_REPO_SLUG" == "locationtech/geowave" ] && [ "$BUILD_AND_PUBLISH" =
   
   echo -e "Generating changelog...\n"
   export CHANGELOG_GITHUB_TOKEN=$GH_TOKEN
-  gem install github_changelog_generator
+  gem install github_changelog_generator -v 1.14.3
   github_changelog_generator
   pandoc -f markdown -t html -s -c stylesheets/changelog.css CHANGELOG.md > changelog.html
   cp changelog.html target/site/
 
   echo -e "Publishing site ...\n"
-  cp -R target/site $HOME/site
+  # Save docs to latest
+  cp -R target/site $HOME/latest
 
   cd $HOME
   git config --global user.email "travis@travis-ci.org"
@@ -54,22 +55,30 @@ if [ "$TRAVIS_REPO_SLUG" == "locationtech/geowave" ] && [ "$BUILD_AND_PUBLISH" =
   git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/locationtech/geowave gh-pages > /dev/null
 
   cd gh-pages 
+  
+  # Back up previous versions
+  mv previous-versions $HOME/previous-versions
+  
+  # Remove old latest
+  rm -rf latest
 
-  # Check if this is not a snapshot version
-  if [[ ! "$GEOWAVE_VERSION" =~ "SNAPSHOT" ]] ; then
-
-    # Make a new directory for this release and copy the contents to it
-    echo "creating a new versioned documentation directory"
-    mkdir previous-versions/$GEOWAVE_VERSION
-    cp -Rf $HOME/site/* previous-versions/$GEOWAVE_VERSION/
-    rm -f previous-versions/$GEOWAVE_VERSION/*.epub *.pdf *.pdfmarks
-
+  if [[ ! "$GEOWAVE_VERSION" =~ "SNAPSHOT" ]] && [[ ! "$GEOWAVE_VERSION" =~ "RC" ]] ; then
+    # If this isn't a snapshot or release candidate, this becomes the main site
+    echo -e "Publishing release documentation ...\n"
+    cp -Rf $HOME/latest $HOME/site/
+  else
+    echo -e "Publishing snapshot documentation ...\n"
+    # Otherwise keep old release
+    cp -Rf . $HOME/site/
   fi
 
   # Save previous versions of the documentation
-  cp -r previous-versions/ $HOME/site/
+  cp -r $HOME/previous-versions $HOME/site/
+  
+  # Save latest
+  cp -r $HOME/latest $HOME/site/
 
-  git rm -rf .
+  git rm -r -f -q .
   cp -Rf $HOME/site/* .
 
   # Don't check in big binary blobs

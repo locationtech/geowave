@@ -1,33 +1,24 @@
-//:geowave-copy(1)
-//:================
-//::doctype: manpage
+//:= geowave-store-copy(1)
+:doctype: manpage
 
-NAME
-//:----
+[[store-copy-name]]
+==== NAME
 
-geowave store copy - Copy a data store
+geowave-store-copy - Copy a data store
 
-SYNOPSIS
-//:--------
+[[store-copy-synopsis]]
+==== SYNOPSIS
 
-geowave store copy [options] <input store name> <output store name>
+  geowave store copy <input store name> <output store name>
 
-DESCRIPTION
-//:-----------
+[[store-copy-description]]
+==== DESCRIPTION
 
-This command will allow a user to copy a data store
+This command copies all of the data from one data store to another.
 
-OPTIONS
-//:-------
+[[store-copy-examples]]
+==== EXAMPLES
 
-- * --hdfsHostPort
- * The hdfs host port
-- * --jobSubmissionHostPort
- * The job submission tracker
-- --maxSplits
- * The max partitions for the input data
-- --minSplits
- * The min partitions for the input data
-- --numReducers
- * Number of threads writing at a time (default: 8)
- * Default: 8
+Copy all data from the `example` data store to the `example_copy` data store:
+
+  geowave store copy example example_copy

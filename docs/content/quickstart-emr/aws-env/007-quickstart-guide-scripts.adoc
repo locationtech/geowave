@@ -1,0 +1,27 @@
+<<<
+
+:linkattrs:
+
+=== Bootstrap Scripts
+
+GeoWave currently supports the use of several key/value stores.  We provide EMR bootstrap scripts for Accumulo, HBase, and Cassandra and the others are vendor hosted.   Choose the appropriate script for the key/value store you'd like to use when setting up your cluster.  The bootstrap scripts help to set up GeoWave and your environment. Click on any of the links below to download the script.
+
+- For Accumulo use: link:http://s3.amazonaws.com/geowave/${version_url}/scripts/emr/accumulo/bootstrap-geowave.sh[s3://geowave/${version_url}/scripts/emr/accumulo/bootstrap-geowave.sh]
+- For HBase use: link:http://s3.amazonaws.com/geowave/${version_url}/scripts/emr/hbase/bootstrap-geowave.sh[s3://geowave/${version_url}/scripts/emr/hbase/bootstrap-geowave.sh]
+- For Cassandra use: link:http://s3.amazonaws.com/geowave/${version_url}/scripts/emr/cassandra/bootstrap-geowave.sh[s3://geowave/${version_url}/scripts/emr/cassandra/bootstrap-geowave.sh]
+
+These scripts will provide you with everything necessary to complete this guide, but can also be used to setup GeoWave for use in other workflows.  There are scripts available for each of the releases of GeoWave going back to 0.9.3. These can be used by replacing ``/${version_url}/`` with the desired release (i.e. ``/0.9.3/``) 
+
+[NOTE]
+====
+We have also provided quickstart scripts that will perform all of the steps in this guide automatically. This will allow you to verify your own steps, or test out other GeoWave commands and features on an already conditioned data set.
+
+If you would prefer to have all of the steps run automatically, please use these bootstrap scripts instead of the ones listed previously:
+
+- For Accumulo use: link:http://s3.amazonaws.com/geowave/${version_url}/scripts/emr/quickstart/accumulo/bootstrap-geowave.sh[s3://geowave/${version_url}/scripts/emr/quickstart/accumulo/bootstrap-geowave.sh]
+- For HBase use: link:http://s3.amazonaws.com/geowave/${version_url}/scripts/emr/quickstart/hbase/bootstrap-geowave.sh[s3://geowave/${version_url}/scripts/emr/quickstart/hbase/bootstrap-geowave.sh]
+- For Cassandra use: link:http://s3.amazonaws.com/geowave/${version_url}/scripts/emr/quickstart/cassandra/bootstrap-geowave.sh[s3://geowave/${version_url}/scripts/emr/quickstart/cassandra/bootstrap-geowave.sh]
+====
+
+To use one of the scripts listed above, it must be accessible from an s3 bucket. Because buckets are region specific, you may not be able to use our `geowave` bucket if your cluster is not deployed in the `us-east-1` region. In this case, you will need a personal bucket in your region that contains the desired script. Instructions on <<110-appendices.adoc#create-aws-s3-bucket, creating>> and <<110-appendices.adoc#upload-to-aws-s3-bucket, uploading>> to an s3 bucket can be found in the appendices.
+

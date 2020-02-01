@@ -1,23 +1,25 @@
-//:geowave-compactindex(1)
-//:================
-//::doctype: manpage
+//:= geowave-index-compact(1)
+:doctype: manpage
 
-NAME
-//:----
+[[index-compact-name]]
+==== NAME
 
-geowave index compact - Compact all rows for a given index
+geowave-index-compact - Compact all rows for a given index
 
-SYNOPSIS
-//:--------
+[[index-compact-synopsis]]
+==== SYNOPSIS
 
-geowave index compact [options] <store name> <index name>
+  geowave index compact <store name> <index name>
 
-DESCRIPTION
-//:-----------
+[[index-compact-description]]
+==== DESCRIPTION
 
-This command will allow a user to compact all rows for a given index
+This command will allow a user to compact all rows for a given index.
 
-OPTIONS
-//:-------
+[[index-compact-examples]]
+==== EXAMPLES
 
-There are currently no options for this command
+Compact all rows on the `spatial_idx` index in the `example` store:
+
+  geowave index compact example spatial_idx
+

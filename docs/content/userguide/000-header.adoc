@@ -1,0 +1,14 @@
+<<<
+
+:linkattrs:
+
+= GeoWave User Guide
+
+ifdef::backend-html5[]
+++++
+<script>
+var doc_name = "User Guide";
+</script>
+++++
+endif::backend-html5[]
+

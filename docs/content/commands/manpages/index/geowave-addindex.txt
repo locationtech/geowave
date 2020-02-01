@@ -1,34 +1,85 @@
-//:geowave-addindex(1)
-//:===================
-//::doctype: manpage
+//:= geowave-index-add(1)
+:doctype: manpage
 
-NAME
-//:----
+[[index-add-name]]
+==== NAME
 
-geowave index add - Add an index to a data store
+geowave-index-add - Add an index to a data store
 
-SYNOPSIS
-//:--------
+[[index-add-synopsis]]
+==== SYNOPSIS
 
-geowave index add [options] <store name> <index name>
+  geowave index add [options] <store name> <index name>
 
-DESCRIPTION
-//:-----------
+[[index-add-description]]
+==== DESCRIPTION
 
-The geowave index add operator will create an index in a data store if it does not already exist.
+This command creates an index in a data store if it does not already exist.
 
-OPTIONS
-//:-------
+[[index-add-options]]
+==== OPTIONS
 
-- -c --crs (will only be shown if you have already defined spatial or satial_temporal as your type)
- * The native Coordinate Reference System used within the index.  All spatial data will be projected into this CRS for appropriate indexing as needed.
- * Default: EPSG:4326
-- -np, --numPartitions
- * The number of partitions.  Default partitions will be 1.
- * Default: 1
-- -ps, --partitionStrategy
- * The partition strategy to use.  Default will be none.
- * Default: NONE
- * Possible Values: [NONE, HASH, ROUND_ROBIN]
-- * -t, --type
- * The type of index, such as spatial, or spatial_temporal
+*-np, --numPartitions* _<count>_::
+  The number of partitions.  Default is 1.
+
+*-ps, --partitionStrategy* _<strategy>_::
+  The partition strategy to use.  Possible values are `NONE`, `HASH`, and `ROUND_ROBIN`, default is `NONE`.
+
+*$$*$$ -t, --type* _<type>_::
+  The type of index, such as spatial, temporal, or spatial_temporal
+  
+When the `spatial` type option is used, additional options are:
+
+*-c --crs* _<crs>_::
+  The native Coordinate Reference System used within the index.  All spatial data will be projected into this CRS for appropriate indexing as needed.  Default is `EPSG:4326`.
+
+*-fp, --fullGeometryPrecision*::
+  If specified, geometry will be encoded losslessly.  Uses more disk space.
+
+*-gp, --geometryPrecision* _<precision>_::
+  The maximum precision of the geometry when encoding.  Lower precision will save more disk space when encoding.  Possible values are between -8 and 7, default is 7.
+
+*--storeTime*::
+  If specified, the index will store temporal values.  This allows it to slightly more efficiently run spatial-temporal queries although if spatial-temporal queries are a common use case, a separate spatial-temporal index is recommended.
+  
+When the `spatial_temporal` type option is used, additional options are:
+
+*-c --crs* _<crs>_::
+  The native Coordinate Reference System used within the index.  All spatial data will be projected into this CRS for appropriate indexing as needed.  Default is `EPSG:4326`.
+
+*-fp, --fullGeometryPrecision*::
+  If specified, geometry will be encoded losslessly.  Uses more disk space.
+
+*-gp, --geometryPrecision* _<precision>_::
+  The maximum precision of the geometry when encoding.  Lower precision will save more disk space when encoding.  Possible values are between -8 and 7, default is 7.
+
+*--bias* _<bias>_::
+  The bias of the spatial-temporal index. There can be more precision given to time or space if necessary. Possible values are `TEMPORAL`, `BALANCED`, and `SPATIAL`, default is `BALANCED`.
+
+*--maxDuplicates* _<count>_::
+  The max number of duplicates per dimension range.  The default is 2 per range (for example lines and polygon timestamp data would be up to 4 because it is 2 dimensions, and line/poly time range data would be 8).
+
+*--period* _<periodicity>_::
+  The periodicity of the temporal dimension.  Because time is continuous, it is binned at this interval.  Possible values are `MINUTE`, `HOUR`, `DAY`, `WEEK`, `MONTH`, `YEAR`, and `DECADE`, default is `YEAR`.
+
+When the `temporal` type option is used, additional options are:
+
+*--maxDuplicates* _<count>_::
+  The max number of duplicates per dimension range.  The default is 2 per range (for example lines and polygon timestamp data would be up to 4 because it is 2 dimensions, and line/poly time range data would be 8).
+
+*--period* _<periodicity>_::
+  The periodicity of the temporal dimension.  Because time is continuous, it is binned at this interval.  Possible values are `MINUTE`, `HOUR`, `DAY`, `WEEK`, `MONTH`, `YEAR`, and `DECADE`, default is `YEAR`.
+
+*--noTimeRange*::
+  If specified, the index will not support time ranges, which can be more efficient.
+
+[[index-add-examples]]
+==== EXAMPLES
+
+Add a spatial index called `spatial_idx` with CRS `EPSG:3857` to the `example` data store:
+
+  geowave index add -t spatial -c EPSG:3857 example spatial_idx
+  
+Add a spatial-temporal index called `st_idx` with a periodicity of `MONTH` to the `example` data store:
+
+  geowave index add -t spatial_temporal --period MONTH example st_idx

@@ -1,23 +1,24 @@
-//:geowave-python-rungateway
-//:====================
-//::doctype: manpage
+//:= geowave-util-python-rungateway(1)
+:doctype: manpage
 
-NAME
-//:----
+[[util-python-rungateway-name]]
+==== NAME
 
-geowave util python rungateway - Runs a Py4J java gateway
+geowave-util-python-rungateway - Run a Py4J java gateway
 
-SYNOPSIS
-//:--------
+[[util-python-rungateway-synopsis]]
+==== SYNOPSIS
 
-geowave util python rungateway [options]
+  geowave util python rungateway
 
-DESCRIPTION
-//:-----------
+[[util-python-rungateway-description]]
+==== DESCRIPTION
 
-The geowave util python rungateway operator will start the Py4J java gateway required by pygw.
+This command starts the Py4J java gateway required by `pygw`.
 
-OPTIONS
-//:-------
+[[util-python-rungateway-examples]]
+==== EXAMPLES
 
-There are currently no options for this command
+Run the Py4J java gateway:
+
+  geowave util python rungateway

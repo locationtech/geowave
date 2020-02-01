@@ -1,0 +1,131 @@
+<<<
+
+:linkattrs:
+
+== Raster Demo
+
+In this demo, we will be looking at Band 8 of Landsat raster data around Berlin, Germany. See link:https://www.usgs.gov/land-resources/nli/landsat/landsat-8[USGS.gov^, window="blank"] for more information about Landsat 8.
+
+=== Install GDAL
+
+The Landsat 8 extension for GeoWave utilizes GDAL (Geospatial Data Abstraction Library), an image processing library, to process raster data. In order to use GDAL, native libraries need to be installed on the system. More info on GDAL can be found link:http://www.gdal.org[here, window="_blank"].
+
+[WARNING]
+====
+Native libraries for GDAL 1.9.2 on MacOS are not readily available.  This demo is currently only applicable to Windows and Linux platforms.
+====
+
+==== Windows Installation
+
+Download the appropriate libraries from link:http://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.7/native/gdal/windows/MSV2010[GeoSolutions^, window="blank"] (use the x64 zip for 64-bit Windows installations).  Extract the files to a directory on your system and add that directory to your `PATH` environment variable.  You can view or modify the environment variables by selecting *System* from the *Control Panel*, selecting the *Advanced system settings* tab, and clicking *Environment Variables*.  You may need to restart your command prompt/terminal window for the environment variable changes to take effect.
+
+==== Linux Installation
+
+Download and extract the appropriate libraries from link:http://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.7/native/gdal/linux[GeoSolutions^, window="blank"].
+
+[source, bash]
+----
+$ mkdir gdal
+$ cd gdal
+$ sudo wget http://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.7/native/gdal/linux/gdal192-CentOS5.8-gcc4.1.2-x86_64.tar.gz
+$ sudo tar -xvf gdal192-CentOS5.8-gcc4.1.2-x86_64.tar.gz
+---- 
+
+Add the GDAL libraries to the library path.  Execute the following command from the `gdal` directory created in the previous step.
+
+[source, bash]
+----
+$ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$(pwd)
+----
+
+=== Configure GeoWave Data Stores
+
+[IMPORTANT]
+====
+Before continuing the demo, make sure that your working directory is the current active directory in your command-line tool.
+====
+
+For this demo, we will be using two data stores.  One will be used for vector data, and the other will be used for raster data.  We will again be using RocksDB for the backend.
+
+[source, bash]
+----
+$ geowave store add -t rocksdb --gwNamespace geowave.landsatraster --dir . landsatraster
+$ geowave store add -t rocksdb --gwNamespace geowave.landsatvector --dir . landsatvector
+----
+
+These commands create two data stores, `landsatraster` and `landsatvector` in the current directory.
+
+=== Add an Index
+
+Before ingesting our raster data, we will add a spatial index to both of the data stores.
+
+[source, bash]
+----
+$ geowave index add -t spatial -c EPSG:3857 landsatraster spatial-idx
+$ geowave index add -t spatial -c EPSG:3857 landsatvector spatial-idx
+----
+
+This is similar to the command we used to add an index in the vector demo, but we have added an additional option to specify the Coordinate Reference System (CRS) of the data.  Geospatial data often uses a CRS that is tailored to the area of interest.  This can be a useful option if you want to use a CRS other than the default.  After these commands have been executed, we will have spatial indices named `spatial-idx` on both data stores.
+
+=== Analyze Available Data
+
+We can now see what Landsat 8 data is available for our area of interest.
+
+[source, bash]
+----
+$ geowave util landsat analyze --nbestperspatial --nbestscenes 1 --usecachedscenes --cql "BBOX(shape,13.0535,52.3303,13.7262,52.6675) AND band='B8' AND cloudCover>0" -ws ./landsat
+----
+
+This command tells GeoWave to analyze the B8 band of Landsat raster data over a bounding box that roughly surrounds Berlin, Germany.  It prints out aggregate statistics for the area of interest, including the average cloud cover, date range, number of scenes, and the size of the data.  Data for this operation is written to the `landsat` directory (specified by the `-ws` option), which can be used by the ingest step.
+
+=== Ingest the Data
+
+Now that we have analyzed the available data, we are ready to ingest it into our data stores.
+
+[source, bash]
+----
+$ geowave util landsat ingest --nbestperspatial --nbestscenes 1 --usecachedscenes --cql "BBOX(shape,13.0535,52.3303,13.7262,52.6675) AND band='B8' AND cloudCover>0" --crop --retainimages -ws ./landsat --vectorstore landsatvector --pyramid --coverage berlin_mosaic landsatraster spatial-idx
+----
+
+There is a lot to this command, but you'll see that it's quite similar to the analyze command, but with some additional options.  The `--crop` option causes the raster data to be cropped to our CQL bounding box. The `--vectorstore landsatvector` option specifies the data store to put the vector data (scene and band information). The `--pyramid` option tells GeoWave to create an image pyramid for the raster, this is used for more efficient rendering at different zoom levels. The `--coverage berlin_mosaic` option tells GeoWave to use `berlin_mosaic` as the type name for the raster data.  Finally, we specify the output data store for the raster, and the index to store it on.
+
+=== Visualizing the Data
+
+We will once again use GeoServer to visualize our ingested data.
+
+==== Run GeoServer
+
+GeoServer should still be running from the previous demo, but if not, go ahead and start it up again from a new terminal window.
+
+[source, bash]
+----
+$ geowave gs run
+----
+
+==== Add Layers
+
+Just like with the vector demo, we can use the GeoWave CLI to add our raster data to GeoServer.  We will also add the vector metadata from the vector data store.
+
+[source, bash]
+----
+$ geowave gs layer add landsatraster --add all
+$ geowave gs layer add landsatvector --add all
+----
+
+==== View the Layers
+
+When we go back to the Layer Preview page in GeoServer, we will see three new layers, `band`, `berlin_mosaic`, and `scene`.
+
+Click on the OpenLayers link by any of these layers to see them in an interactive map.
+
+**berlin_mosaic** - Shows the mosaic created from the raster data that fit into our specifications. This mosaic is made of 5 images.
+
+.Preview of `berlin_mosaic` Layer
+image::berlin_mosaic_preview.png[scaledwidth="100%"]
+
+**band/scene** - Shows representations of the vector data associated with the images. The band and scene layers are identical in this demo.
+
+.Preview of `band` and `scene` Layers
+image::scene_preview.png[scaledwidth="100%"]
+
+

@@ -1,21 +1,24 @@
-//:geowave-aws
-//:===============
-//::doctype: manpage
+//:= geowave-config-aws(1)
+:doctype: manpage
 
-NAME
-//:----
+[[config-aws-name]]
+==== NAME
 
-geowave config aws - Create a local configuration for aws s3
+geowave-config-aws - configure GeoWave CLI for AWS S3 connections
 
-SYNOPSIS
-//:--------
+[[config-aws-synopsis]]
+==== SYNOPSIS
 
-geowave config aws <AWS S3 endpoint URL> (for example s3.amazonaws.com) 
+  geowave config aws <AWS S3 endpoint URL>
 
-DESCRIPTION
-//:-----------
+[[config-aws-description]]
+==== DESCRIPTION
 
-This command will create a local configuration for aws s3
+This command creates a local configuration for AWS S3 connections that is used by commands that interface with S3.
 
-OPTIONS
-//:-------
+[[config-aws-examples]]
+==== EXAMPLES
+
+Configure GeoWave to use an S3 bucket on `us-west-2` called `mybucket`:
+
+  geowave config aws https://s3.us-west-2.amazonaws.com/mybucket

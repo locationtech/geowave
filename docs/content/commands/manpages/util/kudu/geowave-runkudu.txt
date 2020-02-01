@@ -1,0 +1,36 @@
+//:= geowave-util-kudu-run(1)
+:doctype: manpage
+
+[[util-kudu-run-name]]
+==== NAME
+
+geowave-util-kudu-run - Runs a standalone Kudu instance for test and debug with GeoWave
+
+[[util-kudu-run-synopsis]]
+==== SYNOPSIS
+
+  geowave util kudu run [options]
+
+[[util-kudu-run-description]]
+==== DESCRIPTION
+
+This command runs a standalone Kudu instance, which can be used locally for testing and debugging GeoWave, without needing to set up a full instance.
+
+[[util-kudu-run-options]]
+==== OPTIONS
+
+*-d, --directory* _<path>_::
+  The directory to use for Kudu.  Default is `./target/temp`.
+  
+*-i, --interactive* _<enabled>_::
+  Whether to prompt for user input to end the process. Default is `true`.
+  
+*-t, --tablets* _<count>_::
+  The number of tablets to use for Kudu.  Default is 0.
+
+[[util-kudu-run-examples]]
+==== EXAMPLES
+
+Run a standalone Kudu instance:
+
+  geowave util kudu run -d . -t 2

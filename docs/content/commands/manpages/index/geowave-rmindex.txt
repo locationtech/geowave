@@ -1,23 +1,24 @@
-//:geowave-rmindex(1)
-//:==================
-//::doctype: manpage
+//:= geowave-index-rm(1)
+:doctype: manpage
 
-NAME
-//:----
+[[index-rm-name]]
+==== NAME
 
-geowave index rm - Remove an index and all associated data from a data store
+geowave-index-rm - Remove an index and all associated data from a data store
 
-SYNOPSIS
-//:--------
+[[index-rm-synopsis]]
+==== SYNOPSIS
 
-geowave index rm [options] <store name> <index name>
+  geowave index rm <store name> <index name>
 
-DESCRIPTION
-//:-----------
+[[index-rm-description]]
+==== DESCRIPTION
 
-The geowave index rm operator will remove an index and all of its data from a data store
+This command removes an index and all of its data from a data store.
 
-OPTIONS
-//:-------
+[[index-rm-examples]]
+==== EXAMPLES
 
-There are currently no options for this command
+Remove the `spatial_idx` index from the `example` store:
+
+  geowave index rm example spatial_idx

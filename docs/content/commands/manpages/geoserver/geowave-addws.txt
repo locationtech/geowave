@@ -1,23 +1,25 @@
-//:geowave-addws(1)
-//:===================
-//::doctype: manpage
+//:= geowave-gs-ws-add(1)
+:doctype: manpage
 
-NAME
-//:----
+[[gs-ws-add-name]]
+==== NAME
 
-geowave gs ws add - Add GeoServer workspace
+geowave-gs-ws-add - Add a workspace to GeoServer
 
-SYNOPSIS
-//:--------
+[[gs-ws-add-synopsis]]
+==== SYNOPSIS
 
-geowave gs ws add [options] <workspace name>
+  geowave gs ws add <workspace name>
+  geowave geoserver workspace add <workspace name>
 
-DESCRIPTION
-//:-----------
+[[gs-ws-add-description]]
+==== DESCRIPTION
 
-This command will add a GeoServer workspace
+This command adds a new workspace to the configured GeoServer instance.
 
-OPTIONS
-//:-------
+[[gs-ws-add-examples]]
+==== EXAMPLES
 
-There are currently no options available for this command
+Add a new workspace to GeoServer called `geowave`:
+
+  geowave gs ws add geowave

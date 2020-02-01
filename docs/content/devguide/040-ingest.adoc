@@ -1,0 +1,66 @@
+[[ingest]]
+<<<
+== Ingest
+
+:linkattrs:
+
+=== Overview
+
+In addition to the raw data, the ingest process requires an adapter to translate the native data into a format that can be persisted into the data store, and an index to dictate how the ingested data should be organized.  The following diagram shows an overview of the ingest process:
+
+image::ingest.svg[scaledwidth="100%",width="100%",alt="Ingest Architecture", title="Ingest Architecture"]
+
+The logic within the ingest process immediately ensures that the index and data adapter are persisted as metadata within the index and adapter stores to support self-described data discovery. In-memory implementations of both of these stores are provided for cases when connections to third-party data stores (e.g., Accumulo, HBase) are undesirable in the ingest process, such as ingesting bulk data in a MapReduce job. Once the adapter and index have been persisted, each data entry gets processed by the adapter to encode the data to a format that's optimized for GeoWave, and by the index to determine where the data should be stored.  
+
+NOTE: Certain circumstances will cause the same data to be written to the data store in multiple locations, e.g., polygons that cross the dateline or date ranges that cross binning boundaries such as December 31-January 1 when binning by year. To remedy this, deduplication is always performed as a client filter when querying the data.
+
+Once the {core-store}/core/store/entities/GeoWaveKey.java[`GeoWaveKey`] and {core-store}/core/store/entities/GeoWaveValue.java[`GeoWaveValue`] are created for an entry, they are combined into a {core-store}/core/store/entities/GeoWaveRow.java[`GeoWaveRow`] and sent to the {core-store}/core/store/operations/RowWriter.java[`RowWriter`] implementation to be written to the data store.
+
+The full list of GeoWave ingest commands can be found in the link:commands.html#ingest-commands[GeoWave CLI Documentation^, window="_blank"].
+
+=== Ingest Plugins
+
+Ingest plugins contain everything that is needed to convert raw data files into a format that is understood by a GeoWave data adapter. Ingest plugins _hook_ into the ingest framework and are decoupled from the data store and index implementations.
+
+==== Source Formats
+
+Leveraging the GeoTools infrastructure, GeoWave supports ingesting any DataSource that GeoTools supports.  Currently supported data types include:
+
+* arcgrid
+* arcsde
+* db2
+* raster formats
+** geotiff
+** grassraster
+** gtopo30
+** imageio-ext-gdal
+** imagemoasaic
+** imagepyramid
+** JP2K
+* Database “jdgc-ng” support
+** h2
+** mysql
+** oracle
+** postgis
+** spatialite
+** sqlserver
+* postgis
+* property file
+* shapefile
+* dfs
+* edigeo
+* geojson
+* wfs
+
+For a current list of supported formats, refer to the link:http://docs.geotools.org/stable/userguide/faq.html["GeoTools User Guide", window="_blank"]. Reference the version of GeoTools that GeoWave was built against (currently 20.0).
+
+==== Adding New Plugins
+
+For raw data input formats that aren't supported by GeoWave directly, new ingest plugins can be written and installed to enable those unsupported formats to be ingested. For vector data, GeoWave expects the plugin to convert the source data into GeoTools `SimpleFeature` objects. For raster data it expects GeoTools `GridCoverage` objects. Additionally, a data format can supply a translation from a file to any custom schema, which can then be used as an intermediate format to support distributed ingest. For example, all vector ingest plugins derive from {adapter-vector}/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.java[`AbstractSimpleFeatureIngestPlugin`] which itself implements {core-ingest}/core/ingest/avro/GeoWaveAvroFormatPlugin.java[`GeoWaveAvroFormatPlugin`]. This allows the data to be converted into an intermediate Avro format, which can then be ingested in a distributed fashion.
+
+New vector ingest plugins should extend the {adapter-vector}/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.java[`AbstractSimpleFeatureIngestPlugin`] class. See the {format-geotools-raster}/format/geotools/raster/GeoToolsRasterDataStoreIngestPlugin.java[`GeoToolsRasterDataStoreIngestPlugin`] for an example of a plugin that ingests raster data.
+
+Any of our extensions/formats projects are good examples for supporting new formats that can be discovered at runtime, such as the {format-avro}/format/avro/GeoWaveAvroIngestPlugin.java[`GeoWaveAvroIngestPlugin`], or any of the other existing ingest plugins, such as those listed in the {tree-root}/extensions/formats[`extensions/formats`] directory.
+
+New ingest formats are discovered using Service Provider Interface (SPI)-based injection. In order to install a new ingest format, implement {core-ingest}/core/ingest/spi/IngestFormatPluginProviderSpi.java[`IngestFormatPluginProviderSpi`] and make sure your JAR is on the classpath when running GeoWave. For more information on using SPI, see the link:https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html[Oracle documentation, window="_blank"].
+

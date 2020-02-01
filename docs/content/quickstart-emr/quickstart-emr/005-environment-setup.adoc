@@ -1,0 +1,4 @@
+== Environment Setup
+
+See the link:aws-env.html#[AWS Environment Setup Guide] for setting up an EMR cluster to use with this guide.
+

@@ -1,60 +1,48 @@
-[[ingest-commands]]
 <<<
 
-[[ingest-commands]]
-=== Ingest Commands
+== Ingest Commands
 
-Commands that ingest data directly into GeoWave or stage data to be ingested into GeoWave (Required options are designated with an *)
-
-.Commands:
-* <<015-ingest-commands.adoc#ingest-kafkaToGW, KafkaToGW>>
-* <<015-ingest-commands.adoc#ingest-listplugins, ListPlugins>>
-* <<015-ingest-commands.adoc#ingest-localToGW, LocalToGW>>
-* <<015-ingest-commands.adoc#ingest-localToHdfs, LocalToHdfs>>
-* <<015-ingest-commands.adoc#ingest-localToKafka, LocalToKafka>>
-* <<015-ingest-commands.adoc#ingest-localToMrGW, LocalToMRGW>>
-* <<015-ingest-commands.adoc#ingest-mrToGW, MRToGW>>
-* <<015-ingest-commands.adoc#ingest-sparkToGW, SparkToGW>>
-
-
-[[ingest-kafkaToGW]]
-==== *geowave ingest kafkaToGW*
-
-include::manpages/ingest/geowave-kafkaToGW.txt[]
-
-[[ingest-listplugins]]
-==== *geowave ingest listplugins*
-
-include::manpages/ingest/geowave-listplugins.txt[]
+Commands that ingest data directly into GeoWave or stage data to be ingested into GeoWave.
 
 [[ingest-localToGW]]
-==== *geowave ingest localToGW*
+=== Ingest Local to GeoWave
 
 include::manpages/ingest/geowave-localToGW.txt[]
 
+[[ingest-kafkaToGW]]
+=== Ingest Kafka to GeoWave
+
+include::manpages/ingest/geowave-kafkaToGW.txt[]
+
 [[ingest-localToHdfs]]
-==== *geowave ingest localToHdfs*
+=== Stage Local to HDFS
 
 include::manpages/ingest/geowave-localToHdfs.txt[]
 
 [[ingest-localToKafka]]
-==== *geowave ingest localToKafka*
+=== Stage Local to Kafka
 
 include::manpages/ingest/geowave-localToKafka.txt[]
 
 [[ingest-localToMrGW]]
-==== *geowave ingest localToMrGW*
+=== Ingest Local to GeoWave with MapReduce
 
 include::manpages/ingest/geowave-localToMrGW.txt[]
 
 [[ingest-mrToGW]]
-==== *geowave ingest mrToGW*
+=== Ingest MapReduce to GeoWave
 
 include::manpages/ingest/geowave-mrToGW.txt[]
 
 [[ingest-sparkToGW]]
-==== *geowave ingest sparkToGW*
+=== Ingest Spark to GeoWave
 
 include::manpages/ingest/geowave-sparkToGW.txt[]
 
+[[ingest-listplugins]]
+=== List Ingest Plugins
+
+include::manpages/ingest/geowave-listplugins.txt[]
+
 '''
+
