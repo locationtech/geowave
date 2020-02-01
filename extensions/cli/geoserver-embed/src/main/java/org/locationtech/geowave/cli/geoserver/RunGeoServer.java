@@ -44,7 +44,7 @@ public class RunGeoServer extends DefaultOperation implements Command {
 
       jettyServer.start();
       if (interactive) {
-        System.out.println("hit any key to shutdown ..");
+        System.out.println("Press Enter to shutdown..");
         System.in.read();
         System.out.println("Shutting down!");
         jettyServer.stop();
@@ -56,8 +56,8 @@ public class RunGeoServer extends DefaultOperation implements Command {
             try {
               stopServer.stop();
             } catch (final Exception e) {
-              LOGGER.warn("Unable to shutdown geoserver", e);
-              System.out.println("Error shutting down geoserver.");
+              LOGGER.warn("Unable to shutdown GeoServer", e);
+              System.out.println("Error shutting down GeoServer.");
             }
             System.out.println("Shutting down!");
           }

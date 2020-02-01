@@ -11,74 +11,14 @@
 	<name>GeoWave Python Bindings</name>
 	<dependencies>
 		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-core-cli</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>net.sf.py4j</groupId>
 			<artifactId>py4j</artifactId>
 			<version>${py4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.jts</groupId>
-			<artifactId>jts-core</artifactId>
-			<version>${jts.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-analytic-spark</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-datastore-accumulo</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-adapter-vector</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-adapter-raster</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-datastore-rocksdb</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-datastore-redis</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-datastore-accumulo</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-datastore-hbase</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-datastore-bigtable</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-datastore-cassandra</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-datastore-dynamodb</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-datastore-kudu</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 	<profiles>

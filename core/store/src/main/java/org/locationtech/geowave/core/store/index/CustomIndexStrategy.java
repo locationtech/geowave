@@ -14,7 +14,7 @@ import org.locationtech.geowave.core.index.persist.Persistable;
 
 /**
  * This interface is the most straightforward mechanism to add custom indexing of any arbitrary
- * logic to a GeoWave datastore. This can simply be two functions that tell GeoWave how to index an
+ * logic to a GeoWave data store. This can simply be two functions that tell GeoWave how to index an
  * entry on ingest and how to query the index based on a custom constraints type.
  * 
  * @param <E> The entry type (such as SimpleFeature, GridCoverage, or whatever type the adapter

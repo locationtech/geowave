@@ -86,7 +86,7 @@ public class VectorLocalExportCommand extends DefaultOperation implements Comman
       dfw.create(AvroSimpleFeatureCollection.SCHEMA$, options.getOutputFile());
       // get appropriate feature adapters
       final List<GeotoolsFeatureDataAdapter> featureAdapters = new ArrayList<>();
-      if ((options.getTypeNames() != null) && (options.getTypeNames().length > 0)) {
+      if ((options.getTypeNames() != null) && (options.getTypeNames().size() > 0)) {
         for (final String typeName : options.getTypeNames()) {
           final short adapterId = internalAdapterStore.getAdapterId(typeName);
           final InternalDataAdapter<?> internalDataAdapter = adapterStore.getAdapter(adapterId);

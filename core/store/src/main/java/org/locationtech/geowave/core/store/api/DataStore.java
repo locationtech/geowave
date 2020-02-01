@@ -93,6 +93,14 @@ public interface DataStore {
   <P extends Persistable, R, T> R aggregate(final AggregationQuery<P, R, T> query);
 
   /**
+   * Get the data type adapter with the given type name from the data store.
+   * 
+   * @param typeName the name of the type to get
+   * @return The data type adapter with the given name, or {@code null} if it couldn't be found
+   */
+  DataTypeAdapter<?> getType(final String typeName);
+
+  /**
    * Get all the data type adapters that have been used within this data store
    *
    * @return An array of the types used within this datastore.

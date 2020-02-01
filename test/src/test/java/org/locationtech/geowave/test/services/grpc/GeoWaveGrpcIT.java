@@ -194,10 +194,32 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     LOGGER.warn("*                                       *");
     LOGGER.warn("-----------------------------------------");
 
-    final String plugins = client.ListPluginsCommand();
+    String plugins = client.ListIngestPluginsCommand();
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
-    LOGGER.warn("*  FINISHED ListPluginsCommand          *");
+    LOGGER.warn("*  FINISHED ListIngestPluginsCommand    *");
+    LOGGER.warn(
+        "*         "
+            + ((System.currentTimeMillis() - startMillis) / 1000)
+            + "s elapsed.                 *");
+    LOGGER.warn("*                                       *");
+    LOGGER.warn("-----------------------------------------");
+
+    plugins = client.ListIndexPluginsCommand();
+    LOGGER.warn("-----------------------------------------");
+    LOGGER.warn("*                                       *");
+    LOGGER.warn("*  FINISHED ListIndexPluginsCommand     *");
+    LOGGER.warn(
+        "*         "
+            + ((System.currentTimeMillis() - startMillis) / 1000)
+            + "s elapsed.                 *");
+    LOGGER.warn("*                                       *");
+    LOGGER.warn("-----------------------------------------");
+
+    plugins = client.ListStorePluginsCommand();
+    LOGGER.warn("-----------------------------------------");
+    LOGGER.warn("*                                       *");
+    LOGGER.warn("*  FINISHED ListStorePluginsCommand     *");
     LOGGER.warn(
         "*         "
             + ((System.currentTimeMillis() - startMillis) / 1000)

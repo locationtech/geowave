@@ -19,7 +19,7 @@ public class KuduRequiredOptions extends StoreFactoryOptions {
   @Parameter(
       names = "--kuduMaster",
       required = true,
-      description = "An URL for the Kudu master node")
+      description = "A URL for the Kudu master node")
   private String kuduMaster;
 
   @ParametersDelegate

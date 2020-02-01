@@ -16,6 +16,7 @@ import org.locationtech.geowave.adapter.vector.query.gwql.ResultSet;
 import org.locationtech.geowave.core.cli.utils.ConsolePrinter;
 
 public class ConsoleQueryOutputFormat extends QueryOutputFormatSpi {
+
   public static final String FORMAT_NAME = "console";
 
   private static final int RESULTS_PER_PAGE = 24;

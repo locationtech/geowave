@@ -22,13 +22,15 @@ public class BigTableOptions extends StoreFactoryOptions {
   public static final String DEFAULT_PROJECT_ID = "geowave-bigtable-project-id";
   public static final String DEFAULT_INSTANCE_ID = "geowave-bigtable-instance-id";
 
-  @Parameter(names = "--scanCacheSize")
+  @Parameter(
+      names = "--scanCacheSize",
+      description = "The number of rows passed to each scanner (higher values will enable faster scanners, but will use more memory)")
   protected int scanCacheSize = HConstants.DEFAULT_HBASE_CLIENT_SCANNER_CACHING;
 
-  @Parameter(names = "--projectId")
+  @Parameter(names = "--projectId", description = "The Bigtable project to connect to")
   protected String projectId = DEFAULT_PROJECT_ID;
 
-  @Parameter(names = "--instanceId")
+  @Parameter(names = "--instanceId", description = "The Bigtable instance to connect to")
   protected String instanceId = DEFAULT_INSTANCE_ID;
 
   private final HBaseOptions internalHBaseOptions = new InternalHBaseOptions();

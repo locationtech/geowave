@@ -81,6 +81,15 @@ public class IndexServicesIT extends BaseServiceIT {
   }
 
   @Test
+  public void listplugins() {
+    // should always return 200
+    TestUtils.assertStatusCode(
+        "Should successfully list plugins",
+        200,
+        indexServiceClient.listPlugins());
+  }
+
+  @Test
   public void testAddSpatialIndex() {
 
     final Response firstAdd = indexServiceClient.addSpatialIndex(storeName, spatialIndexName);

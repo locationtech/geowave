@@ -78,7 +78,7 @@ public class AccumuloMiniCluster {
             + accumulo.getZooKeepers());
 
     if (interactive) {
-      System.out.println("hit Enter to shutdown ..");
+      System.out.println("Press Enter to shutdown..");
       System.in.read();
       System.out.println("Shutting down!");
       accumulo.stop();
@@ -89,8 +89,8 @@ public class AccumuloMiniCluster {
           try {
             accumulo.stop();
           } catch (final Exception e) {
-            LOGGER.warn("Unable to shutdown accumulo", e);
-            System.out.println("Error shutting down accumulo.");
+            LOGGER.warn("Unable to shutdown Accumulo", e);
+            System.out.println("Error shutting down Accumulo.");
           }
           System.out.println("Shutting down!");
         }

@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 @Environments({Environment.SERVICES})
 public class TypeServicesIT extends BaseServiceIT {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(StoreServicesIT.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(TypeServicesIT.class);
   private static StoreServiceClient storeServiceClient;
   private static TypeServiceClient typeServiceClient;
 
@@ -54,13 +54,14 @@ public class TypeServicesIT extends BaseServiceIT {
   protected DataStorePluginOptions dataStorePluginOptions;
 
   private static long startMillis;
-  private static final String testName = "TestServicesIT";
+  private static final String testName = "TypeServicesIT";
 
   private final String storeName = "test-store-name";
 
   @BeforeClass
   public static void setup() {
     storeServiceClient = new StoreServiceClient(ServicesTestEnvironment.GEOWAVE_BASE_URL);
+    typeServiceClient = new TypeServiceClient(ServicesTestEnvironment.GEOWAVE_BASE_URL);
     startMillis = System.currentTimeMillis();
     TestUtils.printStartOfTest(LOGGER, testName);
   }
@@ -80,7 +81,7 @@ public class TypeServicesIT extends BaseServiceIT {
 
 
   @Test
-  public void testremove() {
+  public void testRemove() {
     // Add data
     final DataStore ds = dataStorePluginOptions.createDataStore();
     final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
@@ -106,20 +107,20 @@ public class TypeServicesIT extends BaseServiceIT {
     storeServiceClient.addStoreReRoute(
         storeName,
         dataStorePluginOptions.getType(),
-        dataStorePluginOptions.getGeoWaveNamespace(),
+        null,
         dataStorePluginOptions.getOptionsAsMap());
 
     TestUtils.assertStatusCode(
         "Should successfully remove adapter for existent store and existent type",
         200,
-        typeServiceClient.remove(storeName, "GridPoint"));
+        typeServiceClient.remove(storeName, sft.getTypeName()));
 
     // The following case should probably return a 404 based on the
     // situation described in the test description
     TestUtils.assertStatusCode(
         "Returns a successful 200 status for removing type for existent store and previously removed type.  A warning is output",
         200,
-        typeServiceClient.remove(storeName, "GridPoint"));
+        typeServiceClient.remove(storeName, sft.getTypeName()));
 
     // The following case should probably return a 404 based on the
     // situation described in the test description

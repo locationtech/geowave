@@ -43,5 +43,5 @@ setup(
         'Operating System :: OS Independent',
     ],
     install_requires=['py4j==0.10.8.1','shapely==1.6'],
-    python_requires='>=3,<=3.7' # py4j does not support python 3.8 yet
+    python_requires='>=3,<3.8' # py4j does not support python 3.8 yet
 )

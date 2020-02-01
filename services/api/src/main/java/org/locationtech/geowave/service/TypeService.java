@@ -18,7 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Produces(MediaType.APPLICATION_JSON)
-@Path("/v0/store/type")
+@Path("/v0/type")
 public interface TypeService {
 
   @GET

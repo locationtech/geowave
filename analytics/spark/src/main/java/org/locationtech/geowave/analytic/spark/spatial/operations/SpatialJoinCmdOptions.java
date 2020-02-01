@@ -36,7 +36,7 @@ public class SpatialJoinCmdOptions {
   private String outLeftAdapterTypeName = null;
 
   @Parameter(
-      names = {"-ra", "--rightTypeNamer"},
+      names = {"-rt", "--rightTypeName"},
       description = "Feature type name of right Store to use in join")
   private String rightAdapterTypeName = null;
 

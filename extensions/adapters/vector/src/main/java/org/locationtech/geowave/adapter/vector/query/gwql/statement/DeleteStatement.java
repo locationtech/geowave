@@ -39,8 +39,7 @@ public class DeleteStatement implements Statement {
   }
 
   @Override
-  public ResultSet execute(final DataStorePluginOptions storeOptions) {
-    final DataStore dataStore = storeOptions.createDataStore();
+  public ResultSet execute(final DataStore dataStore) {
     final VectorQueryBuilder bldr =
         VectorQueryBuilder.newBuilder().addTypeName(typeName.typeName());
     if (filter != null) {

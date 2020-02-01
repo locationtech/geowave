@@ -23,6 +23,12 @@ import javax.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/v0/store")
 public interface StoreService {
+
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  @Path("/listplugins")
+  public Response listPlugins();
+
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.MULTIPART_FORM_DATA)

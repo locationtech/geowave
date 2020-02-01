@@ -32,6 +32,7 @@ import org.locationtech.geowave.core.index.persist.PersistableList;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
@@ -66,14 +67,12 @@ public class SelectStatement implements Statement {
   }
 
   @Override
-  public ResultSet execute(final DataStorePluginOptions storeOptions) {
-    final DataStore dataStore = storeOptions.createDataStore();
-    final PersistentAdapterStore adapterStore = storeOptions.createAdapterStore();
-    final InternalAdapterStore internalAdapterStore = storeOptions.createInternalAdapterStore();
-
-    final GeotoolsFeatureDataAdapter<?> adapter =
-        (GeotoolsFeatureDataAdapter<?>) adapterStore.getAdapter(
-            internalAdapterStore.getAdapterId(typeName.typeName())).getAdapter();
+  public ResultSet execute(final DataStore dataStore) {
+    final DataTypeAdapter<?> dataAdapter = dataStore.getType(typeName.typeName());
+    if (!(dataAdapter instanceof GeotoolsFeatureDataAdapter)) {
+      throw new RuntimeException("Statement can only be used on vector types.");
+    }
+    final GeotoolsFeatureDataAdapter<?> adapter = (GeotoolsFeatureDataAdapter<?>) dataAdapter;
     final SimpleFeatureType featureType = adapter.getFeatureType();
 
     if (isAggregation()) {

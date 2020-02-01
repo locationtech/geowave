@@ -55,6 +55,7 @@
 		</developer>
 	</developers>
 	<properties>
+		<geowave-dev-resources.version>1.6</geowave-dev-resources.version>
 		<spark.version>2.3.1</spark.version>
 		<geotools.version>20.0</geotools.version>
 		<jts.version>1.16.0</jts.version>
@@ -973,7 +974,7 @@
 						<dependency>
 							<groupId>org.locationtech.geowave</groupId>
 							<artifactId>geowave-dev-resources</artifactId>
-							<version>1.6</version>
+							<version>${geowave-dev-resources.version}</version>
 						</dependency>
 					</dependencies>
 				</plugin>
@@ -1271,7 +1272,7 @@
 					<dependency>
 						<groupId>org.locationtech.geowave</groupId>
 						<artifactId>geowave-dev-resources</artifactId>
-						<version>1.5</version>
+						<version>${geowave-dev-resources.version}</version>
 					</dependency>
 				</dependencies>
 			</plugin>
@@ -1362,7 +1363,7 @@
 								<dependency>
 									<groupId>org.locationtech.geowave</groupId>
 									<artifactId>geowave-dev-resources</artifactId>
-									<version>1.5</version>
+									<version>${geowave-dev-resources.version}</version>
 								</dependency>
 							</dependencies>
 						</plugin>

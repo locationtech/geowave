@@ -33,11 +33,10 @@ import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.binned.BinnedSFCUtils;
 import org.locationtech.geowave.core.index.sfc.data.BinnedNumericDataset;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.index.sfc.tiered.SingleTierSubStrategy;
 import org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy;
 
 public class BasicSFCIndexStrategy implements NumericIndexStrategy {
-  private static final Logger LOGGER = Logger.getLogger(SingleTierSubStrategy.class);
+  private static final Logger LOGGER = Logger.getLogger(BasicSFCIndexStrategy.class);
   private SpaceFillingCurve sfc;
   private NumericDimensionDefinition[] baseDefinitions;
 

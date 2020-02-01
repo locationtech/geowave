@@ -16,7 +16,7 @@ public class IngestOperationProvider implements CLIOperationProviderSpi {
       new Class<?>[] {
           IngestSection.class,
           KafkaToGeowaveCommand.class,
-          ListPluginsCommand.class,
+          ListIngestPluginsCommand.class,
           LocalToGeowaveCommand.class,
           LocalToHdfsCommand.class,
           LocalToKafkaCommand.class,

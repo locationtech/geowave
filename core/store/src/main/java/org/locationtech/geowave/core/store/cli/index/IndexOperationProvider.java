@@ -17,6 +17,7 @@ public class IndexOperationProvider implements CLIOperationProviderSpi {
           IndexSection.class,
           AddIndexCommand.class,
           ListIndicesCommand.class,
+          ListIndexPluginsCommand.class,
           RemoveIndexCommand.class,
           CompactIndexCommand.class};
 

@@ -15,10 +15,14 @@ import com.beust.jcommander.Parameter;
 public class HBaseOptions extends BaseDataStoreOptions {
   public static final String COPROCESSOR_JAR_KEY = "coprocessorJar";
 
-  @Parameter(names = "--scanCacheSize")
+  @Parameter(
+      names = "--scanCacheSize",
+      description = "The number of rows passed to each scanner (higher values will enable faster scanners, but will use more memory)")
   protected int scanCacheSize = HConstants.DEFAULT_HBASE_CLIENT_SCANNER_CACHING;
 
-  @Parameter(names = "--disableVerifyCoprocessors")
+  @Parameter(
+      names = "--disableVerifyCoprocessors",
+      description = "Disables coprocessor verification, which ensures that coprocessors have been added to the HBase table prior to executing server-side operations")
   protected boolean disableVerifyCoprocessors = false;
 
   protected boolean bigTable = false;

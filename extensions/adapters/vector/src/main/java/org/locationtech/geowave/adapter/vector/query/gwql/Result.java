@@ -31,4 +31,8 @@ public class Result {
     return values.get(index);
   }
 
+  public List<Object> values() {
+    return values;
+  }
+
 }

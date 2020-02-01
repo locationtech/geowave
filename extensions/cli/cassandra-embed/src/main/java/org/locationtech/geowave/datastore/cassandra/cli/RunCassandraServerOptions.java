@@ -17,7 +17,10 @@ public class RunCassandraServerOptions {
       description = "The number of individual Cassandra processes to run")
   private Integer clusterSize = 1;
 
-  @Parameter(names = {"--directory", "-d"}, description = "The directory to use for Cassandra")
+  @Parameter(
+      names = {"--directory", "-d"},
+      required = true,
+      description = "The directory to use for Cassandra")
   private String directory = null;
 
   @Parameter(names = {"--maxMemoryMB", "-m"}, description = "The maximum memory to use in MB")
