@@ -17,7 +17,6 @@ import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -134,12 +133,7 @@ public class GeoWaveCustomIndexIT {
   public void testCustomIndexingWithSpatialTemporal() {
     ingest(true);
     testQueries(true);
-    // TODO There's an issue with deletion where the IndexMetadataSet delete callback assumes the
-    // GeoWaveRows are from that index (such as spatial/spatial-temporal, when in this case they're
-    // coming from the custom enum index, so it seems the index metadata stat can become
-    // inconsistent, in this case it should throw an ArrayIndexOutOfBoundsException
-    // See Issue #1655
-    // testDeleteByCustomIndex();
+    testDeleteByCustomIndex(true);
 
   }
 
@@ -148,7 +142,7 @@ public class GeoWaveCustomIndexIT {
   public void testCustomIndexingAsOnlyIndex() {
     ingest(false);
     testQueries(false);
-    testDeleteByCustomIndex();
+    testDeleteByCustomIndex(false);
   }
 
   private void testQueries(boolean spatialTemporal) {
@@ -215,7 +209,7 @@ public class GeoWaveCustomIndexIT {
     }
   }
 
-  private void testDeleteByCustomIndex() {
+  private void testDeleteByCustomIndex(boolean spatialIndex) {
     final DataStore dataStore = dataStoreOptions.createDataStore();
     final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
     dataStore.delete(
@@ -236,7 +230,8 @@ public class GeoWaveCustomIndexIT {
                 bldr.constraintsFactory().customConstraints(
                     new TestEnumConstraints(TestEnum.A))).indexName(
                         TEST_ENUM_INDEX_NAME).build())) {
-      Assert.assertTrue((513 / 2) > Iterators.size(it));
+      // Subtract out the number of features that have A + C
+      Assert.assertEquals(513 / 2 - 513 / 10, Iterators.size(it));
     }
     dataStore.delete(
         bldr.constraints(
@@ -256,7 +251,43 @@ public class GeoWaveCustomIndexIT {
                 bldr.constraintsFactory().customConstraints(
                     new TestEnumConstraints(TestEnum.A))).indexName(
                         TEST_ENUM_INDEX_NAME).build())) {
-      Assert.assertTrue((513 / 2) > Iterators.size(it));
+      // Subtract out the number of features that have A + C and A + B, but add back in features
+      // that were A + B + C so they aren't double subtracted.
+      Assert.assertEquals(513 / 2 - 513 / 10 - 513 / 6 + 513 / 30, Iterators.size(it));
+    }
+    if (spatialIndex) {
+      try (CloseableIterator<SimpleFeature> it =
+          dataStore.query(
+              bldr.constraints(
+                  bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(
+                      GeometryUtils.GEOMETRY_FACTORY.toGeometry(
+                          new Envelope(0, 2, 0, 2))).build()).build())) {
+        // Number of features with A and NOT_A only
+        Assert.assertEquals(15, Iterators.size(it));
+      }
+    }
+    dataStore.delete(
+        bldr.constraints(
+            bldr.constraintsFactory().customConstraints(
+                new TestEnumConstraints(TestEnum.A))).indexName(TEST_ENUM_INDEX_NAME).build());
+    try (CloseableIterator<SimpleFeature> it =
+        dataStore.query(
+            bldr.constraints(
+                bldr.constraintsFactory().customConstraints(
+                    new TestEnumConstraints(TestEnum.A))).indexName(
+                        TEST_ENUM_INDEX_NAME).build())) {
+      Assert.assertEquals(0, Iterators.size(it));
+    }
+    if (spatialIndex) {
+      try (CloseableIterator<SimpleFeature> it =
+          dataStore.query(
+              bldr.constraints(
+                  bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(
+                      GeometryUtils.GEOMETRY_FACTORY.toGeometry(
+                          new Envelope(0, 2, 0, 2))).build()).build())) {
+        // Number of features with NOT_A only
+        Assert.assertEquals(9, Iterators.size(it));
+      }
     }
   }
 
