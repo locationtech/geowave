@@ -69,9 +69,6 @@ public class HBaseSplitsProvider extends SplitsProvider {
       return splits;
     }
 
-    final NumericIndexStrategy indexStrategy = index.getIndexStrategy();
-    final int partitionKeyLength = indexStrategy.getPartitionKeyLength();
-
     final String tableName = hbaseOperations.getQualifiedTableName(index.getName());
 
     final Map<HRegionLocation, Map<HRegionInfo, List<ByteArrayRange>>> binnedRanges =
@@ -90,7 +87,7 @@ public class HBaseSplitsProvider extends SplitsProvider {
         ranges =
             DataStoreUtils.constraintsToQueryRanges(
                 indexConstraints,
-                indexStrategy,
+                index,
                 targetResolutionPerDimensionForHierarchicalIndex,
                 maxSplits,
                 indexMetadata).getCompositeQueryRanges();
@@ -98,7 +95,7 @@ public class HBaseSplitsProvider extends SplitsProvider {
         ranges =
             DataStoreUtils.constraintsToQueryRanges(
                 indexConstraints,
-                indexStrategy,
+                index,
                 targetResolutionPerDimensionForHierarchicalIndex,
                 -1,
                 indexMetadata).getCompositeQueryRanges();
@@ -141,7 +138,8 @@ public class HBaseSplitsProvider extends SplitsProvider {
         final List<RangeLocationPair> rangeList = new ArrayList<>();
 
         for (final ByteArrayRange range : regionEntry.getValue()) {
-          final GeoWaveRowRange gwRange = toRowRange(range, partitionKeyLength);
+          final GeoWaveRowRange gwRange =
+              toRowRange(range, index.getIndexStrategy().getPartitionKeyLength());
 
           final double cardinality =
               getCardinality(

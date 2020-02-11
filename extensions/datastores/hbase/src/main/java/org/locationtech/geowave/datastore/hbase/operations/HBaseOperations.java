@@ -1037,7 +1037,7 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
           getMultiRowRangeFilter(
               DataStoreUtils.constraintsToQueryRanges(
                   readerParams.getConstraints(),
-                  readerParams.getIndex().getIndexStrategy(),
+                  readerParams.getIndex(),
                   null,
                   maxRangeDecomposition).getCompositeQueryRanges());
       if (multiFilter != null) {

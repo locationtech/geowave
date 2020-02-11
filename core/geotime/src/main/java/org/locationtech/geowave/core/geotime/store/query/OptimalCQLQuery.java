@@ -63,7 +63,7 @@ public class OptimalCQLQuery implements AdapterAndIndexBasedQueryConstraints, Qu
       final CompareOperation geoCompareOp,
       final Index index,
       final BasicQueryByClass baseQuery) throws CQLException {
-    final Filter cqlFilter = CQL.toFilter(cql);
+    final Filter cqlFilter = ECQL.toFilter(cql);
     return createOptimalQuery(cqlFilter, adapter, geoCompareOp, index, baseQuery);
   }
 

@@ -112,7 +112,7 @@ public class ClusteringUtils {
     final QueryRanges ranges =
         DataStoreUtils.constraintsToQueryRanges(
             new ExplicitSpatialQuery(polygon).getIndexConstraints(index),
-            index.getIndexStrategy(),
+            index,
             null,
             -1);
 

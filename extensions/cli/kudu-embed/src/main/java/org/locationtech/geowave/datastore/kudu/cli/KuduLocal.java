@@ -6,7 +6,7 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.test;
+package org.locationtech.geowave.datastore.kudu.cli;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -47,6 +47,8 @@ public class KuduLocal {
   private static final String KUDU_TABLET = "kudu-tserver";
   private static final long STARTUP_DELAY_MS = 1500L;
 
+  public static final File DEFAULT_DIR = new File("./target/temp");
+
   private final int numTablets;
   private final File kuduLocalDir;
   private final File kuduDBDir; // storage for database files
@@ -54,11 +56,16 @@ public class KuduLocal {
   // require a separate watchdog for each master/tablet server
   private final List<ExecuteWatchdog> watchdogs;
 
+
+  public KuduLocal(final RunKuduLocalOptions opt) {
+    this(opt.getDirectory(), opt.getTablets());
+  }
+
   public KuduLocal(final String localDir, final int numTablets) {
-    if (TestUtils.isSet(localDir)) {
+    if (localDir != null && !localDir.contentEquals("")) {
       kuduLocalDir = new File(localDir);
     } else {
-      kuduLocalDir = new File(TestUtils.TEMP_DIR, "kudu");
+      kuduLocalDir = new File(DEFAULT_DIR, "kudu");
     }
     if (!kuduLocalDir.exists() && !kuduLocalDir.mkdirs()) {
       LOGGER.error("unable to create directory {}", kuduLocalDir.getAbsolutePath());

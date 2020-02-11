@@ -15,6 +15,7 @@ import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBStoreFactoryFamily;
 import org.locationtech.geowave.datastore.dynamodb.config.DynamoDBOptions;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import org.locationtech.geowave.datastore.dynamodb.cli.DynamoDBLocal;
 
 public class DynamoDBStoreTestEnvironment extends StoreTestEnvironment {
   private static final GenericStoreFactory<DataStore> STORE_FACTORY =

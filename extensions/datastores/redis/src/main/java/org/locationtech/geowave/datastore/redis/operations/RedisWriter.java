@@ -59,8 +59,14 @@ public class RedisWriter implements RowWriter {
 
   @Override
   public void write(final GeoWaveRow[] rows) {
-    for (final GeoWaveRow row : rows) {
-      write(row);
+    if (rows.length == 1) {
+      write(rows[0]);
+    } else {
+      // otherwise we should make sure we keep track of duplicates for uniqueness
+      short duplicateId = 0;
+      for (final GeoWaveRow row : rows) {
+        internalWrite(row, duplicateId++);
+      }
     }
   }
 
@@ -85,6 +91,32 @@ public class RedisWriter implements RowWriter {
                   (short) row.getNumberOfDuplicates(),
                   row.getDataId(),
                   value));
+    }
+  }
+
+  private void internalWrite(GeoWaveRow row, Short duplicateId) {
+
+    ByteArray partitionKey;
+    if ((row.getPartitionKey() == null) || (row.getPartitionKey().length == 0)) {
+      partitionKey = EMPTY_PARTITION_KEY;
+    } else {
+      partitionKey = new ByteArray(row.getPartitionKey());
+    }
+    for (final GeoWaveValue value : row.getFieldValues()) {
+      setCache.get(partitionKey).add(
+          RedisUtils.getScore(row.getSortKey()),
+          isTimestampRequired
+              ? new GeoWaveRedisPersistedTimestampRow(
+                  (short) row.getNumberOfDuplicates(),
+                  row.getDataId(),
+                  value,
+                  Instant.now(),
+                  duplicateId)
+              : new GeoWaveRedisPersistedRow(
+                  (short) row.getNumberOfDuplicates(),
+                  row.getDataId(),
+                  value,
+                  duplicateId));
     }
   }
 

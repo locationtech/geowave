@@ -12,7 +12,11 @@ import org.locationtech.geowave.core.cli.spi.CLIOperationProviderSpi;
 
 public class RasterOperationCLIProvider implements CLIOperationProviderSpi {
   private static final Class<?>[] OPERATIONS =
-      new Class<?>[] {RasterSection.class, ResizeMRCommand.class, InstallGdalCommand.class};
+      new Class<?>[] {
+          RasterSection.class,
+          ResizeMRCommand.class,
+          InstallGdalCommand.class,
+          DeletePyramidLevelCommand.class};
 
   @Override
   public Class<?>[] getOperations() {

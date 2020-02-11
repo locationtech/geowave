@@ -72,6 +72,8 @@ import org.locationtech.geowave.core.store.flatten.FlattenedUnreadData;
 import org.locationtech.geowave.core.store.flatten.FlattenedUnreadDataSingleRow;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
+import org.locationtech.geowave.core.store.index.CustomIndexImpl;
+import org.locationtech.geowave.core.store.index.CustomIndexStrategy;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.MetadataType;
@@ -80,6 +82,7 @@ import org.locationtech.geowave.core.store.operations.ReaderParamsBuilder;
 import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.operations.RowWriter;
+import org.locationtech.geowave.core.store.query.constraints.CustomQueryConstraints.InternalCustomConstraints;
 import org.locationtech.geowave.core.store.query.options.CommonQueryOptions.HintKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -215,8 +218,12 @@ public class DataStoreUtils {
       final T entry,
       final InternalDataAdapter adapter,
       final Index index) {
-    final AdapterPersistenceEncoding encoding = adapter.encode(entry, index.getIndexModel());
-    return encoding.getInsertionIds(index);
+    if (index instanceof CustomIndexStrategy) {
+      return ((CustomIndexStrategy) index).getInsertionIds(entry);
+    } else {
+      final AdapterPersistenceEncoding encoding = adapter.encode(entry, index.getIndexModel());
+      return encoding.getInsertionIds(index);
+    }
   }
 
   public static InsertionIds keysToInsertionIds(final GeoWaveKey... geoWaveKeys) {
@@ -292,7 +299,7 @@ public class DataStoreUtils {
           final ByteBuffer input = ByteBuffer.wrap(flattenedValue);
           for (int i = 0; i < fieldPositions.size(); i++) {
             final Integer fieldPosition = fieldPositions.get(i);
-            if ((maxFieldPosition > -1) && (fieldPosition > maxFieldPosition)) {
+            if ((maxFieldPosition > -2) && (fieldPosition > maxFieldPosition)) {
               return new FlattenedDataSet(
                   fieldInfoList,
                   new FlattenedUnreadDataSingleRow(input, i, fieldPositions));
@@ -320,10 +327,18 @@ public class DataStoreUtils {
 
   public static QueryRanges constraintsToQueryRanges(
       final List<MultiDimensionalNumericData> constraints,
-      NumericIndexStrategy indexStrategy,
+      Index index,
       final double[] targetResolutionPerDimensionForHierarchicalIndex,
       final int maxRanges,
       final IndexMetaData... hints) {
+    if (index instanceof CustomIndexImpl
+        && constraints != null
+        && constraints.size() == 1
+        && constraints.get(0) instanceof InternalCustomConstraints) {
+      return ((CustomIndexImpl) index).getQueryRanges(
+          ((InternalCustomConstraints) constraints.get(0)).getCustomConstraints());
+    }
+    NumericIndexStrategy indexStrategy = index.getIndexStrategy();
     SubStrategy targetIndexStrategy = null;
     if ((targetResolutionPerDimensionForHierarchicalIndex != null)
         && (targetResolutionPerDimensionForHierarchicalIndex.length == indexStrategy.getOrderedDimensionDefinitions().length)) {

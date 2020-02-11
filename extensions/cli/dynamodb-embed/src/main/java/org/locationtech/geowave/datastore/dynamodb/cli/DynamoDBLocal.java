@@ -6,7 +6,7 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.test;
+package org.locationtech.geowave.datastore.dynamodb.cli;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,15 +34,16 @@ public class DynamoDBLocal {
   private static final String HOST_PORT = "8000";
 
   private static final long EMULATOR_SPINUP_DELAY_MS = 30000L;
+  public static final File DEFAULT_DIR = new File("./target/temp");
 
   private final File dynLocalDir;
   private ExecuteWatchdog watchdog;
 
   public DynamoDBLocal(final String localDir) {
-    if (TestUtils.isSet(localDir)) {
+    if (localDir != null && !localDir.isEmpty()) {
       dynLocalDir = new File(localDir);
     } else {
-      dynLocalDir = new File(TestUtils.TEMP_DIR, "dynamodb");
+      dynLocalDir = new File(DEFAULT_DIR, "dynamodb");
     }
 
     if (!dynLocalDir.exists() && !dynLocalDir.mkdirs()) {

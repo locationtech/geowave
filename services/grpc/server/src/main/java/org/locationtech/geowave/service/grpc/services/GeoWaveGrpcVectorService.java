@@ -18,8 +18,8 @@ import org.geotools.data.store.ContentFeatureCollection;
 import org.geotools.factory.FactoryRegistryException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
-import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
+import org.geotools.filter.text.ecql.ECQL;
 import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
@@ -94,7 +94,7 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase implemen
 
     Filter filter = null;
     try {
-      filter = CQL.toFilter(request.getQuery());
+      filter = ECQL.toFilter(request.getQuery());
     } catch (final CQLException e) {
       LOGGER.error("Exception encountered creating filter from CQL", e);
     }

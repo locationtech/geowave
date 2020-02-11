@@ -21,6 +21,8 @@ import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
+import org.locationtech.geowave.core.store.base.DataStoreCallbackManager;
+import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowImpl;
@@ -31,6 +33,7 @@ import org.locationtech.geowave.core.store.operations.DataIndexReaderParams;
 import org.locationtech.geowave.core.store.operations.DataIndexReaderParamsBuilder;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.RowReader;
+import org.locationtech.geowave.core.store.util.NativeEntryIteratorWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.primitives.Bytes;
@@ -199,6 +202,7 @@ public class DataIndexUtils {
       final Pair<String[], InternalDataAdapter<?>> fieldSubsets,
       final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
       final String[] additionalAuthorizations,
+      ScanCallback scanCallback,
       final short adapterId,
       final byte[]... dataIds) {
     final DataIndexReaderParams readerParams =
@@ -208,6 +212,27 @@ public class DataIndexUtils {
                 additionalAuthorizations).isAuthorizationsLimiting(false).adapterId(
                     adapterId).dataIds(dataIds).fieldSubsets(fieldSubsets).aggregation(
                         aggregation).build();
+    if (scanCallback != null) {
+      // we need to read first to support scan callbacks and then delete (we might consider changing
+      // the interface on base operations delete with DataIndexReaderParams to allow for a scan
+      // callback but for now we can explicitly read before deleting)
+      try (RowReader<GeoWaveRow> rowReader = operations.createReader(readerParams)) {
+        NativeEntryIteratorWrapper scanCallBackIterator =
+            new NativeEntryIteratorWrapper(
+                adapterStore,
+                DataIndexUtils.DATA_ID_INDEX,
+                rowReader,
+                null,
+                scanCallback,
+                BaseDataStoreUtils.getFieldBitmask(fieldSubsets, DataIndexUtils.DATA_ID_INDEX),
+                null,
+                !BaseDataStoreUtils.isCommonIndexAggregation(aggregation),
+                null);
+        // just drain the iterator so the scan callback is properly exercised
+        scanCallBackIterator.forEachRemaining(it -> {
+        });
+      }
+    }
     operations.delete(readerParams);
   }
 
@@ -218,6 +243,7 @@ public class DataIndexUtils {
       final Pair<String[], InternalDataAdapter<?>> fieldSubsets,
       final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
       final String[] additionalAuthorizations,
+      ScanCallback<?, ?> scanCallback,
       final short adapterId,
       final byte[] startDataId,
       final byte[] endDataId) {
@@ -246,6 +272,7 @@ public class DataIndexUtils {
         fieldSubsets,
         aggregation,
         additionalAuthorizations,
+        scanCallback,
         adapterId,
         dataIds.toArray(new byte[dataIds.size()][]));
   }

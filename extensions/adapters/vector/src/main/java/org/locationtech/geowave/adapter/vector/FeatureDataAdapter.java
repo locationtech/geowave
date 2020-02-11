@@ -895,4 +895,14 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature> imple
 
     return crs;
   }
+
+  @Override
+  public Map<String, String> describe() {
+    Map<String, String> description = new HashMap<>();
+    List<AttributeDescriptor> descriptors = this.persistedFeatureType.getAttributeDescriptors();
+    for (AttributeDescriptor descriptor : descriptors) {
+      description.put(descriptor.getLocalName(), descriptor.getType().getBinding().getName());
+    }
+    return description;
+  }
 }
