@@ -18,10 +18,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
-import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalOptions;
+import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
+import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
+import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorAggregationQueryBuilder;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryConstraintsFactory;
@@ -29,15 +28,15 @@ import org.locationtech.geowave.core.geotime.store.query.api.VectorStatisticsQue
 import org.locationtech.geowave.core.geotime.store.query.api.VectorStatisticsQueryBuilder.QueryByVectorStatisticsTypeFactory;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.api.AggregationQuery;
 import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.DataStoreFactory;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Query;
 import org.locationtech.geowave.core.store.api.StatisticsQuery;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.IndexPluginOptions;
-import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
@@ -97,54 +96,31 @@ public class GeoWaveDocumentationExamplesIT extends AbstractGeoWaveIT {
   public void testExamples() throws Exception {
     // !!IMPORTANT!! If this test has to be updated, update the associated programmatic API example
     // in the dev guide!
-    DataStorePluginOptions pluginOptions = dataStore;
-    DataStore myStore = pluginOptions.createDataStore();
+    StoreFactoryOptions options = dataStore.getFactoryOptions();
+
+    DataStore myStore = DataStoreFactory.createDataStore(options);
 
     // --------------------------------------------------------------------
     // Create Indices Example !! See Note at Top of Test
     // --------------------------------------------------------------------
     // Spatial Index
-    SpatialDimensionalityTypeProvider spatialTypeProvider = new SpatialDimensionalityTypeProvider();
-    SpatialOptions opts = spatialTypeProvider.createOptions();
-    opts.setCrs("EPSG:4326");
-    Index spatialIndex = spatialTypeProvider.createIndex(opts);
+    SpatialIndexBuilder spatialIndexBuilder = new SpatialIndexBuilder();
+    spatialIndexBuilder.setCrs("EPSG:4326");
+    Index spatialIndex = spatialIndexBuilder.createIndex();
 
     // Spatial-temporal Index
-    SpatialTemporalDimensionalityTypeProvider spatialTemporalTypeProvider =
-        new SpatialTemporalDimensionalityTypeProvider();
-    SpatialTemporalOptions stOpts = spatialTemporalTypeProvider.createOptions();
-    stOpts.setCrs("EPSG:3857");
-    Index spatialTemporalIndex = spatialTemporalTypeProvider.createIndex(stOpts);
+    SpatialTemporalIndexBuilder spatialTemporalIndexBuilder = new SpatialTemporalIndexBuilder();
+    spatialTemporalIndexBuilder.setCrs("EPSG:3857");
+    spatialTemporalIndexBuilder.setPeriodicity(Unit.MONTH);
+    Index spatialTemporalIndex = spatialTemporalIndexBuilder.createIndex();
     // --------------------------------------------------------------------
 
     // --------------------------------------------------------------------
     // Add Indices Example !! See Note at Top of Test
     // --------------------------------------------------------------------
-    // Create the index store
-    IndexStore indexStore = pluginOptions.createIndexStore();
-
     // Add the spatial and spatial-temporal indices
-    indexStore.addIndex(spatialIndex);
-    indexStore.addIndex(spatialTemporalIndex);
-    // --------------------------------------------------------------------
-
-    // --------------------------------------------------------------------
-    // Index Plugin Example !! See Note at Top of Test
-    // --------------------------------------------------------------------
-    // Create the index plugin options
-    IndexPluginOptions options = new IndexPluginOptions();
-
-    // Select the spatial index plugin
-    options.selectPlugin("spatial");
-
-    // Set the index name
-    options.setName("myIndex");
-
-    // Set the index options
-    ((SpatialOptions) options.getDimensionalityOptions()).setCrs("EPSG:4326");
-
-    // Create the index
-    Index spatialIdx = options.createIndex();
+    myStore.addIndex(spatialIndex);
+    myStore.addIndex(spatialTemporalIndex);
     // --------------------------------------------------------------------
 
     // --------------------------------------------------------------------

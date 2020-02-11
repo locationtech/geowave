@@ -128,6 +128,13 @@ public interface DataStore {
   <R> R aggregateStatistics(StatisticsQuery<R> query);
 
   /**
+   * Add an index to the data store.
+   * 
+   * @param index the index to add
+   */
+  void addIndex(Index index);
+
+  /**
    * Get the indices that have been used within this data store.
    *
    * @return all indices used within this datastore

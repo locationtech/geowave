@@ -22,69 +22,41 @@ Data stores are created by instantiating a {core-store}/core/store/StoreFactoryO
 | RocksDB         | {store-rocksdb}/datastore/rocksdb/config/RocksDBOptions.java[`org.locationtech.geowave.datastore.rocksdb.config.RocksDBOptions`]
 |======================
 
-Once the options class has been initialized with all of the desired options, an instance of {core-store}/core/store/cli/store/DataStorePluginOptions.java[`DataStorePluginOptions`] can be created.  This class serves as the gateway for accessing the various parts of a GeoWave data store, including the {core-store}/core/store/api/DataStore.java[`DataStore`] interface itself.  The following example shows how to create a RocksDB data store:
+Once the options class has been initialized with all of the desired options, a {core-store}/core/store/api/DataStore.java[`DataStore`] can be created using the {core-store}/core/store/api/DataStoreFactory.java[`DataStoreFactory`].  The following example shows how to create a RocksDB data store:
 
 [source, java]
 ----
 RocksDBOptions options = new RocksDBOptions();
 options.setDirectory("/myStore");
 options.setGeoWaveNamespace("gwNamespace");
-DataStorePluginOptions pluginOptions = options.createPluginOptions();
-
-DataStore myStore = pluginOptions.createDataStore();
+DataStore myStore = DataStoreFactory.createDataStore(options);
 ----
 
 === Creating Indices
 
-Spatial and spatial-temporal indices are created by using the appropriate dimensionality type provider. For spatial indices, the {core-geotime}/core/geotime/ingest/SpatialDimensionalityTypeProvider.java[`SpatialDimensionalityTypeProvider`] can be used, and for spatial-temporal indices, the {core-geotime}/core/geotime/ingest/SpatialTemporalDimensionalityTypeProvider.java[`SpatialTemporalDimensionalityTypeProvider`] can be used. Each of these have their own set of options that can be configured using the `createOptions` function.  Once the options are created and set to the desired values, the `createIndex` function can be used to create the index.
+Spatial and spatial-temporal indices are created by using the appropriate index builder. For spatial indices, the {core-geotime}/core/geotime/ingest/SpatialDimensionalityTypeProvider.java[`SpatialIndexBuilder`] can be used, and for spatial-temporal indices, the {core-geotime}/core/geotime/ingest/SpatialTemporalDimensionalityTypeProvider.java[`SpatialTemporalIndexBuilder`] can be used. Each builder has options that are specific to the type of index being created.  Once all options have been set, the index can be created with the `createIndex` function.
 
 [source, java]
 ----
 // Spatial Index
-SpatialDimensionalityTypeProvider spatialTypeProvider = new SpatialDimensionalityTypeProvider();
-SpatialOptions opts = spatialTypeProvider.createOptions();
-opts.setCrs("EPSG:4326");
-Index spatialIndex = spatialTypeProvider.createIndex(opts);
+SpatialIndexBuilder spatialIndexBuilder = new SpatialIndexBuilder();
+spatialIndexBuilder.setCrs("EPSG:4326");
+Index spatialIndex = spatialIndexBuilder.createIndex();
 
 // Spatial-temporal Index
-SpatialTemporalDimensionalityTypeProvider spatialTemporalTypeProvider = new SpatialTemporalDimensionalityTypeProvider();
-SpatialTemporalOptions stOpts = spatialTemporalTypeProvider.createOptions();
-stOpts.setCrs("EPSG:3857");
-Index spatialTemporalIndex = spatialTemporalTypeProvider.createIndex(stOpts);
+SpatialTemporalIndexBuilder spatialTemporalIndexBuilder = new SpatialTemporalIndexBuilder();
+spatialTemporalIndexBuilder.setCrs("EPSG:3857");
+spatialTemporalIndexBuilder.setPeriodicity(Unit.MONTH);
+Index spatialTemporalIndex = spatialTemporalIndexBuilder.createIndex();
 ----
 
-This index can then be added to the data store through the {core-store}/core/store/index/IndexStore.java[`IndexStore`].  The following example shows how to add these indices to the RocksDB data store created in the previous section:
+This index can then be added to the data store with the `addIndex` function.  The following example shows how to add these indices to the RocksDB data store created in the previous section:
 
 [source, java]
 ----
-// Create the index store
-IndexStore indexStore = pluginOptions.createIndexStore();
-
 // Add the spatial and spatial-temporal indices
-indexStore.addIndex(spatialIndex);
-indexStore.addIndex(spatialTemporalIndex);
-----
-
-==== Index Plugins
-
-Indices can also be created using an index plugin.  To do this, create an instance of {core-store}/core/store/index/IndexPluginOptions.java[`IndexPluginOptions`], select a plugin, and then provide any plugin options that are expected by the plugin.  The following example shows how to use the index plugin to create a spatial index with a custom name:
-
-[source, java]
-----
-// Create the index plugin options
-IndexPluginOptions options = new IndexPluginOptions();
-
-// Select the spatial index plugin
-options.selectPlugin("spatial");
-
-// Set the index name
-options.setName("myIndex");
-
-// Set the index options
-((SpatialOptions) options.getDimensionalityOptions()).setCrs("EPSG:4326");
-
-// Create the index
-Index spatialIdx = options.createIndex();
+myStore.addIndex(spatialIndex);
+myStore.addIndex(spatialTemporalIndex);
 ----
 
 === Ingesting Data

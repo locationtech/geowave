@@ -251,5 +251,5 @@ All of the above configurations can be combined into a single configuration file
 }
 ....
 
-See the <<040-visibility-management.adoc#visibility-management, Visibility Management>> section of this document for more information about visibility management.
+See the <<110-visibility-management.adoc#visibility-management, Visibility Management>> section of the appendix for more information about visibility management.
 

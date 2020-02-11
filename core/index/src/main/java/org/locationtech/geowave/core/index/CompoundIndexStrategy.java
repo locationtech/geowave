@@ -21,10 +21,9 @@ import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
 /**
- * Class that implements a compound index strategy. It's a wrapper around two NumericIndexStrategy
- * objects that can externally be treated as a multi-dimensional NumericIndexStrategy.
- *
- * <p> Each of the 'wrapped' strategies cannot share the same dimension definition.
+ * Class that implements a compound index strategy. It combines a PartitionIndexStrategy with a
+ * NumericIndexStrategy to enable the addition of a partitioning strategy to any numeric index
+ * strategy.
  */
 public class CompoundIndexStrategy implements NumericIndexStrategy {
 

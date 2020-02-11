@@ -91,13 +91,12 @@ geowave-home - status is auto.
 Current `best' version is /usr/local/geowave-0.9.3-hdp2.
 ----
 
-==== geowave-*-accumulo
+==== Accumulo and HBase Jars
 
-This RPM will install the GeoWave Accumulo iterator into the local file system and then upload it into HDFS using the `hadoop fs -put` command. This means of deployment requires that the RPM is installed on a node that has the correct binaries and configuration in place to push files to HDFS, like your namenode. We also need to set the ownership and permissions correctly within HDFS and as such, need to execute the script as a user that has superuser permissions in HDFS. This user varies by Hadoop distribution vendor. If the Accumulo RPM installation fails, check the install log located at `/usr/local/geowave/accumulo/geowave-to-hdfs.log` for errors. The script can be re-run manually if there was a problem that can be corrected like the HDFS service was not started. If a non-default user was used to install Hadoop you can specify a user that has permissions to upload with the --user argument `/usr/local/geowave/accumulo/deploy-to-geowave-to-hdfs.sh --user my-hadoop-user`
+The `geowave-*-accumulo` and `geowave-*-hbase` RPMs will install server-side capabilities for Accumulo and HBase by uploading the necessary artifacts into HDFS using the `hadoop fs -put` command. This means of deployment requires that the RPM is installed on a node that has the correct binaries and configuration in place to push files to HDFS, like your namenode. The RPM also needs to set the ownership and permissions correctly within HDFS and must be executed as a user that has superuser permissions in HDFS. This user varies by Hadoop distribution vendor. If the RPM installation fails, check the install log located at `/usr/local/geowave/[hbase|accumulo]/geowave-to-hdfs.log` for errors. The script can be re-run manually if there was a problem that can be corrected like the HDFS service was not started. If a non-default user was used to install Hadoop you can specify a user that has permissions to upload with the --user argument `/usr/local/geowave/[hbase|accumulo]/deploy-geowave-[hbase|accumulo]-to-hdfs.sh --user my-hadoop-user`
 
 [NOTE]
 ====
-This only applies to the Accumulo RPM. There is no such requirement for the HBase RPM.
+GeoWave HBase artifacts can also be installed to S3 if the `hbase.rootdir` property is set to an S3 URL.
 ====
 
-With the exception of the Accumulo RPM mentioned above, there are no restrictions on where you install RPMs. You can install the rest of the RPMs all on a single node for development use or a mix of nodes depending on your cluster configuration.

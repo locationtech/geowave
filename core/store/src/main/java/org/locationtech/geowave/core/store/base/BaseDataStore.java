@@ -1049,6 +1049,11 @@ public class BaseDataStore implements DataStore {
   }
 
   @Override
+  public void addIndex(final Index index) {
+    indexStore.addIndex(index);
+  }
+
+  @Override
   public Index[] getIndices() {
     return getIndices(null);
   }

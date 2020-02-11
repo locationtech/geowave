@@ -7,14 +7,7 @@
 [[analytics-overview]]
 === Overview
 
-Analytics embody algorithms tailored to geospatial data.  Most analytics leverage Hadoop MapReduce for bulk computation. Results of analytic jobs consist of vector or raster data stored in GeoWave.
-
-[NOTE]
-====
-When running analytics, GeoWave does not remove duplicate features that reference lines and/or polygons spanning multiple index regions. If working with duplication in time ranges, please take a look at the GeoWave {core-mapreduce}/mapreduce/dedupe/GeoWaveDedupeJobRunner.java[`GeoWaveDedupeJobRunner`, window="_blank"].
-
-It is important to note that the default spatial indexing strategy does not produce duplicates. The only time there would be a duplication issue is if you are indexing a time range and the time range spans multiple periods based on your temporal binning strategy. The default temporal periodicity is "YEAR," meaning that a row will be duplicated under the default spatial-temporal indexing if the data has a temporal range that crosses the threshold between December 31 and January 1 of the following year.
-====
+Analytics embody algorithms tailored to geospatial data.  Most analytics leverage either Hadoop MapReduce or Spark for bulk computation.  Results of analytic jobs consist of vector or raster data stored in GeoWave.
 
 GeoWave provides the following algorithms out of the box.
 

@@ -209,7 +209,7 @@ Data written through WFS-T is indexed within a single index. When writing data, 
 
 ==== Authorization Management
 
-Authorization Management determines the set of authorizations to supply to GeoWave queries to be compared against the <<040-visibility-management.adoc#visibility-management, visibility expressions>> attached to GeoWave data.
+Authorization Management determines the set of authorizations to supply to GeoWave queries to be compared against the <<110-visibility-management.adoc#visibility-management, visibility expressions>> attached to GeoWave data.
 
 The provided implementations include the following:
 

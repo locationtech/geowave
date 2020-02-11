@@ -8,6 +8,8 @@
 
 This guide assumes that GeoWave has already been installed and is available on the command-line.  See the link:installation-guide.html[Installation Guide^, window="_blank"] for help with the installation process.
 
+NOTE: Several commands used in this guide are only available if GeoWave was installed using the standalone installer.
+
 === Create Working Directory
 
 In order to keep things organized, create a directory on your system that can be used throughout the guide.  The guide will refer to this directory as the working directory.

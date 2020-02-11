@@ -101,3 +101,31 @@ image::import-maven-eclipse-projects.png[scaledwidth="30%",width="30%",alt="impo
 +
 image::EclipseWorkspace.png[scaledwidth="25%",width="25%", alt="EclipseWorkspace.png", title="Eclipse Workspace"]
 
+==== Clean Up and Formatter Templates
+
+The GeoWave repository includes clean up and formatter templates that can be used by Eclipse to clean and format code according to GeoWave standards when those operations are performed in the IDE.
+
+. Within Eclipse, open the Eclipse Preferences window. (Eclipse -> Preferences... on Mac, Window -> Preferences on Windows).
+
+. Import clean up template:
+
+.. Navigate to the Java -> Code Style -> Clean Up.
+
+.. Press the "Import..." button.
+
+.. Navigate to the `dev-resources/src/main/resources/eclipse` directory from the GeoWave source, select  `eclipse-cleanup.xml`, and press the "Open" button.
+
+.. Press the "Apply" button.
+
+. Import formatter template:
+
+.. Navigate to the Java -> Code Style -> Formatter.
+
+.. Press the "Import..." button.
+
+.. Navigate to the `dev-resources/src/main/resources/eclipse` directory from the GeoWave source, select  `eclipse-formatter.xml`, and press the "Open" button.
+
+.. Press the "Apply and Close" button.
+
+Now when Source -> Clean Up... or Source -> Format are used, they will be done in a manner consistent with the rest of the GeoWave source code.
+

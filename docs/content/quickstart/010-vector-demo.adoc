@@ -172,7 +172,7 @@ Now that we have prepared our vector and KDE data, we can visualize it by using 
 
 [IMPORTANT]
 ====
-Execute the following command in a _new_ terminal window.
+Execute the following command in a _new_ terminal window.  This command is only available if GeoWave was installed using the standalone installer with the `Embedded GeoServer` component selected.
 ====
 
 [source, bash]

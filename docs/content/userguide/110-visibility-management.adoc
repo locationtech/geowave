@@ -34,7 +34,7 @@ By default, the system extracts the JSON visibility string from an attribute nam
 
 NOTE: Additional visibility management strategies can be registered through the Java Service Provider Interface (SPI) model by implementing the {adapter-vector}/adapter/vector/plugin/visibility/ColumnVisibilityManagementSpi.java[`ColumnVisibilityManagement`] interface. For more information on using SPI, see the link:https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html[Oracle documentation, window="_blank"].
 
-=== Visbility Expressions
+=== Visibility Expressions
 
 It is sometimes necessary to provide more complex visibility constraints on a particular attribute.  For example if you wanted to allow two different authorizations to view a particular attribute.  GeoWave handles this by using visibility expressions.  These expressions support AND and OR operations through the symbols `&` and `|`.  It also supports parentheses for situations where more complex expressions are required.
 
