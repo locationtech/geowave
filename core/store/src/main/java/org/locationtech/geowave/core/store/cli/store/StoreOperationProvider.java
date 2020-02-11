@@ -20,9 +20,7 @@ public class StoreOperationProvider implements CLIOperationProviderSpi {
           CopyStoreCommand.class,
           CopyConfigStoreCommand.class,
           DescribeStoreCommand.class,
-          RemoveTypeCommand.class,
           ListStoresCommand.class,
-          ListTypesCommand.class,
           RemoveStoreCommand.class,
           VersionCommand.class};
 
