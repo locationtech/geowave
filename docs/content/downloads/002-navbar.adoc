@@ -1,9 +1,7 @@
-[[packages-navbar]]
+[[downloads-navbar]]
 <<<
 
 :linkattrs:
-
-== GeoWave
 
 ++++
 <!-- Start Navbar -->
@@ -13,7 +11,9 @@
             <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <a class="nav-item nav-link active" id="nav-packages-tab" data-toggle="tab" href="#packages" role="tab"
-                aria-controls="nav-packages" aria-selected="true">Packages</a>
+                aria-controls="nav-packages" aria-selected="true">Overview</a>
+            <a class="nav-item nav-link" id="nav-packages-tab" data-toggle="tab" href="#installers" role="tab"
+                aria-controls="nav-packages" aria-selected="true">Installers</a>
             <a class="nav-item nav-link" id="nav-release-tab" data-toggle="tab" href="#release-rpm" role="tab"
                 aria-controls="nav-release-rpms" aria-selected="false">Release RPMs</a>
             <a class="nav-item nav-link" id="nav-development-tab" data-toggle="tab" href="#dev-rpm" role="tab"

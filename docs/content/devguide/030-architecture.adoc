@@ -36,9 +36,11 @@ These structures are described by two interfaces: {core-store}/core/store/entiti
 
 === Data Stores
 
-GeoWave data stores are made up of several different stores that each manage different parts of the system, such as an adapter store, index store, statistics store, etc.  Most GeoWave tasks can be accomplished through the use of the main {core-store}/core/store/api/DataStore.java[`DataStore`] interface.
+GeoWave data stores are made up of several different components that each manage different aspects of the system, such as an adapter store, index store, statistics store, etc.  Most of the time, directly using these components should not be necessary as most GeoWave tasks can be accomplished through the use of the {core-store}/core/store/api/DataStore.java[`DataStore`] interface.
 
 Programmatically, data stores are accessed by using a {core-store}/core/store/StoreFactoryOptions.java[`StoreFactoryOptions`] implementation for the appropriate key/value store to configure a connection to that store.  Once configured with all of the necessary options, the {core-store}/core/store/api/DataStoreFactory.java[`DataStoreFactory`] can be used to directly create a {core-store}/core/store/api/DataStore.java[`DataStore`] instance.
+
+An instance of {core-store}/core/store/cli/store/DataStorePluginOptions.java[`DataStorePluginOptions`] can be also be created from the {core-store}/core/store/StoreFactoryOptions.java[`StoreFactoryOptions`] if direct access to other parts of the data store is needed.
 
 For an example of accessing a data store through the programmatic API, see the <<075-programmatic-api#creating-data-stores, Creating Data Stores>> example.
 

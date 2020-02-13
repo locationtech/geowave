@@ -115,13 +115,13 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>copy-docs-common-packages</id>
+						<id>copy-docs-common-downloads</id>
 						<phase>validate</phase>
 						<goals>
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/content/packages/</outputDirectory>
+							<outputDirectory>${project.build.directory}/content/downloads/</outputDirectory>
 							<resources>
 								<resource>
 									<directory>${project.basedir}/content/docs-common/</directory>
@@ -394,19 +394,19 @@
 						</goals>
 					</execution>
 					<execution>
-						<id>generate-packages</id>
+						<id>generate-downloads</id>
 						<phase>generate-sources</phase>
 						<configuration>
 							<target>
-								<fileset id="generate-index-file-packages" dir="${project.build.directory}/content/packages" includes="*.adoc">
-								  <exclude name="**/packages.adoc" />
+								<fileset id="generate-index-file-downloads" dir="${project.build.directory}/content/downloads" includes="*.adoc">
+								  <exclude name="**/downloads.adoc" />
 								</fileset>
 								<!-- Abusing this a bit to do some simple templating, I have a file 
 									list and need a list of asciidoc includes that look like include::000-titlepage.adoc[] -->
-								<pathconvert pathsep="[]${line.separator}" property="asciidoc-files" refid="generate-index-file-packages">
-									<map from="${project.build.directory}/content/packages/" to="include::" />
+								<pathconvert pathsep="[]${line.separator}" property="asciidoc-files" refid="generate-index-file-downloads">
+									<map from="${project.build.directory}/content/downloads/" to="include::" />
 								</pathconvert>
-								<echo file="${project.build.directory}/content/packages/packages.adoc">${asciidoc-files}[]</echo>
+								<echo file="${project.build.directory}/content/downloads/downloads.adoc">${asciidoc-files}[]</echo>
 							</target>
 						</configuration>
 						<goals>
@@ -1090,20 +1090,20 @@
 								</configuration>
 							</execution>
 							<execution>
-								<id>generate-html-packages</id>
+								<id>generate-html-downloads</id>
 								<phase>generate-resources</phase>
 								<goals>
 									<goal>process-asciidoc</goal>
 								</goals>
 								<configuration>
-									<sourceDirectory>${project.build.directory}/content/packages</sourceDirectory>
-									<sourceDocumentName>packages.adoc</sourceDocumentName>
+									<sourceDirectory>${project.build.directory}/content/downloads</sourceDirectory>
+									<sourceDocumentName>downloads.adoc</sourceDocumentName>
 									<backend>html5</backend>
 									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
-										<stylesdir>../geowave-index/stylesheets</stylesdir>
-										<stylesheet>geowave.css</stylesheet>
+										<stylesdir>stylesheets</stylesdir>
 										<imagesdir>./images</imagesdir>
+										<title>GeoWave Downloads</title>
 										<icons>font</icons>
 										<sectanchors>true</sectanchors>
 										<idprefix />

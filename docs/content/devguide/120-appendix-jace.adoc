@@ -9,14 +9,7 @@ Using Jace, we are able to create JNI proxy classes for GeoWave that can be used
 
 Boost is required when using the Jace bindings.
 
-[[proxies]]
-==== Prepackaged Source and Binaries
-
-There is a public link:packages.html[GeoWave RPM Repo, window="_blank"] where you can download a tarball for the GeoWave Jace bindings for your desired platform. If your platform is not available, there is a source tarball that can be used in conjunction with CMake to build the GeoWave Jace bindings for your desired platform.
-
 ==== Generate Proxies and Build from Source
-
-If you want, you can generate and build the Jace proxies yourself.
 
 ===== Step 1 - Checkout Jace and GeoWave
 

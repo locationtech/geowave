@@ -295,7 +295,7 @@
   </div>
 
   <!-- FOOTER -->
-  <footer id="geowave-footer" class="bg-dark text-white">
+  <footer class="geowave-footer bg-dark text-white">
     <div class="container">
       <div class="row justify-content-between">
         <div class="col-12 col-md-5">
@@ -328,7 +328,7 @@
               <ul class="list-group">
                 <li class="list-group-item bg-transparent border-0 p-0 mb-2"><a href="https://github.com/locationtech/geowave">GitHub</a></li>
                 <li class="list-group-item bg-transparent border-0 p-0 mb-2"><a href="https://gitter.im/locationtech/geowave">Gitter</a></li>
-                <li class="list-group-item bg-transparent border-0 p-0 mb-2"><a href="packages.html">Packages</a></li>
+                <li class="list-group-item bg-transparent border-0 p-0 mb-2"><a href="downloads.html">Downloads</a></li>
                 <li class="list-group-item bg-transparent border-0 p-0 mb-2"><a href="apidocs/index.html">Javadocs</a></li>
                 <li class="list-group-item bg-transparent border-0 p-0 mb-2"><a href="pydocs/index.html">Python Bindings</a></li>
                 </li>

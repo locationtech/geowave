@@ -35,7 +35,9 @@ var documentationMenuItems = {
 var supportMenuItems = {
   'GitHub Issues': 'https://github.com/locationtech/geowave/issues',
   'Gitter': 'https://gitter.im/locationtech/geowave',
-  'Mailing List': 'mailto:geowave-dev@locationtech.org'
+  'Mailing List': 'mailto:geowave-dev@locationtech.org',
+  'sep1': null,
+  'Downloads': 'downloads.html'
 };
 
 var githubMenuItems = {
@@ -319,7 +321,7 @@ var initPhotoSwipe = function () {
 
 $ (document).ready (function () {
   // Replace Footer
-  $ ('#footer').replaceWith ($ ('#geowave-footer'));
+  $ ('#footer').replaceWith ($ ('.geowave-footer'));
 
   // Update Document Title
   var docTitle = $ ('#doc-title');
@@ -402,10 +404,6 @@ $ (document).ready (function () {
           '</a>'
       );
     }
-    versionMenu.append ('<hr class="my-1">');
-    versionMenu.append (
-      '<a class="dropdown-item" href="packages.html">Packages</a>'
-    );
   }
 
   // Init Swiper

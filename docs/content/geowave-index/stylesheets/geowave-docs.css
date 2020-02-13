@@ -191,7 +191,7 @@ h1 strong, h2 strong, h3 strong, #toctitle strong, .sidebarblock>.content>.title
     width: 100%;
     background-color: white;
     z-index: 10;
-    padding: 4rem 0 0;
+    padding: 6rem 0 0;
 }
 
 pre {

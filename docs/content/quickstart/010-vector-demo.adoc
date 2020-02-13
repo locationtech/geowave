@@ -18,7 +18,7 @@ For this quickstart guide, we will be using RocksDB as the key/value store backe
 $ geowave store add -t rocksdb --gwNamespace geowave.gdelt --dir . gdelt
 ----
 
-This command adds a connection to a RocksDB data store in the current directory under the name `gdelt` for use in future commands.  It configures the connection to put all data for this named store under the `geowave.gdelt` namespace.  Although the database does not yet exist, GeoWave will create a new RocksDB database using this configuration.
+This command adds a connection to a RocksDB data store in the current directory under the name `gdelt` for use in future commands.  It configures the connection to put all data for this named store under the `geowave.gdelt` namespace.  After executing the command, the database is _not_ automatically created.  Instead, GeoWave will only create a new RocksDB database using this configuration when a command is executed that makes a modification to the data store.
 
 === Add an Index
 
@@ -40,11 +40,11 @@ GeoWave has many commands that facilitate ingesting data into a GeoWave data sto
 $ geowave ingest localToGW -f gdelt --gdelt.cql "BBOX(geometry,5.87,47.2,15.04,54.95)" ./gdelt_data gdelt gdelt-spatial
 ----
 
-This command specifies the input format as GDELT using the `-f` option, filters the input data using a CQL bounding box filter, and specifies the input directory for all of the files.  Finally, we tell GeoWave to ingest the data to the `gdelt-spatial` index in the `gdelt` data store.  GeoWave creates an adapter for the new data with the type name `gdeltevent`, which we can use to refer to this data in other commands. The ingest should take about 3-5 minutes.
+This command specifies the input format as GDELT using the `-f` option, filters the input data using a CQL bounding box filter, and specifies the input directory for all of the files.  Finally, we tell GeoWave to ingest the data to the `gdelt-spatial` index in the `gdelt` data store.  GeoWave creates an link:overview.html#adapters-types[adapter^] for the new data with the type name `gdeltevent`, which we can use to refer to this data in other commands. The ingest should take about 3-5 minutes.
 
 === Query the Data
 
-Now that the data has been ingested, we can make queries against it.  The GeoWave programmatic API provides a large array of options for issuing queries, but for the purposes of this guide, we will use the query language support that is available for vector data.  This query language provides a simple way to perform some of the most common types of queries using a well-known syntax.  To demonstrate this, perform the following query:
+Now that the data has been ingested, we can make queries against it.  The GeoWave programmatic API provides a large variety of options for issuing queries, but for the purposes of this guide, we will use the query language support that is available for vector data.  This query language provides a simple way to perform some of the most common types of queries using a well-known syntax.  To demonstrate this, perform the following query:
 
 [source, bash]
 ----

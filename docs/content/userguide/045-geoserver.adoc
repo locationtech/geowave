@@ -11,7 +11,7 @@ GeoWave supports both raster images and vector data exposed through GeoServer.
 
 === Installation
 
-There are two ways to obtain the GeoWave GeoServer plugin JAR, the first is to simply download it from the Release JARs section of the link:packages.html[packages] page.  The second is to link:devguide.html#geoserver-plugin[package the JAR from the GeoWave source^, window="_blank"].
+There are two ways to obtain the GeoWave GeoServer plugin JAR, the first is to simply download it from the Release JARs section of the link:downloads.html[downloads] page.  The second is to link:devguide.html#geoserver-plugin[package the JAR from the GeoWave source^, window="_blank"].
 
 The GeoWave GeoServer plugin can be installed by simply dropping the plugin JAR into the `WEB-INF/lib` directory of GeoServer's installation and then restarting the web service.
 
