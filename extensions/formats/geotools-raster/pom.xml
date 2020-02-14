@@ -27,10 +27,23 @@
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-netcdf</artifactId>
 			<version>${geotools.version}</version>
+			<scope>${geotools.scope}</scope>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
 					<artifactId>log4j-over-slf4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>it.geosolutions.imageio-ext</groupId>
+					<artifactId>imageio-ext-imagereadmt</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>it.geosolutions.imageio-ext</groupId>
+					<artifactId>imageio-ext-utilities</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>it.geosolutions.imageio-ext</groupId>
+					<artifactId>imageio-ext-geocore</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
