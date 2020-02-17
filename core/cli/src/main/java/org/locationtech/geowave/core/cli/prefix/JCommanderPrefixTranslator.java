@@ -35,8 +35,8 @@ public class JCommanderPrefixTranslator {
   // which is a special JCommander class. If the interface changes in the
   // future, this
   // may not work anymore.
-  private final Field paraField;
-  private final Field paraMethod;
+  private Field paraField;
+  private Field paraMethod;
 
   public JCommanderPrefixTranslator() {
     try {
@@ -50,9 +50,18 @@ public class JCommanderPrefixTranslator {
       paraMethod.setAccessible(true);
     } catch (final NoSuchFieldException e) {
       // This is a programmer error, and will only happen if another
-      // version
-      // of JCommander is being used.
-      throw new RuntimeException(e);
+      // version of JCommander is being used.
+      // newer versions of JCommander have renamed the member variables, try the new names
+      try {
+        paraField = Parameterized.class.getDeclaredField("field");
+
+        paraField.setAccessible(true);
+
+        paraMethod = Parameterized.class.getDeclaredField("method");
+        paraMethod.setAccessible(true);
+      } catch (NoSuchFieldException e2) {
+        throw new RuntimeException(e);
+      }
     }
   }
 
