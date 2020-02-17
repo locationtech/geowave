@@ -4,7 +4,7 @@
 
 == Adding Data Stores
 
-In order to start using the GeoWave on a key/value store through the CLI, the store must be added to the GeoWave configuration.  This is done through the link:commands.html#store-add[`store add`] command.  For example:
+In order to start using GeoWave on a key/value store through the CLI, the store must be added to the GeoWave configuration.  This is done through the link:commands.html#store-add[`store add`] command.  For example:
 
 [source, bash]
 ----

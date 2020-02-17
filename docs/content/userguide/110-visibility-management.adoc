@@ -36,7 +36,7 @@ NOTE: Additional visibility management strategies can be registered through the 
 
 === Visibility Expressions
 
-It is sometimes necessary to provide more complex visibility constraints on a particular attribute.  For example if you wanted to allow two different authorizations to view a particular attribute.  GeoWave handles this by using visibility expressions.  These expressions support AND and OR operations through the symbols `&` and `|`.  It also supports parentheses for situations where more complex expressions are required.
+It is sometimes necessary to provide more complex visibility constraints on a particular attribute, such as allowing two different authorizations to have view permissions.  GeoWave handles this by using visibility expressions.  These expressions support AND and OR operations through the symbols `&` and `|`.  It also supports parentheses for situations where more complex expressions are required.
 
 ==== Examples
 

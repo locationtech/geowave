@@ -77,7 +77,7 @@ geowave-${project.version}-apache-tools-${project.version}-201602012009.noarch
 ===== Advanced
 
 When GeoWave tables are first accessed on a tablet server, the vfs classpath tells Accumulo where to download the JAR file from HDFS.
-The JAR file is copied into the local /tmp directory (the default general.vfs.cache.dir setting) and loaded onto the classpath.
+The JAR file is copied into the local `/tmp` directory (the default general.vfs.cache.dir setting) and loaded onto the classpath.
 If there is ever doubt as to if these versions match, you can use the commands below from a tablet server node to verify the version of
 this artifact.
 
@@ -86,7 +86,7 @@ this artifact.
 ----
 sudo -u hdfs hadoop fs -cat /accumulo/classpath/geowave/geowave-accumulo-build.properties | grep scm.revision | sed s/project.scm.revision=// <1>
 ----
-<1> The root directory of Accumulo in various distributions can vary, so check with 'hadoop fs -ls /' first to ensure you have the correct initial path.
+<1> The root directory of Accumulo can vary by distribution, so check with `hadoop fs -ls /` first to ensure you have the correct initial path.
 
 .Compare with the versions downloaded locally
 [source, bash]
@@ -104,10 +104,9 @@ sudo find /tmp -name "*geowave-accumulo.jar" -exec unzip -p {} build.properties 
 294ffb267e6691de3b9edc80e312bf5af7b2d23f <2>
 25cf0f895bd0318ce4071a4680d6dd85e0b34f6b
 ----
-<1> This is the version loaded into hdfs and should be present on all tablet servers once Accumulo has been restarted.
-<2> The find command will probably locate a number of different versions depending on how often you clean out /tmp.
+<1> This is the version loaded into HDFS and should be present on all tablet servers once Accumulo has been restarted.
+<2> The find command will probably locate a number of different versions depending on how often you clean out `/tmp`.
 
-There may be multiple versions copies present - one per JVM, the error scenario is when a tablet server is missing the correct iterator JAR.
-
+There may be multiple versions present - one per JVM.  An error will occur if a tablet server is missing the correct JAR.
 
 

@@ -5,9 +5,7 @@
 
 == GeoServer Plugin
 
-This section will outline the various capabilities of the GeoWave GeoServer plugin. While GeoServer is a third-party tool that integrates with GeoWave, it is important to note that this is not meant to be an exhaustive guide to GeoServer, though it's more of an overview and integration guide. For official GeoServer documentation and how-to guides, please reference the link:http://docs.geoserver.org[GeoServer documentation, window="_blank"] guides.
-
-GeoWave supports both raster images and vector data exposed through GeoServer.
+GeoServer is a third-party tool that integrates with GeoWave through a plugin that can be added to a GeoServer installation. The plugin can be used to explore both raster and vector data from a GeoWave data store. This section provides an overview for integrating the GeoWave plugin with GeoServer. For full GeoServer documentation and how-to guides, please refer to the official link:http://docs.geoserver.org[GeoServer documentation, window="_blank"].
 
 === Installation
 
@@ -140,7 +138,7 @@ These options are available for RocksDB data stores.
 | Name                               | Description                                                       | Constraints
 | dir                                | The directory of the RocksDB data store                            |
 | compactOnWrite                     | Whether to compact on every write, if false it will only compact on merge |
-| batchWriteSize                     | The size (in records) for each batched write                      | Anything <= 1 will use synchronous single record writes without batching
+| batchWriteSize                     | The size (in records) for each batched write                      | Anything less than or equal to 1 will use synchronous single record writes without batching
 |======================
 
 === GeoServer CLI Configuration
@@ -192,9 +190,9 @@ Not all SSL configuration settings may be necessary, as it depends on the setup 
 
 === WFS-T
 
-Transactions are initiated through a Transaction operation, that contains inserts, updates, and deletes to features. WFS-T supports feature locks across multiple requests by using a lock request followed by subsequent use of a provided _Lock ID_. The GeoWave implementation supports transaction isolation. Consistency during a commit is not fully supported. Thus, a failure during a commit of a transaction may leave the affected data in an intermediary state. Some deletions, updates, or insertions may not be processed in such a case. The client application must implement its own compensation logic upon receiving a commit-time error response. As expected with Accumulo, operations on a single feature instances are atomic.
+Transactions are initiated through a Transaction operatio, that contains inserts, updates, and deletes to features. WFS-T supports feature locks across multiple requests by using a lock request followed by subsequent use of a provided _Lock ID_. The GeoWave implementation supports transaction isolation. Consistency during a commit is not fully supported. Thus, a failure during a commit of a transaction may leave the affected data in an intermediary state. Some deletions, updates, or insertions may not be processed in such a case. The client application must implement its own compensation logic upon receiving a commit-time error response. Operations on single feature instances are atomic.
 
-Inserted features are buffered prior to commit. The features are bulk fed to the data store when the buffer size is exceeded and when the transaction is committed. In support of atomicity and isolation, flushed features, prior to commit, are marked in a transient state and are only visible to the controlling transaction. Upon commit, these features are 'unmarked'. The overhead incurred by this operation is avoided by increasing the buffer size to avoid pre-commit flushes.
+Inserted features are buffered prior to commit. The features are bulk fed to the data store when the buffer size is exceeded and when the transaction is committed. In support of atomicity and isolation, prior to commit, flushed features are marked in a transient state and are only visible to the controlling transaction. Upon commit, these features are 'unmarked'. The overhead incurred by this operation is avoided by increasing the buffer size to avoid pre-commit flushes.
 
 ==== Lock Management
 

@@ -28,7 +28,7 @@ Users can still continue to enter their password in plain text at command-line (
 
 
 ==== Password Encryption
-Passwords are encrypted within GeoWave using a local encryption token key. It is important to not manipulate the key or internal content. By doing so, you are compromising the likelihood of not being able to encrypt new data or decrypt already encrypted data.
+Passwords are encrypted within GeoWave using a local encryption token key. This key should _not_ be manipulated manually, as doing so may compromise the ability to encrypt new data or decrypt existing data.
 
 In the event that the encryption token key is compromised, or thought to be compromised, a new token key can very easily be generated using a GeoWave command.
 [source, bash]
