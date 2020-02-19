@@ -451,17 +451,6 @@ href="images/geowave-icon-logo-small.png">
 </div>
 <div class="sect2">
 <h3 id="configure-geoserver"><a class="anchor" href="#configure-geoserver"></a>Configure GeoServer</h3>
-<div class="paragraph">
-<p>If using EMR, GeoServer is on non-standard port 8000, so the client must be configured (for standalone installer, GeoServer runs on default port so this step is unnecessary).</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config geoserver "$HOSTNAME:8000"</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>When using the standalone installer, however, we do need to run GeoServer.</p>
-</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave gs run</code></pre>
@@ -501,8 +490,8 @@ geowave gs layer add gdelt-kde</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">cd /mnt
-sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/KDEColorMap.sld
-sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/SubsamplePoints.sld
+sudo wget s3.amazonaws.com/geowave/1.0.0/scripts/emr/quickstart/KDEColorMap.sld
+sudo wget s3.amazonaws.com/geowave/1.0.0/scripts/emr/quickstart/SubsamplePoints.sld
 geowave gs style add kdecolormap -sld /mnt/KDEColorMap.sld
 geowave gs style add SubsamplePoints -sld /mnt/SubsamplePoints.sld</code></pre>
 </div>
@@ -650,7 +639,7 @@ Select "Layer Preview" from the menu on the left side.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-02-19 01:18:03 +00:00
+Last updated 2019-09-06 20:42:52 +00:00
 </div>
 </div>
 </body>
