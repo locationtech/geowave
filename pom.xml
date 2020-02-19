@@ -55,7 +55,7 @@
 		</developer>
 	</developers>
 	<properties>
-		<geowave-dev-resources.version>1.6</geowave-dev-resources.version>
+		<geowave-dev-resources.version>1.7</geowave-dev-resources.version>
 		<spark.version>2.3.1</spark.version>
 		<geotools.version>20.0</geotools.version>
 		<jts.version>1.16.0</jts.version>

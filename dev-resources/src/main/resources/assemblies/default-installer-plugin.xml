@@ -23,6 +23,7 @@
 				<exclude>io.netty:*</exclude>
 				<exclude>com.fasterxml.jackson.core:*</exclude>
 				<exclude>*:jsr305</exclude>
+				<exclude>org.apache.httpcomponents:httpcore</exclude>
 				<exclude>org.apache.hadoop:hadoop-client</exclude>
 				<exclude>org.apache.hadoop:hadoop-auth</exclude>
 				<exclude>org.apache.hadoop:hadoop-annotations</exclude>
@@ -39,6 +40,7 @@
 				<exclude>org.apache.spark:spark-sql*</exclude>
 				<exclude>org.apache.spark:spark-tags*</exclude>
 				<exclude>com.google.guava:guava</exclude>
+				<exclude>org.locationtech.jts:jts-core</exclude>
 				<exclude>*:commons-io</exclude>
 				<exclude>*:commons-vfs2</exclude>
 				<exclude>*:commons-lang</exclude>
@@ -59,6 +61,8 @@
 				<exclude>*:log4j</exclude>
 				<exclude>*:zookeeper</exclude>
 				<exclude>*:metrics-core</exclude>
+				<exclude>joda-time:joda-time</exclude>
+				<exclude>net.jcip:jcip-annotations</exclude>
 				<exclude>com.google.code.gson:gson</exclude>
 				<exclude>com.google.protobuf:protobuf-java</exclude>
 				<exclude>com.amazonaws:aws-java-sdk-s3</exclude>
@@ -66,12 +70,25 @@
 				<exclude>com.amazonaws:aws-java-sdk-core</exclude>
 				<exclude>com.aol.simplereact:cyclops-react</exclude>
 				<exclude>com.github.spotbugs:spotbugs-annotations</exclude>
-				<exclude>org.geotools:gt-main</exclude>
-				<exclude>org.geotools:gt-coverage</exclude>
+				<exclude>org.geotools:gt-main:jar:</exclude>
+				<exclude>org.geotools:gt-coverage:jar:</exclude>
+				<exclude>org.geotools:gt-image:jar:</exclude>
+				<exclude>org.geotools:gt-imagemosaic:jar:</exclude>
+				<exclude>org.geotools:gt-jdbc:jar:</exclude>
+				<exclude>org.geotools:gt-shapefile:jar:</exclude>
+				<exclude>org.geotools:gt-transform:jar:</exclude>
+				<exclude>org.geotools.ogc:net.opengis.ows:jar:</exclude>
+				<exclude>org.geotools.ogc:org.w3.xlink:jar:</exclude>
+				<exclude>org.eclipse.emf:org.eclipse.emf.common:jar:</exclude>
+				<exclude>org.eclipse.emf:org.eclipse.emf.ecore:jar:</exclude>
+				<exclude>org.eclipse.emf:org.eclipse.emf.ecore.xmi:jar:</exclude>
 				<exclude>javax.media:jai_core</exclude>
 				<exclude>javax.media:jai_codec</exclude>
 				<exclude>javax.media:jai_imageio</exclude>
 				<exclude>it.geosolutions.imageio-ext:imageio-ext-gdalframework</exclude>
+				<exclude>it.geosolutions.imageio-ext:imageio-ext-geocore</exclude>
+				<exclude>it.geosolutions.imageio-ext:imageio-ext-imagereadmt</exclude>
+				<exclude>it.geosolutions.imageio-ext:imageio-ext-utilities</exclude>
 			</excludes>
 			<scope>runtime</scope>
 			<useTransitiveDependencies>true</useTransitiveDependencies>

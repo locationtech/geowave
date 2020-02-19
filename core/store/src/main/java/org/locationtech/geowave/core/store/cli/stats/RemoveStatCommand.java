@@ -31,7 +31,7 @@ public class RemoveStatCommand extends AbstractStatsCommand<Void> {
   @Parameter(
       names = {"--fieldName"},
       description = "If the statistic is maintained per field, optionally provide a field name")
-  private final String fieldName = "";
+  private String fieldName;
 
   private String statType = null;
 

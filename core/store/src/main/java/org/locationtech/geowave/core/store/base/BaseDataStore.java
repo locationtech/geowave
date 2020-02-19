@@ -433,6 +433,7 @@ public class BaseDataStore implements DataStore {
       }
       final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation =
           queryOptions.getAggregation();
+      final ScanCallback callback = queryOptions.getScanCallback();
       for (final Pair<Index, List<InternalDataAdapter<?>>> indexAdapterPair : indexAdapterPairList) {
         if (indexAdapterPair.getKey() == null) {
           // this indicates there are no indices that satisfy this set of adapters
@@ -444,7 +445,6 @@ public class BaseDataStore implements DataStore {
             for (final InternalDataAdapter adapter : indexAdapterPair.getRight()) {
               // this must be a data index only adapter, just worry about updating statistics and
               // not other indices or duplicates
-              final ScanCallback callback = queryOptions.getScanCallback();
               ScanCallback scanCallback = callback;
               if (baseOptions.isPersistDataStatistics()) {
                 final DataStoreCallbackManager callbackCache =
@@ -532,7 +532,6 @@ public class BaseDataStore implements DataStore {
             }
 
             deleteCallbacks.add(callbackCache);
-            final ScanCallback callback = queryOptions.getScanCallback();
 
             final Index index = indexAdapterPair.getLeft();
             if (deleteMode == DeletionMode.DELETE_WITH_DUPLICATES) {
