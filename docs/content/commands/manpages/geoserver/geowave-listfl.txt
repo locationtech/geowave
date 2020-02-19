@@ -1,29 +1,45 @@
-//:geowave-listfl(1)
-//:===================
-//::doctype: manpage
+//:= geowave-gs-fl-list(1)
+:doctype: manpage
 
-NAME
-//:----
+[[gs-fl-list-name]]
+==== NAME
 
-geowave gs fl list - List GeoServer feature layers
+geowave-gs-fl-list - List GeoServer feature layers
 
-SYNOPSIS
-//:--------
+[[gs-fl-list-synopsis]]
+==== SYNOPSIS
 
-geowave gs fl list [options]
+  geowave gs fl list [options]
+  geowave geoserver featurelayer list [options]
 
-DESCRIPTION
-//:-----------
+[[gs-fl-list-description]]
+==== DESCRIPTION
 
-This command will list all GeoServer feature layers
+This command lists feature layers from the configured GeoServer instance.
 
-OPTIONS
-//:-------
+[[gs-fl-list-options]]
+==== OPTIONS
 
-- -ds, --datastore
- * Datastore Name
-- -g, --geowaveOnly
- * Show only GeoWave feature layers (default: false)
- * Default: false
-- -ws, --workspace
- * Workspace Name
+*-ds, --datastore* _<name>_::
+  The GeoServer store name to list feature layers from.
+
+*-g, --geowaveOnly*::
+  If specified, only layers from GeoWave stores will be listed.
+
+*-ws, --workspace* _<workspace>_::
+  The GeoServer workspace to use.
+
+[[gs-fl-list-examples]]
+==== EXAMPLES
+
+List all feature layers in GeoServer:
+
+  geowave gs fl list
+  
+List all GeoWave feature layers in GeoServer:
+
+  geowave gs fl list -g
+  
+List all feature layers from the `my_store` store in GeoServer:
+
+  geowave gs fl list -ds my_store

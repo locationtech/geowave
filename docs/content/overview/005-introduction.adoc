@@ -1,0 +1,50 @@
+[[introduction]]
+<<<
+
+:linkattrs:
+
+== Introduction
+
+=== What is GeoWave
+
+GeoWave is an open-source library to store, index, and search multi-dimensional data in sorted key/value stores. It includes implementations that support OGC spatial types (up to 3 dimensions), and both bounded and unbounded temporal values. Both single and ranged values are also supported in all dimensions. GeoWave’s geospatial support is built on top of the GeoTools project extensibility model. This means that it can integrate natively with any GeoTools-compatible project, such as GeoServer and UDig, and can ingest GeoTools compatible data sources.
+
+Basically, GeoWave is working to bridge geospatial software with distributed computing systems and attempting to do for distributed key/value stores what PostGIS does for PostgreSQL.
+
+==== Capabilities
+* Add multi-dimensional indexing capability to key/value stores
+* Add support for geographic objects and geospatial operators to key/value stores
+* Provide a link:http://geoserver.org/[GeoServer^, window="_blank"] plugin to allow geospatial data from key/value stores to be shared and visualized via OGC standard services
+* Provide Map-Reduce input and output formats for distributed processing and analysis of geospatial data
+
+==== Supported Backends
+* link:https://accumulo.apache.org[Apache Accumulo^, window="_blank"]
+* link:https://cassandra.apache.org[Apache Cassandra^, window="_blank"]
+* link:https://hbase.apache.org[Apache HBase^, window="_blank"]
+* link:https://kudu.apache.org[Apache Kudu^, window="_blank"]
+* link:https://cloud.google.com/bigtable[Google Cloud Bigtable^, window="_blank"]
+* link:https://redis.io[Redis^, window="_blank"]
+* link:https://rocksdb.org[RocksDB^, window="_blank"]
+
+=== Origin
+
+GeoWave was initially developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with link:http://www.radiantblue.com/[RadiantBlue Technologies^, window="_blank"] and link:http://www.boozallen.com/[Booz Allen Hamilton^, window="_blank"]. The government has link:https://github.com/locationtech/geowave/blob/master/NOTICE[unlimited rights^, window="_blank"] and is releasing this software to increase the impact of government investments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the link:http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0^, window="_blank"] license.
+
+=== Design Principles
+
+==== Scalable
+
+GeoWave is designed to operate either in a single-node setup or it can scale out as large as needed to support the amount of data and/or processing resources necessary. By utilizing distributed computing clusters and server-side fine grain filtering, GeoWave is fully capable of performing interactive time and/or location specific queries on datasets containing billions of features with 100 percent accuracy.
+
+==== Pluggable Backend
+
+GeoWave is intended to be a multi-dimensional indexing layer that can be added on top of any sorted key/value store. Accumulo was chosen as the initial target architecture and support for several other backends have been added over time. In practice, any data store which allows prefix based range scans should be straightforward to implement as an extension to GeoWave.
+
+==== Modular Framework
+
+The GeoWave architecture is designed to be extremely extensible with most of the functionality units defined by interfaces.  GeoWave provides default implementations of these interfaces to cover most use cases, but it also allows for easy feature extension and platform integration – bridging the gap between distributed technologies and minimizing the learning curve for developers. The intent is that the out-of-the-box functionality should satisfy 90% of use cases, but the modular architecture allows for easy feature extension as well as integration into other platforms.
+
+==== Self-Describing Data
+
+GeoWave stores the information needed to manipulate data, such as configuration and format, in the database itself. This allows software to programmatically interrogate all the data stored in a single or set of GeoWave instances without needing bits of configuration from clients, application servers, or other external stores.
+

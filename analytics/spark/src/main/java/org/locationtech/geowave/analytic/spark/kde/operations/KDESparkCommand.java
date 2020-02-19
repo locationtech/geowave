@@ -34,7 +34,7 @@ import com.beust.jcommander.ParametersDelegate;
 @Parameters(commandDescription = "Kernel density estimate using Spark")
 public class KDESparkCommand extends ServiceEnabledCommand<Void> implements Command {
   private static final Logger LOGGER = LoggerFactory.getLogger(KDESparkCommand.class);
-  @Parameter(description = "<input storename> <output storename>")
+  @Parameter(description = "<input store name> <output store name>")
   private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate
@@ -47,7 +47,7 @@ public class KDESparkCommand extends ServiceEnabledCommand<Void> implements Comm
   public void execute(final OperationParams params) throws Exception {
     // Ensure we have all the required arguments
     if (parameters.size() != 2) {
-      throw new ParameterException("Requires arguments: <input storename> <output storename>");
+      throw new ParameterException("Requires arguments: <input store name> <output store name>");
     }
     computeResults(params);
   }

@@ -65,6 +65,12 @@ public class IndexServiceClient implements IndexService {
     return target;
   }
 
+  public Response listPlugins() {
+    final Response resp = indexService.listPlugins();
+    resp.bufferEntity();
+    return resp;
+  }
+
   public Response listIndices(final String storeName) {
     final Response resp = indexService.listIndices(storeName);
     return resp;

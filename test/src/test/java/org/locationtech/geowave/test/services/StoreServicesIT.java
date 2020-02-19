@@ -8,20 +8,13 @@
  */
 package org.locationtech.geowave.test.services;
 
-import java.util.List;
 import javax.ws.rs.core.Response;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
-import org.locationtech.geowave.core.store.api.DataStore;
-import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.examples.ingest.SimpleIngest;
 import org.locationtech.geowave.service.client.StoreServiceClient;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
@@ -29,8 +22,6 @@ import org.locationtech.geowave.test.annotation.Environments;
 import org.locationtech.geowave.test.annotation.Environments.Environment;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,6 +66,15 @@ public class StoreServicesIT extends BaseServiceIT {
     // remove any Geowave objects that may interfere with tests.
     storeServiceClient.removeStore(storeName);
     unmuteLogging();
+  }
+
+  @Test
+  public void listplugins() {
+    // should always return 200
+    TestUtils.assertStatusCode(
+        "Should successfully list plugins",
+        200,
+        storeServiceClient.listPlugins());
   }
 
   @Test

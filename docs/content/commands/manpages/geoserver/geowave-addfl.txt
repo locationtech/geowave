@@ -1,26 +1,34 @@
-//:geowave-addfl(1)
-//:===================
-//::doctype: manpage
+//:= geowave-gs-fl-add(1)
+:doctype: manpage
 
-NAME
-//:----
+[[gs-fl-add-name]]
+==== NAME
 
-geowave gs fl add - Add a GeoServer feature layer
+geowave-gs-fl-add - Add a feature layer to GeoServer
 
-SYNOPSIS
-//:--------
+[[gs-fl-add-synopsis]]
+==== SYNOPSIS
 
-geowave gs fl add [options] <layer name>
+  geowave gs fl add [options] <layer name>
+  geowave geoserver featurelayer add [options] <layer name>
 
-DESCRIPTION
-//:-----------
+[[gs-fl-add-description]]
+==== DESCRIPTION
 
-This command will add a GeoServer feature layer
+This command adds a feature layer from a GeoWave store to the configured GeoServer instance.
 
-OPTIONS
-//:-------
+[[gs-fl-add-options]]
+==== OPTIONS
 
-- * -ds, --datastore
- * <datastore name>
-- -ws, --workspace
- * <workspace name>
+*$$*$$ -ds, --datastore* _<name>_::
+  The GeoWave store (on GeoServer) to add the layer from.
+
+*-ws, --workspace* _<workspace>_::
+  The GeoServer workspace to use.
+
+[[gs-fl-add-examples]]
+==== EXAMPLES
+
+Add a layer called `hail` from the `my_store` GeoWave store:
+
+  geowave gs fl add -ds my_store hail

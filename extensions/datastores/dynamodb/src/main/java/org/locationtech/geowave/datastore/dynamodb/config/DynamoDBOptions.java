@@ -35,10 +35,14 @@ public class DynamoDBOptions extends StoreFactoryOptions {
       converter = RegionConverter.class)
   protected Regions region = null;
 
-  @Parameter(names = "--initialWriteCapacity")
+  @Parameter(
+      names = "--initialWriteCapacity",
+      description = "The maximum number of writes consumed per second before throttling occurs")
   protected long writeCapacity = 5;
 
-  @Parameter(names = "--initialReadCapacity")
+  @Parameter(
+      names = "--initialReadCapacity",
+      description = "The maximum number of strongly consistent reads consumed per second before throttling occurs")
   protected long readCapacity = 5;
 
   /** List of client configuration that the user can tweak */
@@ -55,7 +59,7 @@ public class DynamoDBOptions extends StoreFactoryOptions {
 
   @Parameter(
       names = "--cacheResponseMetadata",
-      description = "Whether to cache responses from aws(true or false). "
+      description = "Whether to cache responses from AWS (true or false). "
           + "High performance systems can disable this but debugging will be more difficult")
   protected boolean enableCacheResponseMetadata =
       ClientConfiguration.DEFAULT_CACHE_RESPONSE_METADATA;

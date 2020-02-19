@@ -138,7 +138,6 @@ public class StatsManager {
   /**
    * Creates a stats object to be tracked for this adapter based on type
    *
-   * @param dataAdapter - adapter to be associated with this manager
    * @param statisticsId - name of statistics type to be created
    * @return new statistics object of specified type
    */

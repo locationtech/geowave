@@ -1,0 +1,32 @@
+[[statistics]]
+<<<
+
+== Statistics
+
+=== Overview
+
+GeoWave statistics are stored as metadata and can be queried for aggregated information about a particular adapter. Statistics retain the same visibility constraints as the data they are associated with. For example, let's say there is an adapter that has several rows with a visibility expression of `A&B`, and several more rows with a visibility expression of `A&C`.  If there was count statistic on this data, then there would be two rows in the statistics table, one for the number of rows with the `A&B` visibility, and another for the number of rows with the `A&C` visibility.
+
+=== Table Structure
+
+The following diagram describes the default structure of statistics data in a GeoWave data store.
+
+image::stats.svg[scaledwidth="100%",width="100%",alt="Statistics Structure", title="Statistics Structure"]
+
+* _Statistic ID_: An identifier for the statistic that is unique to the adapter. This will usually be the type of statistic, and (if the statistic is on a particular attribute) the attribute name.
+* _Internal Adapter ID_:  This is a short which represents the adapter that the statistic belongs to. This internal ID is used instead of the full adapter name to save space. A mapping between internal adapter ID and adapter exists in the metadata tables of the GeoWave data store. This is encoded with variable length encoding.
+* _Visibility_: The visibility expression used by this row of data.  It is possible for a dataset to have different visibility expressions on the same attribute for different rows.  In this case, there will be a row of statistics data for each unique visibility expression.
+* _Statistic Value_: The serialized statistic.
+
+Statistics are written to the database using a {core-store}/core/store/operations/MetadataWriter.java[`MetadataWriter`] implementation for the given data store. This implementation will dictate how these structures are used to store the data, so the final structure may vary.
+
+=== Querying
+
+Statistics can be queried by using a {core-store}/core/store/api/StatisticsQueryBuilder.java[`StatisticsQueryBuilder`].  For example, vector queries can be performed by creating a query with the {core-geotime}/core/geotime/store/query/api/VectorStatisticsQueryBuilder.java[`VectorStatisticsQueryBuilder`] and then passing the resulting {core-store}/core/store/api/StatisticsQuery.java[`StatisticsQuery`] object to the `aggregateStatistics` function of the {core-store}/core/store/api/DataStore.java[`DataStore`].
+
+=== Merging
+
+When querying statistics with varying visibilities, GeoWave will merge all statistics that match the provided authorizations. Using the above example, providing no authorizations would return a count of _0_, providing `A` and `B` authorizations would return the number of rows with the `A&B` visibility expression.  Providing `A`, `B`, and `C` authorizations would result in a statistics merge and the result would be the combined count of both rows.
+
+image::stat_merge.svg[scaledwidth="100%",width="100%",alt="Statistics Merge", title="Statistics Merge"]
+

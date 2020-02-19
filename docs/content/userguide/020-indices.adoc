@@ -1,0 +1,15 @@
+<<<
+
+:linkattrs:
+
+== Adding Indices
+
+Before ingesting any data, an index must be added to GeoWave that understands how the ingested data should be organized in the key/value store.  GeoWave provides out-of-the-box implementations for spatial, temporal, and spatial-temporal indices.  These indices can be added to a data store through the link:commands.html#index-add[`index add`] command.  For example:
+
+[source, bash]
+----
+$ geowave index add -t spatial example spatial_idx
+----
+
+When an index is added to GeoWave, the appropriate data store implementation will create a table in the key/value store for the indexed data, and information about the index will be added to the metadata.  Because of this, when one user adds an index to a GeoWave data store, all users that connect to the same data store with the same configuration parameters will be able to see and use the index.  All indices that are added to GeoWave are given an _index name_ that can be used by other CLI operations to refer to that index.  For more information about adding different types of indices to a data store, see the link:commands.html#index-add[`index add`] documentation.
+

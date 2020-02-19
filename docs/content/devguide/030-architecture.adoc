@@ -1,0 +1,119 @@
+[[architecture]]
+<<<
+
+:linkattrs:
+
+== Architecture
+
+=== Overview
+
+image::architecture_overview_dev.svg[scaledwidth="100%",width="100%",alt="Architecture Overview", title="GeoWave Architecture Overview"]
+
+The core of the GeoWave architecture concept is getting data in (_Ingest_), and pulling data out (_Query_). This is accomplished by using data adapters and indices.  As discussed in the link:overview.html[GeoWave Overview], data adapters convert the raw data into a format that is optimized for GeoWave.  An index is then used to determine the organization and storage of the converted data so that it can be efficiently queried. There are two types of data persisted in the system: indexed data and metadata. Indexed data is the data (such as vector attributes and geometries) that has been converted to the GeoWave format by an adapter and stored using the index. Metadata contains all of the information about the state of the data store, such as the adapters, indices, and any statistics that have been created for a type. The intent is to store all of the information needed for data discovery and retrieval in the database. This means that an existing data store isn’t tied to a bit of configuration on a particular external server or client but instead is “self-describing.”
+
+=== Key Structure
+
+The following diagram describes the default structure of indexed data in a GeoWave data store.
+
+image::keystructure.svg[scaledwidth="100%",width="100%",alt="Key/Value Structure", title="Key/Value Structure"]
+
+These structures are described by two interfaces: {core-store}/core/store/entities/GeoWaveKey.java[`GeoWaveKey`] and {core-store}/core/store/entities/GeoWaveValue.java[`GeoWaveValue`]. It is up to the data store implementation to determine how to use these structures to ultimately store GeoWave data, so the final structure may vary between implementations.
+
+==== GeoWave Key
+
+* _Partition Key_: This key is derived from the partition strategy used by the index.  By default, no partitioning strategy is used and this portion of the key will be empty. GeoWave also provides round robin and hash-based partitioning strategies.
+* _Sort Key_: This key is derived from the index strategy and is the main factor in determining the sort order of entries in the key/value store. In most cases this will be a result of the SFC implementation used by the index.
+* _Internal Adapter ID_: This is a short which represents the adapter that the data belongs to. This internal ID is used instead of the full adapter name to save space. A mapping between internal adapter ID and adapter exists in the metadata tables of the GeoWave data store. This is encoded with variable length encoding.
+* _Data ID_: An identifier for the data represented by this row. We do not impose a requirement that _Data IDs_ are globally unique but they should be unique for the adapter. Therefore, the pairing of _Internal Adapter ID_ and _Data ID_ define a unique identifier for a data element. An example of a data ID for vector data would be the feature ID.
+* _Data ID Length_: The length, in bytes, of the _Data ID_, encoded with variable length encoding. 
+* _Number of Duplicates_: The number of duplicates is stored to inform the de-duplication filter whether this element needs to be temporarily stored in order to ensure no duplicates are sent to the caller.
+
+==== GeoWave Value
+
+* _Field Mask_: This mask represents the set of fields from the data type that are visible in this row.
+* _Visibility_: The visibility expression used by this row of data.  It is possible for a single data entry to have different visibility expressions on different attributes.  In this case, the entry will be split into multiple rows, with each row having a different _Visibility_ and a _Field Mask_ that indicates which fields are represented by that visibility expression.
+* _Value_: The extended data of the entry.
+
+=== Data Stores
+
+GeoWave data stores are made up of several different components that each manage different aspects of the system, such as an adapter store, index store, statistics store, etc.  Most of the time, directly using these components should not be necessary as most GeoWave tasks can be accomplished through the use of the {core-store}/core/store/api/DataStore.java[`DataStore`] interface.
+
+Programmatically, data stores are accessed by using a {core-store}/core/store/StoreFactoryOptions.java[`StoreFactoryOptions`] implementation for the appropriate key/value store to configure a connection to that store.  Once configured with all of the necessary options, the {core-store}/core/store/api/DataStoreFactory.java[`DataStoreFactory`] can be used to directly create a {core-store}/core/store/api/DataStore.java[`DataStore`] instance.
+
+An instance of {core-store}/core/store/cli/store/DataStorePluginOptions.java[`DataStorePluginOptions`] can be also be created from the {core-store}/core/store/StoreFactoryOptions.java[`StoreFactoryOptions`] if direct access to other parts of the data store is needed.
+
+For an example of accessing a data store through the programmatic API, see the <<075-programmatic-api#creating-data-stores, Creating Data Stores>> example.
+
+=== Indices
+
+The way that GeoWave stores data in a way that makes it efficient to query is through the use of Indices.  As mentioned in the link:overview.html#indices[overview], indices use a given set of dimensions to determine the order in which the data is stored. Indices are composed of two components: a common index model, and an index strategy.
+
+==== Common Index Model
+
+The common index model defines the set numeric dimensions expected by an index.  For example, a spatial-temporal index might have 3 dimensions defined by the model: latitude, longitude, and time.  In order for data to be added to that index, it must supply all of the dimensions required by the model. The data adapter is responsible for associating attributes from the raw data type with the dimensions of the common index model.
+
+==== Index Strategies
+
+An index strategy is what dictates how the dimensioned data from the index model are used to structure the data in the data store. When data is added to GeoWave, an index strategy is applied to determine the _Partition Key_ and _Sort Key_ of the data. Determining which index strategy to use is dependent on the nature of the data and the types of queries that will be performed.
+
+While most GeoWave index strategies implement the {core-index}/core/index/IndexStrategy.java[`IndexStrategy`] interface, there are currently two main types of index strategies: sorted index strategies, and partition index strategies.  Sorted index strategies use one or more dimensions from the index model to sort the data in a predictable way.  Partition index strategies can be used to split data that would usually reside next to each other into separate partitions in order to reduce hotspotting during querying.
+
+==== IndexStrategy Hierarchy
+
+The diagram below outlines the hierarchy of the various index strategies currently available within GeoWave.
+
+image::IndexStrategyHierarchy.svg[scaledwidth="100%",width="100%",alt="IndexStrategy Hierarchy", title="IndexStrategy Hierarchy"]
+
+.SortedIndexStrategy
+Most of GeoWave's index strategies are derived from {core-index}/core/index/NumericIndexStrategy.java[`NumericIndexStrategy`], which is the only {core-index}/core/index/SortedIndexStrategy.java[`SortedIndexStrategy`] implementation included with GeoWave. The {core-index}/core/index/NumericIndexStrategy.java[`NumericIndexStrategy`] also implements the {core-index}/core/index/PartitionIndexStrategy.java[`PartitionIndexStrategy`] interface so that any derived strategy can define its own partitioning methods. Any numeric index strategy can also be partitioned using one of the built-in {core-index}/core/index/PartitionIndexStrategy.java[`PartitionIndexStrategy`] implementations by using a {core-index}/core/index/CompoundIndexStrategy.java[`CompoundIndexStrategy`] which wraps a {core-index}/core/index/NumericIndexStrategy.java[`NumericIndexStrategy`] and a {core-index}/core/index/PartitionIndexStrategy.java[`PartitionIndexStrategy`] into a single strategy.  The {core-index}/core/index/HierarchicalNumericIndexStrategy.java[`HierarchicalNumericIndexStrategy`] implementations are where most of the built-in spatial and spatial-temporal indexing is done. See the <<125-appendix-theory.adoc#theory, Theory>> section for more information about how GeoWave hierarchical indexing works.
+
+.PartitionIndexStrategy
+There are two built-in {core-index}/core/index/PartitionIndexStrategy.java[`PartitionIndexStrategy`] implementations.  The round robin partition index strategy evenly distributes data to one of _N_ partitions in a round robin fashion, i.e. every successive row goes to the next successive partition until the last partition is reached, at which point the next row will go to the first partition and the process repeats.  The hash partition index strategy assigns each row a partition based on the hash of dimensional data. This should also result in a fairly even row distribution. Unlike the round robin strategy, the hash strategy is deterministic. This means that the partition that a row will go to will not change based on the order of the data.
+
+If there is no suitable index strategy implementation for a given use case, one can be developed using any of the built-in strategies as a reference.
+
+==== Custom Indices
+
+If more direct control of an index is required, a custom index can be created by implementing the {core-store}/core/store/index/CustomIndexStrategy.java[`CustomIndexStrategy`] interface.  This interface is the most straightforward mechanism to add custom indexing of any arbitrary logic to a GeoWave data store. It is made up of two functions that tell GeoWave how to index an entry on ingest and how to query the index based on a custom constraints type.  The interface has two generics that should be supplied with the implementation.  The first is the entry type, such as `SimpleFeature`, `GridCoverage`, etc.  The second is the constraints type, which can be anything, but should implement the {core-index}/core/index/persist/Persistable.java[`Persistable`] interface so that it can work outside of client code.  The constraints type is a class that is used by the {core-store}/core/store/index/CustomIndexStrategy.java[`CustomIndexStrategy`] implementation to generate a set of query ranges for the index based on some arbitrary constraint.
+
+Once a {core-store}/core/store/index/CustomIndexStrategy.java[`CustomIndexStrategy`] implementation has been created, it can be wrapped by a {core-store}/core/store/index/CustomIndexImpl.java[`CustomIndexImpl`] with a name to serve as a GeoWave index.
+
+NOTE: Custom indices are different from other GeoWave indices in that they do not conform to the marriage of a common index model and an index strategy.  Because custom indices provide direct control over the indexing of data, it is up to the developer to decide how the indexing should work.  Because of this, it is important to note that the {core-store}/core/store/index/CustomIndexStrategy.java[`CustomIndexStrategy`] interface has no relation to the {core-index}/core/index/IndexStrategy.java[`IndexStrategy`] interface used by the core GeoWave indices.
+
+==== Secondary Indexing
+
+When secondary indexing is enabled on a data store, all data is written to a `DATA_ID` index in which the key is a unique data ID.  Indices on that data store will then use this data ID as the value instead of the encoded data.  This can be useful to avoid excessive duplication of encoded data in cases where there are many indices on the same dataset.  The drawback for secondary indexing is that when data needs to be decoded, GeoWave has to do a second lookup to pull the data out of the `DATA_ID` index.
+
+=== Adapters
+
+In order to store geometry, attributes, and other information, input data must be converted to a format that is optimized for data discovery. GeoWave provides a {core-store}/core/store/api/DataTypeAdapter.java[`DataTypeAdapter`] interface that handles this conversion process. Implementations that support GeoTools simple feature types as well as raster data are included. When a data adapter is used to ingest data, the adapter and its parameters are persisted as metadata in the GeoWave data store. When the type is queried, the adapter is loaded dynamically in order to translate the GeoWave data back into its native form.
+
+==== Feature Serialization
+
+image::serialization1.svg[scaledwidth="100%",width="100%",alt="Feature Serialization", title="Feature Serialization"]
+
+GeoWave allows developers to create their own data adapters. Adapters not only dictate how the data is serialized and deserialized, but also which attributes should be used for a given index. GeoWave's goal is to minimize the code and make the querying logic as simple as possible. This conflicts with the desire to allow maximum flexibility with arbitrary data adapters. To solve this, data from an adapter is split between common index data and extended data.  Common index data are non-null numeric fields that are used by the index.  They can also be used in server-side filtering during a query without having to decode the entire entry. Extended data is all of the remaining data needed to convert the entry back into its native form. Any filtering that needs to be done on this extended data would require that the entry be decoded back into its native form.  This would be done client-side and would have a significant impact on query performance.
+
+==== Common Index Data
+
+Common index data are the fields used by the index to determine how the data should be organized. The adapter determines these fields from the _common index model_ that is provided by the index when data is encoded. Common index data fields will typically be geometry coordinates and optionally time, but could be any set of numeric values. These fields are used for fine-grained filtering when performing a query. *Common index data _cannot_ be null.*
+
+==== Extended Data
+
+Extended data is all of the remaining data needed to convert the entry back into its native form. Any filtering that needs to be done on this extended data would require that the entry be decoded back into its native form.  This would be done client-side and would have a significant impact on query performance. The data adapter must provide methods to serialize and deserialize these items in the form of field readers and field writers. As this data is only deserialized client-side, the readers and writers do not need to be present on the server-side classpath.
+
+==== Field Writers/Readers
+
+Field readers and writers are used by data adapters to tell GeoWave how to serialize and deserialize data of a given type. GeoWave provides a basic implementation for the following attribute types in both singular and array form:
+
+|=======
+| Boolean | Byte       | Short  | Float    | Double | BigDecimal | Integer
+| Long    | BigInteger | String | Geometry | Date   | Calendar   |        
+|=======
+
+Field readers must implement the {core-store}/core/store/data/field/FieldReader.java[`FieldReader`] interface, and field writers must implement the {core-store}/core/store/data/field/FieldWriter.java[`FieldWriter`] interface.
+
+==== Internal Adapter ID
+
+Most public interfaces and tools reference adapters by their name, however, it would be redundant to include this full name in every row of the database.  GeoWave reduces this memory impact by mapping each adapter to an 2 byte (short) internal adapter ID.  This mapping is stored in a metadata table and can be looked up using the {core-store}/core/store/adapter/InternalAdapterStore.java[`InternalAdapterStore`].
+

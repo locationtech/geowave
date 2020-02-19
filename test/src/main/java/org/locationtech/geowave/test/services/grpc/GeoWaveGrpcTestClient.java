@@ -74,14 +74,15 @@ import org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveWorkspaceCo
 import org.locationtech.geowave.service.grpc.protobuf.GeoServerSetLayerStyleCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.MapStringStringResponseProtos;
 import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos;
-import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.VoidResponseProtos;
 import org.locationtech.geowave.service.grpc.protobuf.KafkaToGeowaveCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.KdeCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.KmeansSparkCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.ListCommandParametersProtos;
+import org.locationtech.geowave.service.grpc.protobuf.ListIndexPluginsCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.ListIndicesCommandParametersProtos;
-import org.locationtech.geowave.service.grpc.protobuf.ListPluginsCommandParametersProtos;
+import org.locationtech.geowave.service.grpc.protobuf.ListIngestPluginsCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.ListStatsCommandParametersProtos;
+import org.locationtech.geowave.service.grpc.protobuf.ListStorePluginsCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.ListTypesCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.LocalToGeowaveCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.LocalToHdfsCommandParametersProtos;
@@ -894,10 +895,22 @@ public class GeoWaveGrpcTestClient {
     return true;
   }
 
-  public String ListPluginsCommand() {
-    final ListPluginsCommandParametersProtos request =
-        ListPluginsCommandParametersProtos.newBuilder().build();
-    return coreIngestBlockingStub.listPluginsCommand(request).getResponseValue();
+  public String ListIngestPluginsCommand() {
+    final ListIngestPluginsCommandParametersProtos request =
+        ListIngestPluginsCommandParametersProtos.newBuilder().build();
+    return coreIngestBlockingStub.listIngestPluginsCommand(request).getResponseValue();
+  }
+
+  public String ListIndexPluginsCommand() {
+    final ListIndexPluginsCommandParametersProtos request =
+        ListIndexPluginsCommandParametersProtos.newBuilder().build();
+    return coreStoreBlockingStub.listIndexPluginsCommand(request).getResponseValue();
+  }
+
+  public String ListStorePluginsCommand() {
+    final ListStorePluginsCommandParametersProtos request =
+        ListStorePluginsCommandParametersProtos.newBuilder().build();
+    return coreStoreBlockingStub.listStorePluginsCommand(request).getResponseValue();
   }
 
   public boolean LocalToKafkaCommand() {

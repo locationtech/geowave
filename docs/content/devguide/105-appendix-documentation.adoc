@@ -1,0 +1,38 @@
+[[documentation]]
+<<<
+=== Documentation
+
+:linkattrs:
+
+==== Overview
+
+The documentation is writen in http://www.methods.co.nz/asciidoc/index.html[AsciiDoc^] which is a plain-text markup format that can be created using any text editor and read “as-is”, or rendered to several other formats like HTML, PDF or EPUB.
+
+Helpful Links:
+
+* link:http://asciidoctor.org/docs/what-is-asciidoc/[What is Asciidoc?^, window="_blank"]
+* link:http://asciidoctor.org/docs/asciidoc-writers-guide/[Writer's Guide^, window="_blank"]
+* link:http://asciidoctor.org/docs/asciidoc-syntax-quick-reference/[AsciiDoc Syntax Reference^, window="_blank"]
+
+
+==== Ordering
+
+All of the content stored in the `docs/content` directory of this project will be rendered into a single webpage with an auto-generated table of contents and a PDF. The order in which the pages appear is determined by the sort order of the file names given to the ASCIIDOC files in the `docs/content` directory, so a numeric prefix has been given to each file. Gaps can be left in between the numbers (only the sort order is important) to allow for future edits without having to renumber other documents that will appear after the new content.
+
+==== Preview
+
+To preview markup as HTML before making a commit, there are plugins available, and various text editors and IDEs, that can be used while editing. If your preferred text editor has no plugin available, there's a link:https://github.com/asciidoctor/asciidoctor-firefox-addon[Firefox AsciiDoc Plugin^, window="_blank"] available that allows for previewing with a quick refresh of the browser.
+
+==== Site
+
+To build all the content used for the entire finished web page or the generated PDF for the link:https://locationtech.github.io/geowave/[GeoWave website, window="_blank"], use the following command.
+
+[source, bash]
+----
+$ cd geowave
+$ mvn -P {FORMAT} install <1>
+----
+<1> Supported formats include 'pdf' and 'html' (no quotes).
+
+The entire site, including both docs and javadocs, will be available for inspection in the `geowave/target/site/` directory.
+

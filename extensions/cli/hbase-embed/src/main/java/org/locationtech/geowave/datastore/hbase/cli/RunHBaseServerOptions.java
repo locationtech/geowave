@@ -8,31 +8,40 @@
  */
 package org.locationtech.geowave.datastore.hbase.cli;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import com.beust.jcommander.Parameter;
 
 public class RunHBaseServerOptions {
+  private static final String DEFAULT_LIB_DIR = "lib/services/third-party/embedded-hbase/lib";
+  private static final String DEFAULT_DATA_DIR = "lib/services/third-party/embedded-hbase/data";
+  private static final String DEFAULT_ZOOKEEPER_DATA_DIR =
+      "lib/services/third-party/embedded-hbase/zookeeper";
 
   @Parameter(
       names = {"--auth", "-a"},
       description = "A list of authorizations to grant the 'admin' user")
   private List<String> auths = new ArrayList<>();
-  @Parameter(names = {"--libDir", "-l"}, description = "Directory for HBase server-side libraries")
-  private String libDir = "./lib/services/third-party/embedded-hbase/lib";
-  @Parameter(names = {"--dataDir", "-d"}, description = "Directory for HBase server-side data")
-  private String dataDir = "./lib/services/third-party/embedded-hbase/data";
+  @Parameter(
+      names = {"--libDir", "-l"},
+      description = "Directory for HBase server-side libraries. Defaults to embedded lib directory.")
+  private String libDir = null;
+  @Parameter(
+      names = {"--dataDir", "-d"},
+      description = "Directory for HBase server-side data. Defaults to embedded data directory.")
+  private String dataDir = null;
   @Parameter(
       names = {"--zkDataDir", "-z"},
-      description = "The host:port to run a single instance of zookeeper on")
-  private String zkDataDir = "./lib/services/third-party/embedded-hbase/zookeeper";
+      description = "The zookeeper data directory.  Defaults to embedded zookeeper data directory.")
+  private String zkDataDir = null;
   @Parameter(
       names = {"--regionServers", "-r"},
       description = "The number of region server processes")
   private int numRegionServers = 1;
 
   public HBaseMiniCluster getMiniCluster() throws Exception {
-    return new HBaseMiniCluster(auths, zkDataDir, libDir, dataDir, numRegionServers);
+    return new HBaseMiniCluster(auths, getZkDataDir(), getLibDir(), getDataDir(), numRegionServers);
   }
 
   public List<String> getAuths() {
@@ -44,6 +53,10 @@ public class RunHBaseServerOptions {
   }
 
   public String getLibDir() {
+    if (libDir == null) {
+      String geowaveHome = System.getProperty("geowave.home", ".");
+      return Paths.get(geowaveHome, DEFAULT_LIB_DIR).toString();
+    }
     return libDir;
   }
 
@@ -52,6 +65,10 @@ public class RunHBaseServerOptions {
   }
 
   public String getZkDataDir() {
+    if (zkDataDir == null) {
+      String geowaveHome = System.getProperty("geowave.home", ".");
+      return Paths.get(geowaveHome, DEFAULT_ZOOKEEPER_DATA_DIR).toString();
+    }
     return zkDataDir;
   }
 
@@ -60,6 +77,10 @@ public class RunHBaseServerOptions {
   }
 
   public String getDataDir() {
+    if (dataDir == null) {
+      String geowaveHome = System.getProperty("geowave.home", ".");
+      return Paths.get(geowaveHome, DEFAULT_DATA_DIR).toString();
+    }
     return dataDir;
   }
 

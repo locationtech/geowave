@@ -40,9 +40,7 @@ public class GeoServerAddLayerCommand extends GeoServerCommand<String> {
       description = "For multiple layers, add (all | raster | vector)")
   private AddOption addOption = null;
 
-  @Parameter(
-      names = {"-id", "--adapterId"},
-      description = "select just <adapter id> from the store")
+  @Parameter(names = {"-t", "--typeName"}, description = "The type to add to GeoServer")
   private String adapterId = null;
 
   @Parameter(names = {"-sld", "--setStyle"}, description = "default style sld")

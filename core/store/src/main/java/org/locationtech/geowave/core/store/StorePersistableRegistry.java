@@ -32,12 +32,6 @@ import org.locationtech.geowave.core.store.index.CustomNameIndex;
 import org.locationtech.geowave.core.store.index.IndexImpl;
 import org.locationtech.geowave.core.store.index.IndexMetaDataSet;
 import org.locationtech.geowave.core.store.index.NullIndex;
-import org.locationtech.geowave.core.store.index.numeric.NumberRangeFilter;
-import org.locationtech.geowave.core.store.index.numeric.NumericFieldIndexStrategy;
-import org.locationtech.geowave.core.store.index.temporal.DateRangeFilter;
-import org.locationtech.geowave.core.store.index.temporal.TemporalIndexStrategy;
-import org.locationtech.geowave.core.store.index.text.TextExactMatchFilter;
-import org.locationtech.geowave.core.store.index.text.TextIndexStrategy;
 import org.locationtech.geowave.core.store.query.aggregate.CountAggregation;
 import org.locationtech.geowave.core.store.query.aggregate.DataStatisticsAggregation;
 import org.locationtech.geowave.core.store.query.aggregate.MergingAggregation;
@@ -95,12 +89,7 @@ public class StorePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 218, CustomNameIndex::new),
         new PersistableIdAndConstructor((short) 219, NullIndex::new),
         new PersistableIdAndConstructor((short) 220, DataIdRangeQuery::new),
-        new PersistableIdAndConstructor((short) 221, NumberRangeFilter::new),
-        new PersistableIdAndConstructor((short) 222, NumericFieldIndexStrategy::new),
-        new PersistableIdAndConstructor((short) 224, DateRangeFilter::new),
-        new PersistableIdAndConstructor((short) 225, TemporalIndexStrategy::new),
-        new PersistableIdAndConstructor((short) 226, TextExactMatchFilter::new),
-        new PersistableIdAndConstructor((short) 227, TextIndexStrategy::new),
+        // 221 - 227 Unused
         new PersistableIdAndConstructor((short) 228, BasicQueryByClass::new),
         new PersistableIdAndConstructor((short) 229, CoordinateRangeQuery::new),
         new PersistableIdAndConstructor((short) 230, CoordinateRangeQueryFilter::new),

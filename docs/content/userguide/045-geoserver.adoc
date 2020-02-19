@@ -1,0 +1,230 @@
+[[geoserveer]]
+<<<
+
+:linkattrs:
+
+== GeoServer Plugin
+
+GeoServer is a third-party tool that integrates with GeoWave through a plugin that can be added to a GeoServer installation. The plugin can be used to explore both raster and vector data from a GeoWave data store. This section provides an overview for integrating the GeoWave plugin with GeoServer. For full GeoServer documentation and how-to guides, please refer to the official link:http://docs.geoserver.org[GeoServer documentation, window="_blank"].
+
+=== Installation
+
+There are two ways to obtain the GeoWave GeoServer plugin JAR, the first is to simply download it from the Release JARs section of the link:downloads.html[downloads] page.  The second is to link:devguide.html#geoserver-plugin[package the JAR from the GeoWave source^, window="_blank"].
+
+The GeoWave GeoServer plugin can be installed by simply dropping the plugin JAR into the `WEB-INF/lib` directory of GeoServer's installation and then restarting the web service.
+
+=== Data Sources
+
+GeoWave data stores are supported by GeoServer through the GeoTools DataStore API. After installing the GeoWave plugin on a GeoServer instance, GeoWave data stores can be configured through the GeoServer web interface by clicking on the `Stores` link under the `Data` section of the navigation bar.
+
+image::geoserver_addstore.png[scaledwidth="100%",width="100%",alt="Adding New GeoWave Data Store in GeoServer"]
+
+When adding a new GeoWave store, several configuration options are available, depending on the type of store being added.  For options that are not required, suitable defaults are provided by GeoWave if a value is not supplied. The options available for each store are detailed below.
+
+==== Common Configuration Options
+
+These options are available for all data store types.
+
+[options="header", cols="30%,45%,25%"]
+|======================
+| Name                              | Description                                                      | Constraints
+| gwNamespace                       | The namespace to use for GeoWave data                            |
+| enableServerSideLibrary           | Whether or not to enable server-side processing if possible      |
+| enableSecondaryIndexing           | Whether or not to enable secondary indexing                      |
+| enableVisibility                  | Whether or not to enable visibility filtering                    |
+| maxRangeDecomposition             | The maximum number of ranges to use when breaking down queries |
+| aggregationMaxRangeDecomposition  | The maximum number of ranges to use when breaking down aggregation queries |
+| Lock Management                   | Select one from a list of lock managers                          |
+| Authorization Management Provider | Select from a list of providers                                  |
+| Authorization Data URL            | The URL for an external supporting service or configuration file | The interpretation of the URL depends on the selected provider
+| Transaction Buffer Size           | Number of features to buffer before flushing to the data store    |
+| Query Index Strategy              | The pluggable query strategy to use for querying GeoWave tables  |
+|======================
+
+==== Accumulo Data Store Configuration
+
+These options are available for Accumulo data stores.
+
+[options="header", cols="30%,45%,25%"]
+|======================
+| Name                              | Description                                                      | Constraints
+| zookeeper                         | Comma-separated list of Zookeeper host and port                  | Host and port are separated by a colon (host:port)
+| instance                          | The Accumulo tablet server's instance name                       | The name matches the one configured in Zookeeper
+| user                              | The Accumulo user name                                           | The user should have administrative privileges to add and remove authorized visibility constraints
+| password                          | Accumulo user's password                                         |
+|======================
+
+==== Bigtable Data Store Configuration
+
+These options are available for Bigtable data stores.
+
+[options="header", cols="30%,45%,25%"]
+|======================
+| Name                              | Description                                                      | Constraints
+| scanCacheSize                     | The number of rows passed to each scanner (higher values will enable faster scanners, but will use more memory) |
+| projectId                         | The Bigtable project to connect to                               |
+| instanceId                        | The Bigtable instance to connect to                              |
+|======================
+
+==== Cassandra Data Store Configuration
+
+These options are available for Cassandra data stores.
+
+[options="header", cols="30%,45%,25%"]
+|======================
+| Name                              | Description                                                      | Constraints
+| contactPoints                     | A single contact point or a comma delimited set of contact points to connect to the Cassandra cluster  |
+| batchWriteSize                    | The number of inserts in a batch write  |
+| durableWrites                     | Whether to write to commit log for durability, configured only on creation of new keyspace  |
+| replicas                          | The number of replicas to use when creating a new keyspace |
+|======================
+
+==== DynamoDB Data Store Configuration
+
+These options are available for DynamoDB data stores.
+
+[options="header", cols="30%,45%,25%"]
+|======================
+| Name                              | Description                                                      | Constraints
+| endpoint                          | The endpoint to connect to                                       | Specify either endpoint or region, not both
+| region                            | The AWS region to use                                            | Specify either endpoint or region, not both
+| initialReadCapacity               | The maximum number of strongly consistent reads consumed per second before throttling occurs |
+| initialWriteCapacity              | The maximum number of writes consumed per second before throttling occurs |
+| maxConnections                    | The maximum number of open HTTP(S) connections active at any given time |
+| protocol                          | The protocol to use                                              | `HTTP` or `HTTPS`
+| cacheResponseMetadata             | Whether to cache responses from AWS                              | High performance systems can disable this but debugging will be more difficult
+|======================
+
+==== HBase Data Store Configuration
+
+These options are available for HBase data stores.
+
+[options="header", cols="30%,45%,25%"]
+|======================
+| Name                               | Description                                                       | Constraints
+| zookeeper                          | Comma-separated list of Zookeeper host and port                   | Host and port are separated by a colon (host:port)
+| scanCacheSize                      | The number of rows passed to each scanner (higher values will enable faster scanners, but will use more memory) |
+| disableVerifyCoprocessors          | Disables coprocessor verification, which ensures that coprocessors have been added to the HBase table prior to executing server-side operations |
+| coprocessorJar                     | Path (HDFS URL) to the JAR containing coprocessor classes         |
+|======================
+
+==== Kudu Data Store Configuration
+
+These options are available for Kudu data stores.
+
+[options="header", cols="30%,45%,25%"]
+|======================
+| Name                               | Description                                                       | Constraints
+| kuduMaster                         | A URL for the Kudu master node                                    |
+|======================
+
+==== Redis Data Store Configuration
+
+These options are available for Redis data stores.
+
+[options="header", cols="30%,45%,25%"]
+|======================
+| Name                               | Description                                                       | Constraints
+| address                            | The address to connect to                                         | A Redis address such as `redis://127.0.0.1:6379`
+| compression                        | The type of compression to use on the data                        | Can be `snappy`, `lz4`, or `none`
+|======================
+
+==== RocksDB Data Store Configuration
+
+These options are available for RocksDB data stores.
+
+[options="header", cols="30%,45%,25%"]
+|======================
+| Name                               | Description                                                       | Constraints
+| dir                                | The directory of the RocksDB data store                            |
+| compactOnWrite                     | Whether to compact on every write, if false it will only compact on merge |
+| batchWriteSize                     | The size (in records) for each batched write                      | Anything less than or equal to 1 will use synchronous single record writes without batching
+|======================
+
+=== GeoServer CLI Configuration
+
+GeoWave can be configured for a GeoServer connection through the link:commands.html#config-geoserver[`config geoserver`] command.
+
+[source, bash]
+----
+$ geowave config geoserver <geoserver_url> --user <username> --pass <password>
+----
+
+[frame="topbot", width="100%", cols="15%,10%,75%", grid="rows", options="header"]
+|==========================
+| Argument    | Required | Description
+| --url       | True     | GeoServer URL (for example http://localhost:8080/geoserver), or simply host:port and appropriate assumptions are made
+| --username  | True     | GeoServer User
+| --password  | True     | GeoServer Password - Refer to the <<115-appendix-security.adoc#password-security, password security>> section for more details and options
+| --workspace | False    | GeoServer Default Workspace
+|==========================
+
+GeoWave supports connecting to GeoServer through both HTTP and HTTPS (HTTP + SSL) connections. If connecting to GeoServer through an HTTP connection (e.g., http://localhost:8080/geoserver), the command above is sufficient.
+
+==== GeoServer SSL Connection Properties
+If connecting to GeoServer through a Secure Sockets Layer (SSL) connection over HTTPS (e.g., https://localhost:8443/geoserver), some additional configuration options need to be specified, in order for the system to properly establish the secure connection’s SSL parameters. Depending on the particular SSL configuration through which the GeoServer server is being connected, you will need to specify which parameters are necessary.
+
+[NOTE]
+====
+Not all SSL configuration settings may be necessary, as it depends on the setup of the SSL connection through which GeoServer is hosted. Contact your GeoServer administrator for SSL connection related details.
+====
+
+[frame="topbot", width="100%", cols="30%,70%", grid="rows", options="header"]
+|==========================
+| SSL Argument               | Description
+| --sslKeyManagerAlgorithm   | Specify the algorithm to use for the keystore.
+| --sslKeyManagerProvider    | Specify the key manager factory provider.
+| --sslKeyPassword           | Specify the password to be used to access the server certificate from the specified keystore file. - Refer to the <<115-appendix-security.adoc#password-security, password security>> section for more details and options.
+| --sslKeyStorePassword      | Specify the password to use to access the keystore file. - Refer to the <<115-appendix-security.adoc#password-security, password security>> section for more details and options.
+| --sslKeyStorePath          | Specify the absolute path to where the keystore file is located on system. The keystore contains the server certificate to be loaded.
+| --sslKeyStoreProvider      | Specify the name of the keystore provider to be used for the server certificate.
+| --sslKeyStoreType          | The type of keystore file to be used for the server certificate, e.g., JKS (Java KeyStore).
+| --sslSecurityProtocol      | Specify the Transport Layer Security (TLS) protocol to use when connecting to the server. By default, the system will use TLS.
+| --sslTrustManagerAlgorithm | Specify the algorithm to use for the truststore.
+| --sslTrustManagerProvider  | Specify the trust manager factory provider.
+| --sslTrustStorePassword    | Specify the password to use to access the truststore file. - Refer to the <<115-appendix-security.adoc#password-security, password security>> section for more details and options
+| --sslTrustStorePath        | Specify the absolute path to where truststore file is located on system. The truststore file is used to validate client certificates.
+| --sslTrustStoreProvider    | Specify the name of the truststore provider to be used for the server certificate.
+| --sslTrustStoreType        | Specify the type of key store used for the truststore, e.g., JKS (Java KeyStore).
+|==========================
+
+=== WFS-T
+
+Transactions are initiated through a Transaction operatio, that contains inserts, updates, and deletes to features. WFS-T supports feature locks across multiple requests by using a lock request followed by subsequent use of a provided _Lock ID_. The GeoWave implementation supports transaction isolation. Consistency during a commit is not fully supported. Thus, a failure during a commit of a transaction may leave the affected data in an intermediary state. Some deletions, updates, or insertions may not be processed in such a case. The client application must implement its own compensation logic upon receiving a commit-time error response. Operations on single feature instances are atomic.
+
+Inserted features are buffered prior to commit. The features are bulk fed to the data store when the buffer size is exceeded and when the transaction is committed. In support of atomicity and isolation, prior to commit, flushed features are marked in a transient state and are only visible to the controlling transaction. Upon commit, these features are 'unmarked'. The overhead incurred by this operation is avoided by increasing the buffer size to avoid pre-commit flushes.
+
+==== Lock Management
+
+Lock management supports life-limited locks on feature instances. The only supported lock manager is in-memory, which is suitable for single Geoserver instance installations.
+
+==== Index Selection
+
+Data written through WFS-T is indexed within a single index. When writing data, the adapter inspects existing indices and finds the index that best matches the input data. A spatial-temporal index is chosen for features with temporal attributes. If no suitable index can be found, a spatial index will be created. A spatial-temporal index will not be automatically created, even if the feature type contains a temporal attribute as spatial-temporal indices can have reduced performance on queries requesting data over large spans of time.
+
+[[geoserver-security]]
+=== Security
+
+==== Authorization Management
+
+Authorization Management determines the set of authorizations to supply to GeoWave queries to be compared against the <<110-visibility-management.adoc#visibility-management, visibility expressions>> attached to GeoWave data.
+
+The provided implementations include the following:
+
+* Empty - Each request is processed without additional authorization.
+* JSON - The requester user name, extracted from the Security Context, is used as a key to find the user's set of authorizations from a JSON file. The location of the JSON file is determined by the associated _Authorization Data URL_ (e.g., _/opt/config/auth.json_). An example of the contents of the JSON file is given below.
+
+[source, json]
+----
+{
+  "authorizationSet": {
+     "fred" : ["1","2","3"],
+     "barney" : ["a"]
+  }
+}
+----
+
+In this example, the user `fred` has three authorization labels. The user `barney` has just one.
+
+NOTE: Additional authorization management strategies can be registered through the Java Service Provider Interface (SPI) model by implementing the {adapter-auth}/adapter/auth/AuthorizationFactorySPI.java[`AuthorizationFactorySPI`] interface. For more information on using SPI, see the link:https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html[Oracle documentation, window="_blank"].
+

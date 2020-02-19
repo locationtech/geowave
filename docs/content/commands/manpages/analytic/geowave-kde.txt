@@ -1,45 +1,65 @@
-//:geowave-kde(1)
-//:==============
-//::doctype: manpage
+//:= geowave-analytic-kde(1)
+:doctype: manpage
 
-NAME
-//:----
+[[analytic-kde-name]]
+==== NAME
 
-geowave analytic kde - Kernel Density Estimate
+geowave-analytic-kde - Kernel Density Estimate
 
-SYNOPSIS
-//:--------
+[[analytic-kde-synopsis]]
+==== SYNOPSIS
 
-geowave analytic kde [options] <input storename> <output storename>
+  geowave analytic kde [options] <input store name> <output store name>
 
-DESCRIPTION
-//:-----------
+[[analytic-kde-description]]
+==== DESCRIPTION
 
-The geowave analytic kde operator will run a Kernel Density Estimate analytic on GeoWave data
+This command runs a Kernel Density Estimate analytic on GeoWave data.
 
-OPTIONS
-//:-------
+[[analytic-kde-options]]
+==== OPTIONS
 
-- * --coverageName
- * The coverage name
-- --cqlFilter
- * An optional CQL filter applied to the input data
-- * --featureType
- * The name of the feature type to run a KDE on
-- * --hdfsHostPort
- * The hdfs host port
-- --indexId
- * An optional index ID to filter the input data
-- * --jobSubmissionHostPort
- * The job submission tracker
-- * --maxLevel
- * The max level to run a KDE at
-- —maxSplits
- * The max partitions for the input data
-- * --minLevel
- * The min level to run a KDE at
-- --minSplits
- * The min partitions for the input data
-- --tileSize
- * The tile size
- * Default: 1
+*$$*$$ --coverageName* _<name>_::
+  The output coverage name.
+
+*$$*$$ --featureType* _<type>_::
+  The name of the feature type to run a KDE on.
+  
+*$$*$$ --minLevel* _<level>_::
+  The minimum zoom level to run a KDE at.
+  
+*$$*$$ --maxLevel* _<level>_::
+  The maximum zoom level to run a KDE at.
+  
+*--minSplits* _<count>_::
+  The minimum partitions for the input data.
+  
+*--maxSplits* _<count>_::
+  The maximum partitions for the input data.
+  
+*--tileSize* _<size>_::
+  The size of output tiles.
+  
+*--cqlFilter* _<filter>_::
+  An optional CQL filter applied to the input data.
+  
+*--indexName* _<index>_::
+  An optional index to filter the input data.
+  
+*--outputIndex* _<index>_::
+  An optional index for output data store. Only spatial index type is supported.
+
+*--hdfsHostPort* _<host>_::
+  The HDFS host and port.
+
+*$$*$$ --jobSubmissionHostPort* _<host>_::
+  The job submission tracker host and port in the format `hostname:port`.
+  
+[[analytic-kde-examples]]
+==== EXAMPLES
+
+Perform a Kernel Density Estimation using a local resource manager at port 8032 on the `gdeltevent` type.  The KDE should be run at zoom levels 5-26 and that the new raster generated should be under the type name `gdeltevent_kde`.  Finally, the input and output data store is called `gdelt`.
+
+  geowave analytic kde --featureType gdeltevent --jobSubmissionHostPort localhost:8032 --minLevel 5 --maxLevel 26 --coverageName gdeltevent_kde gdelt gdelt
+
+

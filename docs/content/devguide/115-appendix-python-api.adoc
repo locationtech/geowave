@@ -1,0 +1,5 @@
+[[python-api]]
+<<<
+=== Python API
+
+The GeoWave Python bindings, also known as `pygw` provides a subset of GeoWave's API to Python applications through the use of a Py4J Java Gateway.  The link:pydocs/index.html[Python bindings documentation] has more information about the specifics of this API.

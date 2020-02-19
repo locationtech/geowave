@@ -1,24 +1,31 @@
-//:geowave-getds(1)
-//:===================
-//::doctype: manpage
+//:= geowave-gs-ds-get(1)
+:doctype: manpage
 
-NAME
-//:----
+[[gs-ds-get-name]]
+==== NAME
 
-geowave gs ds get - Get GeoServer DataStore info
+geowave-gs-ds-get - Get GeoServer store info
 
-SYNOPSIS
-//:--------
+[[gs-ds-get-synopsis]]
+==== SYNOPSIS
 
-geowave gs ds get [options] <datastore name>
+  geowave gs ds get [options] <store name>
+  geowave geoserver datastore get [options] <store name>
 
-DESCRIPTION
-//:-----------
+[[gs-ds-get-description]]
+==== DESCRIPTION
 
-This command will return a GeoServer DataStore info
+This command returns information about a store within the configured GeoServer instance.
 
-OPTIONS
-//:-------
+[[gs-ds-get-options]]
+==== OPTIONS
 
-- -ws, --workspace
- * <workspace name>
+*-ws, --workspace* _<workspace>_::
+  The GeoServer workspace to use.
+
+[[gs-ds-get-examples]]
+==== EXAMPLES
+
+Get information about the `my_store` store from GeoServer:
+
+  geowave gs ds get my_store

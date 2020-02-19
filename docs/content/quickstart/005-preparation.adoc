@@ -1,0 +1,56 @@
+<<<
+
+:linkattrs:
+
+== Preparation
+
+=== Install GeoWave
+
+This guide assumes that GeoWave has already been installed and is available on the command-line.  See the link:installation-guide.html[Installation Guide^, window="_blank"] for help with the installation process.
+
+NOTE: Several commands used in this guide are only available if GeoWave was installed using the standalone installer.
+
+=== Create Working Directory
+
+In order to keep things organized, create a directory on your system that can be used throughout the guide.  The guide will refer to this directory as the working directory.
+
+[source, bash]
+----
+$ mkdir quickstart
+$ cd quickstart
+----  
+
+=== Download Sample Data
+
+We will be using data from the GDELT Project in this guide. For more information about the GDELT Project please visit their website link:http://www.gdeltproject.org/[here, window="_blank"].
+
+Download one or more ZIP files from the link:https://data.gdeltproject.org/events/[GDELT Event Repository^, window="_blank"] into a new `gdelt_data` folder in the working directory.  The examples in this guide will use all of the data from February 2016 (files with a `201602` prefix).
+
+=== Download Styles
+
+Later in the guide, we will be visualizing some data using GeoServer.  For this, we will be using some styles that have been created for the demo.
+
+Download the following styles to your working directory:
+
+* link:http://s3.amazonaws.com/geowave/${version_url}/scripts/emr/quickstart/KDEColorMap.sld[KDEColorMap.sld]
+* link:http://s3.amazonaws.com/geowave/${version_url}/scripts/emr/quickstart/SubsamplePoints.sld[SubsamplePoints.sld]
+
+When finished, you should have a directory structure similar to the one below.
+
+[source]
+----
+quickstart
+|- KDEColorMap.sld
+|- SubsamplePoints.sld
+|- gdelt_data
+|  |- 20160201.export.CSV.zip
+|  |- 20160202.export.CSV.zip
+|  |- 20160203.export.CSV.zip
+|  |- 20160204.export.CSV.zip
+.
+.
+.
+----
+
+After all the data and styles have been downloaded, we can continue.
+

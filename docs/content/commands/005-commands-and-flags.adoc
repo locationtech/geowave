@@ -1,62 +1,118 @@
-[[commands-and-flags]]
 <<<
-== Commands
 
-=== Helpful Commands & Flags
+== Overview
 
-GeoWave supports a few extra commands that can be used for informational purposes to debug
-or explore command usage.
+The Command-Line Interface provides a way to execute a multitude of common operations on GeoWave data stores without having to use the Programmatic API.  It allows users to manage data stores, indices, statistics, and more.  All command options that are marked with `*` are required for the command to execute.
 
-.Commands:
-* <<005-commands-and-flags.adoc#debug, Debug>>
-* <<005-commands-and-flags.adoc#version, Version>>
-* <<005-commands-and-flags.adoc#help, Help>>
-* <<005-commands-and-flags.adoc#explain, Explain>>
+== Configuration
 
-[[debug]]
-==== Debug Flag (--debug)
+The CLI uses a local configuration file to store sets of data store connection parameters aliased by a store name. Most GeoWave commands ask for a store name and use the configuration file to determine which connection parameters should be used. It also stores connection information for GeoServer, AWS, and HDFS for commands that use those services. This configuration file is generally stored in the user's home directory, although an alternate configuration file can be specified when running commands.
 
-Use the debug flag to increase the debug logging output by GeoWave on the console to DEBUG.  By default, it is
-set to WARN. This flag must come right after 'geowave' and before any subcommand:
+== General Usage
+
+The root of all GeoWave CLI commands is the base `geowave` command.
 
 [source, bash]
 ----
-geowave --debug <command> <subcommand> <options...>
+$ geowave
 ----
 
-[[version]]
-==== Version Flag (--version)
+This will display a list of all available top-level commands along with a brief description of each.
 
-The version flag will output the build arguments that were used to build GeoWave, as well as
-the version of the GeoWave tools jar you're using:
+=== Version
 
 [source, bash]
 ----
-geowave --version
+$ geowave --version
 ----
 
-[[help]]
-==== Help Command
+The `--version` flag will display various information about the installed version of GeoWave, including the version, build arguments, and revision information.
 
-The help command will show arguments and their defaults. It can be prepended to any GeoWave command.
-If you use it while also specifying a sub-command and its arguments, that command's help information
-will be displayed:
+=== General Flags
+
+These flags can be optionally supplied to any GeoWave command, and should be supplied before the command itself.
+
+==== Config File
+
+The `--config-file` flag causes GeoWave to use an alternate configuration file.  The supplied file path should include the file name (e.g. `--config-file /mnt/config.properties`). This can be useful if you have multiple projects that use GeoWave and want to keep the configuration for those data stores separate from each other.
 
 [source, bash]
 ----
-geowave help <command> <subcommand>
+$ geowave --config-file <path_to_file> <command>
 ----
 
-[[explain]]
-==== Explain Command
+==== Debug
 
-The explain command will show a simplified tabular view of the arguments and their current values.
-Use this to determine what values are being passed to GeoWave. It also shows hidden parameters and
-their values, if there are any. An example would be additional Accumulo options:
+The `--debug` flag causes all DEBUG, INFO, WARN, and ERROR log events to be output to the console.  By default, only WARN and ERROR log events are displayed.
 
 [source, bash]
 ----
-geowave explain store add -t accumulo
+$ geowave --debug <command>
 ----
 
-'''
+== Help Command
+
+Adding `help` before any CLI command will show that command's options and their defaults.
+
+[source, bash]
+----
+$ geowave help <command>
+----
+
+For example, using the `help` command on `index add` would result in the following output:
+
+....
+$ geowave help index add
+Usage: geowave index add [options] <store name> <index name>
+  Options:
+    -np, --numPartitions
+       The number of partitions.  Default partitions will be 1.
+       Default: 1
+    -ps, --partitionStrategy
+       The partition strategy to use.  Default will be none.
+       Default: NONE
+       Possible Values: [NONE, HASH, ROUND_ROBIN]
+  * -t, --type
+       The type of index, such as spatial, or spatial_temporal
+....
+
+== Explain Command
+
+The `explain` command is similar to the `help` command in it's usage, but shows all options, including hidden ones.  It can be a great way to make sure your parameters are correct before issuing a command.
+
+[source, bash]
+----
+$ geowave explain <command>
+----
+
+For example, if you wanted to add a spatial index to a store named `test-store` but weren't sure what all of the options available to you were, you could do the following:
+
+....
+$ geowave explain index add -t spatial test-store spatial-idx
+Command: geowave [options] <subcommand> ...
+
+                VALUE  NEEDED  PARAMETER NAMES                         
+----------------------------------------------
+{                    }         -cf, --config-file,                     
+{                    }         --debug,                                
+{                    }         --version,                              
+
+Command: add [options]
+
+                VALUE  NEEDED  PARAMETER NAMES                         
+----------------------------------------------
+{           EPSG:4326}         -c, --crs,                              
+{               false}         -fp, --fullGeometryPrecision,           
+{                   7}         -gp, --geometryPrecision,               
+{                   1}         -np, --numPartitions,                   
+{                NONE}         -ps, --partitionStrategy,               
+{               false}         --storeTime,                            
+{             spatial}         -t, --type,                             
+
+Expects: <store name> <index name>
+Specified: 
+test-store spatial-idx
+....
+
+The output is broken down into two sections.  The first section shows all of the options available on the `geowave` command.  If you wanted to use any of these options, they would need to be specified before `index add`.  The second section shows all of the options available on the `index add` command. Some commands contain options that, when specified, may reveal more options.  In this case, the `-t spatial` option has revealed some additional configuration options that we could apply to the spatial index.  Another command where this is useful is the `store add` command, where each data store type specified by the `-t <store_type>` option has a different set of configuration options.
+

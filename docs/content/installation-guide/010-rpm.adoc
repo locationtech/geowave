@@ -1,0 +1,123 @@
+<<<
+
+:linkattrs:
+
+== Installation from RPM
+
+GeoWave provides several RPMs for installing various components on a Linux environment.  This guide discusses the various artifacts that are available and how to install them.  These artifacts can also be downloaded directly from the link:downloads.html[GeoWave Downloads, window="_blank"] page.
+
+=== Versions
+
+Many GeoWave artifacts are annotated with a `$VENDOR` as well as a `$VERSION`.  This is because some distribution vendors have different dependency requirements.  The artifact that should be downloaded is dependent on which distribution vendor is being used. Currently supported distribution vendors through GeoWave include:
+
+[ width="50%" cols="50%,50%", options="header"]
+|============
+| Distribution Vendor | Vendor Abbreviation
+| Apache              | `apache`
+| Apache - Accumulo 1.7 | `apache-accumulo1.7`
+| Cloudera            | `cdh5`
+| Hortonworks         | `hdp2`
+|============
+
+[NOTE]
+====
+Several of the RPMs (`accumulo`, `hbase`, `tools`, etc.) are both GeoWave version and vendor version specific. In the examples below the `$VERSION` and `$VENDOR` tokens in the RPM name should be replaced with appropriate values.  For example, `geowave-$VERSION-$VENDOR-accumulo` might become `geowave-1.0.0-hdp2-accumulo`.
+
+* `$VERSION`: Version of the GeoWave source, e.g., `1.0.0`
+* `$VENDOR`: Distribution vendor abbreviation - from the vendors table below, e.g., `apache`, `cdh5`, `hdp2`.
+====
+
+==== Available RPMs
+
+The following is a list of available RPMs and their descriptions:
+
+[cols="35%,65%", options="header"]
+|=================
+| Name                                 | Description
+| geowave-$VERSION-core                | This package installs the GeoWave home directory and user account
+| geowave-$VERSION-docs                | This package installs the GeoWave documentation
+| geowave-$VERSION-puppet              | This package installs the GeoWave Puppet module into /etc/puppet/modules on a Puppet Server
+| geowave-$VERSION-$VENDOR-accumulo    | This package installs the Accumulo components of GeoWave
+| geowave-$VERSION-$VENDOR-hbase       | This package installs the HBase components of GeoWave
+| geowave-$VERSION-$VENDOR-tools       | This package installs the GeoWave command-line tools (ingest, stats etc.)
+| geowave-$VERSION-$VENDOR-gwtomcat    | This package installs the web application server
+| geowave-$VERSION-$VENDOR-gwgeoserver | This package installs a GeoServer with the GeoWave plugin
+| geowave-$VERSION-$VENDOR-restservices| This package installs REST services supporting all GeoWave operations
+| geowave-$VERSION-$VENDOR-grpc        | This package installs a gRPC service supporting all GeoWave operations
+| geowave-$VERSION-$VENDOR-single-host | This package installs all the components on a single host and will likely be useful for dev environments
+| geowave-$VERSION-$TIME_TAG.src.rpm   | The source RPM file that contains definitions for all the component RPMs listed above
+| geowave-$VERSION.tar.gz              | All of the prebuilt component JARs and other artifacts that are common to all vendors packaged into a compressed archive instead of an RPM format
+| geowave-$VERSION-$VENDOR.tar.gz      | All of the prebuilt component JARs and other artifacts that are vendor-specific packaged into a compressed archive instead of an RPM format
+| geowave-repo                         | This package will install the GeoWave RPM repo config file into /etc/yum.repos.d
+| geowave-repo-dev                     | This package will install the GeoWave Development RPM repo config file into /etc/yum.repos.d
+|=================
+
+=== Installation
+
+Using release RPMs:
+
+[source, bash]
+----
+# Use the GeoWave release RPM repo
+rpm -Uvh http://s3.amazonaws.com/geowave-rpms/release/noarch/geowave-repo-1.0-3.noarch.rpm
+
+# To search for GeoWave packages for a specific distribution
+yum --enablerepo=geowave search geowave-$VERSION-$VENDOR-*
+
+# To install a specific GeoWave package on a host (probably a namenode)
+yum --enablerepo=geowave install geowave-$VERSION-$VENDOR-$PACKAGE
+
+# Update all packages for a specific vendor distribution
+yum --enablerepo=geowave install geowave-$VERSION-$VENDOR-*
+----
+
+Using development RPMs
+
+[source, bash]
+----
+# Use the GeoWave development RPM repo
+rpm -Uvh http://s3.amazonaws.com/geowave-rpms/dev/noarch/geowave-repo-dev-1.0-3.noarch.rpm
+
+# To search for GeoWave packages for a specific distribution
+yum --enablerepo=geowave-dev search geowave-$VERSION-$VENDOR-*
+
+# To install a specific GeoWave package on a host (probably a namenode)
+yum --enablerepo=geowave-dev install geowave-$VERSION-$VENDOR-$PACKAGE
+
+# Update all packages for a specific vendor distribution
+yum --enablerepo=geowave-dev install geowave-$VERSION-$VENDOR-*
+----
+
+
+=== RPM Installation Notes
+
+RPM names contain the version in the name so it is possible to support concurrent installations of multiple GeoWave and/or vendor versions. While only one installation directory (`/usr/local/geowave-$GEOWAVE_VERSION-$VENDOR_VERSION`) is linked to `/usr/local/geowave` (e.g., `/usr/local/geowave -> /usr/local/geowave-0.9.3-hdp2`), there can be multiple versions installed.  Only the version that is linked will be treated as the default.
+
+==== View geowave-home installed and default using alternatives
+
+[source, bash]
+----
+alternatives --display geowave-home
+geowave-home - status is auto.
+ link currently points to /usr/local/geowave-0.9.3-hdp2
+/usr/local/geowave-0.9.3-hdp2 - priority 90
+/usr/local/geowave-0.9.2.1-cdh5 - priority 89
+Current `best' version is /usr/local/geowave-0.9.3-hdp2.
+----
+
+==== Accumulo and HBase Jars
+
+The `geowave-$$*$$-accumulo` and `geowave-$$*$$-hbase` RPMs will install server-side capabilities for Accumulo and HBase by uploading the necessary artifacts into HDFS using the `hadoop fs -put` command. This means of deployment requires that the RPM is installed on a node that has the correct binaries and configuration in place to push files to HDFS, like your namenode. The RPM also needs to set the ownership and permissions correctly within HDFS and must be executed as a user that has superuser permissions in HDFS. This user varies by Hadoop distribution vendor. If the RPM installation fails, check the install log located at `/usr/local/geowave/[hbase|accumulo]/geowave-to-hdfs.log` for errors. The script can be re-run manually if there was a problem that can be corrected (e.g. the HDFS service was not started).
+
+If a non-default user was used to install Hadoop, you can specify a user that has permissions to upload with the `--user` argument:
+
+[source, bash]
+----
+/usr/local/geowave/[hbase|accumulo]/deploy-geowave-[hbase|accumulo]-to-hdfs.sh --user my-hadoop-user
+----
+
+[NOTE]
+====
+GeoWave HBase artifacts can also be installed to S3 if the `hbase.rootdir` property is set to an S3 URL.
+====
+

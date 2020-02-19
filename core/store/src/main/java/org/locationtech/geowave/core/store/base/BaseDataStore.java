@@ -1020,6 +1020,19 @@ public class BaseDataStore implements DataStore {
       final InternalDataAdapter<T> adapter,
       final Index index) {}
 
+  @Override
+  public DataTypeAdapter<?> getType(final String typeName) {
+    Short internalAdapterId = internalAdapterStore.getAdapterId(typeName);
+    if (internalAdapterId == null) {
+      return null;
+    }
+    InternalDataAdapter<?> internalDataAdapter = adapterStore.getAdapter(internalAdapterId);
+    if (internalDataAdapter == null) {
+      return null;
+    }
+    return internalDataAdapter.getAdapter();
+  }
+
   /**
    * Get all the adapters that have been used within this data store
    *
@@ -1032,6 +1045,11 @@ public class BaseDataStore implements DataStore {
           Iterators.transform(it, a -> (DataTypeAdapter<?>) a.getAdapter()),
           DataTypeAdapter.class);
     }
+  }
+
+  @Override
+  public void addIndex(final Index index) {
+    indexStore.addIndex(index);
   }
 
   @Override

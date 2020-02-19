@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.adapter.vector.export;
 
+import java.util.List;
 import com.beust.jcommander.Parameter;
 
 public class VectorExportOptions {
@@ -16,8 +17,8 @@ public class VectorExportOptions {
   @Parameter(names = "--cqlFilter", description = "Filter exported data based on CQL filter")
   private String cqlFilter;
 
-  @Parameter(names = "--typeNames", description = "Comma separated list of adapter Ids")
-  private String[] typeNames;
+  @Parameter(names = "--typeNames", description = "Comma separated list of type names")
+  private List<String> typeNames;
 
   @Parameter(names = "--indexName", description = "The index to export from")
   private String indexName;
@@ -29,7 +30,7 @@ public class VectorExportOptions {
     return cqlFilter;
   }
 
-  public String[] getTypeNames() {
+  public List<String> getTypeNames() {
     return typeNames;
   }
 
@@ -45,7 +46,7 @@ public class VectorExportOptions {
     this.cqlFilter = cqlFilter;
   }
 
-  public void setTypeNames(final String[] typeNames) {
+  public void setTypeNames(final List<String> typeNames) {
     this.typeNames = typeNames;
   }
 

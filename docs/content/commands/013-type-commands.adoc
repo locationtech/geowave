@@ -1,0 +1,23 @@
+<<<
+
+== Type Commands
+
+Commands for managing GeoWave types.
+
+[[type-list]]
+=== List Types
+
+include::manpages/type/geowave-listtypes.txt[]
+
+[[type-rm]]
+=== Remove Type
+
+include::manpages/type/geowave-rmtype.txt[]
+
+[[type-describe]]
+=== Describe Type
+
+include::manpages/type/geowave-describetype.txt[]
+
+'''
+

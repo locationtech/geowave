@@ -1,0 +1,22 @@
+<<<
+
+== Raster Commands
+
+Commands that operate on raster data.
+
+[[raster-resizemr]]
+=== Resize with MapReduce
+
+include::manpages/raster/geowave-resizemr.txt[]
+
+[[raster-resizespark]]
+=== Resize with Spark
+
+include::manpages/raster/geowave-resizespark.txt[]
+
+[[raster-installgdal]]
+=== Install GDAL
+
+include::manpages/raster/geowave-installgdal.txt[]
+'''
+

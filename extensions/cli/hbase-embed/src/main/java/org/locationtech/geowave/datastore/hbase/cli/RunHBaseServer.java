@@ -46,7 +46,7 @@ public class RunHBaseServer extends DefaultOperation implements Command {
       cluster = options.getMiniCluster();
       cluster.setup();
       if (interactive) {
-        System.out.println("hit any key to shutdown ..");
+        System.out.println("Press Enter to shutdown..");
         System.in.read();
         System.out.println("Shutting down!");
         cluster.tearDown();
@@ -61,8 +61,8 @@ public class RunHBaseServer extends DefaultOperation implements Command {
               stopCluster.tearDown();
               stopZkCluster.tearDown();
             } catch (final Exception e) {
-              LOGGER.warn("Unable to shutdown hbase", e);
-              System.out.println("Error shutting down hbase.");
+              LOGGER.warn("Unable to shutdown HBase", e);
+              System.out.println("Error shutting down HBase.");
             }
             System.out.println("Shutting down!");
           }

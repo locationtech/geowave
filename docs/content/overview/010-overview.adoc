@@ -1,0 +1,73 @@
+<<<
+
+:linkattrs:
+
+== Overview
+
+For many GeoWave users, the primary method of interfacing with GeoWave is through the various Command-Line Interface (CLI) commands.  Users will use GeoWave to store, index, or query multi-dimensional data in a key/value store.
+
+image::architecture_overview.svg[scaledwidth="100%",width="100%",alt="Operational Overview", title="Operational Overview"]
+
+Usage _typically_ involves these steps:
+[options="compact"]
+* *Configure Data Store*
++
+Configure GeoWave to connect to a key/value store.
+* *Create Indices*
++
+Create one or more indices on the configured data store.
+* *Ingest Data*
++
+Ingest data into one or more indices on the data store.
+* *Process Data*
++
+Process data using a distributed processing engine (e.g. MapReduce, Spark).
+* *Query*/*Discover*
++
+Query or discover ingested or transformed data using a GeoWave interface. A common interface for exploring GeoWave data is link:http://geoserver.org/[GeoServer^, window="_blank"], which interfaces with GeoWave through a plugin to visualize geospatial data in the underlying key/value store.
+
+== Key Components
+
+=== Data Stores
+
+A GeoWave data store is the sum of all parts required to make GeoWave function. This includes metadata, statistics, indices, and adapters.  GeoWave data stores are typically accessed using a set of configuration parameters that define how to connect to the underlying key/value store.  When using the Command-Line Interface (CLI), these configuration parameters are saved locally under a single store name that can be used in future CLI operations.
+
+[[indices]]
+=== Indices
+
+A GeoWave index serves as a template that GeoWave uses to store and retrieve data from the key/value store efficiently with a given set of dimensions.  Each index can have data from any number of adapters, as long as those adapters conform to the dimensions used by the index.  For example, a spatial-temporal index wouldn't be able to properly index data without a time component, but a spatial-only index _would_ be able to index spatial-temporal data without taking advantage of the time component.
+
+GeoWave uses tiered, gridded, space-filling curves (SFCs) to index data into key/value stores.  The indexing information is stored in a generic key structure that can also be used for server-side processing. This architecture allows query, processing, and rendering times to be reduced by multiple orders of magnitude.  For a more in-depth explanation of space-filling curves and why they are used in GeoWave indexing, see the link:devguide.html#theory[theory section, window="_blank"] of the Developer Guide.
+
+image::tiered.png[scaledwidth="50%",width="50%",alt="Tiered", title="Tiered Space-Filling Curve"]
+
+Each index is assigned a name when it is created.  This index name is used to reference the index in GeoWave operations.
+
+=== Adapters/Types
+
+In order to handle a multitude of input data types, an adapter is needed to translate the input data type into a format that can be understood and efficiently used by the GeoWave core.  Among others, GeoWave provides a data adapter implementation that supports link:http://docs.geotools.org/latest/javadocs/org/opengis/feature/simple/SimpleFeature.html[SimpleFeatures^, window="_blank"] by default, which should cover most use cases for vector data.
+
+An example of this would be if a user had a shapefile and wanted to ingest it into GeoWave.  An adapter would be used that could transform all of the `SimpleFeature` data from the shapefile into the GeoWave format during ingest.  When that data is read by the user in the future, the adapter would be used to transform the GeoWave data back into `SimpleFeature` data.
+
+Data that has been added to GeoWave with an adapter is often referred to as a _type_.  Each _type_ has a name that can be used to interact with the data.  Throughout the documentation, this name is referred to as a _type name_.
+
+In GeoWave, the terms _adapter_ and _type_ are often interchangeable.
+
+=== Statistics
+
+Because GeoWave often deals with large amounts of data, it can be costly to calculate statistics on a particular attribute in a dataset. Sometimes it is useful to have statistics information about an attribute readily available without the need to traverse the entire data set each time. To address this problem, GeoWave has a statistics store that can be configured to keep track of a number of different types of statistics for individual attributes on an adapter. The types of statistics available depend on the adapter type and attribute type.  The types of statistics available out of the box include:
+
+* Ranges over an attribute, including time
+* Enveloping bounding box over all geometries
+* Cardinality of the number of stored items
+* Histograms over the range of values for an attribute
+* Cardinality of discrete values of an attribute
+
+Statistics are generally updated during ingest and deletion. Range and bounding box statistics, however, are not updated during deletion due to their nature. GeoWave does provides tools to recalculate those statistics if needed.
+
+These are the circumstances where recalculation of statistics is recommended:
+
+. As items are removed from an index, the range and envelope statistics may lose their accuracy if the removed item contains an attribute that represents the minimum or maximum value for the population.
+. New statistics added to the statistics store after data is ingested are not automatically computed and would not reflect the existing data.
+. When a statistic algorithm is changed, the existing statistic data may not accurately represent the updated algorithm.
+

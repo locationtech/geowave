@@ -1,0 +1,21 @@
+<<<
+
+[[osm-commands]]
+=== *OSM Commands*
+
+Operations to ingest Open Street Map (OSM) nodes, ways and relations to GeoWave.
+
+IMPORTANT: OSM commands are not included in GeoWave by default.
+
+[[osm-ingest]]
+=== Import OSM
+
+include::manpages/util/osm/geowave-ingest.txt[]
+
+[[osm-stage]]
+=== Stage OSM
+
+include::manpages/util/osm/geowave-stage.txt[]
+
+'''
+

@@ -9,6 +9,7 @@
 package org.locationtech.geowave.adapter.vector.export;
 
 import java.io.IOException;
+import java.util.List;
 import org.apache.avro.mapred.AvroKey;
 import org.apache.avro.mapreduce.AvroJob;
 import org.apache.avro.mapreduce.AvroKeyOutputFormat;
@@ -71,12 +72,12 @@ public class VectorMRExportJobRunner extends Configured implements Tool {
         hdfsHostPort,
         mrOptions.getResourceManagerHostPort(),
         conf);
-    final String[] typeNames = mrOptions.getTypeNames();
+    final List<String> typeNames = mrOptions.getTypeNames();
     final PersistentAdapterStore adapterStore = storeOptions.createAdapterStore();
     final InternalAdapterStore internalAdapterStore = storeOptions.createInternalAdapterStore();
     final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
-    if ((typeNames != null) && (typeNames.length > 0)) {
-      bldr.setTypeNames(typeNames);
+    if ((typeNames != null) && (typeNames.size() > 0)) {
+      bldr.setTypeNames(typeNames.toArray(new String[0]));
       // options.setAdapters(Lists.transform(
       // typeNames,
       // new Function<String, DataTypeAdapter<?>>() {
@@ -103,11 +104,11 @@ public class VectorMRExportJobRunner extends Configured implements Tool {
       bldr.indexName(mrOptions.getIndexName());
     }
     if (mrOptions.getCqlFilter() != null) {
-      if ((typeNames == null) || (typeNames.length != 1)) {
+      if ((typeNames == null) || (typeNames.size() != 1)) {
         JCommander.getConsole().println("Exactly one type is expected when using CQL filter");
         return -1;
       }
-      final String typeName = typeNames[0];
+      final String typeName = typeNames.get(0);
 
       final Short internalAdpaterId = internalAdapterStore.getAdapterId(typeName);
       final InternalDataAdapter<?> adapter =

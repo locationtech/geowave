@@ -29,6 +29,7 @@ public class RunCassandraServer extends DefaultOperation implements Command {
   private RunCassandraServerOptions options = new RunCassandraServerOptions();
   @Parameter(
       names = {"--interactive", "-i"},
+      arity = 1,
       description = "Whether to prompt for user input to end the process")
   private boolean interactive = true;
 
@@ -42,7 +43,7 @@ public class RunCassandraServer extends DefaultOperation implements Command {
       server.start();
 
       if (interactive) {
-        System.out.println("hit any key to shutdown ..");
+        System.out.println("Press Enter to shutdown..");
         System.in.read();
         System.out.println("Shutting down!");
         server.stop();
@@ -53,8 +54,8 @@ public class RunCassandraServer extends DefaultOperation implements Command {
             try {
               server.stop();
             } catch (final Exception e) {
-              LOGGER.warn("Unable to shutdown redis", e);
-              System.out.println("Error shutting down redis.");
+              LOGGER.warn("Unable to shutdown Cassandra", e);
+              System.out.println("Error shutting down Cassandra.");
             }
             System.out.println("Shutting down!");
           }
@@ -66,7 +67,7 @@ public class RunCassandraServer extends DefaultOperation implements Command {
       }
 
     } catch (final Exception e) {
-      LOGGER.error("Unable to run embedded Redis server", e);
+      LOGGER.error("Unable to run embedded Cassandra server", e);
     }
 
   }

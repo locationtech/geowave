@@ -13,27 +13,33 @@
 GeoWave is an open source set of software that:
 
 * Capabilities
-  * Adds multi-dimensional indexing capability to key-value stores (currently [Apache Accumulo](https://accumulo.apache.org), [Apache HBase](https://hbase.apache.org), [Apache Cassandra](http://cassandra.apache.org/), [AmazonDynamoDB](https://aws.amazon.com/dynamodb/), [Cloud BigTable](https://cloud.google.com/bigtable/), [Redis](https://redis.io/), [RocksDB](https://rocksdb.org/), and [Apache Kudu](https://kudu.apache.org/))
+  * Adds multi-dimensional indexing capability to key/value stores (currently [Apache Accumulo](https://accumulo.apache.org), [Apache HBase](https://hbase.apache.org), [Apache Cassandra](http://cassandra.apache.org/), [Amazon DynamoDB](https://aws.amazon.com/dynamodb/), [Cloud Bigtable](https://cloud.google.com/bigtable/), [Redis](https://redis.io/), [RocksDB](https://rocksdb.org/), and [Apache Kudu](https://kudu.apache.org/))
   * Adds support for geographic objects and geospatial operators to these stores
   * Provides Map-Reduce input and output formats for distributed processing and analysis of geospatial data
 * Geospatial software plugins
-  * [GeoServer](http://geoserver.org/) plugin to allow geospatial data in various key-value stores to be shared and visualized via OGC standard services
+  * [GeoServer](http://geoserver.org/) plugin to allow geospatial data in various key/value stores to be shared and visualized via OGC standard services
   
-Basically, GeoWave is working to bridge geospatial software with modern key-value stores and distributed compute systems.
+Basically, GeoWave is working to bridge geospatial software with modern key/value stores and distributed compute systems.
 
 ## The Docs
-* Check out our [GeoWave io page](http://locationtech.github.io/geowave/) page for detailed documentation.
-* A [changelog is available](http://locationtech.github.io/geowave/changelog.html) which details the changes and features for each of our [github releases](https://github.com/locationtech/geowave/releases)
+* [GeoWave](https://locationtech.github.io/geowave/latest/index.html) - Latest snapshot documentation homepage
+* [GeoWave Overview](https://locationtech.github.io/geowave/latest/overview.html) - Overview of GeoWave's capabilities
+* [Installation Guide](https://locationtech.github.io/geowave/latest/installation-guide.html) - Installation instructions for standalone installers and from RPMs
+* [Quickstart Guide](https://locationtech.github.io/geowave/latest/quickstart.html) - A quick demo of GeoWave features using the command-line interface
+* [User Guide](https://locationtech.github.io/geowave/latest/userguide.html) - A guide for using GeoWave through the command-line interface and GeoServer plugin
+* [Developer Guide](https://locationtech.github.io/geowave/latest/devguide.html) - A guide for developing applications that utilize GeoWave
+* [Command-Line Interface](https://locationtech.github.io/geowave/latest/commands.html) - Full documentation for the GeoWave CLI
+* [Changelog](https://locationtech.github.io/geowave/latest/changelog.html) - Changes and features for each of our [GitHub releases](https://github.com/locationtech/geowave/releases)
 * The underlying principles employed in GeoWave are outlined in recent academic publications to include largely the background theory in [Advances in Spatial and Temporal Databases 2017](https://link.springer.com/chapter/10.1007/978-3-319-64367-0_6) and a derivative, more applied paper in [FOSS4G Conference Proceedings 2017](http://scholarworks.umass.edu/cgi/viewcontent.cgi?article=1027&context=foss4g).
 
 ## The Software
-* We have [multi-platform standalone installers](http://locationtech.github.io/geowave/userguide.html#standalone-installers) for the GeoWave's commandline tools to help get started
+* We have [multi-platform standalone installers](https://locationtech.github.io/geowave/latest/installation-guide.html#standalone-installers) for the GeoWave's command-line tools to help get started
   * This is often the quickest and easiest way to get started using GeoWave on your own machine
-* We have a [RPM repository](http://locationtech.github.io/geowave/packages.html)
+* We have a [RPM repository](https://locationtech.github.io/geowave/latest/packages.html)
   * This contains various packages including puppet modules, best used for distributed environments.
-  * See [Documentation: Installation from RPM](http://locationtech.github.io/geowave/userguide.html#installation-from-rpm) for more info.
+  * See the [Installation Guide](https://locationtech.github.io/geowave/latest/installation-guide.html#installation-from-rpm) for more info.
 * Maven artifacts are available on Maven Central
-* And you can always [build from source](http://locationtech.github.io/geowave/devguide.html#development-setup)
+* And you can always [build from source](https://locationtech.github.io/geowave/latest/devguide.html#development-setup)
 
 ## Community
 
@@ -41,7 +47,7 @@ Basically, GeoWave is working to bridge geospatial software with modern key-valu
 
 ## Getting Started
 ### Programmatic Access
-You can use maven to reference pre-built GeoWave artifacts with the following pom.xml snippet (replacing `${keyvalue-datastore}` with your datastore of choice and `${geowave.version}` with the geowave version you'd like to use):
+You can use Maven to reference pre-built GeoWave artifacts with the following pom.xml snippet (replacing `${keyvalue-datastore}` with your data store of choice and `${geowave.version}` with the GeoWave version you'd like to use):
 ```
 	<dependencies>
 		<dependency>
@@ -68,7 +74,7 @@ DataStore store = DataStoreFactory.createDataStore(<data store options>);
 store.addType(<my data type>, <my index>);
 try(Writer writer = store.createWriter()){
   //write data
-  writer.writer(<data);
+  writer.writer(<data>);
 }
  
 //this just queries everything
@@ -79,25 +85,41 @@ try(CloseableIterator it = store.query(QueryBuilder.newBuilder().build())){
   }
 }
 ```
-### Commandline Access
-Alternatively, you can always use the GeoWave commandline to access the same capabilities. Install the `geowave-$VERSION-apache-tools` RPM as instructed [here](http://locationtech.github.io/geowave/packages.html).  Then `geowave store add ...` and `geowave index add ...` are used to create named configurations for connecting to a key-value store (geowave store add) and describing how you want the data indexed (geowave index add).  You can use `--help` at any time such as `geowave store add --help` or furthermore get additional help after specifying the type with `-t` such as `geowave store add -t accumulo --help` to understand accumulo specific parameters. Once you have the indexing and store specified you can use `geowave ingest localtogw <file or directory> <store name> <index name(s)>` to ingest data into the key-value store. For the most basic walkthrough with minimal setup, run through the [quickstart guide](http://locationtech.github.io/geowave/quickstart.html) locally using RocksDB.
+See the [Developer Guide](https://locationtech.github.io/geowave/latest/devguide.html#programmatic-api-examples) for more detailed programmatic API examples.
+
+### Command-line Access
+Alternatively, you can always use the GeoWave command-line to access the same capabilities:
+```bash
+# Add a new RocksDB data store called myStore in the current directory
+geowave store add -t rocksdb myStore
+
+# Add a spatial index called spatialIdx to myStore
+geowave index add -t spatial myStore spatialIdx
+
+# Ingest a shapefile with states into myStore in the spatialIdx index
+geowave ingest localToGW -f geotools-vector states.shp myStore spatialIdx
+
+# Query all the data in the states type from myStore
+geowave vector query "SELECT * FROM myStore.states"
+```
+See the [CLI documentation](https://locationtech.github.io/geowave/latest/commands.html) for a full list of commands and their options.
 
 ## Some GeoWave rendered eye candy
 
 <p align="center">
-	<a href="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/userguide/images/geolife-density-13.jpg" target="_blank"><img align="center" src="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/userguide/images/geolife-density-13-thumb.jpg" alt="Geolife data at city scale"></a><br/><br/>
-	<a href="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/userguide/images/geolife-density-17.jpg" target="_blank"><img align="center" src="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/userguide/images/geolife-density-17-thumb.jpg" alt="Geolife data at block scale"></a><br/><br/>
-	<a href="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/userguide/images/osmgpx.jpg" target="_blank"><img align="center" src="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/userguide/images/osmgpx-thumb.jpg" alt="OSM GPX tracks at country scale"></a><br/>
+	<a href="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/overview/images/geolife-density-13.jpg" target="_blank"><img align="center" src="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/overview/images/geolife-density-13-thumb.jpg" alt="Geolife data at city scale"></a><br/><br/>
+	<a href="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/overview/images/geolife-density-17.jpg" target="_blank"><img align="center" src="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/overview/images/geolife-density-17-thumb.jpg" alt="Geolife data at block scale"></a><br/><br/>
+	<a href="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/overview/images/osmgpx.jpg" target="_blank"><img align="center" src="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/userguide/overview/osmgpx-thumb.jpg" alt="OSM GPX tracks at country scale"></a><br/>
 	
 </p>
 
-See [Screenshots](http://locationtech.github.io/geowave/userguide.html#example-screenshots) in the documentation for more information.
+See [Example Screenshots](https://locationtech.github.io/geowave/latest/overview.html#example-screenshots) in the GeoWave Overview for more information.
 
 ## Supported versions of core libraries
 
 We work to maintain a N and N-1 tested and supported version pace for the following core libraries.
 
-| Geoserver | Geotools | Accumulo | HBase | Hadoop | Java |
+| GeoServer | GeoTools | Accumulo | HBase | Hadoop | Java |
 |:---------:|:--------:|:--------:|:-----:|:------:|:----:|
 | 2.14.x | 20.x | [1.7.x,1.9.x] | [1.1.x,1.4.x] | 2.x | Java8 |
 
@@ -113,6 +135,6 @@ GeoWave was developed at the National Geospatial-Intelligence Agency (NGA) in co
 
 ## Contributing
 
-All pull request contributions to this project will be released under the Apache 2.0 or compatible license. Contributions are welcome and guidelines are provided [here](http://locationtech.github.io/geowave/devguide.html#contributions).
+All pull request contributions to this project will be released under the Apache 2.0 or compatible license. Contributions are welcome and guidelines are provided [here](https://locationtech.github.io/geowave/latest/devguide.html#how-to-contribute).
 
-Did I mention our [documentation!](http://locationtech.github.io/geowave/)
+Did I mention our [documentation!](https://locationtech.github.io/geowave/latest/index.html)

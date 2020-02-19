@@ -1,23 +1,25 @@
-//:geowave-getstyle(1)
-//:===================
-//::doctype: manpage
+//:= geowave-gs-style-get(1)
+:doctype: manpage
 
-NAME
-//:----
+[[gs-style-get-name]]
+==== NAME
 
-geowave gs style get - Get GeoServer Style info
+geowave-gs-style-get - Get GeoServer style info
 
-SYNOPSIS
-//:--------
+[[gs-style-get-synopsis]]
+==== SYNOPSIS
 
-geowave gs style get [options] <style name>
+  geowave gs style get <style name>
+  geowave geoserver style get <style name>
 
-DESCRIPTION
-//:-----------
+[[gs-style-get-description]]
+==== DESCRIPTION
 
-This command will return GeoServer Style info
+This command returns information about a style from the configured GeoServer instance.
 
-OPTIONS
-//:-------
+[[gs-style-get-examples]]
+==== EXAMPLES
 
-There are currently no options available for this command
+Get information about the `my_style` style on GeoServer:
+
+  geowave gs style get my_style

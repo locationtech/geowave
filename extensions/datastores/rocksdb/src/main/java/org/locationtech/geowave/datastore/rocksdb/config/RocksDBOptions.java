@@ -8,6 +8,8 @@
  */
 package org.locationtech.geowave.datastore.rocksdb.config;
 
+import java.io.File;
+import java.util.Properties;
 import org.locationtech.geowave.core.store.BaseDataStoreOptions;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
@@ -15,6 +17,7 @@ import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.datastore.rocksdb.RocksDBStoreFactoryFamily;
 import org.locationtech.geowave.datastore.rocksdb.util.RocksDBUtils;
 import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.ParametersDelegate;
 
 public class RocksDBOptions extends StoreFactoryOptions {
@@ -55,6 +58,20 @@ public class RocksDBOptions extends StoreFactoryOptions {
       return false;
     }
   };
+
+  @Override
+  public void validatePluginOptions() throws ParameterException {
+    // Set the directory to be absolute
+    dir = new File(dir).getAbsolutePath();
+    super.validatePluginOptions();
+  }
+
+  @Override
+  public void validatePluginOptions(final Properties properties) throws ParameterException {
+    // Set the directory to be absolute
+    dir = new File(dir).getAbsolutePath();
+    super.validatePluginOptions(properties);
+  }
 
   public RocksDBOptions() {
     super();

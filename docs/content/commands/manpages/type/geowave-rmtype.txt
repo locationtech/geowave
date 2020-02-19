@@ -1,0 +1,24 @@
+//:= geowave-type-rm(1)
+:doctype: manpage
+
+[[type-rm-name]]
+==== NAME
+
+geowave-type-rm - Remove a type and all associated data from a data store
+
+[[type-rm-synopsis]]
+==== SYNOPSIS
+
+  geowave type rm <store name> <type name>
+
+[[type-rm-description]]
+==== DESCRIPTION
+
+This command removes a type and all associated data from a GeoWave data store.
+
+[[type-rm-examples]]
+==== EXAMPLES
+
+Remove the `hail` type from the `example` data store:
+
+  geowave type rm example hail

@@ -1,0 +1,64 @@
+<<<
+
+== Analytic Commands
+
+Commands that run MapReduce or Spark processing to enhance an existing GeoWave dataset.
+
+[NOTE]
+====
+The commands below can also be run as a Yarn or Hadoop API command (i.e. mapreduce).
+
+For instance, to run the analytic using Yarn:
+[source]
+----
+yarn jar geowave-tools.jar analytic <algorithm> <options> <store>
+----
+====
+
+[[analytic-dbscan]]
+=== Density-Based Scan
+
+include::manpages/analytic/geowave-dbscan.txt[]
+
+[[analytic-kde]]
+=== Kernel Density Estimate
+
+include::manpages/analytic/geowave-kde.txt[]
+
+[[analytic-kdespark]]
+=== Kernel Density Estimate on Spark
+
+include::manpages/analytic/geowave-kdespark.txt[]
+
+[[analytic-kmeansjump]]
+=== K-means Jump
+
+include::manpages/analytic/geowave-kmeansjump.txt[]
+
+[[analytic-kmeansparallel]]
+=== K-means Parallel
+
+include::manpages/analytic/geowave-kmeansparallel.txt[]
+
+[[analytic-kmeansspark]]
+=== K-means on Spark
+
+include::manpages/analytic/geowave-kmeansspark.txt[]
+
+[[analytic-nn]]
+=== Nearest Neighbor
+
+include::manpages/analytic/geowave-nn.txt[]
+
+[[analytic-sql]]
+=== Spark SQL
+
+include::manpages/analytic/geowave-sql.txt[]
+
+[[analytic-spatialjoin]]
+=== Spark Spatial Join
+
+include::manpages/analytic/geowave-spatialjoin.txt[]
+
+'''
+

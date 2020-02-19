@@ -1,0 +1,255 @@
+<<<
+
+:linkattrs:
+
+== Ingesting Data
+
+[[ingest-overview]]
+=== Overview
+
+In addition to raw data, the ingest process requires an _adapter_ to translate the native data into a format that can be persisted into the data store. It also requires an _index_ to determine how the data should be organized. The index keeps track of which common fields from the source data need to be maintained within the table to be used by fine-grained and secondary filters.
+
+There are various ways to ingest data into a GeoWave store. The standard link:commands.html#ingest-localToGW[`ingest localToGW`] command is used to ingest files from a local file system or from an AWS S3 bucket into GeoWave in a single process. For a distributed ingest (recommended for larger datasets) the link:commands.html#ingest-sparkToGW[`ingest sparkToGW`] and link:commands.html#ingest-mrToGW[`ingest mrToGW`] commands can be used. Ingests can also be performed directly from HDFS or utilizing Kafka.
+
+The full list of GeoWave ingest commands can be found in the link:commands.html#ingest-commands[GeoWave CLI Documentation].
+
+For an example of the ingest process in action, see the link:quickstart.html[Quickstart Guide].
+
+=== Ingest Plugins
+
+The CLI contains support for several ingest formats out of the box. You can list the available formats by utilizing the link:commands.html#ingest-listplugins[`ingest listplugins`] command.
+
+[source,bash]
+----
+$ geowave ingest listplugins
+----
+
+This command lists all of the ingest format plugins that are currently installed and should yield a result similar to the following:
+
+....
+Available ingest formats currently registered as plugins:
+
+  twitter:
+    Flattened compressed files from Twitter API
+
+  geotools-vector:
+    all file-based vector datastores supported within geotools
+
+  geolife:
+    files from Microsoft Research GeoLife trajectory data set
+
+  gdelt:
+    files from Google Ideas GDELT data set
+
+  stanag4676:
+    xml files representing track data that adheres to the schema defined by STANAG-4676
+
+  geotools-raster:
+    all file-based raster formats supported within geotools
+
+  gpx:
+    xml files adhering to the schema of gps exchange format
+
+  tdrive:
+    files from Microsoft Research T-Drive trajectory data set
+
+  avro:
+    This can read an Avro file encoded with the SimpleFeatureCollection schema.  This schema is also used by the export tool, so this format handles re-ingesting exported datasets.
+....
+
+=== Statistics and Time Configuration
+
+Sometimes it is necessary to provide additional configuration information for a vector ingest.  For example, if you have multiple time fields and need to specify which one should be use for a temporal index, or if you wanted to add some statistics prior to the ingest process. In these cases, the system property `SIMPLE_FEATURE_CONFIG_FILE` may be assigned to the name of a locally accessible JSON file defining the configuration.
+
+[[ingest-example]]
+==== Example
+
+[source]
+----
+$ GEOWAVE_TOOL_JAVA_OPT="-DSIMPLE_FEATURE_CONFIG_FILE=myconfigfile.json"
+$ geowave ingest localtogw ./ingest_data mystore myindex
+----
+
+[NOTE]
+====
+If GeoWave was installed using the standalone installer, this property can be supplied to the `geowave` command by prepending it with `-J`:
+
+[source]
+----
+$ geowave -J-DSIMPLE_FEATURE_CONFIG_FILE=myconfigfile.json ingest localtogw ./ingest_data mystore myindex
+----
+====
+
+This configuration file serves the following purposes:
+[arabic]
+. Selecting which temporal attribute to use in temporal indices.
+. Adding statistics to one or more attributes.
+. Determining which attribute contains visibility information for other attributes.
+. Setting the names of the indices to update in WFS-T transactions via the GeoServer plugin.
+
+The JSON file is made up of a list of configurations. Each configuration is defined by a class name and a set of attributes and are grouped by the vector type name.
+
+==== Temporal Configuration
+
+Temporal configuration may be necessary if your vector feature type has more than one temporal attribute.  The class name for this configuration is {core-geotime}/core/geotime/util/TimeDescriptors.java[`org.locationtech.geowave.core.geotime.util.TimeDescriptors$TimeDescriptorConfiguration`].
+
+There are three attributes for the temporal configuration:
+[arabic]
+. `timeName`
+. `startRangeName`
+. `endRangeName`
+
+These attributes are associated with the name of a simple feature type attribute that references a time value.  To index by a single time attribute, set `timeName` to the name of the single attribute.  To index by a range, set both `startRangeName` and `endRangeName` to the names of the simple feature type attributes that define start and end time values.
+
+For example, if you had a feature type named `myFeatureTypeName` with two time attributes `captureTime` and `processedTime`, but wanted to tell GeoWave to use the `captureTime` attribute for the temporal index, the configuration would look like the following:
+
+[%nowrap]
+....
+{
+  "configurations": {
+    "myFeatureTypeName" : [
+      {
+        "@class" : "org.locationtech.geowave.core.geotime.util.TimeDescriptors$TimeDescriptorConfiguration",
+        "timeName":"captureTime",
+        "startRangeName":null,
+        "endRangeName":null
+      }
+    ]
+  }
+}
+....
+
+==== Statistics Configuration
+
+Statistics can be configured under a class named {adapter-vector}/adapter/vector/stats/StatsConfigurationCollection.java[`org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection$SimpleFeatureStatsConfigurationCollection`]. This configuration has a single attribute called `attConfig` which contains all of the attributes that are being configured with statistics.  Each attribute under `attConfig` also contains a single property called `configurationsForAttribute`, which is a list of all statistics configurations that should be assigned to that attribute. The following table shows the types of built-in statistics that can be assigned to an attribute.
+
+NOTE: Bounding box and range statistics are automatically captured for geometry and temporal attributes.
+
+[frame="topbot", width="100%", cols="12%,25%,20%,43%", grid="rows", options="header"]
+|=========================================================
+|Attribute Type | Statistic Name|Statistic Configuration Attributes (with default values)|Statistic Class
+.3+| Numeric
+| Fixed Bin Histogram | minValue=-&#8734;, maxValue=&#8734;, bins=32 | {adapter-vector}/adapter/vector/stats/FeatureFixedBinNumericStatistics.java[`org.locationtech.geowave.adapter.vector.stats.
+FeatureFixedBinNumericStatistics$FeatureFixedBinConfig`]
+
+| Dynamic Histogram | | {adapter-vector}/adapter/vector/stats/FeatureNumericHistogramStatistics.java[`org.locationtech.geowave.adapter.vector.stats.
+FeatureNumericHistogramStatistics$FeatureNumericHistogramConfig`]
+
+| Numeric Range | | {adapter-vector}/adapter/vector/stats/FeatureNumericRangeStatistics.java[`org.locationtech.geowave.adapter.vector.stats.
+FeatureNumericRangeStatistics$FeatureNumericRangeConfig`]
+
+.2+| String
+| Count Min Sketch | errorFactor=0.001, probabilityOfCorrectness=0.98 | {adapter-vector}/adapter/vector/stats/FeatureCountMinSketchStatistics.java[`org.locationtech.geowave.adapter.vector.stats.
+FeatureCountMinSketchStatistics$FeatureCountMinSketchConfig`]
+
+| Hyper Log Log | precision=16 | {adapter-vector}/adapter/vector/stats/FeatureHyperLogLogStatistics.java[`org.locationtech.geowave.adapter.vector.stats.
+FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig`]
+
+|=========================================================
+
+For example, if you wanted to add a numeric range statistic on an attribute called `population` in a type called `myFeatureTypeName`, the configuration would look like the following:
+
+[%nowrap]
+....
+{
+  "configurations": {
+    "myFeatureTypeName" : [
+      {
+        "@class" : "org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection$SimpleFeatureStatsConfigurationCollection",
+        "attConfig" : {
+          "population" : {
+            "configurationsForAttribute" :  [
+              {
+                "@class" : "org.locationtech.geowave.adapter.vector.stats.FeatureNumericRangeStatistics$FeatureNumericRangeConfig"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}
+....
+
+Note that the numeric range statistic does not require any additional configuration attributes.
+
+==== Visibility Configuration
+
+Visibility configuration consists of a visibility manager and an attribute which contains the visibility information.
+
+A visibility manager extends {core-store}/core/store/data/visibility/VisibilityManagement.java[`org.locationtech.geowave.core.store.data.visibility.VisibilityManagement`]. An instance of this class interprets the contents of a visibility attribute within a simple feature to determine the visibility constraints of the other attributes in that simple feature. The default visibility management class is {adapter-vector}/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.java[`org.locationtech.geowave.adapter.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement`], which is used by the default visibility configuration class {adapter-vector}/adapter/vector/plugin/visibility/VisibilityConfiguration.java[`org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration`].
+
+For example, if you had an attribute called `vis` that contained the visibility constraints in a type called `myFeatureTypeName`, the configuration would look like the following:
+
+....
+{
+  "configurations": {
+    "myFeatureTypeName" : [
+      {
+        "@class" : "org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration",
+        "attributeName" : "vis"
+      }
+    ]
+  }
+}
+....
+
+==== Primary Index Identifiers
+
+The class {adapter-vector}/adapter/vector/index/SimpleFeaturePrimaryIndexConfiguration.java[`org.locationtech.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration`] is used to maintain the configuration of primary indices used for adding or updating simple features via the GeoServer plugin.
+
+==== Example Configuration
+
+All of the above configurations can be combined into a single configuration file.  This would result in a configuration that looks something like the following:
+
+[%nowrap]
+....
+{
+  "configurations": {
+    "myFeatureTypeName" : [
+      {
+        "@class" : "`org.locationtech.geowave.core.geotime.util.TimeDescriptors$TimeDescriptorConfiguration`",
+        "startRangeName":null,
+        "endRangeName":null,
+        "timeName":"captureTime"
+      },
+      {
+        "@class": "org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration",
+        "attributeName" : "vis"
+      },
+      {
+        "@class": "org.locationtech.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration",
+        "indexNames": ["SPATIAL_IDX"]
+      }
+      {
+        "@class" : "org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection$SimpleFeatureStatsConfigurationCollection",
+        "attConfig" : {
+          "population" : {
+            "configurationsForAttribute" :  [
+              {
+                "@class" : "org.locationtech.geowave.adapter.vector.stats.FeatureFixedBinNumericStatistics$FeatureFixedBinConfig",
+                "bins" : 24
+              }
+            ]
+          },
+          "country" : {
+            "configurationsForAttribute" :  [
+              {
+                "@class" : "org.locationtech.geowave.adapter.vector.stats.FeatureCountMinSketchStatistics$FeatureCountMinSketchConfig",
+                "probabilityOfCorrectness" : 0.98,
+                "errorFactor" :0.001
+              },
+              {
+                "@class" : "org.locationtech.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}
+....
+
+See the <<110-visibility-management.adoc#visibility-management, Visibility Management>> section of the appendix for more information about visibility management.
+

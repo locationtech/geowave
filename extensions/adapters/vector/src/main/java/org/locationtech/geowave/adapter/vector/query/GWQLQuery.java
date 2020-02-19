@@ -101,10 +101,12 @@ public class GWQLQuery extends DefaultOperation implements Command {
         throw new ParameterException("Cannot find store name: " + storeLoader.getStoreName());
       }
       storeOptions = storeLoader.getDataStorePlugin();
+    } else {
+      throw new ParameterException("Query requires a store name prefix on the type.");
     }
     final StopWatch stopWatch = new StopWatch();
     stopWatch.start();
-    ResultSet results = statement.execute(storeOptions);
+    ResultSet results = statement.execute(storeOptions.createDataStore());
     stopWatch.stop();
     output.output(results);
     results.close();

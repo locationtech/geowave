@@ -1,0 +1,43 @@
+[[introduction]]
+<<<
+
+:linkattrs:
+
+== Introduction
+
+=== Purpose of this Guide
+
+This guide focuses on the development side of GeoWave. It also serves as a deep dive into some of the inner workings of GeoWave.  The target audience for this guide are GeoWave developers and developers who wish to use GeoWave as part of another software package.
+
+=== Assumptions
+
+This guide assumes the following:
+
+* The reader is familiar with the basics of GeoWave discussed in the link:overview.html[Overview].
+* The reader is familiar with the contents of the link:userguide.html[GeoWave User Guide].
+* GeoWave has already been installed and is available on the command-line.  See the link:installation-guide.html[Installation Guide^, window="_blank"] for help with the installation process.
+
+=== Development Requirements
+
+GeoWave development requires the following components:
+
+[options="compact"]
+* link:http://www.oracle.com/technetwork/java/javase/downloads/index.html[Java Development Kit (JDK), window="_blank"] (>= 1.8)
++
+Requires JDK v1.8 or greater
++
+Download from the link:http://www.oracle.com/technetwork/java/javase/downloads/index.html[Java downloads site, window="_blank"]. The OracleJDK is the most thoroughly tested but there are no known issues with OpenJDK.
+
+* link:http://git-scm.com/[Git, window="_blank"]
++
+Reference online material at link:https://git-scm.com/[Git SCM Site, window="_blank"].
++
+For a complete reference guide for installing and using Git, please reference chapters in the online link:https://git-scm.com/book/en/v2[Pro Git book, window="_blank"].
+
+* link:https://maven.apache.org/[Maven, window="_blank"]
++
+Requires a version of Maven >= 3.2.1
++
+For a reference guide for getting started with Maven, please reference the online link:https://maven.apache.org/guides/getting-started/[Maven Getting Started Guide, window="_blank"].
+
+

@@ -23,6 +23,7 @@ import org.locationtech.geowave.test.basic.GeoWaveGeometryPrecisionIT;
 import org.locationtech.geowave.test.basic.GeoWaveVectorSerializationIT;
 import org.locationtech.geowave.test.basic.GeoWaveVisibilityIT;
 import org.locationtech.geowave.test.config.ConfigCacheIT;
+import org.locationtech.geowave.test.docs.GeoWaveDocumentationExamplesIT;
 import org.locationtech.geowave.test.kafka.BasicKafkaIT;
 import org.locationtech.geowave.test.landsat.CustomCRSLandsatIT;
 import org.locationtech.geowave.test.mapreduce.BasicMapReduceIT;
@@ -30,6 +31,7 @@ import org.locationtech.geowave.test.mapreduce.BulkIngestInputGenerationIT;
 import org.locationtech.geowave.test.mapreduce.CustomCRSKDERasterResizeIT;
 import org.locationtech.geowave.test.query.AttributesSubsetQueryIT;
 import org.locationtech.geowave.test.query.PolygonDataIdQueryIT;
+import org.locationtech.geowave.test.query.QueryOptionsIT;
 import org.locationtech.geowave.test.query.SpatialTemporalQueryIT;
 import org.locationtech.geowave.test.secondary.BasicSecondaryIndexIT;
 import org.locationtech.geowave.test.secondary.DataIndexOnlyIT;
@@ -44,6 +46,7 @@ import org.locationtech.geowave.test.services.IndexServicesIT;
 import org.locationtech.geowave.test.services.IngestIT;
 import org.locationtech.geowave.test.services.StatServicesIT;
 import org.locationtech.geowave.test.services.StoreServicesIT;
+import org.locationtech.geowave.test.services.TypeServicesIT;
 import org.locationtech.geowave.test.services.grpc.GeoWaveGrpcIT;
 import org.locationtech.geowave.test.spark.GeoWaveBasicSparkIT;
 import org.locationtech.geowave.test.spark.GeoWaveSparkKMeansIT;
@@ -59,6 +62,7 @@ import org.locationtech.geowave.test.stability.GeoWaveStabilityIT;
     GeoWaveBasicSpatialTemporalVectorIT.class,
     GeoWaveGeometryPrecisionIT.class,
     GeoWaveCustomIndexIT.class,
+    GeoWaveDocumentationExamplesIT.class,
     // TODO need to mock up S3
     // GeowaveBasicURLIngestIT.class,
     GeoWaveVectorSerializationIT.class,
@@ -70,6 +74,7 @@ import org.locationtech.geowave.test.stability.GeoWaveStabilityIT;
     MapReduceSecondaryIndexIT.class,
     VisibilitySecondaryIndexIT.class,
     GeoWaveStabilityIT.class,
+    QueryOptionsIT.class,
     // for now tests are taking too long in travis and landsatIT is a long test
     // LandsatIT.class,
     // these also help shave off some time
@@ -96,6 +101,7 @@ import org.locationtech.geowave.test.stability.GeoWaveStabilityIT;
     StoreServicesIT.class,
     IndexServicesIT.class,
     StatServicesIT.class,
+    TypeServicesIT.class,
     IngestIT.class,
     FileUploadIT.class,
     SplitsProviderIT.class})

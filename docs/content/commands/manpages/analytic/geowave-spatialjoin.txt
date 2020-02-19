@@ -1,0 +1,60 @@
+//:= geowave-analytic-spatialjoin(1)
+:doctype: manpage
+
+[[analytic-spatialjoin-name]]
+==== NAME
+
+geowave-analytic-spatialjoin - Spatial join using Spark
+
+[[analytic-spatialjoin-synopsis]]
+==== SYNOPSIS
+
+  geowave analytic spatialjoin [options] <left store name> <right store name> <output store name>
+
+[[analytic-spatialjoin-description]]
+==== DESCRIPTION
+
+This command executes a spatial join, taking two input types and outputting features from each side that match a given predicate.
+
+[[analytic-spatialjoin-options]]
+==== OPTIONS
+
+*-n, --name* _<name>_::
+  The Spark application name.  Default is `GeoWave Spark SQL`.
+
+*-ho, --host* _<host>_::
+  The Spark driver host.  Default is `localhost`.
+
+*-m, --master* _<designation>_::
+  The Spark master designation.  Default is `yarn`.
+
+*-pc, --partCount* _<count>_::
+  The default partition count to set for Spark RDDs. Should be big enough to support the largest RDD that will be used. Sets `spark.default.parallelism`.
+  
+*-lt, --leftTypeName* _<type>_::
+  Feature type name of left store to use in join.
+  
+*-ol, --outLeftTypeName* _<type>_::
+  Feature type name of left join results.
+  
+*-rt, --rightTypeName* _<type>_::
+  Feature type name of right store to use in join.
+  
+*-or, --outRightTypeName* _<type>_::
+  Feature type name of right join results.
+  
+*-p, --predicate* _<predicate>_::
+  Name of the UDF function to use when performing spatial join.  Default is `GeomIntersects`.
+  
+*-r, --radius* _<radius>_::
+  Used for distance join predicate and other spatial operations that require a scalar radius.  Default is 0.01.
+  
+*-not, --negative*::
+  Used for testing a negative result from geometry predicate. i.e `GeomIntersects() == false`.
+  
+[[analytic-spatialjoin-examples]]
+==== EXAMPLES
+
+Using a local Spark cluster, join all features from a `hail` data type in the `my_store` store that intersect features from a `boundary` type in the `other_store` store and output the left results to `left` and `right` types in the `my_store` data store.
+
+  geowave analytic spatialjoin -m local -lt hail -rt boundary -ol left -or right my_store other_store my_store

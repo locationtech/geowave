@@ -1,0 +1,31 @@
+:blob-root: https://github.com/locationtech/geowave/blob/${buildNumber}
+:tree-root: https://github.com/locationtech/geowave/tree/${buildNumber}
+:source-root: src/main/java/org/locationtech/geowave
+:core-store: {blob-root}/core/store/{source-root}
+:core-index: {blob-root}/core/index/{source-root}
+:core-cli: {blob-root}/core/cli/{source-root}
+:core-geotime: {blob-root}/core/geotime/{source-root}
+:core-ingest: {blob-root}/core/ingest/{source-root}
+:core-mapreduce: {blob-root}/core/mapreduce/{source-root}
+:adapter-auth: {blob-root}/extensions/adapters/auth/{source-root}
+:adapter-vector: {blob-root}/extensions/adapters/vector/{source-root}
+:adapter-raster: {blob-root}/extensions/adapters/raster/{source-root}
+:format-geotools-raster: {blob-root}/extensions/formats/geotools-raster/{source-root}
+:format-avro: {blob-root}/extensions/formats/avro/{source-root}
+:grpc-server: {blob-root}/services/grpc/server/{source-root}
+:store-accumulo: {blob-root}/extensions/datastores/accumulo/{source-root}
+:store-bigtable: {blob-root}/extensions/datastores/bigtable/{source-root}
+:store-cassandra: {blob-root}/extensions/datastores/cassandra/{source-root}
+:store-dynamodb: {blob-root}/extensions/datastores/dynamodb/{source-root}
+:store-hbase: {blob-root}/extensions/datastores/hbase/{source-root}
+:store-kudu: {blob-root}/extensions/datastores/kudu/{source-root}
+:store-redis: {blob-root}/extensions/datastores/redis/{source-root}
+:store-rocksdb: {blob-root}/extensions/datastores/rocksdb/{source-root}
+
+ifdef::backend-html5[]
+:icons: font
+:iconfont-remote!:
+:!webfonts:
+:highlightjsdir: vendors/highlightjs
+endif::backend-html5[]
+

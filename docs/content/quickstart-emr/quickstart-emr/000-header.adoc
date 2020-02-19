@@ -1,0 +1,16 @@
+<<<
+
+:linkattrs:
+
+= GeoWave EMR Quickstart Guide
+
+The GeoWave EMR Quickstart guide is similar to the link:quickstart.html[standard Quickstart Guide, window="_blank"], except that it is run in an link:https://aws.amazon.com/emr/[Amazon EMR^] environment.  Amazon EMR is a platform that simplifies the creation and management of multi-node clusters. There are also Jupyter and Zeppelin Notebook examples for users looking try out GeoWave in that manner.
+
+ifdef::backend-html5[]
+++++
+<script>
+var doc_name = "EMR Quickstart Guide";
+</script>
+++++
+endif::backend-html5[]
+

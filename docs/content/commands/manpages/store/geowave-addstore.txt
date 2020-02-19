@@ -1,125 +1,163 @@
-//:geowave-addstore(1)
-//:===================
-//::doctype: manpage
+//:= geowave-store-add(1)
+:doctype: manpage
 
-NAME
-//:----
+[[store-add-name]]
+==== NAME
 
-geowave store add - Create a store within Geowave
+geowave-store-add - Add a data store to the GeoWave configuration
 
-SYNOPSIS
-//:--------
+[[store-add-synopsis]]
+==== SYNOPSIS
 
-geowave store add [options] <name>
+  geowave store add [options] <name>
 
-DESCRIPTION
-//:-----------
+[[store-add-description]]
+==== DESCRIPTION
 
-The geowave store add operator will create a new store in GeoWave.
+This command adds a new store to the GeoWave configuration.  The store name can then be used by other commands for interfacing with the configured data store.
 
-OPTIONS
-//:-------
+[[store-add-options]]
+==== OPTIONS
 
-- -d, --default
- * Make this the default store in all operations
+*-d, --default*::
+  Make this the default store in all operations
 
-- *-t, --type <arg>
- * The type of store, such as accumulo, hbase, rocksdb, redis, cassandra, bigtable, dynamodb, kudu, etc.
- * Required!
- * When -t accummulo option is used, additional options are:
- 
-  ** --gwNamespace
-   *** The geowave namespace
-    **** Default is no namespace
+*$$*$$-t, --type <arg>*::
+  The type of store.  A list of available store types can be found using the `store listplugins` command.
+
+All core data stores have these options:
+
+*--gwNamespace* _<namespace>_::
+  The GeoWave namespace.  By default, no namespace is used.
+  
+*--enableServerSideLibrary* _<enabled>_::
+  Enable server-side operations if possible.  Default is `true`.
+  
+*--enableSecondaryIndexing*::
+  If specified, secondary indexing will be used.
+  
+*--enableVisibility* _<enabled>_::
+  If specified, visibility will be explicitly enabled or disabled.  Default is unspecified.
+  
+*--maxRangeDecomposition* _<count>_::
+  The maximum number of ranges to use when breaking down queries.
+
+*--aggregationMaxRangeDecomposition* _<count>_::
+  The maximum number of ranges to use when breaking down aggregation queries.
+
+When the `accummulo` type option is used, additional options are:
     
-  ** *-i, --instance
-   *** The Accumulo instance ID
-   *** Required!
+*$$*$$ -i, --instance* _<instance>_::
+  The Accumulo instance ID.
+  
+*$$*$$ -u, --user* _<user>_::
+  A valid Accumulo user ID.
 
-  ** *-p, --password
-   *** The password for the user
-   *** Required!
+*-p, --password* _<password>_::
+  The password for the user. Can be specified as `pass:<password>`, `file:<local file containing the password>`, `propfile:<local properties file containing the password>:<property file key>`, `env:<variable containing the pass>`, or `stdin`.
 
-  ** *-u, --user
-   *** A valid Accumulo user ID
-   *** Required!
+*$$*$$-z, --zookeeper* _<servers>_::
+  A comma-separated list of Zookeeper servers that an Accumulo instance is using.
 
-  ** *-z, --zookeeper
-   *** A comma-separated list of zookeeper servers that an Accumulo instance is using
-   *** Required!
+When the `hbase` type option is used, additional options are:
 
- * When -t, --type hbase option is used, additional options are:
-  ** *-z, --zookeeper
-   *** A comma-separated list of zookeeper servers that an Accumulo instance is using
-   *** Required!
+*$$*$$ -z, --zookeeper* _<servers>_::
+  A comma-separated list of zookeeper servers that an HBase instance is using.
    
-  ** --coprocessorJar
-   *** Path (HDFS URL) to the jar containing coprocessor classes
+*--coprocessorJar* _<path>_::
+  Path (HDFS URL) to the JAR containing coprocessor classes.
 
-  ** --disableVerifyCoprocessors
+*--disableVerifyCoprocessors*::
+  If specified, disable coprocessor verification, which ensures that coprocessors have been added to the HBase table prior to executing server-side operations.
 
-  ** --scanCacheSize
+*--scanCacheSize* _<size>_::
+  The number of rows passed to each scanner (higher values will enable faster scanners, but will use more memory).
 
- * When -t, --type redis option is used, additional options are:
-  ** *-a, --address
-   *** The address to connect to, such as redis://127.0.0.1:6379
-   *** Required!
-   
-  ** --compression
-   *** Can be "snappy","lz4", or "none". Defaults to snappy.
+When the `redis` type option is used, additional options are:
 
- * When -t, --type rocksdb option is used, additional options are:
-  ** --dir
-   *** The directory to read/write to.  Defaults to "rocksdb" in the working directory.
-   
-  ** --compactOnWrite
-   *** Whether to compact on every write, if false it will only compact on merge. Defaults to true
+*$$*$$ -a, --address* _<address>_::
+  The address to connect to, such as `redis://127.0.0.1:6379`.
 
-  ** --batchWriteSize
-   *** The size (in records) for each batched write. Anything <= 1 will use synchronous single record writes without batching. Defaults to 1000.
-
- * When -t, --type cassandra option is used, additional options are:
-  ** --contactPoints
-   *** A single contact point or a comma delimited set of contact points to connect to the Cassandra cluster.
-   *** Required!
-   
-  ** --replicas
-   *** The number of replicas to use when creating a new keyspace.
-   
-  ** --durableWrites
-   *** Whether to write to commit log for durability, configured only on creation of new keyspace.
-
-  ** --batchWriteSize
-   *** The number of inserts in a batch write.
+*--compression* _<compression>_::
+  The compression to use.  Possible values are `snappy`, `lz4`, and `none`. Default is `snappy`.
  
- * When -t, --type dynamodb option is used, additional options are:
-  ** --endpoint
-   *** The endpoint to connect to(specify either endpoint/region not both)
+When the `rocksdb` type option is used, additional options are:
+
+*--dir* _<path>_::
+  The directory to read/write to.  Defaults to "rocksdb" in the working directory.
    
-  ** --region
-   *** The AWS region to use(specify either endpoint/region not both)
+*--compactOnWrite* _<enabled>_::
+  Whether to compact on every write, if `false` it will only compact on merge. Default is `true`.
+
+*--batchWriteSize* _<count>_::
+  The size (in records) for each batched write. Anything <= 1 will use synchronous single record writes without batching. Default is 1000.
+
+When the `cassandra` type option is used, additional options are:
+
+*$$*$$ --contactPoints* _<contact points>_::
+  A single contact point or a comma delimited set of contact points to connect to the Cassandra cluster.
    
-  ** --initialWriteCapacity
+*--replicas* _<count>_::
+  The number of replicas to use when creating a new keyspace.  Default is 3.
+   
+*--durableWrites* _<enabled>_::
+  Whether to write to commit log for durability, configured only on creation of new keyspace.  Default is `true`.
 
-  ** --initialReadCapacity
-  
-  ** --maxConnections
-   *** The maximum number of open http(s) connections active at any given time
-  
-  ** --protocol
-   *** The protocol to use. HTTP or HTTPS
-  
-  ** --cacheResponseMetadata
-   *** Whether to cache responses from aws(true or false). High performance systems can disable this but debugging will be more difficult.
- 
- * When -t, --type kudu option is used, additional options are:
-  ** --kuduMaster
-   *** An URL for the Kudu master node
-   *** Required!
+*--batchWriteSize* _<count>_::
+  The number of inserts in a batch write.  Default is 50.
 
- * When -t, --type bigtable option is used, additional options are:
-  ** --projectId
-  
-  ** --instanceId
+When the `dynamodb` type option is used, additional options are:
 
-  ** --scanCacheSize
+*$$*$$ --endpoint* _<endpoint>_::
+  [REQUIRED (or `-region`)] The endpoint to connect to.
+   
+*$$*$$ --region* _<region>_::
+  [REQUIRED (or `-endpoint`)] The AWS region to use.
+   
+*--initialWriteCapacity* _<count>_::
+  The maximum number of writes consumed per second before throttling occurs.  Default is 5.
+
+*--initialReadCapacity* _<count>_::
+  The maximum number of strongly consistent reads consumed per second before throttling occurs.  Default is 5.
+  
+*--maxConnections* _<count>_::
+  The maximum number of open http(s) connections active at any given time.  Default is 50.
+  
+*--protocol* _<protocol>_::
+  The protocol to use. Possible values are `HTTP` or `HTTPS`, default is `HTTPS`.
+  
+*--cacheResponseMetadata* _<enabled>_::
+  Whether to cache responses from AWS. High performance systems can disable this but debugging will be more difficult.  Default is `true`.
+
+When the `kudu` type option is used, additional options are:
+
+*$$*$$ --kuduMaster* _<url>_::
+  A URL for the Kudu master node.
+
+When the `bigtable` type option is used, additional options are:
+
+*--projectId* _<project>_::
+  The Bigtable project to connect to.  Default is `geowave-bigtable-project-id`.
+  
+*--instanceId* _<instance>_::
+  The Bigtable instance to connect to.  Default is `geowave-bigtable-instance-id`.
+
+*--scanCacheSize* _<size>_::
+  The number of rows passed to each scanner (higher values will enable faster scanners, but will use more memory).
+  
+[[store-add-examples]]
+==== EXAMPLES
+
+Add a data store called `example` that uses a locally running Accumulo instance:
+
+  geowave store add -t accumulo --zookeeper localhost:2181 --instance accumulo --user root --password secret example
+  
+Add a data store called `example` that uses a locally running HBase instance:
+
+  geowave store add -t hbase --zookeeper localhost:2181 example
+  
+Add a data store called `example` that uses a RocksDB database in the current directory:
+
+  geowave store add -t rocksdb example
+  
+

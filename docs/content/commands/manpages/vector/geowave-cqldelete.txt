@@ -1,31 +1,39 @@
-//:geowave-cqldelete(1)
-//:==============
-//::doctype: manpage
+//:= geowave-vector-cqldelete(1)
+:doctype: manpage
 
-NAME
-//:----
+[[vector-cqldelete-name]]
+==== NAME
 
-geowave vector cqldelete - Delete data that matches a CQL filter
+geowave-vector-cqldelete - Delete data that matches a CQL filter
 
-SYNOPSIS
-//:--------
+[[vector-cqldelete-synopsis]]
+==== SYNOPSIS
 
-geowave vector cqldelete [options] <storename>
+  geowave vector cqldelete [options] <store name>
 
-DESCRIPTION
-//:-----------
+[[vector-cqldelete-description]]
+==== DESCRIPTION
 
-This command will delete all data in a data store that matches a CQL filter.
+This command deletes all data in a data store that matches a CQL filter.
 
-OPTIONS
-//:-------
+[[vector-cqldelete-options]]
+==== OPTIONS
 
-- --adapterId
- * Optional ability to provide an adapter ID
-- * --cql
- * CQL Filter for delete
-- --debug
- * Print out additional info for debug purposes
- * Default: false
-- --indexId
- * The name of the index (optional)
+*--typeName* _<type>_::
+  The type to delete data from.
+
+*$$*$$ --cql* _<filter>_::
+  All data that matches the CQL filter will be deleted.
+
+*--debug*::
+  If specified, print out additional info for debug purposes.
+
+*--indexName* _<index>_::
+  The name of the index to delete from.
+  
+[[vector-cqldelete-examples]]
+==== EXAMPLES
+
+Delete all data from the `hail` type in the `example` data store that lies within the given bounding box:
+
+  geowave vector cqldelete --typeName hail --cql "BBOX(geom, 7, 46, 23, 51)" example

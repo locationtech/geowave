@@ -11,6 +11,16 @@ package org.locationtech.geowave.core.store.operations;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 
+/**
+ * Provides an interface for reading GeoWave metadata. A {@link MetadataQuery} is used to specify
+ * the metadata to be read.
+ */
 public interface MetadataReader {
-  public CloseableIterator<GeoWaveMetadata> query(MetadataQuery query);
+  /**
+   * Read metadata, as specified by the query.
+   *
+   * @param query The query that specifies the metadata to be read.
+   * @return An iterator that lazily loads the metadata as they are requested.
+   */
+  CloseableIterator<GeoWaveMetadata> query(MetadataQuery query);
 }

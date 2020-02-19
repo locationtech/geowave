@@ -16,6 +16,8 @@ import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import org.locationtech.geowave.core.store.cli.store.RemoveStoreCommand;
 import org.locationtech.geowave.core.store.cli.type.RemoveTypeCommand;
 import org.locationtech.geowave.core.store.cli.store.ClearStoreCommand;
+import org.locationtech.geowave.core.store.cli.store.ListStorePluginsCommand;
+import org.locationtech.geowave.core.store.cli.index.ListIndexPluginsCommand;
 import org.locationtech.geowave.core.store.cli.index.ListIndicesCommand;
 import org.locationtech.geowave.core.store.cli.index.RemoveIndexCommand;
 import org.locationtech.geowave.core.store.cli.type.ListTypesCommand;
@@ -254,6 +256,60 @@ public class GeoWaveGrpcCoreStoreService extends CoreStoreImplBase implements
     try {
       cmd.computeResults(params);
       final VoidResponseProtos resp = VoidResponseProtos.newBuilder().build();
+      responseObserver.onNext(resp);
+      responseObserver.onCompleted();
+
+    } catch (final Exception e) {
+      LOGGER.error("Exception encountered executing command", e);
+    }
+  }
+
+  @Override
+  public void listStorePluginsCommand(
+      final org.locationtech.geowave.service.grpc.protobuf.ListStorePluginsCommandParametersProtos request,
+      final io.grpc.stub.StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+    final ListStorePluginsCommand cmd = new ListStorePluginsCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
+    GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
+
+    final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
+    final OperationParams params = new ManualOperationParams();
+    params.getContext().put(ConfigOptions.PROPERTIES_FILE_CONTEXT, configFile);
+
+    cmd.prepare(params);
+
+    LOGGER.info("Executing ListPluginsCommand...");
+    try {
+      final String result = cmd.computeResults(params);
+      final StringResponseProtos resp =
+          StringResponseProtos.newBuilder().setResponseValue(result).build();
+      responseObserver.onNext(resp);
+      responseObserver.onCompleted();
+
+    } catch (final Exception e) {
+      LOGGER.error("Exception encountered executing command", e);
+    }
+  }
+
+  @Override
+  public void listIndexPluginsCommand(
+      final org.locationtech.geowave.service.grpc.protobuf.ListIndexPluginsCommandParametersProtos request,
+      final io.grpc.stub.StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos> responseObserver) {
+    final ListIndexPluginsCommand cmd = new ListIndexPluginsCommand();
+    final Map<FieldDescriptor, Object> m = request.getAllFields();
+    GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(m, cmd);
+
+    final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
+    final OperationParams params = new ManualOperationParams();
+    params.getContext().put(ConfigOptions.PROPERTIES_FILE_CONTEXT, configFile);
+
+    cmd.prepare(params);
+
+    LOGGER.info("Executing ListPluginsCommand...");
+    try {
+      final String result = cmd.computeResults(params);
+      final StringResponseProtos resp =
+          StringResponseProtos.newBuilder().setResponseValue(result).build();
       responseObserver.onNext(resp);
       responseObserver.onCompleted();
 

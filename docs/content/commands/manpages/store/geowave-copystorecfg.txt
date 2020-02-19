@@ -1,25 +1,30 @@
-//:geowave-copystorecfg(1)
-//:==================
-//::doctype: manpage
+//:= geowave-store-copycfg(1)
+:doctype: manpage
 
-NAME
-//:----
+[[store-copycfg-name]]
+==== NAME
 
-geowave store copycfg - Copy and modify existing store configuration
+geowave-store-copycfg - Copy and modify existing store configuration
 
-SYNOPSIS
-//:--------
+[[store-copycfg-synopsis]]
+==== SYNOPSIS
 
-geowave store copycfg [options] <name> <new name>
+  geowave store copycfg [options] <name> <new name> [option_overrides]
 
-DESCRIPTION
-//:----------- 
+[[store-copycfg-description]]
+==== DESCRIPTION 
 
-The geowave store copycfg operator will copy and modify an existing GeoWave store.
-It is possible to override values as you copy, such as cpstore old new --gwNamespace new_namespace.
+This command copies and modifies an existing GeoWave store. It is possible to override configuration options as you copy by specifying the options after the new name, such as `store copycfg old new --gwNamespace new_namespace`.  It is important to note that this command does not copy data, only the data store configuration.
 
-OPTIONS
-//:-------
+[[store-copycfg-options]]
+==== OPTIONS
 
-- -d, --default
- * Makes this the default store in all operations
+*-d, --default*::
+  Makes this the default store in all operations.
+
+[[store-copycfg-examples]]
+==== EXAMPLES
+
+Copy the `example` RocksDB data store configuration to `example_alt`, but with an alternate directory:
+
+  geowave store copycfg example example_alt --dir /alternate/directory

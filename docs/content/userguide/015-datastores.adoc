@@ -1,0 +1,15 @@
+<<<
+
+:linkattrs:
+
+== Adding Data Stores
+
+In order to start using GeoWave on a key/value store through the CLI, the store must be added to the GeoWave configuration.  This is done through the link:commands.html#store-add[`store add`] command.  For example:
+
+[source, bash]
+----
+$ geowave store add -t rocksdb example
+----
+
+This command takes in several options that are specific to the key/value store that is being used.  It is important to note that this command does not create any data or make any modifications to the key/value store itself, it simply adds a configuration to GeoWave so that all of the connection parameters required to connect to the store are easily accessible to the CLI and can be referred to in future commands by a simple _store name_.  For an exhaustive list of the configuration options available for each data store type, see the link:commands.html#store-add[`store add`] documentation.
+

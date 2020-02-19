@@ -93,6 +93,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.Lists;
 
 public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractGeoWaveBasicVectorIT.class);
@@ -649,7 +650,7 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
     try (CloseableIterator<InternalDataAdapter<?>> adapterIt = adapterStore.getAdapters()) {
       while (adapterIt.hasNext()) {
         final InternalDataAdapter<?> adapter = adapterIt.next();
-        options.setTypeNames(new String[] {adapter.getTypeName()});
+        options.setTypeNames(Lists.newArrayList(adapter.getTypeName()));
         if ((adapter.getAdapter() instanceof GeotoolsFeatureDataAdapter)
             && (filterGeometry != null)
             && (startDate != null)

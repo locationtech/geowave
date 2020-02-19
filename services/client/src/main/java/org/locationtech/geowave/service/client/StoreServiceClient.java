@@ -67,6 +67,12 @@ public class StoreServiceClient implements StoreService {
     return target;
   }
 
+  public Response listPlugins() {
+    final Response resp = storeService.listPlugins();
+    resp.bufferEntity();
+    return resp;
+  }
+
   public Response version(final String storeName) {
     final Response resp = storeService.version(storeName);
     return resp;

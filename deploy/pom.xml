@@ -117,6 +117,16 @@
 					<artifactId>geowave-datastore-rocksdb</artifactId>
 					<version>${project.version}</version>
 				</dependency>
+				<dependency>
+					<groupId>org.locationtech.geowave</groupId>
+					<artifactId>geowave-datastore-redis</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>org.locationtech.geowave</groupId>
+					<artifactId>geowave-datastore-kudu</artifactId>
+					<version>${project.version}</version>
+				</dependency>
 				<!-- don't include OSM tools until they're giving some updates -->
 				<!-- 
 				<dependency> <groupId>org.locationtech.geowave</groupId> <artifactId>geowave-cli-osm</artifactId> 

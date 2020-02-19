@@ -1,0 +1,34 @@
+[[maven-repositories]]
+<<<
+=== Maven Artifacts
+
+Both release and snapshot GeoWave artifacts are available on Maven Central.
+
+GeoWave dependencies can be added through a Maven POM file with the following snippet (replacing `${geowave-artifact}` with the desired artifact and `${geowave.version}` with the desired version):
+
+[source, xml]
+----
+<dependencies>
+  <dependency>
+    <groupId>org.locationtech.geowave</groupId>
+    <artifactId>${geowave-artifact}</artifactId>
+    <version>${geowave.version}</version>
+  </dependency>
+</dependencies>
+----
+
+To use GeoWave snapshots the following repository should be added to the POM file:
+
+[source, xml]
+----
+<repository>
+  <id>ossrh</id>
+  <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+  <releases>
+    <enabled>false</enabled>
+  </releases>
+  <snapshots>
+    <enabled>true</enabled>
+  </snapshots>
+</repository>
+----

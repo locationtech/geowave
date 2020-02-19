@@ -1,0 +1,173 @@
+[[cli]]
+<<<
+
+:linkattrs:
+
+== Command-Line Interface (CLI)
+
+[[cli-overview]]
+=== Overview
+
+The Command-Line Interface provides a way to execute a multitude of common operations on GeoWave data stores without having to use the Programmatic API.  It allows users to manage data stores, indices, statistics, and more.  While this guide covers the basics of the CLI, the link:commands.html[GeoWave CLI Documentation] contains an exhaustive overview of each command and their options.
+
+[[cli-configuration]]
+=== Configuration
+
+The CLI uses a local configuration file to store sets of data store connection parameters aliased by a store name. Most GeoWave commands ask for a store name and use the configuration file to determine which connection parameters should be used. It also stores connection information for GeoServer, AWS, and HDFS for commands that use those services. This configuration file is generally stored in the user's home directory, although an alternate configuration file can be specified when running commands.
+
+=== General Usage
+
+The root of all GeoWave CLI commands is the base `geowave` command.
+
+[source, bash]
+----
+$ geowave
+----
+
+This will display a list of all available top-level commands along with a brief description of each.
+
+==== Version
+
+[source, bash]
+----
+$ geowave --version
+----
+
+The `--version` flag will display various information about the installed version of GeoWave, including the version, build arguments, and revision information.
+
+==== General Flags
+
+These flags can be optionally supplied to any GeoWave command, and should be supplied before the command itself.
+
+===== Config File
+
+The `--config-file` flag causes GeoWave to use an alternate configuration file.  The supplied file path should include the file name (e.g. `--config-file /mnt/config.properties`). This can be useful if you have multiple projects that use GeoWave and want to keep the configuration for those data stores separate from each other.
+
+[source, bash]
+----
+$ geowave --config-file <path_to_file> <command>
+----
+
+===== Debug
+
+The `--debug` flag causes all DEBUG, INFO, WARN, and ERROR log events to be output to the console.  By default, only WARN and ERROR log events are displayed.
+
+[source, bash]
+----
+$ geowave --debug <command>
+----
+
+=== Help Command
+
+Adding `help` before any CLI command will show that command's options and their defaults.
+
+[source, bash]
+----
+$ geowave help <command>
+----
+
+For example, using the `help` command on link:commands.html#index-add[`index add`] would result in the following output:
+
+....
+$ geowave help index add
+Usage: geowave index add [options] <store name> <index name>
+  Options:
+    -np, --numPartitions
+       The number of partitions.  Default partitions will be 1.
+       Default: 1
+    -ps, --partitionStrategy
+       The partition strategy to use.  Default will be none.
+       Default: NONE
+       Possible Values: [NONE, HASH, ROUND_ROBIN]
+  * -t, --type
+       The type of index, such as spatial, or spatial_temporal
+....
+
+=== Explain Command
+
+The `explain` command is similar to the `help` command in it's usage, but shows all options, including hidden ones.  It can be a great way to make sure your parameters are correct before issuing a command.
+
+[source, bash]
+----
+$ geowave explain <command>
+----
+
+For example, if you wanted to add a spatial index to a store named `test-store` but weren't sure what all of the options available to you were, you could do the following:
+
+....
+$ geowave explain index add -t spatial test-store spatial-idx
+Command: geowave [options] <subcommand> ...
+
+                VALUE  NEEDED  PARAMETER NAMES                         
+----------------------------------------------
+{                    }         -cf, --config-file,                     
+{                    }         --debug,                                
+{                    }         --version,                              
+
+Command: add [options]
+
+                VALUE  NEEDED  PARAMETER NAMES                         
+----------------------------------------------
+{           EPSG:4326}         -c, --crs,                              
+{               false}         -fp, --fullGeometryPrecision,           
+{                   7}         -gp, --geometryPrecision,               
+{                   1}         -np, --numPartitions,                   
+{                NONE}         -ps, --partitionStrategy,               
+{               false}         --storeTime,                            
+{             spatial}         -t, --type,                             
+
+Expects: <store name> <index name>
+Specified: 
+test-store spatial-idx
+....
+
+The output is broken down into two sections.  The first section shows all of the options available on the `geowave` command.  If you wanted to use any of these options, they would need to be specified before link:commands.html#index-add[`index add`].  The second section shows all of the options available on the link:commands.html#index-add[`index add`] command. Some commands contain options that, when specified, may reveal more options.  In this case, the `-t spatial` option has revealed some additional configuration options that we could apply to the spatial index.  Another command where this is useful is the link:commands.html#store-add[`store add`] command, where each data store type specified by the `-t <store_type>` option has a different set of configuration options.
+
+=== Top-Level Commands
+
+The GeoWave CLI is broken up into several top-level commands that each focus on a different aspect of GeoWave.
+
+==== Store Commands
+
+The link:commands.html#store-commands[`store`] command contains commands for managing the GeoWave data stores.  This includes commands to add, remove, and copy data stores.
+
+==== Index Commands
+
+The link:commands.html#index-commands[`index`] command contains commands for listing, adding, and removing GeoWave indices from a data store.
+
+==== Type Commands
+
+The link:commands.html#type-commands[`type`] command contains commands for listing, describing, and removing types at a data store level.
+
+==== Ingest Commands
+
+The link:commands.html#ingest-commands[`ingest`] command contains commands for ingesting data into a GeoWave data store.
+
+==== Statistics Commands
+
+The link:commands.html#statistics-commands[`statistics`] or link:commands.html#statistics-commands[`stat`] command contains commands for listing, removing, or recalculating statistics.
+
+==== Analytic Commands
+
+The link:commands.html#analytic-commands[`analytic`] command contains commands for performing analytics on existing GeoWave datasets.  Results of analytic jobs consist of vector or raster data stored in GeoWave.
+
+==== Vector Commands
+
+The link:commands.html#vector-commands[`vector`] command contains commands that are specific to vector data, this includes the vector query language and various export options.
+
+==== Raster Commands
+
+The link:commands.html#raster-commands[`raster`] command contains commands that are specific to raster data, such as resize commands.
+
+==== Config Commands
+
+The link:commands.html#config-commands[`config`] command contains commands that affect the local GeoWave configuration. This includes commands to configure GeoServer, AWS, and HDFS.
+
+==== GeoServer Commands
+
+The link:commands.html#geoserver-commands[`geoserver`] or link:commands.html#geoserver-commands[`gs`] command contains commands for managing GeoWave data on a GeoServer instance.  It includes several subcommands for managing workspaces, stores, layers, and styles.
+
+==== Util Commands
+
+The link:commands.html#utility-commands[`util`] command contains a lot of the miscellaneous operations that don't really warrant their own top-level command.  This includes commands to start standalone data stores and services.
+

@@ -1,0 +1,14 @@
+<<<
+
+[[python-commands]]
+=== *Python Commands*
+
+Commands for use with the GeoWave Python bindings.
+
+[[python-rungateway]]
+=== Run Py4J Java Gateway
+
+include::manpages/util/python/geowave-python-rungateway.txt[]
+
+'''
+

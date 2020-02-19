@@ -28,6 +28,7 @@ public class RunKuduLocal extends DefaultOperation implements Command {
   private RunKuduLocalOptions options = new RunKuduLocalOptions();
   @Parameter(
       names = {"--interactive", "-i"},
+      arity = 1,
       description = "Whether to prompt for user input to end the process")
   private boolean interactive = true;
 
@@ -41,7 +42,7 @@ public class RunKuduLocal extends DefaultOperation implements Command {
       server.start();
 
       if (interactive) {
-        System.out.println("hit any key to shutdown ..");
+        System.out.println("Press Enter to shutdown..");
         System.in.read();
         System.out.println("Shutting down!");
         server.stop();

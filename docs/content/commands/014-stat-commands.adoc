@@ -1,0 +1,33 @@
+<<<
+
+== Statistics Commands
+
+Commands to manage GeoWave statistics.
+
+[[stat-calc]]
+=== Calculate Stat
+
+include::manpages/stat/geowave-calcstat.txt[]
+
+[[stat-list]]
+=== List Stats
+
+include::manpages/stat/geowave-liststats.txt[]
+
+[[stat-compact]]
+=== Compact Stats
+
+include::manpages/stat/geowave-compactstats.txt[]
+
+[[stat-recalc]]
+=== Recalculate Stats
+
+include::manpages/stat/geowave-recalcstats.txt[]
+
+[[stat-rm]]
+=== Remove Stat
+
+include::manpages/stat/geowave-rmstat.txt[]
+
+'''
+

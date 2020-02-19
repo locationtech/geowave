@@ -9,6 +9,7 @@
 package org.locationtech.geowave.cli.geoserver;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.concurrent.TimeUnit;
@@ -24,6 +25,8 @@ import com.beust.jcommander.Parameter;
 
 public class RunGeoServerOptions {
   private static final Logger LOGGER = LoggerFactory.getLogger(RunGeoServerOptions.class);
+  private static final String DEFAULT_GEOSERVER_DIR =
+      "lib/services/third-party/embedded-geoserver/geoserver";
 
   private static final String[] PARENT_CLASSLOADER_LIBRARIES =
       new String[] {"hbase", "hadoop", "protobuf", "guava", "restlet", "spring"};
@@ -34,8 +37,8 @@ public class RunGeoServerOptions {
 
   @Parameter(
       names = {"--directory", "-d"},
-      description = "The directory to use for geoserver. Default is './lib/services/third-party/embedded-geoserver/geoserver'")
-  private String directory = "./lib/services/third-party/embedded-geoserver/geoserver";
+      description = "The directory to use for geoserver. Default is the GeoServer in the installation directory.")
+  private String directory = null;
 
   protected static final int ACCEPT_QUEUE_SIZE = 100;
   protected static final int MAX_IDLE_TIME = (int) TimeUnit.HOURS.toMillis(1);
@@ -61,6 +64,10 @@ public class RunGeoServerOptions {
 
     final WebAppContext gsWebapp = new WebAppContext();
     gsWebapp.setContextPath(GEOSERVER_CONTEXT_PATH);
+    if (directory == null) {
+      directory =
+          Paths.get(System.getProperty("geowave.home", "."), DEFAULT_GEOSERVER_DIR).toString();
+    }
     gsWebapp.setResourceBase(directory);
 
     final WebAppClassLoader classLoader =

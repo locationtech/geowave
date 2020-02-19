@@ -25,6 +25,11 @@ public interface IndexService {
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
+  @Path("/listplugins")
+  public Response listPlugins();
+
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.MULTIPART_FORM_DATA)
   @Path("/list")
   public Response listIndices(@QueryParam("storeName") final String storeName);

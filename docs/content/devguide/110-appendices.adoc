@@ -1,6 +1,0 @@
-[[appendices-overview]]
-<<<
-
-[[appendices]]
-== Appendices
-

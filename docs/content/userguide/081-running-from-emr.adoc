@@ -1,9 +1,0 @@
-[[running-from-emr]]
-<<<
-[[running-from-emr]]
-== Running from EMR
-
-:linkattrs:
-
-For a step by step walkthrough of setting up GeoWave on an EMR cluster, please see our link:quickstart.html[Quickstart Guide, window="_blank"].
-

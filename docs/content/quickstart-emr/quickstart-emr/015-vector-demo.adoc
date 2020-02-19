@@ -1,0 +1,261 @@
+<<<
+
+:linkattrs:
+
+== Vector Demo
+
+[IMPORTANT]
+====
+Before starting the vector demo, make sure that your working directory is the current active directory in your command-line tool.
+====
+
+=== Configure GeoWave Data Store
+
+Depending on which key/value store that was configured in the EMR setup, execute the appropriate command to add the store to the GeoWave configuration, replacing `$HOSTNAME` with the `Master public DNS` of the EMR cluster:
+
+. Accumulo
++
+[source, bash]
+----
+geowave store add gdelt --gwNamespace geowave.gdelt -t accumulo --zookeeper $HOSTNAME:2181 --instance accumulo --user geowave --password geowave
+----
+
+. HBase
++
+[source, bash]
+----
+geowave store add gdelt --gwNamespace geowave.gdelt -t hbase --zookeeper $HOSTNAME:2181
+----
+
+. Cassandra
++
+[source, bash]
+----
+geowave store add gdelt --gwNamespace geowave.gdelt -t cassandra  --contactPoints $HOSTNAME:2181
+----
+
+This command adds a connection to the key/value store on EMR under the name `gdelt` for use in future commands.  It configures the connection to put all data for this named store under the `geowave.gdelt` namespace.
+
+=== Add an Index
+
+Before ingesting any data, we need to create an index that describes how the data will be stored in the key/value store.  For this example we will create a simple spatial index.
+
+[source, bash]
+----
+$ geowave index add gdelt spatial -t spatial --partitionStrategy round_robin --numPartitions 32
+----
+
+This command adds a spatial index to the `gdelt` data store with an index name of `gdelt-spatial`, which will be used to reference this index in future commands.  It configured the index to use a round robin partitioning strategy with 32 partitions.
+
+=== Ingest Data
+
+GeoWave has many commands that facilitate ingesting data into a GeoWave data store.  For this example, we want to ingest GDELT data from the local file system, so we will use the link:commands.html#ingest-localToGW[`ingest localToGW`] command.  We will use a bounding box that roughly surrounds Germany to limit the amount of data ingested for the example.
+
+[source, bash]
+----
+$ geowave ingest localToGW -f gdelt --gdelt.cql "BBOX(geometry,5.87,47.2,15.04,54.95)" ./gdelt_data gdelt gdelt-spatial
+----
+
+This command specifies the input format as GDELT using the `-f` option, filters the input data using a CQL bounding box filter, and specifies the input directory for all of the files.  Finally, we tell GeoWave to ingest the data to the `gdelt-spatial` index in the `gdelt` data store.  GeoWave creates an link:overview.html#adapters-types[adapter^] for the new data with the type name `gdeltevent`, which we can use to refer to this data in other commands. The ingest should take about 3-5 minutes.
+
+=== Query the Data
+
+Now that the data has been ingested, we can make queries against it.  The GeoWave programmatic API provides a large variety of options for issuing queries, but for the purposes of this guide, we will use the query language support that is available for vector data.  This query language provides a simple way to perform some of the most common types of queries using a well-known syntax.  To demonstrate this, perform the following query:
+
+[source, bash]
+----
+$ geowave vector query "SELECT * FROM gdelt.gdeltevent LIMIT 10"
+----
+
+This command tells GeoWave to select all attributes from the `gdeltevent` type in the `gdelt` data store, but limits the output to 10 features.  After running this command, you should get a result that is similar to the following:
+
+[literal%nowrap]
+----
++-------------------------+-----------+------------------------------+----------+-----------+----------------+----------------+-------------+-------------------------------------------------------------------------------------------------------+
+| geometry                | eventid   | Timestamp                    | Latitude | Longitude | actor1Name     | actor2Name     | countryCode | sourceUrl                                                                                             |
++-------------------------+-----------+------------------------------+----------+-----------+----------------+----------------+-------------+-------------------------------------------------------------------------------------------------------+
+| POINT (15.0395 50.1904) | 510693819 | Thu Feb 11 00:00:00 EST 2016 | 50.1904  | 15.0395   | CZECH          | THAILAND       | EZ          | http://praguemonitor.com/2016/02/11/czech-zoo-acquires-rare-douc-langur-monkeys                       |
+| POINT (15.0395 50.1904) | 510694920 | Thu Feb 11 00:00:00 EST 2016 | 50.1904  | 15.0395   | THAILAND       | CZECH          | EZ          | http://praguemonitor.com/2016/02/11/czech-zoo-acquires-rare-douc-langur-monkeys                       |
+| POINT (14.7186 50.4983) | 508121628 | Wed Feb 03 00:00:00 EST 2016 | 50.4983  | 14.7186   |                | LEBANON        | EZ          | http://praguemonitor.com/2016/02/03/plane-pick-five-czechs-leave-lebanon-wednesday                    |
+| POINT (14.7186 50.4983) | 508121971 | Wed Feb 03 00:00:00 EST 2016 | 50.4983  | 14.7186   | POLICE         |                | EZ          | http://praguemonitor.com/2016/02/03/plane-pick-five-czechs-leave-lebanon-wednesday                    |
+| POINT (14.7186 50.4983) | 508122060 | Wed Feb 03 00:00:00 EST 2016 | 50.4983  | 14.7186   | CZECH          |                | EZ          | http://praguemonitor.com/2016/02/03/plane-pick-five-czechs-leave-lebanon-wednesday                    |
+| POINT (14.7186 50.4983) | 508122348 | Wed Feb 03 00:00:00 EST 2016 | 50.4983  | 14.7186   | FOREIGN MINIST | LEBANON        | EZ          | http://praguemonitor.com/2016/02/03/plane-pick-five-czechs-leave-lebanon-wednesday                    |
+| POINT (14.7186 50.4983) | 508122668 | Wed Feb 03 00:00:00 EST 2016 | 50.4983  | 14.7186   | LEBANON        |                | EZ          | http://praguemonitor.com/2016/02/03/plane-pick-five-czechs-leave-lebanon-wednesday                    |
+| POINT (14.7186 50.4983) | 508122669 | Wed Feb 03 00:00:00 EST 2016 | 50.4983  | 14.7186   | LEBANON        |                | EZ          | http://praguemonitor.com/2016/02/03/plane-pick-five-czechs-leave-lebanon-wednesday                    |
+| POINT (14.7186 50.4983) | 508122679 | Wed Feb 03 00:00:00 EST 2016 | 50.4983  | 14.7186   | LEBANON        | FOREIGN MINIST | EZ          | http://praguemonitor.com/2016/02/03/plane-pick-five-czechs-leave-lebanon-wednesday                    |
+| POINT (14.7186 50.4983) | 508579066 | Thu Feb 04 00:00:00 EST 2016 | 50.4983  | 14.7186   | CZECH          | MEDIA          | EZ          | http://www.ceskenoviny.cz/zpravy/plane-with-five-czechs-flying-from-beirut-to-prague-ministry/1311188 |
++-------------------------+-----------+------------------------------+----------+-----------+----------------+----------------+-------------+-------------------------------------------------------------------------------------------------------+
+----
+
+We can see right away that these results are tagged with the country code `EZ` which falls under Czech Republic.  Since our area of interest is around Germany, perhaps we want to only see events that are tagged with the `GM` country code.  We can do this by adding a CQL filter to the query.
+
+[source, bash]
+----
+$ geowave vector query "SELECT * FROM gdelt.gdeltevent WHERE CQL(countryCode='GM') LIMIT 10"
+----
+
+Now the results show only events that have the `GM` country code.
+
+[literal%nowrap]
+----
++-------------------------+-----------+------------------------------+----------+-----------+------------+------------+-------------+---------------------------------------------------------------------------------------------------------------------------+
+| geometry                | eventid   | Timestamp                    | Latitude | Longitude | actor1Name | actor2Name | countryCode | sourceUrl                                                                                                                 |
++-------------------------+-----------+------------------------------+----------+-----------+------------+------------+-------------+---------------------------------------------------------------------------------------------------------------------------+
+| POINT (13.0333 47.6333) | 508836788 | Fri Feb 05 00:00:00 EST 2016 | 47.6333  | 13.0333   | GERMANY    |            | GM          | http://www.thespreadit.com/gold-bar-lake-keep-69589/                                                                      |
+| POINT (13.0333 47.6333) | 508836797 | Fri Feb 05 00:00:00 EST 2016 | 47.6333  | 13.0333   | GERMANY    | ALBERT     | GM          | http://www.thespreadit.com/gold-bar-lake-keep-69589/                                                                      |
+| POINT (13.0333 47.6333) | 508837466 | Fri Feb 05 00:00:00 EST 2016 | 47.6333  | 13.0333   | ALBERT     | GERMANY    | GM          | http://www.thespreadit.com/gold-bar-lake-keep-69589/                                                                      |
+| POINT (12.9 47.7667)    | 508569746 | Thu Feb 04 00:00:00 EST 2016 | 47.7667  | 12.9      |            | GERMAN     | GM          | http://www.ynetnews.com/articles/0,7340,L-4762071,00.html                                                                 |
+| POINT (12.9 47.7667)    | 508574449 | Thu Feb 04 00:00:00 EST 2016 | 47.7667  | 12.9      | COMPANY    | GOVERNMENT | GM          | http://www.i24news.tv/en/news/international/101671-160204-holocaust-survivors-sue-hungary-for-deportation-of-500-000-jews |
+| POINT (12.9 47.7667)    | 508665355 | Thu Feb 04 00:00:00 EST 2016 | 47.7667  | 12.9      | HUNGARY    | GERMANY    | GM          | http://www.jns.org/news-briefs/2016/2/4/14-holocaust-survivors-sue-hungary-in-us-court                                    |
+| POINT (12.9 47.7667)    | 508773863 | Fri Feb 05 00:00:00 EST 2016 | 47.7667  | 12.9      |            | GERMAN     | GM          | http://jpupdates.com/2016/02/04/14-holocaust-survivors-sue-hungary-in-u-s-court/                                          |
+| POINT (12.9 47.7667)    | 508775266 | Fri Feb 05 00:00:00 EST 2016 | 47.7667  | 12.9      | HUNGARY    | GERMANY    | GM          | http://jpupdates.com/2016/02/04/14-holocaust-survivors-sue-hungary-in-u-s-court/                                          |
+| POINT (12.9 47.7667)    | 509245139 | Sat Feb 06 00:00:00 EST 2016 | 47.7667  | 12.9      |            | GERMAN     | GM          | https://theuglytruth.wordpress.com/2016/02/06/hungary-holocaust-survivors-sue-hungarian-government/                       |
+| POINT (12.9 47.7667)    | 509327879 | Sun Feb 07 00:00:00 EST 2016 | 47.7667  | 12.9      |            | LARI       | GM          | http://blackgirllonghair.com/2016/02/the-black-victims-of-the-holocaust-in-nazi-germany/                                  |
++-------------------------+-----------+------------------------------+----------+-----------+------------+------------+-------------+---------------------------------------------------------------------------------------------------------------------------+
+----
+
+If we wanted to see how many events belong to to the `GM` country code, we can perform an aggregation query.
+
+[source, bash]
+----
+$ geowave vector query "SELECT COUNT(*) FROM gdelt.gdeltevent WHERE CQL(countryCode='GM')"
+----
+
+[literal%nowrap]
+----
++----------+
+| COUNT(*) |
++----------+
+| 81897    |
++----------+
+----
+
+We can also perform multiple aggregations on the same data in a single query. The following query counts the number of entries that have set `actor1Name` and how many have set `actor2Name`.
+
+[source, bash]
+----
+$ geowave vector query "SELECT COUNT(actor1Name), COUNT(actor2Name) FROM gdelt.gdeltevent"
+----
+
+[literal%nowrap]
+----
++-------------------+-------------------+
+| COUNT(actor1Name) | COUNT(actor2Name) |
++-------------------+-------------------+
+| 93750             | 80608             |
++-------------------+-------------------+
+----
+
+We can also do bounding box aggregations.  For example, if we wanted to see the bounding box of all the data that has `HUNGARY` set as the `actor1Name`, we could do the following:
+
+[source, bash]
+----
+$ geowave vector query "SELECT BBOX(*), COUNT(*) AS total_events FROM gdelt.gdeltevent WHERE CQL(actor1Name='HUNGARY')"
+----
+
+[literal%nowrap]
+----
++------------------------------------------+--------------+
+| BBOX(*)                                  | total_events |
++------------------------------------------+--------------+
+| Env[6.1667 : 14.7174, 47.3333 : 53.5667] | 408          |
++------------------------------------------+--------------+
+----
+
+[NOTE]
+====
+In these examples each query was output to console, but there are options on the command that allow the query results to be output to several formats, including geojson, shapefile, and CSV.
+====
+
+For more information about vector queries, see the link:userguide.html#vector-queries[vector queries, window="_blank"] section of the User Guide.
+
+=== Kernel Density Estimation (KDE)
+
+We can also perform analytics on data that has been ingested into GeoWave.  In this example, we will perform the Kernel Density Estimation (KDE) analytic.
+
+[source, bash]
+----
+$ geowave analytic kde --featureType gdeltevent --minLevel 5 --maxLevel 26 --minSplits 32 --maxSplits 32 --coverageName gdeltevent_kde --hdfsHostPort ${HOSTNAME}:8020 --jobSubmissionHostPort ${HOSTNAME}:8032 --tileSize 1 gdelt gdelt
+----
+
+This command tells GeoWave to perform a Kernel Density Estimation on the `gdeltevent` type.  It specifies that the KDE should be run at zoom levels 5-26 and that the new raster generated should be under the type name `gdeltevent_kde`.  It also specifies that the minimum and maximum splits should be 32, which is the number of partitions that were created for the index.  It  then points the analytic to the HDFS and resource manager ports on the EMR cluster.  Finally, it specifies the input and output data store as our `gdelt` store.  It is possible to output the results of the KDE to a different data store, but for this demo, we will use the same one. The KDE can take 5-10 minutes to complete due to the size of the dataset.
+
+=== Visualizing the Data
+
+Now that we have prepared our vector and KDE data, we can visualize it by using the GeoServer plugin.  GeoWave provides an embedded GeoServer with the command-line tools.
+
+==== Configure GeoServer
+
+Because GeoServer is running on the EMR cluster, we need to configure GeoWave to communicate with it.  Execute the following command, replacing `$HOSTNAME` with the `Master public DNS` of the EMR cluster:
+
+[source, bash]
+----
+$ geowave config geoserver "$HOSTNAME:8000"
+----
+
+==== Add Layers
+
+GeoWave provides commands that make adding layers to a GeoServer instance a simple process.  In this example, we can add both the `gdeltevent` and `gdeltevent_kde` types to GeoServer with a single command.
+
+[source, bash]
+----
+$ geowave gs layer add gdelt --add all
+----
+
+This command tells GeoWave to add all raster and vector types from the `gdelt` data store to GeoServer.
+
+==== Add Styles
+
+We already downloaded the styles that we want to use to visualize our data as part of the preparation step. The KDEColorMap style will be used for the heatmap produced by the KDE analytic. The SubsamplePoints style will be used to efficiently render the points from the `gdeltevent` type. All we need to do is add them to GeoServer.
+
+[source, bash]
+----
+$ geowave gs style add kdecolormap -sld KDEColorMap.sld
+$ geowave gs style add SubsamplePoints -sld SubsamplePoints.sld
+----
+
+Now we can update our layers to use these styles.
+
+[source, bash]
+----
+$ geowave gs style set gdeltevent_kde --styleName kdecolormap
+$ geowave gs style set gdeltevent --styleName SubsamplePoints
+----
+
+==== View the Layers
+
+The GeoServer web interface can be accessed in your browser:
+
+- ${Master_public_DNS}:8000/geoserver/web
+
+Login to see the layers.
+
+- **Username:** admin
+
+- **Password:** geoserver
+
+.GeoServer Homepage
+image::geoserver-home.png[scaledwidth="100%"]
+
+Select "Layer Preview" from the menu on the left side.  You should now see our two layers in the layer list.
+
+.GeoServer Layer Preview
+image::layer-preview.png[scaledwidth="100%"]
+
+Click on the OpenLayers link by any of these layers to see them in an interactive map.
+
+**gdeltevent** - Shows all of the GDELT events in a bounding box around Germany as individual points. Clicking on the map preview will show you the feature data associated with the clicked point.
+
+.Preview of `gdeltevent` Layer
+image::gdeltevent_preview.png[scaledwidth="100%"]
+
+**gdeltevent_kde** - Shows the heat map produced by the KDE analytic in a bounding box around Germany.
+
+[NOTE]
+====
+For this screenshot, the background color of the preview was set to black by appending `&BGCOLOR=0x000000` to the URL.
+====
+
+.Preview of `gdeltevent_kde` Layer
+image::gdeltevent_kde_preview.png[scaledwidth="100%"]
+

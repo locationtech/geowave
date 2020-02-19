@@ -48,6 +48,7 @@
       <mountPoint id="171" root="" location="lib/utilities/geoserver" mode="755" />
       <mountPoint id="172" root="" location="lib/utilities/landsat8" mode="755" />
       <mountPoint id="173" root="" location="lib/utilities/sentinel2" mode="755" />
+      <mountPoint id="620" root="" location="lib/utilities/python" mode="755" />
       <mountPoint id="175" root="" location="lib/analytics" mode="755" />
       <mountPoint id="176" root="" location="lib/analytics/spark" mode="755" />
       <mountPoint id="177" root="" location="lib/analytics/mapreduce" mode="755" />
@@ -134,6 +135,9 @@
       <dirEntry mountPoint="173" file="../../../extensions/cli/sentinel2/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
         <exclude />
       </dirEntry>
+      <dirEntry mountPoint="620" file="../../../python/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
       <dirEntry mountPoint="176" file="../../../analytics/spark/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
         <exclude />
       </dirEntry>
@@ -152,7 +156,7 @@
       <dirEntry mountPoint="621" file="../../../extensions/cli/bigtable-embed/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
         <exclude />
       </dirEntry>
-      <dirEntry mountPoint="478" file="../../../extensions/cli/cassandra-embed/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+      <dirEntry mountPoint="478" file="../../../extensions/cli/cassandra-embed/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
         <exclude />
       </dirEntry>
       <dirEntry mountPoint="622" file="../../../extensions/cli/dynamodb-embed/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
@@ -240,6 +244,13 @@
               <component id="59" />
             </dependencies>
           </component>
+          <component name="Python Tools" id="621" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
+            <description />
+            <include all="false">
+              <entry location="lib/utilities/python" fileType="regular" />
+            </include>
+            <dependencies />
+          </component>
         </components>
       </folder>
       <folder name="Services" id="131" customizedId="" displayDescription="false" hideHelpButton="false" expanded="true">
@@ -284,6 +295,7 @@
             </include>
             <dependencies>
               <component id="59" />
+              <component id="61" />
             </dependencies>
           </component>
           <component name="Cassandra" id="106" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
@@ -456,21 +468,27 @@
             <include all="false">
               <entry location="lib/services/third-party/embedded-bigtable" fileType="regular" />
             </include>
-            <dependencies />
+            <dependencies>
+              <component id="108" />
+            </dependencies>
           </component>
           <component name="Embedded Cassandra" id="479" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
             <description />
             <include all="false">
               <entry location="lib/services/third-party/embedded-cassandra" fileType="regular" />
             </include>
-            <dependencies />
+            <dependencies>
+              <component id="106" />
+            </dependencies>
           </component>
           <component name="Embedded DynamoDB" id="625" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
             <description />
             <include all="false">
               <entry location="lib/services/third-party/embedded-dynamodb" fileType="regular" />
             </include>
-            <dependencies />
+            <dependencies>
+              <component id="104" />
+            </dependencies>
           </component>
           <component name="Embedded HBase" id="72" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
             <description />
@@ -487,7 +505,9 @@
             <include all="false">
               <entry location="lib/services/third-party/embedded-kudu" fileType="regular" />
             </include>
-            <dependencies />
+            <dependencies>
+              <component id="105" />
+            </dependencies>
           </component>
           <component name="Embedded Redis" id="100" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
             <description />
@@ -529,7 +549,7 @@
   </files>
   <launchers>
     <launcher name="geowave" id="65" customizedId="" external="false" excludeFromMenu="false" unixMode="755" unixAutoStart="true" menuName="" icnsFile="" customMacBundleIdentifier="false" macBundleIdentifier="" swtApp="false" fileset="" macBundleBinary="JavaApplicationStub" addMacEntitlements="false" macEntitlementsFile="" useCustomMacosExecutableName="false" customMacosExecutableName="" useJavaMinVersionOverride="false" javaMinVersionOverride="" useJavaMaxVersionOverride="false" javaMaxVersionOverride="" checkUpdater="false" updateExecutionMode="unattendedProgress" unattendedUpdateTitle="${i18n:updater.WindowTitle(&quot;${compiler:sys.fullName}&quot;)}">
-      <executable name="geowave" type="1" iconSet="false" iconFile="" executableDir="." redirectStderr="false" stderrFile="error.log" stderrMode="overwrite" redirectStdout="false" stdoutFile="output.log" stdoutMode="overwrite" failOnStderrOutput="true" executableMode="2" changeWorkingDirectory="true" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="false" globalSingleInstance="false" singleInstanceActivate="true" dpiAware="java9+">
+      <executable name="geowave" type="1" iconSet="false" iconFile="" executableDir="." redirectStderr="false" stderrFile="error.log" stderrMode="overwrite" redirectStdout="false" stdoutFile="output.log" stdoutMode="overwrite" failOnStderrOutput="true" executableMode="2" changeWorkingDirectory="false" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="false" globalSingleInstance="false" singleInstanceActivate="true" dpiAware="java9+">
         <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" productName="" />
       </executable>
       <splashScreen show="false" width="0" height="0" bitmapFile="" textOverlay="false">
@@ -538,7 +558,7 @@
           <versionLine x="20" y="40" text="version ${compiler:sys.version}" fontSize="8" fontColor="0,0,0" bold="false" />
         </text>
       </splashScreen>
-      <java mainClass="org.locationtech.geowave.core.cli.GeoWaveMain" mainMode="1" vmParameters="-Djava.util.logging.config.file=jul-geowave-cli.properties" arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
+      <java mainClass="org.locationtech.geowave.core.cli.GeoWaveMain" mainMode="1" vmParameters="-Djava.util.logging.config.file=jul-geowave-cli.properties -Dgeowave.home=${installer:sys.installationDir}" arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
         <classPath>
           <scanDirectory location="lib/core" failOnError="false" />
           <scanDirectory location="lib/analytics/mapreduce" failOnError="false" />
@@ -564,6 +584,7 @@
           <scanDirectory location="lib/utilities/geoserver" failOnError="false" />
           <scanDirectory location="lib/utilities/landsat8" failOnError="false" />
           <scanDirectory location="lib/utilities/sentinel2" failOnError="false" />
+          <scanDirectory location="lib/utilities/python" failOnError="false" />
           <scanDirectory location="lib/services/grpc" failOnError="false" />
           <scanDirectory location="lib/services/rest" failOnError="false" />
           <scanDirectory location="lib/services/third-party/embedded-geoserver" failOnError="false" />

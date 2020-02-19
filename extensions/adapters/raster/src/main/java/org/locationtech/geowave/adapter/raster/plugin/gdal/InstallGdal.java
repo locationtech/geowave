@@ -37,8 +37,7 @@ public class InstallGdal {
 
   public static void main(final String[] args) throws IOException {
     if (isMac()) {
-      LOGGER.warn(
-          "Mac OS GDAL native binaries unavailable for download. Run 'brew install --with-swig-java gdal' instead.");
+      LOGGER.warn("Mac OS GDAL native binaries unavailable for download.");
       return;
     }
     File gdalDir = null;

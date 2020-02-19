@@ -1,24 +1,31 @@
-//:geowave-listcs(1)
-//:===================
-//::doctype: manpage
+//:= geowave-gs-cs-list(1)
+:doctype: manpage
 
-NAME
-//:----
+[[gs-cs-list-name]]
+==== NAME
 
-geowave gs cs list - List GeoServer coverage stores
+geowave-gs-cs-list - List GeoServer coverage stores
 
-SYNOPSIS
-//:--------
+[[gs-cs-list-synopsis]]
+==== SYNOPSIS
 
-geowave gs cs list [options]
+  geowave gs cs list [options]
+  geowave geoserver coveragestore list [options]
 
-DESCRIPTION
-//:-----------
+[[gs-cs-list-description]]
+==== DESCRIPTION
 
-This command will list all GeoServer coverage stores
+This command lists all coverage stores in the configured GeoServer instance.
 
-OPTIONS
-//:-------
+[[gs-cs-list-options]]
+==== OPTIONS
 
-- -ws, --workspace
- * <workspace name>
+*-ws, --workspace* _<workspace>_::
+  The GeoServer workspace to use.
+
+[[gs-cs-list-examples]]
+==== EXAMPLES
+
+List all coverage stores in GeoServer:
+
+  geowave gs cs list

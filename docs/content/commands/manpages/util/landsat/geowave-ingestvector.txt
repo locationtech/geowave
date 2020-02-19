@@ -1,43 +1,48 @@
-//:geowave-ingestvector(1)
-//:=====================
-//::doctype: manpage
+//:= geowave-util-landsat-ingestvector(1)
+:doctype: manpage
 
-NAME
-//:----
+[[util-landsat-ingestvector-name]]
+==== NAME
 
-geowave util landsat ingestvector - Ingest routine for searching landsat scenes that match certain criteria and ingesting the scene and band metadata into GeoWave's vector store.
+geowave-util-landsat-ingestvector - Ingest Landsat 8 scene and band metadata into a data store
 
-SYNOPSIS
-//:--------
+[[util-landsat-ingestvector-synopsis]]
+==== SYNOPSIS
 
-geowave util landsat ingestvector [options] <store name> <comma delimited index list>
+  geowave util landsat ingestvector [options] <store name> <comma delimited index list>
 
-DESCRIPTION
-//:-----------
+[[util-landsat-ingestvector-description]]
+==== DESCRIPTION
 
-This command provides an ingest routine for searching landsat scenes that match certain criteria, and ingesting the scene and band metadata into GeoWave's vector store.
+This command ingests Landsat 8 scene and band metadata into a GeoWave data store.
 
-OPTIONS
-//:-------
+[[util-landsat-ingestvector-options]]
+==== OPTIONS
 
-- --cql
- * An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: shape (Geometry), acquisitionDate (Date), cloudCover (double), processingLevel (String), path (int), row (int) and the feature ID is entityId for the scene.  Additionally attributes of the individuals band can be used such as band (String), sizeMB (double), and bandDownloadUrl (String)
- * Default: <empty string>
-- --nbestbands
- * An option to identify and only use a set number of bands with the best cloud cover
- * Default: 0
-- --nbestperspatial
- * A boolean flag, when applied with --nbestscenes or --nbestbands will aggregate scenes and/or bands by path/row
- * Default: false
-- --nbestscenes
- * An option to identify and only use a set number of scenes with the best cloud cover
- * Default: 0
-- --sincelastrun
- * An option to check the scenes list from the workspace and if it exists, to only ingest data since the last scene.
- * Default: false
-- --usecachedscenes
- * An option to run against the existing scenes catalog in the workspace directory if it exists.
- * Default: false
-- -ws, --workspaceDir
- * A local directory to write temporary files needed for landsat 8 ingest. Default is <TEMP_DIR>/landsat8
- * Default: landsat8
+*--cql* _<filter>_::
+  An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: `shape` (Geometry), `acquisitionDate` (Date), `cloudCover` (double), `processingLevel` (String), `path` (int), `row` (int) and the feature ID is `entityId` for the scene. Additionally attributes of the individuals band can be used such as `band` (String), `sizeMB` (double), and `bandDownloadUrl` (String).
+
+*--nbestbands* _<count>_::
+  An option to identify and only use a set number of bands with the best cloud cover.
+
+*--nbestperspatial*::
+  A flag that when applied with `--nbestscenes` or `--nbestbands` will aggregate scenes and/or bands by path/row.
+
+*--nbestscenes* _<count>_::
+  An option to identify and only use a set number of scenes with the best cloud cover.
+
+*--sincelastrun*::
+  If specified, check the scenes list from the workspace and if it exists, only ingest data since the last scene.
+
+*--usecachedscenes*::
+  If specified, run against the existing scenes catalog in the workspace directory if it exists.
+
+*-ws, --workspaceDir* _<path>_::
+  A local directory to write temporary files needed for landsat 8 ingest.  Default is `landsat8`.
+
+[[util-landsat-ingestvector-examples]]
+==== EXAMPLES
+
+Ingest scene and band metadata of the B8 band of Landsat raster data over a bounding box that roughly surrounds Berlin, Germany to a `landsatvector` data store:
+
+  geowave util landsat ingestvector --nbestperspatial --nbestscenes 1 --usecachedscenes --cql "BBOX(shape,13.0535,52.3303,13.7262,52.6675) AND band='B8' AND cloudCover>0" -ws ./landsat landsatvector spatial-idx

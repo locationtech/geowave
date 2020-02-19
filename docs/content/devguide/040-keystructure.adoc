@@ -1,6 +1,0 @@
-[[architecture-accumulo]]
-=== Key Structure
-
-image::accumulo.png[scaledwidth="100%",width="100%",alt="Accumulo Data Schema", title="Accumulo Data Schema"]
-
-The above diagram describes the default structure of entries in the data store. The _Index ID_ comes directly from the tiered SFC implementation. We do not impose a requirement that _Data IDs_ are globally unique but they should be unique for the adapter. Therefore, the pairing of _Adapter ID_ and _Data ID_ define a unique identifier for a data element. The lengths are stored within the _Row ID_ as 4 byte integers. This enables fully reading the _Row ID_ because these IDs can be of variable length. The number of duplicates is stored within the _Row ID_ as well to inform the de-duplication filter whether this element needs to be temporarily stored in order to ensure no duplicates are sent to the caller. The _Adapter ID_ is within the _Row ID_ to enforce unique _Row IDs_ as a whole row iterator is used to aggregate fields for the distributable filters. The _Adapter ID_ is also used as the column family as the mechanism for adapter-specific queries to fetch only the appropriate column families.

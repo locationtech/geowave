@@ -1,0 +1,24 @@
+//:= geowave-store-list(1)
+:doctype: manpage
+
+[[store-list-name]]
+==== NAME
+
+geowave-store-list - List all configured data stores
+
+[[store-list-synopsis]]
+==== SYNOPSIS
+
+  geowave store list
+
+[[store-list-description]]
+==== DESCRIPTION
+
+This command displays all configured data stores and their types.
+
+[[store-list-examples]]
+==== EXAMPLES
+
+List all data stores:
+
+  geowave store list

@@ -33,7 +33,7 @@ import com.beust.jcommander.ParametersDelegate;
 @GeowaveOperation(name = "kmeansspark", parentOperation = AnalyticSection.class)
 @Parameters(commandDescription = "KMeans clustering using Spark ML")
 public class KmeansSparkCommand extends ServiceEnabledCommand<Void> implements Command {
-  @Parameter(description = "<input storename> <output storename>")
+  @Parameter(description = "<input store name> <output store name>")
   private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate
