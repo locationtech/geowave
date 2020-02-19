@@ -421,14 +421,7 @@ public class TieredSpatialJoin extends JoinStrategy {
 
   @Override
   public NumericIndexStrategy createDefaultStrategy(final NumericIndexStrategy indexStrategy) {
-    if (SpatialDimensionalityTypeProvider.isSpatial(indexStrategy)) {
-      return TieredSFCIndexFactory.createFullIncrementalTieredStrategy(
-          SpatialDimensionalityTypeProvider.SPATIAL_DIMENSIONS,
-          new int[] {
-              SpatialDimensionalityTypeProvider.LONGITUDE_BITS,
-              SpatialDimensionalityTypeProvider.LATITUDE_BITS},
-          SFCType.HILBERT);
-    } else if (SpatialTemporalDimensionalityTypeProvider.isSpatialTemporal(indexStrategy)) {
+    if (SpatialTemporalDimensionalityTypeProvider.isSpatialTemporal(indexStrategy)) {
       final SpatialTemporalOptions options = new SpatialTemporalOptions();
       return TieredSFCIndexFactory.createFullIncrementalTieredStrategy(
           SpatialTemporalDimensionalityTypeProvider.SPATIAL_TEMPORAL_DIMENSIONS,
@@ -438,6 +431,13 @@ public class TieredSpatialJoin extends JoinStrategy {
               options.getBias().getTemporalPrecision()},
           SFCType.HILBERT,
           options.getMaxDuplicates());
+    } else if (SpatialDimensionalityTypeProvider.isSpatial(indexStrategy)) {
+      return TieredSFCIndexFactory.createFullIncrementalTieredStrategy(
+          SpatialDimensionalityTypeProvider.SPATIAL_DIMENSIONS,
+          new int[] {
+              SpatialDimensionalityTypeProvider.LONGITUDE_BITS,
+              SpatialDimensionalityTypeProvider.LATITUDE_BITS},
+          SFCType.HILBERT);
     }
 
     return null;

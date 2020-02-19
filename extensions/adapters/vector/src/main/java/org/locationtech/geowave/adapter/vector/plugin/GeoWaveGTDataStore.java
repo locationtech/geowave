@@ -36,9 +36,8 @@ import org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityManag
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.store.dimension.LatitudeField;
-import org.locationtech.geowave.core.geotime.store.dimension.LongitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
+import org.locationtech.geowave.core.geotime.util.SpatialIndexUtils;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.DataStoreOptions;
@@ -143,7 +142,7 @@ public class GeoWaveGTDataStore extends ContentDataStore {
     if (spatialOnly) {
       final List<Index> filtered = Lists.newArrayList();
       for (int i = 0; i < unfiltered.length; i++) {
-        if (SpatialDimensionalityTypeProvider.isSpatial(unfiltered[i])) {
+        if (SpatialIndexUtils.hasSpatialDimensions(unfiltered[i])) {
           filtered.add(unfiltered[i]);
         }
       }
@@ -335,8 +334,8 @@ public class GeoWaveGTDataStore extends ContentDataStore {
         boolean hasLong = false;
         boolean hasTime = false;
         for (final NumericDimensionField<?> dim : dims) {
-          hasLat |= dim instanceof LatitudeField;
-          hasLong |= dim instanceof LongitudeField;
+          hasLat |= SpatialIndexUtils.isLatitudeDimension(dim);
+          hasLong |= SpatialIndexUtils.isLongitudeDimension(dim);
           hasTime |= dim instanceof TimeField;
         }
 

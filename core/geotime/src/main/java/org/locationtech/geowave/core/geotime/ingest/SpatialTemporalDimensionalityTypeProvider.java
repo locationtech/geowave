@@ -27,6 +27,7 @@ import org.locationtech.geowave.core.geotime.store.dimension.LatitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.LongitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.SpatialIndexUtils;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.SFCFactory.SFCType;
@@ -309,13 +310,9 @@ public class SpatialTemporalDimensionalityTypeProvider implements
     for (final NumericDimensionDefinition definition : dimensions) {
       if (definition instanceof TimeDefinition) {
         hasTime = true;
-      } else if ((definition instanceof LatitudeDefinition)
-          || (definition instanceof CustomCRSUnboundedSpatialDimensionY)
-          || (definition instanceof CustomCRSBoundedSpatialDimensionY)) {
+      } else if (SpatialIndexUtils.isLatitudeDimension(definition)) {
         hasLat = true;
-      } else if ((definition instanceof LongitudeDefinition)
-          || (definition instanceof CustomCRSUnboundedSpatialDimensionX)
-          || (definition instanceof CustomCRSBoundedSpatialDimensionX)) {
+      } else if (SpatialIndexUtils.isLongitudeDimension(definition)) {
         hasLon = true;
       }
     }
