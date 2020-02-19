@@ -27,7 +27,6 @@
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-netcdf</artifactId>
 			<version>${geotools.version}</version>
-			<scope>${geotools.scope}</scope>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
