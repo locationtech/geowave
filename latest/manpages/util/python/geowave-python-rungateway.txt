@@ -1,0 +1,24 @@
+//:= geowave-util-python-rungateway(1)
+:doctype: manpage
+
+[[util-python-rungateway-name]]
+==== NAME
+
+geowave-util-python-rungateway - Run a Py4J java gateway
+
+[[util-python-rungateway-synopsis]]
+==== SYNOPSIS
+
+  geowave util python rungateway
+
+[[util-python-rungateway-description]]
+==== DESCRIPTION
+
+This command starts the Py4J java gateway required by `pygw`.
+
+[[util-python-rungateway-examples]]
+==== EXAMPLES
+
+Run the Py4J java gateway:
+
+  geowave util python rungateway

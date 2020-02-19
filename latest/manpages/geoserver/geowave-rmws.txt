@@ -1,0 +1,25 @@
+//:= geowave-gs-ws-rm(1)
+:doctype: manpage
+
+[[gs-ws-rm-name]]
+==== NAME
+
+geowave-gs-ws-rm - Remove GeoServer workspace
+
+[[gs-ws-rm-synopsis]]
+==== SYNOPSIS
+
+  geowave gs ws rm <workspace name>
+  geowave geoserver workspace rm <workspace name>
+
+[[gs-ws-rm-description]]
+==== DESCRIPTION
+
+This command removes a workspace from the configured GeoServer instance.
+
+[[gs-ws-rm-examples]]
+==== EXAMPLES
+
+Remove the `geowave` workspace from GeoServer:
+
+  geowave gs ws rm geowave

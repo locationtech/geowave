@@ -1,0 +1,24 @@
+//:= geowave-index-list(1)
+:doctype: manpage
+
+[[index-list-name]]
+==== NAME
+
+geowave-index-list - Display all indices in a data store
+
+[[index-list-synopsis]]
+==== SYNOPSIS
+
+  geowave index list <store name>
+
+[[index-list-description]]
+==== DESCRIPTION
+
+This command displays all indices in a data store.
+
+[[index-list-examples]]
+==== EXAMPLES
+
+Display all indices in the `example` store:
+
+  geowave index list example

@@ -1,0 +1,23 @@
+//:= geowave-util-osm-stage(1)
+:doctype: manpage
+
+[[util-osm-stage-name]]
+==== NAME
+
+geowave-util-osm-stage - Stage OSM data to HDFS
+
+[[util-osm-stage-synopsis]]
+==== SYNOPSIS
+
+  geowave util osm stage [options] <file or directory> <hdfs host:port> <path to base directory to write to>
+
+[[util-osm-stage-description]]
+==== DESCRIPTION
+
+This command will stage OSM data from a local directory and write it to HDFS.
+
+[[util-osm-stage-options]]
+==== OPTIONS
+
+*--extension*::
+  PBF File extension.  Default is `.pbf`.

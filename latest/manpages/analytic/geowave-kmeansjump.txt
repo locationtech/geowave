@@ -1,0 +1,150 @@
+//:= geowave-analytic-kmeansjump(1)
+:doctype: manpage
+
+[[analytic-kmeansjump-name]]
+==== NAME
+
+geowave-analytic-kmeansjump - KMeans Clustering using Jump Method
+
+[[analytic-kmeansjump-synopsis]]
+==== SYNOPSIS
+
+  geowave analytic kmeansjump [options] <store name>
+
+[[analytic-kmeansjump-description]]
+==== DESCRIPTION
+
+This command executes a KMeans Clustering analytic using a Jump Method.
+
+[[analytic-kmeansjump-options]]
+==== OPTIONS
+
+*-conf, --mapReduceConfigFile* _<file>_::
+  MapReduce configuration file.
+
+*$$*$$ -hdfsbase, --mapReduceHdfsBaseDir* _<path>_::
+  Fully qualified path to the base directory in HDFS.
+
+*$$*$$ -jobtracker, --mapReduceJobtrackerHostPort* _<host>_::
+  [REQUIRED (or `-resourceman`)] Hadoop job tracker hostname and port in the format `hostname:port`.
+
+*$$*$$ -resourceman, --mapReduceYarnResourceManager* _<host>_::
+  [REQUIRED (or `-jobtracker`)] Yarn resource manager hostname and port in the format `hostname:port`.
+  
+*-hdfs, --mapReduceHdfsHostPort* _<host>_::
+  HDFS hostname and port in the format `hostname:port`.
+
+*--cdf, --commonDistanceFunctionClass* _<class>_::
+  Distance function class that implements `org.locationtech.geowave.analytics.distance.DistanceFn`.
+  
+*$$*$$ --query.typeNames* _<types>_::
+  The comma-separated list of types to query; by default all types are used.
+
+*--query.auth* _<auths>_::
+  The comma-separated list of authorizations used during extract; by default all authorizations are used.
+
+*--query.index* _<index>_::
+  The specific index to query; by default one is chosen for each adapter.
+  
+*$$*$$ -emx, --extractMaxInputSplit* _<size>_::
+  Maximum HDFS input split size.
+
+*$$*$$ -emn, --extractMinInputSplit* _<size>_::
+  Minimum HDFS input split size.
+
+*-eq, --extractQuery* _<query>_::
+  Query
+  
+*-ofc, --outputOutputFormat* _<class>_::
+  Output format class.
+  
+*-ifc, --inputFormatClass* _<class>_::
+  Input format class.
+
+*-orc, --outputReducerCount* _<count>_::
+  Number of reducers For output.
+
+*-cce, --centroidExtractorClass* _<class>_::
+  Centroid exractor class that implements `org.locationtech.geowave.analytics.extract.CentroidExtractor`.
+
+*-cid, --centroidIndexId* _<index>_::
+  Index to use for centroids.
+
+*-cfc, --centroidWrapperFactoryClass* _<class>_::
+  A factory class that implements `org.locationtech.geowave.analytics.tools.AnalyticItemWrapperFactory`.
+
+*-czl, --centroidZoomLevel* _<level>_::
+  Zoom level for centroids.
+
+*-cct, --clusteringConverganceTolerance* _<tolerance>_::
+  Convergence tolerance.
+
+*$$*$$ -cmi, --clusteringMaxIterations* _<count>_::
+  Maximum number of iterations when finding optimal clusters.
+
+*-crc, --clusteringMaxReducerCount* _<count>_::
+  Maximum clustering reducer count.
+
+*$$*$$ -zl, --clusteringZoomLevels* _<count>_::
+  Number of zoom levels to process.
+
+*-dde, --commonDimensionExtractClass* _<class>_::
+  Dimension extractor class that implements `org.locationtech.geowave.analytics.extract.DimensionExtractor`.
+
+*-ens, --extractDataNamespaceUri* _<namespace>_::
+  Output data namespace URI.
+
+*-ede, --extractDimensionExtractClass* _<class>_::
+  Class to extract dimensions into a simple feature output.
+
+*-eot, --extractOutputDataTypeId* _<type>_::
+  Output data type ID.
+
+*-erc, --extractReducerCount* _<count>_::
+  Number of reducers For initial data extraction and de-duplication.
+
+*-b, --globalBatchId* _<id>_::
+  Batch ID.
+
+*-pb, --globalParentBatchId* _<id>_::
+  Parent Batch ID.
+
+*-hns, --hullDataNamespaceUri* _<namespace>_::
+  Data type namespace for a centroid item.
+
+*-hdt, --hullDataTypeId* _<type>_::
+  Data type ID for a centroid item.
+
+*-hid, --hullIndexId* _<index>_::
+  Index to use for centroids.
+
+*-hpe, --hullProjectionClass* _<class>_::
+  Class to project on to 2D space. Implements `org.locationtech.geowave.analytics.tools.Projection`.
+
+*-hrc, --hullReducerCount* _<count>_::
+  Centroid reducer count.
+
+*-hfc, --hullWrapperFactoryClass* _<class>_::
+  Class to create analytic item to capture hulls. Implements `org.locationtech.geowave.analytics.tools.AnalyticItemWrapperFactory`.
+
+*$$*$$ -jkp, --jumpKplusplusMin* _<value>_::
+  The minimum K when K-means parallel takes over sampling.
+
+*$$*$$ -jrc, --jumpRangeOfCentroids* _<ranges>_::
+  Comma-separated range of centroids (e.g. 2,100).
+
+[[analytic-kmeansjump-examples]]
+==== EXAMPLES
+
+The minimum clustering iterations is 15 (`-cmi`), the zoom level is 1 (`-zl`), the maximum HDFS input split is 4000 (`-emx`), the minimum HDFS input split is 100 (`-emn`), the temporary files needed by this job are stored in `hdfs:/host:port/user/rwgdrummer/temp_dir_kmeans` (`-hdfsbase`), the HDFS IPC port is `localhost:53000` (`-hdfs`), the yarn job tracker is at `localhost:8032` (`-jobtracker`), the type used is 'hail' (`query.typeNames`), the minimum K for K-means parallel sampling is 3 (`-jkp`), the comma separated range of centroids is 4,8 (`-jrc`), and the data store parameters are loaded from `my_store`.
+
+  geowave analytic kmeansjump -cmi 15 -zl 1 -emx 4000 -emn 100 -hdfsbase /usr/rwgdrummer/temp_dir_kmeans -hdfs localhost:53000 -jobtracker localhost:8032 --query.typeNames hail -jkp 3 -jrc 4,8 my_store
+
+[[analytic-kmeansjump-execution]]
+==== EXECUTION
+
+KMeansJump uses most of the same parameters from KMeansParallel.  It tries every K value given (-jrc) to find the value with least entropy.  The other value, `jkp`, will specify which K values should use K-means parallel for sampling versus a single sampler (which uses a random sample).  For instance, if you specify 4,8 for `jrc` and 6 for `jkp`, then K=4,5 will use the K-means parallel sampler, while 6,7,8 will use the single sampler.
+
+KMeansJump executes by executing several iterations, running the sampler (described above, which also calls the normal K-means algorithm to determine centroids) and then executing a K-means distortion job, which calculates the entropy of the calculated centroids.
+
+Look at the `EXECUTION` documentation for the `kmeansparallel` command for discussion of output, tolerance, and performance variables.

@@ -1,0 +1,24 @@
+//:= geowave-store-copy(1)
+:doctype: manpage
+
+[[store-copy-name]]
+==== NAME
+
+geowave-store-copy - Copy a data store
+
+[[store-copy-synopsis]]
+==== SYNOPSIS
+
+  geowave store copy <input store name> <output store name>
+
+[[store-copy-description]]
+==== DESCRIPTION
+
+This command copies all of the data from one data store to another.
+
+[[store-copy-examples]]
+==== EXAMPLES
+
+Copy all data from the `example` data store to the `example_copy` data store:
+
+  geowave store copy example example_copy

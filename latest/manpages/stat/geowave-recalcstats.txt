@@ -1,0 +1,40 @@
+//:= geowave-stat-recalc(1)
+:doctype: manpage
+
+[[stat-recalc-name]]
+==== NAME
+
+geowave-stat-recalc - Recalculate the statistics in a data store
+
+[[stat-recalc-synopsis]]
+==== SYNOPSIS
+
+  geowave stat recalc [options] <store name>
+
+[[stat-recalc-description]]
+==== DESCRIPTION
+
+This command recalculates the statistics of an existing GeoWave data store.  If a type name is provided as an options, only the statistics for that type will be recalculated.
+
+[[stat-recalc-options]]
+==== OPTIONS
+
+*--typeName* _<type>_::
+  If specified, only statistics for the given type will be recalculated.
+
+*--auth* _<authorizations>_::
+  The authorizations used for the statistics calculation.  By default all authorizations are used.
+
+*--json*::
+  If specified, output will be formatted in JSON.
+
+[[stat-recalc-examples]]
+==== EXAMPLES
+
+Recalculate all of the statistics in the `example` data store:
+
+  geowave stat recalc example
+  
+Recalculate all of the statistics for the `hail` type in the `example` data store:
+
+  geowave stat recalc --typeName hail example

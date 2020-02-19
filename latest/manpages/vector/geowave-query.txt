@@ -1,0 +1,74 @@
+//:= geowave-vector-query(1)
+:doctype: manpage
+
+[[vector-query-name]]
+==== NAME
+
+geowave-vector-query - Query vector data using GeoWave Query Language
+
+[[vector-query-synopsis]]
+==== SYNOPSIS
+
+  geowave vector query [options] <query>
+
+[[vector-query-description]]
+==== DESCRIPTION
+
+This command queries vector data using an SQL-like syntax.  The query language currently only supports `SELECT` and `DELETE` statements.
+
+The syntax for `SELECT` statements is as follows:
+
+  SELECT <attributes> FROM <storeName>.<typeName> [ WHERE CQL(<cqlFilter>) ]
+  
+Where `<attributes>` is a comma-separated list of column selectors or aggregation functions, `<storeName>` is the data store name, `<typeName>` is the type name, and `<cqlFilter>` is a CQL filter to filter the results by.
+
+The syntax for `DELETE` statements is as follows:
+
+  DELETE FROM <storeName>.<typeName> [ WHERE CQL(<cqlFilter>) ]
+  
+Where `<storeName>` is the data store name, `<typeName>` is the type name, and `<cqlFilter>` is the filter to delete results by.
+
+[[vector-query-options]]
+==== OPTIONS
+
+*--debug*::
+  If specified, print out additional info for debug purposes.
+  
+*-f, --format* _<format>_::
+  Output format for query results.  Possible values are `console`, `csv`, `shp`, and `geojson`.  Both `shp` and `geojson` formats require that the query results contain at least 1 geometry column.  Default is `console`.
+  
+When the `csv` format is used, additional options are:
+
+*$$*$$ -o, --outputFile* _<file>_::
+  CSV file to output query results to.
+  
+When the `shp` format is used, additional options are:
+
+*$$*$$ -o, --outputFile* _<file>_::
+  Shapefile to output query results to.
+  
+*-t, --typeName* _<name>_::
+  Output feature type name.
+  
+When the `geojson` format is used, additional options are:
+
+*$$*$$ -o, --outputFile* _<file>_::
+  GeoJson file to output query results to.
+  
+*-t, --typeName* _<name>_::
+  Output feature type name.
+  
+[[vector-query-examples]]
+==== EXAMPLES
+
+Calculate the total population of countries that intersect a bounding box that covers a region of Europe:
+
+  geowave vector query "SELECT SUM(population) FROM example.countries WHERE CQL(BBOX(geom, 7, 46, 23, 51))"
+  
+Select only countries that have a population over 100 million:
+
+  geowave vector query "SELECT * FROM example.countries WHERE CQL(population>100000000)"
+  
+Output country names and populations to a CSV file:
+
+  geowave vector query -f csv -o myfile.csv "SELECT name, population FROM example.countries"

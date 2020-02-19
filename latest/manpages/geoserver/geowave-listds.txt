@@ -1,0 +1,31 @@
+//:= geowave-gs-ds-list(1)
+:doctype: manpage
+
+[[gs-ds-list-name]]
+==== NAME
+
+geowave-gs-ds-list - List GeoServer stores
+
+[[gs-ds-list-synopsis]]
+==== SYNOPSIS
+
+  geowave gs ds list [options]
+  geowave geoserver datastore list [options]
+
+[[gs-ds-list-description]]
+==== DESCRIPTION
+
+This command lists stores from the configured GeoServer instance.
+
+[[gs-ds-list-options]]
+==== OPTIONS
+
+*-ws, --workspace* _<workspace>_::
+  The GeoServer workspace to use.
+
+[[gs-ds-list-examples]]
+==== EXAMPLES
+
+List all stores in GeoServer:
+
+  geowave gs ds list

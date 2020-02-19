@@ -1,0 +1,25 @@
+//:= geowave-gs-ds-getsa(1)
+:doctype: manpage
+
+[[gs-ds-getsa-name]]
+==== NAME
+
+geowave-gs-ds-getsa - Get type info from a GeoWave store
+
+[[gs-ds-getsa-synopsis]]
+==== SYNOPSIS
+
+  geowave gs ds getsa <store name>
+  geowave geoserver datastore getstoreadapters <store name>
+
+[[gs-ds-getsa-description]]
+==== DESCRIPTION
+
+This command returns information about all the GeoWave types in a store from the configured GeoServer instance.
+
+[[gs-ds-getsa-examples]]
+==== EXAMPLES
+
+Get information about all the GeoWave types in the `my_store` store on GeoServer:
+
+  geowave gs ds getsa my_store

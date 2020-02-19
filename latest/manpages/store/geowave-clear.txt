@@ -1,0 +1,24 @@
+//:= geowave-store-clear(1)
+:doctype: manpage
+
+[[store-clear-name]]
+==== NAME
+
+geowave-store-clear - Clear ALL data from a GeoWave data store and delete tables
+
+[[store-clear-synopsis]]
+==== SYNOPSIS
+
+  geowave store clear <store name>
+
+[[store-clear-description]]
+==== DESCRIPTION
+
+This command clears ALL data from a GeoWave store and deletes tables.
+
+[[store-clear-examples]]
+==== EXAMPLES
+
+Clear all data from the `example` data store:
+
+  geowave store clear example

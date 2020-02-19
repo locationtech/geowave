@@ -1,0 +1,25 @@
+//:= geowave-gs-fl-rm(1)
+:doctype: manpage
+
+[[gs-fl-rm-name]]
+==== NAME
+
+geowave-gs-fl-rm - Remove GeoServer feature Layer
+
+[[gs-fl-rm-synopsis]]
+==== SYNOPSIS
+
+  geowave gs fl rm <layer name>
+  geowave geoserver featurelayer rm <layer name>
+
+[[gs-fl-rm-description]]
+==== DESCRIPTION
+
+This command removes a feature layer from the configured GeoServer instance.
+
+[[gs-fl-rm-examples]]
+==== EXAMPLES
+
+Remove the `hail` layer from GeoServer:
+
+  geowave gs fl rm hail

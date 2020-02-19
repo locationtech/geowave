@@ -1,0 +1,31 @@
+//:= geowave-gs-cv-list(1)
+:doctype: manpage
+
+[[gs-cv-list-name]]
+==== NAME
+
+geowave-gs-cv-list - List GeoServer coverages
+
+[[gs-cv-list-synopsis]]
+==== SYNOPSIS
+
+  geowave gs cv list [options] <coverage store name>
+  geowave geoserver coverage list [options] <coverage store name>
+
+[[gs-cv-list-description]]
+==== DESCRIPTION
+
+This command lists all coverages from a given coverage store in the configured GeoServer instance.
+
+[[gs-cv-list-options]]
+==== OPTIONS
+
+*-ws, --workspace* _<workspace>_::
+  The GeoServer workspace to use.
+
+[[gs-cv-list-examples]]
+==== EXAMPLES
+
+List all coverages in the `cov_store` coverage store on GeoServer:
+
+  geowave gs cv list cov_store

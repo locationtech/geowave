@@ -1,0 +1,415 @@
+/*! ===================================
+    GeoWave Global Styles
+ ====================================== */
+
+/*  ----------- Typography ----------- */
+
+hr.title {
+  margin: 0 auto 30px;
+  background: #6c47ff;
+  height: 2px;
+  width: 80px;
+}
+
+.lh-28 {
+  line-height: 28px;
+}
+
+/*  ----------- Animated Hyperlinks ----------- */
+
+a.animated-link {
+  position: relative;
+}
+
+a.animated-link:after {
+  background: none repeat scroll 0 0 transparent;
+  bottom: -2px;
+  content: "";
+  display: block;
+  height: 2px;
+  left: 0;
+  position: absolute;
+  background: #3200fa;
+  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  width: 0;
+}
+
+a.animated-link:hover:after {
+  width: 100%;
+  left: 0;
+}
+
+/*  ----------- Navbar ----------- */
+
+.navbar-brand {
+  z-index: 51;
+}
+
+.navbar-brand>img {
+  max-width: 12rem;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: #ffffff;
+}
+
+.dropdown-toggle::after {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  border: none;
+  content: "";
+  display: inline-block;
+  font-family: "Ionicons";
+  font-size: 15px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  margin-left: 0.55rem;
+  opacity: .5;
+  position: relative;
+  text-rendering: auto;
+  text-transform: none;
+  top: 4px;
+}
+
+.navbar-dark .dropdown-item:hover, .navbar-dark .dropdown-item:focus {
+  color: #3200fa;
+}
+
+.navbar-dark .navbar-toggler {
+  border: 0;
+  z-index: 51;
+}
+
+@media (min-width: 768px) {
+  .navbar-expand-lg .navbar-nav .nav-link {
+    padding: .5rem 1.4rem;
+  }
+}
+
+@media (max-width: 991px) {
+  .navbar-dark .navbar-toggler:hover {
+    opacity: 0.75;
+  }
+  .navbar-collapse {
+    background-color: #17202e;
+    height: 100vh;
+    left: 0;
+    overflow: auto;
+    padding: 6rem 1.5rem;
+    position: absolute;
+    top: 0;
+    transition: none;
+    width: 100%;
+    z-index: 50;
+  }
+}
+
+/*  ----------- Anchor Offsets ----------- */
+
+*[id]:before {
+  display: block;
+  content: " ";
+  margin-top: -75px;
+  height: 75px;
+  visibility: hidden;
+}
+
+.packages-content *[id]:before {
+  display: none;
+}
+
+/*  ----------- Hero ----------- */
+
+.hero {
+  background: linear-gradient(87deg, #1a2132 35%, rgba(38, 37, 80, 1) 100%);
+  /* background: url("../images/hero.svg") no-repeat right -30px;
+  background-size: contain; */
+  overflow-x: hidden;
+}
+
+/* @media (max-width: 1199px) {
+  .hero {
+    background-position: -150px -80px;
+    background-size: cover;
+  }
+} */
+
+/* @media (max-width: 991px) {
+  .hero {
+    background: linear-gradient(87deg, #1a2132 0%, rgba(38, 37, 80, 1) 100%);
+    background-position: center;
+    background-size: initial;
+  }
+} */
+
+.hero-image {
+  position: relative;
+  top: 2rem;
+  width: 100%;
+  margin-left: 4rem;
+}
+
+@media (max-width: 991px) {
+  .hero-image {
+    display: none;
+  }
+}
+
+.hero .lead {
+  opacity: .75;
+}
+
+.hero .btn-lg {
+  padding: .75rem 4.5rem;
+  font-size: 1.2rem;
+}
+
+.hero .display-4 {
+  font-weight: 600;
+}
+
+.downloads>span {
+  font-weight: 600;
+}
+
+.downloads .pipe {
+  font-size: 27px;
+  font-weight: 200;
+  line-height: normal;
+  position: relative;
+  top: 1px;
+}
+
+.downloads>a img {
+  opacity: .95;
+  transition: all .35s ease;
+}
+
+.downloads>a:hover img {
+  opacity: 0.7;
+  transform: translateY(-5px);
+}
+
+.wave {
+  background-image: url('../images/wave.svg');
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: block;
+  margin-top: 50px;
+  min-height: 90px;
+  width: 101%;
+  /* A width of 101% helps Chrome render image to the edge - otherwise a 1px border appears */
+}
+
+@media (min-width: 992px) {
+  .wave {
+    margin-top: 0;
+    min-height: 190px;
+  }
+}
+
+/*  ----------- Why GeoWave  ----------- */
+
+.geo-home-why .card {
+  background-color: #fafbfb;
+  box-shadow: 0 0.15rem 1.5rem rgba(0, 0, 0, 0.11);
+  transition: all .35s ease;
+}
+
+.card-footer {
+  background-color: #fafbfb;
+  border: 0;
+  padding: 0 1.25rem 1rem;
+}
+
+.geo-home-why .card .card-title {
+  font-weight: 400;
+}
+
+.geo-home-why a.card .card-text, .geo-home-why a.card .card-title {
+  color: initial;
+}
+
+.geo-home-why a.card:hover {
+  text-decoration: none !important;
+  box-shadow: 0 0.15rem 1.5rem rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+}
+
+.geo-home-why .card i.icon {
+  font-size: 45px;
+  line-height: initial;
+}
+
+/*  ----------- Image Slider & Lightbox ----------- */
+
+/* --- TODO: Mobile optimization for slides when cvarying caption text --- */
+
+/* remove bullet and space from the list */
+
+ul.swiper-wrapper {
+  list-style-type: none;
+  padding: 0;
+}
+
+/* Swiper styles */
+
+.swiper-container {
+  max-width: 100%;
+  overflow: visible;
+}
+
+/* responive image */
+
+.swiper-container img {
+  width: 100%;
+  height: auto;
+}
+
+.swiper-slide {
+  align-self: center;
+  text-align: center;
+  /* Remove this if you want 1 slide perview - than change slidesPerView js-option to 1 -or- 2+ instead of 'auto' */
+  width: 85%;
+  max-width: 800px;
+}
+
+/* .swiper-slide-active {
+  width: 90%;
+  max-width: 1000px;
+} */
+
+.swiper-slide img {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.swiper-slide .text {
+  background-color: #eaebec;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+@media (min-width: 991px) {
+  .swiper-slide .text {
+    min-height: 230px;
+  }
+}
+
+.swiper-pagination-bullet {
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.75);
+  height: 6px;
+  width: 50px;
+}
+
+/* Swiper custom pagination */
+
+.swiper-pagination-bullet-active {
+  background-color: white;
+}
+
+.pswp__caption__center {
+  text-align: center;
+  max-width: 500px;
+}
+
+/*  ----------- CTA Banner ----------- */
+
+.cta-banner {
+  background: rgb(91, 56, 227);
+  background: url(../images/geowave-logo-abstract.png) no-repeat, linear-gradient(342deg, rgb(80, 46, 214) 27%, rgba(173, 23, 255, 1) 100%);
+  background-size: contain;
+  background-position: top right;
+}
+
+@media (max-width: 992px) {
+  .cta-banner {
+    background: linear-gradient(342deg, rgb(80, 46, 214) 27%, rgba(173, 23, 255, 1) 100%);
+  }
+}
+
+@media (max-width: 768px) {
+  .cta-banner {
+    background: linear-gradient(342deg, rgb(80, 46, 214) 27%, rgba(173, 23, 255, 1) 100%);
+  }
+}
+
+.cta-banner h2 {
+  font-size: 2.25rem;
+}
+
+.cta-banner h3 {
+  font-size: 2.25rem;
+  font-weight: 600;
+  letter-spacing: 0.05rem;
+}
+
+.btn-border-2 {
+  border-width: 2px;
+}
+
+/*  ----------- Footer ----------- */
+
+footer {
+  padding-top: 4rem;
+  font-size: 15px;
+  color: #eaebec;
+}
+
+footer a {
+  color: #eaebec;
+}
+
+footer a:hover {
+  color: #eaebec;
+  opacity: 0.65;
+}
+
+.sub-footer {
+  font-size: 16px;
+  color: #4c6381;
+  margin-top: 3rem;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+  border-top: 1px solid #263345;
+}
+
+.sub-footer a {
+  color: #4c6381;
+}
+
+.footer-nav .row {
+  justify-content: flex-end;
+}
+
+@media (max-width: 991px) {
+  .footer-nav .row {
+    justify-content: flex-start;
+  }
+}
+
+.footer-text {
+  text-align: center;
+}
+
+/*  ----------- Page Preloader ----------- */
+
+.preloader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  background: white;
+  position: fixed;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  z-index: 2000;
+  transition: opacity 0.1s linear;
+  opacity: 1;
+}

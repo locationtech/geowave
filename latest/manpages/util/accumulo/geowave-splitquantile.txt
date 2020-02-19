@@ -1,0 +1,33 @@
+//:= geowave-util-accumulo-splitquantile(1)
+:doctype: manpage
+
+[[util-accumulo-splitquantile-name]]
+==== NAME
+
+geowave-util-accumulo-splitquantile - Set Accumulo splits by providing the number of partitions based on a quantile distribution strategy
+
+[[util-accumulo-splitquantile-synopsis]]
+==== SYNOPSIS
+
+  geowave util accumulo splitquantile [options] <store name>
+
+[[util-accumulo-splitquantile-description]]
+==== DESCRIPTION
+
+This command allows a user to set the Accumulo data store splits by providing the number of partitions based on a quantile distribution strategy.
+
+[[util-accumulo-splitquantile-options]]
+==== OPTIONS
+
+*--indexName* _<name>_::
+  The GeoWave index.  Default is all indices.
+
+*--num* _<count>_::
+  The number of partitions.
+  
+[[util-accumulo-splitquantile-examples]]
+==== EXAMPLES
+
+Split the `spatial_idx` table to 8 partitions using a quantile distribution strategy in the `example` data store:
+
+  geowave util accumulo splitquantile --indexName spatial_idx --num 8 example

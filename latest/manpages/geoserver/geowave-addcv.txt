@@ -1,0 +1,34 @@
+//:= geowave-gs-cv-add(1)
+:doctype: manpage
+
+[[gs-cv-add-name]]
+==== NAME
+
+geowave-gs-cv-add - Add a coverage to GeoServer
+
+[[gs-cv-add-synopsis]]
+==== SYNOPSIS
+
+  geowave gs cv add [options] <coverage name>
+  geowave geoserver coverage add [options] <coverage name>
+
+[[gs-cv-add-description]]
+==== DESCRIPTION
+
+This command adds a coverage to the configured GeoServer instance.
+
+[[gs-cv-add-options]]
+==== OPTIONS
+
+*$$*$$ -cs, --cvgstore* _<name>_::
+  Coverage store name.
+
+*-ws, --workspace* _<workspace>_::
+  GeoServer workspace to add the coverage to.
+
+[[gs-cv-add-examples]]
+==== EXAMPLES
+
+Add a coverage called `cov` to the `cov_store` coverage store on the configured GeoServer instance:
+
+  geowave gs cv add -cs cov_store cov

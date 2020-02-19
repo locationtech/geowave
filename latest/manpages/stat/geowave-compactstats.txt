@@ -1,0 +1,24 @@
+//:= geowave-stat-compact(1)
+:doctype: manpage
+
+[[stat-compact-name]]
+==== NAME
+
+geowave-stat-compact - Combine all statistics in a data store
+
+[[stat-compact-synopsis]]
+==== SYNOPSIS
+
+  geowave stat compact <store name>
+
+[[stat-compact-description]]
+==== DESCRIPTION
+
+This command combines all statistics in a GeoWave data store, which can make the data store more efficient.
+
+[[stat-compact-examples]]
+==== EXAMPLES
+
+Compact all statistics in the `example` data store:
+
+  geowave stat compact example

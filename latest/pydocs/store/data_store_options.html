@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>pygw.store.data_store_options API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>pygw.store.data_store_options</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">#
+# Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file distributed with this work for additional information regarding copyright
+# ownership. All rights reserved. This program and the accompanying materials are made available
+# under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+# available at http://www.apache.org/licenses/LICENSE-2.0.txt
+#===============================================================================================
+
+from pygw.base import GeoWaveObject
+
+class DataStoreOptions(GeoWaveObject):
+    &#34;&#34;&#34;
+    Base options for all data store types.
+    &#34;&#34;&#34;
+
+    def __init__(self, java_ref):
+        super().__init__(java_ref)
+        self._base_options = java_ref.getStoreOptions()
+
+    def set_geowave_namespace(self, namespace):
+        &#34;&#34;&#34;
+        Sets the GeoWave namespace for the data store.
+
+        Args:
+            namespace (str): The namespace to use.
+        &#34;&#34;&#34;
+        self._java_ref.setGeoWaveNamespace(namespace)
+
+    def get_geowave_namespace(self):
+        &#34;&#34;&#34;
+        Returns:
+            The GeoWave namespace for the data store.
+        &#34;&#34;&#34;
+        return self._java_ref.getGeoWaveNamespace()
+
+    def set_persist_data_statistics(self, persist_data_statistics):
+        &#34;&#34;&#34;
+        Sets whether or not to persist data statistics.
+
+        Args:
+            persist_data_statistics (bool): Whether or not to persist data statistics.
+        &#34;&#34;&#34;
+        self._base_options.setPersistDataStatistics(persist_data_statistics)
+
+    def is_persist_data_statistics(self):
+        &#34;&#34;&#34;
+        Returns:
+            True if data statistics are persisted, False otherwise.
+        &#34;&#34;&#34;
+        return self._base_options.isPersistDataStatistics()
+
+    def set_secondary_indexing(self, secondary_indexing):
+        &#34;&#34;&#34;
+        Sets whether or not to enable secondary indexing on the data store.
+
+        Args:
+            secondary_indexing (bool): Whether or not to enable secondary indexing.
+        &#34;&#34;&#34;
+        self._base_options.setSecondaryIndexing(secondary_indexing)
+
+    def is_secondary_indexing(self):
+        &#34;&#34;&#34;
+        Returns:
+            True if secondary indexing is enabled, False otherwise.
+        &#34;&#34;&#34;
+        return self._base_options.isSecondaryIndexing()
+
+    def set_enable_block_cache(self, enable_block_cache):
+        &#34;&#34;&#34;
+        Sets whether or not to enable the block cache.
+
+        Args:
+            enable_block_cache (bool): Whether or not to enable block cache.
+        &#34;&#34;&#34;
+        self._base_options.setEnableBlockCache(enable_block_cache)
+
+    def is_enable_block_cache(self):
+        &#34;&#34;&#34;
+        Returns:
+            True if block cache is enabled, False otherwise.
+        &#34;&#34;&#34;
+        return self._base_options.isEnableBlockCache()
+
+    def set_server_side_library_enabled(self, enable_server_side_library):
+        &#34;&#34;&#34;
+        Sets whether or not to enable server side processing when it is available.
+
+        Args:
+            enable_server_side_library (bool): Whether or not to enable server side processing.
+        &#34;&#34;&#34;
+        self._base_options.setServerSideLibraryEnabled(enable_server_side_library)
+
+    def is_server_side_library_enabled(self):
+        &#34;&#34;&#34;
+        Returns:
+            True if server side processing is enabled, False otherwise.
+        &#34;&#34;&#34;
+        return self._base_options.isServerSideLibraryEnabled()
+
+    def set_max_range_decomposition(self, max_range_decomposition):
+        &#34;&#34;&#34;
+        Sets the maximum number of ranges that a query can be decomposed into.
+
+        Args:
+            max_range_decomposition (int): The maximum range decomposition.
+        &#34;&#34;&#34;
+        self._base_options.setMaxRangeDecomposition(max_range_decomposition)
+
+    def get_max_range_decomposition(self):
+        &#34;&#34;&#34;
+        Returns:
+            The maximum range decomposition for queries.
+        &#34;&#34;&#34;
+        return self._base_options.getMaxRangeDecomposition()
+
+    def set_aggregation_max_range_decomposition(self, max_range_decomposition):
+        &#34;&#34;&#34;
+        Sets the maximum number of ranges that an aggregation query can be decomposed into.
+
+        Args:
+            max_range_decomposition (int): The maximum range decomposition.
+        &#34;&#34;&#34;
+        self._base_options.setAggregationMaxRangeDecomposition(max_range_decomposition)
+
+    def get_aggregation_max_range_decomposition(self):
+        &#34;&#34;&#34;
+        Returns:
+            The maximum range decomposition for aggregations.
+        &#34;&#34;&#34;
+        return self._base_options.getAggregationMaxRangeDecomposition()
+
+    def set_enable_visibility(self, enable_visibility):
+        &#34;&#34;&#34;
+        Sets whether or not to enable visibility on the data store.
+
+        Args:
+            enable_visibility (bool): Whether or not to enable visibility.
+        &#34;&#34;&#34;
+        self._base_options.setEnableVisibility(enable_visibility)
+
+    def is_visibility_enabled(self):
+        &#34;&#34;&#34;
+        Returns:
+            True if visibility is enabled, False otherwise.
+        &#34;&#34;&#34;
+        return self._base_options.isVisibilityEnabled()</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="pygw.store.data_store_options.DataStoreOptions"><code class="flex name class">
+<span>class <span class="ident">DataStoreOptions</span></span>
+<span>(</span><span>java_ref)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Base options for all data store types.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class DataStoreOptions(GeoWaveObject):
+    &#34;&#34;&#34;
+    Base options for all data store types.
+    &#34;&#34;&#34;
+
+    def __init__(self, java_ref):
+        super().__init__(java_ref)
+        self._base_options = java_ref.getStoreOptions()
+
+    def set_geowave_namespace(self, namespace):
+        &#34;&#34;&#34;
+        Sets the GeoWave namespace for the data store.
+
+        Args:
+            namespace (str): The namespace to use.
+        &#34;&#34;&#34;
+        self._java_ref.setGeoWaveNamespace(namespace)
+
+    def get_geowave_namespace(self):
+        &#34;&#34;&#34;
+        Returns:
+            The GeoWave namespace for the data store.
+        &#34;&#34;&#34;
+        return self._java_ref.getGeoWaveNamespace()
+
+    def set_persist_data_statistics(self, persist_data_statistics):
+        &#34;&#34;&#34;
+        Sets whether or not to persist data statistics.
+
+        Args:
+            persist_data_statistics (bool): Whether or not to persist data statistics.
+        &#34;&#34;&#34;
+        self._base_options.setPersistDataStatistics(persist_data_statistics)
+
+    def is_persist_data_statistics(self):
+        &#34;&#34;&#34;
+        Returns:
+            True if data statistics are persisted, False otherwise.
+        &#34;&#34;&#34;
+        return self._base_options.isPersistDataStatistics()
+
+    def set_secondary_indexing(self, secondary_indexing):
+        &#34;&#34;&#34;
+        Sets whether or not to enable secondary indexing on the data store.
+
+        Args:
+            secondary_indexing (bool): Whether or not to enable secondary indexing.
+        &#34;&#34;&#34;
+        self._base_options.setSecondaryIndexing(secondary_indexing)
+
+    def is_secondary_indexing(self):
+        &#34;&#34;&#34;
+        Returns:
+            True if secondary indexing is enabled, False otherwise.
+        &#34;&#34;&#34;
+        return self._base_options.isSecondaryIndexing()
+
+    def set_enable_block_cache(self, enable_block_cache):
+        &#34;&#34;&#34;
+        Sets whether or not to enable the block cache.
+
+        Args:
+            enable_block_cache (bool): Whether or not to enable block cache.
+        &#34;&#34;&#34;
+        self._base_options.setEnableBlockCache(enable_block_cache)
+
+    def is_enable_block_cache(self):
+        &#34;&#34;&#34;
+        Returns:
+            True if block cache is enabled, False otherwise.
+        &#34;&#34;&#34;
+        return self._base_options.isEnableBlockCache()
+
+    def set_server_side_library_enabled(self, enable_server_side_library):
+        &#34;&#34;&#34;
+        Sets whether or not to enable server side processing when it is available.
+
+        Args:
+            enable_server_side_library (bool): Whether or not to enable server side processing.
+        &#34;&#34;&#34;
+        self._base_options.setServerSideLibraryEnabled(enable_server_side_library)
+
+    def is_server_side_library_enabled(self):
+        &#34;&#34;&#34;
+        Returns:
+            True if server side processing is enabled, False otherwise.
+        &#34;&#34;&#34;
+        return self._base_options.isServerSideLibraryEnabled()
+
+    def set_max_range_decomposition(self, max_range_decomposition):
+        &#34;&#34;&#34;
+        Sets the maximum number of ranges that a query can be decomposed into.
+
+        Args:
+            max_range_decomposition (int): The maximum range decomposition.
+        &#34;&#34;&#34;
+        self._base_options.setMaxRangeDecomposition(max_range_decomposition)
+
+    def get_max_range_decomposition(self):
+        &#34;&#34;&#34;
+        Returns:
+            The maximum range decomposition for queries.
+        &#34;&#34;&#34;
+        return self._base_options.getMaxRangeDecomposition()
+
+    def set_aggregation_max_range_decomposition(self, max_range_decomposition):
+        &#34;&#34;&#34;
+        Sets the maximum number of ranges that an aggregation query can be decomposed into.
+
+        Args:
+            max_range_decomposition (int): The maximum range decomposition.
+        &#34;&#34;&#34;
+        self._base_options.setAggregationMaxRangeDecomposition(max_range_decomposition)
+
+    def get_aggregation_max_range_decomposition(self):
+        &#34;&#34;&#34;
+        Returns:
+            The maximum range decomposition for aggregations.
+        &#34;&#34;&#34;
+        return self._base_options.getAggregationMaxRangeDecomposition()
+
+    def set_enable_visibility(self, enable_visibility):
+        &#34;&#34;&#34;
+        Sets whether or not to enable visibility on the data store.
+
+        Args:
+            enable_visibility (bool): Whether or not to enable visibility.
+        &#34;&#34;&#34;
+        self._base_options.setEnableVisibility(enable_visibility)
+
+    def is_visibility_enabled(self):
+        &#34;&#34;&#34;
+        Returns:
+            True if visibility is enabled, False otherwise.
+        &#34;&#34;&#34;
+        return self._base_options.isVisibilityEnabled()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.geowave_object.GeoWaveObject" href="../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject">GeoWaveObject</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="pygw.store.dynamodb.options.DynamoDBOptions" href="dynamodb/options.html#pygw.store.dynamodb.options.DynamoDBOptions">DynamoDBOptions</a></li>
+<li><a title="pygw.store.hbase.options.HBaseOptions" href="hbase/options.html#pygw.store.hbase.options.HBaseOptions">HBaseOptions</a></li>
+<li><a title="pygw.store.accumulo.accumulo_options.AccumuloOptions" href="accumulo/accumulo_options.html#pygw.store.accumulo.accumulo_options.AccumuloOptions">AccumuloOptions</a></li>
+<li><a title="pygw.store.rocksdb.options.RocksDBOptions" href="rocksdb/options.html#pygw.store.rocksdb.options.RocksDBOptions">RocksDBOptions</a></li>
+<li><a title="pygw.store.redis.options.RedisOptions" href="redis/options.html#pygw.store.redis.options.RedisOptions">RedisOptions</a></li>
+<li><a title="pygw.store.bigtable.big_table_options.BigTableOptions" href="bigtable/big_table_options.html#pygw.store.bigtable.big_table_options.BigTableOptions">BigTableOptions</a></li>
+<li><a title="pygw.store.kudu.options.KuduOptions" href="kudu/options.html#pygw.store.kudu.options.KuduOptions">KuduOptions</a></li>
+<li><a title="pygw.store.cassandra.options.CassandraOptions" href="cassandra/options.html#pygw.store.cassandra.options.CassandraOptions">CassandraOptions</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="pygw.store.data_store_options.DataStoreOptions.get_aggregation_max_range_decomposition"><code class="name flex">
+<span>def <span class="ident">get_aggregation_max_range_decomposition</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><h2 id="returns">Returns</h2>
+<p>The maximum range decomposition for aggregations.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_aggregation_max_range_decomposition(self):
+    &#34;&#34;&#34;
+    Returns:
+        The maximum range decomposition for aggregations.
+    &#34;&#34;&#34;
+    return self._base_options.getAggregationMaxRangeDecomposition()</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store_options.DataStoreOptions.get_geowave_namespace"><code class="name flex">
+<span>def <span class="ident">get_geowave_namespace</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><h2 id="returns">Returns</h2>
+<p>The GeoWave namespace for the data store.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_geowave_namespace(self):
+    &#34;&#34;&#34;
+    Returns:
+        The GeoWave namespace for the data store.
+    &#34;&#34;&#34;
+    return self._java_ref.getGeoWaveNamespace()</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store_options.DataStoreOptions.get_max_range_decomposition"><code class="name flex">
+<span>def <span class="ident">get_max_range_decomposition</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><h2 id="returns">Returns</h2>
+<p>The maximum range decomposition for queries.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_max_range_decomposition(self):
+    &#34;&#34;&#34;
+    Returns:
+        The maximum range decomposition for queries.
+    &#34;&#34;&#34;
+    return self._base_options.getMaxRangeDecomposition()</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store_options.DataStoreOptions.is_enable_block_cache"><code class="name flex">
+<span>def <span class="ident">is_enable_block_cache</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><h2 id="returns">Returns</h2>
+<p>True if block cache is enabled, False otherwise.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_enable_block_cache(self):
+    &#34;&#34;&#34;
+    Returns:
+        True if block cache is enabled, False otherwise.
+    &#34;&#34;&#34;
+    return self._base_options.isEnableBlockCache()</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store_options.DataStoreOptions.is_persist_data_statistics"><code class="name flex">
+<span>def <span class="ident">is_persist_data_statistics</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><h2 id="returns">Returns</h2>
+<p>True if data statistics are persisted, False otherwise.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_persist_data_statistics(self):
+    &#34;&#34;&#34;
+    Returns:
+        True if data statistics are persisted, False otherwise.
+    &#34;&#34;&#34;
+    return self._base_options.isPersistDataStatistics()</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store_options.DataStoreOptions.is_secondary_indexing"><code class="name flex">
+<span>def <span class="ident">is_secondary_indexing</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><h2 id="returns">Returns</h2>
+<p>True if secondary indexing is enabled, False otherwise.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_secondary_indexing(self):
+    &#34;&#34;&#34;
+    Returns:
+        True if secondary indexing is enabled, False otherwise.
+    &#34;&#34;&#34;
+    return self._base_options.isSecondaryIndexing()</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store_options.DataStoreOptions.is_server_side_library_enabled"><code class="name flex">
+<span>def <span class="ident">is_server_side_library_enabled</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><h2 id="returns">Returns</h2>
+<p>True if server side processing is enabled, False otherwise.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_server_side_library_enabled(self):
+    &#34;&#34;&#34;
+    Returns:
+        True if server side processing is enabled, False otherwise.
+    &#34;&#34;&#34;
+    return self._base_options.isServerSideLibraryEnabled()</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store_options.DataStoreOptions.is_visibility_enabled"><code class="name flex">
+<span>def <span class="ident">is_visibility_enabled</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><h2 id="returns">Returns</h2>
+<p>True if visibility is enabled, False otherwise.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_visibility_enabled(self):
+    &#34;&#34;&#34;
+    Returns:
+        True if visibility is enabled, False otherwise.
+    &#34;&#34;&#34;
+    return self._base_options.isVisibilityEnabled()</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store_options.DataStoreOptions.set_aggregation_max_range_decomposition"><code class="name flex">
+<span>def <span class="ident">set_aggregation_max_range_decomposition</span></span>(<span>self, max_range_decomposition)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets the maximum number of ranges that an aggregation query can be decomposed into.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>max_range_decomposition</code></strong> :&ensp;<code>int</code></dt>
+<dd>The maximum range decomposition.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_aggregation_max_range_decomposition(self, max_range_decomposition):
+    &#34;&#34;&#34;
+    Sets the maximum number of ranges that an aggregation query can be decomposed into.
+
+    Args:
+        max_range_decomposition (int): The maximum range decomposition.
+    &#34;&#34;&#34;
+    self._base_options.setAggregationMaxRangeDecomposition(max_range_decomposition)</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store_options.DataStoreOptions.set_enable_block_cache"><code class="name flex">
+<span>def <span class="ident">set_enable_block_cache</span></span>(<span>self, enable_block_cache)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets whether or not to enable the block cache.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>enable_block_cache</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not to enable block cache.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_enable_block_cache(self, enable_block_cache):
+    &#34;&#34;&#34;
+    Sets whether or not to enable the block cache.
+
+    Args:
+        enable_block_cache (bool): Whether or not to enable block cache.
+    &#34;&#34;&#34;
+    self._base_options.setEnableBlockCache(enable_block_cache)</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store_options.DataStoreOptions.set_enable_visibility"><code class="name flex">
+<span>def <span class="ident">set_enable_visibility</span></span>(<span>self, enable_visibility)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets whether or not to enable visibility on the data store.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>enable_visibility</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not to enable visibility.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_enable_visibility(self, enable_visibility):
+    &#34;&#34;&#34;
+    Sets whether or not to enable visibility on the data store.
+
+    Args:
+        enable_visibility (bool): Whether or not to enable visibility.
+    &#34;&#34;&#34;
+    self._base_options.setEnableVisibility(enable_visibility)</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store_options.DataStoreOptions.set_geowave_namespace"><code class="name flex">
+<span>def <span class="ident">set_geowave_namespace</span></span>(<span>self, namespace)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets the GeoWave namespace for the data store.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>namespace</code></strong> :&ensp;<code>str</code></dt>
+<dd>The namespace to use.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_geowave_namespace(self, namespace):
+    &#34;&#34;&#34;
+    Sets the GeoWave namespace for the data store.
+
+    Args:
+        namespace (str): The namespace to use.
+    &#34;&#34;&#34;
+    self._java_ref.setGeoWaveNamespace(namespace)</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store_options.DataStoreOptions.set_max_range_decomposition"><code class="name flex">
+<span>def <span class="ident">set_max_range_decomposition</span></span>(<span>self, max_range_decomposition)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets the maximum number of ranges that a query can be decomposed into.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>max_range_decomposition</code></strong> :&ensp;<code>int</code></dt>
+<dd>The maximum range decomposition.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_max_range_decomposition(self, max_range_decomposition):
+    &#34;&#34;&#34;
+    Sets the maximum number of ranges that a query can be decomposed into.
+
+    Args:
+        max_range_decomposition (int): The maximum range decomposition.
+    &#34;&#34;&#34;
+    self._base_options.setMaxRangeDecomposition(max_range_decomposition)</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store_options.DataStoreOptions.set_persist_data_statistics"><code class="name flex">
+<span>def <span class="ident">set_persist_data_statistics</span></span>(<span>self, persist_data_statistics)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets whether or not to persist data statistics.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>persist_data_statistics</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not to persist data statistics.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_persist_data_statistics(self, persist_data_statistics):
+    &#34;&#34;&#34;
+    Sets whether or not to persist data statistics.
+
+    Args:
+        persist_data_statistics (bool): Whether or not to persist data statistics.
+    &#34;&#34;&#34;
+    self._base_options.setPersistDataStatistics(persist_data_statistics)</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store_options.DataStoreOptions.set_secondary_indexing"><code class="name flex">
+<span>def <span class="ident">set_secondary_indexing</span></span>(<span>self, secondary_indexing)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets whether or not to enable secondary indexing on the data store.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>secondary_indexing</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not to enable secondary indexing.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_secondary_indexing(self, secondary_indexing):
+    &#34;&#34;&#34;
+    Sets whether or not to enable secondary indexing on the data store.
+
+    Args:
+        secondary_indexing (bool): Whether or not to enable secondary indexing.
+    &#34;&#34;&#34;
+    self._base_options.setSecondaryIndexing(secondary_indexing)</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store_options.DataStoreOptions.set_server_side_library_enabled"><code class="name flex">
+<span>def <span class="ident">set_server_side_library_enabled</span></span>(<span>self, enable_server_side_library)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets whether or not to enable server side processing when it is available.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>enable_server_side_library</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether or not to enable server side processing.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_server_side_library_enabled(self, enable_server_side_library):
+    &#34;&#34;&#34;
+    Sets whether or not to enable server side processing when it is available.
+
+    Args:
+        enable_server_side_library (bool): Whether or not to enable server side processing.
+    &#34;&#34;&#34;
+    self._base_options.setServerSideLibraryEnabled(enable_server_side_library)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.geowave_object.GeoWaveObject" href="../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject">GeoWaveObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.geowave_object.GeoWaveObject.is_instance_of" href="../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject.is_instance_of">is_instance_of</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pygw.store" href="index.html">pygw.store</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pygw.store.data_store_options.DataStoreOptions" href="#pygw.store.data_store_options.DataStoreOptions">DataStoreOptions</a></code></h4>
+<ul class="">
+<li><code><a title="pygw.store.data_store_options.DataStoreOptions.get_aggregation_max_range_decomposition" href="#pygw.store.data_store_options.DataStoreOptions.get_aggregation_max_range_decomposition">get_aggregation_max_range_decomposition</a></code></li>
+<li><code><a title="pygw.store.data_store_options.DataStoreOptions.get_geowave_namespace" href="#pygw.store.data_store_options.DataStoreOptions.get_geowave_namespace">get_geowave_namespace</a></code></li>
+<li><code><a title="pygw.store.data_store_options.DataStoreOptions.get_max_range_decomposition" href="#pygw.store.data_store_options.DataStoreOptions.get_max_range_decomposition">get_max_range_decomposition</a></code></li>
+<li><code><a title="pygw.store.data_store_options.DataStoreOptions.is_enable_block_cache" href="#pygw.store.data_store_options.DataStoreOptions.is_enable_block_cache">is_enable_block_cache</a></code></li>
+<li><code><a title="pygw.store.data_store_options.DataStoreOptions.is_persist_data_statistics" href="#pygw.store.data_store_options.DataStoreOptions.is_persist_data_statistics">is_persist_data_statistics</a></code></li>
+<li><code><a title="pygw.store.data_store_options.DataStoreOptions.is_secondary_indexing" href="#pygw.store.data_store_options.DataStoreOptions.is_secondary_indexing">is_secondary_indexing</a></code></li>
+<li><code><a title="pygw.store.data_store_options.DataStoreOptions.is_server_side_library_enabled" href="#pygw.store.data_store_options.DataStoreOptions.is_server_side_library_enabled">is_server_side_library_enabled</a></code></li>
+<li><code><a title="pygw.store.data_store_options.DataStoreOptions.is_visibility_enabled" href="#pygw.store.data_store_options.DataStoreOptions.is_visibility_enabled">is_visibility_enabled</a></code></li>
+<li><code><a title="pygw.store.data_store_options.DataStoreOptions.set_aggregation_max_range_decomposition" href="#pygw.store.data_store_options.DataStoreOptions.set_aggregation_max_range_decomposition">set_aggregation_max_range_decomposition</a></code></li>
+<li><code><a title="pygw.store.data_store_options.DataStoreOptions.set_enable_block_cache" href="#pygw.store.data_store_options.DataStoreOptions.set_enable_block_cache">set_enable_block_cache</a></code></li>
+<li><code><a title="pygw.store.data_store_options.DataStoreOptions.set_enable_visibility" href="#pygw.store.data_store_options.DataStoreOptions.set_enable_visibility">set_enable_visibility</a></code></li>
+<li><code><a title="pygw.store.data_store_options.DataStoreOptions.set_geowave_namespace" href="#pygw.store.data_store_options.DataStoreOptions.set_geowave_namespace">set_geowave_namespace</a></code></li>
+<li><code><a title="pygw.store.data_store_options.DataStoreOptions.set_max_range_decomposition" href="#pygw.store.data_store_options.DataStoreOptions.set_max_range_decomposition">set_max_range_decomposition</a></code></li>
+<li><code><a title="pygw.store.data_store_options.DataStoreOptions.set_persist_data_statistics" href="#pygw.store.data_store_options.DataStoreOptions.set_persist_data_statistics">set_persist_data_statistics</a></code></li>
+<li><code><a title="pygw.store.data_store_options.DataStoreOptions.set_secondary_indexing" href="#pygw.store.data_store_options.DataStoreOptions.set_secondary_indexing">set_secondary_indexing</a></code></li>
+<li><code><a title="pygw.store.data_store_options.DataStoreOptions.set_server_side_library_enabled" href="#pygw.store.data_store_options.DataStoreOptions.set_server_side_library_enabled">set_server_side_library_enabled</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

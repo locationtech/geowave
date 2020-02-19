@@ -1,0 +1,42 @@
+//:= geowave-util-bigtable-run(1)
+:doctype: manpage
+
+[[util-bigtable-run-name]]
+==== NAME
+
+geowave-util-bigtable-run - Runs a standalone Bigtable instance for test and debug with GeoWave
+
+[[util-bigtable-run-synopsis]]
+==== SYNOPSIS
+
+  geowave util bigtable run [options]
+
+[[util-bigtable-run-description]]
+==== DESCRIPTION
+
+This command runs a standalone Bigtable instance, which can be used locally for testing and debugging GeoWave, without needing to set up a full instance.
+
+[[util-bigtable-run-options]]
+==== OPTIONS
+
+*-d, --directory* _<path>_::
+  The directory to use for Bigtable.  Default is `./target/temp`.
+  
+*-i, --interactive* _<enabled>_::
+  Whether to prompt for user input to end the process. Default is `true`.
+  
+*-p, --port* _<host>_::
+  The host and port the emulator will run on.  Default is `127.0.0.1:8086`.
+  
+*-s, --sdk* _<sdk>_::
+  The name of the Bigtable SDK.  Default is `google-cloud-sdk-183.0.0-linux-x86_64.tar.gz`.
+  
+*-u, --url* _<url>_::
+  The URL location to download Bigtable.  Default is `https://dl.google.com/dl/cloudsdk/channels/rapid/downloads`.
+
+[[util-accumulo-run-examples]]
+==== EXAMPLES
+
+Run a standalone Bigtable instance:
+
+  geowave util bigtable run -d .

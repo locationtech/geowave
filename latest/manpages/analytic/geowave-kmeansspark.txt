@@ -1,0 +1,72 @@
+//:= geowave-analytic-kmeansspark(1)
+:doctype: manpage
+
+[[analytic-kmeansspark-name]]
+==== NAME
+
+geowave-analytic-kmeansspark - K-means Clustering via Spark ML
+
+[[analytic-kmeansspark-synopsis]]
+==== SYNOPSIS
+
+  geowave analytic kmeansspark [options] <input store name> <output store name>
+
+[[analytic-kmeansspark-description]]
+==== DESCRIPTION
+
+This command executes a K-means clustering analytic via Spark ML.
+
+[[analytic-kmeansspark-options]]
+==== OPTIONS
+
+*-ct, --centroidType* _<type>_::
+  Feature type name for centroid output. Default is `kmeans-centroids`.
+
+*-ch, --computeHullData*::
+  If specified, hull count, area, and density will be computed.
+
+*--cqlFilter* _<filter>_::
+  An optional CQL filter applied to the input data.
+
+*-e, --epsilon* _<tolerance>_::
+  The convergence tolerance.
+
+*-f, --featureType* _<type>_::
+  Feature type name to query.
+
+*-ht, --hullType* _<type>_::
+  Feature type name for hull output.  Default is `kmeans-hulls`.
+
+*-h, --hulls*::
+  If specified, convex hulls will be generated.
+  
+*-ho, --host* _<host>_::
+  The spark driver host.  Default is `localhost`.
+
+*-m, --master* _<designation>_::
+  The spark master designation.  Default is `yarn`.
+
+*--maxSplits* _<count>_::
+  The maximum partitions for the input data.
+
+*--minSplits* _<count>_::
+  The minimum partitions for the input data.
+
+*-n, --name* _<name>_::
+  The Spark application name.  Default is `KMeans Spark`.
+
+*-k, --numClusters* _<count>_::
+  The number of clusters to generate. Default is 8.
+
+*-i, --numIterations* _<count>_::
+  The number of iterations to run. Default is 20.
+
+*-t, --useTime*::
+  If specified, the time field from the input data will be used.
+  
+[[analytic-kmeansspark-examples]]
+==== EXAMPLES
+
+Perform a K-means analytic on a local spark cluster on the `hail` type in the `my_store` data store and output the results to the same data store:
+
+  geowave analytic kmeansspark -m local -f hail my_store my_store

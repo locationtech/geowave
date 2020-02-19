@@ -1,0 +1,25 @@
+//:= geowave-gs-style-list(1)
+:doctype: manpage
+
+[[gs-style-list-name]]
+==== NAME
+
+geowave-gs-style-list - List GeoServer styles
+
+[[gs-style-list-synopsis]]
+==== SYNOPSIS
+
+  geowave gs style list
+  geowave geoserver style list
+
+[[gs-style-list-description]]
+==== DESCRIPTION
+
+This command lists all styles in the configured GeoServer instance.
+
+[[gs-style-list-examples]]
+==== EXAMPLES
+
+List all styles in GeoServer:
+
+  geowave gs style list

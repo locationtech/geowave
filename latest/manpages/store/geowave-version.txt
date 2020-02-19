@@ -1,0 +1,24 @@
+//:= geowave-store-version(1)
+:doctype: manpage
+
+[[store-version-name]]
+==== NAME
+
+geowave-store-version - Get the version of GeoWave used by a data store
+
+[[store-version-synopsis]]
+==== SYNOPSIS
+
+  geowave store version <store name>
+
+[[store-version-description]]
+==== DESCRIPTION
+
+This command returns the version of GeoWave used by a data store.  This is usually the version represented by the server-side libraries being used by the data store.
+
+[[store-version-examples]]
+==== EXAMPLES
+
+Get the version of GeoWave used by the `example` data store:
+
+  geowave store version example

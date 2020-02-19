@@ -1,0 +1,24 @@
+//:= geowave-store-rm(1)
+:doctype: manpage
+
+[[store-rm-name]]
+==== NAME
+
+geowave-store-rm - Removes an existing store from the GeoWave configuration
+
+[[store-rm-synopsis]]
+==== SYNOPSIS
+
+  geowave store rm <store name>
+
+[[store-rm-description]]
+==== DESCRIPTION
+
+This command removes an existing store from the GeoWave configuration.  It does not remove any data from that store.
+
+[[store-rm-examples]]
+==== EXAMPLES
+
+Remove the `example` store from the configuration:
+
+  geowave store rm example

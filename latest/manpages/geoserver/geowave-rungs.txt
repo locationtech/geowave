@@ -1,0 +1,36 @@
+//:= geowave-gs-run(1)
+:doctype: manpage
+
+[[gs-run-name]]
+==== NAME
+
+geowave-gs-run - Runs a standalone GeoServer instance
+
+[[gs-run-synopsis]]
+==== SYNOPSIS
+
+  geowave gs run [options]
+
+[[gs-run-description]]
+==== DESCRIPTION
+
+This command runs a standalone GeoServer instance.
+
+[[gs-run-options]]
+==== OPTIONS
+
+*-d, --directory* _<path>_::
+  The directory to use for GeoServer. Default is `./lib/services/third-party/embedded-geoserver/geoserver`.
+  
+*-i, --interactive*::
+  If specified, prompt for user input to end the process.
+  
+*-p, --port* _<port>_::
+  Select the port for GeoServer to listen on.  Default is 8080.
+
+[[gs-run-examples]]
+==== EXAMPLES
+
+Run a standalone GeoServer instance:
+
+  geowave gs run

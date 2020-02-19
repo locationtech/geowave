@@ -1,0 +1,25 @@
+//:= geowave-gs-ws-list(1)
+:doctype: manpage
+
+[[gs-ws-list-name]]
+==== NAME
+
+geowave-gs-ws-list - List GeoServer workspaces
+
+[[gs-ws-list-synopsis]]
+==== SYNOPSIS
+
+  geowave gs ws list
+  geowave geoserver workspace list
+
+[[gs-ws-list-description]]
+==== DESCRIPTION
+
+This command lists all workspaces in the configured GeoServer instance.
+
+[[gs-ws-list-examples]]
+==== EXAMPLES
+
+List all workspaces in GeoServer:
+
+  geowave gs ws list

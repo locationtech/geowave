@@ -1,0 +1,25 @@
+//:= geowave-gs-fl-get(1)
+:doctype: manpage
+
+[[gs-fl-get-name]]
+==== NAME
+
+geowave-gs-fl-get - Get GeoServer feature layer info
+
+[[gs-fl-get-synopsis]]
+==== SYNOPSIS
+
+  geowave gs fl get <layer name>
+  geowave geoserver featurelayer get <layer name>
+
+[[gs-fl-get-description]]
+==== DESCRIPTION
+
+This command returns information about a layer in the configured GeoServer instance.
+
+[[gs-fl-get-examples]]
+==== EXAMPLES
+
+Get information about the layer `hail` from GeoServer:
+
+  geowave gs fl get hail

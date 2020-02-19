@@ -1,0 +1,25 @@
+//:= geowave-ingest-listplugins(1)
+:doctype: manpage
+
+[[ingest-listplugins-name]]
+==== NAME
+
+geowave-ingest-listplugins - List supported ingest formats
+
+[[ingest-listplugins-synopsis]]
+==== SYNOPSIS
+
+  geowave ingest listplugins
+
+[[ingest-listplugins-description]]
+==== DESCRIPTION
+
+This command will list all ingest formats supported by the version of GeoWave being run.
+
+[[ingest-listplugins-examples]]
+==== EXAMPLES
+
+List all ingest plugins:
+
+  geowave ingest listplugins
+

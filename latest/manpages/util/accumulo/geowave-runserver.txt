@@ -1,0 +1,24 @@
+//:= geowave-util-accumulo-run(1)
+:doctype: manpage
+
+[[util-accumulo-run-name]]
+==== NAME
+
+geowave-util-accumulo-run - Runs a standalone mini Accumulo server for test and debug with GeoWave
+
+[[util-accumulo-run-synopsis]]
+==== SYNOPSIS
+
+  geowave util accumulo run
+
+[[util-accumulo-run-description]]
+==== DESCRIPTION
+
+This command runs a standalone mini single-node Accumulo server, which can be used locally for testing and debugging GeoWave, without needing to stand up an entire cluster.
+
+[[util-accumulo-run-examples]]
+==== EXAMPLES
+
+Run a standalone Accumulo cluster:
+
+  geowave util accumulo run

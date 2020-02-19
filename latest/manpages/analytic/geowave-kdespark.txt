@@ -1,0 +1,68 @@
+//:= geowave-analytic-kdespark(1)
+:doctype: manpage
+
+[[analytic-kdespark-name]]
+==== NAME
+
+geowave-analytic-kdespark - Kernel Density Estimate using Spark
+
+[[analytic-kdespark-synopsis]]
+==== SYNOPSIS
+
+  geowave analytic kdespark [options] <input store name> <output store name>
+
+[[analytic-kdespark-description]]
+==== DESCRIPTION
+
+This command runs a Kernel Density Estimate analytic on GeoWave data using Apache Spark.
+
+[[analytic-kdespark-options]]
+==== OPTIONS
+
+*$$*$$ --coverageName* _<name>_::
+  The output coverage name.
+
+*$$*$$ --featureType* _<type>_::
+  The name of the feature type to run a KDE on.
+  
+*$$*$$ --minLevel* _<level>_::
+  The minimum zoom level to run a KDE at.
+  
+*$$*$$ --maxLevel* _<level>_::
+  The maximum zoom level to run a KDE at.
+  
+*--minSplits* _<count>_::
+  The minimum partitions for the input data.
+
+*--maxSplits* _<count>_::
+  The maximum partitions for the input data.
+  
+*--tileSize* _<size>_::
+  The size of output tiles.
+
+*--cqlFilter* _<filter>_::
+  An optional CQL filter applied to the input data.
+
+*--indexName* _<index>_::
+  An optional index name to filter the input data.
+
+*--outputIndex* _<index>_::
+  An optional index for output data store. Only spatial index type is supported.
+
+*-n, --name* _<name>_::
+  The Spark application name.
+  
+*-ho, --host* _<host>_::
+  The Spark driver host.
+  
+*-m, --master* _<designation>_::
+  The Spark master designation.
+
+[[analytic-kdespark-examples]]
+==== EXAMPLES
+
+Perform a Kernel Density Estimation using a local spark cluster on the `gdeltevent` type.  The KDE should be run at zoom levels 5-26 and that the new raster generated should be under the type name `gdeltevent_kde`.  Finally, the input and output data store is called `gdelt`.
+
+  geowave analytic kdespark --featureType gdeltevent -m local --minLevel 5 --maxLevel 26 --coverageName gdeltevent_kde gdelt gdelt
+
+

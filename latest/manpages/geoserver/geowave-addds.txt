@@ -1,0 +1,34 @@
+//:= geowave-gs-ds-add(1)
+:doctype: manpage
+
+[[gs-cv-add-name]]
+==== NAME
+
+geowave-gs-ds-add - Add a data store to GeoServer
+
+[[gs-cv-add-synopsis]]
+==== SYNOPSIS
+
+  geowave gs ds add [options] <data store name>
+  geowave geoserver datastore add [options] <data store name>
+
+[[gs-cv-add-description]]
+==== DESCRIPTION
+
+This command adds a GeoWave data store to GeoServer as a GeoWave store.
+
+[[gs-cv-add-options]]
+==== OPTIONS
+
+*-ds, --datastore* _<name>_::
+  The name of the new GeoWave store to add to GeoServer.
+
+*-ws, --workspace* _<workspace>_::
+  The GeoServer workspace to use for the store.
+  
+[[gs-cv-add-examples]]
+==== EXAMPLES
+
+Add a GeoWave data store `example` as a GeoWave store in GeoServer called `my_store`:
+
+  geowave gs ds add -ds my_store example

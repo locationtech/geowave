@@ -1,0 +1,24 @@
+//:= geowave-config-newcryptokey(1)
+:doctype: manpage
+
+[[config-newcryptokey-name]]
+==== NAME
+
+geowave-config-newcryptokey - generate a new security cryptography key for use with configuration properties
+
+[[config-newcryptokey-synopsis]]
+==== SYNOPSIS
+
+  geowave config newcryptokey
+
+[[config-newcryptokey-description]]
+==== DESCRIPTION
+
+This command will generate a new security cryptography key for use with configuration properties. This is primarily used if there is a need to re-encrypt the local configurations based on a new security token, should the old one have been compromised.
+
+[[config-newcryptokey-examples]]
+==== EXAMPLES
+
+Generate a new cryptography key:
+
+  geowave config newcryptokey

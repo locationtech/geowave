@@ -1,0 +1,55 @@
+//:= geowave-raster-resizespark(1)
+:doctype: manpage
+
+[[raster-resizespark-name]]
+==== NAME
+
+geowave-raster-resizespark - Resize Raster Tiles using Spark
+
+[[raster-resizespark-synopsis]]
+==== SYNOPSIS
+
+  geowave raster resizespark [options] <input store name> <output store name>
+
+[[raster-resizespark-description]]
+==== DESCRIPTION
+
+This command will resize raster tiles that are stored in a GeoWave data store using Spark, and write the resized tiles to a new output store.
+
+[[raster-resizespark-options]]
+==== OPTIONS
+
+*-ho, --host* _<host>_::
+  The spark driver host.  Default is `localhost`.
+
+*--indexName* _<index>_::
+  The index that the input raster is stored in.
+
+*$$*$$ --inputCoverageName* _<name>_::
+  The name of the input raster coverage.
+
+*-m, --master* _<designation>_::
+  The spark master designation.  Default is `yarn`.
+
+*--maxSplits* _<count>_::
+  The maximum partitions for the input data.
+
+*--minSplits* _<count>_::
+  The minimum partitions for the input data.
+
+*-n, --name* _<name>_::
+  The Spark application name.  Default is `RasterResizeRunner`.
+
+*$$*$$ --outputCoverageName*::
+  The output raster coverage name.
+
+*$$*$$ --outputTileSize*::
+  The tile size to output.
+  
+[[raster-resizespark-examples]]
+==== EXAMPLES
+
+Resize the `cov` raster in the `example` data store to 256 and name the resulting raster `cov_resized`:
+
+   geowave raster resizespark -m local --inputCoverageName cov --outputCoverageName cov_resized --outputTileSize 256 example example
+

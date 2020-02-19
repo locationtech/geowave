@@ -1,0 +1,24 @@
+//:= geowave-config-hdfs(1)
+:doctype: manpage
+
+[[config-hdfs-name]]
+==== NAME
+
+geowave-config-hdfs - configure the GeoWave CLI to connect to HDFS
+
+[[config-hdfs-synopsis]]
+==== SYNOPSIS
+
+  geowave config hdfs <HDFS DefaultFS URL>
+
+[[config-hdfs-description]]
+==== DESCRIPTION
+
+This command creates a local configuration for HDFS connections, which is used by commands that interface with HDFS.
+
+[[config-hdfs-examples]]
+==== EXAMPLES
+
+Configure GeoWave to use locally running HDFS:
+
+  geowave config hdfs localhost:8020

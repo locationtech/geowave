@@ -1,0 +1,24 @@
+//:= geowave-util-grpc-stop(1)
+:doctype: manpage
+
+[[util-grpc-stop-name]]
+==== NAME
+
+geowave-util-grpc-stop - Stop the GeoWave gRPC server
+
+[[util-grpc-stop-synopsis]]
+==== SYNOPSIS
+
+  geowave util grpc stop
+
+[[util-grpc-stop-description]]
+==== DESCRIPTION
+
+Shuts down the GeoWave gRPC server.
+
+[[util-grpc-stop-examples]]
+==== EXAMPLES
+
+Shut down the gRPC server:
+
+  geowave util grpc stop

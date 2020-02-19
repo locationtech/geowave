@@ -1,0 +1,40 @@
+//:= geowave-stat-list(1)
+:doctype: manpage
+
+[[stat-list-name]]
+==== NAME
+
+geowave-stat-list - Print statistics of a data store to standard output
+
+[[stat-list-synopsis]]
+==== SYNOPSIS
+
+  geowave stat list [options] <store name>
+
+[[stat-list-description]]
+==== DESCRIPTION
+
+This command prints statistics of a GeoWave data store (and optionally of a single type) to the standard output.
+
+[[stat-list-options]]
+==== OPTIONS
+
+*--typeName* _<type>_::
+  If specified, only statistics for the given type will be displayed.
+
+*--auth* _<authorizations>_::
+  The authorizations used for the statistics calculation.  By default all authorizations are used.
+
+*--json*::
+  If specified, output will be formatted in JSON.
+  
+[[stat-list-examples]]
+==== EXAMPLES
+
+List all statistics in the `example` store:
+
+  geowave stat list example
+  
+List all statistics for the `hail` type in the `example` store in JSON format:
+
+  geowave stat list --json --typeName hail example

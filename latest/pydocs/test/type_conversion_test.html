@@ -1,0 +1,803 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>pygw.test.type_conversion_test API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>pygw.test.type_conversion_test</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">#
+# Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file distributed with this work for additional information regarding copyright
+# ownership. All rights reserved. This program and the accompanying materials are made available
+# under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+# available at http://www.apache.org/licenses/LICENSE-2.0.txt
+#===============================================================================================
+
+from datetime import datetime
+from decimal import Decimal
+
+from py4j.java_gateway import is_instance_of
+from shapely.geometry import *
+
+from pygw.base.type_conversions import *
+from pygw.config import java_gateway
+
+def java_round_trip(type, value, check_binding=True):
+    j_value = type.to_java(value)
+
+    if value is not None and check_binding:
+        assert is_instance_of(java_gateway, j_value, type.binding)
+
+    py_value = type.from_java(j_value)
+    assert value == py_value
+
+def test_big_decimal():
+    big_decimal_type = BigDecimalType()
+    java_round_trip(big_decimal_type, Decimal(&#39;1.1234&#39;))
+    java_round_trip(big_decimal_type, None)
+
+    big_decimal_array_type = BigDecimalArrayType()
+    java_round_trip(big_decimal_array_type, [Decimal(&#39;1.1234&#39;), None, Decimal(&#39;-15.821&#39;)])
+    java_round_trip(big_decimal_array_type, [])
+    java_round_trip(big_decimal_array_type, None)
+
+def test_big_integer():
+    big_integer_type = BigIntegerType()
+    java_round_trip(big_integer_type, 1234567890123456789012345678901234567890)
+    java_round_trip(big_integer_type, 123231)
+    java_round_trip(big_integer_type, None)
+
+    big_integer_array_type = BigIntegerArrayType()
+    java_round_trip(big_integer_array_type, [1234567890123456789012345678901234567890, None, 123231])
+    java_round_trip(big_integer_array_type, [])
+    java_round_trip(big_integer_array_type, None)
+
+def test_boolean():
+    boolean_type = BooleanType()
+    java_round_trip(boolean_type, True)
+    java_round_trip(boolean_type, False)
+    java_round_trip(boolean_type, None)
+
+    boolean_array_type = BooleanArrayType()
+    java_round_trip(boolean_array_type, [True, None, False])
+    java_round_trip(boolean_array_type, [])
+    java_round_trip(boolean_array_type, None)
+
+    primitive_boolean_array_type = PrimitiveBooleanArrayType()
+    java_round_trip(primitive_boolean_array_type, [True, False, False, True])
+    java_round_trip(primitive_boolean_array_type, [])
+    java_round_trip(primitive_boolean_array_type, None)
+
+def test_float():
+    float_type = FloatType()
+    java_round_trip(float_type, 1.234, False)
+    java_round_trip(float_type, -10, False)
+    java_round_trip(float_type, None)
+
+    float_array_type = FloatArrayType()
+    java_round_trip(float_array_type, [1.234, -10, None])
+    java_round_trip(float_array_type, [])
+    java_round_trip(float_array_type, None)
+
+    primitive_float_array_type = PrimitiveFloatArrayType()
+    java_round_trip(primitive_float_array_type, [1.234, -10, 15.5])
+    java_round_trip(primitive_float_array_type, [])
+    java_round_trip(primitive_float_array_type, None)
+
+def test_double():
+    double_type = DoubleType()
+    java_round_trip(double_type, 1.234)
+    java_round_trip(double_type, -10)
+    java_round_trip(double_type, None)
+
+    double_array_type = DoubleArrayType()
+    java_round_trip(double_array_type, [1.234, -10, None])
+    java_round_trip(double_array_type, [])
+    java_round_trip(double_array_type, None)
+
+    primitive_double_array_type = PrimitiveDoubleArrayType()
+    java_round_trip(primitive_double_array_type, [1.234, -10, 15.5])
+    java_round_trip(primitive_double_array_type, [])
+    java_round_trip(primitive_double_array_type, None)
+
+def test_byte():
+    byte_type = ByteType()
+    java_round_trip(byte_type, 32, False)
+    java_round_trip(byte_type, -127, False)
+    java_round_trip(byte_type, None)
+
+    byte_array_type = ByteArrayType()
+    java_round_trip(byte_array_type, [32, None, -127])
+    java_round_trip(byte_array_type, b&#39;1234&#39;)
+    java_round_trip(byte_array_type, b&#39;&#39;)
+    java_round_trip(byte_array_type, None)
+
+    primitive_byte_array_type = PrimitiveByteArrayType()
+    java_round_trip(primitive_byte_array_type, b&#39;1234&#39;)
+    java_round_trip(primitive_byte_array_type, b&#39;&#39;)
+    java_round_trip(primitive_byte_array_type, None)
+
+def test_short():
+    short_type = ShortType()
+    java_round_trip(short_type, 3232, False)
+    java_round_trip(short_type, -1207, False)
+    java_round_trip(short_type, None)
+
+    short_array_type = ShortArrayType()
+    java_round_trip(short_array_type, [3232, None, -1207])
+    java_round_trip(short_array_type, [])
+    java_round_trip(short_array_type, None)
+
+    primitive_short_array_type = PrimitiveShortArrayType()
+    java_round_trip(primitive_short_array_type, [3232, -1207, 0])
+    java_round_trip(primitive_short_array_type, [])
+    java_round_trip(primitive_short_array_type, None)
+
+def test_integer():
+    integer_type = IntegerType()
+    java_round_trip(integer_type, 3232234)
+    java_round_trip(integer_type, -1207234)
+    java_round_trip(integer_type, None)
+
+    integer_array_type = IntegerArrayType()
+    java_round_trip(integer_array_type, [3232234, None, -1207234])
+    java_round_trip(integer_array_type, [])
+    java_round_trip(integer_array_type, None)
+
+    primitive_int_array_type = PrimitiveIntArrayType()
+    java_round_trip(primitive_int_array_type, [3232234, -1207234, 0])
+    java_round_trip(primitive_int_array_type, [])
+    java_round_trip(primitive_int_array_type, None)
+
+def test_long():
+    long_type = LongType()
+    java_round_trip(long_type, 3232234234)
+    java_round_trip(long_type, -3207234234)
+    java_round_trip(long_type, None)
+
+    long_array_type = LongArrayType()
+    java_round_trip(long_array_type, [3232234234, None, -3207234234])
+    java_round_trip(long_array_type, [])
+    java_round_trip(long_array_type, None)
+
+    primitive_long_array_type = PrimitiveLongArrayType()
+    java_round_trip(primitive_long_array_type, [3232234234, -3207234234, 0])
+    java_round_trip(primitive_long_array_type, [])
+    java_round_trip(primitive_long_array_type, None)
+
+def test_string():
+    string_type = StringType()
+    java_round_trip(string_type, &#34;test&#34;)
+    java_round_trip(string_type, u&#34;✓ unicode check&#34;)
+    java_round_trip(string_type, &#34;&#34;)
+    java_round_trip(string_type, None)
+
+    string_array_type = StringArrayType()
+    java_round_trip(string_array_type, [&#34;test&#34;, u&#34;✓ unicode check&#34;, &#34;&#34;, None])
+    java_round_trip(string_array_type, [])
+    java_round_trip(string_array_type, None)
+
+def test_date():
+    date_type = DateType()
+    java_round_trip(date_type, datetime.fromtimestamp(1563826071))
+    java_round_trip(date_type, datetime.fromtimestamp(0))
+    java_round_trip(date_type, None)
+
+    date_array_type = DateArrayType()
+    java_round_trip(date_array_type, [datetime.fromtimestamp(1563826071), datetime.fromtimestamp(0), None])
+    java_round_trip(date_array_type, [])
+    java_round_trip(date_array_type, None)
+
+def test_calendar():
+    calendar_type = CalendarType()
+    java_round_trip(calendar_type, datetime.fromtimestamp(1563826071))
+    java_round_trip(calendar_type, datetime.fromtimestamp(0))
+    java_round_trip(calendar_type, None)
+
+    calendar_array_type = CalendarArrayType()
+    java_round_trip(calendar_array_type, [datetime.fromtimestamp(1563826071), datetime.fromtimestamp(0), None])
+    java_round_trip(calendar_array_type, [])
+    java_round_trip(calendar_array_type, None)
+
+_test_point = Point(1, 1)
+_test_multi_point = MultiPoint([[0.5, 0.5], [1, 1]])
+_test_line_string = LineString([[0.5, 0.5], [1, 1]])
+_test_multi_line_string = MultiLineString([[[0.5, 0.5], [1, 1]], [[-0.5, -0.5], [1, 1]]])
+_test_polygon = Polygon([[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]])
+_test_polygon2 = Polygon([[0, 0], [0, -1], [-1, -1], [-1, 0], [0, 0]])
+_test_multi_polygon = MultiPolygon([_test_polygon, _test_polygon2])
+
+def test_point():
+    point_type = PointType()
+    java_round_trip(point_type, _test_point)
+    java_round_trip(point_type, None)
+
+    point_array_type = PointArrayType()
+    java_round_trip(point_array_type, [_test_point, None])
+    java_round_trip(point_array_type, [])
+    java_round_trip(point_array_type, None)
+
+def test_multi_point():
+    multi_point_type = MultiPointType()
+    java_round_trip(multi_point_type, _test_multi_point)
+    java_round_trip(multi_point_type, None)
+
+    multi_point_array_type = MultiPointArrayType()
+    java_round_trip(multi_point_array_type, [_test_multi_point, None])
+    java_round_trip(multi_point_array_type, [])
+    java_round_trip(multi_point_array_type, None)
+
+def test_line_string():
+    line_string_type = LineStringType()
+    java_round_trip(line_string_type, _test_line_string)
+    java_round_trip(line_string_type, None)
+
+    line_string_array_type = LineStringArrayType()
+    java_round_trip(line_string_array_type, [_test_line_string, None])
+    java_round_trip(line_string_array_type, [])
+    java_round_trip(line_string_array_type, None)
+
+def test_multi_line_string():
+    multi_line_string_type = MultiLineStringType()
+    java_round_trip(multi_line_string_type, _test_multi_line_string)
+    java_round_trip(multi_line_string_type, None)
+
+    multi_line_string_array_type = MultiLineStringArrayType()
+    java_round_trip(multi_line_string_array_type, [_test_multi_line_string, None])
+    java_round_trip(multi_line_string_array_type, [])
+    java_round_trip(multi_line_string_array_type, None)
+
+def test_polygon():
+    polygon_type = PolygonType()
+    java_round_trip(polygon_type, _test_polygon)
+    java_round_trip(polygon_type, None)
+
+    polygon_array_type = PolygonArrayType()
+    java_round_trip(polygon_array_type, [_test_polygon, None])
+    java_round_trip(polygon_array_type, [])
+    java_round_trip(polygon_array_type, None)
+
+def test_multi_polygon():
+    multi_polygon_type = MultiPolygonType()
+    java_round_trip(multi_polygon_type, _test_multi_polygon)
+    java_round_trip(multi_polygon_type, None)
+
+    multi_polygon_array_type = MultiPolygonArrayType()
+    java_round_trip(multi_polygon_array_type, [_test_multi_polygon, None])
+    java_round_trip(multi_polygon_array_type, [])
+    java_round_trip(multi_polygon_array_type, None)
+
+def test_geometry():
+    geometry_type = GeometryType()
+    java_round_trip(geometry_type, _test_point)
+    java_round_trip(geometry_type, _test_multi_point)
+    java_round_trip(geometry_type, _test_line_string)
+    java_round_trip(geometry_type, _test_multi_line_string)
+    java_round_trip(geometry_type, _test_polygon)
+    java_round_trip(geometry_type, _test_multi_polygon)
+    java_round_trip(geometry_type, None)
+
+    geometry_array_type = GeometryArrayType()
+    java_round_trip(geometry_array_type, [_test_point, _test_multi_point, _test_line_string, _test_multi_line_string, _test_polygon, _test_multi_polygon, None])
+    java_round_trip(geometry_array_type, [])
+    java_round_trip(geometry_array_type, None)
+
+def test_geometry_collection():
+    geometry_collection_type = GeometryCollectionType()
+    test_geometry_collection = GeometryCollection([_test_point, _test_multi_point, _test_line_string, _test_multi_line_string, _test_polygon, _test_multi_polygon])
+    java_round_trip(geometry_collection_type, test_geometry_collection)
+    java_round_trip(geometry_collection_type, None)
+
+    geometry_collection_array_type = GeometryCollectionArrayType()
+    java_round_trip(geometry_collection_array_type, [test_geometry_collection, None])
+    java_round_trip(geometry_collection_array_type, [])
+    java_round_trip(geometry_collection_array_type, None)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="pygw.test.type_conversion_test.java_round_trip"><code class="name flex">
+<span>def <span class="ident">java_round_trip</span></span>(<span>type, value, check_binding=True)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def java_round_trip(type, value, check_binding=True):
+    j_value = type.to_java(value)
+
+    if value is not None and check_binding:
+        assert is_instance_of(java_gateway, j_value, type.binding)
+
+    py_value = type.from_java(j_value)
+    assert value == py_value</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.type_conversion_test.test_big_decimal"><code class="name flex">
+<span>def <span class="ident">test_big_decimal</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_big_decimal():
+    big_decimal_type = BigDecimalType()
+    java_round_trip(big_decimal_type, Decimal(&#39;1.1234&#39;))
+    java_round_trip(big_decimal_type, None)
+
+    big_decimal_array_type = BigDecimalArrayType()
+    java_round_trip(big_decimal_array_type, [Decimal(&#39;1.1234&#39;), None, Decimal(&#39;-15.821&#39;)])
+    java_round_trip(big_decimal_array_type, [])
+    java_round_trip(big_decimal_array_type, None)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.type_conversion_test.test_big_integer"><code class="name flex">
+<span>def <span class="ident">test_big_integer</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_big_integer():
+    big_integer_type = BigIntegerType()
+    java_round_trip(big_integer_type, 1234567890123456789012345678901234567890)
+    java_round_trip(big_integer_type, 123231)
+    java_round_trip(big_integer_type, None)
+
+    big_integer_array_type = BigIntegerArrayType()
+    java_round_trip(big_integer_array_type, [1234567890123456789012345678901234567890, None, 123231])
+    java_round_trip(big_integer_array_type, [])
+    java_round_trip(big_integer_array_type, None)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.type_conversion_test.test_boolean"><code class="name flex">
+<span>def <span class="ident">test_boolean</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_boolean():
+    boolean_type = BooleanType()
+    java_round_trip(boolean_type, True)
+    java_round_trip(boolean_type, False)
+    java_round_trip(boolean_type, None)
+
+    boolean_array_type = BooleanArrayType()
+    java_round_trip(boolean_array_type, [True, None, False])
+    java_round_trip(boolean_array_type, [])
+    java_round_trip(boolean_array_type, None)
+
+    primitive_boolean_array_type = PrimitiveBooleanArrayType()
+    java_round_trip(primitive_boolean_array_type, [True, False, False, True])
+    java_round_trip(primitive_boolean_array_type, [])
+    java_round_trip(primitive_boolean_array_type, None)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.type_conversion_test.test_byte"><code class="name flex">
+<span>def <span class="ident">test_byte</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_byte():
+    byte_type = ByteType()
+    java_round_trip(byte_type, 32, False)
+    java_round_trip(byte_type, -127, False)
+    java_round_trip(byte_type, None)
+
+    byte_array_type = ByteArrayType()
+    java_round_trip(byte_array_type, [32, None, -127])
+    java_round_trip(byte_array_type, b&#39;1234&#39;)
+    java_round_trip(byte_array_type, b&#39;&#39;)
+    java_round_trip(byte_array_type, None)
+
+    primitive_byte_array_type = PrimitiveByteArrayType()
+    java_round_trip(primitive_byte_array_type, b&#39;1234&#39;)
+    java_round_trip(primitive_byte_array_type, b&#39;&#39;)
+    java_round_trip(primitive_byte_array_type, None)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.type_conversion_test.test_calendar"><code class="name flex">
+<span>def <span class="ident">test_calendar</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_calendar():
+    calendar_type = CalendarType()
+    java_round_trip(calendar_type, datetime.fromtimestamp(1563826071))
+    java_round_trip(calendar_type, datetime.fromtimestamp(0))
+    java_round_trip(calendar_type, None)
+
+    calendar_array_type = CalendarArrayType()
+    java_round_trip(calendar_array_type, [datetime.fromtimestamp(1563826071), datetime.fromtimestamp(0), None])
+    java_round_trip(calendar_array_type, [])
+    java_round_trip(calendar_array_type, None)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.type_conversion_test.test_date"><code class="name flex">
+<span>def <span class="ident">test_date</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_date():
+    date_type = DateType()
+    java_round_trip(date_type, datetime.fromtimestamp(1563826071))
+    java_round_trip(date_type, datetime.fromtimestamp(0))
+    java_round_trip(date_type, None)
+
+    date_array_type = DateArrayType()
+    java_round_trip(date_array_type, [datetime.fromtimestamp(1563826071), datetime.fromtimestamp(0), None])
+    java_round_trip(date_array_type, [])
+    java_round_trip(date_array_type, None)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.type_conversion_test.test_double"><code class="name flex">
+<span>def <span class="ident">test_double</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_double():
+    double_type = DoubleType()
+    java_round_trip(double_type, 1.234)
+    java_round_trip(double_type, -10)
+    java_round_trip(double_type, None)
+
+    double_array_type = DoubleArrayType()
+    java_round_trip(double_array_type, [1.234, -10, None])
+    java_round_trip(double_array_type, [])
+    java_round_trip(double_array_type, None)
+
+    primitive_double_array_type = PrimitiveDoubleArrayType()
+    java_round_trip(primitive_double_array_type, [1.234, -10, 15.5])
+    java_round_trip(primitive_double_array_type, [])
+    java_round_trip(primitive_double_array_type, None)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.type_conversion_test.test_float"><code class="name flex">
+<span>def <span class="ident">test_float</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_float():
+    float_type = FloatType()
+    java_round_trip(float_type, 1.234, False)
+    java_round_trip(float_type, -10, False)
+    java_round_trip(float_type, None)
+
+    float_array_type = FloatArrayType()
+    java_round_trip(float_array_type, [1.234, -10, None])
+    java_round_trip(float_array_type, [])
+    java_round_trip(float_array_type, None)
+
+    primitive_float_array_type = PrimitiveFloatArrayType()
+    java_round_trip(primitive_float_array_type, [1.234, -10, 15.5])
+    java_round_trip(primitive_float_array_type, [])
+    java_round_trip(primitive_float_array_type, None)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.type_conversion_test.test_geometry"><code class="name flex">
+<span>def <span class="ident">test_geometry</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_geometry():
+    geometry_type = GeometryType()
+    java_round_trip(geometry_type, _test_point)
+    java_round_trip(geometry_type, _test_multi_point)
+    java_round_trip(geometry_type, _test_line_string)
+    java_round_trip(geometry_type, _test_multi_line_string)
+    java_round_trip(geometry_type, _test_polygon)
+    java_round_trip(geometry_type, _test_multi_polygon)
+    java_round_trip(geometry_type, None)
+
+    geometry_array_type = GeometryArrayType()
+    java_round_trip(geometry_array_type, [_test_point, _test_multi_point, _test_line_string, _test_multi_line_string, _test_polygon, _test_multi_polygon, None])
+    java_round_trip(geometry_array_type, [])
+    java_round_trip(geometry_array_type, None)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.type_conversion_test.test_geometry_collection"><code class="name flex">
+<span>def <span class="ident">test_geometry_collection</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_geometry_collection():
+    geometry_collection_type = GeometryCollectionType()
+    test_geometry_collection = GeometryCollection([_test_point, _test_multi_point, _test_line_string, _test_multi_line_string, _test_polygon, _test_multi_polygon])
+    java_round_trip(geometry_collection_type, test_geometry_collection)
+    java_round_trip(geometry_collection_type, None)
+
+    geometry_collection_array_type = GeometryCollectionArrayType()
+    java_round_trip(geometry_collection_array_type, [test_geometry_collection, None])
+    java_round_trip(geometry_collection_array_type, [])
+    java_round_trip(geometry_collection_array_type, None)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.type_conversion_test.test_integer"><code class="name flex">
+<span>def <span class="ident">test_integer</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_integer():
+    integer_type = IntegerType()
+    java_round_trip(integer_type, 3232234)
+    java_round_trip(integer_type, -1207234)
+    java_round_trip(integer_type, None)
+
+    integer_array_type = IntegerArrayType()
+    java_round_trip(integer_array_type, [3232234, None, -1207234])
+    java_round_trip(integer_array_type, [])
+    java_round_trip(integer_array_type, None)
+
+    primitive_int_array_type = PrimitiveIntArrayType()
+    java_round_trip(primitive_int_array_type, [3232234, -1207234, 0])
+    java_round_trip(primitive_int_array_type, [])
+    java_round_trip(primitive_int_array_type, None)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.type_conversion_test.test_line_string"><code class="name flex">
+<span>def <span class="ident">test_line_string</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_line_string():
+    line_string_type = LineStringType()
+    java_round_trip(line_string_type, _test_line_string)
+    java_round_trip(line_string_type, None)
+
+    line_string_array_type = LineStringArrayType()
+    java_round_trip(line_string_array_type, [_test_line_string, None])
+    java_round_trip(line_string_array_type, [])
+    java_round_trip(line_string_array_type, None)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.type_conversion_test.test_long"><code class="name flex">
+<span>def <span class="ident">test_long</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_long():
+    long_type = LongType()
+    java_round_trip(long_type, 3232234234)
+    java_round_trip(long_type, -3207234234)
+    java_round_trip(long_type, None)
+
+    long_array_type = LongArrayType()
+    java_round_trip(long_array_type, [3232234234, None, -3207234234])
+    java_round_trip(long_array_type, [])
+    java_round_trip(long_array_type, None)
+
+    primitive_long_array_type = PrimitiveLongArrayType()
+    java_round_trip(primitive_long_array_type, [3232234234, -3207234234, 0])
+    java_round_trip(primitive_long_array_type, [])
+    java_round_trip(primitive_long_array_type, None)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.type_conversion_test.test_multi_line_string"><code class="name flex">
+<span>def <span class="ident">test_multi_line_string</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_multi_line_string():
+    multi_line_string_type = MultiLineStringType()
+    java_round_trip(multi_line_string_type, _test_multi_line_string)
+    java_round_trip(multi_line_string_type, None)
+
+    multi_line_string_array_type = MultiLineStringArrayType()
+    java_round_trip(multi_line_string_array_type, [_test_multi_line_string, None])
+    java_round_trip(multi_line_string_array_type, [])
+    java_round_trip(multi_line_string_array_type, None)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.type_conversion_test.test_multi_point"><code class="name flex">
+<span>def <span class="ident">test_multi_point</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_multi_point():
+    multi_point_type = MultiPointType()
+    java_round_trip(multi_point_type, _test_multi_point)
+    java_round_trip(multi_point_type, None)
+
+    multi_point_array_type = MultiPointArrayType()
+    java_round_trip(multi_point_array_type, [_test_multi_point, None])
+    java_round_trip(multi_point_array_type, [])
+    java_round_trip(multi_point_array_type, None)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.type_conversion_test.test_multi_polygon"><code class="name flex">
+<span>def <span class="ident">test_multi_polygon</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_multi_polygon():
+    multi_polygon_type = MultiPolygonType()
+    java_round_trip(multi_polygon_type, _test_multi_polygon)
+    java_round_trip(multi_polygon_type, None)
+
+    multi_polygon_array_type = MultiPolygonArrayType()
+    java_round_trip(multi_polygon_array_type, [_test_multi_polygon, None])
+    java_round_trip(multi_polygon_array_type, [])
+    java_round_trip(multi_polygon_array_type, None)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.type_conversion_test.test_point"><code class="name flex">
+<span>def <span class="ident">test_point</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_point():
+    point_type = PointType()
+    java_round_trip(point_type, _test_point)
+    java_round_trip(point_type, None)
+
+    point_array_type = PointArrayType()
+    java_round_trip(point_array_type, [_test_point, None])
+    java_round_trip(point_array_type, [])
+    java_round_trip(point_array_type, None)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.type_conversion_test.test_polygon"><code class="name flex">
+<span>def <span class="ident">test_polygon</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_polygon():
+    polygon_type = PolygonType()
+    java_round_trip(polygon_type, _test_polygon)
+    java_round_trip(polygon_type, None)
+
+    polygon_array_type = PolygonArrayType()
+    java_round_trip(polygon_array_type, [_test_polygon, None])
+    java_round_trip(polygon_array_type, [])
+    java_round_trip(polygon_array_type, None)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.type_conversion_test.test_short"><code class="name flex">
+<span>def <span class="ident">test_short</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_short():
+    short_type = ShortType()
+    java_round_trip(short_type, 3232, False)
+    java_round_trip(short_type, -1207, False)
+    java_round_trip(short_type, None)
+
+    short_array_type = ShortArrayType()
+    java_round_trip(short_array_type, [3232, None, -1207])
+    java_round_trip(short_array_type, [])
+    java_round_trip(short_array_type, None)
+
+    primitive_short_array_type = PrimitiveShortArrayType()
+    java_round_trip(primitive_short_array_type, [3232, -1207, 0])
+    java_round_trip(primitive_short_array_type, [])
+    java_round_trip(primitive_short_array_type, None)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.type_conversion_test.test_string"><code class="name flex">
+<span>def <span class="ident">test_string</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_string():
+    string_type = StringType()
+    java_round_trip(string_type, &#34;test&#34;)
+    java_round_trip(string_type, u&#34;✓ unicode check&#34;)
+    java_round_trip(string_type, &#34;&#34;)
+    java_round_trip(string_type, None)
+
+    string_array_type = StringArrayType()
+    java_round_trip(string_array_type, [&#34;test&#34;, u&#34;✓ unicode check&#34;, &#34;&#34;, None])
+    java_round_trip(string_array_type, [])
+    java_round_trip(string_array_type, None)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pygw.test" href="index.html">pygw.test</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="pygw.test.type_conversion_test.java_round_trip" href="#pygw.test.type_conversion_test.java_round_trip">java_round_trip</a></code></li>
+<li><code><a title="pygw.test.type_conversion_test.test_big_decimal" href="#pygw.test.type_conversion_test.test_big_decimal">test_big_decimal</a></code></li>
+<li><code><a title="pygw.test.type_conversion_test.test_big_integer" href="#pygw.test.type_conversion_test.test_big_integer">test_big_integer</a></code></li>
+<li><code><a title="pygw.test.type_conversion_test.test_boolean" href="#pygw.test.type_conversion_test.test_boolean">test_boolean</a></code></li>
+<li><code><a title="pygw.test.type_conversion_test.test_byte" href="#pygw.test.type_conversion_test.test_byte">test_byte</a></code></li>
+<li><code><a title="pygw.test.type_conversion_test.test_calendar" href="#pygw.test.type_conversion_test.test_calendar">test_calendar</a></code></li>
+<li><code><a title="pygw.test.type_conversion_test.test_date" href="#pygw.test.type_conversion_test.test_date">test_date</a></code></li>
+<li><code><a title="pygw.test.type_conversion_test.test_double" href="#pygw.test.type_conversion_test.test_double">test_double</a></code></li>
+<li><code><a title="pygw.test.type_conversion_test.test_float" href="#pygw.test.type_conversion_test.test_float">test_float</a></code></li>
+<li><code><a title="pygw.test.type_conversion_test.test_geometry" href="#pygw.test.type_conversion_test.test_geometry">test_geometry</a></code></li>
+<li><code><a title="pygw.test.type_conversion_test.test_geometry_collection" href="#pygw.test.type_conversion_test.test_geometry_collection">test_geometry_collection</a></code></li>
+<li><code><a title="pygw.test.type_conversion_test.test_integer" href="#pygw.test.type_conversion_test.test_integer">test_integer</a></code></li>
+<li><code><a title="pygw.test.type_conversion_test.test_line_string" href="#pygw.test.type_conversion_test.test_line_string">test_line_string</a></code></li>
+<li><code><a title="pygw.test.type_conversion_test.test_long" href="#pygw.test.type_conversion_test.test_long">test_long</a></code></li>
+<li><code><a title="pygw.test.type_conversion_test.test_multi_line_string" href="#pygw.test.type_conversion_test.test_multi_line_string">test_multi_line_string</a></code></li>
+<li><code><a title="pygw.test.type_conversion_test.test_multi_point" href="#pygw.test.type_conversion_test.test_multi_point">test_multi_point</a></code></li>
+<li><code><a title="pygw.test.type_conversion_test.test_multi_polygon" href="#pygw.test.type_conversion_test.test_multi_polygon">test_multi_polygon</a></code></li>
+<li><code><a title="pygw.test.type_conversion_test.test_point" href="#pygw.test.type_conversion_test.test_point">test_point</a></code></li>
+<li><code><a title="pygw.test.type_conversion_test.test_polygon" href="#pygw.test.type_conversion_test.test_polygon">test_polygon</a></code></li>
+<li><code><a title="pygw.test.type_conversion_test.test_short" href="#pygw.test.type_conversion_test.test_short">test_short</a></code></li>
+<li><code><a title="pygw.test.type_conversion_test.test_string" href="#pygw.test.type_conversion_test.test_string">test_string</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
