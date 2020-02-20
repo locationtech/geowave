@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
+ * Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
  *
  * <p> See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
@@ -35,7 +35,7 @@ public class GeowaveOperationGrpcGenerator {
       "option java_package = \"org.locationtech.geowave.service.grpc.protobuf\";\n";
   private static final String header =
       "/**\n"
-          + " * Copyright (c) 2013-2019 Contributors to the Eclipse Foundation\n"
+          + " * Copyright (c) 2013-2020 Contributors to the Eclipse Foundation\n"
           + " *\n"
           + " * See the NOTICE file distributed with this work for additional\n"
           + " * information regarding copyright ownership.\n"
