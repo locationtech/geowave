@@ -52,7 +52,7 @@ if [ "$TRAVIS_REPO_SLUG" == "locationtech/geowave" ] && [ "$BUILD_AND_PUBLISH" =
   cd $HOME
   git config --global user.email "travis@travis-ci.org"
   git config --global user.name "travis-ci"
-  git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/locationtech/geowave gh-pages > /dev/null
+  git clone --quiet --depth 1 --branch=gh-pages https://${GH_TOKEN}@github.com/locationtech/geowave gh-pages > /dev/null
 
   cd gh-pages 
   
