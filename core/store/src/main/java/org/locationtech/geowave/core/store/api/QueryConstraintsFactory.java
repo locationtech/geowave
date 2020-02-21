@@ -11,7 +11,7 @@ package org.locationtech.geowave.core.store.api;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.persist.Persistable;
-import org.locationtech.geowave.core.store.index.CustomIndexImpl;
+import org.locationtech.geowave.core.store.index.CustomIndex;
 import org.locationtech.geowave.core.store.query.constraints.Constraints;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation;
@@ -78,8 +78,8 @@ public interface QueryConstraintsFactory {
 
   /**
    * constrain using a custom persistable object NOTE: this only applies to an index that is a
-   * {@link CustomIndexImpl} and the instance of these custom constraints must match the generic of
-   * the custom index's strategy
+   * {@link CustomIndex} and the instance of these custom constraints must match the generic of the
+   * custom index's strategy
    *
    * @param customConstraints the instance of custom constraints
    * @return the query constraints

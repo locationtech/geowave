@@ -35,7 +35,7 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.CustomIndexImpl;
+import org.locationtech.geowave.core.store.index.CustomIndex;
 import org.locationtech.geowave.core.store.index.CustomIndexStrategy;
 import org.locationtech.geowave.examples.ingest.SimpleIngest;
 import org.locationtech.geowave.test.GeoWaveITRunner;
@@ -291,8 +291,8 @@ public class GeoWaveCustomIndexIT {
     }
   }
 
-  private static CustomIndexImpl<SimpleFeature, TestEnumConstraints> getTestEnumIndex() {
-    return new CustomIndexImpl<>(new TestEnumIndexStrategy(), TEST_ENUM_INDEX_NAME);
+  private static CustomIndex<SimpleFeature, TestEnumConstraints> getTestEnumIndex() {
+    return new CustomIndex<>(new TestEnumIndexStrategy(), TEST_ENUM_INDEX_NAME);
   }
 
   public static class TestEnumIndexStrategy implements

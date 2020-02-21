@@ -29,13 +29,15 @@ public interface GeoWaveKey {
     }
     final ByteBuffer buffer =
         ByteBuffer.allocate(
-            key.getPartitionKey().length
+            (key.getPartitionKey() == null ? 0 : key.getPartitionKey().length)
                 + key.getSortKey().length
                 + key.getDataId().length
                 + VarintUtils.unsignedIntByteLength(key.getAdapterId() & 0xFFFF)
                 + VarintUtils.unsignedIntByteLength(key.getDataId().length)
                 + VarintUtils.unsignedIntByteLength(key.getNumberOfDuplicates()));
-    buffer.put(key.getPartitionKey());
+    if (key.getPartitionKey() != null) {
+      buffer.put(key.getPartitionKey());
+    }
     buffer.put(key.getSortKey());
     VarintUtils.writeUnsignedIntReversed(key.getAdapterId() & 0xFFFF, buffer);
     buffer.put(key.getDataId());

@@ -22,19 +22,19 @@ import org.locationtech.geowave.core.index.persist.PersistenceUtils;
  * 
  * @param <E> The entry type (such as SimpleFeature, GridCoverage, or whatever type the adapter
  *        uses)
- * @param <C> The custom constraints type, can be any arbitrary type, although should be persistable
+ * @param <C> The custom constraints type can be any arbitrary type, although should be persistable
  *        so that it can work outside of just client code (such as server-side filtering,
  *        map-reduce, or spark)
  */
-public class CustomIndexImpl<E, C extends Persistable> extends NullIndex implements
+public class CustomIndex<E, C extends Persistable> extends NullIndex implements
     CustomIndexStrategy<E, C> {
   private CustomIndexStrategy<E, C> indexStrategy;
 
-  public CustomIndexImpl() {
+  public CustomIndex() {
     super();
   }
 
-  public CustomIndexImpl(final CustomIndexStrategy<E, C> indexStrategy, final String id) {
+  public CustomIndex(final CustomIndexStrategy<E, C> indexStrategy, final String id) {
     super(id);
     this.indexStrategy = indexStrategy;
   }
