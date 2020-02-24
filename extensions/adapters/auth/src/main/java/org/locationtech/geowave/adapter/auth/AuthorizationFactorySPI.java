@@ -14,7 +14,7 @@ import java.net.URL;
 public interface AuthorizationFactorySPI {
   /**
    * @param location Any connection information to be interpreted by the provider.
-   * @return
+   * @return the authorization provider
    */
   AuthorizationSPI create(URL location);
 }

@@ -61,8 +61,6 @@ public class GeoWaveAvroFeatureWriter implements FieldWriter<SimpleFeature, Obje
   // Serialization logic
 
   /**
-   * *
-   *
    * @param avroObject Avro object to serialized
    * @return byte array of serialized avro data
    * @throws IOException
@@ -77,7 +75,7 @@ public class GeoWaveAvroFeatureWriter implements FieldWriter<SimpleFeature, Obje
   }
 
   /**
-   * * Converts a SimpleFeature to an avroSimpleFeature and then serializes it.
+   * Converts a SimpleFeature to an avroSimpleFeature and then serializes it.
    *
    * @param sf Simple Feature to be serialized
    * @param avroObjectToReuse null or AvroSimpleFeature instance to be re-used. If null a new
@@ -86,7 +84,7 @@ public class GeoWaveAvroFeatureWriter implements FieldWriter<SimpleFeature, Obje
    *        values will be set to the default classification
    * @param defaultClassification null or default classification. if null and defaultClassifications
    *        are not provided an exception will be thrown
-   * @return
+   * @return the serialized feature
    * @throws IOException
    */
   public byte[] serializeAvroSimpleFeature(

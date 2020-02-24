@@ -17,7 +17,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
  */
 public interface QLVectorAggregationFunction extends QLFunction {
   /**
-   * Gets the {@class Aggregation} associated with this function.
+   * Gets the {@link Aggregation} associated with this function.
    * 
    * @param featureType the feature type of the features
    * @param functionArgs the function arguments

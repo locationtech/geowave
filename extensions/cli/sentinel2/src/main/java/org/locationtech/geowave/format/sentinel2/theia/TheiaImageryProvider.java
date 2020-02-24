@@ -379,11 +379,6 @@ public class TheiaImageryProvider extends Sentinel2ImageryProvider {
 
   /**
    * Fetch the coverage of the specified band in the specified workspace directory
-   *
-   * @param band
-   * @param workspaceDir
-   * @return
-   * @throws IOException
    */
   @Override
   public RasterBandData getCoverage(final SimpleFeature band, final String workspaceDir)

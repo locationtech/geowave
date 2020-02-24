@@ -152,8 +152,7 @@ public class ExplainCommand extends DefaultOperation implements Command {
   /**
    * Output details about the main parameter, if there is one.
    *
-   * @param commander
-   * @return
+   * @return the explanation for the main parameter
    */
   @SuppressWarnings("unchecked")
   public static StringBuilder explainMainParameter(final JCommander commander) {

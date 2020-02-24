@@ -200,7 +200,7 @@ public class TrackEvent {
   /**
    * sets the classification information about this track
    *
-   * @param classification {@link TrackClassificaion}
+   * @param classification {@link TrackClassification}
    */
   public void addClassification(final TrackClassification classification) {
     if (classifications == null) {
@@ -254,9 +254,9 @@ public class TrackEvent {
   }
 
   /**
-   * sets the management information about this track
+   * Adds motion imagery to this track
    *
-   * @param management {@link MotionImagery}
+   * @param image {@link MotionImagery}
    */
   public void addMotionImagery(final MotionImagery image) {
     if (motionImages == null) {
@@ -282,9 +282,7 @@ public class TrackEvent {
   }
 
   /**
-   * sets a list of related tracks
-   *
-   * @param trackRelations List<{@link LineageRelation}>
+   * Adds a track relation to this track
    */
   public void addTrackRelation(final LineageRelation relation) {
     if (trackRelations == null) {

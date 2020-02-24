@@ -39,21 +39,21 @@ import org.slf4j.LoggerFactory;
  * a light weight uniform object that reuses GeoWave data formats to feed analytic processes.
  *
  * <p>If the input object does not require adjustment after de-duplication, use {@link
- * org.locationtech.geowave.accumulo.mapreduce.dedupe.GeoWaveDedupReducer}
+ * org.locationtech.geowave.mapreduce.dedupe.GeoWaveDedupeReducer}
  *
  * <p>OutputFeature Attributes, see {@link
  * org.locationtech.geowave.analytic.AnalyticFeature.ClusterFeatureAttribute}
  *
  * <p>Context configuration parameters include:
  *
- * @formatter:off
+ * <!-- @formatter:off -->
  *     <p>"SimpleFeatureOutputReducer.Extract.DimensionExtractClass" -> {@link DimensionExtractor}
  *     to extract non-geometric dimensions
  *     <p>"SimpleFeatureOutputReducer.Extract.OutputDataTypeId" -> the name of the output
  *     SimpleFeature data type
  *     <p>"SimpleFeatureOutputReducer.Global.BatchId" ->the id of the batch; defaults to current
  *     time in millis (for range comparisons)
- * @formatter:on
+ * <!-- @formatter:on -->
  */
 public class SimpleFeatureOutputReducer extends GeoWaveReducer {
   protected DimensionExtractor<Object> dimExtractor;

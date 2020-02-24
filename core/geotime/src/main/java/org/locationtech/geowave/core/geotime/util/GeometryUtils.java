@@ -472,7 +472,7 @@ public class GeometryUtils {
    * @param geometry
    * @param distanceUnits
    * @param distance
-   * @return
+   * @return the buffered geometry and the degrees that it was buffered
    * @throws TransformException
    */
   public static final Pair<Geometry, Double> buffer(
@@ -557,7 +557,7 @@ public class GeometryUtils {
    *
    * @param crs
    * @param geometry
-   * @return
+   * @return the adjusted geometry
    */
   public static Geometry adjustGeo(final CoordinateReferenceSystem crs, final Geometry geometry) {
     final List<Polygon> polygons = fixRangeOfCoordinates(crs, geometry);
@@ -667,7 +667,7 @@ public class GeometryUtils {
    *
    * @param modifier
    * @param geometry - a geometry that may cross date line and/or hemispheres.
-   * @return
+   * @return the set of polygons
    */
   public static List<Polygon> constructGeometriesOverMapRegions(
       final Coordinate modifier,
@@ -713,7 +713,7 @@ public class GeometryUtils {
    *
    * @param crs
    * @param coord
-   * @return
+   * @return the adjusted coordinate
    */
   public static Coordinate adjustCoordinateToFitInRange(
       final CoordinateReferenceSystem crs,
@@ -766,7 +766,7 @@ public class GeometryUtils {
    * @param val the value
    * @param crs
    * @param axis the coordinate axis
-   * @return
+   * @return the adjusted coordinate dimension
    */
   public static double adjustCoordinateDimensionToRange(
       final double val,
@@ -794,7 +794,7 @@ public class GeometryUtils {
    *
    * @param factory
    * @param crs
-   * @return
+   * @return a world geometry
    */
   public static Geometry world(final GeometryFactory factory, final CoordinateReferenceSystem crs) {
     return factory.createPolygon(toPolygonCoordinates(crs.getCoordinateSystem()));

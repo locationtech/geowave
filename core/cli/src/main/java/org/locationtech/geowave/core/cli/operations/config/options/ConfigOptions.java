@@ -69,7 +69,7 @@ public class ConfigOptions {
   /**
    * The default property file is in the user's home directory, in the .geowave folder.
    *
-   * @return
+   * @return a property file in the user's home directory
    */
   public static File getDefaultPropertyPath() {
     // File location
@@ -87,9 +87,9 @@ public class ConfigOptions {
 
   /**
    * The default property file is in the user's home directory, in the .geowave folder. If the
-   * version can not be found the first available property file in the folder is used
+   * version can not be found the first available property file in the folder is used.
    *
-   * @return Default Property File
+   * @return the default property file
    */
   public static File getDefaultPropertyFile() {
     // HP Fortify "Path Manipulation" false positive
@@ -233,8 +233,6 @@ public class ConfigOptions {
   /**
    * This helper function will load the properties file, or return null if it can't. It's designed
    * to be used by other commands.
-   *
-   * @param delimiter
    */
   public static Properties loadProperties(final File configFile) {
     return loadProperties(configFile, null);
@@ -243,9 +241,6 @@ public class ConfigOptions {
   /**
    * This helper function will load the properties file, or return null if it can't. It's designed
    * to be used by other commands.
-   *
-   * @param delimiter the delimiter
-   * @param pattern filter by a regex pattern
    */
   public static Properties loadProperties(final File configFile, final String pattern) {
 

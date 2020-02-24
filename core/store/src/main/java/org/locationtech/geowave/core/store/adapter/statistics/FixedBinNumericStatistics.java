@@ -25,8 +25,7 @@ import org.locationtech.geowave.core.store.adapter.statistics.histogram.FixedBin
  * range, such as erroneous values. Erroneous values force extremes in the histogram. For example,
  * if the expected range of values falls between 0 and 1 and a value of 10000 occurs, then a single
  * bin contains the entire population between 0 and 1, a single bin represents the single value of
- * 10000. If there are extremes in the data, then use {@link FeatureNumericHistogramStatistics}
- * instead.
+ * 10000. If there are extremes in the data, then use `FeatureNumericHistogramStatistics` instead.
  *
  * <p> The default number of bins is 32.
  */

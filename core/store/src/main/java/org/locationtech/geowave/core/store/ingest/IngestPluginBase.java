@@ -22,7 +22,7 @@ public interface IngestPluginBase<I, O> extends DataAdapterProvider<O> {
    * Convert from an expected input format to a data format that can be directly ingested into
    * GeoWave
    *
-   * @param file The expected input.
+   * @param input The expected input.
    * @param indexNames The set of index IDs specified via a commandline argument (this is typically
    *        either the default spatial index or default spatial-temporal index)
    * @param globalVisibility If on the command-line the user specifies a global visibility to write

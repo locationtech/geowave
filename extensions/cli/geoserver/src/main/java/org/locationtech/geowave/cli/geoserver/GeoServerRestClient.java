@@ -115,7 +115,6 @@ public class GeoServerRestClient {
     SINGLETON_INSTANCE = null;
   }
 
-  /** @return */
   public GeoServerConfig getConfig() {
     return config;
   }
@@ -294,12 +293,6 @@ public class GeoServerRestClient {
 
   /**
    * Convenience - add layer(s) for the given store to geoserver
-   *
-   * @param workspaceName
-   * @param storeName
-   * @param adapterId
-   * @param defaultStyle
-   * @return
    */
   public Response addLayer(
       final String workspaceName,
@@ -549,10 +542,6 @@ public class GeoServerRestClient {
 
   /**
    * Get JSON object(s) from adapter list
-   *
-   * @param adapterInfoList
-   * @param description
-   * @return JSONObject
    */
   private JSONObject getJsonFromAdapters(
       final ArrayList<DataAdapterInfo> adapterInfoList,
@@ -612,8 +601,6 @@ public class GeoServerRestClient {
 
   /**
    * Get list of workspaces from geoserver
-   *
-   * @return
    */
   public Response getWorkspaces() {
     final Response resp = getWebTarget().path("rest/workspaces.json").request().get();
@@ -639,9 +626,6 @@ public class GeoServerRestClient {
 
   /**
    * Add workspace to geoserver
-   *
-   * @param workspace
-   * @return
    */
   public Response addWorkspace(final String workspace) {
     return getWebTarget().path("rest/workspaces").request().post(
@@ -650,9 +634,6 @@ public class GeoServerRestClient {
 
   /**
    * Delete workspace from geoserver
-   *
-   * @param workspace
-   * @return
    */
   public Response deleteWorkspace(final String workspace) {
     return getWebTarget().path("rest/workspaces/" + workspace).queryParam(
@@ -662,10 +643,6 @@ public class GeoServerRestClient {
 
   /**
    * Get the string version of a datastore JSONObject from geoserver
-   *
-   * @param workspaceName
-   * @param datastoreName
-   * @return
    */
   public Response getDatastore(
       final String workspaceName,
@@ -694,9 +671,6 @@ public class GeoServerRestClient {
 
   /**
    * Get list of Datastore names from geoserver
-   *
-   * @param workspaceName
-   * @return
    */
   public Response getDatastores(final String workspaceName) {
     final Response resp =
@@ -724,11 +698,6 @@ public class GeoServerRestClient {
 
   /**
    * Add a geowave datastore to geoserver
-   *
-   * @param workspaceName
-   * @param datastoreName
-   * @param gwStoreName
-   * @return
    */
   public Response addDatastore(
       final String workspaceName,
@@ -763,10 +732,6 @@ public class GeoServerRestClient {
 
   /**
    * Delete a geowave datastore from geoserver
-   *
-   * @param workspaceName
-   * @param datastoreName
-   * @return
    */
   public Response deleteDatastore(final String workspaceName, final String datastoreName) {
     return getWebTarget().path(
@@ -777,9 +742,6 @@ public class GeoServerRestClient {
 
   /**
    * Get a layer from geoserver
-   *
-   * @param layerName
-   * @return
    */
   public Response getFeatureLayer(final String layerName, final boolean quietOnNotFound) {
     final Response resp =
@@ -804,7 +766,7 @@ public class GeoServerRestClient {
    * @param workspaceName : if null, don't filter on workspace
    * @param datastoreName : if null, don't filter on datastore
    * @param geowaveOnly : if true, only return geowave layers
-   * @return
+   * @return the list of layers
    */
   public Response getFeatureLayers(
       final String workspaceName,
@@ -951,12 +913,6 @@ public class GeoServerRestClient {
 
   /**
    * Add feature layer to geoserver
-   *
-   * @param workspaceName
-   * @param datastoreName
-   * @param layerName
-   * @param defaultStyle
-   * @return
    */
   public Response addFeatureLayer(
       final String workspaceName,
@@ -983,9 +939,6 @@ public class GeoServerRestClient {
 
   /**
    * Delete a feature layer from geoserver
-   *
-   * @param layerName
-   * @return
    */
   public Response deleteFeatureLayer(final String layerName) {
     return getWebTarget().path("rest/layers/" + layerName).request().delete();
@@ -993,10 +946,6 @@ public class GeoServerRestClient {
 
   /**
    * Change the default style of a layer
-   *
-   * @param layerName
-   * @param styleName
-   * @return
    */
   public Response setLayerStyle(final String layerName, final String styleName) {
 
@@ -1008,9 +957,6 @@ public class GeoServerRestClient {
 
   /**
    * Get a geoserver style
-   *
-   * @param styleName
-   * @return
    */
   public Response getStyle(
       @PathParam("styleName") final String styleName,
@@ -1034,8 +980,6 @@ public class GeoServerRestClient {
 
   /**
    * Get a list of geoserver styles
-   *
-   * @return
    */
   public Response getStyles() {
     final Response resp = getWebTarget().path("rest/styles.json").request().get();
@@ -1062,10 +1006,6 @@ public class GeoServerRestClient {
 
   /**
    * Add a style to geoserver
-   *
-   * @param styleName
-   * @param fileInStream
-   * @return
    */
   public Response addStyle(final String styleName, final InputStream fileInStream) {
 
@@ -1085,9 +1025,6 @@ public class GeoServerRestClient {
 
   /**
    * Delete a style from geoserver
-   *
-   * @param styleName
-   * @return
    */
   public Response deleteStyle(final String styleName) {
 
@@ -1096,10 +1033,6 @@ public class GeoServerRestClient {
 
   /**
    * Get coverage store from geoserver
-   *
-   * @param workspaceName
-   * @param coverageName
-   * @return
    */
   public Response getCoverageStore(
       final String workspaceName,
@@ -1128,9 +1061,6 @@ public class GeoServerRestClient {
 
   /**
    * Get a list of coverage stores from geoserver
-   *
-   * @param workspaceName
-   * @return
    */
   public Response getCoverageStores(final String workspaceName) {
     final Response resp =
@@ -1158,14 +1088,6 @@ public class GeoServerRestClient {
 
   /**
    * Add coverage store to geoserver
-   *
-   * @param workspaceName
-   * @param cvgStoreName
-   * @param gwStoreName
-   * @param equalizeHistogramOverride
-   * @param interpolationOverride
-   * @param scaleTo8Bit
-   * @return
    */
   public Response addCoverageStore(
       final String workspaceName,
@@ -1204,10 +1126,6 @@ public class GeoServerRestClient {
 
   /**
    * Delete coverage store form geoserver
-   *
-   * @param workspaceName
-   * @param cvgstoreName
-   * @return
    */
   public Response deleteCoverageStore(final String workspaceName, final String cvgstoreName) {
     return getWebTarget().path(
@@ -1218,10 +1136,6 @@ public class GeoServerRestClient {
 
   /**
    * Get a list of coverages (raster layers) from geoserver
-   *
-   * @param workspaceName
-   * @param cvsstoreName
-   * @return
    */
   public Response getCoverages(final String workspaceName, final String cvsstoreName) {
     final Response resp =
@@ -1253,11 +1167,6 @@ public class GeoServerRestClient {
 
   /**
    * Get coverage from geoserver
-   *
-   * @param workspaceName
-   * @param cvgStoreName
-   * @param coverageName
-   * @return
    */
   public Response getCoverage(
       final String workspaceName,
@@ -1289,11 +1198,6 @@ public class GeoServerRestClient {
 
   /**
    * Add coverage to geoserver
-   *
-   * @param workspaceName
-   * @param cvgStoreName
-   * @param coverageName
-   * @return
    */
   public Response addCoverage(
       final String workspaceName,
@@ -1319,11 +1223,6 @@ public class GeoServerRestClient {
 
   /**
    * Delete coverage from geoserver
-   *
-   * @param workspaceName
-   * @param cvgstoreName
-   * @param coverageName
-   * @return
    */
   public Response deleteCoverage(
       final String workspaceName,

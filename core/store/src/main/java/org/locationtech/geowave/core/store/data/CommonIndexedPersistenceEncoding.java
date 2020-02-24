@@ -123,8 +123,8 @@ public class CommonIndexedPersistenceEncoding extends IndexedPersistenceEncoding
    * Given an ordered set of dimensions, convert this persistent encoding common index data into a
    * MultiDimensionalNumericData object that can then be used by the Index
    *
-   * @param dimensions
-   * @return
+   * @param dimensions the ordered set of dimensions
+   * @return the numeric data
    */
   @SuppressWarnings({"rawtypes", "unchecked"})
   public MultiDimensionalNumericData getNumericData(final NumericDimensionField[] dimensions) {

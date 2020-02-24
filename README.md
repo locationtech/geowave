@@ -35,7 +35,7 @@ Basically, GeoWave is working to bridge geospatial software with modern key/valu
 ## The Software
 * We have [multi-platform standalone installers](https://locationtech.github.io/geowave/latest/installation-guide.html#standalone-installers) for the GeoWave's command-line tools to help get started
   * This is often the quickest and easiest way to get started using GeoWave on your own machine
-* We have a [RPM repository](https://locationtech.github.io/geowave/latest/packages.html)
+* We have a [RPM repository](https://locationtech.github.io/geowave/latest/downloads.html)
   * This contains various packages including puppet modules, best used for distributed environments.
   * See the [Installation Guide](https://locationtech.github.io/geowave/latest/installation-guide.html#installation-from-rpm) for more info.
 * Maven artifacts are available on Maven Central
@@ -109,7 +109,7 @@ See the [CLI documentation](https://locationtech.github.io/geowave/latest/comman
 <p align="center">
 	<a href="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/overview/images/geolife-density-13.jpg" target="_blank"><img align="center" src="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/overview/images/geolife-density-13-thumb.jpg" alt="Geolife data at city scale"></a><br/><br/>
 	<a href="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/overview/images/geolife-density-17.jpg" target="_blank"><img align="center" src="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/overview/images/geolife-density-17-thumb.jpg" alt="Geolife data at block scale"></a><br/><br/>
-	<a href="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/overview/images/osmgpx.jpg" target="_blank"><img align="center" src="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/userguide/overview/osmgpx-thumb.jpg" alt="OSM GPX tracks at country scale"></a><br/>
+	<a href="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/overview/images/osmgpx.jpg" target="_blank"><img align="center" src="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/overview/images/osmgpx-thumb.jpg" alt="OSM GPX tracks at country scale"></a><br/>
 	
 </p>
 

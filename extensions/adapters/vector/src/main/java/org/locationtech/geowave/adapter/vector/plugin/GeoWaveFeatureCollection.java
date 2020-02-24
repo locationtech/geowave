@@ -313,10 +313,8 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
   }
 
   /**
-   * Return constraints that are indexed
-   *
-   * @param query
-   * @return
+   * @param query the query
+   * @return the temporal constraints of the query
    */
   protected TemporalConstraintsSet getBoundedTime(final Query query) {
     if (query == null) {

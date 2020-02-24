@@ -240,11 +240,6 @@ public class PropertyManagement implements Serializable {
   /**
    * Returns the value as, without conversion from the properties. Throws an exception if a
    * conversion is required to a specific type
-   *
-   * @param property
-   * @return
-   * @throws Exception
-   * @throws IllegalArgumentException
    */
   public Object getProperty(final ParameterEnum<?> property) throws Exception {
     final Serializable value = getPropertyValue(property);
@@ -260,11 +255,6 @@ public class PropertyManagement implements Serializable {
 
   /**
    * Returns the value after conversion. Throws an exception if a conversion fails.
-   *
-   * @param property
-   * @return
-   * @throws Exception
-   * @throws IllegalArgumentException
    */
   public <T> T getProperty(final ParameterEnum<?> property, final PropertyConverter<T> converter)
       throws Exception {

@@ -23,7 +23,7 @@ public interface QueryConstraints extends Persistable {
    * Fine-grained filtering and secondary filtering should be applied here as the primary index will
    * only enable coarse-grained filtering.
    *
-   * @param indexModel This can be used by the filters to determine the common fields in the index
+   * @param index the index to create filters for
    * @return A list of the query filters
    */
   public List<QueryFilter> createFilters(Index index);

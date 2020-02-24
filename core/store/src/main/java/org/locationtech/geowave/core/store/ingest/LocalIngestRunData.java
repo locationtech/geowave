@@ -90,11 +90,12 @@ public class LocalIngestRunData implements Closeable {
   }
 
   /**
-   * Return an index writer from the pool. The pool will create a new one The pool will not be
-   * cleaned up until the end. (No items will be cleaned up until the end)
+   * Return an index writer from the pool. The pool will create a new one if it doesn't exist. The
+   * pool will not be cleaned up until the end.
    *
-   * @param index
-   * @return
+   * @param typeName the type being written
+   * @param indices the indices to write to
+   * @return the index writer
    * @throws Exception
    */
   public Writer getIndexWriter(final String typeName, final List<Index> indices) throws Exception {
@@ -103,10 +104,10 @@ public class LocalIngestRunData implements Closeable {
   }
 
   /**
-   * Return the index writer to the pool
+   * Return an index writer to the pool.
    *
-   * @param index - the primary index used to create the writer
-   * @param writer
+   * @param typeName the type for the writer
+   * @param writer the writer to return
    * @throws Exception
    */
   public void releaseIndexWriter(final String typeName, final Writer writer) throws Exception {

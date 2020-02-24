@@ -19,8 +19,6 @@ import org.opengis.filter.Filter;
 
 /**
  * Commit changes immediately
- *
- * @source $URL$
  */
 public class GeoWaveEmptyTransaction extends AbstractTransactionManagement implements
     GeoWaveTransaction {

@@ -38,8 +38,6 @@ import com.google.common.collect.Multimap;
  * Captures changes made to a FeatureStore prior to being committed.
  *
  * <p> This is used to simulate the functionality of a database including transaction independence.
- *
- * @source $URL$
  */
 public class GeoWaveTransactionManagement extends AbstractTransactionManagement implements
     GeoWaveTransaction {
@@ -134,10 +132,11 @@ public class GeoWaveTransactionManagement extends AbstractTransactionManagement 
   }
 
   /**
-   * Record a modification to the indicated fid
+   * Record a modification to the indicated feature ID.
    *
-   * @param fid
-   * @param f replacement feature; null to indicate remove
+   * @param fid the feature ID
+   * @param original original feature
+   * @param updated replacement feature; null to indicate remove
    */
   @Override
   public void modify(final String fid, final SimpleFeature original, final SimpleFeature updated)

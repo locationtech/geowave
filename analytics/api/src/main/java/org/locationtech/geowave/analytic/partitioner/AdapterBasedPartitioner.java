@@ -53,7 +53,7 @@ import com.google.common.collect.Iterators;
  *
  * <p> This class depends on an AdapterStore. Since an AdapterStore is not Serializable, the
  * dependency is transient requiring initialization after serialization
- * {@link AdapterBasedPartitioner#initialize(ConfigurationWrapper)}
+ * {@link AdapterBasedPartitioner#initialize}
  */
 public class AdapterBasedPartitioner extends AbstractPartitioner<AdapterDataEntry> implements
     Partitioner<AdapterDataEntry>,

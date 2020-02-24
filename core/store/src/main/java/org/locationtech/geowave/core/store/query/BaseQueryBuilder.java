@@ -22,14 +22,14 @@ import org.locationtech.geowave.core.store.query.options.CommonQueryOptions.Hint
  */
 public interface BaseQueryBuilder<T, Q extends BaseQuery<T, ?>, R extends BaseQueryBuilder<T, Q, R>> {
   /**
-   * choose the appropriate index from all available indices (the default behavior)
+   * Choose the appropriate index from all available indices (the default behavior).
    *
    * @return this builder
    */
   R allIndices();
 
   /**
-   * Query only using the specified index
+   * Query only using the specified index.
    *
    * @param indexName the name of the index
    * @return this builder
@@ -37,7 +37,7 @@ public interface BaseQueryBuilder<T, Q extends BaseQuery<T, ?>, R extends BaseQu
   R indexName(String indexName);
 
   /**
-   * Add authorization to this builder
+   * Add an authorization to the query.
    *
    * @param authorization the authorization
    * @return this builder
@@ -45,8 +45,8 @@ public interface BaseQueryBuilder<T, Q extends BaseQuery<T, ?>, R extends BaseQu
   R addAuthorization(String authorization);
 
   /**
-   * set the authorizations for this query (it is intersecting with row visibilities to determine
-   * access)
+   * Set the authorizations for this query (authorizations are intersected with row visibilities to
+   * determine access).
    *
    * @param authorizations the authorizations
    * @return this builder
@@ -54,21 +54,21 @@ public interface BaseQueryBuilder<T, Q extends BaseQuery<T, ?>, R extends BaseQu
   R setAuthorizations(String[] authorizations);
 
   /**
-   * set to no authorizations (default behavior)
+   * Set to no authorizations (default behavior).
    *
    * @return this builder
    */
   R noAuthorizations();
 
   /**
-   * set no limit for the number of entries (default behavior)
+   * Set no limit for the number of entries (default behavior).
    *
    * @return this builder
    */
   R noLimit();
 
   /**
-   * set the limit for the number of entries
+   * Set the limit for the number of entries.
    *
    * @param limit the limit
    * @return this builder
@@ -76,22 +76,24 @@ public interface BaseQueryBuilder<T, Q extends BaseQuery<T, ?>, R extends BaseQu
   R limit(int limit);
 
   /**
-   * @param key
-   * @param value
-   * @return
+   * Add a hint to the query.
+   * 
+   * @param key the hint key
+   * @param value the hint value
+   * @return this builder
    */
   <HintValueType> R addHint(HintKey<HintValueType> key, HintValueType value);
 
   /**
-   * clear out any hints (default is no hints)
+   * Clear out any hints (default is no hints).
    *
    * @return this builder
    */
   R noHints();
 
   /**
-   * USe the specified constraints. Constraints can most easily be define by using the
-   * constraintFactory()
+   * Use the specified constraints. Constraints can most easily be define by using the
+   * constraintFactory().
    *
    * @param constraints the constraints
    * @return this builder
@@ -100,7 +102,7 @@ public interface BaseQueryBuilder<T, Q extends BaseQuery<T, ?>, R extends BaseQu
 
   /**
    * This is the easiest approach to defining a set of constraints and can be used to create the
-   * constraints that are provided to the constraints method
+   * constraints that are provided to the constraints method.
    *
    * @return a constraints factory
    */
@@ -109,7 +111,7 @@ public interface BaseQueryBuilder<T, Q extends BaseQuery<T, ?>, R extends BaseQu
   }
 
   /**
-   * Build the query represented by this builder
+   * Build the query represented by this builder.
    *
    * @return the query
    */

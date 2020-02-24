@@ -49,9 +49,6 @@ import org.slf4j.LoggerFactory;
  * <p>Catherine A. Sugar and Gareth M. James (2003). "Finding the number of clusters in a data set:
  * An information theoretic approach" Journal of the American Statistical Association 98 (January):
  * 750–763
- *
- * @formatter:off Couple things to note:
- * @formatter:on
  */
 public class KMeansJumpJobRunner extends MapReduceJobController implements ClusteringRunner {
   static final Logger LOGGER = LoggerFactory.getLogger(KMeansJumpJobRunner.class);

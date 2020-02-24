@@ -73,25 +73,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Manages the population of centroids by group id and batch id.
- *
- * <p>Properties:
- *
- * @formatter:off
- *     <p>"CentroidManagerGeoWave.Centroid.WrapperFactoryClass" - {@link AnalyticItemWrapperFactory}
- *     to extract wrap spatial objects with Centroid management function
- *     <p>"CentroidManagerGeoWave.Centroid.DataTypeId" -> The data type ID of the centroid simple
- *     feature
- *     <p>"CentroidManagerGeoWave.Centroid.IndexId" -> The GeoWave index ID of the centroid simple
- *     feature
- *     <p>"CentroidManagerGeoWave.Global.BatchId" -> Batch ID for updates
- *     <p>"CentroidManagerGeoWave.Global.Zookeeper" -> Zookeeper URL
- *     <p>"CentroidManagerGeoWave.Global.AccumuloInstance" -> Accumulo Instance Name
- *     <p>"CentroidManagerGeoWave.Global.AccumuloUser" -> Accumulo User name
- *     <p>"CentroidManagerGeoWave.Global.AccumuloPassword" -> Accumulo Password
- *     <p>"CentroidManagerGeoWave.Global.AccumuloNamespace" -> Accumulo Table Namespace
- *     <p>"CentroidManagerGeoWave.Common.AccumuloConnectFactory" -> {@link
- *     BasicAccumuloOperationsFactory}
- * @formatter:on
+ * 
  * @param <T> The item type used to represent a centroid.
  */
 public class CentroidManagerGeoWave<T> implements CentroidManager<T> {
@@ -206,12 +188,6 @@ public class CentroidManagerGeoWave<T> implements CentroidManager<T> {
 
   /**
    * Creates a new centroid based on the old centroid with new coordinates and dimension values
-   *
-   * @param feature
-   * @param coordinate
-   * @param extraNames
-   * @param extraValues
-   * @return
    */
   @Override
   public AnalyticItemWrapper<T> createNextCentroid(

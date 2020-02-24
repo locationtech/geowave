@@ -51,9 +51,6 @@ public class JavassistUtils {
    * This function will take the given annotations attribute and create a new attribute, cloning all
    * the annotations and specified values within the attribute. The annotations attribute can then
    * be set on a method, class, or field.
-   *
-   * @param attr
-   * @return
    */
   public static AnnotationsAttribute cloneAnnotationsAttribute(
       final ConstPool constPool,
@@ -112,9 +109,6 @@ public class JavassistUtils {
   /**
    * This class will find the method in the CtClass, and return it as a CtMethod.
    *
-   * @param clz
-   * @param m
-   * @return
    * @throws NotFoundException
    */
   public static CtMethod findMethod(final CtClass clz, final Method m) throws NotFoundException {
@@ -133,10 +127,7 @@ public class JavassistUtils {
   }
 
   /**
-   * Simple helper method to essentially clone the annotations from one class onto another
-   *
-   * @param oldClass
-   * @param newClass
+   * Simple helper method to essentially clone the annotations from one class onto another.
    */
   public static void copyClassAnnotations(final CtClass oldClass, final CtClass newClass) {
     // Load the existing annotations attributes
@@ -159,9 +150,6 @@ public class JavassistUtils {
    * Simple helper method to take any FIELD targetable annotations from the method and copy them to
    * the new field. All JCommander annotations can target fields as well as methods, so this should
    * capture them all.
-   *
-   * @param method
-   * @param field
    */
   public static void copyMethodAnnotationsToField(final CtMethod method, final CtField field) {
     // Load the existing annotations attributes
@@ -182,7 +170,7 @@ public class JavassistUtils {
   /**
    * Allows us to generate unique class names for generated classes
    *
-   * @return
+   * @return the unique class name
    */
   public static String getNextUniqueClassName() {
     return String.format("%s.cli_%s_%d", PREFIX_PACKAGE, uniqueId, objectCounter++);
@@ -191,7 +179,7 @@ public class JavassistUtils {
   /**
    * Allows us to generate unique field names for generated classes
    *
-   * @return
+   * @return the unique field name
    */
   public static String getNextUniqueFieldName() {
     return String.format("field_%d", objectCounter++);
@@ -200,7 +188,7 @@ public class JavassistUtils {
   /**
    * This will generate a class which is empty. Useful for applying annotations to it
    *
-   * @return
+   * @return an empty CtClass
    */
   public static CtClass generateEmptyClass() {
     // Create the class, so we can start adding the new facade fields to it.

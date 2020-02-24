@@ -150,9 +150,9 @@ public abstract class AbstractLockingManagement implements LockingManagement {
 
   /**
    * If already locked and request lock has proper authorization
-   * {@link AuthorizedLock#isAuthorized(AuthorizedLock)}, then return. If already locked and request
-   * does not have proper authorization, block until the lock is released or expired. If not already
-   * locked, create the lock.
+   * {@link AuthorizedLock#isAuthorized}, then return. If already locked and request does not have
+   * proper authorization, block until the lock is released or expired. If not already locked,
+   * create the lock.
    *
    * <p> Make sure there is some mechanism for expired locks to be discovered and released so that
    * clients are not blocked indefinitely.
@@ -163,7 +163,7 @@ public abstract class AbstractLockingManagement implements LockingManagement {
   public abstract void lock(AuthorizedLock lock, String featureID);
 
   /**
-   * If authorized {@link AuthorizedLock#isAuthorized(AuthorizedLock)}, unlock the featureID
+   * If authorized {@link AuthorizedLock#isAuthorized}, unlock the featureID
    *
    * @param lock
    * @param featureID
@@ -172,8 +172,7 @@ public abstract class AbstractLockingManagement implements LockingManagement {
 
   /**
    * Release all locks associated with a transaction or associated authorizations. Occurs on commit
-   * and rollback. Basically, call {@link TransactionLock#invalidate())} for all authorized locks
-   * {@link AuthorizedLock#isAuthorized(AuthorizedLock)}
+   * and rollback. Basically,invalidate all authorized locks {@link AuthorizedLock#isAuthorized}
    *
    * @param lock
    */
@@ -181,8 +180,8 @@ public abstract class AbstractLockingManagement implements LockingManagement {
 
   /**
    * Reset all locks associated with a transaction. Occurs on commit and rollback. Basically, call
-   * {@link AuthorizedLock#resetExpireTime()} for all authorized locks
-   * {@link AuthorizedLock#isAuthorized(AuthorizedLock)}
+   * {@link AuthorizedLock#resetExpireTime} for all authorized locks
+   * {@link AuthorizedLock#isAuthorized}
    *
    * @param lock
    */

@@ -48,7 +48,7 @@ public interface BinningStrategy extends Persistable {
    * this binning strategy) with a bin for each of the ranges, this will calculate the original
    * unbinned range.
    *
-   * @param index the normalized and binned range
+   * @param binnedRange the normalized and binned range
    * @return the original query range represented by the normalized and binned range
    */
   public NumericRange getDenormalizedRanges(BinRange binnedRange);

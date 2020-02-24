@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
  *
  * <p>Properties:
  *
- * @formatter:off
+ * <!-- @formatter:off -->
  *     <p>"ConvexHullMapReduce.Hull.DataTypeId" - Id of the data type to store the the polygons as
  *     simple features - defaults to "convex_hull"
  *     <p>"ConvexHullMapReduce.Hull.ProjectionClass" - instance of {@link
@@ -59,7 +59,7 @@ import org.slf4j.LoggerFactory;
  *     <p>"ConvexHullMapReduce.Hull.WrapperFactoryClass" -> {@link AnalyticItemWrapperFactory} to
  *     group and level associated with each entry
  * @see org.locationtech.geowave.analytic.clustering.NestedGroupCentroidAssignment
- * @formatter:on
+ * <!-- @formatter:on -->
  */
 public class ConvexHullMapReduce {
   protected static final Logger LOGGER = LoggerFactory.getLogger(ConvexHullMapReduce.class);

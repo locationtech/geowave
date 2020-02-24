@@ -174,8 +174,6 @@ public class CommonOptions {
 
   /**
    * Build the query options from the command line arguments.
-   *
-   * @return
    */
   public Query<?> buildQuery() {
     final QueryBuilder<?, ?> bldr = QueryBuilder.newBuilder();

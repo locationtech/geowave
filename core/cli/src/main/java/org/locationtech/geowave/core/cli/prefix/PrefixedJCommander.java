@@ -51,10 +51,7 @@ public class PrefixedJCommander extends JCommander {
   private PrefixedJCommanderInitializer initializer = null;
 
   /**
-   * Creates a new instance of this commander
-   *
-   * @param name - the operation name of this commander
-   * @param registry - where to lookup children
+   * Creates a new instance of this commander.
    */
   @SuppressWarnings("unchecked")
   public PrefixedJCommander() {

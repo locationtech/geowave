@@ -269,7 +269,7 @@ public class VarintUtils {
    * Encode a timestamp using varint encoding.
    *
    * @param time the timestamp
-   * @param buffer the {@code ByteBuffer} to write the timestamp to
+   * @return the timestamp as bytes
    */
   public static byte[] writeTime(final long time) {
     return writeSignedLong(time - TIME_EPOCH);

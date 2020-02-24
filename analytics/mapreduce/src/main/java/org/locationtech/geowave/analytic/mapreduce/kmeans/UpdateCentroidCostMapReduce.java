@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
  *
  * <p>As an FYI: During the clustering algorithm, the cost should be monotonic decreasing.
  *
- * @formatter:off
+ * <!-- @formatter:off -->
  *     <p>Context configuration parameters include:
  *     <p>"UpdateCentroidCostMapReduce.Common.DistanceFunctionClass" -> Used to determine distance
  *     to centroid
@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
  *     AnalyticItemWrapperFactory} to extract wrap spatial objects with Centroid management
  *     functions
  * @see CentroidManagerGeoWave
- * @formatter:on
+ * <!-- @formatter:on -->
  */
 public class UpdateCentroidCostMapReduce {
 

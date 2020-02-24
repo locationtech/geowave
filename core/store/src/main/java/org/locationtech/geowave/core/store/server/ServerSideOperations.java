@@ -51,7 +51,7 @@ public interface ServerSideOperations extends DataStoreOperations {
    * @param index the index/table
    * @param priority the operation priority (this is merely relative, it defines how to order
    *        multiple operations, from low to high)
-   * @param serverOpName the operation name
+   * @param name the operation name
    * @param operationClass the operation class
    * @param properties the operation options
    * @param configuredScopes the scopes
@@ -72,7 +72,7 @@ public interface ServerSideOperations extends DataStoreOperations {
    * @param index the index/table
    * @param priority the operation priority (this is merely relative, it defines how to order
    *        multiple operations, from low to high)
-   * @param serverOpName the operation name
+   * @param name the operation name
    * @param operationClass the operation class
    * @param properties the operation options
    * @param currentScopes the existing scopes

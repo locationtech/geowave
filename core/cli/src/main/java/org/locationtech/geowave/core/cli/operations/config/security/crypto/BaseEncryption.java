@@ -126,7 +126,7 @@ public abstract class BaseEncryption {
    * Generate a new token value in a specified file
    *
    * @param tokenFile
-   * @return
+   * @return {@code true} if the token was successfully generated
    */
   public static boolean generateNewEncryptionToken(final File tokenFile) throws Exception {
     boolean success = false;
@@ -159,7 +159,7 @@ public abstract class BaseEncryption {
   /**
    * Sets the path to the resource for the token
    *
-   * @param resourceLocation Path to resource to get the token
+   * @param resourceLoc Path to resource to get the token
    */
   public void setResourceLocation(final String resourceLoc) throws Throwable {
     resourceLocation = resourceLoc;
@@ -244,9 +244,7 @@ public abstract class BaseEncryption {
   }
 
   /**
-   * Get the key to use
-   *
-   * @return
+   * @return the key to use
    */
   protected Key getKey() {
     return key;

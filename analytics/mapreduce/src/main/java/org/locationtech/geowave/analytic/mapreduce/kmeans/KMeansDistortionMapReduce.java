@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
  * set: An information theoretic approach" Journal of the American Statistical Association 98
  * (January): 750–763
  *
- * @formatter:off Context configuration parameters include:
+ * <!-- @formatter:off --> Context configuration parameters include:
  *     <p>"KMeansDistortionMapReduce.Common.DistanceFunctionClass" -> {@link
  *     org.locationtech.geowave.analytic.distance.DistanceFn} used to determine distance to centroid
  *     <p>"KMeansDistortionMapReduce.Centroid.WrapperFactoryClass" -> {@link
@@ -54,7 +54,7 @@ import org.slf4j.LoggerFactory;
  *     <p>"KMeansDistortionMapReduce.Centroid.ExtractorClass" -> {@link
  *     org.locationtech.geowave.analytic.extract.CentroidExtractor}
  *     <p>"KMeansDistortionMapReduce.Jump.CountOfCentroids" -> May be different from actual.
- * @formatter:on
+ * <!-- @formatter:on -->
  * @see CentroidManagerGeoWave
  */
 public class KMeansDistortionMapReduce {

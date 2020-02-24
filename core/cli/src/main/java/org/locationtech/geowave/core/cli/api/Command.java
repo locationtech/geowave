@@ -13,10 +13,9 @@ package org.locationtech.geowave.core.cli.api;
  * called during the execute() phase.
  */
 public interface Command extends Operation {
+
   /**
    * Execute the command, and return whether we want to continue execution
-   *
-   * @return
    */
   public void execute(OperationParams params) throws Exception;
 }

@@ -34,7 +34,7 @@ public class SimpleFeaturePrimaryIndexConfiguration implements
   /**
    * Get all the index names associated with the SimpleFeatureType referenced.
    *
-   * @param type - SFT object which contains Index Names
+   * @param type SFT object which contains Index Names
    * @return List of index names
    */
   public static final List<String> getIndexNames(final SimpleFeatureType type) {
@@ -50,7 +50,7 @@ public class SimpleFeaturePrimaryIndexConfiguration implements
    * names for this Simple Feature Primary Index Configuration. It is stored in user data as
    * '{@value #INDEX_NAME}'
    *
-   * @param SFT to be updated.
+   * @param type SFT to be updated.
    */
   @Override
   public void updateType(final SimpleFeatureType type) {

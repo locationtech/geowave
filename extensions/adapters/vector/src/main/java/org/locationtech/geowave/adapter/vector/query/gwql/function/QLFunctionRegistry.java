@@ -16,7 +16,7 @@ import com.google.common.collect.Maps;
 
 /**
  * Singleton registry for all query language functions. Functions can be added to the language using
- * {@class QLFunctionRegistrySpi}.
+ * {@link QLFunctionRegistrySpi}.
  */
 public class QLFunctionRegistry {
 

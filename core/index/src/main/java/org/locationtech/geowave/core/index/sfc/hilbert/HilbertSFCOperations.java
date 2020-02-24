@@ -104,15 +104,14 @@ public interface HilbertSFCOperations {
       SFCDimensionDefinition[] dimensionDefinitions);
 
   /**
-   * Determines the coordinates per dimension of rows given a multi-dimensional range will span
-   * within this space filling curve
+   * Determines the coordinates a given range will span within this space filling curve.
    *
    * @param minValue the minimum value
    * @param maxValue the maximum value
    * @param dimension the ordinal of the dimension on this space filling curve
-   * @param dimensionDefinitions a set of dimension definitions to use to normalize the raw values
-   * @return the range of coordinates in each dimension (ie. [0][0] would be the min coordinate of
-   *         the first dimension and [0][1] would be the max coordinate of the first dimension)
+   * @param boundedDimensionDefinition the dimension definition to use to normalize the raw values
+   * @return the range of coordinates (ie. [0] would be the min coordinate and [1] would be the max
+   *         coordinate)
    */
   public long[] normalizeRange(
       double minValue,

@@ -105,7 +105,7 @@ public class BitmaskUtils {
    * Iterates the set (true) bits within the given composite bitmask and generates a list of field
    * positions.
    *
-   * @param compositeBitmask the composite bitmask
+   * @param bitmask the composite bitmask
    * @return a list of field positions
    */
   public static List<Integer> getFieldPositions(final byte[] bitmask) {
@@ -116,7 +116,7 @@ public class BitmaskUtils {
    * Iterates the set (true) bits within the given composite bitmask and generates a list of field
    * positions.
    *
-   * @param compositeBitmask the composite bitmask
+   * @param bitmask the composite bitmask
    * @return a list of field positions
    */
   public static int getLowestFieldPosition(final byte[] bitmask) {
@@ -136,7 +136,7 @@ public class BitmaskUtils {
    * Generates a field subset bitmask for the given index, adapter, and fields
    *
    * @param indexModel the index's CommonIndexModel
-   * @param fieldIds the fields to include in the subset, as Strings
+   * @param fieldNames the fields to include in the subset, as Strings
    * @param adapterAssociatedWithFieldIds the adapter for the type whose fields are being subsetted
    * @return the field subset bitmask
    */

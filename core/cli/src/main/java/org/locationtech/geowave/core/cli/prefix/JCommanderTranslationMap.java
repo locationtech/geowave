@@ -67,7 +67,7 @@ public class JCommanderTranslationMap {
   /**
    * Objects are the facades.
    *
-   * @return
+   * @return the translated objects
    */
   public Collection<Object> getObjects() {
     return Collections.unmodifiableCollection(translatedObjects);
@@ -77,7 +77,7 @@ public class JCommanderTranslationMap {
    * Return all the translations. They are indexed by 'field name', where field name is the field in
    * the facade object. Allow the user to modify them up until they create the facade objects
    *
-   * @return
+   * @return the translations
    */
   public Map<String, TranslationEntry> getEntries() {
     if (translatedObjects != null) {
@@ -124,11 +124,6 @@ public class JCommanderTranslationMap {
   /**
    * This is a mapping between the created facade's field (e.g., field_0) and the JCommander
    * parameter (param) which lives in the object it was parsed from, 'item'.
-   *
-   * @param newFieldName
-   * @param item
-   * @param param
-   * @param names - the arguments values for this item.
    */
   protected void addEntry(
       final String newFieldName,
@@ -143,9 +138,6 @@ public class JCommanderTranslationMap {
   /**
    * This will create the facade objects needed in order to parse the fields represented in the
    * translation map.
-   *
-   * @param map
-   * @return
    */
   public void createFacadeObjects() {
     if (translatedObjects != null) {
@@ -280,9 +272,6 @@ public class JCommanderTranslationMap {
   /**
    * Iterate the annotations, look for a 'names' parameter, and override it to prepend the given
    * prefix.
-   *
-   * @param field
-   * @param prefix
    */
   private void overrideParameterPrefixes(final CtField field, final String[] names) {
 
@@ -330,9 +319,6 @@ public class JCommanderTranslationMap {
 
   /**
    * Iterate the annotations, look for a 'required' parameter, and set it to false.
-   *
-   * @param field
-   * @param prefix
    */
   private void disableBooleanMember(final String booleanMemberName, final CtField field) {
 

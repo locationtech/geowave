@@ -150,8 +150,8 @@ public class AttributeSubsettingIterator extends ExceptionHandlingTransformingIt
    *
    * @param setting the {@link IteratorSetting}
    * @param adapterAssociatedWithFieldIds the adapter associated with the given fieldIds
-   * @param fieldIds the desired subset of fieldIds
-   * @param numericDimensions the numeric dimension fields
+   * @param fieldNames the desired subset of fieldIds
+   * @param indexModel the index model
    */
   public static void setFieldNames(
       final IteratorSetting setting,

@@ -199,7 +199,7 @@ public class ExtractGeometryFilterVisitor extends NullFilterVisitor {
   /**
    * Please note we are only visiting literals involved in spatial operations.
    *
-   * @param literal , hopefully a Geometry or Envelope
+   * @param expression hopefully a Geometry or Envelope
    * @param data Incoming BoundingBox (or Envelope or CRS)
    * @return ReferencedEnvelope updated to reflect literal
    */

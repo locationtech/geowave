@@ -20,17 +20,11 @@ public interface NeighborList<NNTYPE> extends Iterable<Entry<ByteArray, NNTYPE>>
 
   /**
    * May be called prior to init() when discovered by entry itself.
-   *
-   * @param entry
-   * @return
    */
   public boolean add(DistanceProfile<?> distanceProfile, ByteArray id, NNTYPE value);
 
   /**
    * See if the entries relationships have already been inferred
-   *
-   * @param entry
-   * @return
    */
   public InferType infer(final ByteArray id, final NNTYPE value);
 

@@ -23,8 +23,9 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 /**
  * This is a Filter which will run on Tablet Server during Scan. HBase uses these filters instead of
- * Iterators. It makes use of Protocol Buffer library See {@link https
- * ://developers.google.com/protocol-buffers/docs/javatutorial} for more info.
+ * Iterators. It makes use of Protocol Buffer library. See the <a
+ * href="https://developers.google.com/protocol-buffers/docs/javatutorial">Google documentation</a>
+ * for more info.
  */
 public class SingleEntryFilter extends FilterBase {
 

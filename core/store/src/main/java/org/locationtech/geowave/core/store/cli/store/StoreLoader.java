@@ -46,10 +46,10 @@ public class StoreLoader {
   }
 
   /**
-   * Attempt to load the datastore configuration from the config file.
+   * Attempt to load the data store configuration from the config file.
    *
    * @param configFile
-   * @return
+   * @return {@code true} if the configuration was successfully loaded
    */
   public boolean loadFromConfig(final File configFile) {
 
@@ -62,10 +62,10 @@ public class StoreLoader {
   }
 
   /**
-   * Attempt to load the datastore configuration from the config file.
+   * Attempt to load the data store configuration from the config file.
    *
    * @param configFile
-   * @return
+   * @return {@code true} if the configuration was successfully loaded
    */
   public boolean loadFromConfig(
       final Properties props,

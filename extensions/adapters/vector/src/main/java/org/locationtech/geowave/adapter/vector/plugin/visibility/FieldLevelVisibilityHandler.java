@@ -36,7 +36,6 @@ public abstract class FieldLevelVisibilityHandler<T, CommonIndexValue> implement
    *        providied by parameter 'visibilityAttribute')
    * @param visibilityAttribute the attribute name that contains data to discern visibility for
    *        other field/attributes.
-   * @param visibilityManagement
    */
   public FieldLevelVisibilityHandler(
       final String fieldName,

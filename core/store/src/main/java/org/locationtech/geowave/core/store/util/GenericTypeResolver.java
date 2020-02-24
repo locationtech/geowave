@@ -47,7 +47,6 @@ import org.slf4j.LoggerFactory;
  * @author Rob Harrop
  * @author Roy Clarkson
  * @since 1.0
- * @see GenericCollectionTypeResolver
  */
 public abstract class GenericTypeResolver {
   private static final Logger LOGGER = LoggerFactory.getLogger(GenericTypeResolver.class);

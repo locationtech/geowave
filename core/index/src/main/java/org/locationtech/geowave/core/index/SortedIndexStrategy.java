@@ -24,7 +24,7 @@ public interface SortedIndexStrategy<QueryRangeType extends IndexConstraints, En
    * Returns a list of query ranges for an specified numeric range.
    *
    * @param indexedRange defines the numeric range for the query
-   * @param maxRangeDecomposition the maximum number of ranges provided by a single query
+   * @param maxEstimatedRangeDecomposition the maximum number of ranges provided by a single query
    *        decomposition, this is a best attempt and not a guarantee
    * @return a List of query ranges
    */
@@ -46,8 +46,8 @@ public interface SortedIndexStrategy<QueryRangeType extends IndexConstraints, En
    * Returns a list of id's for insertion.
    *
    * @param indexedData defines the numeric data to be indexed
-   * @param maxDuplicateInsertionIds defines the maximum number of insertion IDs that can be used,
-   *        this is a best attempt and not a guarantee
+   * @param maxEstimatedDuplicateIds the maximum number of insertion IDs that can be used, this is a
+   *        best attempt and not a guarantee
    * @return a List of insertion ID's
    */
   public InsertionIds getInsertionIds(EntryRangeType indexedData, int maxEstimatedDuplicateIds);

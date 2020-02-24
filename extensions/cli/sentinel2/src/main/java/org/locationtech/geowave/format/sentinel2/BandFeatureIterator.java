@@ -41,10 +41,6 @@ public class BandFeatureIterator implements SimpleFeatureIterator {
 
   /**
    * Default SimpleFeatureTypeBuilder which provides the Bands schema of a Sentinel2 provider.
-   *
-   * @return
-   * @throws NoSuchAuthorityCodeException
-   * @throws FactoryException
    */
   public static SimpleFeatureTypeBuilder defaultBandFeatureTypeBuilder(final String typeName)
       throws NoSuchAuthorityCodeException, FactoryException {

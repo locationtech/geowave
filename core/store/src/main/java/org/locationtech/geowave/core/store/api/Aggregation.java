@@ -49,11 +49,11 @@ public interface Aggregation<P extends Persistable, R, T> extends Persistable {
   R getResult();
 
   /**
-   * this is responsible for reducing 2 results to a single result by
+   * Merge two aggregation results into a single result
    *
-   * @param result1
-   * @param result2
-   * @return
+   * @param result1 the first result
+   * @param result2 the second result
+   * @return the merged result
    */
   default R merge(final R result1, final R result2) {
     if (result1 == null) {

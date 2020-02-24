@@ -110,10 +110,10 @@ public abstract class DefaultOperation implements Operation {
   }
 
   /**
-   * Generate a new token value in a specified file
+   * Generate a new token value in a specified file.
    *
    * @param tokenFile
-   * @return
+   * @return {@code true} if the encryption tocken was successfully generated
    */
   protected boolean generateNewEncryptionToken(final File tokenFile) {
     try {

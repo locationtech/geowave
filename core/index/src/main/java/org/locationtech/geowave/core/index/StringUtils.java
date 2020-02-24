@@ -52,9 +52,9 @@ public class StringUtils {
   }
 
   /**
-   * Utility to convert a String to bytes
+   * Utility to convert a list of Strings to bytes
    *
-   * @param string incoming String to convert
+   * @param strings incoming Strings to convert
    * @return a byte array
    */
   public static byte[] stringsToBinary(final String strings[]) {

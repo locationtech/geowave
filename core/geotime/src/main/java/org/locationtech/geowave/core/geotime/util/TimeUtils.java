@@ -62,7 +62,7 @@ public class TimeUtils {
    * @param startTimeMillis start time (inclusive)
    * @param endTimeMillis end time (exclusive)
    * @param singleTimeField
-   * @return
+   * @return the during filter
    */
   public static Filter toDuringFilter(
       final long startTimeMillis,
@@ -248,7 +248,7 @@ public class TimeUtils {
    * Determine if a time or range descriptor is set. If so, then use it, otherwise infer.
    *
    * @param persistType - FeatureType that will be scanned for TimeAttributes
-   * @return
+   * @return the time descriptors
    */
   public static final TimeDescriptors inferTimeAttributeDescriptor(
       final SimpleFeatureType persistType) {

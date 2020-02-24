@@ -48,7 +48,7 @@ public class GeometryCalculations {
    * @param distances [x,y] = [longitude, latitude]
    * @param unit
    * @param coordinate
-   * @return
+   * @return the geometries that were built
    */
   public List<Geometry> buildSurroundingGeometries(
       final double[] distances,

@@ -54,7 +54,8 @@ public class TieredSFCIndexFactory {
    * Used to create a Single Tier Index Strategy. For example, this would be used to generate a
    * strategy that has Point type spatial data.
    *
-   * @param dimensionDefs an array of SFC Dimension Definition objects
+   * @param baseDefinitions the numeric dimensions of the strategy
+   * @param maxBitsPerDimension the maximum bits to use for each dimension
    * @param sfc the type of space filling curve (e.g. Hilbert)
    * @return an Index Strategy object with a single tier
    */
@@ -153,7 +154,7 @@ public class TieredSFCIndexFactory {
    * @param baseDefinitions an array of Numeric Dimension Definitions
    * @param maxBitsPerDimension the max cardinality for the Index Strategy
    * @param sfcType the type of space filling curve (e.g. Hilbert)
-   * @param numTiers the number of tiers of the Index Strategy
+   * @param numIndices the number of tiers of the Index Strategy
    * @return an Index Strategy object with a specified number of tiers
    */
   public static TieredSFCIndexStrategy createEqualIntervalPrecisionTieredStrategy(

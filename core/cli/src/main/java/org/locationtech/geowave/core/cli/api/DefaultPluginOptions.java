@@ -30,14 +30,12 @@ public abstract class DefaultPluginOptions {
   /**
    * This is implemented by the PluginOptions interface by child classes
    *
-   * @param qualifier
+   * @return the plugin type
    */
   public abstract String getType();
 
   /**
-   * Transform to a map, making all option values live in the "opts" namespace.
-   *
-   * @return
+   * Transform to properties, making all option values live in the "opts" namespace.
    */
   public void save(final Properties properties, final String namespace) {
     final JCommanderPropertiesTransformer jcpt =
@@ -50,9 +48,7 @@ public abstract class DefaultPluginOptions {
   }
 
   /**
-   * Transform from a map, reading values that live in the "opts" namespace.
-   *
-   * @param options
+   * Transform from properties, reading values that live in the "opts" namespace.
    */
   public boolean load(final Properties properties, final String namespace) {
     // Get the qualifier.

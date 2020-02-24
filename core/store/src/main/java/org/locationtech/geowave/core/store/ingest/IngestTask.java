@@ -67,7 +67,7 @@ public class IngestTask implements Runnable {
   /**
    * An identifier, usually (filename)-(counter)
    *
-   * @return
+   * @return the ID of the task
    */
   public String getId() {
     return id;
@@ -76,7 +76,7 @@ public class IngestTask implements Runnable {
   /**
    * Whether this worker has terminated.
    *
-   * @return
+   * @return {@code true} if the task is finished
    */
   public boolean isFinished() {
     return isFinished;

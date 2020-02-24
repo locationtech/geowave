@@ -277,7 +277,7 @@ public class DataStoreUtils {
    * Takes a byte array representing a serialized composite group of FieldInfos sharing a common
    * visibility and returns a List of the individual FieldInfos
    *
-   * @param compositeFieldId the composite bitmask representing the fields contained within the
+   * @param bitmask the composite bitmask representing the fields contained within the
    *        flattenedValue
    * @param flattenedValue the serialized composite FieldInfo
    * @param commonVisibility the shared visibility

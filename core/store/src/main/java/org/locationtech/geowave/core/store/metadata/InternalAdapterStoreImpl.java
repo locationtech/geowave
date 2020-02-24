@@ -151,8 +151,8 @@ public class InternalAdapterStoreImpl implements InternalAdapterStore {
    * This method has a chance of producing a conflicting adapter ID. Whenever possible,
    * {@link #getInitialAdapterId(String)} should be used.
    *
-   * @param typeName
-   * @return
+   * @param typeName the type name
+   * @return a possibly conflicting adapter ID
    */
   public static short getLazyInitialAdapterId(final String typeName) {
     return (short) (Math.abs((typeName.hashCode() % 127)));

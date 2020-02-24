@@ -142,10 +142,7 @@ public class HBaseUtils {
 
   /**
    * Since HBase's end keys are always exclusive, just add a trailing zero if you want an inclusive
-   * row range
-   *
-   * @param endKey
-   * @return
+   * row range.
    */
   public static byte[] getInclusiveEndKey(final byte[] endKey) {
     final byte[] inclusiveEndKey = new byte[endKey.length + 1];

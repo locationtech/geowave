@@ -224,10 +224,6 @@ public class GeometryHullTool {
    * University". 2010.
    *
    * <p> Per the paper, N = concaveThreshold
-   *
-   * @param geometry
-   * @param providedInnerPoints
-   * @return
    */
   public Geometry concaveHullParkOhMethod(
       final Geometry geometry,
@@ -328,10 +324,6 @@ public class GeometryHullTool {
    * hull and speed is critical, use this method. The measure of error is difficult to calculate
    * since it is not directly calculated based on the number of inner points. Rather, the measure is
    * based on some number of points in proximity the optimal concave hull.
-   *
-   * @param geometry
-   * @param providedInnerPoints
-   * @return
    */
   public Geometry concaveHull(
       final Geometry geometry,
@@ -482,10 +474,6 @@ public class GeometryHullTool {
    * Forms create edges between two shapes maintaining convexity.
    *
    * <p> Does not currently work if the shapes intersect
-   *
-   * @param shape1
-   * @param shape2
-   * @return
    */
   public Geometry connect(final Geometry shape1, final Geometry shape2) {
 
@@ -623,9 +611,6 @@ public class GeometryHullTool {
 
   /**
    * Determine if the polygon is defined clockwise
-   *
-   * @param set
-   * @return
    */
   public static boolean clockwise(final Coordinate[] set) {
     double sum = 0.0;
@@ -645,11 +630,6 @@ public class GeometryHullTool {
 
   /**
    * Calculate the angle between two points and a given vertex
-   *
-   * @param one
-   * @param vertex
-   * @param two
-   * @return
    */
   public static double calcAngle(
       final Coordinate one,
@@ -669,9 +649,6 @@ public class GeometryHullTool {
   /**
    * Calculate the distance between two points and a given vertex
    *
-   * @param one
-   * @param vertex
-   * @param two
    * @return array if doubles double[0] = length of the projection from start on the line containing
    *         the segment(start to end) double[1] = distance to the segment double[2] = distance to
    *         the line containing the segment(start to end)

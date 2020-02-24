@@ -69,7 +69,7 @@ public class TranslationEntry {
    * key specified, the description will be looked up in the resource bundle. If no description is
    * defined, the default CLI-specified description will be returned.
    *
-   * @return
+   * @return the description
    */
   public String getDescription() {
     String description = null;
@@ -109,10 +109,10 @@ public class TranslationEntry {
 
   /**
    * If a parameter has a defined description key, this method will lookup the description for the
-   * specified key
+   * specified key.
    *
    * @param descriptionKey Key to lookup for description
-   * @return
+   * @return the description
    */
   private String getDescriptionFromResourceBundle(final String descriptionKey) {
     String description = "";
@@ -144,9 +144,9 @@ public class TranslationEntry {
   }
 
   /**
-   * Specifies if this field is for a password
+   * Specifies if this field is for a password.
    *
-   * @return
+   * @return {@code true} if the field is a password
    */
   public boolean isPassword() {
     boolean isPassword = false;
@@ -161,9 +161,9 @@ public class TranslationEntry {
   }
 
   /**
-   * Specifies if this field is hidden
+   * Specifies if this field is hidden.
    *
-   * @return
+   * @return {@code true} if the field is hidden
    */
   public boolean isHidden() {
     if (getParam().getParameter() != null) {
@@ -175,9 +175,9 @@ public class TranslationEntry {
   }
 
   /**
-   * Specifies if this field is required
+   * Specifies if this field is required.
    *
-   * @return
+   * @return {@code true} if this field is required
    */
   public boolean isRequired() {
     boolean isRequired = false;
@@ -192,7 +192,7 @@ public class TranslationEntry {
    * Whether the given object has a value specified. If the current value is non null, then return
    * true.
    *
-   * @return
+   * @return {@code true} if this field has a value
    */
   public boolean hasValue() {
     final Object value = getParam().get(getObject());
@@ -203,7 +203,7 @@ public class TranslationEntry {
    * Property name is used to write to properties files, but also to report option names to
    * Geoserver.
    *
-   * @return
+   * @return the property name
    */
   public String getAsPropertyName() {
     return trimNonAlphabetic(getLongestParam(getPrefixedNames()));
@@ -213,7 +213,7 @@ public class TranslationEntry {
    * This function will take the configured prefix (a member variable) and add it to all the names
    * list.
    *
-   * @return
+   * @return the list of new names
    */
   private String[] addPrefixToNames() {
     String[] names = null;
@@ -244,10 +244,10 @@ public class TranslationEntry {
   }
 
   /**
-   * For all the entries in names(), look for the largest one
+   * For all the entries in names(), look for the largest one.
    *
-   * @param names
-   * @return
+   * @param names the names to check
+   * @return the longest name
    */
   private String getLongestParam(final String[] names) {
     String longest = null;
@@ -263,8 +263,8 @@ public class TranslationEntry {
    * Remove any non alphabetic character from the beginning of the string. For example, '--version'
    * will become 'version'.
    *
-   * @param str
-   * @return
+   * @param str the string to trim
+   * @return the trimmed string
    */
   private String trimNonAlphabetic(final String str) {
     int i = 0;

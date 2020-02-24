@@ -22,7 +22,7 @@ public class TrackManagement extends TrackItem {
   /**
    * Information about the modality from which a track is computed.
    *
-   * <p> See {@ModalityType}
+   * <p> See {@link ModalityType}
    */
   public ModalityType sourceModality;
 

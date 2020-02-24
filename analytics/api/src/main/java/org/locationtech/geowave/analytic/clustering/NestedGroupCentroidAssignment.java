@@ -42,7 +42,7 @@ import org.slf4j.Logger;
  *
  * <p>Parameters include:
  *
- * @formatter:off
+ * <!-- @formatter:off -->
  *     <p>"NestedGroupCentroidAssignment.Global.ParentBatchId" -> Parent Tier Batch IDs. If not
  *     present then assume value NestedGroupCentroidAssignment.Global.BatchId
  *     <p>"NestedGroupCentroidAssignment.Global.BatchId" -> batch id for current tier.
@@ -50,7 +50,7 @@ import org.slf4j.Logger;
  *     <p>"NestedGroupCentroidAssignment.Common.DistanceFunctionClass" -> distance function used for
  *     association of data points to centroid.
  * @see org.locationtech.geowave.analytic.clustering.CentroidManagerGeoWave
- * @formatter:on
+ * <!-- @formatter:on -->
  * @param <T>
  */
 public class NestedGroupCentroidAssignment<T> {
@@ -94,10 +94,6 @@ public class NestedGroupCentroidAssignment<T> {
 
   /**
    * Override zoomLevel from parameters
-   *
-   * @param config
-   * @param runTimeProperties
-   * @param zoomLevel
    */
   public static void setZoomLevel(
       final Configuration config,
@@ -107,11 +103,7 @@ public class NestedGroupCentroidAssignment<T> {
   }
 
   /**
-   * Override zoomLevel from parameters
-   *
-   * @param config
-   * @param runTimeProperties
-   * @param zoomLevel
+   * Override parent batch ID from parameters
    */
   public static void setParentBatchID(
       final Configuration config,

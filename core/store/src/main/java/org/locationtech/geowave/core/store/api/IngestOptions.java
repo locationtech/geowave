@@ -116,7 +116,7 @@ public class IngestOptions<T> {
   /**
    * get a default implementation of this builder
    *
-   * @return
+   * @return a new builder
    */
   public static <T> Builder<T> newBuilder() {
     return new IngestOptionsBuilderImpl();

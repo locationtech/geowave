@@ -31,6 +31,9 @@ public interface DimensionExtractor<T> extends java.io.Serializable {
    */
   public Geometry getGeometry(T anObject);
 
-  /** @param An assigned group ID, if one exists. null, otherwisw. -- */
+  /**
+   * @param anObject the object to get the group ID from
+   * @return An assigned group ID, if one exists, otherwise {@code null}
+   */
   public String getGroupID(T anObject);
 }

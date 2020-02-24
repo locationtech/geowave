@@ -67,10 +67,6 @@ public class SceneFeatureIterator implements SimpleFeatureIterator {
 
   /**
    * Default SimpleFeatureTypeBuilder which provides the Scene schema of a Sentinel2 repository.
-   *
-   * @return
-   * @throws NoSuchAuthorityCodeException
-   * @throws FactoryException
    */
   public static SimpleFeatureTypeBuilder defaultSceneFeatureTypeBuilder(final String typeName)
       throws NoSuchAuthorityCodeException, FactoryException {

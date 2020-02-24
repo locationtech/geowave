@@ -28,20 +28,28 @@ public interface InternalAdapterStore {
    * If an adapter is already associated with an internal Adapter returns false. Adapter can only be
    * associated with internal adapter once.
    *
-   * @param adapterId the adapter
+   * @param typeName the type to add
    * @return the internal ID
    */
   public short addTypeName(String typeName);
 
   /**
-   * Adapter Id to Internal Adapter Id mappings are maintain without regard to visibility
-   * constraints.
+   * Remove a mapping from the store by type name.
    *
-   * @param adapterId
+   * @param typeName the type to remove
    */
   public boolean remove(String typeName);
 
+  /**
+   * Remove a mapping from the store by internal adapter ID.
+   * 
+   * @param adapterId the internal adapter ID of the adapter to remove
+   * @return {@code true} if the type was removed
+   */
   public boolean remove(short adapterId);
 
+  /**
+   * Remove all mappings from the store.
+   */
   public void removeAll();
 }
