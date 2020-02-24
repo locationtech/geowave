@@ -233,11 +233,11 @@ public class ExtractTimeFilterVisitor extends NullFilterVisitor {
   }
 
   /**
-   * Please note we are only visiting literals involved in spatial operations.
+   * Please note we are only visiting literals involved in time.
    *
-   * @param literal , hopefully a Geometry or Envelope
-   * @param data Incoming BoundingBox (or Envelope or CRS)
-   * @return ReferencedEnvelope updated to reflect literal
+   * @param expression a literal time
+   * @param data unused
+   * @return temporal constraints updated to reflect literal
    */
   @Override
   public Object visit(final Literal expression, final Object data) {

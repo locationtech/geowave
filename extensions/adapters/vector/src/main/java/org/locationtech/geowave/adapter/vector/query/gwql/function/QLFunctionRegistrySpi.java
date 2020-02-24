@@ -21,7 +21,7 @@ public interface QLFunctionRegistrySpi {
   public QLFunctionNameAndConstructor[] getSupportedPersistables();
 
   /**
-   * Associates a {@class QLFunction} with a function name.
+   * Associates a {@link QLFunction} with a function name.
    */
   public static class QLFunctionNameAndConstructor {
     private final String functionName;

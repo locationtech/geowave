@@ -43,7 +43,7 @@ public interface DimensionalityTypeProviderSpi<T extends DimensionalityTypeOptio
   /**
    * These are options specific to the type of index being exposed by this SPI plugin.
    *
-   * @return
+   * @return the options for the dimensionality type provider
    */
   T createOptions();
 }

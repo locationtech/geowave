@@ -41,7 +41,7 @@ import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.IndexImpl;
 
 /**
- * Basic support class for Partitioners (e.g {@link Paritioner}
+ * Basic support class for Partitioners (e.g {@link Partitioner}
  *
  * @param <T>
  */

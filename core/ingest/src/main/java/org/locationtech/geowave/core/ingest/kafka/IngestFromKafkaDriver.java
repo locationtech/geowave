@@ -316,9 +316,7 @@ public class IngestFromKafkaDriver {
   }
 
   /**
-   * Only true if all futures are complete.
-   *
-   * @return
+   * @return {@code true} if all futures are complete
    */
   public boolean isComplete() {
     for (final Future<?> future : futures) {
@@ -332,7 +330,7 @@ public class IngestFromKafkaDriver {
   /**
    * Wait for all kafka topics to complete, then return the result objects.
    *
-   * @return
+   * @return the future results
    * @throws InterruptedException
    * @throws ExecutionException
    */

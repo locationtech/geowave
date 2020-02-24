@@ -86,19 +86,17 @@ public class OperationRegistry {
   }
 
   /**
-   * Allow the iteration and exploration of all operations by a caller. Because we like callers.
-   *
-   * @return
+   * @return a collection of all entries to allow for iteration and exploration by the caller
    */
   public Collection<OperationEntry> getAllOperations() {
     return Collections.unmodifiableCollection(operationMapByClass.values());
   }
 
   /**
-   * Get the exported service entry by class name
+   * Get the exported service entry by class name.
    *
    * @param operationClass
-   * @return
+   * @return the operation entry, if it exists
    */
   public OperationEntry getOperation(final Class<?> operationClass) {
     return operationMapByClass.get(operationClass);

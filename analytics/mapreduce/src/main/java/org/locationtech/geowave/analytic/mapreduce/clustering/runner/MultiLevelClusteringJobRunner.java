@@ -40,11 +40,12 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
  *
  * <p> Steps:
  *
- * @formatter: off <p> (1) Extract and deduplicate items from geowave. <p> (2) Cluster item within
- *             their assigned groups. Initially, items are all part of the same group. <p> (3)
- *             Assign to each point the cluster (group id). <p> (4) Repeat steps 2 to 3 for each
- *             lower level.
- * @formatter: on
+ * <!-- @formatter:off --> 
+ * <p> (1) Extract and deduplicate items from GeoWave.
+ * <p> (2) Cluster item within heir assigned groups. Initially, items are all part of the same group.
+ * <p> (3) Assign to each point the cluster (group id).
+ * <p> (4) Repeat steps 2 to 3 for each lower level.
+ * <!-- @formatter:on -->
  */
 public abstract class MultiLevelClusteringJobRunner extends MapReduceJobController implements
     MapReduceJobRunner {

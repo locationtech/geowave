@@ -36,9 +36,9 @@ public class OperationParser {
    * Parse command line arguments into the given operation. The operation will be prepared, and then
    * can be directly executed, or modified before being executed.
    *
-   * @param operation
-   * @param args
-   * @return
+   * @param operation the operation
+   * @param args the command arguments
+   * @return the parsed parameters
    */
   public CommandLineOperationParams parse(final Operation operation, final String[] args) {
     final CommandLineOperationParams params = new CommandLineOperationParams(args);
@@ -53,9 +53,9 @@ public class OperationParser {
    * Search the arguments for the list of commands/operations to execute based on the top level
    * operation entry given.
    *
-   * @param topLevel
-   * @param args
-   * @return
+   * @param topLevel the top level operation class
+   * @param args the command arguments
+   * @return the parsed parameters
    */
   public CommandLineOperationParams parse(
       final Class<? extends Operation> topLevel,

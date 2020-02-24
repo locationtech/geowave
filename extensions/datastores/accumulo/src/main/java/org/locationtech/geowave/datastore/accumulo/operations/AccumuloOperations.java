@@ -164,6 +164,7 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
    * @param userName The username for an account to establish an Accumulo connector
    * @param password The password for the account to establish an Accumulo connector
    * @param tableNamespace An optional string that is prefixed to any of the table names
+   * @param options Options for the Accumulo data store
    * @throws AccumuloException Thrown if a generic exception occurs when establishing a connector
    * @throws AccumuloSecurityException the credentials passed in are invalid
    */
@@ -184,6 +185,7 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
    * This constructor uses reasonable defaults and only requires an Accumulo connector
    *
    * @param connector The connector to use for all operations
+   * @param options Options for the Accumulo data store
    */
   public AccumuloOperations(final Connector connector, final AccumuloOptions options) {
     this(connector, DEFAULT_TABLE_NAMESPACE, options);
@@ -194,8 +196,8 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
    * namespace
    *
    * @param connector The connector to use for all operations
-   * @param password An optional string that is prefixed to any of the table names
    * @param tableNamespace An optional string that is prefixed to any of the table names
+   * @param options Options for the Accumulo data store
    */
   public AccumuloOperations(
       final Connector connector,
@@ -221,6 +223,7 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
    * @param authorization The authorization to use for a batch scanner
    * @param tableNamespace An optional string that is prefixed to any of the table names
    * @param connector The connector to use for all operations
+   * @param options Options for the Accumulo data store
    */
   public AccumuloOperations(
       final int numThreads,

@@ -138,12 +138,6 @@ public class DistortionGroupManagement {
     }
   }
 
-  /**
-   * @param ops
-   * @param distortationTableName the name of the table holding the distortions
-   * @param parentBatchId the batch id to associate with the centroids for each group
-   * @return
-   */
   public <T> int retainBestGroups(
       final AnalyticItemWrapperFactory<T> itemWrapperFactory,
       final String dataTypeId,

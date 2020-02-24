@@ -84,13 +84,15 @@ public class GPXConsumer implements CloseableIterator<GeoWaveData<SimpleFeature>
 
   /**
    * @param fileStream
-   * @param primaryIndexId
+   * @param indexNames
    * @param inputID prefix to all IDs except waypoints (see uniqueWayPoints)
    * @param additionalData additional attributes to add the over-ride attributes in the GPX data
    *        file. The attribute are grouped by path. "gpx.trk", "gpx.rte" and "gpx.wpt"
-   * @param globalWayPoints if true, waypoints are globally unique, otherwise are unique to this
+   * @param backTimestamp
+   * @param uniqueWayPoints if true, waypoints are globally unique, otherwise are unique to this
    *        file and should have inputID and other components added to the identifier
    * @param globalVisibility
+   * @param maxLength
    */
   public GPXConsumer(
       final InputStream fileStream,

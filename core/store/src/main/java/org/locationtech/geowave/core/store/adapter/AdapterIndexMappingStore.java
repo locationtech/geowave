@@ -15,21 +15,26 @@ import org.locationtech.geowave.core.store.AdapterToIndexMapping;
  * on the implementation).
  */
 public interface AdapterIndexMappingStore {
+  /**
+   * Returns the indices associated with the given adapter.
+   * 
+   * @param internalAdapterId the internal adapter ID of the adapter
+   * @return the adapter to index mapping
+   */
   public AdapterToIndexMapping getIndicesForAdapter(short internalAdapterId);
 
   /**
    * If an adapter is already associated with indices and the provided indices do not match, update
-   * the mapping to include the combined set of indices
+   * the mapping to include the combined set of indices.
    *
-   * @param adapter
-   * @param indices
+   * @param mapping the mapping to add
    */
   public void addAdapterIndexMapping(AdapterToIndexMapping mapping);
 
   /**
-   * Adapter to index mappings are maintain without regard to visibility constraints.
+   * Remove the given adapter from the mapping store.
    *
-   * @param adapterId
+   * @param adapterId the internal adapter ID of the adapter
    */
   public void remove(short adapterId);
 
@@ -37,10 +42,13 @@ public interface AdapterIndexMappingStore {
    * Remove an index for the specified adapter mapping. The method should return false if the
    * adapter, or index for the adapter does not exist.
    *
-   * @param adapterId
-   * @param indexName
+   * @param adapterId the internal adapter ID of the adapter
+   * @param indexName the name of the index
    */
   public boolean remove(short adapterId, String indexName);
 
+  /**
+   * Remove all mappings from the store.
+   */
   public void removeAll();
 }

@@ -698,8 +698,8 @@ public class TestUtils {
   }
 
   /**
-   * @param bi sample
-   * @param ref reference
+   * @param actual sample
+   * @param expected reference
    * @param minPctError used for testing subsampling - to ensure we are properly subsampling we want
    *        there to be some error if subsampling is aggressive (10 pixels)
    * @param maxPctError used for testing subsampling - we want to ensure at most we are off by this

@@ -52,11 +52,6 @@ public class QueryIndexHelper {
 
   /**
    * Clip the provided constraints using the statistics, if available.
-   *
-   * @param statsMap
-   * @param timeDescriptors
-   * @param constraintsSet
-   * @return
    */
   public static TemporalConstraintsSet clipIndexedTemporalConstraints(
       final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap,
@@ -105,11 +100,6 @@ public class QueryIndexHelper {
 
   /**
    * Clip the provided bounded box with the statistics for the index
-   *
-   * @param featureType
-   * @param bbox
-   * @param statsMap
-   * @return
    */
   public static Geometry clipIndexedBBOXConstraints(
       final SimpleFeatureType featureType,
@@ -187,12 +177,6 @@ public class QueryIndexHelper {
   /**
    * Compose a time constraints. When the provided constraints do not fulfill the indexed
    * dimensions, compose constraints from statistics.
-   *
-   * @param featureType
-   * @param timeDescriptors
-   * @param statsMap
-   * @param timeBoundsSet
-   * @return
    */
   public static ConstraintsByClass composeTimeConstraints(
       final SimpleFeatureType featureType,
@@ -210,12 +194,6 @@ public class QueryIndexHelper {
   /**
    * If composed constraints matched statistics constraints, are empty or null, then return empty
    * constraint set.
-   *
-   * @param featureType
-   * @param timeDescriptors
-   * @param statsMap
-   * @param timeBoundsSet
-   * @return
    */
   public static ConstraintsByClass composeTimeBoundedConstraints(
       final SimpleFeatureType featureType,
@@ -241,12 +219,6 @@ public class QueryIndexHelper {
   /**
    * If composed constraints matched statistics constraints, are empty or null, then return empty
    * constraint set
-   *
-   * @param featureType
-   * @param timeDescriptors
-   * @param statsMap
-   * @param timeBoundsSet
-   * @return
    */
   public static GeoConstraintsWrapper composeGeometricConstraints(
       final SimpleFeatureType featureType,
@@ -262,13 +234,6 @@ public class QueryIndexHelper {
   /**
    * Compose a query from the set of constraints. When the provided constraints do not fulfill the
    * indexed dimensions, compose constraints from statistics.
-   *
-   * @param featureType
-   * @param timeDescriptors
-   * @param statsMap
-   * @param jtsBounds
-   * @param timeBoundsSet
-   * @return
    */
   public static ConstraintsByClass composeConstraints(
       final SimpleFeatureType featureType,

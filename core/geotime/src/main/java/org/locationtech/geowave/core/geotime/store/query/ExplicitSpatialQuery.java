@@ -107,7 +107,7 @@ public class ExplicitSpatialQuery extends BasicQueryByClass {
    * (axis).
    *
    * @param queryGeometry spatial geometry of the query
-   * @param overlaps if false, the only fully contained geometries are requested
+   * @param compareOp the compare operation to use
    */
   public ExplicitSpatialQuery(final Geometry queryGeometry, final CompareOperation compareOp) {
     this(GeometryUtils.basicConstraintsFromGeometry(queryGeometry), queryGeometry, compareOp);
@@ -119,7 +119,7 @@ public class ExplicitSpatialQuery extends BasicQueryByClass {
    *
    * @param constraints linear constraints
    * @param queryGeometry spatial geometry of the query
-   * @param compareOp predicate associated query geometry
+   * @param compareOp the compare operation to use
    */
   public ExplicitSpatialQuery(
       final ConstraintsByClass constraints,

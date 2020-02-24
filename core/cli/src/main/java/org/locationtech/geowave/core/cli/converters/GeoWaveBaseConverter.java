@@ -75,10 +75,10 @@ public abstract class GeoWaveBaseConverter<T> extends BaseConverter<T> {
   }
 
   /**
-   * Prompt a user for a standard value and return the input
+   * Prompt a user for a standard value and return the input.
    *
-   * @param promptMessage
-   * @return
+   * @param promptMessage the prompt message
+   * @return the value that was read
    */
   public static String promptAndReadValue(final String promptMessage) {
     LOGGER.trace("ENTER :: promptAndReadValue()");
@@ -97,10 +97,10 @@ public abstract class GeoWaveBaseConverter<T> extends BaseConverter<T> {
   }
 
   /**
-   * Prompt a user for a password and return the input
+   * Prompt a user for a password and return the input.
    *
-   * @param promptMessage
-   * @return
+   * @param promptMessage the prompt message
+   * @return the value that was read
    */
   public static String promptAndReadPassword(final String promptMessage) {
     LOGGER.trace("ENTER :: promptAndReadPassword()");
@@ -132,18 +132,18 @@ public abstract class GeoWaveBaseConverter<T> extends BaseConverter<T> {
 
   /**
    * Specify if a converter is for a password field. This allows a password field to be specified,
-   * though side-stepping most of the default jcommander password functionality
+   * though side-stepping most of the default jcommander password functionality.
    *
-   * @return
+   * @return {@code true} if the converter is for a password field
    */
   public boolean isPassword() {
     return false;
   }
 
   /**
-   * Specify if a field is required
+   * Specify if a field is required.
    *
-   * @return
+   * @return {@code true} if the field is required
    */
   public boolean isRequired() {
     return false;

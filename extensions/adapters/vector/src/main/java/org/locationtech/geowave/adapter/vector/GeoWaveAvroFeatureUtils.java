@@ -53,7 +53,7 @@ public class GeoWaveAvroFeatureUtils {
    * @param sft - SimpleFeatureType of the simpleFeature being serialized
    * @param defaultClassifications - map of attribute names to classification
    * @param defaultClassification - default classification if one could not be found in the map
-   * @return
+   * @return the feature definition
    * @throws IOException
    */
   public static AvroFeatureDefinition buildFeatureDefinition(
@@ -87,14 +87,14 @@ public class GeoWaveAvroFeatureUtils {
   }
 
   /**
-   * If a classification exists for this attribute name then use it If not then use the provided
-   * default classification
+   * If a classification exists for this attribute name then use it. If not, then use the provided
+   * default classification.
    *
    * @param localName - attribute name
    * @param defaultClassifications - map of attribute names to classification
    * @param defaultClassification - default classification to use if one is not mapped for the name
    *        provided
-   * @return
+   * @return the classification
    * @throws IOException
    */
   private static String getClassification(
@@ -124,7 +124,7 @@ public class GeoWaveAvroFeatureUtils {
    *
    * @param sf
    * @param sft
-   * @return
+   * @return the attribute value
    */
   public static synchronized AvroAttributeValues buildAttributeValue(
       final SimpleFeature sf,

@@ -37,9 +37,6 @@ public class NeighborIndex<NNTYPE> {
    *
    * <p> This method is designed for neighbor lists do some optimizations just prior to the neighbor
    * discovery process.
-   *
-   * @param node
-   * @return
    */
   public NeighborList<NNTYPE> init(final ByteArray id, final NNTYPE value) {
     NeighborList<NNTYPE> neighbors = index.get(id);

@@ -15,15 +15,15 @@ public interface VisibilityManagement<T> {
   /**
    * Create a visibility handler
    *
-   * @param fieldName -- the name of the field for object of type T requiring visibility treatment
-   * @param defaultHandler -- default handler if the visibilityAttributeName is not provided or the
-   *        field does not exist in a provided object of type T.
-   * @param visibilityAttributeName -- optional name of a field that determines visibility of each
-   *        field in an object of type T
-   * @return
+   * @param fieldName the name of the field for object of type T requiring visibility treatment
+   * @param defaultFieldVisibilityHandler default handler if the visibilityAttributeName is not
+   *        provided or the field does not exist in a provided object of type T.
+   * @param visibilityAttribute optional name of a field that determines visibility of each field in
+   *        an object of type T
+   * @return the visibility handler
    */
   public FieldVisibilityHandler<T, Object> createVisibilityHandler(
       final String fieldName,
-      FieldVisibilityHandler<T, Object> defaultFieldVisiblityHandler,
+      FieldVisibilityHandler<T, Object> defaultFieldVisibilityHandler,
       final String visibilityAttribute);
 }

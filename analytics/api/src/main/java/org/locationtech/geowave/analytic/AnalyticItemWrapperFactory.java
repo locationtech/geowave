@@ -16,25 +16,16 @@ import org.slf4j.Logger;
 /**
  * Create an analytic item wrapper for the provided item.
  *
- * @param <T>
+ * @param <T> the type of the item to wrap
  */
 public interface AnalyticItemWrapperFactory<T> {
   /**
    * Wrap the item.
-   *
-   * @param item
-   * @return
    */
   public AnalyticItemWrapper<T> create(T item);
 
   /**
    * Creates a new item based on the old item with new coordinates and dimension values
-   *
-   * @param feature
-   * @param coordinate
-   * @param extraNames
-   * @param extraValues
-   * @return
    */
   public AnalyticItemWrapper<T> createNextItem(
       final T feature,

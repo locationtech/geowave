@@ -67,7 +67,7 @@ import com.google.common.primitives.UnsignedBytes;
  *
  * <p>The reducer has four extension points:
  *
- * @formatter:off
+ * <!-- @formatter:off -->
  *     <p>(1) createSetForNeighbors() create a set for primary and secondary neighbor lists. The set
  *     implementation can control the amount of memory used. The algorithm loads the primary and
  *     secondary sets before performing the neighbor analysis. An implementer can constrain the set
@@ -77,9 +77,9 @@ import com.google.common.primitives.UnsignedBytes;
  *     <p>(3) processNeighbors() permits extensions to process the neighbor list for each primary
  *     item and update the summary object
  *     <p>(4) processSummary() permits the reducer to produce an output from the summary object
- * @formatter:on
+ * <!-- @formatter:on -->
  *     <p>* Properties:
- * @formatter:off "NNMapReduce.Partition.PartitionerClass" -> {@link
+ * <!-- @formatter:off -->"NNMapReduce.Partition.PartitionerClass" -> {@link
  *     org.locationtech.geowave.analytic.partitioner.Partitioner}
  *     <p>"NNMapReduce.Common.DistanceFunctionClass" -> Used to determine distance to between simple
  *     features {@link org.locationtech.geowave.analytic.distance.DistanceFn}
@@ -89,7 +89,7 @@ import com.google.common.primitives.UnsignedBytes;
  *     closest, where this variable is K) (integer)
  *     <p>"NNMapReduce.Partition.PartitionDistance" -> Maximum distance between item and its
  *     neighbors. (double)
- * @formatter:on
+ * <!-- @formatter:on -->
  */
 public class NNMapReduce {
   protected static final Logger LOGGER = LoggerFactory.getLogger(NNMapReduce.class);
@@ -230,26 +230,16 @@ public class NNMapReduce {
       return new DefaultNeighborList.DefaultNeighborListFactory<>();
     }
 
-    /**
-     * @param primaries
-     * @param others
-     * @param summary
-     * @param startingPoint
-     * @return alternate startingPoint
-     */
     protected void preprocess(
         final Reducer<PartitionDataWritable, AdapterWithObjectWritable, KEYOUT, VALUEOUT>.Context context,
         final NNProcessor<Object, VALUEIN> processor,
         final PARTITION_SUMMARY summary) throws IOException, InterruptedException {}
 
-    /** @Return an object that represents a summary of the neighbors processed */
+    /** @return an object that represents a summary of the neighbors processed */
     protected abstract PARTITION_SUMMARY createSummary();
 
     /**
      * Allow extended classes to do some final processing for the partition.
-     *
-     * @param summary
-     * @param context
      */
     protected abstract void processSummary(
         PartitionData partitionData,

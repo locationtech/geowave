@@ -18,8 +18,6 @@ import org.opengis.filter.Filter;
 
 /**
  * Represent the Writer's pluggable strategy of a transaction
- *
- * @source $URL$
  */
 public interface GeoWaveTransaction {
 
@@ -32,8 +30,9 @@ public interface GeoWaveTransaction {
   /**
    * Record a modification to the indicated fid
    *
-   * @param fid
-   * @param f replacement feature; null to indicate remove
+   * @param fid the feature ID
+   * @param old the original feature
+   * @param updated the replacement feature; null to indicate remove
    */
   public void modify(String fid, SimpleFeature old, SimpleFeature updated) throws IOException;
 

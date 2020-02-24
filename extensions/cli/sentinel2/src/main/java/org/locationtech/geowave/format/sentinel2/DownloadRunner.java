@@ -71,10 +71,6 @@ public class DownloadRunner extends AnalyzeRunner {
 
   /**
    * Returns the path of the downloaded scene directory in the specified workspace directory
-   *
-   * @param scene
-   * @param workspaceDirectory
-   * @return
    */
   public static File getSceneDirectory(final SimpleFeature scene, final String workspaceDirectory) {
     final String scenesDir = workspaceDirectory + File.separator + DOWNLOAD_DIRECTORY;
@@ -86,9 +82,6 @@ public class DownloadRunner extends AnalyzeRunner {
 
   /**
    * Remove all downloaded files of the scene in the specified workspace directory
-   *
-   * @param scene
-   * @param workspaceDirectory
    */
   protected static void cleanDownloadedFiles(
       final SimpleFeature scene,

@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  *
  * <p>The farther the distance, the higher the rank.
  *
- * @formatter:off Properties:
+ * <!-- @formatter:off --> Properties:
  *     <p>"CentroidDistanceBasedSamplingRankFunction.KMeansConfig.data_store_configuration" - The
  *     class used to determine the prefix class name for te GeoWave Data Store parameters for a
  *     connection to collect the starting set of centroids. Defaults to {@link
@@ -52,8 +52,7 @@ import org.slf4j.LoggerFactory;
  *     <p>"CentroidDistanceBasedSamplingRankFunction.KMeansConfig.centroid_factory" - {@link
  *     AnalyticItemWrapperFactory} to wrap the centroid data with the appropriate centroid wrapper
  *     {@link AnalyticItemWrapper}
- * @ee CentroidManagerGeoWave
- * @formatter:on
+ * <!-- @formatter:on -->
  *     <p>See {@link GeoWaveConfiguratorBase} for information for configuration GeoWave Data Store
  *     for consumption of starting set of centroids.
  * @param <T> The data type for the object being sampled

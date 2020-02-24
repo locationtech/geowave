@@ -158,7 +158,7 @@ public class Track {
   /**
    * sets the classification information about this track
    *
-   * @param classification {@link TrackClassificaion}
+   * @param classification {@link TrackClassification}
    */
   public void addClassification(final TrackClassification classification) {
     if (classifications == null) {
@@ -206,9 +206,7 @@ public class Track {
   }
 
   /**
-   * sets a list of related tracks
-   *
-   * @param trackRelations List<{@link LineageRelation}>
+   * Adds a track relation
    */
   public void addTrackRelation(final LineageRelation relation) {
     if (trackRelations == null) {

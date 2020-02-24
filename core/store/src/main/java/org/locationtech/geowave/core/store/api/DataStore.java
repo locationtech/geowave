@@ -17,15 +17,15 @@ import org.locationtech.geowave.core.store.CloseableIterator;
  * persisted to be used in subsequent queries. Also, implicitly statistics are maintained associated
  * with all data ingested. These statistics can be queried. Furthermore, aggregations can be applied
  * directly to the data which are similar to statistics, but are more dynamic in that any query
- * criteria can be applied as the input of the aggregation. Datastores that support serverside
+ * criteria can be applied as the input of the aggregation. Data stores that support server-side
  * processing will run the aggregation within the scope of iterating through the results for
  * additional efficiency.
  *
- * <p>Here is a simple snippets of pseudocode showing how a data store can be used to store and
+ * <p>Here is a simple snippet of pseudocode showing how a data store can be used to store and
  * retrieve your data.
  *
- * @formatter:off
- *     <pre>{@code
+ * <pre>
+ * {@code
  *  DataStore store = DataStoreFactory.createDataStore(<data store options>);
  * 	store.addType(<my data type>, <my index>);
  *  try(Writer writer = store.createWriter()){
@@ -40,9 +40,9 @@ import org.locationtech.geowave.core.store.CloseableIterator;
  *    	it.next();
  *    }
  *  }
- * }</pre>
- *
- * @formatter:on
+ * }
+ * </pre>
+ * 
  */
 public interface DataStore {
 

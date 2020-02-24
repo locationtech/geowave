@@ -11,8 +11,8 @@ package org.locationtech.geowave.adapter.vector.plugin.lock;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWavePluginConfig;
 
 /**
- * Factories are used with the {@link java.util.ServiceLoader) approach to discover locking
- * management strategies. * *
+ * Factories are used with the {@link java.util.ServiceLoader} approach to discover locking
+ * management strategies.
  */
 public interface LockingManagementFactory {
 

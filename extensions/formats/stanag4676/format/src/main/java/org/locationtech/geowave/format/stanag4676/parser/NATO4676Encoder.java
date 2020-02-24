@@ -107,9 +107,6 @@ public class NATO4676Encoder implements TrackEncoder {
   /**
    * A TrackRun will be encoded as a single NATO4676Message even though there may be multiple
    * messages inside it. The LAST NATO4676Message should be used.
-   *
-   * @param run
-   * @return
    */
   @Override
   public void Encode(final TrackRun run) {

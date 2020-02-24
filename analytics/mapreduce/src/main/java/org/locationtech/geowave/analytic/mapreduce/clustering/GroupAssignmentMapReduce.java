@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  * <p>From a multi-level clustering algorithm, an item has a different grouping in each level. Items
  * are clustered within their respective groups.
  *
- * @formatter:off
+ * <!-- @formatter:off -->
  *     <p>Context configuration parameters include:
  *     <p>"GroupAssignmentMapReduce.Common.DistanceFunctionClass" -> Used to determine distance to
  *     centroid
@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
  *     functions
  *     <p>"GroupAssignmentMapReduce.Centroid.ZoomLevel" -> The current zoom level
  * @see CentroidManagerGeoWave
- * @formatter:on
+ * <!-- @formatter:on -->
  */
 public class GroupAssignmentMapReduce {
 

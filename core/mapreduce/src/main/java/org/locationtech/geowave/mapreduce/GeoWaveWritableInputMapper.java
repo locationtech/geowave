@@ -47,7 +47,7 @@ public abstract class GeoWaveWritableInputMapper<KEYOUT, VALUEOUT> extends
    *
    * @param key
    * @param value
-   * @return
+   * @return the writable object
    */
   protected ObjectWritable toWritableValue(final GeoWaveInputKey key, final Object value) {
     return serializationTool.toWritable(key.getInternalAdapterId(), value);

@@ -22,7 +22,7 @@ public class MemoryFactoryHelper implements StoreFactoryHelper {
    * Return the default options instance. This is actually a method that should be implemented by
    * the individual factories, but is placed here since it's the same.
    *
-   * @return
+   * @return the default options instance
    */
   @Override
   public StoreFactoryOptions createOptionsInstance() {

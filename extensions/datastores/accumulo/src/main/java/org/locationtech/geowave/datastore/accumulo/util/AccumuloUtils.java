@@ -118,8 +118,6 @@ public class AccumuloUtils {
 
   /**
    * Get Namespaces
-   *
-   * @param connector
    */
   public static List<String> getNamespaces(final Connector connector) {
     final List<String> namespaces = new ArrayList<>();
@@ -135,9 +133,6 @@ public class AccumuloUtils {
 
   /**
    * Get list of data adapters associated with the given namespace
-   *
-   * @param connector
-   * @param namespace
    */
   public static List<DataTypeAdapter<?>> getDataAdapters(
       final Connector connector,
@@ -160,9 +155,6 @@ public class AccumuloUtils {
 
   /**
    * Get list of indices associated with the given namespace
-   *
-   * @param connector
-   * @param namespace
    */
   public static List<Index> getIndices(final Connector connector, final String namespace) {
     final List<Index> indices = new ArrayList<>();
@@ -181,14 +173,6 @@ public class AccumuloUtils {
 
   /**
    * Set splits on a table based on a partition ID
-   *
-   * @param namespace
-   * @param index
-   * @param randomParitions number of partition IDs
-   * @throws AccumuloException
-   * @throws AccumuloSecurityException
-   * @throws IOException
-   * @throws TableNotFoundException
    */
   public static void setSplitsByRandomPartitions(
       final Connector connector,
@@ -208,14 +192,6 @@ public class AccumuloUtils {
 
   /**
    * Set splits on a table based on quantile distribution and fixed number of splits
-   *
-   * @param namespace
-   * @param index
-   * @param quantile
-   * @throws AccumuloException
-   * @throws AccumuloSecurityException
-   * @throws IOException
-   * @throws TableNotFoundException
    */
   public static void setSplitsByQuantile(
       final BaseDataStore dataStore,
@@ -254,14 +230,6 @@ public class AccumuloUtils {
 
   /**
    * Set splits on table based on equal interval distribution and fixed number of splits.
-   *
-   * @param namespace
-   * @param index
-   * @param numberSplits
-   * @throws AccumuloException
-   * @throws AccumuloSecurityException
-   * @throws IOException
-   * @throws TableNotFoundException
    */
   public static void setSplitsByNumSplits(
       final Connector connector,
@@ -318,14 +286,6 @@ public class AccumuloUtils {
 
   /**
    * Set splits on table based on fixed number of rows per split.
-   *
-   * @param namespace
-   * @param index
-   * @param numberRows
-   * @throws AccumuloException
-   * @throws AccumuloSecurityException
-   * @throws IOException
-   * @throws TableNotFoundException
    */
   public static void setSplitsByNumRows(
       final Connector connector,
@@ -360,15 +320,6 @@ public class AccumuloUtils {
 
   /**
    * Check if locality group is set.
-   *
-   * @param namespace
-   * @param index
-   * @param adapter
-   * @return
-   * @throws AccumuloException
-   * @throws AccumuloSecurityException
-   * @throws IOException
-   * @throws TableNotFoundException
    */
   public static boolean isLocalityGroupSet(
       final Connector connector,
@@ -384,14 +335,6 @@ public class AccumuloUtils {
 
   /**
    * Set locality group.
-   *
-   * @param namespace
-   * @param index
-   * @param adapter
-   * @throws AccumuloException
-   * @throws AccumuloSecurityException
-   * @throws IOException
-   * @throws TableNotFoundException
    */
   public static void setLocalityGroup(
       final Connector connector,
@@ -405,14 +348,7 @@ public class AccumuloUtils {
   }
 
   /**
-   * * Get number of entries per index.
-   *
-   * @param namespace
-   * @param index
-   * @return
-   * @throws AccumuloException
-   * @throws AccumuloSecurityException
-   * @throws IOException
+   * Get number of entries per index.
    */
   public static long getEntries(
       final BaseDataStore dataStore,

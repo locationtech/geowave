@@ -55,7 +55,6 @@ public class GDALGeoTiffFormat extends BaseGDALGridFormat implements Format {
                     SUGGESTED_TILE_SIZE}));
   }
 
-  /** @see org.geotools.data.coverage.grid.AbstractGridFormat#getReader(Object, Hints) */
   @Override
   public GDALGeoTiffReader getReader(final Object source, final Hints hints) {
     try {

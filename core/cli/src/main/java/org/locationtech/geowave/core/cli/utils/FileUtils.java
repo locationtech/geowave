@@ -21,8 +21,8 @@ public class FileUtils {
    * Method to format file paths, similar to how command-line substitutions will function. For
    * example, we want to substitute '~' for a user's home directory, or environment variables
    *
-   * @param filePath
-   * @return
+   * @param filePath the file path to format
+   * @return the formatted file path
    */
   public static String formatFilePath(String filePath) {
     if (filePath != null) {
@@ -50,8 +50,8 @@ public class FileUtils {
    * If an environment variable, or something resembling one, is detected - i.e. starting with '$',
    * try to resolve it's actual value for resolving a path
    *
-   * @param variable
-   * @return
+   * @param variable the string to check
+   * @return the variable name
    */
   private static String getVariable(final String variable) {
     final StringBuilder sb = new StringBuilder();
@@ -79,10 +79,10 @@ public class FileUtils {
   }
 
   /**
-   * Reads the content of a file
+   * Reads the content of a file.
    *
-   * @param inputFile
-   * @return
+   * @param inputFile the file to read
+   * @return the contents of the file
    */
   public static String readFileContent(final File inputFile) throws Exception {
     Scanner scanner = null;

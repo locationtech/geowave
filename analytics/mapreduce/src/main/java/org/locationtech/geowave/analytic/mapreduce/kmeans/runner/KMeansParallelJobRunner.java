@@ -36,12 +36,12 @@ import org.opengis.feature.simple.SimpleFeature;
  * <p>Bahmani, Kumar, Moseley, Vassilvitskii and Vattani. Scalable K-means++. VLDB Endowment Vol. 5,
  * No. 7. 2012.
  *
- * @formatter:off Couple things to note:
+ * <!-- @formatter:off --> Couple things to note:
  *     <p>(1) Updating the cost of each sampled point occurs as the first step within sampling loop;
  *     the initial sample is performed outside the loop.
  *     <p>(2) A final update cost occurs outside the sampling loop just prior to stripping off the
  *     top 'K' centers.
- * @formatter:on
+ * <!-- @formatter:on -->
  */
 public class KMeansParallelJobRunner extends MapReduceJobController implements ClusteringRunner {
   final SampleMultipleSetsJobRunner<SimpleFeature> sampleSetsRunner =

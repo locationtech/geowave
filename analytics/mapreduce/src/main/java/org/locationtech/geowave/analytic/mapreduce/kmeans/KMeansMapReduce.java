@@ -46,14 +46,14 @@ import org.slf4j.LoggerFactory;
  *
  * <p>Properties:
  *
- * @formatter:off "KMeansMapReduce.Common.DistanceFunctionClass" - Used to determine distance to
+ * <!-- @formatter:off --> "KMeansMapReduce.Common.DistanceFunctionClass" - Used to determine distance to
  *     centroid
  *     <p>"KMeansMapReduce.Centroid.ExtractorClass" - Used to extract a centroid point from an item
  *     geometry
  *     <p>"KMeansMapReduce.Centroid.WrapperFactoryClass" - {@link AnalyticItemWrapperFactory} to
  *     extract wrap spatial objects with Centroid management function
  *     <p>"KMeansMapReduce.Centroid.ZoomLevel" -> The current zoom level @See CentroidManagerGeoWave
- * @formatter:on
+ * <!-- @formatter:on -->
  */
 public class KMeansMapReduce {
 

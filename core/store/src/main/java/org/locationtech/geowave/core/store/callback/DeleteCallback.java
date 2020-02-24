@@ -20,8 +20,8 @@ public interface DeleteCallback<T, R extends GeoWaveRow> {
   /**
    * This will be called after an entry is successfully deleted with the row IDs that were used
    *
-   * @param row the raw row that was deleted
    * @param entry the entry that was deleted
+   * @param rows the raw rows that were deleted
    */
   public void entryDeleted(final T entry, final R... rows);
 }

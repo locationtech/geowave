@@ -241,12 +241,6 @@ public abstract class Sentinel2ImageryProvider {
   /**
    * Copy bytes from a large (over 2GB) <code>InputStream</code> to an <code>OutputStream</code>
    * showing the progress of the copy.
-   *
-   * @param input
-   * @param output
-   * @param contentLength
-   * @return
-   * @throws IOException
    */
   protected static long copyLarge(
       final InputStream input,

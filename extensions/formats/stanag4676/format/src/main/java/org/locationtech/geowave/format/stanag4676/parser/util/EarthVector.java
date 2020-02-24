@@ -844,28 +844,9 @@ public class EarthVector {
    * Rotates this coordinate about the input vector through the input angle (radians - because we
    * usually use this internally)
    *
-   * @param vecAxis The axis of rotation
-   * @param ang The angle of rotation (in radians)
+   * @param rotAxis The axis of rotation
+   * @param angle The angle of rotation (in radians)
    */
-  // public Vector3d rotate( Vector3d vecAxis, double ang )
-  // {
-  // Vector3d vec1 = new Vector3d(vecAxis);
-  // vec1.normalize();
-  // Vector3d vec2 = new Vector3d();
-  // vec2.cross(vec1, ecfVector);
-  // Vector3d vec3 = new Vector3d();
-  // vec3.cross(vec2, vec1);
-  //
-  // double ang_sin = Math.sin(ang);
-  // double ang_cos = Math.cos(ang) - 1.0;
-  //
-  // Vector3d result = new Vector3d();
-  // result.x = ecfVector.x + ang_cos*vec3.x + ang_sin*vec2.x;
-  // result.y = ecfVector.y + ang_cos*vec3.y + ang_sin*vec2.y;
-  // result.z = ecfVector.z + ang_cos*vec3.z + ang_sin*vec2.z;
-  //
-  // return result;
-  // }
   public Vector3d rotate(final Vector3d rotAxis, final double angle) {
     final Vector3d thisVec = new Vector3d(ecfVector);
     final Vector3d axis = new Vector3d(rotAxis);
@@ -985,10 +966,7 @@ public class EarthVector {
   }
 
   /**
-   * Compute the vector from this coord to the input coord
-   *
-   * @param loc
-   * @return
+   * Compute the vector from this coord to the input coord.
    */
   public Vector3d getVector(final EarthVector loc) {
     final Vector3d vecTemp = new Vector3d(loc.getVector());

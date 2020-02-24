@@ -202,7 +202,7 @@ public class StatsManager {
    * Adds/Replaces a stats object for the given adapter <br> Supports object replacement.
    *
    * @param statsObj - data stats object to be tracked by adding or replacement
-   * @param visibilityHandler - type of visibility required to access the stats object
+   * @param fieldName - the field name for the statistic
    */
   public void addStats(
       final InternalDataStatistics<SimpleFeature, ?, ?> statsObj,

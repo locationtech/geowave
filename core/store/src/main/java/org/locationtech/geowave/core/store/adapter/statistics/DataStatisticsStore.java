@@ -36,6 +36,7 @@ public interface DataStatisticsStore {
    * Get all data statistics from the store by a data adapter ID
    *
    * @param adapterId the data adapter ID
+   * @param authorizations authorizations for the query
    * @return the list of statistics for the given adapter, empty if it doesn't exist
    */
   public CloseableIterator<InternalDataStatistics<?, ?, ?>> getDataStatistics(
@@ -45,6 +46,8 @@ public interface DataStatisticsStore {
   /**
    * Get all data statistics from the store by statistics type
    *
+   * @param statisticsType the statistics type for the requested statistics
+   * @param authorizations authorizations for the query
    * @return the list of statistics for the given adapter, empty if it doesn't exist
    */
   public CloseableIterator<InternalDataStatistics<?, ?, ?>> getDataStatistics(
@@ -54,6 +57,9 @@ public interface DataStatisticsStore {
   /**
    * Get all data statistics from the store by statistics type and extended ID prefix
    *
+   * @param extendedIdPrefix extended prefix for the statistics
+   * @param statisticsType the statistics type for the requested statistics
+   * @param authorizations authorizations for the query
    * @return the list of statistics for the given adapter, empty if it doesn't exist
    */
   public CloseableIterator<InternalDataStatistics<?, ?, ?>> getDataStatistics(
@@ -64,6 +70,7 @@ public interface DataStatisticsStore {
   /**
    * Get all data statistics from the store
    *
+   * @param authorizations authorizations for the query
    * @return the list of all statistics
    */
   public CloseableIterator<InternalDataStatistics<?, ?, ?>> getAllDataStatistics(
@@ -73,7 +80,8 @@ public interface DataStatisticsStore {
    * Get statistics by adapter ID and the statistics ID (which will define a unique statistic)
    *
    * @param adapterId The adapter ID for the requested statistics
-   * @param statisticsId the statistics ID for the requested statistics
+   * @param statisticsType the statistics type for the requested statistics
+   * @param authorizations authorizations for the query
    * @return the persisted statistics value
    */
   public CloseableIterator<InternalDataStatistics<?, ?, ?>> getDataStatistics(
@@ -85,7 +93,9 @@ public interface DataStatisticsStore {
    * Get statistics by adapter ID and the statistics ID (which will define a unique statistic)
    *
    * @param adapterId The adapter ID for the requested statistics
-   * @param statisticsId the statistics ID for the requested statistics
+   * @param extendedIdPrefix extended prefix for the statistics
+   * @param statisticsType the statistics type for the requested statistics
+   * @param authorizations authorizations for the query
    * @return the persisted statistics value
    */
   public CloseableIterator<InternalDataStatistics<?, ?, ?>> getDataStatistics(
@@ -95,10 +105,11 @@ public interface DataStatisticsStore {
       String... authorizations);
 
   /**
-   * Remove a statistic from the store
+   * Remove statistics from the store
    *
-   * @param adapterId
-   * @param statisticsId
+   * @param adapterId The adapter ID for the statistics
+   * @param statisticsType the statistics type to remove
+   * @param authorizations authorizations for the query
    * @return a flag indicating whether a statistic had existed with the given IDs and was
    *         successfully deleted.
    */
@@ -110,8 +121,10 @@ public interface DataStatisticsStore {
   /**
    * Remove a statistic from the store
    *
-   * @param adapterId
-   * @param statisticsId
+   * @param adapterId The adapter ID for the statistics
+   * @param extendedIdPrefix extended prefix for the statistics
+   * @param statisticsType the statistics type to remove
+   * @param authorizations authorizations for the query
    * @return a flag indicating whether a statistic had existed with the given IDs and was
    *         successfully deleted.
    */
@@ -124,9 +137,13 @@ public interface DataStatisticsStore {
   /**
    * Remove all statistics with a given adapter ID from the store
    *
-   * @param adapterId
+   * @param adapterId The adapter ID for the statistics
+   * @param authorizations authorizations for the query
    */
   public void removeAllStatistics(short adapterId, String... authorizations);
 
+  /**
+   * Remove all statistics
+   */
   public void removeAll();
 }

@@ -349,7 +349,7 @@ public class BasicQueryByClass extends BasicQuery {
      * Ignores 'default' indicator
      *
      * @param other
-     * @return
+     * @return {@code true} if these constraints match the other constraints
      */
     public boolean matches(final ConstraintData other) {
       if (this == other) {

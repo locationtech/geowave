@@ -50,8 +50,8 @@ public class FeatureHyperLogLogStatistics extends
   }
 
   /**
-   * @param dataAdapterId
-   * @param fieldName
+   * @param adapterId the adapter ID
+   * @param fieldName the field name
    * @param precision number of bits to support counting. 2^p is the maximum count value per
    *        distinct value. 1 <= p <= 32
    */

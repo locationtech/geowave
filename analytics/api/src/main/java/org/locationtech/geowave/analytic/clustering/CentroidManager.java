@@ -25,12 +25,6 @@ public interface CentroidManager<T> {
 
   /**
    * Creates a new centroid based on the old centroid with new coordinates and dimension values
-   *
-   * @param feature
-   * @param coordinate
-   * @param extraNames
-   * @param extraValues
-   * @return
    */
   public AnalyticItemWrapper<T> createNextCentroid(
       final T feature,

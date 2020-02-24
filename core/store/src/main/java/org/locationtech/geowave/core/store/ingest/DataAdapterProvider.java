@@ -14,7 +14,7 @@ import org.locationtech.geowave.core.store.index.CommonIndexValue;
 /**
  * This interface is applicable for plugins that need to provide writable data adapters for ingest.
  *
- * @param <O> the java type for the data being ingested
+ * @param <T> the java type for the data being ingested
  */
 public interface DataAdapterProvider<T> {
   /**

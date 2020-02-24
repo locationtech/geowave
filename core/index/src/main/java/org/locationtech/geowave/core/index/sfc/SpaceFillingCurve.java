@@ -77,7 +77,7 @@ public interface SpaceFillingCurve extends Persistable {
    * * Determines the estimated number of rows a multi-dimensional range will span within this space
    * filling curve
    *
-   * @param query describes the n-dimensional range to estimate the row count for
+   * @param data describes the n-dimensional range to estimate the row count for
    * @return an estimate of the row count for the ranges given within this space filling curve
    */
   public BigInteger getEstimatedIdCount(MultiDimensionalNumericData data);

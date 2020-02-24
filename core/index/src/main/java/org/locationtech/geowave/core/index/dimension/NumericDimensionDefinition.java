@@ -69,9 +69,7 @@ public interface NumericDimensionDefinition extends Persistable {
   public NumericRange getBounds();
 
   /**
-   * Provide the entire allowed range
-   *
-   * @return
+   * @return the entire allowed range
    */
   public NumericData getFullRange();
 }

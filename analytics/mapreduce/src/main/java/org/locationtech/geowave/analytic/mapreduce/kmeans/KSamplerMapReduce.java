@@ -55,15 +55,14 @@ import org.slf4j.LoggerFactory;
  * <p>Sampled features are written to as a new SimpleFeature to a data store. The SimpleFeature
  * contains attributes:
  *
- * @formatter:off
+ * <!-- @formatter:off -->
  *     <p>name - data id of the sampled point
  *     <p>weight - can be anything including the sum of all assigned feature distances
  *     <p>geometry - geometry of the sampled features
  *     <p>count - to hold the number of assigned features
  *     <p>groupID - the assigned group ID to the input objects
- * @formatter:on
+ *     
  *     <p>Properties:
- * @formatter:off
  *     <p>"KSamplerMapReduce.Sample.SampleSize" - number of input objects to sample. defaults to 1.
  *     <p>"KSamplerMapReduce.Sample.DataTypeId" - Id of the data type to store the k samples -
  *     defaults to "centroids"
@@ -80,7 +79,7 @@ import org.slf4j.LoggerFactory;
  *     millis (for range comparisons)
  *     <p>"KSamplerMapReduce.Centroid.WrapperFactoryClass" -> {@link AnalyticItemWrapperFactory} to
  *     extract non-geometric dimensions
- * @formatter:on
+ * <!-- @formatter:on -->
  */
 public class KSamplerMapReduce {
   protected static final Logger LOGGER = LoggerFactory.getLogger(KSamplerMapReduce.class);

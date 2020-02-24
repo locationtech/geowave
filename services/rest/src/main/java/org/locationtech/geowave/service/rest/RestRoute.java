@@ -27,8 +27,6 @@ public class RestRoute implements Comparable<RestRoute> {
 
   /**
    * Return the operation as it was originally passed
-   *
-   * @return
    */
   public ServiceEnabledCommand<?> getOperation() {
     return operation;
