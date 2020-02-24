@@ -115,12 +115,31 @@ var activeTableTab = "activeTableTab";
  persisted to be used in subsequent queries. Also, implicitly statistics are maintained associated
  with all data ingested. These statistics can be queried. Furthermore, aggregations can be applied
  directly to the data which are similar to statistics, but are more dynamic in that any query
- criteria can be applied as the input of the aggregation. Datastores that support serverside
+ criteria can be applied as the input of the aggregation. Data stores that support server-side
  processing will run the aggregation within the scope of iterating through the results for
  additional efficiency.
 
- <p>Here is a simple snippets of pseudocode showing how a data store can be used to store and
- retrieve your data.</div>
+ <p>Here is a simple snippet of pseudocode showing how a data store can be used to store and
+ retrieve your data.
+
+ <pre>
+ <code>
+  DataStore store = DataStoreFactory.createDataStore(&lt;data store options&gt;);
+ 	store.addType(&lt;my data type&gt;, &lt;my index&gt;);
+  try(Writer writer = store.createWriter()){
+    //write data
+    writer.writer(&lt;data);
+  }
+
+  //this just queries everything
+  try(CloseableIterator it = store.query(QueryBuilder.newBuilder().build())){
+    while(it.hasNext()){
+      //retrieve results matching query criteria and do something
+    	it.next();
+    }
+  }
+ </code>
+ </pre></div>
 </li>
 </ul>
 </div>

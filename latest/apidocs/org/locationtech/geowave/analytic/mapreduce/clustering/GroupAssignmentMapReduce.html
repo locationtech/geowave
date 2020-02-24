@@ -109,10 +109,19 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  assigned group ID, the resulting item's group ID is replaced in the output.
 
  <p>From a multi-level clustering algorithm, an item has a different grouping in each level. Items
- are clustered within their respective groups.</div>
+ are clustered within their respective groups.
+
+ <!-- @formatter:off -->
+     <p>Context configuration parameters include:
+     <p>"GroupAssignmentMapReduce.Common.DistanceFunctionClass" -> Used to determine distance to
+     centroid
+     <p>"GroupAssignmentMapReduce.Centroid.ExtractorClass" -> <a href="../../../../../../org/locationtech/geowave/analytic/extract/CentroidExtractor.html" title="interface in org.locationtech.geowave.analytic.extract"><code>CentroidExtractor</code></a>
+     <p>"GroupAssignmentMapReduce.Centroid.WrapperFactoryClass" -> <a href="../../../../../../org/locationtech/geowave/analytic/AnalyticItemWrapperFactory.html" title="interface in org.locationtech.geowave.analytic"><code>AnalyticItemWrapperFactory</code></a> to extract wrap spatial objects with Centroid management
+     functions
+     <p>"GroupAssignmentMapReduce.Centroid.ZoomLevel" -> The current zoom level</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../../../org/locationtech/geowave/analytic/clustering/CentroidManagerGeoWave.html" title="class in org.locationtech.geowave.analytic.clustering"><code>CentroidManagerGeoWave</code></a></dd>
+<dd><a href="../../../../../../org/locationtech/geowave/analytic/clustering/CentroidManagerGeoWave.html" title="class in org.locationtech.geowave.analytic.clustering"><code><!-- @formatter:on --></code></a></dd>
 </dl>
 </li>
 </ul>

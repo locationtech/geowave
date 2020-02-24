@@ -124,7 +124,14 @@ implements <a href="../../../../../../../org/locationtech/geowave/analytic/mapre
 <div class="block">The KMeans Parallel algorithm,labeled Algorithm 2 within in section 3.3 of
 
  <p>Bahmani, Kumar, Moseley, Vassilvitskii and Vattani. Scalable K-means++. VLDB Endowment Vol. 5,
- No. 7. 2012.</div>
+ No. 7. 2012.
+
+ <!-- @formatter:off --> Couple things to note:
+     <p>(1) Updating the cost of each sampled point occurs as the first step within sampling loop;
+     the initial sample is performed outside the loop.
+     <p>(2) A final update cost occurs outside the sampling loop just prior to stripping off the
+     top 'K' centers.
+ <!-- @formatter:on --></div>
 </li>
 </ul>
 </div>

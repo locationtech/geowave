@@ -233,7 +233,7 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/store/
 <td class="colFirst"><code>org.locationtech.jts.geom.Envelope</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BoundingBoxAggregation.html#merge-org.locationtech.jts.geom.Envelope-org.locationtech.jts.geom.Envelope-">merge</a></span>(org.locationtech.jts.geom.Envelope&nbsp;result1,
      org.locationtech.jts.geom.Envelope&nbsp;result2)</code>
-<div class="block">this is responsible for reducing 2 results to a single result by</div>
+<div class="block">Merge two aggregation results into a single result</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
@@ -450,11 +450,15 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/store/
 <pre>public&nbsp;org.locationtech.jts.geom.Envelope&nbsp;merge(org.locationtech.jts.geom.Envelope&nbsp;result1,
                                                 org.locationtech.jts.geom.Envelope&nbsp;result2)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#merge-R-R-">Aggregation</a></code></span></div>
-<div class="block">this is responsible for reducing 2 results to a single result by</div>
+<div class="block">Merge two aggregation results into a single result</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#merge-R-R-">merge</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BoundingBoxAggregation.html" title="type parameter in BoundingBoxAggregation">P</a> extends <a href="../../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,org.locationtech.jts.geom.Envelope,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BoundingBoxAggregation.html" title="type parameter in BoundingBoxAggregation">T</a>&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>result1</code> - the first result</dd>
+<dd><code>result2</code> - the second result</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
+<dd>the merged result</dd>
 </dl>
 </li>
 </ul>

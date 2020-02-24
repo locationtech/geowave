@@ -225,8 +225,13 @@ implements <a href="../../../../../../../org/locationtech/geowave/adapter/vector
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/data/visibility/VisibilityManagement.html#createVisibilityHandler-java.lang.String-org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler-java.lang.String-">createVisibilityHandler</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/data/visibility/VisibilityManagement.html" title="interface in org.locationtech.geowave.core.store.data.visibility">VisibilityManagement</a>&lt;<a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.html" title="type parameter in JsonDefinitionColumnVisibilityManagement">T</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>fieldName</code> - -- the name of the field for object of type T requiring visibility treatment</dd>
+<dd><code>fieldName</code> - the name of the field for object of type T requiring visibility treatment</dd>
+<dd><code>defaultHandler</code> - default handler if the visibilityAttributeName is not
+        provided or the field does not exist in a provided object of type T.</dd>
+<dd><code>visibilityAttributeName</code> - optional name of a field that determines visibility of each field in
+        an object of type T</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
+<dd>the visibility handler</dd>
 </dl>
 </li>
 </ul>

@@ -101,7 +101,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
-<dd><code>T</code> - </dd>
+<dd><code>T</code> - the type of the item to wrap</dd>
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
@@ -176,11 +176,6 @@ var activeTableTab = "activeTableTab";
 <h4>create</h4>
 <pre><a href="../../../../org/locationtech/geowave/analytic/AnalyticItemWrapper.html" title="interface in org.locationtech.geowave.analytic">AnalyticItemWrapper</a>&lt;<a href="../../../../org/locationtech/geowave/analytic/AnalyticItemWrapperFactory.html" title="type parameter in AnalyticItemWrapperFactory">T</a>&gt;&nbsp;create(<a href="../../../../org/locationtech/geowave/analytic/AnalyticItemWrapperFactory.html" title="type parameter in AnalyticItemWrapperFactory">T</a>&nbsp;item)</pre>
 <div class="block">Wrap the item.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>item</code> - </dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-</dl>
 </li>
 </ul>
 <a name="createNextItem-java.lang.Object-java.lang.String-org.locationtech.jts.geom.Coordinate-java.lang.String:A-double:A-">
@@ -197,14 +192,6 @@ var activeTableTab = "activeTableTab";
                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;extraNames,
                                       double[]&nbsp;extraValues)</pre>
 <div class="block">Creates a new item based on the old item with new coordinates and dimension values</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>feature</code> - </dd>
-<dd><code>coordinate</code> - </dd>
-<dd><code>extraNames</code> - </dd>
-<dd><code>extraValues</code> - </dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-</dl>
 </li>
 </ul>
 <a name="initialize-org.apache.hadoop.mapreduce.JobContext-java.lang.Class-org.slf4j.Logger-">

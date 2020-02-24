@@ -176,8 +176,8 @@ implements <a href="../../../../../org/locationtech/geowave/core/index/NumericIn
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/index/MultiDimensionalCoordinates.html" title="class in org.locationtech.geowave.core.index">MultiDimensionalCoordinates</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/index/PartitionIndexStrategyWrapper.html#getCoordinatesPerDimension-byte:A-byte:A-">getCoordinatesPerDimension</a></span>(byte[]&nbsp;partitionKey,
                           byte[]&nbsp;sortKey)</code>
-<div class="block">Return an integer coordinate in each dimension for the given insertion ID plus a bin ID if that
- dimension is continuous</div>
+<div class="block">Return an integer coordinate in each dimension for the given partition and sort key plus a bin
+ ID if that dimension is continuous.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -343,6 +343,8 @@ implements <a href="../../../../../org/locationtech/geowave/core/index/NumericIn
 <dd><code><a href="../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html#getQueryRanges-QueryRangeType-int-org.locationtech.geowave.core.index.IndexMetaData...-">getQueryRanges</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">SortedIndexStrategy</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>,<a href="../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>indexedRange</code> - defines the numeric range for the query</dd>
+<dd><code>maxEstimatedRangeDecomposition</code> - the maximum number of ranges provided by a single query
+        decomposition, this is a best attempt and not a guarantee</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a List of query ranges</dd>
 </dl>
@@ -383,6 +385,8 @@ implements <a href="../../../../../org/locationtech/geowave/core/index/NumericIn
 <dd><code><a href="../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html#getInsertionIds-EntryRangeType-int-">getInsertionIds</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/index/SortedIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">SortedIndexStrategy</a>&lt;<a href="../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>,<a href="../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>indexedData</code> - defines the numeric data to be indexed</dd>
+<dd><code>maxEstimatedDuplicateIds</code> - the maximum number of insertion IDs that can be used, this is a
+        best attempt and not a guarantee</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a List of insertion ID's</dd>
 </dl>
@@ -479,11 +483,14 @@ implements <a href="../../../../../org/locationtech/geowave/core/index/NumericIn
 <pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/index/MultiDimensionalCoordinates.html" title="class in org.locationtech.geowave.core.index">MultiDimensionalCoordinates</a>&nbsp;getCoordinatesPerDimension(byte[]&nbsp;partitionKey,
                                                               byte[]&nbsp;sortKey)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html#getCoordinatesPerDimension-byte:A-byte:A-">NumericIndexStrategy</a></code></span></div>
-<div class="block">Return an integer coordinate in each dimension for the given insertion ID plus a bin ID if that
- dimension is continuous</div>
+<div class="block">Return an integer coordinate in each dimension for the given partition and sort key plus a bin
+ ID if that dimension is continuous.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html#getCoordinatesPerDimension-byte:A-byte:A-">getCoordinatesPerDimension</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>partitionKey</code> - the partition key to determine the coordinates for</dd>
+<dd><code>sortKey</code> - the sort key to determine the coordinates for</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the integer coordinate that the given insertion ID represents and associated bin ID if
          that dimension is continuous</dd>
@@ -506,6 +513,7 @@ implements <a href="../../../../../org/locationtech/geowave/core/index/NumericIn
 <dd><code><a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html#getCoordinateRangesPerDimension-org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData-org.locationtech.geowave.core.index.IndexMetaData...-">getCoordinateRangesPerDimension</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/index/NumericIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">NumericIndexStrategy</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>dataRange</code> - the range to determine the coordinates for</dd>
+<dd><code>hints</code> - index hints</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the integer coordinate ranges that the given data ID represents and associated bin IDs
          if a dimension is continuous</dd>

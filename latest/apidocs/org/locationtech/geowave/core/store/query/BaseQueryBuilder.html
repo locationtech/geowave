@@ -138,74 +138,76 @@ var activeTableTab = "activeTableTab";
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="type parameter in BaseQueryBuilder">R</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html#addAuthorization-java.lang.String-">addAuthorization</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;authorization)</code>
-<div class="block">Add authorization to this builder</div>
+<div class="block">Add an authorization to the query.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>&lt;HintValueType&gt;<br><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="type parameter in BaseQueryBuilder">R</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html#addHint-org.locationtech.geowave.core.store.query.options.CommonQueryOptions.HintKey-HintValueType-">addHint</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/query/options/CommonQueryOptions.HintKey.html" title="class in org.locationtech.geowave.core.store.query.options">CommonQueryOptions.HintKey</a>&lt;HintValueType&gt;&nbsp;key,
-       HintValueType&nbsp;value)</code>&nbsp;</td>
+       HintValueType&nbsp;value)</code>
+<div class="block">Add a hint to the query.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="type parameter in BaseQueryBuilder">R</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html#allIndices--">allIndices</a></span>()</code>
-<div class="block">choose the appropriate index from all available indices (the default behavior)</div>
+<div class="block">Choose the appropriate index from all available indices (the default behavior).</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="type parameter in BaseQueryBuilder">Q</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html#build--">build</a></span>()</code>
-<div class="block">Build the query represented by this builder</div>
+<div class="block">Build the query represented by this builder.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="type parameter in BaseQueryBuilder">R</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html#constraints-org.locationtech.geowave.core.store.query.constraints.QueryConstraints-">constraints</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>&nbsp;constraints)</code>
-<div class="block">USe the specified constraints.</div>
+<div class="block">Use the specified constraints.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>default <a href="../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html" title="interface in org.locationtech.geowave.core.store.api">QueryConstraintsFactory</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html#constraintsFactory--">constraintsFactory</a></span>()</code>
 <div class="block">This is the easiest approach to defining a set of constraints and can be used to create the
- constraints that are provided to the constraints method</div>
+ constraints that are provided to the constraints method.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="type parameter in BaseQueryBuilder">R</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html#indexName-java.lang.String-">indexName</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</code>
-<div class="block">Query only using the specified index</div>
+<div class="block">Query only using the specified index.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="type parameter in BaseQueryBuilder">R</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html#limit-int-">limit</a></span>(int&nbsp;limit)</code>
-<div class="block">set the limit for the number of entries</div>
+<div class="block">Set the limit for the number of entries.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="type parameter in BaseQueryBuilder">R</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html#noAuthorizations--">noAuthorizations</a></span>()</code>
-<div class="block">set to no authorizations (default behavior)</div>
+<div class="block">Set to no authorizations (default behavior).</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="type parameter in BaseQueryBuilder">R</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html#noHints--">noHints</a></span>()</code>
-<div class="block">clear out any hints (default is no hints)</div>
+<div class="block">Clear out any hints (default is no hints).</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="type parameter in BaseQueryBuilder">R</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html#noLimit--">noLimit</a></span>()</code>
-<div class="block">set no limit for the number of entries (default behavior)</div>
+<div class="block">Set no limit for the number of entries (default behavior).</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="type parameter in BaseQueryBuilder">R</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html#setAuthorizations-java.lang.String:A-">setAuthorizations</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</code>
-<div class="block">set the authorizations for this query (it is intersecting with row visibilities to determine
- access)</div>
+<div class="block">Set the authorizations for this query (authorizations are intersected with row visibilities to
+ determine access).</div>
 </td>
 </tr>
 </table>
@@ -230,7 +232,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>allIndices</h4>
 <pre><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="type parameter in BaseQueryBuilder">R</a>&nbsp;allIndices()</pre>
-<div class="block">choose the appropriate index from all available indices (the default behavior)</div>
+<div class="block">Choose the appropriate index from all available indices (the default behavior).</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>this builder</dd>
@@ -244,7 +246,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>indexName</h4>
 <pre><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="type parameter in BaseQueryBuilder">R</a>&nbsp;indexName(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</pre>
-<div class="block">Query only using the specified index</div>
+<div class="block">Query only using the specified index.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>indexName</code> - the name of the index</dd>
@@ -260,7 +262,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>addAuthorization</h4>
 <pre><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="type parameter in BaseQueryBuilder">R</a>&nbsp;addAuthorization(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;authorization)</pre>
-<div class="block">Add authorization to this builder</div>
+<div class="block">Add an authorization to the query.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>authorization</code> - the authorization</dd>
@@ -276,8 +278,8 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>setAuthorizations</h4>
 <pre><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="type parameter in BaseQueryBuilder">R</a>&nbsp;setAuthorizations(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</pre>
-<div class="block">set the authorizations for this query (it is intersecting with row visibilities to determine
- access)</div>
+<div class="block">Set the authorizations for this query (authorizations are intersected with row visibilities to
+ determine access).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>authorizations</code> - the authorizations</dd>
@@ -293,7 +295,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>noAuthorizations</h4>
 <pre><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="type parameter in BaseQueryBuilder">R</a>&nbsp;noAuthorizations()</pre>
-<div class="block">set to no authorizations (default behavior)</div>
+<div class="block">Set to no authorizations (default behavior).</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>this builder</dd>
@@ -307,7 +309,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>noLimit</h4>
 <pre><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="type parameter in BaseQueryBuilder">R</a>&nbsp;noLimit()</pre>
-<div class="block">set no limit for the number of entries (default behavior)</div>
+<div class="block">Set no limit for the number of entries (default behavior).</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>this builder</dd>
@@ -321,7 +323,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>limit</h4>
 <pre><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="type parameter in BaseQueryBuilder">R</a>&nbsp;limit(int&nbsp;limit)</pre>
-<div class="block">set the limit for the number of entries</div>
+<div class="block">Set the limit for the number of entries.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>limit</code> - the limit</dd>
@@ -340,11 +342,13 @@ var activeTableTab = "activeTableTab";
 <h4>addHint</h4>
 <pre>&lt;HintValueType&gt;&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="type parameter in BaseQueryBuilder">R</a>&nbsp;addHint(<a href="../../../../../../org/locationtech/geowave/core/store/query/options/CommonQueryOptions.HintKey.html" title="class in org.locationtech.geowave.core.store.query.options">CommonQueryOptions.HintKey</a>&lt;HintValueType&gt;&nbsp;key,
                           HintValueType&nbsp;value)</pre>
+<div class="block">Add a hint to the query.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>key</code> - </dd>
-<dd><code>value</code> - </dd>
+<dd><code>key</code> - the hint key</dd>
+<dd><code>value</code> - the hint value</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
+<dd>this builder</dd>
 </dl>
 </li>
 </ul>
@@ -355,7 +359,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>noHints</h4>
 <pre><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="type parameter in BaseQueryBuilder">R</a>&nbsp;noHints()</pre>
-<div class="block">clear out any hints (default is no hints)</div>
+<div class="block">Clear out any hints (default is no hints).</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>this builder</dd>
@@ -369,8 +373,8 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>constraints</h4>
 <pre><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="type parameter in BaseQueryBuilder">R</a>&nbsp;constraints(<a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>&nbsp;constraints)</pre>
-<div class="block">USe the specified constraints. Constraints can most easily be define by using the
- constraintFactory()</div>
+<div class="block">Use the specified constraints. Constraints can most easily be define by using the
+ constraintFactory().</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>constraints</code> - the constraints</dd>
@@ -387,7 +391,7 @@ var activeTableTab = "activeTableTab";
 <h4>constraintsFactory</h4>
 <pre>default&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html" title="interface in org.locationtech.geowave.core.store.api">QueryConstraintsFactory</a>&nbsp;constraintsFactory()</pre>
 <div class="block">This is the easiest approach to defining a set of constraints and can be used to create the
- constraints that are provided to the constraints method</div>
+ constraints that are provided to the constraints method.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a constraints factory</dd>
@@ -401,7 +405,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>build</h4>
 <pre><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="type parameter in BaseQueryBuilder">Q</a>&nbsp;build()</pre>
-<div class="block">Build the query represented by this builder</div>
+<div class="block">Build the query represented by this builder.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the query</dd>

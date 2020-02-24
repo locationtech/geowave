@@ -246,7 +246,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/adapter/vector
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/transaction/GeoWaveTransactionManagement.html#modify-java.lang.String-org.opengis.feature.simple.SimpleFeature-org.opengis.feature.simple.SimpleFeature-">modify</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fid,
       org.opengis.feature.simple.SimpleFeature&nbsp;original,
       org.opengis.feature.simple.SimpleFeature&nbsp;updated)</code>
-<div class="block">Record a modification to the indicated fid</div>
+<div class="block">Record a modification to the indicated feature ID.</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
@@ -361,13 +361,14 @@ implements <a href="../../../../../../../org/locationtech/geowave/adapter/vector
                    org.opengis.feature.simple.SimpleFeature&nbsp;original,
                    org.opengis.feature.simple.SimpleFeature&nbsp;updated)
             throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<div class="block">Record a modification to the indicated fid</div>
+<div class="block">Record a modification to the indicated feature ID.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/transaction/GeoWaveTransaction.html#modify-java.lang.String-org.opengis.feature.simple.SimpleFeature-org.opengis.feature.simple.SimpleFeature-">modify</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/transaction/GeoWaveTransaction.html" title="interface in org.locationtech.geowave.adapter.vector.plugin.transaction">GeoWaveTransaction</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>fid</code> - </dd>
-<dd><code>f</code> - replacement feature; null to indicate remove</dd>
+<dd><code>fid</code> - the feature ID</dd>
+<dd><code>original</code> - original feature</dd>
+<dd><code>updated</code> - replacement feature; null to indicate remove</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 </dl>

@@ -124,7 +124,20 @@ implements <a href="../../../../../../org/locationtech/geowave/analytic/sample/f
  rank is determined by the probability of the point meeting being a centroid, modeled in the
  implementation of <a href="../../../../../../org/locationtech/geowave/analytic/sample/SampleProbabilityFn.html" title="interface in org.locationtech.geowave.analytic.sample"><code>SampleProbabilityFn</code></a>.
 
- <p>The farther the distance, the higher the rank.</div>
+ <p>The farther the distance, the higher the rank.
+
+ <!-- @formatter:off --> Properties:
+     <p>"CentroidDistanceBasedSamplingRankFunction.KMeansConfig.data_store_configuration" - The
+     class used to determine the prefix class name for te GeoWave Data Store parameters for a
+     connection to collect the starting set of centroids. Defaults to <a href="../../../../../../org/locationtech/geowave/analytic/sample/function/CentroidDistanceBasedSamplingRankFunction.html" title="class in org.locationtech.geowave.analytic.sample.function"><code>CentroidDistanceBasedSamplingRankFunction</code></a>.
+     <p>"CentroidDistanceBasedSamplingRankFunction.KMeansConfig.probability_function" -
+     implementation of <a href="../../../../../../org/locationtech/geowave/analytic/sample/SampleProbabilityFn.html" title="interface in org.locationtech.geowave.analytic.sample"><code>SampleProbabilityFn</code></a>
+     <p>"CentroidDistanceBasedSamplingRankFunction.KMeansConfig.distance_function" - <a href="../../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance"><code>DistanceFn</code></a>
+     <p>"CentroidDistanceBasedSamplingRankFunction.KMeansConfig.centroid_factory" - <a href="../../../../../../org/locationtech/geowave/analytic/AnalyticItemWrapperFactory.html" title="interface in org.locationtech.geowave.analytic"><code>AnalyticItemWrapperFactory</code></a> to wrap the centroid data with the appropriate centroid wrapper
+     <a href="../../../../../../org/locationtech/geowave/analytic/AnalyticItemWrapper.html" title="interface in org.locationtech.geowave.analytic"><code>AnalyticItemWrapper</code></a>
+ <!-- @formatter:on -->
+     <p>See <a href="../../../../../../org/locationtech/geowave/mapreduce/GeoWaveConfiguratorBase.html" title="class in org.locationtech.geowave.mapreduce"><code>GeoWaveConfiguratorBase</code></a> for information for configuration GeoWave Data Store
+     for consumption of starting set of centroids.</div>
 </li>
 </ul>
 </div>

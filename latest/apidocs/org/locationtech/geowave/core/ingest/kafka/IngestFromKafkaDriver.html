@@ -171,9 +171,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/IngestFromKafkaDriver.html#isComplete--">isComplete</a></span>()</code>
-<div class="block">Only true if all futures are complete.</div>
-</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/ingest/kafka/IngestFromKafkaDriver.html#isComplete--">isComplete</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>protected &lt;T&gt;&nbsp;void</code></td>
@@ -301,9 +299,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>isComplete</h4>
 <pre>public&nbsp;boolean&nbsp;isComplete()</pre>
-<div class="block">Only true if all futures are complete.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
+<dd><code>true</code> if all futures are complete</dd>
 </dl>
 </li>
 </ul>
@@ -319,6 +317,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="block">Wait for all kafka topics to complete, then return the result objects.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
+<dd>the future results</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ExecutionException.html?is-external=true" title="class or interface in java.util.concurrent">ExecutionException</a></code></dd>

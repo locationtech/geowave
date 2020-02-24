@@ -108,10 +108,18 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="block">Compute the convex hull over all points associated with each centroid. Each hull is sent to
  output as a simple features.
 
- <p>Properties:</div>
+ <p>Properties:
+
+ <!-- @formatter:off -->
+     <p>"ConvexHullMapReduce.Hull.DataTypeId" - Id of the data type to store the the polygons as
+     simple features - defaults to "convex_hull"
+     <p>"ConvexHullMapReduce.Hull.ProjectionClass" - instance of <a href="../../../../../../org/locationtech/geowave/analytic/Projection.html" title="interface in org.locationtech.geowave.analytic"><code>Projection</code></a>
+     <p>"ConvexHullMapReduce.Hull.IndexId" - The Index ID used for output simple features.
+     <p>"ConvexHullMapReduce.Hull.WrapperFactoryClass" -> <a href="../../../../../../org/locationtech/geowave/analytic/AnalyticItemWrapperFactory.html" title="interface in org.locationtech.geowave.analytic"><code>AnalyticItemWrapperFactory</code></a> to
+     group and level associated with each entry</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../../../org/locationtech/geowave/analytic/clustering/NestedGroupCentroidAssignment.html" title="class in org.locationtech.geowave.analytic.clustering"><code>NestedGroupCentroidAssignment</code></a></dd>
+<dd><a href="../../../../../../org/locationtech/geowave/analytic/clustering/NestedGroupCentroidAssignment.html" title="class in org.locationtech.geowave.analytic.clustering"><code><!-- @formatter:on --></code></a></dd>
 </dl>
 </li>
 </ul>

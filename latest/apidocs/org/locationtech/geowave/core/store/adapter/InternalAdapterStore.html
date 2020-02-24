@@ -154,18 +154,21 @@ var activeTableTab = "activeTableTab";
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html#remove-short-">remove</a></span>(short&nbsp;adapterId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html#remove-short-">remove</a></span>(short&nbsp;adapterId)</code>
+<div class="block">Remove a mapping from the store by internal adapter ID.</div>
+</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html#remove-java.lang.String-">remove</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>
-<div class="block">Adapter Id to Internal Adapter Id mappings are maintain without regard to visibility
- constraints.</div>
+<div class="block">Remove a mapping from the store by type name.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html#removeAll--">removeAll</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html#removeAll--">removeAll</a></span>()</code>
+<div class="block">Remove all mappings from the store.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -238,7 +241,7 @@ var activeTableTab = "activeTableTab";
  associated with internal adapter once.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>adapterId</code> - the adapter</dd>
+<dd><code>typeName</code> - the type to add</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the internal ID</dd>
 </dl>
@@ -251,11 +254,10 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>remove</h4>
 <pre>boolean&nbsp;remove(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</pre>
-<div class="block">Adapter Id to Internal Adapter Id mappings are maintain without regard to visibility
- constraints.</div>
+<div class="block">Remove a mapping from the store by type name.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>adapterId</code> - </dd>
+<dd><code>typeName</code> - the type to remove</dd>
 </dl>
 </li>
 </ul>
@@ -266,6 +268,13 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>remove</h4>
 <pre>boolean&nbsp;remove(short&nbsp;adapterId)</pre>
+<div class="block">Remove a mapping from the store by internal adapter ID.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>adapterId</code> - the internal adapter ID of the adapter to remove</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd><code>true</code> if the type was removed</dd>
+</dl>
 </li>
 </ul>
 <a name="removeAll--">
@@ -275,6 +284,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>removeAll</h4>
 <pre>void&nbsp;removeAll()</pre>
+<div class="block">Remove all mappings from the store.</div>
 </li>
 </ul>
 </li>

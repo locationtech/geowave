@@ -315,7 +315,7 @@ extends org.geotools.filter.visitor.NullFilterVisitor</pre>
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/ExtractTimeFilterVisitor.html#visit-org.opengis.filter.expression.Literal-java.lang.Object-">visit</a></span>(org.opengis.filter.expression.Literal&nbsp;expression,
      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;data)</code>
-<div class="block">Please note we are only visiting literals involved in spatial operations.</div>
+<div class="block">Please note we are only visiting literals involved in time.</div>
 </td>
 </tr>
 <tr id="i28" class="altColor">
@@ -565,17 +565,17 @@ extends org.geotools.filter.visitor.NullFilterVisitor</pre>
 <h4>visit</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;visit(org.opengis.filter.expression.Literal&nbsp;expression,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;data)</pre>
-<div class="block">Please note we are only visiting literals involved in spatial operations.</div>
+<div class="block">Please note we are only visiting literals involved in time.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>visit</code>&nbsp;in interface&nbsp;<code>org.opengis.filter.expression.ExpressionVisitor</code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>visit</code>&nbsp;in class&nbsp;<code>org.geotools.filter.visitor.NullFilterVisitor</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>literal</code> - , hopefully a Geometry or Envelope</dd>
-<dd><code>data</code> - Incoming BoundingBox (or Envelope or CRS)</dd>
+<dd><code>expression</code> - a literal time</dd>
+<dd><code>data</code> - unused</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>ReferencedEnvelope updated to reflect literal</dd>
+<dd>temporal constraints updated to reflect literal</dd>
 </dl>
 </li>
 </ul>

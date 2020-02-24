@@ -420,12 +420,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  University". 2010.
 
  <p> Per the paper, N = concaveThreshold</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>geometry</code> - </dd>
-<dd><code>providedInnerPoints</code> - </dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-</dl>
 </li>
 </ul>
 <a name="concaveHull-org.locationtech.jts.geom.Geometry-java.util.Collection-">
@@ -449,12 +443,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  hull and speed is critical, use this method. The measure of error is difficult to calculate
  since it is not directly calculated based on the number of inner points. Rather, the measure is
  based on some number of points in proximity the optimal concave hull.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>geometry</code> - </dd>
-<dd><code>providedInnerPoints</code> - </dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-</dl>
 </li>
 </ul>
 <a name="intersectAnotherEdge-org.locationtech.geowave.analytic.GeometryHullTool.Edge-org.locationtech.geowave.analytic.GeometryHullTool.Edge-">
@@ -498,12 +486,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="block">Forms create edges between two shapes maintaining convexity.
 
  <p> Does not currently work if the shapes intersect</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>shape1</code> - </dd>
-<dd><code>shape2</code> - </dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-</dl>
 </li>
 </ul>
 <a name="connect-org.locationtech.jts.geom.Geometry-org.locationtech.jts.geom.Geometry-org.apache.commons.lang3.tuple.Pair-">
@@ -525,11 +507,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>clockwise</h4>
 <pre>public static&nbsp;boolean&nbsp;clockwise(org.locationtech.jts.geom.Coordinate[]&nbsp;set)</pre>
 <div class="block">Determine if the polygon is defined clockwise</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>set</code> - </dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-</dl>
 </li>
 </ul>
 <a name="calcSmallestAngle-org.locationtech.jts.geom.Coordinate-org.locationtech.jts.geom.Coordinate-org.locationtech.jts.geom.Coordinate-">
@@ -553,13 +530,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                org.locationtech.jts.geom.Coordinate&nbsp;vertex,
                                org.locationtech.jts.geom.Coordinate&nbsp;two)</pre>
 <div class="block">Calculate the angle between two points and a given vertex</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>one</code> - </dd>
-<dd><code>vertex</code> - </dd>
-<dd><code>two</code> - </dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-</dl>
 </li>
 </ul>
 <a name="calcDistanceSegment-org.locationtech.jts.geom.Coordinate-org.locationtech.jts.geom.Coordinate-org.locationtech.jts.geom.Coordinate-">
@@ -573,10 +543,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                            org.locationtech.jts.geom.Coordinate&nbsp;point)</pre>
 <div class="block">Calculate the distance between two points and a given vertex</div>
 <dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>one</code> - </dd>
-<dd><code>vertex</code> - </dd>
-<dd><code>two</code> - </dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>array if doubles double[0] = length of the projection from start on the line containing
          the segment(start to end) double[1] = distance to the segment double[2] = distance to

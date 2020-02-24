@@ -125,11 +125,20 @@ extends <a href="../../../../../../org/locationtech/geowave/mapreduce/GeoWaveRed
  EPSG:4326. The output feature contains the ID of the originating object. The intent is to create
  a light weight uniform object that reuses GeoWave data formats to feed analytic processes.
 
- <p>If the input object does not require adjustment after de-duplication, use <code>org.locationtech.geowave.accumulo.mapreduce.dedupe.GeoWaveDedupReducer</code>
+ <p>If the input object does not require adjustment after de-duplication, use <a href="../../../../../../org/locationtech/geowave/mapreduce/dedupe/GeoWaveDedupeReducer.html" title="class in org.locationtech.geowave.mapreduce.dedupe"><code>GeoWaveDedupeReducer</code></a>
 
  <p>OutputFeature Attributes, see <a href="../../../../../../org/locationtech/geowave/analytic/AnalyticFeature.ClusterFeatureAttribute.html" title="enum in org.locationtech.geowave.analytic"><code>AnalyticFeature.ClusterFeatureAttribute</code></a>
 
- <p>Context configuration parameters include:</div>
+ <p>Context configuration parameters include:
+
+ <!-- @formatter:off -->
+     <p>"SimpleFeatureOutputReducer.Extract.DimensionExtractClass" -> <a href="../../../../../../org/locationtech/geowave/analytic/extract/DimensionExtractor.html" title="interface in org.locationtech.geowave.analytic.extract"><code>DimensionExtractor</code></a>
+     to extract non-geometric dimensions
+     <p>"SimpleFeatureOutputReducer.Extract.OutputDataTypeId" -> the name of the output
+     SimpleFeature data type
+     <p>"SimpleFeatureOutputReducer.Global.BatchId" ->the id of the batch; defaults to current
+     time in millis (for range comparisons)
+ <!-- @formatter:on --></div>
 </li>
 </ul>
 </div>

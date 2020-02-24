@@ -200,7 +200,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/ingest/LocalIngestRunData.html#releaseIndexWriter-java.lang.String-org.locationtech.geowave.core.store.api.Writer-">releaseIndexWriter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
                   <a href="../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&nbsp;writer)</code>
-<div class="block">Return the index writer to the pool</div>
+<div class="block">Return an index writer to the pool.</div>
 </td>
 </tr>
 </table>
@@ -270,12 +270,14 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&nbsp;getIndexWriter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
                              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;&nbsp;indices)
                       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
-<div class="block">Return an index writer from the pool. The pool will create a new one The pool will not be
- cleaned up until the end. (No items will be cleaned up until the end)</div>
+<div class="block">Return an index writer from the pool. The pool will create a new one if it doesn't exist. The
+ pool will not be cleaned up until the end.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>index</code> - </dd>
+<dd><code>typeName</code> - the type being written</dd>
+<dd><code>indices</code> - the indices to write to</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
+<dd>the index writer</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
 </dl>
@@ -290,11 +292,11 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <pre>public&nbsp;void&nbsp;releaseIndexWriter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
                                <a href="../../../../../../org/locationtech/geowave/core/store/api/Writer.html" title="interface in org.locationtech.geowave.core.store.api">Writer</a>&nbsp;writer)
                         throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
-<div class="block">Return the index writer to the pool</div>
+<div class="block">Return an index writer to the pool.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>index</code> - - the primary index used to create the writer</dd>
-<dd><code>writer</code> - </dd>
+<dd><code>typeName</code> - the type for the writer</dd>
+<dd><code>writer</code> - the writer to return</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
 </dl>

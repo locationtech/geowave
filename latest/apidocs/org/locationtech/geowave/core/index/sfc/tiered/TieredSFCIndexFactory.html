@@ -266,7 +266,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  strategy that has Point type spatial data.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>dimensionDefs</code> - an array of SFC Dimension Definition objects</dd>
+<dd><code>baseDefinitions</code> - the numeric dimensions of the strategy</dd>
+<dd><code>maxBitsPerDimension</code> - the maximum bits to use for each dimension</dd>
 <dd><code>sfc</code> - the type of space filling curve (e.g. Hilbert)</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an Index Strategy object with a single tier</dd>
@@ -340,7 +341,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <dd><code>baseDefinitions</code> - an array of Numeric Dimension Definitions</dd>
 <dd><code>maxBitsPerDimension</code> - the max cardinality for the Index Strategy</dd>
 <dd><code>sfcType</code> - the type of space filling curve (e.g. Hilbert)</dd>
-<dd><code>numTiers</code> - the number of tiers of the Index Strategy</dd>
+<dd><code>numIndices</code> - the number of tiers of the Index Strategy</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an Index Strategy object with a specified number of tiers</dd>
 </dl>

@@ -109,7 +109,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 
  <p>See Catherine A. Sugar and Gareth M. James (2003). "Finding the number of clusters in a data
  set: An information theoretic approach" Journal of the American Statistical Association 98
- (January): 750–763</div>
+ (January): 750–763
+
+ <!-- @formatter:off --> Context configuration parameters include:
+     <p>"KMeansDistortionMapReduce.Common.DistanceFunctionClass" -> <a href="../../../../../../org/locationtech/geowave/analytic/distance/DistanceFn.html" title="interface in org.locationtech.geowave.analytic.distance"><code>DistanceFn</code></a> used to determine distance to centroid
+     <p>"KMeansDistortionMapReduce.Centroid.WrapperFactoryClass" -> <a href="../../../../../../org/locationtech/geowave/analytic/AnalyticItemWrapperFactory.html" title="interface in org.locationtech.geowave.analytic"><code>AnalyticItemWrapperFactory</code></a> to extract wrap spatial objects with Centroid management
+     functions
+     <p>"KMeansDistortionMapReduce.Centroid.ExtractorClass" -> <a href="../../../../../../org/locationtech/geowave/analytic/extract/CentroidExtractor.html" title="interface in org.locationtech.geowave.analytic.extract"><code>CentroidExtractor</code></a>
+     <p>"KMeansDistortionMapReduce.Jump.CountOfCentroids" -> May be different from actual.
+ <!-- @formatter:on --></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../../../org/locationtech/geowave/analytic/clustering/CentroidManagerGeoWave.html" title="class in org.locationtech.geowave.analytic.clustering"><code>CentroidManagerGeoWave</code></a></dd>

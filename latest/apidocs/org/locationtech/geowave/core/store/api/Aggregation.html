@@ -173,7 +173,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <td class="colFirst"><code>default <a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="type parameter in Aggregation">R</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#merge-R-R-">merge</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="type parameter in Aggregation">R</a>&nbsp;result1,
      <a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="type parameter in Aggregation">R</a>&nbsp;result2)</code>
-<div class="block">this is responsible for reducing 2 results to a single result by</div>
+<div class="block">Merge two aggregation results into a single result</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -274,12 +274,13 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <h4>merge</h4>
 <pre>default&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="type parameter in Aggregation">R</a>&nbsp;merge(<a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="type parameter in Aggregation">R</a>&nbsp;result1,
                 <a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="type parameter in Aggregation">R</a>&nbsp;result2)</pre>
-<div class="block">this is responsible for reducing 2 results to a single result by</div>
+<div class="block">Merge two aggregation results into a single result</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>result1</code> - </dd>
-<dd><code>result2</code> - </dd>
+<dd><code>result1</code> - the first result</dd>
+<dd><code>result2</code> - the second result</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
+<dd>the merged result</dd>
 </dl>
 </li>
 </ul>

@@ -320,13 +320,15 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/Closeable
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>fileStream</code> - </dd>
-<dd><code>primaryIndexId</code> - </dd>
+<dd><code>indexNames</code> - </dd>
 <dd><code>inputID</code> - prefix to all IDs except waypoints (see uniqueWayPoints)</dd>
 <dd><code>additionalData</code> - additional attributes to add the over-ride attributes in the GPX data
         file. The attribute are grouped by path. "gpx.trk", "gpx.rte" and "gpx.wpt"</dd>
-<dd><code>globalWayPoints</code> - if true, waypoints are globally unique, otherwise are unique to this
+<dd><code>backTimestamp</code> - </dd>
+<dd><code>uniqueWayPoints</code> - if true, waypoints are globally unique, otherwise are unique to this
         file and should have inputID and other components added to the identifier</dd>
 <dd><code>globalVisibility</code> - </dd>
+<dd><code>maxLength</code> - </dd>
 </dl>
 </li>
 </ul>

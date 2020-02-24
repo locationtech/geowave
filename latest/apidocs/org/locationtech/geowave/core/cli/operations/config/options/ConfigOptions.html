@@ -366,6 +366,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="block">The default property file is in the user's home directory, in the .geowave folder.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
+<dd>a property file in the user's home directory</dd>
 </dl>
 </li>
 </ul>
@@ -377,10 +378,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>getDefaultPropertyFile</h4>
 <pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;getDefaultPropertyFile()</pre>
 <div class="block">The default property file is in the user's home directory, in the .geowave folder. If the
- version can not be found the first available property file in the folder is used</div>
+ version can not be found the first available property file in the folder is used.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>Default Property File</dd>
+<dd>the default property file</dd>
 </dl>
 </li>
 </ul>
@@ -438,10 +439,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;loadProperties(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile)</pre>
 <div class="block">This helper function will load the properties file, or return null if it can't. It's designed
  to be used by other commands.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>delimiter</code> - </dd>
-</dl>
 </li>
 </ul>
 <a name="loadProperties-java.io.File-java.lang.String-">
@@ -454,11 +451,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pattern)</pre>
 <div class="block">This helper function will load the properties file, or return null if it can't. It's designed
  to be used by other commands.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>delimiter</code> - the delimiter</dd>
-<dd><code>pattern</code> - filter by a regex pattern</dd>
-</dl>
 </li>
 </ul>
 <a name="prepare-org.locationtech.geowave.core.cli.api.OperationParams-">

@@ -257,13 +257,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                                                     <a href="../../../../../../org/locationtech/geowave/core/geotime/util/TimeDescriptors.html" title="class in org.locationtech.geowave.core.geotime.util">TimeDescriptors</a>&nbsp;timeDescriptors,
                                                                     <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;constraintsSet)</pre>
 <div class="block">Clip the provided constraints using the statistics, if available.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>statsMap</code> - </dd>
-<dd><code>timeDescriptors</code> - </dd>
-<dd><code>constraintsSet</code> - </dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-</dl>
 </li>
 </ul>
 <a name="clipIndexedBBOXConstraints-org.opengis.feature.simple.SimpleFeatureType-org.locationtech.jts.geom.Geometry-java.util.Map-">
@@ -276,13 +269,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                                                             org.locationtech.jts.geom.Geometry&nbsp;bbox,
                                                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/StatisticsId.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatisticsId</a>,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature,?,?&gt;&gt;&nbsp;statsMap)</pre>
 <div class="block">Clip the provided bounded box with the statistics for the index</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>featureType</code> - </dd>
-<dd><code>bbox</code> - </dd>
-<dd><code>statsMap</code> - </dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-</dl>
 </li>
 </ul>
 <a name="getTimeConstraintsFromIndex-org.locationtech.geowave.core.geotime.util.TimeDescriptors-java.util.Map-">
@@ -317,14 +303,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                                                           <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBoundsSet)</pre>
 <div class="block">Compose a time constraints. When the provided constraints do not fulfill the indexed
  dimensions, compose constraints from statistics.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>featureType</code> - </dd>
-<dd><code>timeDescriptors</code> - </dd>
-<dd><code>statsMap</code> - </dd>
-<dd><code>timeBoundsSet</code> - </dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-</dl>
 </li>
 </ul>
 <a name="composeTimeBoundedConstraints-org.opengis.feature.simple.SimpleFeatureType-org.locationtech.geowave.core.geotime.util.TimeDescriptors-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-">
@@ -338,14 +316,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                                                                  <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBoundsSet)</pre>
 <div class="block">If composed constraints matched statistics constraints, are empty or null, then return empty
  constraint set.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>featureType</code> - </dd>
-<dd><code>timeDescriptors</code> - </dd>
-<dd><code>statsMap</code> - </dd>
-<dd><code>timeBoundsSet</code> - </dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-</dl>
 </li>
 </ul>
 <a name="composeGeometricConstraints-org.opengis.feature.simple.SimpleFeatureType-org.locationtech.jts.geom.Geometry-">
@@ -358,14 +328,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                                                               org.locationtech.jts.geom.Geometry&nbsp;jtsBounds)</pre>
 <div class="block">If composed constraints matched statistics constraints, are empty or null, then return empty
  constraint set</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>featureType</code> - </dd>
-<dd><code>timeDescriptors</code> - </dd>
-<dd><code>statsMap</code> - </dd>
-<dd><code>timeBoundsSet</code> - </dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-</dl>
 </li>
 </ul>
 <a name="composeConstraints-org.opengis.feature.simple.SimpleFeatureType-org.locationtech.geowave.core.geotime.util.TimeDescriptors-java.util.Map-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-">
@@ -381,15 +343,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                                                       <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBoundsSet)</pre>
 <div class="block">Compose a query from the set of constraints. When the provided constraints do not fulfill the
  indexed dimensions, compose constraints from statistics.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>featureType</code> - </dd>
-<dd><code>timeDescriptors</code> - </dd>
-<dd><code>statsMap</code> - </dd>
-<dd><code>jtsBounds</code> - </dd>
-<dd><code>timeBoundsSet</code> - </dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-</dl>
 </li>
 </ul>
 </li>

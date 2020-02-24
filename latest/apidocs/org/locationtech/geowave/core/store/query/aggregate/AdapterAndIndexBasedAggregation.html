@@ -169,7 +169,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/api/Ag
 <td class="colFirst"><code>default <a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" title="type parameter in AdapterAndIndexBasedAggregation">R</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html#merge-R-R-">merge</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" title="type parameter in AdapterAndIndexBasedAggregation">R</a>&nbsp;result1,
      <a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" title="type parameter in AdapterAndIndexBasedAggregation">R</a>&nbsp;result2)</code>
-<div class="block">this is responsible for reducing 2 results to a single result by</div>
+<div class="block">Merge two aggregation results into a single result</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -321,11 +321,15 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/api/Ag
 <pre>default&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" title="type parameter in AdapterAndIndexBasedAggregation">R</a>&nbsp;merge(<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" title="type parameter in AdapterAndIndexBasedAggregation">R</a>&nbsp;result1,
                 <a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" title="type parameter in AdapterAndIndexBasedAggregation">R</a>&nbsp;result2)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#merge-R-R-">Aggregation</a></code></span></div>
-<div class="block">this is responsible for reducing 2 results to a single result by</div>
+<div class="block">Merge two aggregation results into a single result</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#merge-R-R-">merge</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" title="type parameter in AdapterAndIndexBasedAggregation">P</a> extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" title="type parameter in AdapterAndIndexBasedAggregation">R</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" title="type parameter in AdapterAndIndexBasedAggregation">T</a>&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>result1</code> - the first result</dd>
+<dd><code>result2</code> - the second result</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
+<dd>the merged result</dd>
 </dl>
 </li>
 </ul>

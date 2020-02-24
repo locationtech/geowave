@@ -247,8 +247,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/sfc
               double&nbsp;maxValue,
               int&nbsp;dimension,
               <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>&nbsp;boundedDimensionDefinition)</code>
-<div class="block">Determines the coordinates per dimension of rows given a multi-dimensional range will span
- within this space filling curve</div>
+<div class="block">Determines the coordinates a given range will span within this space filling curve.</div>
 </td>
 </tr>
 </table>
@@ -507,8 +506,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/sfc
                              <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SFCDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.sfc">SFCDimensionDefinition</a>&nbsp;boundedDimensionDefinition)
                       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#normalizeRange-double-double-int-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition-">HilbertSFCOperations</a></code></span></div>
-<div class="block">Determines the coordinates per dimension of rows given a multi-dimensional range will span
- within this space filling curve</div>
+<div class="block">Determines the coordinates a given range will span within this space filling curve.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html#normalizeRange-double-double-int-org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition-">normalizeRange</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/hilbert/HilbertSFCOperations.html" title="interface in org.locationtech.geowave.core.index.sfc.hilbert">HilbertSFCOperations</a></code></dd>
@@ -516,9 +514,10 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/sfc
 <dd><code>minValue</code> - the minimum value</dd>
 <dd><code>maxValue</code> - the maximum value</dd>
 <dd><code>dimension</code> - the ordinal of the dimension on this space filling curve</dd>
+<dd><code>boundedDimensionDefinition</code> - the dimension definition to use to normalize the raw values</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the range of coordinates in each dimension (ie. [0][0] would be the min coordinate of
-         the first dimension and [0][1] would be the max coordinate of the first dimension)</dd>
+<dd>the range of coordinates (ie. [0] would be the min coordinate and [1] would be the max
+         coordinate)</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code></dd>
 </dl>

@@ -112,7 +112,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  <p>Reducer Outputs a new copy of a centroid with the geometry and other dimensions updated
  towards their respective mean for the assigned items.
 
- <p>Properties:</div>
+ <p>Properties:
+
+ <!-- @formatter:off --> "KMeansMapReduce.Common.DistanceFunctionClass" - Used to determine distance to
+     centroid
+     <p>"KMeansMapReduce.Centroid.ExtractorClass" - Used to extract a centroid point from an item
+     geometry
+     <p>"KMeansMapReduce.Centroid.WrapperFactoryClass" - <a href="../../../../../../org/locationtech/geowave/analytic/AnalyticItemWrapperFactory.html" title="interface in org.locationtech.geowave.analytic"><code>AnalyticItemWrapperFactory</code></a> to
+     extract wrap spatial objects with Centroid management function
+     <p>"KMeansMapReduce.Centroid.ZoomLevel" -> The current zoom level @See CentroidManagerGeoWave
+ <!-- @formatter:on --></div>
 </li>
 </ul>
 </div>

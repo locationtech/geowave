@@ -128,7 +128,14 @@ implements <a href="../../../../../../../org/locationtech/geowave/analytic/mapre
 <div class="block">Runs a clustering at multiple levels. Lower levels cluster within each cluster of the higher
  level.
 
- <p> Steps:</div>
+ <p> Steps:
+
+ <!-- @formatter:off --> 
+ <p> (1) Extract and deduplicate items from GeoWave.
+ <p> (2) Cluster item within heir assigned groups. Initially, items are all part of the same group.
+ <p> (3) Assign to each point the cluster (group id).
+ <p> (4) Repeat steps 2 to 3 for each lower level.
+ <!-- @formatter:on --></div>
 </li>
 </ul>
 </div>

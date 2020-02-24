@@ -232,7 +232,7 @@ extends <a href="../../../../../org/locationtech/geowave/core/index/IndexStrateg
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>indexedRange</code> - defines the numeric range for the query</dd>
-<dd><code>maxRangeDecomposition</code> - the maximum number of ranges provided by a single query
+<dd><code>maxEstimatedRangeDecomposition</code> - the maximum number of ranges provided by a single query
         decomposition, this is a best attempt and not a guarantee</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a List of query ranges</dd>
@@ -272,8 +272,8 @@ extends <a href="../../../../../org/locationtech/geowave/core/index/IndexStrateg
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>indexedData</code> - defines the numeric data to be indexed</dd>
-<dd><code>maxDuplicateInsertionIds</code> - defines the maximum number of insertion IDs that can be used,
-        this is a best attempt and not a guarantee</dd>
+<dd><code>maxEstimatedDuplicateIds</code> - the maximum number of insertion IDs that can be used, this is a
+        best attempt and not a guarantee</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a List of insertion ID's</dd>
 </dl>

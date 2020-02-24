@@ -643,6 +643,7 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 <dd><code>userName</code> - The username for an account to establish an Accumulo connector</dd>
 <dd><code>password</code> - The password for the account to establish an Accumulo connector</dd>
 <dd><code>tableNamespace</code> - An optional string that is prefixed to any of the table names</dd>
+<dd><code>options</code> - Options for the Accumulo data store</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>org.apache.accumulo.core.client.AccumuloException</code> - Thrown if a generic exception occurs when establishing a connector</dd>
 <dd><code>org.apache.accumulo.core.client.AccumuloSecurityException</code> - the credentials passed in are invalid</dd>
@@ -661,6 +662,7 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>connector</code> - The connector to use for all operations</dd>
+<dd><code>options</code> - Options for the Accumulo data store</dd>
 </dl>
 </li>
 </ul>
@@ -678,8 +680,8 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>connector</code> - The connector to use for all operations</dd>
-<dd><code>password</code> - An optional string that is prefixed to any of the table names</dd>
 <dd><code>tableNamespace</code> - An optional string that is prefixed to any of the table names</dd>
+<dd><code>options</code> - Options for the Accumulo data store</dd>
 </dl>
 </li>
 </ul>
@@ -706,6 +708,7 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 <dd><code>authorization</code> - The authorization to use for a batch scanner</dd>
 <dd><code>tableNamespace</code> - An optional string that is prefixed to any of the table names</dd>
 <dd><code>connector</code> - The connector to use for all operations</dd>
+<dd><code>options</code> - Options for the Accumulo data store</dd>
 </dl>
 </li>
 </ul>
@@ -1560,6 +1563,7 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 <dd><code>index</code> - the index/table</dd>
 <dd><code>priority</code> - the operation priority (this is merely relative, it defines how to order
         multiple operations, from low to high)</dd>
+<dd><code>name</code> - the operation name</dd>
 <dd><code>operationClass</code> - the operation class</dd>
 <dd><code>properties</code> - the operation options</dd>
 <dd><code>configuredScopes</code> - the scopes</dd>
@@ -1590,6 +1594,7 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 <dd><code>index</code> - the index/table</dd>
 <dd><code>priority</code> - the operation priority (this is merely relative, it defines how to order
         multiple operations, from low to high)</dd>
+<dd><code>name</code> - the operation name</dd>
 <dd><code>operationClass</code> - the operation class</dd>
 <dd><code>properties</code> - the operation options</dd>
 <dd><code>currentScopes</code> - the existing scopes</dd>
