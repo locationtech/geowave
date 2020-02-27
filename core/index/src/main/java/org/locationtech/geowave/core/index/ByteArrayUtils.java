@@ -311,6 +311,18 @@ public class ByteArrayUtils {
     return array1.length - array2.length;
   }
 
+  public static boolean startsWith(final byte[] bytes, final byte[] prefix) {
+    if (bytes == null || prefix == null || prefix.length > bytes.length) {
+      return false;
+    }
+    for (int i = 0; i < prefix.length; i++) {
+      if (bytes[i] != prefix[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   public static String getHexString(final byte[] bytes) {
     final StringBuffer str = new StringBuffer();
     for (final byte b : bytes) {
