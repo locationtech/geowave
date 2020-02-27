@@ -29,6 +29,7 @@ import org.locationtech.geowave.core.geotime.store.query.api.VectorStatisticsQue
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
+import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsQueryBuilder;
 import org.locationtech.geowave.core.store.api.AggregationQuery;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataStoreFactory;
@@ -173,6 +174,9 @@ public class GeoWaveDocumentationExamplesIT extends AbstractGeoWaveIT {
     // Use the constraints factory to create a bounding box constraint
     queryBuilder.constraints(constraintsFactory.cqlConstraints("BBOX(the_geom, -1, -1, 6, 6)"));
 
+    // Only query data from the point type
+    queryBuilder.addTypeName(pointTypeAdapter.getTypeName());
+
     // Build the query
     Query<SimpleFeature> query = queryBuilder.build();
 
@@ -231,21 +235,26 @@ public class GeoWaveDocumentationExamplesIT extends AbstractGeoWaveIT {
     // Create the query by vector statistics type factory
     QueryByVectorStatisticsTypeFactory queryByStatTypeFactory = statisticsQueryBuilder.factory();
 
+    // Create the bounding box query builder
+    FieldStatisticsQueryBuilder<Envelope> builder = queryByStatTypeFactory.bbox();
+
+    // Specify the geometry field name
+    builder.fieldName("the_geom");
+
+    // Specify the type name
+    builder.dataType(pointTypeAdapter.getTypeName());
+
     // Create the bounding box statistics query
-    StatisticsQuery<Envelope> bboxQuery = queryByStatTypeFactory.bbox().build();
+    StatisticsQuery<Envelope> bboxQuery = builder.build();
 
     // Aggregate the statistic into a single result
     Envelope bbox = myStore.aggregateStatistics(bboxQuery);
     // --------------------------------------------------------------------
     // Verify example
-    // TODO: This query is broken on DynamoDB and Cassandra, once it's fixed, this null check should
-    // be removed.
-    if (bbox != null) {
-      Assert.assertEquals(-5.0, bbox.getMinX(), 0.0001);
-      Assert.assertEquals(-5.0, bbox.getMinY(), 0.0001);
-      Assert.assertEquals(5.0, bbox.getMaxX(), 0.0001);
-      Assert.assertEquals(5.0, bbox.getMaxY(), 0.0001);
-    }
+    Assert.assertEquals(-5.0, bbox.getMinX(), 0.0001);
+    Assert.assertEquals(-5.0, bbox.getMinY(), 0.0001);
+    Assert.assertEquals(5.0, bbox.getMaxX(), 0.0001);
+    Assert.assertEquals(5.0, bbox.getMaxY(), 0.0001);
   }
 
   @Override
