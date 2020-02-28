@@ -72,7 +72,7 @@ import org.locationtech.geowave.core.store.flatten.FlattenedUnreadData;
 import org.locationtech.geowave.core.store.flatten.FlattenedUnreadDataSingleRow;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.CustomIndexImpl;
+import org.locationtech.geowave.core.store.index.CustomIndex;
 import org.locationtech.geowave.core.store.index.CustomIndexStrategy;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
@@ -331,11 +331,11 @@ public class DataStoreUtils {
       final double[] targetResolutionPerDimensionForHierarchicalIndex,
       final int maxRanges,
       final IndexMetaData... hints) {
-    if (index instanceof CustomIndexImpl
+    if (index instanceof CustomIndex
         && constraints != null
         && constraints.size() == 1
         && constraints.get(0) instanceof InternalCustomConstraints) {
-      return ((CustomIndexImpl) index).getQueryRanges(
+      return ((CustomIndex) index).getQueryRanges(
           ((InternalCustomConstraints) constraints.get(0)).getCustomConstraints());
     }
     NumericIndexStrategy indexStrategy = index.getIndexStrategy();
