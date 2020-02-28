@@ -238,9 +238,6 @@ public class GeoWaveDocumentationExamplesIT extends AbstractGeoWaveIT {
     // Create the bounding box query builder
     FieldStatisticsQueryBuilder<Envelope> builder = queryByStatTypeFactory.bbox();
 
-    // Specify the geometry field name
-    builder.fieldName("the_geom");
-
     // Specify the type name
     builder.dataType(pointTypeAdapter.getTypeName());
 

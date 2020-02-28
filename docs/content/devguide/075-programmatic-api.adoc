@@ -168,9 +168,6 @@ QueryByVectorStatisticsTypeFactory queryByStatTypeFactory = statisticsQueryBuild
 // Create the bounding box query builder
 FieldStatisticsQueryBuilder<Envelope> builder = queryByStatTypeFactory.bbox();
 
-// Specify the geometry field name
-builder.fieldName("the_geom");
-
 // Specify the type name
 builder.dataType(pointTypeAdapter.getTypeName());
 
@@ -180,4 +177,6 @@ StatisticsQuery<Envelope> bboxQuery = builder.build();
 // Aggregate the statistic into a single result
 Envelope bbox = myStore.aggregateStatistics(bboxQuery);
 ----
+
+NOTE: Specifying the type name in the statistics query is optional and serves to filter statistics to the type we are interested in.  If the type name is not supplied, bounding box statistics for all types will be aggregated.
 
