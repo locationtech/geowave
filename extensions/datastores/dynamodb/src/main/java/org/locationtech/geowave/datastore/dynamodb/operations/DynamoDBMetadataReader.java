@@ -46,7 +46,7 @@ public class DynamoDBMetadataReader implements MetadataReader {
   public CloseableIterator<GeoWaveMetadata> query(final MetadataQuery query) {
     final String tableName = operations.getMetadataTableName(metadataType);
 
-    if (query.hasPrimaryId()) {
+    if (query.hasPrimaryId() && !MetadataType.STATS.equals(metadataType)) {
       final QueryRequest queryRequest = new QueryRequest(tableName);
 
       if (query.hasSecondaryId()) {
@@ -64,12 +64,6 @@ public class DynamoDBMetadataReader implements MetadataReader {
 
       final QueryResult queryResult = operations.getClient().query(queryRequest);
 
-      if (metadataType == MetadataType.STATS) {
-        return getStatisticsIterator(
-            new LazyPaginatedQuery(queryResult, queryRequest, operations.getClient()),
-            query.getAuthorizations());
-      }
-
       return new CloseableIteratorWrapper<>(
           new NoopClosableIteratorWrapper(),
           Iterators.transform(
@@ -82,6 +76,14 @@ public class DynamoDBMetadataReader implements MetadataReader {
     }
 
     final ScanRequest scan = new ScanRequest(tableName);
+    if (query.hasPrimaryId()) {
+      scan.addScanFilterEntry(
+          DynamoDBOperations.METADATA_PRIMARY_ID_KEY,
+          new Condition().withAttributeValueList(
+              new AttributeValue().withB(
+                  ByteBuffer.wrap(query.getPrimaryId()))).withComparisonOperator(
+                      ComparisonOperator.BEGINS_WITH));
+    }
     if (query.hasSecondaryId()) {
       scan.addScanFilterEntry(
           DynamoDBOperations.METADATA_SECONDARY_ID_KEY,

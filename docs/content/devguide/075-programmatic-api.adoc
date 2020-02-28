@@ -112,6 +112,9 @@ VectorQueryConstraintsFactory constraintsFactory = queryBuilder.constraintsFacto
 
 // Use the constraints factory to create a bounding box constraint
 queryBuilder.constraints(constraintsFactory.cqlConstraints("BBOX(the_geom, -1, -1, 6, 6)"));
+    
+// Only query data from the point type
+queryBuilder.addTypeName(pointTypeAdapter.getTypeName());
 
 // Build the query
 Query<SimpleFeature> query = queryBuilder.build();
@@ -162,10 +165,18 @@ VectorStatisticsQueryBuilder<Object> statisticsQueryBuilder = VectorStatisticsQu
 // Create the query by vector statistics type factory
 QueryByVectorStatisticsTypeFactory queryByStatTypeFactory = statisticsQueryBuilder.factory();
 
+// Create the bounding box query builder
+FieldStatisticsQueryBuilder<Envelope> builder = queryByStatTypeFactory.bbox();
+
+// Specify the type name
+builder.dataType(pointTypeAdapter.getTypeName());
+
 // Create the bounding box statistics query
-StatisticsQuery<Envelope> bboxQuery = queryByStatTypeFactory.bbox().build();
+StatisticsQuery<Envelope> bboxQuery = builder.build();
 
 // Aggregate the statistic into a single result
 Envelope bbox = myStore.aggregateStatistics(bboxQuery);
 ----
+
+NOTE: Specifying the type name in the statistics query is optional and serves to filter statistics to the type we are interested in.  If the type name is not supplied, bounding box statistics for all types will be aggregated.
 
