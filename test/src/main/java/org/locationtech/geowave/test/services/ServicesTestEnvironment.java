@@ -213,6 +213,14 @@ public class ServicesTestEnvironment implements TestEnvironment {
     }
   }
 
+  public void restartServices() throws Exception {
+    if (jettyServer != null) {
+      jettyServer.stop();
+      jettyServer = null;
+      doSetup();
+    }
+  }
+
   @Override
   public void tearDown() throws Exception {
     synchronized (GeoWaveITRunner.MUTEX) {

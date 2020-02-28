@@ -148,7 +148,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
   }
 
   @Test
-  public void testExamplesIngest() throws IOException, URISyntaxException {
+  public void testExamplesIngest() throws Exception {
     final DataStore ds = dataStorePluginOptions.createDataStore();
     final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
     final Index spatialIdx = TestUtils.createWebMercatorSpatialIndex();
@@ -272,7 +272,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
     // being a little lenient because of differences in O/S rendering
     TestUtils.testTileAgainstReference(biDirectRender, ref, 0, 0.07);
 
-    final BufferedImage biSubsamplingWithoutError =
+    BufferedImage biSubsamplingWithoutError =
         getWMSSingleTile(
             env.getMinX(),
             env.getMaxX(),
@@ -284,11 +284,10 @@ public class GeoServerIngestIT extends BaseServiceIT {
             360,
             null);
     Assert.assertNotNull(ref);
-
     // being a little lenient because of differences in O/S rendering
     TestUtils.testTileAgainstReference(biSubsamplingWithoutError, ref, 0, 0.07);
 
-    final BufferedImage biSubsamplingWithExpectedError =
+    BufferedImage biSubsamplingWithExpectedError =
         getWMSSingleTile(
             env.getMinX(),
             env.getMaxX(),
@@ -299,10 +298,9 @@ public class GeoServerIngestIT extends BaseServiceIT {
             920,
             360,
             null);
-
     TestUtils.testTileAgainstReference(biSubsamplingWithExpectedError, ref, 0.05, 0.15);
 
-    final BufferedImage biSubsamplingWithLotsOfError =
+    BufferedImage biSubsamplingWithLotsOfError =
         getWMSSingleTile(
             env.getMinX(),
             env.getMaxX(),
@@ -313,8 +311,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
             920,
             360,
             null);
-
     TestUtils.testTileAgainstReference(biSubsamplingWithLotsOfError, ref, 0.3, 0.4);
+
     final BufferedImage biDistributedRendering =
         getWMSSingleTile(
             env.getMinX(),
@@ -327,6 +325,51 @@ public class GeoServerIngestIT extends BaseServiceIT {
             360,
             null);
     TestUtils.testTileAgainstReference(biDistributedRendering, ref, 0, 0.07);
+
+    // Test subsampling with only the spatial-temporal index
+    ds.removeIndex(spatialIdx.getName());
+    ServicesTestEnvironment.getInstance().restartServices();
+
+    biSubsamplingWithoutError =
+        getWMSSingleTile(
+            env.getMinX(),
+            env.getMaxX(),
+            env.getMinY(),
+            env.getMaxY(),
+            SimpleIngest.FEATURE_NAME,
+            ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE,
+            920,
+            360,
+            null);
+    Assert.assertNotNull(ref);
+    // being a little lenient because of differences in O/S rendering
+    TestUtils.testTileAgainstReference(biSubsamplingWithoutError, ref, 0, 0.07);
+
+    biSubsamplingWithExpectedError =
+        getWMSSingleTile(
+            env.getMinX(),
+            env.getMaxX(),
+            env.getMinY(),
+            env.getMaxY(),
+            SimpleIngest.FEATURE_NAME,
+            ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE,
+            920,
+            360,
+            null);
+    TestUtils.testTileAgainstReference(biSubsamplingWithExpectedError, ref, 0.0, 0.15);
+
+    biSubsamplingWithLotsOfError =
+        getWMSSingleTile(
+            env.getMinX(),
+            env.getMaxX(),
+            env.getMinY(),
+            env.getMaxY(),
+            SimpleIngest.FEATURE_NAME,
+            ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE,
+            920,
+            360,
+            null);
+    TestUtils.testTileAgainstReference(biSubsamplingWithLotsOfError, ref, 0.0, 0.4);
   }
 
   private static BufferedImage getWMSSingleTile(
