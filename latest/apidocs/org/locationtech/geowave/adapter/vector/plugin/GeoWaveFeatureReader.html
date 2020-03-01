@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":9,"i14":10,"i15":9,"i16":10,"i17":10,"i18":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":9,"i15":10,"i16":10,"i17":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -224,28 +224,24 @@ implements org.geotools.data.FeatureReader&lt;org.opengis.feature.simple.SimpleF
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#getTransaction--">getTransaction</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i13" class="rowColor">
-<td class="colFirst"><code>protected static boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#hasAtLeastSpatial-org.locationtech.geowave.core.store.api.Index-">hasAtLeastSpatial</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
-</tr>
-<tr id="i14" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#hasNext--">hasNext</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>protected static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#hasTime-org.locationtech.geowave.core.store.api.Index-">hasTime</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#issueQuery-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-org.locationtech.geowave.adapter.vector.plugin.QueryIssuer-">issueQuery</a></span>(org.locationtech.jts.geom.Geometry&nbsp;jtsBounds,
           <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBounds,
           <a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/QueryIssuer.html" title="interface in org.locationtech.geowave.adapter.vector.plugin">QueryIssuer</a>&nbsp;issuer)</code>&nbsp;</td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>org.opengis.feature.simple.SimpleFeature</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#next--">next</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#renderData-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet-org.opengis.filter.Filter-java.lang.Integer-org.locationtech.geowave.adapter.vector.render.DistributedRenderOptions-">renderData</a></span>(org.locationtech.jts.geom.Geometry&nbsp;jtsBounds,
           <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBounds,
@@ -425,15 +421,6 @@ implements org.geotools.data.FeatureReader&lt;org.opengis.feature.simple.SimpleF
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;issueQuery(org.locationtech.jts.geom.Geometry&nbsp;jtsBounds,
                                                                               <a href="../../../../../../org/locationtech/geowave/core/geotime/store/query/TemporalConstraintsSet.html" title="class in org.locationtech.geowave.core.geotime.store.query">TemporalConstraintsSet</a>&nbsp;timeBounds,
                                                                               <a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/QueryIssuer.html" title="interface in org.locationtech.geowave.adapter.vector.plugin">QueryIssuer</a>&nbsp;issuer)</pre>
-</li>
-</ul>
-<a name="hasAtLeastSpatial-org.locationtech.geowave.core.store.api.Index-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>hasAtLeastSpatial</h4>
-<pre>protected static&nbsp;boolean&nbsp;hasAtLeastSpatial(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</pre>
 </li>
 </ul>
 <a name="hasTime-org.locationtech.geowave.core.store.api.Index-">

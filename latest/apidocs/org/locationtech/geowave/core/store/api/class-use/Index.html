@@ -580,13 +580,9 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected static boolean</code></td>
-<td class="colLast"><span class="typeNameLabel">GeoWaveFeatureReader.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#hasAtLeastSpatial-org.locationtech.geowave.core.store.api.Index-">hasAtLeastSpatial</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected static boolean</code></td>
 <td class="colLast"><span class="typeNameLabel">GeoWaveFeatureReader.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveFeatureReader.html#hasTime-org.locationtech.geowave.core.store.api.Index-">hasTime</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">QueryIssuer.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/QueryIssuer.html#query-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass-">query</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
      <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQueryByClass</a>&nbsp;constraints)</code>&nbsp;</td>
@@ -1096,9 +1092,15 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
-<td class="colLast"><span class="typeNameLabel">IndexOptimizationUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/util/IndexOptimizationUtils.html#hasTime-org.locationtech.geowave.core.store.api.Index-">hasTime</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">SpatialIndexUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/util/SpatialIndexUtils.html#hasSpatialDimensions-org.locationtech.geowave.core.store.api.Index-">hasSpatialDimensions</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>
+<div class="block">Determine if the given index has a latitude and longitude dimension.</div>
+</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">IndexOptimizationUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/util/IndexOptimizationUtils.html#hasTime-org.locationtech.geowave.core.store.api.Index-">hasTime</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><span class="typeNameLabel">IndexOptimizationUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/util/IndexOptimizationUtils.html#hasTime-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter-">hasTime</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
        <a href="../../../../../../../org/locationtech/geowave/core/geotime/store/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.core.geotime.store">GeotoolsFeatureDataAdapter</a>&nbsp;adapter)</code>&nbsp;</td>
