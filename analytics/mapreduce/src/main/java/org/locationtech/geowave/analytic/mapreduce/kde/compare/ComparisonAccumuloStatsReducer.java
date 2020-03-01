@@ -16,7 +16,7 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.locationtech.geowave.adapter.raster.RasterUtils;
 import org.locationtech.geowave.analytic.mapreduce.kde.KDEJobRunner;
-import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import org.locationtech.geowave.core.geotime.index.api.SpatialIndexBuilder;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.mapreduce.JobContextIndexStore;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
@@ -101,9 +101,7 @@ public class ComparisonAccumuloStatsReducer extends
     if ((indices != null) && (indices.length > 0)) {
       indexNames = Arrays.stream(indices).map(i -> i.getName()).toArray(i -> new String[i]);
     } else {
-      indexNames =
-          new String[] {
-              new SpatialDimensionalityTypeProvider.SpatialIndexBuilder().createIndex().getName()};
+      indexNames = new String[] {new SpatialIndexBuilder().createIndex().getName()};
     }
   }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.geotools.factory.CommonFactoryFinder;
-import org.locationtech.geowave.core.geotime.ingest.TemporalDimensionalityTypeProvider.TemporalIndexBuilder;
+import org.locationtech.geowave.core.geotime.index.api.TemporalIndexBuilder;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.util.IndexOptimizationUtils;
 import org.locationtech.geowave.core.geotime.util.TimeUtils;

@@ -6,14 +6,15 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.core.geotime.ingest;
+package org.locationtech.geowave.core.geotime.index;
 
+import org.locationtech.geowave.core.geotime.index.SpatialTemporalDimensionalityTypeProvider.Bias;
+import org.locationtech.geowave.core.geotime.index.SpatialTemporalDimensionalityTypeProvider.BiasConverter;
+import org.locationtech.geowave.core.geotime.index.SpatialTemporalDimensionalityTypeProvider.UnitConverter;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
-import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.UnitConverter;
-import org.locationtech.geowave.core.store.spi.DimensionalityTypeOptions;
 import com.beust.jcommander.Parameter;
 
-public class TemporalOptions implements DimensionalityTypeOptions {
+public class SpatialTemporalOptions extends CommonSpatialOptions {
   protected static Unit DEFAULT_PERIODICITY = Unit.YEAR;
 
   @Parameter(
@@ -24,10 +25,11 @@ public class TemporalOptions implements DimensionalityTypeOptions {
   protected Unit periodicity = DEFAULT_PERIODICITY;
 
   @Parameter(
-      names = {"--noTimeRange"},
+      names = {"--bias"},
       required = false,
-      description = "The time index can be more efficient if time ranges don't need to be supported.")
-  protected boolean noTimeRanges = false;
+      description = "The bias of the spatial-temporal index. There can be more precision given to time or space if necessary.",
+      converter = BiasConverter.class)
+  protected Bias bias = Bias.BALANCED;
 
   @Parameter(
       names = {"--maxDuplicates"},
@@ -35,27 +37,27 @@ public class TemporalOptions implements DimensionalityTypeOptions {
       description = "The max number of duplicates per dimension range.  The default is 2 per range (for example lines and polygon timestamp data would be up to 4 because its 2 dimensions, and line/poly time range data would be 8).")
   protected long maxDuplicates = -1;
 
-  public long getMaxDuplicates() {
-    return maxDuplicates;
+  public void setPeriodicity(final Unit periodicity) {
+    this.periodicity = periodicity;
   }
 
   public Unit getPeriodicity() {
     return periodicity;
   }
 
-  public boolean isSupportTimeRanges() {
-    return !noTimeRanges;
+  public void setBias(final Bias bias) {
+    this.bias = bias;
   }
 
-  public void setPeriodicity(final Unit periodicity) {
-    this.periodicity = periodicity;
-  }
-
-  public void setNoTimeRanges(final boolean noTimeRanges) {
-    this.noTimeRanges = noTimeRanges;
+  public Bias getBias() {
+    return bias;
   }
 
   public void setMaxDuplicates(final long maxDuplicates) {
     this.maxDuplicates = maxDuplicates;
+  }
+
+  public long getMaxDuplicates() {
+    return maxDuplicates;
   }
 }

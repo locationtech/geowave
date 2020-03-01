@@ -33,8 +33,8 @@ import org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveTransac
 import org.locationtech.geowave.adapter.vector.plugin.transaction.MemoryTransactionsAllocator;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.TransactionsAllocator;
 import org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityManagementHelper;
-import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
+import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
+import org.locationtech.geowave.core.geotime.index.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
 import org.locationtech.geowave.core.geotime.util.SpatialIndexUtils;

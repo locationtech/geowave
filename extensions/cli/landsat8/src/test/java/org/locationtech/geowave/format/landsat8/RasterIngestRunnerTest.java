@@ -19,7 +19,7 @@ import org.locationtech.geowave.adapter.raster.plugin.gdal.InstallGdal;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
-import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import org.locationtech.geowave.core.geotime.index.api.SpatialIndexBuilder;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
@@ -105,8 +105,7 @@ public class RasterIngestRunnerTest {
   private void createIndices(final OperationParams params) {
     IndexStore indexStore = getStorePluginOptions(params).createIndexStore();
     // Create the spatial index
-    SpatialDimensionalityTypeProvider.SpatialIndexBuilder builder =
-        new SpatialDimensionalityTypeProvider.SpatialIndexBuilder();
+    SpatialIndexBuilder builder = new SpatialIndexBuilder();
     builder.setName("spatialindex");
     builder.setNumPartitions(1);
     builder.setIncludeTimeInCommonIndexModel(false);

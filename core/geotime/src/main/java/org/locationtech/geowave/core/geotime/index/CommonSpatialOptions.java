@@ -6,7 +6,7 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.core.geotime.ingest;
+package org.locationtech.geowave.core.geotime.index;
 
 import javax.annotation.Nullable;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
@@ -34,6 +34,10 @@ public abstract class CommonSpatialOptions implements DimensionalityTypeOptions 
 
   public void setCrs(final String crs) {
     this.crs = crs;
+  }
+
+  public String getCrs() {
+    return crs;
   }
 
   public void setGeometryPrecision(final @Nullable Integer geometryPrecision) {

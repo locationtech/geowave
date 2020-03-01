@@ -6,7 +6,7 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.core.geotime.ingest;
+package org.locationtech.geowave.core.geotime.index;
 
 import java.util.Locale;
 import javax.annotation.Nullable;
@@ -33,7 +33,6 @@ import org.locationtech.geowave.core.index.sfc.SFCFactory.SFCType;
 import org.locationtech.geowave.core.index.sfc.xz.XZHierarchicalIndexFactory;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
-import org.locationtech.geowave.core.store.index.BaseIndexBuilder;
 import org.locationtech.geowave.core.store.index.BasicIndexModel;
 import org.locationtech.geowave.core.store.index.CustomNameIndex;
 import org.locationtech.geowave.core.store.spi.DimensionalityTypeProviderSpi;
@@ -90,10 +89,10 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 
   @Override
   public Index createIndex(final SpatialTemporalOptions options) {
-    return internalCreateIndex(options);
+    return createIndexFromOptions(options);
   }
 
-  private static Index internalCreateIndex(final SpatialTemporalOptions options) {
+  public static Index createIndexFromOptions(final SpatialTemporalOptions options) {
 
     NumericDimensionDefinition[] dimensions;
     NumericDimensionField<?>[] fields = null;
@@ -290,40 +289,6 @@ public class SpatialTemporalDimensionalityTypeProvider implements
                 + StringUtils.join(Unit.values(), ", ").toLowerCase(Locale.ENGLISH));
       }
       return convertedValue;
-    }
-  }
-
-  public static class SpatialTemporalIndexBuilder extends
-      BaseIndexBuilder<SpatialTemporalIndexBuilder> {
-    private final SpatialTemporalOptions options;
-
-    public SpatialTemporalIndexBuilder() {
-      options = new SpatialTemporalOptions();
-    }
-
-    public SpatialTemporalIndexBuilder setBias(final Bias bias) {
-      options.bias = bias;
-      return this;
-    }
-
-    public SpatialTemporalIndexBuilder setPeriodicity(final Unit periodicity) {
-      options.periodicity = periodicity;
-      return this;
-    }
-
-    public SpatialTemporalIndexBuilder setMaxDuplicates(final long maxDuplicates) {
-      options.maxDuplicates = maxDuplicates;
-      return this;
-    }
-
-    public SpatialTemporalIndexBuilder setCrs(final String crs) {
-      options.crs = crs;
-      return this;
-    }
-
-    @Override
-    public Index createIndex() {
-      return createIndex(internalCreateIndex(options));
     }
   }
 

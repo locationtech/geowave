@@ -17,7 +17,7 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.locationtech.geowave.adapter.raster.RasterUtils;
 import org.locationtech.geowave.analytic.mapreduce.kde.GaussianFilter.ValueRange;
-import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import org.locationtech.geowave.core.geotime.index.api.SpatialIndexBuilder;
 import org.locationtech.geowave.core.index.FloatCompareUtils;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.mapreduce.JobContextIndexStore;
@@ -244,8 +244,7 @@ public class KDEReducer extends
       }
 
     } else {
-      indexList.add(
-          new SpatialDimensionalityTypeProvider.SpatialIndexBuilder().createIndex().getName());
+      indexList.add(new SpatialIndexBuilder().createIndex().getName());
     }
   }
 }

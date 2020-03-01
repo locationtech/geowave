@@ -19,7 +19,7 @@ class SpatialIndexBuilder(IndexBuilder):
     """
 
     def __init__(self):
-        super().__init__(geowave_pkg.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder())
+        super().__init__(geowave_pkg.core.geotime.index.api.SpatialIndexBuilder())
 
     def set_include_time_in_common_index_model(self, include):
         """

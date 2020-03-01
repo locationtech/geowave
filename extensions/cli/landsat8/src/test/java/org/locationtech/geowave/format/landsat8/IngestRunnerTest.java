@@ -19,17 +19,17 @@ import org.locationtech.geowave.adapter.raster.plugin.gdal.InstallGdal;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
+import org.locationtech.geowave.core.geotime.index.SpatialTemporalDimensionalityTypeProvider.Bias;
+import org.locationtech.geowave.core.geotime.index.api.SpatialIndexBuilder;
+import org.locationtech.geowave.core.geotime.index.api.SpatialTemporalIndexBuilder;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
-import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
-import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.Bias;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.store.StoreLoader;
-import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.index.IndexPluginOptions.PartitionStrategy;
+import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import com.beust.jcommander.ParameterException;
 import it.geosolutions.jaiext.JAIExt;
@@ -120,16 +120,14 @@ public class IngestRunnerTest {
   private void createIndices(final OperationParams params, final String storeName) {
     IndexStore indexStore = getStorePluginOptions(params, storeName).createIndexStore();
     // Create the spatial index
-    SpatialDimensionalityTypeProvider.SpatialIndexBuilder builder =
-        new SpatialDimensionalityTypeProvider.SpatialIndexBuilder();
+    SpatialIndexBuilder builder = new SpatialIndexBuilder();
     builder.setName("spatialindex");
     builder.setNumPartitions(1);
     builder.setIncludeTimeInCommonIndexModel(false);
     indexStore.addIndex(builder.createIndex());
 
     // Create the spatial temporal index
-    SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder st_builder =
-        new SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder();
+    SpatialTemporalIndexBuilder st_builder = new SpatialTemporalIndexBuilder();
     st_builder.setName("spatempindex");
     st_builder.setBias(Bias.BALANCED);
     st_builder.setMaxDuplicates(-1);
