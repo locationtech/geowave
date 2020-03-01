@@ -34,7 +34,7 @@ DataStore myStore = DataStoreFactory.createDataStore(options);
 
 === Creating Indices
 
-Spatial and spatial-temporal indices are created by using the appropriate index builder. For spatial indices, the {core-geotime}/core/geotime/ingest/SpatialDimensionalityTypeProvider.java[`SpatialIndexBuilder`] can be used, and for spatial-temporal indices, the {core-geotime}/core/geotime/ingest/SpatialTemporalDimensionalityTypeProvider.java[`SpatialTemporalIndexBuilder`] can be used. Each builder has options that are specific to the type of index being created.  Once all options have been set, the index can be created with the `createIndex` function.
+Spatial and spatial-temporal indices are created by using the appropriate index builder. For spatial indices, the {core-geotime}/core/geotime/index/api/SpatialIndexBuilder.java[`SpatialIndexBuilder`] can be used, and for spatial-temporal indices, the {core-geotime}/core/geotime/index/api/SpatialTemporalIndexBuilder.java[`SpatialTemporalIndexBuilder`] can be used. Each builder has options that are specific to the type of index being created.  Once all options have been set, the index can be created with the `createIndex` function.
 
 [source, java]
 ----

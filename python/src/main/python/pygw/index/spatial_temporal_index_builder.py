@@ -19,4 +19,4 @@ class SpatialTemporalIndexBuilder(IndexBuilder):
     """
     
     def __init__(self):
-        super().__init__(geowave_pkg.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder())
+        super().__init__(geowave_pkg.core.geotime.index.api.SpatialTemporalIndexBuilder())

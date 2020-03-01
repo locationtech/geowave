@@ -30,7 +30,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.geowave.adapter.vector.util.DateUtilities;
 import org.locationtech.geowave.adapter.vector.util.FeatureDataUtils;
-import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
+import org.locationtech.geowave.core.geotime.index.api.SpatialIndexBuilder;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;

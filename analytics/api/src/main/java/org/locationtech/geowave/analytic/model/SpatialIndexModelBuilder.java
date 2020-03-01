@@ -8,8 +8,8 @@
  */
 package org.locationtech.geowave.analytic.model;
 
-import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
+import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
+import org.locationtech.geowave.core.geotime.index.SpatialOptions;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 
 /** Builds an index model with longitude and latitude. */

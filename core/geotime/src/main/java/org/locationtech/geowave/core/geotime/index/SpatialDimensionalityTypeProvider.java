@@ -6,7 +6,7 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.core.geotime.ingest;
+package org.locationtech.geowave.core.geotime.index;
 
 import javax.annotation.Nullable;
 import org.geotools.referencing.CRS;
@@ -34,7 +34,6 @@ import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.BasicIndexModel;
 import org.locationtech.geowave.core.store.index.CustomNameIndex;
-import org.locationtech.geowave.core.store.index.BaseIndexBuilder;
 import org.locationtech.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -98,10 +97,10 @@ public class SpatialDimensionalityTypeProvider implements
 
   @Override
   public Index createIndex(final SpatialOptions options) {
-    return internalCreateIndex(options);
+    return createIndexFromOptions(options);
   }
 
-  private static Index internalCreateIndex(final SpatialOptions options) {
+  public static Index createIndexFromOptions(final SpatialOptions options) {
     NumericDimensionDefinition[] dimensions;
     boolean isDefaultCRS;
     String crsCode = null;
@@ -244,40 +243,6 @@ public class SpatialDimensionalityTypeProvider implements
     }
 
     return crs;
-  }
-
-  public static class SpatialIndexBuilder extends BaseIndexBuilder<SpatialIndexBuilder> {
-    private final SpatialOptions options;
-
-    public SpatialIndexBuilder() {
-      super();
-      options = new SpatialOptions();
-    }
-
-    public SpatialIndexBuilder setIncludeTimeInCommonIndexModel(final boolean storeTime) {
-      options.storeTime = storeTime;
-      return this;
-    }
-
-    public SpatialIndexBuilder setGeometryPrecision(@Nullable final Integer precision) {
-      if (precision == null) {
-        options.fullGeometryPrecision = true;
-      } else {
-        options.fullGeometryPrecision = false;
-        options.geometryPrecision = precision;
-      }
-      return this;
-    }
-
-    public SpatialIndexBuilder setCrs(final String crs) {
-      options.crs = crs;
-      return this;
-    }
-
-    @Override
-    public Index createIndex() {
-      return createIndex(internalCreateIndex(options));
-    }
   }
 
   public static boolean isSpatial(final Index index) {

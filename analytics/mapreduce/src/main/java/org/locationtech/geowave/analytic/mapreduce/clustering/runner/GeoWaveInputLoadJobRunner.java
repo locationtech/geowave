@@ -25,8 +25,8 @@ import org.locationtech.geowave.analytic.param.CentroidParameters;
 import org.locationtech.geowave.analytic.param.MapReduceParameters;
 import org.locationtech.geowave.analytic.param.OutputParameters;
 import org.locationtech.geowave.analytic.param.ParameterEnum;
-import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
+import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
+import org.locationtech.geowave.core.geotime.index.SpatialOptions;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
 

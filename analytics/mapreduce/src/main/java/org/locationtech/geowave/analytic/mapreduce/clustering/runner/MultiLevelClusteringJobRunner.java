@@ -31,8 +31,8 @@ import org.locationtech.geowave.analytic.param.GlobalParameters.Global;
 import org.locationtech.geowave.analytic.param.HullParameters;
 import org.locationtech.geowave.analytic.param.MapReduceParameters;
 import org.locationtech.geowave.analytic.param.ParameterEnum;
-import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
+import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
+import org.locationtech.geowave.core.geotime.index.SpatialOptions;
 
 /**
  * Runs a clustering at multiple levels. Lower levels cluster within each cluster of the higher

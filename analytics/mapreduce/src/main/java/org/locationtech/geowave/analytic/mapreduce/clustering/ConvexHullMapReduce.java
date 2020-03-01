@@ -29,7 +29,7 @@ import org.locationtech.geowave.analytic.clustering.CentroidManagerGeoWave;
 import org.locationtech.geowave.analytic.clustering.ClusteringUtils;
 import org.locationtech.geowave.analytic.clustering.NestedGroupCentroidAssignment;
 import org.locationtech.geowave.analytic.param.HullParameters;
-import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import org.locationtech.geowave.core.geotime.index.api.SpatialIndexBuilder;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.mapreduce.GeoWaveWritableInputMapper;
@@ -288,7 +288,7 @@ public class ConvexHullMapReduce {
           new String[] {
               config.getString(
                   HullParameters.Hull.INDEX_NAME,
-                  new SpatialDimensionalityTypeProvider.SpatialIndexBuilder().createIndex().getName())};
+                  new SpatialIndexBuilder().createIndex().getName())};
     }
   }
 }

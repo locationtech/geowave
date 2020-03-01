@@ -26,8 +26,8 @@ import org.locationtech.geowave.analytic.mapreduce.kmeans.runner.StripWeakCentro
 import org.locationtech.geowave.analytic.mapreduce.kmeans.runner.StripWeakCentroidsRunner.StableChangeBreakStrategy;
 import org.locationtech.geowave.analytic.mapreduce.kmeans.runner.StripWeakCentroidsRunner.TailMaxBreakStrategy;
 import org.locationtech.geowave.analytic.mapreduce.kmeans.runner.StripWeakCentroidsRunner.TailStableChangeBreakStrategy;
-import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
+import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
+import org.locationtech.geowave.core.geotime.index.SpatialOptions;
 import org.locationtech.jts.geom.Coordinate;
 
 public class StripWeakCentroidsRunnerTest {

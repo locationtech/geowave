@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
-import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
+import org.locationtech.geowave.core.geotime.index.SpatialOptions;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.index.IndexSection;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;

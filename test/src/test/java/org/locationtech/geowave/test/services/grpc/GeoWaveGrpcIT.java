@@ -22,7 +22,7 @@ import org.junit.runner.RunWith;
 import org.locationtech.geowave.adapter.raster.util.ZipUtils;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
-import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import org.locationtech.geowave.core.geotime.index.api.SpatialIndexBuilder;
 import org.locationtech.geowave.core.ingest.operations.ConfigAWSCommand;
 import org.locationtech.geowave.core.store.cli.store.AddStoreCommand;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
@@ -118,8 +118,7 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     TestUtils.deleteAll(dataStore);
 
     // Create the index
-    SpatialDimensionalityTypeProvider.SpatialIndexBuilder indexBuilder =
-        new SpatialDimensionalityTypeProvider.SpatialIndexBuilder();
+    SpatialIndexBuilder indexBuilder = new SpatialIndexBuilder();
     indexBuilder.setName(GeoWaveGrpcTestUtils.indexName);
 
     IndexStore indexStore = dataStore.createIndexStore();
