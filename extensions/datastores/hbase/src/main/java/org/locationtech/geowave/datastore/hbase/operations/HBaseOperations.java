@@ -499,7 +499,7 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
         index = (Index) URLClassloaderUtils.fromBinary(indexMd.getValue());
       }
       final Scan scan = new Scan();
-      scan.addFamily(ByteArrayUtils.shortToByteArray(adapterId));
+      scan.addFamily(StringUtils.stringToBinary(ByteArrayUtils.shortToString(adapterId)));
       scanner = getScannedResults(scan, indexName);
       for (final Result result : scanner) {
         deleter.delete(new HBaseRow(result, index.getIndexStrategy().getPartitionKeyLength()));

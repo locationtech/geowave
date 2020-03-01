@@ -149,7 +149,7 @@ public class IndexUtils {
     // 2 bits etc.
     // Use the least constraining dimension, but multiply by the
     // # of dimensions.
-    return result * cellRangePerDimension.length;
+    return Math.ceil(result + 1) * cellRangePerDimension.length;
   }
 
   public static double[] inflateRange(
@@ -210,7 +210,7 @@ public class IndexUtils {
           lexicoder.getMaximumValue().doubleValue() / maxResolutionSubsamplingPerDimension[0];
       return (int) Math.round(Math.ceil(log2(maxScaled - minScaled)));
     }
-    return (int) Math.round(
+    return (int) Math.ceil(
         getDimensionalBitsUsed(indexStrategy, maxResolutionSubsamplingPerDimension));
   }
 
@@ -268,7 +268,7 @@ public class IndexUtils {
     final NumericDimensionDefinition dim[] = indexStrategy.getOrderedDimensionDefinitions();
     final double result[] = new double[rangePerDimension.length];
     for (int d = 0; d < rangePerDimension.length; d++) {
-      result[d] += Math.ceil(log2((dim[d].getRange() / rangePerDimension[d])));
+      result[d] += Math.round(log2((dim[d].getRange() / rangePerDimension[d])));
     }
     return result;
   }

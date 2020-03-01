@@ -32,7 +32,6 @@ import org.locationtech.geowave.adapter.vector.render.DistributedRenderAggregati
 import org.locationtech.geowave.adapter.vector.render.DistributedRenderOptions;
 import org.locationtech.geowave.adapter.vector.render.DistributedRenderResult;
 import org.locationtech.geowave.adapter.vector.util.QueryIndexHelper;
-import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.SimpleTimeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
 import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
@@ -43,6 +42,7 @@ import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.geotime.util.ExtractAttributesFilter;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils.GeoConstraintsWrapper;
+import org.locationtech.geowave.core.geotime.util.SpatialIndexUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.persist.Persistable;
@@ -219,25 +219,6 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
         }, Iterators.concat(results.iterator())));
   }
 
-  protected static boolean hasAtLeastSpatial(final Index index) {
-    if ((index == null)
-        || (index.getIndexStrategy() == null)
-        || (index.getIndexStrategy().getOrderedDimensionDefinitions() == null)) {
-      return false;
-    }
-    boolean hasLatitude = false;
-    boolean hasLongitude = false;
-    for (final NumericDimensionDefinition dimension : index.getIndexStrategy().getOrderedDimensionDefinitions()) {
-      if (dimension instanceof LatitudeDefinition) {
-        hasLatitude = true;
-      }
-      if (dimension instanceof LatitudeDefinition) {
-        hasLongitude = true;
-      }
-    }
-    return hasLatitude && hasLongitude;
-  }
-
   protected static boolean hasTime(final Index index) {
     if ((index == null)
         || (index.getIndexStrategy() == null)
@@ -389,7 +370,23 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
                   fullTransform.inverse(),
                   new Rectangle(width, height),
                   pixelSize);
-          bldr = bldr.addHint(DataStoreUtils.MAX_RESOLUTION_SUBSAMPLING_PER_DIMENSION, spans);
+          NumericDimensionDefinition[] dimensions =
+              index.getIndexStrategy().getOrderedDimensionDefinitions();
+          final double[] maxResolutionSubsampling = new double[dimensions.length];
+          for (int i = 0; i < dimensions.length; i++) {
+            if (SpatialIndexUtils.isLongitudeDimension(dimensions[i])) {
+              maxResolutionSubsampling[i] = spans[0];
+            } else if (SpatialIndexUtils.isLatitudeDimension(dimensions[i])) {
+              maxResolutionSubsampling[i] = spans[1];
+            } else {
+              // Ignore all other dimensions
+              maxResolutionSubsampling[i] = 0;
+            }
+          }
+          bldr =
+              bldr.addHint(
+                  DataStoreUtils.MAX_RESOLUTION_SUBSAMPLING_PER_DIMENSION,
+                  maxResolutionSubsampling);
           return components.getDataStore().query(bldr.build());
         } catch (final TransformException e) {
           throw new IllegalArgumentException("Unable to compute generalization distance", e);
