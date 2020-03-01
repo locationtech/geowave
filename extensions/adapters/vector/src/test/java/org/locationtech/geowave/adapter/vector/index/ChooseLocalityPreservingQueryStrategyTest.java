@@ -123,7 +123,7 @@ public class ChooseLocalityPreservingQueryStrategyTest {
   }
 
   @Test
-  public void testChooseSpatialWithoutStatsBlockDay() {
+  public void testChooseTemporalWithoutStatsBlockDay() {
     final ChooseLocalityPreservingQueryStrategy strategy =
         new ChooseLocalityPreservingQueryStrategy();
 
@@ -133,7 +133,7 @@ public class ChooseLocalityPreservingQueryStrategyTest {
             new BasicQueryByClass(createConstraints(BLOCK, BLOCK, DAY)),
             strategy);
     assertTrue(it.hasNext());
-    assertEquals(indices.get(3).getName(), it.next().getName());
+    assertEquals(indices.get(1).getName(), it.next().getName());
     assertFalse(it.hasNext());
   }
 
@@ -183,7 +183,7 @@ public class ChooseLocalityPreservingQueryStrategyTest {
   }
 
   @Test
-  public void testChooseSpatialWithoutStatsCityWeek() {
+  public void testChooseTemporalWithoutStatsCityWeek() {
     final ChooseLocalityPreservingQueryStrategy strategy =
         new ChooseLocalityPreservingQueryStrategy();
 
@@ -193,7 +193,7 @@ public class ChooseLocalityPreservingQueryStrategyTest {
             new BasicQueryByClass(createConstraints(CITY, CITY, WEEK)),
             strategy);
     assertTrue(it.hasNext());
-    assertEquals(indices.get(3).getName(), it.next().getName());
+    assertEquals(indices.get(1).getName(), it.next().getName());
     assertFalse(it.hasNext());
   }
 

@@ -16,7 +16,6 @@ import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
-import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSBoundedSpatialDimension;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSBoundedSpatialDimensionX;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSBoundedSpatialDimensionY;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSSpatialField;
@@ -52,6 +51,8 @@ public class SpatialTemporalDimensionalityTypeProvider implements
   private static final Logger LOGGER =
       LoggerFactory.getLogger(SpatialTemporalDimensionalityTypeProvider.class);
   private static final String DEFAULT_SPATIAL_TEMPORAL_ID_STR = "ST_IDX";
+  // this is chosen to place metric CRSs always in the same bin
+  public static final double DEFAULT_UNBOUNDED_CRS_INTERVAL = 40075017;
 
   // TODO should we use different default IDs for all the different
   // options, for now lets just use one
@@ -118,15 +119,41 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 
       for (int d = 0; d < (dimensions.length - 1); d++) {
         final CoordinateSystemAxis csa = cs.getAxis(d);
-        dimensions[d] =
-            new CustomCRSBoundedSpatialDimension(
-                (byte) d,
-                csa.getMinimumValue(),
-                csa.getMaximumValue());
-        fields[d] =
-            new CustomCRSSpatialField(
-                (CustomCRSBoundedSpatialDimension) dimensions[d],
-                geometryPrecision);
+        if (!isUnbounded(csa)) {
+          if (d == 0) {
+            dimensions[d] =
+                new CustomCRSBoundedSpatialDimensionX(csa.getMinimumValue(), csa.getMaximumValue());
+            fields[d] =
+                new CustomCRSSpatialField(
+                    (CustomCRSBoundedSpatialDimensionX) dimensions[d],
+                    geometryPrecision);
+          }
+          if (d == 1) {
+            dimensions[d] =
+                new CustomCRSBoundedSpatialDimensionY(csa.getMinimumValue(), csa.getMaximumValue());
+            fields[d] =
+                new CustomCRSSpatialField(
+                    (CustomCRSBoundedSpatialDimensionY) dimensions[d],
+                    geometryPrecision);
+          }
+        } else {
+          if (d == 0) {
+            dimensions[d] =
+                new CustomCRSUnboundedSpatialDimensionX(DEFAULT_UNBOUNDED_CRS_INTERVAL, (byte) d);
+            fields[d] =
+                new CustomCRSSpatialField(
+                    (CustomCRSUnboundedSpatialDimensionX) dimensions[d],
+                    geometryPrecision);
+          }
+          if (d == 1) {
+            dimensions[d] =
+                new CustomCRSUnboundedSpatialDimensionY(DEFAULT_UNBOUNDED_CRS_INTERVAL, (byte) d);
+            fields[d] =
+                new CustomCRSSpatialField(
+                    (CustomCRSUnboundedSpatialDimensionY) dimensions[d],
+                    geometryPrecision);
+          }
+        }
       }
 
       dimensions[dimensions.length - 1] = new TimeDefinition(options.periodicity);
@@ -167,6 +194,16 @@ public class SpatialTemporalDimensionalityTypeProvider implements
             options.maxDuplicates),
         indexModel,
         combinedId);
+  }
+
+  private static boolean isUnbounded(final CoordinateSystemAxis csa) {
+    final double min = csa.getMinimumValue();
+    final double max = csa.getMaximumValue();
+
+    if (!Double.isFinite(max) || !Double.isFinite(min)) {
+      return true;
+    }
+    return false;
   }
 
   public static CoordinateReferenceSystem decodeCRS(final String crsCode) {

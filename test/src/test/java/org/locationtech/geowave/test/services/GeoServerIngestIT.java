@@ -265,7 +265,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
             "point",
             920,
             360,
-            null);
+            null,
+            true);
 
     final BufferedImage ref = ImageIO.read(new File(REFERENCE_WMS_IMAGE_PATH));
 
@@ -282,7 +283,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
             ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE,
             920,
             360,
-            null);
+            null,
+            false);
     Assert.assertNotNull(ref);
     // being a little lenient because of differences in O/S rendering
     TestUtils.testTileAgainstReference(biSubsamplingWithoutError, ref, 0, 0.07);
@@ -297,8 +299,9 @@ public class GeoServerIngestIT extends BaseServiceIT {
             ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE,
             920,
             360,
-            null);
-    TestUtils.testTileAgainstReference(biSubsamplingWithExpectedError, ref, 0.05, 0.15);
+            null,
+            false);
+    TestUtils.testTileAgainstReference(biSubsamplingWithExpectedError, ref, 0.01, 0.15);
 
     BufferedImage biSubsamplingWithLotsOfError =
         getWMSSingleTile(
@@ -310,7 +313,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
             ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE,
             920,
             360,
-            null);
+            null,
+            false);
     TestUtils.testTileAgainstReference(biSubsamplingWithLotsOfError, ref, 0.3, 0.4);
 
     final BufferedImage biDistributedRendering =
@@ -323,7 +327,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
             ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER,
             920,
             360,
-            null);
+            null,
+            true);
     TestUtils.testTileAgainstReference(biDistributedRendering, ref, 0, 0.07);
 
     // Test subsampling with only the spatial-temporal index
@@ -340,10 +345,11 @@ public class GeoServerIngestIT extends BaseServiceIT {
             ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE,
             920,
             360,
-            null);
+            null,
+            true);
     Assert.assertNotNull(ref);
     // being a little lenient because of differences in O/S rendering
-    TestUtils.testTileAgainstReference(biSubsamplingWithoutError, ref, 0, 0.07);
+    TestUtils.testTileAgainstReference(biSubsamplingWithoutError, ref, 0, 0.071);
 
     biSubsamplingWithExpectedError =
         getWMSSingleTile(
@@ -355,8 +361,9 @@ public class GeoServerIngestIT extends BaseServiceIT {
             ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE,
             920,
             360,
-            null);
-    TestUtils.testTileAgainstReference(biSubsamplingWithExpectedError, ref, 0.0, 0.15);
+            null,
+            true);
+    TestUtils.testTileAgainstReference(biSubsamplingWithExpectedError, ref, 0.01, 0.151);
 
     biSubsamplingWithLotsOfError =
         getWMSSingleTile(
@@ -368,8 +375,9 @@ public class GeoServerIngestIT extends BaseServiceIT {
             ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE,
             920,
             360,
-            null);
-    TestUtils.testTileAgainstReference(biSubsamplingWithLotsOfError, ref, 0.0, 0.4);
+            null,
+            true);
+    TestUtils.testTileAgainstReference(biSubsamplingWithLotsOfError, ref, 0.3, 0.41);
   }
 
   private static BufferedImage getWMSSingleTile(
@@ -381,7 +389,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
       final String style,
       final int width,
       final int height,
-      final String outputFormat) throws IOException, URISyntaxException {
+      final String outputFormat,
+      final boolean temporalFilter) throws IOException, URISyntaxException {
     final URIBuilder builder = new URIBuilder();
     builder.setScheme("http").setHost("localhost").setPort(
         ServicesTestEnvironment.JETTY_PORT).setPath(WMS_URL_PREFIX).setParameter(
@@ -403,9 +412,12 @@ public class GeoServerIngestIT extends BaseServiceIT {
                                     "width",
                                     String.valueOf(width)).setParameter(
                                         "height",
-                                        String.valueOf(height)).setParameter(
-                                            "cql_filter",
-                                            "TimeStamp DURING 1997-01-01T00:00:00.000Z/1998-01-01T00:00:00.000Z");
+                                        String.valueOf(height));
+    if (temporalFilter) {
+      builder.setParameter(
+          "cql_filter",
+          "TimeStamp DURING 1997-01-01T00:00:00.000Z/1998-01-01T00:00:00.000Z");
+    }
 
     final HttpGet command = new HttpGet(builder.build());
 
