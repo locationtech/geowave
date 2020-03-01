@@ -41,6 +41,7 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>Move geotime index builders to an API package <a href="https://github.com/locationtech/geowave/pull/1693">#1693</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>Fix incorrect stat queries on Cassandra and DynamoDB <a href="https://github.com/locationtech/geowave/pull/1692">#1692</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>Fix all javadoc warnings <a href="https://github.com/locationtech/geowave/pull/1690">#1690</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>Add example for custom index <a href="https://github.com/locationtech/geowave/pull/1689">#1689</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
@@ -1285,7 +1286,6 @@
 <li>added raster format options (#481) <a href="https://github.com/locationtech/geowave/pull/482">#482</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Ensure that fieldreaders and fieldwriters properly support null values (#472) <a href="https://github.com/locationtech/geowave/pull/479">#479</a> (<a href="https://github.com/jprochaz">jprochaz</a>)</li>
 <li>Package analytics jar and fix doc markup <a href="https://github.com/locationtech/geowave/pull/475">#475</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
-<li>Supports Min/Max Range of ROW IDs per index. <a href="https://github.com/locationtech/geowave/pull/474">#474</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 </ul>
 <h2 id="v0.8.8.1-2015-07-21"><a href="https://github.com/locationtech/geowave/tree/v0.8.8.1">v0.8.8.1</a> (2015-07-21)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v0.8.8...v0.8.8.1">Full Changelog</a></p>
@@ -1299,6 +1299,7 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>Supports Min/Max Range of ROW IDs per index. <a href="https://github.com/locationtech/geowave/pull/474">#474</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>Implemented a Simple NumericIndexStrategy <a href="https://github.com/locationtech/geowave/pull/471">#471</a> (<a href="https://github.com/meislerj">meislerj</a>)</li>
 <li>Adds Date retyping for GeoTools Vector ingest (#468) <a href="https://github.com/locationtech/geowave/pull/470">#470</a> (<a href="https://github.com/ewilson-radblue">ewilson-radblue</a>)</li>
 <li>Geowave 464 <a href="https://github.com/locationtech/geowave/pull/469">#469</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
@@ -1306,7 +1307,6 @@
 <li>gpx schema loaded with correct classloader (#462) <a href="https://github.com/locationtech/geowave/pull/463">#463</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Fixed persistence of CompoundIndexStrategy <a href="https://github.com/locationtech/geowave/pull/461">#461</a> (<a href="https://github.com/meislerj">meislerj</a>)</li>
 <li>Roll version to 0.8.9-SNAPSHOT <a href="https://github.com/locationtech/geowave/pull/460">#460</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
-<li>Pick up java system properties if set <a href="https://github.com/locationtech/geowave/pull/447">#447</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 </ul>
 <h2 id="v0.8.8-2015-07-16"><a href="https://github.com/locationtech/geowave/tree/v0.8.8">v0.8.8</a> (2015-07-16)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v0.8.7...v0.8.8">Full Changelog</a></p>
@@ -1353,6 +1353,7 @@
 <li>DBScan: An extension to nearest neighbors. Supports polygons and line <a href="https://github.com/locationtech/geowave/pull/453">#453</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>Issue #451. Optimization for index ID verification when ingesting ge… <a href="https://github.com/locationtech/geowave/pull/452">#452</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>Issue #448. GPX Consumer is not freeing up temporary objects created … <a href="https://github.com/locationtech/geowave/pull/449">#449</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
+<li>Pick up java system properties if set <a href="https://github.com/locationtech/geowave/pull/447">#447</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Implemented a Compound Index Strategy <a href="https://github.com/locationtech/geowave/pull/445">#445</a> (<a href="https://github.com/meislerj">meislerj</a>)</li>
 <li>Cleaned up unnecessary logging of checked Exception that is handled properly <a href="https://github.com/locationtech/geowave/pull/444">#444</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
 <li>GEOWAVE-441. Improve performance of WFS-T with small transaction set… <a href="https://github.com/locationtech/geowave/pull/443">#443</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
@@ -1363,6 +1364,7 @@
 <li>Formatting Fixes <a href="https://github.com/locationtech/geowave/pull/431">#431</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
 <li>ContentDataStore <a href="https://github.com/locationtech/geowave/pull/430">#430</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
 <li>Issue #425 Optimize spatial queries to use prepared geometries. <a href="https://github.com/locationtech/geowave/pull/426">#426</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
+<li>Support CDH single user install <a href="https://github.com/locationtech/geowave/pull/424">#424</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Added hyper-loglog, min scetch and histogram analytics for simple features. <a href="https://github.com/locationtech/geowave/pull/421">#421</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>Corrected one command and added a tip on inspecting configs <a href="https://github.com/locationtech/geowave/pull/418">#418</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Roll to 0.8.8-SNAPSHOT <a href="https://github.com/locationtech/geowave/pull/413">#413</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
@@ -1398,7 +1400,6 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
-<li>Support CDH single user install <a href="https://github.com/locationtech/geowave/pull/424">#424</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Updates for 0.8.7 release <a href="https://github.com/locationtech/geowave/pull/412">#412</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Final tweaks to documentation before release <a href="https://github.com/locationtech/geowave/pull/409">#409</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Updated jace so that jace-core-runtime and AWT are no longer needed. <a href="https://github.com/locationtech/geowave/pull/408">#408</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</li>

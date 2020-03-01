@@ -114,8 +114,9 @@ org.locationtech.geowave.core.cli.prefix
 org.locationtech.geowave.core.cli.spi
 org.locationtech.geowave.core.cli.utils
 org.locationtech.geowave.core.geotime
+org.locationtech.geowave.core.geotime.index
+org.locationtech.geowave.core.geotime.index.api
 org.locationtech.geowave.core.geotime.index.dimension
-org.locationtech.geowave.core.geotime.ingest
 org.locationtech.geowave.core.geotime.store
 org.locationtech.geowave.core.geotime.store.dimension
 org.locationtech.geowave.core.geotime.store.field
