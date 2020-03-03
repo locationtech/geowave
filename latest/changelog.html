@@ -41,6 +41,7 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>Revert Jackson version to avoid GeoServer conflicts <a href="https://github.com/locationtech/geowave/pull/1694">#1694</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>Move geotime index builders to an API package <a href="https://github.com/locationtech/geowave/pull/1693">#1693</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>Fix incorrect stat queries on Cassandra and DynamoDB <a href="https://github.com/locationtech/geowave/pull/1692">#1692</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>Fix all javadoc warnings <a href="https://github.com/locationtech/geowave/pull/1690">#1690</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
@@ -79,6 +80,7 @@
 <li>update to quickstart guide <a href="https://github.com/locationtech/geowave/pull/1623">#1623</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>fixed an issue in quickstart bootstrap script <a href="https://github.com/locationtech/geowave/pull/1622">#1622</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>docs update post release <a href="https://github.com/locationtech/geowave/pull/1621">#1621</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>added exclusion to make gradle build easier <a href="https://github.com/locationtech/geowave/pull/1619">#1619</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 </ul>
 <h2 id="v1.0.0-2019-09-06"><a href="https://github.com/locationtech/geowave/tree/v1.0.0">v1.0.0</a> (2019-09-06)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v1.0.0-RC1...v1.0.0">Full Changelog</a></p>
@@ -148,7 +150,6 @@
 <p><strong>Merged pull requests:</strong></p>
 <ul>
 <li>Updates to Quickstart guide for Standalone installer <a href="https://github.com/locationtech/geowave/pull/1620">#1620</a> (<a href="https://github.com/jprochaz">jprochaz</a>)</li>
-<li>added exclusion to make gradle build easier <a href="https://github.com/locationtech/geowave/pull/1619">#1619</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>minor installer tweaks <a href="https://github.com/locationtech/geowave/pull/1618">#1618</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Brute Force Merging for HBase and CLI partition strategy converter <a href="https://github.com/locationtech/geowave/pull/1617">#1617</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Using ByteBuffer instead of DataInputStream for TWKB <a href="https://github.com/locationtech/geowave/pull/1616">#1616</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
@@ -370,6 +371,7 @@
 <li>catch exceptions in gt canprocess <a href="https://github.com/locationtech/geowave/pull/1418">#1418</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>remove xuggle repo <a href="https://github.com/locationtech/geowave/pull/1417">#1417</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>spatial join patch. <a href="https://github.com/locationtech/geowave/pull/1416">#1416</a> (<a href="https://github.com/JWileczek">JWileczek</a>)</li>
+<li>update emr accumulo script to 1.9.2 <a href="https://github.com/locationtech/geowave/pull/1415">#1415</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 </ul>
 <h2 id="v0.9.8-2018-09-14"><a href="https://github.com/locationtech/geowave/tree/v0.9.8">v0.9.8</a> (2018-09-14)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v0.9.7...v0.9.8">Full Changelog</a></p>
@@ -382,7 +384,6 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
-<li>update emr accumulo script to 1.9.2 <a href="https://github.com/locationtech/geowave/pull/1415">#1415</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>changed periodicity for unbounded crs <a href="https://github.com/locationtech/geowave/pull/1414">#1414</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Updated QuickStart Guide <a href="https://github.com/locationtech/geowave/pull/1413">#1413</a> (<a href="https://github.com/emacthecav">emacthecav</a>)</li>
 <li>Update version of jupyterhub + oauthenticator to match swap <a href="https://github.com/locationtech/geowave/pull/1412">#1412</a> (<a href="https://github.com/JWileczek">JWileczek</a>)</li>
@@ -1286,6 +1287,7 @@
 <li>added raster format options (#481) <a href="https://github.com/locationtech/geowave/pull/482">#482</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Ensure that fieldreaders and fieldwriters properly support null values (#472) <a href="https://github.com/locationtech/geowave/pull/479">#479</a> (<a href="https://github.com/jprochaz">jprochaz</a>)</li>
 <li>Package analytics jar and fix doc markup <a href="https://github.com/locationtech/geowave/pull/475">#475</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
+<li>Supports Min/Max Range of ROW IDs per index. <a href="https://github.com/locationtech/geowave/pull/474">#474</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 </ul>
 <h2 id="v0.8.8.1-2015-07-21"><a href="https://github.com/locationtech/geowave/tree/v0.8.8.1">v0.8.8.1</a> (2015-07-21)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v0.8.8...v0.8.8.1">Full Changelog</a></p>
@@ -1299,7 +1301,6 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
-<li>Supports Min/Max Range of ROW IDs per index. <a href="https://github.com/locationtech/geowave/pull/474">#474</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>Implemented a Simple NumericIndexStrategy <a href="https://github.com/locationtech/geowave/pull/471">#471</a> (<a href="https://github.com/meislerj">meislerj</a>)</li>
 <li>Adds Date retyping for GeoTools Vector ingest (#468) <a href="https://github.com/locationtech/geowave/pull/470">#470</a> (<a href="https://github.com/ewilson-radblue">ewilson-radblue</a>)</li>
 <li>Geowave 464 <a href="https://github.com/locationtech/geowave/pull/469">#469</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
