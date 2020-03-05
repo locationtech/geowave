@@ -1,27 +1,33 @@
-//:geowave-presplitpartitionid(1)
-//:==============
-//::doctype: manpage
+//:= geowave-util-accumulo-presplitpartitionid(1)
+:doctype: manpage
 
-NAME
-//:----
+[[util-accumulo-presplitpartitionid-name]]
+==== NAME
 
-geowave util accumulo presplitpartitionid - Pre-split Accumulo table by providing the number of partition IDs
+geowave-util-accumulo-presplitpartitionid - Pre-split Accumulo table by providing the number of partition IDs
 
-SYNOPSIS
-//:--------
+[[util-accumulo-presplitpartitionid-synopsis]]
+==== SYNOPSIS
 
-geowave util accumulo presplitpartitionid [options] <storename>
+  geowave util accumulo presplitpartitionid [options] <store name>
 
-DESCRIPTION
-//:-----------
+[[util-accumulo-presplitpartitionid-description]]
+==== DESCRIPTION
 
-This command will pre-split an accumulo table by providing the number of partition IDs
+This command pre-splits an Accumulo table by providing the number of partition IDs.
 
-OPTIONS
-//:-------
+[[util-accumulo-presplitpartitionid-options]]
+==== OPTIONS
 
-- --indexId
- * The geowave index ID (optional; default is all indices)
-- --num
- * The number of partitions (or entries)
- * Default: 0
+*--indexName* _<name>_::
+  The GeoWave index.  Default is all indices.
+
+*--num* _<count>_::
+  The number of partitions.
+  
+[[util-accumulo-presplitpartitionid-examples]]
+==== EXAMPLES
+
+Pre-split the `spatial_idx` table to 8 partitions in the `example` data store:
+
+  geowave util accumulo presplitpartitionid --indexName spatial_idx --num 8 example

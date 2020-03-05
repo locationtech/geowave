@@ -1,26 +1,34 @@
-//:geowave-rmcv(1)
-//:===================
-//::doctype: manpage
+//:= geowave-gs-cv-rm(1)
+:doctype: manpage
 
-NAME
-//:----
+[[gs-cv-rm-name]]
+==== NAME
 
-geowave gs cv rm - Remove a GeoServer coverage
+geowave-gs-cv-rm - Remove a GeoServer coverage
 
-SYNOPSIS
-//:--------
+[[gs-cv-rm-synopsis]]
+==== SYNOPSIS
 
-geowave gs cv rm [options] <coverage name>
+  geowave gs cv rm [options] <coverage name>
+  geowave geoserver coverage rm [options] <coverage name>
 
-DESCRIPTION
-//:-----------
+[[gs-cv-rm-description]]
+==== DESCRIPTION
 
-This command will remove a GeoServer coverage
+This command removes a coverage from the configured GeoServer instance.
 
-OPTIONS
-//:-------
+[[gs-cv-rm-options]]
+==== OPTIONS
 
-- * -cs, --cvgstore
- * <coverage store name>
-- -ws, --workspace
- * <workspace name>
+*$$*$$ -cs, --cvgstore* _<name>_::
+  The coverage store that contains the coverage.
+
+*-ws, --workspace* _<workspace>_::
+  The GeoServer workspace to use.
+
+[[gs-cv-rm-examples]]
+==== EXAMPLES
+
+Remove the `cov` coverage from the `cov_store` coverage store in GeoServer:
+
+  geowave gs cv rm -cs cov_store cov

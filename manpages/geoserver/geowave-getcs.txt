@@ -1,24 +1,31 @@
-//:geowave-getcs(1)
-//:===================
-//::doctype: manpage
+//:= geowave-gs-cs-get(1)
+:doctype: manpage
 
-NAME
-//:----
+[[gs-cs-get-name]]
+==== NAME
 
-geowave gs cs get - Get GeoServer CoverageStore info
+geowave-gs-cs-get - Get GeoServer coverage store info
 
-SYNOPSIS
-//:--------
+[[gs-cs-get-synopsis]]
+==== SYNOPSIS
 
-geowave gs cs get [options] <coverage store name>
+  geowave gs cs get [options] <coverage store name>
+  geowave geoserver coveragestore get [options] <coverage store name>
 
-DESCRIPTION
-//:-----------
+[[gs-cs-get-description]]
+==== DESCRIPTION
 
-This command will return GeoServer CoverageStore info
+This command will return information about a coverage store from the configured GeoServer instance.
 
-OPTIONS
-//:-------
+[[gs-cs-get-options]]
+==== OPTIONS
 
-- -ws, --workspace
- * <workspace name>
+*-ws, --workspace* _<workspace>_::
+  The GeoServer workspace to use.
+
+[[gs-cs-get-examples]]
+==== EXAMPLES
+
+Get information about the coverage store called `my_store` from GeoServer:
+
+  geowave gs cs get my_store

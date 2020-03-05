@@ -1,34 +1,35 @@
-//:geowave-ingest(1)
-//:==============
-//::doctype: manpage
+//:= geowave-util-osm-ingest(1)
+:doctype: manpage
 
-NAME
-//:----
+[[util-osm-ingest-name]]
+==== NAME
 
-geowave util osm ingest - Ingest and convert OSM data from HDFS to GeoWave
+geowave-util-osm-ingest - Ingest and convert OSM data from HDFS to GeoWave
 
-SYNOPSIS
-//:--------
+[[util-osm-ingest-synopsis]]
+==== SYNOPSIS
 
-geowave util osm ingest [options] <hdfs host:port> <path to base directory to read from> <store name>
+  geowave util osm ingest [options] <hdfs host:port> <path to base directory to read from> <store name>
 
-DESCRIPTION
-//:-----------
+[[util-osm-ingest-description]]
+==== DESCRIPTION
 
 This command will ingest and convert OSM data from HDFS to GeoWave.
 
-OPTIONS
-//:-------
+[[util-osm-ingest-options]]
+==== OPTIONS
 
-- -jn, --jobName
- * Name of mapreduce job
- * Default: Ingest (mcarrier)
-- -m, --mappingFile
- * Mapping file, imposm3 form
-- --table
- * OSM Table name in GeoWave
- * Default: OSM
-- * -t, --type
- * Mapper type - one of node, way, or relation
-- -v, --visibility
- * The visibility of the data ingested (optional; default is 'public')
+*-jn, --jobName*::
+  Name of mapreduce job. Default is `Ingest (mcarrier)`.
+
+*-m, --mappingFile*::
+  Mapping file, imposm3 form.
+
+*--table*::
+  OSM Table name in GeoWave.  Default is `OSM`.
+
+*$$*$$ -t, --type*::
+  Mapper type - one of node, way, or relation.
+
+*-v, --visibility*::
+  The visibility of the data ingested (optional; default is 'public').

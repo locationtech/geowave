@@ -26,6 +26,12 @@ org.locationtech.geowave.adapter.vector.plugin
 org.locationtech.geowave.adapter.vector.plugin.lock
 org.locationtech.geowave.adapter.vector.plugin.transaction
 org.locationtech.geowave.adapter.vector.plugin.visibility
+org.locationtech.geowave.adapter.vector.query
+org.locationtech.geowave.adapter.vector.query.aggregation
+org.locationtech.geowave.adapter.vector.query.gwql
+org.locationtech.geowave.adapter.vector.query.gwql.function
+org.locationtech.geowave.adapter.vector.query.gwql.parse
+org.locationtech.geowave.adapter.vector.query.gwql.statement
 org.locationtech.geowave.adapter.vector.render
 org.locationtech.geowave.adapter.vector.stats
 org.locationtech.geowave.adapter.vector.util
@@ -108,8 +114,9 @@ org.locationtech.geowave.core.cli.prefix
 org.locationtech.geowave.core.cli.spi
 org.locationtech.geowave.core.cli.utils
 org.locationtech.geowave.core.geotime
+org.locationtech.geowave.core.geotime.index
+org.locationtech.geowave.core.geotime.index.api
 org.locationtech.geowave.core.geotime.index.dimension
-org.locationtech.geowave.core.geotime.ingest
 org.locationtech.geowave.core.geotime.store
 org.locationtech.geowave.core.geotime.store.dimension
 org.locationtech.geowave.core.geotime.store.field
@@ -155,6 +162,7 @@ org.locationtech.geowave.core.store.cli
 org.locationtech.geowave.core.store.cli.index
 org.locationtech.geowave.core.store.cli.stats
 org.locationtech.geowave.core.store.cli.store
+org.locationtech.geowave.core.store.cli.type
 org.locationtech.geowave.core.store.config
 org.locationtech.geowave.core.store.data
 org.locationtech.geowave.core.store.data.field
@@ -164,9 +172,6 @@ org.locationtech.geowave.core.store.dimension
 org.locationtech.geowave.core.store.entities
 org.locationtech.geowave.core.store.flatten
 org.locationtech.geowave.core.store.index
-org.locationtech.geowave.core.store.index.numeric
-org.locationtech.geowave.core.store.index.temporal
-org.locationtech.geowave.core.store.index.text
 org.locationtech.geowave.core.store.index.writer
 org.locationtech.geowave.core.store.ingest
 org.locationtech.geowave.core.store.memory
@@ -192,13 +197,16 @@ org.locationtech.geowave.datastore.accumulo.operations.config
 org.locationtech.geowave.datastore.accumulo.split
 org.locationtech.geowave.datastore.accumulo.util
 org.locationtech.geowave.datastore.bigtable
+org.locationtech.geowave.datastore.bigtable.cli
 org.locationtech.geowave.datastore.bigtable.config
 org.locationtech.geowave.datastore.bigtable.operations
 org.locationtech.geowave.datastore.cassandra
+org.locationtech.geowave.datastore.cassandra.cli
 org.locationtech.geowave.datastore.cassandra.config
 org.locationtech.geowave.datastore.cassandra.operations
 org.locationtech.geowave.datastore.cassandra.util
 org.locationtech.geowave.datastore.dynamodb
+org.locationtech.geowave.datastore.dynamodb.cli
 org.locationtech.geowave.datastore.dynamodb.config
 org.locationtech.geowave.datastore.dynamodb.operations
 org.locationtech.geowave.datastore.dynamodb.util
@@ -215,6 +223,7 @@ org.locationtech.geowave.datastore.hbase.query.protobuf
 org.locationtech.geowave.datastore.hbase.server
 org.locationtech.geowave.datastore.hbase.util
 org.locationtech.geowave.datastore.kudu
+org.locationtech.geowave.datastore.kudu.cli
 org.locationtech.geowave.datastore.kudu.config
 org.locationtech.geowave.datastore.kudu.operations
 org.locationtech.geowave.datastore.kudu.util
@@ -227,6 +236,7 @@ org.locationtech.geowave.datastore.rocksdb
 org.locationtech.geowave.datastore.rocksdb.config
 org.locationtech.geowave.datastore.rocksdb.operations
 org.locationtech.geowave.datastore.rocksdb.util
+org.locationtech.geowave.examples.index
 org.locationtech.geowave.examples.ingest
 org.locationtech.geowave.examples.ingest.bulk
 org.locationtech.geowave.examples.query

@@ -1,24 +1,31 @@
-//:geowave-setls(1)
-//:===================
-//::doctype: manpage
+//:= geowave-gs-style-set(1)
+:doctype: manpage
 
-NAME
-//:----
+[[gs-style-set-name]]
+==== NAME
 
-geowave gs style set - Set GeoServer Layer Style
+geowave-gs-style-set - Set GeoServer layer style
 
-SYNOPSIS
-//:--------
+[[gs-style-set-synopsis]]
+==== SYNOPSIS
 
-geowave gs style set [options] <layer name>
+  geowave gs style set [options] <layer name>
+  geowave geoserver style set [options] <layer name>
 
-DESCRIPTION
-//:-----------
+[[gs-style-set-description]]
+==== DESCRIPTION
 
-This command will set a GeoServer layer style
+This command sets the layer style to the specified style in the configured GeoServer instance.
 
-OPTIONS
-//:-------
+[[gs-style-set-options]]
+==== OPTIONS
 
-- * -sn, --styleName
- * <style name>
+*$$*$$ -sn, --styleName* _<name>_::
+  The name of the style to set on the layer.
+
+[[gs-style-set-examples]]
+==== EXAMPLES
+
+Set the style on the `hail` layer to `my_style`:
+
+  geowave gs style set -sn my_style hail

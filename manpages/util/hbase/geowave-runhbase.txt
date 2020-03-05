@@ -1,0 +1,45 @@
+//:= geowave-util-hbase-run(1)
+:doctype: manpage
+
+[[util-hbase-run-name]]
+==== NAME
+
+geowave-util-hbase-run - Runs a standalone HBase instance for test and debug with GeoWave
+
+[[util-hbase-run-synopsis]]
+==== SYNOPSIS
+
+  geowave util hbase run [options]
+
+[[util-hbase-run-description]]
+==== DESCRIPTION
+
+This command runs a standalone HBase instance, which can be used locally for testing and debugging GeoWave, without needing to set up a full instance.
+
+[[util-hbase-run-options]]
+==== OPTIONS
+
+*-a, --auth* _<authorizations>_::
+  A list of authorizations to grant the `admin` user.
+
+*-d, --dataDir* _<path>_::
+  Directory for HBase server-side data.  Default is `./lib/services/third-party/embedded-hbase/data`.
+  
+*-i, --interactive*::
+  If specified, prompt for user input to end the process.
+  
+*-l, --libDir* _<path>_::
+  Directory for HBase server-side libraries.  Default is `./lib/services/third-party/embedded-hbase/lib`.
+  
+*-r, --regionServers* _<count>_::
+  The number of region server processes.  Default is 1.
+  
+*-z, --zkDataDir* _<path>_::
+  The data directory for the Zookeper instance.  Default is `./lib/services/third-party/embedded-hbase/zookeeper`.
+
+[[util-hbase-run-examples]]
+==== EXAMPLES
+
+Run a standalone HBase instance:
+
+  geowave util hbase run

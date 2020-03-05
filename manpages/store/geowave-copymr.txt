@@ -1,0 +1,42 @@
+//:= geowave-store-copymr(1)
+:doctype: manpage
+
+[[store-copymr-name]]
+==== NAME
+
+geowave-store-copymr - Copy a data store using MapReduce
+
+[[store-copymr-synopsis]]
+==== SYNOPSIS
+
+  geowave store copymr [options] <input store name> <output store name>
+
+[[store-copymr-description]]
+==== DESCRIPTION
+
+This command copies all of the data from one data store to another using MapReduce.
+
+[[store-copymr-options]]
+==== OPTIONS
+
+*$$*$$ --hdfsHostPort* _<host>_::
+  The HDFS host and port.
+
+*$$*$$ --jobSubmissionHostPort* _<host>_::
+  The job submission tracker host and port.
+
+*--maxSplits* _<count>_::
+  The maximum partitions for the input data.
+
+*--minSplits* _<count>_::
+  The minimum partitions for the input data.
+
+*--numReducers* _<count>_::
+  Number of threads writing at a time.  Default is 8.
+
+[[store-copymr-examples]]
+==== EXAMPLES
+
+Copy all data from the `example` data store to the `example_copy` data store using MapReduce:
+
+  geowave store copymr --hdfsHostPort localhost:53000 --jobSubmissionHostPort localhost:8032 example example_copy

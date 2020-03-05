@@ -1,24 +1,31 @@
-//:geowave-addstyle(1)
-//:===================
-//::doctype: manpage
+//:= geowave-gs-style-add(1)
+:doctype: manpage
 
-NAME
-//:----
+[[gs-style-add-name]]
+==== NAME
 
-geowave gs style add - Add a GeoServer style
+geowave-gs-style-add - Add a style to GeoServer
 
-SYNOPSIS
-//:--------
+[[gs-style-add-synopsis]]
+==== SYNOPSIS
 
-geowave gs style add [options] <GeoWave style name>
+  geowave gs style add [options] <style name>
+  geowave geoserver style add [options] <style name>
 
-DESCRIPTION
-//:-----------
+[[gs-style-add-description]]
+==== DESCRIPTION
 
-This command will add a GeoServer style
+This command adds an SLD style file to the configured GeoServer instance.
 
-OPTIONS
-//:-------
+[[gs-style-add-options]]
+==== OPTIONS
 
-- * -sld, --stylesld
- * <style sld file>
+*$$*$$ -sld, --stylesld* _<file>_::
+  The SLD to add to GeoServer.
+
+[[gs-style-add-examples]]
+==== EXAMPLES
+
+Add the `my_sld.sld` style file to GeoServer with the name `my_style`:
+
+  geowave gs style add -sld my_sld.sld my_style

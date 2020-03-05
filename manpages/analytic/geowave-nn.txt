@@ -1,97 +1,103 @@
-//:geowave-nn(1)
-//:=============
-//::doctype: manpage
+//:= geowave-analytic-nn(1)
+:doctype: manpage
 
-NAME
-//:----
+[[analytic-nn-name]]
+==== NAME
 
-geowave analytic nn - Nearest Neighbors
+geowave-analytic-nn - Nearest Neighbors
 
-SYNOPSIS
-//:--------
+[[analytic-nn-synopsis]]
+==== SYNOPSIS
 
-geowave analytic nn [options] <storename>
+  geowave analytic nn [options] <store name>
 
-DESCRIPTION
-//:-----------
+[[analytic-nn-description]]
+==== DESCRIPTION
 
-The geowave analytic nn operator will execute a Nearest Neighbors analytic.
-Analytic 'nn' is similar to DBScan, with less arguments.
-'nn' just dumps all near neighbors for every feature id in a list of pairs.
-Most developers will want to extend the framework to add their own extensions.
+This command executes a Nearest Neighbors analytic. This is similar to DBScan, with less arguments. Nearest neighbor just dumps all near neighbors for every feature to a list of pairs. Most developers will want to extend the framework to add their own extensions.
 
-EXAMPLE
-//:-----------
+[[analytic-nn-options]]
+==== OPTIONS
 
-[source, bash]
-----
-yarn jar geowave-tools.jar analytic nn -emn 2 -emx 6 -pmd 1000 -oop /user/rwgdrummer_out -orc 4 -hdfs localhost:53000 -jobtracker localhost:8032 -hdfsbase /user/rwgdrummer --query.adapters gpxpoint my_store
-----
+*-conf, --mapReduceConfigFile* _<file>_::
+  MapReduce configuration file.
 
-The min hdfs input split is 2 (emn), max hdfs input split is 6 (emx), max search distance is 1000 meters (pmd),
-the sequence file output directory is _hdfs://host:port/user/rwgdrummer_out_, reducer count is 4 (orc), 
-the hdfs ipc port is _localhost:53000_ (hdfs), the yarn job tracker is at _localhost:8032_ (-jobtracker),
-the temporary files needed by this job are stored in _hdfs:/host:port//user/rwgdrummer_ (hdfsbase), and the data executed against is 'gpxpoint' (query.adapters).  
-The accumulo connection parameters are loaded from _my_store_.
+*$$*$$ -hdfsbase, --mapReduceHdfsBaseDir* _<path>_::
+  Fully qualified path to the base directory in HDFS.
 
-EXECUTION
-//:-----------
+*$$*$$ -jobtracker, --mapReduceJobtrackerHostPort* _<host>_::
+  [REQUIRED (or `-resourceman`)] Hadoop job tracker hostname and port in the format `hostname:port`.
 
-To execute nearest neighbor search in GeoWave, we use the concept of a "partitioner" to 
-partition all data on the hilbert curve into square segments for the 
-purposes of parallelizing the search.  
+*$$*$$ -resourceman, --mapReduceYarnResourceManager* _<host>_::
+  [REQUIRED (or `-jobtracker`)] Yarn resource manager hostname and port in the format `hostname:port`.
+  
+*-hdfs, --mapReduceHdfsHostPort* _<host>_::
+  HDFS hostname and port in the format `hostname:port`.
 
-The default partitioner will multiply this value by 2 and use that for the actual partition sizes. 
-Because of this, the terminology is a bit confusing, but the "pmd" option is actually the most 
-important variable here, describing the max distance for a point to be considered a neighbor to
-another point.
+*--cdf, --commonDistanceFunctionClass* _<class>_::
+  Distance function class that implements `org.locationtech.geowave.analytics.distance.DistanceFn`.
+  
+*$$*$$ --query.typeNames* _<types>_::
+  The comma-separated list of types to query; by default all types are used.
 
-OPTIONS
-//:-------
+*--query.auth* _<auths>_::
+  The comma-separated list of authorizations used during extract; by default all authorizations are used.
 
-- -cdf, --commonDistanceFunctionClass
- * Distance Function Class implements _org.locationtech.geowave.analytics.distance.DistanceFn_
-- * -emx, --extractMaxInputSplit
- * Maximum hdfs input split size
-- * -emn, --extractMinInputSplit
- * Minimum hdfs input split size
-- -eq, --extractQuery
- * Query
-- -ifc, --inputFormatClass
- * Input Format Class
-- -conf, --mapReduceConfigFile
- * MapReduce Configuration
-- * -hdfsbase, --mapReduceHdfsBaseDir
- * Fully qualified path to the base directory in hdfs
-- * -hdfs, --mapReduceHdfsHostPort
- * HDFS hostname and port in the format hostname:port
-- -jobtracker, --mapReduceJobtrackerHostPort
- * [REQUIRED (or resourceman)] Hadoop job tracker hostname and port in the format hostname:port
-- -resourceman, --mapReduceYarnResourceManager
- * [REQUIRED (or jobtracker)] Yarn resource manager hostname and port in the format hostname:port
-- * -oop, --outputHdfsOutputPath
- * Output HDFS File Path
-- -ofc, --outputOutputFormat
- * Output Format Class
-- -orc, --outputReducerCount
- * Number of Reducers For Output
-- -pdt, --partitionDistanceThresholds
- * Comma separated list of distance thresholds, per dimension
-- -pdu, --partitionGeometricDistanceUnit
- * Geometric distance unit (m=meters,km=kilometers, see symbols for javax.units.BaseUnit)
-- * -pmd, --partitionMaxDistance
- * Maximum Partition Distance
-- -pms, --partitionMaxMemberSelection
- * Maximum number of members selected from a partition
-- -pp, --partitionPartitionPrecision
- * Partition Precision
-- -pc, --partitionPartitionerClass
- * Index Identifier for Centroids
-- -psp, --partitionSecondaryPartitionerClass
- * Perform secondary partitioning with the provided class
-- * --query.adapters
- * The comma-separated list of data adapters to query; by default all adapters are used.
-- --query.auth
- * The comma-separated list of authorizations used during extract; by default all authorizations are used.
-- --query.index
- * The specific index to query; by default one is chosen for each adapter.
+*--query.index* _<index>_::
+  The specific index to query; by default one is chosen for each adapter.
+  
+*$$*$$ -emx, --extractMaxInputSplit* _<size>_::
+  Maximum HDFS input split size.
+
+*$$*$$ -emn, --extractMinInputSplit* _<size>_::
+  Minimum HDFS input split size.
+
+*-eq, --extractQuery* _<query>_::
+  Query
+  
+*-ofc, --outputOutputFormat* _<class>_::
+  Output format class.
+  
+*-ifc, --inputFormatClass* _<class>_::
+  Input format class.
+
+*-orc, --outputReducerCount* _<count>_::
+  Number of reducers For output.
+
+*$$*$$ -oop, --outputHdfsOutputPath* _<path>_::
+  Output HDFS file path.
+
+*-pdt, --partitionDistanceThresholds* _<thresholds>_::
+  Comma separated list of distance thresholds, per dimension.
+
+*-pdu, --partitionGeometricDistanceUnit* _<unit>_::
+  Geometric distance unit (m=meters,km=kilometers, see symbols for javax.units.BaseUnit).
+
+*$$*$$ -pmd, --partitionMaxDistance* _<distance>_::
+  Maximum partition distance.
+
+*-pms, --partitionMaxMemberSelection* _<count>_::
+  Maximum number of members selected from a partition.
+
+*-pp, --partitionPartitionPrecision* _<precision>_::
+  Partition precision.
+
+*-pc, --partitionPartitionerClass* _<class>_::
+  Perform primary partitioning for centroids with the provided class.
+
+*-psp, --partitionSecondaryPartitionerClass* _<class>_::
+  Perform secondary partitioning for centroids with the provided class.
+
+[[analytic-nn-examples]]
+==== EXAMPLES
+
+The minimum HDFS input split is 2 (`-emn`), maximum HDFS input split is 6 (`-emx`), maximum search distance is 1000 meters (`-pmd`), the sequence file output directory is `hdfs://host:port/user/rwgdrummer_out`, reducer count is 4 (`-orc`), the HDFS IPC port is `localhost:53000` (`-hdfs`), the Yarn job tracker is at `localhost:8032` (`-jobtracker`), the temporary files needed by this job are stored in `hdfs:/host:port//user/rwgdrummer` (`-hdfsbase`), the input type is `gpxpoint` (`-query.typeNames`), and the data store parameters are loaded from `my_store`.
+
+  geowave analytic nn -emn 2 -emx 6 -pmd 1000 -oop /user/rwgdrummer_out -orc 4 -hdfs localhost:53000 -jobtracker localhost:8032 -hdfsbase /user/rwgdrummer --query.typeNames gpxpoint my_store
+
+[[analytic-nn-execution]]
+==== EXECUTION
+
+To execute nearest neighbor search in GeoWave, we use the concept of a "partitioner" to partition all data on the hilbert curve into square segments for the purposes of parallelizing the search.  
+
+The default partitioner will multiply this value by 2 and use that for the actual partition sizes. Because of this, the terminology is a bit confusing, but the `-pmd` option is actually the most important variable here, describing the max distance for a point to be considered a neighbor to another point.

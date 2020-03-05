@@ -1,24 +1,25 @@
-//:geowave-rmstyle(1)
-//:===================
-//::doctype: manpage
+//:= geowave-gs-style-rm(1)
+:doctype: manpage
 
-NAME
-//:----
+[[gs-style-rm-name]]
+==== NAME
 
-geowave gs style rm - Remove GeoServer Style
+geowave-gs-style-rm - Remove GeoServer Style
 
-SYNOPSIS
-//:--------
+[[gs-style-rm-synopsis]]
+==== SYNOPSIS
 
-geowave gs style rm [options] <style name>
+  geowave gs style rm <style name>
+  geowave geoserver style rm <style name>
 
-DESCRIPTION
-//:-----------
+[[gs-style-rm-description]]
+==== DESCRIPTION
 
-This command will remove a GeoServer Style
+This command removes a style from the configured GeoServer instance.
 
-OPTIONS
-//:-------
+[[gs-style-rm-examples]]
+==== EXAMPLES
 
-There are currently no options available for this command
+Remove the `my_style` style from GeoServer:
 
+  geowave gs style rm my_style

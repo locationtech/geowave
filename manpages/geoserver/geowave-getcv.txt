@@ -1,26 +1,34 @@
-//:geowave-getcv(1)
-//:===================
-//::doctype: manpage
+//:= geowave-gs-cv-get(1)
+:doctype: manpage
 
-NAME
-//:----
+[[gs-cv-get-name]]
+==== NAME
 
-geowave gs cv get - Get a GeoServer coverage's info
+geowave-gs-cv-get - Get a GeoServer coverage's info
 
-SYNOPSIS
-//:--------
+[[gs-cv-get-synopsis]]
+==== SYNOPSIS
 
-geowave gs cv get [options] <coverage name>
+  geowave gs cv get [options] <coverage name>
+  geowave geoserver coverage get [options] <coverage name>
 
-DESCRIPTION
-//:-----------
+[[gs-cv-get-description]]
+==== DESCRIPTION
 
-This command will return a GeoServer coverage's info
+This command returns a information about a coverage from the configured GeoServer instance.
 
-OPTIONS
-//:-------
+[[gs-cv-get-options]]
+==== OPTIONS
 
-- -cs, --coverageStore
- * <coverage store name>
-- -ws, --workspace
- * <workspace name>
+*-cs, --coverageStore* _<name>_::
+  The name of the GeoServer coverage store.
+
+*-ws, --workspace* _<workspace>_::
+  The GeoServer workspace to use.
+
+[[gs-cv-get-examples]]
+==== EXAMPLES
+
+Get information about the `cov` coverage in the `cov_store` coverage store:
+
+  geowave gs cv get -cs cov_store cov

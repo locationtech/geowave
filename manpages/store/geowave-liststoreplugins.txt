@@ -1,0 +1,24 @@
+//:= geowave-store-listplugins(1)
+:doctype: manpage
+
+[[store-listplugins-name]]
+==== NAME
+
+geowave-store-listplugins - List all available store types
+
+[[store-listplugins-synopsis]]
+==== SYNOPSIS
+
+  geowave store listplugins
+
+[[store-listplugins-description]]
+==== DESCRIPTION
+
+This command lists all of the store types that can be added via the `store add` command.
+
+[[store-listplugins-examples]]
+==== EXAMPLES
+
+List all store plugins:
+
+  geowave store listplugins

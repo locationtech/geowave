@@ -5,10 +5,11 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.2">
-<title>GeoWave Quickstart Guide AWS EMR Environment Setup</title>
+<title>GeoWave EMR Quickstart Guide: AWS Environment Setup Guide</title>
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
-@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400";
+/* Remove the comments around the @import statement below when using this as a custom stylesheet */
+/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400";*/
 article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block}
 audio,canvas,video{display:inline-block}
 audio:not([controls]){display:none;height:0}
@@ -68,15 +69,15 @@ img{display:inline-block;vertical-align:middle}
 textarea{height:auto;min-height:50px}
 select{width:100%}
 p.lead,.paragraph.lead>p,#preamble>.sectionbody>.paragraph:first-of-type p{font-size:1.21875em;line-height:1.6}
-.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#222;font-weight:400;margin-top:0;margin-bottom:.25em}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
 div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0;direction:ltr}
-a{color:#222;text-decoration:underline;line-height:inherit}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
 a:hover,a:focus{color:#1d4b8f}
 a img{border:none}
 p{font-family:inherit;font-weight:400;font-size:1em;line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
 p aside{font-size:.875em;line-height:1.35;font-style:italic}
-h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight: 300;font-style:normal;color:#222;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
-h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#222;line-height:0}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
 h1{font-size:2.125em}
 h2{font-size:1.6875em}
 h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
@@ -135,7 +136,7 @@ p a>code:hover{color:rgba(0,0,0,.9)}
 #header:after,#content:after,#footnotes:after,#footer:after{clear:both}
 #content{margin-top:1.25em}
 #content:before{content:none}
-#header>h1:first-child{color: #222;margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
 #header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #ddddd8}
 #header>h1:only-child,body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #ddddd8;padding-bottom:8px}
 #header .details{border-bottom:1px solid #ddddd8;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:-ms-flexbox;display:-webkit-flex;display:flex;-ms-flex-flow:row wrap;-webkit-flex-flow:row wrap;flex-flow:row wrap}
@@ -155,7 +156,7 @@ p a>code:hover{color:rgba(0,0,0,.9)}
 #toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
 #toc a{text-decoration:none}
 #toc a:active{text-decoration:underline}
-#toctitle{color:#222;font-size:1.2em}
+#toctitle{color:#7a2518;font-size:1.2em}
 @media only screen and (min-width:768px){#toctitle{font-size:1.375em}
 body.toc2{padding-left:15em;padding-right:0}
 #toc.toc2{margin-top:0!important;background-color:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #efefed;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
@@ -198,7 +199,7 @@ table.tableblock #preamble>.sectionbody>.paragraph:first-of-type p{font-size:inh
 .sidebarblock{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
 .sidebarblock>:first-child{margin-top:0}
 .sidebarblock>:last-child{margin-bottom:0}
-.sidebarblock>.content>.title{color:#222;margin-top:0;text-align:center}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
 .exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
 .literalblock pre,.listingblock pre:not(.highlight),.listingblock pre[class="highlight"],.listingblock pre[class^="highlight "],.listingblock pre.CodeRay,.listingblock pre.prettyprint{background:#f7f7f8}
 .sidebarblock .literalblock pre,.sidebarblock .listingblock pre:not(.highlight),.sidebarblock .listingblock pre[class="highlight"],.sidebarblock .listingblock pre[class^="highlight "],.sidebarblock .listingblock pre.CodeRay,.sidebarblock .listingblock pre.prettyprint{background:#f2f1f1}
@@ -223,7 +224,7 @@ table.pyhltable .linenodiv{background:none!important;padding-right:0!important}
 .quoteblock>.title{margin-left:-1.5em;margin-bottom:.75em}
 .quoteblock blockquote,.quoteblock blockquote p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
 .quoteblock blockquote{margin:0;padding:0;border:0}
-.quoteblock blockquote:before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#222;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote:before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
 .quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
 .quoteblock .attribution{margin-top:.5em;margin-right:.5ex;text-align:right}
 .quoteblock .quoteblock{margin-left:0;margin-right:0;padding:.5em 0;border-left:3px solid rgba(0,0,0,.6)}
@@ -272,8 +273,8 @@ dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
 ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
 ul.unstyled,ol.unnumbered,ul.checklist,ul.none{list-style-type:none}
 ul.unstyled,ol.unnumbered,ul.checklist{margin-left:.625em}
-ul.checklist li>p:first-child>.fa-check-square-o:first-child,ul.checklist li>p:first-child>input[type="checkbox"]:first-child{margin-right:.25em}
-ul.checklist li>p:first-child>input[type="checkbox"]:first-child{position:relative;top:1px}
+ul.checklist li>p:first-child>.fa-square-o:first-child,ul.checklist li>p:first-child>.fa-check-square-o:first-child{width:1em;font-size:.85em}
+ul.checklist li>p:first-child>input[type="checkbox"]:first-child{width:1em;position:relative;top:1px}
 ul.inline{margin:0 auto .625em auto;margin-left:-1.375em;margin-right:0;padding:0;list-style:none;overflow:hidden}
 ul.inline>li{list-style:none;float:left;margin-left:1.375em;display:block}
 ul.inline>li>*{display:block}
@@ -378,7 +379,7 @@ p{margin-bottom:1.25rem}
 *{-webkit-box-shadow:none!important;box-shadow:none!important;text-shadow:none!important}
 a{color:inherit!important;text-decoration:underline!important}
 a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
-a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after,a[href^="mailto:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
 abbr[title]:after{content:" (" attr(title) ")"}
 pre,blockquote,tr,img{page-break-inside:avoid}
 thead{display:table-header-group}
@@ -406,21 +407,100 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .hide-for-print{display:none!important}
 .show-for-print{display:inherit!important}}
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<link rel="stylesheet" href="stylesheets/font-awesome.css">
+<link rel="stylesheet" href="vendors/highlightjs/styles/github.min.css">
+<script src="vendors/highlightjs/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>
 <!-- docinfo.html -->
-<link rel="icon"
-type="image/png"
-href="images/geowave-icon-logo-small.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="manifest" href="site.webmanifest">
+
+<!-- CSS - Google Fonts -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i,900,900i|Livvic:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,900,900i&display=swap" />
+
+<!-- CSS - Bootstrap 4.4.1 -->
+<link href="vendors/css/bootstrap.min.css" rel="stylesheet" />
+
+<!-- CSS - DataTables -->
+<link href="vendors/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+
+<!-- CSS - GeoWave Bootstrap Theme -->
+<link href="stylesheets/geowave-boostrap-theme.css" rel="stylesheet" />
+
+<!-- CSS - GeoWave Custom Styles -->
+<link href="stylesheets/geowave.css" rel="stylesheet" />
+
+<!-- CSS - GeoWave Documentation Syles  -->
+<link href="stylesheets/geowave-docs.css" rel="stylesheet" />
+
+<!-- CSS - Ion Icons -->
+<link href="vendors/css/ionicons.min.css" rel="stylesheet" />
+
+<!-- JS - Bootstrap 4.4.1 -->
+<script src="vendors/js/jquery-3.4.1.min.js"></script>
+<script src="vendors/js/popper.min.js"></script>
+<script src="vendors/js/bootstrap.min.js"></script>
+
+<!-- JS - GeoWave -->
+<script src="js/versions.js"></script>
+<script src="https://locationtech.github.io/geowave/js/versions.js"></script>
+<script src="js/geowave.js"></script>
+
+<!-- Start Navbar -->
+<nav class="navbar navbar-docs navbar-expand-lg navbar-dark fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="index.html">
+            <img src="images/geowave-logo-light.png" alt="GeoWave Logo">
+        </a>
+        <span id="doc-title-separator">|</span>
+        <a id="doc-title" href="#"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+            aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown06" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">Documentation</a>
+                    <div id="documentation-menu" class="dropdown-menu" aria-labelledby="dropdown06">
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown06" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">Support</a>
+                    <div id="support-menu" class="dropdown-menu" aria-labelledby="dropdown06">
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="current-version" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false"></a>
+                    <div id="version-menu" class="dropdown-menu" aria-labelledby="dropdown06">
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown06" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">GitHub</a>
+                    <div id="github-menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown06">
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- End Navbar -->
+
+<!-- Page Preloader -->
+<div class="preloader"></div>
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel0">
-<li><a href="#geowave-quickstart-guide-aws-emr-environment-setup">GeoWave Quickstart Guide AWS EMR Environment Setup</a>
+<li><a href="#geowave-emr-quickstart-guide-aws-environment-setup-guide">GeoWave EMR Quickstart Guide: AWS Environment Setup Guide</a>
 <ul class="sectlevel1">
 <li><a href="#quickstart-guide-intro">What you will need</a></li>
 <li><a href="#creating-the-cluster">Creating the Cluster</a>
@@ -430,12 +510,10 @@ href="images/geowave-icon-logo-small.png">
 <li><a href="#quickstart-guide-GUI">AWS GUI Method</a></li>
 <li><a href="#quickstart-enable-jupyter">Enabling Jupyter Support</a></li>
 <li><a href="#steps-overview">Connecting to the Cluster</a></li>
-<li><a href="#demo-links">Demo Links</a></li>
 </ul>
 </li>
 <li><a href="#appendices">Appendices</a>
 <ul class="sectlevel2">
-<li><a href="#version">Version</a></li>
 <li><a href="#create-ec2-vpc-network-interface-subnet-id">Create EC2 VPC (Network Interface/Subnet Id)</a></li>
 <li><a href="#create-aws-s3-bucket">Create AWS S3 Bucket</a></li>
 <li><a href="#upload-to-aws-s3-bucket">Upload to AWS S3 Bucket</a></li>
@@ -453,17 +531,16 @@ href="images/geowave-icon-logo-small.png">
 <div id="preamble">
 <div class="sectionbody">
 <div style="page-break-after: always;"></div>
-<div class="paragraph">
-<p><em>v1.0.0</em></p>
 </div>
-<div class="imageblock">
+</div>
+<h1 id="geowave-emr-quickstart-guide-aws-environment-setup-guide" class="sect0"><a class="anchor" href="#geowave-emr-quickstart-guide-aws-environment-setup-guide"></a>GeoWave EMR Quickstart Guide: AWS Environment Setup Guide</h1>
+<div class="openblock partintro">
 <div class="content">
-<img src="./images/geowave-icon-logo-cropped-v2.png" alt="geowave icon logo cropped v2" width="15%">
+<script>
+var doc_name = "EMR Quickstart Guide";
+</script>
 </div>
 </div>
-</div>
-</div>
-<h1 id="geowave-quickstart-guide-aws-emr-environment-setup" class="sect0"><a class="anchor" href="#geowave-quickstart-guide-aws-emr-environment-setup"></a>GeoWave Quickstart Guide AWS EMR Environment Setup</h1>
 <div class="sect1">
 <h2 id="quickstart-guide-intro"><a class="anchor" href="#quickstart-guide-intro"></a>What you will need</h2>
 <div class="sectionbody">
@@ -506,30 +583,29 @@ href="images/geowave-icon-logo-small.png">
 <h2 id="creating-the-cluster"><a class="anchor" href="#creating-the-cluster"></a>Creating the Cluster</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>We will be using the GeoWave bootstrap script to provision our cluster. Then we will walk through the cli commands to download, ingest, analyze and visualize the data.</p>
+<p>We will be using the GeoWave bootstrap script to provision our cluster. Then we will walk through the CLI commands to download, ingest, analyze and visualize the data.</p>
 </div>
 <div style="page-break-after: always;"></div>
 <div class="sect2">
 <h3 id="bootstrap-scripts"><a class="anchor" href="#bootstrap-scripts"></a>Bootstrap Scripts</h3>
-<div id="quickstart-guide-intro" class="paragraph">
-<p>GeoWave currently supports the use of Accumulo, HBase, Cassandra, DynamoDB and BigTable.  We provide EMR bootstrap scripts for Accumulo, HBase, and Cassandra and the others are vendor hosted.
-Choose the appropriate script for the backend datastore you&#8217;d like to use when setting up your cluster. The bootstrap scripts help to set up geowave and your environment. Click on any of the links below to download the script.</p>
+<div class="paragraph">
+<p>GeoWave currently supports the use of several key/value stores.  We provide EMR bootstrap scripts for Accumulo, HBase, and Cassandra and the others are vendor hosted.   Choose the appropriate script for the key/value store you&#8217;d like to use when setting up your cluster.  The bootstrap scripts help to set up GeoWave and your environment. Click on any of the links below to download the script.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>For Accumulo use: <a href="http://s3.amazonaws.com/geowave/1.0.0/scripts/emr/accumulo/bootstrap-geowave.sh">s3://geowave/1.0.0/scripts/emr/accumulo/bootstrap-geowave.sh</a></p>
+<p>For Accumulo use: <a href="http://s3.amazonaws.com/geowave/1.1.0/scripts/emr/accumulo/bootstrap-geowave.sh">s3://geowave/1.1.0/scripts/emr/accumulo/bootstrap-geowave.sh</a></p>
 </li>
 <li>
-<p>For HBase use: <a href="http://s3.amazonaws.com/geowave/1.0.0/scripts/emr/hbase/bootstrap-geowave.sh">s3://geowave/1.0.0/scripts/emr/hbase/bootstrap-geowave.sh</a></p>
+<p>For HBase use: <a href="http://s3.amazonaws.com/geowave/1.1.0/scripts/emr/hbase/bootstrap-geowave.sh">s3://geowave/1.1.0/scripts/emr/hbase/bootstrap-geowave.sh</a></p>
 </li>
 <li>
-<p>For Cassandra use: <a href="http://s3.amazonaws.com/geowave/1.0.0/scripts/emr/cassandra/bootstrap-geowave.sh">s3://geowave/1.0.0/scripts/emr/cassandra/bootstrap-geowave.sh</a></p>
+<p>For Cassandra use: <a href="http://s3.amazonaws.com/geowave/1.1.0/scripts/emr/cassandra/bootstrap-geowave.sh">s3://geowave/1.1.0/scripts/emr/cassandra/bootstrap-geowave.sh</a></p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>These scripts will provide you with everything necessary to complete this guide, but will also set up Geowave if you would like to use it in other workflows. There are scripts available for each of the releases of Geowave going back to 0.9.3. These can be used by replacing <code>/1.0.0/</code> with the desired release (i.e. <code>/0.9.3/</code>)</p>
+<p>These scripts will provide you with everything necessary to complete this guide, but can also be used to setup GeoWave for use in other workflows.  There are scripts available for each of the releases of GeoWave going back to 0.9.3. These can be used by replacing <code>/1.1.0/</code> with the desired release (i.e. <code>/0.9.3/</code>)</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -539,22 +615,21 @@ Choose the appropriate script for the backend datastore you&#8217;d like to use 
 </td>
 <td class="content">
 <div class="paragraph">
-<p>We have also provided quickstart scripts that will perform all of the steps in this guide automatically. This will allow you to verify your own steps, or test out other geowave commands and features on an already conditioned data set.</p>
+<p>We have also provided quickstart scripts that will perform all of the steps in this guide automatically. This will allow you to verify your own steps, or test out other GeoWave commands and features on an already conditioned data set.</p>
 </div>
 <div class="paragraph">
-<p>If you would prefer to have all of the steps run automatically, please use these bootstrap scripts instead of the
-ones listed previously:</p>
+<p>If you would prefer to have all of the steps run automatically, please use these bootstrap scripts instead of the ones listed previously:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>For Accumulo use: <a href="http://s3.amazonaws.com/geowave/1.0.0/scripts/emr/quickstart/accumulo/bootstrap-geowave.sh">s3://geowave/1.0.0/scripts/emr/quickstart/accumulo/bootstrap-geowave.sh</a></p>
+<p>For Accumulo use: <a href="http://s3.amazonaws.com/geowave/1.1.0/scripts/emr/quickstart/accumulo/bootstrap-geowave.sh">s3://geowave/1.1.0/scripts/emr/quickstart/accumulo/bootstrap-geowave.sh</a></p>
 </li>
 <li>
-<p>For HBase use: <a href="http://s3.amazonaws.com/geowave/1.0.0/scripts/emr/quickstart/hbase/bootstrap-geowave.sh">s3://geowave/1.0.0/scripts/emr/quickstart/hbase/bootstrap-geowave.sh</a></p>
+<p>For HBase use: <a href="http://s3.amazonaws.com/geowave/1.1.0/scripts/emr/quickstart/hbase/bootstrap-geowave.sh">s3://geowave/1.1.0/scripts/emr/quickstart/hbase/bootstrap-geowave.sh</a></p>
 </li>
 <li>
-<p>For Cassandra use: <a href="http://s3.amazonaws.com/geowave/1.0.0/scripts/emr/quickstart/cassandra/bootstrap-geowave.sh">s3://geowave/1.0.0/scripts/emr/quickstart/cassandra/bootstrap-geowave.sh</a></p>
+<p>For Cassandra use: <a href="http://s3.amazonaws.com/geowave/1.1.0/scripts/emr/quickstart/cassandra/bootstrap-geowave.sh">s3://geowave/1.1.0/scripts/emr/quickstart/cassandra/bootstrap-geowave.sh</a></p>
 </li>
 </ul>
 </div>
@@ -563,16 +638,14 @@ ones listed previously:</p>
 </table>
 </div>
 <div class="paragraph">
-<p>To use one of the scripts listed above, it must be accessible from an s3 bucket. Because buckets are region specific, you may not be able to use our geowave bucket if your cluster is not deployed in the us-east-1 region. In this case, you will need a personal bucket in your region that contains the desired script. Instructions on <a href="#create-aws-s3-bucket">creating</a> and <a href="#upload-to-aws-s3-bucket">uploading</a> to an s3 bucket can be found in the appendices.</p>
+<p>To use one of the scripts listed above, it must be accessible from an s3 bucket. Because buckets are region specific, you may not be able to use our <code>geowave</code> bucket if your cluster is not deployed in the <code>us-east-1</code> region. In this case, you will need a personal bucket in your region that contains the desired script. Instructions on <a href="#create-aws-s3-bucket">creating</a> and <a href="#upload-to-aws-s3-bucket">uploading</a> to an s3 bucket can be found in the appendices.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
 <div class="sect2">
 <h3 id="aws-cli-method"><a class="anchor" href="#aws-cli-method"></a>AWS CLI Method</h3>
 <div class="paragraph">
-<p>This is the basic makeup of the command you will call to create your geowave test cluster. All variables, designated as
-${VARIABLES}, will need to be be replaced with your individual path, group, value, etc. An explanation of each of the
-variables is given below the command.</p>
+<p>This is the basic makeup of the command you will call to create your GeoWave test cluster. All variables, designated as <code>${VARIABLES}</code>, will need to be be replaced with your individual path, group, value, etc. An explanation of each of the variables is given below the command.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -592,17 +665,17 @@ variables is given below the command.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>${CLUSTER_NAME} - The name you want to show up in the Cluster list in AWS</p>
+<p><code>${CLUSTER_NAME}</code> - The name you want to show up in the Cluster list in AWS</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Example: “geowave-guide-cluster”</p>
+<p>Example: <code>geowave-guide-cluster</code></p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>${NUM_WORKERS} - The number core/worker nodes you want</p>
+<p><code>${NUM_WORKERS}</code> - The number core/worker nodes you want</p>
 <div class="ulist">
 <ul>
 <li>
@@ -612,11 +685,11 @@ variables is given below the command.</p>
 </div>
 </li>
 <li>
-<p>${YOUR_KEYNAME} - The name of the key value pair you want to use for this cluster</p>
+<p><code>${YOUR_KEYNAME}</code> - The name of the key value pair you want to use for this cluster</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Example: geowave-guide-keypair</p>
+<p>Example: <code>geowave-guide-keypair</code></p>
 </li>
 <li>
 <p>If you have not created a keypair for this cluster please follow the steps <a href="#create-ec2-key-pair">here</a>.</p>
@@ -625,11 +698,11 @@ variables is given below the command.</p>
 </div>
 </li>
 <li>
-<p>${YOUR_SUBNET_ID} - The subnet id linked with your security group(s)</p>
+<p><code>${YOUR_SUBNET_ID}</code> - The subnet id linked with your security group(s)</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Example: subnet-bc123123</p>
+<p>Example: <code>subnet-bc123123</code></p>
 </li>
 <li>
 <p>If you are unsure of which subnet to use please see the VPC (network interface/subnet id) section <a href="#create-ec2-vpc-network-interface-subnet-id">here</a>.</p>
@@ -638,14 +711,14 @@ variables is given below the command.</p>
 </div>
 </li>
 <li>
-<p>${YOUR_SECURITY_GROUP} - This is the security group(s) you want the cluster to be assigned to.</p>
+<p><code>${YOUR_SECURITY_GROUP}</code> - This is the security group(s) you want the cluster to be assigned to.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Example: sg-1a123456</p>
+<p>Example: <code>sg-1a123456</code></p>
 </li>
 <li>
-<p>If your AWS EMR account has default security groups setup you can leave the EmrManagedMasterSecurityGroup and EmrManagedSlaveSecurityGroup out of --ec2-attributes</p>
+<p>If your AWS EMR account has default security groups setup you can leave the <code>EmrManagedMasterSecurityGroup</code> and <code>EmrManagedSlaveSecurityGroup</code> out of <code>--ec2-attributes</code></p>
 </li>
 <li>
 <p>If you are unsure of which groups to use here please see the EC2 Security Group section <a href="#create-ec2-security-group">here</a>.</p>
@@ -654,31 +727,31 @@ variables is given below the command.</p>
 </div>
 </li>
 <li>
-<p>${EMR_VERSION} - The version of EMR that you want to use for your cluster</p>
+<p><code>${EMR_VERSION}</code> - The version of EMR that you want to use for your cluster</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Example: emr-5.7.0</p>
+<p>Example: <code>emr-5.7.0</code></p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>${Your_Bucket} - The name of the bucket that you created in s3. This is the home to your script.</p>
+<p><code>${Your_Bucket}</code> - The name of the bucket that you created in s3. This is the home to your script.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Example: geowave-guide-bucket</p>
+<p>Example: <code>geowave-guide-bucket</code></p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>${Path_To_Your_Script} - The path to the script that you are planning to use</p>
+<p><code>${Path_To_Your_Script}</code> - The path to the script that you are planning to use</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Example: scripts/hbase/bootstrap-geowave.sh</p>
+<p>Example: <code>scripts/hbase/bootstrap-geowave.sh</code></p>
 </li>
 <li>
 <p>Info on the bootstrap scripts and their locations can be found <a href="007-appendices.html#quickstart-guide-scripts">above</a></p>
@@ -687,24 +760,24 @@ variables is given below the command.</p>
 </div>
 </li>
 <li>
-<p>${YOUR_TAGNAME} - Tag name for the cluster you are creating</p>
+<p><code>${YOUR_TAGNAME}</code> - Tag name for the cluster you are creating</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Example: “geowave-guide”</p>
+<p>Example: <code>geowave-guide</code></p>
 </li>
 <li>
-<p>The --tags is completely optional, but may help you search for this cluster if there are many on the aws account you are using</p>
+<p>The <code>--tags</code> is completely optional, but may help you search for this cluster if there are many on the AWS account you are using</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>${YOUR_REGION} - Your aws region</p>
+<p><code>${YOUR_REGION}</code> - Your AWS region</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Example: “us-east-1”</p>
+<p>Example: <code>us-east-1</code></p>
 </li>
 </ul>
 </div>
@@ -714,24 +787,24 @@ variables is given below the command.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>You can opt to use spot instances to save money by adding <code>BidPrice</code> in your <code>--instance-groups</code> line. Info and current pricing on spot instances can be found <a href="https://aws.amazon.com/ec2/spot/pricing/">here</a>. The new line should look something like</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
+<p>You can opt to use spot instances to save money by adding <code>BidPrice</code> in your <code>--instance-groups</code> line. Info and current pricing on spot instances can be found <a href="https://aws.amazon.com/ec2/spot/pricing/">here</a>. The new line should look something like:</p>
 <div class="listingblock">
 <div class="content">
-<pre>--instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=m4.xlarge,BidPrice=${Bid_Price} InstanceGroupType=CORE,InstanceCount=${NUM_WORKERS},InstanceType=m4.xlarge,BidPrice=${Bid_Price} \</pre>
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">--instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=m4.xlarge,BidPrice=${Bid_Price} InstanceGroupType=CORE,InstanceCount=${NUM_WORKERS},InstanceType=m4.xlarge,BidPrice=${Bid_Price} \</code></pre>
 </div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>If your create-cluster command was successful it will return the ClusterId of your cluster, otherwise you will receive a
-message  detailing why the command failed.</p>
+<p>If your <code>create-cluster</code> command was successful it will return the <code>ClusterId</code> of your cluster, otherwise you will receive a
+message detailing why the command failed.</p>
 </div>
 <div class="paragraph">
-<p>For more information on the create-cluster command please see the amazon documentation <a href="http://docs.aws.amazon.com/cli/latest/reference/emr/create-cluster.html">here</a>.</p>
+<p>For more information on the <code>create-cluster</code> command please see the AWS documentation <a href="http://docs.aws.amazon.com/cli/latest/reference/emr/create-cluster.html">here</a>.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -741,7 +814,7 @@ message  detailing why the command failed.</p>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>The return of a ClusterId only verifies that aws understood your command and has begun setting up the desired
+<p>The return of a <code>ClusterId</code> only verifies that AWS understood your command and has begun setting up the desired
 cluster. There are many things that could still go wrong and cause the cluster to fail. You can open the AWS EMR GUI to
 follow the progress of your cluster’s creation.</p>
 </div>
@@ -760,13 +833,10 @@ follow the progress of your cluster’s creation.</p>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>If you used the quickstart version of bootstrap script the script will now setup the environment, then download and process one month of gdelt data.</p>
+<p>If you used the quickstart version of bootstrap script the script will now setup the environment, then download and process one month of GDELT data.</p>
 </div>
 <div class="paragraph">
 <p>The entire process takes approximately 25 minutes on a three node cluster.</p>
-</div>
-<div class="paragraph">
-<p>Please see the <a href="#interacting-with-the-cluster">Interacting with the Cluster</a> section of this document to see how the data can be visualized.</p>
 </div>
 </td>
 </tr>
@@ -785,7 +855,7 @@ follow the progress of your cluster’s creation.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Select the “Create cluster” button in the top left side of the page. Once the Create Cluster application opens select the “Go to advanced options” link at the top of the page.</p>
+<p>Select the “Create Cluster” button in the top left side of the page. Once the Create Cluster application opens select the “Go to advanced options” link at the top of the page.</p>
 </div>
 <div style="page-break-after: always;"></div>
 <div id="quickstart-guide-steo-1" class="paragraph">
@@ -806,7 +876,7 @@ follow the progress of your cluster’s creation.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Select emr-5.17.0 from the dropdown list (older versions of GeoWave may not support all functions on newer versions of EMR and vice versa but you can likely choose different EMR versions without any issues - at the time of writing EMR 5.17.0 was the latest)</p>
+<p>Select <code>emr-5.17.0</code> from the dropdown list (older versions of GeoWave may not support all functions on newer versions of EMR and vice versa but you can likely choose different EMR versions without any issues - at the time of writing EMR 5.17.0 was the latest)</p>
 </li>
 <li>
 <p>Ensure Hadoop is selected</p>
@@ -1221,13 +1291,10 @@ list of your available buckets and chose a script from there. Otherwise, type in
 </td>
 <td class="content">
 <div class="paragraph">
-<p>If you used the quickstart version of bootstrap script the script will now setup the environment, then download and process one month of gdelt data.</p>
+<p>If you used the quickstart version of bootstrap script the script will now setup the environment, then download and process one month of GDELT data.</p>
 </div>
 <div class="paragraph">
 <p>The entire process takes approximately 25 minutes on a three node cluster.</p>
-</div>
-<div class="paragraph">
-<p>Please see the <a href="#interacting-with-the-cluster">Interacting with the Cluster</a> section of this document to see how the data can be visualized.</p>
 </div>
 </td>
 </tr>
@@ -1238,9 +1305,7 @@ list of your available buckets and chose a script from there. Otherwise, type in
 <div class="sect2">
 <h3 id="quickstart-enable-jupyter"><a class="anchor" href="#quickstart-enable-jupyter"></a>Enabling Jupyter Support</h3>
 <div class="paragraph">
-<p>Geowave also supports jupyter notebook development which you can enable by following the steps here
-before creating the cluster:
-- <a href="jupyter.html" target="_blank">Jupyter Quickstart</a></p>
+<p>GeoWave also supports Jupyter notebook development which you can enable by following the steps <a href="jupyter.html" target="_blank">here</a> before creating the cluster.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -1250,8 +1315,7 @@ before creating the cluster:
 <p>Once your cluster is running and bootstrapped, ssh into the cluster.</p>
 </div>
 <div class="paragraph">
-<p>Go to the Cluster List (“Services” dropdown, select EMR) and click on the cluster you created. You will use the “Master public DNS”
-value as your hostname and the security key you assigned to the cluster to access it. If you are prompted for a login, the default name is "hadoop"</p>
+<p>Go to the Cluster List (“Services” dropdown, select EMR) and click on the cluster you created. You will use the “Master public DNS” value as your hostname and the security key you assigned to the cluster to access it. If you are prompted for a login, the default name is <code>hadoop</code>.</p>
 </div>
 <div class="paragraph">
 <p>If you are unsure of how to do this, click on the blue SSH link to the right of your Master public DNS to open a popup that will walk you though it.</p>
@@ -1269,35 +1333,16 @@ value as your hostname and the security key you assigned to the cluster to acces
 </td>
 <td class="content">
 <div class="paragraph">
-<p>The cluster status may show as waiting before the bootstrap script has completed. Please allow 5-7 minutes
-for the cluster to be setup and bootstrapped. This may take longer if you are using spot instances.</p>
+<p>The cluster status may show as waiting before the bootstrap script has completed. Please allow 5-7 minutes for the cluster to be setup and bootstrapped. This may take longer if you are using spot instances.</p>
 </div>
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>If you are using Accumulo as your datastore, the script will automatically create a geowave user with a password (geowave) and table creation permissions, as well as pointing accumulo to the geowave jar on hdfs.</p>
+<p>If you are using Accumulo as your data store, the script will automatically create a <code>geowave</code> user with a password (<code>geowave</code>) and table creation permissions, as well as pointing Accumulo to the GeoWave JAR on HDFS.</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="demo-links"><a class="anchor" href="#demo-links"></a>Demo Links</h3>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="walkthrough-vector.html" target="_blank">Vector Demo</a></p>
-</li>
-<li>
-<p><a href="walkthrough-raster.html" target="_blank">Raster Demo</a></p>
-</li>
-<li>
-<p><a href="integrate-geoserver.html" target="_blank">GeoServer Integration</a></p>
-</li>
-<li>
-<p><a href="interact-cluster.html" target="_blank">Interacting with the cluster</a></p>
-</li>
-</ul>
-</div>
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 </div>
@@ -1305,13 +1350,6 @@ for the cluster to be setup and bootstrapped. This may take longer if you are us
 <h2 id="appendices"><a class="anchor" href="#appendices"></a>Appendices</h2>
 <div class="sectionbody">
 <div style="page-break-after: always;"></div>
-<div class="sect2">
-<h3 id="version"><a class="anchor" href="#version"></a>Version</h3>
-<div class="paragraph">
-<p>This documentation was generated for GeoWave version 1.0.0 from commit 8db81537e91a03878cd173522eafc6bf107be90f.</p>
-</div>
-<div style="page-break-after: always;"></div>
-</div>
 <div class="sect2">
 <h3 id="create-ec2-vpc-network-interface-subnet-id"><a class="anchor" href="#create-ec2-vpc-network-interface-subnet-id"></a>Create EC2 VPC (Network Interface/Subnet Id)</h3>
 <div class="paragraph">
@@ -1476,13 +1514,22 @@ button.</p>
 <div class="paragraph">
 <p>Please see the Amazon documentation <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html">here</a>.</p>
 </div>
+<script>
+var geowave_version = '1.1.0';
+</script>
+
+<div class="geowave-footer col-md-12 docs-footer">
+  <div class="py-4 d-flex justify-content-center align-items-center">
+    <small><p class="footer-text">This page was generated on Thursday, March 05, 2020 at 02:27 AM UTC<br><a href="https://github.com/locationtech/geowave/tree/d27015a544ba43a0831e49d9ead3ac08637a7447">View the commit it was generated from on GitHub</a></p></small>
+  </div>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-09-06 20:42:52 +00:00
+Last updated 2020-03-05 02:27:09 +00:00
 </div>
 </div>
 </body>

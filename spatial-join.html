@@ -5,10 +5,11 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.2">
-<title>GeoWave Quickstart Guide: Spatial Join Jupyter Notebook</title>
+<title>GeoWave EMR Quickstart Guide: Spatial Join Jupyter Notebook</title>
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
-@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400";
+/* Remove the comments around the @import statement below when using this as a custom stylesheet */
+/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400";*/
 article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block}
 audio,canvas,video{display:inline-block}
 audio:not([controls]){display:none;height:0}
@@ -68,15 +69,15 @@ img{display:inline-block;vertical-align:middle}
 textarea{height:auto;min-height:50px}
 select{width:100%}
 p.lead,.paragraph.lead>p,#preamble>.sectionbody>.paragraph:first-of-type p{font-size:1.21875em;line-height:1.6}
-.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#222;font-weight:400;margin-top:0;margin-bottom:.25em}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
 div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0;direction:ltr}
-a{color:#222;text-decoration:underline;line-height:inherit}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
 a:hover,a:focus{color:#1d4b8f}
 a img{border:none}
 p{font-family:inherit;font-weight:400;font-size:1em;line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
 p aside{font-size:.875em;line-height:1.35;font-style:italic}
-h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight: 300;font-style:normal;color:#222;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
-h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#222;line-height:0}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
 h1{font-size:2.125em}
 h2{font-size:1.6875em}
 h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
@@ -135,7 +136,7 @@ p a>code:hover{color:rgba(0,0,0,.9)}
 #header:after,#content:after,#footnotes:after,#footer:after{clear:both}
 #content{margin-top:1.25em}
 #content:before{content:none}
-#header>h1:first-child{color: #222;margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
 #header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #ddddd8}
 #header>h1:only-child,body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #ddddd8;padding-bottom:8px}
 #header .details{border-bottom:1px solid #ddddd8;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:-ms-flexbox;display:-webkit-flex;display:flex;-ms-flex-flow:row wrap;-webkit-flex-flow:row wrap;flex-flow:row wrap}
@@ -155,7 +156,7 @@ p a>code:hover{color:rgba(0,0,0,.9)}
 #toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
 #toc a{text-decoration:none}
 #toc a:active{text-decoration:underline}
-#toctitle{color:#222;font-size:1.2em}
+#toctitle{color:#7a2518;font-size:1.2em}
 @media only screen and (min-width:768px){#toctitle{font-size:1.375em}
 body.toc2{padding-left:15em;padding-right:0}
 #toc.toc2{margin-top:0!important;background-color:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #efefed;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
@@ -198,7 +199,7 @@ table.tableblock #preamble>.sectionbody>.paragraph:first-of-type p{font-size:inh
 .sidebarblock{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
 .sidebarblock>:first-child{margin-top:0}
 .sidebarblock>:last-child{margin-bottom:0}
-.sidebarblock>.content>.title{color:#222;margin-top:0;text-align:center}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
 .exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
 .literalblock pre,.listingblock pre:not(.highlight),.listingblock pre[class="highlight"],.listingblock pre[class^="highlight "],.listingblock pre.CodeRay,.listingblock pre.prettyprint{background:#f7f7f8}
 .sidebarblock .literalblock pre,.sidebarblock .listingblock pre:not(.highlight),.sidebarblock .listingblock pre[class="highlight"],.sidebarblock .listingblock pre[class^="highlight "],.sidebarblock .listingblock pre.CodeRay,.sidebarblock .listingblock pre.prettyprint{background:#f2f1f1}
@@ -223,7 +224,7 @@ table.pyhltable .linenodiv{background:none!important;padding-right:0!important}
 .quoteblock>.title{margin-left:-1.5em;margin-bottom:.75em}
 .quoteblock blockquote,.quoteblock blockquote p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
 .quoteblock blockquote{margin:0;padding:0;border:0}
-.quoteblock blockquote:before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#222;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote:before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
 .quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
 .quoteblock .attribution{margin-top:.5em;margin-right:.5ex;text-align:right}
 .quoteblock .quoteblock{margin-left:0;margin-right:0;padding:.5em 0;border-left:3px solid rgba(0,0,0,.6)}
@@ -272,8 +273,8 @@ dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
 ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
 ul.unstyled,ol.unnumbered,ul.checklist,ul.none{list-style-type:none}
 ul.unstyled,ol.unnumbered,ul.checklist{margin-left:.625em}
-ul.checklist li>p:first-child>.fa-check-square-o:first-child,ul.checklist li>p:first-child>input[type="checkbox"]:first-child{margin-right:.25em}
-ul.checklist li>p:first-child>input[type="checkbox"]:first-child{position:relative;top:1px}
+ul.checklist li>p:first-child>.fa-square-o:first-child,ul.checklist li>p:first-child>.fa-check-square-o:first-child{width:1em;font-size:.85em}
+ul.checklist li>p:first-child>input[type="checkbox"]:first-child{width:1em;position:relative;top:1px}
 ul.inline{margin:0 auto .625em auto;margin-left:-1.375em;margin-right:0;padding:0;list-style:none;overflow:hidden}
 ul.inline>li{list-style:none;float:left;margin-left:1.375em;display:block}
 ul.inline>li>*{display:block}
@@ -378,7 +379,7 @@ p{margin-bottom:1.25rem}
 *{-webkit-box-shadow:none!important;box-shadow:none!important;text-shadow:none!important}
 a{color:inherit!important;text-decoration:underline!important}
 a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
-a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after,a[href^="mailto:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
 abbr[title]:after{content:" (" attr(title) ")"}
 pre,blockquote,tr,img{page-break-inside:avoid}
 thead{display:table-header-group}
@@ -406,21 +407,100 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .hide-for-print{display:none!important}
 .show-for-print{display:inherit!important}}
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<link rel="stylesheet" href="stylesheets/font-awesome.css">
+<link rel="stylesheet" href="vendors/highlightjs/styles/github.min.css">
+<script src="vendors/highlightjs/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>
 <!-- docinfo.html -->
-<link rel="icon"
-type="image/png"
-href="images/geowave-icon-logo-small.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="manifest" href="site.webmanifest">
+
+<!-- CSS - Google Fonts -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i,900,900i|Livvic:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,900,900i&display=swap" />
+
+<!-- CSS - Bootstrap 4.4.1 -->
+<link href="vendors/css/bootstrap.min.css" rel="stylesheet" />
+
+<!-- CSS - DataTables -->
+<link href="vendors/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+
+<!-- CSS - GeoWave Bootstrap Theme -->
+<link href="stylesheets/geowave-boostrap-theme.css" rel="stylesheet" />
+
+<!-- CSS - GeoWave Custom Styles -->
+<link href="stylesheets/geowave.css" rel="stylesheet" />
+
+<!-- CSS - GeoWave Documentation Syles  -->
+<link href="stylesheets/geowave-docs.css" rel="stylesheet" />
+
+<!-- CSS - Ion Icons -->
+<link href="vendors/css/ionicons.min.css" rel="stylesheet" />
+
+<!-- JS - Bootstrap 4.4.1 -->
+<script src="vendors/js/jquery-3.4.1.min.js"></script>
+<script src="vendors/js/popper.min.js"></script>
+<script src="vendors/js/bootstrap.min.js"></script>
+
+<!-- JS - GeoWave -->
+<script src="js/versions.js"></script>
+<script src="https://locationtech.github.io/geowave/js/versions.js"></script>
+<script src="js/geowave.js"></script>
+
+<!-- Start Navbar -->
+<nav class="navbar navbar-docs navbar-expand-lg navbar-dark fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="index.html">
+            <img src="images/geowave-logo-light.png" alt="GeoWave Logo">
+        </a>
+        <span id="doc-title-separator">|</span>
+        <a id="doc-title" href="#"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+            aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown06" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">Documentation</a>
+                    <div id="documentation-menu" class="dropdown-menu" aria-labelledby="dropdown06">
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown06" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">Support</a>
+                    <div id="support-menu" class="dropdown-menu" aria-labelledby="dropdown06">
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="current-version" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false"></a>
+                    <div id="version-menu" class="dropdown-menu" aria-labelledby="dropdown06">
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown06" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">GitHub</a>
+                    <div id="github-menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown06">
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- End Navbar -->
+
+<!-- Page Preloader -->
+<div class="preloader"></div>
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel0">
-<li><a href="#geowave-quickstart-guide-spatial-join-jupyter-notebook">GeoWave Quickstart Guide: Spatial Join Jupyter Notebook</a>
+<li><a href="#geowave-emr-quickstart-guide-spatial-join-jupyter-notebook">GeoWave EMR Quickstart Guide: Spatial Join Jupyter Notebook</a>
 <ul class="sectlevel1">
 <li><a href="#assumptions">Assumptions</a></li>
 <li><a href="#configuring-spark">Configuring Spark</a></li>
@@ -429,10 +509,10 @@ href="images/geowave-icon-logo-small.png">
 <li><a href="#spatial-join-demo-settings">Spatial Join Demo Settings</a></li>
 </ul>
 </li>
-<li><a href="#connect-to-the-notebook-server">Connect to the notebook server</a></li>
+<li><a href="#connect-to-the-notebook-server">Connect to the Notebook Server</a></li>
 <li><a href="#appendices">Appendices</a>
 <ul class="sectlevel2">
-<li><a href="#modifying-spark-settings-on-jupyter-kernel">Modifying Spark settings on Jupyter kernel</a></li>
+<li><a href="#modifying-spark-settings-on-jupyter-kernel">Modifying Spark Settings on Jupyter Kernel</a></li>
 <li><a href="#restarting-the-jupyter-daemon">Restarting the Jupyter Daemon</a></li>
 </ul>
 </li>
@@ -445,17 +525,16 @@ href="images/geowave-icon-logo-small.png">
 <div id="preamble">
 <div class="sectionbody">
 <div style="page-break-after: always;"></div>
-<div class="paragraph">
-<p><em>v1.0.0</em></p>
 </div>
-<div class="imageblock">
+</div>
+<h1 id="geowave-emr-quickstart-guide-spatial-join-jupyter-notebook" class="sect0"><a class="anchor" href="#geowave-emr-quickstart-guide-spatial-join-jupyter-notebook"></a>GeoWave EMR Quickstart Guide: Spatial Join Jupyter Notebook</h1>
+<div class="openblock partintro">
 <div class="content">
-<img src="./images/geowave-icon-logo-cropped-v2.png" alt="geowave icon logo cropped v2" width="28%">
+<script>
+var doc_name = "EMR Quickstart Guide";
+</script>
 </div>
 </div>
-</div>
-</div>
-<h1 id="geowave-quickstart-guide-spatial-join-jupyter-notebook" class="sect0"><a class="anchor" href="#geowave-quickstart-guide-spatial-join-jupyter-notebook"></a>GeoWave Quickstart Guide: Spatial Join Jupyter Notebook</h1>
 <div class="sect1">
 <h2 id="assumptions"><a class="anchor" href="#assumptions"></a>Assumptions</h2>
 <div class="sectionbody">
@@ -465,7 +544,7 @@ href="images/geowave-icon-logo-small.png">
 <div class="ulist">
 <ul>
 <li>
-<p><a href="aws-env.html#" target="_blank">Amazon Web Services EMR</a></p>
+<p><a href="aws-env.html#" target="_blank">AWS Environment Setup Guide</a></p>
 </li>
 <li>
 <p><a href="jupyter.html#" target="_blank">Jupyter Notebook Quickstart</a></p>
@@ -478,8 +557,7 @@ href="images/geowave-icon-logo-small.png">
 <h2 id="configuring-spark"><a class="anchor" href="#configuring-spark"></a>Configuring Spark</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To better configure Spark for our demo we use an option provided by AWS to maximize the memory and CPU usage of our Spark cluster called <code>maximizeResourceAllocation</code>. This option has to be provided at cluster creation as a configuration option given to Spark.
-For more information on how to set this option visit <a href="http://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-spark-configure.html">Configuring Spark</a>.</p>
+<p>To better configure Spark for our demo we use an option provided by AWS to maximize the memory and CPU usage of our Spark cluster called <code>maximizeResourceAllocation</code>. This option has to be provided at cluster creation as a configuration option given to Spark.  For more information on how to set this option visit <a href="http://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-spark-configure.html">Configuring Spark</a>.</p>
 </div>
 <div class="admonitionblock warning">
 <table>
@@ -502,7 +580,7 @@ When running through Jupyter notebook there is no issue because we account for t
 <h2 id="recommended-hardware-settings"><a class="anchor" href="#recommended-hardware-settings"></a>Recommended Hardware settings</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The current implementation of the join is rather unoptimized as it considers the worst case scenario in terms of setup logic for each dataset (dynamically generates indices for each set). This requires more hardware resources than the other demos, so you will need to modify the hardware specifications of your emr cluster to at least the minimum required settings specified below to run successfully.</p>
+<p>The current implementation of the join is rather unoptimized as it considers the worst case scenario in terms of setup logic for each dataset (dynamically generates indices for each set). This requires more hardware resources than the other demos, so you will need to modify the hardware specifications of your EMR cluster to at least the minimum required settings specified below to run successfully.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -558,7 +636,7 @@ When running through Jupyter notebook there is no issue because we account for t
 </div>
 </div>
 <div class="sect1">
-<h2 id="connect-to-the-notebook-server"><a class="anchor" href="#connect-to-the-notebook-server"></a>Connect to the notebook server</h2>
+<h2 id="connect-to-the-notebook-server"><a class="anchor" href="#connect-to-the-notebook-server"></a>Connect to the Notebook Server</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>After your cluster has been created and is in the Waiting state, you are ready to connect to the notebook server and run the demo:</p>
@@ -592,7 +670,7 @@ When running through Jupyter notebook there is no issue because we account for t
 <h2 id="appendices"><a class="anchor" href="#appendices"></a>Appendices</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="modifying-spark-settings-on-jupyter-kernel"><a class="anchor" href="#modifying-spark-settings-on-jupyter-kernel"></a>Modifying Spark settings on Jupyter kernel</h3>
+<h3 id="modifying-spark-settings-on-jupyter-kernel"><a class="anchor" href="#modifying-spark-settings-on-jupyter-kernel"></a>Modifying Spark Settings on Jupyter Kernel</h3>
 <div class="paragraph">
 <p>Our bootstrap scripts setup the Jupyter kernel to use yarn by default, and other spark configuration settings through the <code>kernel.json</code> file for the kernel itself. If for any reason you would like to change these settings, you can do so by modifying the <code>kernel.json</code> once you are connected to the cluster.</p>
 </div>
@@ -628,7 +706,7 @@ When running through Jupyter notebook there is no issue because we account for t
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>SSH into the emr cluster</p>
+<p>SSH into the EMR cluster</p>
 </li>
 <li>
 <p>Run the following commands</p>
@@ -641,13 +719,22 @@ sudo start jupyter</code></pre>
 </li>
 </ol>
 </div>
+<script>
+var geowave_version = '1.1.0';
+</script>
+
+<div class="geowave-footer col-md-12 docs-footer">
+  <div class="py-4 d-flex justify-content-center align-items-center">
+    <small><p class="footer-text">This page was generated on Thursday, March 05, 2020 at 02:27 AM UTC<br><a href="https://github.com/locationtech/geowave/tree/d27015a544ba43a0831e49d9ead3ac08637a7447">View the commit it was generated from on GitHub</a></p></small>
+  </div>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-09-06 20:42:53 +00:00
+Last updated 2020-03-05 02:27:12 +00:00
 </div>
 </div>
 </body>

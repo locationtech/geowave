@@ -1,0 +1,24 @@
+//:= geowave-index-listplugins(1)
+:doctype: manpage
+
+[[index-listplugins-name]]
+==== NAME
+
+geowave-index-listplugins - List all available index types
+
+[[index-listplugins-synopsis]]
+==== SYNOPSIS
+
+  geowave index listplugins
+
+[[index-listplugins-description]]
+==== DESCRIPTION
+
+This command lists all of the index types that can be added via the `index add` command.
+
+[[index-listplugins-examples]]
+==== EXAMPLES
+
+List all index plugins:
+
+  geowave index listplugins

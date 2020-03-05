@@ -1,27 +1,40 @@
-//:geowave-calcstat(1)
-//:===================
-//::doctype: manpage
+//:= geowave-stat-calc(1)
+:doctype: manpage
 
-NAME
-//:----
+[[stat-calc-name]]
+==== NAME
 
-geowave stat calc - Calculate a specific statistic in the remote store, given adapter ID and statistic ID
+geowave-stat-calc - Calculate a specific statistic in the remote store, given a type name and stat type
 
-SYNOPSIS
-//:--------
+[[stat-calc-synopsis]]
+==== SYNOPSIS
 
-geowave stat calc [options] <store name> <type name> <stat type>
+  geowave stat calc [options] <store name> <type name> <stat type>
 
-DESCRIPTION
-//:-----------
+[[stat-calc-description]]
+==== DESCRIPTION
 
-The geowave stat calc operator will calculate a specific statistic in the remote store, given type name and statistic type.
+This command calculates a specific statistic in the data store, given a type name and statistic type.
 
-OPTIONS
-//:-------
+[[stat-calc-options]]
+==== OPTIONS
 
-- --auth
- * The authorizations used for the statistics calculation as a subset of the accumulo user authorization; by default all authorizations are used.
-- --json
- * Output in JSON format.
- * Default: false
+*--fieldName*::
+  The field name for the statistic, if the statistic is maintained per field.
+
+*--auth* _<authorizations>_::
+  The authorizations used for the statistics calculation.  By default all authorizations are used.
+
+*--json*::
+  If specified, output will be formatted in JSON.
+
+[[stat-calc-examples]]
+==== EXAMPLES
+
+Calculate the `COUNT_DATA` statistic on the `hail` type in the `example` data store:
+
+  geowave stat calc example hail COUNT_DATA
+  
+Calculate the numeric range statistic of the `AREA` attribute of the `hail` type in the `example` data store:
+
+  geowave stat calc --fieldName AREA example hail FEATURE_NUMERIC_RANGE

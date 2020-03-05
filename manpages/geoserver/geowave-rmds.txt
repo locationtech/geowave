@@ -1,24 +1,31 @@
-//:geowave-rmds(1)
-//:===================
-//::doctype: manpage
+//:= geowave-gs-ds-rm(1)
+:doctype: manpage
 
-NAME
-//:----
+[[gs-ds-rm-name]]
+==== NAME
 
-geowave gs ds rm - Remove GeoServer DataStore
+geowave-gs-ds-rm - Remove GeoServer store
 
-SYNOPSIS
-//:--------
+[[gs-ds-rm-synopsis]]
+==== SYNOPSIS
 
-geowave gs ds rm [options] <datastore name>
+  geowave gs ds rm [options] <store name>
+  geowave geoserver datastore rm [options] <store name>
 
-DESCRIPTION
-//:-----------
+[[gs-ds-rm-description]]
+==== DESCRIPTION
 
-This command will remove a GeoServer DataStore
+This command removes a store from the configured GeoServer instance.
 
-OPTIONS
-//:-------
+[[gs-ds-rm-options]]
+==== OPTIONS
 
-- -ws, --workspace
- * <workspace name>
+*-ws, --workspace* _<workspace>_::
+  The GeoServer workspace to use.
+
+[[gs-ds-rm-examples]]
+==== EXAMPLES
+
+Remove the `my_store` store from GeoServer:
+
+  geowave gs ds rm my_store

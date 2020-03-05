@@ -1,27 +1,33 @@
-//:geowave-splitequalinterval(1)
-//:==============
-//::doctype: manpage
+//:= geowave-util-accumulo-splitequalinterval(1)
+:doctype: manpage
 
-NAME
-//:----
+[[util-accumulo-splitequalinterval-name]]
+==== NAME
 
-geowave util accumulo splitequalinterval - Set Accumulo splits by providing the number of partitions based on an equal interval strategy
+geowave-util-accumulo-splitequalinterval - Set Accumulo splits by providing the number of partitions based on an equal interval strategy
 
-SYNOPSIS
-//:--------
+[[util-accumulo-splitequalinterval-synopsis]]
+==== SYNOPSIS
 
-geowave util accumulo splitequalinterval [options] <storename>
+  geowave util accumulo splitequalinterval [options] <store name>
 
-DESCRIPTION
-//:-----------
+[[util-accumulo-splitequalinterval-description]]
+==== DESCRIPTION
 
 This command will allow a user to set the accumulated splits through providing the number of partitions based on an equal interval strategy.
 
-OPTIONS
-//:-------
+[[util-accumulo-splitequalinterval-options]]
+==== OPTIONS
 
-- --indexId
- * The geowave index ID (optional; default is all indices)
-- --num
- * The number of partitions (or entries)
- * Default: 0
+*--indexName* _<name>_::
+  The GeoWave index.  Default is all indices.
+
+*--num* _<count>_::
+  The number of partitions.
+  
+[[util-accumulo-splitequalinterval-examples]]
+==== EXAMPLES
+
+Split the `spatial_idx` table to 8 partitions using an equal interval strategy in the `example` data store:
+
+  geowave util accumulo splitequalinterval --indexName spatial_idx --num 8 example

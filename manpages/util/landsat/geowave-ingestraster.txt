@@ -1,72 +1,78 @@
-//:geowave-ingestraster(1)
-//:=====================
-//::doctype: manpage
+//:= geowave-util-landsat-ingestraster(1)
+:doctype: manpage
 
-NAME
-//:----
+[[util-landsat-ingestraster-name]]
+==== NAME
 
-geowave util landsat ingestraster - Ingest routine for locally downloading Landsat 8 imagery and ingesting it into GeoWave
+geowave-util-landsat-ingestraster - Ingest Landsat 8 imagery into a GeoWave data store
 
-SYNOPSIS
-//:--------
+[[util-landsat-ingestraster-synopsis]]
+==== SYNOPSIS
 
-geowave util landsat analyze [options]
+  geowave util landsat ingestraster [options] <store name> <comma delimited index list>
 
-DESCRIPTION
-//:-----------
+[[util-landsat-ingestraster-description]]
+==== DESCRIPTION
 
-This command provides an ingest routine for locally downloading Landsat 8 imagery and ingesting it into GeoWave.
+This command downloads Landsat 8 imagery and then ingests it as raster data into GeoWave.
 
-OPTIONS
-//:-------
+[[util-landsat-ingestraster-options]]
+==== OPTIONS
 
-- --converter
- * Prior to ingesting an image, this converter will be used to massage the data. The default is not to convert the data.
-- --coverage
- * The name to give to each unique coverage. Freemarker templating can be used for variable substition based on the same attributes used for filtering.  The default coverage name is '${entityId}_${band}'. If ${band} is unused in the coverage name, all bands will be merged together into the same coverage.
- * Default: ${entityId}_${band}
-- --cql
- * An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: shape (Geometry), acquisitionDate (Date), cloudCover (double), processingLevel (String), path (int), row (int) and the feature ID is entityId for the scene. Additionally attributes of the individuals band can be used such as band (String), sizeMB (double), and bandDownloadUrl (String)
- * Default: <empty string>
-- --crop
- * Use the spatial constraint provided in CQL to crop the image. If no spatial constraint is provided, this will not have an effect.
- * Default: false
-- --histogram
- * An option to store the histogram of the values of the coverage so that histogram equalization will be performed
- * Default: false
-- --nbestbands
- * An option to identify and only use a set number of bands with the best cloud cover
- * Default: 0
-- --nbestperspatial
- * A boolean flag, when applied with --nbestscenes or --nbestbands will aggregate scenes and/or bands by path/row
- * Default: false
-- --nbestscenes
- * An option to identify and only use a set number of scenes with the best cloud cover
- * Default: 0
-- --overwrite
- * An option to overwrite images that are ingested in the local workspace directory.  By default it will keep an existing image rather than downloading it again.
- *  Default: false
-- --pyramid
- * An option to store an image pyramid for the coverage
- * Default: false
-- --retainimages
- * An option to keep the images that are ingested in the local workspace directory. By default it will delete the local file after it is ingested successfully.
- * Default: false
-- --sincelastrun
- * An option to check the scenes list from the workspace and if it exists, to only ingest data since the last scene.
- * Default: false
-- --skipMerge
- * By default the ingest will automerge overlapping tiles as a post-processing optimization step for efficient retrieval, but this will skip the merge process
- * Default: false
-- --subsample
- * Subsample the image prior to ingest by the scale factor provided. The scale factor should be an integer value greater than 1.
- * Default: 1
-- --tilesize
- * The option to set the pixel size for each tile stored in GeoWave. The default is 512
- * Default: 512
-- --usecachedscenes
- * An option to run against the existing scenes catalog in the workspace directory if it exists.
- * Default: false
-- -ws, --workspaceDir
- * A local directory to write temporary files needed for landsat 8 ingest. Default is <TEMP_DIR>/landsat8
- * Default: landsat8
+*--converter* _<converter>_::
+  Prior to ingesting an image, this converter will be used to massage the data. The default is not to convert the data.
+
+*--coverage* _<name>_::
+  The name to give to each unique coverage. Freemarker templating can be used for variable substition based on the same attributes used for filtering. The default coverage name is `${entityId}_${band}`.  If `${band}` is unused in the coverage name, all bands will be merged together into the same coverage.
+
+*--cql* _<filter>_::
+  An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: `shape` (Geometry), `acquisitionDate` (Date), `cloudCover` (double), `processingLevel` (String), `path` (int), `row` (int) and the feature ID is `entityId` for the scene. Additionally attributes of the individuals band can be used such as `band` (String), `sizeMB` (double), and `bandDownloadUrl` (String).
+
+*--crop*::
+  If specified, use the spatial constraint provided in CQL to crop the image.  If no spatial constraint is provided, this will not have an effect.
+
+*--histogram*::
+  If specified, store the histogram of the values of the coverage so that histogram equalization will be performed.
+
+*--nbestbands* _<count>_::
+  An option to identify and only use a set number of bands with the best cloud cover.
+
+*--nbestperspatial*::
+  A flag that when applied with `--nbestscenes` or `--nbestbands` will aggregate scenes and/or bands by path/row.
+
+*--nbestscenes* _<count>_::
+  An option to identify and only use a set number of scenes with the best cloud cover.
+
+*--overwrite*::
+  If specified, overwrite images that are ingested in the local workspace directory. By default it will keep an existing image rather than downloading it again.
+
+*--pyramid*::
+  If specified, store an image pyramid for the coverage.
+
+*--retainimages*::
+  If specified, keep the images that are ingested in the local workspace directory. By default it will delete the local file after it is ingested successfully.
+
+*--sincelastrun*::
+  If specified, check the scenes list from the workspace and if it exists, only ingest data since the last scene.
+
+*--skipMerge*::
+  By default the ingest will automerge overlapping tiles as a post-processing optimization step for efficient retrieval, but this option will skip the merge process.
+
+*--subsample* _<factor>_::
+  Subsample the image prior to ingest by the scale factor provided. The scale factor should be an integer value greater than or equal to 1.  Default is 1.
+
+*--tilesize* _<size>_::
+  The pixel size for each tile stored in GeoWave.  Default is 512.
+
+*--usecachedscenes*::
+  If specified, run against the existing scenes catalog in the workspace directory if it exists.
+
+*-ws, --workspaceDir* _<path>_::
+  A local directory to write temporary files needed for landsat 8 ingest.  Default is `landsat8`.
+
+[[util-landsat-ingestraster-examples]]
+==== EXAMPLES
+
+Ingest and crop the B8 band of Landsat raster data over a bounding box that roughly surrounds Berlin, Germany, and output raster data to a `landsatraster` data store:
+
+  geowave util landsat ingestraster --nbestperspatial --nbestscenes 1 --usecachedscenes --cql "BBOX(shape,13.0535,52.3303,13.7262,52.6675) AND band='B8' AND cloudCover>0" --crop --retainimages -ws ./landsat --pyramid --coverage berlin_mosaic landsatraster spatial-idx

@@ -1,7 +1,8 @@
 // When a new version of GeoWave is released, update the previous version to load from S3 and add the new version to the top of the list.
 
 var _versions = {
-  '1.0.0': 'https://locationtech.github.io/geowave/%%page%%',
+  '1.1.0': 'https://locationtech.github.io/geowave/%%page%%',
+  '1.0.0': 'http://s3.amazonaws.com/geowave/1.0.0/docs/%%page%%',
   '0.9.8': 'http://s3.amazonaws.com/geowave/0.9.8/docs/%%page%%',
   '0.9.7': 'http://s3.amazonaws.com/geowave/0.9.7/docs/%%page%%',
   '0.9.6': 'http://s3.amazonaws.com/geowave/0.9.6/docs/%%page%%',

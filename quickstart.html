@@ -8,7 +8,8 @@
 <title>GeoWave Quickstart Guide</title>
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
-@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400";
+/* Remove the comments around the @import statement below when using this as a custom stylesheet */
+/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400";*/
 article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block}
 audio,canvas,video{display:inline-block}
 audio:not([controls]){display:none;height:0}
@@ -68,15 +69,15 @@ img{display:inline-block;vertical-align:middle}
 textarea{height:auto;min-height:50px}
 select{width:100%}
 p.lead,.paragraph.lead>p,#preamble>.sectionbody>.paragraph:first-of-type p{font-size:1.21875em;line-height:1.6}
-.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#222;font-weight:400;margin-top:0;margin-bottom:.25em}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
 div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0;direction:ltr}
-a{color:#222;text-decoration:underline;line-height:inherit}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
 a:hover,a:focus{color:#1d4b8f}
 a img{border:none}
 p{font-family:inherit;font-weight:400;font-size:1em;line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
 p aside{font-size:.875em;line-height:1.35;font-style:italic}
-h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight: 300;font-style:normal;color:#222;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
-h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#222;line-height:0}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
 h1{font-size:2.125em}
 h2{font-size:1.6875em}
 h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
@@ -135,7 +136,7 @@ p a>code:hover{color:rgba(0,0,0,.9)}
 #header:after,#content:after,#footnotes:after,#footer:after{clear:both}
 #content{margin-top:1.25em}
 #content:before{content:none}
-#header>h1:first-child{color: #222;margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
 #header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #ddddd8}
 #header>h1:only-child,body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #ddddd8;padding-bottom:8px}
 #header .details{border-bottom:1px solid #ddddd8;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:-ms-flexbox;display:-webkit-flex;display:flex;-ms-flex-flow:row wrap;-webkit-flex-flow:row wrap;flex-flow:row wrap}
@@ -155,7 +156,7 @@ p a>code:hover{color:rgba(0,0,0,.9)}
 #toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
 #toc a{text-decoration:none}
 #toc a:active{text-decoration:underline}
-#toctitle{color:#222;font-size:1.2em}
+#toctitle{color:#7a2518;font-size:1.2em}
 @media only screen and (min-width:768px){#toctitle{font-size:1.375em}
 body.toc2{padding-left:15em;padding-right:0}
 #toc.toc2{margin-top:0!important;background-color:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #efefed;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
@@ -198,7 +199,7 @@ table.tableblock #preamble>.sectionbody>.paragraph:first-of-type p{font-size:inh
 .sidebarblock{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
 .sidebarblock>:first-child{margin-top:0}
 .sidebarblock>:last-child{margin-bottom:0}
-.sidebarblock>.content>.title{color:#222;margin-top:0;text-align:center}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
 .exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
 .literalblock pre,.listingblock pre:not(.highlight),.listingblock pre[class="highlight"],.listingblock pre[class^="highlight "],.listingblock pre.CodeRay,.listingblock pre.prettyprint{background:#f7f7f8}
 .sidebarblock .literalblock pre,.sidebarblock .listingblock pre:not(.highlight),.sidebarblock .listingblock pre[class="highlight"],.sidebarblock .listingblock pre[class^="highlight "],.sidebarblock .listingblock pre.CodeRay,.sidebarblock .listingblock pre.prettyprint{background:#f2f1f1}
@@ -223,7 +224,7 @@ table.pyhltable .linenodiv{background:none!important;padding-right:0!important}
 .quoteblock>.title{margin-left:-1.5em;margin-bottom:.75em}
 .quoteblock blockquote,.quoteblock blockquote p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
 .quoteblock blockquote{margin:0;padding:0;border:0}
-.quoteblock blockquote:before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#222;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote:before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
 .quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
 .quoteblock .attribution{margin-top:.5em;margin-right:.5ex;text-align:right}
 .quoteblock .quoteblock{margin-left:0;margin-right:0;padding:.5em 0;border-left:3px solid rgba(0,0,0,.6)}
@@ -272,8 +273,8 @@ dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
 ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
 ul.unstyled,ol.unnumbered,ul.checklist,ul.none{list-style-type:none}
 ul.unstyled,ol.unnumbered,ul.checklist{margin-left:.625em}
-ul.checklist li>p:first-child>.fa-check-square-o:first-child,ul.checklist li>p:first-child>input[type="checkbox"]:first-child{margin-right:.25em}
-ul.checklist li>p:first-child>input[type="checkbox"]:first-child{position:relative;top:1px}
+ul.checklist li>p:first-child>.fa-square-o:first-child,ul.checklist li>p:first-child>.fa-check-square-o:first-child{width:1em;font-size:.85em}
+ul.checklist li>p:first-child>input[type="checkbox"]:first-child{width:1em;position:relative;top:1px}
 ul.inline{margin:0 auto .625em auto;margin-left:-1.375em;margin-right:0;padding:0;list-style:none;overflow:hidden}
 ul.inline>li{list-style:none;float:left;margin-left:1.375em;display:block}
 ul.inline>li>*{display:block}
@@ -378,7 +379,7 @@ p{margin-bottom:1.25rem}
 *{-webkit-box-shadow:none!important;box-shadow:none!important;text-shadow:none!important}
 a{color:inherit!important;text-decoration:underline!important}
 a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
-a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after,a[href^="mailto:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
 abbr[title]:after{content:" (" attr(title) ")"}
 pre,blockquote,tr,img{page-break-inside:avoid}
 thead{display:table-header-group}
@@ -406,14 +407,93 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .hide-for-print{display:none!important}
 .show-for-print{display:inherit!important}}
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<link rel="stylesheet" href="stylesheets/font-awesome.css">
+<link rel="stylesheet" href="vendors/highlightjs/styles/github.min.css">
+<script src="vendors/highlightjs/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>
 <!-- docinfo.html -->
-<link rel="icon"
-type="image/png"
-href="images/geowave-icon-logo-small.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="manifest" href="site.webmanifest">
+
+<!-- CSS - Google Fonts -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i,900,900i|Livvic:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,900,900i&display=swap" />
+
+<!-- CSS - Bootstrap 4.4.1 -->
+<link href="vendors/css/bootstrap.min.css" rel="stylesheet" />
+
+<!-- CSS - DataTables -->
+<link href="vendors/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+
+<!-- CSS - GeoWave Bootstrap Theme -->
+<link href="stylesheets/geowave-boostrap-theme.css" rel="stylesheet" />
+
+<!-- CSS - GeoWave Custom Styles -->
+<link href="stylesheets/geowave.css" rel="stylesheet" />
+
+<!-- CSS - GeoWave Documentation Syles  -->
+<link href="stylesheets/geowave-docs.css" rel="stylesheet" />
+
+<!-- CSS - Ion Icons -->
+<link href="vendors/css/ionicons.min.css" rel="stylesheet" />
+
+<!-- JS - Bootstrap 4.4.1 -->
+<script src="vendors/js/jquery-3.4.1.min.js"></script>
+<script src="vendors/js/popper.min.js"></script>
+<script src="vendors/js/bootstrap.min.js"></script>
+
+<!-- JS - GeoWave -->
+<script src="js/versions.js"></script>
+<script src="https://locationtech.github.io/geowave/js/versions.js"></script>
+<script src="js/geowave.js"></script>
+
+<!-- Start Navbar -->
+<nav class="navbar navbar-docs navbar-expand-lg navbar-dark fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="index.html">
+            <img src="images/geowave-logo-light.png" alt="GeoWave Logo">
+        </a>
+        <span id="doc-title-separator">|</span>
+        <a id="doc-title" href="#"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+            aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown06" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">Documentation</a>
+                    <div id="documentation-menu" class="dropdown-menu" aria-labelledby="dropdown06">
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown06" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">Support</a>
+                    <div id="support-menu" class="dropdown-menu" aria-labelledby="dropdown06">
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="current-version" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false"></a>
+                    <div id="version-menu" class="dropdown-menu" aria-labelledby="dropdown06">
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown06" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">GitHub</a>
+                    <div id="github-menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown06">
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- End Navbar -->
+
+<!-- Page Preloader -->
+<div class="preloader"></div>
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
@@ -422,9 +502,34 @@ href="images/geowave-icon-logo-small.png">
 <ul class="sectlevel0">
 <li><a href="#geowave-quickstart-guide">GeoWave Quickstart Guide</a>
 <ul class="sectlevel1">
-<li><a href="#environment-options">Environment Options</a></li>
-<li><a href="#walkthroughs">Walkthroughs</a></li>
-<li><a href="#notebook-examples">Notebook Examples</a></li>
+<li><a href="#preparation">Preparation</a>
+<ul class="sectlevel2">
+<li><a href="#install-geowave">Install GeoWave</a></li>
+<li><a href="#create-working-directory">Create Working Directory</a></li>
+<li><a href="#download-sample-data">Download Sample Data</a></li>
+<li><a href="#download-styles">Download Styles</a></li>
+</ul>
+</li>
+<li><a href="#vector-demo">Vector Demo</a>
+<ul class="sectlevel2">
+<li><a href="#configure-geowave-data-store">Configure GeoWave Data Store</a></li>
+<li><a href="#add-an-index">Add an Index</a></li>
+<li><a href="#ingest-data">Ingest Data</a></li>
+<li><a href="#query-the-data">Query the Data</a></li>
+<li><a href="#kernel-density-estimation-kde">Kernel Density Estimation (KDE)</a></li>
+<li><a href="#visualizing-the-data">Visualizing the Data</a></li>
+</ul>
+</li>
+<li><a href="#raster-demo">Raster Demo</a>
+<ul class="sectlevel2">
+<li><a href="#install-gdal">Install GDAL</a></li>
+<li><a href="#configure-geowave-data-stores">Configure GeoWave Data Stores</a></li>
+<li><a href="#add-an-index-2">Add an Index</a></li>
+<li><a href="#analyze-available-data">Analyze Available Data</a></li>
+<li><a href="#ingest-the-data">Ingest the Data</a></li>
+<li><a href="#visualizing-the-data-2">Visualizing the Data</a></li>
+</ul>
+</li>
 <li><a href="#further-documentation">Further Documentation</a></li>
 </ul>
 </li>
@@ -435,98 +540,664 @@ href="images/geowave-icon-logo-small.png">
 <div id="preamble">
 <div class="sectionbody">
 <div style="page-break-after: always;"></div>
-<div class="paragraph">
-<p><em>v1.0.0</em></p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="./images/geowave-icon-logo-cropped-v2.png" alt="geowave-icon-logo-cropped-v2" width="15%"></span></p>
-</div>
 </div>
 </div>
 <h1 id="geowave-quickstart-guide" class="sect0"><a class="anchor" href="#geowave-quickstart-guide"></a>GeoWave Quickstart Guide</h1>
 <div class="openblock partintro">
 <div class="content">
-The GeoWave quickstart guide is designed to allow a new user to run through a simple use case with the GeoWave framework. We currently have both a vector and raster walkthough which can be run in an AWS EMR environment
-or on your local machine as a single node through the Standalone Installer. There are also Jupyter and Zeppelin Notebook examples for users
-looking try out GeoWave in that manner.
+<div class="paragraph">
+<p>The GeoWave quickstart guide is designed to allow a new user to run through a few simple use cases with the GeoWave framework using the Command-Line Interface.  While this guide uses a local key/value store, a version of the guide is available <a href="quickstart-emr.html" target="_blank">here</a> which utilizes EMR on AWS.</p>
+</div>
+<script>
+var doc_name = "Quickstart Guide";
+</script>
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="environment-options"><a class="anchor" href="#environment-options"></a>Environment Options</h2>
+<h2 id="preparation"><a class="anchor" href="#preparation"></a>Preparation</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="install-geowave"><a class="anchor" href="#install-geowave"></a>Install GeoWave</h3>
+<div class="paragraph">
+<p>This guide assumes that GeoWave has already been installed and is available on the command-line.  See the <a href="installation-guide.html" target="_blank">Installation Guide</a> for help with the installation process.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Several commands used in this guide are only available if GeoWave was installed using the standalone installer.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="create-working-directory"><a class="anchor" href="#create-working-directory"></a>Create Working Directory</h3>
+<div class="paragraph">
+<p>In order to keep things organized, create a directory on your system that can be used throughout the guide.  The guide will refer to this directory as the working directory.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ mkdir quickstart
+$ cd quickstart</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="download-sample-data"><a class="anchor" href="#download-sample-data"></a>Download Sample Data</h3>
+<div class="paragraph">
+<p>We will be using data from the GDELT Project in this guide. For more information about the GDELT Project please visit their website <a href="http://www.gdeltproject.org/" target="_blank">here</a>.</p>
+</div>
+<div class="paragraph">
+<p>Download one or more ZIP files from the <a href="https://data.gdeltproject.org/events/" target="_blank">GDELT Event Repository</a> into a new <code>gdelt_data</code> folder in the working directory.  The examples in this guide will use all of the data from February 2016 (files with a <code>201602</code> prefix).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="download-styles"><a class="anchor" href="#download-styles"></a>Download Styles</h3>
+<div class="paragraph">
+<p>Later in the guide, we will be visualizing some data using GeoServer.  For this, we will be using some styles that have been created for the demo.</p>
+</div>
+<div class="paragraph">
+<p>Download the following styles to your working directory:</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="aws-env.html#">Amazon Web Services EMR</a></p>
+<p><a href="http://s3.amazonaws.com/geowave/1.1.0/scripts/emr/quickstart/KDEColorMap.sld">KDEColorMap.sld</a></p>
 </li>
 <li>
-<p><a href="standalone-installer.html#">GeoWave Standalone Installer</a></p>
+<p><a href="http://s3.amazonaws.com/geowave/1.1.0/scripts/emr/quickstart/SubsamplePoints.sld">SubsamplePoints.sld</a></p>
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>When finished, you should have a directory structure similar to the one below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>quickstart
+|- KDEColorMap.sld
+|- SubsamplePoints.sld
+|- gdelt_data
+|  |- 20160201.export.CSV.zip
+|  |- 20160202.export.CSV.zip
+|  |- 20160203.export.CSV.zip
+|  |- 20160204.export.CSV.zip
+.
+.
+.</code></pre>
 </div>
 </div>
-<div class="sect1">
-<h2 id="walkthroughs"><a class="anchor" href="#walkthroughs"></a>Walkthroughs</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p><a href="walkthrough-vector.html#">Vector Demo</a></p>
-</li>
-<li>
-<p><a href="walkthrough-raster.html#">Raster Demo</a></p>
-</li>
-<li>
-<p><a href="integrate-geoserver.html#">GeoServer Integration</a></p>
-</li>
-<li>
-<p><a href="interact-cluster.html#">Interacting with the cluster</a></p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="notebook-examples"><a class="anchor" href="#notebook-examples"></a>Notebook Examples</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p><a href="jupyter.html#">Jupyter</a></p>
-</li>
-<li>
-<p><a href="zeppelin.html#">Zeppelin</a></p>
-</li>
-<li>
-<p><a href="spatial-join.html#">Spatial Join</a></p>
-</li>
-</ul>
+<div class="paragraph">
+<p>After all the data and styles have been downloaded, we can continue.</p>
 </div>
 <div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="vector-demo"><a class="anchor" href="#vector-demo"></a>Vector Demo</h2>
+<div class="sectionbody">
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Before starting the vector demo, make sure that your working directory is the current active directory in your command-line tool.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="configure-geowave-data-store"><a class="anchor" href="#configure-geowave-data-store"></a>Configure GeoWave Data Store</h3>
+<div class="paragraph">
+<p>For this quickstart guide, we will be using RocksDB as the key/value store backend for GeoWave.  This is mainly for simplicity, as RocksDB does not require any external services to be made available.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave store add -t rocksdb --gwNamespace geowave.gdelt --dir . gdelt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command adds a connection to a RocksDB data store in the current directory under the name <code>gdelt</code> for use in future commands.  It configures the connection to put all data for this named store under the <code>geowave.gdelt</code> namespace.  After executing the command, the database is <em>not</em> automatically created.  Instead, GeoWave will only create a new RocksDB database using this configuration when a command is executed that makes a modification to the data store.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="add-an-index"><a class="anchor" href="#add-an-index"></a>Add an Index</h3>
+<div class="paragraph">
+<p>Before ingesting any data, we need to create an index that describes how the data will be stored in the key/value store.  For this example we will create a simple spatial index.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave index add -t spatial gdelt gdelt-spatial</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command adds a spatial index to the <code>gdelt</code> data store with an index name of <code>gdelt-spatial</code>.  This is the name that we will use to reference this index in future commands.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="ingest-data"><a class="anchor" href="#ingest-data"></a>Ingest Data</h3>
+<div class="paragraph">
+<p>GeoWave has many commands that facilitate ingesting data into a GeoWave data store.  For this example, we want to ingest GDELT data from the local file system, so we will use the <a href="commands.html#ingest-localToGW"><code>ingest localToGW</code></a> command.  We will use a bounding box that roughly surrounds Germany to limit the amount of data ingested for the example.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave ingest localToGW -f gdelt --gdelt.cql "BBOX(geometry,5.87,47.2,15.04,54.95)" ./gdelt_data gdelt gdelt-spatial</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command specifies the input format as GDELT using the <code>-f</code> option, filters the input data using a CQL bounding box filter, and specifies the input directory for all of the files.  Finally, we tell GeoWave to ingest the data to the <code>gdelt-spatial</code> index in the <code>gdelt</code> data store.  GeoWave creates an <a href="overview.html#adapters-types" target="_blank">adapter</a> for the new data with the type name <code>gdeltevent</code>, which we can use to refer to this data in other commands. The ingest should take about 3-5 minutes.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="query-the-data"><a class="anchor" href="#query-the-data"></a>Query the Data</h3>
+<div class="paragraph">
+<p>Now that the data has been ingested, we can make queries against it.  The GeoWave programmatic API provides a large variety of options for issuing queries, but for the purposes of this guide, we will use the query language support that is available for vector data.  This query language provides a simple way to perform some of the most common types of queries using a well-known syntax.  To demonstrate this, perform the following query:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave vector query "SELECT * FROM gdelt.gdeltevent LIMIT 10"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command tells GeoWave to select all attributes from the <code>gdeltevent</code> type in the <code>gdelt</code> data store, but limits the output to 10 features.  After running this command, you should get a result that is similar to the following:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre class="nowrap">+-------------------------+-----------+------------------------------+----------+-----------+----------------+----------------+-------------+-------------------------------------------------------------------------------------------------------+
+| geometry                | eventid   | Timestamp                    | Latitude | Longitude | actor1Name     | actor2Name     | countryCode | sourceUrl                                                                                             |
++-------------------------+-----------+------------------------------+----------+-----------+----------------+----------------+-------------+-------------------------------------------------------------------------------------------------------+
+| POINT (15.0395 50.1904) | 510693819 | Thu Feb 11 00:00:00 EST 2016 | 50.1904  | 15.0395   | CZECH          | THAILAND       | EZ          | http://praguemonitor.com/2016/02/11/czech-zoo-acquires-rare-douc-langur-monkeys                       |
+| POINT (15.0395 50.1904) | 510694920 | Thu Feb 11 00:00:00 EST 2016 | 50.1904  | 15.0395   | THAILAND       | CZECH          | EZ          | http://praguemonitor.com/2016/02/11/czech-zoo-acquires-rare-douc-langur-monkeys                       |
+| POINT (14.7186 50.4983) | 508121628 | Wed Feb 03 00:00:00 EST 2016 | 50.4983  | 14.7186   |                | LEBANON        | EZ          | http://praguemonitor.com/2016/02/03/plane-pick-five-czechs-leave-lebanon-wednesday                    |
+| POINT (14.7186 50.4983) | 508121971 | Wed Feb 03 00:00:00 EST 2016 | 50.4983  | 14.7186   | POLICE         |                | EZ          | http://praguemonitor.com/2016/02/03/plane-pick-five-czechs-leave-lebanon-wednesday                    |
+| POINT (14.7186 50.4983) | 508122060 | Wed Feb 03 00:00:00 EST 2016 | 50.4983  | 14.7186   | CZECH          |                | EZ          | http://praguemonitor.com/2016/02/03/plane-pick-five-czechs-leave-lebanon-wednesday                    |
+| POINT (14.7186 50.4983) | 508122348 | Wed Feb 03 00:00:00 EST 2016 | 50.4983  | 14.7186   | FOREIGN MINIST | LEBANON        | EZ          | http://praguemonitor.com/2016/02/03/plane-pick-five-czechs-leave-lebanon-wednesday                    |
+| POINT (14.7186 50.4983) | 508122668 | Wed Feb 03 00:00:00 EST 2016 | 50.4983  | 14.7186   | LEBANON        |                | EZ          | http://praguemonitor.com/2016/02/03/plane-pick-five-czechs-leave-lebanon-wednesday                    |
+| POINT (14.7186 50.4983) | 508122669 | Wed Feb 03 00:00:00 EST 2016 | 50.4983  | 14.7186   | LEBANON        |                | EZ          | http://praguemonitor.com/2016/02/03/plane-pick-five-czechs-leave-lebanon-wednesday                    |
+| POINT (14.7186 50.4983) | 508122679 | Wed Feb 03 00:00:00 EST 2016 | 50.4983  | 14.7186   | LEBANON        | FOREIGN MINIST | EZ          | http://praguemonitor.com/2016/02/03/plane-pick-five-czechs-leave-lebanon-wednesday                    |
+| POINT (14.7186 50.4983) | 508579066 | Thu Feb 04 00:00:00 EST 2016 | 50.4983  | 14.7186   | CZECH          | MEDIA          | EZ          | http://www.ceskenoviny.cz/zpravy/plane-with-five-czechs-flying-from-beirut-to-prague-ministry/1311188 |
++-------------------------+-----------+------------------------------+----------+-----------+----------------+----------------+-------------+-------------------------------------------------------------------------------------------------------+</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can see right away that these results are tagged with the country code <code>EZ</code> which falls under Czech Republic.  Since our area of interest is around Germany, perhaps we want to only see events that are tagged with the <code>GM</code> country code.  We can do this by adding a CQL filter to the query.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave vector query "SELECT * FROM gdelt.gdeltevent WHERE CQL(countryCode='GM') LIMIT 10"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now the results show only events that have the <code>GM</code> country code.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre class="nowrap">+-------------------------+-----------+------------------------------+----------+-----------+------------+------------+-------------+---------------------------------------------------------------------------------------------------------------------------+
+| geometry                | eventid   | Timestamp                    | Latitude | Longitude | actor1Name | actor2Name | countryCode | sourceUrl                                                                                                                 |
++-------------------------+-----------+------------------------------+----------+-----------+------------+------------+-------------+---------------------------------------------------------------------------------------------------------------------------+
+| POINT (13.0333 47.6333) | 508836788 | Fri Feb 05 00:00:00 EST 2016 | 47.6333  | 13.0333   | GERMANY    |            | GM          | http://www.thespreadit.com/gold-bar-lake-keep-69589/                                                                      |
+| POINT (13.0333 47.6333) | 508836797 | Fri Feb 05 00:00:00 EST 2016 | 47.6333  | 13.0333   | GERMANY    | ALBERT     | GM          | http://www.thespreadit.com/gold-bar-lake-keep-69589/                                                                      |
+| POINT (13.0333 47.6333) | 508837466 | Fri Feb 05 00:00:00 EST 2016 | 47.6333  | 13.0333   | ALBERT     | GERMANY    | GM          | http://www.thespreadit.com/gold-bar-lake-keep-69589/                                                                      |
+| POINT (12.9 47.7667)    | 508569746 | Thu Feb 04 00:00:00 EST 2016 | 47.7667  | 12.9      |            | GERMAN     | GM          | http://www.ynetnews.com/articles/0,7340,L-4762071,00.html                                                                 |
+| POINT (12.9 47.7667)    | 508574449 | Thu Feb 04 00:00:00 EST 2016 | 47.7667  | 12.9      | COMPANY    | GOVERNMENT | GM          | http://www.i24news.tv/en/news/international/101671-160204-holocaust-survivors-sue-hungary-for-deportation-of-500-000-jews |
+| POINT (12.9 47.7667)    | 508665355 | Thu Feb 04 00:00:00 EST 2016 | 47.7667  | 12.9      | HUNGARY    | GERMANY    | GM          | http://www.jns.org/news-briefs/2016/2/4/14-holocaust-survivors-sue-hungary-in-us-court                                    |
+| POINT (12.9 47.7667)    | 508773863 | Fri Feb 05 00:00:00 EST 2016 | 47.7667  | 12.9      |            | GERMAN     | GM          | http://jpupdates.com/2016/02/04/14-holocaust-survivors-sue-hungary-in-u-s-court/                                          |
+| POINT (12.9 47.7667)    | 508775266 | Fri Feb 05 00:00:00 EST 2016 | 47.7667  | 12.9      | HUNGARY    | GERMANY    | GM          | http://jpupdates.com/2016/02/04/14-holocaust-survivors-sue-hungary-in-u-s-court/                                          |
+| POINT (12.9 47.7667)    | 509245139 | Sat Feb 06 00:00:00 EST 2016 | 47.7667  | 12.9      |            | GERMAN     | GM          | https://theuglytruth.wordpress.com/2016/02/06/hungary-holocaust-survivors-sue-hungarian-government/                       |
+| POINT (12.9 47.7667)    | 509327879 | Sun Feb 07 00:00:00 EST 2016 | 47.7667  | 12.9      |            | LARI       | GM          | http://blackgirllonghair.com/2016/02/the-black-victims-of-the-holocaust-in-nazi-germany/                                  |
++-------------------------+-----------+------------------------------+----------+-----------+------------+------------+-------------+---------------------------------------------------------------------------------------------------------------------------+</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If we wanted to see how many events belong to to the <code>GM</code> country code, we can perform an aggregation query.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave vector query "SELECT COUNT(*) FROM gdelt.gdeltevent WHERE CQL(countryCode='GM')"</code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre class="nowrap">+----------+
+| COUNT(*) |
++----------+
+| 81897    |
++----------+</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can also perform multiple aggregations on the same data in a single query. The following query counts the number of entries that have set <code>actor1Name</code> and how many have set <code>actor2Name</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave vector query "SELECT COUNT(actor1Name), COUNT(actor2Name) FROM gdelt.gdeltevent"</code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre class="nowrap">+-------------------+-------------------+
+| COUNT(actor1Name) | COUNT(actor2Name) |
++-------------------+-------------------+
+| 93750             | 80608             |
++-------------------+-------------------+</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We can also do bounding box aggregations.  For example, if we wanted to see the bounding box of all the data that has <code>HUNGARY</code> set as the <code>actor1Name</code>, we could do the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave vector query "SELECT BBOX(*), COUNT(*) AS total_events FROM gdelt.gdeltevent WHERE CQL(actor1Name='HUNGARY')"</code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre class="nowrap">+------------------------------------------+--------------+
+| BBOX(*)                                  | total_events |
++------------------------------------------+--------------+
+| Env[6.1667 : 14.7174, 47.3333 : 53.5667] | 408          |
++------------------------------------------+--------------+</pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>In these examples each query was output to console, but there are options on the command that allow the query results to be output to several formats, including geojson, shapefile, and CSV.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>For more information about vector queries, see the <a href="userguide.html#vector-queries" target="_blank">vector queries</a> section of the User Guide.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="kernel-density-estimation-kde"><a class="anchor" href="#kernel-density-estimation-kde"></a>Kernel Density Estimation (KDE)</h3>
+<div class="paragraph">
+<p>We can also perform analytics on data that has been ingested into GeoWave.  In this example, we will perform the Kernel Density Estimation (KDE) analytic.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave analytic kdespark --featureType gdeltevent -m local --minLevel 5 --maxLevel 26 --coverageName gdeltevent_kde gdelt gdelt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command tells GeoWave to perform a Kernel Density Estimation using a local spark cluster on the <code>gdeltevent</code> type.  It specifies that the KDE should be run at zoom levels 5-26 and that the new raster generated should be under the type name <code>gdeltevent_kde</code>.  Finally, it specifies the input and output data store as our <code>gdelt</code> store.  It is possible to output the results of the KDE to a different data store, but for this demo, we will use the same one. The KDE can take 5-10 minutes to complete due to the size of the dataset.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="visualizing-the-data"><a class="anchor" href="#visualizing-the-data"></a>Visualizing the Data</h3>
+<div class="paragraph">
+<p>Now that we have prepared our vector and KDE data, we can visualize it by using the GeoServer plugin.  GeoWave provides an embedded GeoServer with the command-line tools.</p>
+</div>
+<div class="sect3">
+<h4 id="run-geoserver"><a class="anchor" href="#run-geoserver"></a>Run GeoServer</h4>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Execute the following command in a <em>new</em> terminal window.  This command is only available if GeoWave was installed using the standalone installer with the <code>Embedded GeoServer</code> component selected.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave gs run</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After a few moments, GeoServer should be available by browsing to <a href="localhost:8080/geoserver/web/" target="blank">localhost:8080/geoserver</a>.  The login credentials for this embedded service are username <code>admin</code> and password <code>geoserver</code>. The server will remain running until the command-line process is exited.  You can exit the process by pressing Ctrl+C or by closing the terminal window.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>RocksDB only supports a single connection to the database, because of this, you will be unable to perform queries or other data store operations with the CLI while GeoServer maintains a connection to it. If you would like the capability to do both simultaneously, you can use one of the other <a href="commands.html#standalone-commands" target="blank">standalone data stores</a> that are packaged with GeoWave.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="add-layers"><a class="anchor" href="#add-layers"></a>Add Layers</h4>
+<div class="paragraph">
+<p>GeoWave provides commands that make adding layers to a GeoServer instance a simple process.  In this example, we can add both the <code>gdeltevent</code> and <code>gdeltevent_kde</code> types to GeoServer with a single command.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave gs layer add gdelt --add all</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command tells GeoWave to add all raster and vector types from the <code>gdelt</code> data store to GeoServer.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="add-styles"><a class="anchor" href="#add-styles"></a>Add Styles</h4>
+<div class="paragraph">
+<p>We already downloaded the styles that we want to use to visualize our data as part of the preparation step. The KDEColorMap style will be used for the heatmap produced by the KDE analytic. The SubsamplePoints style will be used to efficiently render the points from the <code>gdeltevent</code> type. All we need to do is add them to GeoServer.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave gs style add kdecolormap -sld KDEColorMap.sld
+$ geowave gs style add SubsamplePoints -sld SubsamplePoints.sld</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now we can update our layers to use these styles.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave gs style set gdeltevent_kde --styleName kdecolormap
+$ geowave gs style set gdeltevent --styleName SubsamplePoints</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="view-the-layers"><a class="anchor" href="#view-the-layers"></a>View the Layers</h4>
+<div class="paragraph">
+<p>The GeoServer web interface can be accessed in your browser:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="localhost:8080/geoserver/web/" target="blank">localhost:8080/geoserver</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Login to see the layers.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Username:</strong> admin</p>
+</li>
+<li>
+<p><strong>Password:</strong> geoserver</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/geoserver-home.png" alt="geoserver home">
+</div>
+<div class="title">Figure 1. GeoServer Homepage</div>
+</div>
+<div class="paragraph">
+<p>Select "Layer Preview" from the menu on the left side.  You should now see our two layers in the layer list.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/layer-preview.png" alt="layer preview">
+</div>
+<div class="title">Figure 2. GeoServer Layer Preview</div>
+</div>
+<div class="paragraph">
+<p>Click on the OpenLayers link by any of these layers to see them in an interactive map.</p>
+</div>
+<div class="paragraph">
+<p><strong>gdeltevent</strong> - Shows all of the GDELT events in a bounding box around Germany as individual points. Clicking on the map preview will show you the feature data associated with the clicked point.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/gdeltevent_preview.png" alt="gdeltevent preview">
+</div>
+<div class="title">Figure 3. Preview of <code>gdeltevent</code> Layer</div>
+</div>
+<div class="paragraph">
+<p><strong>gdeltevent_kde</strong> - Shows the heat map produced by the KDE analytic in a bounding box around Germany.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>For this screenshot, the background color of the preview was set to black by appending <code>&amp;BGCOLOR=0x000000</code> to the URL.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/gdeltevent_kde_preview.png" alt="gdeltevent kde preview">
+</div>
+<div class="title">Figure 4. Preview of <code>gdeltevent_kde</code> Layer</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="raster-demo"><a class="anchor" href="#raster-demo"></a>Raster Demo</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this demo, we will be looking at Band 8 of Landsat raster data around Berlin, Germany. See <a href="https://www.usgs.gov/land-resources/nli/landsat/landsat-8" target="blank">USGS.gov</a> for more information about Landsat 8.</p>
+</div>
+<div class="sect2">
+<h3 id="install-gdal"><a class="anchor" href="#install-gdal"></a>Install GDAL</h3>
+<div class="paragraph">
+<p>The Landsat 8 extension for GeoWave utilizes GDAL (Geospatial Data Abstraction Library), an image processing library, to process raster data. In order to use GDAL, native libraries need to be installed on the system. More info on GDAL can be found <a href="http://www.gdal.org" target="_blank">here</a>.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Native libraries for GDAL 1.9.2 on MacOS are not readily available.  This demo is currently only applicable to Windows and Linux platforms.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>GeoWave provides a command to install GDAL libraries on both Windows and Linux with the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave raster installgdal</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configure-geowave-data-stores"><a class="anchor" href="#configure-geowave-data-stores"></a>Configure GeoWave Data Stores</h3>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Before continuing the demo, make sure that your working directory is the current active directory in your command-line tool.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>For this demo, we will be using two data stores.  One will be used for vector data, and the other will be used for raster data.  We will again be using RocksDB for the backend.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave store add -t rocksdb --gwNamespace geowave.landsatraster --dir . landsatraster
+$ geowave store add -t rocksdb --gwNamespace geowave.landsatvector --dir . landsatvector</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>These commands create two data stores, <code>landsatraster</code> and <code>landsatvector</code> in the current directory.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="add-an-index-2"><a class="anchor" href="#add-an-index-2"></a>Add an Index</h3>
+<div class="paragraph">
+<p>Before ingesting our raster data, we will add a spatial index to both of the data stores.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave index add -t spatial -c EPSG:3857 landsatraster spatial-idx
+$ geowave index add -t spatial -c EPSG:3857 landsatvector spatial-idx</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is similar to the command we used to add an index in the vector demo, but we have added an additional option to specify the Coordinate Reference System (CRS) of the data.  Geospatial data often uses a CRS that is tailored to the area of interest.  This can be a useful option if you want to use a CRS other than the default.  After these commands have been executed, we will have spatial indices named <code>spatial-idx</code> on both data stores.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="analyze-available-data"><a class="anchor" href="#analyze-available-data"></a>Analyze Available Data</h3>
+<div class="paragraph">
+<p>We can now see what Landsat 8 data is available for our area of interest.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave util landsat analyze --nbestperspatial --nbestscenes 1 --usecachedscenes --cql "BBOX(shape,13.0535,52.3303,13.7262,52.6675) AND band='B8' AND cloudCover&gt;0" -ws ./landsat</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This command tells GeoWave to analyze the B8 band of Landsat raster data over a bounding box that roughly surrounds Berlin, Germany.  It prints out aggregate statistics for the area of interest, including the average cloud cover, date range, number of scenes, and the size of the data.  Data for this operation is written to the <code>landsat</code> directory (specified by the <code>-ws</code> option), which can be used by the ingest step.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="ingest-the-data"><a class="anchor" href="#ingest-the-data"></a>Ingest the Data</h3>
+<div class="paragraph">
+<p>Now that we have analyzed the available data, we are ready to ingest it into our data stores.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave util landsat ingest --nbestperspatial --nbestscenes 1 --usecachedscenes --cql "BBOX(shape,13.0535,52.3303,13.7262,52.6675) AND band='B8' AND cloudCover&gt;0" --crop --retainimages -ws ./landsat --vectorstore landsatvector --pyramid --coverage berlin_mosaic landsatraster spatial-idx</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There is a lot to this command, but you&#8217;ll see that it&#8217;s quite similar to the analyze command, but with some additional options.  The <code>--crop</code> option causes the raster data to be cropped to our CQL bounding box. The <code>--vectorstore landsatvector</code> option specifies the data store to put the vector data (scene and band information). The <code>--pyramid</code> option tells GeoWave to create an image pyramid for the raster, this is used for more efficient rendering at different zoom levels. The <code>--coverage berlin_mosaic</code> option tells GeoWave to use <code>berlin_mosaic</code> as the type name for the raster data.  Finally, we specify the output data store for the raster, and the index to store it on.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="visualizing-the-data-2"><a class="anchor" href="#visualizing-the-data-2"></a>Visualizing the Data</h3>
+<div class="paragraph">
+<p>We will once again use GeoServer to visualize our ingested data.</p>
+</div>
+<div class="sect3">
+<h4 id="run-geoserver-2"><a class="anchor" href="#run-geoserver-2"></a>Run GeoServer</h4>
+<div class="paragraph">
+<p>GeoServer should still be running from the previous demo, but if not, go ahead and start it up again from a new terminal window.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave gs run</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="add-layers-2"><a class="anchor" href="#add-layers-2"></a>Add Layers</h4>
+<div class="paragraph">
+<p>Just like with the vector demo, we can use the GeoWave CLI to add our raster data to GeoServer.  We will also add the vector metadata from the vector data store.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave gs layer add landsatraster --add all
+$ geowave gs layer add landsatvector --add all</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="view-the-layers-2"><a class="anchor" href="#view-the-layers-2"></a>View the Layers</h4>
+<div class="paragraph">
+<p>When we go back to the Layer Preview page in GeoServer, we will see three new layers, <code>band</code>, <code>berlin_mosaic</code>, and <code>scene</code>.</p>
+</div>
+<div class="paragraph">
+<p>Click on the OpenLayers link by any of these layers to see them in an interactive map.</p>
+</div>
+<div class="paragraph">
+<p><strong>berlin_mosaic</strong> - Shows the mosaic created from the raster data that fit into our specifications. This mosaic is made of 5 images.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/berlin_mosaic_preview.png" alt="berlin mosaic preview">
+</div>
+<div class="title">Figure 5. Preview of <code>berlin_mosaic</code> Layer</div>
+</div>
+<div class="paragraph">
+<p><strong>band/scene</strong> - Shows representations of the vector data associated with the images. The band and scene layers are identical in this demo.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/scene_preview.png" alt="scene preview">
+</div>
+<div class="title">Figure 6. Preview of <code>band</code> and <code>scene</code> Layers</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="further-documentation"><a class="anchor" href="#further-documentation"></a>Further Documentation</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>More information on GeoWave, including the User/Developer Guides and further information on many of the commands run in these demos can be found below.</p>
+<p>More information on GeoWave, including the User and Developer Guides and further information on many of the commands run in these demos can be found below.</p>
 </div>
 <div class="paragraph">
-<p><a href="userguide.html" target="_blank"><strong>User Guide</strong></a></p>
+<p><a href="overview.html"><strong>GeoWave Overview</strong></a></p>
 </div>
 <div class="paragraph">
-<p><a href="devguide.html" target="_blank"><strong>Developer Guide</strong></a></p>
+<p><a href="userguide.html"><strong>User Guide</strong></a></p>
 </div>
 <div class="paragraph">
-<p><a href="commands.html" target="_blank"><strong>Command Line Controls</strong></a></p>
+<p><a href="devguide.html"><strong>Developer Guide</strong></a></p>
+</div>
+<div class="paragraph">
+<p><a href="commands.html"><strong>Command-Line Interface Documentation</strong></a></p>
+</div>
+<script>
+var geowave_version = '1.1.0';
+</script>
+
+<div class="geowave-footer col-md-12 docs-footer">
+  <div class="py-4 d-flex justify-content-center align-items-center">
+    <small><p class="footer-text">This page was generated on Thursday, March 05, 2020 at 02:27 AM UTC<br><a href="https://github.com/locationtech/geowave/tree/d27015a544ba43a0831e49d9ead3ac08637a7447">View the commit it was generated from on GitHub</a></p></small>
+  </div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-09-06 20:42:52 +00:00
+Last updated 2020-03-05 02:27:08 +00:00
 </div>
 </div>
 </body>

@@ -107,7 +107,8 @@ results.close()
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">#
-# Copyright (c) 2013-2019 Contributors to the Eclipse Foundation
+# Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
+
 #
 # See the NOTICE file distributed with this work for additional information regarding copyright
 # ownership. All rights reserved. This program and the accompanying materials are made available
@@ -201,8 +202,16 @@ for feature in results:
 results.close()
 ```
 &#34;&#34;&#34;
+from pkg_resources import get_distribution
+from pkg_resources import DistributionNotFound
 
-__version__ = &#34;1.0.0-RC2-SNAPSHOT&#34;</code></pre>
+try:
+    version = get_distribution(&#39;pygw&#39;).version
+except DistributionNotFound:
+    from maven_version import get_maven_version
+    version = get_maven_version();
+
+__version__ = version</code></pre>
 </details>
 </section>
 <section>

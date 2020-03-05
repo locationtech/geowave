@@ -1,0 +1,857 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="504" height="486" viewBox="0 0 504 486">
+  <defs>
+    <radialGradient id="hero-globe-a" cx="-162.464%" cy="299.629%" r="555.674%" fx="-162.464%" fy="299.629%" gradientTransform="matrix(.55638 0 0 1 -.72 0)">
+      <stop offset="0%" stop-color="#6A44FF"/>
+      <stop offset="100%" stop-color="#6A44FF"/>
+    </radialGradient>
+    <radialGradient id="hero-globe-b" cx="-162.464%" cy="299.629%" r="555.388%" fx="-162.464%" fy="299.629%" gradientTransform="matrix(.55666 0 0 1 -.72 0)">
+      <stop offset="0%" stop-color="#6A44FF"/>
+      <stop offset="100%" stop-color="#6A44FF"/>
+    </radialGradient>
+    <radialGradient id="hero-globe-c" cx="-162.464%" cy="299.629%" r="555.33%" fx="-162.464%" fy="299.629%" gradientTransform="matrix(.55672 0 0 1 -.72 0)">
+      <stop offset="0%" stop-color="#6A44FF"/>
+      <stop offset="100%" stop-color="#6A44FF"/>
+    </radialGradient>
+    <radialGradient id="hero-globe-d" cx="-162.464%" cy="299.629%" r="555.933%" fx="-162.464%" fy="299.629%" gradientTransform="matrix(.55612 0 0 1 -.721 0)">
+      <stop offset="0%" stop-color="#6A44FF"/>
+      <stop offset="100%" stop-color="#6A44FF"/>
+    </radialGradient>
+    <radialGradient id="hero-globe-e" cx="-162.464%" cy="299.629%" r="555.459%" fx="-162.464%" fy="299.629%" gradientTransform="matrix(.5566 0 0 1 -.72 0)">
+      <stop offset="0%" stop-color="#6A44FF"/>
+      <stop offset="100%" stop-color="#6A44FF"/>
+    </radialGradient>
+    <radialGradient id="hero-globe-f" cx="-162.464%" cy="299.629%" r="555.259%" fx="-162.464%" fy="299.629%" gradientTransform="matrix(.5568 0 0 1 -.72 0)">
+      <stop offset="0%" stop-color="#6A44FF"/>
+      <stop offset="100%" stop-color="#6A44FF"/>
+    </radialGradient>
+    <radialGradient id="hero-globe-g" cx="-162.464%" cy="299.629%" r="555.646%" fx="-162.464%" fy="299.629%" gradientTransform="matrix(.5564 0 0 1 -.72 0)">
+      <stop offset="0%" stop-color="#6A44FF"/>
+      <stop offset="100%" stop-color="#6A44FF"/>
+    </radialGradient>
+    <radialGradient id="hero-globe-h" cx="-162.464%" cy="299.629%" r="556.191%" fx="-162.464%" fy="299.629%" gradientTransform="matrix(.55586 0 0 1 -.722 0)">
+      <stop offset="0%" stop-color="#6A44FF"/>
+      <stop offset="100%" stop-color="#6A44FF"/>
+    </radialGradient>
+    <radialGradient id="hero-globe-i" cx="-162.464%" cy="299.629%" r="555.717%" fx="-162.464%" fy="299.629%" gradientTransform="matrix(.55633 0 0 1 -.72 0)">
+      <stop offset="0%" stop-color="#6A44FF"/>
+      <stop offset="100%" stop-color="#6A44FF"/>
+    </radialGradient>
+    <radialGradient id="hero-globe-j" cx="-162.464%" cy="299.629%" r="555.904%" fx="-162.464%" fy="299.629%" gradientTransform="matrix(.55615 0 0 1 -.721 0)">
+      <stop offset="0%" stop-color="#6A44FF"/>
+      <stop offset="100%" stop-color="#6A44FF"/>
+    </radialGradient>
+    <radialGradient id="hero-globe-k" cx="-162.464%" cy="299.629%" r="555.474%" fx="-162.464%" fy="299.629%" gradientTransform="matrix(.55658 0 0 1 -.72 0)">
+      <stop offset="0%" stop-color="#6A44FF"/>
+      <stop offset="100%" stop-color="#6A44FF"/>
+    </radialGradient>
+    <radialGradient id="hero-globe-l" cx="-162.464%" cy="299.629%" r="477.24%" fx="-162.464%" fy="299.629%" gradientTransform="matrix(.64782 0 0 1 -.572 0)">
+      <stop offset="0%" stop-color="#6A44FF"/>
+      <stop offset="100%" stop-color="#6A44FF"/>
+    </radialGradient>
+    <radialGradient id="hero-globe-m" cx="-162.464%" cy="299.629%" r="555.975%" fx="-162.464%" fy="299.629%" gradientTransform="matrix(.55607 0 0 1 -.721 0)">
+      <stop offset="0%" stop-color="#6A44FF"/>
+      <stop offset="100%" stop-color="#6A44FF"/>
+    </radialGradient>
+    <radialGradient id="hero-globe-n" cx="-162.464%" cy="299.629%" r="554.944%" fx="-162.464%" fy="299.629%" gradientTransform="matrix(.5571 0 0 1 -.72 0)">
+      <stop offset="0%" stop-color="#6A44FF"/>
+      <stop offset="100%" stop-color="#6A44FF"/>
+    </radialGradient>
+    <radialGradient id="hero-globe-o" cx="-162.464%" cy="299.629%" r="555.588%" fx="-162.464%" fy="299.629%" gradientTransform="matrix(.55646 0 0 1 -.72 0)">
+      <stop offset="0%" stop-color="#6A44FF"/>
+      <stop offset="100%" stop-color="#6A44FF"/>
+    </radialGradient>
+    <radialGradient id="hero-globe-p" cx="-162.464%" cy="299.629%" r="555.846%" fx="-162.464%" fy="299.629%" gradientTransform="matrix(.5562 0 0 1 -.721 0)">
+      <stop offset="0%" stop-color="#6A44FF"/>
+      <stop offset="100%" stop-color="#6A44FF"/>
+    </radialGradient>
+    <radialGradient id="hero-globe-q" cx="-162.464%" cy="299.629%" r="555.517%" fx="-162.464%" fy="299.629%" gradientTransform="matrix(.55653 0 0 1 -.72 0)">
+      <stop offset="0%" stop-color="#6A44FF"/>
+      <stop offset="100%" stop-color="#6A44FF"/>
+    </radialGradient>
+    <radialGradient id="hero-globe-r" cx="-162.464%" cy="299.629%" r="554.873%" fx="-162.464%" fy="299.629%" gradientTransform="matrix(.55718 0 0 1 -.72 0)">
+      <stop offset="0%" stop-color="#6A44FF"/>
+      <stop offset="100%" stop-color="#6A44FF"/>
+    </radialGradient>
+    <radialGradient id="hero-globe-s" cx="528.849%" cy="85.508%" r="2496.972%" fx="528.849%" fy="85.508%" gradientTransform="scale(1 .99985)">
+      <stop offset="4%" stop-color="#FFF"/>
+      <stop offset="98%"/>
+    </radialGradient>
+    <radialGradient id="hero-globe-t" cx="514.017%" cy="1307.209%" r="2427.005%" fx="514.017%" fy="1307.209%" gradientTransform="matrix(.96093 0 0 1 .2 0)">
+      <stop offset="4%" stop-color="#FFF"/>
+      <stop offset="98%"/>
+    </radialGradient>
+    <radialGradient id="hero-globe-u" cx="1259.372%" cy="-1132.616%" r="2452.727%" fx="1259.372%" fy="-1132.616%" gradientTransform="matrix(1 0 0 .99985 0 -.002)">
+      <stop offset="4%" stop-color="#FFF"/>
+      <stop offset="98%"/>
+    </radialGradient>
+    <radialGradient id="hero-globe-v" cx="-929.392%" cy="-1538.681%" r="2435.931%" fx="-929.392%" fy="-1538.681%" gradientTransform="matrix(1 0 0 .99985 0 -.002)">
+      <stop offset="4%" stop-color="#FFF"/>
+      <stop offset="98%"/>
+    </radialGradient>
+    <radialGradient id="hero-globe-w" cx="1621.146%" cy="693.353%" r="2484.594%" fx="1621.146%" fy="693.353%" gradientTransform="matrix(1 0 0 .99983 0 .001)">
+      <stop offset="4%" stop-color="#FFF"/>
+      <stop offset="98%"/>
+    </radialGradient>
+    <filter id="hero-globe-x" width="102.8%" height="102.1%" x="-1.2%" y="-1.1%" filterUnits="objectBoundingBox">
+      <feGaussianBlur in="SourceGraphic"/>
+    </filter>
+    <linearGradient id="hero-globe-A" x1="69.402%" x2="35.311%" y1="90.539%" y2="3.854%">
+      <stop offset="0%" stop-color="#4CEDFF"/>
+      <stop offset="100%" stop-color="#B2FFFF"/>
+    </linearGradient>
+    <ellipse id="hero-globe-z" cx="87.169" cy="103.017" rx="4.114" ry="4.091"/>
+    <filter id="hero-globe-y" width="431.2%" height="433%" x="-165.6%" y="-166.5%" filterUnits="objectBoundingBox">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="1.125" result="shadowSpreadOuter1"/>
+      <feOffset in="shadowSpreadOuter1" result="shadowOffsetOuter1"/>
+      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="3.5"/>
+      <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"/>
+      <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0.430276   0 0 0 0 0.873617069   0 0 0 0 0.922158062  0 0 0 1 0"/>
+    </filter>
+    <ellipse id="hero-globe-C" cx="50.727" cy="38.115" rx="4.114" ry="4.091"/>
+    <filter id="hero-globe-B" width="431.2%" height="433%" x="-165.6%" y="-166.5%" filterUnits="objectBoundingBox">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="1.125" result="shadowSpreadOuter1"/>
+      <feOffset in="shadowSpreadOuter1" result="shadowOffsetOuter1"/>
+      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="3.5"/>
+      <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"/>
+      <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0.430276   0 0 0 0 0.873617069   0 0 0 0 0.922158062  0 0 0 1 0"/>
+    </filter>
+    <ellipse id="hero-globe-E" cx="69.798" cy="49.38" rx="4.114" ry="4.091"/>
+    <filter id="hero-globe-D" width="431.2%" height="433%" x="-165.6%" y="-166.5%" filterUnits="objectBoundingBox">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="1.125" result="shadowSpreadOuter1"/>
+      <feOffset in="shadowSpreadOuter1" result="shadowOffsetOuter1"/>
+      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="3.5"/>
+      <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"/>
+      <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0.430276   0 0 0 0 0.873617069   0 0 0 0 0.922158062  0 0 0 1 0"/>
+    </filter>
+    <filter id="hero-globe-F" width="102.4%" height="102.1%" x="-1.4%" y="-1%" filterUnits="objectBoundingBox">
+      <feGaussianBlur in="SourceGraphic"/>
+    </filter>
+    <linearGradient id="hero-globe-I" x1="69.063%" x2="35.567%" y1="90.999%" y2="3.331%">
+      <stop offset="0%" stop-color="#4CEDFF"/>
+      <stop offset="100%" stop-color="#B2FFFF"/>
+    </linearGradient>
+    <ellipse id="hero-globe-H" cx="99.533" cy="103.829" rx="4.091" ry="4.127"/>
+    <filter id="hero-globe-G" width="433%" height="430.1%" x="-166.5%" y="-165.1%" filterUnits="objectBoundingBox">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="1.125" result="shadowSpreadOuter1"/>
+      <feOffset in="shadowSpreadOuter1" result="shadowOffsetOuter1"/>
+      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="3.5"/>
+      <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"/>
+      <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0.430276   0 0 0 0 0.873617069   0 0 0 0 0.922158062  0 0 0 1 0"/>
+    </filter>
+    <ellipse id="hero-globe-K" cx="43.491" cy="71.005" rx="4.091" ry="4.127"/>
+    <filter id="hero-globe-J" width="433%" height="430.1%" x="-166.5%" y="-165.1%" filterUnits="objectBoundingBox">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="1.125" result="shadowSpreadOuter1"/>
+      <feOffset in="shadowSpreadOuter1" result="shadowOffsetOuter1"/>
+      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="3.5"/>
+      <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"/>
+      <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0.430276   0 0 0 0 0.873617069   0 0 0 0 0.922158062  0 0 0 1 0"/>
+    </filter>
+    <ellipse id="hero-globe-M" cx="76.268" cy="90.299" rx="4.091" ry="4.127"/>
+    <filter id="hero-globe-L" width="433%" height="430.1%" x="-166.5%" y="-165.1%" filterUnits="objectBoundingBox">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="1.125" result="shadowSpreadOuter1"/>
+      <feOffset in="shadowSpreadOuter1" result="shadowOffsetOuter1"/>
+      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="3.5"/>
+      <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"/>
+      <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0.430276   0 0 0 0 0.873617069   0 0 0 0 0.922158062  0 0 0 1 0"/>
+    </filter>
+    <filter id="hero-globe-N" width="101.1%" height="101.6%" x="-.6%" y="-.9%" filterUnits="objectBoundingBox">
+      <feGaussianBlur in="SourceGraphic"/>
+    </filter>
+    <linearGradient id="hero-globe-Q" x1="69.393%" x2="35.318%" y1="90.999%" y2="3.331%">
+      <stop offset="0%" stop-color="#4CEDFF"/>
+      <stop offset="100%" stop-color="#B2FFFF"/>
+    </linearGradient>
+    <ellipse id="hero-globe-P" cx="37.573" cy="188.561" rx="4.103" ry="4.104"/>
+    <filter id="hero-globe-O" width="432.1%" height="432%" x="-166%" y="-166%" filterUnits="objectBoundingBox">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="1.125" result="shadowSpreadOuter1"/>
+      <feOffset in="shadowSpreadOuter1" result="shadowOffsetOuter1"/>
+      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="3.5"/>
+      <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"/>
+      <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0.430276   0 0 0 0 0.873617069   0 0 0 0 0.922158062  0 0 0 1 0"/>
+    </filter>
+    <ellipse id="hero-globe-S" cx="257.386" cy="84.62" rx="4.103" ry="4.104"/>
+    <filter id="hero-globe-R" width="432.1%" height="432%" x="-166%" y="-166%" filterUnits="objectBoundingBox">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="1.125" result="shadowSpreadOuter1"/>
+      <feOffset in="shadowSpreadOuter1" result="shadowOffsetOuter1"/>
+      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="3.5"/>
+      <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"/>
+      <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0.430276   0 0 0 0 0.873617069   0 0 0 0 0.922158062  0 0 0 1 0"/>
+    </filter>
+    <ellipse id="hero-globe-U" cx="317.584" cy="91.914" rx="4.103" ry="4.104"/>
+    <filter id="hero-globe-T" width="432.1%" height="432%" x="-166%" y="-166%" filterUnits="objectBoundingBox">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="1.125" result="shadowSpreadOuter1"/>
+      <feOffset in="shadowSpreadOuter1" result="shadowOffsetOuter1"/>
+      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="3.5"/>
+      <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"/>
+      <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0.430276   0 0 0 0 0.873617069   0 0 0 0 0.922158062  0 0 0 1 0"/>
+    </filter>
+    <ellipse id="hero-globe-W" cx="164.771" cy="136.621" rx="4.103" ry="4.104"/>
+    <filter id="hero-globe-V" width="432.1%" height="432%" x="-166%" y="-166%" filterUnits="objectBoundingBox">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="1.125" result="shadowSpreadOuter1"/>
+      <feOffset in="shadowSpreadOuter1" result="shadowOffsetOuter1"/>
+      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="3.5"/>
+      <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"/>
+      <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0.430276   0 0 0 0 0.873617069   0 0 0 0 0.922158062  0 0 0 1 0"/>
+    </filter>
+    <ellipse id="hero-globe-Y" cx="108.39" cy="168.983" rx="4.103" ry="4.104"/>
+    <filter id="hero-globe-X" width="432.1%" height="432%" x="-166%" y="-166%" filterUnits="objectBoundingBox">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="1.125" result="shadowSpreadOuter1"/>
+      <feOffset in="shadowSpreadOuter1" result="shadowOffsetOuter1"/>
+      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="3.5"/>
+      <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"/>
+      <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0.430276   0 0 0 0 0.873617069   0 0 0 0 0.922158062  0 0 0 1 0"/>
+    </filter>
+    <ellipse id="hero-globe-aa" cx="141.449" cy="150.104" rx="4.103" ry="4.104"/>
+    <filter id="hero-globe-Z" width="432.1%" height="432%" x="-166%" y="-166%" filterUnits="objectBoundingBox">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="1.125" result="shadowSpreadOuter1"/>
+      <feOffset in="shadowSpreadOuter1" result="shadowOffsetOuter1"/>
+      <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="3.5"/>
+      <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"/>
+      <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0.430276   0 0 0 0 0.873617069   0 0 0 0 0.922158062  0 0 0 1 0"/>
+    </filter>
+    <filter id="hero-globe-ab" width="110.4%" height="104.6%" x="-5.9%" y="-2.6%" filterUnits="objectBoundingBox">
+      <feGaussianBlur in="SourceGraphic"/>
+    </filter>
+    <linearGradient id="hero-globe-ac" x1="50%" x2="191.817%" y1="59.514%" y2="9.922%">
+      <stop offset="0%" stop-color="#00128C"/>
+      <stop offset="100%" stop-color="#157EFF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-ad" x1="119.459%" x2="-81.089%" y1="98.447%" y2="2.623%">
+      <stop offset="0%" stop-color="#001C96"/>
+      <stop offset="100%" stop-color="#157EFF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-ae" x1="83.182%" x2="-68.567%" y1="69.651%" y2="8.458%">
+      <stop offset="0%" stop-color="#093CC3"/>
+      <stop offset="100%" stop-color="#27A6FF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-af" x1="79.752%" x2="5.662%" y1="65.057%" y2="28.529%">
+      <stop offset="0%" stop-color="#6A44FF"/>
+      <stop offset="100%" stop-color="#2787FF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-ag" x1="24.879%" x2="-192.999%" y1="62.131%" y2="154.58%">
+      <stop offset="0%" stop-color="#093CC3"/>
+      <stop offset="100%" stop-color="#27A6FF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-ah" x1="96.885%" x2="-59.075%" y1="28.338%" y2="96.262%">
+      <stop offset="0%" stop-color="#0D4BCB"/>
+      <stop offset="100%" stop-color="#7DD7FF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-ai" x1="50%" x2="191.817%" y1="59.327%" y2="10.709%">
+      <stop offset="0%" stop-color="#00128C"/>
+      <stop offset="100%" stop-color="#157EFF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aj" x1="119.459%" x2="-81.089%" y1="97.495%" y2="3.554%">
+      <stop offset="0%" stop-color="#001C96"/>
+      <stop offset="100%" stop-color="#157EFF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-ak" x1="83.182%" x2="-68.567%" y1="69.264%" y2="9.274%">
+      <stop offset="0%" stop-color="#093CC3"/>
+      <stop offset="100%" stop-color="#27A6FF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-al" x1="79.752%" x2="5.662%" y1="64.761%" y2="28.951%">
+      <stop offset="0%" stop-color="#6A44FF"/>
+      <stop offset="100%" stop-color="#2787FF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-am" x1="24.879%" x2="-192.999%" y1="61.892%" y2="152.526%">
+      <stop offset="0%" stop-color="#093CC3"/>
+      <stop offset="100%" stop-color="#27A6FF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-an" x1="96.885%" x2="-59.075%" y1="28.764%" y2="95.353%">
+      <stop offset="0%" stop-color="#0D4BCB"/>
+      <stop offset="100%" stop-color="#7DD7FF"/>
+    </linearGradient>
+    <filter id="hero-globe-ao" width="109.9%" height="107.4%" x="-5.6%" y="-3.7%" filterUnits="objectBoundingBox">
+      <feGaussianBlur in="SourceGraphic"/>
+    </filter>
+    <linearGradient id="hero-globe-ap" x1="0%" x2="71.264%" y1="32.073%" y2="61.714%">
+      <stop offset="0%" stop-color="#00EBFF"/>
+      <stop offset="100%" stop-color="#0380D7"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aq" x1="79.752%" x2="5.662%" y1="64.558%" y2="29.241%">
+      <stop offset="0%" stop-color="#6A44FF"/>
+      <stop offset="100%" stop-color="#2787FF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-ar" x1="50%" x2="50%" y1="4.965%" y2="82.891%">
+      <stop offset="0%" stop-color="#00EBFF" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#00EBFF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-as" x1="59.873%" x2="59.873%" y1="90.451%" y2="28.328%">
+      <stop offset="0%" stop-color="#FFF"/>
+      <stop offset="100%" stop-color="#FFF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-at" x1="59.873%" x2="59.873%" y1="65.347%" y2="-38.222%">
+      <stop offset="0%" stop-color="#ACAEDC"/>
+      <stop offset="100%" stop-color="#AEAFDC"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-au" x1="59.873%" x2="59.873%" y1="90.451%" y2="28.328%">
+      <stop offset="0%" stop-color="#EB445F"/>
+      <stop offset="100%" stop-color="#FFDFB9"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-av" x1="50%" x2="50%" y1="-8.472%" y2="83.228%">
+      <stop offset="0%" stop-color="#F1F1F9"/>
+      <stop offset="100%" stop-color="#EAEAF5"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aw" x1="50%" x2="50%" y1="4.965%" y2="82.891%">
+      <stop offset="0%" stop-color="#00EBFF" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#00EBFF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-ax" x1="59.873%" x2="59.873%" y1="90.451%" y2="28.328%">
+      <stop offset="0%" stop-color="#EB445F"/>
+      <stop offset="100%" stop-color="#FFDFB9"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-ay" x1="59.873%" x2="59.873%" y1="65.347%" y2="0%">
+      <stop offset="0%" stop-color="#E83155"/>
+      <stop offset="100%" stop-color="#FBC0A7"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-az" x1="59.873%" x2="59.873%" y1="90.451%" y2="28.328%">
+      <stop offset="0%" stop-color="#EB445F"/>
+      <stop offset="100%" stop-color="#FFDFB9"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aA" x1="50%" x2="50%" y1="-8.472%" y2="83.228%">
+      <stop offset="0%" stop-color="#FFDFB9"/>
+      <stop offset="100%" stop-color="#E7857B"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aB" x1="50%" x2="50%" y1="4.965%" y2="82.891%">
+      <stop offset="0%" stop-color="#00EBFF" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#00EBFF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aC" x1="69.266%" x2="69.266%" y1="87.999%" y2="33.801%">
+      <stop offset="0%" stop-color="#3DB8E4"/>
+      <stop offset="100%" stop-color="#4AFCC8"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aD" x1="69.266%" x2="69.266%" y1="72.686%" y2="-158.048%">
+      <stop offset="0%" stop-color="#3DB8E4"/>
+      <stop offset="100%" stop-color="#4AFCC8"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aE" x1="59.873%" x2="59.873%" y1="90.451%" y2="28.328%">
+      <stop offset="0%" stop-color="#EB445F"/>
+      <stop offset="100%" stop-color="#FFDFB9"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aF" x1="50%" x2="50%" y1="117.021%" y2="50%">
+      <stop offset="0%" stop-color="#3DB8E4"/>
+      <stop offset="100%" stop-color="#4AFCC8"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aG" x1="50%" x2="50%" y1="4.965%" y2="82.891%">
+      <stop offset="0%" stop-color="#00EBFF" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#00EBFF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aH" x1="50%" x2="50%" y1="130.216%" y2="14.074%">
+      <stop offset="0%" stop-color="#093CC3"/>
+      <stop offset="100%" stop-color="#27A6FF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aI" x1="50%" x2="50%" y1="100%" y2="-95.408%">
+      <stop offset="0%" stop-color="#002FAC"/>
+      <stop offset="100%" stop-color="#27A6FF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aJ" x1="59.873%" x2="59.873%" y1="90.451%" y2="28.328%">
+      <stop offset="0%" stop-color="#EB445F"/>
+      <stop offset="100%" stop-color="#FFDFB9"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aK" x1="50%" x2="50%" y1="189.902%" y2="-22.427%">
+      <stop offset="0%" stop-color="#093CC3"/>
+      <stop offset="100%" stop-color="#27A6FF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aL" x1="0%" x2="71.264%" y1="31.933%" y2="61.806%">
+      <stop offset="0%" stop-color="#00EBFF"/>
+      <stop offset="100%" stop-color="#0380D7"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aM" x1="79.752%" x2="5.662%" y1="64.559%" y2="29.239%">
+      <stop offset="0%" stop-color="#6A44FF"/>
+      <stop offset="100%" stop-color="#2787FF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aN" x1="63.706%" x2="37.036%" y1="68.77%" y2="68.77%">
+      <stop offset="0%" stop-color="#B1EBFF"/>
+      <stop offset="100%" stop-color="#6ECDFF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aO" x1="-1242.44%" x2="-1168.322%" y1="50%" y2="50%">
+      <stop offset="0%" stop-color="#4AFFC7"/>
+      <stop offset="100%" stop-color="#3BADEA"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aP" x1="-1.819%" x2="100.024%" y1="49.985%" y2="49.985%">
+      <stop offset="0%" stop-color="#4AFFC7"/>
+      <stop offset="100%" stop-color="#3BADEA"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aQ" x1="50.023%" x2="50.023%" y1="97.913%" y2="26.174%">
+      <stop offset="0%" stop-color="#3BADEA"/>
+      <stop offset="100%" stop-color="#4AFFC7"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aR" x1="-90.345%" x2="-91.353%" y1="12.661%" y2="27.893%">
+      <stop offset="0%" stop-color="#4AFFC7"/>
+      <stop offset="100%" stop-color="#3BADEA"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aS" x1="-274.146%" x2="-170.542%" y1="41.252%" y2="59.881%">
+      <stop offset="0%" stop-color="#4AFFC7"/>
+      <stop offset="100%" stop-color="#3BADEA"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aT" x1="90.223%" x2="7.498%" y1="67.304%" y2="25.667%">
+      <stop offset="0%" stop-color="#FFF"/>
+      <stop offset="100%" stop-color="#CACCED"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aU" x1="14.049%" x2="109.415%" y1="49.99%" y2="49.99%">
+      <stop offset="0%" stop-color="#AFAFDC"/>
+      <stop offset="100%" stop-color="#FFF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aV" x1=".021%" x2="100%" y1="49.948%" y2="49.948%">
+      <stop offset="0%" stop-color="#E83155"/>
+      <stop offset="10%" stop-color="#EB4A64"/>
+      <stop offset="32%" stop-color="#F27F82"/>
+      <stop offset="53%" stop-color="#F8A99A"/>
+      <stop offset="72%" stop-color="#FCC6AB"/>
+      <stop offset="88%" stop-color="#FED9B5"/>
+      <stop offset="100%" stop-color="#FFDFB9"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aW" x1="-29.527%" x2="61.731%" y1="64.151%" y2="43.621%">
+      <stop offset="0%" stop-color="#E83155"/>
+      <stop offset="10%" stop-color="#EB4A64"/>
+      <stop offset="32%" stop-color="#F27F82"/>
+      <stop offset="53%" stop-color="#F8A99A"/>
+      <stop offset="72%" stop-color="#FCC6AB"/>
+      <stop offset="88%" stop-color="#FED9B5"/>
+      <stop offset="100%" stop-color="#FFDFB9"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aX" x1="0%" x2="145.292%" y1="49.981%" y2="50%">
+      <stop offset="0%" stop-color="#00D0FF"/>
+      <stop offset="100%" stop-color="#007FD9"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aY" x1="-18.287%" x2="62.057%" y1="35.96%" y2="71.307%">
+      <stop offset="0%" stop-color="#FFF"/>
+      <stop offset="100%" stop-color="#D2E3E5"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-aZ" x1="-6.554%" x2="68.07%" y1="42.648%" y2="65.969%">
+      <stop offset="0%" stop-color="#FFF"/>
+      <stop offset="100%" stop-color="#CACCED"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-ba" x1="79.752%" x2="5.662%" y1="65.302%" y2="28.181%">
+      <stop offset="0%" stop-color="#6A44FF"/>
+      <stop offset="100%" stop-color="#2787FF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-bb" x1="79.752%" x2="5.662%" y1="65.158%" y2="28.385%">
+      <stop offset="0%" stop-color="#6A44FF"/>
+      <stop offset="100%" stop-color="#2787FF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-bc" x1="50%" x2="48.128%" y1="90.709%" y2="28.442%">
+      <stop offset="0%" stop-color="#6A44FF"/>
+      <stop offset="100%" stop-color="#00EBFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-bd" x1="50%" x2="50%" y1="90.709%" y2="22.542%">
+      <stop offset="0%" stop-color="#02C9F4"/>
+      <stop offset="100%" stop-color="#00EBFF" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="hero-globe-be" width="200.7%" height="143.8%" x="-50.3%" y="-21.9%" filterUnits="objectBoundingBox">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="13"/>
+    </filter>
+    <linearGradient id="hero-globe-bf" x1="50%" x2="50%" y1="35.598%" y2="61.579%">
+      <stop offset="0%" stop-color="#00F7FF" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#C6FBFF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-bg" x1="50%" x2="50%" y1="34.2%" y2="61.579%">
+      <stop offset="0%" stop-color="#00F7FF" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#C6FBFF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-bh" x1="50%" x2="50%" y1="15.818%" y2="61.579%">
+      <stop offset="0%" stop-color="#00F7FF" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#C6FBFF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-bi" x1="45.172%" x2="45.172%" y1="11.32%" y2="90.429%">
+      <stop offset="0%" stop-color="#55D4FB" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#989AFF"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-bj" x1="50%" x2="50%" y1="93.146%" y2="110.316%">
+      <stop offset="0%" stop-color="#FFF"/>
+      <stop offset="100%" stop-color="#33BCCB"/>
+    </linearGradient>
+    <filter id="hero-globe-bk" width="202%" height="144.8%" x="-51%" y="-22.4%" filterUnits="objectBoundingBox">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="13"/>
+    </filter>
+    <linearGradient id="hero-globe-bl" x1="4.899%" x2="112.236%" y1="42.295%" y2="51.877%">
+      <stop offset="0%" stop-color="#00F7FF" stop-opacity="0"/>
+      <stop offset="53.031%" stop-color="#80F9FF" stop-opacity=".646"/>
+      <stop offset="100%" stop-color="#C6FBFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-bm" x1="50%" x2="50%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#56A1EE"/>
+      <stop offset="100%" stop-color="#6A44FF"/>
+    </linearGradient>
+    <circle id="hero-globe-bn" cx="137.956" cy="137.946" r="109.726"/>
+    <filter id="hero-globe-bo" width="106.4%" height="106.4%" x="-3.2%" y="-3.2%" filterUnits="objectBoundingBox">
+      <feGaussianBlur in="SourceAlpha" result="shadowBlurInner1" stdDeviation="6.5"/>
+      <feOffset dy="1" in="shadowBlurInner1" result="shadowOffsetInner1"/>
+      <feComposite in="shadowOffsetInner1" in2="SourceAlpha" k2="-1" k3="1" operator="arithmetic" result="shadowInnerInner1"/>
+      <feColorMatrix in="shadowInnerInner1" values="0 0 0 0 0.160784314   0 0 0 0 0.149019608   0 0 0 0 0.341176471  0 0 0 0.191925262 0"/>
+    </filter>
+    <linearGradient id="hero-globe-bp" x1="50%" x2="69.554%" y1="50%" y2="121.326%">
+      <stop offset="0%" stop-color="#C2E0FF"/>
+      <stop offset="100%" stop-color="#51A9E1"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-bq" x1="50%" x2="124.88%" y1="50%" y2="97.166%">
+      <stop offset="0%" stop-color="#C2E0FF"/>
+      <stop offset="100%" stop-color="#51A9E1"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-br" x1="50%" x2="96.93%" y1="50%" y2="519.147%">
+      <stop offset="0%" stop-color="#C2E0FF"/>
+      <stop offset="100%" stop-color="#51A9E1"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-bs" x1="50%" x2="56.293%" y1="50%" y2="121.326%">
+      <stop offset="0%" stop-color="#C2E0FF"/>
+      <stop offset="100%" stop-color="#51A9E1"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-bt" x1="-.002%" x2="99.51%" y1="49.957%" y2="49.957%">
+      <stop offset="0%" stop-color="#A8D3FF"/>
+      <stop offset="100%" stop-color="#3BADEA"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-bu" x1="-.002%" x2="99.51%" y1="49.957%" y2="49.957%">
+      <stop offset="0%" stop-color="#A8D3FF"/>
+      <stop offset="100%" stop-color="#3BADEA"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-bv" x1="-.002%" x2="99.51%" y1="49.957%" y2="49.957%">
+      <stop offset="0%" stop-color="#A8D3FF"/>
+      <stop offset="100%" stop-color="#3BADEA"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-bw" x1="-.002%" x2="99.51%" y1="49.957%" y2="49.957%">
+      <stop offset="0%" stop-color="#A8D3FF"/>
+      <stop offset="100%" stop-color="#3BADEA"/>
+    </linearGradient>
+    <linearGradient id="hero-globe-bx" x1="-.002%" x2="99.51%" y1="49.957%" y2="49.957%">
+      <stop offset="0%" stop-color="#A8D3FF"/>
+      <stop offset="100%" stop-color="#3BADEA"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" fill-rule="evenodd" transform="translate(0 -28)">
+    <g opacity=".344">
+      <g fill-rule="nonzero" opacity=".7" transform="translate(45 147)" style="mix-blend-mode:screen">
+        <path fill="url(#hero-globe-a)" d="M341.220044,23.6793377 L376.600887,43.3649007 L412,23.6793377 L376.591752,3.98463576 L341.220044,23.6793377 Z M376.600887,41.9574834 L343.713969,23.6793377 L376.600887,5.40119205 L409.487805,23.6793377 L376.600887,41.9574834 Z"/>
+        <path fill="url(#hero-globe-b)" d="M272.97969,23.6793377 L308.351397,43.3649007 L343.723104,23.6793377 L308.351397,3.98463576 L272.97969,23.6793377 Z M308.351397,41.9574834 L275.464479,23.6793377 L308.351397,5.40119205 L341.238315,23.6793377 L308.351397,41.9574834 Z"/>
+        <path fill="url(#hero-globe-c)" d="M307.099867,42.6703311 L342.471574,62.3650331 L377.852417,42.6703311 L342.471574,22.9756291 L307.099867,42.6703311 Z M342.471574,60.9484768 L309.584656,42.6703311 L342.471574,24.3921854 L375.358492,42.6703311 L342.471574,60.9484768 Z"/>
+        <path fill="url(#hero-globe-d)" d="M341.220044,61.6704636 L376.600887,81.3377483 L412,61.6704636 L376.600887,41.9757616 L341.220044,61.6704636 Z M376.600887,79.9486093 L343.713969,61.6704636 L376.600887,43.3923179 L409.487805,61.6704636 L376.600887,79.9486093 Z"/>
+        <path fill="url(#hero-globe-e)" d="M204.7302,23.6793377 L240.111042,43.3649007 L275.482749,23.6793377 L240.111042,3.98463576 L204.7302,23.6793377 Z M240.111042,41.9574834 L207.224124,23.6793377 L240.111042,5.40119205 L272.99796,23.6793377 L240.111042,41.9574834 Z"/>
+        <path fill="url(#hero-globe-f)" d="M238.859512,42.6703311 L274.23122,62.3650331 L309.602927,42.6703311 L274.23122,22.9756291 L238.859512,42.6703311 Z M274.23122,60.9484768 L241.344302,42.6703311 L274.23122,24.3921854 L307.118137,42.6703311 L274.23122,60.9484768 Z"/>
+        <path fill="url(#hero-globe-g)" d="M272.97969,61.6613245 L308.351397,81.3377483 L343.723104,61.6521854 L308.351397,41.9757616 L272.97969,61.6613245 Z M308.351397,79.9394702 L275.464479,61.6613245 L308.351397,43.3831788 L341.238315,61.6613245 L308.351397,79.9394702 Z"/>
+        <path fill="url(#hero-globe-c)" d="M307.099867,80.661457 L342.471574,100.356159 L377.852417,80.661457 L342.471574,60.966755 L307.099867,80.661457 Z M342.471574,98.9396026 L309.584656,80.661457 L342.471574,62.3833113 L375.358492,80.661457 L342.471574,98.9396026 Z"/>
+        <path fill="url(#hero-globe-h)" d="M341.220044,99.615894 L376.600887,119.310596 L412,99.615894 L376.600887,79.9668874 L341.220044,99.615894 Z M376.600887,117.89404 L343.713969,99.615894 L376.600887,81.3377483 L409.487805,99.615894 L376.600887,117.89404 Z"/>
+        <path fill="url(#hero-globe-b)" d="M136.489845,23.6793377 L171.861552,43.3649007 L207.233259,23.6793377 L171.861552,3.98463576 L136.489845,23.6793377 Z M171.861552,41.9574834 L138.974634,23.6793377 L171.861552,5.40119205 L204.74847,23.6793377 L171.861552,41.9574834 Z"/>
+        <path fill="url(#hero-globe-c)" d="M170.610022,42.6703311 L205.981729,62.3650331 L241.362572,42.6703311 L205.981729,22.9756291 L170.610022,42.6703311 Z M205.981729,60.9484768 L173.094812,42.6703311 L205.981729,24.3921854 L238.868647,42.6703311 L205.981729,60.9484768 Z"/>
+        <path fill="url(#hero-globe-i)" d="M204.7302,61.6613245 L240.111042,81.3377483 L275.482749,61.6430464 L240.111042,41.9757616 L204.7302,61.6613245 Z M240.111042,79.9394702 L207.224124,61.6613245 L240.111042,43.3831788 L272.99796,61.6613245 L240.111042,79.9394702 Z"/>
+        <path fill="url(#hero-globe-f)" d="M238.859512,80.661457 L274.23122,100.356159 L309.602927,80.661457 L274.23122,60.966755 L238.859512,80.661457 Z M274.23122,98.9396026 L241.344302,80.661457 L274.23122,62.3833113 L307.118137,80.661457 L274.23122,98.9396026 Z"/>
+        <path fill="url(#hero-globe-j)" d="M272.97969,99.615894 L308.351397,119.310596 L343.723104,99.615894 L308.351397,79.9668874 L272.97969,99.615894 Z M308.351397,117.89404 L275.464479,99.615894 L308.351397,81.3377483 L341.238315,99.615894 L308.351397,117.89404 Z"/>
+        <path fill="url(#hero-globe-e)" d="M307.099867,118.652583 L342.48071,138.338146 L377.852417,118.652583 L342.471574,98.9578808 L307.099867,118.652583 Z M342.48071,136.930728 L309.593792,118.652583 L342.48071,100.374437 L375.367627,118.652583 L342.48071,136.930728 Z"/>
+        <path fill="url(#hero-globe-a)" d="M341.220044,137.643576 L376.600887,157.338278 L412,137.643576 L376.628293,117.958013 L341.220044,137.643576 Z M376.600887,155.921722 L343.713969,137.643576 L376.600887,119.36543 L409.487805,137.643576 L376.600887,155.921722 Z"/>
+        <path fill="url(#hero-globe-b)" d="M68.24949,23.6701987 L103.621197,43.3649007 L138.992905,23.6793377 L103.621197,3.98463576 L68.24949,23.6701987 Z M103.621197,41.9483444 L70.7342794,23.6701987 L103.621197,5.39205298 L136.508115,23.6701987 L103.621197,41.9483444 Z"/>
+        <path fill="url(#hero-globe-f)" d="M102.369667,42.6703311 L137.741375,62.3650331 L173.113082,42.6703311 L137.741375,22.9756291 L102.369667,42.6703311 Z M137.741375,60.9484768 L104.854457,42.6703311 L137.741375,24.3921854 L170.628293,42.6703311 L137.741375,60.9484768 Z"/>
+        <path fill="url(#hero-globe-g)" d="M136.489845,61.6613245 L171.861552,81.3377483 L207.233259,61.6430464 L171.861552,41.9757616 L136.489845,61.6613245 Z M171.861552,79.9394702 L138.974634,61.6613245 L171.861552,43.3831788 L204.74847,61.6613245 L171.861552,79.9394702 Z"/>
+        <path fill="url(#hero-globe-c)" d="M170.610022,80.661457 L205.990865,100.356159 L241.362572,80.661457 L205.981729,60.966755 L170.610022,80.661457 Z M205.990865,98.9396026 L173.103947,80.661457 L205.990865,62.3833113 L238.877783,80.661457 L205.990865,98.9396026 Z"/>
+        <path fill="url(#hero-globe-j)" d="M204.739335,99.615894 L240.111042,119.310596 L275.482749,99.615894 L240.111042,79.9668874 L204.739335,99.615894 Z M240.111042,117.89404 L207.224124,99.615894 L240.111042,81.3377483 L272.99796,99.615894 L240.111042,117.89404 Z"/>
+        <path fill="url(#hero-globe-b)" d="M238.859512,118.652583 L274.23122,138.338146 L309.602927,118.652583 L274.23122,98.9578808 L238.859512,118.652583 Z M274.23122,136.930728 L241.344302,118.652583 L274.23122,100.374437 L307.118137,118.652583 L274.23122,136.930728 Z"/>
+        <path fill="url(#hero-globe-e)" d="M272.97969,137.643576 L308.351397,157.338278 L343.732239,137.643576 L308.351397,117.958013 L272.97969,137.643576 Z M308.351397,155.921722 L275.464479,137.643576 L308.351397,119.36543 L341.238315,137.643576 L308.351397,155.921722 Z"/>
+        <path fill="url(#hero-globe-e)" d="M307.099867,156.643709 L342.48071,176.329272 L377.852417,156.643709 L342.48071,136.949007 L307.099867,156.643709 Z M342.48071,174.921854 L309.593792,156.643709 L342.48071,138.365563 L375.367627,156.643709 L342.48071,174.921854 Z"/>
+        <path fill="url(#hero-globe-k)" d="M341.22918,175.634702 L376.600887,195.329404 L412,175.634702 L376.628293,155.94 L341.22918,175.634702 Z M376.600887,193.912848 L343.713969,175.634702 L376.600887,157.356556 L409.487805,175.634702 L376.600887,193.912848 Z"/>
+        <path fill="url(#hero-globe-l)" d="M36,40.6582693 L68.1639427,62.1770243 L101.106445,40.506646 L68.5532227,20 L36,40.6582693 Z M68.1639427,60.760468 L38.4847894,40.6582693 L68.5532227,21.4074172 L98.6125207,40.506646 L68.1639427,60.760468 Z"/>
+        <path fill="url(#hero-globe-c)" d="M34.1201774,42.6703311 L69.50102,62.3650331 L104.872727,42.6703311 L69.50102,22.9756291 L34.1201774,42.6703311 Z M69.50102,60.9484768 L36.614102,42.6703311 L69.50102,24.3921854 L102.387938,42.6703311 L69.50102,60.9484768 Z"/>
+        <path fill="url(#hero-globe-g)" d="M68.24949,61.6613245 L103.621197,81.3377483 L138.992905,61.6430464 L103.621197,41.9757616 L68.24949,61.6613245 Z M103.621197,79.9394702 L70.7342794,61.6613245 L103.621197,43.3831788 L136.508115,61.6613245 L103.621197,79.9394702 Z"/>
+        <path fill="url(#hero-globe-b)" d="M102.369667,80.661457 L137.741375,100.34702 L173.113082,80.661457 L137.741375,60.966755 L102.369667,80.661457 Z M137.741375,98.9396026 L104.854457,80.661457 L137.741375,62.3833113 L170.628293,80.661457 L137.741375,98.9396026 Z"/>
+        <path fill="url(#hero-globe-m)" d="M136.489845,99.615894 L171.861552,119.310596 L207.242395,99.615894 L171.861552,79.9668874 L136.489845,99.615894 Z M171.861552,117.89404 L138.974634,99.615894 L171.861552,81.3377483 L204.74847,99.615894 L171.861552,117.89404 Z"/>
+        <path fill="url(#hero-globe-e)" d="M170.610022,118.652583 L205.990865,138.338146 L241.362572,118.652583 L205.990865,98.9578808 L170.610022,118.652583 Z M205.990865,136.930728 L173.103947,118.652583 L205.990865,100.374437 L238.877783,118.652583 L205.990865,136.930728 Z"/>
+        <path fill="url(#hero-globe-b)" d="M204.739335,137.643576 L240.111042,157.338278 L275.482749,137.643576 L240.111042,117.958013 L204.739335,137.643576 Z M240.111042,155.921722 L207.224124,137.643576 L240.111042,119.36543 L272.99796,137.643576 L240.111042,155.921722 Z"/>
+        <path fill="url(#hero-globe-b)" d="M238.859512,156.643709 L274.23122,176.329272 L309.602927,156.643709 L274.23122,136.949007 L238.859512,156.643709 Z M274.23122,174.921854 L241.344302,156.643709 L274.23122,138.365563 L307.118137,156.643709 L274.23122,174.921854 Z"/>
+        <path fill="url(#hero-globe-c)" d="M272.97969,175.634702 L308.351397,195.329404 L343.732239,175.634702 L308.351397,155.94 L272.97969,175.634702 Z M308.351397,193.912848 L275.464479,175.634702 L308.351397,157.356556 L341.238315,175.634702 L308.351397,193.912848 Z"/>
+        <path fill="url(#hero-globe-n)" d="M307.099867,194.662252 L342.48071,214.356954 L377.852417,194.662252 L342.48071,174.940132 L307.099867,194.662252 Z M342.48071,212.940397 L309.593792,194.662252 L342.48071,176.384106 L375.367627,194.662252 L342.48071,212.940397 Z"/>
+        <path fill="url(#hero-globe-k)" d="M341.22918,213.625828 L376.600887,233.32053 L412,213.625828 L376.600887,193.931126 L341.22918,213.625828 Z M376.600887,231.903974 L343.713969,213.625828 L376.600887,195.347682 L409.487805,213.625828 L376.600887,231.903974 Z"/>
+        <path fill="url(#hero-globe-i)" d="M0,61.6613245 L35.3717073,81.3377483 L70.7525499,61.6613245 L35.3717073,41.9757616 L0,61.6613245 Z M35.3717073,79.9394702 L2.48478936,61.6613245 L35.3717073,43.3831788 L68.2586253,61.6613245 L35.3717073,79.9394702 Z"/>
+        <path fill="url(#hero-globe-e)" d="M34.1201774,80.661457 L69.50102,100.34702 L104.872727,80.661457 L69.50102,60.966755 L34.1201774,80.661457 Z M69.50102,98.9396026 L36.614102,80.661457 L69.50102,62.3833113 L102.387938,80.661457 L69.50102,98.9396026 Z"/>
+        <path fill="url(#hero-globe-j)" d="M68.24949,99.615894 L103.621197,119.310596 L138.992905,99.615894 L103.621197,79.9668874 L68.24949,99.615894 Z M103.621197,117.89404 L70.7342794,99.615894 L103.621197,81.3377483 L136.508115,99.615894 L103.621197,117.89404 Z"/>
+        <path fill="url(#hero-globe-b)" d="M102.369667,118.652583 L137.741375,138.338146 L173.113082,118.652583 L137.741375,98.9578808 L102.369667,118.652583 Z M137.741375,136.930728 L104.854457,118.652583 L137.741375,100.374437 L170.628293,118.652583 L137.741375,136.930728 Z"/>
+        <path fill="url(#hero-globe-c)" d="M136.489845,137.643576 L171.861552,157.338278 L207.242395,137.643576 L171.861552,117.948874 L136.489845,137.643576 Z M171.861552,155.921722 L138.974634,137.643576 L171.861552,119.36543 L204.74847,137.643576 L171.861552,155.921722 Z"/>
+        <path fill="url(#hero-globe-e)" d="M170.610022,156.643709 L205.990865,176.329272 L241.362572,156.643709 L205.990865,136.949007 L170.610022,156.643709 Z M205.990865,174.921854 L173.103947,156.643709 L205.990865,138.365563 L238.877783,156.643709 L205.990865,174.921854 Z"/>
+        <path fill="url(#hero-globe-f)" d="M204.739335,175.634702 L240.111042,195.329404 L275.482749,175.634702 L240.111042,155.94 L204.739335,175.634702 Z M240.111042,193.912848 L207.224124,175.634702 L240.111042,157.356556 L272.99796,175.634702 L240.111042,193.912848 Z"/>
+        <path fill="url(#hero-globe-b)" d="M238.859512,194.662252 L274.23122,214.356954 L309.602927,194.662252 L274.23122,174.976689 L238.859512,194.662252 Z M274.23122,212.940397 L241.344302,194.662252 L274.23122,176.384106 L307.118137,194.662252 L274.23122,212.940397 Z"/>
+        <path fill="url(#hero-globe-c)" d="M272.97969,213.625828 L308.351397,233.32053 L343.732239,213.625828 L308.351397,193.931126 L272.97969,213.625828 Z M308.351397,231.903974 L275.464479,213.625828 L308.351397,195.347682 L341.238315,213.625828 L308.351397,231.903974 Z"/>
+        <path fill="url(#hero-globe-o)" d="M307.099867,232.616821 L342.48071,252.311523 L377.852417,232.616821 L342.48071,212.940397 L307.099867,232.616821 Z M342.48071,250.894967 L309.593792,232.616821 L342.48071,214.338675 L375.367627,232.616821 L342.48071,250.894967 Z"/>
+        <path fill="url(#hero-globe-k)" d="M341.22918,251.616954 L376.600887,271.311656 L412,251.616954 L376.628293,231.922252 L341.22918,251.616954 Z M376.600887,269.895099 L343.713969,251.616954 L376.600887,233.338808 L409.487805,251.616954 L376.600887,269.895099 Z"/>
+        <path fill="url(#hero-globe-p)" d="M0,99.615894 L35.3808426,119.310596 L70.7525499,99.615894 L35.3717073,79.9577483 L0,99.615894 Z M35.3808426,117.89404 L2.49392461,99.615894 L35.3808426,81.3377483 L68.2677605,99.615894 L35.3808426,117.89404 Z"/>
+        <path fill="url(#hero-globe-e)" d="M34.1201774,118.652583 L69.50102,138.338146 L104.872727,118.652583 L69.50102,98.9578808 L34.1201774,118.652583 Z M69.50102,136.930728 L36.614102,118.652583 L69.50102,100.374437 L102.387938,118.652583 L69.50102,136.930728 Z"/>
+        <path fill="url(#hero-globe-f)" d="M68.24949,137.643576 L103.621197,157.338278 L138.992905,137.643576 L103.621197,117.948874 L68.24949,137.643576 Z M103.621197,155.921722 L70.7342794,137.643576 L103.621197,119.36543 L136.508115,137.643576 L103.621197,155.921722 Z"/>
+        <path fill="url(#hero-globe-b)" d="M102.369667,156.63457 L137.741375,176.329272 L173.113082,156.643709 L137.741375,136.949007 L102.369667,156.63457 Z M137.741375,174.912715 L104.854457,156.63457 L137.741375,138.356424 L170.628293,156.63457 L137.741375,174.912715 Z"/>
+        <path fill="url(#hero-globe-c)" d="M136.489845,175.634702 L171.870687,195.329404 L207.242395,175.634702 L171.861552,155.94 L136.489845,175.634702 Z M171.870687,193.912848 L138.983769,175.634702 L171.870687,157.356556 L204.757605,175.634702 L171.870687,193.912848 Z"/>
+        <path fill="url(#hero-globe-b)" d="M170.619157,194.662252 L205.990865,214.356954 L241.362572,194.662252 L205.990865,174.976689 L170.619157,194.662252 Z M205.990865,212.940397 L173.103947,194.662252 L205.990865,176.384106 L238.877783,194.662252 L205.990865,212.940397 Z"/>
+        <path fill="url(#hero-globe-b)" d="M204.739335,213.625828 L240.111042,233.311391 L275.482749,213.625828 L240.111042,193.931126 L204.739335,213.625828 Z M240.111042,231.903974 L207.224124,213.625828 L240.111042,195.347682 L272.99796,213.625828 L240.111042,231.903974 Z"/>
+        <path fill="url(#hero-globe-o)" d="M238.859512,232.616821 L274.23122,252.311523 L309.612062,232.616821 L274.23122,212.940397 L238.859512,232.616821 Z M274.23122,250.894967 L241.344302,232.616821 L274.23122,214.338675 L307.118137,232.616821 L274.23122,250.894967 Z"/>
+        <path fill="url(#hero-globe-e)" d="M272.97969,251.616954 L308.360532,271.302517 L343.732239,251.616954 L308.351397,231.922252 L272.97969,251.616954 Z M308.360532,269.895099 L275.473614,251.616954 L308.360532,233.338808 L341.24745,251.616954 L308.360532,269.895099 Z"/>
+        <path fill="url(#hero-globe-c)" d="M0,137.643576 L35.3808426,157.338278 L70.7525499,137.643576 L35.3808426,117.948874 L0,137.643576 Z M35.3808426,155.921722 L2.49392461,137.643576 L35.3808426,119.36543 L68.2677605,137.643576 L35.3808426,155.921722 Z"/>
+        <path fill="url(#hero-globe-b)" d="M34.1293126,156.63457 L69.50102,176.329272 L104.872727,156.63457 L69.50102,136.949007 L34.1293126,156.63457 Z M69.50102,174.912715 L36.614102,156.63457 L69.50102,138.356424 L102.387938,156.63457 L69.50102,174.912715 Z"/>
+        <path fill="url(#hero-globe-f)" d="M68.24949,175.634702 L103.621197,195.329404 L138.992905,175.634702 L103.621197,155.94 L68.24949,175.634702 Z M103.621197,193.912848 L70.7342794,175.634702 L103.621197,157.356556 L136.508115,175.634702 L103.621197,193.912848 Z"/>
+        <path fill="url(#hero-globe-e)" d="M102.369667,194.662252 L137.75051,214.356954 L173.122217,194.662252 L137.741375,174.976689 L102.369667,194.662252 Z M137.75051,212.940397 L104.863592,194.662252 L137.75051,176.384106 L170.637428,194.662252 L137.75051,212.940397 Z"/>
+        <path fill="url(#hero-globe-e)" d="M136.489845,213.625828 L171.870687,233.311391 L207.242395,213.625828 L171.870687,193.931126 L136.489845,213.625828 Z M171.870687,231.903974 L138.983769,213.625828 L171.870687,195.347682 L204.757605,213.625828 L171.870687,231.903974 Z"/>
+        <path fill="url(#hero-globe-q)" d="M170.619157,232.616821 L205.990865,252.311523 L241.362572,232.616821 L205.990865,212.940397 L170.619157,232.616821 Z M205.990865,250.894967 L173.103947,232.616821 L205.990865,214.338675 L238.877783,232.616821 L205.990865,250.894967 Z"/>
+        <path fill="url(#hero-globe-b)" d="M204.739335,251.616954 L240.111042,271.302517 L275.482749,251.616954 L240.111042,231.922252 L204.739335,251.616954 Z M240.111042,269.895099 L207.224124,251.616954 L240.111042,233.338808 L272.99796,251.616954 L240.111042,269.895099 Z"/>
+        <path fill="url(#hero-globe-e)" d="M0,175.634702 L35.3808426,195.320265 L70.7525499,175.634702 L35.3808426,155.94 L0,175.634702 Z M35.3808426,193.912848 L2.49392461,175.634702 L35.3808426,157.356556 L68.2677605,175.634702 L35.3808426,193.912848 Z"/>
+        <path fill="url(#hero-globe-r)" d="M34.1293126,194.662252 L69.50102,214.356954 L104.872727,194.662252 L69.50102,174.940132 L34.1293126,194.662252 Z M69.50102,212.940397 L36.614102,194.662252 L69.50102,176.384106 L102.387938,194.662252 L69.50102,212.940397 Z"/>
+        <path fill="url(#hero-globe-e)" d="M68.24949,213.625828 L103.621197,233.311391 L139.00204,213.625828 L103.621197,193.931126 L68.24949,213.625828 Z M103.621197,231.903974 L70.7342794,213.625828 L103.621197,195.347682 L136.508115,213.625828 L103.621197,231.903974 Z"/>
+        <path fill="url(#hero-globe-o)" d="M102.369667,232.616821 L137.75051,252.311523 L173.122217,232.616821 L137.75051,212.940397 L102.369667,232.616821 Z M137.75051,250.894967 L104.863592,232.616821 L137.75051,214.338675 L170.637428,232.616821 L137.75051,250.894967 Z"/>
+        <path fill="url(#hero-globe-b)" d="M136.49898 251.616954L171.870687 271.302517 207.242395 251.616954 171.870687 231.922252 136.49898 251.616954zM171.870687 269.895099L138.983769 251.616954 171.870687 233.338808 204.757605 251.616954 171.870687 269.895099zM0 213.625828L35.3717073 233.311391 70.7434146 213.625828 35.3808426 193.931126 0 213.625828zM35.3717073 231.903974L2.48478936 213.625828 35.3717073 195.347682 68.2586253 213.625828 35.3717073 231.903974z"/>
+        <path fill="url(#hero-globe-q)" d="M34.1293126,232.616821 L69.50102,252.311523 L104.872727,232.616821 L69.50102,212.940397 L34.1293126,232.616821 Z M69.50102,250.894967 L36.614102,232.616821 L69.50102,214.338675 L102.387938,232.616821 L69.50102,250.894967 Z"/>
+        <path fill="url(#hero-globe-e)" d="M68.24949,251.616954 L103.621197,271.302517 L139.00204,251.616954 L103.621197,231.922252 L68.24949,251.616954 Z M103.621197,269.895099 L70.7342794,251.616954 L103.621197,233.338808 L136.508115,251.616954 L103.621197,269.895099 Z"/>
+        <path fill="url(#hero-globe-b)" d="M0,251.607815 L35.3717073,271.302517 L70.7434146,251.616954 L35.3808426,231.922252 L0,251.607815 Z M35.3717073,269.88596 L2.48478936,251.607815 L35.3717073,233.329669 L68.2586253,251.607815 L35.3717073,269.88596 Z"/>
+        <path fill="url(#hero-globe-s)" d="M171.861552,113.964238 C169.298081,114.059287 167.287379,116.198536 167.35014,118.764071 C167.412901,121.329606 169.525799,123.367895 172.090848,123.337379 C174.655898,123.306863 176.719748,121.218885 176.721508,118.652583 C176.67151,116.016233 174.496876,113.918388 171.861552,113.964238 Z"/>
+        <path fill="url(#hero-globe-t)" d="M171.861552,2.83452515e-13 C169.231273,-0.0458508213 167.060729,2.04790299 167.010732,4.6792053 C167.123523,7.27999801 169.263968,9.33044773 171.86612,9.33044773 C174.468272,9.33044773 176.608717,7.27999801 176.721508,4.6792053 C176.69751,3.41388895 176.171941,2.20996149 175.260472,1.3323909 C174.349002,0.454820318 173.126331,-0.0244718725 171.861552,2.83452515e-13 Z"/>
+        <path fill="url(#hero-globe-u)" d="M103.621197,227.937616 C101.062776,228.032663 99.0561645,230.167816 99.1189232,232.728301 C99.181682,235.288787 101.290486,237.322984 103.850489,237.292471 C106.410493,237.261959 108.470254,235.178075 108.472018,232.616821 C108.422021,229.985519 106.251476,227.891765 103.621197,227.937616 L103.621197,227.937616 Z"/>
+        <path fill="url(#hero-globe-v)" d="M308.360532,265.94702 C305.802111,266.042067 303.795499,268.17722 303.858258,270.737705 C303.921017,273.29819 306.029821,275.332388 308.589824,275.301875 C311.149828,275.271363 313.209589,273.187479 313.211353,270.626225 C313.161356,267.994923 310.990811,265.901169 308.360532,265.94702 L308.360532,265.94702 Z"/>
+        <path fill="url(#hero-globe-w)" d="M69.50102,56.9821192 C66.9361395,57.0722086 64.9208151,59.2094536 64.9803298,61.7762966 C65.0398445,64.3431395 67.1520563,66.3846037 69.7183536,66.3556223 C72.2846508,66.326641 74.35026,64.2379965 74.3518404,61.6704636 C74.3018287,59.0377402 72.1328034,56.9413655 69.50102,56.9821192 Z"/>
+      </g>
+    </g>
+    <g transform="translate(264 282)">
+      <polyline stroke="#FFF" stroke-linecap="square" stroke-width="2" points="4.527 4.539 122.926 85.06 72.052 111.308 101.819 135.815" filter="url(#hero-globe-x)" transform="rotate(-4 63.726 70.177)"/>
+      <g transform="rotate(-4 87.17 103.017)">
+        <use fill="#000" filter="url(#hero-globe-y)" xlink:href="#hero-globe-z"/>
+        <use fill="url(#hero-globe-A)" stroke="#4CC3D0" stroke-width=".25" xlink:href="#hero-globe-z"/>
+      </g>
+      <g transform="rotate(-4 50.727 38.115)">
+        <use fill="#000" filter="url(#hero-globe-B)" xlink:href="#hero-globe-C"/>
+        <use fill="url(#hero-globe-A)" stroke="#4CC3D0" stroke-width=".25" xlink:href="#hero-globe-C"/>
+      </g>
+      <g transform="rotate(-4 69.798 49.38)">
+        <use fill="#000" filter="url(#hero-globe-D)" xlink:href="#hero-globe-E"/>
+        <use fill="url(#hero-globe-A)" stroke="#4CC3D0" stroke-width=".25" xlink:href="#hero-globe-E"/>
+      </g>
+    </g>
+    <g transform="translate(112 160)">
+      <polyline stroke="#FFF" stroke-linecap="square" stroke-width="2" points="8.815 5.338 38.612 26.892 5.2 42.511 145.067 138.94" filter="url(#hero-globe-F)" transform="rotate(-4 75.133 72.14)"/>
+      <g transform="rotate(-4 99.533 103.829)">
+        <use fill="#000" filter="url(#hero-globe-G)" xlink:href="#hero-globe-H"/>
+        <use fill="url(#hero-globe-I)" stroke="#4CC3D0" stroke-width=".25" xlink:href="#hero-globe-H"/>
+      </g>
+      <g transform="rotate(-4 43.49 71.005)">
+        <use fill="#000" filter="url(#hero-globe-J)" xlink:href="#hero-globe-K"/>
+        <use fill="url(#hero-globe-I)" stroke="#4CC3D0" stroke-width=".25" xlink:href="#hero-globe-K"/>
+      </g>
+      <g transform="rotate(-4 76.268 90.3)">
+        <use fill="#000" filter="url(#hero-globe-L)" xlink:href="#hero-globe-M"/>
+        <use fill="url(#hero-globe-I)" stroke="#4CC3D0" stroke-width=".25" xlink:href="#hero-globe-M"/>
+      </g>
+    </g>
+    <g transform="translate(92 142)">
+      <polyline stroke="#FFF" stroke-linecap="square" stroke-width="2" points="64.435 78.855 88.14 94.888 90.507 56.593 283.094 187.934 279.71 230.278 312.859 253.027" filter="url(#hero-globe-N)" transform="rotate(-64 188.647 154.81)"/>
+      <g transform="rotate(-64 37.573 188.561)">
+        <use fill="#000" filter="url(#hero-globe-O)" xlink:href="#hero-globe-P"/>
+        <use fill="url(#hero-globe-Q)" stroke="#4CC3D0" stroke-width=".25" xlink:href="#hero-globe-P"/>
+      </g>
+      <g transform="rotate(-64 257.386 84.62)">
+        <use fill="#000" filter="url(#hero-globe-R)" xlink:href="#hero-globe-S"/>
+        <use fill="url(#hero-globe-Q)" stroke="#4CC3D0" stroke-width=".25" xlink:href="#hero-globe-S"/>
+      </g>
+      <g transform="rotate(-64 317.584 91.914)">
+        <use fill="#000" filter="url(#hero-globe-T)" xlink:href="#hero-globe-U"/>
+        <use fill="url(#hero-globe-Q)" stroke="#4CC3D0" stroke-width=".25" xlink:href="#hero-globe-U"/>
+      </g>
+      <g transform="rotate(-64 164.771 136.621)">
+        <use fill="#000" filter="url(#hero-globe-V)" xlink:href="#hero-globe-W"/>
+        <use fill="url(#hero-globe-Q)" stroke="#4CC3D0" stroke-width=".25" xlink:href="#hero-globe-W"/>
+      </g>
+      <g transform="rotate(-64 108.39 168.983)">
+        <use fill="#000" filter="url(#hero-globe-X)" xlink:href="#hero-globe-Y"/>
+        <use fill="url(#hero-globe-Q)" stroke="#4CC3D0" stroke-width=".25" xlink:href="#hero-globe-Y"/>
+      </g>
+      <g transform="rotate(-64 141.45 150.104)">
+        <use fill="#000" filter="url(#hero-globe-Z)" xlink:href="#hero-globe-aa"/>
+        <use fill="url(#hero-globe-Q)" stroke="#4CC3D0" stroke-width=".25" xlink:href="#hero-globe-aa"/>
+      </g>
+      <polyline stroke="#FFF" stroke-linecap="square" stroke-width="2" points="38.727 223.453 40.833 184.695 17.65 170.162" filter="url(#hero-globe-ab)" transform="rotate(-64 29.241 196.808)"/>
+    </g>
+    <g transform="translate(0 58)">
+      <g transform="translate(8.203 45.144)">
+        <g transform="translate(329.013)">
+          <g transform="translate(.42 29.38)">
+            <polygon fill="url(#hero-globe-ac)" points="0 43.398 0 32.597 99.489 32.597 99.489 43.398 49.744 75.996"/>
+            <polygon fill="url(#hero-globe-ad)" points="0 43.398 0 32.597 49.744 44.183 49.744 75.996"/>
+            <polygon fill="url(#hero-globe-ae)" points="0 32.597 49.744 0 99.489 32.597 49.744 65.195"/>
+          </g>
+          <g transform="translate(4.978 44.883)">
+            <polygon fill="#06004F" points="0 13.544 0 .15 89.46 .15 89.46 13.544 44.73 42.835"/>
+            <polygon fill="#00EBFF" points="62.216 22.118 71.975 15.624 71.975 22.605 62.216 29.1"/>
+          </g>
+          <g transform="translate(.42 .195)">
+            <polygon fill="url(#hero-globe-ac)" points="0 43.398 0 32.597 99.489 32.597 99.489 43.398 49.744 75.996"/>
+            <polygon fill="url(#hero-globe-ad)" points="0 43.398 0 32.597 49.744 44.183 49.744 75.996"/>
+            <polygon fill="url(#hero-globe-af)" points="0 32.597 49.744 0 99.489 32.597 49.744 65.195"/>
+            <g transform="translate(21.202 13.543)">
+              <path fill="url(#hero-globe-ag)" d="M56.3900372,18.0627379 L56.7560414,18.312091 L27.9717023,37.2808622 L27.6050713,37.0301134 L56.3900372,18.0627379 Z M50.9047905,14.4655154 L51.2780388,14.7100952 L22.4950807,33.6761477 L22.1270687,33.4281176 L50.9047905,14.4655154 Z M45.4453003,10.8513212 L45.8000361,11.1080994 L17.0200231,30.0722114 L16.649066,29.8261219 L45.4453003,10.8513212 Z M39.9624034,7.25255036 L40.3220335,7.50610363 L11.5540116,26.4623142 L11.1710634,26.2241261 L39.9624034,7.25255036 Z M34.4790148,3.65410361 L34.8440308,3.90410783 L6.07500936,22.8609771 L5.69306075,22.6221303 L34.4790148,3.65410361 Z M28.9094792,0.0175320005 L29.2939492,0.254717361 L0.512677498,19.2196587 L0.142979122,18.9727398 L28.9094792,0.0175320005 Z" transform="translate(.408 .41)"/>
+              <path fill="url(#hero-globe-ah)" d="M56.5088142,18.2797932 L56.8748184,18.5291464 L28.0904793,37.4979176 L27.7238483,37.2471688 L56.5088142,18.2797932 Z M51.0235675,14.6825708 L51.3968158,14.9271506 L22.6138577,33.8932031 L22.2458457,33.645173 L51.0235675,14.6825708 Z M45.5640773,11.0683765 L45.9188131,11.3251548 L17.1388001,30.2892667 L16.767843,30.0431772 L45.5640773,11.0683765 Z M40.0811804,7.46960572 L40.4408105,7.72315898 L11.6727886,26.6793696 L11.2898404,26.4411814 L40.0811804,7.46960572 Z M34.5977918,3.87115897 L34.9628078,4.12116319 L6.19378637,23.0780324 L5.81183776,22.8391856 L34.5977918,3.87115897 Z M29.0282562,0.234587357 L29.4127262,0.471772717 L0.631454506,19.436714 L0.26175613,19.1897952 L29.0282562,0.234587357 Z"/>
+            </g>
+          </g>
+        </g>
+        <g transform="translate(395.544 41.04)">
+          <g transform="translate(.42 29.38)">
+            <polygon fill="url(#hero-globe-ac)" points="0 43.398 0 32.597 99.489 32.597 99.489 43.398 49.744 75.996"/>
+            <polygon fill="url(#hero-globe-ad)" points="0 43.398 0 32.597 49.744 44.183 49.744 75.996"/>
+            <polygon fill="url(#hero-globe-ae)" points="0 32.597 49.744 0 99.489 32.597 49.744 65.195"/>
+          </g>
+          <g transform="translate(4.978 44.883)">
+            <polygon fill="#06004F" points="0 13.544 0 .15 89.46 .15 89.46 13.544 44.73 42.835"/>
+            <polygon fill="#00EBFF" points="62.216 22.118 71.975 15.624 71.975 22.605 62.216 29.1"/>
+          </g>
+          <g transform="translate(.42 .195)">
+            <polygon fill="url(#hero-globe-ac)" points="0 43.398 0 32.597 99.489 32.597 99.489 43.398 49.744 75.996"/>
+            <polygon fill="url(#hero-globe-ad)" points="0 43.398 0 32.597 49.744 44.183 49.744 75.996"/>
+            <polygon fill="url(#hero-globe-af)" points="0 32.597 49.744 0 99.489 32.597 49.744 65.195"/>
+            <g transform="translate(21.202 13.543)">
+              <path fill="url(#hero-globe-ag)" d="M56.3900372,18.0627379 L56.7560414,18.312091 L27.9717023,37.2808622 L27.6050713,37.0301134 L56.3900372,18.0627379 Z M50.9047905,14.4655154 L51.2780388,14.7100952 L22.4950807,33.6761477 L22.1270687,33.4281176 L50.9047905,14.4655154 Z M45.4453003,10.8513212 L45.8000361,11.1080994 L17.0200231,30.0722114 L16.649066,29.8261219 L45.4453003,10.8513212 Z M39.9624034,7.25255036 L40.3220335,7.50610363 L11.5540116,26.4623142 L11.1710634,26.2241261 L39.9624034,7.25255036 Z M34.4790148,3.65410361 L34.8440308,3.90410783 L6.07500936,22.8609771 L5.69306075,22.6221303 L34.4790148,3.65410361 Z M28.9094792,0.0175320005 L29.2939492,0.254717361 L0.512677498,19.2196587 L0.142979122,18.9727398 L28.9094792,0.0175320005 Z" transform="translate(.408 .41)"/>
+              <path fill="url(#hero-globe-ah)" d="M56.5088142,18.2797932 L56.8748184,18.5291464 L28.0904793,37.4979176 L27.7238483,37.2471688 L56.5088142,18.2797932 Z M51.0235675,14.6825708 L51.3968158,14.9271506 L22.6138577,33.8932031 L22.2458457,33.645173 L51.0235675,14.6825708 Z M45.5640773,11.0683765 L45.9188131,11.3251548 L17.1388001,30.2892667 L16.767843,30.0431772 L45.5640773,11.0683765 Z M40.0811804,7.46960572 L40.4408105,7.72315898 L11.6727886,26.6793696 L11.2898404,26.4411814 L40.0811804,7.46960572 Z M34.5977918,3.87115897 L34.9628078,4.12116319 L6.19378637,23.0780324 L5.81183776,22.8391856 L34.5977918,3.87115897 Z M29.0282562,0.234587357 L29.4127262,0.471772717 L0.631454506,19.436714 L0.26175613,19.1897952 L29.0282562,0.234587357 Z"/>
+            </g>
+          </g>
+        </g>
+        <g transform="translate(0 192.432)">
+          <g transform="translate(0 31.806)">
+            <polygon fill="url(#hero-globe-ai)" points="0 48.048 0 36.089 111.246 36.089 111.246 48.048 55.623 84.138"/>
+            <polygon fill="url(#hero-globe-aj)" points="0 48.048 0 36.089 55.623 48.917 55.623 84.138"/>
+            <polygon fill="url(#hero-globe-ak)" points="0 36.09 55.623 0 111.246 36.09 55.623 72.18"/>
+          </g>
+          <g transform="translate(5.471 49.507)">
+            <polygon fill="#06004F" points="0 14.985 0 .166 100.304 .166 100.304 14.985 50.152 47.392"/>
+            <polygon fill="#00EBFF" points="69.757 24.471 80.699 17.286 80.699 25.01 69.757 32.196"/>
+          </g>
+          <polygon fill="url(#hero-globe-ai)" points="0 48.048 0 36.089 111.246 36.089 111.246 48.048 55.623 84.138"/>
+          <polygon fill="url(#hero-globe-aj)" points="0 48.048 0 36.089 55.623 48.917 55.623 84.138"/>
+          <polygon fill="url(#hero-globe-al)" points="0 36.09 55.623 0 111.246 36.09 55.623 72.18"/>
+          <g transform="translate(23.708 14.994)">
+            <path fill="url(#hero-globe-am)" d="M63.0543144,19.9980312 L63.4635736,20.2741008 L31.277449,41.2752403 L30.8674889,40.9976256 L63.0543144,19.9980312 Z M56.9208112,16.0153921 L57.3381706,16.2861768 L25.1535903,37.2843064 L24.7420859,37.0097017 L56.9208112,16.0153921 Z M50.8161085,12.0139627 L51.2127677,12.2982529 L19.0314803,33.294234 L18.6166829,33.0217778 L50.8161085,12.0139627 Z M44.6852329,8.02960933 L45.0873647,8.31032902 L12.9194857,29.2975622 L12.49128,29.0338539 L44.6852329,8.02960933 Z M38.5538074,4.04561471 L38.9619617,4.3224051 L6.79296501,25.3103675 L6.36587702,25.0459299 L38.5538074,4.04561471 Z M32.326054,0.0194104292 L32.7559614,0.282008506 L0.573266657,21.2789078 L0.159876655,21.0055333 L32.326054,0.0194104292 Z" transform="translate(.456 .454)"/>
+            <path fill="url(#hero-globe-an)" d="M63.1871287,20.2383425 L63.5963879,20.514412 L31.4102633,41.5155516 L31.0003031,41.2379369 L63.1871287,20.2383425 Z M57.0536255,16.2557034 L57.4709849,16.5264881 L25.2864045,37.5246177 L24.8749002,37.250013 L57.0536255,16.2557034 Z M50.9489228,12.254274 L51.3455819,12.5385642 L19.1642946,33.5345453 L18.7494972,33.2620891 L50.9489228,12.254274 Z M44.8180472,8.26992062 L45.220179,8.5506403 L13.0523,29.5378734 L12.6240943,29.2741651 L44.8180472,8.26992062 Z M38.6866217,4.285926 L39.094776,4.56271639 L6.9257793,25.5506788 L6.49869131,25.2862412 L38.6866217,4.285926 Z M32.4588683,0.259721717 L32.8887757,0.522319794 L0.706080948,21.5192191 L0.292690946,21.2458446 L32.4588683,0.259721717 Z"/>
+          </g>
+        </g>
+        <g transform="translate(70.425 239.465)">
+          <g transform="translate(0 31.806)">
+            <polygon fill="url(#hero-globe-ai)" points="0 48.048 0 36.089 111.246 36.089 111.246 48.048 55.623 84.138"/>
+            <polygon fill="url(#hero-globe-aj)" points="0 48.048 0 36.089 55.623 48.917 55.623 84.138"/>
+            <polygon fill="url(#hero-globe-ak)" points="0 36.09 55.623 0 111.246 36.09 55.623 72.18"/>
+          </g>
+          <g transform="translate(5.471 49.507)">
+            <polygon fill="#06004F" points="0 14.985 0 .166 100.304 .166 100.304 14.985 50.152 47.392"/>
+            <polygon fill="#00EBFF" points="69.757 24.471 80.699 17.286 80.699 25.01 69.757 32.196"/>
+          </g>
+          <polygon fill="url(#hero-globe-ai)" points="0 48.048 0 36.089 111.246 36.089 111.246 48.048 55.623 84.138"/>
+          <polygon fill="url(#hero-globe-aj)" points="0 48.048 0 36.089 55.623 48.917 55.623 84.138"/>
+          <polygon fill="url(#hero-globe-al)" points="0 36.09 55.623 0 111.246 36.09 55.623 72.18"/>
+          <g transform="translate(23.708 14.994)">
+            <path fill="url(#hero-globe-am)" d="M63.0543144,19.9980312 L63.4635736,20.2741008 L31.277449,41.2752403 L30.8674889,40.9976256 L63.0543144,19.9980312 Z M56.9208112,16.0153921 L57.3381706,16.2861768 L25.1535903,37.2843064 L24.7420859,37.0097017 L56.9208112,16.0153921 Z M50.8161085,12.0139627 L51.2127677,12.2982529 L19.0314803,33.294234 L18.6166829,33.0217778 L50.8161085,12.0139627 Z M44.6852329,8.02960933 L45.0873647,8.31032902 L12.9194857,29.2975622 L12.49128,29.0338539 L44.6852329,8.02960933 Z M38.5538074,4.04561471 L38.9619617,4.3224051 L6.79296501,25.3103675 L6.36587702,25.0459299 L38.5538074,4.04561471 Z M32.326054,0.0194104292 L32.7559614,0.282008506 L0.573266657,21.2789078 L0.159876655,21.0055333 L32.326054,0.0194104292 Z" transform="translate(.456 .454)"/>
+            <path fill="url(#hero-globe-an)" d="M63.1871287,20.2383425 L63.5963879,20.514412 L31.4102633,41.5155516 L31.0003031,41.2379369 L63.1871287,20.2383425 Z M57.0536255,16.2557034 L57.4709849,16.5264881 L25.2864045,37.5246177 L24.8749002,37.250013 L57.0536255,16.2557034 Z M50.9489228,12.254274 L51.3455819,12.5385642 L19.1642946,33.5345453 L18.7494972,33.2620891 L50.9489228,12.254274 Z M44.8180472,8.26992062 L45.220179,8.5506403 L13.0523,29.5378734 L12.6240943,29.2741651 L44.8180472,8.26992062 Z M38.6866217,4.285926 L39.094776,4.56271639 L6.9257793,25.5506788 L6.49869131,25.2862412 L38.6866217,4.285926 Z M32.4588683,0.259721717 L32.8887757,0.522319794 L0.706080948,21.5192191 L0.292690946,21.2458446 L32.4588683,0.259721717 Z"/>
+          </g>
+        </g>
+      </g>
+      <polyline stroke="#FFF" stroke-linecap="square" stroke-width="2" points="349.519 169.632 324.894 154.715 357.722 132.413" filter="url(#hero-globe-ao)"/>
+      <g transform="translate(304.405 268.584)">
+        <g transform="translate(52.134 66.174)">
+          <polygon fill="url(#hero-globe-ap)" points="0 31.344 48.031 0 96.061 31.344 48.031 62.687"/>
+          <path stroke="#00EBFF" stroke-width="1.08" d="M0.988102427,31.3435133 L48.0306868,0.644808636 L95.0732711,31.3435133 L48.0306868,62.042218 L0.988102427,31.3435133 Z"/>
+        </g>
+        <g transform="translate(0 50.78)">
+          <polygon fill="#403FE6" points=".07 71.622 .07 64.331 199.526 64.331 199.526 71.622 99.798 135.882"/>
+          <polygon fill="url(#hero-globe-aq)" points=".07 64.32 99.798 .06 199.526 64.32 99.798 128.58"/>
+        </g>
+        <g transform="translate(111.147)">
+          <polygon fill="url(#hero-globe-ar)" points="0 97.684 0 91.665 29.772 91.665 30.187 97.684 15.094 107.613" opacity=".6"/>
+          <polygon fill="url(#hero-globe-as)" points="0 98.004 0 9.929 15.094 2.204 30.187 9.929 30.187 98.004 15.094 107.934"/>
+          <polygon fill="url(#hero-globe-at)" points="0 98.004 0 10.221 15.454 19.276 15.094 107.934"/>
+          <line x1="15.094" x2="15.094" y1="70.188" y2="107.613" fill="url(#hero-globe-au)"/>
+          <polygon fill="url(#hero-globe-av)" points="0 9.929 15.094 0 30.187 9.929 15.094 19.858"/>
+        </g>
+        <g transform="translate(147.935 38.198)">
+          <polygon fill="url(#hero-globe-aw)" points="0 75.146 0 69.166 29.772 69.166 30.187 75.146 15.094 85.011" opacity=".6"/>
+          <polygon fill="url(#hero-globe-ax)" points="0 75.465 0 9.865 15.094 2.19 30.187 9.865 30.187 75.465 15.094 85.329"/>
+          <polygon fill="url(#hero-globe-ay)" points="0 75.465 0 9.653 15.454 18.65 15.094 85.329"/>
+          <line x1="15.094" x2="15.094" y1="47.829" y2="85.011" fill="url(#hero-globe-az)"/>
+          <polygon fill="url(#hero-globe-aA)" points="0 9.865 15.094 0 30.187 9.865 15.094 19.729"/>
+        </g>
+        <g transform="translate(74.359 24.166)">
+          <polygon fill="url(#hero-globe-aB)" points="0 89.085 0 83.051 29.772 83.051 30.187 89.085 15.094 99.037" opacity=".6"/>
+          <polygon fill="url(#hero-globe-aC)" points="0 89.406 0 9.295 15.094 1.552 30.187 9.295 30.187 89.406 15.094 99.358"/>
+          <polygon fill="url(#hero-globe-aD)" points="0 89.406 0 9.633 15.454 18.709 15.094 99.358"/>
+          <line x1="15.094" x2="15.094" y1="61.526" y2="99.037" fill="url(#hero-globe-aE)"/>
+          <polygon fill="url(#hero-globe-aF)" points="0 9.952 15.094 0 30.187 9.952 15.094 19.904"/>
+        </g>
+        <g transform="translate(54.008 71.719)">
+          <polygon fill="url(#hero-globe-aG)" points="0 67.3 0 61.291 29.772 61.291 30.187 67.3 15.094 77.212" opacity=".6"/>
+          <polygon fill="url(#hero-globe-aH)" points="0 67.62 0 10.239 15.094 2.527 30.187 10.239 30.187 67.62 15.094 77.532"/>
+          <polygon fill="url(#hero-globe-aI)" points="0 67.62 0 9.852 15.454 18.892 15.094 77.532"/>
+          <line x1="15.094" x2="15.094" y1="39.851" y2="77.212" fill="url(#hero-globe-aJ)"/>
+          <polygon fill="url(#hero-globe-aK)" points="0 9.912 15.094 0 30.187 9.912 15.094 19.824"/>
+        </g>
+      </g>
+      <g transform="translate(0 .456)">
+        <g transform="translate(43.747 31.008)">
+          <polygon fill="url(#hero-globe-aL)" points="0 26.42 40.328 0 80.655 26.42 40.328 52.84"/>
+          <path stroke="#00EBFF" stroke-width="1.08" d="M0.985400173,26.4198052 L40.3276521,0.645564005 L79.669904,26.4198052 L40.3276521,52.1940464 L0.985400173,26.4198052 Z"/>
+        </g>
+        <g transform="translate(0 18.24)">
+          <polygon fill="#403FE6" points=".059 59.851 .059 53.758 166.727 53.758 166.727 59.851 83.393 113.549"/>
+          <polygon fill="url(#hero-globe-aM)" points=".059 53.749 83.393 .05 166.727 53.749 83.393 107.447"/>
+        </g>
+        <ellipse cx="71.089" cy="70.224" fill="url(#hero-globe-aN)" rx="25.519" ry="15.504"/>
+        <path fill="url(#hero-globe-aO)" fill-rule="nonzero" d="M40.1012658,37.392 L40.1012658,71.2828073 C40.1012658,76.8348161 44.3357049,82.4002842 52.7723753,86.64 L52.8607595,50.6831725 C52.8607595,50.6831725 40.0771951,42.9305493 40.1012658,37.392 Z"/>
+        <path fill="url(#hero-globe-aP)" fill-rule="nonzero" d="M59.2551506,35.2474095 C59.2652226,34.9193646 59.30441,34.5926806 59.372305,34.2707557 C59.4461188,33.9438157 59.5439823,33.6220778 59.6651911,33.3078575 C61.4517958,28.8372588 67.3900601,26.7807835 71.9517599,26.0104649 C77.1981223,25.0817685 82.6151363,25.5218514 87.6138403,27.2828661 C88.5156261,27.6121588 89.3894765,28.0053272 90.2278481,28.4589774 L90.1692709,65.8194265 C89.3260409,65.3699468 88.4500877,64.9769332 87.5479409,64.6433152 C82.6422148,62.9114447 77.3292879,62.4575433 72.1714245,63.329647 C67.778134,64.0174314 62.0834961,66.544 59.2551506,69.4731992 C59.0464912,69.7830787 58.486045,66.1642751 58.3291139,66.5 C58.2705367,66.6513126 58.4096576,67.041083 58.3291139,67.1992734 L59.2551506,35.2474095 Z"/>
+        <polygon fill="url(#hero-globe-aQ)" fill-rule="nonzero" points="51.038 73.872 65.62 65.493 65.62 42.864 51.038 51.25"/>
+        <polygon fill="url(#hero-globe-aR)" fill-rule="nonzero" points="90.228 70.224 104.81 61.567 104.81 20.976 90.228 29.626"/>
+        <path fill="url(#hero-globe-aS)" fill-rule="nonzero" d="M50.1218709,21.0333355 C35.88583,31.1234141 35.1502078,44.0953658 50.2970191,52.896 L65.3037118,44.1235504 C58.4939521,40.1706634 58.4589225,33.7586721 65.2266466,29.8057851 C71.9943708,25.8528982 82.9936741,25.8528982 89.8104398,29.8057851 L104.810127,21.0333355 C89.6633153,12.2327013 65.3037118,10.2738732 50.1218709,21.0333355 Z"/>
+        <polygon fill="#9D9DC2" fill-rule="nonzero" points="101.165 31.008 101.165 64.767 90.228 71.136 90.228 37.377"/>
+        <path fill="url(#hero-globe-aT)" fill-rule="nonzero" d="M104.645758,29.184 L90.2278481,37.7395572 C95.4670514,40.8275357 96.6926747,45.3047606 93.3659827,49.2180339 L111.622384,54.72 C119.036732,46.0544034 116.302649,36.0545801 104.645758,29.184 Z"/>
+        <path fill="#FFF" fill-rule="nonzero" d="M115.619732,45.0486501 C115.612108,45.093052 115.602465,45.1369223 115.590844,45.180065 C115.590844,45.4774778 115.515738,45.7818072 115.46374,46.0792199 L115.46374,46.1829686 C115.411743,46.4942145 115.342414,46.8054605 115.273085,47.123623 C115.255034,47.1848901 115.239607,47.2472204 115.226865,47.3103705 C115.145981,47.6146999 115.065097,47.9259458 114.96688,48.2371918 C114.953943,48.2821835 114.938502,48.3260868 114.92066,48.3686067 C114.816666,48.7006024 114.701117,49.032598 114.574014,49.3645937 C114.574014,49.3645937 114.574014,49.3645937 114.574014,49.3645937 C114.439206,49.7058115 114.29477,50.0378072 114.140705,50.3605807 C114.11529,50.4272777 114.086344,50.491964 114.054043,50.5542449 C114.013601,50.6441603 113.961604,50.7409924 113.915384,50.8378245 C113.869165,50.9346566 113.805613,51.0522384 113.747838,51.1629036 L113.591847,51.4533998 L113.412746,51.7784789 L113.245201,52.0620585 L113.054545,52.380221 C112.990993,52.4770531 112.933218,52.5738852 112.869666,52.6638007 L112.690566,52.9473803 C112.517242,53.2032936 112.338141,53.4661235 112.147485,53.7220368 L112.101266,82.08 C112.291922,81.8240867 112.471022,81.5612568 112.644346,81.3053434 C112.664111,81.2717668 112.685324,81.2394457 112.707898,81.2085114 L112.823447,81.0217638 C112.886999,80.9318483 112.944773,80.8350163 113.002548,80.7381842 C113.060322,80.6413521 113.135429,80.5237703 113.198981,80.4200217 L113.366527,80.1295255 C113.430079,80.0257768 113.487853,79.9151116 113.545628,79.8113629 L113.701619,79.5208667 L113.869165,79.1957876 L114.007824,78.912208 C114.025382,78.8814727 114.040839,78.8490901 114.054043,78.8153759 C114.070941,78.7853117 114.084534,78.7527665 114.094485,78.7185439 C114.250476,78.3934648 114.394913,78.0268862 114.527794,77.7294735 C114.654898,77.3974778 114.770447,77.0378158 114.874441,76.740403 L114.909105,76.643571 C114.907209,76.6275122 114.907209,76.6112137 114.909105,76.5951549 C115.001545,76.2908256 115.088206,75.9795796 115.163313,75.6752503 C115.181364,75.6139832 115.196791,75.5516529 115.209533,75.4885027 C115.28464,75.1772568 115.348192,74.8590943 115.400189,74.5478483 L115.400189,74.5478483 C115.400189,74.5478483 115.400189,74.4925157 115.400189,74.471766 C115.446408,74.1674366 115.48685,73.8700238 115.515738,73.5726111 L115.515738,73.4342795 C115.515738,73.1299502 115.561957,72.8187042 115.567735,72.5074583 C115.567735,72.5074583 115.567735,72.4452091 115.567735,72.4106262 C115.567735,72.3760433 115.637064,72.1962124 115.637064,72.0855471 L115.746835,43.776 L115.746835,43.776 C115.746835,43.9143315 115.677506,44.0526631 115.671729,44.1909946 C115.700616,44.4261582 115.648619,44.7374041 115.619732,45.0486501 Z"/>
+        <polygon fill="url(#hero-globe-aU)" fill-rule="nonzero" points="92.051 83.904 112.042 82.441 112.101 53.1 92.11 47.424"/>
+        <path fill="url(#hero-globe-aV)" fill-rule="nonzero" d="M109.136619,63.7698167 C101.265209,70.076749 89.5644627,73.8088924 79.5107427,73.9064223 L79.2911392,73.9064223 L79.2911392,92.112 L80.5675842,92.112 C90.8614955,91.7803984 102.527928,89.2966375 110.330713,82.4565418 C110.935351,81.9305902 111.508147,81.3726975 112.046365,80.7855299 L112.101266,61.104 C111.197257,62.0730586 110.205237,62.9650857 109.136619,63.7698167 Z"/>
+        <path fill="url(#hero-globe-aW)" fill-rule="nonzero" d="M79.0126582,61.3853848 L79.0126582,75.784 L79.2403872,75.784 C89.3225704,75.784 101.157577,71.442709 109.031479,64.5038788 C110.107234,63.5991804 111.104823,62.5968029 112.012658,61.508388 L93.2974763,55.72 C90.4474136,59.1423844 84.8991074,61.1900267 79.0126582,61.3853848 Z"/>
+        <path fill="url(#hero-globe-aX)" fill-rule="nonzero" d="M77.2574184,79.0648 C68.8803169,79.2471946 60.5946513,77.2199617 53.1683976,73.171 C52.8078635,72.9759333 52.4473294,72.7599667 52.0867953,72.544 L52,86.1011333 C59.3442136,90.5249667 68.0704748,92.3711333 76.4962908,92.608 C77.3375371,92.608 77.9985163,92.608 79,92.608 L79,79.0648 C77.9985163,79.0717667 77.8115727,79.0787333 77.2574184,79.0648 Z"/>
+      </g>
+    </g>
+    <g transform="translate(127 33)">
+      <g fill-rule="nonzero" transform="translate(39.188 188.895)">
+        <path fill="#AFAFDC" d="M0.135782574,56.3119384 C-0.0452608579,52.3412712 -0.0452608579,55.3405515 0.135782574,65.3097793 C0.399051172,79.8067683 9.01643751,94.2512781 25.9879416,105.312739 C60.4657835,127.784247 116.36541,127.784247 150.843252,105.312739 C167.877755,94.2102176 176.496003,79.6994846 176.697997,65.1483372 C176.835892,55.2147494 176.835892,53.5082018 176.697997,60.0286944 L0.135782574,56.3119384 Z"/>
+        <path fill="url(#hero-globe-aY)" d="M25.8382505,98.3079443 C60.2892511,120.797247 116.145359,120.797247 150.59636,98.3079443 C185.047361,75.8186421 185.047361,39.3562789 150.59636,16.8669767 C116.145359,-5.62232555 60.2892511,-5.62232555 25.8382505,16.8669767 C-8.61275016,39.3562789 -8.61275016,75.8186421 25.8382505,98.3079443 Z"/>
+        <path fill="#AFAFDC" d="M38.341842,88.0879681 C65.988591,106.05067 110.812827,106.05067 138.459576,88.0879681 C166.106325,70.1252667 166.106325,41.0019734 138.459576,23.0392719 C110.812827,5.07657047 65.988591,5.07657047 38.341842,23.0392719 C10.695093,41.0019734 10.695093,70.1252667 38.341842,88.0879681 Z"/>
+        <path fill="url(#hero-globe-aZ)" d="M38.341842,83.3043452 C65.988591,101.267047 110.812827,101.267047 138.459576,83.3043452 C166.106325,65.3416437 166.106325,36.2183505 138.459576,18.255649 C110.812827,0.292947552 65.988591,0.292947552 38.341842,18.255649 C10.695093,36.2183505 10.695093,65.3416437 38.341842,83.3043452 Z"/>
+      </g>
+      <g transform="translate(37.365 71.634)">
+        <g transform="translate(0 115.436)">
+          <path fill="#06004F" d="M0.137182394,57.5726534 C-0.0457274647,53.5130907 -0.0457274647,56.5795191 0.137182394,66.7719386 C0.403165101,81.593487 9.10939048,96.3613814 26.2558585,107.670487 C61.0891421,130.645088 117.565053,130.645088 152.398337,107.670487 C169.608453,96.3194016 178.31555,81.4838014 178.519626,66.6068821 C178.658943,56.4509005 178.658943,54.7061467 178.519626,61.3726204 L0.137182394,57.5726534 Z"/>
+          <path fill="url(#hero-globe-ba)" d="M26.1046242,100.508868 C60.9107898,123.501662 117.342734,123.501662 152.1489,100.508868 C186.955065,77.5160744 186.955065,40.2373896 152.1489,17.2445955 C117.342734,-5.74819851 60.9107898,-5.74819851 26.1046242,17.2445955 C-8.7015414,40.2373896 -8.7015414,77.5160744 26.1046242,100.508868 Z"/>
+          <path fill="#001C96" d="M38.7371187,90.0600868 C66.6688857,108.424938 111.955228,108.424938 139.886995,90.0600868 C167.818762,71.6952353 167.818762,41.919928 139.886995,23.5550765 C111.955228,5.19022503 66.6688857,5.19022503 38.7371187,23.5550765 C10.8053517,41.919928 10.8053517,71.6952353 38.7371187,90.0600868 Z"/>
+          <path fill="url(#hero-globe-bb)" d="M38.7371187,85.1693678 C66.6688857,103.534219 111.955228,103.534219 139.886995,85.1693678 C167.818762,66.8045164 167.818762,37.029209 139.886995,18.6643576 C111.955228,0.29950608 66.6688857,0.29950608 38.7371187,18.6643576 C10.8053517,37.029209 10.8053517,66.8045164 38.7371187,85.1693678 Z"/>
+          <path fill="#00EBFF" d="M48.9569248,78.5188668 C71.2444488,93.210748 107.379665,93.210748 129.667189,78.5188668 C151.954713,63.8269856 151.954713,40.0067398 129.667189,25.3148586 C107.379665,10.6229774 71.2444488,10.6229774 48.9569248,25.3148586 C26.6694009,40.0067398 26.6694009,63.8269856 48.9569248,78.5188668 Z"/>
+        </g>
+        <g transform="translate(18.227 .456)">
+          <g transform="translate(12.62)">
+            <path fill="url(#hero-globe-bc)" d="M17.6075726,193.622407 C40.0804529,208.446461 76.5161909,208.446461 98.9890712,193.622407 C110.988501,185.707081 116.580817,175.165805 115.766017,164.802839 C115.291897,158.772774 115.291897,120.085311 115.766017,48.7404475 L0.839921976,48.7404475 C1.33947241,120.035042 1.33947241,158.684213 0.839921976,164.687962 C-0.0254163968,175.087861 5.56380049,185.677831 17.6075726,193.622407 Z" opacity=".748"/>
+            <path fill="url(#hero-globe-bd)" d="M31.4853694,165.523546 C46.6150157,182.459608 71.1450192,182.459608 86.2746655,165.523546 C94.3531643,156.480509 98.1181358,144.437399 97.56958,132.598003 C97.2503831,125.708825 97.2503831,81.5094905 97.56958,0 L20.1967129,0 C20.5330303,81.4520597 20.5330303,125.607646 20.1967129,132.46676 C19.6141323,144.348351 23.3770178,156.447092 31.4853694,165.523546 Z" filter="url(#hero-globe-be)" opacity=".513"/>
+            <path fill="#00EBFF" d="M30.9301291,186.362086 C45.5419697,195.929932 69.2324441,195.929932 83.8442847,186.362086 C98.4561252,176.794241 98.4561252,161.281699 83.8442847,151.713854 C69.2324441,142.146009 45.5419697,142.146009 30.9301291,151.713854 C16.3182885,161.281699 16.3182885,176.794241 30.9301291,186.362086 Z" opacity=".3"/>
+          </g>
+          <path fill="url(#hero-globe-bf)" fill-rule="nonzero" d="M35.2090433,170.315552 C15.9788469,157.800887 15.9788469,137.399211 35.2090433,124.884545 C54.3170531,112.449397 85.2487488,112.449397 104.356759,124.884545 C123.586955,137.399211 123.586955,157.800887 104.356759,170.315552 C85.2487488,182.750701 54.3170531,182.750701 35.2090433,170.315552 Z M35.6848332,169.574997 C54.5032805,181.821704 85.0625213,181.821704 103.880969,169.574997 C122.57723,157.407808 122.57723,137.79229 103.880969,125.6251 C85.0625213,113.378393 54.5032805,113.378393 35.6848332,125.6251 C16.9885723,137.79229 16.9885723,157.407808 35.6848332,169.574997 Z"/>
+          <path fill="url(#hero-globe-bg)" fill-rule="nonzero" d="M29.5132744,152.401818 C6.49441018,137.472189 6.49441018,113.131628 29.5132744,98.2019998 C52.384642,83.368035 89.4082738,83.368035 112.279641,98.2019998 C135.298506,113.131628 135.298506,137.472189 112.279641,152.401818 C89.4082738,167.235783 52.384642,167.235783 29.5132744,152.401818 Z M30.07959,151.5155 C52.6060572,166.125769 89.1868585,166.125769 111.713326,151.5155 C134.092296,137.000896 134.092296,113.602922 111.713326,99.088317 C89.1868585,84.4780485 52.6060572,84.4780485 30.07959,99.088317 C7.70061943,113.602922 7.70061943,137.000896 30.07959,151.5155 Z"/>
+          <path fill="url(#hero-globe-bh)" fill-rule="nonzero" d="M20.7599065,128.74926 C-6.91996883,110.745759 -6.91996883,81.3957092 20.7599065,63.3922075 C48.2638165,45.5031569 92.7867279,45.5031569 120.290638,63.3922075 C147.970513,81.3957092 147.970513,110.745759 120.290638,128.74926 C92.7867279,146.638311 48.2638165,146.638311 20.7599065,128.74926 Z M21.4424749,127.684877 C48.5308979,145.303687 92.5196465,145.303687 119.608069,127.684877 C146.520527,110.180518 146.520527,81.9609501 119.608069,64.456591 C92.5196465,46.8377809 48.5308979,46.8377809 21.4424749,64.456591 C-5.4699827,81.9609501 -5.4699827,110.180518 21.4424749,127.684877 Z"/>
+        </g>
+      </g>
+      <g transform="translate(39.188 76.653)">
+        <g transform="translate(30.684)">
+          <path fill="url(#hero-globe-bi)" fill-rule="nonzero" d="M16.9893861,157.500883 C39.2492707,172.045811 75.3396745,172.045811 97.5995591,157.500883 C109.48526,149.734595 115.024572,139.391803 114.217495,129.223964 C113.747868,123.307441 113.747868,85.3484329 114.217495,15.3469388 L0.380657477,15.3469388 C0.875473226,85.2991106 0.875473226,123.220548 0.380657477,129.111251 C-0.476479308,139.315328 5.05976356,149.705896 16.9893861,157.500883 Z" opacity=".168"/>
+          <path fill="#33BCCB" fill-opacity=".161" fill-rule="nonzero" d="M31.8742826,179.756841 C45.4212139,188.543638 67.3851292,188.543638 80.9320605,179.756841 C94.4789918,170.970045 94.4789918,156.723833 80.9320605,147.937036 C67.3851292,139.15024 45.4212139,139.15024 31.8742826,147.937036 C18.3273512,156.723833 18.3273512,170.970045 31.8742826,179.756841 Z" opacity=".3"/>
+          <path fill="url(#hero-globe-bj)" d="M31.0791065,161.845245 C46.0135316,178.40495 70.2270189,178.40495 85.1614441,161.845245 C93.1357041,153.003164 96.8520953,141.227679 96.3106177,129.651381 C95.9955395,122.915295 95.9955395,79.6981685 96.3106177,0 L19.9361101,0 C20.268088,79.6420139 20.268088,122.816365 19.9361101,129.523054 C19.3610467,141.14061 23.0753789,152.97049 31.0791065,161.845245 Z" filter="url(#hero-globe-bk)" opacity=".34"/>
+        </g>
+        <path fill="#33BCCB" fill-rule="nonzero" d="M47.115853,157.864872 C24.3940064,143.267013 24.3940064,119.467354 47.115853,104.869495 C69.6921062,90.3651733 106.238014,90.3651733 128.814267,104.869495 C151.536113,119.467354 151.536113,143.267013 128.814267,157.864872 C106.238014,172.369193 69.6921062,172.369193 47.115853,157.864872 Z M47.6748614,156.998251 C69.9106645,171.283847 106.019455,171.283847 128.255259,156.998251 C150.345468,142.806193 150.345468,119.928174 128.255259,105.736116 C106.019455,91.4505199 69.9106645,91.4505199 47.6748614,105.736116 C25.5846517,119.928174 25.5846517,142.806193 47.6748614,156.998251 Z" opacity="0"/>
+        <path fill="url(#hero-globe-bl)" fill-rule="nonzero" d="M25.7534769,116.762593 C-8.5844923,94.6651454 -8.5844923,58.6409771 25.7534769,36.5435296 C59.8731542,14.5865591 115.105569,14.5865591 149.225247,36.5435296 C183.563216,58.6409771 183.563216,94.6651454 149.225247,116.762593 C115.105569,138.719563 59.8731542,138.719563 25.7534769,116.762593 Z M26.9186188,116.043884 C60.5986346,137.742418 115.291436,137.742418 148.971452,116.043884 C182.432684,94.4863038 182.432684,59.732355 148.971452,38.1747746 C115.291436,16.4762413 60.5986346,16.4762413 26.9186188,38.1747746 C-6.54261289,59.732355 -6.54261289,94.4863038 26.9186188,116.043884 Z" opacity="0"/>
+      </g>
+    </g>
+    <g fill-rule="nonzero" transform="translate(115)">
+      <g opacity=".222" transform="rotate(-17.35 137.956 137.946)">
+        <use fill="url(#hero-globe-bm)" xlink:href="#hero-globe-bn"/>
+        <use fill="#000" filter="url(#hero-globe-bo)" xlink:href="#hero-globe-bn"/>
+      </g>
+      <path fill="url(#hero-globe-bp)" d="M190.571028,152.758571 C189.788235,152.082942 189.38901,153.119953 188.614045,152.570023 C187.839079,152.020093 186.58661,151.635142 186.054311,152.31077 C185.522011,152.986399 184.864465,152.954974 185.201066,151.784409 C185.537667,150.613843 183.862489,150.755254 183.29105,149.961783 C182.719611,149.168312 182.171656,149.121176 180.402543,148.736224 C178.63343,148.351273 178.155926,147.903473 177.373133,147.809199 C176.59034,147.714926 176.300706,149.553264 175.37701,150.016776 C174.453314,150.480289 176.300706,147.777775 175.893654,147.29855 C175.486601,146.819325 172.911211,147.047153 172.050139,146.261539 C171.189066,145.475924 170.484552,147.180708 169.059868,148.916916 C167.635184,150.653124 168.144,149.074039 169.568684,147.50281 C170.590492,146.502949 171.537619,145.428995 172.402396,144.289646 C173.02863,143.307628 171.924892,143.095512 170.782013,142.207768 C169.639135,141.320024 169.920941,139.599528 169.138147,138.538948 C168.355354,137.478369 167.963958,138.468243 167.392518,137.250541 C166.821079,136.032838 164.464872,135.349354 162.742726,134.304486 C161.020581,133.259619 160.394346,133.943104 159.400199,134.634444 C158.406051,135.325785 155.486232,134.713006 155.30619,134.045233 C155.126147,133.377461 155.024384,133.636714 153.599701,133.369605 C152.175017,133.102496 152.448994,133.369605 152.402027,132.049773 C152.355059,130.72994 150.946031,130.321421 149.685734,129.920757 C148.425437,129.520094 148.347157,129.512238 148.03404,128.349528 C147.720923,127.186819 147.462601,127.084689 144.902867,126.558327 C142.343133,126.031966 143.11027,124.256477 140.362666,123.942231 C137.615061,123.627985 138.98495,124.782839 137.748136,125.741288 C136.511323,126.699738 135.039671,125.379906 133.990728,124.303614 C132.941785,123.227322 132.918302,124.445024 130.859555,124.806407 C128.800809,125.16779 129.293969,125.097084 129.661881,123.730115 C130.029794,122.363146 128.534659,122.520269 127.156943,122.221735 C125.607672,122.001918 124.02957,122.305961 122.671537,123.085911 C121.888744,123.706547 122.961171,126.464054 122.765472,127.532489 C122.569774,128.600925 119.829998,127.061121 120.902424,125.670583 C121.974851,124.280045 121.646078,124.020793 121.215542,122.70096 C120.785005,121.381128 122.695021,121.286854 122.914203,120.257699 C123.133385,119.228544 121.254681,120.163425 120.307502,121.043314 C119.360322,121.923202 118.233099,121.781791 117.638176,122.096037 C116.777634,122.352865 115.870054,122.409289 114.984507,122.261016 C114.391355,122.232925 113.812831,122.451086 113.384878,122.864234 C112.956924,123.277383 112.717271,123.849093 112.722234,124.445024 C112.81617,125.804137 112.643955,126.57404 111.743743,126.597608 C110.746394,126.628762 109.9279,127.399708 109.833727,128.396665 C109.638029,129.543662 107.970679,126.621176 106.272018,125.851274 C104.573356,125.081372 103.313059,125.953404 101.950999,126.550471 C100.588938,127.147538 99.806145,126.958991 98.3344936,126.424773 C96.8628422,125.890555 95.6651685,123.9658 95.3442232,122.308153 C95.023278,120.650506 96.4401338,119.503509 96.3696824,118.144396 C96.299231,116.785283 97.0585405,116.007525 97.1524757,114.742685 C97.2464109,113.477846 96.9098098,113.878509 97.6221517,113.037902 C98.3344936,112.197294 95.5007819,112.008747 94.0682701,111.466673 C92.6357584,110.924599 89.9664332,111.608084 87.9781383,111.592371 C85.9898433,111.576659 86.0446388,111.65522 87.077926,110.743908 C88.1112131,109.832595 89.058393,107.130081 89.9664332,105.244606 C90.8744735,103.359131 91.4459126,101.913601 92.565307,99.7453047 C93.6847014,97.5770087 91.398945,99.1168131 90.5613561,99.4310589 C89.7237673,99.7453047 87.9389986,98.8104235 86.4282075,99.0932447 C84.9174165,99.3760659 84.3772891,103.052742 81.8958343,104.741813 C79.4143796,106.430884 79.8214321,104.592546 77.4808801,104.741813 C75.1403282,104.89108 74.4279863,102.848482 73.7860958,101.434376 C73.3609469,100.138134 73.1726615,98.7754637 73.2303125,97.4120297 C73.2303125,95.0551862 76.8624734,86.9240762 77.7000622,86.3662899 C78.5376511,85.8085037 79.6570455,85.6513808 82.396822,84.6222258 C85.1365986,83.5930708 85.2383617,84.1665694 87.3362478,84.6222258 C89.4341338,85.0778822 88.8470388,84.6222258 90.2952064,83.5459339 C91.743374,82.4696421 91.2267305,83.0195722 93.7394969,82.3910806 C96.2522634,81.762589 95.5007819,82.9410108 97.3873137,83.5930708 C99.2738456,84.2451308 99.461716,83.7580498 100.612422,84.6222258 C101.763128,85.4864017 100.612422,88.5974351 101.11341,89.4144742 C101.699296,90.7952775 102.768541,91.9130878 104.119336,92.5569321 C105.982384,93.3425466 106.170255,89.9251236 106.287674,88.919537 C106.349422,87.4457935 106.098615,85.9756912 105.551848,84.6065135 C105.003893,83.3102496 104.487249,82.2968069 104.831683,80.6313042 C105.176107,78.9658014 109.825899,76.0747401 113.262362,75.2184203 C116.698824,74.3621005 117.512929,72.8615768 117.004114,71.7931411 C116.495298,70.7247054 117.082393,68.9413605 117.082393,68.3914304 C117.082393,67.8415002 117.199812,67.503686 117.747767,67.7629388 C118.295723,68.0221916 119.133312,66.906619 120.542339,66.5216679 C121.951367,66.1367168 121.544315,64.6754738 122.734161,64.1648244 C123.924007,63.654175 125.082541,63.8270102 126.796858,63.7327364 C128.511175,63.6384627 124.886842,60.7631137 128.730357,59.7575271 C132.573873,58.7519406 134.076836,59.5846919 134.20991,58.4848316 C134.342985,57.3849713 134.710898,57.6206557 135.853776,57.5499504 C136.996655,57.4792451 135.853776,57.9820384 134.663931,59.0111933 C133.474085,60.0403483 135.070983,60.833819 136.902719,60.4252994 C138.482517,59.9997747 139.989366,59.3376557 141.372469,58.4612632 C142.327477,57.9113331 143.634742,58.5555369 143.56429,57.4792451 C143.493839,56.4029532 141.662103,56.5365077 140.746235,56.4500901 C139.830366,56.3636725 140.198279,56.1829812 139.337207,55.8530231 C138.476134,55.523065 138.695316,54.9888471 138.029942,54.5567592 C137.364567,54.1246712 138.029942,53.8654184 137.912523,53.18979 C137.795104,52.5141615 138.742284,52.8362634 139.478109,52.0663612 C140.213935,51.296459 137.662029,50.9429325 135.908572,51.1471923 C134.267643,51.3156676 132.660911,51.7287276 131.141361,52.3727509 C130.061106,52.9148249 129.442699,53.0955162 129.528807,52.7262774 C130.2859,51.9084405 131.323576,51.4087855 132.43297,51.3278836 C133.101676,51.5091411 133.816431,51.3474478 134.342985,50.8957956 C134.922252,50.4165708 134.491716,49.8666407 137.325428,49.937346 C140.15914,50.0080513 143.196378,50.7936658 145.035942,49.505258 C146.875506,48.2168502 147.16514,48.5468083 149.036016,48.1304326 C150.906892,47.7140569 150.601602,46.417793 150.429388,45.9621366 C150.257173,45.5064802 149.286509,45.0979607 148.949908,44.7601465 C148.613307,44.4223322 148.26105,44.5480305 147.666127,44.571599 C147.071204,44.5951674 147.900965,44.3987638 146.969441,43.5188756 C146.037917,42.6389873 144.010483,42.9610893 143.509495,42.6075628 C143.063605,42.2627103 142.472897,42.1708205 141.943908,42.3640223 C141.325502,42.513289 141.630791,41.8140921 142.061327,41.2563058 C142.491864,40.6985195 139.62684,39.5122417 138.076909,38.3652445 C136.526979,37.2182473 136.714849,38.3652445 136.581774,39.150859 C136.448699,39.9364735 134.859629,39.9364735 134.303846,40.2114386 C133.748062,40.4864036 133.067032,40.0150349 132.542561,39.5122417 C132.040974,39.0237442 131.922783,38.2607454 132.252927,37.6424792 C132.519077,36.8568647 131.650176,37.2575281 131.086565,37.6424792 C130.522954,38.0274303 129.434871,36.6604611 128.675562,36.1812362 C127.916252,35.7020114 124.612865,36.0398256 123.924007,36.008401 C123.235148,35.9769764 122.734161,36.2755099 122.663709,37.6110546 C122.593258,38.9465992 121.802637,38.3966691 121.3721,39.6065154 C120.941564,40.8163617 122.569774,40.8713547 122.687193,41.5941201 C122.804612,42.3168854 120.816317,43.4403141 118.867162,43.6052932 C116.918007,43.7702722 117.372027,47.5333656 117.301575,48.4918153 C117.269586,48.9848159 117.042046,49.4443811 116.669849,49.7677212 C116.297651,50.0910614 115.811852,50.251197 115.321108,50.212311 C114.342617,50.0709004 113.755522,47.2662567 113.91208,45.7343084 C114.068639,44.2023602 113.91208,43.5817247 112.73789,43.7231353 C111.798864,43.8349254 110.849778,43.624488 110.045081,43.1260683 C109.113557,42.6939803 108.831752,43.1260683 107.994163,41.9790712 C107.156574,40.832074 105.536192,41.2798743 104.510733,41.7748114 C103.485274,42.2697485 103.367855,42.0969133 103.727939,40.9891969 C104.088024,39.8814805 103.164328,40.3057123 103.727939,39.4179679 C104.291551,38.5302235 106.976532,37.5717739 108.596914,37.2182473 C109.744513,37.0248605 110.850982,36.6369978 111.86899,36.0712502 C113.035352,35.4506147 114.522659,36.0712502 115.172377,35.6627306 C115.822096,35.2542111 117.1685,34.3664667 117.732112,34.0915017 C118.295723,33.8165366 118.976753,34.2329123 119.736062,33.8793857 C120.495372,33.5258592 122.530634,33.6044207 123.055106,33.1409081 C123.579577,32.6773956 122.413215,32.1510339 122.875064,31.5696791 C123.336912,30.9883244 124.722456,31.8367881 125.497421,32.1117531 C126.272386,32.3867182 126.14714,31.5932476 126.569848,31.019749 C126.992556,30.4462504 127.039524,31.6246722 128.064983,32.2610199 C129.090442,32.8973676 125.794883,32.2060269 126.499397,33.0466344 C127.20391,33.8872419 129.810612,31.8682127 130.413363,32.4652797 C131.016114,33.0623467 125.192132,34.0915017 124.244952,34.4450282 C123.297772,34.7985547 124.010114,35.2306427 126.076688,35.1835058 C127.570725,35.0882074 129.061018,35.4205772 130.374223,36.1419555 C131.344887,36.6840295 135.172746,37.1396859 135.853776,36.4247767 C136.534807,35.7098675 132.894818,35.6941552 132.949613,35.301348 C133.004409,34.9085407 135.728529,35.6155938 136.378248,35.1363689 C137.027966,34.6571441 135.282337,34.6807125 134.460404,33.9500911 C133.638471,33.2194696 136.245173,33.4630101 137.748136,33.8793857 C139.251099,34.2957614 138.671832,33.7222629 138.94581,33.1959011 C139.219788,32.6695394 137.716824,32.6538271 135.767669,32.2610199 C133.818514,31.8682127 135.141435,31.7817951 135.376273,31.3418509 C135.611111,30.9019068 133.575848,30.8233454 132.182476,30.7055032 C130.789104,30.587661 130.663857,30.0927239 131.133533,29.4642323 C131.603209,28.8357407 129.301797,29.283541 128.45638,29.6213552 C127.610963,29.9591694 127.532684,30.0298747 126.108,29.6213552 C124.683316,29.2128357 122.648053,31.2632895 122.295796,30.6112295 C121.94354,29.9591694 121.035499,30.3284082 120.072664,30.6819348 C119.109828,31.0354613 120.252706,31.5225423 120.933736,32.1510339 C121.614766,32.7795255 119.06286,33.133052 118.687119,33.5572838 C118.311379,33.9815156 117.458134,33.5101469 118.123508,33.133052 C118.788883,32.755957 118.561872,32.103897 117.505101,32.0096233 C116.448331,31.9153495 115.344592,33.133052 114.82012,33.2508942 C114.295649,33.3687363 114.937539,32.8737992 114.82012,31.993911 C114.702701,31.1140227 112.988384,33.1959011 112.268214,33.8008243 C111.548044,34.4057475 109.990286,33.9108103 108.753472,34.2879053 C107.516659,34.6650002 105.622299,34.8928284 105.003893,34.5864388 C104.385486,34.2800491 105.003893,34.0050841 106.75735,33.5887084 C108.510806,33.1723327 106.624275,32.8659431 104.839506,33.5887084 C103.054737,34.3114737 103.140844,34.3743229 103.179984,35.1599374 C103.219124,35.9455519 102.06059,35.6941552 100.956851,35.1599374 C99.8531126,34.6257195 99.0859752,36.3147907 98.8198255,35.7020114 C98.5536757,35.0892321 98.1387953,35.3799094 98.1387953,35.3799094 C82.0289092,41.7748114 68.4787572,53.2762076 68.4787572,53.2762076 C65.5041427,55.633051 65.5041427,58.1548735 62.9992041,59.749671 C60.4942655,61.3444684 58.7094968,65.8303271 56.6507504,68.2264513 C54.5920041,70.6225755 53.3630186,76.4204105 54.1692957,78.4394397 C54.9755728,80.458469 53.2142879,85.6749492 53.6917918,87.0811991 C54.1692957,88.4874491 52.4549784,89.6658708 52.9089985,91.0092716 C53.5123825,92.4789431 53.6597102,94.0971736 53.3317069,95.6522532 C52.9951057,98.1033704 56.46288,98.7947112 57.1908778,97.7655562 C57.9188756,96.7364012 55.6252912,86.4998444 56.1889024,85.502114 C56.7525136,84.5043836 57.0969426,86.0284757 56.9716957,87.4661502 C56.8464488,88.9038248 58.451175,93.4996695 59.1635169,95.9429306 C59.8758588,98.3861917 58.8347437,101.167267 59.1635169,105.001066 C59.4922901,108.834864 71.0854589,112.762937 72.6980131,113.336435 C74.3105673,113.909934 74.4201583,111.144571 75.9622611,111.537378 C77.5043639,111.930186 80.2911081,115.991812 82.2246075,116.4239 C84.158107,116.855988 84.0876556,117.751589 85.551479,117.83015 C87.0153025,117.908712 87.8998589,121.027601 89.3480265,121.420409 C90.7961941,121.813216 90.1308198,121.711086 89.8881539,122.45742 C89.6362731,123.725402 90.3746106,124.980701 91.6024712,125.372049 C93.2150254,126.016253 92.3852645,127.728893 93.8960556,129.111574 C95.4068467,130.494256 96.541897,129.897189 98.2640422,130.72994 C99.9861875,131.562692 100.557627,133.243907 102.420675,131.303439 C104.283723,129.362971 103.853186,129.362971 105.778858,130.596386 C107.704529,131.829801 106.428576,136.260666 106.068491,138.916043 C105.708406,141.57142 101.630053,142.364891 100.839432,144.525331 C100.048811,146.685771 99.5869629,152.546455 98.4675685,153.701308 C97.3481741,154.856161 98.8511372,157.527251 99.0390076,161.840274 C99.226878,166.153298 105.410945,171.401203 108.753472,176.114889 C112.096,180.828576 122.060958,183.609652 123.548266,187.702703 C125.035573,191.795755 123.031622,204.11419 123.180353,205.591145 C123.329084,207.0681 122.929859,209.794183 123.462159,211.69537 C123.994458,213.596557 122.186205,218.200258 121.841776,218.380949 C121.497347,218.56164 121.583455,218.655914 121.497347,219.025153 C121.41124,219.394392 121.137262,219.323687 120.714554,219.52009 C120.291846,219.716494 121.395584,222.018344 121.559971,222.513281 C121.724357,223.008218 121.653906,223.165341 121.012015,223.778121 C120.570181,224.27377 120.454207,224.981314 120.714554,225.59289 C120.958436,226.281095 120.798276,227.048391 120.299674,227.580495 C119.579504,228.256123 119.51688,228.95532 120.581479,229.088875 C121.646078,229.222429 121.606938,228.044007 122.147066,226.849873 C122.687193,225.655739 122.882891,226.991284 122.54629,228.05972 C122.209689,229.128155 122.374076,230.4637 122.272313,231.437862 C122.17055,232.412024 121.387756,231.178609 121.019843,230.801514 C120.651931,230.424419 120.362297,231.587129 119.775202,232.042785 C119.188107,232.498442 117.826047,232.168483 117.826047,232.600571 C117.826047,233.032659 119.313354,233.103365 119.869137,232.961954 C120.424921,232.820543 120.597135,232.76555 120.99636,232.961954 C121.395584,233.158358 120.722382,233.354761 120.745866,233.708288 C120.76935,234.061814 120.824145,234.218937 120.119631,234.187513 C119.415117,234.156088 119.462085,234.82386 119.900449,235.106682 C120.338813,235.389503 120.260534,235.208812 120.745866,235.798022 C121.231198,236.387233 121.192058,236.74076 121.004188,237.125711 C120.816317,237.510662 121.849604,238.107729 122.421043,238.107729 C122.992483,238.107729 122.804612,238.626235 122.648053,239.011186 C122.491495,239.396137 121.959195,239.7968 125.364346,241.297324 C128.769497,242.797848 134.170771,242.30291 135.102295,241.776549 C136.033819,241.250187 131.916326,239.034754 130.80476,237.777771 C129.693193,236.520788 134.718726,235.185243 135.814637,233.92826 C136.910547,232.671277 134.131631,231.807101 135.95554,230.982206 C137.779448,230.15731 139.39983,228.680355 139.470281,227.242681 C139.540733,225.805006 141.184599,226.205669 142.515347,224.885837 C143.846096,223.566005 141.615135,223.157485 144.159213,223.157485 C146.703292,223.157485 151.642717,220.250712 152.605553,219.850048 C153.568389,219.449385 152.535102,218.380949 151.533126,216.581892 C150.531151,214.782835 151.032138,215.537025 153.881506,216.189085 C156.730874,216.841145 156.644766,215.741284 159.400199,213.211606 C162.155631,210.681927 161.255419,210.116285 163.157607,208.890726 C165.059794,207.665167 163.799497,209.181403 162.72707,210.831194 C161.654644,212.480984 168.879826,212.520265 170.98554,205.049071 C173.091254,197.577877 181.341895,196.407312 183.635479,190.499491 C185.929064,184.59167 201.107426,175.871349 202.954818,163.576482 C204.80221,151.281615 191.338165,153.434199 190.571028,152.758571 Z"/>
+      <path fill="#A8D3FF" d="M116.681618 36.6006161C116.681618 36.6006161 115.551927 36.3820022 115.695836 36.8192299 115.839746 37.2564576 116.516122 37.32022 116.861505 37.1471507 117.206889 36.9740814 117.624227 36.9649725 117.473122 36.7008141 117.322017 36.4366557 116.746378 36.6006161 116.681618 36.6006161zM120.135154 37.0105876C119.76898 36.8176572 119.060511 35.9996321 118.009748 36.740485 117.770939 36.9025466 117.165954 37.3964485 117.755018 37.342428 118.259978 37.2887557 118.767462 37.2604214 119.27544 37.2575386 119.808781 37.2421042 120.501329 37.2421042 120.135154 37.0105876z"/>
+      <path fill="#A8D3FF" d="M120.876262 36.4961101C120.521014 36.4232388 120.539232 36.5780903 120.347945 36.8149219 120.156658 37.0517536 120.347945 37.3523477 120.748737 37.2976942 121.149529 37.2430408 121.258836 36.5780903 120.876262 36.4961101zM119.994882 37.399214C119.621969 37.498161 119.361789 37.7428774 119.326733 38.0276519 119.326733 38.2420601 119.707064 38.2938138 120.190188 38.2346667 120.673311 38.1755196 121.300344 38.1311593 121.115318 37.8280304 120.930292 37.5249016 120.858337 37.2217728 119.994882 37.399214zM118.37871 37.4141119C118.24861 37.4538911 117.550178 37.6063782 117.509094 37.818534 117.46801 38.0306899 117.735057 38.1898069 118.193831 38.2295861 118.652605 38.2693653 118.823789 38.3091445 119.036058 38.0240601 119.248327 37.7389756 119.433206 37.7323457 119.255174 37.5400794 119.01198 37.339172 118.671692 37.290265 118.37871 37.4141119L118.37871 37.4141119zM144.901085 55.6939634C144.575983 54.7598933 145.01531 54.0109543 144.435398 53.8174083 143.855486 53.6238622 144.163015 53.8174083 143.556743 54.2634057 142.997378 54.676791 142.508311 55.1707292 142.106963 55.7276235 141.992738 55.996905 143.143776 56.8047493 143.319507 57.0235405 143.495238 57.2423317 143.697328 56.6701086 143.864273 56.8804847 144.031217 57.0908609 144.02243 57.5368583 144.742927 57.3348972 145.463424 57.1329361 145.990617 57.0992759 145.621582 56.5943732 145.252547 56.0894705 145.217401 56.6280334 144.901085 55.6939634zM155.142241 51.4219958C154.105025 51.0638179 152.998928 50.9098721 151.894208 50.9699371 151.152029 51.0588666 149.539983 51.0514558 150.154476 50.4511812 150.768968 49.8509065 151.997954 48.3983901 151.199911 48.2872281 150.401869 48.1760662 149.603826 49.0283079 148.805784 49.0283079 148.007741 49.0283079 148.510508 50.0658197 148.103506 50.421538 147.696505 50.7772563 147.672563 51.9036976 147.249601 52.037092 146.826638 52.1704864 145.653516 52.2594159 145.757261 52.6521882 145.861007 53.0449606 147.217679 52.4965615 146.994227 52.9115662 146.770775 53.3265709 145.461986 53.541484 145.797163 53.7786296 146.132341 54.0157751 147.305464 53.9638995 148.526469 53.7786296 149.747474 53.5933596 150.122554 53.8527375 150.385908 54.1047047 150.649262 54.3566718 151.064244 54.3270286 151.55903 54.2306883 152.053817 54.1343479 152.851859 53.837916 152.436877 54.1788127 152.021895 54.5197094 151.199911 54.8383737 151.35952 55.1422164 151.519128 55.4460592 151.798443 55.8462423 152.444858 55.2756108 153.091272 54.7049793 154.416023 54.5938174 154.631494 54.1788127 154.846966 53.763808 155.812597 53.5859488 155.277909 53.0079066 154.74322 52.4298643 154.862927 52.3631671 155.277909 52.1778972 155.692891 51.9926272 156.179697 51.7999465 155.142241 51.4219958zM155.506417 54.1455309C154.81777 53.8568225 154.308171 54.8512625 154.018939 55.2763053 153.729707 55.7013482 154.32883 55.6772892 154.404581 56.1745092 154.480332 56.6717291 155.527077 56.4471782 155.967811 56.2466862 156.408545 56.0461943 156.498069 54.466318 156.656458 53.92098 156.814847 53.3756419 155.809422 54.2658261 155.506417 54.1455309zM116.334189 102.827802C115.799034 102.545287 114.337342 100.724639 112.931562 100.677553 111.525782 100.630467 110.878804 99.4768664 109.225415 98.8569041 107.572026 98.2369418 106.349955 97.232446 104.912226 96.9970173 102.542771 96.5643739 100.124686 96.448225 97.7235775 96.6517218 94.8960426 96.9891696 95.6388695 97.1932078 94.01743 98.087837 91.9886337 99.2257424 93.2186913 100.340105 94.01743 100.630467 94.8161687 100.920829 98.6501144 99.3356092 100.646961 99.8457047 102.249645 100.285968 103.876331 100.637053 105.519267 100.897286 106.589577 100.991458 106.541653 102.380487 107.516114 103.00045 108.490575 103.620412 107.460202 104.774013 108.051269 104.632755 108.642336 104.491498 113.362881 104.962356 116.08658 104.632755 118.810279 104.303155 116.869344 103.141707 116.334189 102.827802zM125.954092 105.025692C124.45957 104.407405 122.872925 104.01743 121.252065 103.870001 119.652736 103.632739 118.133373 104.933849 118.125377 105.814011 118.11738 106.694173 115.350541 106.747748 114.334967 106.893166 113.319393 107.038584 113.983114 108.339694 115.886316 108.691758 117.789518 109.043823 120.076558 108.944327 120.860229 109.923985 121.643901 110.903644 122.907371 109.158627 124.170841 108.691758 125.278447 108.1738 126.573762 108.1738 127.681368 108.691758 129.088777 109.281084 128.776908 108.43919 129.280697 107.360035 129.784486 106.28088 127.273539 105.722168 125.954092 105.025692zM133.608811 107.500103C132.793137 107.433829 131.973558 107.589011 131.273734 107.942235 130.763683 108.285383 132.22211 108.925485 133.130638 109.050866 134.039166 109.176246 134.047136 109.4798 134.828151 109.176246 135.454205 108.978216 136.044216 108.709516 136.581451 108.377769 136.963989 108.094012 135.170842 107.599088 133.608811 107.500103zM109.024909 92.1033351C106.950181 91.5200769 107.420658 93.5397174 107.883423 94.8106982 108.346188 96.0816789 108.878367 96.4560088 110.289799 96.5517676 111.701231 96.6475265 110.953095 94.1577971 110.737138 93.3656105 110.521182 92.5734239 109.665067 92.2861474 109.024909 92.1033351z"/>
+      <path fill="url(#hero-globe-bq)" d="M160.235189,30.830818 C157.105812,30.2766945 154.844837,29.7306017 149.673541,28.8472164 C146.388373,28.2136897 143.031013,28.073023 139.706475,28.4296161 C137.914907,28.6062931 136.154632,28.5982623 135.56005,28.6223547 C134.225461,28.6074198 132.89168,28.6960105 131.570094,28.8873703 C130.240109,29.1604167 132.477614,29.6021093 134.410004,29.9956173 C136.342395,30.3891253 138.587723,29.7707556 141.044284,29.8430326 C143.500845,29.9153096 143.688607,31.047649 145.292413,31.4491877 C146.896219,31.8507265 145.049886,32.1799883 145.980876,32.4289424 C146.911866,32.6778964 146.246873,32.8626043 146.958806,33.23202 C147.67074,33.6014356 148.077559,34.8381751 151.895399,36.7575305 C155.713239,38.6768859 155.595887,37.9862392 157.528278,38.4520242 C159.460668,38.9178092 161.197472,39.7208868 162.848219,40.0581794 C164.498965,40.3954719 162.848219,36.5808535 162.652633,35.3842679 C162.457047,34.1876823 165.617717,35.1353138 165.35172,34.0350975 C165.085723,32.9348813 166.75994,34.0350975 168.285511,33.1758045 C169.811083,32.3165115 163.341096,31.3769108 160.235189,30.830818 Z"/>
+      <path fill="#A8D3FF" d="M176.136875 35.4754706C175.004168 34.9950648 172.056131 34.1018103 172.16115 34.9950648 172.26617 35.8883194 172.483709 36.6839915 173.218843 36.8115993 176.069362 37.2995114 177.682156 37.6147777 177.622145 37.0292832 177.562134 36.4437886 177.269581 35.9558764 176.136875 35.4754706zM199.761547 48.4232087C197.066653 48.4232087 193.30671 47.5721461 195.686931 49.9798532 197.52656 51.8347333 198.446374 52.8167287 200.019741 53.3550076 201.593107 53.8932865 203.674792 54.1697 202.997034 52.1111468 202.319276 50.0525936 202.456442 48.3868385 199.761547 48.4232087z"/>
+      <path fill="url(#hero-globe-br)" d="M218.405958,64.2713361 C216.494112,62.9299275 202.115439,47.5422749 206.791495,56.5620913 C207.476573,57.8803721 213.498887,62.0587828 211.754328,62.2977694 C210.009768,62.536756 209.420283,63.2845527 211.125012,65.2118639 C212.829741,67.1391751 215.15582,67.732787 215.761238,70.2999655 C216.067373,72.2696168 217.396892,73.9492656 219.28222,74.7481997 C220.978984,75.5576704 220.453226,74.2239711 221.568469,74.9332216 C222.683713,75.6424721 223.161674,76.2129563 223.121844,74.3319005 C223.082014,72.4508448 223.607772,73.1061306 221.903042,70.4772781 C220.198313,67.8484257 220.32577,65.6127447 218.405958,64.2713361 Z"/>
+      <path fill="url(#hero-globe-bs)" d="M228.77045,76.0000776 C221.042022,66.7453645 226.305081,76.3062131 224.133393,76.1806191 C221.961705,76.055025 221.884421,75.992228 221.814865,76.8792361 C221.660296,79.3440197 223.090055,83.1589396 222.711362,85.2547907 C222.33267,87.3506417 222.100817,89.3208987 222.263114,89.611335 C222.425411,89.9017713 222.147187,89.9410194 224.736211,90.7102831 C227.325234,91.4795468 227.657556,92.280209 226.104142,92.0996675 C224.550728,91.9191261 223.60786,91.3147046 224.172035,92.8846305 C224.736211,94.4545564 223.592403,95.1845719 223.785614,96.3777156 C223.978825,97.5708593 226.421008,99.9728459 224.39616,99.9257481 C222.371312,99.8786503 220.7097,99.2506799 221.760766,103.324638 C222.811832,107.398595 223.507391,111.017274 223.46102,113.529156 C223.414649,116.041037 225.493596,120.790063 228.507683,125.955119 C231.52177,131.120175 233.971682,136.716961 236.939398,135.194133 C239.907114,133.671305 240.432647,131.269318 242.032432,133.522162 C243.632216,135.775006 246.313981,137.203638 246.553562,133.184628 C246.793143,129.165618 247.681913,125.193705 245.541138,115.271774 C243.400364,105.349842 236.467964,85.2390914 228.77045,76.0000776 Z"/>
+      <path fill="url(#hero-globe-bt)" d="M145.850461,237.47228 C144.783051,237.71146 144.668685,237.423038 143.776635,237.620009 C143.083997,237.611511 142.416931,237.377282 141.893419,236.958749 C141.367338,236.522598 141.52745,237.310483 141.420709,237.795876 C141.313968,238.281269 140.970872,238.407893 140.429542,238.464171 C139.888213,238.520448 140.93275,239.498269 141.336841,239.434957 C141.740932,239.371645 142.762596,239.132465 142.709225,239.350541 C142.655855,239.568616 143.319174,239.631928 143.669894,239.4842 C144.909128,239.158053 146.193563,239.00162 147.482073,239.019911 C148.572357,239.111361 147.482073,238.182783 148.29788,237.795876 C149.113686,237.408968 146.910247,237.219032 145.850461,237.47228 Z"/>
+      <path fill="url(#hero-globe-bu)" d="M172.965554,237.802197 C172.393908,237.693337 171.806334,237.733962 171.252318,237.92065 C170.356405,237.92065 170.246381,238.885194 170.387841,239.333622 C170.861411,239.936658 171.51887,240.338558 172.242537,240.467384 C172.816235,240.551993 174.39587,239.942807 173.877184,239.172865 C173.358498,238.402922 173.932196,237.988337 172.965554,237.802197 Z"/>
+      <path fill="url(#hero-globe-bv)" d="M213.333805,109.31133 C212.687852,109.481892 211.908909,110.074797 212.383874,110.594604 C212.858839,111.114411 213.637783,111.406803 213.970258,110.748922 C214.302734,110.091041 213.618784,109.238233 213.333805,109.31133 Z"/>
+      <path fill="url(#hero-globe-bw)" d="M213.154129,113.228345 C213.468011,113.769228 214.166654,113.957361 214.369159,113.816261 C214.571664,113.675161 215.280432,113.228345 214.814671,113.040212 C214.348909,112.852079 213.052876,112.98142 213.154129,113.228345 Z"/>
+      <path fill="url(#hero-globe-bx)" d="M215.294811,112.161609 C215.208966,112.503548 214.753329,113.41213 215.096708,113.675912 C215.757052,114.193706 215.80988,113.529366 215.875914,112.884566 C215.941948,112.239766 215.367449,111.819669 215.294811,112.161609 Z"/>
+      <path fill="url(#hero-globe-bv)" d="M216.81668 112.178403C216.694512 112.445521 217.052873 112.86332 217.329789 112.938661 217.606704 113.014002 217.834752 112.719487 217.614849 112.342783 217.460102 112.089363 216.938849 111.897587 216.81668 112.178403zM216.152011 111.133365C215.803888 111.233228 215.863324 111.394546 215.939741 111.640364 216.016158 111.886181 216.398244 112.254908 216.712403 111.878499 217.026562 111.502091 216.321826 111.079592 216.152011 111.133365zM216.299354 109.315962C216.138663 109.388411 215.704203 109.629908 215.960118 109.959953 216.138134 110.219788 216.42081 110.291682 216.656445 110.13705 216.779014 109.983695 216.823328 109.747099 216.769523 109.533309 216.649203 109.359763 216.473036 109.278326 216.299354 109.315962L216.299354 109.315962z"/>
+      <path fill="url(#hero-globe-bw)" d="M214.632353,110.257232 C214.202137,110.388212 213.781481,110.309624 214.29774,110.676369 C214.813999,111.043114 215.062568,111.284117 215.435422,111.011678 C215.808276,110.739239 215.942121,110.582063 215.856078,110.487757 C215.770035,110.393451 215.11037,110.115773 214.632353,110.257232 Z"/>
+    </g>
+  </g>
+</svg>

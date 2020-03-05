@@ -1,23 +1,24 @@
-//:geowave-grpc-stop
-//:====================
-//::doctype: manpage
+//:= geowave-util-grpc-stop(1)
+:doctype: manpage
 
-NAME
-//:----
+[[util-grpc-stop-name]]
+==== NAME
 
-geowave util grpc stop - Stop the GeoWave gRPC server
+geowave-util-grpc-stop - Stop the GeoWave gRPC server
 
-SYNOPSIS
-//:--------
+[[util-grpc-stop-synopsis]]
+==== SYNOPSIS
 
-geowave util grpc stop
+  geowave util grpc stop
 
-DESCRIPTION
-//:-----------
+[[util-grpc-stop-description]]
+==== DESCRIPTION
 
-Shuts down the GeoWave gRPC server
+Shuts down the GeoWave gRPC server.
 
-OPTIONS
-//:-------
+[[util-grpc-stop-examples]]
+==== EXAMPLES
 
-There are currently no options for this command
+Shut down the gRPC server:
+
+  geowave util grpc stop

@@ -1,0 +1,42 @@
+//:= geowave-util-redis-run(1)
+:doctype: manpage
+
+[[util-redis-run-name]]
+==== NAME
+
+geowave-util-redis-run - Runs a standalone Redis instance for test and debug with GeoWave
+
+[[util-redis-run-synopsis]]
+==== SYNOPSIS
+
+  geowave util redis run [options]
+
+[[util-redis-run-description]]
+==== DESCRIPTION
+
+This command runs a standalone Redis instance, which can be used locally for testing and debugging GeoWave, without needing to set up a full instance.
+
+[[util-redis-run-options]]
+==== OPTIONS
+
+*-d, --directory* _<path>_::
+  The directory to use for Redis. If set, the data will be persisted and durable. If none, it will use a temp directory and delete when complete
+  
+*-i, --interactive* _<enabled>_::
+  Whether to prompt for user input to end the process. Default is `true`.
+  
+*-m, --maxMemory* _<size>_::
+  The maximum memory to use (in a form such as `512M` or `1G`).  Default is `1G`.
+  
+*-p, --port* _<port>_::
+  The port for Redis to listen on.  Default is 6379.
+  
+*-s, --setting* _<setting>_::
+  A setting to apply to Redis in the form of `<name>=<value>`.
+
+[[util-redis-run-examples]]
+==== EXAMPLES
+
+Run a standalone Redis instance:
+
+  geowave util redis run

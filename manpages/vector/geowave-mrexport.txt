@@ -1,36 +1,48 @@
-//:geowave-mrexport(1)
-//:==============
-//::doctype: manpage
+//:= geowave-vector-mrexport(1)
+:doctype: manpage
 
-NAME
-//:----
+[[vector-mrexport-name]]
+==== NAME
 
-geowave vector mrexport - Export data using map-reduce
+geowave-vector-mrexport - Export vector data from a data store to Avro using MapReduce
 
-SYNOPSIS
-//:--------
+[[vector-mrexport-synopsis]]
+==== SYNOPSIS
 
-geowave vector mrexport [options] <hdfs host:port> <path to base directory to write to> <store name>
+  geowave vector mrexport [options] <path to base directory to write to> <store name>
 
-DESCRIPTION
-//:-----------
+[[vector-mrexport-description]]
+==== DESCRIPTION
 
-This command will perform a data export for data in a data store, and will use MapReduce to support high-volume data stores.
+This command will perform a data export for vector data in a data store, and will use MapReduce to support high-volume data stores.
 
-OPTIONS
-//:-------
+[[vector-mrexport-options]]
+==== OPTIONS
 
-- --adapterIds
- * Comma separated list of adapter Ids
-- --batchSize
- * Records to process at a time
- * Default: 10000
-- --cqlFilter
- * Filter exported data based on CQL filter
-- --indexId
- * The index to export from
-- --maxSplits
- * The max partitions for the input data
--  --minSplits
- * The min partitions for the input data
--  --resourceManagerHostPort
+*--typeNames* _<types>_::
+  Comma separated list of types to export.
+
+*--batchSize* _<size>_::
+  Records to process at a time.  Default is 10,000.
+
+*--cqlFilter* _<filter>_::
+  Filter exported data based on CQL filter.
+
+*--indexName* _<index>_::
+  The name of the index to export from.
+  
+*--maxSplits* _<count>_::
+  The maximum partitions for the input data.
+
+*--minSplits* _<count>_::
+  The minimum partitions for the input data.
+  
+*--resourceManagerHostPort* _<host>_::
+  The host and port of the resource manager.
+  
+[[vector-mrexport-examples]]
+==== EXAMPLES
+
+Export all data from the `hail` type in the `example` data store to an Avro file using MapReduce:
+
+  geowave vector mrexport --typeNames hail --resourceManagerHostPort localhost:8032 /export example
