@@ -21,9 +21,9 @@ Many GeoWave artifacts are annotated with a `$VENDOR` as well as a `$VERSION`.  
 
 [NOTE]
 ====
-Several of the RPMs (`accumulo`, `hbase`, `tools`, etc.) are both GeoWave version and vendor version specific. In the examples below the `$VERSION` and `$VENDOR` tokens in the RPM name should be replaced with appropriate values.  For example, `geowave-$VERSION-$VENDOR-accumulo` might become `geowave-1.0.0-hdp2-accumulo`.
+Several of the RPMs (`accumulo`, `hbase`, `tools`, etc.) are both GeoWave version and vendor version specific. In the examples below the `$VERSION` and `$VENDOR` tokens in the RPM name should be replaced with appropriate values.  For example, `geowave-$VERSION-$VENDOR-accumulo` might become `geowave-1.1.0-hdp2-accumulo`.
 
-* `$VERSION`: Version of the GeoWave source, e.g., `1.0.0`
+* `$VERSION`: Version of the GeoWave source, e.g., `1.1.0`
 * `$VENDOR`: Distribution vendor abbreviation - from the vendors table below, e.g., `apache`, `cdh5`, `hdp2`.
 ====
 
