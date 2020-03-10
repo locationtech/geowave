@@ -60,7 +60,9 @@ fi
 ## Build the pyspark module
 if [[ ! -f $WORKSPACE/analytics/pyspark/target/geowave_pyspark-${GEOWAVE_VERSION}.tar.gz ]]; then
     mvn package -am -pl analytics/pyspark -P python -Dpython.executable=python3.6 $BUILD_ARGS "$@"
-    mv $WORKSPACE/analytics/pyspark/target/geowave_pyspark-*.tar.gz $WORKSPACE/analytics/pyspark/target/geowave_pyspark-${GEOWAVE_VERSION}.tar.gz
+    if [[ ! -f $WORKSPACE/analytics/pyspark/target/geowave_pyspark-${GEOWAVE_VERSION}.tar.gz ]]; then
+      mv $WORKSPACE/analytics/pyspark/target/geowave_pyspark-*.tar.gz $WORKSPACE/analytics/pyspark/target/geowave_pyspark-${GEOWAVE_VERSION}.tar.gz
+    fi
 fi
 if [ -d /opt/install4j7 ]; then
     # Build standalone installer
