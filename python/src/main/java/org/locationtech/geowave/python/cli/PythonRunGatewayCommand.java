@@ -16,17 +16,21 @@ import org.locationtech.geowave.python.GeoWavePy4JGateway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "rungateway", parentOperation = PythonSection.class)
 @Parameters(commandDescription = "Runs a Py4J java gateway")
 public class PythonRunGatewayCommand extends DefaultOperation implements Command {
   private static final Logger LOGGER = LoggerFactory.getLogger(PythonRunGatewayCommand.class);
 
+  @ParametersDelegate
+  private PythonRunGatewayOptions options = new PythonRunGatewayOptions();
+
   /** Prep the driver & run the operation. */
   @Override
   public void execute(final OperationParams params) {
     try {
-      GeoWavePy4JGateway.main(new String[] {});
+      GeoWavePy4JGateway.runGateway(options);
     } catch (final Exception e) {
       LOGGER.error("Unable to run Py4J gateway", e);
     }

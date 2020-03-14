@@ -8,7 +8,10 @@
  */
 package org.locationtech.geowave.python;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.concurrent.TimeUnit;
+import org.locationtech.geowave.python.cli.PythonRunGatewayOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import py4j.GatewayServer;
@@ -26,8 +29,18 @@ public class GeoWavePy4JGateway {
     return debug;
   }
 
-  public static void main(final String[] args) throws InterruptedException {
-    final GatewayServer server = new GatewayServer(new GeoWavePy4JGateway());
+  public static void runGateway(final PythonRunGatewayOptions options)
+      throws InterruptedException, UnknownHostException {
+    final GatewayServer server =
+        new GatewayServer(
+            new GeoWavePy4JGateway(),
+            options.getPort(),
+            options.getPythonPort(),
+            InetAddress.getByName(options.getAddress()),
+            InetAddress.getByName(options.getPythonAddress()),
+            GatewayServer.DEFAULT_CONNECT_TIMEOUT,
+            GatewayServer.DEFAULT_READ_TIMEOUT,
+            null);
     GatewayServer.turnLoggingOn();
 
     server.start();
@@ -50,6 +63,10 @@ public class GeoWavePy4JGateway {
     while (true) {
       Thread.sleep(TimeUnit.MILLISECONDS.convert(Long.MAX_VALUE, TimeUnit.DAYS));
     }
+  }
+
+  public static void main(final String[] args) throws InterruptedException, UnknownHostException {
+    runGateway(new PythonRunGatewayOptions());
   }
 
 }
