@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -93,6 +94,7 @@ import org.locationtech.geowave.core.store.util.NativeEntryIteratorWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Iterators;
+import com.google.common.collect.Sets;
 import com.google.common.collect.Streams;
 
 public class BaseDataStore implements DataStore {
@@ -281,7 +283,7 @@ public class BaseDataStore implements DataStore {
     final Map<Short, Set<ByteArray>> dataIdsToDelete;
     if (DeletionMode.DELETE_WITH_DUPLICATES.equals(deleteMode)
         && (baseOptions.isSecondaryIndexing())) {
-      dataIdsToDelete = new HashMap<>();
+      dataIdsToDelete = new ConcurrentHashMap<Short, Set<ByteArray>>();
     } else {
       dataIdsToDelete = null;
     }
@@ -568,8 +570,13 @@ public class BaseDataStore implements DataStore {
                   Set<ByteArray> currentDataIdsToDelete =
                       internalDataIdsToDelete.get(row.getAdapterId());
                   if (currentDataIdsToDelete == null) {
-                    currentDataIdsToDelete = Collections.synchronizedSet(new HashSet<>());
-                    internalDataIdsToDelete.put(row.getAdapterId(), currentDataIdsToDelete);
+                    synchronized (internalDataIdsToDelete) {
+                      currentDataIdsToDelete = internalDataIdsToDelete.get(row.getAdapterId());
+                      if (currentDataIdsToDelete == null) {
+                        currentDataIdsToDelete = Sets.newConcurrentHashSet();
+                        internalDataIdsToDelete.put(row.getAdapterId(), currentDataIdsToDelete);
+                      }
+                    }
                   }
                   currentDataIdsToDelete.add(dataId);
                 }
