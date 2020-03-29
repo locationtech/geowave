@@ -54,7 +54,7 @@ script:
   - .utility/run-tests.sh
 before_install:
   # Force an ntp time sync which is required for Kudu to start (ntp is already installed on travis)
-  - sudo service ntp stop && sudo ntpd -gq && sudo service ntp start
+  - (sudo service ntp stop && sudo ntpd -gq && sudo service ntp start) || true
   # Remove travis CI jdk 11 from path (automatically included in xenial)
   - |
     lsb_release -a | grep "xenial" \
