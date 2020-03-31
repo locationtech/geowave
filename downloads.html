@@ -533,12 +533,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div style="page-break-after: always;"></div>
 <!-- Start Main Content Container -->
   <div class="container mt-0 packages-content">
-    <div class="row">
-      <div class="col-12">
-
-        <!-- Start Tabs -->
-        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-          <div class="tab-content" data-toggle="tab">
+    <div class="row col-12 tab-content" id="nav-home">
             <div role="tabpanel" class="tab-pane active" id="packages">
               <div class="page-header col-md-12">
                 <h2>GeoWave Downloads</h2>
@@ -767,11 +762,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
                 <div class="timestamp"></div>
               </div>
             </div>
-          </div>
-        </div>
         <!-- End Tabs -->
-
-      </div>
       <div class="col-xs-6 col-md-1">&nbsp;</div>
     </div>
   </div>
@@ -870,7 +861,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
         var bucketPrefix, REFRESH_INTERVAL = 900000;
 
         var list = new S3List({
-            url: 'https://s3.amazonaws.com/geowave-rpms',
+            url: 'https://s3.amazonaws.com/geowave-rpms/',
             list: ['repodata', '.html'],
             cache: REFRESH_INTERVAL - 1
         });
