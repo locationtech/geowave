@@ -18,6 +18,7 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>Fix issue with broken downloads links. <a href="https://github.com/locationtech/geowave/pull/1701">#1701</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>Update pygw to support remote gateways. <a href="https://github.com/locationtech/geowave/pull/1700">#1700</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>Fix issue with deleting when using secondary indexing. <a href="https://github.com/locationtech/geowave/pull/1699">#1699</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>Fix issue which prevented installers from being generated on release <a href="https://github.com/locationtech/geowave/pull/1698">#1698</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
@@ -1116,6 +1117,7 @@
 <li>Geowave 647 9.1 <a href="https://github.com/locationtech/geowave/pull/661">#661</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>Pathingjar <a href="https://github.com/locationtech/geowave/pull/656">#656</a> (<a href="https://github.com/andrewdmanning">andrewdmanning</a>)</li>
 <li>GEOWAVE-614 - Added multi-threading to Geowave Ingest <a href="https://github.com/locationtech/geowave/pull/654">#654</a> (<a href="https://github.com/datasedai">datasedai</a>)</li>
+<li>GEOWAVE-626: Address performance issue when querying multiple range c… <a href="https://github.com/locationtech/geowave/pull/631">#631</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 </ul>
 <h2 id="v0.9.0.1-2016-03-01"><a href="https://github.com/locationtech/geowave/tree/v0.9.0.1">v0.9.0.1</a> (2016-03-01)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v0.9.0...v0.9.0.1">Full Changelog</a></p>
@@ -1165,7 +1167,6 @@
 <li>Protect against NPE <a href="https://github.com/locationtech/geowave/pull/639">#639</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
 <li>Updated supported version #s of core libraries <a href="https://github.com/locationtech/geowave/pull/636">#636</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
 <li>Doc and deployment script fixes for EMR bootstrap failures <a href="https://github.com/locationtech/geowave/pull/634">#634</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
-<li>GEOWAVE-626: Address performance issue when querying multiple range c… <a href="https://github.com/locationtech/geowave/pull/631">#631</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>GEOWAVE-618: Adjust the index choosing heuristic to incorporate binning <a href="https://github.com/locationtech/geowave/pull/630">#630</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>GEOWAVE-581 - Updated README dead links <a href="https://github.com/locationtech/geowave/pull/628">#628</a> (<a href="https://github.com/binderparty">binderparty</a>)</li>
 <li>added extra check for end less than start before calculating bins <a href="https://github.com/locationtech/geowave/pull/627">#627</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
@@ -1707,6 +1708,7 @@
 <li>Geowave 126 - Remove instances of geotools 2.2 filter generation <a href="https://github.com/locationtech/geowave/pull/127">#127</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</li>
 <li>Update to Apache Accumolo project url <a href="https://github.com/locationtech/geowave/pull/125">#125</a> (<a href="https://github.com/state-hiu">state-hiu</a>)</li>
 <li>added codecov.io support; fixes for dependencies in integration tests <a href="https://github.com/locationtech/geowave/pull/124">#124</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</li>
+<li>GEOWAVE-122 <a href="https://github.com/locationtech/geowave/pull/123">#123</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>added clustering to analytics <a href="https://github.com/locationtech/geowave/pull/118">#118</a> (<a href="https://github.com/bptran">bptran</a>)</li>
 <li>updated to version 0.8.2-SNAPSHOT <a href="https://github.com/locationtech/geowave/pull/114">#114</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 </ul>
@@ -1737,10 +1739,10 @@
 <p><strong>Closed issues:</strong></p>
 <ul>
 <li>Coverity High Priority Defects <a href="https://github.com/locationtech/geowave/issues/99">#99</a></li>
+<li>GeoTools data store utilizing existing spatial-temporal index <a href="https://github.com/locationtech/geowave/issues/67">#67</a></li>
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
-<li>GEOWAVE-122 <a href="https://github.com/locationtech/geowave/pull/123">#123</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>Geowave 112 <a href="https://github.com/locationtech/geowave/pull/113">#113</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Capture build info within artifacts <a href="https://github.com/locationtech/geowave/pull/110">#110</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Geowave 106 redux <a href="https://github.com/locationtech/geowave/pull/109">#109</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
