@@ -111,7 +111,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<sonar.language>java</sonar.language>
 		<container.extension />
-		<!-- Feed Sonar with the JaCoCo integration tests coverage report (that 
+		<!-- Feed Sonar with the JaCoCo integration tests coverage report (that
 			you have previously generated) -->
 		<jacoco.it.reportPath>${project.build.directory}/coverage-reports/jacoco-it.exec</jacoco.it.reportPath>
 		<jacoco.ut.reportPath>${project.build.directory}/coverage-reports/jacoco-ut.exec</jacoco.ut.reportPath>
@@ -879,7 +879,7 @@
 		</extensions>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
+				<!--This plugin's configuration is used to store Eclipse m2e settings
 					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
@@ -1233,15 +1233,15 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- for incrementing version numbers and tagging repositories To Use: 
-				0. Ensure all files checked into master (clean environment). Make sure you 
-				have access to both mvn and git on your command line, and you are in a terminal 
-				that has push access (credentials are setup and correct). Make sure you have 
-				the branch active in git you want to tag. If something goes wrong pushing, 
-				you will most likely have outstanding commits in your local repo you will 
-				have to revert/remove. 1. mvn release:prepare -DdryRun=true -Darguments="-DskipTests 
-				-Dspotbugs.skip" 2. Inspect and ensure the correct pom.xml files will be 
-				modified 3. mvn release:prepare -Darguments="-DskipTests -Dspotbugs.skip" 
+			<!-- for incrementing version numbers and tagging repositories To Use:
+				0. Ensure all files checked into master (clean environment). Make sure you
+				have access to both mvn and git on your command line, and you are in a terminal
+				that has push access (credentials are setup and correct). Make sure you have
+				the branch active in git you want to tag. If something goes wrong pushing,
+				you will most likely have outstanding commits in your local repo you will
+				have to revert/remove. 1. mvn release:prepare -DdryRun=true -Darguments="-DskipTests
+				-Dspotbugs.skip" 2. Inspect and ensure the correct pom.xml files will be
+				modified 3. mvn release:prepare -Darguments="-DskipTests -Dspotbugs.skip"
 				4. mvn release:clean -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -1298,14 +1298,14 @@
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
-			<id>boundlessgeo</id>
-			<name>BoundlessGeo Maven Repository</name>
-			<url>http://repo.boundlessgeo.com/main</url>
+			<id>osgeo-snapshot</id>
+			<name>Open Source Geospatial Foundation Build Repository</name>
+			<url>https://repo.osgeo.org/repository/snapshot/</url>
 		</repository>
 		<repository>
-			<id>osgeo</id>
+			<id>osgeo-release</id>
 			<name>Open Source Geospatial Foundation Repository</name>
-			<url>http://download.osgeo.org/webdav/geotools/</url>
+			<url>https://repo.osgeo.org/repository/release/</url>
 		</repository>
 		<repository>
 			<id>geosolutions</id>
@@ -1397,7 +1397,7 @@
 				<hadoop.version>2.6.0-cdh5.14.0</hadoop.version>
 				<spark.version>2.2.0.cloudera2</spark.version>
 				<accumulo.api>1.7</accumulo.api>
-				<!-- accumulo 1.7 references com.google.common.net.HostAndPort.getHostText() 
+				<!-- accumulo 1.7 references com.google.common.net.HostAndPort.getHostText()
 					which was removed in guava 22.0 -->
 				<guava.version>21.0</guava.version>
 			</properties>
@@ -1434,14 +1434,14 @@
 			<id>hortonworks</id>
 			<properties>
 				<accumulo.version>1.7.0.2.6.5.35-1</accumulo.version>
-				<!-- this is used in place of 1.1.2.2.6.5.35-1 because the hbase-shaded-client 
-					from hortonworks doesn't shade third party libraries like the apache one 
+				<!-- this is used in place of 1.1.2.2.6.5.35-1 because the hbase-shaded-client
+					from hortonworks doesn't shade third party libraries like the apache one
 					does -->
 				<hbase.version>1.1.2</hbase.version>
 				<hadoop.version>2.7.3.2.6.5.35-1</hadoop.version>
 				<spark.version>2.3.0.2.6.5.35-1</spark.version>
 				<accumulo.api>1.7</accumulo.api>
-				<!-- accumulo 1.7 references com.google.common.net.HostAndPort.getHostText() 
+				<!-- accumulo 1.7 references com.google.common.net.HostAndPort.getHostText()
 					which was removed in guava 22.0 -->
 				<guava.version>21.0</guava.version>
 			</properties>
@@ -1490,7 +1490,7 @@
 				<geotools.version>20.0</geotools.version>
 				<geoserver.version>2.14.0</geoserver.version>
 				<imageio.ext.version>1.1.25</imageio.ext.version>
-				<!-- accumulo 1.7 references com.google.common.net.HostAndPort.getHostText() 
+				<!-- accumulo 1.7 references com.google.common.net.HostAndPort.getHostText()
 					which was removed in guava 22.0 -->
 				<guava.version>21.0</guava.version>
 			</properties>
