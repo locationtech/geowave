@@ -33,14 +33,6 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-collections4</artifactId>
 		</dependency>
-		<!-- in redisson 3.8.2 this is marked as provided so we have to explicitly 
-			depend on it, in later versions of redisson it is a compile dependency and 
-			we don't have to explicitly depend on it -->
-		<dependency>
-			<groupId>de.ruedigermoeller</groupId>
-			<artifactId>fst</artifactId>
-			<version>2.54</version>
-		</dependency>
 		<dependency>
 			<groupId>com.github.kstyrc</groupId>
 			<artifactId>embedded-redis</artifactId>
