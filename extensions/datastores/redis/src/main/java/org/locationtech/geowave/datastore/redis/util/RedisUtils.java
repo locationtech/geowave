@@ -26,10 +26,10 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.operations.RangeReaderParams;
 import org.locationtech.geowave.datastore.redis.config.RedisOptions.Compression;
+import org.locationtech.geowave.datastore.redis.config.RedisOptions.Serialization;
 import org.redisson.api.RScoredSortedSet;
 import org.redisson.api.RedissonClient;
 import org.redisson.client.protocol.ScoredEntry;
-import org.redisson.codec.FstCodec;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.MultimapBuilder;
 import com.google.common.collect.Streams;
@@ -40,7 +40,6 @@ public class RedisUtils {
   protected static final int MAX_ROWS_FOR_PAGINATION = 1000000;
   public static int REDIS_DEFAULT_MAX_RANGE_DECOMPOSITION = 250;
   public static int REDIS_DEFAULT_AGGREGATION_MAX_RANGE_DECOMPOSITION = 250;
-  private static FstCodec DEFAULT_CODEC = new FstCodec();
 
   public static RScoredSortedSet<GeoWaveMetadata> getMetadataSet(
       final RedissonClient client,
@@ -103,6 +102,7 @@ public class RedisUtils {
 
   public static RedisMapWrapper getDataIndexMap(
       final RedissonClient client,
+      final Serialization serialization,
       final Compression compression,
       final String namespace,
       final String typeName,
@@ -110,7 +110,7 @@ public class RedisUtils {
     return new RedisMapWrapper(
         client,
         getRowSetPrefix(namespace, typeName, DataIndexUtils.DATA_ID_INDEX.getName()),
-        compression.getCodec(DEFAULT_CODEC),
+        compression.getCodec(serialization.getCodec()),
         visibilityEnabled);
   }
 
