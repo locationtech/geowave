@@ -106,6 +106,9 @@ public class ExtractGeometryFilterVisitor extends NullFilterVisitor {
         (ExtractGeometryFilterVisitorResult) filter.accept(
             new ExtractGeometryFilterVisitor(crs, attributeOfInterest),
             null);
+    if(geoAndCompareOpData == null) {
+      return null;
+    }
     final Geometry geo = geoAndCompareOpData.getGeometry();
     // empty or infinite geometry simply return null as we can't create
     // linear constraints from

@@ -156,22 +156,35 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
   private BasicQueryByClass getQuery(
       final Geometry jtsBounds,
       final TemporalConstraintsSet timeBounds) {
-    final ConstraintsByClass timeConstraints =
-        QueryIndexHelper.composeTimeBoundedConstraints(
-            components.getAdapter().getFeatureType(),
-            components.getAdapter().getTimeDescriptors(),
-            timeBounds);
-
+    
     final GeoConstraintsWrapper geoConstraints =
         QueryIndexHelper.composeGeometricConstraints(getFeatureType(), jtsBounds);
-
-    /**
-     * NOTE: query to an index that requires a constraint and the constraint is missing equates to a
-     * full table scan. @see BasicQuery
-     */
-    final BasicQueryByClass query = composeQuery(geoConstraints, timeConstraints);
-    query.setExact(timeBounds.isExact());
-    return query;
+    
+    if(timeBounds == null) {
+      // if timeBounds are unspecified just use the geoConstraints
+      return new ExplicitSpatialQuery(
+          geoConstraints.getConstraints(),
+          geoConstraints.getGeometry(),
+          GeometryUtils.getCrsCode(
+              components.getAdapter().getFeatureType().getCoordinateReferenceSystem()));
+    } else {
+    
+      final ConstraintsByClass timeConstraints =
+          QueryIndexHelper.composeTimeBoundedConstraints(
+              components.getAdapter().getFeatureType(),
+              components.getAdapter().getTimeDescriptors(),
+              timeBounds);
+      
+      /**
+       * NOTE: query to an index that requires a constraint and the constraint is missing equates to a
+       * full table scan. @see BasicQuery
+       */
+    
+      final BasicQueryByClass query = composeQuery(geoConstraints, timeConstraints);
+      query.setExact(timeBounds.isExact());
+      return query;
+    }
+   
   }
 
   public CloseableIterator<SimpleFeature> issueQuery(
