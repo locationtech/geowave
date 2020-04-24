@@ -156,22 +156,39 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
   private BasicQueryByClass getQuery(
       final Geometry jtsBounds,
       final TemporalConstraintsSet timeBounds) {
-    final ConstraintsByClass timeConstraints =
-        QueryIndexHelper.composeTimeBoundedConstraints(
-            components.getAdapter().getFeatureType(),
-            components.getAdapter().getTimeDescriptors(),
-            timeBounds);
 
     final GeoConstraintsWrapper geoConstraints =
         QueryIndexHelper.composeGeometricConstraints(getFeatureType(), jtsBounds);
 
-    /**
-     * NOTE: query to an index that requires a constraint and the constraint is missing equates to a
-     * full table scan. @see BasicQuery
-     */
-    final BasicQueryByClass query = composeQuery(geoConstraints, timeConstraints);
-    query.setExact(timeBounds.isExact());
-    return query;
+    if (timeBounds == null) {
+      // if timeBounds are unspecified just use the geoConstraints
+      return new ExplicitSpatialQuery(
+          geoConstraints.getConstraints(),
+          geoConstraints.getGeometry(),
+          GeometryUtils.getCrsCode(
+              components.getAdapter().getFeatureType().getCoordinateReferenceSystem()));
+    } else {
+
+      final ConstraintsByClass timeConstraints =
+          QueryIndexHelper.composeTimeBoundedConstraints(
+              components.getAdapter().getFeatureType(),
+              components.getAdapter().getTimeDescriptors(),
+              timeBounds);
+
+      /**
+       * NOTE: query to an index that requires a constraint and the constraint is missing equates to
+       * a full table scan. @see BasicQuery
+       */
+      final BasicQueryByClass query =
+          new ExplicitSpatialQuery(
+              geoConstraints.getConstraints().merge(timeConstraints),
+              geoConstraints.getGeometry(),
+              GeometryUtils.getCrsCode(
+                  components.getAdapter().getFeatureType().getCoordinateReferenceSystem()));
+      query.setExact(timeBounds.isExact());
+      return query;
+    }
+
   }
 
   public CloseableIterator<SimpleFeature> issueQuery(
@@ -518,34 +535,6 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
         bbox,
         transaction.getDataStatistics());
   }
-
-  private BasicQueryByClass composeQuery(
-      final GeoConstraintsWrapper geoConstraints,
-      final ConstraintsByClass temporalConstraints) {
-
-    // TODO: this actually doesn't boost performance much, if at
-    // all, and one key is missing - the query geometry has to be
-    // topologically equivalent to its envelope and the ingested
-    // geometry has to be topologically equivalent to its envelope
-    // this could be kept as a statistic on ingest, but considering
-    // it doesn't boost performance it may not be worthwhile
-    // pursuing
-
-    // if (geoConstraints.isConstraintsMatchGeometry()) {
-    // return new BasicQuery(
-    // geoConstraints.getConstraints().merge(
-    // temporalConstraints));
-    // }
-    // else {
-    return new ExplicitSpatialQuery(
-        geoConstraints.getConstraints().merge(temporalConstraints),
-        geoConstraints.getGeometry(),
-        GeometryUtils.getCrsCode(
-            components.getAdapter().getFeatureType().getCoordinateReferenceSystem()));
-    // }
-  }
-
-
 
   private boolean subsetRequested() {
     if (query == null) {

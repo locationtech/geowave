@@ -215,16 +215,21 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
     return featureCursor;
   }
 
-  private Iterator<SimpleFeature> openIterator(final QueryConstraints contraints) {
-    if (query.getFilter() == Filter.EXCLUDE) {
+  private Iterator<SimpleFeature> openIterator(final QueryConstraints constraints) {
+
+    if ((constraints.jtsBounds != null && constraints.jtsBounds.isEmpty())
+        || (constraints.timeBounds != null && constraints.timeBounds.isEmpty())) {
+      // return nothing if either constraint is empty
+      featureCursor = reader.getNoData();
+    } else if (query.getFilter() == Filter.EXCLUDE) {
       featureCursor = reader.getNoData();
     } else if (isDistributedRenderQuery()) {
       featureCursor =
           reader.renderData(
-              contraints.jtsBounds,
-              contraints.timeBounds,
+              constraints.jtsBounds,
+              constraints.timeBounds,
               getFilter(query),
-              contraints.limit,
+              constraints.limit,
               (DistributedRenderOptions) query.getHints().get(DistributedRenderProcess.OPTIONS));
     } else if (query.getHints().containsKey(SubsampleProcess.OUTPUT_WIDTH)
         && query.getHints().containsKey(SubsampleProcess.OUTPUT_HEIGHT)
@@ -235,23 +240,22 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
       }
       featureCursor =
           reader.getData(
-              contraints.jtsBounds,
-              contraints.timeBounds,
+              constraints.jtsBounds,
+              constraints.timeBounds,
               (Integer) query.getHints().get(SubsampleProcess.OUTPUT_WIDTH),
               (Integer) query.getHints().get(SubsampleProcess.OUTPUT_HEIGHT),
               pixelSize,
               getFilter(query),
-              contraints.referencedEnvelope,
-              contraints.limit);
+              constraints.referencedEnvelope,
+              constraints.limit);
 
     } else {
-      // get the data within the bounding box
       featureCursor =
           reader.getData(
-              contraints.jtsBounds,
-              contraints.timeBounds,
+              constraints.jtsBounds,
+              constraints.timeBounds,
               getFilter(query),
-              contraints.limit);
+              constraints.limit);
     }
     return featureCursor;
   }
@@ -323,8 +327,7 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
     final TemporalConstraintsSet constraints =
         new ExtractTimeFilterVisitor(
             reader.getComponents().getAdapter().getTimeDescriptors()).getConstraints(query);
-
-    return constraints.isEmpty() ? constraints : reader.clipIndexedTemporalConstraints(constraints);
+    return constraints.isEmpty() ? null : reader.clipIndexedTemporalConstraints(constraints);
   }
 
   @Override

@@ -57,9 +57,6 @@ public class QueryIndexHelper {
       final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap,
       final TimeDescriptors timeDescriptors,
       final TemporalConstraintsSet constraintsSet) {
-    // TODO: if query range doesn't intersect with the stats, it seems the
-    // constraints are removed or empty - does this make sense? It seems
-    // this can result in open-ended time when it should find no results.
     if ((timeDescriptors.getEndRange() != null) && (timeDescriptors.getStartRange() != null)) {
       final String ename = timeDescriptors.getEndRange().getLocalName();
       final String sname = timeDescriptors.getStartRange().getLocalName();
@@ -114,10 +111,6 @@ public class QueryIndexHelper {
     final BoundingBoxDataStatistics bboxStats = (BoundingBoxDataStatistics) statsMap.get(statId);
     if ((bboxStats != null) && bboxStats.isSet() && (bbox != null)) {
       final Geometry geo = new GeometryFactory().toGeometry(bboxStats.getResult());
-      // TODO if the query doesn't intersect the stats this will return an
-      // empty geometry, it seems that'd be an opportunity to quickly
-      // return no results rather than continuing on and hoping that an
-      // empty geometry gives no results and not a full table scan
       return geo.intersection(bbox);
     }
     return bbox;
