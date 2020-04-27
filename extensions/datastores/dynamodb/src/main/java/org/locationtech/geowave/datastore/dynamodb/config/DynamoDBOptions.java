@@ -191,7 +191,7 @@ public class DynamoDBOptions extends StoreFactoryOptions {
 
     @Override
     public Regions convert(final String regionName) {
-      return Regions.fromName(regionName);
+      return Regions.fromName(regionName.toLowerCase().replaceAll("_", "-"));
     }
   }
 
