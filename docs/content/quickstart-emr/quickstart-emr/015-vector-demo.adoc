@@ -42,7 +42,7 @@ Before ingesting any data, we need to create an index that describes how the dat
 
 [source, bash]
 ----
-$ geowave index add gdelt spatial -t spatial --partitionStrategy round_robin --numPartitions 32
+$ geowave index add gdelt gdelt-spatial -t spatial --partitionStrategy round_robin --numPartitions 32
 ----
 
 This command adds a spatial index to the `gdelt` data store with an index name of `gdelt-spatial`, which will be used to reference this index in future commands.  It configured the index to use a round robin partitioning strategy with 32 partitions.
