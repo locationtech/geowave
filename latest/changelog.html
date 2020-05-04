@@ -12,6 +12,10 @@
 <h1 id="change-log">Change Log</h1>
 <h2 id="unreleased"><a href="https://github.com/locationtech/geowave/tree/HEAD">Unreleased</a></h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v1.1.0...HEAD">Full Changelog</a></p>
+<p><strong>Fixed bugs:</strong></p>
+<ul>
+<li>[Bug] Time Bounds Handling through GeoWaveFeatureReader <a href="https://github.com/locationtech/geowave/issues/1702">#1702</a></li>
+</ul>
 <p><strong>Closed issues:</strong></p>
 <ul>
 <li>Error creating spatial_temporal index on DynamoDB store <a href="https://github.com/locationtech/geowave/issues/1712">#1712</a></li>
@@ -19,6 +23,7 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>Fix for #1702, doc updates, and additional tests for GeoWaveFeatureReader <a href="https://github.com/locationtech/geowave/pull/1716">#1716</a> (<a href="https://github.com/richard3d">richard3d</a>)</li>
 <li>fix for serialization of regions as enum <a href="https://github.com/locationtech/geowave/pull/1713">#1713</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>updated redis version and provided serialization option <a href="https://github.com/locationtech/geowave/pull/1710">#1710</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>updated pom to use osgeo maven repo <a href="https://github.com/locationtech/geowave/pull/1708">#1708</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
@@ -386,7 +391,6 @@
 <li>Update &quot;current&quot; docs to 0.9.7 <a href="https://github.com/locationtech/geowave/pull/1427">#1427</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>removing outdated code <a href="https://github.com/locationtech/geowave/pull/1425">#1425</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>refactored mil.nga.giat to org.locationtech <a href="https://github.com/locationtech/geowave/pull/1420">#1420</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
-<li>catch exceptions in gt canprocess <a href="https://github.com/locationtech/geowave/pull/1418">#1418</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>remove xuggle repo <a href="https://github.com/locationtech/geowave/pull/1417">#1417</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>spatial join patch. <a href="https://github.com/locationtech/geowave/pull/1416">#1416</a> (<a href="https://github.com/JWileczek">JWileczek</a>)</li>
 </ul>
@@ -401,6 +405,7 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>catch exceptions in gt canprocess <a href="https://github.com/locationtech/geowave/pull/1418">#1418</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>update emr accumulo script to 1.9.2 <a href="https://github.com/locationtech/geowave/pull/1415">#1415</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>changed periodicity for unbounded crs <a href="https://github.com/locationtech/geowave/pull/1414">#1414</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Updated QuickStart Guide <a href="https://github.com/locationtech/geowave/pull/1413">#1413</a> (<a href="https://github.com/emacthecav">emacthecav</a>)</li>
@@ -785,6 +790,7 @@
 <li>updated emr scripts to reflect order of accumulo-geowave config <a href="https://github.com/locationtech/geowave/pull/981">#981</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>adding the GeoWave logo to docs <a href="https://github.com/locationtech/geowave/pull/980">#980</a> (<a href="https://github.com/mawhitby">mawhitby</a>)</li>
 <li>externalized profiles for generating each doc type <a href="https://github.com/locationtech/geowave/pull/978">#978</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>Adding 0.9.3 <a href="https://github.com/locationtech/geowave/pull/977">#977</a> (<a href="https://github.com/mawhitby">mawhitby</a>)</li>
 <li>added the documentation images <a href="https://github.com/locationtech/geowave/pull/976">#976</a> (<a href="https://github.com/mawhitby">mawhitby</a>)</li>
 <li>adding previous versions of documentation <a href="https://github.com/locationtech/geowave/pull/975">#975</a> (<a href="https://github.com/mawhitby">mawhitby</a>)</li>
 </ul>
@@ -803,7 +809,6 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
-<li>Adding 0.9.3 <a href="https://github.com/locationtech/geowave/pull/977">#977</a> (<a href="https://github.com/mawhitby">mawhitby</a>)</li>
 <li>configure geowave namespace in bootstrap <a href="https://github.com/locationtech/geowave/pull/974">#974</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>fix for new location of manpages <a href="https://github.com/locationtech/geowave/pull/973">#973</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>fix to puppet issue, and quickstart guide <a href="https://github.com/locationtech/geowave/pull/972">#972</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
@@ -1245,6 +1250,7 @@
 <li>Update Boundless maven repo <a href="https://github.com/locationtech/geowave/pull/534">#534</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Make doc rpm vendor versioned <a href="https://github.com/locationtech/geowave/pull/533">#533</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Build and RPM GeoWave components using Docker containers <a href="https://github.com/locationtech/geowave/pull/530">#530</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
+<li>0.9.0-SNAPSHOT version bump <a href="https://github.com/locationtech/geowave/pull/527">#527</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 </ul>
 <h2 id="v0.8.9-2015-10-08"><a href="https://github.com/locationtech/geowave/tree/v0.8.9">v0.8.9</a> (2015-10-08)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v0.8.8.1...v0.8.9">Full Changelog</a></p>
@@ -1281,7 +1287,6 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
-<li>0.9.0-SNAPSHOT version bump <a href="https://github.com/locationtech/geowave/pull/527">#527</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>0.8.9 release version bump <a href="https://github.com/locationtech/geowave/pull/526">#526</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Issue #524. SimpleFeatureSource, used by WPS Import, behaved slowly s… <a href="https://github.com/locationtech/geowave/pull/525">#525</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>Issue #520 <a href="https://github.com/locationtech/geowave/pull/523">#523</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
