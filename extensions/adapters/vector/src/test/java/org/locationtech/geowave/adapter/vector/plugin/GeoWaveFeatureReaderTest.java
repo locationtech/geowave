@@ -29,6 +29,7 @@ import org.geotools.feature.SchemaException;
 import org.geotools.feature.visitor.MaxVisitor;
 import org.geotools.feature.visitor.MinVisitor;
 import org.geotools.filter.FilterFactoryImpl;
+import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
 import org.junit.Before;
@@ -115,6 +116,49 @@ public class GeoWaveFeatureReaderTest extends BaseDataStoreTest {
       count++;
     }
     assertTrue(count > 0);
+  }
+
+  @Test
+  public void testTemporal()
+      throws IllegalArgumentException, NoSuchElementException, IOException, CQLException {
+    final FilterFactoryImpl factory = new FilterFactoryImpl();
+    // This tests performs both CQL and ECQL queries on a time-based attribute because different
+    // geometry visitors are used to extract the geometry portion of the query. Under normal
+    // circumstances this is fine except for when there is no geometry constraint specified. Using
+    // CQL will result in a default geometry with infinite area. ECQL results in a null geometry.
+    // This test checks both code paths to ensure there are no unintended errors.
+    final Query ecqlQuery =
+        new Query(
+            "GeoWaveFeatureReaderTest",
+            ECQL.toFilter("start AFTER 2005-05-16T20:32:56Z"),
+            new String[] {"geometry", "pid"});
+
+    FeatureReader<SimpleFeatureType, SimpleFeature> reader =
+        dataStore.getFeatureReader(ecqlQuery, Transaction.AUTO_COMMIT);
+    int count = 0;
+    while (reader.hasNext()) {
+      final SimpleFeature feature = reader.next();
+      assertTrue(fids.contains(feature.getID()));
+      count++;
+    }
+    reader.close();
+    assertEquals(1, count);
+
+    final Query cqlQuery =
+        new Query(
+            "GeoWaveFeatureReaderTest",
+            CQL.toFilter("start >= '2005-05-16 20:32:56+0000'"),
+            new String[] {"geometry", "pid"});
+
+    reader = dataStore.getFeatureReader(cqlQuery, Transaction.AUTO_COMMIT);
+    count = 0;
+    while (reader.hasNext()) {
+      final SimpleFeature feature = reader.next();
+      assertTrue(fids.contains(feature.getID()));
+      count++;
+    }
+    reader.close();
+    assertEquals(1, count);
   }
 
   @Test

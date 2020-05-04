@@ -101,6 +101,11 @@ image::import-maven-eclipse-projects.png[scaledwidth="30%",width="30%",alt="impo
 +
 image::EclipseWorkspace.png[scaledwidth="25%",width="25%", alt="EclipseWorkspace.png", title="Eclipse Workspace"]
 
+[NOTE]
+====
+If Eclipse produces `Plugin execution not covered by lifecycle configuration:...` error messages in the `geowave-datastore-hbase` or `geowave-grpc-protobuf` project `pom.xml` files, they may be ignored. The error can be muted by hovering the mouse over the line of XML and selecting the `Mark goal as ignored in pom.xml` option. 
+====
+
 ==== Clean Up and Formatter Templates
 
 The GeoWave repository includes clean up and formatter templates that can be used by Eclipse to clean and format code according to GeoWave standards when those operations are performed in the IDE.
@@ -129,3 +134,24 @@ The GeoWave repository includes clean up and formatter templates that can be use
 
 Now when Source -> Clean Up... or Source -> Format are used, they will be done in a manner consistent with the rest of the GeoWave source code.
 
+==== 
+
+==== Debugging
+
+One of the simplest ways to debug GeoWave source code and analyze system interactions is to create a debug configuration and step through the integration test suite. 
+
+. Within Eclipse open the Debug Configurations window (Run -> Debug Configurations...).
+
+. Right-click on "JUnit" in the configuration type list on the left-hand side of the window and select "New Configuration".
+
+. Give the configuration a name, and ensure that `geowave-test` is set in the "Project" field.
+
+. Set the "Test Class" field to `org.locationtech.geowave.test.GeoWaveITSuite` (or any another test class that is preferred).
+
+. Navigate to the arguments tab and set values for the "VM arguments" field. Example: `-ea -DtestStoreType=ROCKSDB -DenableServerSideLibrary=false` will run the test suite with RocksDB as the data store. Note: The `DenableServerSideLibrary` option technically only applies to Accumulo and HBase currently and is false by default.
+
+. Click the "Apply" button to save the changes and then "Debug" to start the actual process.
+
+The integration test suite allocates some resources on the local file system. If the suite is terminated or canceled before it finishes, it is possible that some of these resources may not be fully cleaned up by the test runner. This may cause issues or errors in subsequent runs of the suite. To resolve this issue, delete the `temp` folder and the `<DataStoreName>_temp` folder where `<DataStoreName>` is the name of the data store used by the current debug configuration. Both of these folders will exist under the `target` directory of the `geowave-test` project.
+
+====
