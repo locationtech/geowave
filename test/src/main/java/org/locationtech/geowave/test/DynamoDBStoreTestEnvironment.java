@@ -8,14 +8,15 @@
  */
 package org.locationtech.geowave.test;
 
+import java.io.File;
 import org.apache.log4j.Logger;
 import org.locationtech.geowave.core.store.GenericStoreFactory;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBStoreFactoryFamily;
+import org.locationtech.geowave.datastore.dynamodb.cli.DynamoDBLocal;
 import org.locationtech.geowave.datastore.dynamodb.config.DynamoDBOptions;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
-import org.locationtech.geowave.datastore.dynamodb.cli.DynamoDBLocal;
 
 public class DynamoDBStoreTestEnvironment extends StoreTestEnvironment {
   private static final GenericStoreFactory<DataStore> STORE_FACTORY =
@@ -33,6 +34,7 @@ public class DynamoDBStoreTestEnvironment extends StoreTestEnvironment {
   private static final Logger LOGGER = Logger.getLogger(DynamoDBStoreTestEnvironment.class);
 
   protected DynamoDBLocal dynamoLocal;
+  public static final File DEFAULT_DIR = new File("./target/temp/dynamodb");
 
   private DynamoDBStoreTestEnvironment() {}
 
@@ -40,7 +42,7 @@ public class DynamoDBStoreTestEnvironment extends StoreTestEnvironment {
   public void setup() {
     // DynamoDB IT's rely on an external dynamo local process
     if (dynamoLocal == null) {
-      dynamoLocal = new DynamoDBLocal(null); // null uses tmp dir
+      dynamoLocal = new DynamoDBLocal(DEFAULT_DIR.getAbsolutePath()); // uses tmp dir
     }
 
     // Make sure we clean up any old processes first

@@ -31,21 +31,38 @@ public class DynamoDBLocal {
   // these need to move to config
   private static final String DYNDB_URL = "https://s3-us-west-2.amazonaws.com/dynamodb-local/";
   private static final String DYNDB_TAR = "dynamodb_local_latest.tar.gz";
-  private static final String HOST_PORT = "8000";
+  public static final int DEFAULT_PORT = 8000;
 
   private static final long EMULATOR_SPINUP_DELAY_MS = 30000L;
-  public static final File DEFAULT_DIR = new File("./target/temp");
+  public static final File DEFAULT_DIR = new File("./temp");
 
   private final File dynLocalDir;
+  private final int port;
   private ExecuteWatchdog watchdog;
 
+  public DynamoDBLocal() {
+    this(null, null);
+  }
+
   public DynamoDBLocal(final String localDir) {
-    if (localDir != null && !localDir.isEmpty()) {
+    this(localDir, null);
+  }
+
+  public DynamoDBLocal(final int port) {
+    this(null, port);
+  }
+
+  public DynamoDBLocal(final String localDir, final Integer port) {
+    if ((localDir != null) && !localDir.isEmpty()) {
       dynLocalDir = new File(localDir);
     } else {
       dynLocalDir = new File(DEFAULT_DIR, "dynamodb");
     }
-
+    if (port != null) {
+      this.port = port;
+    } else {
+      this.port = DEFAULT_PORT;
+    }
     if (!dynLocalDir.exists() && !dynLocalDir.mkdirs()) {
       LOGGER.warn("unable to create directory " + dynLocalDir.getAbsolutePath());
     }
@@ -139,7 +156,7 @@ public class DynamoDBLocal {
     cmdLine.addArgument("-sharedDb");
     cmdLine.addArgument("-inMemory");
     cmdLine.addArgument("-port");
-    cmdLine.addArgument(HOST_PORT);
+    cmdLine.addArgument(Integer.toString(port));
     System.setProperty("aws.accessKeyId", "dummy");
     System.setProperty("aws.secretKey", "dummy");
 

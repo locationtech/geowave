@@ -191,6 +191,9 @@ public class DynamoDBOptions extends StoreFactoryOptions {
 
     @Override
     public Regions convert(final String regionName) {
+      if (regionName == null || regionName.isEmpty()) {
+        return null;
+      }
       return Regions.fromName(regionName.toLowerCase().replaceAll("_", "-"));
     }
   }
