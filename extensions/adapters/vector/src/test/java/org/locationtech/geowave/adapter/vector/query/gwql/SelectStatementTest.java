@@ -242,4 +242,31 @@ public class SelectStatementTest extends AbstractStatementTest {
     assertEquals("c", selector.columnName());
     assertNull(selectStatement.filter());
   }
+
+  @Test
+  public void testUnconventionalNaming() {
+    final String statement = "SELECT [a-1], `b-2`, \"c-3\" FROM store.[ty-p3]";
+    final Statement gwStatement = GWQLParser.parseStatement(statement);
+    assertTrue(gwStatement instanceof SelectStatement);
+    final SelectStatement selectStatement = (SelectStatement) gwStatement;
+    assertFalse(selectStatement.isAggregation());
+    assertNotNull(selectStatement.typeName());
+    assertEquals("store", selectStatement.typeName().storeName());
+    assertEquals("ty-p3", selectStatement.typeName().typeName());
+    assertNotNull(selectStatement.selectors());
+    assertTrue(selectStatement.selectors().size() == 3);
+    assertTrue(selectStatement.selectors().get(0) instanceof ColumnSelector);
+    ColumnSelector selector = (ColumnSelector) selectStatement.selectors().get(0);
+    assertNull(selector.alias());
+    assertEquals("a-1", selector.columnName());
+    assertTrue(selectStatement.selectors().get(1) instanceof ColumnSelector);
+    selector = (ColumnSelector) selectStatement.selectors().get(1);
+    assertNull(selector.alias());
+    assertEquals("b-2", selector.columnName());
+    assertTrue(selectStatement.selectors().get(2) instanceof ColumnSelector);
+    selector = (ColumnSelector) selectStatement.selectors().get(2);
+    assertNull(selector.alias());
+    assertEquals("c-3", selector.columnName());
+    assertNull(selectStatement.filter());
+  }
 }

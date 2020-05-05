@@ -206,10 +206,20 @@ K_SELECT : S E L E C T;
 K_WHERE : W H E R E;
 
 IDENTIFIER
+	: ESCAPED_IDENTIFIER
+	{
+		String txt = getText();
+		// strip the leading and trailing characters that wrap the identifier when using unconventional naming
+		txt = txt.substring(1, txt.length() - 1); 
+		setText(txt);
+    }
+    | [a-zA-Z_] [a-zA-Z_0-9]* // TODO check: needs more chars in set
+;
+
+ESCAPED_IDENTIFIER
 	: '"' (~'"' | '""')* '"'
 	| '`' (~'`' | '``')* '`'
- 	| '[' ~']'* ']'
- 	| [a-zA-Z_] [a-zA-Z_0-9]* // TODO check: needs more chars in set
+	| '[' ~']'* ']'
 ;
  
 INTEGER
