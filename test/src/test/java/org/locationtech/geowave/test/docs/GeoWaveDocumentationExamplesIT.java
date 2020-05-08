@@ -65,7 +65,8 @@ public class GeoWaveDocumentationExamplesIT extends AbstractGeoWaveIT {
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
-          GeoWaveStoreType.ROCKSDB})
+          GeoWaveStoreType.ROCKSDB,
+          GeoWaveStoreType.FILESYSTEM})
   protected DataStorePluginOptions dataStore;
 
   private static long startMillis;

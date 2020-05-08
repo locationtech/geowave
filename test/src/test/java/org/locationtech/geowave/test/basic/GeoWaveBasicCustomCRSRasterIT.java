@@ -55,7 +55,8 @@ public class GeoWaveBasicCustomCRSRasterIT extends AbstractGeoWaveIT {
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
-          GeoWaveStoreType.ROCKSDB})
+          GeoWaveStoreType.ROCKSDB,
+          GeoWaveStoreType.FILESYSTEM})
   protected DataStorePluginOptions dataStoreOptions;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveBasicCustomCRSRasterIT.class);

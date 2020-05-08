@@ -40,6 +40,7 @@ public class RocksDBClient implements Closeable {
       final int prime = 31;
       int result = 1;
       result = (prime * result) + ((directory == null) ? 0 : directory.hashCode());
+      result = (prime * result) + (requiresTimestamp ? 1231 : 1237);
       return result;
     }
 
@@ -62,8 +63,12 @@ public class RocksDBClient implements Closeable {
       } else if (!directory.equals(other.directory)) {
         return false;
       }
+      if (requiresTimestamp != other.requiresTimestamp) {
+        return false;
+      }
       return true;
     }
+
   }
 
   private static class IndexCacheKey extends DataIndexCacheKey {

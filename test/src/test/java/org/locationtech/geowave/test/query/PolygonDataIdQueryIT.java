@@ -60,7 +60,8 @@ public class PolygonDataIdQueryIT extends AbstractGeoWaveIT {
       GeoWaveStoreType.DYNAMODB,
       GeoWaveStoreType.KUDU,
       GeoWaveStoreType.REDIS,
-      GeoWaveStoreType.ROCKSDB})
+      GeoWaveStoreType.ROCKSDB,
+      GeoWaveStoreType.FILESYSTEM})
   protected DataStorePluginOptions dataStore;
 
   @Override

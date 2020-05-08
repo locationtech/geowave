@@ -197,6 +197,11 @@
 		
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-datastore-filesystem</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-datastore-redis</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -758,6 +763,13 @@
 			<properties>
 				<skipITs>false</skipITs>
 				<testStoreType>ROCKSDB</testStoreType>
+			</properties>
+		</profile>
+		<profile>
+			<id>filesystem-it</id>
+			<properties>
+				<skipITs>false</skipITs>
+				<testStoreType>FILESYSTEM</testStoreType>
 			</properties>
 		</profile>
 		<profile>

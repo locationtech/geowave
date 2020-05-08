@@ -25,6 +25,8 @@ env:
     - NAME='Accumulo Server IT on Latest HDP Versions' MAVEN_PROFILES='accumulo-it-server,hortonworks' BUILD_AND_PUBLISH=false  IT_ONLY=true
     - NAME='RocksDB IT with Secondary Indexing'  MAVEN_PROFILES='rocksdb-it,secondary-index-it' BUILD_AND_PUBLISH=false  IT_ONLY=true
     - NAME='Kudu IT on Latest ASF Versions' MAVEN_PROFILES='kudu-it' BUILD_AND_PUBLISH=false  IT_ONLY=true
+    - NAME='FileSystem IT on Latest ASF Versions' MAVEN_PROFILES='filesystem-it' BUILD_AND_PUBLISH=false  IT_ONLY=true
+    - NAME='FileSystem IT with Secondary Indexing'  MAVEN_PROFILES='filesystem-it,secondary-index-it' BUILD_AND_PUBLISH=false  IT_ONLY=true
   global:
     - secure: C3gdJmFavZxvsRVqCLpRUAaisNV3MhWbSYf4Wjs2SBLC/AIEwN0vDWHOuYiUExuXR1kApBVdNffuCX7bt/5siewHgmiVUGyY1xytxDdv+PAKZihlfYZRGattyg3XUbEFwyjr7c74639Y1w45NPUoBMUT4SKHZkfqD+FDU47OHIM=
 

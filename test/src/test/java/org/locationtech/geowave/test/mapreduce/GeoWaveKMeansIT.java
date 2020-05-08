@@ -67,7 +67,8 @@ public class GeoWaveKMeansIT {
       GeoWaveStoreType.ACCUMULO,
       GeoWaveStoreType.BIGTABLE,
       GeoWaveStoreType.REDIS,
-      GeoWaveStoreType.ROCKSDB})
+      GeoWaveStoreType.ROCKSDB,
+      GeoWaveStoreType.FILESYSTEM})
   protected DataStorePluginOptions dataStorePluginOptions;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveKMeansIT.class);

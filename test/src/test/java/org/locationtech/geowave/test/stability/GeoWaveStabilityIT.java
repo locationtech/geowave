@@ -63,7 +63,8 @@ public class GeoWaveStabilityIT extends AbstractGeoWaveBasicVectorIT {
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.REDIS,
-          GeoWaveStoreType.ROCKSDB})
+          GeoWaveStoreType.ROCKSDB,
+          GeoWaveStoreType.FILESYSTEM})
   protected DataStorePluginOptions dataStore;
   @GeoWaveTestStore(
       value = {
@@ -73,7 +74,8 @@ public class GeoWaveStabilityIT extends AbstractGeoWaveBasicVectorIT {
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.REDIS,
-          GeoWaveStoreType.ROCKSDB},
+          GeoWaveStoreType.ROCKSDB,
+          GeoWaveStoreType.FILESYSTEM},
       namespace = "badDataStore")
   protected DataStorePluginOptions badDataStore;
 

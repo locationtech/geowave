@@ -38,7 +38,8 @@ import org.locationtech.geowave.test.basic.AbstractGeoWaveBasicVectorIT;
     GeoWaveStoreType.ACCUMULO,
     GeoWaveStoreType.HBASE,
     GeoWaveStoreType.REDIS,
-    GeoWaveStoreType.ROCKSDB})
+    GeoWaveStoreType.ROCKSDB,
+    GeoWaveStoreType.FILESYSTEM})
 public class StoreCopyIT extends AbstractGeoWaveBasicVectorIT {
   private static final String HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE =
       HAIL_TEST_CASE_PACKAGE + "hail-box-filter.shp";

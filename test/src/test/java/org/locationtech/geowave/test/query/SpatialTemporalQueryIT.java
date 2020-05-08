@@ -80,7 +80,8 @@ import org.slf4j.LoggerFactory;
         // GeoWaveStoreType.HBASE,
         GeoWaveStoreType.KUDU,
         GeoWaveStoreType.REDIS,
-        GeoWaveStoreType.ROCKSDB})
+        GeoWaveStoreType.ROCKSDB,
+        GeoWaveStoreType.FILESYSTEM})
 public class SpatialTemporalQueryIT {
   private static final SimpleDateFormat CQL_DATE_FORMAT =
       new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");

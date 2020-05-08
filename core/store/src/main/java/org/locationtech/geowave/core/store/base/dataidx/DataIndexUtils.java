@@ -21,7 +21,6 @@ import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
-import org.locationtech.geowave.core.store.base.DataStoreCallbackManager;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;

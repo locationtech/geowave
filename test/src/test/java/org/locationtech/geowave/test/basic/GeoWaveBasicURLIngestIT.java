@@ -55,7 +55,8 @@ public class GeoWaveBasicURLIngestIT extends AbstractGeoWaveBasicVectorIT {
           GeoWaveStoreType.ACCUMULO,
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.REDIS,
-          GeoWaveStoreType.ROCKSDB})
+          GeoWaveStoreType.ROCKSDB,
+          GeoWaveStoreType.FILESYSTEM})
   protected DataStorePluginOptions dataStore;
 
   private static Stopwatch stopwatch = new Stopwatch();

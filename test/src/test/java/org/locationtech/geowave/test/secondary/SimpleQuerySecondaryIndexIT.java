@@ -54,7 +54,8 @@ public class SimpleQuerySecondaryIndexIT extends AbstractGeoWaveIT {
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
-          GeoWaveStoreType.ROCKSDB},
+          GeoWaveStoreType.ROCKSDB,
+          GeoWaveStoreType.FILESYSTEM},
       options = {"enableSecondaryIndexing=true"})
   protected DataStorePluginOptions dataStoreOptions;
   private static long startMillis;

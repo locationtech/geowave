@@ -135,6 +135,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-datastore-filesystem</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-core-geotime</artifactId>
 			<version>${project.version}</version>
 		</dependency>

@@ -59,7 +59,8 @@ public class GeoWaveGeometryPrecisionIT extends AbstractGeoWaveBasicVectorIT {
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
-          GeoWaveStoreType.ROCKSDB},
+          GeoWaveStoreType.ROCKSDB,
+          GeoWaveStoreType.FILESYSTEM},
       options = "enableSecondaryIndexing=false")
   protected DataStorePluginOptions dataStorePluginOptions;
 

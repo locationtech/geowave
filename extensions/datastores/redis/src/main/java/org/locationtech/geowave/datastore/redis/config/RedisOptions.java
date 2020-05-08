@@ -40,7 +40,7 @@ public class RedisOptions extends StoreFactoryOptions {
 
   @Parameter(
       names = "--serialization",
-      description = "Can be \"fst\" or \"jdk\". Defaults to fst. This is only used for the data index when secondary indexing.",
+      description = "Can be \"fst\" or \"jdk\". Defaults to fst. Note that this serialization codec is only used for the data index when secondary indexing.",
       converter = SerializationConverter.class)
   private Serialization serialization = Serialization.FST;
   @ParametersDelegate

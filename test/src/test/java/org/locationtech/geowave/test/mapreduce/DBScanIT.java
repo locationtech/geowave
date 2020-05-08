@@ -73,7 +73,8 @@ public class DBScanIT extends AbstractGeoWaveIT {
           GeoWaveStoreType.BIGTABLE,
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.REDIS,
-          GeoWaveStoreType.ROCKSDB})
+          GeoWaveStoreType.ROCKSDB,
+          GeoWaveStoreType.FILESYSTEM})
   protected DataStorePluginOptions dataStorePluginOptions;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DBScanIT.class);
