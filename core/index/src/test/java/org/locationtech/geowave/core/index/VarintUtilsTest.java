@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.core.index;
 
+import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.util.Calendar;
 import java.util.Date;
@@ -202,13 +203,13 @@ public class VarintUtilsTest {
     testEncodeDecodeTimeValue(new Date());
     // Epoch time
     testEncodeDecodeTimeValue(new Date(0));
-    // Geowave epoch time
+    // GeoWave epoch time
     testEncodeDecodeTimeValue(new Date(VarintUtils.TIME_EPOCH));
     // Distant past
-    cal.set(15, 8, 13, 5, 18, 36);
+    cal.set(15, Calendar.SEPTEMBER, 13, 5, 18, 36);
     testEncodeDecodeTimeValue(cal.getTime());
     // Distant future
-    cal.set(3802, 11, 31, 23, 59, 59);
+    cal.set(3802, Calendar.DECEMBER, 31, 23, 59, 59);
     testEncodeDecodeTimeValue(cal.getTime());
   }
 
@@ -219,5 +220,37 @@ public class VarintUtilsTest {
     buffer.position(0);
     final Date decoded = new Date(VarintUtils.readTime(buffer));
     Assert.assertEquals(value, decoded);
+  }
+
+  @Test
+  public void testEncodeDecodeBigDecimal() {
+    testEncodeDecodeBigDecimalValue(new BigDecimal(123));
+    testEncodeDecodeBigDecimalValue(new BigDecimal(-123));
+    testEncodeDecodeBigDecimalValue(new BigDecimal(256));
+    testEncodeDecodeBigDecimalValue(new BigDecimal(2_061_000_009));
+    testEncodeDecodeBigDecimalValue(new BigDecimal(-1_000_000_000));
+    testEncodeDecodeBigDecimalValue(new BigDecimal("3133731337313373133731337"));
+    testEncodeDecodeBigDecimalValue(new BigDecimal("-3133731337313373133731337"));
+    testEncodeDecodeBigDecimalValue(
+        new BigDecimal("-3133731337313373133731337.3133731337313373133731337"));
+  }
+
+  private void testEncodeDecodeBigDecimalValue(final BigDecimal value) {
+    byte[] encoded = VarintUtils.writeBigDecimal(value);
+    BigDecimal roundtrip = VarintUtils.readBigDecimal(ByteBuffer.wrap(encoded));
+    Assert.assertNotNull(roundtrip);
+    Assert.assertEquals(0, value.compareTo(roundtrip));
+
+    // append garbage after the BigDecimal to ensure that it is not read.
+    byte[] garbage = new byte[] {0xc, 0xa, 0xf, 0xe, 32, 0xb, 0xa, 0xb, 0xe};
+    ByteBuffer appended = ByteBuffer.allocate(encoded.length + garbage.length);
+    appended.put(encoded);
+    appended.put(garbage);
+    roundtrip = VarintUtils.readBigDecimal((ByteBuffer) appended.flip());
+    Assert.assertNotNull(roundtrip);
+    Assert.assertEquals(
+        value.toString() + " == " + roundtrip.toString(),
+        0,
+        value.compareTo(roundtrip));
   }
 }

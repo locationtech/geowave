@@ -40,6 +40,8 @@ import org.locationtech.geowave.core.geotime.store.query.TemporalQuery;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.CommonIndexBoundingBoxAggregation;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.CommonIndexTimeRangeAggregation;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.FieldNameParam;
+import org.locationtech.geowave.core.geotime.store.query.aggregate.GeohashCommonIndexedBinningStrategy;
+import org.locationtech.geowave.core.geotime.store.query.aggregate.GeohashSimpleFeatureBinningStrategy;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.OptimalVectorBoundingBoxAggregation;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.OptimalVectorTimeRangeAggregation;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.VectorBoundingBoxAggregation;
@@ -90,7 +92,8 @@ public class GeoTimePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 334, SimpleTimeDefinition::new),
         new PersistableIdAndConstructor((short) 335, SimpleTimeIndexStrategy::new),
         new PersistableIdAndConstructor((short) 336, CustomCRSBoundedSpatialDimensionX::new),
-        new PersistableIdAndConstructor((short) 337, CustomCRSBoundedSpatialDimensionY::new)};
-
+        new PersistableIdAndConstructor((short) 337, CustomCRSBoundedSpatialDimensionY::new),
+        new PersistableIdAndConstructor((short) 338, GeohashSimpleFeatureBinningStrategy::new),
+        new PersistableIdAndConstructor((short) 339, GeohashCommonIndexedBinningStrategy::new)};
   }
 }

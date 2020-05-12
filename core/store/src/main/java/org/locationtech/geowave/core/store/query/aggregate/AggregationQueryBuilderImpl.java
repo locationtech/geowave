@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.core.store.query.aggregate;
 
+import java.util.Map;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.AggregationQuery;
@@ -21,6 +22,10 @@ public class AggregationQueryBuilderImpl<P extends Persistable, R, T, A extends 
     AggregationQueryBuilder<P, R, T, A> {
   protected AggregateTypeQueryOptions<P, R, T> options;
 
+  public AggregationQueryBuilderImpl() {
+    this.options = new AggregateTypeQueryOptions<>();
+  }
+
   @Override
   public AggregationQuery<P, R, T> build() {
     return new AggregationQuery<>(
@@ -31,18 +36,37 @@ public class AggregationQueryBuilderImpl<P extends Persistable, R, T, A extends 
   }
 
   @Override
-  public A count(final String... typeNames) {
-    this.options = new AggregateTypeQueryOptions<>((Aggregation) new CountAggregation(), typeNames);
-    return (A) this;
+  public AggregationQuery<BinningAggregationOptions<P, T>, Map<String, R>, T> buildWithBinningStrategy(
+      AggregationBinningStrategy<T> binningStrategy,
+      int maxBins) {
+    AggregateTypeQueryOptions<BinningAggregationOptions<P, T>, Map<String, R>, T> newOptions =
+        new AggregateTypeQueryOptions<>(
+            new BinningAggregation<>(this.options.getAggregation(), binningStrategy, maxBins),
+            this.options.getTypeNames());
+    return new AggregationQuery<>(
+        newCommonQueryOptions(),
+        newOptions,
+        newIndexQueryOptions(),
+        constraints);
   }
 
   @Override
   public A aggregate(final String typeName, final Aggregation<P, R, T> aggregation) {
-    this.options = new AggregateTypeQueryOptions<>(aggregation, new String[] {typeName});
+    this.options.setAggregation(aggregation);
+    this.options.setTypeNames(new String[] {typeName});
     return (A) this;
   }
 
-  protected AggregateTypeQueryOptions<P, R, T> newAggregateTypeQueryOptions() {
+  @Override
+  public A count(final String... typeNames) {
+    // this forces the result type of the aggregation to be Long,
+    // and will fail at runtime otherwise.
+    this.options.setAggregation((Aggregation<P, R, T>) new CountAggregation());
+    this.options.setTypeNames(typeNames);
+    return (A) this;
+  }
+
+  private AggregateTypeQueryOptions<P, R, T> newAggregateTypeQueryOptions() {
     return options;
   }
 }

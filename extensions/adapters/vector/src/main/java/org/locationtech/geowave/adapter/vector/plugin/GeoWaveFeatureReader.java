@@ -437,7 +437,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
           new DistributedRenderAggregation(renderOptions)).constraints(
               OptimalCQLQuery.createOptimalQuery(filter, components.getAdapter(), index, query));
       final DistributedRenderResult result = components.getDataStore().aggregate(bldr.build());
-      return new CloseableIterator.Wrapper(
+      return new CloseableIterator.Wrapper<>(
           Iterators.singletonIterator(
               SimpleFeatureBuilder.build(
                   GeoWaveFeatureCollection.getDistributedRenderFeatureType(),

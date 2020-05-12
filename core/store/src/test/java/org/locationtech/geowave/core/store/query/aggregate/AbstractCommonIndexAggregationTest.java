@@ -21,7 +21,7 @@ import com.google.common.collect.Lists;
 public abstract class AbstractCommonIndexAggregationTest<P extends Persistable, R> extends
     AbstractAggregationTest<P, R, CommonIndexedPersistenceEncoding> {
 
-  public List<CommonIndexedPersistenceEncoding> generateObjects(final int count) {
+  public static List<CommonIndexedPersistenceEncoding> generateObjects(final int count) {
     List<CommonIndexedPersistenceEncoding> objects = Lists.newArrayListWithCapacity(count);
     for (int i = 0; i < count; i++) {
       String dataId = "entry" + i;

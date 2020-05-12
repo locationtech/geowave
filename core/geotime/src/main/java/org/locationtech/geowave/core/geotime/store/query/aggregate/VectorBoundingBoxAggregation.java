@@ -43,7 +43,7 @@ public class VectorBoundingBoxAggregation extends
     } else {
       o = entry.getDefaultGeometry();
     }
-    if ((o != null) && (o instanceof Geometry)) {
+    if (o instanceof Geometry) {
       final Geometry geometry = (Geometry) o;
       return geometry.getEnvelopeInternal();
     }

@@ -1005,7 +1005,7 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
           AggregationProtosClient.AggregationRequest.newBuilder();
       requestBuilder.setAggregation(aggregationBuilder.build());
       if (readerParams.getFilter() != null) {
-        final List<QueryFilter> distFilters = new ArrayList();
+        final List<QueryFilter> distFilters = new ArrayList<>();
         distFilters.add(readerParams.getFilter());
 
         final byte[] filterBytes = URLClassloaderUtils.toBinary(distFilters);

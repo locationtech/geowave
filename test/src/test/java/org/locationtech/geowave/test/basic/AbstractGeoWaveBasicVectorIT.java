@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math.util.MathUtils;
@@ -61,6 +62,7 @@ import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.AggregationQuery;
 import org.locationtech.geowave.core.store.api.AggregationQueryBuilder;
+import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
@@ -91,7 +93,6 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.common.collect.Lists;
 
 public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractGeoWaveBasicVectorIT.class);
@@ -176,10 +177,10 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
       final Index index,
       final String queryDescription,
       final CoordinateReferenceSystem crs,
-      final boolean countDuplicates) throws Exception {
+      final boolean countDuplicates) throws IOException {
     LOGGER.info("querying " + queryDescription);
-    final org.locationtech.geowave.core.store.api.DataStore geowaveStore =
-        getDataStorePluginOptions().createDataStore();
+
+    final DataStore geowaveStore = getDataStorePluginOptions().createDataStore();
     // this file is the filtered dataset (using the previous file as a
     // filter) so use it to ensure the query worked
     final QueryConstraints constraints =
@@ -246,7 +247,7 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
           final Long countResult = geowaveStore.aggregate(aggBldr.build());
           // results should already be aggregated, there should be
           // exactly one value in this iterator
-          Assert.assertTrue(countResult != null);
+          Assert.assertNotNull(countResult);
           statisticsResult += countResult;
         }
       }
@@ -368,8 +369,7 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
     LOGGER.warn("deleting by data ID from " + index.getName() + " index");
 
     boolean success = false;
-    final org.locationtech.geowave.core.store.api.DataStore geowaveStore =
-        getDataStorePluginOptions().createDataStore();
+    final DataStore geowaveStore = getDataStorePluginOptions().createDataStore();
     final QueryConstraints query = TestUtils.resourceToQuery(savedFilterResource);
     final CloseableIterator<?> actualResults;
 
@@ -412,8 +412,7 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
       throws Exception {
     LOGGER.info("bulk deleting via spatial query");
 
-    final org.locationtech.geowave.core.store.api.DataStore geowaveStore =
-        getDataStorePluginOptions().createDataStore();
+    final DataStore geowaveStore = getDataStorePluginOptions().createDataStore();
 
     // Run the query for this delete to get the expected count
     final QueryConstraints query = TestUtils.resourceToQuery(savedFilterResource);
@@ -424,8 +423,7 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
   protected void testDeleteCQL(final String cqlStr, final Index index) throws Exception {
     LOGGER.info("bulk deleting using CQL: '" + cqlStr + "'");
 
-    final org.locationtech.geowave.core.store.api.DataStore geowaveStore =
-        getDataStorePluginOptions().createDataStore();
+    final DataStore geowaveStore = getDataStorePluginOptions().createDataStore();
 
     // Retrieve the feature adapter for the CQL query generator
     final PersistentAdapterStore adapterStore = getDataStorePluginOptions().createAdapterStore();
@@ -445,9 +443,9 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
   }
 
   protected void deleteInternal(
-      final org.locationtech.geowave.core.store.api.DataStore geowaveStore,
+      final DataStore geowaveStore,
       final Index index,
-      final QueryConstraints query) throws IOException {
+      final QueryConstraints query) {
     // Query everything
     QueryBuilder<?, ?> bldr = QueryBuilder.newBuilder();
     if (index != null) {
@@ -593,7 +591,7 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
       Assert.fail(
           "Error occurred on reingested dataset while testing a bounding box and time range query of spatial temporal index: '"
               + e.getLocalizedMessage()
-              + "'");
+              + '\'');
     }
   }
 

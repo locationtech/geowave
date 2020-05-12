@@ -122,9 +122,9 @@ public class BaseDataStoreUtils {
       } finally {
         it.close();
       }
-      return new Wrapper(Iterators.singletonIterator(aggregationFunction.getResult()));
+      return new Wrapper<>(Iterators.singletonIterator(aggregationFunction.getResult()));
     }
-    return new CloseableIterator.Empty();
+    return new CloseableIterator.Empty<>();
   }
 
   /**

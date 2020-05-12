@@ -17,6 +17,7 @@ import org.locationtech.geowave.test.basic.GeoWaveBasicCustomCRSRasterIT;
 import org.locationtech.geowave.test.basic.GeoWaveBasicRasterIT;
 import org.locationtech.geowave.test.basic.GeoWaveBasicSpatialTemporalVectorIT;
 import org.locationtech.geowave.test.basic.GeoWaveBasicTemporalVectorIT;
+import org.locationtech.geowave.test.basic.GeoWaveBinningAggregationIT;
 import org.locationtech.geowave.test.basic.GeoWaveCustomCRSSpatialVectorIT;
 import org.locationtech.geowave.test.basic.GeoWaveCustomIndexIT;
 import org.locationtech.geowave.test.basic.GeoWaveGeometryPrecisionIT;
@@ -60,6 +61,7 @@ import org.locationtech.geowave.test.stability.GeoWaveStabilityIT;
     GeoWaveCustomCRSSpatialVectorIT.class,
     GeoWaveBasicTemporalVectorIT.class,
     GeoWaveBasicSpatialTemporalVectorIT.class,
+    GeoWaveBinningAggregationIT.class,
     GeoWaveGeometryPrecisionIT.class,
     GeoWaveCustomIndexIT.class,
     GeoWaveDocumentationExamplesIT.class,

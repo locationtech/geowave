@@ -8,22 +8,10 @@
  */
 package org.locationtech.geowave.core.index;
 
-import java.nio.ByteBuffer;
-/**
- * Licensed to the Apache Software Foundation (ASF) under one or more contributor license
- * agreements. See the NOTICE file distributed with this work for additional information regarding
- * copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance with the License. You may obtain a
- * copy of the License at
- *
- * <p> http://www.apache.org/licenses/LICENSE-2.0
- *
- * <p> Unless required by applicable law or agreed to in writing, software distributed under the
- * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing permissions and
- * limitations under the License.
- */
 import com.google.common.annotations.VisibleForTesting;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
 
 /**
  * Based on {@link com.clearspring.analytics.util.Varint}. Provides additional functionality to
@@ -37,7 +25,7 @@ public class VarintUtils {
    * Convert an int to an int that uses zig-zag encoding to prevent negative numbers from using the
    * maximum number of bytes.
    *
-   * @see {@code com.clearsprint.analytics.util.Varint}
+   * @see com.clearspring.analytics.util.Varint
    */
   @VisibleForTesting
   static int signedToUnsignedInt(final int value) {
@@ -47,7 +35,7 @@ public class VarintUtils {
   /**
    * Convert an int that has been zig-zag encoded back to normal.
    *
-   * @see {@code com.clearsprint.analytics.util.Varint}
+   * @see com.clearspring.analytics.util.Varint
    */
   @VisibleForTesting
   static int unsignedToSignedInt(final int value) {
@@ -172,7 +160,7 @@ public class VarintUtils {
    * Convert a long to a long that uses zig-zag encoding to prevent negative numbers from using the
    * maximum number of bytes.
    *
-   * @see {@code com.clearsprint.analytics.util.Varint}
+   * @see com.clearspring.analytics.util.Varint
    */
   @VisibleForTesting
   static long signedToUnsignedLong(final long value) {
@@ -182,7 +170,7 @@ public class VarintUtils {
   /**
    * Convert a long that has been zig-zag encoded back to normal.
    *
-   * @see {@code com.clearsprint.analytics.util.Varint}
+   * @see com.clearspring.analytics.util.Varint
    */
   @VisibleForTesting
   static long unsignedToSignedLong(final long value) {
@@ -283,5 +271,45 @@ public class VarintUtils {
    */
   public static long readTime(final ByteBuffer buffer) {
     return VarintUtils.readSignedLong(buffer) + TIME_EPOCH;
+  }
+
+  /**
+   * Encode a BigDecimal as a byte[]. The structure of the byte[] is opaque, so to deserialize, use
+   * {@link #readBigDecimal(ByteBuffer)}
+   *
+   * @param num The number to serialize as a {@link ByteBuffer}
+   * @return a byte array that represents the given BigDecimal.
+   */
+  public static byte[] writeBigDecimal(final BigDecimal num) {
+    if (num == null) {
+      return new byte[0];
+    }
+    final byte[] unscaled = num.unscaledValue().toByteArray();
+
+    final ByteBuffer buf =
+        ByteBuffer.allocate(VarintUtils.signedIntByteLength(num.scale()) + 4 + unscaled.length);
+    VarintUtils.writeSignedInt(num.scale(), buf);
+    buf.putInt(unscaled.length);
+    buf.put(unscaled);
+    return buf.array();
+  }
+
+  /**
+   * Read a BigDecimal number from a {@link ByteBuffer} that was previously encoded by using
+   * {@link #writeBigDecimal(BigDecimal)}
+   *
+   * @param buffer The {@link ByteBuffer} that contains the BigDecimal next in its contents.
+   * @return The BigDecimal that was stored in the ByteBuffer, and the ByteBuffer's position is
+   *         modified past the BigDecimal.
+   */
+  public static BigDecimal readBigDecimal(final ByteBuffer buffer) {
+    if (buffer.remaining() == 0) {
+      return null;
+    }
+    final int scale = VarintUtils.readSignedInt(buffer);
+    final int unscaledLength = buffer.getInt();
+    final byte[] unscaled = new byte[unscaledLength];
+    buffer.get(unscaled);
+    return new BigDecimal(new BigInteger(unscaled), scale);
   }
 }

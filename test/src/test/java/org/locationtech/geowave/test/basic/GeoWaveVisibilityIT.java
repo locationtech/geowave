@@ -701,7 +701,7 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
       final String[] auths,
       final boolean spatial,
       final int expectedResultCount,
-      final int expectedNonNullFieldCount) throws IOException {
+      final int expectedNonNullFieldCount) {
     try (CloseableIterator<SimpleFeature> it =
         (CloseableIterator) store.query(
             QueryBuilder.newBuilder().setAuthorizations(auths).constraints(
