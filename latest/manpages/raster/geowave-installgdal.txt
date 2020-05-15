@@ -14,7 +14,7 @@ geowave-raster-installgdal - Install GDAL by downloading native libraries
 [[raster-installgdal-description]]
 ==== DESCRIPTION
 
-This command will download GDAL to a directory.  The directory should be added to the `PATH` and Linux users should set `LD_LIBRARY_PATH` to the directory.  This command is not currently supported on Mac.
+This command installs the version of GDAL that is used by GeoWave.  By default, it is installed to the GeoWave home directory under `lib/utilities/gdal`.  If an alternate directory is provided, it should be added to the `PATH` environment variable for Mac and Windows users, or the `LD_LIBRARY_PATH` environment variable for Linux users.
 
 [[raster-installgdal-options]]
 ==== OPTIONS
@@ -25,7 +25,7 @@ This command will download GDAL to a directory.  The directory should be added t
 [[raster-installgdal-examples]]
 ==== EXAMPLES
 
-Install GDAL libraries on a Windows or Linux machine:
+Install GDAL native libraries:
 
   geowave raster installgdal
 
