@@ -10,12 +10,7 @@ In this demo, we will be looking at Band 8 of Landsat raster data around Berlin,
 
 The Landsat 8 extension for GeoWave utilizes GDAL (Geospatial Data Abstraction Library), an image processing library, to process raster data. In order to use GDAL, native libraries need to be installed on the system. More info on GDAL can be found link:http://www.gdal.org[here, window="_blank"].
 
-[WARNING]
-====
-Native libraries for GDAL 1.9.2 on MacOS are not readily available.  This demo is currently only applicable to Windows and Linux platforms.
-====
-
-GeoWave provides a command to install GDAL libraries on both Windows and Linux with the following command:
+GeoWave provides a way to install GDAL libraries with the following command:
 
 [source, bash]
 ----

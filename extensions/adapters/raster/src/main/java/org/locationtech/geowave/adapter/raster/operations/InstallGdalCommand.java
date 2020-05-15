@@ -8,6 +8,8 @@
  */
 package org.locationtech.geowave.adapter.raster.operations;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import org.locationtech.geowave.adapter.raster.plugin.gdal.InstallGdal;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
@@ -19,13 +21,18 @@ import com.beust.jcommander.Parameters;
 @GeowaveOperation(name = "installgdal", parentOperation = RasterSection.class)
 @Parameters(commandDescription = "Install GDAL by downloading native libraries")
 public class InstallGdalCommand extends DefaultOperation implements Command {
+  private static final String DEFAULT_DOWNLOAD_DIR = "lib/utilities/gdal";
 
   @Parameter(names = "--dir", description = "The download directory", required = false)
-  private String downloadDirectory = "./lib/utilities/gdal";
+  private String downloadDirectory = null;
 
   @Override
   public void execute(final OperationParams params) throws Exception {
+    if (downloadDirectory == null) {
+      final String homeDirectory = System.getProperty("geowave.home", ".");
+      final Path path = Paths.get(homeDirectory, DEFAULT_DOWNLOAD_DIR);
+      downloadDirectory = path.toString();
+    }
     InstallGdal.main(new String[] {downloadDirectory});
   }
-
 }
