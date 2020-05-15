@@ -210,6 +210,11 @@ org.locationtech.geowave.datastore.dynamodb.cli
 org.locationtech.geowave.datastore.dynamodb.config
 org.locationtech.geowave.datastore.dynamodb.operations
 org.locationtech.geowave.datastore.dynamodb.util
+org.locationtech.geowave.datastore.filesystem
+org.locationtech.geowave.datastore.filesystem.cli
+org.locationtech.geowave.datastore.filesystem.config
+org.locationtech.geowave.datastore.filesystem.operations
+org.locationtech.geowave.datastore.filesystem.util
 org.locationtech.geowave.datastore.hbase
 org.locationtech.geowave.datastore.hbase.cli
 org.locationtech.geowave.datastore.hbase.config

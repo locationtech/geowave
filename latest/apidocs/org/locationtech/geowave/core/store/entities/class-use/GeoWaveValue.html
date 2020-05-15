@@ -107,6 +107,14 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.datastore.filesystem">org.locationtech.geowave.datastore.filesystem</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.datastore.filesystem.util">org.locationtech.geowave.datastore.filesystem.util</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.datastore.hbase">org.locationtech.geowave.datastore.hbase</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -350,6 +358,103 @@
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">AccumuloRow.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/AccumuloRow.html#getFieldValues--">getFieldValues</a></span>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.datastore.filesystem">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a> in <a href="../../../../../../../org/locationtech/geowave/datastore/filesystem/package-summary.html">org.locationtech.geowave.datastore.filesystem</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/datastore/filesystem/package-summary.html">org.locationtech.geowave.datastore.filesystem</a> that return <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a></code></td>
+<td class="colLast"><span class="typeNameLabel">FileSystemDataFormatter.IndexFormatter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/filesystem/FileSystemDataFormatter.IndexFormatter.html#getValue-org.locationtech.geowave.datastore.filesystem.FileSystemDataFormatter.FileSystemIndexKey-java.lang.String-java.lang.String-org.locationtech.geowave.datastore.filesystem.FileSystemDataFormatter.FormattedFileInfo-">getValue</a></span>(<a href="../../../../../../../org/locationtech/geowave/datastore/filesystem/FileSystemDataFormatter.FileSystemIndexKey.html" title="class in org.locationtech.geowave.datastore.filesystem">FileSystemDataFormatter.FileSystemIndexKey</a>&nbsp;key,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
+        <a href="../../../../../../../org/locationtech/geowave/datastore/filesystem/FileSystemDataFormatter.FormattedFileInfo.html" title="class in org.locationtech.geowave.datastore.filesystem">FileSystemDataFormatter.FormattedFileInfo</a>&nbsp;fileInfo)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a></code></td>
+<td class="colLast"><span class="typeNameLabel">FileSystemDataFormatter.DataIndexFormatter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/filesystem/FileSystemDataFormatter.DataIndexFormatter.html#getValue-java.lang.String-java.lang.String-byte:A-byte:A-">getValue</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fileName,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+        byte[]&nbsp;dataId,
+        byte[]&nbsp;fileContents)</code>
+<div class="block">Get the geowave value for a given file name and file contents.</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/datastore/filesystem/package-summary.html">org.locationtech.geowave.datastore.filesystem</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/datastore/filesystem/FileSystemDataFormatter.FormattedFileInfo.html" title="class in org.locationtech.geowave.datastore.filesystem">FileSystemDataFormatter.FormattedFileInfo</a></code></td>
+<td class="colLast"><span class="typeNameLabel">FileSystemDataFormatter.IndexFormatter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/filesystem/FileSystemDataFormatter.IndexFormatter.html#format-java.lang.String-java.lang.String-org.locationtech.geowave.datastore.filesystem.FileSystemDataFormatter.FileSystemIndexKey-org.locationtech.geowave.core.store.entities.GeoWaveValue-">format</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
+      <a href="../../../../../../../org/locationtech/geowave/datastore/filesystem/FileSystemDataFormatter.FileSystemIndexKey.html" title="class in org.locationtech.geowave.datastore.filesystem">FileSystemDataFormatter.FileSystemIndexKey</a>&nbsp;key,
+      <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>&nbsp;value)</code>
+<div class="block">This is called for storing values in each GeoWave index.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>byte[]</code></td>
+<td class="colLast"><span class="typeNameLabel">FileSystemDataFormatter.DataIndexFormatter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/filesystem/FileSystemDataFormatter.DataIndexFormatter.html#getFileContents-java.lang.String-byte:A-org.locationtech.geowave.core.store.entities.GeoWaveValue-">getFileContents</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+               byte[]&nbsp;dataId,
+               <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>&nbsp;value)</code>
+<div class="block">When using secondary indexing, this is called for storing the data values</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.datastore.filesystem.util">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a> in <a href="../../../../../../../org/locationtech/geowave/datastore/filesystem/util/package-summary.html">org.locationtech.geowave.datastore.filesystem.util</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/datastore/filesystem/util/package-summary.html">org.locationtech.geowave.datastore.filesystem.util</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">FileSystemIndexTable.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/filesystem/util/FileSystemIndexTable.html#add-byte:A-byte:A-short-org.locationtech.geowave.core.store.entities.GeoWaveValue-">add</a></span>(byte[]&nbsp;sortKey,
+   byte[]&nbsp;dataId,
+   short&nbsp;numDuplicates,
+   <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>&nbsp;value)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">FileSystemDataIndexTable.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/filesystem/util/FileSystemDataIndexTable.html#add-byte:A-org.locationtech.geowave.core.store.entities.GeoWaveValue-">add</a></span>(byte[]&nbsp;dataId,
+   <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>&nbsp;value)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../../org/locationtech/geowave/datastore/filesystem/util/package-summary.html">org.locationtech.geowave.datastore.filesystem.util</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/filesystem/util/FileSystemRow.html#FileSystemRow-java.lang.String-short-byte:A-org.locationtech.geowave.datastore.filesystem.FileSystemDataFormatter.FileSystemIndexKey-org.locationtech.geowave.core.store.entities.GeoWaveValue-">FileSystemRow</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fileName,
+             short&nbsp;adapterId,
+             byte[]&nbsp;partition,
+             <a href="../../../../../../../org/locationtech/geowave/datastore/filesystem/FileSystemDataFormatter.FileSystemIndexKey.html" title="class in org.locationtech.geowave.datastore.filesystem">FileSystemDataFormatter.FileSystemIndexKey</a>&nbsp;key,
+             <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveValue.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveValue</a>&nbsp;value)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
