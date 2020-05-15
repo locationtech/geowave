@@ -79,8 +79,6 @@ import org.locationtech.geowave.core.store.memory.MemoryAdapterStore;
 import org.locationtech.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import org.locationtech.geowave.core.store.query.constraints.DataIdQuery;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
-import org.locationtech.geowave.datastore.cassandra.CassandraStoreFactoryFamily;
-import org.locationtech.geowave.datastore.dynamodb.DynamoDBStoreFactoryFamily;
 import org.locationtech.geowave.format.geotools.vector.GeoToolsVectorDataStoreIngestPlugin;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.TestUtils.DimensionalityType;

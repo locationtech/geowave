@@ -40,7 +40,8 @@ public class GeoWaveCustomCRSSpatialVectorIT extends AbstractGeoWaveBasicVectorI
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
-          GeoWaveStoreType.ROCKSDB},
+          GeoWaveStoreType.ROCKSDB,
+          GeoWaveStoreType.FILESYSTEM},
       namespace = "cpVectorStore")
   protected DataStorePluginOptions cpDataStore;
   @GeoWaveTestStore(
@@ -51,7 +52,8 @@ public class GeoWaveCustomCRSSpatialVectorIT extends AbstractGeoWaveBasicVectorI
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.REDIS,
-          GeoWaveStoreType.ROCKSDB})
+          GeoWaveStoreType.ROCKSDB,
+          GeoWaveStoreType.FILESYSTEM})
   protected DataStorePluginOptions dataStore;
 
   private static long startMillis;

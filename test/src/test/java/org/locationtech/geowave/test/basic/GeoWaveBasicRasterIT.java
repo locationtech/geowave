@@ -65,7 +65,8 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
-          GeoWaveStoreType.ROCKSDB},
+          GeoWaveStoreType.ROCKSDB,
+          GeoWaveStoreType.FILESYSTEM},
       namespace = "cpRasterStore")
   protected DataStorePluginOptions cpDataStoreOptions;
   @GeoWaveTestStore(
@@ -76,7 +77,8 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.REDIS,
-          GeoWaveStoreType.ROCKSDB})
+          GeoWaveStoreType.ROCKSDB,
+          GeoWaveStoreType.FILESYSTEM})
   protected DataStorePluginOptions dataStoreOptions;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveBasicRasterIT.class);

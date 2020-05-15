@@ -57,7 +57,8 @@ public class StatServicesIT extends BaseServiceIT {
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
-          GeoWaveStoreType.ROCKSDB},
+          GeoWaveStoreType.ROCKSDB,
+          GeoWaveStoreType.FILESYSTEM},
       namespace = TestUtils.TEST_NAMESPACE)
   protected DataStorePluginOptions dataStoreOptions;
 

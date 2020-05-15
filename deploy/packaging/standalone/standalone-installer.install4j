@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="7.0.12" transformSequenceNumber="7">
-  <directoryPresets config="../../../target" />
-  <application name="GeoWave" distributionSourceDir="" applicationId="5520-1479-3644-9667" mediaDir="../../target/install4j-output" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="geowave" publisher="" publisherWeb="" version="1.1.0" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" macVolumeId="54e94e574843f5f8" javaMinVersion="1.8" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
+  <directoryPresets config="../../../extensions/datastores/filesystem/target" />
+  <application name="GeoWave" distributionSourceDir="" applicationId="5520-1479-3644-9667" mediaDir="../../target/install4j-output" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="geowave" publisher="" publisherWeb="" version="1.2.0" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" macVolumeId="54e94e574843f5f8" javaMinVersion="1.8" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -44,6 +44,7 @@
       <mountPoint id="167" root="" location="lib/datastores/cassandra" mode="755" />
       <mountPoint id="168" root="" location="lib/datastores/dynamodb" mode="755" />
       <mountPoint id="169" root="" location="lib/datastores/kudu" mode="755" />
+      <mountPoint id="783" root="" location="lib/datastores/filesystem" mode="755" />
       <mountPoint id="170" root="" location="lib/utilities" mode="755" />
       <mountPoint id="171" root="" location="lib/utilities/geoserver" mode="755" />
       <mountPoint id="172" root="" location="lib/utilities/landsat8" mode="755" />
@@ -124,6 +125,9 @@
         <exclude />
       </dirEntry>
       <dirEntry mountPoint="169" file="../../../extensions/datastores/kudu/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="783" file="../../../extensions/datastores/filesystem/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
         <exclude />
       </dirEntry>
       <dirEntry mountPoint="171" file="../../../extensions/cli/geoserver/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
@@ -351,6 +355,13 @@
             <dependencies>
               <component id="59" />
             </dependencies>
+          </component>
+          <component name="FileSystem" id="784" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
+            <description />
+            <include all="false">
+              <entry location="lib/datastores/filesystem" fileType="regular" />
+            </include>
+            <dependencies />
           </component>
         </components>
       </folder>

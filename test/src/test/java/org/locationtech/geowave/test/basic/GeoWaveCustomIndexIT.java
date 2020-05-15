@@ -60,7 +60,8 @@ import jersey.repackaged.com.google.common.collect.Iterators;
         GeoWaveStoreType.DYNAMODB,
         GeoWaveStoreType.KUDU,
         GeoWaveStoreType.REDIS,
-        GeoWaveStoreType.ROCKSDB})
+        GeoWaveStoreType.ROCKSDB,
+        GeoWaveStoreType.FILESYSTEM})
 public class GeoWaveCustomIndexIT {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveCustomIndexIT.class);
   private static long startMillis;

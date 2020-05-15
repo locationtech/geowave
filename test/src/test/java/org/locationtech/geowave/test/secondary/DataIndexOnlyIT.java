@@ -58,7 +58,8 @@ public class DataIndexOnlyIT extends AbstractSecondaryIndexIT {
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
-          GeoWaveStoreType.ROCKSDB},
+          GeoWaveStoreType.ROCKSDB,
+          GeoWaveStoreType.FILESYSTEM},
       options = {"enableSecondaryIndexing=true"})
   protected DataStorePluginOptions dataStoreOptions;
 
@@ -70,7 +71,8 @@ public class DataIndexOnlyIT extends AbstractSecondaryIndexIT {
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
-          GeoWaveStoreType.ROCKSDB},
+          GeoWaveStoreType.ROCKSDB,
+          GeoWaveStoreType.FILESYSTEM},
       options = {"enableSecondaryIndexing=true"},
       namespace = "BasicSecondaryIndexIT_dataIdxOnly")
   protected DataStorePluginOptions dataIdxOnlyDataStoreOptions;

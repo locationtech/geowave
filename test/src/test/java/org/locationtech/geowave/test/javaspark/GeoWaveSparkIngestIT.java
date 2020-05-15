@@ -43,8 +43,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @RunWith(GeoWaveITRunner.class)
-public class GeowaveSparkIngestIT extends AbstractGeoWaveBasicVectorIT {
-  private static final Logger LOGGER = LoggerFactory.getLogger(GeowaveSparkIngestIT.class);
+public class GeoWaveSparkIngestIT extends AbstractGeoWaveBasicVectorIT {
+  private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveSparkIngestIT.class);
   private static final String S3URL = "s3.amazonaws.com";
   protected static final String GDELT_INPUT_FILES = "s3://geowave-test/data/gdelt";
   private static final int GDELT_COUNT = 448675;
@@ -58,7 +58,8 @@ public class GeowaveSparkIngestIT extends AbstractGeoWaveBasicVectorIT {
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
-          GeoWaveStoreType.ROCKSDB})
+          GeoWaveStoreType.ROCKSDB,
+          GeoWaveStoreType.FILESYSTEM})
   protected DataStorePluginOptions dataStore;
 
   private static Stopwatch stopwatch = new Stopwatch();

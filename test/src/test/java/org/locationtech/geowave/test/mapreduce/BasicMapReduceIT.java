@@ -129,7 +129,8 @@ public class BasicMapReduceIT extends AbstractGeoWaveIT {
           GeoWaveStoreType.CASSANDRA,
           GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
-          GeoWaveStoreType.ROCKSDB})
+          GeoWaveStoreType.ROCKSDB,
+          GeoWaveStoreType.FILESYSTEM})
   protected DataStorePluginOptions dataStorePluginOptions;
 
   @Override

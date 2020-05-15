@@ -67,7 +67,8 @@ import org.slf4j.LoggerFactory;
     GeoWaveStoreType.BIGTABLE,
     GeoWaveStoreType.HBASE,
     GeoWaveStoreType.REDIS,
-    GeoWaveStoreType.ROCKSDB})
+    GeoWaveStoreType.ROCKSDB,
+    GeoWaveStoreType.FILESYSTEM})
 public class CustomCRSKDERasterResizeIT {
   private static final String TEST_COVERAGE_NAME_MR_PREFIX = "TEST_COVERAGE_MR";
   private static final String TEST_COVERAGE_NAME_SPARK_PREFIX = "TEST_COVERAGE_SPARK";

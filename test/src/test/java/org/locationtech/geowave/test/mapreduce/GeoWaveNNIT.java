@@ -67,7 +67,8 @@ public class GeoWaveNNIT extends AbstractGeoWaveIT {
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
-          GeoWaveStoreType.ROCKSDB})
+          GeoWaveStoreType.ROCKSDB,
+          GeoWaveStoreType.FILESYSTEM})
   protected DataStorePluginOptions dataStorePluginOptions;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveNNIT.class);

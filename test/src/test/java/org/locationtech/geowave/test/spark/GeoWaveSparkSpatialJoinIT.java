@@ -51,7 +51,8 @@ import org.slf4j.LoggerFactory;
         GeoWaveStoreType.CASSANDRA,
         GeoWaveStoreType.KUDU,
         GeoWaveStoreType.REDIS,
-        GeoWaveStoreType.ROCKSDB})
+        GeoWaveStoreType.ROCKSDB,
+        GeoWaveStoreType.FILESYSTEM})
 public class GeoWaveSparkSpatialJoinIT extends AbstractGeoWaveBasicVectorIT {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveSparkSpatialJoinIT.class);
 

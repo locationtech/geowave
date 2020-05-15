@@ -66,7 +66,8 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
-          GeoWaveStoreType.ROCKSDB},
+          GeoWaveStoreType.ROCKSDB,
+          GeoWaveStoreType.FILESYSTEM},
       options = {"enableVisibility=true", "enableSecondaryIndexing=false"})
   protected DataStorePluginOptions dataStoreOptions;
 
