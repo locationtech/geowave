@@ -143,7 +143,9 @@ var activeTableTab = "activeTableTab";
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/datastore/filesystem/FileSystemDataFormatter.FileSystemIndexKey.html" title="class in org.locationtech.geowave.datastore.filesystem">FileSystemDataFormatter.FileSystemIndexKey</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/datastore/filesystem/FileSystemDataFormatter.IndexFormatter.html#getKey-java.lang.String-boolean-">getKey</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fileName,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/datastore/filesystem/FileSystemDataFormatter.IndexFormatter.html#getKey-java.lang.String-java.lang.String-java.lang.String-boolean-">getKey</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fileName,
+      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
       boolean&nbsp;expectsTime)</code>
 <div class="block">When using secondary indexing, this is called for storing the data values.</div>
 </td>
@@ -188,20 +190,24 @@ var activeTableTab = "activeTableTab";
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getKey-java.lang.String-boolean-">
+<a name="getKey-java.lang.String-java.lang.String-java.lang.String-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getKey</h4>
 <pre><a href="../../../../../org/locationtech/geowave/datastore/filesystem/FileSystemDataFormatter.FileSystemIndexKey.html" title="class in org.locationtech.geowave.datastore.filesystem">FileSystemDataFormatter.FileSystemIndexKey</a>&nbsp;getKey(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fileName,
+                                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
                                                   boolean&nbsp;expectsTime)</pre>
 <div class="block">When using secondary indexing, this is called for storing the data values.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>fileName</code> - the file name</dd>
+<dd><code>typeName</code> - the DataTypeAdapter type name</dd>
+<dd><code>indexName</code> - the name of this index</dd>
 <dd><code>expectsTime</code> - whether this index/type anticipates time is encoded in the file name
-        (typically raster data only, and not with the secondary data index)</dd>
+        (typically raster data only, and not with the secondary data index) *</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an object containing a file name and the expected contents of the file according to
          this format</dd>
@@ -222,7 +228,8 @@ var activeTableTab = "activeTableTab";
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>key</code> - the key (as resolved by this file reader's getKey() method)</dd>
 <dd><code>fileInfo</code> - the file name and contents</dd>
-<dd> - </dd>
+<dd><code>typeName</code> - the DataTypeAdapter type name</dd>
+<dd><code>indexName</code> - the name of this index</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a GeoWaveValue to be used for reading the original data back into the system</dd>
 </dl>
