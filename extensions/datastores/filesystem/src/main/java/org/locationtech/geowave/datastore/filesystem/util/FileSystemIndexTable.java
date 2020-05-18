@@ -72,7 +72,7 @@ public class FileSystemIndexTable extends AbstractFileSystemTable {
 
   protected Function<String, FileSystemKey> fileNameToKey() {
     return fileName -> new FileSystemIndexKeyWrapper(
-        formatter.getIndexFormatter().getKey(fileName, requiresTimestamp),
+        formatter.getIndexFormatter().getKey(fileName, typeName, indexName, requiresTimestamp),
         fileName);
   }
 

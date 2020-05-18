@@ -160,7 +160,11 @@ public class GeoWaveBinaryDataFormatter implements FileSystemDataFormatterSpi {
     }
 
     @Override
-    public FileSystemIndexKey getKey(final String fileName, final boolean expectsTime) {
+    public FileSystemIndexKey getKey(
+        final String fileName,
+        final String typeName,
+        final String indexName,
+        final boolean expectsTime) {
       int otherBytes = 4;
       final byte[] key = FileSystemUtils.fileNameToKey(fileName);
       final ByteBuffer buf = ByteBuffer.wrap(key);
