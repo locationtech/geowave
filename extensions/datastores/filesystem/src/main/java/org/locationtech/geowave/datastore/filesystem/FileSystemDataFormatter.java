@@ -82,19 +82,25 @@ public interface FileSystemDataFormatter {
      * When using secondary indexing, this is called for storing the data values.
      *
      * @param fileName the file name
+     * @param typeName the DataTypeAdapter type name
+     * @param indexName the name of this index
      * @param expectsTime whether this index/type anticipates time is encoded in the file name
-     *        (typically raster data only, and not with the secondary data index)
-     *
+     *        (typically raster data only, and not with the secondary data index) *
      * @return an object containing a file name and the expected contents of the file according to
      *         this format
      */
-    FileSystemIndexKey getKey(String fileName, boolean expectsTime);
+    FileSystemIndexKey getKey(
+        String fileName,
+        String typeName,
+        String indexName,
+        boolean expectsTime);
 
     /**
      *
      * @param key the key (as resolved by this file reader's getKey() method)
      * @param fileInfo the file name and contents
-     * @param
+     * @param typeName the DataTypeAdapter type name
+     * @param indexName the name of this index
      * @return a GeoWaveValue to be used for reading the original data back into the system
      */
     GeoWaveValue getValue(
