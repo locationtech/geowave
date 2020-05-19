@@ -28,20 +28,17 @@ public class FileSystemWriter implements RowWriter {
   private final LoadingCache<ByteArray, FileSystemIndexTable> tableCache =
       Caffeine.newBuilder().build(partitionKey -> getTable(partitionKey.getBytes()));
   private final boolean isTimestampRequired;
-  private final String format;
 
   public FileSystemWriter(
       final FileSystemClient client,
       final short adapterId,
       final String typeName,
       final String indexName,
-      final String format,
       final boolean isTimestampRequired) {
     this.client = client;
     this.adapterId = adapterId;
     this.typeName = typeName;
     this.indexName = indexName;
-    this.format = format;
     this.isTimestampRequired = isTimestampRequired;
   }
 
@@ -52,7 +49,6 @@ public class FileSystemWriter implements RowWriter {
         typeName,
         indexName,
         partitionKey,
-        format,
         isTimestampRequired);
   }
 

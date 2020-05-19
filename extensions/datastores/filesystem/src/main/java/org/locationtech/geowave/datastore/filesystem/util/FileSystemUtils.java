@@ -13,7 +13,6 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -45,8 +44,6 @@ public class FileSystemUtils {
   public static int FILESYSTEM_DEFAULT_MAX_RANGE_DECOMPOSITION = 250;
   public static int FILESYSTEM_DEFAULT_AGGREGATION_MAX_RANGE_DECOMPOSITION = 250;
 
-  private static final Set<ByteArray> EMPTY_PARTITION = Collections.singleton(new ByteArray());
-
   public static SortedSet<Pair<FileSystemKey, Path>> getSortedSet(
       final Path subDirectory,
       final Function<String, FileSystemKey> fileNameToKey) {
@@ -77,6 +74,31 @@ public class FileSystemUtils {
     return new TreeSet<>();
   }
 
+  public static Path getSubdirectory(
+      final String parentDir,
+      final String subdirectory1,
+      final String subdirectory2) {
+    if ((subdirectory1 != null) && !subdirectory1.trim().isEmpty()) {
+      if ((subdirectory2 != null) && !subdirectory2.trim().isEmpty()) {
+        return Paths.get(parentDir, subdirectory1, subdirectory2);
+      } else {
+        return Paths.get(parentDir, subdirectory1);
+      }
+    } else if ((subdirectory2 != null) && !subdirectory2.trim().isEmpty()) {
+      return Paths.get(parentDir, subdirectory2);
+    } else {
+      return Paths.get(parentDir);
+    }
+  }
+
+  public static Path getSubdirectory(final String parentDir, final String subdirectory) {
+    if ((subdirectory != null) && !subdirectory.trim().isEmpty()) {
+      return Paths.get(parentDir, subdirectory);
+    } else {
+      return Paths.get(parentDir);
+    }
+  }
+
   public static void visit(
       final Path subDirectory,
       final byte[] startKeyInclusive,
@@ -90,13 +112,20 @@ public class FileSystemUtils {
   public static FileSystemDataIndexTable getDataIndexTable(
       final FileSystemClient client,
       final short adapterId,
-      final String typeName,
-      final String format) {
-    return client.getDataIndexTable(adapterId, typeName, format);
+      final String typeName) {
+    return client.getDataIndexTable(adapterId, typeName);
   }
 
-  public static Path getMetadataTablePath(final String subDirectory, final MetadataType type) {
-    return Paths.get(subDirectory, "metadata", type.name());
+  public static Path getMetadataTablePath(
+      final String subDirectory,
+      final String format,
+      final boolean visibilityEnabled,
+      final MetadataType type) {
+    final String metadataDirectory =
+        DataFormatterCache.getInstance().getFormatter(
+            format,
+            visibilityEnabled).getMetadataDirectory();
+    return getSubdirectory(subDirectory, metadataDirectory, type.name());
   }
 
   public static FileSystemIndexTable getIndexTable(
@@ -105,15 +134,8 @@ public class FileSystemUtils {
       final String typeName,
       final String indexName,
       final byte[] partitionKey,
-      final String format,
       final boolean requiresTimestamp) {
-    return client.getIndexTable(
-        adapterId,
-        typeName,
-        indexName,
-        partitionKey,
-        format,
-        requiresTimestamp);
+    return client.getIndexTable(adapterId, typeName, indexName, partitionKey, requiresTimestamp);
   }
 
   public static boolean isSortByTime(final InternalDataAdapter<?> adapter) {

@@ -158,7 +158,10 @@ public interface FileSystemDataFormatter {
         final String indexName,
         final String typeName,
         final byte[] partitionKey) {
-      return ByteArrayUtils.byteArrayToString(partitionKey);
+      if ((partitionKey != null) && (partitionKey.length > 0)) {
+        return ByteArrayUtils.byteArrayToString(partitionKey);
+      }
+      return "";
     }
 
     /**
@@ -326,5 +329,9 @@ public interface FileSystemDataFormatter {
   DataIndexFormatter getDataIndexFormatter();
 
   IndexFormatter getIndexFormatter();
+
+  default String getMetadataDirectory() {
+    return "metadata";
+  }
 
 }

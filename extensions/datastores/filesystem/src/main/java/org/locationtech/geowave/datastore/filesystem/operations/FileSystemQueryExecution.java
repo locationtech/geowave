@@ -126,7 +126,6 @@ public class FileSystemQueryExecution<T> {
         typeName,
         indexName,
         partitionKey,
-        format,
         groupByRowAndSortByTimePair.getRight());
   }
 

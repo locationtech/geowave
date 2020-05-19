@@ -10,7 +10,6 @@ package org.locationtech.geowave.datastore.filesystem.util;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Objects;
 import org.apache.commons.lang3.tuple.Pair;
@@ -34,7 +33,9 @@ public class FileSystemDataIndexTable extends AbstractFileSystemTable {
       final boolean visibilityEnabled) throws IOException {
     super(adapterId, typeName, format, visibilityEnabled);
     setTableDirectory(
-        Paths.get(subDirectory, formatter.getDataIndexFormatter().getDirectoryName(typeName)));
+        FileSystemUtils.getSubdirectory(
+            subDirectory,
+            formatter.getDataIndexFormatter().getDirectoryName(typeName)));
   }
 
   public synchronized void add(final byte[] dataId, final GeoWaveValue value) {

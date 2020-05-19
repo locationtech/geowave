@@ -46,6 +46,7 @@ public class GeoWaveBinaryDataFormatter implements FileSystemDataFormatterSpi {
   }
 
   private static class BinaryFormatter implements FileSystemDataFormatter {
+
     private final DataIndexFormatter dataIndexFormatter;
     private final IndexFormatter indexFormatter;
 
