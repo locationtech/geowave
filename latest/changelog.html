@@ -27,7 +27,9 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>filesystem datastore bug fix in formatting index values <a href="https://github.com/locationtech/geowave/pull/1730">#1730</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>improved flexibility for directory naming <a href="https://github.com/locationtech/geowave/pull/1729">#1729</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>minor tweak to make format api more consistent <a href="https://github.com/locationtech/geowave/pull/1726">#1726</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>GEOWAVE-1723: &quot;filesystem&quot; datastore with pluggable data formatter <a href="https://github.com/locationtech/geowave/pull/1724">#1724</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Fixes for installGdal command <a href="https://github.com/locationtech/geowave/pull/1722">#1722</a> (<a href="https://github.com/richard3d">richard3d</a>)</li>
 <li>GWQL grammar update for unconventional type names. Fixes #1707 <a href="https://github.com/locationtech/geowave/pull/1719">#1719</a> (<a href="https://github.com/richard3d">richard3d</a>)</li>
@@ -36,7 +38,6 @@
 <li>fix for serialization of regions as enum <a href="https://github.com/locationtech/geowave/pull/1713">#1713</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>updated redis version and provided serialization option <a href="https://github.com/locationtech/geowave/pull/1710">#1710</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>updated pom to use osgeo maven repo <a href="https://github.com/locationtech/geowave/pull/1708">#1708</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
-<li>Fix issue with broken downloads links. <a href="https://github.com/locationtech/geowave/pull/1701">#1701</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>Update pygw to support remote gateways. <a href="https://github.com/locationtech/geowave/pull/1700">#1700</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>Fix issue with deleting when using secondary indexing. <a href="https://github.com/locationtech/geowave/pull/1699">#1699</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>Fix issue which prevented installers from being generated on release <a href="https://github.com/locationtech/geowave/pull/1698">#1698</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
@@ -1256,6 +1257,7 @@
 <li>Issue #540. Catching and handling assertion errors with orthodromic … <a href="https://github.com/locationtech/geowave/pull/541">#541</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>Issue #528 Add unit test for a CQL temporal range query <a href="https://github.com/locationtech/geowave/pull/539">#539</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>Issue #536. Statistics should be cached in a single WFS transaction <a href="https://github.com/locationtech/geowave/pull/537">#537</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
+<li>Update Boundless maven repo <a href="https://github.com/locationtech/geowave/pull/534">#534</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Make doc rpm vendor versioned <a href="https://github.com/locationtech/geowave/pull/533">#533</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Build and RPM GeoWave components using Docker containers <a href="https://github.com/locationtech/geowave/pull/530">#530</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>0.9.0-SNAPSHOT version bump <a href="https://github.com/locationtech/geowave/pull/527">#527</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
@@ -1295,7 +1297,6 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
-<li>Update Boundless maven repo <a href="https://github.com/locationtech/geowave/pull/534">#534</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>0.8.9 release version bump <a href="https://github.com/locationtech/geowave/pull/526">#526</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Issue #524. SimpleFeatureSource, used by WPS Import, behaved slowly s… <a href="https://github.com/locationtech/geowave/pull/525">#525</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>Issue #520 <a href="https://github.com/locationtech/geowave/pull/523">#523</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
@@ -1340,7 +1341,6 @@
 <li>gpx schema loaded with correct classloader (#462) <a href="https://github.com/locationtech/geowave/pull/463">#463</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Fixed persistence of CompoundIndexStrategy <a href="https://github.com/locationtech/geowave/pull/461">#461</a> (<a href="https://github.com/meislerj">meislerj</a>)</li>
 <li>Roll version to 0.8.9-SNAPSHOT <a href="https://github.com/locationtech/geowave/pull/460">#460</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
-<li>Implemented a Compound Index Strategy <a href="https://github.com/locationtech/geowave/pull/445">#445</a> (<a href="https://github.com/meislerj">meislerj</a>)</li>
 </ul>
 <h2 id="v0.8.8-2015-07-16"><a href="https://github.com/locationtech/geowave/tree/v0.8.8">v0.8.8</a> (2015-07-16)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v0.8.7...v0.8.8">Full Changelog</a></p>
@@ -1388,6 +1388,7 @@
 <li>Issue #451. Optimization for index ID verification when ingesting ge… <a href="https://github.com/locationtech/geowave/pull/452">#452</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>Issue #448. GPX Consumer is not freeing up temporary objects created … <a href="https://github.com/locationtech/geowave/pull/449">#449</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>Pick up java system properties if set <a href="https://github.com/locationtech/geowave/pull/447">#447</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
+<li>Implemented a Compound Index Strategy <a href="https://github.com/locationtech/geowave/pull/445">#445</a> (<a href="https://github.com/meislerj">meislerj</a>)</li>
 <li>Cleaned up unnecessary logging of checked Exception that is handled properly <a href="https://github.com/locationtech/geowave/pull/444">#444</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
 <li>GEOWAVE-441. Improve performance of WFS-T with small transaction set… <a href="https://github.com/locationtech/geowave/pull/443">#443</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>Fixed the logger initialization <a href="https://github.com/locationtech/geowave/pull/442">#442</a> (<a href="https://github.com/viggyprabhu">viggyprabhu</a>)</li>
@@ -1402,6 +1403,7 @@
 <li>Corrected one command and added a tip on inspecting configs <a href="https://github.com/locationtech/geowave/pull/418">#418</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Roll to 0.8.8-SNAPSHOT <a href="https://github.com/locationtech/geowave/pull/413">#413</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Geolife Ingest handling of bad coordinates <a href="https://github.com/locationtech/geowave/pull/411">#411</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
+<li>GEOWAVE-398 &amp; GEOWAVE-401. DWITHIN corrected to handle the unit conv… <a href="https://github.com/locationtech/geowave/pull/403">#403</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 </ul>
 <h2 id="v0.8.7-2015-05-28"><a href="https://github.com/locationtech/geowave/tree/v0.8.7">v0.8.7</a> (2015-05-28)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v0.8.6...v0.8.7">Full Changelog</a></p>
@@ -1439,7 +1441,6 @@
 <li>Stop adding timestamp to javadocs html <a href="https://github.com/locationtech/geowave/pull/407">#407</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Documentation updates and fix for rpm dependencies <a href="https://github.com/locationtech/geowave/pull/405">#405</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Build dependencies updated for geoserver 2.7.1 <a href="https://github.com/locationtech/geowave/pull/404">#404</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
-<li>GEOWAVE-398 &amp; GEOWAVE-401. DWITHIN corrected to handle the unit conv… <a href="https://github.com/locationtech/geowave/pull/403">#403</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>Revert &quot;GEOWAVE-398&quot; <a href="https://github.com/locationtech/geowave/pull/402">#402</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</li>
 <li>GEOWAVE-398 <a href="https://github.com/locationtech/geowave/pull/400">#400</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>GEOWAVE-143 <a href="https://github.com/locationtech/geowave/pull/397">#397</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
