@@ -32,19 +32,16 @@ public class FileSystemRowDeleter implements RowDeleter {
     private final String typeName;
     private final String indexName;
     private final byte[] partition;
-    private final String format;
 
     public CacheKey(
         final short adapterId,
         final String typeName,
         final String indexName,
-        final byte[] partition,
-        final String format) {
+        final byte[] partition) {
       this.adapterId = adapterId;
       this.typeName = typeName;
       this.indexName = indexName;
       this.partition = partition;
-      this.format = format;
     }
 
   }
@@ -55,19 +52,16 @@ public class FileSystemRowDeleter implements RowDeleter {
   private final PersistentAdapterStore adapterStore;
   private final InternalAdapterStore internalAdapterStore;
   private final String indexName;
-  private final String format;
 
   public FileSystemRowDeleter(
       final FileSystemClient client,
       final PersistentAdapterStore adapterStore,
       final InternalAdapterStore internalAdapterStore,
-      final String indexName,
-      final String format) {
+      final String indexName) {
     this.client = client;
     this.adapterStore = adapterStore;
     this.internalAdapterStore = internalAdapterStore;
     this.indexName = indexName;
-    this.format = format;
   }
 
   @Override
@@ -82,7 +76,6 @@ public class FileSystemRowDeleter implements RowDeleter {
         cacheKey.typeName,
         cacheKey.indexName,
         cacheKey.partition,
-        cacheKey.format,
         FileSystemUtils.isSortByTime(adapterStore.getAdapter(cacheKey.adapterId)));
   }
 
@@ -94,8 +87,7 @@ public class FileSystemRowDeleter implements RowDeleter {
                 row.getAdapterId(),
                 internalAdapterStore.getTypeName(row.getAdapterId()),
                 indexName,
-                row.getPartitionKey(),
-                format));
+                row.getPartitionKey()));
     if (row instanceof GeoWaveRowImpl) {
       final GeoWaveKey key = ((GeoWaveRowImpl) row).getKey();
       if (key instanceof FileSystemRow) {

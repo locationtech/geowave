@@ -29,7 +29,6 @@ public class FileSystemDataStoreFactory extends BaseDataStoreFactory {
     if (!(options instanceof FileSystemOptions)) {
       throw new AssertionError("Expected " + FileSystemOptions.class.getSimpleName());
     }
-
     return new FileSystemDataStore(
         (FileSystemOperations) helper.createOperations(options),
         ((FileSystemOptions) options).getStoreOptions());

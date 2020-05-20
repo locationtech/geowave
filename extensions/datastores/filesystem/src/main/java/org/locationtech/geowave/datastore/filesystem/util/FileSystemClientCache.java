@@ -22,20 +22,27 @@ public class FileSystemClientCache {
   }
 
   private final LoadingCache<ClientKey, FileSystemClient> clientCache =
-      Caffeine.newBuilder().build(subDirectoryVisiblityPair -> {
+      Caffeine.newBuilder().build(clientInfo -> {
         return new FileSystemClient(
-            subDirectoryVisiblityPair.directory,
-            subDirectoryVisiblityPair.visibilityEnabled);
+            clientInfo.directory,
+            clientInfo.format,
+            clientInfo.visibilityEnabled);
       });
 
   protected FileSystemClientCache() {}
 
-  public FileSystemClient getClient(final String directory, final boolean visibilityEnabled) {
-    return clientCache.get(new ClientKey(directory, visibilityEnabled));
+  public FileSystemClient getClient(
+      final String directory,
+      final String format,
+      final boolean visibilityEnabled) {
+    return clientCache.get(new ClientKey(directory, format, visibilityEnabled));
   }
 
-  public synchronized void close(final String directory, final boolean visibilityEnabled) {
-    final ClientKey key = new ClientKey(directory, visibilityEnabled);
+  public synchronized void close(
+      final String directory,
+      final String format,
+      final boolean visibilityEnabled) {
+    final ClientKey key = new ClientKey(directory, format, visibilityEnabled);
     final FileSystemClient client = clientCache.getIfPresent(key);
     if (client != null) {
       clientCache.invalidate(key);
@@ -48,11 +55,13 @@ public class FileSystemClientCache {
 
   private static class ClientKey {
     private final String directory;
+    private final String format;
     private final boolean visibilityEnabled;
 
-    public ClientKey(final String directory, final boolean visibilityEnabled) {
+    public ClientKey(final String directory, final String format, final boolean visibilityEnabled) {
       super();
       this.directory = directory;
+      this.format = format;
       this.visibilityEnabled = visibilityEnabled;
     }
 
@@ -61,6 +70,7 @@ public class FileSystemClientCache {
       final int prime = 31;
       int result = 1;
       result = (prime * result) + ((directory == null) ? 0 : directory.hashCode());
+      result = (prime * result) + ((format == null) ? 0 : format.hashCode());
       result = (prime * result) + (visibilityEnabled ? 1231 : 1237);
       return result;
     }
@@ -82,6 +92,13 @@ public class FileSystemClientCache {
           return false;
         }
       } else if (!directory.equals(other.directory)) {
+        return false;
+      }
+      if (format == null) {
+        if (other.format != null) {
+          return false;
+        }
+      } else if (!format.equals(other.format)) {
         return false;
       }
       if (visibilityEnabled != other.visibilityEnabled) {

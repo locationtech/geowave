@@ -63,9 +63,9 @@ public class FileSystemOperations implements MapReduceDataStoreOperations, Close
     }
 
     visibilityEnabled = options.getStoreOptions().isVisibilityEnabled();
-    // a factory method for accessing filesystem directories
-    client = FileSystemClientCache.getInstance().getClient(directory, visibilityEnabled);
     format = options.getFormat();
+    // a factory method for accessing filesystem directories
+    client = FileSystemClientCache.getInstance().getClient(directory, format, visibilityEnabled);
   }
 
   @Override
@@ -140,7 +140,7 @@ public class FileSystemOperations implements MapReduceDataStoreOperations, Close
           DataFormatterCache.getInstance().getFormatter(
               format,
               visibilityEnabled).getDataIndexFormatter().getDirectoryName(typeName);
-      client.invalidateDataIndexCache(adapterId, typeName, format);
+      client.invalidateDataIndexCache(adapterId, typeName);
     } else {
       directoryName =
           DataFormatterCache.getInstance().getFormatter(
@@ -149,7 +149,8 @@ public class FileSystemOperations implements MapReduceDataStoreOperations, Close
       client.invalidateIndexCache(indexName, typeName);
     }
     try {
-      deleteDirectory(Paths.get(directoryName));
+
+      deleteDirectory(FileSystemUtils.getSubdirectory(directory, directoryName));
     } catch (final IOException e) {
       LOGGER.warn("Unable to delete directories", e);
     }
@@ -168,17 +169,12 @@ public class FileSystemOperations implements MapReduceDataStoreOperations, Close
         adapter.getAdapterId(),
         adapter.getTypeName(),
         index.getName(),
-        format,
         FileSystemUtils.isSortByTime(adapter));
   }
 
   @Override
   public RowWriter createDataIndexWriter(final InternalDataAdapter<?> adapter) {
-    return new FileSystemDataIndexWriter(
-        client,
-        adapter.getAdapterId(),
-        adapter.getTypeName(),
-        format);
+    return new FileSystemDataIndexWriter(client, adapter.getAdapterId(), adapter.getTypeName());
   }
 
   @Override
@@ -202,12 +198,12 @@ public class FileSystemOperations implements MapReduceDataStoreOperations, Close
 
   @Override
   public <T> RowReader<T> createReader(final ReaderParams<T> readerParams) {
-    return new FileSystemReader<>(client, readerParams, READER_ASYNC, format);
+    return new FileSystemReader<>(client, readerParams, READER_ASYNC);
   }
 
   @Override
   public RowReader<GeoWaveRow> createReader(final DataIndexReaderParams readerParams) {
-    return new FileSystemReader<>(client, readerParams, format);
+    return new FileSystemReader<>(client, readerParams);
   }
 
   @Override
@@ -220,7 +216,7 @@ public class FileSystemOperations implements MapReduceDataStoreOperations, Close
             readerParams.getAdditionalAuthorizations()),
         // intentionally don't run this reader as async because it does
         // not work well while simultaneously deleting rows
-        new FileSystemReader<>(client, readerParams, false, format));
+        new FileSystemReader<>(client, readerParams, false));
   }
 
   @Override
@@ -235,13 +231,13 @@ public class FileSystemOperations implements MapReduceDataStoreOperations, Close
       final short adapterId,
       final String typeName) {
     final FileSystemDataIndexTable table =
-        FileSystemUtils.getDataIndexTable(client, adapterId, typeName, format);
+        FileSystemUtils.getDataIndexTable(client, adapterId, typeName);
     Arrays.stream(dataIds).forEach(d -> table.deleteDataId(d));
   }
 
   @Override
   public RowReader<GeoWaveRow> createReader(final RecordReaderParams readerParams) {
-    return new FileSystemReader<>(client, readerParams, format);
+    return new FileSystemReader<>(client, readerParams);
   }
 
   @Override
@@ -250,11 +246,11 @@ public class FileSystemOperations implements MapReduceDataStoreOperations, Close
       final PersistentAdapterStore adapterStore,
       final InternalAdapterStore internalAdapterStore,
       final String... authorizations) {
-    return new FileSystemRowDeleter(client, adapterStore, internalAdapterStore, indexName, format);
+    return new FileSystemRowDeleter(client, adapterStore, internalAdapterStore, indexName);
   }
 
   @Override
   public void close() {
-    FileSystemClientCache.getInstance().close(directory, visibilityEnabled);
+    FileSystemClientCache.getInstance().close(directory, format, visibilityEnabled);
   }
 }

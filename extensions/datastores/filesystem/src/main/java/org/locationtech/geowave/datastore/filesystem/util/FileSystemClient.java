@@ -11,19 +11,13 @@ package org.locationtech.geowave.datastore.filesystem.util;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.stream.Collectors;
-import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.operations.MetadataType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 
 public class FileSystemClient {
-  private static final Logger LOGGER = LoggerFactory.getLogger(FileSystemClient.class);
-
   private abstract static class CacheKey {
     protected final boolean requiresTimestamp;
 
@@ -56,6 +50,7 @@ public class FileSystemClient {
       }
       return true;
     }
+
   }
   private static class MetadataCacheKey extends CacheKey {
     protected final MetadataType type;
@@ -103,9 +98,8 @@ public class FileSystemClient {
         final String typeName,
         final String indexName,
         final byte[] partition,
-        final String format,
         final boolean requiresTimestamp) {
-      super(requiresTimestamp, adapterId, typeName, format);
+      super(requiresTimestamp, adapterId, typeName);
       this.partition = partition;
       this.indexName = indexName;
     }
@@ -147,21 +141,18 @@ public class FileSystemClient {
   private static class DataIndexCacheKey extends CacheKey {
     protected final short adapterId;
     protected final String typeName;
-    protected final String format;
 
-    public DataIndexCacheKey(final short adapterId, final String typeName, final String format) {
-      this(false, adapterId, typeName, format);
+    public DataIndexCacheKey(final short adapterId, final String typeName) {
+      this(false, adapterId, typeName);
     }
 
     private DataIndexCacheKey(
         final boolean requiresTimestamp,
         final short adapterId,
-        final String typeName,
-        final String format) {
+        final String typeName) {
       super(requiresTimestamp);
       this.adapterId = adapterId;
       this.typeName = typeName;
-      this.format = format;
     }
 
     @Override
@@ -169,7 +160,7 @@ public class FileSystemClient {
       final int prime = 31;
       int result = super.hashCode();
       result = (prime * result) + adapterId;
-      result = (prime * result) + ((format == null) ? 0 : format.hashCode());
+      result = (prime * result) + ((typeName == null) ? 0 : typeName.hashCode());
       return result;
     }
 
@@ -188,15 +179,16 @@ public class FileSystemClient {
       if (adapterId != other.adapterId) {
         return false;
       }
-      if (format == null) {
-        if (other.format != null) {
+      if (typeName == null) {
+        if (other.typeName != null) {
           return false;
         }
-      } else if (!format.equals(other.format)) {
+      } else if (!typeName.equals(other.typeName)) {
         return false;
       }
       return true;
     }
+
 
   }
 
@@ -209,14 +201,20 @@ public class FileSystemClient {
       Caffeine.newBuilder().build(key -> loadMetadataTable(key));
   private final String subDirectory;
   private final boolean visibilityEnabled;
+  private final String format;
 
-  public FileSystemClient(final String subDirectory, final boolean visibilityEnabled) {
+  public FileSystemClient(
+      final String subDirectory,
+      final String format,
+      final boolean visibilityEnabled) {
     this.subDirectory = subDirectory;
     this.visibilityEnabled = visibilityEnabled;
+    this.format = format;
   }
 
   private FileSystemMetadataTable loadMetadataTable(final MetadataCacheKey key) throws IOException {
-    Path dir = FileSystemUtils.getMetadataTablePath(subDirectory, key.type);
+    Path dir =
+        FileSystemUtils.getMetadataTablePath(subDirectory, format, visibilityEnabled, key.type);
     if (!Files.exists(dir)) {
       dir = Files.createDirectories(dir);
     }
@@ -230,7 +228,7 @@ public class FileSystemClient {
         key.typeName,
         key.indexName,
         key.partition,
-        key.format,
+        format,
         key.requiresTimestamp,
         visibilityEnabled);
   }
@@ -241,7 +239,7 @@ public class FileSystemClient {
         subDirectory,
         key.adapterId,
         key.typeName,
-        key.format,
+        format,
         visibilityEnabled);
   }
 
@@ -254,17 +252,15 @@ public class FileSystemClient {
       final String typeName,
       final String indexName,
       final byte[] partition,
-      final String format,
       final boolean requiresTimestamp) {
     return indexTableCache.get(
-        new IndexCacheKey(adapterId, typeName, indexName, partition, format, requiresTimestamp));
+        new IndexCacheKey(adapterId, typeName, indexName, partition, requiresTimestamp));
   }
 
   public synchronized FileSystemDataIndexTable getDataIndexTable(
       final short adapterId,
-      final String typeName,
-      final String format) {
-    return dataIndexTableCache.get(new DataIndexCacheKey(adapterId, typeName, format));
+      final String typeName) {
+    return dataIndexTableCache.get(new DataIndexCacheKey(adapterId, typeName));
   }
 
   public synchronized FileSystemMetadataTable getMetadataTable(final MetadataType type) {
@@ -275,14 +271,12 @@ public class FileSystemClient {
     // this could have been created by a different process so check the
     // directory listing
     return (metadataTableCache.getIfPresent(new MetadataCacheKey(type)) != null)
-        || Files.exists(FileSystemUtils.getMetadataTablePath(subDirectory, type));
+        || Files.exists(
+            FileSystemUtils.getMetadataTablePath(subDirectory, format, visibilityEnabled, type));
   }
 
-  public void invalidateDataIndexCache(
-      final short adapterId,
-      final String typeName,
-      final String format) {
-    dataIndexTableCache.invalidate(new DataIndexCacheKey(adapterId, typeName, format));
+  public void invalidateDataIndexCache(final short adapterId, final String typeName) {
+    dataIndexTableCache.invalidate(new DataIndexCacheKey(adapterId, typeName));
   }
 
   public void invalidateIndexCache(final String indexName, final String typeName) {
@@ -296,4 +290,7 @@ public class FileSystemClient {
     return visibilityEnabled;
   }
 
+  public String getFormat() {
+    return format;
+  }
 }

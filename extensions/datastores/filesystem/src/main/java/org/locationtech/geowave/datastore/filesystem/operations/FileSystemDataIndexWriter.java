@@ -21,9 +21,8 @@ public class FileSystemDataIndexWriter implements RowWriter {
   public FileSystemDataIndexWriter(
       final FileSystemClient client,
       final short adapterId,
-      final String typeName,
-      final String format) {
-    table = FileSystemUtils.getDataIndexTable(client, adapterId, typeName, format);
+      final String typeName) {
+    table = FileSystemUtils.getDataIndexTable(client, adapterId, typeName);
   }
 
   @Override

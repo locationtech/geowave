@@ -33,6 +33,7 @@ public class FileSystemOptions extends StoreFactoryOptions {
           + GeoWaveBinaryDataFormatter.DEFAULT_BINARY_FORMATTER
           + "\" which is a compact geowave serialization.  Use `geowave util filesystem listformats` to see available formats.")
   private String format = "binary";
+
   @ParametersDelegate
   protected BaseDataStoreOptions baseOptions = new BaseDataStoreOptions() {
     @Override

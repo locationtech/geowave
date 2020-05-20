@@ -10,7 +10,6 @@ package org.locationtech.geowave.datastore.filesystem.util;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Function;
@@ -47,16 +46,11 @@ public class FileSystemIndexTable extends AbstractFileSystemTable {
     this.partitionKey = partitionKey;
     final IndexFormatter indexFormatter = formatter.getIndexFormatter();
 
-    if ((partitionKey != null) && (partitionKey.length > 0)) {
-      setTableDirectory(
-          Paths.get(
-              subDirectory,
-              indexFormatter.getDirectoryName(indexName, typeName),
-              indexFormatter.getPartitionDirectoryName(indexName, typeName, partitionKey)));
-    } else {
-      setTableDirectory(
-          Paths.get(subDirectory, indexFormatter.getDirectoryName(indexName, typeName)));
-    }
+    setTableDirectory(
+        FileSystemUtils.getSubdirectory(
+            subDirectory,
+            indexFormatter.getDirectoryName(indexName, typeName),
+            indexFormatter.getPartitionDirectoryName(indexName, typeName, partitionKey)));
   }
 
   public void delete(final byte[] sortKey, final byte[] dataId) {
