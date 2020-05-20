@@ -85,7 +85,7 @@ public class FileSystemIndexTable extends AbstractFileSystemTable {
                 requiresTimestamp ? Optional.of(System.currentTimeMillis()) : Optional.empty(),
                 numDuplicates),
             value);
-    writeFile(fileInfo.getFileName(), value.getValue());
+    writeFile(fileInfo.getFileName(), fileInfo.getFileContents());
   }
 
 
