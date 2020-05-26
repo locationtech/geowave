@@ -83,7 +83,7 @@ public class AddKuduStoreCommand extends ServiceEnabledCommand<String> {
     }
 
     // Write properties file
-    ConfigOptions.writeProperties(propFile, existingProps);
+    ConfigOptions.writeProperties(propFile, existingProps, params.getConsole());
 
     final StringBuilder builder = new StringBuilder();
     for (final Object key : existingProps.keySet()) {

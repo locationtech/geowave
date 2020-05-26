@@ -10,10 +10,10 @@ package org.locationtech.geowave.core.store.cli.stats;
 
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
-import org.locationtech.geowave.core.cli.operations.GeowaveTopLevelSection;
+import org.locationtech.geowave.core.cli.operations.GeoWaveTopLevelSection;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = {"stat", "statistics"}, parentOperation = GeowaveTopLevelSection.class)
+@GeowaveOperation(name = {"stat", "statistics"}, parentOperation = GeoWaveTopLevelSection.class)
 @Parameters(commandDescription = "Commands to manage statistics")
 public class StatsSection extends DefaultOperation {
 }

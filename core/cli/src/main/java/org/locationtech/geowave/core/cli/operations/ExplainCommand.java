@@ -23,7 +23,7 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterDescription;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "explain", parentOperation = GeowaveTopLevelSection.class)
+@GeowaveOperation(name = "explain", parentOperation = GeoWaveTopLevelSection.class)
 @Parameters(
     commandDescription = "See what arguments are missing and "
         + "what values will be used for GeoWave commands")
@@ -76,7 +76,7 @@ public class ExplainCommand extends DefaultOperation implements Command {
       commander = commander.getCommands().get(nextCommand);
     }
 
-    JCommander.getConsole().println(builder.toString().trim());
+    params.getConsole().println(builder.toString().trim());
   }
 
   /**
@@ -158,7 +158,7 @@ public class ExplainCommand extends DefaultOperation implements Command {
   public static StringBuilder explainMainParameter(final JCommander commander) {
     final StringBuilder builder = new StringBuilder();
 
-    final ParameterDescription mainParameter = commander.getMainParameter();
+    final ParameterDescription mainParameter = commander.getMainParameterValue();
 
     // Output the main parameter.
     if (mainParameter != null) {

@@ -25,7 +25,7 @@ import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "sparkToGW", parentOperation = IngestSection.class)
 @Parameters(commandDescription = "Ingest supported files that already exist in HDFS or S3")
-public class SparkToGeowaveCommand extends ServiceEnabledCommand<Void> {
+public class SparkToGeoWaveCommand extends ServiceEnabledCommand<Void> {
 
   @Parameter(description = "<input directory> <store name> <comma delimited index list>")
   private List<String> parameters = new ArrayList<>();
@@ -126,7 +126,8 @@ public class SparkToGeowaveCommand extends ServiceEnabledCommand<Void> {
         indexList,
         ingestOptions,
         sparkOptions,
-        inputPath)) {
+        inputPath,
+        params.getConsole())) {
       throw new RuntimeException("Ingest failed to execute");
     }
 

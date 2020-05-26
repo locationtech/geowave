@@ -46,7 +46,7 @@ public class NewTokenCommand extends DefaultOperation implements Command {
                   + tokenFile.getCanonicalPath());
           sLog.info(
               "Creating new encryption token and migrating all passwords in [{}] to be encrypted with new token",
-              ConfigOptions.getDefaultPropertyFile().getCanonicalPath());
+              ConfigOptions.getDefaultPropertyFile(params.getConsole()).getCanonicalPath());
 
           File backupFile = null;
           boolean tokenBackedUp = false;
@@ -80,18 +80,23 @@ public class NewTokenCommand extends DefaultOperation implements Command {
                     final String decryptedValue =
                         SecurityUtils.decryptHexEncodedValue(
                             configValue,
-                            backupFile.getCanonicalPath());
+                            backupFile.getCanonicalPath(),
+                            params.getConsole());
                     final String encryptedValue =
                         SecurityUtils.encryptAndHexEncodeValue(
                             decryptedValue,
-                            tokenFile.getCanonicalPath());
+                            tokenFile.getCanonicalPath(),
+                            params.getConsole());
                     configProps.put(configKey, encryptedValue);
                     updated = true;
                   }
                 }
               }
               if (updated) {
-                ConfigOptions.writeProperties(getGeoWaveConfigFile(params), configProps);
+                ConfigOptions.writeProperties(
+                    getGeoWaveConfigFile(params),
+                    configProps,
+                    params.getConsole());
               }
             }
             // HP Fortify "NULL Pointer Dereference" false positive

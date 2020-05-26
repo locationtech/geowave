@@ -63,7 +63,7 @@ public abstract class AbstractRemoveCommand extends ServiceEnabledCommand<String
     }
 
     // Write properties file
-    ConfigOptions.writeProperties(getGeoWaveConfigFile(params), existingProps);
+    ConfigOptions.writeProperties(getGeoWaveConfigFile(params), existingProps, params.getConsole());
     final int endSize = existingProps.size();
 
     if (endSize < startSize) {

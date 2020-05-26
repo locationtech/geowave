@@ -53,7 +53,7 @@ public class IngestOSMToGeoWaveCommand extends DefaultOperation implements Comma
     }
 
     for (final String string : computeResults(params)) {
-      JCommander.getConsole().println(string);
+      params.getConsole().println(string);
     }
   }
 
@@ -123,7 +123,7 @@ public class IngestOSMToGeoWaveCommand extends DefaultOperation implements Comma
     final String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
 
     final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile)) {
+    if (!inputStoreLoader.loadFromConfig(configFile, new JCommander().getConsole())) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
     inputStoreOptions = inputStoreLoader.getDataStorePlugin();

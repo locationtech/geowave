@@ -43,21 +43,21 @@ public class JCommanderPrefixTranslator {
       // HP Fortify "Access Specifier Manipulation"
       // These fields are being modified by trusted code,
       // in a way that is not influenced by user input
-      paraField = Parameterized.class.getDeclaredField("m_field");
+      paraField = Parameterized.class.getDeclaredField("field");
       paraField.setAccessible(true);
 
-      paraMethod = Parameterized.class.getDeclaredField("m_method");
+      paraMethod = Parameterized.class.getDeclaredField("method");
       paraMethod.setAccessible(true);
     } catch (final NoSuchFieldException e) {
       // This is a programmer error, and will only happen if another
       // version of JCommander is being used.
-      // newer versions of JCommander have renamed the member variables, try the new names
+      // newer versions of JCommander have renamed the member variables, try the old names
       try {
-        paraField = Parameterized.class.getDeclaredField("field");
+        paraField = Parameterized.class.getDeclaredField("m_field");
 
         paraField.setAccessible(true);
 
-        paraMethod = Parameterized.class.getDeclaredField("method");
+        paraMethod = Parameterized.class.getDeclaredField("m_method");
         paraMethod.setAccessible(true);
       } catch (NoSuchFieldException e2) {
         throw new RuntimeException(e);

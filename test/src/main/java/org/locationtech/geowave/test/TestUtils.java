@@ -59,7 +59,7 @@ import org.locationtech.geowave.core.geotime.util.TWKBReader;
 import org.locationtech.geowave.core.geotime.util.TWKBWriter;
 import org.locationtech.geowave.core.geotime.util.TimeUtils;
 import org.locationtech.geowave.core.ingest.operations.ConfigAWSCommand;
-import org.locationtech.geowave.core.ingest.operations.LocalToGeowaveCommand;
+import org.locationtech.geowave.core.ingest.operations.LocalToGeoWaveCommand;
 import org.locationtech.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
 import org.locationtech.geowave.core.ingest.spark.SparkCommandLineOptions;
 import org.locationtech.geowave.core.ingest.spark.SparkIngestDriver;
@@ -89,6 +89,7 @@ import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -268,12 +269,12 @@ public class TestUtils {
     addStore.setPluginOptions(dataStore);
     addStore.execute(params);
 
-    IndexStore indexStore = dataStore.createIndexStore();
+    final IndexStore indexStore = dataStore.createIndexStore();
 
     // Add indices
     final StringBuilder indexParam = new StringBuilder();
     for (int i = 0; i < indexOptions.size(); i++) {
-      String indexName = "test-index" + i;
+      final String indexName = "test-index" + i;
       if (indexStore.getIndex(indexName) == null) {
         indexOptions.get(i).setName(indexName);
         indexStore.addIndex(indexOptions.get(i).createIndex());
@@ -281,7 +282,7 @@ public class TestUtils {
       indexParam.append(indexName + ",");
     }
     // Create the command and execute.
-    final LocalToGeowaveCommand localIngester = new LocalToGeowaveCommand();
+    final LocalToGeoWaveCommand localIngester = new LocalToGeoWaveCommand();
     localIngester.setPluginFormats(ingestFormatOptions);
     localIngester.setParameters(ingestFilePath, "test-store", indexParam.toString());
     localIngester.setThreads(nthreads);
@@ -327,7 +328,7 @@ public class TestUtils {
 
     final StringBuilder indexParam = new StringBuilder();
     for (int i = 0; i < indexOptions.size(); i++) {
-      String indexName = "test-index" + i;
+      final String indexName = "test-index" + i;
       if (indexStore.getIndex(indexName) == null) {
         indexOptions.get(i).setName(indexName);
         indexStore.addIndex(indexOptions.get(i).createIndex());
@@ -340,7 +341,7 @@ public class TestUtils {
     configS3.execute(operationParams);
 
     // Create the command and execute.
-    final LocalToGeowaveCommand localIngester = new LocalToGeowaveCommand();
+    final LocalToGeoWaveCommand localIngester = new LocalToGeoWaveCommand();
     localIngester.setPluginFormats(ingestFormatOptions);
     localIngester.setParameters(ingestFilePath, "test-store", indexParam.toString());
     localIngester.setThreads(nthreads);
@@ -415,7 +416,8 @@ public class TestUtils {
         indexes,
         new VisibilityOptions(),
         sparkOptions,
-        ingestFilePath);
+        ingestFilePath,
+        new JCommander().getConsole());
 
     verifyStats(dataStore);
   }

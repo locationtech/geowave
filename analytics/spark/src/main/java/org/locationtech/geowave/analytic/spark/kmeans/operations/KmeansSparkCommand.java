@@ -63,13 +63,13 @@ public class KmeansSparkCommand extends ServiceEnabledCommand<Void> implements C
     final File configFile = getGeoWaveConfigFile(params);
 
     final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile)) {
+    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
       throw new ParameterException("Cannot find input store: " + inputStoreLoader.getStoreName());
     }
     inputDataStore = inputStoreLoader.getDataStorePlugin();
 
     final StoreLoader outputStoreLoader = new StoreLoader(outputStoreName);
-    if (!outputStoreLoader.loadFromConfig(configFile)) {
+    if (!outputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
       throw new ParameterException("Cannot find output store: " + outputStoreLoader.getStoreName());
     }
     outputDataStore = outputStoreLoader.getDataStorePlugin();

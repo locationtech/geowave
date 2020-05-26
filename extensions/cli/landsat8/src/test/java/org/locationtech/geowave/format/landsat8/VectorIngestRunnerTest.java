@@ -26,6 +26,7 @@ import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 import it.geosolutions.jaiext.JAIExt;
 
@@ -82,16 +83,16 @@ public class VectorIngestRunnerTest {
     final File configFile = (File) params.getContext().get(ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
     final StoreLoader inputStoreLoader = new StoreLoader("memorystore");
-    if (!inputStoreLoader.loadFromConfig(configFile)) {
+    if (!inputStoreLoader.loadFromConfig(configFile, new JCommander().getConsole())) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
     return inputStoreLoader.getDataStorePlugin();
   }
 
   private void createIndices(final OperationParams params) {
-    IndexStore indexStore = getStorePluginOptions(params).createIndexStore();
+    final IndexStore indexStore = getStorePluginOptions(params).createIndexStore();
     // Create the spatial index
-    SpatialIndexBuilder builder = new SpatialIndexBuilder();
+    final SpatialIndexBuilder builder = new SpatialIndexBuilder();
     builder.setName("spatialindex");
     builder.setNumPartitions(1);
     builder.setIncludeTimeInCommonIndexModel(false);

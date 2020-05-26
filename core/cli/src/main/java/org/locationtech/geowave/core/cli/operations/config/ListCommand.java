@@ -36,12 +36,12 @@ public class ListCommand extends ServiceEnabledCommand<SortedMap<String, Object>
     final Pair<String, SortedMap<String, Object>> list = getProperties(params);
     final String name = list.getKey();
 
-    JCommander.getConsole().println("PROPERTIES (" + name + ")");
+    params.getConsole().println("PROPERTIES (" + name + ")");
 
     final SortedMap<String, Object> properties = list.getValue();
 
     for (final Entry<String, Object> e : properties.entrySet()) {
-      JCommander.getConsole().println(e.getKey() + ": " + e.getValue());
+      params.getConsole().println(e.getKey() + ": " + e.getValue());
     }
   }
 

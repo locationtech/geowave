@@ -12,6 +12,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.util.Properties;
 import org.junit.Test;
+import com.beust.jcommander.JCommander;
 
 public class ConfigOptionsTest {
   @Test
@@ -23,7 +24,8 @@ public class ConfigOptionsTest {
     final String key = "key";
     final String value = "value";
     prop.setProperty(key, value);
-    final boolean success = ConfigOptions.writeProperties(configfile, prop);
+    final boolean success =
+        ConfigOptions.writeProperties(configfile, prop, new JCommander().getConsole());
     if (success) {
       final Properties loadprop = ConfigOptions.loadProperties(configfile);
       assertEquals(value, loadprop.getProperty(key));

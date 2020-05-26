@@ -74,7 +74,7 @@ import org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveWorkspaceCo
 import org.locationtech.geowave.service.grpc.protobuf.GeoServerSetLayerStyleCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.MapStringStringResponseProtos;
 import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypesProtos.StringResponseProtos;
-import org.locationtech.geowave.service.grpc.protobuf.KafkaToGeowaveCommandParametersProtos;
+import org.locationtech.geowave.service.grpc.protobuf.KafkaToGeoWaveCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.KdeCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.KmeansSparkCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.ListCommandParametersProtos;
@@ -84,11 +84,11 @@ import org.locationtech.geowave.service.grpc.protobuf.ListIngestPluginsCommandPa
 import org.locationtech.geowave.service.grpc.protobuf.ListStatsCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.ListStorePluginsCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.ListTypesCommandParametersProtos;
-import org.locationtech.geowave.service.grpc.protobuf.LocalToGeowaveCommandParametersProtos;
+import org.locationtech.geowave.service.grpc.protobuf.LocalToGeoWaveCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.LocalToHdfsCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.LocalToKafkaCommandParametersProtos;
-import org.locationtech.geowave.service.grpc.protobuf.LocalToMapReduceToGeowaveCommandParametersProtos;
-import org.locationtech.geowave.service.grpc.protobuf.MapReduceToGeowaveCommandParametersProtos;
+import org.locationtech.geowave.service.grpc.protobuf.LocalToMapReduceToGeoWaveCommandParametersProtos;
+import org.locationtech.geowave.service.grpc.protobuf.MapReduceToGeoWaveCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.NearestNeighborCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.RecalculateStatsCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.RemoveIndexCommandParametersProtos;
@@ -97,7 +97,7 @@ import org.locationtech.geowave.service.grpc.protobuf.RemoveStoreCommandParamete
 import org.locationtech.geowave.service.grpc.protobuf.RemoveTypeCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.SetCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.SparkSqlCommandParametersProtos;
-import org.locationtech.geowave.service.grpc.protobuf.SparkToGeowaveCommandParametersProtos;
+import org.locationtech.geowave.service.grpc.protobuf.SparkToGeoWaveCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.SpatialJoinCommandParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.SpatialQueryParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.SpatialTemporalQueryParametersProtos;
@@ -810,10 +810,10 @@ public class GeoWaveGrpcTestClient {
 
     final ArrayList<String> extensions = new ArrayList<>();
 
-    final LocalToGeowaveCommandParametersProtos request =
-        LocalToGeowaveCommandParametersProtos.newBuilder().addAllParameters(
+    final LocalToGeoWaveCommandParametersProtos request =
+        LocalToGeoWaveCommandParametersProtos.newBuilder().addAllParameters(
             params).addAllExtensions(extensions).setFormats("gpx").setThreads(1).build();
-    coreIngestBlockingStub.localToGeowaveCommand(request);
+    coreIngestBlockingStub.localToGeoWaveCommand(request);
     return true;
   }
 
@@ -824,11 +824,11 @@ public class GeoWaveGrpcTestClient {
     params.add(GeoWaveGrpcTestUtils.indexName);
 
     final ArrayList<String> extensions = new ArrayList<>();
-    final MapReduceToGeowaveCommandParametersProtos request =
-        MapReduceToGeowaveCommandParametersProtos.newBuilder().addAllParameters(
+    final MapReduceToGeoWaveCommandParametersProtos request =
+        MapReduceToGeoWaveCommandParametersProtos.newBuilder().addAllParameters(
             params).addAllExtensions(extensions).setFormats("gpx").setJobTrackerHostPort(
                 GeoWaveGrpcTestUtils.getMapReduceTestEnv().getJobtracker()).build();
-    coreIngestBlockingStub.mapReduceToGeowaveCommand(request);
+    coreIngestBlockingStub.mapReduceToGeoWaveCommand(request);
     return true;
   }
 
@@ -851,12 +851,12 @@ public class GeoWaveGrpcTestClient {
 
     final ArrayList<String> extensions = new ArrayList<>();
 
-    final SparkToGeowaveCommandParametersProtos request =
-        SparkToGeowaveCommandParametersProtos.newBuilder().addAllParameters(
+    final SparkToGeoWaveCommandParametersProtos request =
+        SparkToGeoWaveCommandParametersProtos.newBuilder().addAllParameters(
             params).addAllExtensions(extensions).setFormats("gpx").setAppName(
                 "CoreGeoWaveSparkITs").setMaster("local[*]").setHost("localhost").setNumExecutors(
                     1).setNumCores(1).build();
-    coreIngestBlockingStub.sparkToGeowaveCommand(request);
+    coreIngestBlockingStub.sparkToGeoWaveCommand(request);
     return true;
   }
 
@@ -869,11 +869,11 @@ public class GeoWaveGrpcTestClient {
 
     final ArrayList<String> extensions = new ArrayList<>();
 
-    final LocalToMapReduceToGeowaveCommandParametersProtos request =
-        LocalToMapReduceToGeowaveCommandParametersProtos.newBuilder().addAllParameters(
+    final LocalToMapReduceToGeoWaveCommandParametersProtos request =
+        LocalToMapReduceToGeoWaveCommandParametersProtos.newBuilder().addAllParameters(
             params).addAllExtensions(extensions).setFormats("gpx").setJobTrackerHostPort(
                 GeoWaveGrpcTestUtils.getMapReduceTestEnv().getJobtracker()).build();
-    coreIngestBlockingStub.localToMapReduceToGeowaveCommand(request);
+    coreIngestBlockingStub.localToMapReduceToGeoWaveCommand(request);
     return true;
   }
 
@@ -884,14 +884,14 @@ public class GeoWaveGrpcTestClient {
 
     final ArrayList<String> extensions = new ArrayList<>();
 
-    final KafkaToGeowaveCommandParametersProtos request =
-        KafkaToGeowaveCommandParametersProtos.newBuilder().addAllParameters(
+    final KafkaToGeoWaveCommandParametersProtos request =
+        KafkaToGeoWaveCommandParametersProtos.newBuilder().addAllParameters(
             params).addAllExtensions(extensions).setFormats("gpx").setGroupId(
                 "testGroup").setZookeeperConnect(
                     GeoWaveGrpcTestUtils.getZookeeperTestEnv().getZookeeper()).setAutoOffsetReset(
                         "smallest").setFetchMessageMaxBytes("5000000").setConsumerTimeoutMs(
                             "5000").setReconnectOnTimeout(false).setBatchSize(10000).build();
-    coreIngestBlockingStub.kafkaToGeowaveCommand(request);
+    coreIngestBlockingStub.kafkaToGeoWaveCommand(request);
     return true;
   }
 

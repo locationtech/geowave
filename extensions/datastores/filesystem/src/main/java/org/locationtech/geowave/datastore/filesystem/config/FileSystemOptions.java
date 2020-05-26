@@ -20,6 +20,7 @@ import org.locationtech.geowave.datastore.filesystem.util.GeoWaveBinaryDataForma
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.ParametersDelegate;
+import com.beust.jcommander.internal.Console;
 
 public class FileSystemOptions extends StoreFactoryOptions {
   @Parameter(
@@ -66,17 +67,18 @@ public class FileSystemOptions extends StoreFactoryOptions {
   }
 
   @Override
-  public void validatePluginOptions() throws ParameterException {
+  public void validatePluginOptions(final Console console) throws ParameterException {
     // Set the directory to be absolute
     dir = Paths.get(dir).toAbsolutePath().toString();
-    super.validatePluginOptions();
+    super.validatePluginOptions(console);
   }
 
   @Override
-  public void validatePluginOptions(final Properties properties) throws ParameterException {
+  public void validatePluginOptions(final Properties properties, final Console console)
+      throws ParameterException {
     // Set the directory to be absolute
     dir = Paths.get(dir).toAbsolutePath().toString();
-    super.validatePluginOptions(properties);
+    super.validatePluginOptions(properties, console);
   }
 
   public FileSystemOptions() {

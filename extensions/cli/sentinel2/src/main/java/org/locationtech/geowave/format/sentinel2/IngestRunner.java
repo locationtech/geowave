@@ -61,7 +61,7 @@ public class IngestRunner extends RasterIngestRunner {
       final String vectorStoreName = vectorOverrideOptions.getVectorStore();
 
       final StoreLoader vectorStoreLoader = new StoreLoader(vectorStoreName);
-      if (!vectorStoreLoader.loadFromConfig(configFile)) {
+      if (!vectorStoreLoader.loadFromConfig(configFile, params.getConsole())) {
         throw new ParameterException(
             "Cannot find vector store name: " + vectorStoreLoader.getStoreName());
       }

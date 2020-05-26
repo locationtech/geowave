@@ -39,7 +39,7 @@ import com.beust.jcommander.ParametersDelegate;
 @GeowaveOperation(name = "localToMrGW", parentOperation = IngestSection.class)
 @Parameters(
     commandDescription = "Copy supported files from local file system to HDFS and ingest from HDFS")
-public class LocalToMapReduceToGeowaveCommand extends ServiceEnabledCommand<Void> {
+public class LocalToMapReduceToGeoWaveCommand extends ServiceEnabledCommand<Void> {
 
   @Parameter(
       description = "<file or directory> <path to base directory to write to> <store name> <comma delimited index list>")
@@ -168,7 +168,7 @@ public class LocalToMapReduceToGeowaveCommand extends ServiceEnabledCommand<Void
     final String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
 
     final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile)) {
+    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
     inputStoreOptions = inputStoreLoader.getDataStorePlugin();

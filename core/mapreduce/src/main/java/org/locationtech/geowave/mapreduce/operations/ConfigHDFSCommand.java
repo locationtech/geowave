@@ -88,7 +88,8 @@ public class ConfigHDFSCommand extends ServiceEnabledCommand<Void> {
         getGeoWaveConfigFile(params),
         existingProps,
         this.getClass(),
-        HDFS_DEFAULTFS_PREFIX);
+        HDFS_DEFAULTFS_PREFIX,
+        params.getConsole());
 
     return null;
   }

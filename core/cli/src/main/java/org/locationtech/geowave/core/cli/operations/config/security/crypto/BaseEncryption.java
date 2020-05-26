@@ -26,6 +26,7 @@ import org.locationtech.geowave.core.cli.operations.config.security.utils.Securi
 import org.locationtech.geowave.core.cli.utils.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.internal.Console;
 
 /**
  * Abstract base encryption class for setting up and defining common encryption/decryption methods
@@ -63,27 +64,27 @@ public abstract class BaseEncryption {
    *
    * @param resourceLocation Path to cryptography token key file
    */
-  public BaseEncryption(final String resourceLocation) {
+  public BaseEncryption(final String resourceLocation, Console console) {
     try {
       setResourceLocation(resourceLocation);
-      init();
+      init(console);
     } catch (final Throwable t) {
       LOGGER.error(t.getLocalizedMessage(), t);
     }
   }
 
   /** Base constructor for encryption */
-  public BaseEncryption() {
-    init();
+  public BaseEncryption(Console console) {
+    init(console);
   }
 
   /**
    * Method to initialize all required fields, check for the existence of the cryptography token
    * key, and generate the key for encryption/decryption
    */
-  private void init() {
+  private void init(Console console) {
     try {
-      checkForToken();
+      checkForToken(console);
       setResourceLocation(tokenFile.getCanonicalPath());
 
       salt = "Ge0W@v3-Ro0t-K3y".getBytes("UTF-8");
@@ -95,7 +96,7 @@ public abstract class BaseEncryption {
   }
 
   /** Check if encryption token exists. If not, create one initially */
-  private void checkForToken() throws Throwable {
+  private void checkForToken(Console console) throws Throwable {
     if (getResourceLocation() != null) {
       // this is simply caching the location, ideally under all
       // circumstances resource location exists
@@ -106,7 +107,8 @@ public abstract class BaseEncryption {
       // because of that assumption this can cause inconsistency
       // under all circumstances this seems like it should never happen
       tokenFile =
-          SecurityUtils.getFormattedTokenKeyFileForConfig(ConfigOptions.getDefaultPropertyFile());
+          SecurityUtils.getFormattedTokenKeyFileForConfig(
+              ConfigOptions.getDefaultPropertyFile(console));
     }
     if (!tokenFile.exists()) {
       generateNewEncryptionToken(tokenFile);

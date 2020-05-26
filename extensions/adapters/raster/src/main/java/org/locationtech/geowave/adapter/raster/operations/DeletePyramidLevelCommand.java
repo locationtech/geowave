@@ -49,11 +49,11 @@ public class DeletePyramidLevelCommand extends DefaultOperation implements Comma
   private List<String> parameters = new ArrayList<>();
 
   @Parameter(names = "--level", description = "The raster pyramid level to delete", required = true)
-  private final Integer level = null;
+  private Integer level = null;
   @Parameter(
       names = "--coverage",
       description = "The raster coverage name (required if store has multiple coverages)")
-  private final String coverageName = null;
+  private String coverageName = null;
 
   private DataStorePluginOptions inputStoreOptions = null;
 
@@ -61,6 +61,14 @@ public class DeletePyramidLevelCommand extends DefaultOperation implements Comma
   @Override
   public void execute(final OperationParams params) throws Exception {
     run(params);
+  }
+
+  public void setLevel(final Integer level) {
+    this.level = level;
+  }
+
+  public void setCoverageName(final String coverageName) {
+    this.coverageName = coverageName;
   }
 
   public void run(final OperationParams params) {
@@ -76,7 +84,7 @@ public class DeletePyramidLevelCommand extends DefaultOperation implements Comma
 
     // Attempt to load input store.
     final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile)) {
+    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
     inputStoreOptions = inputStoreLoader.getDataStorePlugin();

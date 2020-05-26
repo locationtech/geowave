@@ -21,7 +21,7 @@ public class ExplainCommandTest {
     final String[] args = {"explain"};
     final OperationRegistry registry = OperationRegistry.getInstance();
     final OperationParser parser = new OperationParser(registry);
-    final CommandLineOperationParams params = parser.parse(GeowaveTopLevelSection.class, args);
+    final CommandLineOperationParams params = parser.parse(GeoWaveTopLevelSection.class, args);
 
     final ExplainCommand expcommand = new ExplainCommand();
     expcommand.prepare(params);

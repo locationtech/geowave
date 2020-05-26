@@ -19,7 +19,6 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.store.StoreLoader;
-import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -32,7 +31,11 @@ public class ListIndicesCommand extends ServiceEnabledCommand<String> {
 
   @Override
   public void execute(final OperationParams params) throws TargetNotFoundException {
-    JCommander.getConsole().println(computeResults(params));
+    params.getConsole().println(computeResults(params));
+  }
+
+  public void setParameters(List<String> parameters) {
+    this.parameters = parameters;
   }
 
   @Override
@@ -52,7 +55,7 @@ public class ListIndicesCommand extends ServiceEnabledCommand<String> {
     String result;
 
     final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile)) {
+    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     } else {
 

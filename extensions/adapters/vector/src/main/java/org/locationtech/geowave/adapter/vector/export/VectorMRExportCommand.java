@@ -61,14 +61,19 @@ public class VectorMRExportCommand extends DefaultOperation implements Command {
     // Attempt to load store.
     if (storeOptions == null) {
       final StoreLoader storeLoader = new StoreLoader(storeName);
-      if (!storeLoader.loadFromConfig(configFile)) {
+      if (!storeLoader.loadFromConfig(configFile, params.getConsole())) {
         throw new ParameterException("Cannot find store name: " + storeLoader.getStoreName());
       }
       storeOptions = storeLoader.getDataStorePlugin();
     }
 
     final VectorMRExportJobRunner vectorRunner =
-        new VectorMRExportJobRunner(storeOptions, mrOptions, hdfsHostPort, hdfsPath);
+        new VectorMRExportJobRunner(
+            storeOptions,
+            mrOptions,
+            hdfsHostPort,
+            hdfsPath,
+            params.getConsole());
     return vectorRunner;
   }
 

@@ -18,7 +18,6 @@ import org.locationtech.geowave.cli.geoserver.GeoServerCommand;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import com.beust.jcommander.IStringConverter;
-import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -49,11 +48,23 @@ public class GeoServerAddLayerCommand extends GeoServerCommand<String> {
   @Parameter(description = "<GeoWave store name>")
   private List<String> parameters = new ArrayList<>();
 
+  public void setAddOption(final AddOption addOption) {
+    this.addOption = addOption;
+  }
+
+  public void setStyle(final String style) {
+    this.style = style;
+  }
+
+  public void setParameters(final List<String> parameters) {
+    this.parameters = parameters;
+  }
+
   private String gwStore = null;
 
   @Override
   public void execute(final OperationParams params) throws Exception {
-    JCommander.getConsole().println(computeResults(params));
+    params.getConsole().println(computeResults(params));
   }
 
   public static class AddOptionConverter implements IStringConverter<AddOption> {

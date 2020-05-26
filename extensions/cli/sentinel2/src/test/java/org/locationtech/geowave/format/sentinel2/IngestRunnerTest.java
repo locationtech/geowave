@@ -149,23 +149,23 @@ public class IngestRunnerTest {
     final File configFile = (File) params.getContext().get(ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
     final StoreLoader inputStoreLoader = new StoreLoader(storeName);
-    if (!inputStoreLoader.loadFromConfig(configFile)) {
+    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
     return inputStoreLoader.getDataStorePlugin();
   }
 
   private void createIndices(final OperationParams params, final String storeName) {
-    IndexStore indexStore = getStorePluginOptions(params, storeName).createIndexStore();
+    final IndexStore indexStore = getStorePluginOptions(params, storeName).createIndexStore();
     // Create the spatial index
-    SpatialIndexBuilder builder = new SpatialIndexBuilder();
+    final SpatialIndexBuilder builder = new SpatialIndexBuilder();
     builder.setName("spatialindex");
     builder.setNumPartitions(1);
     builder.setIncludeTimeInCommonIndexModel(false);
     indexStore.addIndex(builder.createIndex());
 
     // Create the spatial temporal index
-    SpatialTemporalIndexBuilder st_builder = new SpatialTemporalIndexBuilder();
+    final SpatialTemporalIndexBuilder st_builder = new SpatialTemporalIndexBuilder();
     st_builder.setName("spatempindex");
     st_builder.setBias(Bias.BALANCED);
     st_builder.setMaxDuplicates(-1);

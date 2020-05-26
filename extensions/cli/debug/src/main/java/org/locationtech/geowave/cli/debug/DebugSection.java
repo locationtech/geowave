@@ -10,10 +10,10 @@ package org.locationtech.geowave.cli.debug;
 
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
-import org.locationtech.geowave.core.cli.operations.GeowaveTopLevelSection;
+import org.locationtech.geowave.core.cli.operations.GeoWaveTopLevelSection;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "debug", parentOperation = GeowaveTopLevelSection.class)
+@GeowaveOperation(name = "debug", parentOperation = GeoWaveTopLevelSection.class)
 @Parameters(commandDescription = "Scratchpad for geowave ops")
 public class DebugSection extends DefaultOperation {
 }

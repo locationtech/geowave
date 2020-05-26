@@ -38,7 +38,7 @@ import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.beust.jcommander.JCommander;
+import com.beust.jcommander.internal.Console;
 
 public class VectorMRExportJobRunner extends Configured implements Tool {
   private static final Logger LOGGER = LoggerFactory.getLogger(VectorMRExportCommand.class);
@@ -48,16 +48,19 @@ public class VectorMRExportJobRunner extends Configured implements Tool {
   private final VectorMRExportOptions mrOptions;
   private final String hdfsHostPort;
   private final String hdfsPath;
+  private final Console console;
 
   public VectorMRExportJobRunner(
       final DataStorePluginOptions storeOptions,
       final VectorMRExportOptions mrOptions,
       final String hdfsHostPort,
-      final String hdfsPath) {
+      final String hdfsPath,
+      final Console console) {
     this.storeOptions = storeOptions;
     this.mrOptions = mrOptions;
     this.hdfsHostPort = hdfsHostPort;
     this.hdfsPath = hdfsPath;
+    this.console = console;
   }
 
   /** Main method to execute the MapReduce analytic. */
@@ -97,15 +100,14 @@ public class VectorMRExportJobRunner extends Configured implements Tool {
     if (mrOptions.getIndexName() != null) {
       final Index index = indexStore.getIndex(mrOptions.getIndexName());
       if (index == null) {
-        JCommander.getConsole().println(
-            "Unable to find index '" + mrOptions.getIndexName() + "' in store");
+        console.println("Unable to find index '" + mrOptions.getIndexName() + "' in store");
         return -1;
       }
       bldr.indexName(mrOptions.getIndexName());
     }
     if (mrOptions.getCqlFilter() != null) {
       if ((typeNames == null) || (typeNames.size() != 1)) {
-        JCommander.getConsole().println("Exactly one type is expected when using CQL filter");
+        console.println("Exactly one type is expected when using CQL filter");
         return -1;
       }
       final String typeName = typeNames.get(0);
@@ -114,11 +116,11 @@ public class VectorMRExportJobRunner extends Configured implements Tool {
       final InternalDataAdapter<?> adapter =
           storeOptions.createAdapterStore().getAdapter(internalAdpaterId);
       if (adapter == null) {
-        JCommander.getConsole().println("Type '" + typeName + "' not found");
+        console.println("Type '" + typeName + "' not found");
         return -1;
       }
       if (!(adapter.getAdapter() instanceof GeotoolsFeatureDataAdapter)) {
-        JCommander.getConsole().println("Type '" + typeName + "' does not support vector export");
+        console.println("Type '" + typeName + "' does not support vector export");
 
         return -1;
       }

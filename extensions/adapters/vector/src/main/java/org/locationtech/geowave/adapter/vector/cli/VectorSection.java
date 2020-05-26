@@ -10,10 +10,10 @@ package org.locationtech.geowave.adapter.vector.cli;
 
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
-import org.locationtech.geowave.core.cli.operations.GeowaveTopLevelSection;
+import org.locationtech.geowave.core.cli.operations.GeoWaveTopLevelSection;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "vector", parentOperation = GeowaveTopLevelSection.class)
+@GeowaveOperation(name = "vector", parentOperation = GeoWaveTopLevelSection.class)
 @Parameters(commandDescription = "Vector data operations")
 public class VectorSection extends DefaultOperation {
 }

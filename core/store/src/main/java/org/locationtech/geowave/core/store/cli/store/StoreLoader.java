@@ -26,7 +26,9 @@ import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
+import com.beust.jcommander.internal.Console;
 
 /**
  * This is a convenience class which sets up some obvious values in the OperationParams based on the
@@ -52,13 +54,26 @@ public class StoreLoader {
    * @return {@code true} if the configuration was successfully loaded
    */
   public boolean loadFromConfig(final File configFile) {
+    return loadFromConfig(configFile, new JCommander().getConsole());
+  }
+
+
+  /**
+   * Attempt to load the data store configuration from the config file.
+   *
+   * @param console the console to print output to
+   * @param configFile
+   * @return {@code true} if the configuration was successfully loaded
+   */
+  public boolean loadFromConfig(final File configFile, final Console console) {
 
     final String namespace = DataStorePluginOptions.getStoreNamespace(storeName);
 
     return loadFromConfig(
         ConfigOptions.loadProperties(configFile, "^" + namespace),
         namespace,
-        configFile);
+        configFile,
+        console);
   }
 
   /**
@@ -70,7 +85,8 @@ public class StoreLoader {
   public boolean loadFromConfig(
       final Properties props,
       final String namespace,
-      final File configFile) {
+      final File configFile,
+      final Console console) {
 
     dataStorePlugin = new DataStorePluginOptions();
 
@@ -99,7 +115,10 @@ public class StoreLoader {
                 String decryptedValue = value;
                 try {
                   decryptedValue =
-                      SecurityUtils.decryptHexEncodedValue(value, tokenFile.getAbsolutePath());
+                      SecurityUtils.decryptHexEncodedValue(
+                          value,
+                          tokenFile.getAbsolutePath(),
+                          console);
                 } catch (final Exception e) {
                   LOGGER.error(
                       "An error occurred encrypting specified password value: "

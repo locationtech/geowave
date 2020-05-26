@@ -54,10 +54,14 @@ public class RocksDBDataIndexTable extends AbstractRocksDBTable {
   }
 
   public CloseableIterator<GeoWaveRow> dataIndexIterator(final byte[][] dataIds) {
+    if (dataIds == null || dataIds.length == 0) {
+      return new CloseableIterator.Empty<>();
+    }
     final RocksDB readDb = getReadDb();
     if (readDb == null) {
       return new CloseableIterator.Empty<>();
     }
+
     try {
       final List<byte[]> dataIdsList = Arrays.asList(dataIds);
       final Map<byte[], byte[]> dataIdxResults = readDb.multiGet(dataIdsList);

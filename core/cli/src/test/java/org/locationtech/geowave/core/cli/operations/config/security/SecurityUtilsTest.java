@@ -14,21 +14,27 @@ import java.io.File;
 import org.junit.Test;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.operations.config.security.utils.SecurityUtils;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.internal.Console;
 
 /** Unit test cases for encrypting and decrypting values */
 public class SecurityUtilsTest {
   @Test
   public void testEncryptionDecryption() throws Exception {
     final String rawInput = "geowave";
-
+    Console console = new JCommander().getConsole();
     final File tokenFile =
-        SecurityUtils.getFormattedTokenKeyFileForConfig(ConfigOptions.getDefaultPropertyFile());
+        SecurityUtils.getFormattedTokenKeyFileForConfig(
+            ConfigOptions.getDefaultPropertyFile(console));
     if ((tokenFile != null) && tokenFile.exists()) {
       final String encryptedValue =
-          SecurityUtils.encryptAndHexEncodeValue(rawInput, tokenFile.getCanonicalPath());
+          SecurityUtils.encryptAndHexEncodeValue(rawInput, tokenFile.getCanonicalPath(), console);
 
       final String decryptedValue =
-          SecurityUtils.decryptHexEncodedValue(encryptedValue, tokenFile.getCanonicalPath());
+          SecurityUtils.decryptHexEncodedValue(
+              encryptedValue,
+              tokenFile.getCanonicalPath(),
+              console);
 
       assertEquals(decryptedValue, rawInput);
     }

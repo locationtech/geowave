@@ -10,10 +10,10 @@ package org.locationtech.geowave.core.ingest.operations;
 
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
-import org.locationtech.geowave.core.cli.operations.GeowaveTopLevelSection;
+import org.locationtech.geowave.core.cli.operations.GeoWaveTopLevelSection;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "ingest", parentOperation = GeowaveTopLevelSection.class)
+@GeowaveOperation(name = "ingest", parentOperation = GeoWaveTopLevelSection.class)
 @Parameters(
     commandDescription = "Commands that ingest data directly into GeoWave or stage data to be ingested into GeoWave")
 public class IngestSection extends DefaultOperation {

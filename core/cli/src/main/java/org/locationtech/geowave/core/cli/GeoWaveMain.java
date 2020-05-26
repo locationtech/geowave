@@ -11,7 +11,7 @@ package org.locationtech.geowave.core.cli;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.Operation;
 import org.locationtech.geowave.core.cli.operations.ExplainCommand;
-import org.locationtech.geowave.core.cli.operations.GeowaveTopLevelSection;
+import org.locationtech.geowave.core.cli.operations.GeoWaveTopLevelSection;
 import org.locationtech.geowave.core.cli.operations.HelpCommand;
 import org.locationtech.geowave.core.cli.parser.CommandLineOperationParams;
 import org.locationtech.geowave.core.cli.parser.OperationParser;
@@ -31,7 +31,7 @@ public class GeoWaveMain {
   public static void main(final String[] args) {
     // Take an initial stab at running geowave with the given arguments.
     final OperationParser parser = new OperationParser(prepRegistry());
-    final CommandLineOperationParams params = parser.parse(GeowaveTopLevelSection.class, args);
+    final CommandLineOperationParams params = parser.parse(GeoWaveTopLevelSection.class, args);
 
     // Run the command if no issue.
     // successCode == 1 means that prepare returned false
@@ -48,7 +48,7 @@ public class GeoWaveMain {
     if (params.getSuccessCode() < 0) {
       doHelp(params);
       LOGGER.debug(params.getSuccessMessage(), params.getSuccessException());
-      JCommander.getConsole().println("\n" + params.getSuccessMessage());
+      params.getCommander().getConsole().println("\n" + params.getSuccessMessage());
     } else if ((params.getSuccessCode() == 0) && !params.isCommandPresent()) {
       doHelp(params);
     }
@@ -94,7 +94,7 @@ public class GeoWaveMain {
 
     final OperationEntry explainCommand = registry.getOperation(ExplainCommand.class);
     final OperationEntry helpCommand = registry.getOperation(HelpCommand.class);
-    final OperationEntry topLevel = registry.getOperation(GeowaveTopLevelSection.class);
+    final OperationEntry topLevel = registry.getOperation(GeoWaveTopLevelSection.class);
 
     // Special processing for "HelpSection". This special section will be
     // added as a child to

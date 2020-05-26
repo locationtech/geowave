@@ -14,7 +14,6 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.ingest.spi.IngestFormatPluginProviderSpi;
 import org.locationtech.geowave.core.ingest.spi.IngestFormatPluginRegistry;
-import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "listplugins", parentOperation = IngestSection.class)
@@ -23,7 +22,7 @@ public class ListIngestPluginsCommand extends ServiceEnabledCommand<String> {
 
   @Override
   public void execute(final OperationParams params) {
-    JCommander.getConsole().println(computeResults(params));
+    params.getConsole().println(computeResults(params));
   }
 
   @Override

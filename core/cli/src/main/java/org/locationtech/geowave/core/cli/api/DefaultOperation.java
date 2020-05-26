@@ -72,7 +72,7 @@ public abstract class DefaultOperation implements Operation {
 
     if (getGeoWaveConfigFile(params) == null) {
       // if file does not exist
-      setGeoWaveConfigFile(ConfigOptions.getDefaultPropertyFile());
+      setGeoWaveConfigFile(ConfigOptions.getDefaultPropertyFile(params.getConsole()));
       setDefaultConfigProperties(params);
     }
 
@@ -184,7 +184,7 @@ public abstract class DefaultOperation implements Operation {
       final DefaultConfigProviderSpi defaultPropertiesProvider = defaultPropertiesProviders.next();
       defaultProperties.putAll(defaultPropertiesProvider.getDefaultConfig());
     }
-    ConfigOptions.writeProperties(getGeoWaveConfigFile(), defaultProperties);
+    ConfigOptions.writeProperties(getGeoWaveConfigFile(), defaultProperties, params.getConsole());
   }
 
   @Override

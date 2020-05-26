@@ -67,14 +67,14 @@ public class KdeCommand extends ServiceEnabledCommand<Void> {
     Index outputPrimaryIndex = null;
 
     final StoreLoader inputStoreLoader = new StoreLoader(inputStore);
-    if (!inputStoreLoader.loadFromConfig(configFile)) {
+    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
     inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
     // Attempt to load output store.
     final StoreLoader outputStoreLoader = new StoreLoader(outputStore);
-    if (!outputStoreLoader.loadFromConfig(configFile)) {
+    if (!outputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
       throw new ParameterException("Cannot find store name: " + outputStoreLoader.getStoreName());
     }
     outputStoreOptions = outputStoreLoader.getDataStorePlugin();
@@ -83,7 +83,7 @@ public class KdeCommand extends ServiceEnabledCommand<Void> {
       final String outputIndex = kdeOptions.getOutputIndex();
 
       // Load the Indices
-      List<Index> outputIndices =
+      final List<Index> outputIndices =
           DataStoreUtils.loadIndices(outputStoreLoader.createIndexStore(), outputIndex);
 
       for (final Index primaryIndex : outputIndices) {

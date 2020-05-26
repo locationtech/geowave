@@ -61,6 +61,10 @@ public class AddIndexCommand extends ServiceEnabledCommand<String> {
     return true;
   }
 
+  public void setBasicIndexOptions(BasicIndexOptions basicIndexOptions) {
+    this.basicIndexOptions = basicIndexOptions;
+  }
+
   @Override
   public void execute(final OperationParams params) {
     // Ensure we have all the required arguments
@@ -82,7 +86,7 @@ public class AddIndexCommand extends ServiceEnabledCommand<String> {
     final File configFile = getGeoWaveConfigFile(params);
 
     final StoreLoader inputStoreLoader = new StoreLoader(storeName);
-    if (!inputStoreLoader.loadFromConfig(configFile)) {
+    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
     final DataStorePluginOptions storeOptions = inputStoreLoader.getDataStorePlugin();

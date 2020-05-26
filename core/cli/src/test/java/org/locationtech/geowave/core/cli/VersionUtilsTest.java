@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.cli;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
+import com.beust.jcommander.JCommander;
 
 public class VersionUtilsTest {
 
@@ -19,6 +20,6 @@ public class VersionUtilsTest {
     // version
     assertEquals(
         version, // change this value when it gives a version
-        VersionUtils.getVersion());
+        VersionUtils.getVersion(new JCommander().getConsole()));
   }
 }

@@ -101,7 +101,7 @@ public class ConfigGeoServerCommand extends ServiceEnabledCommand<String> {
 
   @Override
   public void execute(final OperationParams params) throws Exception {
-    JCommander.getConsole().println(computeResults(params));
+    params.getConsole().println(computeResults(params));
   }
 
   @Override
@@ -166,7 +166,7 @@ public class ConfigGeoServerCommand extends ServiceEnabledCommand<String> {
 
     final String programName = StringUtils.join(nameArray, " ");
     jc.setProgramName(programName);
-    jc.usage(builder);
+    jc.getUsageFormatter().usage(builder);
 
     // Trim excess newlines.
     final String operations = builder.toString().trim();
@@ -196,7 +196,7 @@ public class ConfigGeoServerCommand extends ServiceEnabledCommand<String> {
     }
 
     jc.setProgramName(programName);
-    jc.usage(builder);
+    jc.getUsageFormatter().usage(builder);
     builder.append("\n\n");
 
     return builder.toString().trim();
@@ -236,7 +236,8 @@ public class ConfigGeoServerCommand extends ServiceEnabledCommand<String> {
         getGeoWaveConfigFile(params),
         existingProps,
         this.getClass(),
-        GEOSERVER_NAMESPACE_PREFIX);
+        GEOSERVER_NAMESPACE_PREFIX,
+        params.getConsole());
     GeoServerRestClient.invalidateInstance();
 
     // generate a return for rest calls

@@ -49,6 +49,10 @@ public class MinimalFullTable extends DefaultOperation implements Command {
   @Parameter(names = "--indexId", required = true, description = "The name of the index (optional)")
   private String indexId;
 
+  public void setParameters(final List<String> parameters) {
+    this.parameters = parameters;
+  }
+
   @Override
   public void execute(final OperationParams params) throws ParseException {
     final StopWatch stopWatch = new StopWatch();
@@ -62,7 +66,7 @@ public class MinimalFullTable extends DefaultOperation implements Command {
 
     // Attempt to load store.
     final StoreLoader storeOptions = new StoreLoader(storeName);
-    if (!storeOptions.loadFromConfig(getGeoWaveConfigFile(params))) {
+    if (!storeOptions.loadFromConfig(getGeoWaveConfigFile(params), params.getConsole())) {
       throw new ParameterException("Cannot find store name: " + storeOptions.getStoreName());
     }
 

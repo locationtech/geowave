@@ -183,6 +183,6 @@ public class PasswordConverter extends GeoWaveBaseConverter<String> {
   }
 
   protected File getGeoWaveConfigFile() {
-    return ConfigOptions.getDefaultPropertyFile();
+    return ConfigOptions.getDefaultPropertyFile(getConsole());
   }
 }

@@ -15,7 +15,6 @@ import javax.ws.rs.core.Response.Status;
 import org.locationtech.geowave.cli.geoserver.GeoServerRemoveCommand;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
-import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -27,13 +26,17 @@ public class GeoServerRemoveDatastoreCommand extends GeoServerRemoveCommand<Stri
   private String workspace;
 
   @Parameter(description = "<datastore name>")
-  private final List<String> parameters = new ArrayList<>();
+  private List<String> parameters = new ArrayList<>();
 
   private String datastoreName = null;
 
   @Override
   public void execute(final OperationParams params) throws Exception {
-    JCommander.getConsole().println(computeResults(params));
+    params.getConsole().println(computeResults(params));
+  }
+
+  public void setParameters(final List<String> parameters) {
+    this.parameters = parameters;
   }
 
   @Override

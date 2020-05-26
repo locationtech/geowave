@@ -40,8 +40,12 @@ public class RemoveIndexCommand extends ServiceEnabledCommand<String> {
     computeResults(params);
   }
 
+  public void setParameters(final List<String> parameters) {
+    this.parameters = parameters;
+  }
+
   @Override
-  public String computeResults(OperationParams params) throws Exception {
+  public String computeResults(final OperationParams params) throws Exception {
     final String storeName = parameters.get(0);
     final String indexName = parameters.get(1);
 
@@ -49,14 +53,14 @@ public class RemoveIndexCommand extends ServiceEnabledCommand<String> {
     final File configFile = getGeoWaveConfigFile(params);
 
     final StoreLoader inputStoreLoader = new StoreLoader(storeName);
-    if (!inputStoreLoader.loadFromConfig(configFile)) {
+    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
-    DataStorePluginOptions storeOptions = inputStoreLoader.getDataStorePlugin();
+    final DataStorePluginOptions storeOptions = inputStoreLoader.getDataStorePlugin();
 
-    IndexStore indexStore = storeOptions.createIndexStore();
+    final IndexStore indexStore = storeOptions.createIndexStore();
 
-    Index existingIndex = indexStore.getIndex(indexName);
+    final Index existingIndex = indexStore.getIndex(indexName);
     if (existingIndex == null) {
       throw new TargetNotFoundException(indexName + " does not exist");
     }

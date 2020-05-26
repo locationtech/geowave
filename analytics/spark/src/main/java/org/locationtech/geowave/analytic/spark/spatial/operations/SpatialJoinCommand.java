@@ -30,6 +30,7 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
+import com.beust.jcommander.internal.Console;
 
 @GeowaveOperation(name = "spatialjoin", parentOperation = AnalyticSection.class)
 @Parameters(commandDescription = "Spatial join using Spark ")
@@ -38,11 +39,15 @@ public class SpatialJoinCommand extends ServiceEnabledCommand<Void> {
   private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate
-  private final SpatialJoinCmdOptions spatialJoinOptions = new SpatialJoinCmdOptions();
+  private SpatialJoinCmdOptions spatialJoinOptions = new SpatialJoinCmdOptions();
 
   DataStorePluginOptions leftDataStore = null;
   DataStorePluginOptions rightDataStore = null;
   DataStorePluginOptions outputDataStore = null;
+
+  public void setParameters(final List<String> parameters) {
+    this.parameters = parameters;
+  }
 
   @Override
   public void execute(final OperationParams params) throws Exception {
@@ -52,6 +57,10 @@ public class SpatialJoinCommand extends ServiceEnabledCommand<Void> {
           "Requires arguments: <left storename> <right storename> <output storename>");
     }
     computeResults(params);
+  }
+
+  public void setSpatialJoinOptions(final SpatialJoinCmdOptions spatialJoinOptions) {
+    this.spatialJoinOptions = spatialJoinOptions;
   }
 
   @Override
@@ -65,15 +74,15 @@ public class SpatialJoinCommand extends ServiceEnabledCommand<Void> {
 
     // Attempt to load stores.
     if (leftDataStore == null) {
-      leftDataStore = loadStore(leftStoreName, configFile);
+      leftDataStore = loadStore(leftStoreName, configFile, params.getConsole());
     }
 
     if (rightDataStore == null) {
-      rightDataStore = loadStore(rightStoreName, configFile);
+      rightDataStore = loadStore(rightStoreName, configFile, params.getConsole());
     }
 
     if (outputDataStore == null) {
-      outputDataStore = loadStore(outputStoreName, configFile);
+      outputDataStore = loadStore(outputStoreName, configFile, params.getConsole());
     }
 
     // Save a reference to the output store in the property management.
@@ -134,9 +143,12 @@ public class SpatialJoinCommand extends ServiceEnabledCommand<Void> {
     return null;
   }
 
-  private DataStorePluginOptions loadStore(final String storeName, final File configFile) {
+  private DataStorePluginOptions loadStore(
+      final String storeName,
+      final File configFile,
+      final Console console) {
     final StoreLoader storeLoader = new StoreLoader(storeName);
-    if (!storeLoader.loadFromConfig(configFile)) {
+    if (!storeLoader.loadFromConfig(configFile, console)) {
       throw new ParameterException("Cannot find left store: " + storeLoader.getStoreName());
     }
     return storeLoader.getDataStorePlugin();

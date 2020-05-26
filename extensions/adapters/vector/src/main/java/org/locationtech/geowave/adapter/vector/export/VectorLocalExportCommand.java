@@ -37,7 +37,6 @@ import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
-import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -67,7 +66,7 @@ public class VectorLocalExportCommand extends DefaultOperation implements Comman
     // Config file
     final File configFile = getGeoWaveConfigFile(params);
     final StoreLoader inputStoreLoader = new StoreLoader(storeName);
-    if (!inputStoreLoader.loadFromConfig(configFile)) {
+    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
     inputStoreOptions = inputStoreLoader.getDataStorePlugin();
@@ -91,10 +90,10 @@ public class VectorLocalExportCommand extends DefaultOperation implements Comman
           final short adapterId = internalAdapterStore.getAdapterId(typeName);
           final InternalDataAdapter<?> internalDataAdapter = adapterStore.getAdapter(adapterId);
           if (internalDataAdapter == null) {
-            JCommander.getConsole().println("Type '" + typeName + "' not found");
+            params.getConsole().println("Type '" + typeName + "' not found");
             continue;
           } else if (!(internalDataAdapter.getAdapter() instanceof GeotoolsFeatureDataAdapter)) {
-            JCommander.getConsole().println(
+            params.getConsole().println(
                 "Type '"
                     + typeName
                     + "' does not support vector export. Instance of "
@@ -114,20 +113,20 @@ public class VectorLocalExportCommand extends DefaultOperation implements Comman
         adapters.close();
       }
       if (featureAdapters.isEmpty()) {
-        JCommander.getConsole().println("Unable to find any vector data types in store");
+        params.getConsole().println("Unable to find any vector data types in store");
       }
       Index queryIndex = null;
       if (options.getIndexName() != null) {
         queryIndex = indexStore.getIndex(options.getIndexName());
         if (queryIndex == null) {
-          JCommander.getConsole().println(
+          params.getConsole().println(
               "Unable to find index '" + options.getIndexName() + "' in store");
           return;
         }
       }
       for (final GeotoolsFeatureDataAdapter adapter : featureAdapters) {
         final SimpleFeatureType sft = adapter.getFeatureType();
-        JCommander.getConsole().println("Exporting type '" + sft.getTypeName() + "'");
+        params.getConsole().println("Exporting type '" + sft.getTypeName() + "'");
         final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
 
         if (options.getIndexName() != null) {
@@ -155,7 +154,7 @@ public class VectorLocalExportCommand extends DefaultOperation implements Comman
                 avList.add(av);
               }
             }
-            JCommander.getConsole().println(
+            params.getConsole().println(
                 "Exported "
                     + (avList.size() + (iteration * options.getBatchSize()))
                     + " features from '"
@@ -166,7 +165,7 @@ public class VectorLocalExportCommand extends DefaultOperation implements Comman
             dfw.append(simpleFeatureCollection);
             dfw.flush();
           }
-          JCommander.getConsole().println("Finished exporting '" + sft.getTypeName() + "'");
+          params.getConsole().println("Finished exporting '" + sft.getTypeName() + "'");
         }
       }
     }

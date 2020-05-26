@@ -134,7 +134,7 @@ public class RasterIngestRunnerTest {
     final File configFile = (File) params.getContext().get(ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
     final StoreLoader inputStoreLoader = new StoreLoader("memorystore");
-    if (!inputStoreLoader.loadFromConfig(configFile)) {
+    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
 
@@ -142,9 +142,9 @@ public class RasterIngestRunnerTest {
   }
 
   private void createIndices(final OperationParams params) {
-    IndexStore indexStore = getStorePluginOptions(params).createIndexStore();
+    final IndexStore indexStore = getStorePluginOptions(params).createIndexStore();
     // Create the spatial index
-    SpatialIndexBuilder builder = new SpatialIndexBuilder();
+    final SpatialIndexBuilder builder = new SpatialIndexBuilder();
     builder.setName("spatialindex");
     builder.setNumPartitions(1);
     builder.setIncludeTimeInCommonIndexModel(false);

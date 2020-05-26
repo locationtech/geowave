@@ -13,7 +13,6 @@ import java.util.List;
 import org.locationtech.geowave.cli.geoserver.GeoServerCommand;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
-import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -26,13 +25,17 @@ public class GeoServerGetStoreAdapterCommand extends GeoServerCommand<List<Strin
 
   private String storeName = null;
 
+  public void setParameters(List<String> parameters) {
+    this.parameters = parameters;
+  }
+
   @Override
   public void execute(final OperationParams params) throws Exception {
     final List<String> adapterList = computeResults(params);
 
-    JCommander.getConsole().println("Store " + storeName + " has these adapters:");
+    params.getConsole().println("Store " + storeName + " has these adapters:");
     for (final String adapterId : adapterList) {
-      JCommander.getConsole().println(adapterId);
+      params.getConsole().println(adapterId);
     }
   }
 

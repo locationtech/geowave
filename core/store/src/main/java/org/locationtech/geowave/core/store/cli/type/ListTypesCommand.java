@@ -16,7 +16,6 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.store.StoreLoader;
-import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -31,7 +30,7 @@ public class ListTypesCommand extends ServiceEnabledCommand<String> {
 
   @Override
   public void execute(final OperationParams params) {
-    JCommander.getConsole().println("Available types: " + computeResults(params));
+    params.getConsole().println("Available types: " + computeResults(params));
   }
 
   public List<String> getParameters() {
@@ -60,7 +59,7 @@ public class ListTypesCommand extends ServiceEnabledCommand<String> {
 
     // Attempt to load input store.
     final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile)) {
+    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
 

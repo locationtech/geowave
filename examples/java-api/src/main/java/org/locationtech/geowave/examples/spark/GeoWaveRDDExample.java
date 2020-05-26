@@ -26,8 +26,8 @@ import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.opengis.feature.simple.SimpleFeature;
 
-public class GeowaveRDDExample {
-  public GeowaveRDDExample() {}
+public class GeoWaveRDDExample {
+  public GeoWaveRDDExample() {}
 
   public boolean loadRddFromStore(final String[] args) {
     if (args.length < 1) {

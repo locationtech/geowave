@@ -14,7 +14,6 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.datastore.filesystem.FileSystemDataFormatterRegistry;
 import org.locationtech.geowave.datastore.filesystem.FileSystemDataFormatterSpi;
-import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "listformats", parentOperation = FileSystemSection.class)
@@ -24,7 +23,7 @@ public class ListFormatsCommand extends ServiceEnabledCommand<String> {
 
   @Override
   public void execute(final OperationParams params) {
-    JCommander.getConsole().println(computeResults(params));
+    params.getConsole().println(computeResults(params));
   }
 
   @Override

@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.ParametersDelegate;
+import com.beust.jcommander.internal.Console;
 
 /** Common methods for dumping, manipulating and calculating stats. */
 public abstract class AbstractStatsCommand<T> extends ServiceEnabledCommand<T> {
@@ -48,7 +49,7 @@ public abstract class AbstractStatsCommand<T> extends ServiceEnabledCommand<T> {
     // Attempt to load input store if not already provided (test purposes).
 
     final StoreLoader inputStoreLoader = new StoreLoader(storeName);
-    if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
+    if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params), params.getConsole())) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
     final DataStorePluginOptions inputStoreOptions = inputStoreLoader.getDataStorePlugin();
@@ -63,7 +64,7 @@ public abstract class AbstractStatsCommand<T> extends ServiceEnabledCommand<T> {
         final Short adapterId = internalAdapterStore.getAdapterId(typeName);
         final InternalDataAdapter<?> adapter = adapterStore.getAdapter(adapterId);
         if (adapter != null) {
-          performStatsCommand(inputStoreOptions, adapter, statsOptions);
+          performStatsCommand(inputStoreOptions, adapter, statsOptions, params.getConsole());
         } else {
           // If this adapter is not known, provide list of available
           // adapters
@@ -79,7 +80,11 @@ public abstract class AbstractStatsCommand<T> extends ServiceEnabledCommand<T> {
         try (CloseableIterator<InternalDataAdapter<?>> adapterIt = adapterStore.getAdapters()) {
           while (adapterIt.hasNext()) {
             final InternalDataAdapter<?> adapter = adapterIt.next();
-            if (!performStatsCommand(inputStoreOptions, adapter, statsOptions)) {
+            if (!performStatsCommand(
+                inputStoreOptions,
+                adapter,
+                statsOptions,
+                params.getConsole())) {
               LOGGER.info("Unable to calculate statistics for data type: " + adapter.getTypeName());
             }
           }
@@ -90,11 +95,16 @@ public abstract class AbstractStatsCommand<T> extends ServiceEnabledCommand<T> {
     }
   }
 
+  public void setStatsOptions(final StatsCommandLineOptions statsOptions) {
+    this.statsOptions = statsOptions;
+  }
+
   /** Abstracted command method to be called when command selected */
   protected abstract boolean performStatsCommand(
       final DataStorePluginOptions options,
       final InternalDataAdapter<?> adapter,
-      final StatsCommandLineOptions statsOptions) throws IOException;
+      final StatsCommandLineOptions statsOptions,
+      final Console console) throws IOException;
 
   /**
    * Helper method to extract a list of authorizations from a string passed in from the command line

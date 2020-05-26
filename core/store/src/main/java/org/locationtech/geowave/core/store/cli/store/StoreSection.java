@@ -10,10 +10,10 @@ package org.locationtech.geowave.core.store.cli.store;
 
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
-import org.locationtech.geowave.core.cli.operations.GeowaveTopLevelSection;
+import org.locationtech.geowave.core.cli.operations.GeoWaveTopLevelSection;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "store", parentOperation = GeowaveTopLevelSection.class)
+@GeowaveOperation(name = "store", parentOperation = GeoWaveTopLevelSection.class)
 @Parameters(commandDescription = "Commands to manage GeoWave data stores")
 public class StoreSection extends DefaultOperation {
 }

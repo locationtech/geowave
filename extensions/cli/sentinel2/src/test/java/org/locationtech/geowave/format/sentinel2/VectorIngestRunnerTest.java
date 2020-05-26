@@ -100,7 +100,7 @@ public class VectorIngestRunnerTest {
     final File configFile = (File) params.getContext().get(ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
     final StoreLoader inputStoreLoader = new StoreLoader("memorystore");
-    if (!inputStoreLoader.loadFromConfig(configFile)) {
+    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
 
@@ -108,16 +108,16 @@ public class VectorIngestRunnerTest {
   }
 
   private void createIndices(final OperationParams params) {
-    IndexStore indexStore = getStorePluginOptions(params).createIndexStore();
+    final IndexStore indexStore = getStorePluginOptions(params).createIndexStore();
     // Create the spatial index
-    SpatialIndexBuilder builder = new SpatialIndexBuilder();
+    final SpatialIndexBuilder builder = new SpatialIndexBuilder();
     builder.setName("spatialindex");
     builder.setNumPartitions(1);
     builder.setIncludeTimeInCommonIndexModel(false);
     indexStore.addIndex(builder.createIndex());
 
     // Create the spatial temporal index
-    SpatialTemporalIndexBuilder st_builder = new SpatialTemporalIndexBuilder();
+    final SpatialTemporalIndexBuilder st_builder = new SpatialTemporalIndexBuilder();
     st_builder.setName("spatempindex");
     st_builder.setBias(Bias.BALANCED);
     st_builder.setMaxDuplicates(-1);

@@ -57,6 +57,10 @@ public class CopyConfigStoreCommand extends DefaultOperation implements Command 
     return true;
   }
 
+  public void setNewPluginOptions(final DataStorePluginOptions newPluginOptions) {
+    this.newPluginOptions = newPluginOptions;
+  }
+
   @Override
   public void execute(final OperationParams params) {
 
@@ -85,7 +89,7 @@ public class CopyConfigStoreCommand extends DefaultOperation implements Command 
     }
 
     // Write properties file
-    ConfigOptions.writeProperties(getGeoWaveConfigFile(params), existingProps);
+    ConfigOptions.writeProperties(getGeoWaveConfigFile(params), existingProps, params.getConsole());
   }
 
   public List<String> getParameters() {
