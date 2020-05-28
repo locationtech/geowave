@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10};
+var methods = {"i0":10,"i1":10,"i2":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -152,10 +152,16 @@ implements <a href="../../../../../../org/locationtech/geowave/core/cli/api/Oper
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>com.beust.jcommander.internal.Console</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/parser/ManualOperationParams.html#getConsole--">getConsole</a></span>()</code>
+<div class="block">Get the console to print commandline messages</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/parser/ManualOperationParams.html#getContext--">getContext</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../org/locationtech/geowave/core/cli/api/Operation.html" title="interface in org.locationtech.geowave.core.cli.api">Operation</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/parser/ManualOperationParams.html#getOperationMap--">getOperationMap</a></span>()</code>&nbsp;</td>
 </tr>
@@ -216,7 +222,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/cli/api/Oper
 <a name="getContext--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getContext</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;getContext()</pre>
@@ -225,6 +231,23 @@ implements <a href="../../../../../../org/locationtech/geowave/core/cli/api/Oper
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html#getContext--">getContext</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>Key value pairs for contextual information during command parsing.</dd>
+</dl>
+</li>
+</ul>
+<a name="getConsole--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getConsole</h4>
+<pre>public&nbsp;com.beust.jcommander.internal.Console&nbsp;getConsole()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html#getConsole--">OperationParams</a></code></span></div>
+<div class="block">Get the console to print commandline messages</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html#getConsole--">getConsole</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the console</dd>
 </dl>
 </li>
 </ul>

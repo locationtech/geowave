@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -199,13 +199,21 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/store/StoreLoader.html#loadFromConfig-java.util.Properties-java.lang.String-java.io.File-">loadFromConfig</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;props,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/store/StoreLoader.html#loadFromConfig-java.io.File-com.beust.jcommander.internal.Console-">loadFromConfig</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile,
+              com.beust.jcommander.internal.Console&nbsp;console)</code>
 <div class="block">Attempt to load the data store configuration from the config file.</div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/store/StoreLoader.html#loadFromConfig-java.util.Properties-java.lang.String-java.io.File-com.beust.jcommander.internal.Console-">loadFromConfig</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;props,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile,
+              com.beust.jcommander.internal.Console&nbsp;console)</code>
+<div class="block">Attempt to load the data store configuration from the config file.</div>
+</td>
+</tr>
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/store/StoreLoader.html#setDataStorePlugin-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-">setDataStorePlugin</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;dataStorePlugin)</code>&nbsp;</td>
 </tr>
@@ -265,7 +273,25 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="loadFromConfig-java.util.Properties-java.lang.String-java.io.File-">
+<a name="loadFromConfig-java.io.File-com.beust.jcommander.internal.Console-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>loadFromConfig</h4>
+<pre>public&nbsp;boolean&nbsp;loadFromConfig(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile,
+                              com.beust.jcommander.internal.Console&nbsp;console)</pre>
+<div class="block">Attempt to load the data store configuration from the config file.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>console</code> - the console to print output to</dd>
+<dd><code>configFile</code> - </dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd><code>true</code> if the configuration was successfully loaded</dd>
+</dl>
+</li>
+</ul>
+<a name="loadFromConfig-java.util.Properties-java.lang.String-java.io.File-com.beust.jcommander.internal.Console-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -273,7 +299,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>loadFromConfig</h4>
 <pre>public&nbsp;boolean&nbsp;loadFromConfig(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;props,
                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace,
-                              <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile)</pre>
+                              <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile,
+                              com.beust.jcommander.internal.Console&nbsp;console)</pre>
 <div class="block">Attempt to load the data store configuration from the config file.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

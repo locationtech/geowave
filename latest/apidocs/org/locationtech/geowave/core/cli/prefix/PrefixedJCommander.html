@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -143,6 +143,13 @@ extends com.beust.jcommander.JCommander</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/prefix/PrefixedJCommander.PrefixedJCommanderInitializer.html" title="interface in org.locationtech.geowave.core.cli.prefix">PrefixedJCommander.PrefixedJCommanderInitializer</a></span></code>&nbsp;</td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="nested.classes.inherited.from.class.com.beust.jcommander.JCommander">
+<!--   -->
+</a>
+<h3>Nested classes/interfaces inherited from class&nbsp;com.beust.jcommander.JCommander</h3>
+<code>com.beust.jcommander.JCommander.Builder, com.beust.jcommander.JCommander.ProgramName</code></li>
+</ul>
 </li>
 </ul>
 <!-- =========== FIELD SUMMARY =========== -->
@@ -202,41 +209,45 @@ extends com.beust.jcommander.JCommander</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/prefix/PrefixedJCommander.html#addPrefixedObject-java.lang.Object-">addPrefixedObject</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;object)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/prefix/PrefixedJCommander.html#createDescriptions--">createDescriptions</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/cli/prefix/PrefixedJCommander.PrefixedJCommanderInitializer.html" title="interface in org.locationtech.geowave.core.cli.prefix">PrefixedJCommander.PrefixedJCommanderInitializer</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/prefix/PrefixedJCommander.html#getInitializer--">getInitializer</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/prefix/PrefixedJCommander.html#getPrefixedObjects--">getPrefixedObjects</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/cli/prefix/JCommanderTranslationMap.html" title="class in org.locationtech.geowave.core.cli.prefix">JCommanderTranslationMap</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/prefix/PrefixedJCommander.html#getTranslationMap--">getTranslationMap</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/prefix/PrefixedJCommander.html#parse-java.lang.String...-">parse</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;args)</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/prefix/PrefixedJCommander.html#parseWithoutValidation-java.lang.String...-">parseWithoutValidation</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;args)</code>
 <div class="block">We replace the parseWithoutValidation() command with the setValidate option that we apply to
  all children.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/prefix/PrefixedJCommander.html#setAcceptUnknownOptions-boolean-">setAcceptUnknownOptions</a></span>(boolean&nbsp;allowUnknown)</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/prefix/PrefixedJCommander.html#setDefaultProvider-com.beust.jcommander.IDefaultProvider-">setDefaultProvider</a></span>(com.beust.jcommander.IDefaultProvider&nbsp;defaultProvider)</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/prefix/PrefixedJCommander.html#setInitializer-org.locationtech.geowave.core.cli.prefix.PrefixedJCommander.PrefixedJCommanderInitializer-">setInitializer</a></span>(<a href="../../../../../../org/locationtech/geowave/core/cli/prefix/PrefixedJCommander.PrefixedJCommanderInitializer.html" title="interface in org.locationtech.geowave.core.cli.prefix">PrefixedJCommander.PrefixedJCommanderInitializer</a>&nbsp;initializer)</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/cli/prefix/PrefixedJCommander.html#setValidate-boolean-">setValidate</a></span>(boolean&nbsp;validate)</code>&nbsp;</td>
 </tr>
@@ -246,7 +257,7 @@ extends com.beust.jcommander.JCommander</pre>
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;com.beust.jcommander.JCommander</h3>
-<code>addCommand, addCommand, addConverterFactory, addObject, convertValue, convertValue, findConverter, getColumnSize, getCommandDescription, getCommands, getConsole, getMainParameter, getMainParameterDescription, getObjects, getParameters, getParsedAlias, getParsedCommand, getUnknownOptions, isParameterOverwritingAllowed, setAllowAbbreviatedOptions, setAllowParameterOverwriting, setCaseSensitiveOptions, setColumnSize, setDescriptionsBundle, setParameterDescriptionComparator, setProgramName, setProgramName, setVerbose, usage, usage, usage, usage, usage, usage</code></li>
+<code>addCommand, addCommand, addConverterFactory, addConverterInstanceFactory, addObject, convertValue, findCommandByAlias, getBundle, getColumnSize, getCommands, getConsole, getDescriptions, getFields, getMainParameter, getMainParameterDescription, getMainParameterValue, getObjects, getOptions, getParameterDescriptionComparator, getParameters, getParsedAlias, getParsedCommand, getProgramDisplayName, getProgramName, getRawCommands, getUnknownOptions, getUsageFormatter, isParameterOverwritingAllowed, newBuilder, setAllowAbbreviatedOptions, setAllowParameterOverwriting, setAtFileCharset, setCaseSensitiveOptions, setColumnSize, setConsole, setDescriptionsBundle, setExpandAtSign, setParameterDescriptionComparator, setProgramName, setProgramName, setUsageFormatter, setVerbose, usage</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -299,6 +310,19 @@ extends com.beust.jcommander.JCommander</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>addCommand</code>&nbsp;in class&nbsp;<code>com.beust.jcommander.JCommander</code></dd>
+</dl>
+</li>
+</ul>
+<a name="createDescriptions--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createDescriptions</h4>
+<pre>public&nbsp;void&nbsp;createDescriptions()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>createDescriptions</code>&nbsp;in class&nbsp;<code>com.beust.jcommander.JCommander</code></dd>
 </dl>
 </li>
 </ul>

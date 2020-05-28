@@ -374,10 +374,11 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/export/VectorMRExportJobRunner.html#VectorMRExportJobRunner-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-org.locationtech.geowave.adapter.vector.export.VectorMRExportOptions-java.lang.String-java.lang.String-">VectorMRExportJobRunner</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;storeOptions,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/export/VectorMRExportJobRunner.html#VectorMRExportJobRunner-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-org.locationtech.geowave.adapter.vector.export.VectorMRExportOptions-java.lang.String-java.lang.String-com.beust.jcommander.internal.Console-">VectorMRExportJobRunner</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;storeOptions,
                        <a href="../../../../../../../../org/locationtech/geowave/adapter/vector/export/VectorMRExportOptions.html" title="class in org.locationtech.geowave.adapter.vector.export">VectorMRExportOptions</a>&nbsp;mrOptions,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;hdfsHostPort,
-                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;hdfsPath)</code>&nbsp;</td>
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;hdfsPath,
+                       com.beust.jcommander.internal.Console&nbsp;console)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -1244,19 +1245,19 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a></code></td>
-<td class="colLast"><span class="typeNameLabel">LocalToGeowaveCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/ingest/operations/LocalToGeowaveCommand.html#getInputStoreOptions--">getInputStoreOptions</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">LocalToGeoWaveCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/ingest/operations/LocalToGeoWaveCommand.html#getInputStoreOptions--">getInputStoreOptions</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a></code></td>
-<td class="colLast"><span class="typeNameLabel">LocalToMapReduceToGeowaveCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/ingest/operations/LocalToMapReduceToGeowaveCommand.html#getInputStoreOptions--">getInputStoreOptions</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">MapReduceToGeoWaveCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/ingest/operations/MapReduceToGeoWaveCommand.html#getInputStoreOptions--">getInputStoreOptions</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a></code></td>
-<td class="colLast"><span class="typeNameLabel">KafkaToGeowaveCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/ingest/operations/KafkaToGeowaveCommand.html#getInputStoreOptions--">getInputStoreOptions</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">LocalToMapReduceToGeoWaveCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/ingest/operations/LocalToMapReduceToGeoWaveCommand.html#getInputStoreOptions--">getInputStoreOptions</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a></code></td>
-<td class="colLast"><span class="typeNameLabel">MapReduceToGeowaveCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/ingest/operations/MapReduceToGeowaveCommand.html#getInputStoreOptions--">getInputStoreOptions</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">KafkaToGeoWaveCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/ingest/operations/KafkaToGeoWaveCommand.html#getInputStoreOptions--">getInputStoreOptions</a></span>()</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -1323,35 +1324,40 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><span class="typeNameLabel">RemoveStatCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/stats/RemoveStatCommand.html#performStatsCommand-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.cli.stats.StatsCommandLineOptions-">performStatsCommand</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;storeOptions,
+<td class="colLast"><span class="typeNameLabel">RemoveStatCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/stats/RemoveStatCommand.html#performStatsCommand-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.cli.stats.StatsCommandLineOptions-com.beust.jcommander.internal.Console-">performStatsCommand</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;storeOptions,
                    <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter,
-                   <a href="../../../../../../../../org/locationtech/geowave/core/store/cli/stats/StatsCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.cli.stats">StatsCommandLineOptions</a>&nbsp;statsOptions)</code>&nbsp;</td>
+                   <a href="../../../../../../../../org/locationtech/geowave/core/store/cli/stats/StatsCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.cli.stats">StatsCommandLineOptions</a>&nbsp;statsOptions,
+                   com.beust.jcommander.internal.Console&nbsp;console)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected abstract boolean</code></td>
-<td class="colLast"><span class="typeNameLabel">AbstractStatsCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/stats/AbstractStatsCommand.html#performStatsCommand-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.cli.stats.StatsCommandLineOptions-">performStatsCommand</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;options,
+<td class="colLast"><span class="typeNameLabel">AbstractStatsCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/stats/AbstractStatsCommand.html#performStatsCommand-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.cli.stats.StatsCommandLineOptions-com.beust.jcommander.internal.Console-">performStatsCommand</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;options,
                    <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter,
-                   <a href="../../../../../../../../org/locationtech/geowave/core/store/cli/stats/StatsCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.cli.stats">StatsCommandLineOptions</a>&nbsp;statsOptions)</code>
+                   <a href="../../../../../../../../org/locationtech/geowave/core/store/cli/stats/StatsCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.cli.stats">StatsCommandLineOptions</a>&nbsp;statsOptions,
+                   com.beust.jcommander.internal.Console&nbsp;console)</code>
 <div class="block">Abstracted command method to be called when command selected</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><span class="typeNameLabel">CalculateStatCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/stats/CalculateStatCommand.html#performStatsCommand-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.cli.stats.StatsCommandLineOptions-">performStatsCommand</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;storeOptions,
+<td class="colLast"><span class="typeNameLabel">CalculateStatCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/stats/CalculateStatCommand.html#performStatsCommand-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.cli.stats.StatsCommandLineOptions-com.beust.jcommander.internal.Console-">performStatsCommand</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;storeOptions,
                    <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter,
-                   <a href="../../../../../../../../org/locationtech/geowave/core/store/cli/stats/StatsCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.cli.stats">StatsCommandLineOptions</a>&nbsp;statsOptions)</code>&nbsp;</td>
+                   <a href="../../../../../../../../org/locationtech/geowave/core/store/cli/stats/StatsCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.cli.stats">StatsCommandLineOptions</a>&nbsp;statsOptions,
+                   com.beust.jcommander.internal.Console&nbsp;console)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><span class="typeNameLabel">RecalculateStatsCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/stats/RecalculateStatsCommand.html#performStatsCommand-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.cli.stats.StatsCommandLineOptions-">performStatsCommand</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;storeOptions,
+<td class="colLast"><span class="typeNameLabel">RecalculateStatsCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/stats/RecalculateStatsCommand.html#performStatsCommand-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.cli.stats.StatsCommandLineOptions-com.beust.jcommander.internal.Console-">performStatsCommand</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;storeOptions,
                    <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter,
-                   <a href="../../../../../../../../org/locationtech/geowave/core/store/cli/stats/StatsCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.cli.stats">StatsCommandLineOptions</a>&nbsp;statsOptions)</code>&nbsp;</td>
+                   <a href="../../../../../../../../org/locationtech/geowave/core/store/cli/stats/StatsCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.cli.stats">StatsCommandLineOptions</a>&nbsp;statsOptions,
+                   com.beust.jcommander.internal.Console&nbsp;console)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><span class="typeNameLabel">ListStatsCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/stats/ListStatsCommand.html#performStatsCommand-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.cli.stats.StatsCommandLineOptions-">performStatsCommand</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;storeOptions,
+<td class="colLast"><span class="typeNameLabel">ListStatsCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/stats/ListStatsCommand.html#performStatsCommand-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.cli.stats.StatsCommandLineOptions-com.beust.jcommander.internal.Console-">performStatsCommand</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;storeOptions,
                    <a href="../../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter,
-                   <a href="../../../../../../../../org/locationtech/geowave/core/store/cli/stats/StatsCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.cli.stats">StatsCommandLineOptions</a>&nbsp;statsOptions)</code>&nbsp;</td>
+                   <a href="../../../../../../../../org/locationtech/geowave/core/store/cli/stats/StatsCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.cli.stats">StatsCommandLineOptions</a>&nbsp;statsOptions,
+                   com.beust.jcommander.internal.Console&nbsp;console)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -1405,6 +1411,10 @@
 <td class="colLast"><span class="typeNameLabel">StoreLoader.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/store/StoreLoader.html#setDataStorePlugin-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-">setDataStorePlugin</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;dataStorePlugin)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">CopyConfigStoreCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/store/CopyConfigStoreCommand.html#setNewPluginOptions-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-">setNewPluginOptions</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;newPluginOptions)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">AddStoreCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/store/AddStoreCommand.html#setPluginOptions-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-">setPluginOptions</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;pluginOptions)</code>&nbsp;</td>
 </tr>

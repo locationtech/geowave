@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":10,"i2":9,"i3":9,"i4":9,"i5":9,"i6":10,"i7":10,"i8":9,"i9":9};
+var methods = {"i0":9,"i1":10,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":10,"i8":10,"i9":9,"i10":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -198,46 +198,54 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/cli/operations/config/options/ConfigOptions.html#getDefaultPropertyPath--">getDefaultPropertyPath</a></span>()</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/cli/operations/config/options/ConfigOptions.html#getDefaultPropertyFile-com.beust.jcommander.internal.Console-">getDefaultPropertyFile</a></span>(com.beust.jcommander.internal.Console&nbsp;console)</code>
 <div class="block">The default property file is in the user's home directory, in the .geowave folder.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/cli/operations/config/options/ConfigOptions.html#getDefaultPropertyPath--">getDefaultPropertyPath</a></span>()</code>
+<div class="block">The default property file is in the user's home directory, in the .geowave folder.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/cli/operations/config/options/ConfigOptions.html#loadProperties-java.io.File-">loadProperties</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile)</code>
 <div class="block">This helper function will load the properties file, or return null if it can't.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/cli/operations/config/options/ConfigOptions.html#loadProperties-java.io.File-java.lang.String-">loadProperties</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pattern)</code>
 <div class="block">This helper function will load the properties file, or return null if it can't.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/cli/operations/config/options/ConfigOptions.html#prepare-org.locationtech.geowave.core.cli.api.OperationParams-">prepare</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/cli/api/OperationParams.html" title="interface in org.locationtech.geowave.core.cli.api">OperationParams</a>&nbsp;inputParams)</code>
 <div class="block">Load the properties file into the input params.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/cli/operations/config/options/ConfigOptions.html#setConfigFile-java.lang.String-">setConfigFile</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;configFilePath)</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
-<td class="colFirst"><code>static boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/cli/operations/config/options/ConfigOptions.html#writeProperties-java.io.File-java.util.Properties-">writeProperties</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile,
-               <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;properties)</code>
-<div class="block">Write the given properties to the file, and log an error if an exception occurs.</div>
-</td>
-</tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/cli/operations/config/options/ConfigOptions.html#writeProperties-java.io.File-java.util.Properties-java.lang.Class-java.lang.String-">writeProperties</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/cli/operations/config/options/ConfigOptions.html#writeProperties-java.io.File-java.util.Properties-java.lang.Class-java.lang.String-com.beust.jcommander.internal.Console-">writeProperties</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;properties,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;clazz,
-               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespacePrefix)</code>&nbsp;</td>
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespacePrefix,
+               com.beust.jcommander.internal.Console&nbsp;console)</code>&nbsp;</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>static boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/cli/operations/config/options/ConfigOptions.html#writeProperties-java.io.File-java.util.Properties-com.beust.jcommander.internal.Console-">writeProperties</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;properties,
+               com.beust.jcommander.internal.Console&nbsp;console)</code>
+<div class="block">Write the given properties to the file, and log an error if an exception occurs.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -385,6 +393,23 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
+<a name="getDefaultPropertyFile-com.beust.jcommander.internal.Console-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDefaultPropertyFile</h4>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;getDefaultPropertyFile(com.beust.jcommander.internal.Console&nbsp;console)</pre>
+<div class="block">The default property file is in the user's home directory, in the .geowave folder. If the
+ version can not be found the first available property file in the folder is used.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>console</code> - console to print output to</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the default property file</dd>
+</dl>
+</li>
+</ul>
 <a name="formatConfigFile-java.lang.String-java.io.File-">
 <!--   -->
 </a>
@@ -403,7 +428,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="writeProperties-java.io.File-java.util.Properties-java.lang.Class-java.lang.String-">
+<a name="writeProperties-java.io.File-java.util.Properties-java.lang.Class-java.lang.String-com.beust.jcommander.internal.Console-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -412,17 +437,19 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public static&nbsp;boolean&nbsp;writeProperties(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile,
                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;properties,
                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;clazz,
-                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespacePrefix)</pre>
+                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespacePrefix,
+                                      com.beust.jcommander.internal.Console&nbsp;console)</pre>
 </li>
 </ul>
-<a name="writeProperties-java.io.File-java.util.Properties-">
+<a name="writeProperties-java.io.File-java.util.Properties-com.beust.jcommander.internal.Console-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>writeProperties</h4>
 <pre>public static&nbsp;boolean&nbsp;writeProperties(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile,
-                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;properties)</pre>
+                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;properties,
+                                      com.beust.jcommander.internal.Console&nbsp;console)</pre>
 <div class="block">Write the given properties to the file, and log an error if an exception occurs.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

@@ -203,11 +203,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/StoreFactoryOptions.html#validatePluginOptions--">validatePluginOptions</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/StoreFactoryOptions.html#validatePluginOptions-com.beust.jcommander.internal.Console-">validatePluginOptions</a></span>(com.beust.jcommander.internal.Console&nbsp;console)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/StoreFactoryOptions.html#validatePluginOptions-java.util.Properties-">validatePluginOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;properties)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/core/store/StoreFactoryOptions.html#validatePluginOptions-java.util.Properties-com.beust.jcommander.internal.Console-">validatePluginOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;properties,
+                     com.beust.jcommander.internal.Console&nbsp;console)</code>
 <div class="block">Method to perform global validation for all plugin options</div>
 </td>
 </tr>
@@ -347,13 +348,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public abstract&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/DataStoreOptions.html" title="interface in org.locationtech.geowave.core.store">DataStoreOptions</a>&nbsp;getStoreOptions()</pre>
 </li>
 </ul>
-<a name="validatePluginOptions--">
+<a name="validatePluginOptions-com.beust.jcommander.internal.Console-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>validatePluginOptions</h4>
-<pre>public&nbsp;void&nbsp;validatePluginOptions()
+<pre>public&nbsp;void&nbsp;validatePluginOptions(com.beust.jcommander.internal.Console&nbsp;console)
                            throws com.beust.jcommander.ParameterException</pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -361,13 +362,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="validatePluginOptions-java.util.Properties-">
+<a name="validatePluginOptions-java.util.Properties-com.beust.jcommander.internal.Console-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>validatePluginOptions</h4>
-<pre>public&nbsp;void&nbsp;validatePluginOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;properties)
+<pre>public&nbsp;void&nbsp;validatePluginOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;properties,
+                                  com.beust.jcommander.internal.Console&nbsp;console)
                            throws com.beust.jcommander.ParameterException</pre>
 <div class="block">Method to perform global validation for all plugin options</div>
 <dl>
