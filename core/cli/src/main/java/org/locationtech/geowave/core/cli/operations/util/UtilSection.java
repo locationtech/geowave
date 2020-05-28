@@ -10,10 +10,10 @@ package org.locationtech.geowave.core.cli.operations.util;
 
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
-import org.locationtech.geowave.core.cli.operations.GeowaveTopLevelSection;
+import org.locationtech.geowave.core.cli.operations.GeoWaveTopLevelSection;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = {"util", "utility"}, parentOperation = GeowaveTopLevelSection.class)
+@GeowaveOperation(name = {"util", "utility"}, parentOperation = GeoWaveTopLevelSection.class)
 @Parameters(commandDescription = "GeoWave utility commands")
 public class UtilSection extends DefaultOperation {
 }

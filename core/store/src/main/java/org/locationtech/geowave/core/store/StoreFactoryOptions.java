@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.internal.Console;
 
 /** This interface doesn't actually do anything, is just used for tracking during development. */
 public abstract class StoreFactoryOptions {
@@ -58,8 +59,8 @@ public abstract class StoreFactoryOptions {
 
   public abstract DataStoreOptions getStoreOptions();
 
-  public void validatePluginOptions() throws ParameterException {
-    validatePluginOptions(new Properties());
+  public void validatePluginOptions(final Console console) throws ParameterException {
+    validatePluginOptions(new Properties(), console);
   }
 
   /**
@@ -67,7 +68,8 @@ public abstract class StoreFactoryOptions {
    *
    * @throws Exception
    */
-  public void validatePluginOptions(final Properties properties) throws ParameterException {
+  public void validatePluginOptions(final Properties properties, final Console console)
+      throws ParameterException {
     LOGGER.trace("ENTER :: validatePluginOptions()");
     final PropertiesUtils propsUtils = new PropertiesUtils(properties);
     final boolean defaultEchoEnabled =
@@ -95,18 +97,18 @@ public abstract class StoreFactoryOptions {
             try {
               value = field.get(this);
               if (value == null) {
-                JCommander.getConsole().println(
+                console.println(
                     "Field ["
                         + field.getName()
                         + "] is required: "
                         + Arrays.toString(parameter.names())
                         + ": "
                         + parameter.description());
-                JCommander.getConsole().print("Enter value for [" + field.getName() + "]: ");
+                console.print("Enter value for [" + field.getName() + "]: ");
                 final boolean echoEnabled =
                     JCommanderParameterUtils.isPassword(parameter) ? passwordEchoEnabled
                         : defaultEchoEnabled;
-                char[] password = JCommander.getConsole().readPassword(echoEnabled);
+                char[] password = console.readPassword(echoEnabled);
                 final String strPassword = new String(password);
                 password = null;
 

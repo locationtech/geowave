@@ -32,7 +32,7 @@ public class PrefixedJCommander extends JCommander {
 
   // Allows us to override the commanders list that's being stored
   // in our parent class.
-  private final Map<Object, JCommander> childCommanders;
+  private Map<Object, JCommander> childCommanders;
 
   // A list of objects to add to the translator before feeding
   // into the internal JCommander object.
@@ -49,6 +49,7 @@ public class PrefixedJCommander extends JCommander {
   // to add additional commands/objects to this commander before
   // it is used
   private PrefixedJCommanderInitializer initializer = null;
+  private boolean initialized = false;
 
   /**
    * Creates a new instance of this commander.
@@ -56,19 +57,27 @@ public class PrefixedJCommander extends JCommander {
   @SuppressWarnings("unchecked")
   public PrefixedJCommander() {
     super();
+    Field commandsField;
     try {
       // HP Fortify "Access Specifier Manipulation"
       // This field is being modified by trusted code,
       // in a way that is not influenced by user input
-      final Field commandsField = JCommander.class.getDeclaredField("m_commands");
+      commandsField = JCommander.class.getDeclaredField("commands");
       commandsField.setAccessible(true);
       childCommanders = (Map<Object, JCommander>) commandsField.get(this);
     } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
       // This is a programmer error, and will only happen if another
-      // version
-      // of JCommander is being used.
-      LOGGER.error("Another version of JCommander is being used", e);
-      throw new RuntimeException(e);
+      // version of JCommander is being used.
+      // newer versions of JCommander have renamed the member variables, try the old names
+      try {
+        commandsField = JCommander.class.getDeclaredField("m_commands");
+
+        commandsField.setAccessible(true);
+        childCommanders = (Map<Object, JCommander>) commandsField.get(this);
+      } catch (final NoSuchFieldException | IllegalArgumentException | IllegalAccessException e2) {
+        LOGGER.error("Another version of JCommander is being used", e2);
+        throw new RuntimeException(e);
+      }
     }
   }
 
@@ -76,34 +85,37 @@ public class PrefixedJCommander extends JCommander {
    * This function will translate the given prefixed objects into the object list before parsing.
    * This is so that their descriptions will be picked up.
    */
-  private void createMap() {
-    if (translationMap != null) {
-      throw new RuntimeException("This PrefixedJCommander has already been used.");
-    }
-
-    // Initialize
-    if (initializer != null) {
-      initializer.initialize(this);
-    }
-
-    final JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
-
-    // And these are the input to the translator!
-    if (prefixedObjects != null) {
-      for (final Object obj : prefixedObjects) {
-        translator.addObject(obj);
+  private void initialize() {
+    if (!initialized) {
+      if (translationMap != null) {
+        throw new RuntimeException("This PrefixedJCommander has already been used.");
       }
+
+      // Initialize
+      if (initializer != null) {
+        initializer.initialize(this);
+      }
+
+      final JCommanderPrefixTranslator translator = new JCommanderPrefixTranslator();
+
+      // And these are the input to the translator!
+      if (prefixedObjects != null) {
+        for (final Object obj : prefixedObjects) {
+          translator.addObject(obj);
+        }
+      }
+
+      translationMap = translator.translate();
+      translationMap.createFacadeObjects();
+
+      for (final Object obj : translationMap.getObjects()) {
+        addObject(obj);
+      }
+
+      // Copy default parameters over for parsing.
+      translationMap.transformToFacade();
+      initialized = true;
     }
-
-    translationMap = translator.translate();
-    translationMap.createFacadeObjects();
-
-    for (final Object obj : translationMap.getObjects()) {
-      addObject(obj);
-    }
-
-    // Copy default parameters over for parsing.
-    translationMap.transformToFacade();
   }
 
   @Override
@@ -135,14 +147,36 @@ public class PrefixedJCommander extends JCommander {
   }
 
   @Override
+  public void createDescriptions() {
+    // because child commanders are called from a private method parseValues() L796 of JCommander
+    // v1.78, children don't get initialized without this override
+    initialize();
+    super.createDescriptions();
+  }
+
+  @Override
   public void parse(final String... args) {
-    createMap();
+    initialize();
     if (validate) {
       super.parse(args);
     } else {
       super.parseWithoutValidation(args);
     }
-    translationMap.transformToOriginal();
+
+    complete();
+  }
+
+  private void complete() {
+    if (initialized) {
+      for (JCommander child : childCommanders.values()) {
+        if (child instanceof PrefixedJCommander) {
+          ((PrefixedJCommander) child).complete();
+        }
+      }
+      translationMap.transformToOriginal();
+      translationMap = null;
+      initialized = false;
+    }
   }
 
   /**

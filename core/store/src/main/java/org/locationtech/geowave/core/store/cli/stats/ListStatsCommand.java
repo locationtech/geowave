@@ -23,10 +23,10 @@ import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatis
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
+import com.beust.jcommander.internal.Console;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
@@ -54,7 +54,8 @@ public class ListStatsCommand extends AbstractStatsCommand<String> implements Co
   protected boolean performStatsCommand(
       final DataStorePluginOptions storeOptions,
       final InternalDataAdapter<?> adapter,
-      final StatsCommandLineOptions statsOptions) throws IOException {
+      final StatsCommandLineOptions statsOptions,
+      final Console console) throws IOException {
 
     if (adapter == null) {
       throw new IOException("Provided adapter is null");
@@ -103,10 +104,14 @@ public class ListStatsCommand extends AbstractStatsCommand<String> implements Co
         }
       }
       retValue = builder.toString().trim();
-      JCommander.getConsole().println(retValue);
+      console.println(retValue);
     }
 
     return true;
+  }
+
+  public void setTypeName(final String typeName) {
+    this.typeName = typeName;
   }
 
   public List<String> getParameters() {

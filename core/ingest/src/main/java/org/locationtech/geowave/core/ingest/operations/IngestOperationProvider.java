@@ -15,15 +15,15 @@ public class IngestOperationProvider implements CLIOperationProviderSpi {
   private static final Class<?>[] OPERATIONS =
       new Class<?>[] {
           IngestSection.class,
-          KafkaToGeowaveCommand.class,
+          KafkaToGeoWaveCommand.class,
           ListIngestPluginsCommand.class,
-          LocalToGeowaveCommand.class,
+          LocalToGeoWaveCommand.class,
           LocalToHdfsCommand.class,
           LocalToKafkaCommand.class,
-          LocalToMapReduceToGeowaveCommand.class,
-          MapReduceToGeowaveCommand.class,
+          LocalToMapReduceToGeoWaveCommand.class,
+          MapReduceToGeoWaveCommand.class,
           ConfigAWSCommand.class,
-          SparkToGeowaveCommand.class};
+          SparkToGeoWaveCommand.class};
 
   @Override
   public Class<?>[] getOperations() {

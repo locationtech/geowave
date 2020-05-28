@@ -36,6 +36,7 @@ import org.locationtech.geowave.core.cli.utils.JCommanderParameterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.beust.jcommander.Parameter;
+import com.beust.jcommander.internal.Console;
 
 /**
  * Config options allows the user to override the default location for configuration options, and
@@ -92,11 +93,23 @@ public class ConfigOptions {
    * @return the default property file
    */
   public static File getDefaultPropertyFile() {
+    return getDefaultPropertyFile(null);
+  }
+
+  /**
+   * The default property file is in the user's home directory, in the .geowave folder. If the
+   * version can not be found the first available property file in the folder is used.
+   *
+   * @param console console to print output to
+   *
+   * @return the default property file
+   */
+  public static File getDefaultPropertyFile(final Console console) {
     // HP Fortify "Path Manipulation" false positive
     // What Fortify considers "user input" comes only
     // from users with OS-level access anyway
     final File defaultPath = getDefaultPropertyPath();
-    final String version = VersionUtils.getVersion();
+    final String version = VersionUtils.getVersion(console);
     if (version != null) {
       return formatConfigFile(version, defaultPath);
     } else {
@@ -142,7 +155,8 @@ public class ConfigOptions {
       final File configFile,
       final Properties properties,
       final Class<?> clazz,
-      final String namespacePrefix) {
+      final String namespacePrefix,
+      final Console console) {
     try {
       final Properties tmp = new Properties() {
         private static final long serialVersionUID = 1L;
@@ -187,7 +201,8 @@ public class ConfigOptions {
                       encryptedValue =
                           SecurityUtils.encryptAndHexEncodeValue(
                               value,
-                              tokenFile.getAbsolutePath());
+                              tokenFile.getAbsolutePath(),
+                              console);
                     } catch (final Exception e) {
                       LOGGER.error(
                           "An error occurred encrypting specified password value: "
@@ -226,8 +241,11 @@ public class ConfigOptions {
    *
    * @return true if success, false if failure
    */
-  public static boolean writeProperties(final File configFile, final Properties properties) {
-    return writeProperties(configFile, properties, null, null);
+  public static boolean writeProperties(
+      final File configFile,
+      final Properties properties,
+      final Console console) {
+    return writeProperties(configFile, properties, null, null, console);
   }
 
   /**
@@ -299,7 +317,7 @@ public class ConfigOptions {
     if (getConfigFile() != null) {
       propertyFile = new File(getConfigFile());
     } else {
-      propertyFile = getDefaultPropertyFile();
+      propertyFile = getDefaultPropertyFile(inputParams.getConsole());
     }
 
     // Set the properties on the context.

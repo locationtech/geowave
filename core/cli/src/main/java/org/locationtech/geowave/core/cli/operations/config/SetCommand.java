@@ -99,7 +99,11 @@ public class SetCommand extends ServiceEnabledCommand<Object> {
         try {
           final File tokenFile =
               SecurityUtils.getFormattedTokenKeyFileForConfig(getGeoWaveConfigFile());
-          value = SecurityUtils.encryptAndHexEncodeValue(value, tokenFile.getAbsolutePath());
+          value =
+              SecurityUtils.encryptAndHexEncodeValue(
+                  value,
+                  tokenFile.getAbsolutePath(),
+                  params.getConsole());
           LOGGER.debug("Value was successfully encrypted");
         } catch (final Exception e) {
           LOGGER.error(
@@ -116,7 +120,7 @@ public class SetCommand extends ServiceEnabledCommand<Object> {
     }
 
     final Object previousValue = p.setProperty(key, value);
-    if (!ConfigOptions.writeProperties(f, p)) {
+    if (!ConfigOptions.writeProperties(f, p, params.getConsole())) {
       throw new WritePropertiesException("Write failure");
     } else {
       return previousValue;

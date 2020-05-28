@@ -29,11 +29,11 @@ import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.jts.util.Stopwatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
+import com.beust.jcommander.internal.Console;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 @GeowaveOperation(name = "sql", parentOperation = AnalyticSection.class)
@@ -78,7 +78,8 @@ public class SparkSqlCommand extends ServiceEnabledCommand<Void> {
     final String sql = parameters.get(0);
 
     LOGGER.debug("Input SQL: " + sql);
-    final String cleanSql = initStores(configFile, sql, sparkSqlOptions.getOutputStoreName());
+    final String cleanSql =
+        initStores(configFile, sql, sparkSqlOptions.getOutputStoreName(), params.getConsole());
 
     LOGGER.debug("Running with cleaned SQL: " + cleanSql);
     sqlRunner.setSql(cleanSql);
@@ -104,8 +105,7 @@ public class SparkSqlCommand extends ServiceEnabledCommand<Void> {
       results.show(sparkSqlOptions.getShowResults(), false);
     }
 
-    JCommander.getConsole().println(
-        "GeoWave SparkSQL query returned " + results.count() + " results");
+    params.getConsole().println("GeoWave SparkSQL query returned " + results.count() + " results");
 
     if (outputDataStore != null) {
       final SqlResultsWriter sqlResultsWriter = new SqlResultsWriter(results, outputDataStore);
@@ -115,9 +115,9 @@ public class SparkSqlCommand extends ServiceEnabledCommand<Void> {
         typeName = "sqlresults";
       }
 
-      JCommander.getConsole().println("Writing GeoWave SparkSQL query results to datastore...");
+      params.getConsole().println("Writing GeoWave SparkSQL query results to datastore...");
       sqlResultsWriter.writeResults(typeName);
-      JCommander.getConsole().println("Datastore write complete.");
+      params.getConsole().println("Datastore write complete.");
     }
 
     if (sparkSqlOptions.getCsvOutputFile() != null) {
@@ -130,7 +130,11 @@ public class SparkSqlCommand extends ServiceEnabledCommand<Void> {
   }
 
   @SuppressFBWarnings("SF_SWITCH_FALLTHROUGH")
-  private String initStores(final File configFile, final String sql, final String outputStoreName) {
+  private String initStores(
+      final File configFile,
+      final String sql,
+      final String outputStoreName,
+      final Console console) {
     final Pattern storeDetect = Pattern.compile("(\\\"[^\\\"]*\\\"|'[^']*')|([%][^.,\\s]+)");
     final String escapedDelimRegex = java.util.regex.Pattern.quote(STORE_ADAPTER_DELIM);
 
@@ -172,7 +176,7 @@ public class SparkSqlCommand extends ServiceEnabledCommand<Void> {
       }
 
       final StoreLoader inputStoreLoader = new StoreLoader(storeName);
-      if (!inputStoreLoader.loadFromConfig(configFile)) {
+      if (!inputStoreLoader.loadFromConfig(configFile, console)) {
         throw new ParameterException("Cannot find input store: " + inputStoreLoader.getStoreName());
       }
       final DataStorePluginOptions storeOptions = inputStoreLoader.getDataStorePlugin();

@@ -17,7 +17,6 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.server.ServerSideOperations;
-import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -34,6 +33,10 @@ public class VersionCommand extends ServiceEnabledCommand<String> {
     computeResults(params);
   }
 
+  public void setParameters(final List<String> parameters) {
+    this.parameters = parameters;
+  }
+
   @Override
   public String computeResults(final OperationParams params) throws Exception {
     if (parameters.size() < 1) {
@@ -45,7 +48,7 @@ public class VersionCommand extends ServiceEnabledCommand<String> {
     final File configFile = getGeoWaveConfigFile(params);
 
     final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile)) {
+    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
       final String ret = "Cannot find store name: " + inputStoreLoader.getStoreName();
       throw new ParameterException(ret);
     }
@@ -56,14 +59,14 @@ public class VersionCommand extends ServiceEnabledCommand<String> {
       final DataStoreOperations ops = inputStoreOptions.createDataStoreOperations();
       if ((ops instanceof ServerSideOperations)
           && inputStoreOptions.getFactoryOptions().getStoreOptions().isServerSideLibraryEnabled()) {
-        JCommander.getConsole().println(
+        params.getConsole().println(
             "Looking up remote datastore version for type ["
                 + inputStoreOptions.getType()
                 + "] and name ["
                 + inputStoreName
                 + "]");
         final String version = "Version: " + ((ServerSideOperations) ops).getVersion();
-        JCommander.getConsole().println(version);
+        params.getConsole().println(version);
         return version;
       } else {
         final String ret1 =
@@ -72,9 +75,9 @@ public class VersionCommand extends ServiceEnabledCommand<String> {
                 + "] and name ["
                 + inputStoreName
                 + "] does not have a serverside library enabled.";
-        JCommander.getConsole().println(ret1);
+        params.getConsole().println(ret1);
         final String ret2 = "Commandline Version: " + VersionUtils.getVersion();
-        JCommander.getConsole().println(ret2);
+        params.getConsole().println(ret2);
         return ret1 + '\n' + ret2;
       }
     }

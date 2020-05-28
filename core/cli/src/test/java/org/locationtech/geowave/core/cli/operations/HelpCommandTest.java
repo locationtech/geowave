@@ -20,7 +20,7 @@ public class HelpCommandTest {
     final String[] args = {"help"};
     final OperationRegistry registry = OperationRegistry.getInstance();
     final OperationParser parser = new OperationParser(registry);
-    final CommandLineOperationParams params = parser.parse(GeowaveTopLevelSection.class, args);
+    final CommandLineOperationParams params = parser.parse(GeoWaveTopLevelSection.class, args);
 
     final HelpCommand helpcommand = new HelpCommand();
     helpcommand.prepare(params);

@@ -19,6 +19,7 @@ import org.locationtech.geowave.datastore.rocksdb.util.RocksDBUtils;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.ParametersDelegate;
+import com.beust.jcommander.internal.Console;
 
 public class RocksDBOptions extends StoreFactoryOptions {
   @Parameter(
@@ -60,17 +61,18 @@ public class RocksDBOptions extends StoreFactoryOptions {
   };
 
   @Override
-  public void validatePluginOptions() throws ParameterException {
+  public void validatePluginOptions(final Console console) throws ParameterException {
     // Set the directory to be absolute
     dir = new File(dir).getAbsolutePath();
-    super.validatePluginOptions();
+    super.validatePluginOptions(console);
   }
 
   @Override
-  public void validatePluginOptions(final Properties properties) throws ParameterException {
+  public void validatePluginOptions(final Properties properties, final Console console)
+      throws ParameterException {
     // Set the directory to be absolute
     dir = new File(dir).getAbsolutePath();
-    super.validatePluginOptions(properties);
+    super.validatePluginOptions(properties, console);
   }
 
   public RocksDBOptions() {

@@ -13,7 +13,6 @@ import javax.ws.rs.core.Response.Status;
 import org.locationtech.geowave.cli.geoserver.GeoServerCommand;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
-import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameters;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -24,7 +23,7 @@ public class GeoServerListStylesCommand extends GeoServerCommand<String> {
 
   @Override
   public void execute(final OperationParams params) throws Exception {
-    JCommander.getConsole().println(computeResults(params));
+    params.getConsole().println(computeResults(params));
   }
 
   @Override

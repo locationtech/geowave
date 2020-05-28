@@ -19,7 +19,7 @@ import org.locationtech.geowave.adapter.vector.export.VectorMRExportCommand;
 import org.locationtech.geowave.adapter.vector.export.VectorMRExportOptions;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
-import org.locationtech.geowave.core.ingest.operations.LocalToMapReduceToGeowaveCommand;
+import org.locationtech.geowave.core.ingest.operations.LocalToMapReduceToGeoWaveCommand;
 import org.locationtech.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
 import org.locationtech.geowave.core.store.cli.store.AddStoreCommand;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
@@ -142,7 +142,7 @@ public class MapReduceTestUtils {
     configHdfs.setHdfsUrlParameter(env.getHdfs());
     configHdfs.execute(operationParams);
 
-    final LocalToMapReduceToGeowaveCommand mrGw = new LocalToMapReduceToGeowaveCommand();
+    final LocalToMapReduceToGeoWaveCommand mrGw = new LocalToMapReduceToGeoWaveCommand();
 
     final AddStoreCommand addStore = new AddStoreCommand();
     addStore.setParameters("test-store");

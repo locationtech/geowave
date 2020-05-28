@@ -21,7 +21,7 @@ import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "geowave")
 @Parameters(commandDescription = "This is the top level section.")
-public class GeowaveTopLevelSection extends DefaultOperation {
+public class GeoWaveTopLevelSection extends DefaultOperation {
   @Parameter(names = "--debug", description = "Verbose output")
   private Boolean verboseFlag;
 
@@ -48,7 +48,7 @@ public class GeowaveTopLevelSection extends DefaultOperation {
 
     // Print out the version info if requested.
     if (Boolean.TRUE.equals(versionFlag)) {
-      VersionUtils.printVersionInfo();
+      VersionUtils.printVersionInfo(inputParams.getConsole());
       // Do not continue
       return false;
     }

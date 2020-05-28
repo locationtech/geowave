@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
+import com.beust.jcommander.internal.Console;
 
 @GeowaveOperation(name = "recalc", parentOperation = StatsSection.class)
 @Parameters(commandDescription = "Recalculate the statistics of a data store")
@@ -54,7 +55,8 @@ public class RecalculateStatsCommand extends AbstractStatsCommand<Void> {
   protected boolean performStatsCommand(
       final DataStorePluginOptions storeOptions,
       final InternalDataAdapter<?> adapter,
-      final StatsCommandLineOptions statsOptions) throws IOException {
+      final StatsCommandLineOptions statsOptions,
+      final Console console) throws IOException {
 
     try {
       final DataStore dataStore = storeOptions.createDataStore();
@@ -103,6 +105,10 @@ public class RecalculateStatsCommand extends AbstractStatsCommand<Void> {
     }
 
     return true;
+  }
+
+  public void setTypeName(String typeName) {
+    this.typeName = typeName;
   }
 
   public List<String> getParameters() {

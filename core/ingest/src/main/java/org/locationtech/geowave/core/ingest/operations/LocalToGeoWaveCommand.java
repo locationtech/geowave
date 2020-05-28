@@ -15,15 +15,14 @@ import java.util.Map;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
-import org.locationtech.geowave.core.ingest.avro.GeoWaveAvroFormatPlugin;
-import org.locationtech.geowave.core.ingest.kafka.IngestFromKafkaDriver;
-import org.locationtech.geowave.core.ingest.kafka.KafkaConsumerCommandLineOptions;
+import org.locationtech.geowave.core.ingest.local.LocalFileIngestCLIDriver;
 import org.locationtech.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.VisibilityOptions;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.core.store.index.IndexStore;
+import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import com.beust.jcommander.Parameter;
@@ -31,18 +30,16 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
-@GeowaveOperation(name = "kafkaToGW", parentOperation = IngestSection.class)
-@Parameters(commandDescription = "Subscribe to a Kafka topic and ingest into GeoWave")
-public class KafkaToGeowaveCommand extends ServiceEnabledCommand<Void> {
+@GeowaveOperation(name = "localToGW", parentOperation = IngestSection.class)
+@Parameters(
+    commandDescription = "Ingest supported files in local file system directly, from S3 or from HDFS")
+public class LocalToGeoWaveCommand extends ServiceEnabledCommand<Void> {
 
-  @Parameter(description = "<store name> <comma delimited index list>")
+  @Parameter(description = "<file or directory> <store name> <comma delimited index list>")
   private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate
   private VisibilityOptions ingestOptions = new VisibilityOptions();
-
-  @ParametersDelegate
-  private KafkaConsumerCommandLineOptions kafkaOptions = new KafkaConsumerCommandLineOptions();
 
   @ParametersDelegate
   private LocalInputCommandLineOptions localInputOptions = new LocalInputCommandLineOptions();
@@ -52,17 +49,17 @@ public class KafkaToGeowaveCommand extends ServiceEnabledCommand<Void> {
   @ParametersDelegate
   private IngestFormatPluginOptions pluginFormats = new IngestFormatPluginOptions();
 
+  @Parameter(
+      names = {"-t", "--threads"},
+      description = "number of threads to use for ingest, default to 1 (optional)")
+  private int threads = 1;
+
   private DataStorePluginOptions inputStoreOptions = null;
 
   private List<Index> inputIndices = null;
 
-  protected IngestFromKafkaDriver driver = null;
-
   @Override
   public boolean prepare(final OperationParams params) {
-
-    // TODO: localInputOptions has 'extensions' which doesn't mean
-    // anything for Kafka to Geowave
 
     // Based on the selected formats, select the format plugins
     pluginFormats.selectPlugin(localInputOptions.getFormats());
@@ -70,19 +67,9 @@ public class KafkaToGeowaveCommand extends ServiceEnabledCommand<Void> {
     return true;
   }
 
-  /**
-   * Prep the driver & run the operation.
-   *
-   * @throws Exception
-   */
+  /** Prep the driver & run the operation. */
   @Override
-  public void execute(final OperationParams params) throws Exception {
-
-    // Ensure we have all the required arguments
-    if (parameters.size() != 2) {
-      throw new ParameterException("Requires arguments: <store name> <comma delimited index list>");
-    }
-
+  public void execute(final OperationParams params) {
     computeResults(params);
   }
 
@@ -91,18 +78,18 @@ public class KafkaToGeowaveCommand extends ServiceEnabledCommand<Void> {
     return true;
   }
 
-  public IngestFromKafkaDriver getDriver() {
-    return driver;
-  }
-
   public List<String> getParameters() {
     return parameters;
   }
 
-  public void setParameters(final String storeName, final String commaSeparatedIndexes) {
+  public void setParameters(
+      final String fileOrDirectory,
+      final String storeName,
+      final String commaDelimitedIndexes) {
     parameters = new ArrayList<>();
+    parameters.add(fileOrDirectory);
     parameters.add(storeName);
-    parameters.add(commaSeparatedIndexes);
+    parameters.add(commaDelimitedIndexes);
   }
 
   public VisibilityOptions getIngestOptions() {
@@ -111,14 +98,6 @@ public class KafkaToGeowaveCommand extends ServiceEnabledCommand<Void> {
 
   public void setIngestOptions(final VisibilityOptions ingestOptions) {
     this.ingestOptions = ingestOptions;
-  }
-
-  public KafkaConsumerCommandLineOptions getKafkaOptions() {
-    return kafkaOptions;
-  }
-
-  public void setKafkaOptions(final KafkaConsumerCommandLineOptions kafkaOptions) {
-    this.kafkaOptions = kafkaOptions;
   }
 
   public LocalInputCommandLineOptions getLocalInputOptions() {
@@ -137,6 +116,14 @@ public class KafkaToGeowaveCommand extends ServiceEnabledCommand<Void> {
     this.pluginFormats = pluginFormats;
   }
 
+  public int getThreads() {
+    return threads;
+  }
+
+  public void setThreads(final int threads) {
+    this.threads = threads;
+  }
+
   public DataStorePluginOptions getInputStoreOptions() {
     return inputStoreOptions;
   }
@@ -146,37 +133,46 @@ public class KafkaToGeowaveCommand extends ServiceEnabledCommand<Void> {
   }
 
   @Override
-  public Void computeResults(final OperationParams params) throws Exception {
-    final String inputStoreName = parameters.get(0);
-    final String indexList = parameters.get(1);
+  public Void computeResults(final OperationParams params) {
+    // Ensure we have all the required arguments
+    if (parameters.size() != 3) {
+      throw new ParameterException(
+          "Requires arguments: <file or directory> <storename> <comma delimited index list>");
+    }
+
+    final String inputPath = parameters.get(0);
+    final String inputStoreName = parameters.get(1);
+    final String indexList = parameters.get(2);
 
     // Config file
     final File configFile = getGeoWaveConfigFile(params);
 
     final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile)) {
+    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
     inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
     final IndexStore indexStore = inputStoreOptions.createIndexStore();
+
     inputIndices = DataStoreUtils.loadIndices(indexStore, indexList);
 
     // Ingest Plugins
-    final Map<String, GeoWaveAvroFormatPlugin<?, ?>> ingestPlugins =
-        pluginFormats.createAvroPlugins();
+    final Map<String, LocalFileIngestPlugin<?>> ingestPlugins =
+        pluginFormats.createLocalIngestPlugins();
 
     // Driver
-    driver =
-        new IngestFromKafkaDriver(
+    final LocalFileIngestCLIDriver driver =
+        new LocalFileIngestCLIDriver(
             inputStoreOptions,
             inputIndices,
             ingestPlugins,
-            kafkaOptions,
-            ingestOptions);
+            ingestOptions,
+            localInputOptions,
+            threads);
 
     // Execute
-    if (!driver.runOperation()) {
+    if (!driver.runOperation(inputPath, configFile)) {
       throw new RuntimeException("Ingest failed to execute");
     }
     return null;

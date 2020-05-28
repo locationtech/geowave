@@ -10,10 +10,10 @@ package org.locationtech.geowave.core.store.cli.type;
 
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
-import org.locationtech.geowave.core.cli.operations.GeowaveTopLevelSection;
+import org.locationtech.geowave.core.cli.operations.GeoWaveTopLevelSection;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "type", parentOperation = GeowaveTopLevelSection.class)
+@GeowaveOperation(name = "type", parentOperation = GeoWaveTopLevelSection.class)
 @Parameters(commandDescription = "Commands for managing types within a data store")
 public class TypeSection extends DefaultOperation {
 }

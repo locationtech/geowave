@@ -20,6 +20,7 @@ import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.internal.Console;
 
 /** Encryption/Decryption implementation based of symmetric cryptography */
 public class GeoWaveEncryption extends BaseEncryption {
@@ -31,13 +32,13 @@ public class GeoWaveEncryption extends BaseEncryption {
    *
    * @param resourceLocation Path to cryptography token key file
    */
-  public GeoWaveEncryption(final String resourceLocation) {
-    super(resourceLocation);
+  public GeoWaveEncryption(final String resourceLocation, Console console) {
+    super(resourceLocation, console);
   }
 
   /** Base constructor for encryption */
-  public GeoWaveEncryption() {
-    super();
+  public GeoWaveEncryption(Console console) {
+    super(console);
   }
 
   @Override

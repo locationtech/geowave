@@ -18,6 +18,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.internal.Console;
 
 public class GeoServerRestClientTest {
   WebTarget webTarget;
@@ -45,8 +47,9 @@ public class GeoServerRestClientTest {
   @Before
   public void prepare() {
     webTarget = mockedWebTarget();
-    config = new GeoServerConfig();
-    client = GeoServerRestClient.getInstance(config);
+    final Console console = new JCommander().getConsole();
+    config = new GeoServerConfig(console);
+    client = GeoServerRestClient.getInstance(config, console);
     client.setWebTarget(webTarget);
   }
 

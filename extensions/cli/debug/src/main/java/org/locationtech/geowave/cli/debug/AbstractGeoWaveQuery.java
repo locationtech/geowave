@@ -44,6 +44,14 @@ public abstract class AbstractGeoWaveQuery extends DefaultOperation implements C
   @Parameter(names = "--debug", description = "Print out additional info for debug purposes")
   private boolean debug = false;
 
+  public void setParameters(final List<String> parameters) {
+    this.parameters = parameters;
+  }
+
+  public void setDebug(final boolean debug) {
+    this.debug = debug;
+  }
+
   @Override
   public void execute(final OperationParams params) throws ParseException {
     final StopWatch stopWatch = new StopWatch();
@@ -57,7 +65,7 @@ public abstract class AbstractGeoWaveQuery extends DefaultOperation implements C
 
     // Attempt to load store.
     final StoreLoader storeOptions = new StoreLoader(storeName);
-    if (!storeOptions.loadFromConfig(getGeoWaveConfigFile(params))) {
+    if (!storeOptions.loadFromConfig(getGeoWaveConfigFile(params), params.getConsole())) {
       throw new ParameterException("Cannot find store name: " + storeOptions.getStoreName());
     }
 

@@ -72,14 +72,14 @@ public class ResizeMRCommand extends DefaultOperation implements Command {
 
     // Attempt to load input store.
     final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile)) {
+    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
     inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
     // Attempt to load output store.
     final StoreLoader outputStoreLoader = new StoreLoader(outputStoreName);
-    if (!outputStoreLoader.loadFromConfig(configFile)) {
+    if (!outputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
       throw new ParameterException("Cannot find store name: " + outputStoreLoader.getStoreName());
     }
     outputStoreOptions = outputStoreLoader.getDataStorePlugin();

@@ -175,7 +175,7 @@ public class JCommanderPropertiesTransformer {
           // set it on the original object.
           entry.getParam().set(
               entry.getObject(),
-              jc.convertValue(entry.getParam(), entry.getParam().getType(), value));
+              jc.convertValue(entry.getParam(), entry.getParam().getType(), propertyName, value));
         }
       }
     }

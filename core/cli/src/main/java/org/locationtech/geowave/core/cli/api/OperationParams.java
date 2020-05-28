@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.cli.api;
 
 import java.util.Map;
+import com.beust.jcommander.internal.Console;
 
 /**
  * This arguments are used to allow sections and commands to modify how arguments are parsed during
@@ -25,4 +26,11 @@ public interface OperationParams {
    * @return Key value pairs for contextual information during command parsing.
    */
   Map<String, Object> getContext();
+
+  /**
+   * Get the console to print commandline messages
+   * 
+   * @return the console
+   */
+  Console getConsole();
 }

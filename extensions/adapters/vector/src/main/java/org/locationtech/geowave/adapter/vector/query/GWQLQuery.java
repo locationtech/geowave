@@ -54,7 +54,19 @@ public class GWQLQuery extends DefaultOperation implements Command {
       names = "--debug",
       required = false,
       description = "Print out additional info for debug purposes")
-  private final boolean debug = false;
+  private boolean debug = false;
+
+  public void setOutputFormat(final String outputFormat) {
+    this.outputFormat = outputFormat;
+  }
+
+  public void setDebug(final boolean debug) {
+    this.debug = debug;
+  }
+
+  public void setParameters(final List<String> parameters) {
+    this.parameters = parameters;
+  }
 
   @Override
   public boolean prepare(final OperationParams params) {
@@ -97,7 +109,7 @@ public class GWQLQuery extends DefaultOperation implements Command {
     if (statement.getStoreName() != null) {
       final File configFile = (File) params.getContext().get(ConfigOptions.PROPERTIES_FILE_CONTEXT);
       final StoreLoader storeLoader = new StoreLoader(statement.getStoreName());
-      if (!storeLoader.loadFromConfig(configFile)) {
+      if (!storeLoader.loadFromConfig(configFile, params.getConsole())) {
         throw new ParameterException("Cannot find store name: " + storeLoader.getStoreName());
       }
       storeOptions = storeLoader.getDataStorePlugin();
@@ -106,7 +118,7 @@ public class GWQLQuery extends DefaultOperation implements Command {
     }
     final StopWatch stopWatch = new StopWatch();
     stopWatch.start();
-    ResultSet results = statement.execute(storeOptions.createDataStore());
+    final ResultSet results = statement.execute(storeOptions.createDataStore());
     stopWatch.stop();
     output.output(results);
     results.close();

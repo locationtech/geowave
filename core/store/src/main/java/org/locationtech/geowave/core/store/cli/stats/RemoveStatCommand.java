@@ -20,6 +20,7 @@ import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
+import com.beust.jcommander.internal.Console;
 
 @GeowaveOperation(name = "rm", parentOperation = StatsSection.class)
 @Parameters(commandDescription = "Remove a statistic from a data store")
@@ -44,7 +45,8 @@ public class RemoveStatCommand extends AbstractStatsCommand<Void> {
   protected boolean performStatsCommand(
       final DataStorePluginOptions storeOptions,
       final InternalDataAdapter<?> adapter,
-      final StatsCommandLineOptions statsOptions) throws IOException {
+      final StatsCommandLineOptions statsOptions,
+      final Console console) throws IOException {
 
     // Remove the stat
     final DataStatisticsStore statStore = storeOptions.createDataStatisticsStore();

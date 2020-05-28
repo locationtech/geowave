@@ -14,6 +14,7 @@ import org.locationtech.geowave.core.cli.operations.config.security.crypto.BaseE
 import org.locationtech.geowave.core.cli.operations.config.security.crypto.GeoWaveEncryption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.internal.Console;
 
 /** Security utility class for simpler interfacing with */
 public class SecurityUtils {
@@ -30,13 +31,15 @@ public class SecurityUtils {
    *        resource location
    * @return decrypted value
    */
-  public static String decryptHexEncodedValue(final String value, final String resourceLocation)
-      throws Exception {
+  public static String decryptHexEncodedValue(
+      final String value,
+      final String resourceLocation,
+      Console console) throws Exception {
     LOGGER.trace("Decrypting hex-encoded value");
     if ((value != null) && !"".equals(value.trim())) {
       if (BaseEncryption.isProperlyWrapped(value.trim())) {
         try {
-          return getEncryptionService(resourceLocation).decryptHexEncoded(value);
+          return getEncryptionService(resourceLocation, console).decryptHexEncoded(value);
         } catch (final Throwable t) {
           LOGGER.error(
               "Encountered exception during content decryption: " + t.getLocalizedMessage(),
@@ -63,13 +66,15 @@ public class SecurityUtils {
    * @return If encryption is successful, encrypted and hex-encoded string value is returned wrapped
    *         with ENC{}
    */
-  public static String encryptAndHexEncodeValue(final String value, final String resourceLocation)
-      throws Exception {
+  public static String encryptAndHexEncodeValue(
+      final String value,
+      final String resourceLocation,
+      Console console) throws Exception {
     LOGGER.debug("Encrypting and hex-encoding value");
     if ((value != null) && !"".equals(value.trim())) {
       if (!BaseEncryption.isProperlyWrapped(value)) {
         try {
-          return getEncryptionService(resourceLocation).encryptAndHexEncode(value);
+          return getEncryptionService(resourceLocation, console).encryptAndHexEncode(value);
         } catch (final Throwable t) {
           LOGGER.error(
               "Encountered exception during content encryption: " + t.getLocalizedMessage(),
@@ -98,19 +103,20 @@ public class SecurityUtils {
    * @return An initialized instance of the encryption service
    * @throws Exception
    */
-  private static synchronized BaseEncryption getEncryptionService(final String resourceLocation)
-      throws Throwable {
+  private static synchronized BaseEncryption getEncryptionService(
+      final String resourceLocation,
+      Console console) throws Throwable {
     if (encService == null) {
       if ((resourceLocation != null) && !"".equals(resourceLocation.trim())) {
         LOGGER.trace(
             "Setting resource location for encryption service: [" + resourceLocation + "]");
-        encService = new GeoWaveEncryption(resourceLocation);
+        encService = new GeoWaveEncryption(resourceLocation, console);
       } else {
-        encService = new GeoWaveEncryption();
+        encService = new GeoWaveEncryption(console);
       }
     } else {
       if (!resourceLocation.equals(encService.getResourceLocation())) {
-        encService = new GeoWaveEncryption(resourceLocation);
+        encService = new GeoWaveEncryption(resourceLocation, console);
       }
     }
     return encService;

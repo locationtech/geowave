@@ -21,6 +21,7 @@ import org.locationtech.geowave.core.cli.operations.config.security.utils.Securi
 import org.locationtech.geowave.core.cli.utils.URLUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.internal.Console;
 
 public class GeoServerConfig {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoServerConfig.class);
@@ -48,7 +49,7 @@ public class GeoServerConfig {
    *
    * @param propFile
    */
-  public GeoServerConfig(final File propFile) {
+  public GeoServerConfig(final File propFile, final Console console) {
     this.propFile = propFile;
 
     if ((propFile != null) && propFile.exists()) {
@@ -81,7 +82,11 @@ public class GeoServerConfig {
       try {
         final File resourceTokenFile = SecurityUtils.getFormattedTokenKeyFileForConfig(propFile);
         // if password in config props is encrypted, need to decrypt it
-        pass = SecurityUtils.decryptHexEncodedValue(pass, resourceTokenFile.getCanonicalPath());
+        pass =
+            SecurityUtils.decryptHexEncodedValue(
+                pass,
+                resourceTokenFile.getCanonicalPath(),
+                console);
       } catch (final Exception e) {
         LOGGER.error("An error occurred decrypting password: " + e.getLocalizedMessage(), e);
       }
@@ -95,15 +100,15 @@ public class GeoServerConfig {
     }
 
     if (update) {
-      ConfigOptions.writeProperties(propFile, gsConfigProperties);
+      ConfigOptions.writeProperties(propFile, gsConfigProperties, console);
 
       LOGGER.info("GeoServer Config Saved");
     }
   }
 
   /** Secondary no-arg constructor for direct-access testing */
-  public GeoServerConfig() {
-    this(ConfigOptions.getDefaultPropertyFile());
+  public GeoServerConfig(final Console console) {
+    this(ConfigOptions.getDefaultPropertyFile(console), console);
   }
 
   public String getUrl() {

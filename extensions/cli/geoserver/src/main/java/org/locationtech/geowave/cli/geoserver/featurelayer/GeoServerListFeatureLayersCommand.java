@@ -13,7 +13,6 @@ import javax.ws.rs.core.Response.Status;
 import org.locationtech.geowave.cli.geoserver.GeoServerCommand;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
-import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import net.sf.json.JSONObject;
@@ -24,6 +23,10 @@ public class GeoServerListFeatureLayersCommand extends GeoServerCommand<String> 
   @Parameter(names = {"-ws", "--workspace"}, required = false, description = "Workspace Name")
   private String workspace = null;
 
+  public void setWorkspace(final String workspace) {
+    this.workspace = workspace;
+  }
+
   @Parameter(names = {"-ds", "--datastore"}, required = false, description = "Datastore Name")
   private String datastore = null;
 
@@ -33,9 +36,17 @@ public class GeoServerListFeatureLayersCommand extends GeoServerCommand<String> 
       description = "Show only GeoWave feature layers (default: false)")
   private Boolean geowaveOnly = false;
 
+  public void setGeowaveOnly(final Boolean geowaveOnly) {
+    this.geowaveOnly = geowaveOnly;
+  }
+
   @Override
   public void execute(final OperationParams params) throws Exception {
-    JCommander.getConsole().println(computeResults(params));
+    params.getConsole().println(computeResults(params));
+  }
+
+  public void setDatastore(final String datastore) {
+    this.datastore = datastore;
   }
 
   @Override

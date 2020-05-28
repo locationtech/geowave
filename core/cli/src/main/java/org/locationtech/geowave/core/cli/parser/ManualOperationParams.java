@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.locationtech.geowave.core.cli.api.Operation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.internal.Console;
 
 public class ManualOperationParams implements OperationParams {
 
@@ -25,5 +27,10 @@ public class ManualOperationParams implements OperationParams {
   @Override
   public Map<String, Object> getContext() {
     return context;
+  }
+
+  @Override
+  public Console getConsole() {
+    return new JCommander().getConsole();
   }
 }

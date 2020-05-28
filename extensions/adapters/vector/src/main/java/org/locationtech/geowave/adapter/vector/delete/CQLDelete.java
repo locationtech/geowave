@@ -67,6 +67,14 @@ public class CQLDelete extends DefaultOperation implements Command {
       description = "Print out additional info for debug purposes")
   private boolean debug = false;
 
+  public void setParameters(final List<String> parameters) {
+    this.parameters = parameters;
+  }
+
+  public void setDebug(final boolean debug) {
+    this.debug = debug;
+  }
+
   @Override
   public void execute(final OperationParams params) throws ParseException {
     if (debug) {
@@ -87,7 +95,7 @@ public class CQLDelete extends DefaultOperation implements Command {
 
     // Attempt to load store.
     final StoreLoader storeOptions = new StoreLoader(storeName);
-    if (!storeOptions.loadFromConfig(configFile)) {
+    if (!storeOptions.loadFromConfig(configFile, params.getConsole())) {
       throw new ParameterException("Cannot find store name: " + storeOptions.getStoreName());
     }
 

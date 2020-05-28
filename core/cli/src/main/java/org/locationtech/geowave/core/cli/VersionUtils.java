@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.beust.jcommander.JCommander;
+import com.beust.jcommander.internal.Console;
 
 public class VersionUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(VersionUtils.class);
@@ -24,7 +24,7 @@ public class VersionUtils {
   private static final String BUILD_PROPERTIES_FILE_NAME = "build.properties";
   private static final String VERSION_PROPERTY_KEY = "project.version";
 
-  public static Properties getBuildProperties() {
+  public static Properties getBuildProperties(final Console console) {
 
     final Properties props = new Properties();
     try (InputStream stream =
@@ -37,19 +37,30 @@ public class VersionUtils {
       return props;
     } catch (final IOException e) {
       LOGGER.warn("Cannot read GeoWave build properties to show version information", e);
-      JCommander.getConsole().print(
-          "Cannot read GeoWave build properties to show version information: " + e.getMessage());
+
+      if (console != null) {
+        console.println(
+            "Cannot read GeoWave build properties to show version information: " + e.getMessage());
+      }
     }
     return props;
   }
 
   public static String getVersion() {
-    return getBuildProperties().getProperty(VERSION_PROPERTY_KEY);
+    return getVersion(null);
+  }
+
+  public static String getVersion(final Console console) {
+    return getBuildProperties(console).getProperty(VERSION_PROPERTY_KEY);
   }
 
   public static List<String> getVersionInfo() {
+    return getVersionInfo(null);
+  }
+
+  public static List<String> getVersionInfo(final Console console) {
     final List<String> buildAndPropertyList =
-        Arrays.asList(getBuildProperties().toString().split(","));
+        Arrays.asList(getBuildProperties(console).toString().split(","));
     Collections.sort(buildAndPropertyList.subList(1, buildAndPropertyList.size()));
     return buildAndPropertyList;
   }
@@ -62,10 +73,10 @@ public class VersionUtils {
     return str.toString();
   }
 
-  public static void printVersionInfo() {
-    final List<String> buildAndPropertyList = getVersionInfo();
+  public static void printVersionInfo(final Console console) {
+    final List<String> buildAndPropertyList = getVersionInfo(console);
     for (final String str : buildAndPropertyList) {
-      JCommander.getConsole().println(str);
+      console.println(str);
     }
   }
 }

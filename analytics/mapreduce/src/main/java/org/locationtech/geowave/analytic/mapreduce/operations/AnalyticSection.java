@@ -10,10 +10,10 @@ package org.locationtech.geowave.analytic.mapreduce.operations;
 
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
-import org.locationtech.geowave.core.cli.operations.GeowaveTopLevelSection;
+import org.locationtech.geowave.core.cli.operations.GeoWaveTopLevelSection;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "analytic", parentOperation = GeowaveTopLevelSection.class)
+@GeowaveOperation(name = "analytic", parentOperation = GeoWaveTopLevelSection.class)
 @Parameters(commandDescription = "Commands to run analytics on GeoWave data sets")
 public class AnalyticSection extends DefaultOperation {
 }

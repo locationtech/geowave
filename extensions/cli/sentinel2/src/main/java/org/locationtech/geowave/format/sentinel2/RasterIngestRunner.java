@@ -112,7 +112,7 @@ public class RasterIngestRunner extends DownloadRunner {
 
     // Attempt to load input store.
     final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile)) {
+    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
 

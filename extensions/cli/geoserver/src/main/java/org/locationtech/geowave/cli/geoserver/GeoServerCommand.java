@@ -25,7 +25,9 @@ public abstract class GeoServerCommand<T> extends ServiceEnabledCommand<T> {
     if (geoserverClient == null) {
       // Create the rest client
       geoserverClient =
-          GeoServerRestClient.getInstance(new GeoServerConfig(getGeoWaveConfigFile(params)));
+          GeoServerRestClient.getInstance(
+              new GeoServerConfig(getGeoWaveConfigFile(params), params.getConsole()),
+              params.getConsole());
     }
 
     // Successfully prepared

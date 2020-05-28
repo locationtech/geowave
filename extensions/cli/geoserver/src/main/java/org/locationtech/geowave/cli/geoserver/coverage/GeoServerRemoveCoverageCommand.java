@@ -15,7 +15,6 @@ import javax.ws.rs.core.Response.Status;
 import org.locationtech.geowave.cli.geoserver.GeoServerRemoveCommand;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
-import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -30,13 +29,13 @@ public class GeoServerRemoveCoverageCommand extends GeoServerRemoveCommand<Strin
   private String cvgstore = null;
 
   @Parameter(description = "<coverage name>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   private String cvgName = null;
 
   @Override
   public void execute(final OperationParams params) throws Exception {
-    JCommander.getConsole().println(computeResults(params));
+    params.getConsole().println(computeResults(params));
   }
 
   @Override
@@ -64,5 +63,13 @@ public class GeoServerRemoveCoverageCommand extends GeoServerRemoveCommand<Strin
             + "\nGeoServer Response Code = "
             + getCvgResponse.getStatus();
     return handleError(getCvgResponse, errorMessage);
+  }
+
+  public void setCvgstore(String cvgstore) {
+    this.cvgstore = cvgstore;
+  }
+
+  public void setParameters(List<String> parameters) {
+    this.parameters = parameters;
   }
 }

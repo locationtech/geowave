@@ -23,7 +23,6 @@ import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
-import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -51,7 +50,7 @@ public class CompactIndexCommand extends DefaultOperation implements Command {
     final String indexList = parameters.get(1);
 
     final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
+    if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params), params.getConsole())) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
     inputStoreOptions = inputStoreLoader.getDataStorePlugin();
@@ -73,10 +72,9 @@ public class CompactIndexCommand extends DefaultOperation implements Command {
           internalAdapterStore,
           adapterIndexMappingStore,
           inputStoreOptions.getFactoryOptions().getStoreOptions().getMaxRangeDecomposition())) {
-        JCommander.getConsole().println(
-            "Unable to merge data within index '" + index.getName() + "'");
+        params.getConsole().println("Unable to merge data within index '" + index.getName() + "'");
       } else {
-        JCommander.getConsole().println(
+        params.getConsole().println(
             "Data successfully merged within index '" + index.getName() + "'");
       }
     }

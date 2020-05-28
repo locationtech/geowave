@@ -109,7 +109,7 @@ public class AddStoreCommand extends ServiceEnabledCommand<String> {
     }
 
     if (pluginOptions.getFactoryOptions() != null) {
-      pluginOptions.getFactoryOptions().validatePluginOptions(existingProps);
+      pluginOptions.getFactoryOptions().validatePluginOptions(existingProps, params.getConsole());
     }
 
     // Save the store options.
@@ -125,7 +125,8 @@ public class AddStoreCommand extends ServiceEnabledCommand<String> {
         getGeoWaveConfigFile(),
         existingProps,
         pluginOptions.getFactoryOptions().getClass(),
-        getNamespace() + "." + DefaultPluginOptions.OPTS);
+        getNamespace() + "." + DefaultPluginOptions.OPTS,
+        params.getConsole());
 
     final StringBuilder builder = new StringBuilder();
     for (final Object key : existingProps.keySet()) {

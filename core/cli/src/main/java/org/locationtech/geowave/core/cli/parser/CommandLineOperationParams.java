@@ -14,6 +14,7 @@ import java.util.Map;
 import org.locationtech.geowave.core.cli.api.Operation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.prefix.PrefixedJCommander;
+import com.beust.jcommander.internal.Console;
 
 public class CommandLineOperationParams implements OperationParams {
   private final Map<String, Object> context = new HashMap<>();
@@ -48,6 +49,10 @@ public class CommandLineOperationParams implements OperationParams {
 
   public PrefixedJCommander getCommander() {
     return commander;
+  }
+
+  public Console getConsole() {
+    return commander.getConsole();
   }
 
   public void setValidate(final boolean validate) {

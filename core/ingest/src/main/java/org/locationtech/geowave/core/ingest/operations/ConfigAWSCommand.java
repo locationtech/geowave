@@ -62,7 +62,8 @@ public class ConfigAWSCommand extends DefaultOperation implements Command {
         getGeoWaveConfigFile(params),
         existingProps,
         this.getClass(),
-        AWS_S3_ENDPOINT_PREFIX);
+        AWS_S3_ENDPOINT_PREFIX,
+        params.getConsole());
   }
 
   public static String getS3Url(final Properties configProperties) {

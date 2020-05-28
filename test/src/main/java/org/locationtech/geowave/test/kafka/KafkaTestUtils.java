@@ -14,7 +14,7 @@ import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
-import org.locationtech.geowave.core.ingest.operations.KafkaToGeowaveCommand;
+import org.locationtech.geowave.core.ingest.operations.KafkaToGeoWaveCommand;
 import org.locationtech.geowave.core.ingest.operations.LocalToKafkaCommand;
 import org.locationtech.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
 import org.locationtech.geowave.core.store.cli.store.AddStoreCommand;
@@ -83,7 +83,7 @@ public class KafkaTestUtils {
     indexOption.selectPlugin((spatialTemporal ? "spatial_temporal" : "spatial"));
 
     // Execute Command
-    final KafkaToGeowaveCommand kafkaToGeowave = new KafkaToGeowaveCommand();
+    final KafkaToGeoWaveCommand kafkaToGeowave = new KafkaToGeoWaveCommand();
     final File configFile = File.createTempFile("test_stats", null);
     final ManualOperationParams params = new ManualOperationParams();
 

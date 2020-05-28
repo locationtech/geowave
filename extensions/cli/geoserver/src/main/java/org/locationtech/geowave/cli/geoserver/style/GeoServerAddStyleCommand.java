@@ -17,7 +17,6 @@ import javax.ws.rs.core.Response.Status;
 import org.locationtech.geowave.cli.geoserver.GeoServerCommand;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
-import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -29,13 +28,21 @@ public class GeoServerAddStyleCommand extends GeoServerCommand<String> {
   private String stylesld = null;
 
   @Parameter(description = "<GeoWave style name>")
-  private List<String> parameters = new ArrayList<String>();
+  private List<String> parameters = new ArrayList<>();
 
   private String gwStyle = null;
 
+  public void setStylesld(final String stylesld) {
+    this.stylesld = stylesld;
+  }
+
+  public void setParameters(final List<String> parameters) {
+    this.parameters = parameters;
+  }
+
   @Override
   public void execute(final OperationParams params) throws Exception {
-    JCommander.getConsole().println(computeResults(params));
+    params.getConsole().println(computeResults(params));
   }
 
   @Override

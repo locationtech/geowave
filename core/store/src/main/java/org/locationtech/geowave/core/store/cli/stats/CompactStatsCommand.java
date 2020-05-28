@@ -46,7 +46,7 @@ public class CompactStatsCommand extends DefaultOperation implements Command {
     // Attempt to load input store.
     if (inputStoreOptions == null) {
       final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-      if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
+      if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params), params.getConsole())) {
         throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
       }
       inputStoreOptions = inputStoreLoader.getDataStorePlugin();

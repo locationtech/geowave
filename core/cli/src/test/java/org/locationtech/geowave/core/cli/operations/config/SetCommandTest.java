@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.util.Properties;
 import org.junit.Test;
-import org.locationtech.geowave.core.cli.operations.GeowaveTopLevelSection;
+import org.locationtech.geowave.core.cli.operations.GeoWaveTopLevelSection;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.CommandLineOperationParams;
 import org.locationtech.geowave.core.cli.parser.OperationParser;
@@ -25,7 +25,7 @@ public class SetCommandTest {
     final String[] args = {"config", "set", "name", "value"};
     final OperationRegistry registry = OperationRegistry.getInstance();
     final OperationParser parser = new OperationParser(registry);
-    final CommandLineOperationParams params = parser.parse(GeowaveTopLevelSection.class, args);
+    final CommandLineOperationParams params = parser.parse(GeoWaveTopLevelSection.class, args);
 
     final SetCommand setcommand = new SetCommand();
     final String name = "name";

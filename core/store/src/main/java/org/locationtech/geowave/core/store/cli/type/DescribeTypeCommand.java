@@ -14,15 +14,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
-import org.locationtech.geowave.core.cli.api.Command;
-import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.cli.utils.ConsolePrinter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
-import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.slf4j.Logger;
@@ -80,7 +77,7 @@ public class DescribeTypeCommand extends ServiceEnabledCommand<Void> {
     final File configFile = getGeoWaveConfigFile(params);
 
     final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile)) {
+    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
     inputStoreOptions = inputStoreLoader.getDataStorePlugin();
@@ -92,18 +89,18 @@ public class DescribeTypeCommand extends ServiceEnabledCommand<Void> {
         inputStoreOptions.createInternalAdapterStore();
     final DataTypeAdapter<?> type =
         adapterStore.getAdapter(internalAdapterStore.getAdapterId(typeName)).getAdapter();
-    Map<String, String> description = type.describe();
-    List<List<Object>> rows = new ArrayList<>();
-    for (Entry<String, String> entry : description.entrySet()) {
-      List<Object> row = new ArrayList<>();
+    final Map<String, String> description = type.describe();
+    final List<List<Object>> rows = new ArrayList<>();
+    for (final Entry<String, String> entry : description.entrySet()) {
+      final List<Object> row = new ArrayList<>();
       row.add(entry.getKey());
       row.add(entry.getValue());
       rows.add(row);
     }
-    List<String> headers = new ArrayList<>();
+    final List<String> headers = new ArrayList<>();
     headers.add("Property");
     headers.add("Value");
-    ConsolePrinter cp = new ConsolePrinter();
+    final ConsolePrinter cp = new ConsolePrinter();
     cp.print(headers, rows);
     return null;
   }

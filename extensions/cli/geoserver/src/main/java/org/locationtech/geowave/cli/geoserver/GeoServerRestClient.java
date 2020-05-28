@@ -75,6 +75,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.internal.Console;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -89,20 +90,28 @@ public class GeoServerRestClient {
   }
 
   private final GeoServerConfig config;
+  private final Console console;
   private WebTarget webTarget = null;
 
-  private GeoServerRestClient(final GeoServerConfig config) {
+  private GeoServerRestClient(final GeoServerConfig config, final Console console) {
     this.config = config;
+    this.console = console;
   }
 
-  private GeoServerRestClient(final GeoServerConfig config, final WebTarget webTarget) {
+  private GeoServerRestClient(
+      final GeoServerConfig config,
+      final WebTarget webTarget,
+      final Console console) {
     this.config = config;
     this.webTarget = webTarget;
+    this.console = console;
   }
 
-  public static GeoServerRestClient getInstance(final GeoServerConfig config) {
+  public static GeoServerRestClient getInstance(
+      final GeoServerConfig config,
+      final Console console) {
     if (SINGLETON_INSTANCE == null) {
-      SINGLETON_INSTANCE = new GeoServerRestClient(config);
+      SINGLETON_INSTANCE = new GeoServerRestClient(config, console);
     }
     return SINGLETON_INSTANCE;
   }
@@ -280,7 +289,8 @@ public class GeoServerRestClient {
           configValue =
               SecurityUtils.decryptHexEncodedValue(
                   configValue,
-                  resourceTokenFile.getCanonicalPath());
+                  resourceTokenFile.getCanonicalPath(),
+                  console);
           return configValue;
         } catch (final Exception e) {
           LOGGER.error("An error occurred decrypting password: " + e.getLocalizedMessage(), e);
@@ -1449,7 +1459,7 @@ public class GeoServerRestClient {
 
   public DataStorePluginOptions getStorePlugin(final String storeName) {
     final StoreLoader inputStoreLoader = new StoreLoader(storeName);
-    if (!inputStoreLoader.loadFromConfig(config.getPropFile())) {
+    if (!inputStoreLoader.loadFromConfig(config.getPropFile(), console)) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
 

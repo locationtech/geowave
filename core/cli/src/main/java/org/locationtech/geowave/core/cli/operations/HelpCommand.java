@@ -27,7 +27,7 @@ import org.locationtech.geowave.core.cli.spi.OperationRegistry;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameters;
 
-@GeowaveOperation(name = "help", parentOperation = GeowaveTopLevelSection.class)
+@GeowaveOperation(name = "help", parentOperation = GeoWaveTopLevelSection.class)
 @Parameters(commandDescription = "Get descriptions of arguments for any GeoWave command")
 public class HelpCommand extends DefaultOperation implements Command {
 
@@ -61,7 +61,7 @@ public class HelpCommand extends DefaultOperation implements Command {
     }
 
     if (lastOperation == null) {
-      lastOperation = registry.getOperation(GeowaveTopLevelSection.class).createInstance();
+      lastOperation = registry.getOperation(GeoWaveTopLevelSection.class).createInstance();
     }
     if (lastOperation != null) {
       final String usage = lastOperation.usage();
@@ -91,7 +91,7 @@ public class HelpCommand extends DefaultOperation implements Command {
 
         final String programName = StringUtils.join(nameArray, " ");
         jc.setProgramName(programName);
-        jc.usage(builder);
+        jc.getUsageFormatter().usage(builder);
 
         // Trim excess newlines.
         final String operations = builder.toString().trim();

@@ -61,13 +61,13 @@ public class KDESparkCommand extends ServiceEnabledCommand<Void> implements Comm
     final File configFile = getGeoWaveConfigFile(params);
 
     final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile)) {
+    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
       throw new ParameterException("Cannot find input store: " + inputStoreLoader.getStoreName());
     }
     inputDataStore = inputStoreLoader.getDataStorePlugin();
 
     final StoreLoader outputStoreLoader = new StoreLoader(outputStoreName);
-    if (!outputStoreLoader.loadFromConfig(configFile)) {
+    if (!outputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
       throw new ParameterException("Cannot find output store: " + outputStoreLoader.getStoreName());
     }
     outputDataStore = outputStoreLoader.getDataStorePlugin();
@@ -91,7 +91,7 @@ public class KDESparkCommand extends ServiceEnabledCommand<Void> implements Comm
       final String outputIndex = kdeSparkOptions.getOutputIndex();
 
       // Load the Indices
-      List<Index> outputIndices =
+      final List<Index> outputIndices =
           DataStoreUtils.loadIndices(outputStoreLoader.createIndexStore(), outputIndex);
 
       for (final Index primaryIndex : outputIndices) {

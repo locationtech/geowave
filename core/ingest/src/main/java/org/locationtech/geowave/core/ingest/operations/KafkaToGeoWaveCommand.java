@@ -12,14 +12,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
-import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
-import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsDriver;
-import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
-import org.locationtech.geowave.core.ingest.hdfs.mapreduce.MapReduceCommandLineOptions;
+import org.locationtech.geowave.core.ingest.avro.GeoWaveAvroFormatPlugin;
+import org.locationtech.geowave.core.ingest.kafka.IngestFromKafkaDriver;
+import org.locationtech.geowave.core.ingest.kafka.KafkaConsumerCommandLineOptions;
 import org.locationtech.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.VisibilityOptions;
@@ -28,25 +26,23 @@ import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
-import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
-@GeowaveOperation(name = "mrToGW", parentOperation = IngestSection.class)
-@Parameters(commandDescription = "Ingest supported files that already exist in HDFS")
-public class MapReduceToGeowaveCommand extends ServiceEnabledCommand<Void> {
+@GeowaveOperation(name = "kafkaToGW", parentOperation = IngestSection.class)
+@Parameters(commandDescription = "Subscribe to a Kafka topic and ingest into GeoWave")
+public class KafkaToGeoWaveCommand extends ServiceEnabledCommand<Void> {
 
-  @Parameter(
-      description = "<path to base directory to write to> <store name> <comma delimited index list>")
+  @Parameter(description = "<store name> <comma delimited index list>")
   private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate
   private VisibilityOptions ingestOptions = new VisibilityOptions();
 
   @ParametersDelegate
-  private MapReduceCommandLineOptions mapReduceOptions = new MapReduceCommandLineOptions();
+  private KafkaConsumerCommandLineOptions kafkaOptions = new KafkaConsumerCommandLineOptions();
 
   @ParametersDelegate
   private LocalInputCommandLineOptions localInputOptions = new LocalInputCommandLineOptions();
@@ -60,11 +56,13 @@ public class MapReduceToGeowaveCommand extends ServiceEnabledCommand<Void> {
 
   private List<Index> inputIndices = null;
 
+  protected IngestFromKafkaDriver driver = null;
+
   @Override
   public boolean prepare(final OperationParams params) {
 
     // TODO: localInputOptions has 'extensions' which doesn't mean
-    // anything for MapReduce to GeoWave.
+    // anything for Kafka to Geowave
 
     // Based on the selected formats, select the format plugins
     pluginFormats.selectPlugin(localInputOptions.getFormats());
@@ -81,9 +79,8 @@ public class MapReduceToGeowaveCommand extends ServiceEnabledCommand<Void> {
   public void execute(final OperationParams params) throws Exception {
 
     // Ensure we have all the required arguments
-    if (parameters.size() != 3) {
-      throw new ParameterException(
-          "Requires arguments: <path to base directory to write to> <store name> <comma delimited index list>");
+    if (parameters.size() != 2) {
+      throw new ParameterException("Requires arguments: <store name> <comma delimited index list>");
     }
 
     computeResults(params);
@@ -94,16 +91,16 @@ public class MapReduceToGeowaveCommand extends ServiceEnabledCommand<Void> {
     return true;
   }
 
+  public IngestFromKafkaDriver getDriver() {
+    return driver;
+  }
+
   public List<String> getParameters() {
     return parameters;
   }
 
-  public void setParameters(
-      final String hdfsPath,
-      final String storeName,
-      final String commaSeparatedIndexes) {
+  public void setParameters(final String storeName, final String commaSeparatedIndexes) {
     parameters = new ArrayList<>();
-    parameters.add(hdfsPath);
     parameters.add(storeName);
     parameters.add(commaSeparatedIndexes);
   }
@@ -116,12 +113,12 @@ public class MapReduceToGeowaveCommand extends ServiceEnabledCommand<Void> {
     this.ingestOptions = ingestOptions;
   }
 
-  public MapReduceCommandLineOptions getMapReduceOptions() {
-    return mapReduceOptions;
+  public KafkaConsumerCommandLineOptions getKafkaOptions() {
+    return kafkaOptions;
   }
 
-  public void setMapReduceOptions(final MapReduceCommandLineOptions mapReduceOptions) {
-    this.mapReduceOptions = mapReduceOptions;
+  public void setKafkaOptions(final KafkaConsumerCommandLineOptions kafkaOptions) {
+    this.kafkaOptions = kafkaOptions;
   }
 
   public LocalInputCommandLineOptions getLocalInputOptions() {
@@ -150,22 +147,14 @@ public class MapReduceToGeowaveCommand extends ServiceEnabledCommand<Void> {
 
   @Override
   public Void computeResults(final OperationParams params) throws Exception {
-    if (mapReduceOptions.getJobTrackerOrResourceManagerHostPort() == null) {
-      throw new ParameterException(
-          "Requires job tracker or resource manager option (try geowave help <command>...)");
-    }
+    final String inputStoreName = parameters.get(0);
+    final String indexList = parameters.get(1);
 
-    final String basePath = parameters.get(0);
-    final String inputStoreName = parameters.get(1);
-    final String indexList = parameters.get(2);
     // Config file
     final File configFile = getGeoWaveConfigFile(params);
 
-    final Properties configProperties = ConfigOptions.loadProperties(configFile);
-    final String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
-
     final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile)) {
+    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
     inputStoreOptions = inputStoreLoader.getDataStorePlugin();
@@ -174,19 +163,17 @@ public class MapReduceToGeowaveCommand extends ServiceEnabledCommand<Void> {
     inputIndices = DataStoreUtils.loadIndices(indexStore, indexList);
 
     // Ingest Plugins
-    final Map<String, IngestFromHdfsPlugin<?, ?>> ingestPlugins =
-        pluginFormats.createHdfsIngestPlugins();
+    final Map<String, GeoWaveAvroFormatPlugin<?, ?>> ingestPlugins =
+        pluginFormats.createAvroPlugins();
 
     // Driver
-    final IngestFromHdfsDriver driver =
-        new IngestFromHdfsDriver(
+    driver =
+        new IngestFromKafkaDriver(
             inputStoreOptions,
             inputIndices,
-            ingestOptions,
-            mapReduceOptions,
             ingestPlugins,
-            hdfsHostPort,
-            basePath);
+            kafkaOptions,
+            ingestOptions);
 
     // Execute
     if (!driver.runOperation()) {
