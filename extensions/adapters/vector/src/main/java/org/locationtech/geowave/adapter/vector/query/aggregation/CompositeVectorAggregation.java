@@ -45,14 +45,6 @@ public class CompositeVectorAggregation implements
   }
 
   @Override
-  public byte[] toBinary() {
-    return new byte[0];
-  }
-
-  @Override
-  public void fromBinary(final byte[] bytes) {}
-
-  @Override
   public PersistableList getParameters() {
     List<Persistable> persistables = Lists.newArrayListWithCapacity(aggregations.size());
     for (Aggregation agg : aggregations) {

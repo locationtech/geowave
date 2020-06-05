@@ -93,4 +93,22 @@ public interface Aggregation<P extends Persistable, R, T> extends Persistable {
    * @param entry the new entry to compute an updated aggregation result on
    */
   void aggregate(T entry);
+
+  /**
+   * Because the serialization of aggregation is just the function without the parameters or the
+   * result, its expected that this is empty
+   */
+  @Override
+  default byte[] toBinary() {
+    return new byte[0];
+  }
+
+  /**
+   * Because the serialization of aggregation is just the function without the parameters or the
+   * result, its expected that there's nothing to deserialize
+   */
+  @Override
+  default void fromBinary(byte[] bytes) {}
+
+
 }

@@ -17,14 +17,6 @@ public class MergingAggregation<T extends Mergeable> implements Aggregation<Pers
   private T result = null;
 
   @Override
-  public byte[] toBinary() {
-    return new byte[0];
-  }
-
-  @Override
-  public void fromBinary(final byte[] bytes) {}
-
-  @Override
   public Persistable getParameters() {
     return null;
   }

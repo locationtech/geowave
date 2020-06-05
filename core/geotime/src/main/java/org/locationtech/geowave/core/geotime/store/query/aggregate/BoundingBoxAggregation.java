@@ -22,14 +22,6 @@ public abstract class BoundingBoxAggregation<P extends Persistable, T> implement
   protected double maxY = -Double.MAX_VALUE;
 
   @Override
-  public byte[] toBinary() {
-    return new byte[0];
-  }
-
-  @Override
-  public void fromBinary(final byte[] bytes) {}
-
-  @Override
   public P getParameters() {
     return null;
   }
