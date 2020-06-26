@@ -8,15 +8,22 @@
  */
 package org.locationtech.geowave.datastore.accumulo.util;
 
+import org.apache.accumulo.core.client.*;
+import org.apache.accumulo.core.client.security.tokens.KerberosToken;
+import org.apache.accumulo.core.client.security.tokens.PasswordToken;
+import org.apache.hadoop.security.UserGroupInformation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.Connector;
-import org.apache.accumulo.core.client.Instance;
-import org.apache.accumulo.core.client.ZooKeeperInstance;
+import java.util.Objects;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class ConnectorPool {
+  private static final Logger LOGGER = LoggerFactory.getLogger(ConnectorPool.class);
   private static ConnectorPool singletonInstance;
 
   public static synchronized ConnectorPool getInstance() {
@@ -32,14 +39,44 @@ public class ConnectorPool {
       final String zookeeperUrl,
       final String instanceName,
       final String userName,
-      final String password) throws AccumuloException, AccumuloSecurityException {
+      final String passwordOrKeyTab,
+      boolean useSasl) throws AccumuloException, AccumuloSecurityException, IOException {
 
     final ConnectorConfig config =
-        new ConnectorConfig(zookeeperUrl, instanceName, userName, password);
+        new ConnectorConfig(zookeeperUrl, instanceName, userName, passwordOrKeyTab, useSasl);
     Connector connector = connectorCache.get(config);
     if (connector == null) {
-      final Instance inst = new ZooKeeperInstance(instanceName, zookeeperUrl);
-      connector = inst.getConnector(userName, password);
+
+      ClientConfiguration conf =
+          // ClientConfiguration.create().withInstance(instanceName).withZkHosts(zookeeperUrl);
+
+          // using deprecated constructor for accumulo 1.7 compatibility
+          new ClientConfiguration().withInstance(instanceName).withZkHosts(zookeeperUrl);
+      if (useSasl) {
+        conf.withSasl(true);
+        File file = new java.io.File(passwordOrKeyTab);
+        UserGroupInformation.loginUserFromKeytab(userName, file.getAbsolutePath());
+
+        // using deprecated constructor with replaceCurrentUser=false for accumulo 1.7 compatibility
+        connector =
+            new ZooKeeperInstance(conf).getConnector(
+                userName,
+                new KerberosToken(userName, file, false));
+        // If on a secured cluster, create a thread to periodically renew Kerberos tgt
+        ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
+
+        executor.scheduleAtFixedRate(() -> {
+          try {
+            UserGroupInformation.getLoginUser().checkTGTAndReloginFromKeytab();
+          } catch (Exception e) {
+            LOGGER.warn("Unable to renew Kerberos TGT", e);
+          }
+        }, 0, 10, TimeUnit.MINUTES);
+
+      } else {
+        connector =
+            new ZooKeeperInstance(conf).getConnector(userName, new PasswordToken(passwordOrKeyTab));
+      }
       connectorCache.put(config, connector);
     }
     return connector;
@@ -49,71 +86,39 @@ public class ConnectorPool {
     private final String zookeeperUrl;
     private final String instanceName;
     private final String userName;
-    private final String password;
+    private final String passwordOrKeyTab;
+    private final boolean useSasl;
 
     public ConnectorConfig(
         final String zookeeperUrl,
         final String instanceName,
         final String userName,
-        final String password) {
+        final String passwordOrKeyTab,
+        boolean useSasl) {
       this.zookeeperUrl = zookeeperUrl;
       this.instanceName = instanceName;
       this.userName = userName;
-      this.password = password;
+      this.passwordOrKeyTab = passwordOrKeyTab;
+      this.useSasl = useSasl;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o)
+        return true;
+      if (o == null || getClass() != o.getClass())
+        return false;
+      ConnectorConfig that = (ConnectorConfig) o;
+      return useSasl == that.useSasl
+          && zookeeperUrl.equals(that.zookeeperUrl)
+          && instanceName.equals(that.instanceName)
+          && userName.equals(that.userName)
+          && Objects.equals(passwordOrKeyTab, that.passwordOrKeyTab);
     }
 
     @Override
     public int hashCode() {
-      final int prime = 31;
-      int result = 1;
-      result = (prime * result) + ((instanceName == null) ? 0 : instanceName.hashCode());
-      result = (prime * result) + ((password == null) ? 0 : password.hashCode());
-      result = (prime * result) + ((userName == null) ? 0 : userName.hashCode());
-      result = (prime * result) + ((zookeeperUrl == null) ? 0 : zookeeperUrl.hashCode());
-      return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-      if (this == obj) {
-        return true;
-      }
-      if (obj == null) {
-        return false;
-      }
-      if (getClass() != obj.getClass()) {
-        return false;
-      }
-      final ConnectorConfig other = (ConnectorConfig) obj;
-      if (instanceName == null) {
-        if (other.instanceName != null) {
-          return false;
-        }
-      } else if (!instanceName.equals(other.instanceName)) {
-        return false;
-      }
-      if (password == null) {
-        if (other.password != null) {
-          return false;
-        }
-      } else if (!password.equals(other.password)) {
-        return false;
-      }
-      if (userName == null) {
-        if (other.userName != null) {
-          return false;
-        }
-      } else if (!userName.equals(other.userName)) {
-        return false;
-      }
-      if (zookeeperUrl == null) {
-        if (other.zookeeperUrl != null) {
-          return false;
-        }
-      } else if (!zookeeperUrl.equals(other.zookeeperUrl)) {
-        return false;
-      }
-      return true;
+      return Objects.hash(zookeeperUrl, instanceName, userName, passwordOrKeyTab, useSasl);
     }
   }
 }

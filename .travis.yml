@@ -27,6 +27,7 @@ env:
     - NAME='Kudu IT on Latest ASF Versions' MAVEN_PROFILES='kudu-it' BUILD_AND_PUBLISH=false  IT_ONLY=true
     - NAME='FileSystem IT on Latest ASF Versions' MAVEN_PROFILES='filesystem-it' BUILD_AND_PUBLISH=false  IT_ONLY=true
     - NAME='FileSystem IT with Secondary Indexing'  MAVEN_PROFILES='filesystem-it,secondary-index-it' BUILD_AND_PUBLISH=false  IT_ONLY=true
+    - NAME='Accumulo Server IT with Kerberos on Latest ASF Versions' MAVEN_PROFILES='accumulo-it-kerberos' BUILD_AND_PUBLISH=false  IT_ONLY=true TEST_KERBEROS=true
   global:
     - secure: C3gdJmFavZxvsRVqCLpRUAaisNV3MhWbSYf4Wjs2SBLC/AIEwN0vDWHOuYiUExuXR1kApBVdNffuCX7bt/5siewHgmiVUGyY1xytxDdv+PAKZihlfYZRGattyg3XUbEFwyjr7c74639Y1w45NPUoBMUT4SKHZkfqD+FDU47OHIM=
 

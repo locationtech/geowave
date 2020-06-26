@@ -9,18 +9,18 @@
 /** */
 package org.locationtech.geowave.core.cli.converters;
 
-import java.io.File;
-import java.lang.reflect.Method;
-import java.util.Properties;
+import com.beust.jcommander.converters.BaseConverter;
+import com.beust.jcommander.internal.Console;
+import com.beust.jcommander.internal.DefaultConsole;
+import com.beust.jcommander.internal.JDK6Console;
 import org.locationtech.geowave.core.cli.Constants;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.utils.PropertiesUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.beust.jcommander.converters.BaseConverter;
-import com.beust.jcommander.internal.Console;
-import com.beust.jcommander.internal.DefaultConsole;
-import com.beust.jcommander.internal.JDK6Console;
+import java.io.File;
+import java.lang.reflect.Method;
+import java.util.Properties;
 
 /**
  * Base value converter for handling field conversions of varying types
@@ -57,17 +57,16 @@ public abstract class GeoWaveBaseConverter<T> extends BaseConverter<T> {
   }
 
   protected static Console getConsole() {
-    LOGGER.trace("ENTER :: getConsole()");
     if (console == null) {
       try {
-        final Method consoleMethod = System.class.getDeclaredMethod("console");
-        final Object consoleObj = consoleMethod.invoke(null);
-        console = new JDK6Console(consoleObj);
-      } catch (final Throwable t) {
-        LOGGER.error(
-            "An error occurred getting declared method console. Defaulting to default console. Error message: "
-                + t.getLocalizedMessage(),
-            t);
+        Method consoleMethod = System.class.getDeclaredMethod("console");
+        Object systemConsole = consoleMethod.invoke(null);
+        if (systemConsole == null) {
+          console = new DefaultConsole();
+        } else {
+          console = new JDK6Console(systemConsole);
+        }
+      } catch (Throwable t) {
         console = new DefaultConsole();
       }
     }
