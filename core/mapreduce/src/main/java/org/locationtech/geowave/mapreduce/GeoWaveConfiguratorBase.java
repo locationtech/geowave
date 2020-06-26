@@ -8,14 +8,6 @@
  */
 package org.locationtech.geowave.mapreduce;
 
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
@@ -33,6 +25,10 @@ import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.Map.Entry;
 
 /** This class forms the basis for GeoWave input and output format configuration. */
 public class GeoWaveConfiguratorBase {
@@ -432,7 +428,6 @@ public class GeoWaveConfiguratorBase {
     } else {
       finalHdfsHostPort = hdfsHostPort;
     }
-
     conf.set("fs.defaultFS", finalHdfsHostPort);
     conf.set("fs.AbstractFileSystem.hdfs.impl", org.apache.hadoop.fs.Hdfs.class.getName());
     conf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());

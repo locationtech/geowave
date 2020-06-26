@@ -21,6 +21,7 @@ import org.locationtech.geowave.datastore.accumulo.config.AccumuloRequiredOption
 import org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.io.IOException;
 
 public abstract class AbstractAccumuloSplitsOperation {
   private static Logger LOGGER = LoggerFactory.getLogger(AbstractAccumuloSplitsOperation.class);
@@ -76,7 +77,7 @@ public abstract class AbstractAccumuloSplitsOperation {
         }
         return setSplits(connector, index, namespace, number);
       }
-    } catch (final AccumuloSecurityException | AccumuloException e) {
+    } catch (final AccumuloSecurityException | AccumuloException | IOException e) {
       LOGGER.error("unable to create index store", e);
       return false;
     }
@@ -85,7 +86,7 @@ public abstract class AbstractAccumuloSplitsOperation {
 
   protected boolean isPreSplit() {
     return false;
-  };
+  }
 
   protected abstract boolean setSplits(
       Connector connector,

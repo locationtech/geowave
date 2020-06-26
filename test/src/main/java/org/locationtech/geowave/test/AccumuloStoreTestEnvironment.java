@@ -8,12 +8,8 @@
  */
 package org.locationtech.geowave.test;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.apache.accumulo.cluster.ClusterUser;
 import org.apache.accumulo.core.conf.Property;
 import org.apache.accumulo.gc.SimpleGarbageCollector;
 import org.apache.accumulo.master.Master;
@@ -23,6 +19,7 @@ import org.apache.accumulo.server.init.Initialize;
 import org.apache.accumulo.tserver.TabletServer;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
+import org.apache.hadoop.conf.Configuration;
 import org.junit.Assert;
 import org.locationtech.geowave.core.store.GenericStoreFactory;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
@@ -33,6 +30,13 @@ import org.locationtech.geowave.datastore.accumulo.config.AccumuloRequiredOption
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class AccumuloStoreTestEnvironment extends StoreTestEnvironment {
   private static final GenericStoreFactory<DataStore> STORE_FACTORY =
@@ -51,8 +55,6 @@ public class AccumuloStoreTestEnvironment extends StoreTestEnvironment {
   private static final int NUM_TABLET_SERVERS = 2;
 
   protected static final String DEFAULT_MINI_ACCUMULO_PASSWORD = "Ge0wave";
-  protected static final String HADOOP_WINDOWS_UTIL = "winutils.exe";
-  protected static final String HADOOP_DLL = "hadoop.dll";
   // breaks on windows if temp directory isn't on same drive as project
   protected static final File TEMP_DIR = new File("./target/accumulo_temp");
   protected String zookeeper;
@@ -136,16 +138,32 @@ public class AccumuloStoreTestEnvironment extends StoreTestEnvironment {
         tearDown();
       }
     });
+    Configuration coreSite = new Configuration(false);
     final Map<String, String> siteConfig = config.getSiteConfig();
     siteConfig.put(Property.INSTANCE_ZK_HOST.getKey(), zookeeper);
     config.setSiteConfig(siteConfig);
 
+    if (KerberosTestEnvironment.useKerberos()) {
+      KerberosTestEnvironment.getInstance().configureMiniAccumulo(config, coreSite);
+      File siteFile = new File(config.getConfDir(), "accumulo-site.xml");
+      writeConfig(siteFile, config.getSiteConfig().entrySet());
+      // Write out any configuration items to a file so HDFS will pick them up automatically (from
+      // the classpath)
+      if (coreSite.size() > 0) {
+        File csFile = new File(config.getConfDir(), "core-site.xml");
+        TestUtils.writeConfigToFile(csFile, coreSite);
+      }
+    }
     final LinkedList<String> args = new LinkedList<>();
     args.add("--instance-name");
     args.add(config.getInstanceName());
-    args.add("--password");
-    args.add(config.getRootPassword());
-
+    if (!KerberosTestEnvironment.useKerberos()) {
+      args.add("--password");
+      args.add(config.getRootPassword());
+    } else {
+      args.add("--user");
+      args.add(KerberosTestEnvironment.getInstance().getRootUser().getPrincipal());
+    }
     final Process initProcess =
         miniAccumulo.exec(Initialize.class, jvmArgs, args.toArray(new String[0]));
 
@@ -173,6 +191,26 @@ public class AccumuloStoreTestEnvironment extends StoreTestEnvironment {
 
     cleanup.add(miniAccumulo.exec(Master.class, jvmArgs));
     cleanup.add(miniAccumulo.exec(SimpleGarbageCollector.class, jvmArgs));
+  }
+
+  @SuppressFBWarnings("DM_DEFAULT_ENCODING")
+  private void writeConfig(File file, Iterable<Map.Entry<String, String>> settings)
+      throws IOException {
+    try (FileWriter fileWriter = new FileWriter(file)) {
+      fileWriter.append("<configuration>\n");
+
+      for (Map.Entry<String, String> entry : settings) {
+        String value =
+            entry.getValue().replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
+        fileWriter.append(
+            "<property><name>"
+                + entry.getKey()
+                + "</name><value>"
+                + value
+                + "</value></property>\n");
+      }
+      fileWriter.append("</configuration>\n");
+    }
   }
 
   @Override
@@ -217,8 +255,15 @@ public class AccumuloStoreTestEnvironment extends StoreTestEnvironment {
   @Override
   protected void initOptions(final StoreFactoryOptions options) {
     final AccumuloRequiredOptions accumuloOpts = (AccumuloRequiredOptions) options;
-    accumuloOpts.setUser(accumuloUser);
-    accumuloOpts.setPassword(accumuloPassword);
+    if (KerberosTestEnvironment.useKerberos()) {
+      ClusterUser rootUser = KerberosTestEnvironment.getInstance().getRootUser();
+      accumuloOpts.setUser(rootUser.getPrincipal());
+      accumuloOpts.setKeytab(rootUser.getKeytab().getAbsolutePath());
+      accumuloOpts.setUseSasl(true);
+    } else {
+      accumuloOpts.setUser(accumuloUser);
+      accumuloOpts.setPassword(accumuloPassword);
+    }
     accumuloOpts.setInstance(accumuloInstance);
     accumuloOpts.setZookeeper(zookeeper);
   }
@@ -251,6 +296,11 @@ public class AccumuloStoreTestEnvironment extends StoreTestEnvironment {
 
   @Override
   public TestEnvironment[] getDependentEnvironments() {
+    if (KerberosTestEnvironment.useKerberos()) {
+      return new TestEnvironment[] {
+          KerberosTestEnvironment.getInstance(),
+          ZookeeperTestEnvironment.getInstance()};
+    }
     return new TestEnvironment[] {ZookeeperTestEnvironment.getInstance()};
   }
 }

@@ -8,19 +8,19 @@
  */
 package org.locationtech.geowave.service.client;
 
-import java.lang.reflect.AnnotatedElement;
-import java.util.Map;
-import java.util.Map.Entry;
-import javax.ws.rs.Path;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
 import org.locationtech.geowave.service.IndexService;
 import org.locationtech.geowave.service.StoreService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import javax.ws.rs.Path;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.lang.reflect.AnnotatedElement;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class IndexServiceClient implements IndexService {
   private static final Logger LOGGER = LoggerFactory.getLogger(IndexServiceClient.class);
@@ -45,6 +45,7 @@ public class IndexServiceClient implements IndexService {
           addPathFromAnnotation(
               IndexService.class.getMethod(
                   "addIndexReRoute",
+                  String.class,
                   String.class,
                   String.class,
                   Map.class),

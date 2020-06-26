@@ -8,11 +8,9 @@
  */
 package org.locationtech.geowave.cli.debug;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map.Entry;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.BatchScanner;
@@ -34,9 +32,12 @@ import org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations
 import org.locationtech.geowave.datastore.hbase.HBaseStoreFactoryFamily;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.Parameters;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
 
 @GeowaveOperation(name = "fullscanMinimal", parentOperation = DebugSection.class)
 @Parameters(commandDescription = "full table scan without any iterators or deserialization")
@@ -82,7 +83,8 @@ public class MinimalFullTable extends DefaultOperation implements Command {
                 opts.getZookeeper(),
                 opts.getInstance(),
                 opts.getUser(),
-                opts.getPassword(),
+                opts.getPasswordOrKeytab(),
+                opts.isUseSasl(),
                 opts.getGeoWaveNamespace(),
                 (AccumuloOptions) opts.getStoreOptions());
 
@@ -100,7 +102,8 @@ public class MinimalFullTable extends DefaultOperation implements Command {
 
         scanner.close();
         System.out.println("Got " + results + " results in " + stopWatch.toString());
-      } catch (AccumuloException | AccumuloSecurityException | TableNotFoundException e) {
+      } catch (AccumuloException | AccumuloSecurityException | TableNotFoundException
+          | IOException e) {
         LOGGER.error("Unable to scan accumulo datastore", e);
       }
     } else if (storeType.equals(HBaseStoreFactoryFamily.TYPE)) {
