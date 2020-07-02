@@ -133,22 +133,6 @@
 </tr>
 </tbody>
 </table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
-<caption><span>Constructors in <a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/config/package-summary.html">org.locationtech.geowave.datastore.accumulo.config</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.config">AccumuloOptions</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Constructor and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/config/AccumuloRequiredOptions.html#AccumuloRequiredOptions-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-org.locationtech.geowave.datastore.accumulo.config.AccumuloOptions-">AccumuloRequiredOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;zookeeper,
-                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;instance,
-                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;user,
-                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;password,
-                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;gwNamespace,
-                       <a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.config">AccumuloOptions</a>&nbsp;additionalOptions)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
 </li>
 <li class="blockList"><a name="org.locationtech.geowave.datastore.accumulo.operations">
 <!--   -->
@@ -187,10 +171,11 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#AccumuloOperations-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-org.locationtech.geowave.datastore.accumulo.config.AccumuloOptions-">AccumuloOperations</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;zookeeperUrl,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloOperations.html#AccumuloOperations-java.lang.String-java.lang.String-java.lang.String-java.lang.String-boolean-java.lang.String-org.locationtech.geowave.datastore.accumulo.config.AccumuloOptions-">AccumuloOperations</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;zookeeperUrl,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;instanceName,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;userName,
-                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;password,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;passwordOrKeytab,
+                  boolean&nbsp;useSasl,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableNamespace,
                   <a href="../../../../../../../org/locationtech/geowave/datastore/accumulo/config/AccumuloOptions.html" title="class in org.locationtech.geowave.datastore.accumulo.config">AccumuloOptions</a>&nbsp;options)</code>
 <div class="block">This is will create an Accumulo connector based on passed in connection information and

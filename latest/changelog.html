@@ -25,11 +25,12 @@
 <li>Geowave plugin not work in Geoserver <a href="https://github.com/locationtech/geowave/issues/1711">#1711</a></li>
 <li>Investigate solution for GDAL native libraries on Mac <a href="https://github.com/locationtech/geowave/issues/1684">#1684</a></li>
 <li>Fix intermittent secondary index IT failures <a href="https://github.com/locationtech/geowave/issues/1683">#1683</a></li>
+<li>Kerberos support <a href="https://github.com/locationtech/geowave/issues/1042">#1042</a></li>
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>GEOWAVE-1042: kerberos support for accumulo <a href="https://github.com/locationtech/geowave/pull/1738">#1738</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>added default to/from binary to aggregation <a href="https://github.com/locationtech/geowave/pull/1734">#1734</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
-<li>Aggregation API and Geohash Aggregation implementation <a href="https://github.com/locationtech/geowave/pull/1733">#1733</a> (<a href="https://github.com/sinistersnare">sinistersnare</a>)</li>
 <li>GEOWAVE-1731: update jcommander to v1.78 <a href="https://github.com/locationtech/geowave/pull/1732">#1732</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>filesystem datastore bug fix in formatting index values <a href="https://github.com/locationtech/geowave/pull/1730">#1730</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>improved flexibility for directory naming <a href="https://github.com/locationtech/geowave/pull/1729">#1729</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
@@ -1326,6 +1327,7 @@
 <li>Ensure that fieldreaders and fieldwriters properly support null values (#472) <a href="https://github.com/locationtech/geowave/pull/479">#479</a> (<a href="https://github.com/jprochaz">jprochaz</a>)</li>
 <li>Package analytics jar and fix doc markup <a href="https://github.com/locationtech/geowave/pull/475">#475</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Supports Min/Max Range of ROW IDs per index. <a href="https://github.com/locationtech/geowave/pull/474">#474</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
+<li>DBScan: An extension to nearest neighbors. Supports polygons and line <a href="https://github.com/locationtech/geowave/pull/453">#453</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 </ul>
 <h2 id="v0.8.8.1-2015-07-21"><a href="https://github.com/locationtech/geowave/tree/v0.8.8.1">v0.8.8.1</a> (2015-07-21)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v0.8.8...v0.8.8.1">Full Changelog</a></p>
@@ -1389,7 +1391,6 @@
 <ul>
 <li>Updates for 0.8.8 release <a href="https://github.com/locationtech/geowave/pull/459">#459</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Issue #454. Accumulo Persistence cache includes namespace with cache… <a href="https://github.com/locationtech/geowave/pull/455">#455</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
-<li>DBScan: An extension to nearest neighbors. Supports polygons and line <a href="https://github.com/locationtech/geowave/pull/453">#453</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>Issue #451. Optimization for index ID verification when ingesting ge… <a href="https://github.com/locationtech/geowave/pull/452">#452</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>Issue #448. GPX Consumer is not freeing up temporary objects created … <a href="https://github.com/locationtech/geowave/pull/449">#449</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>Pick up java system properties if set <a href="https://github.com/locationtech/geowave/pull/447">#447</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
@@ -1782,6 +1783,7 @@
 <li>updated ingest examples to reflect recent code changes <a href="https://github.com/locationtech/geowave/pull/81">#81</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>fixed package name in raster format and jai dependency <a href="https://github.com/locationtech/geowave/pull/78">#78</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Geowave 45 (support for raster data) <a href="https://github.com/locationtech/geowave/pull/76">#76</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>Geowave 5 - transform geometry on ingest to EPSG:4326 <a href="https://github.com/locationtech/geowave/pull/7">#7</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 </ul>
 <h2 id="v0.8.0-2014-09-23"><a href="https://github.com/locationtech/geowave/tree/v0.8.0">v0.8.0</a> (2014-09-23)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/0.7.0...v0.8.0">Full Changelog</a></p>
@@ -1840,7 +1842,6 @@
 <li>Geowave 3 <a href="https://github.com/locationtech/geowave/pull/19">#19</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</li>
 <li>Geowave 11 <a href="https://github.com/locationtech/geowave/pull/18">#18</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</li>
 <li>formatting on tests and a simple update to ingested ranges regarding bit... <a href="https://github.com/locationtech/geowave/pull/8">#8</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
-<li>Geowave 5 - transform geometry on ingest to EPSG:4326 <a href="https://github.com/locationtech/geowave/pull/7">#7</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Geowave 2 - integrations tests <a href="https://github.com/locationtech/geowave/pull/6">#6</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 </ul>
 <h2 id="section"><a href="https://github.com/locationtech/geowave/tree/0.7.0">0.7.0</a> (2014-06-11)</h2>

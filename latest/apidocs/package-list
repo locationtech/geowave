@@ -293,6 +293,7 @@ org.locationtech.geowave.service.rest.security.oauth2
 org.locationtech.geowave.test
 org.locationtech.geowave.test.annotation
 org.locationtech.geowave.test.kafka
+org.locationtech.geowave.test.kerberos
 org.locationtech.geowave.test.mapreduce
 org.locationtech.geowave.test.services
 org.locationtech.geowave.test.services.grpc

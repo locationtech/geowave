@@ -1284,9 +1284,17 @@ The truststore file is used to validate client certificates.</p>
 <dd>
 <p>The Accumulo instance ID.</p>
 </dd>
-<dt class="hdlist1"><strong>* -u, --user</strong> <em>&lt;user&gt;</em></dt>
+<dt class="hdlist1"><strong>-u, --user</strong> <em>&lt;user&gt;</em></dt>
 <dd>
-<p>A valid Accumulo user ID.</p>
+<p>A valid Accumulo user ID. If not given and using SASL, the active Kerberos user will be used.</p>
+</dd>
+<dt class="hdlist1"><strong>-k, --keytab</strong> <em>&lt;keytab&gt;</em></dt>
+<dd>
+<p>Path to keytab file for Kerberos authentication. If using SASL, this is required.</p>
+</dd>
+<dt class="hdlist1"><strong>--sasl</strong> <em>&lt;sasl&gt;</em></dt>
+<dd>
+<p>Use SASL to connect to Accumulo (Kerberos).</p>
 </dd>
 <dt class="hdlist1"><strong>-p, --password</strong> <em>&lt;password&gt;</em></dt>
 <dd>
@@ -8838,7 +8846,7 @@ var geowave_version = '1.2.0-SNAPSHOT';
 
 <div class="geowave-footer col-md-12 docs-footer">
   <div class="py-4 d-flex justify-content-center align-items-center">
-    <small><p class="footer-text">This page was generated on Thursday, July 02, 2020 at 11:08 AM UTC<br><a href="https://github.com/locationtech/geowave/tree/42cd1adab75ea545941efc58d436c0d5972e7e3f">View the commit it was generated from on GitHub</a></p></small>
+    <small><p class="footer-text">This page was generated on Thursday, July 02, 2020 at 07:10 PM UTC<br><a href="https://github.com/locationtech/geowave/tree/073b2a453b422c6ee50e17abd538ddacb00d2a80">View the commit it was generated from on GitHub</a></p></small>
   </div>
 </div>
 </div>
@@ -8848,7 +8856,7 @@ var geowave_version = '1.2.0-SNAPSHOT';
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-07-02 11:09:11 +00:00
+Last updated 2020-07-02 19:10:24 +00:00
 </div>
 </div>
 </body>
