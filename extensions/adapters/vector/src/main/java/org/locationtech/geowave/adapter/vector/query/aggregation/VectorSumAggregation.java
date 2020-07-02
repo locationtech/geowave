@@ -33,5 +33,4 @@ public class VectorSumAggregation extends VectorMathAggregation {
     }
     return a.add(b);
   }
-
 }

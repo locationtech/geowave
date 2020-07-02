@@ -18,9 +18,9 @@ import org.locationtech.geowave.core.index.persist.Persistable;
  * efficiency. A third party Aggregation can be used, but if serverside processing is enabled, the
  * third party Aggregation implementation must also be on the server classpath.
  *
- * @param <P> input type for the aggregation
- * @param <R> result type for the aggregation
- * @param <T> data type of the entries for the aggregation
+ * @param <P> Parameters for the aggregation. What is needed to configure it correctly
+ * @param <R> Result type for the aggregation, the output when given an entry of type T.
+ * @param <T> Data type of the entries for the aggregation.
  */
 public interface Aggregation<P extends Persistable, R, T> extends Persistable {
   /**

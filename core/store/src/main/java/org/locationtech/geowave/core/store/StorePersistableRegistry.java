@@ -32,6 +32,8 @@ import org.locationtech.geowave.core.store.index.CustomNameIndex;
 import org.locationtech.geowave.core.store.index.IndexImpl;
 import org.locationtech.geowave.core.store.index.IndexMetaDataSet;
 import org.locationtech.geowave.core.store.index.NullIndex;
+import org.locationtech.geowave.core.store.query.aggregate.BinningAggregation;
+import org.locationtech.geowave.core.store.query.aggregate.BinningAggregationOptions;
 import org.locationtech.geowave.core.store.query.aggregate.CountAggregation;
 import org.locationtech.geowave.core.store.query.aggregate.DataStatisticsAggregation;
 import org.locationtech.geowave.core.store.query.aggregate.MergingAggregation;
@@ -127,6 +129,8 @@ public class StorePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 262, InternalDataAdapterWrapper::new),
         new PersistableIdAndConstructor((short) 263, CustomIndex::new),
         new PersistableIdAndConstructor((short) 264, CustomQueryConstraints::new),
-        new PersistableIdAndConstructor((short) 265, InternalCustomConstraints::new)};
+        new PersistableIdAndConstructor((short) 265, InternalCustomConstraints::new),
+        new PersistableIdAndConstructor((short) 266, BinningAggregationOptions::new),
+        new PersistableIdAndConstructor((short) 267, BinningAggregation::new)};
   }
 }

@@ -136,7 +136,7 @@ public class BaseQueryOptions {
     if ((typeOptions instanceof AggregateTypeQueryOptions)
         && (((AggregateTypeQueryOptions) typeOptions).getAggregation() != null)) {
       // TODO issue #1439 addresses being able to handle multiple types
-      // within aa single aggregation
+      // within a single aggregation
       // it seems that the best approach would check if its a
       // commonindexaggregation and then it can be done with a single
       // query with simply adapter IDs rather than even needing adapters,
@@ -146,15 +146,14 @@ public class BaseQueryOptions {
       // for now let's just assume a single type name and get the adapter,
       // rather than just type name (which type name would be sufficient
       // for commonindexaggregation)
-      if (((AggregateTypeQueryOptions) typeOptions).getTypeNames().length == 1) {
-        final String typeName = ((AggregateTypeQueryOptions) typeOptions).getTypeNames()[0];
+      if (typeOptions.getTypeNames().length == 1) {
+        final String typeName = typeOptions.getTypeNames()[0];
         final Short adapterId = internalAdapterStore.getAdapterId(typeName);
         if (adapterId != null) {
           final InternalDataAdapter<?> adapter = adapterStore.getAdapter(adapterId);
-          aggregationAdapterPair =
-              new ImmutablePair<>(
-                  adapter,
-                  ((AggregateTypeQueryOptions) typeOptions).getAggregation());
+          final Aggregation<?, ?, ?> agg =
+              ((AggregateTypeQueryOptions) typeOptions).getAggregation();
+          aggregationAdapterPair = new ImmutablePair<>(adapter, agg);
         } else {
           throw new IllegalArgumentException("Type name " + typeName + " does not exist");
         }
@@ -165,10 +164,10 @@ public class BaseQueryOptions {
     } else if ((typeOptions instanceof FilterByTypeQueryOptions)
         && (((FilterByTypeQueryOptions) typeOptions).getFieldNames() != null)
         && (((FilterByTypeQueryOptions) typeOptions).getFieldNames().length > 0)
-        && (((FilterByTypeQueryOptions) typeOptions).getTypeNames().length > 0)) {
+        && (typeOptions.getTypeNames().length > 0)) {
       // filter by type for field subsetting only allows a single type
       // name
-      final String typeName = ((FilterByTypeQueryOptions) typeOptions).getTypeNames()[0];
+      final String typeName = typeOptions.getTypeNames()[0];
       if (typeName != null) {
         final Short adapterId = internalAdapterStore.getAdapterId(typeName);
         if (adapterId != null) {
@@ -193,21 +192,13 @@ public class BaseQueryOptions {
               Collections2.filter(
                   Lists.transform(
                       Arrays.asList(typeOptions.getTypeNames()),
-                      new Function<String, Short>() {
-                        @Override
-                        public Short apply(final String input) {
-                          return internalAdapterStore.getAdapterId(input);
-                        }
-                      }),
-                  new Predicate<Short>() {
-                    @Override
-                    public boolean apply(final Short input) {
-                      if (input == null) {
-                        nullId = true;
-                        return false;
-                      }
-                      return true;
+                      internalAdapterStore::getAdapterId),
+                  input -> {
+                    if (input == null) {
+                      nullId = true;
+                      return false;
                     }
+                    return true;
                   }).toArray(new Short[0]));
     }
   }
@@ -252,7 +243,7 @@ public class BaseQueryOptions {
           }
         }
       }
-      return adapters.toArray(new InternalDataAdapter[adapters.size()]);
+      return adapters.toArray(new InternalDataAdapter[0]);
     }
     if (nullId) {
       return new InternalDataAdapter[] {};

@@ -24,10 +24,7 @@ public class CountAggregation implements CommonIndexAggregation<Persistable, Lon
 
   @Override
   public String toString() {
-    final StringBuffer buffer = new StringBuffer();
-    buffer.append("count[count=").append(count);
-    buffer.append("]");
-    return buffer.toString();
+    return "count[count=" + count + ']';
   }
 
   @Override

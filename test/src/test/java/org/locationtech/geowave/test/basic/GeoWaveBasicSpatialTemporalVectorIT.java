@@ -74,7 +74,7 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends AbstractGeoWaveBasicVec
   }
 
   @Test
-  public void testIngestAndQuerySpatialTemporalPointsAndLines() throws Exception {
+  public void testIngestAndQuerySpatialTemporalPointsAndLines() {
     // ingest both lines and points
     final IngestOptions.Builder<SimpleFeature> builder = IngestOptions.newBuilder();
     dataStore.createDataStore().ingest(

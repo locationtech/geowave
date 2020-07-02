@@ -36,8 +36,16 @@ public class AggregateTypeQueryOptions<P extends Persistable, R, T> implements
     return typeNames;
   }
 
+  public void setTypeNames(String[] typeNames) {
+    this.typeNames = typeNames;
+  }
+
   public Aggregation<P, R, T> getAggregation() {
     return aggregation;
+  }
+
+  public void setAggregation(Aggregation<P, R, T> aggregation) {
+    this.aggregation = aggregation;
   }
 
   @Override

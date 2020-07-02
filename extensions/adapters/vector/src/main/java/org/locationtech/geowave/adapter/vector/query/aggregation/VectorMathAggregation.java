@@ -9,9 +9,9 @@
 package org.locationtech.geowave.adapter.vector.query.aggregation;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.FieldNameParam;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.opengis.feature.simple.SimpleFeature;
@@ -45,38 +45,23 @@ public abstract class VectorMathAggregation implements
   }
 
   @Override
-  public BigDecimal merge(final BigDecimal result1, final BigDecimal result2) {
-    return agg(result1, result2);
-  }
-
-  @Override
   public BigDecimal getResult() {
     return value;
   }
 
   @Override
+  public BigDecimal merge(final BigDecimal result1, final BigDecimal result2) {
+    return agg(result1, result2);
+  }
+
+  @Override
   public byte[] resultToBinary(BigDecimal result) {
-    if (result == null) {
-      return new byte[0];
-    }
-    final byte[] unscaled = result.unscaledValue().toByteArray();
-    final ByteBuffer buf =
-        ByteBuffer.allocate(VarintUtils.signedIntByteLength(result.scale()) + unscaled.length);
-    VarintUtils.writeSignedInt(result.scale(), buf);
-    buf.put(unscaled);
-    return buf.array();
+    return VarintUtils.writeBigDecimal(result);
   }
 
   @Override
   public BigDecimal resultFromBinary(byte[] binary) {
-    if (binary.length == 0) {
-      return null;
-    }
-    final ByteBuffer bb = ByteBuffer.wrap(binary);
-    final int scale = VarintUtils.readSignedInt(bb);
-    final byte[] unscaled = new byte[bb.remaining()];
-    bb.get(unscaled);
-    return new BigDecimal(new BigInteger(unscaled), scale);
+    return VarintUtils.readBigDecimal(ByteBuffer.wrap(binary));
   }
 
   @Override
@@ -89,8 +74,8 @@ public abstract class VectorMathAggregation implements
     Object o;
     if ((fieldNameParam != null) && !fieldNameParam.isEmpty()) {
       o = entry.getAttribute(fieldNameParam.getFieldName());
-      if (o != null && Number.class.isAssignableFrom(o.getClass())) {
-        value = agg(value, new BigDecimal(((Number) o).toString()));
+      if (o instanceof Number) {
+        value = agg(value, new BigDecimal(o.toString()));
       }
     }
   }

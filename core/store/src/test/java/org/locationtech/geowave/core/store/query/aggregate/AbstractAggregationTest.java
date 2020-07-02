@@ -15,8 +15,18 @@ import org.locationtech.geowave.core.store.api.Aggregation;
 
 public abstract class AbstractAggregationTest<P extends Persistable, R, T> {
 
+  /**
+   * Aggregate given objects into a given aggregation.
+   *
+   * Internally, this splits the objectsToAggregate and gives it to separate aggregations, and
+   * returns the merged results.
+   * 
+   * @param aggregation The aggregation to give data to for testing.
+   * @param objectsToAggregate The test data to feed into the aggregation
+   * @return The results of aggregating the data.
+   */
   @SuppressWarnings({"unchecked", "rawtypes"})
-  public R aggregateObjects(Aggregation<P, R, T> aggregation, List<T> objectsToAggregate) {
+  protected R aggregateObjects(Aggregation<P, R, T> aggregation, List<T> objectsToAggregate) {
     byte[] aggregationBytes = PersistenceUtils.toBinary(aggregation);
     byte[] aggregationParameters = PersistenceUtils.toBinary(aggregation.getParameters());
     Aggregation<P, R, T> agg1 = (Aggregation) PersistenceUtils.fromBinary(aggregationBytes);
@@ -37,5 +47,4 @@ public abstract class AbstractAggregationTest<P extends Persistable, R, T> {
 
     return aggregation.merge(agg1Result, agg2Result);
   }
-
 }
