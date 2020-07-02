@@ -306,6 +306,25 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 </dl>
 </li>
 </ul>
+<a name="getResult--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getResult</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigDecimal.html?is-external=true" title="class or interface in java.math">BigDecimal</a>&nbsp;getResult()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#getResult--">Aggregation</a></code></span></div>
+<div class="block">Get the current result of the aggregation. This must be mergeable and it is the responsibility
+ of the caller to merge separate results if desired. It is the responsibility of the aggregation
+ to start with a new instance of the result at the beginning of any aggregation.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#getResult--">getResult</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/FieldNameParam.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">FieldNameParam</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigDecimal.html?is-external=true" title="class or interface in java.math">BigDecimal</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the current result of the aggregation</dd>
+</dl>
+</li>
+</ul>
 <a name="merge-java.math.BigDecimal-java.math.BigDecimal-">
 <!--   -->
 </a>
@@ -324,25 +343,6 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 <dd><code>result2</code> - the second result</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the merged result</dd>
-</dl>
-</li>
-</ul>
-<a name="getResult--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getResult</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigDecimal.html?is-external=true" title="class or interface in java.math">BigDecimal</a>&nbsp;getResult()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#getResult--">Aggregation</a></code></span></div>
-<div class="block">Get the current result of the aggregation. This must be mergeable and it is the responsibility
- of the caller to merge separate results if desired. It is the responsibility of the aggregation
- to start with a new instance of the result at the beginning of any aggregation.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#getResult--">getResult</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/FieldNameParam.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">FieldNameParam</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigDecimal.html?is-external=true" title="class or interface in java.math">BigDecimal</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the current result of the aggregation</dd>
 </dl>
 </li>
 </ul>

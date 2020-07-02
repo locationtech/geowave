@@ -1371,21 +1371,39 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/OptimalVectorBoundingBoxAggregation.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">OptimalVectorBoundingBoxAggregation</a>&lt;P extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,T&gt;</span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/GeohashBinningStrategy.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">GeohashBinningStrategy</a>&lt;T&gt;</span></code>
+<div class="block">This strategy uses the geohash of the types geometry to bin data.</div>
+</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/GeohashCommonIndexedBinningStrategy.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">GeohashCommonIndexedBinningStrategy</a></span></code>
+<div class="block">A GeohashBinningStrategy that bins CommonIndexedPersistenceEncoding values.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/GeohashSimpleFeatureBinningStrategy.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">GeohashSimpleFeatureBinningStrategy</a></span></code>
+<div class="block">A GeohashBinningStrategy that bins SimpleFeature values.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/OptimalVectorBoundingBoxAggregation.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">OptimalVectorBoundingBoxAggregation</a>&lt;P extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,T&gt;</span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/OptimalVectorTimeRangeAggregation.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">OptimalVectorTimeRangeAggregation</a>&lt;P extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,T&gt;</span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/TimeRangeAggregation.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">TimeRangeAggregation</a>&lt;P extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,T&gt;</span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/VectorBoundingBoxAggregation.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">VectorBoundingBoxAggregation</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/VectorTimeRangeAggregation.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">VectorTimeRangeAggregation</a></span></code>&nbsp;</td>
 </tr>
@@ -2744,6 +2762,18 @@
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="class in org.locationtech.geowave.core.store.query.aggregate">AggregationQueryBuilderImpl</a>&lt;P extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,R,T,A extends <a href="../../../../../../../org/locationtech/geowave/core/store/api/AggregationQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">AggregationQueryBuilder</a>&lt;P,R,T,A&gt;&gt;</span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/BinningAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">BinningAggregation</a>&lt;P extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,R,T&gt;</span></code>
+<div class="block">A Meta-Aggregation, to be used internally by an aggregation query.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/BinningAggregationOptions.html" title="class in org.locationtech.geowave.core.store.query.aggregate">BinningAggregationOptions</a>&lt;P extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,T&gt;</span></code>
+<div class="block">The configuration parameters of a <a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/BinningAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate"><code>BinningAggregation</code></a></div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>interface&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CommonIndexAggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">CommonIndexAggregation</a>&lt;P extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,R&gt;</span></code>&nbsp;</td>
 </tr>
@@ -2762,6 +2792,12 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>interface&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationBinningStrategy.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">AggregationBinningStrategy</a>&lt;T&gt;</span></code>
+<div class="block">A binning strategy is used to bin data in an aggregation query.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>interface&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CommonIndexAggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">CommonIndexAggregation</a>&lt;P extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,R&gt;</span></code>&nbsp;</td>
 </tr>
 </tbody>
@@ -2773,6 +2809,18 @@
 <th class="colLast" scope="col">Class and Description</th>
 </tr>
 <tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/BinningAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">BinningAggregation</a>&lt;P extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,R,T&gt;</span></code>
+<div class="block">A Meta-Aggregation, to be used internally by an aggregation query.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/BinningAggregationOptions.html" title="class in org.locationtech.geowave.core.store.query.aggregate">BinningAggregationOptions</a>&lt;P extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,T&gt;</span></code>
+<div class="block">The configuration parameters of a <a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/BinningAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate"><code>BinningAggregation</code></a></div>
+</td>
+</tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">CountAggregation</a></span></code>&nbsp;</td>

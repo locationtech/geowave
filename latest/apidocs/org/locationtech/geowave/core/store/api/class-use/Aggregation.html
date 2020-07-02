@@ -752,13 +752,19 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">CountAggregation</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/BinningAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">BinningAggregation</a>&lt;P extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,R,T&gt;</span></code>
+<div class="block">A Meta-Aggregation, to be used internally by an aggregation query.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/DataStatisticsAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">DataStatisticsAggregation</a>&lt;T&gt;</span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">CountAggregation</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/DataStatisticsAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">DataStatisticsAggregation</a>&lt;T&gt;</span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/MergingAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">MergingAggregation</a>&lt;T extends <a href="../../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>&gt;</span></code>&nbsp;</td>
 </tr>
@@ -792,6 +798,21 @@
 </tr>
 </tbody>
 </table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/package-summary.html">org.locationtech.geowave.core.store.query.aggregate</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/BinningAggregation.html#BinningAggregation-org.locationtech.geowave.core.store.api.Aggregation-org.locationtech.geowave.core.store.query.aggregate.AggregationBinningStrategy-int-">BinningAggregation</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/BinningAggregation.html" title="type parameter in BinningAggregation">P</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/BinningAggregation.html" title="type parameter in BinningAggregation">R</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/BinningAggregation.html" title="type parameter in BinningAggregation">T</a>&gt;&nbsp;baseAggregation,
+                  <a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationBinningStrategy.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">AggregationBinningStrategy</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/BinningAggregation.html" title="type parameter in BinningAggregation">T</a>&gt;&nbsp;binningStrategy,
+                  int&nbsp;maxBins)</code>
+<div class="block">Creates a BinningAggregation based upon a base aggregation and a strategy for binning.</div>
+</td>
+</tr>
+</tbody>
+</table>
 </li>
 <li class="blockList"><a name="org.locationtech.geowave.core.store.query.options">
 <!--   -->
@@ -807,6 +828,19 @@
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/query/options/AggregateTypeQueryOptions.html" title="type parameter in AggregateTypeQueryOptions">P</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/options/AggregateTypeQueryOptions.html" title="type parameter in AggregateTypeQueryOptions">R</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/options/AggregateTypeQueryOptions.html" title="type parameter in AggregateTypeQueryOptions">T</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">AggregateTypeQueryOptions.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/options/AggregateTypeQueryOptions.html#getAggregation--">getAggregation</a></span>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/core/store/query/options/package-summary.html">org.locationtech.geowave.core.store.query.options</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">AggregateTypeQueryOptions.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/options/AggregateTypeQueryOptions.html#setAggregation-org.locationtech.geowave.core.store.api.Aggregation-">setAggregation</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/query/options/AggregateTypeQueryOptions.html" title="type parameter in AggregateTypeQueryOptions">P</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/options/AggregateTypeQueryOptions.html" title="type parameter in AggregateTypeQueryOptions">R</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/options/AggregateTypeQueryOptions.html" title="type parameter in AggregateTypeQueryOptions">T</a>&gt;&nbsp;aggregation)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

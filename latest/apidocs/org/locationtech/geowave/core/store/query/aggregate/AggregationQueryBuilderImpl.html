@@ -49,8 +49,8 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CommonIndexAggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationBinningStrategy.html" title="interface in org.locationtech.geowave.core.store.query.aggregate"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/BinningAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" target="_top">Frames</a></li>
@@ -200,15 +200,18 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/AggregationQuery.html" title="class in org.locationtech.geowave.core.store.api">AggregationQuery</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/BinningAggregationOptions.html" title="class in org.locationtech.geowave.core.store.query.aggregate">BinningAggregationOptions</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">P</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">T</a>&gt;,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">R</a>&gt;,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">T</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html#buildWithBinningStrategy-org.locationtech.geowave.core.store.query.aggregate.AggregationBinningStrategy-int-">buildWithBinningStrategy</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationBinningStrategy.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">AggregationBinningStrategy</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">T</a>&gt;&nbsp;binningStrategy,
+                        int&nbsp;maxBins)</code>
+<div class="block">Instead of having a scalar aggregation, bin the results by a given strategy.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">A</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html#count-java.lang.String...-">count</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;typeNames)</code>
 <div class="block">this is a convenience method to set the count aggregation if no type names are given it is
  assumed to count every type</div>
 </td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/query/options/AggregateTypeQueryOptions.html" title="class in org.locationtech.geowave.core.store.query.options">AggregateTypeQueryOptions</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">P</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">R</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">T</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html#newAggregateTypeQueryOptions--">newAggregateTypeQueryOptions</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -304,23 +307,30 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 </dl>
 </li>
 </ul>
-<a name="count-java.lang.String...-">
+<a name="buildWithBinningStrategy-org.locationtech.geowave.core.store.query.aggregate.AggregationBinningStrategy-int-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>count</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">A</a>&nbsp;count(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;typeNames)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/AggregationQueryBuilder.html#count-java.lang.String...-">AggregationQueryBuilder</a></code></span></div>
-<div class="block">this is a convenience method to set the count aggregation if no type names are given it is
- assumed to count every type</div>
+<h4>buildWithBinningStrategy</h4>
+<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/api/AggregationQuery.html" title="class in org.locationtech.geowave.core.store.api">AggregationQuery</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/BinningAggregationOptions.html" title="class in org.locationtech.geowave.core.store.query.aggregate">BinningAggregationOptions</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">P</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">T</a>&gt;,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">R</a>&gt;,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">T</a>&gt;&nbsp;buildWithBinningStrategy(<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationBinningStrategy.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">AggregationBinningStrategy</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">T</a>&gt;&nbsp;binningStrategy,
+                                                                                                 int&nbsp;maxBins)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/AggregationQueryBuilder.html#buildWithBinningStrategy-org.locationtech.geowave.core.store.query.aggregate.AggregationBinningStrategy-int-">AggregationQueryBuilder</a></code></span></div>
+<div class="block">Instead of having a scalar aggregation, bin the results by a given strategy.
+
+ Calling this produces a 'meta aggregation', which uses the current aggregation along with the
+ binning strategy to perform aggregations.
+
+ entries of type <code>T</code> are binned using the strategy. When a new bin is required, it is
+ created by instantiating a fresh aggregation (based on the current aggregation)</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/AggregationQueryBuilder.html#count-java.lang.String...-">count</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/AggregationQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">AggregationQueryBuilder</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">P</a> extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">R</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">T</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">A</a> extends <a href="../../../../../../../org/locationtech/geowave/core/store/api/AggregationQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">AggregationQueryBuilder</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">P</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">R</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">T</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">A</a>&gt;&gt;</code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/AggregationQueryBuilder.html#buildWithBinningStrategy-org.locationtech.geowave.core.store.query.aggregate.AggregationBinningStrategy-int-">buildWithBinningStrategy</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/AggregationQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">AggregationQueryBuilder</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">P</a> extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">R</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">T</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">A</a> extends <a href="../../../../../../../org/locationtech/geowave/core/store/api/AggregationQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">AggregationQueryBuilder</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">P</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">R</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">T</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">A</a>&gt;&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>typeNames</code> - the type names to count results</dd>
+<dd><code>binningStrategy</code> - The strategy to bin the hashes of given data.</dd>
+<dd><code>maxBins</code> - The maximum bins to allow in the aggregation. -1 for no limit.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a count of how many entries match the query criteria</dd>
+<dd>A complete aggregation query, ready to consume data.</dd>
 </dl>
 </li>
 </ul>
@@ -345,13 +355,24 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 </dl>
 </li>
 </ul>
-<a name="newAggregateTypeQueryOptions--">
+<a name="count-java.lang.String...-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>newAggregateTypeQueryOptions</h4>
-<pre>protected&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/query/options/AggregateTypeQueryOptions.html" title="class in org.locationtech.geowave.core.store.query.options">AggregateTypeQueryOptions</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">P</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">R</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">T</a>&gt;&nbsp;newAggregateTypeQueryOptions()</pre>
+<h4>count</h4>
+<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">A</a>&nbsp;count(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;typeNames)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/AggregationQueryBuilder.html#count-java.lang.String...-">AggregationQueryBuilder</a></code></span></div>
+<div class="block">this is a convenience method to set the count aggregation if no type names are given it is
+ assumed to count every type</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/AggregationQueryBuilder.html#count-java.lang.String...-">count</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/AggregationQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">AggregationQueryBuilder</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">P</a> extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">R</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">T</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">A</a> extends <a href="../../../../../../../org/locationtech/geowave/core/store/api/AggregationQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.api">AggregationQueryBuilder</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">P</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">R</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">T</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="type parameter in AggregationQueryBuilderImpl">A</a>&gt;&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>typeNames</code> - the type names to count results</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a count of how many entries match the query criteria</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -382,8 +403,8 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CommonIndexAggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationBinningStrategy.html" title="interface in org.locationtech.geowave.core.store.query.aggregate"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/BinningAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" target="_top">Frames</a></li>

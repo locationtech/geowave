@@ -241,6 +241,7 @@ org.locationtech.geowave.datastore.rocksdb
 org.locationtech.geowave.datastore.rocksdb.config
 org.locationtech.geowave.datastore.rocksdb.operations
 org.locationtech.geowave.datastore.rocksdb.util
+org.locationtech.geowave.examples.aggregation.binning
 org.locationtech.geowave.examples.index
 org.locationtech.geowave.examples.ingest
 org.locationtech.geowave.examples.ingest.bulk
