@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -171,51 +171,39 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Ag
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/render/DistributedRenderAggregation.html#fromBinary-byte:A-">fromBinary</a></span>(byte[]&nbsp;bytes)</code>
-<div class="block">Convert a stream of binary bytes to fields and data within an object.</div>
-</td>
-</tr>
-<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/adapter/vector/render/DistributedRenderOptions.html" title="class in org.locationtech.geowave.adapter.vector.render">DistributedRenderOptions</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/render/DistributedRenderAggregation.html#getParameters--">getParameters</a></span>()</code>
 <div class="block">Returns a persistable object for any parameters that must be persisted to properly compute the
  aggregation</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/adapter/vector/render/DistributedRenderResult.html" title="class in org.locationtech.geowave.adapter.vector.render">DistributedRenderResult</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/render/DistributedRenderAggregation.html#getResult--">getResult</a></span>()</code>
 <div class="block">Get the current result of the aggregation.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/adapter/vector/render/DistributedRenderResult.html" title="class in org.locationtech.geowave.adapter.vector.render">DistributedRenderResult</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/render/DistributedRenderAggregation.html#resultFromBinary-byte:A-">resultFromBinary</a></span>(byte[]&nbsp;binary)</code>
 <div class="block">This is responsible for reading the result from binary</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/render/DistributedRenderAggregation.html#resultToBinary-org.locationtech.geowave.adapter.vector.render.DistributedRenderResult-">resultToBinary</a></span>(<a href="../../../../../../org/locationtech/geowave/adapter/vector/render/DistributedRenderResult.html" title="class in org.locationtech.geowave.adapter.vector.render">DistributedRenderResult</a>&nbsp;result)</code>
 <div class="block">This is responsible for writing the result to binary</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/render/DistributedRenderAggregation.html#setParameters-org.locationtech.geowave.adapter.vector.render.DistributedRenderOptions-">setParameters</a></span>(<a href="../../../../../../org/locationtech/geowave/adapter/vector/render/DistributedRenderOptions.html" title="class in org.locationtech.geowave.adapter.vector.render">DistributedRenderOptions</a>&nbsp;options)</code>
 <div class="block">Sets the parameters based on what has been persisted</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/render/DistributedRenderAggregation.html#stopRenderer--">stopRenderer</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i10" class="altColor">
-<td class="colFirst"><code>byte[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/render/DistributedRenderAggregation.html#toBinary--">toBinary</a></span>()</code>
-<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
-</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -230,7 +218,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Ag
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.store.api.<a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#merge-R-R-">merge</a></code></li>
+<code><a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#fromBinary-byte:A-">fromBinary</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#merge-R-R-">merge</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#toBinary--">toBinary</a></code></li>
 </ul>
 </li>
 </ul>
@@ -374,38 +362,6 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Ag
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#aggregate-T-">aggregate</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;<a href="../../../../../../org/locationtech/geowave/adapter/vector/render/DistributedRenderOptions.html" title="class in org.locationtech.geowave.adapter.vector.render">DistributedRenderOptions</a>,<a href="../../../../../../org/locationtech/geowave/adapter/vector/render/DistributedRenderResult.html" title="class in org.locationtech.geowave.adapter.vector.render">DistributedRenderResult</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>entry</code> - the new entry to compute an updated aggregation result on</dd>
-</dl>
-</li>
-</ul>
-<a name="toBinary--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>toBinary</h4>
-<pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
-<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>an array of bytes representing a binary stream representation of the object.</dd>
-</dl>
-</li>
-</ul>
-<a name="fromBinary-byte:A-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>fromBinary</h4>
-<pre>public&nbsp;void&nbsp;fromBinary(byte[]&nbsp;bytes)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#fromBinary-byte:A-">Persistable</a></code></span></div>
-<div class="block">Convert a stream of binary bytes to fields and data within an object.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#fromBinary-byte:A-">fromBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
 </dl>
 </li>
 </ul>

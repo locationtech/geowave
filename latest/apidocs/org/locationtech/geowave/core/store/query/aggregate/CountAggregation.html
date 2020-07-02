@@ -166,7 +166,8 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountAggregation.html#fromBinary-byte:A-">fromBinary</a></span>(byte[]&nbsp;bytes)</code>
-<div class="block">Convert a stream of binary bytes to fields and data within an object.</div>
+<div class="block">Because the serialization of aggregation is just the function without the parameters or the
+ result, its expected that there's nothing to deserialize</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -214,7 +215,8 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountAggregation.html#toBinary--">toBinary</a></span>()</code>
-<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
+<div class="block">Because the serialization of aggregation is just the function without the parameters or the
+ result, its expected that this is empty</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
@@ -376,11 +378,14 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <li class="blockList">
 <h4>toBinary</h4>
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
-<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#toBinary--">Aggregation</a></code></span></div>
+<div class="block">Because the serialization of aggregation is just the function without the parameters or the
+ result, its expected that this is empty</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an array of bytes representing a binary stream representation of the object.</dd>
 </dl>
@@ -393,11 +398,14 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <li class="blockList">
 <h4>fromBinary</h4>
 <pre>public&nbsp;void&nbsp;fromBinary(byte[]&nbsp;bytes)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#fromBinary-byte:A-">Persistable</a></code></span></div>
-<div class="block">Convert a stream of binary bytes to fields and data within an object.</div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#fromBinary-byte:A-">Aggregation</a></code></span></div>
+<div class="block">Because the serialization of aggregation is just the function without the parameters or the
+ result, its expected that there's nothing to deserialize</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#fromBinary-byte:A-">fromBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#fromBinary-byte:A-">fromBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
