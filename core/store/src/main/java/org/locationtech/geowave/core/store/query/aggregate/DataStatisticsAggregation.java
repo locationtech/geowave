@@ -54,14 +54,6 @@ public class DataStatisticsAggregation<T> implements
   }
 
   @Override
-  public byte[] toBinary() {
-    return new byte[] {};
-  }
-
-  @Override
-  public void fromBinary(final byte[] bytes) {}
-
-  @Override
   public byte[] resultToBinary(final InternalDataStatistics<T, ?, ?> result) {
     return PersistenceUtils.toBinary(result);
   }

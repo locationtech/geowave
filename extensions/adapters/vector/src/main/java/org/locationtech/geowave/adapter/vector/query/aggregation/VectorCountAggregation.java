@@ -32,14 +32,6 @@ public class VectorCountAggregation implements Aggregation<FieldNameParam, Long,
   }
 
   @Override
-  public byte[] toBinary() {
-    return new byte[0];
-  }
-
-  @Override
-  public void fromBinary(final byte[] bytes) {}
-
-  @Override
   public FieldNameParam getParameters() {
     return fieldNameParam;
   }

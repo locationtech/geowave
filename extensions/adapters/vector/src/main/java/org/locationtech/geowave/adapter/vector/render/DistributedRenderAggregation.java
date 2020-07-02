@@ -177,14 +177,6 @@ public class DistributedRenderAggregation implements
   }
 
   @Override
-  public byte[] toBinary() {
-    return new byte[] {};
-  }
-
-  @Override
-  public void fromBinary(final byte[] bytes) {}
-
-  @Override
   public byte[] resultToBinary(final DistributedRenderResult result) {
     return result.toBinary();
   }

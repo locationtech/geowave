@@ -22,14 +22,6 @@ public abstract class TimeRangeAggregation<P extends Persistable, T> implements
   protected long max = Long.MIN_VALUE;
 
   @Override
-  public byte[] toBinary() {
-    return new byte[0];
-  }
-
-  @Override
-  public void fromBinary(final byte[] bytes) {}
-
-  @Override
   public P getParameters() {
     return null;
   }

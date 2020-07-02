@@ -35,14 +35,6 @@ public abstract class VectorMathAggregation implements
   }
 
   @Override
-  public byte[] toBinary() {
-    return new byte[0];
-  }
-
-  @Override
-  public void fromBinary(final byte[] bytes) {}
-
-  @Override
   public FieldNameParam getParameters() {
     return fieldNameParam;
   }
