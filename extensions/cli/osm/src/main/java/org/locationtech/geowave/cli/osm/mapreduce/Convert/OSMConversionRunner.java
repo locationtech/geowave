@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.cli.osm.mapreduce.Convert;
 
-import java.util.Arrays;
 import org.apache.accumulo.core.client.ClientConfiguration;
 import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.mapreduce.AbstractInputFormat;
@@ -42,6 +41,7 @@ import org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputFormat;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
 import org.opengis.feature.simple.SimpleFeature;
+import java.util.Arrays;
 
 public class OSMConversionRunner extends Configured implements Tool {
 
@@ -132,7 +132,8 @@ public class OSMConversionRunner extends Configured implements Tool {
                 accumuloOptions.getZookeeper(),
                 accumuloOptions.getInstance(),
                 accumuloOptions.getUser(),
-                accumuloOptions.getPassword(),
+                accumuloOptions.getPasswordOrKeytab(),
+                accumuloOptions.isUseSasl(),
                 accumuloOptions.getGeoWaveNamespace(),
                 options),
             options);

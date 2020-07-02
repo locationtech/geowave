@@ -50,8 +50,14 @@ When the `accumulo` type option is used, additional options are:
 *$$*$$ -i, --instance* _<instance>_::
   The Accumulo instance ID.
 
-*$$*$$ -u, --user* _<user>_::
-  A valid Accumulo user ID.
+*-u, --user* _<user>_::
+  A valid Accumulo user ID. If not given and using SASL, the active Kerberos user will be used.
+
+*-k, --keytab* _<keytab>_::
+  Path to keytab file for Kerberos authentication. If using SASL, this is required.
+
+*--sasl* _<sasl>_::
+  Use SASL to connect to Accumulo (Kerberos).
 
 *-p, --password* _<password>_::
   The password for the user. Can be specified as `pass:<password>`, `file:<local file containing the password>`, `propfile:<local properties file containing the password>:<property file key>`, `env:<variable containing the pass>`, or `stdin`.

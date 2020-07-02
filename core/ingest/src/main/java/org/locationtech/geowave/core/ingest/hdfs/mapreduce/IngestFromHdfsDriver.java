@@ -8,13 +8,6 @@
  */
 package org.locationtech.geowave.core.ingest.hdfs.mapreduce;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -27,6 +20,13 @@ import org.locationtech.geowave.core.store.ingest.IngestUtils;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This class actually executes the ingestion of intermediate data into GeoWave that had been staged
@@ -95,7 +95,7 @@ public class IngestFromHdfsDriver {
 
     final Path hdfsBaseDirectory = new Path(basePath);
     try {
-      final Configuration conf = new Configuration(false);
+      final Configuration conf = new Configuration();
       GeoWaveConfiguratorBase.setRemoteInvocationParams(
           hdfsHostPort,
           mapReduceOptions.getJobTrackerOrResourceManagerHostPort(),

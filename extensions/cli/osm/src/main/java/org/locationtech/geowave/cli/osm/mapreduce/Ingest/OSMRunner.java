@@ -38,6 +38,7 @@ import org.locationtech.geowave.datastore.accumulo.config.AccumuloRequiredOption
 import org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.io.IOException;
 
 public class OSMRunner extends Configured implements Tool {
   private static final Logger log = LoggerFactory.getLogger(OSMRunner.class);
@@ -82,13 +83,14 @@ public class OSMRunner extends Configured implements Tool {
   }
 
   private void enableLocalityGroups(final OSMIngestCommandArgs argv)
-      throws AccumuloSecurityException, AccumuloException, TableNotFoundException {
+      throws AccumuloSecurityException, AccumuloException, TableNotFoundException, IOException {
     final AccumuloOperations bao =
         new AccumuloOperations(
             accumuloOptions.getZookeeper(),
             accumuloOptions.getInstance(),
             accumuloOptions.getUser(),
-            accumuloOptions.getPassword(),
+            accumuloOptions.getPasswordOrKeytab(),
+            accumuloOptions.isUseSasl(),
             accumuloOptions.getGeoWaveNamespace(),
             new AccumuloOptions());
     bao.createTable(argv.getOsmTableName(), true, true);

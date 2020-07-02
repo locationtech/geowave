@@ -17,6 +17,7 @@ import org.locationtech.geowave.datastore.accumulo.config.AccumuloRequiredOption
 import org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.io.IOException;
 
 public class AccumuloFactoryHelper implements StoreFactoryHelper {
   private static final Logger LOGGER = LoggerFactory.getLogger(AccumuloFactoryHelper.class);
@@ -30,7 +31,7 @@ public class AccumuloFactoryHelper implements StoreFactoryHelper {
   public DataStoreOperations createOperations(final StoreFactoryOptions options) {
     try {
       return AccumuloOperations.createOperations((AccumuloRequiredOptions) options);
-    } catch (AccumuloException | AccumuloSecurityException e) {
+    } catch (AccumuloException | AccumuloSecurityException | IOException e) {
       LOGGER.error("Unable to create Accumulo operations from config options", e);
       return null;
     }

@@ -8,9 +8,6 @@
  */
 package org.locationtech.geowave.test.mapreduce;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.util.ToolRunner;
@@ -30,6 +27,9 @@ import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.TestUtils.DimensionalityType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapReduceTestUtils {
 
