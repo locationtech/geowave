@@ -201,7 +201,7 @@ public class DataIndexUtils {
       final Pair<String[], InternalDataAdapter<?>> fieldSubsets,
       final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
       final String[] additionalAuthorizations,
-      ScanCallback scanCallback,
+      final ScanCallback scanCallback,
       final short adapterId,
       final byte[]... dataIds) {
     final DataIndexReaderParams readerParams =
@@ -216,7 +216,7 @@ public class DataIndexUtils {
       // the interface on base operations delete with DataIndexReaderParams to allow for a scan
       // callback but for now we can explicitly read before deleting)
       try (RowReader<GeoWaveRow> rowReader = operations.createReader(readerParams)) {
-        NativeEntryIteratorWrapper scanCallBackIterator =
+        final NativeEntryIteratorWrapper scanCallBackIterator =
             new NativeEntryIteratorWrapper(
                 adapterStore,
                 DataIndexUtils.DATA_ID_INDEX,
@@ -242,7 +242,7 @@ public class DataIndexUtils {
       final Pair<String[], InternalDataAdapter<?>> fieldSubsets,
       final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
       final String[] additionalAuthorizations,
-      ScanCallback<?, ?> scanCallback,
+      final ScanCallback<?, ?> scanCallback,
       final short adapterId,
       final byte[] startDataId,
       final byte[] endDataId) {
@@ -304,13 +304,14 @@ public class DataIndexUtils {
       final String[] additionalAuthorizations,
       final short adapterId,
       final byte[] startDataId,
-      final byte[] endDataId) {
+      final byte[] endDataId,
+      final boolean reverse) {
     final DataIndexReaderParams readerParams =
         new DataIndexReaderParamsBuilder<>(
             adapterStore,
             internalAdapterStore).additionalAuthorizations(
                 additionalAuthorizations).isAuthorizationsLimiting(false).adapterId(
-                    adapterId).dataIdsByRange(startDataId, endDataId).fieldSubsets(
+                    adapterId).dataIdsByRange(startDataId, endDataId, reverse).fieldSubsets(
                         fieldSubsets).aggregation(aggregation).build();
     return operations.createReader(readerParams);
   }

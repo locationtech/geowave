@@ -19,6 +19,7 @@ public class DataIndexReaderParams extends BaseReaderParams<GeoWaveRow> {
   private byte[][] dataIds;
   private byte[] startInclusiveDataId;
   private byte[] endInclusiveDataId;
+  private boolean reverse = false;
   private final short adapterId;
 
   public DataIndexReaderParams(
@@ -49,6 +50,7 @@ public class DataIndexReaderParams extends BaseReaderParams<GeoWaveRow> {
       final Pair<String[], InternalDataAdapter<?>> fieldSubsets,
       final byte[] startInclusiveDataId,
       final byte[] endInclusiveDataId,
+      final boolean reverse,
       final boolean isAuthorizationsLimiting,
       final String[] additionalAuthorizations) {
     super(
@@ -60,6 +62,8 @@ public class DataIndexReaderParams extends BaseReaderParams<GeoWaveRow> {
         additionalAuthorizations);
     this.startInclusiveDataId = startInclusiveDataId;
     this.endInclusiveDataId = endInclusiveDataId;
+
+    this.reverse = reverse;
     this.adapterId = adapterId;
   }
 
@@ -77,5 +81,9 @@ public class DataIndexReaderParams extends BaseReaderParams<GeoWaveRow> {
 
   public byte[] getEndInclusiveDataId() {
     return endInclusiveDataId;
+  }
+
+  public boolean isReverse() {
+    return reverse;
   }
 }

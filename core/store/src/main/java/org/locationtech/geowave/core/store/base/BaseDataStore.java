@@ -283,7 +283,7 @@ public class BaseDataStore implements DataStore {
     final Map<Short, Set<ByteArray>> dataIdsToDelete;
     if (DeletionMode.DELETE_WITH_DUPLICATES.equals(deleteMode)
         && (baseOptions.isSecondaryIndexing())) {
-      dataIdsToDelete = new ConcurrentHashMap<Short, Set<ByteArray>>();
+      dataIdsToDelete = new ConcurrentHashMap<>();
     } else {
       dataIdsToDelete = null;
     }
@@ -324,6 +324,11 @@ public class BaseDataStore implements DataStore {
                     adapter.getAdapterId(),
                     ((DataIdQuery) sanitizedConstraints).getDataIds());
           } else if (sanitizedConstraints instanceof DataIdRangeQuery) {
+            if (((DataIdRangeQuery) sanitizedConstraints).isReverse()
+                && !isReverseIterationSupported()) {
+              throw new UnsupportedOperationException(
+                  "Currently the underlying datastore does not support reverse iteration");
+            }
             rowReader =
                 DataIndexUtils.getRowReader(
                     baseOperations,
@@ -334,7 +339,8 @@ public class BaseDataStore implements DataStore {
                     queryOptions.getAuthorizations(),
                     adapter.getAdapterId(),
                     ((DataIdRangeQuery) sanitizedConstraints).getStartDataIdInclusive(),
-                    ((DataIdRangeQuery) sanitizedConstraints).getEndDataIdInclusive());
+                    ((DataIdRangeQuery) sanitizedConstraints).getEndDataIdInclusive(),
+                    ((DataIdRangeQuery) sanitizedConstraints).isReverse());
           } else {
             rowReader =
                 DataIndexUtils.getRowReader(
@@ -1029,11 +1035,11 @@ public class BaseDataStore implements DataStore {
 
   @Override
   public DataTypeAdapter<?> getType(final String typeName) {
-    Short internalAdapterId = internalAdapterStore.getAdapterId(typeName);
+    final Short internalAdapterId = internalAdapterStore.getAdapterId(typeName);
     if (internalAdapterId == null) {
       return null;
     }
-    InternalDataAdapter<?> internalDataAdapter = adapterStore.getAdapter(internalAdapterId);
+    final InternalDataAdapter<?> internalDataAdapter = adapterStore.getAdapter(internalAdapterId);
     if (internalDataAdapter == null) {
       return null;
     }
@@ -1726,5 +1732,9 @@ public class BaseDataStore implements DataStore {
   @Override
   public void deleteAll() {
     deleteEverything();
+  }
+
+  public boolean isReverseIterationSupported() {
+    return false;
   }
 }

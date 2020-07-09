@@ -37,6 +37,7 @@ public class QueryConstraintsFactoryImpl implements QueryConstraintsFactory {
     return new CoordinateRangeQuery(indexStrategy, coordinateRanges);
   }
 
+  @Override
   public QueryConstraints customConstraints(final Persistable customConstraints) {
     return new CustomQueryConstraints<>(customConstraints);
   }
@@ -77,5 +78,12 @@ public class QueryConstraintsFactoryImpl implements QueryConstraintsFactory {
       final byte[] startDataIdInclusive,
       final byte[] endDataIdInclusive) {
     return new DataIdRangeQuery(startDataIdInclusive, endDataIdInclusive);
+  }
+
+  @Override
+  public QueryConstraints dataIdsByRangeReverse(
+      final byte[] startDataIdInclusive,
+      final byte[] endDataIdInclusive) {
+    return new DataIdRangeQuery(startDataIdInclusive, endDataIdInclusive, true);
   }
 }

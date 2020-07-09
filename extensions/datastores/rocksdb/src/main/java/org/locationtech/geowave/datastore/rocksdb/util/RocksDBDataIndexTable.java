@@ -54,7 +54,7 @@ public class RocksDBDataIndexTable extends AbstractRocksDBTable {
   }
 
   public CloseableIterator<GeoWaveRow> dataIndexIterator(final byte[][] dataIds) {
-    if (dataIds == null || dataIds.length == 0) {
+    if ((dataIds == null) || (dataIds.length == 0)) {
       return new CloseableIterator.Empty<>();
     }
     final RocksDB readDb = getReadDb();
@@ -80,27 +80,41 @@ public class RocksDBDataIndexTable extends AbstractRocksDBTable {
 
   public CloseableIterator<GeoWaveRow> dataIndexIterator(
       final byte[] startDataId,
-      final byte[] endDataId) {
+      final byte[] endDataId,
+      final boolean reverse) {
     final RocksDB readDb = getReadDb();
     if (readDb == null) {
       return new CloseableIterator.Empty<>();
     }
-    final ReadOptions options;
     final RocksIterator it;
-    if (endDataId == null) {
-      options = null;
+    if (reverse) {
       it = readDb.newIterator();
+      if (endDataId == null) {
+        it.seekToLast();
+      } else {
+        it.seekForPrev(ByteArrayUtils.getNextPrefix(endDataId));
+      }
+      if (startDataId == null) {
+        return new DataIndexReverseRowIterator(it, adapterId, visibilityEnabled);
+      }
+      return new DataIndexBoundedReverseRowIterator(startDataId, it, adapterId, visibilityEnabled);
     } else {
-      options =
-          new ReadOptions().setIterateUpperBound(
-              new Slice(ByteArrayUtils.getNextPrefix(endDataId)));
-      it = readDb.newIterator(options);
+      final ReadOptions options;
+      if (endDataId == null) {
+        options = null;
+        it = readDb.newIterator();
+      } else {
+        options =
+            new ReadOptions().setIterateUpperBound(
+                new Slice(ByteArrayUtils.getNextPrefix(endDataId)));
+        it = readDb.newIterator(options);
+      }
+      if (startDataId == null) {
+        it.seekToFirst();
+      } else {
+        it.seek(startDataId);
+      }
+      return new DataIndexForwardRowIterator(options, it, adapterId, visibilityEnabled);
     }
-    if (startDataId == null) {
-      it.seekToFirst();
-    } else {
-      it.seek(startDataId);
-    }
-    return new DataIndexRowIterator(options, it, adapterId, visibilityEnabled);
   }
 }

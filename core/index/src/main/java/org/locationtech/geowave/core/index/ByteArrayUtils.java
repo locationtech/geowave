@@ -291,6 +291,25 @@ public class ByteArrayUtils {
     return newStopRow;
   }
 
+  public static byte[] getPreviousPrefix(final byte[] rowKeyPrefix) {
+    int offset = rowKeyPrefix.length;
+    while (offset > 0) {
+      if (rowKeyPrefix[offset - 1] != (byte) 0x00) {
+        break;
+      }
+      offset--;
+    }
+
+    if (offset == 0) {
+      return new byte[0];
+    }
+
+    final byte[] newStopRow = Arrays.copyOfRange(rowKeyPrefix, 0, offset);
+    // And decrement the last one
+    newStopRow[newStopRow.length - 1]--;
+    return newStopRow;
+  }
+
   public static int compare(final byte[] array1, final byte[] array2) {
     if (array2 == null) {
       if (array1 == null) {

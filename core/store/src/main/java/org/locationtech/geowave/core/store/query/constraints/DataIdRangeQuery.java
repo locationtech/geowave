@@ -19,12 +19,21 @@ import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 public class DataIdRangeQuery implements QueryConstraints {
   private byte[] startDataIdInclusive;
   private byte[] endDataIdInclusive;
+  private boolean reverse;
 
   public DataIdRangeQuery() {}
 
   public DataIdRangeQuery(final byte[] startDataIdInclusive, final byte[] endDataIdInclusive) {
+    this(startDataIdInclusive, endDataIdInclusive, false);
+  }
+
+  public DataIdRangeQuery(
+      final byte[] startDataIdInclusive,
+      final byte[] endDataIdInclusive,
+      final boolean reverse) {
     this.startDataIdInclusive = startDataIdInclusive;
     this.endDataIdInclusive = endDataIdInclusive;
+    this.reverse = reverse;
   }
 
 
@@ -34,6 +43,10 @@ public class DataIdRangeQuery implements QueryConstraints {
 
   public byte[] getEndDataIdInclusive() {
     return endDataIdInclusive;
+  }
+
+  public boolean isReverse() {
+    return reverse;
   }
 
   @Override

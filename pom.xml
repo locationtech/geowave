@@ -1442,56 +1442,6 @@
             </repositories>
         </profile>
         <profile>
-            <id>hortonworks</id>
-            <properties>
-                <accumulo.version>1.7.0.2.6.5.35-1</accumulo.version>
-                <!-- this is used in place of 1.1.2.2.6.5.35-1 because the hbase-shaded-client
-                    from hortonworks doesn't shade third party libraries like the apache one
-                    does -->
-                <hbase.version>1.1.2</hbase.version>
-                <hadoop.version>2.7.3.2.6.5.35-1</hadoop.version>
-                <spark.version>2.3.0.2.6.5.35-1</spark.version>
-                <accumulo.api>1.7</accumulo.api>
-                <!-- accumulo 1.7 references com.google.common.net.HostAndPort.getHostText()
-                    which was removed in guava 22.0 -->
-                <guava.version>21.0</guava.version>
-            </properties>
-            <repositories>
-                <repository>
-                    <releases>
-                        <enabled>true</enabled>
-                        <updatePolicy>always</updatePolicy>
-                        <checksumPolicy>warn</checksumPolicy>
-                    </releases>
-                    <snapshots>
-                        <enabled>false</enabled>
-                        <updatePolicy>never</updatePolicy>
-                        <checksumPolicy>fail</checksumPolicy>
-                    </snapshots>
-                    <id>HDPReleases</id>
-                    <name>HDP Releases</name>
-                    <url>http://repo.hortonworks.com/content/repositories/releases/</url>
-                    <layout>default</layout>
-                </repository>
-                <repository>
-                    <releases>
-                        <enabled>true</enabled>
-                        <updatePolicy>always</updatePolicy>
-                        <checksumPolicy>warn</checksumPolicy>
-                    </releases>
-                    <snapshots>
-                        <enabled>false</enabled>
-                        <updatePolicy>never</updatePolicy>
-                        <checksumPolicy>fail</checksumPolicy>
-                    </snapshots>
-                    <id>HDPJettyHadoop</id>
-                    <name>HDP Jetty Hadoop</name>
-                    <url>http://repo.hortonworks.com/content/repositories/jetty-hadoop/</url>
-                    <layout>default</layout>
-                </repository>
-            </repositories>
-        </profile>
-        <profile>
             <id>compatibility</id>
             <properties>
                 <accumulo.version>1.7.2</accumulo.version>

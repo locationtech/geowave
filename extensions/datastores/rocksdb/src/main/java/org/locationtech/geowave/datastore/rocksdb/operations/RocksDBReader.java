@@ -195,7 +195,8 @@ public class RocksDBReader<T> implements RowReader<T> {
       iterator =
           dataIndexTable.dataIndexIterator(
               dataIndexReaderParams.getStartInclusiveDataId(),
-              dataIndexReaderParams.getEndInclusiveDataId());
+              dataIndexReaderParams.getEndInclusiveDataId(),
+              dataIndexReaderParams.isReverse());
     }
     if (client.isVisibilityEnabled()) {
       Stream<GeoWaveRow> stream = Streams.stream(iterator);

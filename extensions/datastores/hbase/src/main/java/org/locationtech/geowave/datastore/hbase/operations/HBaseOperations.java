@@ -55,7 +55,6 @@ import org.apache.hadoop.hbase.client.coprocessor.Batch;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter.RowRange;
 import org.apache.hadoop.hbase.ipc.BlockingRpcCallback;
-import org.apache.hadoop.hbase.protobuf.generated.AdminProtos.GetRegionInfoResponse.CompactionState;
 import org.apache.hadoop.hbase.security.visibility.Authorizations;
 import org.apache.hadoop.hbase.shaded.com.google.protobuf.ByteString;
 import org.locationtech.geowave.core.cli.VersionUtils;
@@ -67,11 +66,9 @@ import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIterator.Wrapper;
-import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
@@ -547,16 +544,29 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
   public Iterator<GeoWaveRow> getDataIndexResults(
       final byte[] startRow,
       final byte[] endRow,
+      final boolean reverse,
       final short adapterId,
       final String... additionalAuthorizations) {
     Result[] results = null;
     final byte[] family = StringUtils.stringToBinary(ByteArrayUtils.shortToString(adapterId));
     final Scan scan = new Scan();
-    if (startRow != null) {
-      scan.setStartRow(startRow);
-    }
-    if (endRow != null) {
-      scan.setStopRow(HBaseUtils.getInclusiveEndKey(endRow));
+    if (reverse) {
+      scan.setReversed(true);
+      // for whatever reason HBase treats start row as the higher lexicographic row and the end row
+      // as the lesser when reversed
+      if (startRow != null) {
+        scan.setStopRow(startRow);
+      }
+      if (endRow != null) {
+        scan.setStartRow(ByteArrayUtils.getNextPrefix(endRow));
+      }
+    } else {
+      if (startRow != null) {
+        scan.setStartRow(startRow);
+      }
+      if (endRow != null) {
+        scan.setStopRow(HBaseUtils.getInclusiveEndKey(endRow));
+      }
     }
     if ((additionalAuthorizations != null) && (additionalAuthorizations.length > 0)) {
       scan.setAuthorizations(new Authorizations(additionalAuthorizations));
@@ -1050,7 +1060,7 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
                   ByteArrayUtils.shortToByteArray(
                       readerParams.getAggregation().getLeft().getAdapterId())));
         } else {
-          byte[] adapterBytes =
+          final byte[] adapterBytes =
               URLClassloaderUtils.toBinary(readerParams.getAggregation().getLeft().getAdapter());
           requestBuilder.setAdapter(ByteString.copyFrom(adapterBytes));
         }
@@ -1174,7 +1184,7 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
       } else {
         final List<MultiDimensionalCoordinateRangesArray> coords =
             readerParams.getCoordinateRanges();
-        if (coords != null && !coords.isEmpty()) {
+        if ((coords != null) && !coords.isEmpty()) {
           final byte[] filterBytes =
               new HBaseNumericIndexStrategyFilter(
                   readerParams.getIndex().getIndexStrategy(),
@@ -1584,6 +1594,7 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
               getDataIndexResults(
                   readerParams.getStartInclusiveDataId(),
                   readerParams.getEndInclusiveDataId(),
+                  readerParams.isReverse(),
                   readerParams.getAdapterId(),
                   readerParams.getAdditionalAuthorizations())));
     }
