@@ -97,4 +97,9 @@ public class HBaseDataStore extends BaseMapReduceDataStore {
       }
     }
   }
+
+  @Override
+  public boolean isReverseIterationSupported() {
+    return true;
+  }
 }

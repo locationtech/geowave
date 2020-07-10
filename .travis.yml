@@ -22,7 +22,6 @@ env:
     - NAME='Bigtable IT on Latest ASF Versions' MAVEN_PROFILES='bigtable-it' BUILD_AND_PUBLISH=false  IT_ONLY=true
     - NAME='Accumulo Server IT on Older ASF and GeoTools Versions' MAVEN_PROFILES='accumulo-it-server,compatibility,ignore-kerberos-it' BUILD_AND_PUBLISH=false  IT_ONLY=true
     - NAME='HBase Client IT on Older ASF and GeoTools Versions' MAVEN_PROFILES='hbase-it-client,compatibility,ignore-kerberos-it' BUILD_AND_PUBLISH=false  IT_ONLY=true
-    - NAME='Accumulo Server IT on Latest HDP Versions' MAVEN_PROFILES='accumulo-it-server,hortonworks,ignore-kerberos-it' BUILD_AND_PUBLISH=false  IT_ONLY=true
     - NAME='RocksDB IT with Secondary Indexing'  MAVEN_PROFILES='rocksdb-it,secondary-index-it' BUILD_AND_PUBLISH=false  IT_ONLY=true
     - NAME='Kudu IT on Latest ASF Versions' MAVEN_PROFILES='kudu-it' BUILD_AND_PUBLISH=false  IT_ONLY=true
     - NAME='FileSystem IT on Latest ASF Versions' MAVEN_PROFILES='filesystem-it' BUILD_AND_PUBLISH=false  IT_ONLY=true

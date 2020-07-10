@@ -10,6 +10,8 @@ package org.locationtech.geowave.test.secondary;
 
 import java.nio.ByteBuffer;
 import java.util.Collections;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -23,7 +25,7 @@ import org.locationtech.geowave.core.geotime.store.query.api.VectorAggregationQu
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorStatisticsQueryBuilder;
 import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.index.VarintUtils;
+import org.locationtech.geowave.core.index.lexicoder.Lexicoders;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
@@ -32,6 +34,7 @@ import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.api.Writer;
+import org.locationtech.geowave.core.store.base.BaseDataStore;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
@@ -42,12 +45,13 @@ import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.TestUtils.DimensionalityType;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import org.locationtech.geowave.test.basic.AbstractGeoWaveBasicVectorIT;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @RunWith(GeoWaveITRunner.class)
-public class DataIndexOnlyIT extends AbstractSecondaryIndexIT {
+public class DataIndexOnlyIT extends AbstractGeoWaveBasicVectorIT {
   private static final Logger LOGGER = LoggerFactory.getLogger(DataIndexOnlyIT.class);
 
   @GeoWaveTestStore(
@@ -127,7 +131,7 @@ public class DataIndexOnlyIT extends AbstractSecondaryIndexIT {
     count = dataIdxStore.aggregateStatistics(bldr.factory().count().build());
     Assert.assertEquals(originalCount, count);
     count = 0L;
-    String[] idsToRemove = new String[3];
+    final String[] idsToRemove = new String[3];
     int idsToRemoveIdx = 0;
     try (CloseableIterator<SimpleFeature> it =
         store.query(VectorQueryBuilder.newBuilder().build())) {
@@ -141,15 +145,15 @@ public class DataIndexOnlyIT extends AbstractSecondaryIndexIT {
       }
     }
     Assert.assertEquals(originalCount, count);
-    for (String id : idsToRemove) {
-      VectorQueryBuilder idBldr = VectorQueryBuilder.newBuilder();
+    for (final String id : idsToRemove) {
+      final VectorQueryBuilder idBldr = VectorQueryBuilder.newBuilder();
       Assert.assertTrue(
           dataIdxStore.delete(
               idBldr.constraints(
                   idBldr.constraintsFactory().dataIds(StringUtils.stringToBinary(id))).build()));
     }
     count = dataIdxStore.aggregateStatistics(bldr.factory().count().build());
-    Assert.assertEquals((long) originalCount - 3, (long) count);
+    Assert.assertEquals(originalCount - 3, (long) count);
 
     TestUtils.deleteAll(dataStoreOptions);
     TestUtils.deleteAll(dataIdxOnlyDataStoreOptions);
@@ -175,6 +179,61 @@ public class DataIndexOnlyIT extends AbstractSecondaryIndexIT {
       }
     }
     Assert.assertTrue(expectedIntIds.isEmpty());
+    try {
+      List<Integer> expectedReversedIntIds =
+          IntStream.rangeClosed(0, 2).boxed().collect(Collectors.toList());
+      ListIterator<Integer> expectedReversedIntIdsIterator =
+          expectedReversedIntIds.listIterator(expectedReversedIntIds.size());
+      try (CloseableIterator<LatLonTime> it =
+          (CloseableIterator) dataStore.query(
+              QueryBuilder.newBuilder().constraints(
+                  QueryBuilder.newBuilder().constraintsFactory().dataIdsByRangeReverse(
+                      null,
+                      Lexicoders.LONG.toByteArray(200L))).build())) {
+        while (it.hasNext()) {
+          Assert.assertEquals(
+              Integer.valueOf(expectedReversedIntIdsIterator.previous()),
+              Integer.valueOf(it.next().getId()));
+        }
+        Assert.assertTrue(!expectedReversedIntIdsIterator.hasPrevious());
+      }
+      expectedReversedIntIds = IntStream.rangeClosed(7, 9).boxed().collect(Collectors.toList());
+      expectedReversedIntIdsIterator =
+          expectedReversedIntIds.listIterator(expectedReversedIntIds.size());
+      try (CloseableIterator<LatLonTime> it =
+          (CloseableIterator) dataStore.query(
+              QueryBuilder.newBuilder().constraints(
+                  QueryBuilder.newBuilder().constraintsFactory().dataIdsByRangeReverse(
+                      Lexicoders.LONG.toByteArray(650L),
+                      null)).build())) {
+        while (it.hasNext()) {
+          Assert.assertEquals(
+              Integer.valueOf(expectedReversedIntIdsIterator.previous()),
+              Integer.valueOf(it.next().getId()));
+        }
+        Assert.assertTrue(!expectedReversedIntIdsIterator.hasPrevious());
+      }
+      expectedReversedIntIds = IntStream.rangeClosed(4, 8).boxed().collect(Collectors.toList());
+      expectedReversedIntIdsIterator =
+          expectedReversedIntIds.listIterator(expectedReversedIntIds.size());
+      try (CloseableIterator<LatLonTime> it =
+          (CloseableIterator) dataStore.query(
+              QueryBuilder.newBuilder().constraints(
+                  QueryBuilder.newBuilder().constraintsFactory().dataIdsByRangeReverse(
+                      Lexicoders.LONG.toByteArray(400L),
+                      Lexicoders.LONG.toByteArray(800L))).build())) {
+        while (it.hasNext()) {
+          Assert.assertEquals(
+              Integer.valueOf(expectedReversedIntIdsIterator.previous()),
+              Integer.valueOf(it.next().getId()));
+        }
+        Assert.assertTrue(!expectedReversedIntIdsIterator.hasPrevious());
+      }
+    } catch (final UnsupportedOperationException e) {
+      if (((BaseDataStore) dataStore).isReverseIterationSupported()) {
+        Assert.fail(e.getMessage());
+      }
+    }
     TestUtils.deleteAll(dataIdxOnlyDataStoreOptions);
   }
 
@@ -259,16 +318,25 @@ public class DataIndexOnlyIT extends AbstractSecondaryIndexIT {
 
     @Override
     public byte[] getDataId(final LatLonTime entry) {
-      return VarintUtils.writeUnsignedInt(entry.getId());
+      final ByteBuffer buf = ByteBuffer.allocate(Long.BYTES + Integer.BYTES);
+      buf.put(Lexicoders.LONG.toByteArray(entry.time));
+      buf.put(Lexicoders.INT.toByteArray(entry.getId()));
+      return buf.array();
     }
 
     @Override
     public LatLonTime decode(final IndexedAdapterPersistenceEncoding data, final Index index) {
       final LatLonTime retVal =
           (LatLonTime) data.getAdapterExtendedData().getValue(SINGLETON_FIELD);
-      retVal.setId(VarintUtils.readUnsignedInt(ByteBuffer.wrap(data.getDataId())));
+      final ByteBuffer buf = ByteBuffer.wrap(data.getDataId());
+      buf.position(8);
+      final byte[] idBytes = new byte[4];
+      buf.get(idBytes);
+      final int id = Lexicoders.INT.fromByteArray(idBytes);
+      retVal.setId(id);
       return retVal;
     }
+
 
     @Override
     public AdapterPersistenceEncoding encode(

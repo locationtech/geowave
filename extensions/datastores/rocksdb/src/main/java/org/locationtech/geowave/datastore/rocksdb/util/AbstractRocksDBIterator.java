@@ -36,8 +36,12 @@ public abstract class AbstractRocksDBIterator<T> implements CloseableIterator<T>
     }
     final T retVal = readRow(it.key(), it.value());
 
-    it.next();
+    advance();
     return retVal;
+  }
+
+  protected void advance() {
+    it.next();
   }
 
   protected abstract T readRow(byte[] key, byte[] value);

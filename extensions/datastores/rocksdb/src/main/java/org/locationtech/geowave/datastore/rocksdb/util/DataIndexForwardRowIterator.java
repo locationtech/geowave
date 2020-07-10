@@ -13,11 +13,11 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.rocksdb.ReadOptions;
 import org.rocksdb.RocksIterator;
 
-public class DataIndexRowIterator extends AbstractRocksDBIterator<GeoWaveRow> {
+public class DataIndexForwardRowIterator extends AbstractRocksDBIterator<GeoWaveRow> {
   private final short adapterId;
   private final boolean visibilityEnabled;
 
-  public DataIndexRowIterator(
+  public DataIndexForwardRowIterator(
       final ReadOptions options,
       final RocksIterator it,
       final short adapterId,

@@ -17,6 +17,7 @@ public class DataIndexReaderParamsBuilder<T> extends
   protected byte[][] dataIds = null;
   private byte[] startInclusiveDataId = null;
   private byte[] endInclusiveDataId = null;
+  private boolean reverse = false;
   protected short adapterId;
 
   public DataIndexReaderParamsBuilder(
@@ -41,10 +42,21 @@ public class DataIndexReaderParamsBuilder<T> extends
   public DataIndexReaderParamsBuilder<T> dataIdsByRange(
       final byte[] startInclusiveDataId,
       final byte[] endInclusiveDataId) {
+    return dataIdsByRange(startInclusiveDataId, endInclusiveDataId, false);
+  }
+
+  /**
+   * Currently only RocksDB And HBase support reverse scans
+   */
+  public DataIndexReaderParamsBuilder<T> dataIdsByRange(
+      final byte[] startInclusiveDataId,
+      final byte[] endInclusiveDataId,
+      final boolean reverse) {
     this.dataIds = null;
     // its either an array of explicit IDs or a range, not both
     this.startInclusiveDataId = startInclusiveDataId;
     this.endInclusiveDataId = endInclusiveDataId;
+    this.reverse = reverse;
     return builder();
   }
 
@@ -63,6 +75,7 @@ public class DataIndexReaderParamsBuilder<T> extends
           fieldSubsets,
           startInclusiveDataId,
           endInclusiveDataId,
+          reverse,
           isAuthorizationsLimiting,
           additionalAuthorizations);
     }

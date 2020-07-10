@@ -38,6 +38,23 @@ public interface QueryConstraintsFactory {
       final byte[] endDataIdInclusive);
 
   /**
+   * constrain a query using a range of data IDs, assuming big endian ordering
+   *
+   * RocksDB and HBase are currently the only two that will support this, but allows for reverse
+   * iteration from "end" to "start" data ID
+   *
+   * All other datastores will throw an UnsupportedOperationException and the forward scan should be
+   * preferred for those datastores
+   *
+   * @param startDataIdInclusive the start of data ID range (inclusive)
+   * @param endDataIdInclusive the end of data ID range (inclusive)
+   * @return the constraints
+   */
+  QueryConstraints dataIdsByRangeReverse(
+      final byte[] startDataIdInclusive,
+      final byte[] endDataIdInclusive);
+
+  /**
    * constrain a query by prefix
    *
    * @param partitionKey the prefix
