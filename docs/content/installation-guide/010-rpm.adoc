@@ -16,7 +16,6 @@ Many GeoWave artifacts are annotated with a `$VENDOR` as well as a `$VERSION`.  
 | Apache              | `apache`
 | Apache - Accumulo 1.7 | `apache-accumulo1.7`
 | Cloudera            | `cdh5`
-| Hortonworks         | `hdp2`
 |============
 
 [NOTE]

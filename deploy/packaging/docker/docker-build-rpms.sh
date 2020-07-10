@@ -46,7 +46,6 @@ if [ -z $BUILD_ARGS_MATRIX  ]; then
     	BUILD_ARGS_MATRIX=(
 	"-Dvendor.version=apache"
 	"-P cloudera -Dvendor.version=cdh5"
-	"-P hortonworks -Dvendor.version=hdp2"
     	)
 	fi
 fi

@@ -16,5 +16,4 @@
 BUILD_ARGS_MATRIX=(
  ""
  "--P cloudera"
- "-P hortonworks"
 )

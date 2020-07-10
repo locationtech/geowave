@@ -47,7 +47,7 @@ popd
 ## Step #4: Build GeoWave Artifacts and RPMs
 
 The docker-build-rpms script will coordinate a series of container builds resulting in finished jar and rpm artifacts
-built for each of the desired build configurations (ex: cdh5, hortonworks or apache).
+built for each of the desired build configurations (ex: cdh5 or apache).
 
 ```
 export WORKSPACE="$(pwd)/geowave"

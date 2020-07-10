@@ -25,6 +25,5 @@ Some commands in this guide are intended to be used alongside external third par
 | link:http://hadoop.apache.org/[Apache Hadoop, window="_blank"] | 2.x |
 | link:https://gdal.org/[GDAL, window="_blank"] | 1.9.2 | 
 | link:http://cloudera.com/content/cloudera/en/home.html[Cloudera CDH5, window="_blank"] | 5.9 |
-| link:http://hortonworks.com/hdp/[Hortonworks Data Platform, window="_blank"] | 2.6+ |
 |=========================================================
 
