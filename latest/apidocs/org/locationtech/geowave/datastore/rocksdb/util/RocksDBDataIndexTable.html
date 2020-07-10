@@ -184,8 +184,9 @@ extends <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/ut
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBDataIndexTable.html#dataIndexIterator-byte:A-byte:A-">dataIndexIterator</a></span>(byte[]&nbsp;startDataId,
-                 byte[]&nbsp;endDataId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBDataIndexTable.html#dataIndexIterator-byte:A-byte:A-boolean-">dataIndexIterator</a></span>(byte[]&nbsp;startDataId,
+                 byte[]&nbsp;endDataId,
+                 boolean&nbsp;reverse)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -259,14 +260,15 @@ extends <a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/ut
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;dataIndexIterator(byte[][]&nbsp;dataIds)</pre>
 </li>
 </ul>
-<a name="dataIndexIterator-byte:A-byte:A-">
+<a name="dataIndexIterator-byte:A-byte:A-boolean-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>dataIndexIterator</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;dataIndexIterator(byte[]&nbsp;startDataId,
-                                                       byte[]&nbsp;endDataId)</pre>
+                                                       byte[]&nbsp;endDataId,
+                                                       boolean&nbsp;reverse)</pre>
 </li>
 </ul>
 </li>

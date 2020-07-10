@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -144,13 +144,14 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/operation
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;additionalAuthorizations)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/DataIndexReaderParams.html#DataIndexReaderParams-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-short-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-byte:A-byte:A-boolean-java.lang.String:A-">DataIndexReaderParams</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/DataIndexReaderParams.html#DataIndexReaderParams-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-short-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-byte:A-byte:A-boolean-boolean-java.lang.String:A-">DataIndexReaderParams</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
                      <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore,
                      short&nbsp;adapterId,
                      org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;,<a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;?,?,?&gt;&gt;&nbsp;aggregation,
                      org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[],<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;&nbsp;fieldSubsets,
                      byte[]&nbsp;startInclusiveDataId,
                      byte[]&nbsp;endInclusiveDataId,
+                     boolean&nbsp;reverse,
                      boolean&nbsp;isAuthorizationsLimiting,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;additionalAuthorizations)</code>&nbsp;</td>
 </tr>
@@ -184,6 +185,10 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/operation
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/DataIndexReaderParams.html#getStartInclusiveDataId--">getStartInclusiveDataId</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/DataIndexReaderParams.html#isReverse--">isReverse</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -230,7 +235,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/operation
                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;additionalAuthorizations)</pre>
 </li>
 </ul>
-<a name="DataIndexReaderParams-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-short-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-byte:A-byte:A-boolean-java.lang.String:A-">
+<a name="DataIndexReaderParams-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-short-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-byte:A-byte:A-boolean-boolean-java.lang.String:A-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -243,6 +248,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/operation
                              org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[],<a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;&nbsp;fieldSubsets,
                              byte[]&nbsp;startInclusiveDataId,
                              byte[]&nbsp;endInclusiveDataId,
+                             boolean&nbsp;reverse,
                              boolean&nbsp;isAuthorizationsLimiting,
                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;additionalAuthorizations)</pre>
 </li>
@@ -285,10 +291,19 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/operation
 <a name="getEndInclusiveDataId--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getEndInclusiveDataId</h4>
 <pre>public&nbsp;byte[]&nbsp;getEndInclusiveDataId()</pre>
+</li>
+</ul>
+<a name="isReverse--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>isReverse</h4>
+<pre>public&nbsp;boolean&nbsp;isReverse()</pre>
 </li>
 </ul>
 </li>

@@ -484,11 +484,24 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
+<td class="colLast"><span class="typeNameLabel">QueryConstraintsFactory.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html#dataIdsByRangeReverse-byte:A-byte:A-">dataIdsByRangeReverse</a></span>(byte[]&nbsp;startDataIdInclusive,
+                     byte[]&nbsp;endDataIdInclusive)</code>
+<div class="block">constrain a query using a range of data IDs, assuming big endian ordering
+
+ RocksDB and HBase are currently the only two that will support this, but allows for reverse
+ iteration from "end" to "start" data ID
+
+ All other datastores will throw an UnsupportedOperationException and the forward scan should be
+ preferred for those datastores</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
 <td class="colLast"><span class="typeNameLabel">QueryConstraintsFactory.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html#noConstraints--">noConstraints</a></span>()</code>
 <div class="block">no query constraints, meaning wide open query (this is the default)</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
 <td class="colLast"><span class="typeNameLabel">QueryConstraintsFactory.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/api/QueryConstraintsFactory.html#prefix-byte:A-byte:A-">prefix</a></span>(byte[]&nbsp;partitionKey,
       byte[]&nbsp;sortKeyPrefix)</code>
@@ -790,9 +803,14 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
-<td class="colLast"><span class="typeNameLabel">QueryConstraintsFactoryImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraintsFactoryImpl.html#noConstraints--">noConstraints</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">QueryConstraintsFactoryImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraintsFactoryImpl.html#dataIdsByRangeReverse-byte:A-byte:A-">dataIdsByRangeReverse</a></span>(byte[]&nbsp;startDataIdInclusive,
+                     byte[]&nbsp;endDataIdInclusive)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
+<td class="colLast"><span class="typeNameLabel">QueryConstraintsFactoryImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraintsFactoryImpl.html#noConstraints--">noConstraints</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
 <td class="colLast"><span class="typeNameLabel">QueryConstraintsFactoryImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraintsFactoryImpl.html#prefix-byte:A-byte:A-">prefix</a></span>(byte[]&nbsp;partitionKey,
       byte[]&nbsp;sortKeyPrefix)</code>&nbsp;</td>

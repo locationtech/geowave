@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -140,6 +140,11 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/DataIdRangeQuery.html#DataIdRangeQuery-byte:A-byte:A-">DataIdRangeQuery</a></span>(byte[]&nbsp;startDataIdInclusive,
                 byte[]&nbsp;endDataIdInclusive)</code>&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/DataIdRangeQuery.html#DataIdRangeQuery-byte:A-byte:A-boolean-">DataIdRangeQuery</a></span>(byte[]&nbsp;startDataIdInclusive,
+                byte[]&nbsp;endDataIdInclusive,
+                boolean&nbsp;reverse)</code>&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -183,6 +188,10 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/DataIdRangeQuery.html#getStartDataIdInclusive--">getStartDataIdInclusive</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/DataIdRangeQuery.html#isReverse--">isReverse</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/DataIdRangeQuery.html#toBinary--">toBinary</a></span>()</code>
 <div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
@@ -229,11 +238,22 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <a name="DataIdRangeQuery-byte:A-byte:A-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>DataIdRangeQuery</h4>
 <pre>public&nbsp;DataIdRangeQuery(byte[]&nbsp;startDataIdInclusive,
                         byte[]&nbsp;endDataIdInclusive)</pre>
+</li>
+</ul>
+<a name="DataIdRangeQuery-byte:A-byte:A-boolean-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>DataIdRangeQuery</h4>
+<pre>public&nbsp;DataIdRangeQuery(byte[]&nbsp;startDataIdInclusive,
+                        byte[]&nbsp;endDataIdInclusive,
+                        boolean&nbsp;reverse)</pre>
 </li>
 </ul>
 </li>
@@ -260,6 +280,15 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/que
 <li class="blockList">
 <h4>getEndDataIdInclusive</h4>
 <pre>public&nbsp;byte[]&nbsp;getEndDataIdInclusive()</pre>
+</li>
+</ul>
+<a name="isReverse--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isReverse</h4>
+<pre>public&nbsp;boolean&nbsp;isReverse()</pre>
 </li>
 </ul>
 <a name="createFilters-org.locationtech.geowave.core.store.api.Index-">

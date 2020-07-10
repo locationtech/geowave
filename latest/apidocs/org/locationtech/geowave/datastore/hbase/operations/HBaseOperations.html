@@ -339,8 +339,9 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 </tr>
 <tr id="i27" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseOperations.html#getDataIndexResults-byte:A-byte:A-short-java.lang.String...-">getDataIndexResults</a></span>(byte[]&nbsp;startRow,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseOperations.html#getDataIndexResults-byte:A-byte:A-boolean-short-java.lang.String...-">getDataIndexResults</a></span>(byte[]&nbsp;startRow,
                    byte[]&nbsp;endRow,
+                   boolean&nbsp;reverse,
                    short&nbsp;adapterId,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</code>&nbsp;</td>
 </tr>
@@ -841,7 +842,7 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
                                     short&nbsp;adapterId)</pre>
 </li>
 </ul>
-<a name="getDataIndexResults-byte:A-byte:A-short-java.lang.String...-">
+<a name="getDataIndexResults-byte:A-byte:A-boolean-short-java.lang.String...-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -849,6 +850,7 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 <h4>getDataIndexResults</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;getDataIndexResults(byte[]&nbsp;startRow,
                                                 byte[]&nbsp;endRow,
+                                                boolean&nbsp;reverse,
                                                 short&nbsp;adapterId,
                                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</pre>
 </li>

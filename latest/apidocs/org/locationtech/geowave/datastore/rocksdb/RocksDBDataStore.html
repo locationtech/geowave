@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10};
+var methods = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -203,6 +203,10 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/datastore/rocksdb/RocksDBDataStore.html#close--">close</a></span>()</code>&nbsp;</td>
 </tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/datastore/rocksdb/RocksDBDataStore.html#isReverseIterationSupported--">isReverseIterationSupported</a></span>()</code>&nbsp;</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.mapreduce.BaseMapReduceDataStore">
@@ -267,7 +271,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <a name="close--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>close</h4>
 <pre>public&nbsp;void&nbsp;close()</pre>
@@ -276,6 +280,19 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true#close--" title="class or interface in java.io">close</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a></code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true#close--" title="class or interface in java.lang">close</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="isReverseIterationSupported--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>isReverseIterationSupported</h4>
+<pre>public&nbsp;boolean&nbsp;isReverseIterationSupported()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html#isReverseIterationSupported--">isReverseIterationSupported</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/base/BaseDataStore.html" title="class in org.locationtech.geowave.core.store.base">BaseDataStore</a></code></dd>
 </dl>
 </li>
 </ul>

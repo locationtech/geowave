@@ -1351,9 +1351,13 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/filesystem/util/FileSystemMetadataIterator.html" title="class in org.locationtech.geowave.datastore.filesystem.util">FileSystemMetadataIterator</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/filesystem/util/DataIndexRowIterator.html" title="class in org.locationtech.geowave.datastore.filesystem.util">DataIndexRowIterator</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/filesystem/util/FileSystemMetadataIterator.html" title="class in org.locationtech.geowave.datastore.filesystem.util">FileSystemMetadataIterator</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/filesystem/util/FileSystemRowIterator.html" title="class in org.locationtech.geowave.datastore.filesystem.util">FileSystemRowIterator</a></span></code>&nbsp;</td>
 </tr>
@@ -1619,7 +1623,15 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/DataIndexRowIterator.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">DataIndexRowIterator</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/DataIndexBoundedReverseRowIterator.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">DataIndexBoundedReverseRowIterator</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/DataIndexForwardRowIterator.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">DataIndexForwardRowIterator</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/DataIndexReverseRowIterator.html" title="class in org.locationtech.geowave.datastore.rocksdb.util">DataIndexReverseRowIterator</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
@@ -1644,8 +1656,9 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">RocksDBDataIndexTable.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBDataIndexTable.html#dataIndexIterator-byte:A-byte:A-">dataIndexIterator</a></span>(byte[]&nbsp;startDataId,
-                 byte[]&nbsp;endDataId)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">RocksDBDataIndexTable.</span><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBDataIndexTable.html#dataIndexIterator-byte:A-byte:A-boolean-">dataIndexIterator</a></span>(byte[]&nbsp;startDataId,
+                 byte[]&nbsp;endDataId,
+                 boolean&nbsp;reverse)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveMetadata.html" title="class in org.locationtech.geowave.core.store.entities">GeoWaveMetadata</a>&gt;</code></td>

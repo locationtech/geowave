@@ -580,7 +580,7 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../../org/locationtech/geowave/core/store/operations/RowReader.html" title="interface in org.locationtech.geowave.core.store.operations">RowReader</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">DataIndexUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/base/dataidx/DataIndexUtils.html#getRowReader-org.locationtech.geowave.core.store.operations.DataStoreOperations-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-java.lang.String:A-short-byte:A-byte:A-">getRowReader</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/operations/DataStoreOperations.html" title="interface in org.locationtech.geowave.core.store.operations">DataStoreOperations</a>&nbsp;operations,
+<td class="colLast"><span class="typeNameLabel">DataIndexUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/base/dataidx/DataIndexUtils.html#getRowReader-org.locationtech.geowave.core.store.operations.DataStoreOperations-org.locationtech.geowave.core.store.adapter.PersistentAdapterStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-java.lang.String:A-short-byte:A-byte:A-boolean-">getRowReader</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/operations/DataStoreOperations.html" title="interface in org.locationtech.geowave.core.store.operations">DataStoreOperations</a>&nbsp;operations,
             <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
             <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore,
             org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[],<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;&nbsp;fieldSubsets,
@@ -588,7 +588,8 @@
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;additionalAuthorizations,
             short&nbsp;adapterId,
             byte[]&nbsp;startDataId,
-            byte[]&nbsp;endDataId)</code>&nbsp;</td>
+            byte[]&nbsp;endDataId,
+            boolean&nbsp;reverse)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -1698,8 +1699,9 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">HBaseOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseOperations.html#getDataIndexResults-byte:A-byte:A-short-java.lang.String...-">getDataIndexResults</a></span>(byte[]&nbsp;startRow,
+<td class="colLast"><span class="typeNameLabel">HBaseOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseOperations.html#getDataIndexResults-byte:A-byte:A-boolean-short-java.lang.String...-">getDataIndexResults</a></span>(byte[]&nbsp;startRow,
                    byte[]&nbsp;endRow,
+                   boolean&nbsp;reverse,
                    short&nbsp;adapterId,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</code>&nbsp;</td>
 </tr>
@@ -2129,11 +2131,15 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a></code></td>
-<td class="colLast"><span class="typeNameLabel">DataIndexRowIterator.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/util/DataIndexRowIterator.html#readRow-byte:A-byte:A-">readRow</a></span>(byte[]&nbsp;key,
-       byte[]&nbsp;value)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a></code></td>
+<td class="colLast"><span class="typeNameLabel">DataIndexBoundedReverseRowIterator.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/util/DataIndexBoundedReverseRowIterator.html#next--">next</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a></code></td>
+<td class="colLast"><span class="typeNameLabel">DataIndexForwardRowIterator.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/util/DataIndexForwardRowIterator.html#readRow-byte:A-byte:A-">readRow</a></span>(byte[]&nbsp;key,
+       byte[]&nbsp;value)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a></code></td>
 <td class="colLast"><span class="typeNameLabel">RocksDBRowIterator.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBRowIterator.html#readRow-byte:A-byte:A-">readRow</a></span>(byte[]&nbsp;key,
        byte[]&nbsp;value)</code>&nbsp;</td>
@@ -2153,8 +2159,9 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">RocksDBDataIndexTable.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBDataIndexTable.html#dataIndexIterator-byte:A-byte:A-">dataIndexIterator</a></span>(byte[]&nbsp;startDataId,
-                 byte[]&nbsp;endDataId)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">RocksDBDataIndexTable.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBDataIndexTable.html#dataIndexIterator-byte:A-byte:A-boolean-">dataIndexIterator</a></span>(byte[]&nbsp;startDataId,
+                 byte[]&nbsp;endDataId,
+                 boolean&nbsp;reverse)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
