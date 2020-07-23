@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Iterators;
+import com.google.common.collect.Maps;
 
 /**
  * This class will persist Adapter Internal Adapter Mappings within an Accumulo table for GeoWave
@@ -42,7 +43,7 @@ import com.google.common.collect.Iterators;
 public class InternalAdapterStoreImpl implements InternalAdapterStore {
   private static final Logger LOGGER = LoggerFactory.getLogger(InternalAdapterStoreImpl.class);
   private static final Object MUTEX = new Object();
-  protected final BiMap<String, Short> cache = HashBiMap.create();
+  protected final BiMap<String, Short> cache = Maps.synchronizedBiMap(HashBiMap.create());
   private static final byte[] INTERNAL_TO_EXTERNAL_ID = new byte[] {0};
   private static final byte[] EXTERNAL_TO_INTERNAL_ID = new byte[] {1};
 

@@ -14,12 +14,13 @@ import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.google.common.collect.Maps;
 
 public class JobContextInternalAdapterStore implements InternalAdapterStore {
   private static final Class<?> CLASS = JobContextInternalAdapterStore.class;
   private final JobContext context;
   private final InternalAdapterStore persistentInternalAdapterStore;
-  protected final BiMap<String, Short> cache = HashBiMap.create();
+  protected final BiMap<String, Short> cache = Maps.synchronizedBiMap(HashBiMap.create());
 
   public JobContextInternalAdapterStore(
       final JobContext context,

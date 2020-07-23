@@ -806,6 +806,8 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature> imple
     }
   }
 
+  // this is not thread-safe, but should be ok given the only modification is on initialization
+  // which is a synchronized operation
   private final transient BiMap<String, Integer> fieldToPositionMap = HashBiMap.create();
   private transient BiMap<Integer, String> positionToFieldMap = null;
   private final transient Map<String, List<String>> modelToDimensionsMap =
