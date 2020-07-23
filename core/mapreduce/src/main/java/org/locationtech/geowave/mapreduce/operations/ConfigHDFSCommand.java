@@ -73,7 +73,7 @@ public class ConfigHDFSCommand extends ServiceEnabledCommand<Void> {
   public Void computeResults(final OperationParams params) throws Exception {
     if (parameters.size() != 1) {
       throw new ParameterException(
-          "Requires argument: <HDFS DefaultFS URL> (HDFS hostname:port or namenode HA nameservice, eg: sandbox.hortonworks.com:8020 )");
+          "Requires argument: <HDFS DefaultFS URL> (HDFS hostname:port or namenode HA nameservice, eg: sandbox.mydomain.com:8020 )");
     }
     url = parameters.get(0);
     final Properties existingProps = getGeoWaveConfigProperties(params);

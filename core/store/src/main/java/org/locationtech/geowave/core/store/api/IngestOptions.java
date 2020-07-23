@@ -100,7 +100,7 @@ public class IngestOptions<T> {
      * provide properties used for particular URL handlers
      *
      * @param properties for URL handlers such as s3.endpoint.url=s3.amazonaws.com or
-     *        hdfs.defaultFS.url=sandbox.hortonworks.com:8020
+     *        hdfs.defaultFS.url=sandbox.mydomain.com:8020
      * @return this builder
      */
     Builder<T> properties(Properties properties);
