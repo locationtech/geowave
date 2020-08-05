@@ -62,10 +62,6 @@ public class RocksDBClientCache {
         RocksDBClient.indexWriteOptions.close();
         RocksDBClient.indexWriteOptions = null;
       }
-      if (RocksDBClient.indexReadOptions != null) {
-        RocksDBClient.indexReadOptions.close();
-        RocksDBClient.indexReadOptions = null;
-      }
       if (RocksDBClient.batchWriteOptions != null) {
         RocksDBClient.batchWriteOptions.close();
         RocksDBClient.batchWriteOptions = null;
@@ -83,10 +79,6 @@ public class RocksDBClientCache {
     if (RocksDBClient.indexWriteOptions != null) {
       RocksDBClient.indexWriteOptions.close();
       RocksDBClient.indexWriteOptions = null;
-    }
-    if (RocksDBClient.indexReadOptions != null) {
-      RocksDBClient.indexReadOptions.close();
-      RocksDBClient.indexReadOptions = null;
     }
     if (RocksDBClient.batchWriteOptions != null) {
       RocksDBClient.batchWriteOptions.close();

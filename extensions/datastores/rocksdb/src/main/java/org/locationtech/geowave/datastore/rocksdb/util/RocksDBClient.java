@@ -171,7 +171,6 @@ public class RocksDBClient implements Closeable {
 
   protected static Options indexWriteOptions = null;
   protected static WriteOptions batchWriteOptions = null;
-  protected static Options indexReadOptions = null;
   protected static Options metadataOptions = null;
 
   public RocksDBClient(
@@ -200,7 +199,6 @@ public class RocksDBClient implements Closeable {
   private RocksDBIndexTable loadIndexTable(final IndexCacheKey key) {
     return new RocksDBIndexTable(
         indexWriteOptions,
-        indexReadOptions,
         batchWriteOptions,
         key.directory,
         key.adapterId,
@@ -214,7 +212,6 @@ public class RocksDBClient implements Closeable {
   private RocksDBDataIndexTable loadDataIndexTable(final DataIndexCacheKey key) {
     return new RocksDBDataIndexTable(
         indexWriteOptions,
-        indexReadOptions,
         batchWriteOptions,
         key.directory,
         key.adapterId,
@@ -237,9 +234,8 @@ public class RocksDBClient implements Closeable {
       final int cores = Runtime.getRuntime().availableProcessors();
       indexWriteOptions =
           new Options().setCreateIfMissing(true).prepareForBulkLoad().setIncreaseParallelism(cores);
-      indexReadOptions = new Options().setIncreaseParallelism(cores);
       batchWriteOptions =
-          new WriteOptions().setDisableWAL(false).setNoSlowdown(false).setSync(false);
+          new WriteOptions().setDisableWAL(true).setNoSlowdown(false).setSync(false);
     }
     final String directory = subDirectory + "/" + tableName;
     return indexTableCache.get(
@@ -256,7 +252,6 @@ public class RocksDBClient implements Closeable {
       final int cores = Runtime.getRuntime().availableProcessors();
       indexWriteOptions =
           new Options().setCreateIfMissing(true).prepareForBulkLoad().setIncreaseParallelism(cores);
-      indexReadOptions = new Options().setIncreaseParallelism(cores);
       batchWriteOptions =
           new WriteOptions().setDisableWAL(false).setNoSlowdown(false).setSync(false);
     }
