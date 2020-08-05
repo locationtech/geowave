@@ -102,12 +102,16 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
   private final KeyspaceState state;
 
   public CassandraOperations(final CassandraRequiredOptions options) {
+    this(options, SessionPool.getInstance().getSession(options.getContactPoint()));
+  }
+
+  public CassandraOperations(final CassandraRequiredOptions options, Session session) {
     if ((options.getGeoWaveNamespace() == null) || options.getGeoWaveNamespace().equals("")) {
       gwNamespace = "geowave";
     } else {
       gwNamespace = getCassandraSafeName(options.getGeoWaveNamespace());
     }
-    session = SessionPool.getInstance().getSession(options.getContactPoint());
+    this.session = session;
     state = KeyspaceStatePool.getInstance().getCachedState(options.getContactPoint(), gwNamespace);
     this.options = (CassandraOptions) options.getStoreOptions();
     initKeyspace();
