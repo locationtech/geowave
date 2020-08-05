@@ -35,7 +35,10 @@ public class RocksDBOptions extends StoreFactoryOptions {
       names = "--batchWriteSize",
       description = "The size (in records) for each batched write. Anything <= 1 will use synchronous single record writes without batching. Defaults to 1000.")
   private int batchWriteSize = 1000;
-
+  @Parameter(
+      names = "--walOnBatchWrite",
+      description = "Whether to enable write-ahead-log on batched writes.")
+  private boolean walOnBatchWrite = true;
 
   @ParametersDelegate
   protected BaseDataStoreOptions baseOptions = new BaseDataStoreOptions() {
@@ -115,5 +118,13 @@ public class RocksDBOptions extends StoreFactoryOptions {
 
   public void setBatchWriteSize(final int batchWriteSize) {
     this.batchWriteSize = batchWriteSize;
+  }
+
+  public boolean isWalOnBatchWrite() {
+    return walOnBatchWrite;
+  }
+
+  public void setWalOnBatchWrite(final boolean walOnBatchWrite) {
+    this.walOnBatchWrite = walOnBatchWrite;
   }
 }

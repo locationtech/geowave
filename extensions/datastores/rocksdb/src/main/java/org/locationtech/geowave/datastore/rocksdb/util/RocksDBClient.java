@@ -168,20 +168,23 @@ public class RocksDBClient implements Closeable {
   private final boolean visibilityEnabled;
   private final boolean compactOnWrite;
   private final int batchWriteSize;
+  private final boolean walOnBatchWrite;
 
   protected static Options indexWriteOptions = null;
-  protected static WriteOptions batchWriteOptions = null;
+  protected WriteOptions batchWriteOptions = null;
   protected static Options metadataOptions = null;
 
   public RocksDBClient(
       final String subDirectory,
       final boolean visibilityEnabled,
       final boolean compactOnWrite,
-      final int batchWriteSize) {
+      final int batchWriteSize,
+      final boolean walOnBatchWrite) {
     this.subDirectory = subDirectory;
     this.visibilityEnabled = visibilityEnabled;
     this.compactOnWrite = compactOnWrite;
     this.batchWriteSize = batchWriteSize;
+    this.walOnBatchWrite = walOnBatchWrite;
   }
 
   private RocksDBMetadataTable loadMetadataTable(final CacheKey key) throws RocksDBException {
@@ -234,8 +237,10 @@ public class RocksDBClient implements Closeable {
       final int cores = Runtime.getRuntime().availableProcessors();
       indexWriteOptions =
           new Options().setCreateIfMissing(true).prepareForBulkLoad().setIncreaseParallelism(cores);
+    }
+    if (batchWriteOptions == null) {
       batchWriteOptions =
-          new WriteOptions().setDisableWAL(true).setNoSlowdown(false).setSync(false);
+          new WriteOptions().setDisableWAL(!walOnBatchWrite).setNoSlowdown(false).setSync(false);
     }
     final String directory = subDirectory + "/" + tableName;
     return indexTableCache.get(
@@ -252,8 +257,10 @@ public class RocksDBClient implements Closeable {
       final int cores = Runtime.getRuntime().availableProcessors();
       indexWriteOptions =
           new Options().setCreateIfMissing(true).prepareForBulkLoad().setIncreaseParallelism(cores);
+    }
+    if (batchWriteOptions == null) {
       batchWriteOptions =
-          new WriteOptions().setDisableWAL(false).setNoSlowdown(false).setSync(false);
+          new WriteOptions().setDisableWAL(!walOnBatchWrite).setNoSlowdown(false).setSync(false);
     }
     final String directory = subDirectory + "/" + tableName;
     return dataIndexTableCache.get(
@@ -336,5 +343,9 @@ public class RocksDBClient implements Closeable {
     dataIndexTableCache.invalidateAll();
     metadataTableCache.asMap().values().forEach(db -> db.close());
     metadataTableCache.invalidateAll();
+    if (batchWriteOptions != null) {
+      batchWriteOptions.close();
+      batchWriteOptions = null;
+    }
   }
 }
