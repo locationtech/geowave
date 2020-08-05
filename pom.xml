@@ -73,7 +73,7 @@
         <bigtable.version>1.2.0</bigtable.version>
         <cassandra.version>3.11.3</cassandra.version>
         <redisson.version>3.11.6</redisson.version>
-        <rocksdb.version>5.15.10</rocksdb.version>
+        <rocksdb.version>6.11.4</rocksdb.version>
         <cassandraclient.version>3.5.1</cassandraclient.version>
         <kuduclient.version>1.8.0</kuduclient.version>
         <grpc.version>1.13.1</grpc.version>
