@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class RocksDBClient implements Closeable {
   private static final Logger LOGGER = LoggerFactory.getLogger(RocksDBClient.class);
@@ -199,6 +200,9 @@ public class RocksDBClient implements Closeable {
         compactOnWrite);
   }
 
+  @SuppressFBWarnings(
+      value = "IS2_INCONSISTENT_SYNC",
+      justification = "This is only called from the loading cache which is synchronized")
   private RocksDBIndexTable loadIndexTable(final IndexCacheKey key) {
     return new RocksDBIndexTable(
         indexWriteOptions,
@@ -212,6 +216,9 @@ public class RocksDBClient implements Closeable {
         batchWriteSize);
   }
 
+  @SuppressFBWarnings(
+      value = "IS2_INCONSISTENT_SYNC",
+      justification = "This is only called from the loading cache which is synchronized")
   private RocksDBDataIndexTable loadDataIndexTable(final DataIndexCacheKey key) {
     return new RocksDBDataIndexTable(
         indexWriteOptions,
@@ -343,9 +350,11 @@ public class RocksDBClient implements Closeable {
     dataIndexTableCache.invalidateAll();
     metadataTableCache.asMap().values().forEach(db -> db.close());
     metadataTableCache.invalidateAll();
-    if (batchWriteOptions != null) {
-      batchWriteOptions.close();
-      batchWriteOptions = null;
+    synchronized (this) {
+      if (batchWriteOptions != null) {
+        batchWriteOptions.close();
+        batchWriteOptions = null;
+      }
     }
   }
 }

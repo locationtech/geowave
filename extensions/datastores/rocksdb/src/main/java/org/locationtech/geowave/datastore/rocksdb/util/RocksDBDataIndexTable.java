@@ -10,6 +10,7 @@ package org.locationtech.geowave.datastore.rocksdb.util;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
@@ -70,11 +71,12 @@ public class RocksDBDataIndexTable extends AbstractRocksDBTable {
             Streams.zip(
                 dataIdsList.stream(),
                 dataIdxResults.stream(),
-                (key, value) -> DataIndexUtils.deserializeDataIndexRow(
-                    key,
-                    adapterId,
-                    value,
-                    visibilityEnabled)).iterator());
+                (key, value) -> value == null ? null
+                    : DataIndexUtils.deserializeDataIndexRow(
+                        key,
+                        adapterId,
+                        value,
+                        visibilityEnabled)).filter(Objects::nonNull).iterator());
       }
     } catch (final RocksDBException e) {
       LOGGER.error("Unable to get values by data ID", e);
