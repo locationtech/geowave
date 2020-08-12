@@ -10,7 +10,7 @@ package org.locationtech.geowave.datastore.rocksdb.util;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
@@ -25,13 +25,13 @@ import org.rocksdb.Slice;
 import org.rocksdb.WriteOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.Streams;
 
 public class RocksDBDataIndexTable extends AbstractRocksDBTable {
   private static final Logger LOGGER = LoggerFactory.getLogger(RocksDBDataIndexTable.class);
 
   public RocksDBDataIndexTable(
       final Options writeOptions,
-      final Options readOptions,
       final WriteOptions batchWriteOptions,
       final String subDirectory,
       final short adapterId,
@@ -40,7 +40,6 @@ public class RocksDBDataIndexTable extends AbstractRocksDBTable {
       final int batchSize) {
     super(
         writeOptions,
-        readOptions,
         batchWriteOptions,
         subDirectory,
         adapterId,
@@ -57,21 +56,28 @@ public class RocksDBDataIndexTable extends AbstractRocksDBTable {
     if ((dataIds == null) || (dataIds.length == 0)) {
       return new CloseableIterator.Empty<>();
     }
-    final RocksDB readDb = getReadDb();
+    final RocksDB readDb = getDb();
     if (readDb == null) {
       return new CloseableIterator.Empty<>();
     }
 
     try {
       final List<byte[]> dataIdsList = Arrays.asList(dataIds);
-      final Map<byte[], byte[]> dataIdxResults = readDb.multiGet(dataIdsList);
-      return new CloseableIterator.Wrapper(
-          dataIdsList.stream().filter(dataId -> dataIdxResults.containsKey(dataId)).map(
-              dataId -> DataIndexUtils.deserializeDataIndexRow(
-                  dataId,
-                  adapterId,
-                  dataIdxResults.get(dataId),
-                  visibilityEnabled)).iterator());
+      final List<byte[]> dataIdxResults = readDb.multiGetAsList(dataIdsList);
+      if (dataIdsList.size() != dataIdxResults.size()) {
+        LOGGER.warn("Result size differs from original keys");
+      } else {
+        return new CloseableIterator.Wrapper(
+            Streams.zip(
+                dataIdsList.stream(),
+                dataIdxResults.stream(),
+                (key, value) -> value == null ? null
+                    : DataIndexUtils.deserializeDataIndexRow(
+                        key,
+                        adapterId,
+                        value,
+                        visibilityEnabled)).filter(Objects::nonNull).iterator());
+      }
     } catch (final RocksDBException e) {
       LOGGER.error("Unable to get values by data ID", e);
     }
@@ -82,7 +88,7 @@ public class RocksDBDataIndexTable extends AbstractRocksDBTable {
       final byte[] startDataId,
       final byte[] endDataId,
       final boolean reverse) {
-    final RocksDB readDb = getReadDb();
+    final RocksDB readDb = getDb();
     if (readDb == null) {
       return new CloseableIterator.Empty<>();
     }

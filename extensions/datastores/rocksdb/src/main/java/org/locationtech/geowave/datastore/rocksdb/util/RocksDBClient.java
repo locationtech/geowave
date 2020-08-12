@@ -11,7 +11,10 @@ package org.locationtech.geowave.datastore.rocksdb.util;
 import java.io.Closeable;
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.rocksdb.Options;
 import org.rocksdb.RocksDB;
@@ -22,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class RocksDBClient implements Closeable {
   private static final Logger LOGGER = LoggerFactory.getLogger(RocksDBClient.class);
@@ -168,21 +172,23 @@ public class RocksDBClient implements Closeable {
   private final boolean visibilityEnabled;
   private final boolean compactOnWrite;
   private final int batchWriteSize;
+  private final boolean walOnBatchWrite;
 
   protected static Options indexWriteOptions = null;
-  protected static WriteOptions batchWriteOptions = null;
-  protected static Options indexReadOptions = null;
+  protected WriteOptions batchWriteOptions = null;
   protected static Options metadataOptions = null;
 
   public RocksDBClient(
       final String subDirectory,
       final boolean visibilityEnabled,
       final boolean compactOnWrite,
-      final int batchWriteSize) {
+      final int batchWriteSize,
+      final boolean walOnBatchWrite) {
     this.subDirectory = subDirectory;
     this.visibilityEnabled = visibilityEnabled;
     this.compactOnWrite = compactOnWrite;
     this.batchWriteSize = batchWriteSize;
+    this.walOnBatchWrite = walOnBatchWrite;
   }
 
   private RocksDBMetadataTable loadMetadataTable(final CacheKey key) throws RocksDBException {
@@ -197,10 +203,12 @@ public class RocksDBClient implements Closeable {
         compactOnWrite);
   }
 
+  @SuppressFBWarnings(
+      value = "IS2_INCONSISTENT_SYNC",
+      justification = "This is only called from the loading cache which is synchronized")
   private RocksDBIndexTable loadIndexTable(final IndexCacheKey key) {
     return new RocksDBIndexTable(
         indexWriteOptions,
-        indexReadOptions,
         batchWriteOptions,
         key.directory,
         key.adapterId,
@@ -211,10 +219,12 @@ public class RocksDBClient implements Closeable {
         batchWriteSize);
   }
 
+  @SuppressFBWarnings(
+      value = "IS2_INCONSISTENT_SYNC",
+      justification = "This is only called from the loading cache which is synchronized")
   private RocksDBDataIndexTable loadDataIndexTable(final DataIndexCacheKey key) {
     return new RocksDBDataIndexTable(
         indexWriteOptions,
-        indexReadOptions,
         batchWriteOptions,
         key.directory,
         key.adapterId,
@@ -237,9 +247,10 @@ public class RocksDBClient implements Closeable {
       final int cores = Runtime.getRuntime().availableProcessors();
       indexWriteOptions =
           new Options().setCreateIfMissing(true).prepareForBulkLoad().setIncreaseParallelism(cores);
-      indexReadOptions = new Options().setIncreaseParallelism(cores);
+    }
+    if (batchWriteOptions == null) {
       batchWriteOptions =
-          new WriteOptions().setDisableWAL(false).setNoSlowdown(false).setSync(false);
+          new WriteOptions().setDisableWAL(!walOnBatchWrite).setNoSlowdown(false).setSync(false);
     }
     final String directory = subDirectory + "/" + tableName;
     return indexTableCache.get(
@@ -256,9 +267,10 @@ public class RocksDBClient implements Closeable {
       final int cores = Runtime.getRuntime().availableProcessors();
       indexWriteOptions =
           new Options().setCreateIfMissing(true).prepareForBulkLoad().setIncreaseParallelism(cores);
-      indexReadOptions = new Options().setIncreaseParallelism(cores);
+    }
+    if (batchWriteOptions == null) {
       batchWriteOptions =
-          new WriteOptions().setDisableWAL(false).setNoSlowdown(false).setSync(false);
+          new WriteOptions().setDisableWAL(!walOnBatchWrite).setNoSlowdown(false).setSync(false);
     }
     final String directory = subDirectory + "/" + tableName;
     return dataIndexTableCache.get(
@@ -323,6 +335,21 @@ public class RocksDBClient implements Closeable {
     return visibilityEnabled;
   }
 
+  public List<RocksDBIndexTable> getIndexTables(final Predicate<RocksDBIndexTable> filter) {
+    return indexTableCache.asMap().values().stream().filter(filter).collect(Collectors.toList());
+  }
+
+  public List<RocksDBDataIndexTable> getDataIndexTables(
+      final Predicate<RocksDBDataIndexTable> filter) {
+    return dataIndexTableCache.asMap().values().stream().filter(filter).collect(
+        Collectors.toList());
+  }
+
+  public List<RocksDBMetadataTable> getMetadataTables(
+      final Predicate<RocksDBMetadataTable> filter) {
+    return metadataTableCache.asMap().values().stream().filter(filter).collect(Collectors.toList());
+  }
+
   public void mergeData() {
     indexTableCache.asMap().values().parallelStream().forEach(db -> db.compact());
     dataIndexTableCache.asMap().values().parallelStream().forEach(db -> db.compact());
@@ -341,5 +368,11 @@ public class RocksDBClient implements Closeable {
     dataIndexTableCache.invalidateAll();
     metadataTableCache.asMap().values().forEach(db -> db.close());
     metadataTableCache.invalidateAll();
+    synchronized (this) {
+      if (batchWriteOptions != null) {
+        batchWriteOptions.close();
+        batchWriteOptions = null;
+      }
+    }
   }
 }

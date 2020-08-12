@@ -39,12 +39,9 @@ abstract public class AbstractRocksDBTable {
   private WriteBatch currentBatch;
   private final int batchSize;
   private RocksDB writeDb;
-  private RocksDB readDb;
   private final Options writeOptions;
-  private final Options readOptions;
   private final WriteOptions batchWriteOptions;
   protected final String subDirectory;
-  protected boolean readerDirty = false;
   private boolean exists;
   protected final short adapterId;
   protected boolean visibilityEnabled;
@@ -53,7 +50,6 @@ abstract public class AbstractRocksDBTable {
 
   public AbstractRocksDBTable(
       final Options writeOptions,
-      final Options readOptions,
       final WriteOptions batchWriteOptions,
       final String subDirectory,
       final short adapterId,
@@ -62,7 +58,6 @@ abstract public class AbstractRocksDBTable {
       final int batchSize) {
     super();
     this.writeOptions = writeOptions;
-    this.readOptions = readOptions;
     this.batchWriteOptions = batchWriteOptions;
     this.subDirectory = subDirectory;
     this.adapterId = adapterId;
@@ -74,9 +69,8 @@ abstract public class AbstractRocksDBTable {
   }
 
   public void delete(final byte[] key) {
-    final RocksDB db = getWriteDb();
+    final RocksDB db = getDb();
     try {
-      readerDirty = true;
       db.singleDelete(key);
     } catch (final RocksDBException e) {
       LOGGER.warn("Unable to delete key", e);
@@ -111,9 +105,8 @@ abstract public class AbstractRocksDBTable {
     } else
 
     {
-      final RocksDB db = getWriteDb();
+      final RocksDB db = getDb();
       try {
-        readerDirty = true;
         db.put(key, value);
       } catch (final RocksDBException e) {
         LOGGER.warn("Unable to write key-value", e);
@@ -124,9 +117,8 @@ abstract public class AbstractRocksDBTable {
   private void flushWriteQueue() {
     try {
       writeSemaphore.acquire();
-      readerDirty = true;
       CompletableFuture.runAsync(
-          new BatchWriter(currentBatch, getWriteDb(), batchWriteOptions, writeSemaphore),
+          new BatchWriter(currentBatch, getDb(), batchWriteOptions, writeSemaphore),
           BATCH_WRITE_THREADS);
     } catch (final InterruptedException e) {
       LOGGER.warn("async write semaphore interrupted", e);
@@ -151,26 +143,17 @@ abstract public class AbstractRocksDBTable {
 
   protected void internalFlush() {
     if (compactOnWrite) {
-      final RocksDB db = getWriteDb();
+      final RocksDB db = getDb();
       try {
         db.compactRange();
       } catch (final RocksDBException e) {
         LOGGER.warn("Unable to compact range", e);
       }
     }
-    // force re-opening a reader to catch the updates from this write
-    if (readerDirty && (readDb != null)) {
-      synchronized (this) {
-        if (readDb != null) {
-          readDb.close();
-          readDb = null;
-        }
-      }
-    }
   }
 
   public void compact() {
-    final RocksDB db = getWriteDb();
+    final RocksDB db = getDb();
     try {
       db.compactRange();
     } catch (final RocksDBException e) {
@@ -198,15 +181,16 @@ abstract public class AbstractRocksDBTable {
         writeDb.close();
         writeDb = null;
       }
-      if (readDb != null) {
-        readDb.close();
-      }
     }
+  }
+
+  public String getSubDirectory() {
+    return subDirectory;
   }
 
   @SuppressFBWarnings(
       justification = "double check for null is intentional to avoid synchronized blocks when not needed.")
-  protected RocksDB getWriteDb() {
+  public RocksDB getDb() {
     // avoid synchronization if unnecessary by checking for null outside
     // synchronized block
     if (writeDb == null) {
@@ -227,30 +211,6 @@ abstract public class AbstractRocksDBTable {
       }
     }
     return writeDb;
-  }
-
-  @SuppressFBWarnings(
-      justification = "double check for null is intentional to avoid synchronized blocks when not needed.")
-  protected RocksDB getReadDb() {
-    if (!exists) {
-      return null;
-    }
-    // avoid synchronization if unnecessary by checking for null outside
-    // synchronized block
-    if (readDb == null) {
-      synchronized (this) {
-        // check again within synchronized block
-        if (readDb == null) {
-          try {
-            readerDirty = false;
-            readDb = RocksDB.openReadOnly(readOptions, subDirectory);
-          } catch (final RocksDBException e) {
-            LOGGER.warn("Unable to open for reading", e);
-          }
-        }
-      }
-    }
-    return readDb;
   }
 
   private static class BatchWriter implements Runnable {

@@ -27,7 +27,8 @@ public class RocksDBClientCache {
             subDirectoryVisiblityPair.directory,
             subDirectoryVisiblityPair.visibilityEnabled,
             subDirectoryVisiblityPair.compactOnWrite,
-            subDirectoryVisiblityPair.batchSize);
+            subDirectoryVisiblityPair.batchSize,
+            subDirectoryVisiblityPair.walOnBatchWrite);
       });
 
   protected RocksDBClientCache() {}
@@ -36,18 +37,30 @@ public class RocksDBClientCache {
       final String directory,
       final boolean visibilityEnabled,
       final boolean compactOnWrite,
-      final int batchWriteSize) {
+      final int batchWriteSize,
+      final boolean walOnBatchWrite) {
     return clientCache.get(
-        new ClientKey(directory, visibilityEnabled, compactOnWrite, batchWriteSize));
+        new ClientKey(
+            directory,
+            visibilityEnabled,
+            compactOnWrite,
+            batchWriteSize,
+            walOnBatchWrite));
   }
 
   public synchronized void close(
       final String directory,
       final boolean visibilityEnabled,
       final boolean compactOnWrite,
-      final int batchWriteSize) {
+      final int batchWriteSize,
+      final boolean walOnBatchWrite) {
     final ClientKey key =
-        new ClientKey(directory, visibilityEnabled, compactOnWrite, batchWriteSize);
+        new ClientKey(
+            directory,
+            visibilityEnabled,
+            compactOnWrite,
+            batchWriteSize,
+            walOnBatchWrite);
     final RocksDBClient client = clientCache.getIfPresent(key);
     if (client != null) {
       clientCache.invalidate(key);
@@ -61,14 +74,6 @@ public class RocksDBClientCache {
       if (RocksDBClient.indexWriteOptions != null) {
         RocksDBClient.indexWriteOptions.close();
         RocksDBClient.indexWriteOptions = null;
-      }
-      if (RocksDBClient.indexReadOptions != null) {
-        RocksDBClient.indexReadOptions.close();
-        RocksDBClient.indexReadOptions = null;
-      }
-      if (RocksDBClient.batchWriteOptions != null) {
-        RocksDBClient.batchWriteOptions.close();
-        RocksDBClient.batchWriteOptions = null;
       }
     }
   }
@@ -84,14 +89,6 @@ public class RocksDBClientCache {
       RocksDBClient.indexWriteOptions.close();
       RocksDBClient.indexWriteOptions = null;
     }
-    if (RocksDBClient.indexReadOptions != null) {
-      RocksDBClient.indexReadOptions.close();
-      RocksDBClient.indexReadOptions = null;
-    }
-    if (RocksDBClient.batchWriteOptions != null) {
-      RocksDBClient.batchWriteOptions.close();
-      RocksDBClient.batchWriteOptions = null;
-    }
   }
 
   private static class ClientKey {
@@ -99,17 +96,20 @@ public class RocksDBClientCache {
     private final boolean visibilityEnabled;
     private final boolean compactOnWrite;;
     private final int batchSize;
+    private final boolean walOnBatchWrite;
 
     public ClientKey(
         final String directory,
         final boolean visibilityEnabled,
         final boolean compactOnWrite,
-        final int batchSize) {
+        final int batchSize,
+        final boolean walOnBatchWrite) {
       super();
       this.directory = directory;
       this.visibilityEnabled = visibilityEnabled;
       this.compactOnWrite = compactOnWrite;
       this.batchSize = batchSize;
+      this.walOnBatchWrite = walOnBatchWrite;
     }
 
     @Override
@@ -120,6 +120,7 @@ public class RocksDBClientCache {
       result = (prime * result) + (compactOnWrite ? 1231 : 1237);
       result = (prime * result) + ((directory == null) ? 0 : directory.hashCode());
       result = (prime * result) + (visibilityEnabled ? 1231 : 1237);
+      result = (prime * result) + (walOnBatchWrite ? 1231 : 1237);
       return result;
     }
 
@@ -151,7 +152,11 @@ public class RocksDBClientCache {
       if (visibilityEnabled != other.visibilityEnabled) {
         return false;
       }
+      if (walOnBatchWrite != other.walOnBatchWrite) {
+        return false;
+      }
       return true;
     }
+
   }
 }

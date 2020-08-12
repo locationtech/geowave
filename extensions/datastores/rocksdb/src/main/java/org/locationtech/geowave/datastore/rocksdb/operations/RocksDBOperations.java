@@ -48,6 +48,7 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
   private final String directory;
   private final boolean visibilityEnabled;
   private final boolean compactOnWrite;
+  private final boolean walOnBatchWrite;
   private final int batchWriteSize;
 
   public RocksDBOperations(final RocksDBOptions options) {
@@ -62,13 +63,15 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
     visibilityEnabled = options.getStoreOptions().isVisibilityEnabled();
     compactOnWrite = options.isCompactOnWrite();
     batchWriteSize = options.getBatchWriteSize();
+    walOnBatchWrite = options.isWalOnBatchWrite();
     // a factory method that returns a RocksDB instance
     client =
         RocksDBClientCache.getInstance().getClient(
             directory,
             visibilityEnabled,
             compactOnWrite,
-            batchWriteSize);
+            batchWriteSize,
+            walOnBatchWrite);
   }
 
   @Override
@@ -85,8 +88,12 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
             internalAdapterStore,
             adapterIndexMappingStore,
             maxRangeDecomposition);
-    client.mergeData();
+    compactData();
     return retVal;
+  }
+
+  public void compactData() {
+    client.mergeData();
   }
 
   @Override
@@ -95,8 +102,12 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
       final InternalAdapterStore internalAdapterStore) {
     final boolean retVal =
         MapReduceDataStoreOperations.super.mergeStats(statsStore, internalAdapterStore);
-    client.mergeMetadata();
+    compactMetadata();
     return retVal;
+  }
+
+  public void compactMetadata() {
+    client.mergeMetadata();
   }
 
   @Override
@@ -232,6 +243,11 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
         directory,
         visibilityEnabled,
         compactOnWrite,
-        batchWriteSize);
+        batchWriteSize,
+        walOnBatchWrite);
+  }
+
+  public RocksDBClient getClient() {
+    return client;
   }
 }

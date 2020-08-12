@@ -33,7 +33,6 @@ public class RocksDBIndexTable extends AbstractRocksDBTable {
 
   public RocksDBIndexTable(
       final Options writeOptions,
-      final Options readOptions,
       final WriteOptions batchWriteOptions,
       final String subDirectory,
       final short adapterId,
@@ -44,7 +43,6 @@ public class RocksDBIndexTable extends AbstractRocksDBTable {
       final int batchSize) {
     super(
         writeOptions,
-        readOptions,
         batchWriteOptions,
         subDirectory,
         adapterId,
@@ -56,9 +54,8 @@ public class RocksDBIndexTable extends AbstractRocksDBTable {
   }
 
   public void delete(final byte[] sortKey, final byte[] dataId) {
-    final RocksDB db = getWriteDb();
+    final RocksDB db = getDb();
     try {
-      readerDirty = true;
       final byte[] prefix = Bytes.concat(sortKey, dataId);
       db.deleteRange(prefix, ByteArrayUtils.getNextPrefix(prefix));
     } catch (final RocksDBException e) {
@@ -108,7 +105,7 @@ public class RocksDBIndexTable extends AbstractRocksDBTable {
 
 
   public CloseableIterator<GeoWaveRow> iterator() {
-    final RocksDB readDb = getReadDb();
+    final RocksDB readDb = getDb();
     if (readDb == null) {
       return new CloseableIterator.Empty<>();
     }
@@ -125,7 +122,7 @@ public class RocksDBIndexTable extends AbstractRocksDBTable {
   }
 
   public CloseableIterator<GeoWaveRow> iterator(final ByteArrayRange range) {
-    final RocksDB readDb = getReadDb();
+    final RocksDB readDb = getDb();
     if (readDb == null) {
       return new CloseableIterator.Empty<>();
     }
