@@ -88,8 +88,12 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
             internalAdapterStore,
             adapterIndexMappingStore,
             maxRangeDecomposition);
-    client.mergeData();
+    compactData();
     return retVal;
+  }
+
+  public void compactData() {
+    client.mergeData();
   }
 
   @Override
@@ -98,8 +102,12 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
       final InternalAdapterStore internalAdapterStore) {
     final boolean retVal =
         MapReduceDataStoreOperations.super.mergeStats(statsStore, internalAdapterStore);
-    client.mergeMetadata();
+    compactMetadata();
     return retVal;
+  }
+
+  public void compactMetadata() {
+    client.mergeMetadata();
   }
 
   @Override
@@ -237,5 +245,9 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
         compactOnWrite,
         batchWriteSize,
         walOnBatchWrite);
+  }
+
+  public RocksDBClient getClient() {
+    return client;
   }
 }

@@ -11,7 +11,10 @@ package org.locationtech.geowave.datastore.rocksdb.util;
 import java.io.Closeable;
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.rocksdb.Options;
 import org.rocksdb.RocksDB;
@@ -330,6 +333,21 @@ public class RocksDBClient implements Closeable {
 
   public boolean isVisibilityEnabled() {
     return visibilityEnabled;
+  }
+
+  public List<RocksDBIndexTable> getIndexTables(final Predicate<RocksDBIndexTable> filter) {
+    return indexTableCache.asMap().values().stream().filter(filter).collect(Collectors.toList());
+  }
+
+  public List<RocksDBDataIndexTable> getDataIndexTables(
+      final Predicate<RocksDBDataIndexTable> filter) {
+    return dataIndexTableCache.asMap().values().stream().filter(filter).collect(
+        Collectors.toList());
+  }
+
+  public List<RocksDBMetadataTable> getMetadataTables(
+      final Predicate<RocksDBMetadataTable> filter) {
+    return metadataTableCache.asMap().values().stream().filter(filter).collect(Collectors.toList());
   }
 
   public void mergeData() {

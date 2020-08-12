@@ -184,9 +184,13 @@ abstract public class AbstractRocksDBTable {
     }
   }
 
+  public String getSubDirectory() {
+    return subDirectory;
+  }
+
   @SuppressFBWarnings(
       justification = "double check for null is intentional to avoid synchronized blocks when not needed.")
-  protected RocksDB getDb() {
+  public RocksDB getDb() {
     // avoid synchronization if unnecessary by checking for null outside
     // synchronized block
     if (writeDb == null) {
