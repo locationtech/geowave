@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -201,22 +201,30 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/StoreFact
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/config/RocksDBOptions.html#isCompactOnWrite--">isCompactOnWrite</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/config/RocksDBOptions.html#setBatchWriteSize-int-">setBatchWriteSize</a></span>(int&nbsp;batchWriteSize)</code>&nbsp;</td>
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/config/RocksDBOptions.html#isWalOnBatchWrite--">isWalOnBatchWrite</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/config/RocksDBOptions.html#setCompactOnWrite-boolean-">setCompactOnWrite</a></span>(boolean&nbsp;compactOnWrite)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/config/RocksDBOptions.html#setBatchWriteSize-int-">setBatchWriteSize</a></span>(int&nbsp;batchWriteSize)</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/config/RocksDBOptions.html#setDirectory-java.lang.String-">setDirectory</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;dir)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/config/RocksDBOptions.html#setCompactOnWrite-boolean-">setCompactOnWrite</a></span>(boolean&nbsp;compactOnWrite)</code>&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/config/RocksDBOptions.html#validatePluginOptions-com.beust.jcommander.internal.Console-">validatePluginOptions</a></span>(com.beust.jcommander.internal.Console&nbsp;console)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/config/RocksDBOptions.html#setDirectory-java.lang.String-">setDirectory</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;dir)</code>&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/config/RocksDBOptions.html#setWalOnBatchWrite-boolean-">setWalOnBatchWrite</a></span>(boolean&nbsp;walOnBatchWrite)</code>&nbsp;</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/config/RocksDBOptions.html#validatePluginOptions-com.beust.jcommander.internal.Console-">validatePluginOptions</a></span>(com.beust.jcommander.internal.Console&nbsp;console)</code>&nbsp;</td>
+</tr>
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/config/RocksDBOptions.html#validatePluginOptions-java.util.Properties-com.beust.jcommander.internal.Console-">validatePluginOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;properties,
                      com.beust.jcommander.internal.Console&nbsp;console)</code>
@@ -404,10 +412,28 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/StoreFact
 <a name="setBatchWriteSize-int-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>setBatchWriteSize</h4>
 <pre>public&nbsp;void&nbsp;setBatchWriteSize(int&nbsp;batchWriteSize)</pre>
+</li>
+</ul>
+<a name="isWalOnBatchWrite--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isWalOnBatchWrite</h4>
+<pre>public&nbsp;boolean&nbsp;isWalOnBatchWrite()</pre>
+</li>
+</ul>
+<a name="setWalOnBatchWrite-boolean-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setWalOnBatchWrite</h4>
+<pre>public&nbsp;void&nbsp;setWalOnBatchWrite(boolean&nbsp;walOnBatchWrite)</pre>
 </li>
 </ul>
 </li>
