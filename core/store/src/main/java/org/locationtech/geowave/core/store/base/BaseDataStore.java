@@ -1734,6 +1734,26 @@ public class BaseDataStore implements DataStore {
     deleteEverything();
   }
 
+  public IndexStore getIndexStore() {
+    return indexStore;
+  }
+
+  public PersistentAdapterStore getAdapterStore() {
+    return adapterStore;
+  }
+
+  public AdapterIndexMappingStore getIndexMappingStore() {
+    return indexMappingStore;
+  }
+
+  public DataStoreOperations getBaseOperations() {
+    return baseOperations;
+  }
+
+  public InternalAdapterStore getInternalAdapterStore() {
+    return internalAdapterStore;
+  }
+
   public boolean isReverseIterationSupported() {
     return false;
   }
