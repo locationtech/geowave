@@ -54,7 +54,11 @@ public class RocksDBIndexTable extends AbstractRocksDBTable {
   }
 
   public void delete(final byte[] sortKey, final byte[] dataId) {
-    final RocksDB db = getDb();
+    final RocksDB db = getDb(false);
+    if (db == null) {
+      LOGGER.warn("Unable to delete key because directory '" + subDirectory + "' doesn't exist");
+      return;
+    }
     try {
       final byte[] prefix = Bytes.concat(sortKey, dataId);
       db.deleteRange(prefix, ByteArrayUtils.getNextPrefix(prefix));
@@ -105,7 +109,7 @@ public class RocksDBIndexTable extends AbstractRocksDBTable {
 
 
   public CloseableIterator<GeoWaveRow> iterator() {
-    final RocksDB readDb = getDb();
+    final RocksDB readDb = getDb(true);
     if (readDb == null) {
       return new CloseableIterator.Empty<>();
     }
@@ -122,7 +126,7 @@ public class RocksDBIndexTable extends AbstractRocksDBTable {
   }
 
   public CloseableIterator<GeoWaveRow> iterator(final ByteArrayRange range) {
-    final RocksDB readDb = getDb();
+    final RocksDB readDb = getDb(true);
     if (readDb == null) {
       return new CloseableIterator.Empty<>();
     }
