@@ -56,7 +56,7 @@ public class RocksDBDataIndexTable extends AbstractRocksDBTable {
     if ((dataIds == null) || (dataIds.length == 0)) {
       return new CloseableIterator.Empty<>();
     }
-    final RocksDB readDb = getDb();
+    final RocksDB readDb = getDb(true);
     if (readDb == null) {
       return new CloseableIterator.Empty<>();
     }
@@ -88,7 +88,7 @@ public class RocksDBDataIndexTable extends AbstractRocksDBTable {
       final byte[] startDataId,
       final byte[] endDataId,
       final boolean reverse) {
-    final RocksDB readDb = getDb();
+    final RocksDB readDb = getDb(true);
     if (readDb == null) {
       return new CloseableIterator.Empty<>();
     }

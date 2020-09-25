@@ -69,7 +69,11 @@ abstract public class AbstractRocksDBTable {
   }
 
   public void delete(final byte[] key) {
-    final RocksDB db = getDb();
+    final RocksDB db = getDb(true);
+    if (db == null) {
+      LOGGER.warn("Unable to delete key because directory '" + subDirectory + "' doesn't exist");
+      return;
+    }
     try {
       db.singleDelete(key);
     } catch (final RocksDBException e) {
@@ -105,7 +109,7 @@ abstract public class AbstractRocksDBTable {
     } else
 
     {
-      final RocksDB db = getDb();
+      final RocksDB db = getDb(false);
       try {
         db.put(key, value);
       } catch (final RocksDBException e) {
@@ -118,7 +122,7 @@ abstract public class AbstractRocksDBTable {
     try {
       writeSemaphore.acquire();
       CompletableFuture.runAsync(
-          new BatchWriter(currentBatch, getDb(), batchWriteOptions, writeSemaphore),
+          new BatchWriter(currentBatch, getDb(false), batchWriteOptions, writeSemaphore),
           BATCH_WRITE_THREADS);
     } catch (final InterruptedException e) {
       LOGGER.warn("async write semaphore interrupted", e);
@@ -143,7 +147,10 @@ abstract public class AbstractRocksDBTable {
 
   protected void internalFlush() {
     if (compactOnWrite) {
-      final RocksDB db = getDb();
+      final RocksDB db = getDb(true);
+      if (db == null) {
+        return;
+      }
       try {
         db.compactRange();
       } catch (final RocksDBException e) {
@@ -153,7 +160,10 @@ abstract public class AbstractRocksDBTable {
   }
 
   public void compact() {
-    final RocksDB db = getDb();
+    final RocksDB db = getDb(true);
+    if (db == null) {
+      return;
+    }
     try {
       db.compactRange();
     } catch (final RocksDBException e) {
@@ -190,13 +200,16 @@ abstract public class AbstractRocksDBTable {
 
   @SuppressFBWarnings(
       justification = "double check for null is intentional to avoid synchronized blocks when not needed.")
-  public RocksDB getDb() {
+  public RocksDB getDb(final boolean read) {
     // avoid synchronization if unnecessary by checking for null outside
     // synchronized block
     if (writeDb == null) {
       synchronized (this) {
         // check again within synchronized block
         if (writeDb == null) {
+          if (read && !exists) {
+            return null;
+          }
           try {
             if (exists || new File(subDirectory).mkdirs()) {
               exists = true;

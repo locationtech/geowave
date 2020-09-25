@@ -73,17 +73,18 @@ public class PolygonDataIdQueryIT extends AbstractGeoWaveIT {
 
   @Test
   public void testPolygonDataIdQueryResults() {
-    final CloseableIterator<SimpleFeature> matches =
+    try (final CloseableIterator<SimpleFeature> matches =
         (CloseableIterator) dataStore.createDataStore().query(
             QueryBuilder.newBuilder().addTypeName(dataAdapter.getTypeName()).indexName(
                 TestUtils.DEFAULT_SPATIAL_INDEX.getName()).constraints(
-                    new DataIdQuery(StringUtils.stringToBinary(DATA_ID))).build());
-    int numResults = 0;
-    while (matches.hasNext()) {
-      matches.next();
-      numResults++;
+                    new DataIdQuery(StringUtils.stringToBinary(DATA_ID))).build())) {
+      int numResults = 0;
+      while (matches.hasNext()) {
+        matches.next();
+        numResults++;
+      }
+      Assert.assertTrue("Expected 1 result, but returned " + numResults, numResults == 1);
     }
-    Assert.assertTrue("Expected 1 result, but returned " + numResults, numResults == 1);
   }
 
   @BeforeClass

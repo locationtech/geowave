@@ -74,7 +74,7 @@ public class WRS2GeometryStore {
 
   private static final String WRS2_TYPE_NAME = "WRS2_descending";
   private static final String WRS2_SHAPE_URL =
-      "https://landsat.usgs.gov/sites/default/files/documents/WRS2_descending.zip";
+      "https://prd-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/s3fs-public/atoms/files/WRS2_descending_0.zip";
   private static final String WRS2_SHAPE_NAME = "WRS2_descending.shp";
   private static final String WRS2_SHAPE_ZIP = "WRS2_descending.zip";
   protected static final String WRS2_SHAPE_DIRECTORY = "WRS2_descending";
