@@ -32,27 +32,5 @@
 			<groupId>com.github.ben-manes.caffeine</groupId>
 			<artifactId>caffeine</artifactId>
 		</dependency>
-		<!-- <dependency>
-			<groupId>com.vmlens</groupId>
-			<artifactId>api</artifactId>
-			<version>1.0.15</version>
-			<scope>test</scope>
-		</dependency> -->
 	</dependencies>
-	<!-- <build>
-		<plugins>
-			<plugin>
-				<groupId>com.vmlens</groupId>
-				<artifactId>interleave</artifactId>
-				<version>1.0.15</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>test</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build> -->
 </project>
