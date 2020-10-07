@@ -8,7 +8,7 @@
  */
 package org.locationtech.geowave.core.index.sfc.hilbert;
 
-import com.vmlens.api.AllInterleavings;
+// import com.vmlens.api.AllInterleavings;
 import org.junit.Test;
 import org.locationtech.geowave.core.index.dimension.BasicDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
@@ -40,25 +40,25 @@ public class ThreadedHilbertSFCTest {
     final BasicNumericDataset spatialQuery2 =
         new BasicNumericDataset(new NumericData[] {new NumericRange(5, 7), new NumericRange(5, 7)});
 
-    try (AllInterleavings allInterleavings = new AllInterleavings("ThreadedHilbertTest");) {
+    // try (AllInterleavings allInterleavings = new AllInterleavings("ThreadedHilbertTest");) {
 
-      while (allInterleavings.hasNext()) {
+    //   while (allInterleavings.hasNext()) {
 
-        Thread first = new Thread(() -> {
-          hilbertSFC.decomposeRange(spatialQuery1, false, 2);
-        });
+    //     Thread first = new Thread(() -> {
+    //       hilbertSFC.decomposeRange(spatialQuery1, false, 2);
+    //     });
 
-        Thread second = new Thread(() -> {
-          hilbertSFC.decomposeRange(spatialQuery2, true, 8);
-        });
+    //     Thread second = new Thread(() -> {
+    //       hilbertSFC.decomposeRange(spatialQuery2, true, 8);
+    //     });
 
-        first.start();
-        second.start();
+    //     first.start();
+    //     second.start();
 
-        first.join();
-        second.join();
-      }
-    }
+    //     first.join();
+    //     second.join();
+    //   }
+    // }
 
   }
 }

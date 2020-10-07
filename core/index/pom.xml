@@ -32,14 +32,14 @@
 			<groupId>com.github.ben-manes.caffeine</groupId>
 			<artifactId>caffeine</artifactId>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.vmlens</groupId>
 			<artifactId>api</artifactId>
 			<version>1.0.15</version>
 			<scope>test</scope>
-		</dependency>
+		</dependency> -->
 	</dependencies>
-	<build>
+	<!-- <build>
 		<plugins>
 			<plugin>
 				<groupId>com.vmlens</groupId>
@@ -54,5 +54,5 @@
 				</executions>
 			</plugin>
 		</plugins>
-	</build>
+	</build> -->
 </project>
