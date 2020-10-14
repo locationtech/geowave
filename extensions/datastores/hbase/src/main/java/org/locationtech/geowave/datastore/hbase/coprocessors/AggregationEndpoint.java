@@ -160,7 +160,8 @@ public class AggregationEndpoint extends AggregationProtosServer.AggregationServ
       if (request.hasAdapter()) {
         final byte[] adapterBytes = request.getAdapter().toByteArray();
         dataAdapter = (DataTypeAdapter) URLClassloaderUtils.fromBinary(adapterBytes);
-      } else if (request.hasInternalAdapterId()) {
+      }
+      if (request.hasInternalAdapterId()) {
         final byte[] adapterIdBytes = request.getInternalAdapterId().toByteArray();
         internalAdapterId = ByteArrayUtils.byteArrayToShort(adapterIdBytes);
       }

@@ -47,7 +47,7 @@ public class InternalDistributedRenderProcess {
     if (features != null) {
       final SimpleFeatureIterator it = features.features();
       if (it.hasNext()) {
-        final SimpleFeature resultFeature = features.features().next();
+        final SimpleFeature resultFeature = it.next();
         final DistributedRenderResult actualResult =
             (DistributedRenderResult) resultFeature.getAttribute(0);
         final DistributedRenderOptions renderOptions =
