@@ -431,8 +431,6 @@
 											<exclude>*:jetty*:*</exclude>
 											<exclude>*:commons-httpclient:*</exclude>
 											<exclude>*:maven*:*</exclude>
-											<exclude>*:httpclient:*</exclude>
-											<exclude>*:httpcore:*</exclude>
 											<exclude>*:commons-logging:*</exclude>
 											<exclude>*:commons-io:*</exclude>
 											<exclude>*:jts*:*</exclude>

@@ -175,6 +175,18 @@ public class TranslationEntry {
   }
 
   /**
+   * Specifies if this field uses a string converter.
+   *
+   * @return {@code true} if the uses a string converter.
+   */
+  public boolean hasStringConverter() {
+    if (getParam().getParameter() != null) {
+      return getParam().getParameter().converter() != null;
+    }
+    return false;
+  }
+
+  /**
    * Specifies if this field is required.
    *
    * @return {@code true} if this field is required

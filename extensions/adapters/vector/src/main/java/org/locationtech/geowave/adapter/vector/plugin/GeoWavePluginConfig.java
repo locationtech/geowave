@@ -423,7 +423,7 @@ public class GeoWavePluginConfig {
       }
       return new Param(
           input.getName(),
-          input.getType(),
+          input.usesStringConverter() ? String.class : input.getType(),
           input.getDescription(),
           !input.isOptional());
     }

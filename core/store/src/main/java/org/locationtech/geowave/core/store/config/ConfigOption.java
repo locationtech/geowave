@@ -13,6 +13,7 @@ public class ConfigOption {
   private final String description;
   private final boolean optional;
   private boolean password;
+  private boolean usesStringConverter;
   private Class type;
 
   public ConfigOption(
@@ -52,5 +53,13 @@ public class ConfigOption {
 
   public void setPassword(final boolean password) {
     this.password = password;
+  }
+
+  public boolean usesStringConverter() {
+    return usesStringConverter;
+  }
+
+  public void setUsesStringConverter(boolean usesStringConverter) {
+    this.usesStringConverter = usesStringConverter;
   }
 }
