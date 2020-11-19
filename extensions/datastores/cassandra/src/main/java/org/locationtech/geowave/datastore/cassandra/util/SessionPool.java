@@ -33,7 +33,9 @@ public class SessionPool {
   private final LoadingCache<String, Session> sessionCache =
       Caffeine.newBuilder().build(contactPoints -> {
         final SocketOptions so = new SocketOptions();
-        so.setReadTimeoutMillis(SocketOptions.DEFAULT_READ_TIMEOUT_MILLIS * 2);
+        so.setReadTimeoutMillis(SocketOptions.DEFAULT_READ_TIMEOUT_MILLIS * 5);
+        so.setConnectTimeoutMillis(SocketOptions.DEFAULT_CONNECT_TIMEOUT_MILLIS * 5);
+        so.setTcpNoDelay(true);
         return Cluster.builder().addContactPoints(contactPoints.split(",")).withSocketOptions(
             so).build().connect();
       });

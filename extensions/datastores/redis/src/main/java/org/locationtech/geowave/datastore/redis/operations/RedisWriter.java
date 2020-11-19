@@ -85,11 +85,13 @@ public class RedisWriter implements RowWriter {
               ? new GeoWaveRedisPersistedTimestampRow(
                   (short) row.getNumberOfDuplicates(),
                   row.getDataId(),
+                  row.getSortKey(),
                   value,
                   Instant.now())
               : new GeoWaveRedisPersistedRow(
                   (short) row.getNumberOfDuplicates(),
                   row.getDataId(),
+                  row.getSortKey(),
                   value));
     }
   }
@@ -109,12 +111,14 @@ public class RedisWriter implements RowWriter {
               ? new GeoWaveRedisPersistedTimestampRow(
                   (short) row.getNumberOfDuplicates(),
                   row.getDataId(),
+                  row.getSortKey(),
                   value,
                   Instant.now(),
                   duplicateId)
               : new GeoWaveRedisPersistedRow(
                   (short) row.getNumberOfDuplicates(),
                   row.getDataId(),
+                  row.getSortKey(),
                   value,
                   duplicateId));
     }

@@ -12,6 +12,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -55,14 +56,41 @@ public class BatchedRangeRead<T> {
     byte[] partitionKey;
     double startScore;
     double endScore;
+    byte[] explicitStartCheck, explicitEndCheck;
 
     public RangeReadInfo(
         final byte[] partitionKey,
         final double startScore,
-        final double endScore) {
+        final double endScore,
+        final ByteArrayRange originalRange) {
       this.partitionKey = partitionKey;
       this.startScore = startScore;
       this.endScore = endScore;
+      explicitStartCheck =
+          (originalRange.getStart() != null) && (originalRange.getStart().length > 6)
+              ? Arrays.copyOfRange(originalRange.getStart(), 6, originalRange.getStart().length)
+              : null;
+      final byte[] end = originalRange.getEndAsNextPrefix();
+      explicitEndCheck =
+          (end != null) && (end.length > 6) ? Arrays.copyOfRange(end, 6, end.length) : null;
+    }
+
+    public boolean passesExplicitChecks(final GeoWaveRedisPersistedRow row) {
+      if ((explicitStartCheck != null)
+          && (row.getSortKeyPrecisionBeyondScore().length > 0)
+          && (UnsignedBytes.lexicographicalComparator().compare(
+              explicitStartCheck,
+              row.getSortKeyPrecisionBeyondScore()) > 0)) {
+        return false;
+      }
+      if ((explicitEndCheck != null)
+          && (row.getSortKeyPrecisionBeyondScore().length > 0)
+          && (UnsignedBytes.lexicographicalComparator().compare(
+              explicitEndCheck,
+              row.getSortKeyPrecisionBeyondScore()) <= 0)) {
+        return false;
+      }
+      return true;
     }
   }
 
@@ -165,11 +193,11 @@ public class BatchedRangeRead<T> {
           // (eg. a sort key of 0 when the first bit is flipped becomes -Double.MAX_VALUE which
           // results in precision lost)
 
-          reads.add(new RangeReadInfo(r.getPartitionKey(), start, Double.POSITIVE_INFINITY));
+          reads.add(new RangeReadInfo(r.getPartitionKey(), start, Double.POSITIVE_INFINITY, range));
 
-          reads.add(new RangeReadInfo(r.getPartitionKey(), Double.NEGATIVE_INFINITY, end));
+          reads.add(new RangeReadInfo(r.getPartitionKey(), Double.NEGATIVE_INFINITY, end, range));
         } else {
-          reads.add(new RangeReadInfo(r.getPartitionKey(), start, end));
+          reads.add(new RangeReadInfo(r.getPartitionKey(), start, end, range));
         }
       }
     }
@@ -197,11 +225,13 @@ public class BatchedRangeRead<T> {
           // precision we need to make
           // sure the end is inclusive
           return new PartitionIteratorWrapper(
-              setCache.get(partitionKey).entryRange(
-                  r.startScore,
-                  true,
-                  r.endScore,
-                  r.endScore <= r.startScore),
+              Streams.stream(
+                  setCache.get(partitionKey).entryRange(
+                      r.startScore,
+                      true,
+                      r.endScore,
+                      r.endScore <= r.startScore)).filter(
+                          e -> r.passesExplicitChecks(e.getValue())).iterator(),
               r.partitionKey);
         }).iterator());
     return new CloseableIterator.Wrapper<>(transformAndFilter(result));
@@ -274,13 +304,19 @@ public class BatchedRangeRead<T> {
               } else {
                 try {
                   result.forEach(i -> i.getValue().setPartitionKey(r.partitionKey));
-                  transformAndFilter(result.iterator()).forEachRemaining(row -> {
-                    try {
-                      results.put(row);
-                    } catch (final InterruptedException e) {
-                      LOGGER.warn("interrupted while waiting to enqueue a redis result", e);
-                    }
-                  });
+
+                  transformAndFilter(
+                      result.stream().filter(
+                          e -> r.passesExplicitChecks(e.getValue())).iterator()).forEachRemaining(
+                              row -> {
+                                try {
+                                  results.put(row);
+                                } catch (final InterruptedException e) {
+                                  LOGGER.warn(
+                                      "interrupted while waiting to enqueue a redis result",
+                                      e);
+                                }
+                              });
 
                 } finally {
                   checkFinalize(readSemaphore, results, queryCount);
@@ -336,7 +372,10 @@ public class BatchedRangeRead<T> {
                         entry.getValue(),
                         adapterId,
                         entry.getValue().getPartitionKey(),
-                        RedisUtils.getSortKey(entry.getScore()))).filter(filter).iterator();
+                        RedisUtils.getFullSortKey(
+                            entry.getScore(),
+                            entry.getValue().getSortKeyPrecisionBeyondScore()))).filter(
+                                filter).iterator();
     return rowTransformer.apply(
         sortByKeyIfRequired(
             isSortFinalResultsBySortKey,

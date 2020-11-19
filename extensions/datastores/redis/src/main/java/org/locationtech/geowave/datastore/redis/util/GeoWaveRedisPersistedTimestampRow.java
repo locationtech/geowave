@@ -18,18 +18,20 @@ public class GeoWaveRedisPersistedTimestampRow extends GeoWaveRedisPersistedRow 
   public GeoWaveRedisPersistedTimestampRow(
       final short numDuplicates,
       final byte[] dataId,
+      final byte[] sortKey,
       final GeoWaveValue value,
       final Instant time) {
-    this(numDuplicates, dataId, value, time, null);
+    this(numDuplicates, dataId, sortKey, value, time, null);
   }
 
   public GeoWaveRedisPersistedTimestampRow(
       final short numDuplicates,
       final byte[] dataId,
+      final byte[] sortKey,
       final GeoWaveValue value,
       final Instant time,
       final Short duplicateId) {
-    this(numDuplicates, dataId, value, time.getEpochSecond(), time.getNano(), duplicateId);
+    this(numDuplicates, dataId, sortKey, value, time.getEpochSecond(), time.getNano(), duplicateId);
   }
 
   public GeoWaveRedisPersistedTimestampRow(
@@ -39,7 +41,18 @@ public class GeoWaveRedisPersistedTimestampRow extends GeoWaveRedisPersistedRow 
       final long secondsSinceEpic,
       final int nanoOfSecond,
       final Short duplicateId) {
-    super(numDuplicates, dataId, value, duplicateId);
+    this(numDuplicates, dataId, null, value, secondsSinceEpic, nanoOfSecond, duplicateId);
+  }
+
+  public GeoWaveRedisPersistedTimestampRow(
+      final short numDuplicates,
+      final byte[] dataId,
+      final byte[] sortKey,
+      final GeoWaveValue value,
+      final long secondsSinceEpic,
+      final int nanoOfSecond,
+      final Short duplicateId) {
+    super(numDuplicates, dataId, sortKey, value, duplicateId);
     this.secondsSinceEpic = secondsSinceEpic;
     this.nanoOfSecond = nanoOfSecond;
   }

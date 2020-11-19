@@ -39,6 +39,7 @@ public class GeoWaveRedisRowCodec extends BaseCodec {
         } else {
           visibility = new byte[0];
         }
+        final byte[] sortKeyPrecisionBeyondScore = new byte[Varint.readUnsignedVarInt(in)];
         final byte[] value = new byte[Varint.readUnsignedVarInt(in)];
         final int numDuplicates = in.readUnsignedByte();
         if ((dataId.length > 0) && (in.read(dataId) != dataId.length)) {
@@ -52,14 +53,21 @@ public class GeoWaveRedisRowCodec extends BaseCodec {
             && (in.read(visibility) != visibility.length)) {
           LOGGER.warn("unable to read visibility");
         }
+        if ((sortKeyPrecisionBeyondScore.length > 0)
+            && (in.read(sortKeyPrecisionBeyondScore) != sortKeyPrecisionBeyondScore.length)) {
+          LOGGER.warn("unable to read sortKey");
+        }
         if ((value.length > 0) && (in.read(value) != value.length)) {
           LOGGER.warn("unable to read value");
         }
-        return new GeoWaveRedisPersistedRow(
-            (short) numDuplicates,
-            dataId,
-            new GeoWaveValueImpl(fieldMask, visibility, value),
-            in.available() > 0 ? (short) in.readUnsignedByte() : null);
+        final GeoWaveRedisPersistedRow retVal =
+            new GeoWaveRedisPersistedRow(
+                (short) numDuplicates,
+                dataId,
+                new GeoWaveValueImpl(fieldMask, visibility, value),
+                in.available() > 0 ? (short) in.readUnsignedByte() : null);
+        retVal.setSortKeyPrecisionBeyondScore(sortKeyPrecisionBeyondScore);
+        return retVal;
       }
     }
   };
@@ -92,6 +100,7 @@ public class GeoWaveRedisRowCodec extends BaseCodec {
     if (visibilityEnabled) {
       out.writeByte(row.getVisibility().length);
     }
+    Varint.writeUnsignedVarInt(row.getSortKeyPrecisionBeyondScore().length, out);
     Varint.writeUnsignedVarInt(row.getValue().length, out);
     out.writeByte(row.getNumDuplicates());
     out.write(row.getDataId());
@@ -99,6 +108,7 @@ public class GeoWaveRedisRowCodec extends BaseCodec {
     if (visibilityEnabled) {
       out.write(row.getVisibility());
     }
+    out.write(row.getSortKeyPrecisionBeyondScore());
     out.write(row.getValue());
   }
 

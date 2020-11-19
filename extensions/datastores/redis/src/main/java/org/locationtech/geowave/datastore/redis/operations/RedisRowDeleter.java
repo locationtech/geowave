@@ -84,6 +84,7 @@ public class RedisRowDeleter implements RowDeleter {
               new GeoWaveRedisPersistedRow(
                   (short) row.getNumberOfDuplicates(),
                   row.getDataId(),
+                  row.getSortKey(),
                   v)));
     }
     set.flush();
