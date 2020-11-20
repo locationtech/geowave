@@ -195,7 +195,7 @@ public class BasicMapReduceIT extends AbstractGeoWaveIT {
     // methods, by adapter and by index
     MapReduceTestUtils.testMapReduceIngest(
         dataStorePluginOptions,
-        DimensionalityType.ALL,
+        DimensionalityType.SPATIAL_AND_SPATIAL_TEMPORAL,
         OSM_GPX_INPUT_DIR);
     final DataTypeAdapter<SimpleFeature>[] adapters = new GpxIngestPlugin().getDataAdapters(null);
 
@@ -237,7 +237,7 @@ public class BasicMapReduceIT extends AbstractGeoWaveIT {
 
     // now that we have expected results, run map-reduce export and
     // re-ingest it
-    testMapReduceExportAndReingest(DimensionalityType.ALL);
+    testMapReduceExportAndReingest(DimensionalityType.SPATIAL_AND_SPATIAL_TEMPORAL);
     // first try each adapter individually
     for (final DataTypeAdapter<SimpleFeature> adapter : adapters) {
       final ExpectedResults expResults = adapterIdToResultsMap.get(adapter.getTypeName());

@@ -184,6 +184,14 @@ public class ExplicitSpatialQuery extends BasicQueryByClass {
     return queryGeometry;
   }
 
+  public String getCrsCode() {
+    return crsCode;
+  }
+
+  public CoordinateReferenceSystem getCrs() {
+    return crs;
+  }
+
   @Override
   protected QueryFilter createQueryFilter(
       final MultiDimensionalNumericData constraints,
@@ -199,7 +207,7 @@ public class ExplicitSpatialQuery extends BasicQueryByClass {
         nonSpatialCompareOp);
   }
 
-  private Geometry internalGetGeometry(final Index index) {
+  protected Geometry internalGetGeometry(final Index index) {
     final String indexCrsStr = getCrs(index.getIndexModel());
     CrsCache cache = crsCodeCache.get(indexCrsStr);
     if (cache != null) {
@@ -218,7 +226,7 @@ public class ExplicitSpatialQuery extends BasicQueryByClass {
       List<MultiDimensionalNumericData> indexConstraints =
           cache.constraintsPerIndexId.get(index.getName());
       if (indexConstraints == null) {
-        if (crsMatches(crsCode, indexCrsStr) || (queryGeometry == null)) {
+        if (GeometryUtils.crsMatches(crsCode, indexCrsStr) || (queryGeometry == null)) {
           indexConstraints = super.getIndexConstraints(index);
         } else {
           indexConstraints = indexConstraintsFromGeometry(cache.geometry, index);
@@ -233,7 +241,7 @@ public class ExplicitSpatialQuery extends BasicQueryByClass {
   }
 
   private CrsCache transformToIndex(final String indexCrsStr, final Index index) {
-    if (crsMatches(crsCode, indexCrsStr) || (queryGeometry == null)) {
+    if (GeometryUtils.crsMatches(crsCode, indexCrsStr) || (queryGeometry == null)) {
       final List<MultiDimensionalNumericData> constraints = super.getIndexConstraints(index);
       final Map<String, List<MultiDimensionalNumericData>> constraintsPerIndexId = new HashMap<>();
       constraintsPerIndexId.put(index.getName(), constraints);
@@ -252,7 +260,7 @@ public class ExplicitSpatialQuery extends BasicQueryByClass {
         }
       }
       CoordinateReferenceSystem indexCrs;
-      if (isDefaultCrs(indexCrsStr)) {
+      if (GeometryUtils.isDefaultCrs(indexCrsStr)) {
         indexCrs = GeometryUtils.getDefaultCRS();
       } else {
         indexCrs = ((CustomCrsIndexModel) index.getIndexModel()).getCrs();
@@ -287,7 +295,7 @@ public class ExplicitSpatialQuery extends BasicQueryByClass {
 
   private static String getCrs(final CommonIndexModel indexModel) {
     if (indexModel instanceof CustomCrsIndexModel) {
-      if (isDefaultCrs(((CustomCrsIndexModel) indexModel).getCrsCode())) {
+      if (GeometryUtils.isDefaultCrs(((CustomCrsIndexModel) indexModel).getCrsCode())) {
         return null;
       }
       return ((CustomCrsIndexModel) indexModel).getCrsCode();
@@ -295,25 +303,10 @@ public class ExplicitSpatialQuery extends BasicQueryByClass {
     return null;
   }
 
-  private static boolean crsMatches(final String crsCode1, final String crsCode2) {
-    if (isDefaultCrs(crsCode1)) {
-      return isDefaultCrs(crsCode2);
-    } else if (isDefaultCrs(crsCode2)) {
-      return isDefaultCrs(crsCode1);
-    }
-    return crsCode1.equalsIgnoreCase(crsCode2);
-  }
-
-  private static boolean isDefaultCrs(final String crsCode) {
-    return (crsCode == null)
-        || crsCode.isEmpty()
-        || crsCode.equalsIgnoreCase(GeometryUtils.DEFAULT_CRS_STR);
-  }
-
   @Override
   public byte[] toBinary() {
     final byte[] crsBinary =
-        isDefaultCrs(crsCode) ? new byte[0] : StringUtils.stringToBinary(crsCode);
+        GeometryUtils.isDefaultCrs(crsCode) ? new byte[0] : StringUtils.stringToBinary(crsCode);
     final byte[] superBinary = super.toBinary();
     final byte[] geometryBinary = new TWKBWriter().write(queryGeometry);
     final ByteBuffer buf =

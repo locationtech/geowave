@@ -28,6 +28,7 @@ import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import org.locationtech.geowave.core.geotime.store.dimension.Time;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.SpatialIndexUtils;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors.TimeDescriptorConfiguration;
 import org.locationtech.geowave.core.geotime.util.TimeUtils;
@@ -224,8 +225,10 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature> imple
       if (indexCrsCode == null) {
         if (primaryindx.getIndexModel() instanceof CustomCrsIndexModel) {
           indexCrsCode = ((CustomCrsIndexModel) primaryindx.getIndexModel()).getCrsCode();
-        } else {
+        } else if (SpatialIndexUtils.hasSpatialDimensions(primaryindx)) {
           indexCrsCode = GeometryUtils.DEFAULT_CRS_STR;
+        } else {
+          continue;
         }
       } else {
         if (primaryindx.getIndexModel() instanceof CustomCrsIndexModel) {
@@ -900,9 +903,9 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature> imple
 
   @Override
   public Map<String, String> describe() {
-    Map<String, String> description = new HashMap<>();
-    List<AttributeDescriptor> descriptors = this.persistedFeatureType.getAttributeDescriptors();
-    for (AttributeDescriptor descriptor : descriptors) {
+    final Map<String, String> description = new HashMap<>();
+    final List<AttributeDescriptor> descriptors = persistedFeatureType.getAttributeDescriptors();
+    for (final AttributeDescriptor descriptor : descriptors) {
       description.put(descriptor.getLocalName(), descriptor.getType().getBinding().getName());
     }
     return description;
