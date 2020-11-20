@@ -73,8 +73,8 @@ import org.locationtech.geowave.test.stability.GeoWaveStabilityIT;
     GeoWaveSparkKMeansIT.class,
     GeoWaveSparkSQLIT.class,
     GeoWaveSparkSpatialJoinIT.class,
-    GeoServerIT.class,
     GeoServerIngestIT.class,
+    GeoServerIT.class,
     // has to be after SparkEnvironment usage
     CustomCRSKDERasterResizeIT.class,
     GeoWaveGrpcIT.class,

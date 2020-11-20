@@ -1,0 +1,141 @@
+name: GeoWave Build
+on: [push, pull_request, pull_request_target]
+env:
+    DEV_RESOURCES_VERSION: 1.7
+    MAVEN_PROFILES: '""'
+    BUILD_AND_PUBLISH: false
+    IT_ONLY: true
+    MAVEN_OPTS: "-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2g -XX:MaxMetaspaceSize=512m -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"
+    
+jobs:
+    unit-tests:
+        if: >
+          github.event_name == 'push' ||
+          github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
+        runs-on: ubuntu-18.04
+        name: Unit Tests on Latest ASF Versions
+        env:
+            IT_ONLY: false
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v2
+
+            - name: Set up JDK 1.8
+              uses: joschi/setup-jdk@v2
+              with:
+                java-version: '8'  
+                architecture: x64  
+                
+            - name: Cache resources
+              uses: actions/cache@v2
+              env:
+                cache-name: cache-geowave-resources
+              with:
+                key:  ${{ runner.os }}
+                path: |
+                      ~/.m2
+                      ~/.downloads
+                      test/landsat8
+                      test/sentinel2
+                      test/target/temp/gdal
+            - name: Run
+              run: ./.utility/run-all.sh
+
+            - name: Publish Unit Test Results
+              uses: scacap/action-surefire-report@v1
+              if: always()
+              with:
+                check_name: Unit Test Results
+                report_paths: "**/target/surefire-reports/*.xml"
+                github_token: ${{ secrets.GITHUB_TOKEN }} 
+                     
+    python-tests:
+        if: >
+          github.event_name == 'push' ||
+          github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
+        runs-on:  ubuntu-18.04
+        name: Python Tests on Latest ASF Versions
+        env:
+            IT_ONLY: false
+            PYTHON_BUILD: true
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v2
+
+            - name: Set up AdoptOpenJDK 1.8
+              uses: joschi/setup-jdk@v2
+              with:
+                java-version: '8'  
+                architecture: x64   
+                
+            - name: Cache resources
+              uses: actions/cache@v2
+              env:
+                cache-name: cache-geowave-resources
+              with:
+                key:  ${{ runner.os }}
+                path: |
+                      ~/.m2
+                      ~/.downloads
+                      test/landsat8
+                      test/sentinel2
+                      test/target/temp/gdal
+            - name: Run
+              run: ./.utility/run-all.sh
+
+            - name: Python Test Results
+              uses: scacap/action-surefire-report@v1
+              with:
+                check_name: Python Test Results
+                report_paths: python/src/main/python/test-report.xml
+                github_token: ${{ secrets.GITHUB_TOKEN }}
+
+    integration-tests:
+        if: >
+          github.event_name == 'push' ||
+          github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
+        runs-on: ubuntu-18.04
+        name: ${{ matrix.profile }} Integration Tests 
+        strategy:
+            fail-fast: false
+            matrix:
+                profile: [redis-it, rocksdb-it, accumulo-it-client, accumulo-it-server, hbase-it-client, hbase-it-server, cassandra-it, dynamodb-it, bigtable-it, kudu-it, filesystem-it, accumulo-it-kerberos, 'filesystem-it,secondary-index-it', 'rocksdb-it,secondary-index-it', 'hbase-it-client,compatibility,ignore-kerberos-it', 'accumulo-it-server,compatibility,ignore-kerberos-it', 'hbase-it-server,cloudera,ignore-kerberos-it', 'accumulo-it-server,cloudera,ignore-kerberos-it']
+                include:
+                  # include a new variable of TEST_KERBEROS = true
+                  - profile: accumulo-it-kerberos
+                    test_kerberos: true
+        env:
+            IT_ONLY: true
+            MAVEN_PROFILES: ${{ matrix.profile }}
+            TEST_KERBEROS: ${{ matrix.test_kerberos }}
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v2
+              
+            - name: Set up AdoptOpenJDK 1.8
+              uses: joschi/setup-jdk@v2
+              with:
+                java-version: '8' 
+                architecture: x64  
+              
+            - name: Cache resources
+              uses: actions/cache@v2
+              env:
+                cache-name: cache-geowave-resources
+              with:
+                key:  ${{ runner.os }}
+                path: |
+                      ~/.m2
+                      ~/.downloads
+                      test/landsat8
+                      test/sentinel2
+                      test/target/temp/gdal
+            - name: Run
+              run: ./.utility/run-all.sh
+
+            - name: Publish Integration Test ${{ matrix.profile }} Results
+              uses: scacap/action-surefire-report@v1
+              with:
+                check_name: ${{ matrix.profile }} Results
+                report_paths: test/target/failsafe-reports/TEST-org.locationtech.geowave.test.GeoWaveITSuite.xml
+                github_token: ${{ secrets.GITHUB_TOKEN }}

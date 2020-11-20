@@ -21,7 +21,7 @@ pip install --upgrade pip
 pip install wheel
 pip install -r requirements.txt
 
-pytest --cov-report= --cov=pygw pygw/test/
+pytest --junitxml=test-report.xml --cov-report= --cov=pygw pygw/test/
 EXIT_CODE=$?
 
 deactivate
