@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
+import com.datastax.driver.core.SocketOptions;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 
@@ -30,9 +31,12 @@ public class SessionPool {
   protected SessionPool() {}
 
   private final LoadingCache<String, Session> sessionCache =
-      Caffeine.newBuilder().build(
-          contactPoints -> Cluster.builder().addContactPoints(
-              contactPoints.split(",")).build().connect());
+      Caffeine.newBuilder().build(contactPoints -> {
+        final SocketOptions so = new SocketOptions();
+        so.setReadTimeoutMillis(SocketOptions.DEFAULT_READ_TIMEOUT_MILLIS * 2);
+        return Cluster.builder().addContactPoints(contactPoints.split(",")).withSocketOptions(
+            so).build().connect();
+      });
 
   public synchronized Session getSession(final String contactPoints) {
     if (contactPoints == null) {
