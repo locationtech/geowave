@@ -175,7 +175,11 @@ public class GeoWaveBasicSparkIT extends AbstractGeoWaveBasicVectorIT {
     TestUtils.deleteAll(dataStore);
 
     // ingest test points
-    TestUtils.testLocalIngest(dataStore, DimensionalityType.ALL, HAIL_SHAPEFILE_FILE, 1);
+    TestUtils.testLocalIngest(
+        dataStore,
+        DimensionalityType.SPATIAL_AND_SPATIAL_TEMPORAL,
+        HAIL_SHAPEFILE_FILE,
+        1);
     verifyQuery(
         context,
         TEST_BOX_FILTER_FILE,
@@ -233,7 +237,11 @@ public class GeoWaveBasicSparkIT extends AbstractGeoWaveBasicVectorIT {
     TestUtils.deleteAll(dataStore);
 
     // test lines only
-    TestUtils.testLocalIngest(dataStore, DimensionalityType.ALL, TORNADO_TRACKS_SHAPEFILE_FILE, 1);
+    TestUtils.testLocalIngest(
+        dataStore,
+        DimensionalityType.SPATIAL_AND_SPATIAL_TEMPORAL,
+        TORNADO_TRACKS_SHAPEFILE_FILE,
+        1);
 
     verifyQuery(
         context,
@@ -291,7 +299,11 @@ public class GeoWaveBasicSparkIT extends AbstractGeoWaveBasicVectorIT {
         true);
 
     // now test with both ingested
-    TestUtils.testLocalIngest(dataStore, DimensionalityType.ALL, HAIL_SHAPEFILE_FILE, 1);
+    TestUtils.testLocalIngest(
+        dataStore,
+        DimensionalityType.SPATIAL_AND_SPATIAL_TEMPORAL,
+        HAIL_SHAPEFILE_FILE,
+        1);
 
     // Retrieve the adapters
     final CloseableIterator<InternalDataAdapter<?>> adapterIt =

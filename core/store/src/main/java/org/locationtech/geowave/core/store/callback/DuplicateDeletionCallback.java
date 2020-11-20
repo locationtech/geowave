@@ -43,8 +43,7 @@ public class DuplicateDeletionCallback<T> implements DeleteCallback<T, GeoWaveRo
     this.adapter = adapter;
     this.index = index;
     dataStore = store;
-    insertionIdsNotYetDeletedByDataId = new HashMap<>();// Collections.synchronizedSet(new
-                                                        // HashSet<>());
+    insertionIdsNotYetDeletedByDataId = new HashMap<>();
   }
 
   @Override

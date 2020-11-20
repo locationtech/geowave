@@ -105,12 +105,13 @@ public class GeometryUtils {
 
   public static SpatialOperator geometryToSpatialOperator(
       final Geometry jtsGeom,
-      final String geometryAttributeName) {
+      final String geometryAttributeName,
+      final CoordinateReferenceSystem crs) {
     final FilterFactory2 factory = CommonFactoryFinder.getFilterFactory2();
     if (jtsGeom.equalsTopo(jtsGeom.getEnvelope())) {
       return factory.bbox(
           factory.property(geometryAttributeName),
-          new ReferencedEnvelope(jtsGeom.getEnvelopeInternal(), GeometryUtils.getDefaultCRS()));
+          new ReferencedEnvelope(jtsGeom.getEnvelopeInternal(), crs));
     }
     // there apparently is no way to associate a CRS with a poly
     // intersection operation so it will have to assume the same CRS as the
@@ -135,6 +136,21 @@ public class GeometryUtils {
       }
     }
     return defaultCrsSingleton;
+  }
+
+  public static boolean crsMatches(final String crsCode1, final String crsCode2) {
+    if (isDefaultCrs(crsCode1)) {
+      return isDefaultCrs(crsCode2);
+    } else if (isDefaultCrs(crsCode2)) {
+      return isDefaultCrs(crsCode1);
+    }
+    return crsCode1.equalsIgnoreCase(crsCode2);
+  }
+
+  public static boolean isDefaultCrs(final String crsCode) {
+    return (crsCode == null)
+        || crsCode.isEmpty()
+        || crsCode.equalsIgnoreCase(GeometryUtils.DEFAULT_CRS_STR);
   }
 
   public static void initClassLoader() throws MalformedURLException {

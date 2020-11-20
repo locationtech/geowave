@@ -159,7 +159,7 @@ public class MapReduceSecondaryIndexIT extends AbstractSecondaryIndexIT {
 
   @Test
   public void testDistributedIngestAndQuerySpatialAndSpatialTemporal() throws Exception {
-    testIngestAndQuery(DimensionalityType.ALL);
+    testIngestAndQuery(DimensionalityType.SPATIAL_AND_SPATIAL_TEMPORAL);
   }
 
   @Override

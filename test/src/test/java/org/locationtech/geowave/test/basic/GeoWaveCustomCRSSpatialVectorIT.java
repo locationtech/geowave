@@ -83,10 +83,21 @@ public class GeoWaveCustomCRSSpatialVectorIT extends AbstractGeoWaveBasicVectorI
 
   @Test
   public void testSingleThreadedIngestAndQuerySpatialPointsAndLines() throws Exception {
-    testIngestAndQuerySpatialPointsAndLines(1);
+    testIngestAndQueryPointsAndLines(1, DimensionalityType.SPATIAL);
   }
 
-  public void testIngestAndQuerySpatialPointsAndLines(final int nthreads) throws Exception {
+  @Test
+  public void testSingleThreadedIngestAndQuerySpatialTemporalPointsAndLines() throws Exception {
+    testIngestAndQueryPointsAndLines(1, DimensionalityType.SPATIAL_TEMPORAL);
+  }
+
+  @Test
+  public void testSingleThreadedIngestAndQuerySpatialAndTemporalPointsAndLines() throws Exception {
+    testIngestAndQueryPointsAndLines(1, DimensionalityType.SPATIAL_AND_TEMPORAL);
+  }
+
+  private void testIngestAndQueryPointsAndLines(final int nthreads, final DimensionalityType type)
+      throws Exception {
     long mark = System.currentTimeMillis();
 
     TestUtils.deleteAll(cpDataStore);
@@ -95,7 +106,7 @@ public class GeoWaveCustomCRSSpatialVectorIT extends AbstractGeoWaveBasicVectorI
     // ingest both lines and points
     TestUtils.testLocalIngest(
         cpDataStore,
-        DimensionalityType.SPATIAL,
+        type,
         TestUtils.CUSTOM_CRSCODE,
         HAIL_SHAPEFILE_FILE,
         "geotools-vector",
@@ -107,7 +118,7 @@ public class GeoWaveCustomCRSSpatialVectorIT extends AbstractGeoWaveBasicVectorI
 
     TestUtils.testLocalIngest(
         cpDataStore,
-        DimensionalityType.SPATIAL,
+        type,
         TestUtils.CUSTOM_CRSCODE,
         TORNADO_TRACKS_SHAPEFILE_FILE,
         "geotools-vector",

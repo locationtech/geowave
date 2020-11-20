@@ -8,9 +8,26 @@
  */
 package org.locationtech.geowave.test;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.ParameterException;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.Random;
+import java.util.Set;
+import javax.ws.rs.core.Response;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -28,11 +45,19 @@ import org.geotools.referencing.CRS;
 import org.junit.Assert;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
-import org.locationtech.geowave.core.geotime.index.*;
+import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
+import org.locationtech.geowave.core.geotime.index.SpatialOptions;
+import org.locationtech.geowave.core.geotime.index.SpatialTemporalDimensionalityTypeProvider;
+import org.locationtech.geowave.core.geotime.index.SpatialTemporalOptions;
+import org.locationtech.geowave.core.geotime.index.TemporalOptions;
 import org.locationtech.geowave.core.geotime.index.api.SpatialIndexBuilder;
 import org.locationtech.geowave.core.geotime.index.api.SpatialTemporalIndexBuilder;
 import org.locationtech.geowave.core.geotime.index.api.TemporalIndexBuilder;
-import org.locationtech.geowave.core.geotime.store.query.*;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialTemporalQuery;
+import org.locationtech.geowave.core.geotime.store.query.OptimalCQLQuery;
+import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.SpatialTemporalQuery;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.TWKBReader;
 import org.locationtech.geowave.core.geotime.util.TWKBWriter;
@@ -68,13 +93,9 @@ import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.ws.rs.core.Response;
-import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
-import java.io.*;
-import java.net.URL;
-import java.util.*;
-import java.util.Map.Entry;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.ParameterException;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class TestUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(TestUtils.class);
@@ -83,7 +104,9 @@ public class TestUtils {
     TEMPORAL("temporal", DEFAULT_TEMPORAL_INDEX),
     SPATIAL("spatial", DEFAULT_SPATIAL_INDEX),
     SPATIAL_TEMPORAL("spatial_temporal", DEFAULT_SPATIAL_TEMPORAL_INDEX),
-    ALL("spatial,spatial_temporal",
+    SPATIAL_AND_TEMPORAL("spatial,temporal",
+        new Index[] {DEFAULT_SPATIAL_INDEX, DEFAULT_TEMPORAL_INDEX}),
+    SPATIAL_AND_SPATIAL_TEMPORAL("spatial,spatial_temporal",
         new Index[] {DEFAULT_SPATIAL_INDEX, DEFAULT_SPATIAL_TEMPORAL_INDEX});
     private final String dimensionalityArg;
     private final Index[] indices;
@@ -164,7 +187,8 @@ public class TestUtils {
         && System.getProperty("java.vm.name").contains("HotSpot");
   }
 
-  public static void writeConfigToFile(File file, Configuration config) throws IOException {
+  public static void writeConfigToFile(final File file, final Configuration config)
+      throws IOException {
     try (OutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
       config.writeXml(out);
     }
@@ -237,7 +261,7 @@ public class TestUtils {
       if (crsCode != null) {
         if (indexOption.getDimensionalityOptions() instanceof SpatialOptions) {
           ((SpatialOptions) indexOption.getDimensionalityOptions()).setCrs(crsCode);
-        } else {
+        } else if (indexOption.getDimensionalityOptions() instanceof SpatialTemporalOptions) {
           ((SpatialTemporalOptions) indexOption.getDimensionalityOptions()).setCrs(crsCode);
         }
       }
@@ -624,7 +648,8 @@ public class TestUtils {
               factory.and(
                   GeometryUtils.geometryToSpatialOperator(
                       filterGeometry,
-                      optimalCqlQueryGeometryAndTimeField.getLeft()),
+                      optimalCqlQueryGeometryAndTimeField.getLeft(),
+                      GeometryUtils.getDefaultCRS()),
                   timeConstraint);
           return new OptimalCQLQuery(expression);
         }
@@ -636,7 +661,8 @@ public class TestUtils {
       return new OptimalCQLQuery(
           GeometryUtils.geometryToSpatialOperator(
               filterGeometry,
-              optimalCqlQueryGeometryAndTimeField.getLeft()));
+              optimalCqlQueryGeometryAndTimeField.getLeft(),
+              GeometryUtils.getDefaultCRS()));
     }
     // otherwise just return a spatial query
     return new SpatialQuery(new ExplicitSpatialQuery(filterGeometry, crsCode));
