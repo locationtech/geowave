@@ -105,7 +105,7 @@
 		<fasterxml.jackson.version>2.9.5</fasterxml.jackson.version>
 		<spring-security.version>4.2.7.RELEASE</spring-security.version>
 		<slf4j.version>1.7.21</slf4j.version>
-		<junit.version>4.11</junit.version>
+		<junit.version>4.13.1</junit.version>
 		<clearspring.version>2.9.6</clearspring.version>
 		<py4j.version>0.10.8.1</py4j.version>
 		<gdal.dir>${project.build.directory}/temp/gdal</gdal.dir>
