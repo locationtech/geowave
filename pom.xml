@@ -103,7 +103,7 @@
 		<jcommander.version>1.78</jcommander.version>
 		<jackson.version>1.9.13</jackson.version>
 		<fasterxml.jackson.version>2.9.5</fasterxml.jackson.version>
-		<spring-security.version>4.2.7.RELEASE</spring-security.version>
+		<spring-security.version>4.2.17.RELEASE</spring-security.version>
 		<slf4j.version>1.7.21</slf4j.version>
 		<junit.version>4.11</junit.version>
 		<clearspring.version>2.9.6</clearspring.version>
