@@ -1054,16 +1054,15 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
         requestBuilder.setRangeFilter(ByteString.copyFrom(multiFilter.toByteArray()));
       }
       if (readerParams.getAggregation().getLeft() != null) {
-        if (readerParams.getAggregation().getRight() instanceof CommonIndexAggregation) {
-          requestBuilder.setInternalAdapterId(
-              ByteString.copyFrom(
-                  ByteArrayUtils.shortToByteArray(
-                      readerParams.getAggregation().getLeft().getAdapterId())));
-        } else {
+        if (!(readerParams.getAggregation().getRight() instanceof CommonIndexAggregation)) {
           final byte[] adapterBytes =
               URLClassloaderUtils.toBinary(readerParams.getAggregation().getLeft().getAdapter());
           requestBuilder.setAdapter(ByteString.copyFrom(adapterBytes));
         }
+        requestBuilder.setInternalAdapterId(
+            ByteString.copyFrom(
+                ByteArrayUtils.shortToByteArray(
+                    readerParams.getAggregation().getLeft().getAdapterId())));
       }
 
       if ((readerParams.getAdditionalAuthorizations() != null)
