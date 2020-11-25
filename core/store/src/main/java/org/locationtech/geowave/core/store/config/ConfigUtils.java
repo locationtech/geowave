@@ -69,6 +69,7 @@ public class ConfigUtils {
                   !entry.isRequired(),
                   entry.getParam().getType());
           opt.setPassword(entry.isPassword());
+          opt.setUsesStringConverter(entry.hasStringConverter());
           options.add(opt);
         }
       }

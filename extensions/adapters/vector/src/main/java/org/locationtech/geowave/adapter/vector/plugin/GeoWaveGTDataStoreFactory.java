@@ -14,11 +14,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFactorySpi;
 import org.geotools.factory.FactoryIteratorProvider;
@@ -152,15 +152,19 @@ public class GeoWaveGTDataStoreFactory implements DataStoreFactorySpi {
           params.entrySet().stream().filter(
               e -> !GeoWavePluginConfig.BASE_GEOWAVE_PLUGIN_PARAM_KEYS.contains(
                   e.getKey())).collect(
-                      Collectors.toMap(
-                          e -> e.getKey() == null ? null : e.getKey().toString(),
-                          e -> e.getValue() == null ? null : e.getValue().toString()));
+                      HashMap::new,
+                      (m, e) -> m.put(
+                          e.getKey() == null ? null : e.getKey().toString(),
+                          e.getValue() == null ? null : e.getValue().toString()),
+                      HashMap::putAll);
 
       final Map<String, String> originalParams =
           params.entrySet().stream().collect(
-              Collectors.toMap(
-                  e -> e.getKey() == null ? null : e.getKey().toString(),
-                  e -> e.getValue() == null ? null : e.getValue().toString()));
+              HashMap::new,
+              (m, e) -> m.put(
+                  e.getKey() == null ? null : e.getKey().toString(),
+                  e.getValue() == null ? null : e.getValue().toString()),
+              HashMap::putAll);
       return GeoWaveStoreFinder.exactMatch(
           geowaveStoreFactoryFamily,
           dataStoreParams,
