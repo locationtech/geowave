@@ -16,6 +16,7 @@ import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.NavigableSet;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -47,25 +48,37 @@ public class FileSystemUtils {
   public static SortedSet<Pair<FileSystemKey, Path>> getSortedSet(
       final Path subDirectory,
       final Function<String, FileSystemKey> fileNameToKey) {
-    return getSortedSet(subDirectory, null, null, fileNameToKey);
+    return getSortedSet(subDirectory, null, null, false, fileNameToKey);
   }
 
   public static SortedSet<Pair<FileSystemKey, Path>> getSortedSet(
       final Path subDirectory,
       final byte[] startKeyInclusive,
-      final byte[] endKeyExclusive,
+      final byte[] endKey,
+      final boolean endKeyInclusive,
       final Function<String, FileSystemKey> fileNameToKey) {
     try {
-      final Supplier<SortedSet<Pair<FileSystemKey, Path>>> sortedSetFactory = () -> new TreeSet<>();
-      SortedSet<Pair<FileSystemKey, Path>> sortedSet =
+      final Supplier<NavigableSet<Pair<FileSystemKey, Path>>> sortedSetFactory =
+          () -> new TreeSet<>();
+      NavigableSet<Pair<FileSystemKey, Path>> sortedSet =
           Files.walk(subDirectory).filter(Files::isRegularFile).map(
               path -> Pair.of(fileNameToKey.apply(path.getFileName().toString()), path)).collect(
                   Collectors.toCollection(sortedSetFactory));
       if (startKeyInclusive != null) {
-        sortedSet = sortedSet.tailSet(Pair.of(new BasicFileSystemKey(startKeyInclusive), null));
+        sortedSet =
+            sortedSet.tailSet(
+                Pair.of(
+                    new BasicFileSystemKey(startKeyInclusive),
+                    subDirectory.resolve(keyToFileName(startKeyInclusive))),
+                true);
       }
-      if (endKeyExclusive != null) {
-        sortedSet = sortedSet.headSet(Pair.of(new BasicFileSystemKey(endKeyExclusive), null));
+      if (endKey != null) {
+        sortedSet =
+            sortedSet.headSet(
+                Pair.of(
+                    new BasicFileSystemKey(endKey),
+                    subDirectory.resolve(keyToFileName(endKey))),
+                endKeyInclusive);
       }
       return sortedSet;
     } catch (final IOException e) {
@@ -105,8 +118,12 @@ public class FileSystemUtils {
       final byte[] endKeyExclusive,
       final Consumer<Path> pathVisitor,
       final Function<String, FileSystemKey> fileNameToKey) {
-    getSortedSet(subDirectory, startKeyInclusive, endKeyExclusive, fileNameToKey).stream().map(
-        Pair::getRight).forEach(pathVisitor);
+    getSortedSet(
+        subDirectory,
+        startKeyInclusive,
+        endKeyExclusive,
+        false,
+        fileNameToKey).stream().map(Pair::getRight).forEach(pathVisitor);
   }
 
   public static FileSystemDataIndexTable getDataIndexTable(
