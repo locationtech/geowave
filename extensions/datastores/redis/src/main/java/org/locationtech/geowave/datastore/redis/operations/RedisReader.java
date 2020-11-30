@@ -165,7 +165,9 @@ public class RedisReader<T> implements RowReader<T> {
                             pr.getValue(),
                             adapterId,
                             p.getLeft().getBytes(),
-                            RedisUtils.getSortKey(pr.getScore())))).iterator());
+                            RedisUtils.getFullSortKey(
+                                pr.getScore(),
+                                pr.getValue().getSortKeyPrecisionBeyondScore())))).iterator());
       }
       return wrapResults(
           Iterators.concat(iterators),

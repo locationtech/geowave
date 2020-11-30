@@ -9,7 +9,6 @@
 package org.locationtech.geowave.datastore.redis.util;
 
 import java.io.IOException;
-import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveValueImpl;
 import org.redisson.client.codec.BaseCodec;
 import org.redisson.client.handler.State;
@@ -42,6 +41,7 @@ public class GeoWaveRedisRowWithTimestampCodec extends BaseCodec {
         } else {
           visibility = new byte[0];
         }
+        final byte[] sortKeyPrecisionBeyondScore = new byte[Varint.readUnsignedVarInt(in)];
         final byte[] value = new byte[Varint.readUnsignedVarInt(in)];
         final int numDuplicates = in.readUnsignedByte();
         if ((dataId.length > 0) && (in.read(dataId) != dataId.length)) {
@@ -55,16 +55,23 @@ public class GeoWaveRedisRowWithTimestampCodec extends BaseCodec {
             && (in.read(visibility) != visibility.length)) {
           LOGGER.warn("unable to read visibility");
         }
+        if ((sortKeyPrecisionBeyondScore.length > 0)
+            && (in.read(sortKeyPrecisionBeyondScore) != sortKeyPrecisionBeyondScore.length)) {
+          LOGGER.warn("unable to read sortKey");
+        }
         if ((value.length > 0) && (in.read(value) != value.length)) {
           LOGGER.warn("unable to read value");
         }
-        return new GeoWaveRedisPersistedTimestampRow(
-            (short) numDuplicates,
-            dataId,
-            new GeoWaveValueImpl(fieldMask, visibility, value),
-            Integer.toUnsignedLong(Varint.readSignedVarInt(in)),
-            Varint.readSignedVarInt(in),
-            in.available() > 0 ? (short) in.readUnsignedByte() : null);
+        final GeoWaveRedisPersistedTimestampRow retVal =
+            new GeoWaveRedisPersistedTimestampRow(
+                (short) numDuplicates,
+                dataId,
+                new GeoWaveValueImpl(fieldMask, visibility, value),
+                Integer.toUnsignedLong(Varint.readSignedVarInt(in)),
+                Varint.readSignedVarInt(in),
+                in.available() > 0 ? (short) in.readUnsignedByte() : null);
+        retVal.setSortKeyPrecisionBeyondScore(sortKeyPrecisionBeyondScore);
+        return retVal;
       }
     }
   };
