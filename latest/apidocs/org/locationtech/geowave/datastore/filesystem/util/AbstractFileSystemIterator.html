@@ -153,12 +153,19 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/Closea
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/filesystem/util/AbstractFileSystemIterator.html#AbstractFileSystemIterator-java.nio.file.Path-byte:A-byte:A-boolean-java.util.function.Function-">AbstractFileSystemIterator</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/file/Path.html?is-external=true" title="class or interface in java.nio.file">Path</a>&nbsp;subDirectory,
+                          byte[]&nbsp;startKey,
+                          byte[]&nbsp;endKey,
+                          boolean&nbsp;endKeyInclusive,
+                          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Function.html?is-external=true" title="class or interface in java.util">java.util.function.Function</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,org.locationtech.geowave.datastore.filesystem.util.FileSystemKey&gt;&nbsp;fileNameToKey)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/filesystem/util/AbstractFileSystemIterator.html#AbstractFileSystemIterator-java.nio.file.Path-byte:A-byte:A-java.util.function.Function-">AbstractFileSystemIterator</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/file/Path.html?is-external=true" title="class or interface in java.nio.file">Path</a>&nbsp;subDirectory,
                           byte[]&nbsp;startKey,
                           byte[]&nbsp;endKey,
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Function.html?is-external=true" title="class or interface in java.util">java.util.function.Function</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,org.locationtech.geowave.datastore.filesystem.util.FileSystemKey&gt;&nbsp;fileNameToKey)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/filesystem/util/AbstractFileSystemIterator.html#AbstractFileSystemIterator-java.nio.file.Path-java.util.Collection-java.util.function.Function-">AbstractFileSystemIterator</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/file/Path.html?is-external=true" title="class or interface in java.nio.file">Path</a>&nbsp;subDirectory,
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>&gt;&nbsp;ranges,
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Function.html?is-external=true" title="class or interface in java.util">java.util.function.Function</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,org.locationtech.geowave.datastore.filesystem.util.FileSystemKey&gt;&nbsp;fileNameToKey)</code>&nbsp;</td>
@@ -233,6 +240,19 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/Closea
 <pre>public&nbsp;AbstractFileSystemIterator(<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/file/Path.html?is-external=true" title="class or interface in java.nio.file">Path</a>&nbsp;subDirectory,
                                   byte[]&nbsp;startKey,
                                   byte[]&nbsp;endKey,
+                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Function.html?is-external=true" title="class or interface in java.util">java.util.function.Function</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,org.locationtech.geowave.datastore.filesystem.util.FileSystemKey&gt;&nbsp;fileNameToKey)</pre>
+</li>
+</ul>
+<a name="AbstractFileSystemIterator-java.nio.file.Path-byte:A-byte:A-boolean-java.util.function.Function-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>AbstractFileSystemIterator</h4>
+<pre>public&nbsp;AbstractFileSystemIterator(<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/file/Path.html?is-external=true" title="class or interface in java.nio.file">Path</a>&nbsp;subDirectory,
+                                  byte[]&nbsp;startKey,
+                                  byte[]&nbsp;endKey,
+                                  boolean&nbsp;endKeyInclusive,
                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/util/function.Function.html?is-external=true" title="class or interface in java.util">java.util.function.Function</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,org.locationtech.geowave.datastore.filesystem.util.FileSystemKey&gt;&nbsp;fileNameToKey)</pre>
 </li>
 </ul>
