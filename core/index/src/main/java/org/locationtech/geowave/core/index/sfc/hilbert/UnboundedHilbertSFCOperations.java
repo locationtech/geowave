@@ -121,7 +121,9 @@ public class UnboundedHilbertSFCOperations implements HilbertSFCOperations {
       bitVectors[i].copyFrom(values.get(i));
     }
 
-    compactHilbertCurve.index(bitVectors, 0, hilbertBitVector);
+    synchronized (compactHilbertCurve) {
+      compactHilbertCurve.index(bitVectors, 0, hilbertBitVector);
+    }
 
     return hilbertBitVector;
   }
@@ -320,7 +322,9 @@ public class UnboundedHilbertSFCOperations implements HilbertSFCOperations {
             BigIntegerRangeHome.INSTANCE,
             zero);
 
-    compactHilbertCurve.accept(new ZoomingSpaceVisitorAdapter(compactHilbertCurve, queryBuilder));
+    synchronized (compactHilbertCurve) {
+      compactHilbertCurve.accept(new ZoomingSpaceVisitorAdapter(compactHilbertCurve, queryBuilder));
+    }
 
     // com.google.uzaygezen.core.Query<LongRange, LongRange> hilbertQuery =
     // queryBuilder.get();

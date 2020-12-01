@@ -17,7 +17,7 @@
 			<groupId>com.google.uzaygezen</groupId>
 			<artifactId>uzaygezen-core</artifactId>
 			<version>0.2</version>
-		</dependency>		
+		</dependency>
         <dependency>
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs-annotations</artifactId>
@@ -32,5 +32,27 @@
 			<groupId>com.github.ben-manes.caffeine</groupId>
 			<artifactId>caffeine</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.vmlens</groupId>
+			<artifactId>api</artifactId>
+			<version>1.0.15</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.vmlens</groupId>
+				<artifactId>interleave</artifactId>
+				<version>1.0.15</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>
