@@ -31,6 +31,7 @@ public class DataIndexRowIterator extends AbstractFileSystemIterator<GeoWaveRow>
         subDirectory,
         startKey,
         endKey,
+        true,
         fileName -> new BasicFileSystemKey(formatter.getDataId(fileName, typeName), fileName));
     this.adapterId = adapterId;
     this.typeName = typeName;

@@ -51,6 +51,9 @@ public class ByteArrayRange implements Comparable<ByteArrayRange> {
   }
 
   public byte[] getEndAsNextPrefix() {
+    if (end == null) {
+      return null;
+    }
     return ByteArrayUtils.getNextPrefix(end);
   }
 

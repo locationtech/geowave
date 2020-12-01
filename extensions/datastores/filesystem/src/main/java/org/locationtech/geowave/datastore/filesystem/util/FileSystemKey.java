@@ -21,5 +21,4 @@ interface FileSystemKey extends Comparable<FileSystemKey> {
         getSortOrderKey(),
         o.getSortOrderKey());
   }
-
 }

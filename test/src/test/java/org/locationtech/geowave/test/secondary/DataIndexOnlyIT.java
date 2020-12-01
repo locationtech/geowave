@@ -151,7 +151,6 @@ public class DataIndexOnlyIT extends AbstractGeoWaveBasicVectorIT {
     @Override
     public void fromBinary(final byte[] bytes) {
       matchText = StringUtils.stringFromBinary(bytes);
-
     }
 
   }

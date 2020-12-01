@@ -34,9 +34,18 @@ public abstract class AbstractFileSystemIterator<T> implements CloseableIterator
       final byte[] startKey,
       final byte[] endKey,
       final Function<String, FileSystemKey> fileNameToKey) {
+    this(subDirectory, startKey, endKey, false, fileNameToKey);
+  }
+
+  public AbstractFileSystemIterator(
+      final Path subDirectory,
+      final byte[] startKey,
+      final byte[] endKey,
+      final boolean endKeyInclusive,
+      final Function<String, FileSystemKey> fileNameToKey) {
     super();
     iterator =
-        FileSystemUtils.getSortedSet(subDirectory, startKey, endKey, fileNameToKey).iterator();
+        FileSystemUtils.getSortedSet(subDirectory, startKey, endKey, endKeyInclusive, fileNameToKey).iterator();
   }
 
   public AbstractFileSystemIterator(
