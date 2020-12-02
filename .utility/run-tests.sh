@@ -1,5 +1,8 @@
 #!/bin/bash
 set -ev
+chmod +x .utility/*.sh
+
+.utility/build-dev-resources.sh
 if [ "$PYTHON_BUILD" == "true" ]; then
   echo -e "Running Python tests...\n"
   source .utility/run-python-tests.sh

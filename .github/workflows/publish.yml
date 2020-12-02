@@ -1,0 +1,47 @@
+name: GeoWave Publish
+on: 
+  push:
+    branches:
+      - master
+env:
+  DEV_RESOURCES_VERSION: 1.7
+  MAVEN_OPTS: "-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2g -XX:MaxMetaspaceSize=512m -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"
+jobs:
+  publish:
+    if: github.repository == 'locationtech/geowave'
+    runs-on: ubuntu-18.04
+    name: Publish Artifacts and Docs
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GPG_EXECUTABLE: ${{ secrets.GPG_EXECUTABLE }}
+      GPG_OWNERTRUST: ${{ secrets.GPG_OWNERTRUST }}
+      GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      GPG_SECRET_KEYS: ${{ secrets.GPG_SECRET_KEYS }}
+      PYPI_CREDENTIALS: ${{ secrets.PYPI_CREDENTIALS }}
+      SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+      SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up JDK 1.8
+      uses: joschi/setup-jdk@v2
+      with:
+        java-version: '8'  
+        architecture: x64  
+        
+    - name: Cache resources
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-geowave-resources
+      with:
+        key:  ${{ runner.os }}-Publish
+        path: ~/.m2
+
+    - name: Generate build number
+      uses: einaregilsson/build-number@v3
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}  
+
+    - name: Publish
+      run: ./.utility/publish.sh
