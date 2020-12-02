@@ -1,0 +1,67 @@
+name: GeoWave Publish
+on: 
+  push:
+    branches:
+      - master
+env:
+  DEV_RESOURCES_VERSION: 1.7
+  MAVEN_OPTS: "-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2g -XX:MaxMetaspaceSize=512m -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"
+jobs:
+  publish:
+    if: github.repository == 'locationtech/geowave'
+    runs-on: ubuntu-18.04
+    name: Publish Artifacts and Docs
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GPG_OWNERTRUST: ${{ secrets.GPG_OWNERTRUST }}
+      GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      GPG_SECRET_KEYS: ${{ secrets.GPG_SECRET_KEYS }}
+      PYPI_CREDENTIALS: ${{ secrets.PYPI_CREDENTIALS }}
+      SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+      SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up JDK 1.8
+      uses: joschi/setup-jdk@v2
+      with:
+        java-version: '8'  
+        architecture: x64  
+        
+    - name: Cache resources
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-geowave-resources
+      with:
+        key:  ${{ runner.os }}-Publish
+        path: ~/.m2
+
+    - name: Publish Artifacts
+      run: ./.utility/publish-artifacts.sh
+    
+    - name: Generate Changelog
+      uses: heinrichreimer/github-changelog-generator-action@v2.1.1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Convert Changelog to HTML
+      uses: docker://pandoc/core:2.9
+      with:
+        args: "-f markdown -t html -s -c stylesheets/changelog.css -o changelog.html CHANGELOG.md"
+
+    - name: Build HTML Docs
+      run: mvn -P html -pl docs install -DskipTests -Dspotbugs.skip      
+    
+    - name: Install Local Artifacts
+      run: mvn install -B -DskipTests -Dspotbugs.skip
+
+    - name: Build Aggregate Javadocs
+      run: mvn javadoc:aggregate -B -DskipTests -Dspotbugs.skip
+
+    - name: Build Python Docs
+      run: ./.utility/build-python-docs.sh
+
+    - name: Publish Docs to GH-Pages
+      run: ./.utility/publish-docs.sh
+

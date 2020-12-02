@@ -1,17 +1,12 @@
-name: GeoWave Build
-on: [push, pull_request, pull_request_target]
+name: GeoWave Tests
+on: [push, pull_request]
 env:
     DEV_RESOURCES_VERSION: 1.7
     MAVEN_PROFILES: '""'
-    BUILD_AND_PUBLISH: false
     IT_ONLY: true
-    MAVEN_OPTS: "-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2g -XX:MaxMetaspaceSize=512m -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"
-    
+    MAVEN_OPTS: "-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2g -XX:MaxMetaspaceSize=512m -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"    
 jobs:
     unit-tests:
-        if: >
-          github.event_name == 'push' ||
-          github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
         runs-on: ubuntu-18.04
         name: Unit Tests on Latest ASF Versions
         env:
@@ -39,7 +34,7 @@ jobs:
                       test/sentinel2
                       test/target/temp/gdal
             - name: Run
-              run: ./.utility/run-all.sh
+              run: ./.utility/run-tests.sh
 
             - name: Publish Unit Test Results
               uses: scacap/action-surefire-report@v1
@@ -50,9 +45,6 @@ jobs:
                 github_token: ${{ secrets.GITHUB_TOKEN }} 
                      
     python-tests:
-        if: >
-          github.event_name == 'push' ||
-          github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
         runs-on:  ubuntu-18.04
         name: Python Tests on Latest ASF Versions
         env:
@@ -81,7 +73,7 @@ jobs:
                       test/sentinel2
                       test/target/temp/gdal
             - name: Run
-              run: ./.utility/run-all.sh
+              run: ./.utility/run-tests.sh
 
             - name: Python Test Results
               uses: scacap/action-surefire-report@v1
@@ -91,9 +83,6 @@ jobs:
                 github_token: ${{ secrets.GITHUB_TOKEN }}
 
     integration-tests:
-        if: >
-          github.event_name == 'push' ||
-          github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
         runs-on: ubuntu-18.04
         name: ${{ matrix.profile }} Integration Tests 
         strategy:
@@ -131,7 +120,7 @@ jobs:
                       test/sentinel2
                       test/target/temp/gdal
             - name: Run
-              run: ./.utility/run-all.sh
+              run: ./.utility/run-tests.sh
 
             - name: Publish Integration Test ${{ matrix.profile }} Results
               uses: scacap/action-surefire-report@v1
