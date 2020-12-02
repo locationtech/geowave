@@ -34,11 +34,6 @@ jobs:
       with:
         key:  ${{ runner.os }}-Publish
         path: ~/.m2
-
-    - name: Generate build number
-      uses: einaregilsson/build-number@v3
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}  
-
+        
     - name: Publish
       run: ./.utility/publish.sh

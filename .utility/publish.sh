@@ -63,7 +63,7 @@ cp -R target/site $HOME/latest
 cd $HOME
 git config --global user.email "travis@travis-ci.org"
 git config --global user.name "travis-ci"
-git clone --quiet --depth 1 --branch=gh-pages https://${GH_TOKEN}@github.com/locationtech/geowave gh-pages > /dev/null
+git clone --quiet --depth 1 --branch=gh-pages https://${GITHUB_TOKEN}@github.com/locationtech/geowave gh-pages > /dev/null
 
 cd gh-pages 
 
@@ -97,7 +97,7 @@ cp -Rf $HOME/site/* .
 rm -f *.epub *.pdf *.pdfmarks
 
 git add -f .
-git commit -m "Lastest javadoc on successful github build $BUILD_NUMBER auto-pushed to gh-pages"
+git commit -m "Lastest javadoc on successful github build $GITHUB_RUN_NUMBER auto-pushed to gh-pages"
 git push -fq origin gh-pages > /dev/null
 
 echo -e "Published Javadoc to gh-pages.\n"
