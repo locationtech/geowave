@@ -1,8 +1,8 @@
 #!/bin/bash
 set -ev
 
-echo $GPG_SECRET_KEYS | base64 --decode | $GPG_EXECUTABLE --import
-echo $GPG_OWNERTRUST | base64 --decode | $GPG_EXECUTABLE --import-ownertrust
+echo $GPG_SECRET_KEYS | base64 --decode | gpg --import
+echo $GPG_OWNERTRUST | base64 --decode | gpg --import-ownertrust
 
 # Build the dev-resources jar
 dev-resources-exists=$(curl -I -s https://oss.sonatype.org/service/local/repositories/releases/content/org/locationtech/geowave/geowave-dev-resources/${DEV_RESOURCES_VERSION}/geowave-dev-resources-${DEV_RESOURCES_VERSION}.pom | grep HTTP)
