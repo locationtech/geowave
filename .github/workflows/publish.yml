@@ -35,5 +35,8 @@ jobs:
         key:  ${{ runner.os }}-Publish
         path: ~/.m2
         
+    - name: Build Docs
+      run: ./.utility/build-docs.sh
+
     - name: Publish
       run: ./.utility/publish.sh
