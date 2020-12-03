@@ -36,7 +36,12 @@ jobs:
 
     - name: Publish Artifacts
       run: ./.utility/publish-artifacts.sh
-
+    
+    - name: Generate Changelog
+      uses: heinrichreimer/github-changelog-generator-action@v2.1.1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
     - name: Publish Docs
       run: ./.utility/publish-docs.sh
 

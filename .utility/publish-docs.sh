@@ -1,12 +1,13 @@
 #!/bin/bash
 set -ev
+
+echo -e "Building aggregate javadocs...\n"
+mvn javadoc:aggregate -B -DskipTests -Dspotbugs.skip
+
 echo -e "Building docs...\n"
 mvn -P html -pl docs install -DskipTests -Dspotbugs.skip
 
 echo -e "Generating changelog...\n"
-export CHANGELOG_GITHUB_TOKEN=$GITHUB_TOKEN
-gem install github_changelog_generator -v 1.14.3
-github_changelog_generator
 pandoc -f markdown -t html -s -c stylesheets/changelog.css CHANGELOG.md > changelog.html
 cp changelog.html target/site/
 
