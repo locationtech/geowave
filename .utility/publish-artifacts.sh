@@ -5,11 +5,12 @@ echo $GPG_SECRET_KEYS | base64 --decode | gpg --import --no-tty --batch --yes
 echo $GPG_OWNERTRUST | base64 --decode | gpg --import-ownertrust --no-tty --batch --yes
 
 # Build the dev-resources jar
-if [[ curl --head --silent --fail  https://oss.sonatype.org/service/local/repositories/releases/content/org/locationtech/geowave/geowave-dev-resources/${DEV_RESOURCES_VERSION}/geowave-dev-resources-${DEV_RESOURCES_VERSION}.pom 2> /dev/null; ]]; then
-  pushd dev-resources
-  echo -e "Deploying dev-resources..."
-  mvn deploy --settings ../.utility/.maven.xml -DskipTests -Dspotbugs.skip -B -U -Prelease
-  popd
+if curl --head --silent --fail  https://oss.sonatype.org/service/local/repositories/releases/content/org/locationtech/geowave/geowave-dev-resources/${DEV_RESOURCES_VERSION}/geowave-dev-resources-${DEV_RESOURCES_VERSION}.pom 2> /dev/null;
+  then
+    pushd dev-resources
+    echo -e "Deploying dev-resources..."
+    mvn deploy --settings ../.utility/.maven.xml -DskipTests -Dspotbugs.skip -B -U -Prelease
+    popd
 fi
 echo -e "Deploying geowave artifacts..."
 mvn deploy --settings .utility/.maven.xml -DskipTests -Dspotbugs.skip -B -U -Prelease
