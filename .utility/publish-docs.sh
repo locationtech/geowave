@@ -1,6 +1,9 @@
 #!/bin/bash
 set -ev
 
+echo -e "Installing local artifacts...\n"
+mvn install -B -DskipTests -Dspotbugs.skip
+
 echo -e "Building aggregate javadocs...\n"
 mvn javadoc:aggregate -B -DskipTests -Dspotbugs.skip
 
