@@ -6,7 +6,7 @@ chmod +x .utility/*.sh
 if [ "$PYTHON_BUILD" == "true" ]; then
   echo -e "Running Python tests...\n"
   source .utility/run-python-tests.sh
-elif [ "$BUILD_AND_PUBLISH" == "false" ]; then
+else
   if [ "$IT_ONLY" == "true" ]; then
     echo -e "Skipping unit tests w/ verify...\n"
     wget https://archive.apache.org/dist/hadoop/common/hadoop-2.8.4/hadoop-2.8.4.tar.gz

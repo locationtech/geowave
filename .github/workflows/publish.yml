@@ -10,7 +10,6 @@ jobs:
     name: Publish Artifacts and Docs
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      GPG_EXECUTABLE: ${{ secrets.GPG_EXECUTABLE }}
       GPG_OWNERTRUST: ${{ secrets.GPG_OWNERTRUST }}
       GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
       GPG_SECRET_KEYS: ${{ secrets.GPG_SECRET_KEYS }}
@@ -34,9 +33,10 @@ jobs:
       with:
         key:  ${{ runner.os }}-Publish
         path: ~/.m2
-        
-    - name: Build Docs
-      run: ./.utility/build-docs.sh
 
-    - name: Publish
-      run: ./.utility/publish.sh
+    - name: Publish Artifacts
+      run: ./.utility/publish-artifacts.sh
+
+    - name: Publish Docs
+      run: ./.utility/publish-docs.sh
+
