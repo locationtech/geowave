@@ -5,8 +5,7 @@ echo $GPG_SECRET_KEYS | base64 --decode | gpg --import --no-tty --batch --yes
 echo $GPG_OWNERTRUST | base64 --decode | gpg --import-ownertrust --no-tty --batch --yes
 
 # Build the dev-resources jar
-dev-resources-exists=$(curl -I -s https://oss.sonatype.org/service/local/repositories/releases/content/org/locationtech/geowave/geowave-dev-resources/${DEV_RESOURCES_VERSION}/geowave-dev-resources-${DEV_RESOURCES_VERSION}.pom | grep HTTP)
-if [[ ${dev-resources-exists} != *"200"* ]];then
+if [[ curl --head --silent --fail  https://oss.sonatype.org/service/local/repositories/releases/content/org/locationtech/geowave/geowave-dev-resources/${DEV_RESOURCES_VERSION}/geowave-dev-resources-${DEV_RESOURCES_VERSION}.pom 2> /dev/null; ]]; then
   pushd dev-resources
   echo -e "Deploying dev-resources..."
   mvn deploy --settings ../.utility/.maven.xml -DskipTests -Dspotbugs.skip -B -U -Prelease
