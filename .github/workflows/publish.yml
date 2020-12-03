@@ -1,5 +1,5 @@
 name: GeoWave Publish
-on: [pull_request]
+on: [pull_request, push]
 env:
   DEV_RESOURCES_VERSION: 1.7
   MAVEN_OPTS: "-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2g -XX:MaxMetaspaceSize=512m -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"
