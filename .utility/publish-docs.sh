@@ -10,8 +10,7 @@ mvn javadoc:aggregate -B -DskipTests -Dspotbugs.skip
 echo -e "Building docs...\n"
 mvn -P html -pl docs install -DskipTests -Dspotbugs.skip
 
-echo -e "Generating changelog...\n"
-pandoc -f markdown -t html -s -c stylesheets/changelog.css CHANGELOG.md > changelog.html
+echo -e "Copying changelog...\n"
 cp changelog.html target/site/
 
 echo -e "Publishing site ...\n"

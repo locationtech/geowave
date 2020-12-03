@@ -41,7 +41,12 @@ jobs:
       uses: heinrichreimer/github-changelog-generator-action@v2.1.1
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        
+
+    - name: Convert Changelog to HTML
+      uses: docker://pandoc/core:2.9
+      with:
+        args: "-f markdown -t html -s -c stylesheets/changelog.css CHANGELOG.md > changelog.html"
+
     - name: Publish Docs
       run: ./.utility/publish-docs.sh
 
