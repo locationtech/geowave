@@ -3,16 +3,6 @@ set -ev
 echo -e "Building docs...\n"
 mvn -P html -pl docs install -DskipTests -Dspotbugs.skip
 
-echo -e "Installing local artifacts...\n"
-mvn -q install -DskipTests -Dspotbugs.skip
-
-echo -e "Building javadocs...\n"
-mvn -q javadoc:aggregate -DskipTests -Dspotbugs.skip
-
-echo -e "Building python docs...\n"
-source .utility/build-python-docs.sh
-
-
 echo -e "Generating changelog...\n"
 export CHANGELOG_GITHUB_TOKEN=$GITHUB_TOKEN
 gem install github_changelog_generator -v 1.14.3
@@ -65,7 +55,10 @@ cp -Rf $HOME/site/* .
 rm -f *.epub *.pdf *.pdfmarks
 
 git add -f .
-git commit -m "Lastest javadoc on successful github build $GITHUB_RUN_NUMBER auto-pushed to gh-pages"
+git commit -m "Lastest docs on successful github build $GITHUB_RUN_NUMBER auto-pushed to gh-pages"
 git push -fq origin gh-pages > /dev/null
 
-echo -e "Published Javadoc to gh-pages.\n"
+echo -e "Published docs to gh-pages.\n"
+
+echo -e "Building python docs...\n"
+source .utility/build-python-docs.sh

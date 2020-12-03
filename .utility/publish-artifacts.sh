@@ -1,6 +1,9 @@
 #!/bin/bash
 set -ev
 
+echo -e "Building javadocs...\n"
+mvn javadoc:aggregate -B -DskipTests -Dspotbugs.skip
+
 echo $GPG_SECRET_KEYS | base64 --decode | gpg --import --no-tty --batch --yes
 echo $GPG_OWNERTRUST | base64 --decode | gpg --import-ownertrust --no-tty --batch --yes
 
