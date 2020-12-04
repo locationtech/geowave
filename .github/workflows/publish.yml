@@ -34,8 +34,8 @@ jobs:
         key:  ${{ runner.os }}-Publish
         path: ~/.m2
 
-    - name: Publish Artifacts
-      run: ./.utility/publish-artifacts.sh
+#    - name: Publish Artifacts
+#      run: ./.utility/publish-artifacts.sh
     
     - name: Generate Changelog
       uses: heinrichreimer/github-changelog-generator-action@v2.1.1

@@ -1,14 +1,17 @@
 #!/bin/bash
 set -ev
 
+echo -e "Building docs...\n"
+mvn -P html -pl docs install -DskipTests -Dspotbugs.skip
+
 echo -e "Installing local artifacts...\n"
 mvn install -B -DskipTests -Dspotbugs.skip
 
 echo -e "Building aggregate javadocs...\n"
 mvn javadoc:aggregate -B -DskipTests -Dspotbugs.skip
 
-echo -e "Building docs...\n"
-mvn -P html -pl docs install -DskipTests -Dspotbugs.skip
+echo -e "Building python docs...\n"
+source .utility/build-python-docs.sh
 
 echo -e "Copying changelog...\n"
 cp changelog.html target/site/
@@ -20,7 +23,7 @@ cp -R target/site $HOME/latest
 cd $HOME
 git config --global user.email "geowave-dev@locationtech.org"
 git config --global user.name "geowave-dev"
-git clone --quiet --depth 1 --branch=gh-pages https://${GITHUB_TOKEN}@github.com/locationtech/geowave gh-pages > /dev/null
+git clone --quiet --depth 1 --branch=gh-pages https://x-access-token:${GITHUB_TOKEN}@github.com/locationtech/geowave gh-pages > /dev/null
 
 cd gh-pages 
 
@@ -62,6 +65,3 @@ git commit -m "Lastest docs on successful github build $GITHUB_RUN_NUMBER auto-p
 git push -fq origin gh-pages > /dev/null
 
 echo -e "Published docs to gh-pages.\n"
-
-echo -e "Building python docs...\n"
-source .utility/build-python-docs.sh
