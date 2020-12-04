@@ -19,9 +19,8 @@ mv previous-versions $HOME/previous-versions
 # Remove old latest
 rm -rf latest
 
-# Get the version from the build.properties file
-filePath=deploy/target/classes/build.properties
-GEOWAVE_VERSION=$(grep project.version $filePath|  awk -F= '{print $2}')
+# Get the version
+GEOWAVE_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
 
 if [[ ! "$GEOWAVE_VERSION" =~ "SNAPSHOT" ]] && [[ ! "$GEOWAVE_VERSION" =~ "RC" ]] ; then
   # If this isn't a snapshot or release candidate, this becomes the main site

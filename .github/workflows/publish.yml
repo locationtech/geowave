@@ -45,7 +45,7 @@ jobs:
     - name: Convert Changelog to HTML
       uses: docker://pandoc/core:2.9
       with:
-        args: "-f markdown -t html -s -c stylesheets/changelog.css -o changelog.html CHANGELOG.md"
+        args: "-f markdown -M title="GeoWave Change Log" -t html -s -c stylesheets/changelog.css -o changelog.html CHANGELOG.md"
 
     - name: Build HTML Docs
       run: mvn -P html -pl docs install -DskipTests -Dspotbugs.skip      
