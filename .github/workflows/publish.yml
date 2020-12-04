@@ -47,6 +47,18 @@ jobs:
       with:
         args: "-f markdown -t html -s -c stylesheets/changelog.css -o changelog.html CHANGELOG.md"
 
-    - name: Publish Docs
+    - name: Build HTML Docs
+      run: mvn -P html -pl docs install -DskipTests -Dspotbugs.skip      
+    
+    - name: Install Local Artifacts
+      run: mvn install -B -DskipTests -Dspotbugs.skip
+
+    - name: Build Aggregate Javadocs
+      run: mvn javadoc:aggregate -B -DskipTests -Dspotbugs.skip
+
+    - name: Build Python Docs
+      run: ./.utility/build-python-docs.sh
+
+    - name: Publish Docs to GH-Pages
       run: ./.utility/publish-docs.sh
 

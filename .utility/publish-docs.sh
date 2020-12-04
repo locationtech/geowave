@@ -1,18 +1,4 @@
 #!/bin/bash
-set -ev
-
-echo -e "Building docs...\n"
-mvn -P html -pl docs install -DskipTests -Dspotbugs.skip
-
-echo -e "Installing local artifacts...\n"
-mvn install -B -DskipTests -Dspotbugs.skip
-
-echo -e "Building aggregate javadocs...\n"
-mvn javadoc:aggregate -B -DskipTests -Dspotbugs.skip
-
-echo -e "Building python docs...\n"
-source .utility/build-python-docs.sh
-
 echo -e "Copying changelog...\n"
 cp changelog.html target/site/
 
