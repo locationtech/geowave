@@ -45,7 +45,7 @@ jobs:
     - name: Convert Changelog to HTML
       uses: docker://pandoc/core:2.9
       with:
-        args: "-f markdown -t html -s -c stylesheets/changelog.css CHANGELOG.md > changelog.html"
+        args: "-f markdown -t html -s -c stylesheets/changelog.css -o changelog.html CHANGELOG.md"
 
     - name: Publish Docs
       run: ./.utility/publish-docs.sh
