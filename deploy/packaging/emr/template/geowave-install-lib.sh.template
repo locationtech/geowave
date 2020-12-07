@@ -80,17 +80,22 @@ install_geowave() {
 	# Install the repo config file
 	sudo rpm -Uvh $GEOWAVE_REPO_BASE_URL_TOKEN$GEOWAVE_REPO_RPM
 
-	# EMR 5.17.2 and lower has a tar bundle installed puppet in /home/ec2-user, more recent versions of EMR do not
-	# So as not to install incompatible puppet from the dependencies of geowave-puppet
-	# we're doing this convoluted workaround to download and then install with no dep resolution
-	# whenever the puppet command exists
-	if command -v puppet &> /dev/null
+	# EMR 5.17.2 and lower has a tar bundle installed puppet in /home/ec2-user
+	# more recent versions of EMR use an emr-puppet RPM installed to /opt/aws/puppet
+
+	# We need to make more recent versions of EMR's puppet act similar to the older version 
+	if ! command -v puppet &> /dev/null
 	then
-		sudo yumdownloader --enablerepo $GEOWAVE_REPO_NAME_TOKEN --destdir /tmp geowave-${GEOWAVE_VERSION}-puppet
-		sudo rpm -Uvh --force --nodeps /tmp/geowave-${GEOWAVE_VERSION}-puppet.*.noarch.rpm
-	else    	
-		sudo yum --enablerepo $GEOWAVE_REPO_NAME_TOKEN install geowave-${GEOWAVE_VERSION}-puppet
+		# this is a more recent EMR
+		sudo ln -s /opt/aws/puppet/bin/puppet /usr/bin/puppet
+		sudo ln -s /opt/aws/puppet /etc/puppet
+		sudo puppet module install puppetlabs-stdlib
 	fi
+	
+	# So as not to install incompatible puppet from the dependencies of geowave-puppet
+	# we're doing this convoluted workaround to download and then install with no dep resolution	
+	sudo yumdownloader --enablerepo $GEOWAVE_REPO_NAME_TOKEN --destdir /tmp geowave-${GEOWAVE_VERSION}-puppet
+	sudo rpm -Uvh --force --nodeps /tmp/geowave-${GEOWAVE_VERSION}-puppet.*.noarch.rpm
 	 
 
 cat << EOF > /tmp/geowave.pp
@@ -118,7 +123,7 @@ file { '/usr/local/geowave/tomcat8/bin/setenv.sh':
 	ensure  => file,
 	owner   => 'geowave',
 	group   => 'geowave',
-	mode    => 644,
+	mode    => '644',
 	content => 'export JAVA_OPTS="${GEOSERVER_MEMORY}"',
 	require => Package['geowave-${GEOWAVE_VERSION}-apache-gwtomcat'],
         notify  => Service['gwtomcat'],
