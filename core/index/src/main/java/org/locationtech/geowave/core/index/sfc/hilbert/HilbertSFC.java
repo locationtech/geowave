@@ -13,8 +13,6 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -22,22 +20,27 @@ import org.locationtech.geowave.core.index.sfc.RangeDecomposition;
 import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.SpaceFillingCurve;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.uzaygezen.core.CompactHilbertCurve;
 import com.google.uzaygezen.core.MultiDimensionalSpec;
 
 /** * Implementation of a Compact Hilbert space filling curve */
 public class HilbertSFC implements SpaceFillingCurve {
   private static class QueryCacheKey {
+    private final HilbertSFC sfc;
     private final double[] minsPerDimension;
     private final double[] maxesPerDimension;
     private final boolean overInclusiveOnEdge;
     private final int maxFilteredIndexedRanges;
 
     public QueryCacheKey(
+        final HilbertSFC sfc,
         final double[] minsPerDimension,
         final double[] maxesPerDimension,
         final boolean overInclusiveOnEdge,
         final int maxFilteredIndexedRanges) {
+      this.sfc = sfc;
       this.minsPerDimension = minsPerDimension;
       this.maxesPerDimension = maxesPerDimension;
       this.overInclusiveOnEdge = overInclusiveOnEdge;
@@ -52,6 +55,7 @@ public class HilbertSFC implements SpaceFillingCurve {
       result = (prime * result) + Arrays.hashCode(maxesPerDimension);
       result = (prime * result) + Arrays.hashCode(minsPerDimension);
       result = (prime * result) + (overInclusiveOnEdge ? 1231 : 1237);
+      result = (prime * result) + ((sfc == null) ? 0 : sfc.hashCode());
       return result;
     }
 
@@ -79,12 +83,19 @@ public class HilbertSFC implements SpaceFillingCurve {
       if (overInclusiveOnEdge != other.overInclusiveOnEdge) {
         return false;
       }
+      if (sfc == null) {
+        if (other.sfc != null) {
+          return false;
+        }
+      } else if (!sfc.equals(other.sfc)) {
+        return false;
+      }
       return true;
     }
   }
 
   private static final int MAX_CACHED_QUERIES = 500;
-  private final Cache<QueryCacheKey, RangeDecomposition> queryDecompositionCache =
+  private final static Cache<QueryCacheKey, RangeDecomposition> QUERY_DECOMPOSITION_CACHE =
       Caffeine.newBuilder().maximumSize(MAX_CACHED_QUERIES).initialCapacity(
           MAX_CACHED_QUERIES).build();
   protected CompactHilbertCurve compactHilbertCurve;
@@ -176,17 +187,18 @@ public class HilbertSFC implements SpaceFillingCurve {
   public RangeDecomposition decomposeRange(
       final MultiDimensionalNumericData query,
       final boolean overInclusiveOnEdge,
-      int maxFilteredIndexedRanges) {
+      final int maxFilteredIndexedRanges) {
     final int maxRanges =
         (maxFilteredIndexedRanges < 0) ? Integer.MAX_VALUE : maxFilteredIndexedRanges;
     final QueryCacheKey key =
         new QueryCacheKey(
+            this,
             query.getMinValuesPerDimension(),
             query.getMaxValuesPerDimension(),
             overInclusiveOnEdge,
             maxRanges);
 
-    return queryDecompositionCache.get(
+    return QUERY_DECOMPOSITION_CACHE.get(
         key,
         k -> decomposeQueryOperations.decomposeRange(
             query.getDataPerDimension(),

@@ -57,6 +57,7 @@ public class GeoWaveGrpcAnalyticMapreduceService extends
       cmd.computeResults(params);
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
     LOGGER.info("Executing KdeCommand...");
     try {
@@ -67,6 +68,7 @@ public class GeoWaveGrpcAnalyticMapreduceService extends
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -92,6 +94,7 @@ public class GeoWaveGrpcAnalyticMapreduceService extends
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -117,6 +120,7 @@ public class GeoWaveGrpcAnalyticMapreduceService extends
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 }

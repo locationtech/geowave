@@ -87,6 +87,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -115,6 +116,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -143,6 +145,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -171,6 +174,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -198,6 +202,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -225,6 +230,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -253,6 +259,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -281,6 +288,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -308,6 +316,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -336,6 +345,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -364,6 +374,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -391,6 +402,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -419,6 +431,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -447,6 +460,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -475,6 +489,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -503,6 +518,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -531,6 +547,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -559,6 +576,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -587,6 +605,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -615,6 +634,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -643,6 +663,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -671,6 +692,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -699,6 +721,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -727,6 +750,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -755,6 +779,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -783,6 +808,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -811,6 +837,7 @@ public class GeoWaveGrpcCliGeoserverService extends CliGeoserverImplBase impleme
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 }

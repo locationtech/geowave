@@ -87,8 +87,8 @@ install_geowave() {
 	if ! command -v puppet &> /dev/null
 	then
 		# this is a more recent EMR
-		sudo ln -s /opt/aws/puppet/bin/puppet /usr/bin/puppet
-		sudo ln -s /opt/aws/puppet /etc/puppet
+		sudo ln -s /opt/aws/puppet/bin/puppet /usr/bin/
+		sudo ln -s /opt/aws/puppet /etc/
 		sudo puppet module install puppetlabs-stdlib
 	fi
 	

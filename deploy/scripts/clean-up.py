@@ -49,7 +49,7 @@ class CleanUp():
             build_type = fileptr.readline().rstrip()
             fileptr.close()
         else:
-            print("WARNING: \"{}\" file now found. Script will not run clean".format(build_type_file)) 
+            print("WARNING: \"{}\" file not found. Script will not run clean".format(build_type_file)) 
             build_type = None
         return build_type
 

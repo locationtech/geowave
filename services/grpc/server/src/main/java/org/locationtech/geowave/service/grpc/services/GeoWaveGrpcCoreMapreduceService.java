@@ -59,6 +59,7 @@ public class GeoWaveGrpcCoreMapreduceService extends CoreMapreduceImplBase imple
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 }

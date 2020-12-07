@@ -58,7 +58,6 @@ import org.locationtech.geowave.test.basic.AbstractGeoWaveBasicVectorIT;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.spark_project.guava.collect.Lists;
 
 @RunWith(GeoWaveITRunner.class)
 public class DataIndexOnlyIT extends AbstractGeoWaveBasicVectorIT {
@@ -108,7 +107,7 @@ public class DataIndexOnlyIT extends AbstractGeoWaveBasicVectorIT {
 
     @Override
     public InsertionIds getInsertionIds(final Pair<byte[], byte[]> entry) {
-      return new InsertionIds(Lists.newArrayList(entry.getValue()));
+      return new InsertionIds(Collections.singletonList(entry.getValue()));
     }
 
     @Override

@@ -29,11 +29,7 @@ public class GeoWaveGrpcServiceCommandUtil {
     for (final Map.Entry<FieldDescriptor, Object> entry : m.entrySet()) {
       try {
         mapFieldValue(cmd, cmd.getClass(), entry);
-      } catch (final IOException e) {
-        LOGGER.error("Exception encountered setting fields on command", e);
-      } catch (final IllegalArgumentException e) {
-        LOGGER.error("Exception encountered setting fields on command", e);
-      } catch (final IllegalAccessException e) {
+      } catch (final IOException | IllegalArgumentException | IllegalAccessException e) {
         LOGGER.error("Exception encountered setting fields on command", e);
       }
     }

@@ -67,6 +67,7 @@ public class GeoWaveGrpcCoreCliService extends CoreCliImplBase implements GeoWav
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -101,6 +102,7 @@ public class GeoWaveGrpcCoreCliService extends CoreCliImplBase implements GeoWav
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 }

@@ -35,20 +35,20 @@ public class KafkaTestEnvironment implements TestEnvironment {
 
   @Override
   public void setup() throws Exception {
-    LOGGER.info("Starting up Kafka Server...");
-
-    FileUtils.deleteDirectory(KafkaTestUtils.DEFAULT_LOG_DIR);
-
-    final boolean success = KafkaTestUtils.DEFAULT_LOG_DIR.mkdir();
-    if (!success) {
-      LOGGER.warn(
-          "Unable to create Kafka log dir ["
-              + KafkaTestUtils.DEFAULT_LOG_DIR.getAbsolutePath()
-              + "]");
-    }
-
-    final KafkaConfig config = KafkaTestUtils.getKafkaBrokerConfig();
     if (kafkaServer == null) {
+      LOGGER.info("Starting up Kafka Server...");
+
+      FileUtils.deleteDirectory(KafkaTestUtils.DEFAULT_LOG_DIR);
+
+      final boolean success = KafkaTestUtils.DEFAULT_LOG_DIR.mkdir();
+      if (!success) {
+        LOGGER.warn(
+            "Unable to create Kafka log dir ["
+                + KafkaTestUtils.DEFAULT_LOG_DIR.getAbsolutePath()
+                + "]");
+      }
+
+      final KafkaConfig config = KafkaTestUtils.getKafkaBrokerConfig();
       kafkaServer = new KafkaServerStartable(config);
 
       kafkaServer.startup();

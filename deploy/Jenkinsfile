@@ -82,7 +82,7 @@ node ('master') {
      }
   }
     
-  stage('Clean bucket and local space'){
+  stage('Clean local space'){
     // Local Cleanup - cleanup all but noarch directories
     sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/dev-jars/*"
     sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/release-jars/*"
@@ -90,8 +90,6 @@ node ('master') {
     sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/release/SRPMS/*"
     sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/dev/TARBALL/*"
     sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/release/TARBALL/*"
-    // S3 Cleanup
-    sh "python deploy/scripts/clean-up.py ${env.WORKSPACE}"
   }
   
   // Mark the build artifacts 'stage'....
@@ -101,6 +99,11 @@ node ('master') {
     	sh "echo 'params.install4j_home=${params.install4j_home}'"
         sh "deploy/packaging/docker/docker-build-rpms.sh"
     }
+  }
+  
+  stage('Clean S3'){
+     // S3 Cleanup
+    sh "python deploy/scripts/clean-up.py ${env.WORKSPACE}"
   }
   
   // Deploy to geowave-rpms

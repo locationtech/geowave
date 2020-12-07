@@ -90,6 +90,7 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase implemen
       gtStore = new GeoWaveGTDataStore(new GeoWavePluginConfig(storeLoader.getDataStorePlugin()));
     } catch (final IOException | GeoWavePluginException e) {
       LOGGER.error("Exception encountered instantiating GeoWaveGTDataStore", e);
+      responseObserver.onError(e);
     }
 
     Filter filter = null;
@@ -97,6 +98,7 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase implemen
       filter = ECQL.toFilter(request.getQuery());
     } catch (final CQLException e) {
       LOGGER.error("Exception encountered creating filter from CQL", e);
+      responseObserver.onError(e);
     }
 
     ContentFeatureCollection featureCollection = null;
@@ -105,6 +107,7 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase implemen
       featureCollection = gtStore.getFeatureSource(typeName).getFeatures(filter);
     } catch (final IOException | NullPointerException e) {
       LOGGER.error("Exception encountered getting feature collection", e);
+      responseObserver.onError(e);
     }
 
     try (final SimpleFeatureIterator iterator = featureCollection.features()) {
@@ -130,6 +133,7 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase implemen
       responseObserver.onCompleted();
     } catch (final NullPointerException e) {
       LOGGER.error("Exception encountered", e);
+      responseObserver.onError(e);
     }
   }
 

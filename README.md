@@ -8,12 +8,12 @@
 
 | Continuous Integration | License | Chat |            
 |:------------------:|:-------:|:----:| 
-| <a href="https://travis-ci.org/locationtech/geowave/branches"><img alt="Travis-CI test status" src="https://travis-ci.org/locationtech/geowave.svg?branch=master"/></a> | [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) | [![Join the chat at https://gitter.im/locationtech/geowave](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/locationtech/geowave?utm_source=badge&utm_medium=badge&utm_content=badge) |  
+| <a href="https://github.com/locationtech/geowave/actions?query=workflow%3A%22GeoWave+Tests%22+branch%3Amaster"><img alt="GitHub Action Test Status" src="https://github.com/locationtech/geowave/workflows/GeoWave%20Tests/badge.svg?branch=master"/></a> | [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) | [![Join the chat at https://gitter.im/locationtech/geowave](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/locationtech/geowave?utm_source=badge&utm_medium=badge&utm_content=badge) |  
 
 GeoWave is an open source set of software that:
 
 * Capabilities
-  * Adds multi-dimensional indexing capability to key/value stores (currently [Apache Accumulo](https://accumulo.apache.org), [Apache HBase](https://hbase.apache.org), [Apache Cassandra](http://cassandra.apache.org/), [Amazon DynamoDB](https://aws.amazon.com/dynamodb/), [Cloud Bigtable](https://cloud.google.com/bigtable/), [Redis](https://redis.io/), [RocksDB](https://rocksdb.org/), and [Apache Kudu](https://kudu.apache.org/))
+  * Adds multi-dimensional indexing capability to key/value stores (currently [Apache Accumulo](https://accumulo.apache.org), [Apache HBase](https://hbase.apache.org), [Apache Cassandra](http://cassandra.apache.org/), [Amazon DynamoDB](https://aws.amazon.com/dynamodb/), [Cloud Bigtable](https://cloud.google.com/bigtable/), [Redis](https://redis.io/), [RocksDB](https://rocksdb.org/), and [Apache Kudu](https://kudu.apache.org/), as well as direct FileSystem support)
   * Adds support for geographic objects and geospatial operators to these stores
   * Provides Map-Reduce input and output formats for distributed processing and analysis of geospatial data
 * Geospatial software plugins
@@ -30,7 +30,7 @@ Basically, GeoWave is working to bridge geospatial software with modern key/valu
 * [Developer Guide](https://locationtech.github.io/geowave/latest/devguide.html) - A guide for developing applications that utilize GeoWave
 * [Command-Line Interface](https://locationtech.github.io/geowave/latest/commands.html) - Full documentation for the GeoWave CLI
 * [Changelog](https://locationtech.github.io/geowave/latest/changelog.html) - Changes and features for each of our [GitHub releases](https://github.com/locationtech/geowave/releases)
-* The underlying principles employed in GeoWave are outlined in recent academic publications to include largely the background theory in [Advances in Spatial and Temporal Databases 2017](https://link.springer.com/chapter/10.1007/978-3-319-64367-0_6) and a derivative, more applied paper in [FOSS4G Conference Proceedings 2017](http://scholarworks.umass.edu/cgi/viewcontent.cgi?article=1027&context=foss4g).
+* The underlying principles employed in GeoWave are outlined in past academic publications to include largely the background theory in [Advances in Spatial and Temporal Databases 2017](https://link.springer.com/chapter/10.1007/978-3-319-64367-0_6) and a derivative, more applied paper in [FOSS4G Conference Proceedings 2017](http://scholarworks.umass.edu/cgi/viewcontent.cgi?article=1027&context=foss4g).
 
 ## The Software
 * We have [multi-platform standalone installers](https://locationtech.github.io/geowave/latest/installation-guide.html#standalone-installers) for the GeoWave's command-line tools to help get started
@@ -124,13 +124,12 @@ We work to maintain a N and N-1 tested and supported version pace for the follow
 | 2.14.x | 20.x | [1.7.x,1.9.x] | [1.1.x,1.4.x] | 2.x | Java8 |
 
 * [Apache Maven](http://maven.apache.org/) 3.x or greater is required for building
-* See our [.travis.yml](https://github.com/locationtech/geowave/blob/master/.travis.yml) file for the currently tested build matrix. 
 
 
 
 ## Origin
 
-GeoWave was developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with [RadiantBlue Technologies](http://www.radiantblue.com/) (now Maxar Technologies) and [Booz Allen Hamilton](http://www.boozallen.com/).  The government has ["unlimited rights"](https://github.com/locationtech/geowave/blob/master/NOTICE) and is releasing this software to increase the impact of government investments by providing developers with the opportunity to take things in new directions. The software use, modification, and distribution rights are stipulated within the [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.html) license.  
+GeoWave was originally developed at the National Geospatial-Intelligence Agency (NGA) in collaboration with [RadiantBlue Technologies](http://www.radiantblue.com/) (now [Maxar Technologies](https://www.maxar.com/)) and [Booz Allen Hamilton](http://www.boozallen.com/). The software use, modification, and distribution rights are stipulated within the [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.html) license.  
 
 
 ## Contributing
