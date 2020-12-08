@@ -4,7 +4,7 @@ env:
     DEV_RESOURCES_VERSION: 1.7
     MAVEN_PROFILES: '""'
     IT_ONLY: true
-    MAVEN_OPTS: "-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2g -XX:MaxMetaspaceSize=512m -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"    
+    MAVEN_OPTS: "-Dmaven.wagon.httpconnectionManager.ttlSeconds=25 -Dmaven.wagon.http.retryHandler.count=3 -XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2g -XX:MaxMetaspaceSize=512m -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"    
 jobs:
     unit-tests:
         runs-on: ubuntu-18.04
@@ -38,7 +38,7 @@ jobs:
 
             - name: Publish Unit Test Results
               uses: scacap/action-surefire-report@v1
-              if: always()
+              if: github.event.pull_request.head.repo.full_name == github.repository
               with:
                 check_name: Unit Test Results
                 report_paths: "**/target/surefire-reports/*.xml"
@@ -77,6 +77,7 @@ jobs:
 
             - name: Python Test Results
               uses: scacap/action-surefire-report@v1
+              if: github.event.pull_request.head.repo.full_name == github.repository
               with:
                 check_name: Python Test Results
                 report_paths: python/src/main/python/test-report.xml
@@ -124,6 +125,7 @@ jobs:
 
             - name: Publish Integration Test ${{ matrix.profile }} Results
               uses: scacap/action-surefire-report@v1
+              if: github.event.pull_request.head.repo.full_name == github.repository
               with:
                 check_name: ${{ matrix.profile }} Results
                 report_paths: test/target/failsafe-reports/TEST-org.locationtech.geowave.test.GeoWaveITSuite.xml
