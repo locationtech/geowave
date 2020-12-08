@@ -55,15 +55,15 @@ class CleanUp():
 
     def clean_bucket(self):
         s3 = boto3.client('s3')
-        resp = s3.list_objects_v2(Bucket=self.rpm_bucket)
+        resp = s3.list_objects_v2(Bucket="geowave-rpms", Prefix="dev")
 
         for obj in resp['Contents']:
             key = obj['Key']
-            if ((key.endswith('.tar.gz') or key.endswith('.rpm')) and key.startswith('dev/')) or key.startswith('dev-jars/'):
+            if '.repodata' not in key:
                 if 'noarch' in key:
                     artifact_date_str = os.path.basename(key).split('.')[3]
                 else:
-                    artifact_date_str = os.path.basename(key).split('.')[2].split('-')[1]
+                    artifact_date_str = os.path.basename(key).rsplit('-', 1)[1].split('.')[0]
                     
                 try:
                     date_time = datetime.strptime(artifact_date_str, "%Y%m%d%H%M")
