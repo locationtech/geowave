@@ -64,6 +64,7 @@ public class GeoWaveGrpcAnalyticSparkService extends AnalyticSparkGrpc.AnalyticS
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -89,6 +90,7 @@ public class GeoWaveGrpcAnalyticSparkService extends AnalyticSparkGrpc.AnalyticS
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -114,6 +116,7 @@ public class GeoWaveGrpcAnalyticSparkService extends AnalyticSparkGrpc.AnalyticS
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -139,6 +142,7 @@ public class GeoWaveGrpcAnalyticSparkService extends AnalyticSparkGrpc.AnalyticS
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 }

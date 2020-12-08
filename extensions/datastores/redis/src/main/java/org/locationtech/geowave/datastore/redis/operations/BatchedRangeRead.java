@@ -75,8 +75,10 @@ public class BatchedRangeRead<T> {
           (end != null) && (end.length > 6) ? Arrays.copyOfRange(end, 6, end.length) : null;
     }
 
-    public boolean passesExplicitChecks(final GeoWaveRedisPersistedRow row) {
+    public boolean passesExplicitChecks(final ScoredEntry<GeoWaveRedisPersistedRow> entry) {
+      final GeoWaveRedisPersistedRow row = entry.getValue();
       if ((explicitStartCheck != null)
+          && (entry.getScore() == startScore)
           && (row.getSortKeyPrecisionBeyondScore().length > 0)
           && (UnsignedBytes.lexicographicalComparator().compare(
               explicitStartCheck,
@@ -84,6 +86,7 @@ public class BatchedRangeRead<T> {
         return false;
       }
       if ((explicitEndCheck != null)
+          && (entry.getScore() == endScore)
           && (row.getSortKeyPrecisionBeyondScore().length > 0)
           && (UnsignedBytes.lexicographicalComparator().compare(
               explicitEndCheck,
@@ -221,17 +224,16 @@ public class BatchedRangeRead<T> {
           } else {
             partitionKey = new ByteArray(r.partitionKey);
           }
-          // if we don't have enough
-          // precision we need to make
-          // sure the end is inclusive
           return new PartitionIteratorWrapper(
               Streams.stream(
                   setCache.get(partitionKey).entryRange(
                       r.startScore,
                       true,
                       r.endScore,
-                      r.endScore <= r.startScore)).filter(
-                          e -> r.passesExplicitChecks(e.getValue())).iterator(),
+                      // because we have a finite precision we need to make
+                      // sure the end is inclusive and do more precise client-side filtering
+                      ((r.endScore <= r.startScore) || (r.explicitEndCheck != null)))).filter(
+                          e -> r.passesExplicitChecks(e)).iterator(),
               r.partitionKey);
         }).iterator());
     return new CloseableIterator.Wrapper<>(transformAndFilter(result));
@@ -289,10 +291,9 @@ public class BatchedRangeRead<T> {
                     r.startScore,
                     true,
                     r.endScore,
-                    // if we don't have enough
-                    // precision we need to make
-                    // sure the end is inclusive
-                    r.endScore <= r.startScore);
+                    // because we have a finite precision we need to make
+                    // sure the end is inclusive and do more precise client-side filtering
+                    ((r.endScore <= r.startScore) || (r.explicitEndCheck != null)));
             queryCount.incrementAndGet();
             f.handle((result, throwable) -> {
               if (!f.isSuccess()) {
@@ -307,16 +308,13 @@ public class BatchedRangeRead<T> {
 
                   transformAndFilter(
                       result.stream().filter(
-                          e -> r.passesExplicitChecks(e.getValue())).iterator()).forEachRemaining(
-                              row -> {
-                                try {
-                                  results.put(row);
-                                } catch (final InterruptedException e) {
-                                  LOGGER.warn(
-                                      "interrupted while waiting to enqueue a redis result",
-                                      e);
-                                }
-                              });
+                          e -> r.passesExplicitChecks(e)).iterator()).forEachRemaining(row -> {
+                            try {
+                              results.put(row);
+                            } catch (final InterruptedException e) {
+                              LOGGER.warn("interrupted while waiting to enqueue a redis result", e);
+                            }
+                          });
 
                 } finally {
                   checkFinalize(readSemaphore, results, queryCount);

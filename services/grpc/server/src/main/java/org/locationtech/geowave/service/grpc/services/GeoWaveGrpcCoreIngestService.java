@@ -67,6 +67,7 @@ public class GeoWaveGrpcCoreIngestService extends CoreIngestImplBase implements
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -95,6 +96,7 @@ public class GeoWaveGrpcCoreIngestService extends CoreIngestImplBase implements
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -122,6 +124,7 @@ public class GeoWaveGrpcCoreIngestService extends CoreIngestImplBase implements
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -150,6 +153,7 @@ public class GeoWaveGrpcCoreIngestService extends CoreIngestImplBase implements
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -177,6 +181,7 @@ public class GeoWaveGrpcCoreIngestService extends CoreIngestImplBase implements
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -203,6 +208,7 @@ public class GeoWaveGrpcCoreIngestService extends CoreIngestImplBase implements
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -230,6 +236,7 @@ public class GeoWaveGrpcCoreIngestService extends CoreIngestImplBase implements
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -257,6 +264,7 @@ public class GeoWaveGrpcCoreIngestService extends CoreIngestImplBase implements
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 }

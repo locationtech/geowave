@@ -13,19 +13,19 @@ import java.util.Map;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
-import org.locationtech.geowave.core.store.cli.store.RemoveStoreCommand;
-import org.locationtech.geowave.core.store.cli.type.RemoveTypeCommand;
-import org.locationtech.geowave.core.store.cli.store.ClearStoreCommand;
-import org.locationtech.geowave.core.store.cli.store.ListStorePluginsCommand;
 import org.locationtech.geowave.core.store.cli.index.ListIndexPluginsCommand;
 import org.locationtech.geowave.core.store.cli.index.ListIndicesCommand;
 import org.locationtech.geowave.core.store.cli.index.RemoveIndexCommand;
-import org.locationtech.geowave.core.store.cli.type.ListTypesCommand;
 import org.locationtech.geowave.core.store.cli.stats.CalculateStatCommand;
 import org.locationtech.geowave.core.store.cli.stats.ListStatsCommand;
 import org.locationtech.geowave.core.store.cli.stats.RecalculateStatsCommand;
 import org.locationtech.geowave.core.store.cli.stats.RemoveStatCommand;
+import org.locationtech.geowave.core.store.cli.store.ClearStoreCommand;
+import org.locationtech.geowave.core.store.cli.store.ListStorePluginsCommand;
+import org.locationtech.geowave.core.store.cli.store.RemoveStoreCommand;
 import org.locationtech.geowave.core.store.cli.store.VersionCommand;
+import org.locationtech.geowave.core.store.cli.type.ListTypesCommand;
+import org.locationtech.geowave.core.store.cli.type.RemoveTypeCommand;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceOptions;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceSpi;
 import org.locationtech.geowave.service.grpc.protobuf.CoreStoreGrpc.CoreStoreImplBase;
@@ -71,6 +71,7 @@ public class GeoWaveGrpcCoreStoreService extends CoreStoreImplBase implements
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -99,6 +100,7 @@ public class GeoWaveGrpcCoreStoreService extends CoreStoreImplBase implements
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -127,6 +129,7 @@ public class GeoWaveGrpcCoreStoreService extends CoreStoreImplBase implements
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -153,6 +156,7 @@ public class GeoWaveGrpcCoreStoreService extends CoreStoreImplBase implements
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -179,6 +183,7 @@ public class GeoWaveGrpcCoreStoreService extends CoreStoreImplBase implements
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -207,6 +212,7 @@ public class GeoWaveGrpcCoreStoreService extends CoreStoreImplBase implements
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -235,6 +241,7 @@ public class GeoWaveGrpcCoreStoreService extends CoreStoreImplBase implements
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -261,6 +268,7 @@ public class GeoWaveGrpcCoreStoreService extends CoreStoreImplBase implements
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -288,6 +296,7 @@ public class GeoWaveGrpcCoreStoreService extends CoreStoreImplBase implements
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -315,6 +324,7 @@ public class GeoWaveGrpcCoreStoreService extends CoreStoreImplBase implements
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -342,6 +352,7 @@ public class GeoWaveGrpcCoreStoreService extends CoreStoreImplBase implements
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -370,6 +381,7 @@ public class GeoWaveGrpcCoreStoreService extends CoreStoreImplBase implements
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 
@@ -397,6 +409,7 @@ public class GeoWaveGrpcCoreStoreService extends CoreStoreImplBase implements
 
     } catch (final Exception e) {
       LOGGER.error("Exception encountered executing command", e);
+      responseObserver.onError(e);
     }
   }
 }

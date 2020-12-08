@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.Pair;
-import org.bouncycastle.util.Arrays;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
@@ -162,16 +161,21 @@ public class RedisUtils {
       final double score,
       final byte[] sortKeyPrecisionBeyondScore) {
     if (sortKeyPrecisionBeyondScore.length > 0) {
-      return Arrays.concatenate(longToBytes((long) score, 6), sortKeyPrecisionBeyondScore);
+      return appendBytes(longToBytes((long) score), sortKeyPrecisionBeyondScore, 6);
     }
     return getSortKey(score);
   }
 
-  private static byte[] longToBytes(final long val) {
-    return longToBytes(val, 8);
+  private static byte[] appendBytes(final byte[] a, final byte[] b, final int length) {
+    final byte[] rv = new byte[length + b.length];
+
+    System.arraycopy(a, 0, rv, 0, Math.min(length, a.length));
+    System.arraycopy(b, 0, rv, length, b.length);
+
+    return rv;
   }
 
-  private static byte[] longToBytes(long val, final int maxLength) {
+  private static byte[] longToBytes(long val) {
     final int radix = 1 << 8;
     final int mask = radix - 1;
     // we want to eliminate trailing 0's (ie. truncate the byte array by
@@ -184,7 +188,7 @@ public class RedisUtils {
         return new byte[0];
       }
     }
-    final byte[] array = new byte[Math.min(8 - trailingZeros, maxLength)];
+    final byte[] array = new byte[8 - trailingZeros];
     int pos = array.length;
     do {
       array[--pos] = (byte) (((int) val) & mask);
