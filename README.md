@@ -8,7 +8,7 @@
 
 | Continuous Integration | License | Chat |            
 |:------------------:|:-------:|:----:| 
-| <a href="https://github.com/locationtech/geowave/actions?query=workflow%3A%22GeoWave+Tests%22+branch%3Amaster"><img alt="GitHub Action Test Status" src="https://github.com/locationtech/geowave/workflows/GeoWave%20Tests/badge.svg?branch=master"/></a> | [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) | [![Join the chat at https://gitter.im/locationtech/geowave](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/locationtech/geowave?utm_source=badge&utm_medium=badge&utm_content=badge) |  
+| ![Tests](https://github.com/locationtech/geowave/workflows/Tests/badge.svg) | [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) | [![Join the chat at https://gitter.im/locationtech/geowave](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/locationtech/geowave?utm_source=badge&utm_medium=badge&utm_content=badge) |  
 
 GeoWave is an open source set of software that:
 

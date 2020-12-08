@@ -66,11 +66,12 @@ class CleanUp():
                     artifact_date_str = os.path.basename(key).split('.')[2].split('-')[1]
                     
                 try:
-                    date_time = datetime.strptime(artifact_date_str, "%Y%m%d%H%M%S")
+                    date_time = datetime.strptime(artifact_date_str, "%Y%m%d%H%M")
 
                     if date_time < self.date_threshhold and date_time != None:
                         s3.delete_object(Bucket=self.rpm_bucket, Key=key)
-                except ValueError:
+                except ValueError as error:
+                        print(error)
                         print("Incorrect date format, skipping")
 
 if __name__ == "__main__":

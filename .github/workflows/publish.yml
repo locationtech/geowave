@@ -1,4 +1,4 @@
-name: GeoWave Publish
+name: Publish
 on: 
   push:
     branches:
