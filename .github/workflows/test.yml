@@ -1,4 +1,4 @@
-name: GeoWave Tests
+name: Tests
 on: [push, pull_request]
 env:
     DEV_RESOURCES_VERSION: 1.7
