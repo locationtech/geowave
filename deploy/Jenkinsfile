@@ -92,6 +92,12 @@ node ('master') {
     sh "sudo rm -rf ${params.LOCAL_REPO_DIR}/geowave/release/TARBALL/*"
   }
   
+  stage('Clean S3'){
+    sh "deploy/docker/init.sh"
+     // S3 Cleanup	
+    sh "python deploy/scripts/clean-up.py ${env.WORKSPACE}"
+  }
+  
   // Mark the build artifacts 'stage'....
   stage('Build and Publish RPMs'){
     withEnv(["INSTALL4J_HOME=${ params.install4j_home }","LOCAL_REPO_DIR=${ params.LOCAL_REPO_DIR }","GEOWAVE_RPM_BUCKET=${ params.rpm_bucket }","GEOWAVE_BUCKET=${ params.cache_bucket }"]) {
@@ -99,11 +105,6 @@ node ('master') {
     	sh "echo 'params.install4j_home=${params.install4j_home}'"
         sh "deploy/packaging/docker/docker-build-rpms.sh"
     }
-  }
-  
-  stage('Clean S3'){
-     // S3 Cleanup
-    sh "python deploy/scripts/clean-up.py ${env.WORKSPACE}"
   }
   
   // Deploy to geowave-rpms
