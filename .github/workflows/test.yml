@@ -4,7 +4,7 @@ env:
     DEV_RESOURCES_VERSION: 1.7
     MAVEN_PROFILES: '""'
     IT_ONLY: true
-    MAVEN_OPTS: "-Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 -XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2g -XX:MaxMetaspaceSize=512m -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"    
+    MAVEN_OPTS: "-Dmaven.wagon.http.retryHandler.count=3 -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 -XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2g -XX:MaxMetaspaceSize=512m -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"    
 jobs:
     unit-tests:
         runs-on: ubuntu-18.04
@@ -20,6 +20,11 @@ jobs:
               with:
                 java-version: '8'  
                 architecture: x64  
+
+            - name: Set up Maven
+              uses: stCarolas/setup-maven@v4
+              with:
+                maven-version: 3.6.3
                 
             - name: Cache resources
               uses: actions/cache@v2
@@ -61,6 +66,11 @@ jobs:
               with:
                 java-version: '8'  
                 architecture: x64   
+
+            - name: Set up Maven
+              uses: stCarolas/setup-maven@v4
+              with:
+                maven-version: 3.6.3
                 
             - name: Cache resources
               uses: actions/cache@v2
@@ -111,6 +121,11 @@ jobs:
               with:
                 java-version: '8' 
                 architecture: x64  
+                
+            - name: Set up Maven
+              uses: stCarolas/setup-maven@v4
+              with:
+                maven-version: 3.6.3
               
             - name: Cache resources
               uses: actions/cache@v2
