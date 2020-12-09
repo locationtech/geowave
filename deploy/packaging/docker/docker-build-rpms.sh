@@ -90,7 +90,7 @@ docker run $DOCKER_ARGS --rm \
   -v $INSTALL4J_HOME:/opt/install4j7 \
   locationtech/geowave-centos7-java8-build \
   /bin/bash -c \
-  "cd \$WORKSPACE && deploy/packaging/docker/build-src/build-geowave-common.sh $SKIP_EXTRA"
+  "cd \$WORKSPACE && deploy/packaging/docker/init.sh && deploy/packaging/docker/build-src/build-geowave-common.sh $SKIP_EXTRA"
 	
 docker run $DOCKER_ARGS --rm \
   -e WORKSPACE=/usr/src/geowave \
@@ -101,7 +101,7 @@ docker run $DOCKER_ARGS --rm \
   -v $WORKSPACE:/usr/src/geowave \
   locationtech/geowave-centos7-rpm-build \
   /bin/bash -c \
-  "cd \$WORKSPACE && deploy/packaging/docker/build-rpm/build-rpm.sh"
+  "cd \$WORKSPACE && deploy/packaging/docker/init.sh && deploy/packaging/docker/build-rpm/build-rpm.sh"
 
 docker run $DOCKER_ARGS --rm \
   -e WORKSPACE=/usr/src/geowave \
