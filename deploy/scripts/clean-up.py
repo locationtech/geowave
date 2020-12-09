@@ -59,7 +59,7 @@ class CleanUp():
 
         for obj in resp['Contents']:
             key = obj['Key']
-            if '.repodata' not in key:
+            if 'repo' not in key:
                 if 'noarch' in key:
                     artifact_date_str = os.path.basename(key).split('.')[3]
                 else:
