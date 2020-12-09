@@ -80,6 +80,11 @@ install_geowave() {
 	# Install the repo config file
 	sudo rpm -Uvh $GEOWAVE_REPO_BASE_URL_TOKEN$GEOWAVE_REPO_RPM
 
+	# So as not to install incompatible puppet from the dependencies of geowave-puppet
+	# we're doing this convoluted workaround to download and then install with no dep resolution	
+	sudo yumdownloader --enablerepo geowave-dev --destdir /tmp geowave-${GEOWAVE_VERSION}-puppet
+	sudo rpm -Uvh --force --nodeps /tmp/geowave-${GEOWAVE_VERSION}-puppet.*.noarch.rpm
+
 	# EMR 5.17.2 and lower has a tar bundle installed puppet in /home/ec2-user
 	# more recent versions of EMR use an emr-puppet RPM installed to /opt/aws/puppet
 
@@ -87,16 +92,17 @@ install_geowave() {
 	if ! command -v puppet &> /dev/null
 	then
 		# this is a more recent EMR
+
+		# first add puppet to /usr/bin
 		sudo ln -s /opt/aws/puppet/bin/puppet /usr/bin/
-		sudo ln -s /opt/aws/puppet /etc/
+		# install stdlib which is required by geowave
 		sudo puppet module install puppetlabs-stdlib
+		
+		# GeoWave puppet always puts its modules assuming puppet is installed to /etc/puppet
+		# move the geowave module and clear the /etc/puppet directory which was created just for geowave
+		sudo mv /etc/puppet/modules/geowave/ /opt/aws/puppet/modules/
+		sudo rm -rf /etc/puppet/
 	fi
-	
-	# So as not to install incompatible puppet from the dependencies of geowave-puppet
-	# we're doing this convoluted workaround to download and then install with no dep resolution	
-	sudo yumdownloader --enablerepo $GEOWAVE_REPO_NAME_TOKEN --destdir /tmp geowave-${GEOWAVE_VERSION}-puppet
-	sudo rpm -Uvh --force --nodeps /tmp/geowave-${GEOWAVE_VERSION}-puppet.*.noarch.rpm
-	 
 
 cat << EOF > /tmp/geowave.pp
 class { 'geowave::repo': 

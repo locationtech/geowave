@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 
 public class SparkUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(SparkUtils.class);
-  private static final int DEFAULT_SPLITS_FOR_COUNT = 100;
+  private static final int DEFAULT_SPLITS_FOR_COUNT = 10;
 
   public static void verifyQuery(
       final DataStorePluginOptions dataStore,

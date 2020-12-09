@@ -17,10 +17,18 @@
 trap 'chmod -R 777 $WORKSPACE' EXIT
 trap 'chmod -R 777 $WORKSPACE && exit' ERR
 
+# Get the version
+GEOWAVE_VERSION=$(cat $WORKSPACE/deploy/target/version.txt)
+BUILD_TYPE=$(cat $WORKSPACE/deploy/target/build-type.txt)
+GEOWAVE_RPM_VERSION=$(cat $WORKSPACE/deploy/target/rpm_version.txt)
+
 echo "---------------------------------------------------------------"
 echo "         Building GeoWave Common"
 echo "---------------------------------------------------------------"
-
+echo "GEOWAVE_VERSION=${GEOWAVE_VERSION}"
+echo "INSTALL4J_HOME=${INSTALL4J_HOME}"
+echo "BUILD_ARGS=${BUILD_ARGS} ${@}"
+echo "---------------------------------------------------------------"
 # Build and archive HTML/PDF docs
 if [[ ! -f $WORKSPACE/target/site-${GEOWAVE_VERSION}.tar.gz ]]; then
     mvn -q javadoc:aggregate $BUILD_ARGS "$@"

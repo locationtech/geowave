@@ -93,9 +93,15 @@ node ('master') {
   }
   
   stage('Clean S3'){
-    sh "deploy/docker/init.sh"
-     // S3 Cleanup	
-    sh "python deploy/scripts/clean-up.py ${env.WORKSPACE}"
+      withMaven(
+      maven: 'maven',
+      mavenLocalRepo: "${env.WORKSPACE}/docker-root/.m2/repository/",
+      mavenOpts: "-Xmx2g -Xms1g",
+      options: [junitPublisher(disabled: true), findbugsPublisher(disabled: true)]) {
+      sh "deploy/packaging/docker/init.sh"
+      // S3 Cleanup	
+      sh "python deploy/scripts/clean-up.py ${env.WORKSPACE}"
+    }
   }
   
   // Mark the build artifacts 'stage'....
@@ -112,12 +118,12 @@ node ('master') {
     def build_type = readFile('deploy/target/build-type.txt').trim()
     if ( build_type == "dev" ) {
       echo 'Build type determined as Dev.'
-      sh "aws s3 sync --acl public-read ${params.LOCAL_REPO_DIR}/geowave/dev/ s3://${params.rpm_bucket}/dev/"
-      sh "aws s3 sync --acl public-read ${params.LOCAL_REPO_DIR}/geowave/dev-jars/ s3://${params.rpm_bucket}/dev-jars/"
+      sh "aws s3 sync --quiet --acl public-read ${params.LOCAL_REPO_DIR}/geowave/dev/ s3://${params.rpm_bucket}/dev/"
+      sh "aws s3 sync --quiet --acl public-read ${params.LOCAL_REPO_DIR}/geowave/dev-jars/ s3://${params.rpm_bucket}/dev-jars/"
     } else if (build_type == "release" ) {
       echo 'Build type determined as Release.'
-      sh "aws s3 sync --acl public-read ${params.LOCAL_REPO_DIR}/geowave/release/ s3://${params.rpm_bucket}/release/"
-      sh "aws s3 sync --acl public-read ${params.LOCAL_REPO_DIR}/geowave/release-jars/ s3://${params.rpm_bucket}/release-jars/"
+      sh "aws s3 sync --quiet --acl public-read ${params.LOCAL_REPO_DIR}/geowave/release/ s3://${params.rpm_bucket}/release/"
+      sh "aws s3 sync --quiet --acl public-read ${params.LOCAL_REPO_DIR}/geowave/release-jars/ s3://${params.rpm_bucket}/release-jars/"
     } else {
       error("ERROR: Could not determine build type. Unable to upload rpm's.")
     }

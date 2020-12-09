@@ -24,6 +24,12 @@ ACCUMULO_API="$(mvn -q -Dexec.executable="echo" -Dexec.args='${accumulo.api}' --
 if [[ ! -z "$BUILD_ARGS" ]]; then
 	VENDOR_VERSION=$(echo "$BUILD_ARGS" | grep -oi "vendor.version=\w*" | sed "s/vendor.version=//g")
 fi
+
+# Get the version
+GEOWAVE_VERSION=$(cat $WORKSPACE/deploy/target/version.txt)
+BUILD_TYPE=$(cat $WORKSPACE/deploy/target/build-type.txt)
+GEOWAVE_RPM_VERSION=$(cat $WORKSPACE/deploy/target/rpm_version.txt)
+
 echo "---------------------------------------------------------------"
 echo "  Building GeoWave Vendor-specific with the following settings"
 echo "---------------------------------------------------------------"
