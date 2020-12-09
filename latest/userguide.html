@@ -1028,7 +1028,7 @@ $ geowave ingest localtogw ./ingest_data mystore myindex</code></pre>
 <div class="sect3">
 <h4 id="temporal-configuration"><a class="anchor" href="#temporal-configuration"></a>Temporal Configuration</h4>
 <div class="paragraph">
-<p>Temporal configuration may be necessary if your vector feature type has more than one temporal attribute.  The class name for this configuration is <a href="https://github.com/locationtech/geowave/blob/a0c8a52476341c8231b24bd4bf4dd78f6f1d75c1/core/geotime/src/main/java/org/locationtech/geowave/core/geotime/util/TimeDescriptors.java"><code>org.locationtech.geowave.core.geotime.util.TimeDescriptors$TimeDescriptorConfiguration</code></a>.</p>
+<p>Temporal configuration may be necessary if your vector feature type has more than one temporal attribute.  The class name for this configuration is <a href="https://github.com/locationtech/geowave/blob/a7978ec54aed17f16d1a1a5d7f4e523c1d672e25/core/geotime/src/main/java/org/locationtech/geowave/core/geotime/util/TimeDescriptors.java"><code>org.locationtech.geowave.core.geotime.util.TimeDescriptors$TimeDescriptorConfiguration</code></a>.</p>
 </div>
 <div class="paragraph">
 <p>There are three attributes for the temporal configuration:</p>
@@ -1072,7 +1072,7 @@ $ geowave ingest localtogw ./ingest_data mystore myindex</code></pre>
 <div class="sect3">
 <h4 id="statistics-configuration"><a class="anchor" href="#statistics-configuration"></a>Statistics Configuration</h4>
 <div class="paragraph">
-<p>Statistics can be configured under a class named <a href="https://github.com/locationtech/geowave/blob/a0c8a52476341c8231b24bd4bf4dd78f6f1d75c1/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/StatsConfigurationCollection.java"><code>org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection$SimpleFeatureStatsConfigurationCollection</code></a>. This configuration has a single attribute called <code>attConfig</code> which contains all of the attributes that are being configured with statistics.  Each attribute under <code>attConfig</code> also contains a single property called <code>configurationsForAttribute</code>, which is a list of all statistics configurations that should be assigned to that attribute. The following table shows the types of built-in statistics that can be assigned to an attribute.</p>
+<p>Statistics can be configured under a class named <a href="https://github.com/locationtech/geowave/blob/a7978ec54aed17f16d1a1a5d7f4e523c1d672e25/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/StatsConfigurationCollection.java"><code>org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection$SimpleFeatureStatsConfigurationCollection</code></a>. This configuration has a single attribute called <code>attConfig</code> which contains all of the attributes that are being configured with statistics.  Each attribute under <code>attConfig</code> also contains a single property called <code>configurationsForAttribute</code>, which is a list of all statistics configurations that should be assigned to that attribute. The following table shows the types of built-in statistics that can be assigned to an attribute.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1106,32 +1106,32 @@ Bounding box and range statistics are automatically captured for geometry and te
 <td class="tableblock halign-left valign-top" rowspan="3"><p class="tableblock">Numeric</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Fixed Bin Histogram</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">minValue=-&#8734;, maxValue=&#8734;, bins=32</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/locationtech/geowave/blob/a0c8a52476341c8231b24bd4bf4dd78f6f1d75c1/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/FeatureFixedBinNumericStatistics.java"><code>org.locationtech.geowave.adapter.vector.stats.
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/locationtech/geowave/blob/a7978ec54aed17f16d1a1a5d7f4e523c1d672e25/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/FeatureFixedBinNumericStatistics.java"><code>org.locationtech.geowave.adapter.vector.stats.
 FeatureFixedBinNumericStatistics$FeatureFixedBinConfig</code></a></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Dynamic Histogram</p></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/locationtech/geowave/blob/a0c8a52476341c8231b24bd4bf4dd78f6f1d75c1/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/FeatureNumericHistogramStatistics.java"><code>org.locationtech.geowave.adapter.vector.stats.
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/locationtech/geowave/blob/a7978ec54aed17f16d1a1a5d7f4e523c1d672e25/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/FeatureNumericHistogramStatistics.java"><code>org.locationtech.geowave.adapter.vector.stats.
 FeatureNumericHistogramStatistics$FeatureNumericHistogramConfig</code></a></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Numeric Range</p></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/locationtech/geowave/blob/a0c8a52476341c8231b24bd4bf4dd78f6f1d75c1/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/FeatureNumericRangeStatistics.java"><code>org.locationtech.geowave.adapter.vector.stats.
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/locationtech/geowave/blob/a7978ec54aed17f16d1a1a5d7f4e523c1d672e25/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/FeatureNumericRangeStatistics.java"><code>org.locationtech.geowave.adapter.vector.stats.
 FeatureNumericRangeStatistics$FeatureNumericRangeConfig</code></a></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Count Min Sketch</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">errorFactor=0.001, probabilityOfCorrectness=0.98</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/locationtech/geowave/blob/a0c8a52476341c8231b24bd4bf4dd78f6f1d75c1/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/FeatureCountMinSketchStatistics.java"><code>org.locationtech.geowave.adapter.vector.stats.
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/locationtech/geowave/blob/a7978ec54aed17f16d1a1a5d7f4e523c1d672e25/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/FeatureCountMinSketchStatistics.java"><code>org.locationtech.geowave.adapter.vector.stats.
 FeatureCountMinSketchStatistics$FeatureCountMinSketchConfig</code></a></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Hyper Log Log</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">precision=16</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/locationtech/geowave/blob/a0c8a52476341c8231b24bd4bf4dd78f6f1d75c1/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/FeatureHyperLogLogStatistics.java"><code>org.locationtech.geowave.adapter.vector.stats.
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/locationtech/geowave/blob/a7978ec54aed17f16d1a1a5d7f4e523c1d672e25/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/FeatureHyperLogLogStatistics.java"><code>org.locationtech.geowave.adapter.vector.stats.
 FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig</code></a></p></td>
 </tr>
 </tbody>
@@ -1171,7 +1171,7 @@ FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig</code></a></p></td>
 <p>Visibility configuration consists of a visibility manager and an attribute which contains the visibility information.</p>
 </div>
 <div class="paragraph">
-<p>A visibility manager extends <a href="https://github.com/locationtech/geowave/blob/a0c8a52476341c8231b24bd4bf4dd78f6f1d75c1/core/store/src/main/java/org/locationtech/geowave/core/store/data/visibility/VisibilityManagement.java"><code>org.locationtech.geowave.core.store.data.visibility.VisibilityManagement</code></a>. An instance of this class interprets the contents of a visibility attribute within a simple feature to determine the visibility constraints of the other attributes in that simple feature. The default visibility management class is <a href="https://github.com/locationtech/geowave/blob/a0c8a52476341c8231b24bd4bf4dd78f6f1d75c1/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.java"><code>org.locationtech.geowave.adapter.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement</code></a>, which is used by the default visibility configuration class <a href="https://github.com/locationtech/geowave/blob/a0c8a52476341c8231b24bd4bf4dd78f6f1d75c1/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/plugin/visibility/VisibilityConfiguration.java"><code>org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration</code></a>.</p>
+<p>A visibility manager extends <a href="https://github.com/locationtech/geowave/blob/a7978ec54aed17f16d1a1a5d7f4e523c1d672e25/core/store/src/main/java/org/locationtech/geowave/core/store/data/visibility/VisibilityManagement.java"><code>org.locationtech.geowave.core.store.data.visibility.VisibilityManagement</code></a>. An instance of this class interprets the contents of a visibility attribute within a simple feature to determine the visibility constraints of the other attributes in that simple feature. The default visibility management class is <a href="https://github.com/locationtech/geowave/blob/a7978ec54aed17f16d1a1a5d7f4e523c1d672e25/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.java"><code>org.locationtech.geowave.adapter.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement</code></a>, which is used by the default visibility configuration class <a href="https://github.com/locationtech/geowave/blob/a7978ec54aed17f16d1a1a5d7f4e523c1d672e25/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/plugin/visibility/VisibilityConfiguration.java"><code>org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration</code></a>.</p>
 </div>
 <div class="paragraph">
 <p>For example, if you had an attribute called <code>vis</code> that contained the visibility constraints in a type called <code>myFeatureTypeName</code>, the configuration would look like the following:</p>
@@ -1194,7 +1194,7 @@ FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig</code></a></p></td>
 <div class="sect3">
 <h4 id="primary-index-identifiers"><a class="anchor" href="#primary-index-identifiers"></a>Primary Index Identifiers</h4>
 <div class="paragraph">
-<p>The class <a href="https://github.com/locationtech/geowave/blob/a0c8a52476341c8231b24bd4bf4dd78f6f1d75c1/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/index/SimpleFeaturePrimaryIndexConfiguration.java"><code>org.locationtech.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration</code></a> is used to maintain the configuration of primary indices used for adding or updating simple features via the GeoServer plugin.</p>
+<p>The class <a href="https://github.com/locationtech/geowave/blob/a7978ec54aed17f16d1a1a5d7f4e523c1d672e25/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/index/SimpleFeaturePrimaryIndexConfiguration.java"><code>org.locationtech.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration</code></a> is used to maintain the configuration of primary indices used for adding or updating simple features via the GeoServer plugin.</p>
 </div>
 </div>
 <div class="sect3">
@@ -2267,7 +2267,7 @@ When all of the data of a given type is removed, that type is removed from the d
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Additional authorization management strategies can be registered through the Java Service Provider Interface (SPI) model by implementing the <a href="https://github.com/locationtech/geowave/blob/a0c8a52476341c8231b24bd4bf4dd78f6f1d75c1/extensions/adapters/auth/src/main/java/org/locationtech/geowave/adapter/auth/AuthorizationFactorySPI.java"><code>AuthorizationFactorySPI</code></a> interface. For more information on using SPI, see the <a href="https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html" target="_blank">Oracle documentation</a>.
+Additional authorization management strategies can be registered through the Java Service Provider Interface (SPI) model by implementing the <a href="https://github.com/locationtech/geowave/blob/a7978ec54aed17f16d1a1a5d7f4e523c1d672e25/extensions/adapters/auth/src/main/java/org/locationtech/geowave/adapter/auth/AuthorizationFactorySPI.java"><code>AuthorizationFactorySPI</code></a> interface. For more information on using SPI, see the <a href="https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html" target="_blank">Oracle documentation</a>.
 </td>
 </tr>
 </table>
@@ -2460,7 +2460,7 @@ this artifact.</p>
 <p>When data is written to GeoWave, it may contain visibility constraints. By default, the visibility expression attached to each attribute is empty, which means that the data is visible regardless of which authorizations are present. If a visibility expression is set for an attribute, only queries that supply the appropriate authorizations will be able to see it.</p>
 </div>
 <div class="paragraph">
-<p>The only provided visibility management strategy is <a href="https://github.com/locationtech/geowave/blob/a0c8a52476341c8231b24bd4bf4dd78f6f1d75c1/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.java"><code>JsonDefinitionColumnVisibilityManagement</code></a>, which expects each feature to have an attribute that contains a JSON string describing the visibility for each attribute of the feature instance. This approach allows each feature to determine its own visibility criteria.</p>
+<p>The only provided visibility management strategy is <a href="https://github.com/locationtech/geowave/blob/a7978ec54aed17f16d1a1a5d7f4e523c1d672e25/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.java"><code>JsonDefinitionColumnVisibilityManagement</code></a>, which expects each feature to have an attribute that contains a JSON string describing the visibility for each attribute of the feature instance. This approach allows each feature to determine its own visibility criteria.</p>
 </div>
 <div class="paragraph">
 <p>Each name/value pair within the JSON structure defines the visibility for the associated attribute. In the following example, the <code>geometry</code> attribute is given a visibility <code>S</code> and the <code>eventName</code> attribute is given a visibility <code>TS</code>.  This means that a user with an authorization set of <code>["S","TS"]</code> would be able to see both attributes, while a user with only <code>["S"]</code> would only be able to see the <code>geometry</code> attribute.</p>
@@ -2501,7 +2501,7 @@ this artifact.</p>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Additional visibility management strategies can be registered through the Java Service Provider Interface (SPI) model by implementing the <a href="https://github.com/locationtech/geowave/blob/a0c8a52476341c8231b24bd4bf4dd78f6f1d75c1/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/plugin/visibility/ColumnVisibilityManagementSpi.java"><code>ColumnVisibilityManagement</code></a> interface. For more information on using SPI, see the <a href="https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html" target="_blank">Oracle documentation</a>.
+Additional visibility management strategies can be registered through the Java Service Provider Interface (SPI) model by implementing the <a href="https://github.com/locationtech/geowave/blob/a7978ec54aed17f16d1a1a5d7f4e523c1d672e25/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/plugin/visibility/ColumnVisibilityManagementSpi.java"><code>ColumnVisibilityManagement</code></a> interface. For more information on using SPI, see the <a href="https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html" target="_blank">Oracle documentation</a>.
 </td>
 </tr>
 </table>
@@ -2853,7 +2853,7 @@ var geowave_version = '1.2.0-SNAPSHOT';
 
 <div class="geowave-footer col-md-12 docs-footer">
   <div class="py-4 d-flex justify-content-center align-items-center">
-    <small><p class="footer-text">This page was generated on Wednesday, December 09, 2020 at 03:17 PM UTC<br><a href="https://github.com/locationtech/geowave/tree/a0c8a52476341c8231b24bd4bf4dd78f6f1d75c1">View the commit it was generated from on GitHub</a></p></small>
+    <small><p class="footer-text">This page was generated on Wednesday, December 09, 2020 at 09:48 PM UTC<br><a href="https://github.com/locationtech/geowave/tree/a7978ec54aed17f16d1a1a5d7f4e523c1d672e25">View the commit it was generated from on GitHub</a></p></small>
   </div>
 </div>
 </div>
@@ -2864,7 +2864,7 @@ var geowave_version = '1.2.0-SNAPSHOT';
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-12-09 15:17:32 +00:00
+Last updated 2020-12-09 21:48:17 +00:00
 </div>
 </div>
 </body>
