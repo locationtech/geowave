@@ -19,6 +19,7 @@ jobs:
       PYPI_CREDENTIALS: ${{ secrets.PYPI_CREDENTIALS }}
       SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
       SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -28,7 +29,7 @@ jobs:
       with:
         java-version: '8'  
         architecture: x64  
-        
+
     - name: Cache resources
       uses: actions/cache@v2
       env:
@@ -37,11 +38,14 @@ jobs:
         key:  ${{ runner.os }}-Publish
         path: ~/.m2
 
+    - name: Install Local Artifacts
+      run: mvn install -B -DskipTests -Dspotbugs.skip
+
     - name: Publish Artifacts
       run: ./.utility/publish-artifacts.sh
     
     - name: Generate Changelog
-      uses: heinrichreimer/github-changelog-generator-action@v2.1.1
+      uses: charmixer/auto-changelog-action@v1.1
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -52,9 +56,6 @@ jobs:
 
     - name: Build HTML Docs
       run: mvn -P html -pl docs install -DskipTests -Dspotbugs.skip      
-    
-    - name: Install Local Artifacts
-      run: mvn install -B -DskipTests -Dspotbugs.skip
 
     - name: Build Aggregate Javadocs
       run: mvn javadoc:aggregate -B -DskipTests -Dspotbugs.skip
