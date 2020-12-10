@@ -29,12 +29,11 @@ if [[ ! "$GEOWAVE_VERSION" =~ "SNAPSHOT" ]] ; then
   else
     echo -e "Deploying pygw to PyPi..."
     pushd python/src/main/python
-    pyenv global 3.7.1
-    python -m venv publish-venv
+    python3 -m venv publish-venv
     source ./publish-venv/bin/activate
   
     pip install --upgrade pip wheel setuptools twine
-    python setup.py bdist_wheel --python-tag=py3 sdist
+    python3 setup.py bdist_wheel --python-tag=py3 sdist
     twine upload --skip-existing -u __token__ -p $PYPI_CREDENTIALS dist/*
     deactivate
     popd
