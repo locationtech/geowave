@@ -4,7 +4,7 @@
 		<artifactId>geowave-service-parent</artifactId>
 		<groupId>org.locationtech.geowave</groupId>
 		<relativePath>../</relativePath>
-		<version>1.2.0-SNAPSHOT</version>
+		<version>1.2.0</version>
 	</parent>
 	<properties>
 		<restlet.version>2.4.0</restlet.version>
