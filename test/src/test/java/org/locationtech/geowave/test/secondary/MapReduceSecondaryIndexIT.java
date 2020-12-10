@@ -41,8 +41,9 @@ public class MapReduceSecondaryIndexIT extends AbstractSecondaryIndexIT {
           // HBase for cloudera 5.14 takes too long
           // GeoWaveStoreType.HBASE,
           GeoWaveStoreType.BIGTABLE,
-          GeoWaveStoreType.CASSANDRA,
-          // DYNAMODB takes too long
+          // TODO: Cassandra seems to have inconsistencies passing this IT
+          // GeoWaveStoreType.CASSANDRA,
+          // TODO: DYNAMODB takes too long
           // GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,

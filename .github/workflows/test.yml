@@ -4,7 +4,7 @@ env:
     DEV_RESOURCES_VERSION: 1.7
     MAVEN_PROFILES: '""'
     IT_ONLY: true
-    MAVEN_OPTS: "-Dmaven.wagon.http.retryHandler.count=3 -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 -XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2g -XX:MaxMetaspaceSize=512m -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"    
+    MAVEN_OPTS: "-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2g -XX:MaxMetaspaceSize=512m -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"    
 jobs:
     unit-tests:
         runs-on: ubuntu-18.04
@@ -26,26 +26,37 @@ jobs:
               with:
                 maven-version: 3.6.3
                 
-            - name: Cache resources
+            - name: Cache maven resources
               uses: actions/cache@v2
               env:
-                cache-name: cache-geowave-resources
+                cache-name: cache-maven-resources
               with:
-                key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+                key: ${{ runner.os }}-mvn-${{ hashFiles('**/pom.xml') }}
                 restore-keys: |
-                      ${{ runner.os }}-maven-
+                      ${{ runner.os }}-mvn-
                 path: |
                       ~/.m2/repository
+
+            - name: Cache other resources
+              uses: actions/cache@v2
+              env:
+                cache-name: cache-resources
+              with:
+                key: ${{ runner.os }}-other
+                restore-keys: |
+                      ${{ runner.os }}-other
+                path: |  
                       ~/.downloads
                       test/landsat8
                       test/sentinel2
                       test/target/temp/gdal
+
             - name: Run
-              run: ./.utility/run-tests.sh
+              run: ./.utility/retry ./.utility/run-tests.sh
 
             - name: Publish Unit Test Results
               uses: scacap/action-surefire-report@v1
-              if: github.event.pull_request.head.repo.full_name == github.repository
+              if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
               with:
                 check_name: Unit Test Results
                 report_paths: "**/target/surefire-reports/*.xml"
@@ -72,26 +83,37 @@ jobs:
               with:
                 maven-version: 3.6.3
                 
-            - name: Cache resources
+            - name: Cache maven resources
               uses: actions/cache@v2
               env:
-                cache-name: cache-geowave-resources
+                cache-name: cache-maven-resources
               with:
-                key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+                key: ${{ runner.os }}-mvn-${{ hashFiles('**/pom.xml') }}
                 restore-keys: |
-                      ${{ runner.os }}-maven-
+                      ${{ runner.os }}-mvn-
                 path: |
                       ~/.m2/repository
+
+            - name: Cache other resources
+              uses: actions/cache@v2
+              env:
+                cache-name: cache-resources
+              with:
+                key: ${{ runner.os }}-other
+                restore-keys: |
+                      ${{ runner.os }}-other
+                path: |  
                       ~/.downloads
                       test/landsat8
                       test/sentinel2
                       test/target/temp/gdal
+
             - name: Run
-              run: ./.utility/run-tests.sh
+              run: ./.utility/retry ./.utility/run-tests.sh
 
             - name: Python Test Results
               uses: scacap/action-surefire-report@v1
-              if: github.event.pull_request.head.repo.full_name == github.repository
+              if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
               with:
                 check_name: Python Test Results
                 report_paths: python/src/main/python/test-report.xml
@@ -127,26 +149,38 @@ jobs:
               with:
                 maven-version: 3.6.3
               
-            - name: Cache resources
+                
+            - name: Cache maven resources
               uses: actions/cache@v2
               env:
-                cache-name: cache-geowave-resources
+                cache-name: cache-maven-resources
               with:
-                key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+                key: ${{ runner.os }}-mvn-${{ hashFiles('**/pom.xml') }}
                 restore-keys: |
-                      ${{ runner.os }}-maven-
+                      ${{ runner.os }}-mvn-
                 path: |
                       ~/.m2/repository
+
+            - name: Cache other resources
+              uses: actions/cache@v2
+              env:
+                cache-name: cache-resources
+              with:
+                key: ${{ runner.os }}-other
+                restore-keys: |
+                      ${{ runner.os }}-other
+                path: |  
                       ~/.downloads
                       test/landsat8
                       test/sentinel2
                       test/target/temp/gdal
+
             - name: Run
-              run: ./.utility/run-tests.sh
+              run: ./.utility/retry ./.utility/run-tests.sh
 
             - name: Publish Integration Test ${{ matrix.profile }} Results
               uses: scacap/action-surefire-report@v1
-              if: github.event.pull_request.head.repo.full_name == github.repository
+              if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
               with:
                 check_name: ${{ matrix.profile }} Results
                 report_paths: test/target/failsafe-reports/TEST-org.locationtech.geowave.test.GeoWaveITSuite.xml
