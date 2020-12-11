@@ -46,7 +46,7 @@ jobs:
     - name: Generate Changelog
       env:
         CHANGELOG_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gem install github_changelog_generator -v 1.15.2 && github_changelog_generator
+      run: gem install github_changelog_generator -v 1.15.2 && github_changelog_generator --user locationtech --project geowave
       
     - name: Install Local Artifacts
       run: mvn install -B -DskipTests -Dspotbugs.skip
