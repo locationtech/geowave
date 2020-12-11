@@ -20,6 +20,7 @@ jobs:
       PYPI_CREDENTIALS: ${{ secrets.PYPI_CREDENTIALS }}
       SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
       SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+      CHANGELOG_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -41,7 +42,6 @@ jobs:
     - name: Generate Changelog
       uses: heinrichreimer/github-changelog-generator-action@v2.2
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
         issues: true
         issuesWoLabels: true
         pullRequests: true
