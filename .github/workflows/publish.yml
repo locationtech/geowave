@@ -45,7 +45,7 @@ jobs:
       with:
         token: ${{ secrets.CHANGELOG_GITHUB_TOKEN }}
         issues: true
-        issuesWoLabels: false
+        issuesWoLabels: true
         pullRequests: true
         prWoLabels: true
         author: true
