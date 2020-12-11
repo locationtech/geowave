@@ -82,7 +82,7 @@ install_geowave() {
 
 	# So as not to install incompatible puppet from the dependencies of geowave-puppet
 	# we're doing this convoluted workaround to download and then install with no dep resolution	
-	sudo yumdownloader --enablerepo geowave-dev --destdir /tmp geowave-${GEOWAVE_VERSION}-puppet
+	sudo yumdownloader --enablerepo $GEOWAVE_REPO_NAME_TOKEN --destdir /tmp geowave-${GEOWAVE_VERSION}-puppet
 	sudo rpm -Uvh --force --nodeps /tmp/geowave-${GEOWAVE_VERSION}-puppet.*.noarch.rpm
 
 	# EMR 5.17.2 and lower has a tar bundle installed puppet in /home/ec2-user
