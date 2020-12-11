@@ -41,11 +41,11 @@ jobs:
     - name: Install Local Artifacts
       run: mvn install -B -DskipTests -Dspotbugs.skip
 
-    - name: Publish Artifacts
-      uses: gabrielfalcao/pyenv-action@v5
-      with:
-        default: 3.7.1
-        command: ./.utility/publish-artifacts.sh
+    # - name: Publish Artifacts
+    #   uses: gabrielfalcao/pyenv-action@v5
+    #   with:
+    #     default: 3.7.1
+    #     command: ./.utility/publish-artifacts.sh
 
     - name: Generate Changelog
       uses: heinrichreimer/github-changelog-generator-action@v2.1.1
