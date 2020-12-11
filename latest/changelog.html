@@ -723,6 +723,7 @@
 <li>GeoServer SSL Configuration Properties Encryption Support <a href="https://github.com/locationtech/geowave/pull/1088">#1088</a> (<a href="https://github.com/mcarrier7">mcarrier7</a>)</li>
 <li>Migrating logging from log4j to slf4j. <a href="https://github.com/locationtech/geowave/pull/1079">#1079</a> (<a href="https://github.com/mcarrier7">mcarrier7</a>)</li>
 <li>Initial creation - map/reduce store copy command <a href="https://github.com/locationtech/geowave/pull/1073">#1073</a> (<a href="https://github.com/blastarr">blastarr</a>)</li>
+<li>Enabled Authorization Provider for the raster data adapter plugin <a href="https://github.com/locationtech/geowave/pull/1066">#1066</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</li>
 </ul>
 <h2 id="v0.9.4.1-2017-05-05"><a href="https://github.com/locationtech/geowave/tree/v0.9.4.1">v0.9.4.1</a> (2017-05-05)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v0.9.4...v0.9.4.1">Full Changelog</a></p>
@@ -776,11 +777,9 @@
 <li>Geowave 811 rebase <a href="https://github.com/locationtech/geowave/pull/1076">#1076</a> (<a href="https://github.com/mcarrier7">mcarrier7</a>)</li>
 <li>merged stanag4676 additional point detail geometries with latest <a href="https://github.com/locationtech/geowave/pull/1070">#1070</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>added dependency for bigtable to default packaging <a href="https://github.com/locationtech/geowave/pull/1068">#1068</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
-<li>Enabled Authorization Provider for the raster data adapter plugin <a href="https://github.com/locationtech/geowave/pull/1066">#1066</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</li>
 <li>simple fixes to gpx format <a href="https://github.com/locationtech/geowave/pull/1065">#1065</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>small updates to documentation <a href="https://github.com/locationtech/geowave/pull/1062">#1062</a> (<a href="https://github.com/mawhitby">mawhitby</a>)</li>
 <li>fixed issues in build process <a href="https://github.com/locationtech/geowave/pull/1059">#1059</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
-<li>Implementation of BatchDeleter for Accumulo : Geowave - 1027 <a href="https://github.com/locationtech/geowave/pull/1056">#1056</a> (<a href="https://github.com/nmehta92">nmehta92</a>)</li>
 <li>Added capability to retain geometric predicate associated with query geometry extracted from CQL expression <a href="https://github.com/locationtech/geowave/pull/1055">#1055</a> (<a href="https://github.com/ashish217">ashish217</a>)</li>
 <li>Update to latest version of mvn cache <a href="https://github.com/locationtech/geowave/pull/1052">#1052</a> (<a href="https://github.com/chizou">chizou</a>)</li>
 <li>GEOWAVE-1045: ingest at all lower resolution pyramid levels <a href="https://github.com/locationtech/geowave/pull/1047">#1047</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
@@ -1258,6 +1257,7 @@
 <li>Add support for STANAG4676 file format <a href="https://github.com/locationtech/geowave/issues/515">#515</a></li>
 <li>Allow for more dynamic SimpleFeature Retyping <a href="https://github.com/locationtech/geowave/issues/492">#492</a></li>
 <li>Allow for more dynamic SimpleFeature Retyping <a href="https://github.com/locationtech/geowave/pull/493">#493</a> (<a href="https://github.com/ewilson-radblue">ewilson-radblue</a>)</li>
+<li>fixed local and kafka ingest that use multiple indices per ingest format and cleaned up kafka ingest and test (#436) <a href="https://github.com/locationtech/geowave/pull/450">#450</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 </ul>
 <p><strong>Fixed bugs:</strong></p>
 <ul>
@@ -1341,7 +1341,6 @@
 <li>Map Reduce Job to Compute statistics <a href="https://github.com/locationtech/geowave/issues/243">#243</a></li>
 <li>Additional geowave-examples <a href="https://github.com/locationtech/geowave/issues/116">#116</a></li>
 <li>Update Kernel Density to use GeoWave input and output formats and raster data adapter <a href="https://github.com/locationtech/geowave/issues/102">#102</a></li>
-<li>fixed local and kafka ingest that use multiple indices per ingest format and cleaned up kafka ingest and test (#436) <a href="https://github.com/locationtech/geowave/pull/450">#450</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Moved tests to geoserver 2.6.4 / 2.7.1.1 <a href="https://github.com/locationtech/geowave/pull/440">#440</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</li>
 <li>Source config file if present for GeoServer setttings <a href="https://github.com/locationtech/geowave/pull/420">#420</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 </ul>
