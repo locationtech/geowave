@@ -20,7 +20,7 @@ jobs:
       PYPI_CREDENTIALS: ${{ secrets.PYPI_CREDENTIALS }}
       SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
       SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-      CHANGELOG_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      CHANGELOG_GITHUB_TOKEN: ${{ secrets.CHANGELOG_TOKEN }}
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
