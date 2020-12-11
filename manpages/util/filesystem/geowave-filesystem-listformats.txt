@@ -1,0 +1,24 @@
+//:= geowave-util-filesystem-listformats(1)
+:doctype: manpage
+
+[[util-filesystem-list-formats-name]]
+==== NAME
+
+geowave-util-filesystem-listformats - List available filesystem data formats
+
+[[util-filesystem-listformats-synopsis]]
+==== SYNOPSIS
+
+  geowave util filesystem listformats
+
+[[util-filesystem-listformats-description]]
+==== DESCRIPTION
+
+List available formats for usage with --format option with FileSystem datastore
+
+[[util-filesystem-listformats-examples]]
+==== EXAMPLES
+
+List available filesystem data formats:
+
+  geowave util filesystem listformats

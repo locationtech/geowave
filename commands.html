@@ -668,6 +668,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#grpc-commands"><strong>gRPC Commands</strong></a></li>
 <li><a href="#grpc-start">Start gRPC Server</a></li>
 <li><a href="#grpc-stop">Stop gRPC Server</a></li>
+<li><a href="#filesystem-commands"><strong>Python Commands</strong></a></li>
+<li><a href="#filesystem-listformats">List Available FileSystem Data Formats</a></li>
 </ul>
 </li>
 </ul>
@@ -1274,7 +1276,7 @@ The truststore file is used to validate client certificates.</p>
 </dl>
 </div>
 <div class="paragraph">
-<p>When the <code>accummulo</code> type option is used, additional options are:</p>
+<p>When the <code>accumulo</code> type option is used, additional options are:</p>
 </div>
 <div class="dlist">
 <dl>
@@ -1282,9 +1284,17 @@ The truststore file is used to validate client certificates.</p>
 <dd>
 <p>The Accumulo instance ID.</p>
 </dd>
-<dt class="hdlist1"><strong>* -u, --user</strong> <em>&lt;user&gt;</em></dt>
+<dt class="hdlist1"><strong>-u, --user</strong> <em>&lt;user&gt;</em></dt>
 <dd>
-<p>A valid Accumulo user ID.</p>
+<p>A valid Accumulo user ID. If not given and using SASL, the active Kerberos user will be used.</p>
+</dd>
+<dt class="hdlist1"><strong>-k, --keytab</strong> <em>&lt;keytab&gt;</em></dt>
+<dd>
+<p>Path to keytab file for Kerberos authentication. If using SASL, this is required.</p>
+</dd>
+<dt class="hdlist1"><strong>--sasl</strong> <em>&lt;sasl&gt;</em></dt>
+<dd>
+<p>Use SASL to connect to Accumulo (Kerberos).</p>
 </dd>
 <dt class="hdlist1"><strong>-p, --password</strong> <em>&lt;password&gt;</em></dt>
 <dd>
@@ -1332,6 +1342,10 @@ The truststore file is used to validate client certificates.</p>
 <dd>
 <p>The compression to use.  Possible values are <code>snappy</code>, <code>lz4</code>, and <code>none</code>. Default is <code>snappy</code>.</p>
 </dd>
+<dt class="hdlist1"><strong>--serialization</strong> <em>&lt;serialization&gt;</em></dt>
+<dd>
+<p>Can be \"fst\" or \"jdk\". Defaults to fst. This serialization codec is only used for the data index when secondary indexing.</p>
+</dd>
 </dl>
 </div>
 <div class="paragraph">
@@ -1350,6 +1364,21 @@ The truststore file is used to validate client certificates.</p>
 <dt class="hdlist1"><strong>--batchWriteSize</strong> <em>&lt;count&gt;</em></dt>
 <dd>
 <p>The size (in records) for each batched write. Anything &#8656; 1 will use synchronous single record writes without batching. Default is 1000.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>When the <code>filesystem</code> type option is used, additional options are:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><strong>--dir</strong> <em>&lt;path&gt;</em></dt>
+<dd>
+<p>The directory to read/write to.  Defaults to "geowave" in the working directory.</p>
+</dd>
+<dt class="hdlist1"><strong>--format</strong> <em>&lt;format&gt;</em></dt>
+<dd>
+<p>Optionally use a formatter configured with Java SPI of type org.locationtech.geowave.datastore.filesystem.FileSystemDataFormatterSpi.  Defaults to 'binary' which is a compact geowave serialization.  Use <code>geowave util filesystem listformats</code> to see available formats.</p>
 </dd>
 </dl>
 </div>
@@ -6159,7 +6188,7 @@ The truststore file is used to validate client certificates.</p>
 <div class="sect3">
 <h4 id="raster-installgdal-description"><a class="anchor" href="#raster-installgdal-description"></a>DESCRIPTION</h4>
 <div class="paragraph">
-<p>This command will download GDAL to a directory.  The directory should be added to the <code>PATH</code> and Linux users should set <code>LD_LIBRARY_PATH</code> to the directory.  This command is not currently supported on Mac.</p>
+<p>This command installs the version of GDAL that is used by GeoWave.  By default, it is installed to the GeoWave home directory under <code>lib/utilities/gdal</code>.  If an alternate directory is provided, it should be added to the <code>PATH</code> environment variable for Mac and Windows users, or the <code>LD_LIBRARY_PATH</code> environment variable for Linux users.</p>
 </div>
 </div>
 <div class="sect3">
@@ -6176,7 +6205,7 @@ The truststore file is used to validate client certificates.</p>
 <div class="sect3">
 <h4 id="raster-installgdal-examples"><a class="anchor" href="#raster-installgdal-examples"></a>EXAMPLES</h4>
 <div class="paragraph">
-<p>Install GDAL libraries on a Windows or Linux machine:</p>
+<p>Install GDAL native libraries:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -8769,13 +8798,55 @@ OSM commands are not included in GeoWave by default.
 </div>
 </div>
 <hr>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="filesystem-commands"><a class="anchor" href="#filesystem-commands"></a><strong>Python Commands</strong></h3>
+<div class="paragraph">
+<p>FileSystem datastore commands</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="filesystem-listformats"><a class="anchor" href="#filesystem-listformats"></a>List Available FileSystem Data Formats</h3>
+<div class="sect3">
+<h4 id="util-filesystem-list-formats-name"><a class="anchor" href="#util-filesystem-list-formats-name"></a>NAME</h4>
+<div class="paragraph">
+<p>geowave-util-filesystem-listformats - List available filesystem data formats</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="util-filesystem-listformats-synopsis"><a class="anchor" href="#util-filesystem-listformats-synopsis"></a>SYNOPSIS</h4>
+<div class="literalblock">
+<div class="content">
+<pre>geowave util filesystem listformats</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="util-filesystem-listformats-description"><a class="anchor" href="#util-filesystem-listformats-description"></a>DESCRIPTION</h4>
+<div class="paragraph">
+<p>List available formats for usage with --format option with FileSystem datastore</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="util-filesystem-listformats-examples"><a class="anchor" href="#util-filesystem-listformats-examples"></a>EXAMPLES</h4>
+<div class="paragraph">
+<p>List available filesystem data formats:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>geowave util filesystem listformats</pre>
+</div>
+</div>
+<hr>
 <script>
-var geowave_version = '1.1.0';
+var geowave_version = '1.2.0';
 </script>
 
 <div class="geowave-footer col-md-12 docs-footer">
   <div class="py-4 d-flex justify-content-center align-items-center">
-    <small><p class="footer-text">This page was generated on Thursday, March 05, 2020 at 02:27 AM UTC<br><a href="https://github.com/locationtech/geowave/tree/d27015a544ba43a0831e49d9ead3ac08637a7447">View the commit it was generated from on GitHub</a></p></small>
+    <small><p class="footer-text">This page was generated on Friday, December 11, 2020 at 04:12 AM UTC<br><a href="https://github.com/locationtech/geowave/tree/52a12f591b99ea921f34c3f8c04517e7f79bce4a">View the commit it was generated from on GitHub</a></p></small>
   </div>
 </div>
 </div>
@@ -8785,7 +8856,7 @@ var geowave_version = '1.1.0';
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-05 02:27:13 +00:00
+Last updated 2020-12-11 04:12:25 +00:00
 </div>
 </div>
 </body>

@@ -29,29 +29,35 @@ All core data stores have these options:
 
 *--gwNamespace* _<namespace>_::
   The GeoWave namespace.  By default, no namespace is used.
-  
+
 *--enableServerSideLibrary* _<enabled>_::
   Enable server-side operations if possible.  Default is `true`.
-  
+
 *--enableSecondaryIndexing*::
   If specified, secondary indexing will be used.
-  
+
 *--enableVisibility* _<enabled>_::
   If specified, visibility will be explicitly enabled or disabled.  Default is unspecified.
-  
+
 *--maxRangeDecomposition* _<count>_::
   The maximum number of ranges to use when breaking down queries.
 
 *--aggregationMaxRangeDecomposition* _<count>_::
   The maximum number of ranges to use when breaking down aggregation queries.
 
-When the `accummulo` type option is used, additional options are:
-    
+When the `accumulo` type option is used, additional options are:
+
 *$$*$$ -i, --instance* _<instance>_::
   The Accumulo instance ID.
-  
-*$$*$$ -u, --user* _<user>_::
-  A valid Accumulo user ID.
+
+*-u, --user* _<user>_::
+  A valid Accumulo user ID. If not given and using SASL, the active Kerberos user will be used.
+
+*-k, --keytab* _<keytab>_::
+  Path to keytab file for Kerberos authentication. If using SASL, this is required.
+
+*--sasl* _<sasl>_::
+  Use SASL to connect to Accumulo (Kerberos).
 
 *-p, --password* _<password>_::
   The password for the user. Can be specified as `pass:<password>`, `file:<local file containing the password>`, `propfile:<local properties file containing the password>:<property file key>`, `env:<variable containing the pass>`, or `stdin`.
@@ -63,7 +69,7 @@ When the `hbase` type option is used, additional options are:
 
 *$$*$$ -z, --zookeeper* _<servers>_::
   A comma-separated list of zookeeper servers that an HBase instance is using.
-   
+
 *--coprocessorJar* _<path>_::
   Path (HDFS URL) to the JAR containing coprocessor classes.
 
@@ -80,26 +86,37 @@ When the `redis` type option is used, additional options are:
 
 *--compression* _<compression>_::
   The compression to use.  Possible values are `snappy`, `lz4`, and `none`. Default is `snappy`.
- 
+
+*--serialization* _<serialization>_::
+  Can be \"fst\" or \"jdk\". Defaults to fst. This serialization codec is only used for the data index when secondary indexing.
+
 When the `rocksdb` type option is used, additional options are:
 
 *--dir* _<path>_::
   The directory to read/write to.  Defaults to "rocksdb" in the working directory.
-   
+
 *--compactOnWrite* _<enabled>_::
   Whether to compact on every write, if `false` it will only compact on merge. Default is `true`.
 
 *--batchWriteSize* _<count>_::
   The size (in records) for each batched write. Anything <= 1 will use synchronous single record writes without batching. Default is 1000.
 
+When the `filesystem` type option is used, additional options are:
+
+*--dir* _<path>_::
+  The directory to read/write to.  Defaults to "geowave" in the working directory.
+
+*--format* _<format>_::
+  Optionally use a formatter configured with Java SPI of type org.locationtech.geowave.datastore.filesystem.FileSystemDataFormatterSpi.  Defaults to 'binary' which is a compact geowave serialization.  Use `geowave util filesystem listformats` to see available formats.
+
 When the `cassandra` type option is used, additional options are:
 
 *$$*$$ --contactPoints* _<contact points>_::
   A single contact point or a comma delimited set of contact points to connect to the Cassandra cluster.
-   
+
 *--replicas* _<count>_::
   The number of replicas to use when creating a new keyspace.  Default is 3.
-   
+
 *--durableWrites* _<enabled>_::
   Whether to write to commit log for durability, configured only on creation of new keyspace.  Default is `true`.
 
@@ -110,22 +127,22 @@ When the `dynamodb` type option is used, additional options are:
 
 *$$*$$ --endpoint* _<endpoint>_::
   [REQUIRED (or `-region`)] The endpoint to connect to.
-   
+
 *$$*$$ --region* _<region>_::
   [REQUIRED (or `-endpoint`)] The AWS region to use.
-   
+
 *--initialWriteCapacity* _<count>_::
   The maximum number of writes consumed per second before throttling occurs.  Default is 5.
 
 *--initialReadCapacity* _<count>_::
   The maximum number of strongly consistent reads consumed per second before throttling occurs.  Default is 5.
-  
+
 *--maxConnections* _<count>_::
   The maximum number of open http(s) connections active at any given time.  Default is 50.
-  
+
 *--protocol* _<protocol>_::
   The protocol to use. Possible values are `HTTP` or `HTTPS`, default is `HTTPS`.
-  
+
 *--cacheResponseMetadata* _<enabled>_::
   Whether to cache responses from AWS. High performance systems can disable this but debugging will be more difficult.  Default is `true`.
 
@@ -138,26 +155,24 @@ When the `bigtable` type option is used, additional options are:
 
 *--projectId* _<project>_::
   The Bigtable project to connect to.  Default is `geowave-bigtable-project-id`.
-  
+
 *--instanceId* _<instance>_::
   The Bigtable instance to connect to.  Default is `geowave-bigtable-instance-id`.
 
 *--scanCacheSize* _<size>_::
   The number of rows passed to each scanner (higher values will enable faster scanners, but will use more memory).
-  
+
 [[store-add-examples]]
 ==== EXAMPLES
 
 Add a data store called `example` that uses a locally running Accumulo instance:
 
   geowave store add -t accumulo --zookeeper localhost:2181 --instance accumulo --user root --password secret example
-  
+
 Add a data store called `example` that uses a locally running HBase instance:
 
   geowave store add -t hbase --zookeeper localhost:2181 example
-  
+
 Add a data store called `example` that uses a RocksDB database in the current directory:
 
   geowave store add -t rocksdb example
-  
-

@@ -533,238 +533,238 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div style="page-break-after: always;"></div>
 <!-- Start Main Content Container -->
   <div class="container mt-0 packages-content">
-    <div class="row col-12 tab-content" id="nav-home">
-            <div role="tabpanel" class="tab-pane active" id="packages">
-              <div class="page-header col-md-12">
-                <h2>GeoWave Downloads</h2>
-                <p>
-                  This site contains links to the GeoWave standalone installers, JAR files, RPM packages, and compressed archives (which include other content like service and logrotate scripts in addition to the source code).
-                </p>
-                <h3>Installers</h3>
-                <p>
-                  Installers are available for Linux, Mac, and Windows platforms.  See the <a href="installation-guide.html#standalone-installers">Installation Guide</a> for help with installing GeoWave using the standalone installers.
-                </p>
-                <h3>RPMs</h3>
-                <p>
-                  RPMs are available for both release and development versions of GeoWave.  See the <a href="installation-guide.html#installation-from-rpm">Installation Guide</a> for help with installing GeoWave components using these RPMs.  Many of these packages and RPMs are annotated with a <code>$VENDOR</code> as well as a <code>$VERSION</code>.  This is because some distribution vendors have different dependency requirements.  The artifact that should be downloaded is dependent on which distribution vendor is being used. Currently supported distribution vendors through GeoWave include Apache (<code>apache</code>), Apache with Accumulo 1.7 (<code>apache-accumulo1.7</code>), Cloudera (<code>cdh5</code>), and Hortonworks (<code>hdp2</code>).  Most artifacts also have a time tag, which indicates when the artifact was built. The following is a list of available RPMs and packages and their descriptions:
-                </p>
-                <table class="tableblock frame-all grid-all spread">
-				<colgroup>
-				  <col style="width: 35%;">
-				  <col style="width: 65%;">
-				</colgroup>
-				<thead>
-				  <tr>
-				    <th class="tableblock halign-left valign-top">Name</th>
-				    <th class="tableblock halign-left valign-top">Description</th>
-				  </tr>
-				</thead>
-				<tbody>
-				  <tr>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-core</p></td>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">This package installs the GeoWave home directory and user account</p></td>
-				  </tr>
-				  <tr>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-docs</p></td>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">This package installs the GeoWave documentation</p></td>
-				  </tr>
-				  <tr>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-puppet</p></td>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">This package installs the GeoWave Puppet module into /etc/puppet/modules on a Puppet Server</p></td>
-				  </tr>
-				  <tr>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-$VENDOR-accumulo</p></td>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">This package installs the Accumulo components of GeoWave</p></td>
-				  </tr>
-				  <tr>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-$VENDOR-hbase</p></td>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">This package installs the HBase components of GeoWave</p></td>
-				  </tr>
-				  <tr>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-$VENDOR-tools</p></td>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">This package installs the GeoWave command-line tools (ingest, stats etc.)</p></td>
-				  </tr>
-				  <tr>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-$VENDOR-gwtomcat</p></td>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">This package installs the web application server</p></td>
-				  </tr>
-				  <tr>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-$VENDOR-gwgeoserver</p></td>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">This package installs a GeoServer with the GeoWave plugin</p></td>
-				  </tr>
-				  <tr>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-$VENDOR-restservices</p></td>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">This package installs REST services supporting all GeoWave operations</p></td>
-				  </tr>
-				  <tr>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-$VENDOR-grpc</p></td>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">This package installs a gRPC service supporting all GeoWave operations</p></td>
-				  </tr>
-				  <tr>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-$VENDOR-single-host</p></td>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">This package installs all the components on a single host and will likely be useful for dev environments</p></td>
-				  </tr>
-				  <tr>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-$TIME_TAG.src.rpm</p></td>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">The source RPM file that contains definitions for all the component RPMs listed above</p></td>
-				  </tr>
-				  <tr>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION.tar.gz</p></td>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">All of the prebuilt component JARs and other artifacts that are common to all vendors packaged into a compressed archive instead of an RPM format</p></td>
-				  </tr>
-				  <tr>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-$VENDOR.tar.gz</p></td>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">All of the prebuilt component JARs and other artifacts that are vendor-specific packaged into a compressed archive instead of an RPM format</p></td>
-				  </tr>
-				  <tr>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-repo</p></td>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">This package will install the GeoWave RPM repo config file into /etc/yum.repos.d</p></td>
-				  </tr>
-				  <tr>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-repo-dev</p></td>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">This package will install the GeoWave Development RPM repo config file into /etc/yum.repos.d</p></td>
-				  </tr>
-				</tbody>
-			   </table>
-			   <h3>JARs</h3>
-			   <p>
-                  JARs are available for both release and development versions of GeoWave.  These JARs are annotated with a <code>$VENDOR</code> as well as a <code>$VERSION</code>.  This is because some distribution vendors have different dependency requirements.  The JAR that should be downloaded is dependent on which distribution vendor is being used. Currently supported distribution vendors through GeoWave include Apache (<code>apache</code>), Apache with Accumulo 1.7 (<code>apache-accumulo1.7</code>), Cloudera (<code>cdh5</code>), and Hortonworks (<code>hdp2</code>).  Most artifacts also have a time tag, which indicates when the artifact was built. The following is a list of available JARs and their descriptions:
-                </p>
-                <table class="tableblock frame-all grid-all spread">
-				<colgroup>
-				  <col style="width: 35%;">
-				  <col style="width: 65%;">
-				</colgroup>
-				<thead>
-				  <tr>
-				    <th class="tableblock halign-left valign-top">Name</th>
-				    <th class="tableblock halign-left valign-top">Description</th>
-				  </tr>
-				</thead>
-				<tbody>
-				  <tr>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-tools-$VERSION-$VENDOR.jar</p></td>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">Tools JAR used for GeoWave CLI commands</p></td>
-				  </tr>
-				  <tr>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-accumulo-$VERSION-$VENDOR.jar</p></td>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">Accumulo data store JAR to be placed in HDFS</p></td>
-				  </tr>
-				  <tr>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-hbase-$VERSION-$VENDOR.jar</p></td>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">HBase data store JAR to be placed in HDFS</p></td>
-				  </tr>
-				  <tr>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-geoserver-$VERSION-$VENDOR.jar</p></td>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">GeoServer JAR, added to the GeoServer WEB-INF/lib to add GeoWave as a GeoServer plugin</p></td>
-				  </tr>
-				  <tr>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-restservices-$VERSION-$VENDOR.jar</p></td>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">JAR for running GeoWave REST services</p></td>
-				  </tr>
-				</tbody>
-			   </table>
-              </div>
+  	<div class="row col-12 tab-content" id="nav-home">
+        <!-- Start Tabs -->
+        <div role="tabpanel" class="tab-pane active" id="packages">
+          <div class="page-header col-md-12">
+            <h2>GeoWave Downloads</h2>
+            <p>
+              This site contains links to the GeoWave standalone installers, JAR files, RPM packages, and compressed archives (which include other content like service and logrotate scripts in addition to the source code).
+            </p>
+            <h3>Installers</h3>
+            <p>
+              Installers are available for Linux, Mac, and Windows platforms.  See the <a href="installation-guide.html#standalone-installers">Installation Guide</a> for help with installing GeoWave using the standalone installers.
+            </p>
+            <h3>RPMs</h3>
+            <p>
+              RPMs are available for both release and development versions of GeoWave.  See the <a href="installation-guide.html#installation-from-rpm">Installation Guide</a> for help with installing GeoWave components using these RPMs.  Many of these packages and RPMs are annotated with a <code>$VENDOR</code> as well as a <code>$VERSION</code>.  This is because some distribution vendors have different dependency requirements.  The artifact that should be downloaded is dependent on which distribution vendor is being used. Currently supported distribution vendors through GeoWave include Apache (<code>apache</code>), Apache with Accumulo 1.7 (<code>apache-accumulo1.7</code>), and Cloudera (<code>cdh5</code>).  Most artifacts also have a time tag, which indicates when the artifact was built. The following is a list of available RPMs and packages and their descriptions:
+            </p>
+            <table class="tableblock frame-all grid-all spread">
+			<colgroup>
+			  <col style="width: 35%;">
+			  <col style="width: 65%;">
+			</colgroup>
+			<thead>
+			  <tr>
+			    <th class="tableblock halign-left valign-top">Name</th>
+			    <th class="tableblock halign-left valign-top">Description</th>
+			  </tr>
+			</thead>
+			<tbody>
+			  <tr>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-core</p></td>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">This package installs the GeoWave home directory and user account</p></td>
+			  </tr>
+			  <tr>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-docs</p></td>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">This package installs the GeoWave documentation</p></td>
+			  </tr>
+			  <tr>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-puppet</p></td>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">This package installs the GeoWave Puppet module into /etc/puppet/modules on a Puppet Server</p></td>
+			  </tr>
+			  <tr>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-$VENDOR-accumulo</p></td>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">This package installs the Accumulo components of GeoWave</p></td>
+			  </tr>
+			  <tr>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-$VENDOR-hbase</p></td>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">This package installs the HBase components of GeoWave</p></td>
+			  </tr>
+			  <tr>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-$VENDOR-tools</p></td>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">This package installs the GeoWave command-line tools (ingest, stats etc.)</p></td>
+			  </tr>
+			  <tr>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-$VENDOR-gwtomcat</p></td>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">This package installs the web application server</p></td>
+			  </tr>
+			  <tr>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-$VENDOR-gwgeoserver</p></td>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">This package installs a GeoServer with the GeoWave plugin</p></td>
+			  </tr>
+			  <tr>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-$VENDOR-restservices</p></td>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">This package installs REST services supporting all GeoWave operations</p></td>
+			  </tr>
+			  <tr>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-$VENDOR-grpc</p></td>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">This package installs a gRPC service supporting all GeoWave operations</p></td>
+			  </tr>
+			  <tr>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-$VENDOR-single-host</p></td>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">This package installs all the components on a single host and will likely be useful for dev environments</p></td>
+			  </tr>
+			  <tr>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-$TIME_TAG.src.rpm</p></td>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">The source RPM file that contains definitions for all the component RPMs listed above</p></td>
+			  </tr>
+			  <tr>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION.tar.gz</p></td>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">All of the prebuilt component JARs and other artifacts that are common to all vendors packaged into a compressed archive instead of an RPM format</p></td>
+			  </tr>
+			  <tr>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-$VENDOR.tar.gz</p></td>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">All of the prebuilt component JARs and other artifacts that are vendor-specific packaged into a compressed archive instead of an RPM format</p></td>
+			  </tr>
+			  <tr>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-repo</p></td>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">This package will install the GeoWave RPM repo config file into /etc/yum.repos.d</p></td>
+			  </tr>
+			  <tr>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-repo-dev</p></td>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">This package will install the GeoWave Development RPM repo config file into /etc/yum.repos.d</p></td>
+			  </tr>
+			</tbody>
+		   </table>
+		   <h3>JARs</h3>
+		   <p>
+              JARs are available for both release and development versions of GeoWave.  These JARs are annotated with a <code>$VENDOR</code> as well as a <code>$VERSION</code>.  This is because some distribution vendors have different dependency requirements.  The JAR that should be downloaded is dependent on which distribution vendor is being used. Currently supported distribution vendors through GeoWave include Apache (<code>apache</code>), Apache with Accumulo 1.7 (<code>apache-accumulo1.7</code>), Cloudera (<code>cdh5</code>), and Hortonworks (<code>hdp2</code>).  Most artifacts also have a time tag, which indicates when the artifact was built. The following is a list of available JARs and their descriptions:
+            </p>
+            <table class="tableblock frame-all grid-all spread">
+			<colgroup>
+			  <col style="width: 35%;">
+			  <col style="width: 65%;">
+			</colgroup>
+			<thead>
+			  <tr>
+			    <th class="tableblock halign-left valign-top">Name</th>
+			    <th class="tableblock halign-left valign-top">Description</th>
+			  </tr>
+			</thead>
+			<tbody>
+			  <tr>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-tools-$VERSION-$VENDOR.jar</p></td>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">Tools JAR used for GeoWave CLI commands</p></td>
+			  </tr>
+			  <tr>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-accumulo-$VERSION-$VENDOR.jar</p></td>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">Accumulo data store JAR to be placed in HDFS</p></td>
+			  </tr>
+			  <tr>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-hbase-$VERSION-$VENDOR.jar</p></td>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">HBase data store JAR to be placed in HDFS</p></td>
+			  </tr>
+			  <tr>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-geoserver-$VERSION-$VENDOR.jar</p></td>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">GeoServer JAR, added to the GeoServer WEB-INF/lib to add GeoWave as a GeoServer plugin</p></td>
+			  </tr>
+			  <tr>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-restservices-$VERSION-$VENDOR.jar</p></td>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">JAR for running GeoWave REST services</p></td>
+			  </tr>
+			</tbody>
+		   </table>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="installers">
+          <div class="page-header col-md-12">
+            <h2>Standalone Installers</h2>
+            <p>
+            	These standalone installers can be used to easily install GeoWave command-line tools to Linux, Mac, and Windows platforms.  They provide options for including or excluding various components to enable the user to customize the intallation to fit their needs.
+            </p>
+            <table class="tableblock frame-all grid-all spread">
+			<colgroup>
+			  <col style="width: 15%;">
+			  <col style="width: 85%;">
+			</colgroup>
+			<thead>
+			  <tr>
+			    <th class="tableblock halign-left valign-top">Platform</th>
+			    <th class="tableblock halign-left valign-top">Description</th>
+			  </tr>
+			</thead>
+			<tbody>
+			  <tr>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">Linux</p></td>
+				<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://geowave.s3.amazonaws.com/1.2.0/standalone-installers/geowave_unix_1_2_0.sh">GeoWave 1.2.0 Installer - [.sh]</a></p></td>
+			  </tr>
+			  <tr>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">Mac</p></td>
+				<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://geowave.s3.amazonaws.com/1.2.0/standalone-installers/geowave_macos_1_2_0.dmg">GeoWave 1.2.0 Installer - [.dmg]</a></p></td>
+			  </tr>
+			  <tr>
+				<td class="tableblock halign-left valign-top"><p class="tableblock">Windows</p></td>
+				<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://geowave.s3.amazonaws.com/1.2.0/standalone-installers/geowave_windows-x64_1_2_0.exe">GeoWave 1.2.0 Installer - [.exe]</a></p></td>
+			  </tr>
+			</tbody>
+		   </table>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="release-rpm">
+          <div class="page-header col-md-12">
+            <h2>Release Packages/RPMs</h2>
+            <p>
+              These are stable releases and are the recommended option to use for your deployment. There
+              are RPMs, SRPMs and .tar.gz archives included in the list, use the search to filter.
+            </p>
+        	   <p class="refresh"><a href="#" class="btn btn-primary btn-labeled btn-sm rounded-pill" role="button">Refresh List</a></p>
+            <div class="table table-hover">
+              <table class="file-listing display compact" cellspacing="0" width="100%">
+                <thead class="thead-light"><tr><th>Name</th><th>Last Modified</th><th>Size</th></tr></thead class="table-light">
+              </table>
             </div>
-            <div role="tabpanel" class="tab-pane" id="installers">
-              <div class="page-header col-md-12">
-                <h2>Standalone Installers</h2>
-                <p>
-                	These standalone installers can be used to easily install GeoWave command-line tools to Linux, Mac, and Windows platforms.  They provide options for including or excluding various components to enable the user to customize the intallation to fit their needs.
-                </p>
-                <table class="tableblock frame-all grid-all spread">
-				<colgroup>
-				  <col style="width: 15%;">
-				  <col style="width: 85%;">
-				</colgroup>
-				<thead>
-				  <tr>
-				    <th class="tableblock halign-left valign-top">Platform</th>
-				    <th class="tableblock halign-left valign-top">Description</th>
-				  </tr>
-				</thead>
-				<tbody>
-				  <tr>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">Linux</p></td>
-					<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://geowave.s3.amazonaws.com/1.1.0/standalone-installers/geowave_unix_1_1_0.sh">GeoWave 1.1.0 Installer - [.sh]</a></p></td>
-				  </tr>
-				  <tr>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">Mac</p></td>
-					<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://geowave.s3.amazonaws.com/1.1.0/standalone-installers/geowave_macos_1_1_0.dmg">GeoWave 1.1.0 Installer - [.dmg]</a></p></td>
-				  </tr>
-				  <tr>
-					<td class="tableblock halign-left valign-top"><p class="tableblock">Windows</p></td>
-					<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://geowave.s3.amazonaws.com/1.1.0/standalone-installers/geowave_windows-x64_1_1_0.exe">GeoWave 1.1.0 Installer - [.exe]</a></p></td>
-				  </tr>
-				</tbody>
-			   </table>
-              </div>
+            <div class="timestamp"></div>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="dev-rpm">
+          <div class="page-header col-md-12">
+            <h2>Development Packages/RPMs</h2>
+            <p>
+              These are built for every commit that passes automated tests. There
+              are RPMs, SRPMs and .tar.gz archives included in the list, use the search to filter.
+            </p>
+        	   <p class="refresh"><a href="#" class="btn btn-primary btn-labeled btn-sm rounded-pill" role="button">Refresh List</a></p>
+            <div class="table table-hover">
+              <table class="file-listing display compact" cellspacing="0" width="100%">
+                <thead class="thead-light"><tr><th>Name</th><th>Last Modified</th><th>Size</th></tr></thead class="table-light">
+              </table>
             </div>
-            <div role="tabpanel" class="tab-pane" id="release-rpm">
-              <div class="page-header col-md-12">
-                <h2>Release Packages/RPMs</h2>
-                <p>
-                  These are stable releases and are the recommended option to use for your deployment. There
-                  are RPMs, SRPMs and .tar.gz archives included in the list, use the search to filter.
-                </p>
-            	   <p class="refresh"><a href="#" class="btn btn-primary btn-labeled btn-sm rounded-pill" role="button">Refresh List</a></p>
-                <div class="table table-hover">
-                  <table class="file-listing display compact" cellspacing="0" width="100%">
-                    <thead class="thead-light"><tr><th>Name</th><th>Last Modified</th><th>Size</th></tr></thead class="table-light">
-                  </table>
-                </div>
-                <div class="timestamp"></div>
-              </div>
+            <div class="timestamp"></div>
+          </div>
+        </div>
+	   <div role="tabpanel" class="tab-pane" id="release-jar">
+          <div class="page-header col-md-12">
+            <h2>Release JARs</h2>
+            <p>
+              These are stable releases and are the recommended option to use for your deployment.
+            </p>
+        	   <p class="refresh"><a href="#" class="btn btn-primary btn-labeled btn-sm rounded-pill" role="button">Refresh List</a></p>
+            <div class="table table-hover">
+              <table class="file-listing display compact" cellspacing="0" width="100%">
+                <thead class="thead-light"><tr><th>Name</th><th>Last Modified</th><th>Size</th></tr></thead class="table-light">
+              </table>
             </div>
-            <div role="tabpanel" class="tab-pane" id="dev-rpm">
-              <div class="page-header col-md-12">
-                <h2>Development Packages/RPMs</h2>
-                <p>
-                  These are built for every commit that passes automated tests. There
-                  are RPMs, SRPMs and .tar.gz archives included in the list, use the search to filter.
-                </p>
-            	   <p class="refresh"><a href="#" class="btn btn-primary btn-labeled btn-sm rounded-pill" role="button">Refresh List</a></p>
-                <div class="table table-hover">
-                  <table class="file-listing display compact" cellspacing="0" width="100%">
-                    <thead class="thead-light"><tr><th>Name</th><th>Last Modified</th><th>Size</th></tr></thead class="table-light">
-                  </table>
-                </div>
-                <div class="timestamp"></div>
-              </div>
+            <div class="timestamp"></div>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="dev-jar">
+          <div class="page-header col-md-12">
+            <h2>Development JARs</h2>
+            <p>
+              These are built for every commit that passes automated tests.
+            </p>
+        	   <p class="refresh"><a href="#" class="btn btn-primary btn-labeled btn-sm rounded-pill" role="button">Refresh List</a></p>
+            <div class="table table-hover">
+              <table class="file-listing display compact" cellspacing="0" width="100%">
+                <thead class="thead-light"><tr><th>Name</th><th>Last Modified</th><th>Size</th></tr></thead class="table-light">
+              </table>
             </div>
-		   <div role="tabpanel" class="tab-pane" id="release-jar">
-              <div class="page-header col-md-12">
-                <h2>Release JARs</h2>
-                <p>
-                  These are stable releases and are the recommended option to use for your deployment.
-                </p>
-            	   <p class="refresh"><a href="#" class="btn btn-primary btn-labeled btn-sm rounded-pill" role="button">Refresh List</a></p>
-                <div class="table table-hover">
-                  <table class="file-listing display compact" cellspacing="0" width="100%">
-                    <thead class="thead-light"><tr><th>Name</th><th>Last Modified</th><th>Size</th></tr></thead class="table-light">
-                  </table>
-                </div>
-                <div class="timestamp"></div>
-              </div>
-            </div>
-            <div role="tabpanel" class="tab-pane" id="dev-jar">
-              <div class="page-header col-md-12">
-                <h2>Development JARs</h2>
-                <p>
-                  These are built for every commit that passes automated tests.
-                </p>
-            	   <p class="refresh"><a href="#" class="btn btn-primary btn-labeled btn-sm rounded-pill" role="button">Refresh List</a></p>
-                <div class="table table-hover">
-                  <table class="file-listing display compact" cellspacing="0" width="100%">
-                    <thead class="thead-light"><tr><th>Name</th><th>Last Modified</th><th>Size</th></tr></thead class="table-light">
-                  </table>
-                </div>
-                <div class="timestamp"></div>
-              </div>
-            </div>
+            <div class="timestamp"></div>
+          </div>
+        </div>
         <!-- End Tabs -->
-      <div class="col-xs-6 col-md-1">&nbsp;</div>
-    </div>
+      </div>
   </div>
   <!-- End Content Container -->
 <div style="page-break-after: always;"></div>
@@ -877,12 +877,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </body>
 </html>
 <script>
-var geowave_version = '1.1.0';
+var geowave_version = '1.2.0';
 </script>
 
 <div class="geowave-footer col-md-12 docs-footer">
   <div class="py-4 d-flex justify-content-center align-items-center">
-    <small><p class="footer-text">This page was generated on Thursday, March 05, 2020 at 02:27 AM UTC<br><a href="https://github.com/locationtech/geowave/tree/d27015a544ba43a0831e49d9ead3ac08637a7447">View the commit it was generated from on GitHub</a></p></small>
+    <small><p class="footer-text">This page was generated on Friday, December 11, 2020 at 04:12 AM UTC<br><a href="https://github.com/locationtech/geowave/tree/52a12f591b99ea921f34c3f8c04517e7f79bce4a">View the commit it was generated from on GitHub</a></p></small>
   </div>
 </div>
 </div>
@@ -890,7 +890,7 @@ var geowave_version = '1.1.0';
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-05 02:27:06 +00:00
+Last updated 2020-12-11 04:12:25 +00:00
 </div>
 </div>
 </body>

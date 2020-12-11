@@ -29,6 +29,11 @@ Can be used to construct JVM objects like <code>java_pkg.org.geotools.feature.si
 - <em><a title="pygw.config.geowave_pkg" href="#pygw.config.geowave_pkg"><code>geowave_pkg</code></a></em>: Similar to <a title="pygw.config.java_pkg" href="#pygw.config.java_pkg"><code>java_pkg</code></a>, serves as a shortcut for <code>java_gateway.jvm.org.locationtech.geowave</code>.
 - <em><a title="pygw.config.reflection_util" href="#pygw.config.reflection_util"><code>reflection_util</code></a></em>: Direct access to the Py4J reflection utility.</p>
 <p>These objects can be imported directly using <code>from pygw.config import &lt;object_name&gt;</code>.</p>
+<p>By default, the configuration will attempt to connect to a Py4J Java Gateway running on the local machine.
+To use a gateway on a separate machine, the address and port
+can be specified with the <code>PYGW_GATEWAY_ADDRESS</code> and <code>PYGW_GATEWAY_PORT</code> environment variables.
+Alternatively, a JavaGateway can be supplied by creating a <code>pygw_gateway_config</code>
+module on the Python path that contains a JavaGateway named <code>gateway</code>.</p>
 <p>NOTE: the GeoWaveConfiguration has an <code>init()</code> method. This is INTENTIONALLY not an <code>__init__</code> method. Initialization is attempted when the configuration is imported.</p>
 <details class="source">
 <summary>Source code</summary>
@@ -42,7 +47,8 @@ Can be used to construct JVM objects like <code>java_pkg.org.geotools.feature.si
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
 #===============================================================================================
 &#34;&#34;&#34;
-The `config` module includes a singleton object of type GeoWaveConfiguration called `gw_config` that handles all communication between python and the Py4J Java Gateway.  The module includes several shortcut objects to make accessing the gateway more convenient.  These include:
+The `config` module includes a singleton object of type GeoWaveConfiguration called `gw_config` that handles all communication between python and the Py4J Java Gateway.
+The module includes several shortcut objects to make accessing the gateway more convenient.  These include:
 - *`java_gateway`* Py4J Gateway Object
 - *`java_pkg`*: Shortcut for `java_gateway.jvm`.  Can be used to construct JVM objects like `java_pkg.org.geotools.feature.simple.SimpleFeatureTypeBuilder()`
 - *`geowave_pkg`*: Similar to `java_pkg`, serves as a shortcut for `java_gateway.jvm.org.locationtech.geowave`.
@@ -50,13 +56,24 @@ The `config` module includes a singleton object of type GeoWaveConfiguration cal
 
 These objects can be imported directly using `from pygw.config import &lt;object_name&gt;`.
 
+By default, the configuration will attempt to connect to a Py4J Java Gateway running on the local machine.  To use a gateway on a separate machine, the address and port
+can be specified with the `PYGW_GATEWAY_ADDRESS` and `PYGW_GATEWAY_PORT` environment variables.  Alternatively, a JavaGateway can be supplied by creating a `pygw_gateway_config`
+module on the Python path that contains a JavaGateway named `gateway`.
+
 NOTE: the GeoWaveConfiguration has an `init()` method. This is INTENTIONALLY not an `__init__` method. Initialization is attempted when the configuration is imported.
 &#34;&#34;&#34;
+from os import environ
 
 from py4j.java_gateway import JavaGateway
 from py4j.java_gateway import GatewayParameters
 from py4j.java_gateway import java_import
+from py4j.java_gateway import DEFAULT_ADDRESS
+from py4j.java_gateway import DEFAULT_PORT
+
 from py4j.protocol import Py4JNetworkError
+
+PYGW_ADDRESS_ENV = &#39;PYGW_GATEWAY_ADDRESS&#39;
+PYGW_PORT_ENV = &#39;PYGW_GATEWAY_PORT&#39;
 
 class GeoWaveConfiguration:
     &#34;&#34;&#34;
@@ -72,17 +89,20 @@ class GeoWaveConfiguration:
     def __init__(self):
         self.is_initialized = False
 
-    def init(self, gateway=None):
+    def init(self):
         &#34;&#34;&#34;
         Sets up the Py4J Gateway, called automatically on import.
         &#34;&#34;&#34;
         if not self.is_initialized:
             try:
-                # Set-up Main Gateway Connection to JVM
-                if gateway is None:
-                    self.GATEWAY = JavaGateway(gateway_parameters=GatewayParameters(auto_field=True))
-                else:
+                try:
+                    from pygw_gateway_config import gateway
                     self.GATEWAY = gateway
+                except ImportError:
+                    gateway_address = environ.get(PYGW_ADDRESS_ENV, DEFAULT_ADDRESS)
+                    gateway_port = environ.get(PYGW_PORT_ENV, DEFAULT_PORT)
+                    self.GATEWAY = JavaGateway(gateway_parameters=GatewayParameters(auto_field=True, address=gateway_address, port=gateway_port))
+
                 self.PKG = self.GATEWAY.jvm
                 self.GEOWAVE_PKG = self.GATEWAY.jvm.org.locationtech.geowave
 

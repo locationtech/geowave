@@ -604,10 +604,10 @@ $ cd quickstart</code></pre>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="http://s3.amazonaws.com/geowave/1.1.0/scripts/emr/quickstart/KDEColorMap.sld">KDEColorMap.sld</a></p>
+<p><a href="http://s3.amazonaws.com/geowave/1.2.0/scripts/emr/quickstart/KDEColorMap.sld">KDEColorMap.sld</a></p>
 </li>
 <li>
-<p><a href="http://s3.amazonaws.com/geowave/1.1.0/scripts/emr/quickstart/SubsamplePoints.sld">SubsamplePoints.sld</a></p>
+<p><a href="http://s3.amazonaws.com/geowave/1.2.0/scripts/emr/quickstart/SubsamplePoints.sld">SubsamplePoints.sld</a></p>
 </li>
 </ul>
 </div>
@@ -697,7 +697,7 @@ $ cd quickstart</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave index add gdelt spatial -t spatial --partitionStrategy round_robin --numPartitions 32</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave index add gdelt gdelt-spatial -t spatial --partitionStrategy round_robin --numPartitions 32</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1003,22 +1003,8 @@ $ geowave gs style set gdeltevent --styleName SubsamplePoints</code></pre>
 <div class="paragraph">
 <p>The Landsat 8 extension for GeoWave utilizes GDAL (Geospatial Data Abstraction Library), an image processing library, to process raster data. In order to use GDAL, native libraries need to be installed on the system. More info on GDAL can be found <a href="http://www.gdal.org" target="_blank">here</a>.</p>
 </div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
 <div class="paragraph">
-<p>Native libraries for GDAL 1.9.2 on MacOS are not readily available.  This demo is currently only applicable to Windows and Linux platforms.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>GeoWave provides a command to install GDAL libraries on both Windows and Linux with the following command:</p>
+<p>GeoWave provides a way to install GDAL libraries with the following command:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1223,12 +1209,12 @@ $ geowave gs layer add landsatvector --add all</code></pre>
 <p><a href="commands.html"><strong>Command-Line Interface Documentation</strong></a></p>
 </div>
 <script>
-var geowave_version = '1.1.0';
+var geowave_version = '1.2.0';
 </script>
 
 <div class="geowave-footer col-md-12 docs-footer">
   <div class="py-4 d-flex justify-content-center align-items-center">
-    <small><p class="footer-text">This page was generated on Thursday, March 05, 2020 at 02:27 AM UTC<br><a href="https://github.com/locationtech/geowave/tree/d27015a544ba43a0831e49d9ead3ac08637a7447">View the commit it was generated from on GitHub</a></p></small>
+    <small><p class="footer-text">This page was generated on Friday, December 11, 2020 at 04:12 AM UTC<br><a href="https://github.com/locationtech/geowave/tree/52a12f591b99ea921f34c3f8c04517e7f79bce4a">View the commit it was generated from on GitHub</a></p></small>
   </div>
 </div>
 </div>
@@ -1236,7 +1222,7 @@ var geowave_version = '1.1.0';
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-05 02:27:08 +00:00
+Last updated 2020-12-11 04:12:25 +00:00
 </div>
 </div>
 </body>

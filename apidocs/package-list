@@ -210,6 +210,11 @@ org.locationtech.geowave.datastore.dynamodb.cli
 org.locationtech.geowave.datastore.dynamodb.config
 org.locationtech.geowave.datastore.dynamodb.operations
 org.locationtech.geowave.datastore.dynamodb.util
+org.locationtech.geowave.datastore.filesystem
+org.locationtech.geowave.datastore.filesystem.cli
+org.locationtech.geowave.datastore.filesystem.config
+org.locationtech.geowave.datastore.filesystem.operations
+org.locationtech.geowave.datastore.filesystem.util
 org.locationtech.geowave.datastore.hbase
 org.locationtech.geowave.datastore.hbase.cli
 org.locationtech.geowave.datastore.hbase.config
@@ -236,6 +241,7 @@ org.locationtech.geowave.datastore.rocksdb
 org.locationtech.geowave.datastore.rocksdb.config
 org.locationtech.geowave.datastore.rocksdb.operations
 org.locationtech.geowave.datastore.rocksdb.util
+org.locationtech.geowave.examples.aggregation.binning
 org.locationtech.geowave.examples.index
 org.locationtech.geowave.examples.ingest
 org.locationtech.geowave.examples.ingest.bulk
@@ -287,6 +293,7 @@ org.locationtech.geowave.service.rest.security.oauth2
 org.locationtech.geowave.test
 org.locationtech.geowave.test.annotation
 org.locationtech.geowave.test.kafka
+org.locationtech.geowave.test.kerberos
 org.locationtech.geowave.test.mapreduce
 org.locationtech.geowave.test.services
 org.locationtech.geowave.test.services.grpc
