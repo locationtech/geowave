@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - test-publish
 env:
   DEV_RESOURCES_VERSION: 1.7
   MAVEN_OPTS: "-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2g -XX:MaxMetaspaceSize=512m -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"
@@ -60,7 +61,7 @@ jobs:
 
     - name: Publish Artifacts
       run: ./.utility/publish-artifacts.sh
-      
+
     - name: Convert Changelog to HTML
       uses: docker://pandoc/core:2.9
       with:
