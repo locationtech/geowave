@@ -20,7 +20,6 @@ jobs:
       PYPI_CREDENTIALS: ${{ secrets.PYPI_CREDENTIALS }}
       SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
       SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-      CHANGELOG_GITHUB_TOKEN: ${{ secrets.CHANGELOG_TOKEN }}
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -39,11 +38,10 @@ jobs:
         key:  ${{ runner.os }}-Publish
         path: ~/.m2
 
-    
     - name: Generate Changelog
       uses: heinrichreimer/github-changelog-generator-action@v2.2
       with:
-        token: ${{ secrets.CHANGELOG_GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         issues: true
         issuesWoLabels: true
         pullRequests: true
@@ -56,16 +54,16 @@ jobs:
         httpCache: true
         filterByMilestone: true
         
+    - name: Convert Changelog to HTML
+      uses: docker://pandoc/core:2.9
+      with:
+        args: "-f markdown -t html -s -c stylesheets/changelog.css -o changelog.html CHANGELOG.md"
+
     - name: Install Local Artifacts
       run: mvn install -B -DskipTests -Dspotbugs.skip
 
     - name: Publish Artifacts
       run: ./.utility/publish-artifacts.sh
-
-    - name: Convert Changelog to HTML
-      uses: docker://pandoc/core:2.9
-      with:
-        args: "-f markdown -t html -s -c stylesheets/changelog.css -o changelog.html CHANGELOG.md"
 
     - name: Build HTML Docs
       run: mvn -P html -pl docs install -DskipTests -Dspotbugs.skip      
