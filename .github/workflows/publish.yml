@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - master
-      - test-publish
 env:
   DEV_RESOURCES_VERSION: 1.7
   MAVEN_OPTS: "-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2g -XX:MaxMetaspaceSize=512m -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"
@@ -20,6 +19,7 @@ jobs:
       PYPI_CREDENTIALS: ${{ secrets.PYPI_CREDENTIALS }}
       SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
       SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+      CHANGELOG_GITHUB_TOKEN: ${{ secrets.CHANGELOG_TOKEN }}
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -38,22 +38,17 @@ jobs:
         key:  ${{ runner.os }}-Publish
         path: ~/.m2
 
-    - name: Install Ruby
-      uses: actions/setup-ruby@v1.1.2
-      with:
-        ruby-version: '2.7'
-
-    - name: Generate Changelog
-      env:
-        CHANGELOG_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gem install github_changelog_generator -v 1.15.2 && github_changelog_generator --user locationtech --project geowave --token $GITHUB_TOKEN
-      
     - name: Install Local Artifacts
       run: mvn install -B -DskipTests -Dspotbugs.skip
 
     - name: Publish Artifacts
       run: ./.utility/publish-artifacts.sh
     
+    - name: Generate Changelog
+      uses: charmixer/auto-changelog-action@v1.1
+      with:
+        token: ${{ secrets.CHANGELOG_GITHUB_TOKEN }}
+
     - name: Convert Changelog to HTML
       uses: docker://pandoc/core:2.9
       with:
