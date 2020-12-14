@@ -12,7 +12,7 @@ echo -e "Publishing site ...\n"
 cp -R target/site $HOME/latest
 
 cd $HOME
-git config --global user.email "geowave-dev@locationtech.org"
+git config --global user.email "geowave-dev@eclipse.org"
 git config --global user.name "geowave-dev"
 git clone --quiet --depth 1 --branch=gh-pages https://x-access-token:${GITHUB_TOKEN}@github.com/locationtech/geowave gh-pages > /dev/null
 
