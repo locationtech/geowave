@@ -43,7 +43,7 @@ Basically, GeoWave is working to bridge geospatial software with modern key/valu
 
 ## Community
 
-* Community support is available on [chat](https://gitter.im/locationtech/geowave) and on [our mailing list](mailto:geowave-dev@locationtech.org).
+* Community support is available on [chat](https://gitter.im/locationtech/geowave) and on [our mailing list](mailto:geowave-dev@eclipse.org).
 
 ## Getting Started
 ### Programmatic Access

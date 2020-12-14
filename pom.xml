@@ -39,10 +39,10 @@
 	<mailingLists>
 		<mailingList>
 			<name>Developer List</name>
-			<subscribe>geowave-dev-join@locationtech.org</subscribe>
-			<unsubscribe>https://dev.locationtech.org/mailman/listinfo/geowave-dev</unsubscribe>
-			<post>geowave-dev@locationtech.org</post>
-			<archive>http://locationtech.org/mhonarc/lists/geowave-dev</archive>
+			<subscribe>geowave-dev-join@eclipse.org</subscribe>
+			<unsubscribe>https://dev.eclipse.org/mailman/listinfo/geowave-dev</unsubscribe>
+			<post>geowave-dev@eclipse.org</post>
+			<archive>http://eclipse.org/mhonarc/lists/geowave-dev</archive>
 		</mailingList>
 	</mailingLists>
 	<developers>
