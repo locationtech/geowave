@@ -19,6 +19,7 @@ import org.locationtech.geowave.core.geotime.index.api.SpatialIndexBuilder;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.index.CustomIndexStrategy;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.StringUtils;
@@ -29,7 +30,6 @@ import org.locationtech.geowave.core.store.api.DataStoreFactory;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.index.CustomIndex;
-import org.locationtech.geowave.core.store.index.CustomIndexStrategy;
 import org.locationtech.geowave.core.store.memory.MemoryRequiredOptions;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
@@ -49,14 +49,14 @@ public class CustomIndexExample {
   private Index spatialIndex;
   private Index customIndex;
 
-  private String uuid1 = UUID.randomUUID().toString();
-  private String uuid2 = UUID.randomUUID().toString();
-  private String uuid3 = UUID.randomUUID().toString();
-  private String uuid4 = UUID.randomUUID().toString();
+  private final String uuid1 = UUID.randomUUID().toString();
+  private final String uuid2 = UUID.randomUUID().toString();
+  private final String uuid3 = UUID.randomUUID().toString();
+  private final String uuid4 = UUID.randomUUID().toString();
 
   public static void main(final String[] args) throws IOException, CQLException {
 
-    CustomIndexExample example = new CustomIndexExample();
+    final CustomIndexExample example = new CustomIndexExample();
     example.run();
   }
 
@@ -74,8 +74,7 @@ public class CustomIndexExample {
     spatialIndex = new SpatialIndexBuilder().createIndex();
 
     // Create our custom index using the UUID index strategy
-    customIndex =
-        new CustomIndex<SimpleFeature, UUIDConstraints>(new UUIDIndexStrategy("uuid"), "customIdx");
+    customIndex = new CustomIndex<>(new UUIDIndexStrategy("uuid"), "customIdx");
 
     // Add the type to the data store with the spatial and custom indices
     dataStore.addType(adapter, spatialIndex, customIndex);
@@ -196,7 +195,7 @@ public class CustomIndexExample {
      * Load the index strategy UUID field from binary.
      */
     @Override
-    public void fromBinary(byte[] bytes) {
+    public void fromBinary(final byte[] bytes) {
       uuidField = StringUtils.stringFromBinary(bytes);
     }
 
@@ -204,12 +203,12 @@ public class CustomIndexExample {
      * The method supplies all of the insertion IDs needed for a given entry. It is possible to
      * insert the same SimpleFeature multiple times in the index under different insertion IDs, but
      * for this case we only need to use the UUID as the lone insertion ID.
-     * 
+     *
      * @param entry the feature to generate sort keys for.
      * @return the insertion IDs for the given feature
      */
     @Override
-    public InsertionIds getInsertionIds(SimpleFeature entry) {
+    public InsertionIds getInsertionIds(final SimpleFeature entry) {
       final String featureUUID = (String) entry.getAttribute(uuidField);;
       return new InsertionIds(Lists.newArrayList(StringUtils.stringToBinary(featureUUID)));
     }
@@ -220,7 +219,7 @@ public class CustomIndexExample {
      * an exact UUID, so we can simply use the desired UUID as the query range.
      */
     @Override
-    public QueryRanges getQueryRanges(UUIDConstraints constraints) {
+    public QueryRanges getQueryRanges(final UUIDConstraints constraints) {
       final byte[] sortKey = StringUtils.stringToBinary(constraints.uuid());
       return new QueryRanges(new ByteArrayRange(sortKey, sortKey));
     }

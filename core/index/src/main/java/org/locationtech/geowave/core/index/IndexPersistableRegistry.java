@@ -35,6 +35,9 @@ import org.locationtech.geowave.core.index.simple.SimpleFloatIndexStrategy;
 import org.locationtech.geowave.core.index.simple.SimpleIntegerIndexStrategy;
 import org.locationtech.geowave.core.index.simple.SimpleLongIndexStrategy;
 import org.locationtech.geowave.core.index.simple.SimpleShortIndexStrategy;
+import org.locationtech.geowave.core.index.text.TextIndexStrategy;
+import org.locationtech.geowave.core.index.text.TextSearch;
+import org.locationtech.geowave.core.index.text.TextSearchPredicate;
 
 public class IndexPersistableRegistry implements PersistableRegistrySpi {
 
@@ -75,6 +78,9 @@ public class IndexPersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 131, SimpleFloatIndexStrategy::new),
         new PersistableIdAndConstructor((short) 132, SimpleDoubleIndexStrategy::new),
         new PersistableIdAndConstructor((short) 133, SimpleByteIndexStrategy::new),
-        new PersistableIdAndConstructor((short) 134, BasicSFCIndexStrategy::new),};
+        new PersistableIdAndConstructor((short) 134, BasicSFCIndexStrategy::new),
+        new PersistableIdAndConstructor((short) 135, TextSearch::new),
+        new PersistableIdAndConstructor((short) 136, TextSearchPredicate::new),
+        new PersistableIdAndConstructor((short) 137, TextIndexStrategy::new),};
   }
 }

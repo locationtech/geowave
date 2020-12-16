@@ -42,9 +42,11 @@ import org.locationtech.geowave.core.store.query.constraints.BasicOrderedConstra
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintsByClass;
-import org.locationtech.geowave.core.store.query.constraints.CustomQueryConstraints.InternalCustomConstraints;
 import org.locationtech.geowave.core.store.query.constraints.CoordinateRangeQuery;
 import org.locationtech.geowave.core.store.query.constraints.CustomQueryConstraints;
+import org.locationtech.geowave.core.store.query.constraints.CustomQueryConstraints.InternalCustomConstraints;
+import org.locationtech.geowave.core.store.query.constraints.CustomQueryConstraintsWithFilter;
+import org.locationtech.geowave.core.store.query.constraints.CustomQueryConstraintsWithFilter.InternalCustomQueryFilter;
 import org.locationtech.geowave.core.store.query.constraints.DataIdQuery;
 import org.locationtech.geowave.core.store.query.constraints.DataIdRangeQuery;
 import org.locationtech.geowave.core.store.query.constraints.EverythingQuery;
@@ -131,6 +133,8 @@ public class StorePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 264, CustomQueryConstraints::new),
         new PersistableIdAndConstructor((short) 265, InternalCustomConstraints::new),
         new PersistableIdAndConstructor((short) 266, BinningAggregationOptions::new),
-        new PersistableIdAndConstructor((short) 267, BinningAggregation::new)};
+        new PersistableIdAndConstructor((short) 267, BinningAggregation::new),
+        new PersistableIdAndConstructor((short) 268, CustomQueryConstraintsWithFilter::new),
+        new PersistableIdAndConstructor((short) 269, InternalCustomQueryFilter::new),};
   }
 }
