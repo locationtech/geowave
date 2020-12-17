@@ -139,6 +139,7 @@ org.locationtech.geowave.core.index.sfc.tiered
 org.locationtech.geowave.core.index.sfc.xz
 org.locationtech.geowave.core.index.sfc.zorder
 org.locationtech.geowave.core.index.simple
+org.locationtech.geowave.core.index.text
 org.locationtech.geowave.core.ingest
 org.locationtech.geowave.core.ingest.avro
 org.locationtech.geowave.core.ingest.hdfs

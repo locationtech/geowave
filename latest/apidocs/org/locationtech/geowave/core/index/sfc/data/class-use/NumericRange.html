@@ -282,13 +282,13 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a></code></td>
-<td class="colLast"><span class="typeNameLabel">BasicDimensionDefinition.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/dimension/BasicDimensionDefinition.html#getBounds--">getBounds</a></span>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a></code></td>
 <td class="colLast"><span class="typeNameLabel">NumericDimensionDefinition.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#getBounds--">getBounds</a></span>()</code>
 <div class="block">Returns the native bounds of the dimension definition</div>
 </td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a></code></td>
+<td class="colLast"><span class="typeNameLabel">BasicDimensionDefinition.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/dimension/BasicDimensionDefinition.html#getBounds--">getBounds</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a></code></td>
@@ -296,14 +296,14 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a></code></td>
-<td class="colLast"><span class="typeNameLabel">BasicDimensionDefinition.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/dimension/BasicDimensionDefinition.html#getDenormalizedRange-org.locationtech.geowave.core.index.dimension.bin.BinRange-">getDenormalizedRange</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>&nbsp;range)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a></code></td>
 <td class="colLast"><span class="typeNameLabel">NumericDimensionDefinition.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#getDenormalizedRange-org.locationtech.geowave.core.index.dimension.bin.BinRange-">getDenormalizedRange</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>&nbsp;range)</code>
 <div class="block">Returns a range in the native bounds of the dimension definition, denormalized from a bin and
  separate range</div>
 </td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a></code></td>
+<td class="colLast"><span class="typeNameLabel">BasicDimensionDefinition.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/dimension/BasicDimensionDefinition.html#getDenormalizedRange-org.locationtech.geowave.core.index.dimension.bin.BinRange-">getDenormalizedRange</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>&nbsp;range)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -321,15 +321,15 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a></code></td>
+<td class="colLast"><span class="typeNameLabel">BasicBinningStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BasicBinningStrategy.html#getDenormalizedRanges-org.locationtech.geowave.core.index.dimension.bin.BinRange-">getDenormalizedRanges</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>&nbsp;binnedRange)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a></code></td>
 <td class="colLast"><span class="typeNameLabel">BinningStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinningStrategy.html#getDenormalizedRanges-org.locationtech.geowave.core.index.dimension.bin.BinRange-">getDenormalizedRanges</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>&nbsp;binnedRange)</code>
 <div class="block">Given a set of normalized ranges (each of which are confined to the normalized min and max of
  this binning strategy) with a bin for each of the ranges, this will calculate the original
  unbinned range.</div>
 </td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a></code></td>
-<td class="colLast"><span class="typeNameLabel">BasicBinningStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BasicBinningStrategy.html#getDenormalizedRanges-org.locationtech.geowave.core.index.dimension.bin.BinRange-">getDenormalizedRanges</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>&nbsp;binnedRange)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -407,19 +407,19 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a></code></td>
-<td class="colLast"><span class="typeNameLabel">AbstractNumericDimensionField.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/dimension/AbstractNumericDimensionField.html#getBounds--">getBounds</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">ArrayField.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/dimension/ArrayField.html#getBounds--">getBounds</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a></code></td>
-<td class="colLast"><span class="typeNameLabel">ArrayField.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/dimension/ArrayField.html#getBounds--">getBounds</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">AbstractNumericDimensionField.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/dimension/AbstractNumericDimensionField.html#getBounds--">getBounds</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a></code></td>
-<td class="colLast"><span class="typeNameLabel">AbstractNumericDimensionField.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/dimension/AbstractNumericDimensionField.html#getDenormalizedRange-org.locationtech.geowave.core.index.dimension.bin.BinRange-">getDenormalizedRange</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>&nbsp;range)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">ArrayField.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/dimension/ArrayField.html#getDenormalizedRange-org.locationtech.geowave.core.index.dimension.bin.BinRange-">getDenormalizedRange</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>&nbsp;range)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a></code></td>
-<td class="colLast"><span class="typeNameLabel">ArrayField.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/dimension/ArrayField.html#getDenormalizedRange-org.locationtech.geowave.core.index.dimension.bin.BinRange-">getDenormalizedRange</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>&nbsp;range)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">AbstractNumericDimensionField.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/dimension/AbstractNumericDimensionField.html#getDenormalizedRange-org.locationtech.geowave.core.index.dimension.bin.BinRange-">getDenormalizedRange</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>&nbsp;range)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

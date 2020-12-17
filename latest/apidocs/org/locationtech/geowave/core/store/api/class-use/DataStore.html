@@ -277,11 +277,11 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></td>
-<td class="colLast"><span class="typeNameLabel">GeoWaveGTDataStore.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getDataStore--">getDataStore</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveDataStoreComponents.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#getDataStore--">getDataStore</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></td>
-<td class="colLast"><span class="typeNameLabel">GeoWaveDataStoreComponents.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#getDataStore--">getDataStore</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveGTDataStore.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getDataStore--">getDataStore</a></span>()</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -319,13 +319,13 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/ResultSet.html" title="interface in org.locationtech.geowave.adapter.vector.query.gwql">ResultSet</a></code></td>
-<td class="colLast"><span class="typeNameLabel">Statement.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/Statement.html#execute-org.locationtech.geowave.core.store.api.DataStore-">execute</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore)</code>
-<div class="block">Executes the statement on the provided data store.</div>
-</td>
+<td class="colLast"><span class="typeNameLabel">SelectStatement.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/SelectStatement.html#execute-org.locationtech.geowave.core.store.api.DataStore-">execute</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/ResultSet.html" title="interface in org.locationtech.geowave.adapter.vector.query.gwql">ResultSet</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SelectStatement.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/SelectStatement.html#execute-org.locationtech.geowave.core.store.api.DataStore-">execute</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">Statement.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/Statement.html#execute-org.locationtech.geowave.core.store.api.DataStore-">execute</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore)</code>
+<div class="block">Executes the statement on the provided data store.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -386,7 +386,25 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected long</code></td>
-<td class="colLast"><span class="typeNameLabel">ClientSideCQLQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/cli/debug/ClientSideCQLQuery.html#runQuery-org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.api.DataStore-boolean-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-">runQuery</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.core.geotime.store">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
+<td class="colLast"><span class="typeNameLabel">FullTableScan.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/cli/debug/FullTableScan.html#runQuery-org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.api.DataStore-boolean-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-">runQuery</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.core.geotime.store">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
+        <a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore,
+        boolean&nbsp;debug,
+        <a href="../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;pluginOptions)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected long</code></td>
+<td class="colLast"><span class="typeNameLabel">BBOXQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/cli/debug/BBOXQuery.html#runQuery-org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.api.DataStore-boolean-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-">runQuery</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.core.geotime.store">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
+        <a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore,
+        boolean&nbsp;debug,
+        <a href="../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;pluginOptions)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected long</code></td>
+<td class="colLast"><span class="typeNameLabel">SparkQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/cli/debug/SparkQuery.html#runQuery-org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.api.DataStore-boolean-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-">runQuery</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.core.geotime.store">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
         <a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore,
@@ -403,35 +421,17 @@
         <a href="../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;pluginOptions)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected long</code></td>
-<td class="colLast"><span class="typeNameLabel">BBOXQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/cli/debug/BBOXQuery.html#runQuery-org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.api.DataStore-boolean-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-">runQuery</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.core.geotime.store">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
-        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
-        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
-        <a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore,
-        boolean&nbsp;debug,
-        <a href="../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;pluginOptions)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected long</code></td>
-<td class="colLast"><span class="typeNameLabel">SparkQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/cli/debug/SparkQuery.html#runQuery-org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.api.DataStore-boolean-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-">runQuery</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.core.geotime.store">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
-        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
-        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
-        <a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore,
-        boolean&nbsp;debug,
-        <a href="../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;pluginOptions)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected long</code></td>
-<td class="colLast"><span class="typeNameLabel">FullTableScan.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/cli/debug/FullTableScan.html#runQuery-org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.api.DataStore-boolean-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-">runQuery</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.core.geotime.store">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
-        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
-        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
-        <a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore,
-        boolean&nbsp;debug,
-        <a href="../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;pluginOptions)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>protected abstract long</code></td>
 <td class="colLast"><span class="typeNameLabel">AbstractGeoWaveQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/cli/debug/AbstractGeoWaveQuery.html#runQuery-org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.api.DataStore-boolean-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-">runQuery</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.core.geotime.store">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
+        <a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore,
+        boolean&nbsp;debug,
+        <a href="../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;pluginOptions)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected long</code></td>
+<td class="colLast"><span class="typeNameLabel">ClientSideCQLQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/cli/debug/ClientSideCQLQuery.html#runQuery-org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter-java.lang.String-java.lang.String-org.locationtech.geowave.core.store.api.DataStore-boolean-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-">runQuery</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/geotime/store/GeotoolsFeatureDataAdapter.html" title="interface in org.locationtech.geowave.core.geotime.store">GeotoolsFeatureDataAdapter</a>&nbsp;adapter,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
         <a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore,
@@ -506,11 +506,11 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/GenericStoreFactory.html" title="interface in org.locationtech.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">StoreFactoryFamilySpi.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/StoreFactoryFamilySpi.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">BaseDataStoreFamily.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/BaseDataStoreFamily.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/GenericStoreFactory.html" title="interface in org.locationtech.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">BaseDataStoreFamily.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/BaseDataStoreFamily.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">StoreFactoryFamilySpi.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/StoreFactoryFamilySpi.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -606,11 +606,11 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></td>
-<td class="colLast"><span class="typeNameLabel">StoreLoader.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/store/StoreLoader.html#createDataStore--">createDataStore</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">DataStorePluginOptions.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html#createDataStore--">createDataStore</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></td>
-<td class="colLast"><span class="typeNameLabel">DataStorePluginOptions.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html#createDataStore--">createDataStore</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">StoreLoader.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/store/StoreLoader.html#createDataStore--">createDataStore</a></span>()</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -1191,7 +1191,15 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/GenericStoreFactory.html" title="interface in org.locationtech.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">CassandraStoreTestEnvironment.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/test/CassandraStoreTestEnvironment.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/GenericStoreFactory.html" title="interface in org.locationtech.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">HBaseStoreTestEnvironment.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/test/HBaseStoreTestEnvironment.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/GenericStoreFactory.html" title="interface in org.locationtech.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">BigtableStoreTestEnvironment.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/test/BigtableStoreTestEnvironment.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/GenericStoreFactory.html" title="interface in org.locationtech.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&gt;</code></td>
@@ -1199,11 +1207,11 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/GenericStoreFactory.html" title="interface in org.locationtech.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">KuduStoreTestEnvironment.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/test/KuduStoreTestEnvironment.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">RedisStoreTestEnvironment.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/test/RedisStoreTestEnvironment.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/GenericStoreFactory.html" title="interface in org.locationtech.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">FileSystemStoreTestEnvironment.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/test/FileSystemStoreTestEnvironment.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code>protected abstract <a href="../../../../../../../org/locationtech/geowave/core/store/GenericStoreFactory.html" title="interface in org.locationtech.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">StoreTestEnvironment.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/test/StoreTestEnvironment.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/GenericStoreFactory.html" title="interface in org.locationtech.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&gt;</code></td>
@@ -1211,23 +1219,15 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/GenericStoreFactory.html" title="interface in org.locationtech.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">KuduStoreTestEnvironment.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/test/KuduStoreTestEnvironment.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/GenericStoreFactory.html" title="interface in org.locationtech.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">FileSystemStoreTestEnvironment.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/test/FileSystemStoreTestEnvironment.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/GenericStoreFactory.html" title="interface in org.locationtech.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">RocksDBStoreTestEnvironment.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/test/RocksDBStoreTestEnvironment.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/GenericStoreFactory.html" title="interface in org.locationtech.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">RedisStoreTestEnvironment.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/test/RedisStoreTestEnvironment.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/GenericStoreFactory.html" title="interface in org.locationtech.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">BigtableStoreTestEnvironment.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/test/BigtableStoreTestEnvironment.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected abstract <a href="../../../../../../../org/locationtech/geowave/core/store/GenericStoreFactory.html" title="interface in org.locationtech.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">StoreTestEnvironment.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/test/StoreTestEnvironment.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/GenericStoreFactory.html" title="interface in org.locationtech.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">CassandraStoreTestEnvironment.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/test/CassandraStoreTestEnvironment.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
