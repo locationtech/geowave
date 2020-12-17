@@ -9,6 +9,7 @@
 package org.locationtech.geowave.adapter.vector;
 
 import org.locationtech.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration;
+import org.locationtech.geowave.adapter.vector.index.VectorTextIndexEntryConverter;
 import org.locationtech.geowave.adapter.vector.ingest.CQLFilterOptionProvider;
 import org.locationtech.geowave.adapter.vector.ingest.DataSchemaOptionProvider;
 import org.locationtech.geowave.adapter.vector.ingest.FeatureSerializationOptionProvider;
@@ -93,6 +94,7 @@ public class FeatureAdapterPersistableRegistry implements PersistableRegistrySpi
         new PersistableIdAndConstructor((short) 536, GeometrySimpOptionProvider::new),
         new PersistableIdAndConstructor((short) 537, VectorMinAggregation::new),
         new PersistableIdAndConstructor((short) 538, VectorMaxAggregation::new),
-        new PersistableIdAndConstructor((short) 539, VectorSumAggregation::new)};
+        new PersistableIdAndConstructor((short) 539, VectorSumAggregation::new),
+        new PersistableIdAndConstructor((short) 540, VectorTextIndexEntryConverter::new)};
   }
 }

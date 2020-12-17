@@ -94,10 +94,6 @@
 			<artifactId>gt-render</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.clearspring.analytics</groupId>
-			<artifactId>stream</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.hdrhistogram</groupId>
 			<artifactId>HdrHistogram</artifactId>
 			<version>2.1.7</version>

@@ -6,7 +6,7 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.test.mapreduce;
+package org.locationtech.geowave.examples.ingest;
 
 import java.io.IOException;
 import org.apache.accumulo.core.client.mapreduce.AccumuloFileOutputFormat;
@@ -33,11 +33,11 @@ import org.locationtech.geowave.examples.ingest.bulk.SimpleFeatureToAccumuloKeyV
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BulkIngestInputGenerationIT {
+public class BulkIngestInputGenerationTest {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(BulkIngestInputGenerationIT.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BulkIngestInputGenerationTest.class);
   private static final String TEST_DATA_LOCATION =
-      "src/test/resources/org/locationtech/geowave/test/geonames/barbados";
+      "src/test/resources/org/locationtech/geowave/examples/ingest/geonames/barbados";
   private static final long NUM_GEONAMES_RECORDS = 834; // (see BB.txt)
   private static final String OUTPUT_PATH = "target/tmp_bulkIngestTest";
   private static long mapInputRecords;
