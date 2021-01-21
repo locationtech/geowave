@@ -1,3 +1,11 @@
+/**
+ * Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
+ *
+ * <p> See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ */
 package org.locationtech.geowave.test.basic;
 
 import java.io.IOException;
@@ -259,7 +267,7 @@ public class GeoWaveTextIndexIT extends AbstractGeoWaveIT {
       final EnumSet<CaseSensitivity> supportedCaseSensitivity,
       final int nCharacterGrams,
       final boolean includeSpatial) throws IOException {
-    ingest(CITY_ATTR_NAME, supportedSearchTypes, supportedCaseSensitivity, 3, false);
+    ingest(CITY_ATTR_NAME, supportedSearchTypes, supportedCaseSensitivity, 3, includeSpatial);
     // start by exercising various "begins with" searches
     Set<String> results;
     if (supportedSearchTypes.contains(TextSearchType.BEGINS_WITH)

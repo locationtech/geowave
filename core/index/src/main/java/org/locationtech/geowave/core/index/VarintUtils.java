@@ -55,7 +55,7 @@ public class VarintUtils {
     }
     return numBytes;
   }
-
+ 
   public static int unsignedShortByteLength(final short value) {
     return unsignedIntByteLength(value & 0xFFFF);
   }
