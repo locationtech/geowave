@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -202,17 +203,20 @@ public class GeoWaveEnumIndexIT extends AbstractGeoWaveIT {
     final DataStore ds = dataStoreOptions.createDataStore();
     final Set<String> expectedResults = new HashSet<>();
     final QueryBuilder queryBldr = QueryBuilder.newBuilder().addTypeName(TYPE_NAME);
-    try (final CloseableIterator<SimpleFeature> it =
-        ds.query(
-            (Query) queryBldr.constraints(
-                queryBldr.constraintsFactory().customConstraints(search)).build())) {
+    // query everything and apply manual filtering
+    final AtomicInteger everythingResults = new AtomicInteger(0);
+    try (final CloseableIterator<SimpleFeature> it = ds.query((Query) queryBldr.build())) {
       it.forEachRemaining(f -> {
         final String timezone = f.getAttribute(TIMEZONE_ATTR_NAME).toString();
         if (search.getSearchTerm().equals(timezone)) {
           expectedResults.add(f.getID());
         }
+        everythingResults.incrementAndGet();
       });
     }
+    // ensure that the full set of results exceeds the expected results (ie. that we successfully
+    // queried everything in the previous step)
+    Assert.assertTrue(everythingResults.get() > expectedResults.size());
     LOGGER.info("Expecting '" + expectedResults.size() + "' in timezone " + search.getSearchTerm());
     queryBldr.indexName(TEST_ENUM_INDEX_NAME);
     try (final CloseableIterator<SimpleFeature> it =
