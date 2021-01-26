@@ -10,14 +10,11 @@ package org.locationtech.geowave.core.index.text;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.CustomIndexStrategy;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
-import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -73,12 +70,12 @@ public class EnumIndexStrategy<E> implements CustomIndexStrategy<E, EnumSearch> 
   public InsertionIds getInsertionIds(final E entry) {
     final String str = entryToString(entry);
     if (str == null) {
-      return null;
+      return new InsertionIds();
     }
     final int index = Arrays.binarySearch(exactMatchTerms, str);
     if (index < 0) {
       LOGGER.warn("Enumerated value not found for insertion '" + str + "'");
-      return null;
+      return new InsertionIds();
     }
     return new InsertionIds(
         new SinglePartitionInsertionIds(null, VarintUtils.writeUnsignedInt(index)));
