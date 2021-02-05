@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.Coordinate;
 import org.locationtech.geowave.core.index.IndexMetaData;
@@ -37,6 +38,7 @@ import org.locationtech.geowave.core.index.sfc.data.NumericValue;
  * inserting ranges because there will be too much replication of data.
  */
 public abstract class SimpleNumericIndexStrategy<T extends Number> implements NumericIndexStrategy {
+  private static final Logger LOGGER = Logger.getLogger(SimpleNumericIndexStrategy.class);
 
   private final NumberLexicoder<T> lexicoder;
   private final NumericDimensionDefinition[] definitions;
@@ -134,6 +136,10 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements Nu
   public InsertionIds getInsertionIds(
       final MultiDimensionalNumericData indexedData,
       final int maxEstimatedDuplicateIds) {
+    if (indexedData.isEmpty()) {
+      LOGGER.warn("Cannot index empty fields, skipping writing row to index '" + getId() + "'");
+      return new InsertionIds();
+    }
     final double min = indexedData.getMinValuesPerDimension()[0];
     final double max = indexedData.getMaxValuesPerDimension()[0];
     final List<byte[]> insertionIds = new ArrayList<>((int) (max - min) + 1);

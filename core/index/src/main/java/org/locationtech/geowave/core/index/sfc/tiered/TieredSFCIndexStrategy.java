@@ -194,6 +194,10 @@ public class TieredSFCIndexStrategy implements HierarchicalNumericIndexStrategy 
   private InsertionIds internalGetInsertionIds(
       final MultiDimensionalNumericData indexedData,
       final BigInteger maxDuplicateInsertionIds) {
+    if (indexedData.isEmpty()) {
+      LOGGER.warn("Cannot index empty fields, skipping writing row to index '" + getId() + "'");
+      return new InsertionIds();
+    }
     final List<BinnedNumericDataset> ranges =
         BinnedNumericDataset.applyBins(indexedData, baseDefinitions);
     // place each of these indices into a single row ID at a tier that will

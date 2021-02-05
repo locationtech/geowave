@@ -103,6 +103,10 @@ public class BasicSFCIndexStrategy implements NumericIndexStrategy {
   public InsertionIds getInsertionIds(
       final MultiDimensionalNumericData indexedData,
       final int maxDuplicateInsertionIds) {
+    if (indexedData.isEmpty()) {
+      LOGGER.warn("Cannot index empty fields, skipping writing row to index '" + getId() + "'");
+      return new InsertionIds();
+    }
     // we need to duplicate per bin so we can't adhere to max duplication
     // anyways
     final List<BinnedNumericDataset> ranges =
