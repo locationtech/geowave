@@ -70,6 +70,7 @@ public class EnumIndexStrategy<E> implements CustomIndexStrategy<E, EnumSearch> 
   public InsertionIds getInsertionIds(final E entry) {
     final String str = entryToString(entry);
     if (str == null) {
+      LOGGER.warn("Cannot index null enum, skipping entry");
       return new InsertionIds();
     }
     final int index = Arrays.binarySearch(exactMatchTerms, str);

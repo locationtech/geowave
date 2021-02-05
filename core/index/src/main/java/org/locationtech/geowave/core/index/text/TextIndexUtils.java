@@ -21,8 +21,11 @@ import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
 import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TextIndexUtils {
+  private static Logger LOGGER = LoggerFactory.getLogger(TextIndexUtils.class);
   protected static BiPredicate<String, String> ALWAYS_TRUE = (term, value) -> true;
   private static final byte[] FORWARD_INDEX_CASE_SENSITIVE_PARTITION_KEY = new byte[] {0};
   private static final byte[] REVERSE_INDEX_CASE_SENSITIVE_PARTITION_KEY = new byte[] {1};
@@ -37,6 +40,7 @@ public class TextIndexUtils {
       final EnumSet<CaseSensitivity> supportedCaseSensitivities,
       final int nGramCharacters) {
     if ((entry == null) || entry.isEmpty()) {
+      LOGGER.warn("Cannot index null enum, skipping entry");
       return new InsertionIds();
     }
     final Set<TextIndexType> indexTypes =
