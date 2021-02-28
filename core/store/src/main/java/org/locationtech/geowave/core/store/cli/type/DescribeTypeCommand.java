@@ -16,7 +16,7 @@ import java.util.Map.Entry;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
-import org.locationtech.geowave.core.cli.utils.ConsolePrinter;
+import org.locationtech.geowave.core.cli.utils.ConsoleTablePrinter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
@@ -100,7 +100,7 @@ public class DescribeTypeCommand extends ServiceEnabledCommand<Void> {
     final List<String> headers = new ArrayList<>();
     headers.add("Property");
     headers.add("Value");
-    final ConsolePrinter cp = new ConsolePrinter();
+    final ConsoleTablePrinter cp = new ConsoleTablePrinter(params.getConsole());
     cp.print(headers, rows);
     return null;
   }

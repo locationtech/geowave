@@ -59,6 +59,7 @@ public class StatsConfigurationCollection implements java.io.Serializable, Persi
     return PersistenceUtils.toBinary(configurationsForAttribute);
   }
 
+  @SuppressWarnings({"unchecked", "rawtypes"})
   @Override
   public void fromBinary(final byte[] bytes) {
     configurationsForAttribute = (List) PersistenceUtils.fromBinaryAsList(bytes);

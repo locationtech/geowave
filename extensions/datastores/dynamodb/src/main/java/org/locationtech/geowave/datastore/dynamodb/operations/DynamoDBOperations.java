@@ -115,7 +115,7 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
   }
 
   public String getMetadataTableName(final MetadataType metadataType) {
-    final String tableName = metadataType.name() + "_" + AbstractGeoWavePersistence.METADATA_TABLE;
+    final String tableName = metadataType.id() + "_" + AbstractGeoWavePersistence.METADATA_TABLE;
     return getQualifiedTableName(tableName);
   }
 
@@ -382,32 +382,21 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
     return false;
   }
 
-  @Override
-  public MetadataWriter createMetadataWriter(final MetadataType metadataType) {
-    final String tableName = getMetadataTableName(metadataType);
-
+  public void ensureTableExists(final String tableName) {
     synchronized (DynamoDBOperations.tableExistsCache) {
       final Boolean tableExists = DynamoDBOperations.tableExistsCache.get(tableName);
       if ((tableExists == null) || !tableExists) {
         final boolean tableCreated =
-            TableUtils.createTableIfNotExists(
-                client,
-                new CreateTableRequest().withTableName(tableName).withAttributeDefinitions(
-                    new AttributeDefinition(
-                        METADATA_PRIMARY_ID_KEY,
-                        ScalarAttributeType.B)).withKeySchema(
-                            new KeySchemaElement(
-                                METADATA_PRIMARY_ID_KEY,
-                                KeyType.HASH)).withAttributeDefinitions(
-                                    new AttributeDefinition(
-                                        METADATA_TIMESTAMP_KEY,
-                                        ScalarAttributeType.N)).withKeySchema(
-                                            new KeySchemaElement(
-                                                METADATA_TIMESTAMP_KEY,
-                                                KeyType.RANGE)).withProvisionedThroughput(
-                                                    new ProvisionedThroughput(
-                                                        Long.valueOf(5),
-                                                        Long.valueOf(5))));
+            TableUtils.createTableIfNotExists(client, new CreateTableRequest() //
+                .withTableName(tableName) //
+                .withAttributeDefinitions(
+                    new AttributeDefinition(METADATA_PRIMARY_ID_KEY, ScalarAttributeType.B)) //
+                .withKeySchema(new KeySchemaElement(METADATA_PRIMARY_ID_KEY, KeyType.HASH)) //
+                .withAttributeDefinitions(
+                    new AttributeDefinition(METADATA_TIMESTAMP_KEY, ScalarAttributeType.N)) //
+                .withKeySchema(new KeySchemaElement(METADATA_TIMESTAMP_KEY, KeyType.RANGE)) //
+                .withProvisionedThroughput(
+                    new ProvisionedThroughput(Long.valueOf(5), Long.valueOf(5))));
         if (tableCreated) {
           try {
             TableUtils.waitUntilActive(client, tableName);
@@ -418,17 +407,26 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
         DynamoDBOperations.tableExistsCache.put(tableName, true);
       }
     }
+  }
 
+  @Override
+  public MetadataWriter createMetadataWriter(final MetadataType metadataType) {
+    final String tableName = getMetadataTableName(metadataType);
+    ensureTableExists(tableName);
     return new DynamoDBMetadataWriter(this, tableName);
   }
 
   @Override
   public MetadataReader createMetadataReader(final MetadataType metadataType) {
+    final String tableName = getMetadataTableName(metadataType);
+    ensureTableExists(tableName);
     return new DynamoDBMetadataReader(this, metadataType);
   }
 
   @Override
   public MetadataDeleter createMetadataDeleter(final MetadataType metadataType) {
+    final String tableName = getMetadataTableName(metadataType);
+    ensureTableExists(tableName);
     return new DynamoDBMetadataDeleter(this, metadataType);
   }
 

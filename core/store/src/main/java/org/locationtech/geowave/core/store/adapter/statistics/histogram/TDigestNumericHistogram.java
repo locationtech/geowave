@@ -89,4 +89,9 @@ public class TDigestNumericHistogram implements NumericHistogram {
     }
     return sum;
   }
+
+  @Override
+  public String toString() {
+    return NumericHistogram.histogramToString(this);
+  }
 }

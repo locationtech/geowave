@@ -7,6 +7,7 @@
 :core-geotime: {blob-root}/core/geotime/{source-root}
 :core-ingest: {blob-root}/core/ingest/{source-root}
 :core-mapreduce: {blob-root}/core/mapreduce/{source-root}
+:examples: {blob-root}/examples/java-api/{source-root}
 :adapter-auth: {blob-root}/extensions/adapters/auth/{source-root}
 :adapter-vector: {blob-root}/extensions/adapters/vector/{source-root}
 :adapter-raster: {blob-root}/extensions/adapters/raster/{source-root}

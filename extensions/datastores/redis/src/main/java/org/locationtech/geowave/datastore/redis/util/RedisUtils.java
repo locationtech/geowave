@@ -51,9 +51,9 @@ public class RedisUtils {
     // need to still be unique (consider multiple count statistics that are
     // exactly the same count, but need to be merged)
     return client.getScoredSortedSet(
-        namespace + "_" + metadataType.toString(),
+        namespace + "_" + metadataType.id(),
         compression.getCodec(
-            MetadataType.STATS.equals(metadataType)
+            metadataType.isStatValues()
                 ? visibilityEnabled ? GeoWaveMetadataWithTimestampCodec.SINGLETON_WITH_VISIBILITY
                     : GeoWaveMetadataWithTimestampCodec.SINGLETON_WITHOUT_VISIBILITY
                 : visibilityEnabled ? GeoWaveMetadataCodec.SINGLETON_WITH_VISIBILITY

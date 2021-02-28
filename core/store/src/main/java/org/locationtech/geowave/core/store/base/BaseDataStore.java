@@ -18,7 +18,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -37,20 +36,19 @@ import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import org.locationtech.geowave.core.store.adapter.statistics.DuplicateEntryCount;
-import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.StatisticsImpl;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.AggregationQuery;
+import org.locationtech.geowave.core.store.api.BinConstraints;
+import org.locationtech.geowave.core.store.api.BinConstraints.ByteArrayConstraints;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IngestOptions;
 import org.locationtech.geowave.core.store.api.Query;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
-import org.locationtech.geowave.core.store.api.Statistics;
-import org.locationtech.geowave.core.store.api.StatisticsQuery;
+import org.locationtech.geowave.core.store.api.Statistic;
+import org.locationtech.geowave.core.store.api.StatisticQuery;
+import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.callback.DeleteCallbackList;
@@ -59,13 +57,10 @@ import org.locationtech.geowave.core.store.callback.DuplicateDeletionCallback;
 import org.locationtech.geowave.core.store.callback.IngestCallback;
 import org.locationtech.geowave.core.store.callback.IngestCallbackList;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
-import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
-import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowMergingTransform;
-import org.locationtech.geowave.core.store.index.IndexMetaDataSet;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.index.writer.IndependentAdapterIndexWriter;
 import org.locationtech.geowave.core.store.index.writer.IndexCompositeWriter;
@@ -90,12 +85,30 @@ import org.locationtech.geowave.core.store.query.constraints.PrefixIdQuery;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.constraints.TypeConstraintQuery;
 import org.locationtech.geowave.core.store.query.filter.DedupeFilter;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.statistics.DefaultStatisticsProvider;
+import org.locationtech.geowave.core.store.statistics.InternalStatisticsHelper;
+import org.locationtech.geowave.core.store.statistics.StatisticId;
+import org.locationtech.geowave.core.store.statistics.StatisticType;
+import org.locationtech.geowave.core.store.statistics.StatisticUpdateCallback;
+import org.locationtech.geowave.core.store.statistics.adapter.DataTypeStatistic;
+import org.locationtech.geowave.core.store.statistics.adapter.DataTypeStatisticType;
+import org.locationtech.geowave.core.store.statistics.field.FieldStatistic;
+import org.locationtech.geowave.core.store.statistics.field.FieldStatisticType;
+import org.locationtech.geowave.core.store.statistics.index.DifferingVisibilityCountStatistic.DifferingVisibilityCountValue;
+import org.locationtech.geowave.core.store.statistics.index.FieldVisibilityCountStatistic.FieldVisibilityCountValue;
+import org.locationtech.geowave.core.store.statistics.index.IndexStatistic;
+import org.locationtech.geowave.core.store.statistics.index.IndexStatisticType;
+import org.locationtech.geowave.core.store.statistics.query.DataTypeStatisticQuery;
+import org.locationtech.geowave.core.store.statistics.query.FieldStatisticQuery;
+import org.locationtech.geowave.core.store.statistics.query.IndexStatisticQuery;
 import org.locationtech.geowave.core.store.util.NativeEntryIteratorWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.internal.Maps;
 import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.google.common.collect.Streams;
 
 public class BaseDataStore implements DataStore {
   private static final Logger LOGGER = LoggerFactory.getLogger(BaseDataStore.class);
@@ -132,12 +145,20 @@ public class BaseDataStore implements DataStore {
   public void store(final Index index) {
     if (!indexStore.indexExists(index.getName())) {
       indexStore.addIndex(index);
+      if (index instanceof DefaultStatisticsProvider) {
+        ((DefaultStatisticsProvider) index).getDefaultStatistics().forEach(
+            stat -> statisticsStore.addStatistic(stat));
+      }
     }
   }
 
   protected synchronized void store(final InternalDataAdapter<?> adapter) {
     if (!adapterStore.adapterExists(adapter.getAdapterId())) {
       adapterStore.addAdapter(adapter);
+      if (adapter.getAdapter() instanceof DefaultStatisticsProvider) {
+        ((DefaultStatisticsProvider) adapter.getAdapter()).getDefaultStatistics().forEach(
+            stat -> statisticsStore.addStatistic(stat));
+      }
     }
   }
 
@@ -837,7 +858,10 @@ public class BaseDataStore implements DataStore {
       final InternalDataAdapter<T> adapter,
       final Index index,
       final String... additionalAuthorizations) throws IOException {
-    statisticsStore.removeAllStatistics(adapter.getAdapterId(), additionalAuthorizations);
+    try (CloseableIterator<? extends Statistic<? extends StatisticValue<?>>> adapterStats =
+        statisticsStore.getDataTypeStatistics(adapter.getAdapter(), null, null)) {
+      statisticsStore.removeStatistics(adapterStats);
+    }
 
     // cannot delete because authorizations are not used
     // this.indexMappingStore.remove(adapter.getAdapterId());
@@ -867,24 +891,28 @@ public class BaseDataStore implements DataStore {
             sanitizedQueryOptions.getScanCallback(),
             sanitizedQueryOptions.getAggregation(),
             sanitizedQueryOptions.getFieldIdsAdapterPair(),
-            IndexMetaDataSet.getIndexMetadata(
+            InternalStatisticsHelper.getIndexMetadata(
                 index,
                 adapterIdsToQuery,
+                tempAdapterStore,
                 statisticsStore,
                 sanitizedQueryOptions.getAuthorizations()),
-            DuplicateEntryCount.getDuplicateCounts(
+            InternalStatisticsHelper.getDuplicateCounts(
                 index,
                 adapterIdsToQuery,
+                tempAdapterStore,
                 statisticsStore,
                 sanitizedQueryOptions.getAuthorizations()),
-            DifferingFieldVisibilityEntryCount.getVisibilityCounts(
+            InternalStatisticsHelper.getDifferingVisibilityCounts(
                 index,
                 adapterIdsToQuery,
+                tempAdapterStore,
                 statisticsStore,
                 sanitizedQueryOptions.getAuthorizations()),
-            FieldVisibilityCount.getVisibilityCounts(
+            InternalStatisticsHelper.getVisibilityCounts(
                 index,
                 adapterIdsToQuery,
+                tempAdapterStore,
                 statisticsStore,
                 sanitizedQueryOptions.getAuthorizations()),
             DataIndexUtils.getDataIndexRetrieval(
@@ -926,14 +954,16 @@ public class BaseDataStore implements DataStore {
             partitionKey,
             sortPrefix,
             (ScanCallback<Object, ?>) sanitizedQueryOptions.getScanCallback(),
-            DifferingFieldVisibilityEntryCount.getVisibilityCounts(
+            InternalStatisticsHelper.getDifferingVisibilityCounts(
                 index,
                 adapterIds,
+                tempAdapterStore,
                 statisticsStore,
                 sanitizedQueryOptions.getAuthorizations()),
-            FieldVisibilityCount.getVisibilityCounts(
+            InternalStatisticsHelper.getVisibilityCounts(
                 index,
                 adapterIds,
+                tempAdapterStore,
                 statisticsStore,
                 sanitizedQueryOptions.getAuthorizations()),
             DataIndexUtils.getDataIndexRetrieval(
@@ -967,16 +997,18 @@ public class BaseDataStore implements DataStore {
       final BaseQueryOptions sanitizedQueryOptions,
       final PersistentAdapterStore tempAdapterStore,
       final boolean delete) {
-    final DifferingFieldVisibilityEntryCount differingVisibilityCounts =
-        DifferingFieldVisibilityEntryCount.getVisibilityCounts(
+    final DifferingVisibilityCountValue differingVisibilityCounts =
+        InternalStatisticsHelper.getDifferingVisibilityCounts(
             index,
             Collections.singletonList(adapter.getAdapterId()),
+            tempAdapterStore,
             statisticsStore,
             sanitizedQueryOptions.getAuthorizations());
-    final FieldVisibilityCount visibilityCounts =
-        FieldVisibilityCount.getVisibilityCounts(
+    final FieldVisibilityCountValue visibilityCounts =
+        InternalStatisticsHelper.getVisibilityCounts(
             index,
             Collections.singletonList(adapter.getAdapterId()),
+            tempAdapterStore,
             statisticsStore,
             sanitizedQueryOptions.getAuthorizations());
     final BaseInsertionIdQuery<Object> q =
@@ -1062,12 +1094,17 @@ public class BaseDataStore implements DataStore {
 
   @Override
   public void addIndex(final Index index) {
-    indexStore.addIndex(index);
+    store(index);
   }
 
   @Override
   public Index[] getIndices() {
     return getIndices(null);
+  }
+
+  @Override
+  public Index getIndex(final String indexName) {
+    return indexStore.getIndex(indexName);
   }
 
   @Override
@@ -1170,15 +1207,33 @@ public class BaseDataStore implements DataStore {
 
   @Override
   public <T> void addType(final DataTypeAdapter<T> dataTypeAdapter, final Index... initialIndices) {
+    addTypeInternal(dataTypeAdapter, initialIndices);
+  }
+
+  @Override
+  public <T> void addType(
+      final DataTypeAdapter<T> dataTypeAdapter,
+      final List<Statistic<?>> statistics,
+      final Index... initialIndices) {
+    if (addTypeInternal(dataTypeAdapter, initialIndices)) {
+      statistics.stream().forEach(stat -> statisticsStore.addStatistic(stat));
+    }
+  }
+
+  protected <T> boolean addTypeInternal(
+      final DataTypeAdapter<T> dataTypeAdapter,
+      final Index... initialIndices) {
     // add internal adapter
     final InternalDataAdapter<T> adapter =
         new InternalDataAdapterWrapper<>(
             dataTypeAdapter,
             internalAdapterStore.addTypeName(dataTypeAdapter.getTypeName()));
+    final boolean newAdapter = !adapterStore.adapterExists(adapter.getAdapterId());
     final Index[] initialIndicesUnique =
         Arrays.stream(initialIndices).distinct().toArray(size -> new Index[size]);
     internalAddIndices(adapter, initialIndicesUnique, false);
     store(adapter);
+    return newAdapter;
   }
 
   /** Returns an index writer to perform batched write operations for the given typename */
@@ -1266,102 +1321,145 @@ public class BaseDataStore implements DataStore {
     }
   }
 
-  protected <R> CloseableIterator<InternalDataStatistics<?, R, ?>> internalQueryStatistics(
-      final StatisticsQuery<R> query) {
-    // sanity check, although using the builders should disallow this type
-    // of query
-    if ((query.getStatsType() == null)
-        && (query.getExtendedId() != null)
-        && (query.getExtendedId().length() > 0)) {
-      LOGGER.error(
-          "Cannot query by extended ID '"
-              + query.getExtendedId()
-              + "' if statistic type is not provided");
-      return new CloseableIterator.Empty<>();
-    }
-    CloseableIterator<InternalDataStatistics<?, R, ?>> it = null;
-    if ((query.getTypeName() != null) && (query.getTypeName().length() > 0)) {
-      final Short adapterId = internalAdapterStore.getAdapterId(query.getTypeName());
-      if (adapterId == null) {
-        LOGGER.error("DataTypeAdapter does not exist for type '" + query.getTypeName() + "'");
-        return new CloseableIterator.Empty<>();
-      }
-      if (query.getStatsType() != null) {
-        if ((query.getExtendedId() != null) && (query.getExtendedId().length() > 0)) {
+  @SuppressWarnings("unchecked")
+  protected <V extends StatisticValue<R>, R> CloseableIterator<V> internalQueryStatistics(
+      final StatisticQuery<V, R> query) {
+    final List<Statistic<V>> statistics = Lists.newLinkedList();
+    if (query instanceof IndexStatisticQuery) {
+      final IndexStatisticQuery<V, R> statQuery = (IndexStatisticQuery<V, R>) query;
+      if (statQuery.indexName() == null) {
+        final Index[] indices = getIndices();
+        for (final Index index : indices) {
+          getIndexStatistics(index, statQuery, statistics);
 
-          it =
-              (CloseableIterator) statisticsStore.getDataStatistics(
-                  adapterId,
-                  query.getExtendedId(),
-                  query.getStatsType(),
-                  query.getAuthorizations());
-        } else {
-          it =
-              (CloseableIterator) statisticsStore.getDataStatistics(
-                  adapterId,
-                  query.getStatsType(),
-                  query.getAuthorizations());
         }
       } else {
-        it =
-            (CloseableIterator) statisticsStore.getDataStatistics(
-                adapterId,
-                query.getAuthorizations());
-        if (query.getExtendedId() != null) {
-          it =
-              new CloseableIteratorWrapper<>(
-                  it,
-                  Iterators.filter(it, s -> s.getExtendedId().startsWith(query.getExtendedId())));
+        final Index index = indexStore.getIndex(statQuery.indexName());
+        if (index != null) {
+          getIndexStatistics(index, statQuery, statistics);
         }
       }
+    } else if (query instanceof DataTypeStatisticQuery) {
+      final DataTypeStatisticQuery<V, R> statQuery = (DataTypeStatisticQuery<V, R>) query;
+      if (statQuery.typeName() == null) {
+        final DataTypeAdapter<?>[] adapters = getTypes();
+        for (final DataTypeAdapter<?> adapter : adapters) {
+          getAdapterStatistics(adapter, statQuery, statistics);
+        }
+      } else {
+        final DataTypeAdapter<?> adapter = getType(statQuery.typeName());
+        if (adapter != null) {
+          getAdapterStatistics(adapter, statQuery, statistics);
+        }
+      }
+    } else if (query instanceof FieldStatisticQuery) {
+      final FieldStatisticQuery<V, R> statQuery = (FieldStatisticQuery<V, R>) query;
+      if (statQuery.typeName() == null) {
+        final DataTypeAdapter<?>[] adapters = getTypes();
+        for (final DataTypeAdapter<?> adapter : adapters) {
+          getFieldStatistics(adapter, statQuery, statistics);
+        }
+      } else {
+        final DataTypeAdapter<?> adapter = getType(statQuery.typeName());
+        if (adapter != null) {
+          getFieldStatistics(adapter, statQuery, statistics);
+        }
+      }
+    }
+
+    if (query.binConstraints() != null) {
+      final List<CloseableIterator<? extends StatisticValue<?>>> iterators = new ArrayList<>();
+      for (final Statistic<?> stat : statistics) {
+        if (stat.getBinningStrategy() != null) {
+          final ByteArrayConstraints bins =
+              stat.getBinningStrategy().constraints(query.binConstraints());
+          // we really don't need to check if the binning strategy supports the class considering
+          // the binning strategy won't return bin constraints if it doesn't support the object
+          if ((bins != null) && ((bins.getBins().length > 0) || bins.isAllBins())) {
+            iterators.add(
+                statisticsStore.getStatisticValues(
+                    statistics.iterator(),
+                    bins,
+                    query.authorizations()));
+          }
+        }
+      }
+      return (CloseableIterator<V>) new CloseableIteratorWrapper<>(
+          () -> iterators.forEach(CloseableIterator::close),
+          Iterators.concat(iterators.iterator()));
     } else {
-      if (query.getStatsType() != null) {
-        if (query.getExtendedId() != null) {
-          it =
-              (CloseableIterator) statisticsStore.getDataStatistics(
-                  query.getExtendedId(),
-                  query.getStatsType(),
-                  query.getAuthorizations());
-        } else {
-          it =
-              (CloseableIterator) statisticsStore.getDataStatistics(
-                  query.getStatsType(),
-                  query.getAuthorizations());
-        }
-      } else {
-        it = (CloseableIterator) statisticsStore.getAllDataStatistics(query.getAuthorizations());
-      }
-    }
-    return it;
-  }
-
-  @Override
-  public <R> Statistics<R>[] queryStatistics(final StatisticsQuery<R> query) {
-    try (CloseableIterator<InternalDataStatistics<?, R, ?>> it = internalQueryStatistics(query)) {
-      return Streams.stream(it).map(
-          s -> new StatisticsImpl<>(
-              s.getResult(),
-              s.getType(),
-              s.getExtendedId(),
-              internalAdapterStore.getTypeName(s.getAdapterId()))).toArray(
-                  size -> new Statistics[size]);
+      return (CloseableIterator<V>) statisticsStore.getStatisticValues(
+          statistics.iterator(),
+          null,
+          query.authorizations());
     }
   }
 
   @Override
-  public <R> R aggregateStatistics(final StatisticsQuery<R> query) {
-    if (query.getStatsType() == null) {
+  public <V extends StatisticValue<R>, R> CloseableIterator<V> queryStatistics(
+      final StatisticQuery<V, R> query) {
+    return internalQueryStatistics(query);
+  }
+
+  @Override
+  public <V extends StatisticValue<R>, R> V aggregateStatistics(final StatisticQuery<V, R> query) {
+    if (query.statisticType() == null) {
       LOGGER.error("Statistic Type must be provided for a statistical aggregation");
       return null;
     }
-    try (CloseableIterator<InternalDataStatistics<?, R, ?>> it = internalQueryStatistics(query)) {
-      final Optional<InternalDataStatistics<?, R, ?>> result =
-          Streams.stream(it).reduce(InternalDataStatistics::reduce);
-      if (result.isPresent()) {
-        return result.get().getResult();
+    try (CloseableIterator<V> values = internalQueryStatistics(query)) {
+      V value = null;
+      while (values.hasNext()) {
+        if (value == null) {
+          value = values.next();
+        } else {
+          value.merge(values.next());
+        }
       }
-      LOGGER.warn("No statistics found matching query criteria for statistical aggregation");
-      return null;
+      return value;
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  private <V extends StatisticValue<R>, R> void getIndexStatistics(
+      final Index index,
+      final IndexStatisticQuery<V, R> query,
+      final List<Statistic<V>> statistics) {
+    try (CloseableIterator<? extends Statistic<?>> statsIter =
+        statisticsStore.getIndexStatistics(index, query.statisticType(), query.tag())) {
+      while (statsIter.hasNext()) {
+        statistics.add((Statistic<V>) statsIter.next());
+      }
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  private <V extends StatisticValue<R>, R> void getAdapterStatistics(
+      final DataTypeAdapter<?> adapter,
+      final DataTypeStatisticQuery<V, R> query,
+      final List<Statistic<V>> statistics) {
+    try (CloseableIterator<? extends Statistic<?>> statsIter =
+        statisticsStore.getDataTypeStatistics(adapter, query.statisticType(), query.tag())) {
+      while (statsIter.hasNext()) {
+        statistics.add((Statistic<V>) statsIter.next());
+      }
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  private <V extends StatisticValue<R>, R> void getFieldStatistics(
+      final DataTypeAdapter<?> adapter,
+      final FieldStatisticQuery<V, R> query,
+      final List<Statistic<V>> statistics) {
+    try (CloseableIterator<? extends Statistic<?>> statsIter =
+        statisticsStore.getFieldStatistics(
+            adapter,
+            query.statisticType(),
+            query.fieldName(),
+            query.tag())) {
+      while (statsIter.hasNext()) {
+        statistics.add((Statistic<V>) statsIter.next());
+      }
     }
   }
 
@@ -1390,8 +1488,8 @@ public class BaseDataStore implements DataStore {
           for (final Index index : indexMappingStore.getIndicesForAdapter(
               adapter.getAdapterId()).getIndices(indexStore)) {
             final boolean rowMerging = BaseDataStoreUtils.isRowMerging(adapter);
-            final ReaderParamsBuilder bldr =
-                new ReaderParamsBuilder(
+            final ReaderParamsBuilder<GeoWaveRow> bldr =
+                new ReaderParamsBuilder<>(
                     index,
                     adapterStore,
                     internalAdapterStore,
@@ -1444,7 +1542,7 @@ public class BaseDataStore implements DataStore {
 
         final QueryBuilder<?, ?> qb = QueryBuilder.newBuilder().addTypeName(typeName);
         try (CloseableIterator<?> it = query(qb.build())) {
-          try (final Writer writer = other.createWriter(typeName)) {
+          try (final Writer<Object> writer = other.createWriter(typeName)) {
             while (it.hasNext()) {
               writer.write(it.next());
             }
@@ -1571,7 +1669,7 @@ public class BaseDataStore implements DataStore {
             QueryBuilder.newBuilder().addTypeName(typeName).constraints(
                 query.getQueryConstraints());
         try (CloseableIterator<?> it = query(qb.build())) {
-          try (Writer writer = other.createWriter(typeName)) {
+          try (Writer<Object> writer = other.createWriter(typeName)) {
             while (it.hasNext()) {
               writer.write(it.next());
             }
@@ -1595,7 +1693,7 @@ public class BaseDataStore implements DataStore {
             QueryBuilder.newBuilder().addTypeName(adapter.getTypeName()).indexName(
                 indexToCopy.getName()).constraints(query.getQueryConstraints());
         try (CloseableIterator<?> it = query(qb.build())) {
-          try (Writer writer = other.createWriter(adapter.getTypeName())) {
+          try (Writer<Object> writer = other.createWriter(adapter.getTypeName())) {
             while (it.hasNext()) {
               writer.write(it.next());
             }
@@ -1616,7 +1714,11 @@ public class BaseDataStore implements DataStore {
     // If this index is the only index remaining for a given type, then we
     // need
     // to throw an exception first (no deletion will occur).
-
+    final Index index = indexStore.getIndex(indexName);
+    if (index == null) {
+      LOGGER.warn("Unable to remove index '" + indexName + "' because it was not found.");
+      return;
+    }
     final ArrayList<Short> markedAdapters = new ArrayList<>();
     try (CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters()) {
       while (it.hasNext()) {
@@ -1647,24 +1749,11 @@ public class BaseDataStore implements DataStore {
     for (int i = 0; i < markedAdapters.size(); i++) {
       final short adapterId = markedAdapters.get(i);
       baseOperations.deleteAll(indexName, internalAdapterStore.getTypeName(adapterId), adapterId);
-      // need to be careful only deleting stats for this index and not any others for the adapter
-      final List<InternalDataStatistics<?, ?, ?>> statsToRemove = new ArrayList<>();
-      try (CloseableIterator<InternalDataStatistics<?, ?, ?>> it =
-          statisticsStore.getDataStatistics(adapterId)) {
-        while (it.hasNext()) {
-          final InternalDataStatistics<?, ?, ?> stat = it.next();
-          if ((stat.getExtendedId() != null) && stat.getExtendedId().startsWith(indexName)) {
-            statsToRemove.add(stat);
-          }
-        }
-      }
-      statsToRemove.forEach(
-          stat -> statisticsStore.removeStatistics(
-              adapterId,
-              stat.getType(),
-              stat.getExtendedId()));
       indexMappingStore.remove(adapterId, indexName);
     }
+
+    statisticsStore.removeStatistics(index);
+
     // remove the actual index
     indexStore.removeIndex(indexName);
   }
@@ -1697,6 +1786,15 @@ public class BaseDataStore implements DataStore {
     final Short[] adapters = getAdaptersForIndex(indexName);
     if (adapters.length == 1) {
       indexStore.removeIndex(indexName);
+    } else {
+      try (CloseableIterator<? extends Statistic<?>> iter =
+          statisticsStore.getIndexStatistics(getIndex(indexName), null, null)) {
+        while (iter.hasNext()) {
+          statisticsStore.removeTypeSpecificStatisticValues(
+              (IndexStatistic<?>) iter.next(),
+              typeName);
+        }
+      }
     }
 
     // Finally, remove the mapping
@@ -1722,7 +1820,7 @@ public class BaseDataStore implements DataStore {
         baseOperations.deleteAll(DataIndexUtils.DATA_ID_INDEX.getName(), typeName, adapterId);
       }
 
-      statisticsStore.removeAllStatistics(adapterId);
+      statisticsStore.removeStatistics(adapterStore.getAdapter(adapterId));
       indexMappingStore.remove(adapterId);
       internalAdapterStore.remove(adapterId);
       adapterStore.removeAdapter(adapterId);
@@ -1756,5 +1854,497 @@ public class BaseDataStore implements DataStore {
 
   public boolean isReverseIterationSupported() {
     return false;
+  }
+
+  private void addStatistics(
+      final Statistic<? extends StatisticValue<?>>[] statistics,
+      final boolean calculateStats) {
+    if ((statistics == null) || (statistics.length == 0)) {
+      return;
+    }
+    // grouping stats is separated from calculating stats primarily because regardless of whether
+    // stats are calculated they should be validated before adding them to the statistics store
+    final Pair<Map<Index, List<IndexStatistic<?>>>, Map<DataTypeAdapter<?>, List<Statistic<? extends StatisticValue<?>>>>> groupedStats =
+        groupAndValidateStats(statistics, false);
+    final Map<Index, List<IndexStatistic<?>>> indexStatsToAdd = groupedStats.getLeft();
+    final Map<DataTypeAdapter<?>, List<Statistic<? extends StatisticValue<?>>>> otherStatsToAdd =
+        groupedStats.getRight();
+    for (final List<IndexStatistic<?>> indexStats : indexStatsToAdd.values()) {
+      indexStats.forEach(indexStat -> statisticsStore.addStatistic(indexStat));
+    }
+    for (final List<Statistic<? extends StatisticValue<?>>> otherStats : otherStatsToAdd.values()) {
+      otherStats.forEach(statistic -> statisticsStore.addStatistic(statistic));
+    }
+
+    if (calculateStats) {
+      calcStats(indexStatsToAdd, otherStatsToAdd);
+    }
+  }
+
+  private Pair<Map<Index, List<IndexStatistic<?>>>, Map<DataTypeAdapter<?>, List<Statistic<? extends StatisticValue<?>>>>> groupAndValidateStats(
+      final Statistic<? extends StatisticValue<?>>[] statistics,
+      final boolean allowExisting) {
+    final Map<Index, List<IndexStatistic<?>>> indexStatsToAdd = Maps.newHashMap();
+    final Map<DataTypeAdapter<?>, List<Statistic<? extends StatisticValue<?>>>> otherStatsToAdd =
+        Maps.newHashMap();
+    for (final Statistic<? extends StatisticValue<?>> statistic : statistics) {
+      if (!allowExisting && statisticsStore.exists(statistic)) {
+        throw new IllegalArgumentException("The statistic already exists.");
+      }
+      if (statistic instanceof IndexStatistic) {
+        final IndexStatistic<?> indexStat = (IndexStatistic<?>) statistic;
+        if (indexStat.getIndexName() == null) {
+          throw new IllegalArgumentException("No index specified.");
+        }
+        final Index index = indexStore.getIndex(indexStat.getIndexName());
+        if (index == null) {
+          throw new IllegalArgumentException("No index named " + indexStat.getIndexName() + ".");
+        }
+        if (!indexStatsToAdd.containsKey(index)) {
+          indexStatsToAdd.put(index, Lists.newArrayList());
+        }
+        indexStatsToAdd.get(index).add(indexStat);
+      } else if (statistic instanceof DataTypeStatistic) {
+        final DataTypeStatistic<?> adapterStat = (DataTypeStatistic<?>) statistic;
+        if (adapterStat.getTypeName() == null) {
+          throw new IllegalArgumentException("No type specified.");
+        }
+        final DataTypeAdapter<?> adapter = getType(adapterStat.getTypeName());
+        if (adapter == null) {
+          throw new IllegalArgumentException("No type named " + adapterStat.getTypeName() + ".");
+        }
+        if (!otherStatsToAdd.containsKey(adapter)) {
+          otherStatsToAdd.put(adapter, Lists.newArrayList());
+        }
+        otherStatsToAdd.get(adapter).add(adapterStat);
+      } else if (statistic instanceof FieldStatistic) {
+        final FieldStatistic<?> fieldStat = (FieldStatistic<?>) statistic;
+        if (fieldStat.getTypeName() == null) {
+          throw new IllegalArgumentException("No type specified.");
+        }
+        final DataTypeAdapter<?> adapter = getType(fieldStat.getTypeName());
+        if (adapter == null) {
+          throw new IllegalArgumentException("No type named " + fieldStat.getTypeName() + ".");
+        }
+        if (fieldStat.getFieldName() == null) {
+          throw new IllegalArgumentException("No field specified.");
+        }
+        boolean foundMatch = false;
+        for (int i = 0; i < adapter.getFieldCount(); i++) {
+          if (fieldStat.getFieldName().equals(adapter.getFieldName(i))) {
+            foundMatch = true;
+            break;
+          }
+        }
+        if (!foundMatch) {
+          throw new IllegalArgumentException(
+              "No field named "
+                  + fieldStat.getFieldName()
+                  + " was found on the type "
+                  + fieldStat.getTypeName()
+                  + ".");
+        }
+        if (!otherStatsToAdd.containsKey(adapter)) {
+          otherStatsToAdd.put(adapter, Lists.newArrayList());
+        }
+        otherStatsToAdd.get(adapter).add(fieldStat);
+      } else {
+        throw new IllegalArgumentException("Unrecognized statistic type.");
+      }
+    }
+    return Pair.of(indexStatsToAdd, otherStatsToAdd);
+  }
+
+  @SuppressWarnings("unchecked")
+  private void calcStats(
+      final Map<Index, List<IndexStatistic<?>>> indexStatsToAdd,
+      final Map<DataTypeAdapter<?>, List<Statistic<? extends StatisticValue<?>>>> otherStatsToAdd) {
+    for (final Entry<Index, List<IndexStatistic<?>>> indexStats : indexStatsToAdd.entrySet()) {
+      final Index index = indexStats.getKey();
+      final ArrayList<Short> indexAdapters = new ArrayList<>();
+      try (CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters()) {
+        while (it.hasNext()) {
+
+          final InternalDataAdapter<?> dataAdapter = it.next();
+          final AdapterToIndexMapping adapterIndexMap =
+              indexMappingStore.getIndicesForAdapter(dataAdapter.getAdapterId());
+          final String[] indexNames = adapterIndexMap.getIndexNames();
+          for (int i = 0; i < indexNames.length; i++) {
+            if (indexNames[i].equals(index.getName())) {
+              indexAdapters.add(adapterIndexMap.getAdapterId());
+              break;
+            }
+          }
+        }
+      }
+
+      // Scan all adapters used on the index
+      for (int i = 0; i < indexAdapters.size(); i++) {
+        final short adapterId = indexAdapters.get(i);
+        final DataTypeAdapter<?> adapter = adapterStore.getAdapter(adapterId);
+        final Query<Object> query =
+            QueryBuilder.newBuilder().addTypeName(adapter.getTypeName()).indexName(
+                index.getName()).build();
+        final List<Statistic<? extends StatisticValue<?>>> statsToUpdate =
+            Lists.newArrayList(indexStats.getValue());
+        if (otherStatsToAdd.containsKey(adapter)) {
+          statsToUpdate.addAll(otherStatsToAdd.get(adapter));
+          // Adapter-specific stats only need to be computed once, so remove them once they've
+          // been processed
+          otherStatsToAdd.remove(adapter);
+        }
+        try (StatisticUpdateCallback<?> updateCallback =
+            new StatisticUpdateCallback<>(statsToUpdate, statisticsStore, index, adapter)) {
+          try (CloseableIterator<?> entryIt =
+              this.query(query, (ScanCallback<Object, GeoWaveRow>) updateCallback)) {
+            while (entryIt.hasNext()) {
+              entryIt.next();
+            }
+          }
+        }
+      }
+    }
+    for (final Entry<DataTypeAdapter<?>, List<Statistic<? extends StatisticValue<?>>>> otherStats : otherStatsToAdd.entrySet()) {
+      final DataTypeAdapter<?> adapter = otherStats.getKey();
+      final String typeName = adapter.getTypeName();
+      final Index[] indices = getIndices(typeName);
+      if (indices.length == 0) {
+        // If there are no indices, then there is nothing to calculate.
+        return;
+      }
+      final Query<Object> query =
+          QueryBuilder.newBuilder().addTypeName(typeName).indexName(indices[0].getName()).build();
+      try (StatisticUpdateCallback<?> updateCallback =
+          new StatisticUpdateCallback<>(
+              otherStats.getValue(),
+              statisticsStore,
+              indices[0],
+              adapter)) {
+        try (CloseableIterator<?> entryIt =
+            this.query(query, (ScanCallback<Object, GeoWaveRow>) updateCallback)) {
+          while (entryIt.hasNext()) {
+            entryIt.next();
+          }
+        }
+      }
+    }
+  }
+
+  @Override
+  public void removeStatistic(final Statistic<?>... statistic) {
+    final boolean removed = statisticsStore.removeStatistics(Arrays.asList(statistic).iterator());
+    if (!removed) {
+      throw new IllegalArgumentException(
+          "Statistic could not be removed because it was not found.");
+    }
+  }
+
+  @Override
+  public void addEmptyStatistic(final Statistic<?>... statistic) {
+    addStatistics(statistic, false);
+  }
+
+  @Override
+  public void addStatistic(final Statistic<?>... statistic) {
+    addStatistics(statistic, true);
+  }
+
+  @Override
+  public void recalcStatistic(final Statistic<?>... statistic) {
+    for (final Statistic<?> stat : statistic) {
+      if (!statisticsStore.exists(stat)) {
+        throw new IllegalArgumentException("The statistic " + stat.toString() + " doesn't exist.");
+      }
+    }
+
+    final Pair<Map<Index, List<IndexStatistic<?>>>, Map<DataTypeAdapter<?>, List<Statistic<? extends StatisticValue<?>>>>> groupedStats =
+        groupAndValidateStats(statistic, true);
+    // Remove old statistic values
+    for (final Statistic<?> stat : statistic) {
+      statisticsStore.removeStatisticValues(stat);
+    }
+    calcStats(groupedStats.getLeft(), groupedStats.getRight());
+  }
+
+  @Override
+  public Statistic<?>[] getDataTypeStatistics(final String typeName) {
+    final Short adapterId = internalAdapterStore.getAdapterId(typeName);
+    if (adapterId == null) {
+      throw new IllegalArgumentException(typeName + " doesn't exist");
+    }
+    final List<Statistic<?>> retVal = new ArrayList<>();
+    try (CloseableIterator<? extends Statistic<?>> it =
+        statisticsStore.getDataTypeStatistics(adapterStore.getAdapter(adapterId), null, null)) {
+      while (it.hasNext()) {
+        retVal.add(it.next());
+      }
+    }
+    return retVal.toArray(new Statistic<?>[retVal.size()]);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public <V extends StatisticValue<R>, R> Statistic<V> getDataTypeStatistic(
+      final StatisticType<V> statisticType,
+      final String typeName,
+      final String tag) {
+    if (!(statisticType instanceof DataTypeStatisticType)) {
+      throw new IllegalArgumentException("Statistic type must be a data type statistic.");
+    }
+    final Short adapterId = internalAdapterStore.getAdapterId(typeName);
+    if (adapterId == null) {
+      throw new IllegalArgumentException(typeName + " doesn't exist");
+    }
+    final InternalDataAdapter<?> adapter = adapterStore.getAdapter(adapterId);
+    if (adapter == null) {
+      throw new IllegalArgumentException(typeName + " is null");
+    }
+    Statistic<V> retVal = null;
+    if (tag == null) {
+      retVal =
+          internalGetDataTypeStatistic(
+              (DataTypeStatisticType<V>) statisticType,
+              adapter,
+              Statistic.DEFAULT_TAG);
+      if (retVal == null) {
+        retVal =
+            internalGetDataTypeStatistic(
+                (DataTypeStatisticType<V>) statisticType,
+                adapter,
+                Statistic.INTERNAL_TAG);
+      }
+      if (retVal == null) {
+        try (CloseableIterator<Statistic<V>> iter =
+            (CloseableIterator<Statistic<V>>) statisticsStore.getDataTypeStatistics(
+                adapter,
+                statisticType,
+                null)) {
+          if (iter.hasNext()) {
+            retVal = iter.next();
+            if (iter.hasNext()) {
+              throw new IllegalArgumentException(
+                  "Multiple statistics with different tags were found.  A tag must be specified.");
+            }
+          }
+        }
+      }
+    } else {
+      retVal = internalGetDataTypeStatistic((DataTypeStatisticType<V>) statisticType, adapter, tag);
+    }
+    return retVal;
+  }
+
+  private <V extends StatisticValue<R>, R> Statistic<V> internalGetDataTypeStatistic(
+      final DataTypeStatisticType<V> statisticType,
+      final DataTypeAdapter<?> adapter,
+      final String tag) {
+    final StatisticId<V> statId =
+        DataTypeStatistic.generateStatisticId(adapter.getTypeName(), statisticType, tag);
+    return statisticsStore.getStatisticById(statId);
+  }
+
+  @Override
+  public Statistic<?>[] getIndexStatistics(final String indexName) {
+    final Index index = getIndex(indexName);
+    if (index == null) {
+      throw new IllegalArgumentException(indexName + " doesn't exist");
+    }
+    final List<Statistic<?>> retVal = new ArrayList<>();
+    try (CloseableIterator<? extends Statistic<?>> it =
+        statisticsStore.getIndexStatistics(index, null, null)) {
+      while (it.hasNext()) {
+        retVal.add(it.next());
+      }
+    }
+    return retVal.toArray(new Statistic<?>[retVal.size()]);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public <V extends StatisticValue<R>, R> Statistic<V> getIndexStatistic(
+      final StatisticType<V> statisticType,
+      final String indexName,
+      final String tag) {
+    if (!(statisticType instanceof IndexStatisticType)) {
+      throw new IllegalArgumentException("Statistic type must be an index statistic.");
+    }
+    final Index index = getIndex(indexName);
+    if (index == null) {
+      throw new IllegalArgumentException(indexName + " doesn't exist");
+    }
+    Statistic<V> retVal = null;
+    if (tag == null) {
+      retVal =
+          internalGetIndexStatistic(
+              (IndexStatisticType<V>) statisticType,
+              index,
+              Statistic.DEFAULT_TAG);
+      if (retVal == null) {
+        retVal =
+            internalGetIndexStatistic(
+                (IndexStatisticType<V>) statisticType,
+                index,
+                Statistic.INTERNAL_TAG);
+      }
+      if (retVal == null) {
+        try (CloseableIterator<Statistic<V>> iter =
+            (CloseableIterator<Statistic<V>>) statisticsStore.getIndexStatistics(
+                index,
+                statisticType,
+                null)) {
+          if (iter.hasNext()) {
+            retVal = iter.next();
+            if (iter.hasNext()) {
+              throw new IllegalArgumentException(
+                  "Multiple statistics with different tags were found.  A tag must be specified.");
+            }
+          }
+        }
+      }
+    } else {
+      retVal = internalGetIndexStatistic((IndexStatisticType<V>) statisticType, index, tag);
+    }
+    return retVal;
+  }
+
+  private <V extends StatisticValue<R>, R> Statistic<V> internalGetIndexStatistic(
+      final IndexStatisticType<V> statisticType,
+      final Index index,
+      final String tag) {
+    final StatisticId<V> statId =
+        IndexStatistic.generateStatisticId(index.getName(), statisticType, tag);
+    return statisticsStore.getStatisticById(statId);
+  }
+
+  @Override
+  public Statistic<?>[] getFieldStatistics(final String typeName, final String fieldName) {
+    final Short adapterId = internalAdapterStore.getAdapterId(typeName);
+    if (adapterId == null) {
+      throw new IllegalArgumentException(typeName + " doesn't exist");
+    }
+    final List<Statistic<?>> retVal = new ArrayList<>();
+    try (CloseableIterator<? extends Statistic<?>> it =
+        statisticsStore.getFieldStatistics(
+            adapterStore.getAdapter(adapterId),
+            null,
+            fieldName,
+            null)) {
+      while (it.hasNext()) {
+        retVal.add(it.next());
+      }
+    }
+    return retVal.toArray(new Statistic<?>[retVal.size()]);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public <V extends StatisticValue<R>, R> Statistic<V> getFieldStatistic(
+      final StatisticType<V> statisticType,
+      final String typeName,
+      final String fieldName,
+      final String tag) {
+    if (!(statisticType instanceof FieldStatisticType)) {
+      throw new IllegalArgumentException("Statistic type must be a field statistic.");
+    }
+    final Short adapterId = internalAdapterStore.getAdapterId(typeName);
+    if (adapterId == null) {
+      throw new IllegalArgumentException(typeName + " doesn't exist");
+    }
+    final InternalDataAdapter<?> adapter = adapterStore.getAdapter(adapterId);
+    if (adapter == null) {
+      throw new IllegalArgumentException(typeName + " is null");
+    }
+    Statistic<V> retVal = null;
+    if (tag == null) {
+      retVal =
+          internalGetFieldStatistic(
+              (FieldStatisticType<V>) statisticType,
+              adapter,
+              fieldName,
+              Statistic.DEFAULT_TAG);
+      if (retVal == null) {
+        retVal =
+            internalGetFieldStatistic(
+                (FieldStatisticType<V>) statisticType,
+                adapter,
+                fieldName,
+                Statistic.INTERNAL_TAG);
+      }
+      if (retVal == null) {
+        try (CloseableIterator<Statistic<V>> iter =
+            (CloseableIterator<Statistic<V>>) statisticsStore.getFieldStatistics(
+                adapter,
+                statisticType,
+                fieldName,
+                null)) {
+          if (iter.hasNext()) {
+            retVal = iter.next();
+            if (iter.hasNext()) {
+              throw new IllegalArgumentException(
+                  "Multiple statistics with different tags were found.  A tag must be specified.");
+            }
+          }
+        }
+      }
+    } else {
+      retVal =
+          internalGetFieldStatistic((FieldStatisticType<V>) statisticType, adapter, fieldName, tag);
+    }
+    return retVal;
+  }
+
+  private <V extends StatisticValue<R>, R> Statistic<V> internalGetFieldStatistic(
+      final FieldStatisticType<V> statisticType,
+      final DataTypeAdapter<?> adapter,
+      final String fieldName,
+      final String tag) {
+    final StatisticId<V> statId =
+        FieldStatistic.generateStatisticId(adapter.getTypeName(), statisticType, fieldName, tag);
+    return statisticsStore.getStatisticById(statId);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public <V extends StatisticValue<R>, R> R getStatisticValue(
+      final Statistic<V> stat,
+      BinConstraints binConstraints) {
+    if (stat == null) {
+      throw new IllegalArgumentException("Statistic must be non-null");
+    }
+    if (binConstraints == null) {
+      LOGGER.warn("Constraints are null, assuming all bins should match.");
+      binConstraints = BinConstraints.allBins();
+    }
+    try (CloseableIterator<V> values =
+        (CloseableIterator<V>) statisticsStore.getStatisticValues(
+            Iterators.forArray(stat),
+            binConstraints.constraints(stat))) {
+      final V value = stat.createEmpty();
+      while (values.hasNext()) {
+        value.merge(values.next());
+      }
+      return value.getValue();
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public <V extends StatisticValue<R>, R> CloseableIterator<Pair<ByteArray, R>> getBinnedStatisticValues(
+      final Statistic<V> stat,
+      BinConstraints binConstraints) {
+    if (stat == null) {
+      throw new IllegalArgumentException("Statistic must be non-null");
+    }
+    if (binConstraints == null) {
+      LOGGER.warn("Constraints are null, assuming all bins should match.");
+      binConstraints = BinConstraints.allBins();
+    }
+    final CloseableIterator<V> values =
+        (CloseableIterator<V>) statisticsStore.getStatisticValues(
+            Iterators.forArray(stat),
+            binConstraints.constraints(stat));
+    return new CloseableIteratorWrapper<>(
+        values,
+        Iterators.transform(values, (v) -> Pair.of(v.getBin(), v.getValue())));
   }
 }

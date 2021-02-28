@@ -355,7 +355,7 @@ public class KuduOperations implements MapReduceDataStoreOperations {
   }
 
   public String getMetadataTableName(final MetadataType metadataType) {
-    return metadataType.name() + "_" + AbstractGeoWavePersistence.METADATA_TABLE;
+    return metadataType.id() + "_" + AbstractGeoWavePersistence.METADATA_TABLE;
   }
 
   public List<Delete> getDeletions(

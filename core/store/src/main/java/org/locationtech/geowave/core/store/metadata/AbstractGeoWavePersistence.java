@@ -175,7 +175,14 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable> {
   }
 
   protected byte[] getValue(final T object) {
-    return PersistenceUtils.toBinary(object);
+    final byte[] value = PersistenceUtils.toBinary(object);
+    if (object != null && (value == null || value.length == 0)) {
+      throw new UnsupportedOperationException(
+          "Object of class "
+              + object.getClass().getName()
+              + " was not found in the persistable registry and cannot be persisted!");
+    }
+    return value;
   }
 
   protected CloseableIterator<T> getAllObjectsWithSecondaryId(
@@ -293,12 +300,12 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable> {
     return deleteObjects(primaryId, secondaryId, operations, getType(), this, authorizations);
   }
 
-  protected static boolean deleteObjects(
+  protected static <T extends Persistable> boolean deleteObjects(
       final ByteArray primaryId,
       final ByteArray secondaryId,
       final DataStoreOperations operations,
       final MetadataType type,
-      final AbstractGeoWavePersistence cacheDeleter,
+      final AbstractGeoWavePersistence<T> cacheDeleter,
       final String... authorizations) {
     try {
       if (!operations.metadataExists(type)) {

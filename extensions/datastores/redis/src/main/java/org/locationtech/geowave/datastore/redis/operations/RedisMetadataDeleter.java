@@ -32,7 +32,7 @@ public class RedisMetadataDeleter implements MetadataDeleter {
 
     boolean noFailures = true;
     try (CloseableIterator<GeoWaveMetadata> it =
-        new RedisMetadataReader(set, metadataType).query(query, false)) {
+        new RedisMetadataReader(set, metadataType).query(query)) {
       while (it.hasNext()) {
         if (set.remove(it.next())) {
           atLeastOneDeletion = true;

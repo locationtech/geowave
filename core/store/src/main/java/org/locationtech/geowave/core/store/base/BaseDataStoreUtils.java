@@ -79,6 +79,7 @@ import org.locationtech.geowave.core.store.query.aggregate.CommonIndexAggregatio
 import org.locationtech.geowave.core.store.query.constraints.AdapterAndIndexBasedQueryConstraints;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
+import org.locationtech.geowave.core.store.statistics.DefaultStatisticsProvider;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -714,10 +715,10 @@ public class BaseDataStoreUtils {
     Index bestIdx = null;
     while (i < indices.length) {
       nextIdx = indices[i++];
-      if (nextIdx == null
-          || nextIdx.getIndexStrategy() == null
-          || nextIdx.getIndexStrategy().getOrderedDimensionDefinitions() == null
-          || nextIdx.getIndexStrategy().getOrderedDimensionDefinitions().length == 0) {
+      if ((nextIdx == null)
+          || (nextIdx.getIndexStrategy() == null)
+          || (nextIdx.getIndexStrategy().getOrderedDimensionDefinitions() == null)
+          || (nextIdx.getIndexStrategy().getOrderedDimensionDefinitions().length == 0)) {
         continue;
       }
 
@@ -767,7 +768,7 @@ public class BaseDataStoreUtils {
         }
       }
     }
-    if (bestIdx == null && indices.length > 0) {
+    if ((bestIdx == null) && (indices.length > 0)) {
       bestIdx = indices[0];
     }
     return bestIdx;
@@ -860,6 +861,15 @@ public class BaseDataStoreUtils {
       }
     }
     return combineByIndex(result);
+  }
+
+  public static DefaultStatisticsProvider getDefaultStatisticsProvider(
+      final DataTypeAdapter<?> adapter) {
+    if (adapter instanceof InternalDataAdapter) {
+      return getDefaultStatisticsProvider(((InternalDataAdapter) adapter).getAdapter());
+    }
+    return adapter instanceof DefaultStatisticsProvider ? (DefaultStatisticsProvider) adapter
+        : null;
   }
 
   public static RowMergingDataAdapter<?, ?> getRowMergingAdapter(final DataTypeAdapter<?> adapter) {

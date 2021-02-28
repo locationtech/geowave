@@ -15,43 +15,55 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 import org.geotools.feature.visitor.MaxVisitor;
 import org.geotools.feature.visitor.MinVisitor;
-import org.locationtech.geowave.core.geotime.store.statistics.FieldNameStatistic;
-import org.locationtech.geowave.core.geotime.store.statistics.TimeRangeDataStatistics;
+import org.locationtech.geowave.core.geotime.store.statistics.TimeRangeStatistic;
+import org.locationtech.geowave.core.geotime.store.statistics.TimeRangeStatistic.TimeRangeValue;
 import org.locationtech.geowave.core.geotime.util.ExtractAttributesFilter;
-import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.NumericRangeDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
-import org.opengis.feature.simple.SimpleFeature;
+import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Statistic;
+import org.locationtech.geowave.core.store.api.StatisticValue;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.statistics.field.FieldStatistic;
+import org.locationtech.geowave.core.store.statistics.field.NumericRangeStatistic;
+import org.locationtech.geowave.core.store.statistics.field.NumericRangeStatistic.NumericRangeValue;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
+import com.beust.jcommander.internal.Lists;
+import com.beust.jcommander.internal.Maps;
 
 class GeoWaveGTPluginUtils {
 
-  protected static List<InternalDataStatistics<SimpleFeature, ?, ?>> getStatsFor(
-      final String name,
-      final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap) {
-    final List<InternalDataStatistics<SimpleFeature, ?, ?>> stats = new LinkedList<>();
-    for (final Map.Entry<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> stat : statsMap.entrySet()) {
-      if ((stat.getValue() instanceof FieldNameStatistic)
-          && ((FieldNameStatistic) stat.getValue()).getFieldName().endsWith(name)) {
-        stats.add(stat.getValue());
+  protected static Map<String, List<FieldStatistic<?>>> getFieldStats(
+      final DataStatisticsStore statisticsStore,
+      final DataTypeAdapter<?> adapter) {
+    final Map<String, List<FieldStatistic<?>>> adapterFieldStatistics = Maps.newHashMap();
+    try (CloseableIterator<? extends Statistic<? extends StatisticValue<?>>> statistics =
+        statisticsStore.getFieldStatistics(adapter, null, null, null)) {
+      while (statistics.hasNext()) {
+        final FieldStatistic<?> next = (FieldStatistic<?>) statistics.next();
+        List<FieldStatistic<?>> fieldStats = adapterFieldStatistics.get(next.getFieldName());
+        if (fieldStats == null) {
+          fieldStats = Lists.newArrayList();
+          adapterFieldStatistics.put(next.getFieldName(), fieldStats);
+        }
+        fieldStats.add(next);
       }
     }
-    return stats;
+    return adapterFieldStatistics;
   }
 
   protected static boolean accepts(
+      final DataStatisticsStore statisticsStore,
+      final DataTypeAdapter<?> adapter,
       final org.opengis.feature.FeatureVisitor visitor,
       final org.opengis.util.ProgressListener progress,
-      final SimpleFeatureType featureType,
-      final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap)
-      throws IOException {
+      final SimpleFeatureType featureType) throws IOException {
     if ((visitor instanceof MinVisitor)) {
       final ExtractAttributesFilter filter = new ExtractAttributesFilter();
 
@@ -59,19 +71,30 @@ class GeoWaveGTPluginUtils {
       final Collection<String> attrs =
           (Collection<String>) minVisitor.getExpression().accept(filter, null);
       int acceptedCount = 0;
+      final Map<String, List<FieldStatistic<?>>> adapterFieldStatistics =
+          getFieldStats(statisticsStore, adapter);
       for (final String attr : attrs) {
-        for (final InternalDataStatistics<SimpleFeature, ?, ?> stat : getStatsFor(attr, statsMap)) {
-          if (stat instanceof TimeRangeDataStatistics) {
-            minVisitor.setValue(
-                convertToType(
-                    attr,
-                    new Date(((TimeRangeDataStatistics) stat).getMin()),
-                    featureType));
-            acceptedCount++;
-          } else if (stat instanceof NumericRangeDataStatistics) {
-            minVisitor.setValue(
-                convertToType(attr, ((NumericRangeDataStatistics) stat).getMin(), featureType));
-            acceptedCount++;
+        if (!adapterFieldStatistics.containsKey(attr)) {
+          continue;
+        }
+        for (final FieldStatistic<?> stat : adapterFieldStatistics.get(attr)) {
+          if ((stat instanceof TimeRangeStatistic) && (stat.getBinningStrategy() == null)) {
+            final TimeRangeValue statValue =
+                statisticsStore.getStatisticValue((TimeRangeStatistic) stat);
+            if (statValue != null) {
+              minVisitor.setValue(convertToType(attr, new Date(statValue.getMin()), featureType));
+              acceptedCount++;
+            }
+          } else if (stat instanceof NumericRangeStatistic) {
+            final NumericRangeValue statValue =
+                statisticsStore.getStatisticValue(
+                    (NumericRangeStatistic) stat,
+                    new ByteArray(),
+                    true);
+            if (statValue != null) {
+              minVisitor.setValue(convertToType(attr, statValue.getMin(), featureType));
+              acceptedCount++;
+            }
           }
         }
       }
@@ -89,19 +112,27 @@ class GeoWaveGTPluginUtils {
       final Collection<String> attrs =
           (Collection<String>) maxVisitor.getExpression().accept(filter, null);
       int acceptedCount = 0;
+      final Map<String, List<FieldStatistic<?>>> adapterFieldStatistics =
+          getFieldStats(statisticsStore, adapter);
       for (final String attr : attrs) {
-        for (final InternalDataStatistics<SimpleFeature, ?, ?> stat : getStatsFor(attr, statsMap)) {
-          if (stat instanceof TimeRangeDataStatistics) {
-            maxVisitor.setValue(
-                convertToType(
-                    attr,
-                    new Date(((TimeRangeDataStatistics) stat).getMax()),
-                    featureType));
-            acceptedCount++;
-          } else if (stat instanceof NumericRangeDataStatistics) {
-            maxVisitor.setValue(
-                convertToType(attr, ((NumericRangeDataStatistics) stat).getMax(), featureType));
-            acceptedCount++;
+        for (final FieldStatistic<?> stat : adapterFieldStatistics.get(attr)) {
+          if ((stat instanceof TimeRangeStatistic) && (stat.getBinningStrategy() == null)) {
+            final TimeRangeValue statValue =
+                statisticsStore.getStatisticValue((TimeRangeStatistic) stat);
+            if (statValue != null) {
+              maxVisitor.setValue(convertToType(attr, new Date(statValue.getMax()), featureType));
+              acceptedCount++;
+            }
+          } else if (stat instanceof NumericRangeStatistic) {
+            final NumericRangeValue statValue =
+                statisticsStore.getStatisticValue(
+                    (NumericRangeStatistic) stat,
+                    new ByteArray(),
+                    true);
+            if (statValue != null) {
+              maxVisitor.setValue(convertToType(attr, statValue.getMax(), featureType));
+              acceptedCount++;
+            }
           }
         }
       }

@@ -97,7 +97,7 @@ public class AddIndexCommand extends ServiceEnabledCommand<String> {
       throw new ParameterException("That index already exists: " + newIndex.getName());
     }
 
-    indexStore.addIndex(newIndex);
+    storeOptions.createDataStore().addIndex(newIndex);
 
     return newIndex.getName();
   }

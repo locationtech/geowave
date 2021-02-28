@@ -52,4 +52,14 @@ public interface NumericHistogram {
   public double getMinValue();
 
   public long getTotalCount();
+
+  public static String histogramToString(final NumericHistogram histogram) {
+    return "Numeric Histogram[Min: "
+        + histogram.getMinValue()
+        + ", Max: "
+        + histogram.getMaxValue()
+        + ", Median: "
+        + histogram.quantile(0.5)
+        + "]";
+  }
 }

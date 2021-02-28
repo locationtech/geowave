@@ -46,12 +46,12 @@ import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.visibility.VisibilityManagement;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.IndexStore;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.Name;
@@ -187,9 +187,7 @@ public class GeoWaveGTDataStore extends ContentDataStore {
       if (featureNameSpaceURI != null) {
         adapter.setNamespace(featureNameSpaceURI.toString());
       }
-      final InternalDataAdapter<?> internalAdapter =
-          new InternalDataAdapterWrapper(adapter, adapterId);
-      adapterStore.addAdapter(internalAdapter);
+      dataStore.addType(adapter);
     }
   }
 

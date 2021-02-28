@@ -11,6 +11,7 @@ package org.locationtech.geowave.adapter.vector;
 import java.net.MalformedURLException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,12 +22,13 @@ import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.referencing.CRS;
 import org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration;
 import org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection;
-import org.locationtech.geowave.adapter.vector.stats.StatsManager;
 import org.locationtech.geowave.adapter.vector.util.FeatureDataUtils;
 import org.locationtech.geowave.adapter.vector.util.SimpleFeatureUserDataConfigurationSet;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import org.locationtech.geowave.core.geotime.store.dimension.Time;
+import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic;
+import org.locationtech.geowave.core.geotime.store.statistics.TimeRangeStatistic;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.SpatialIndexUtils;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
@@ -35,7 +37,6 @@ import org.locationtech.geowave.core.geotime.util.TimeUtils;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
-import org.locationtech.geowave.core.store.EntryVisibilityHandler;
 import org.locationtech.geowave.core.store.adapter.AbstractDataAdapter;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexFieldHandler;
@@ -43,12 +44,9 @@ import org.locationtech.geowave.core.store.adapter.InitializeWithIndicesDataAdap
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
 import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
-import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
-import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
+import org.locationtech.geowave.core.store.api.Statistic;
+import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
@@ -57,17 +55,22 @@ import org.locationtech.geowave.core.store.data.visibility.VisibilityManagement;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
+import org.locationtech.geowave.core.store.statistics.DefaultStatisticsProvider;
+import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.mapreduce.HadoopDataAdapter;
 import org.locationtech.geowave.mapreduce.HadoopWritableSerializer;
+import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
+import org.opengis.feature.type.GeometryDescriptor;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.internal.Lists;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
@@ -97,9 +100,9 @@ import com.google.common.collect.HashBiMap;
  */
 public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature> implements
     GeotoolsFeatureDataAdapter<SimpleFeature>,
-    StatisticsProvider<SimpleFeature>,
     HadoopDataAdapter<SimpleFeature, FeatureWritable>,
-    InitializeWithIndicesDataAdapter<SimpleFeature> {
+    InitializeWithIndicesDataAdapter<SimpleFeature>,
+    DefaultStatisticsProvider {
   private static final Logger LOGGER = LoggerFactory.getLogger(FeatureDataAdapter.class);
   // the original coordinate system will always be represented internally by
   // the persisted type
@@ -110,7 +113,6 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature> imple
   // from the data adapter should match in CRS
   private SimpleFeatureType reprojectedFeatureType;
   private MathTransform transform;
-  private StatsManager statsManager;
   private TimeDescriptors timeDescriptors = null;
 
   // -----------------------------------------------------------------------------------
@@ -216,6 +218,11 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature> imple
   }
 
   @Override
+  public Class<SimpleFeature> getDataClass() {
+    return SimpleFeature.class;
+  }
+
+  @Override
   public boolean init(final Index... indices) throws RuntimeException {
     String indexCrsCode =
         reprojectedFeatureType == null ? null
@@ -278,8 +285,6 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature> imple
         LOGGER.warn("Unable to create coordinate reference system transform", e);
       }
     }
-
-    statsManager = new StatsManager(this, persistedFeatureType, reprojectedFeatureType, transform);
   }
 
   /** Helper method for establishing a visibility manager in the constructor */
@@ -748,26 +753,6 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature> imple
   }
 
   @Override
-  public StatisticsId[] getSupportedStatistics() {
-    return statsManager.getSupportedStatistics();
-  }
-
-  @Override
-  public <R, B extends StatisticsQueryBuilder<R, B>> InternalDataStatistics<SimpleFeature, R, B> createDataStatistics(
-      final StatisticsId statisticsId) {
-    return (InternalDataStatistics<SimpleFeature, R, B>) statsManager.createDataStatistics(
-        statisticsId);
-  }
-
-  @Override
-  public EntryVisibilityHandler<SimpleFeature> getVisibilityHandler(
-      final CommonIndexModel indexModel,
-      final DataTypeAdapter<SimpleFeature> adapter,
-      final StatisticsId statisticsId) {
-    return statsManager.getVisibilityHandler(indexModel, adapter, statisticsId);
-  }
-
-  @Override
   public boolean hasTemporalConstraints() {
     return getTimeDescriptors().hasTime();
   }
@@ -878,6 +863,26 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature> imple
     }
   }
 
+  @Override
+  public int getFieldCount() {
+    return reprojectedFeatureType.getAttributeCount();
+  }
+
+  @Override
+  public Class<?> getFieldClass(final int fieldIndex) {
+    return reprojectedFeatureType.getDescriptor(fieldIndex).getType().getBinding();
+  }
+
+  @Override
+  public String getFieldName(final int fieldIndex) {
+    return reprojectedFeatureType.getDescriptor(fieldIndex).getLocalName();
+  }
+
+  @Override
+  public Object getFieldValue(final SimpleFeature entry, final String fieldName) {
+    return entry.getAttribute(fieldName);
+  }
+
   protected List<String> getDimensionFieldNames(final CommonIndexModel model) {
     final List<String> retVal = modelToDimensionsMap.get(model.getId());
     if (retVal != null) {
@@ -909,5 +914,36 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature> imple
       description.put(descriptor.getLocalName(), descriptor.getType().getBinding().getName());
     }
     return description;
+  }
+
+  @Override
+  public List<Statistic<? extends StatisticValue<?>>> getDefaultStatistics() {
+    List<Statistic<?>> statistics = Lists.newArrayList();
+    CountStatistic count = new CountStatistic(getTypeName());
+    count.setInternal();
+    statistics.add(count);
+    for (int i = 0; i < reprojectedFeatureType.getAttributeCount(); i++) {
+      final AttributeDescriptor ad = reprojectedFeatureType.getDescriptor(i);
+      if (Geometry.class.isAssignableFrom(ad.getType().getBinding())) {
+        BoundingBoxStatistic bbox = new BoundingBoxStatistic(getTypeName(), ad.getLocalName());
+        if (reprojectedFeatureType.getGeometryDescriptor().equals(ad) && transform != null) {
+          CoordinateReferenceSystem persistedCRS =
+              persistedFeatureType.getCoordinateReferenceSystem();
+          if (persistedCRS == null) {
+            persistedCRS = GeometryUtils.getDefaultCRS();
+          }
+          bbox.setSourceCrs(persistedCRS);
+          bbox.setDestinationCrs(((GeometryDescriptor) ad).getCoordinateReferenceSystem());
+        }
+        bbox.setInternal();
+        statistics.add(bbox);
+      }
+      if (Date.class.isAssignableFrom(ad.getType().getBinding())) {
+        TimeRangeStatistic timeRange = new TimeRangeStatistic(getTypeName(), ad.getLocalName());
+        timeRange.setInternal();
+        statistics.add(timeRange);
+      }
+    }
+    return statistics;
   }
 }

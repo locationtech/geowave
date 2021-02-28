@@ -23,13 +23,13 @@ public class LongLexicoder implements NumberLexicoder<Long> {
 
   @Override
   public byte[] toByteArray(final Long value) {
-    return Longs.toByteArray(value ^ 0x8000000000000000l);
+    return Longs.toByteArray(lexicode(value));
   }
 
   @Override
   public Long fromByteArray(final byte[] bytes) {
     final long value = Longs.fromByteArray(bytes);
-    return value ^ 0x8000000000000000l;
+    return lexicode(value);
   }
 
   @Override
@@ -40,5 +40,9 @@ public class LongLexicoder implements NumberLexicoder<Long> {
   @Override
   public Long getMaximumValue() {
     return Long.MAX_VALUE;
+  }
+
+  public Long lexicode(final Long value) {
+    return value ^ 0x8000000000000000l;
   }
 }

@@ -39,6 +39,7 @@ import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.internal.Maps;
 
 /**
  * This plugin is used for ingesting any GeoTools supported file data store from a local file system
@@ -122,7 +123,7 @@ public class GeoToolsRasterDataStoreIngestPlugin implements LocalFileIngestPlugi
       final String globalVisibility) {
     final AbstractGridFormat format = prioritizedFindFormat(input);
     if (format == null) {
-      return new Wrapper(Collections.emptyIterator());
+      return new Wrapper<>(Collections.emptyIterator());
     }
     Hints hints = null;
     if ((optionProvider.getCrs() != null) && !optionProvider.getCrs().trim().isEmpty()) {
@@ -139,7 +140,7 @@ public class GeoToolsRasterDataStoreIngestPlugin implements LocalFileIngestPlugi
     final GridCoverage2DReader reader = format.getReader(input, hints);
     if (reader == null) {
       LOGGER.error("Unable to get reader instance, getReader returned null");
-      return new Wrapper(Collections.emptyIterator());
+      return new Wrapper<>(Collections.emptyIterator());
     }
     try {
       final GridCoverage2D coverage = reader.read(null);
@@ -198,7 +199,7 @@ public class GeoToolsRasterDataStoreIngestPlugin implements LocalFileIngestPlugi
                   optionProvider.getNodata(coverage.getNumSampleDimensions()));
           coverages.add(new GeoWaveData<>(adapter, indexNames, coverage));
         }
-        return new Wrapper(coverages.iterator()) {
+        return new Wrapper<GeoWaveData<GridCoverage>>(coverages.iterator()) {
 
           @Override
           public void close() {
@@ -226,12 +227,27 @@ public class GeoToolsRasterDataStoreIngestPlugin implements LocalFileIngestPlugi
               + "'",
           e);
     }
-    return new Wrapper(Collections.emptyIterator());
+    return new Wrapper<>(Collections.emptyIterator());
   }
 
   @Override
   public DataTypeAdapter<GridCoverage>[] getDataAdapters(final String globalVisibility) {
-    return new DataTypeAdapter[] {};
+    return new RasterDataAdapter[] {};
+  }
+
+  @Override
+  public DataTypeAdapter<GridCoverage>[] getDataAdapters(
+      final URL url,
+      final String globalVisibility) {
+    Map<String, DataTypeAdapter<GridCoverage>> adapters = Maps.newHashMap();
+    try (CloseableIterator<GeoWaveData<GridCoverage>> dataIt =
+        toGeoWaveData(url, new String[0], globalVisibility)) {
+      while (dataIt.hasNext()) {
+        DataTypeAdapter<GridCoverage> adapter = dataIt.next().getAdapter();
+        adapters.put(adapter.getTypeName(), adapter);
+      }
+    }
+    return adapters.values().toArray(new RasterDataAdapter[adapters.size()]);
   }
 
   @Override
@@ -239,6 +255,7 @@ public class GeoToolsRasterDataStoreIngestPlugin implements LocalFileIngestPlugi
     return new Index[] {};
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Class<? extends CommonIndexValue>[] getSupportedIndexableTypes() {
     return new Class[] {GeometryWrapper.class};

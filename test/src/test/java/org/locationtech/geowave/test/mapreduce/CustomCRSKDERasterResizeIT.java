@@ -165,9 +165,8 @@ public class CustomCRSKDERasterResizeIT {
     outputIndexOptions.setName(outputIndexName);
     ((SpatialOptions) outputIndexOptions.getDimensionalityOptions()).setCrs("EPSG:4240");
 
-    final IndexStore outputIndexStore = outputDataStorePluginOptions.createIndexStore();
     final Index outputIndex = outputIndexOptions.createIndex();
-    outputIndexStore.addIndex(outputIndex);
+    outputDataStorePluginOptions.createDataStore().addIndex(outputIndex);
 
     // use the min level to define the request boundary because it is the
     // most coarse grain

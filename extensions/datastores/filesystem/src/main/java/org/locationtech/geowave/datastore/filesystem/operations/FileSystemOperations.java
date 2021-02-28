@@ -19,7 +19,6 @@ import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
@@ -34,6 +33,7 @@ import org.locationtech.geowave.core.store.operations.ReaderParams;
 import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.operations.RowWriter;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import org.locationtech.geowave.datastore.filesystem.config.FileSystemOptions;
 import org.locationtech.geowave.datastore.filesystem.util.DataFormatterCache;
 import org.locationtech.geowave.datastore.filesystem.util.FileSystemClient;
@@ -86,11 +86,8 @@ public class FileSystemOperations implements MapReduceDataStoreOperations, Close
   }
 
   @Override
-  public boolean mergeStats(
-      final DataStatisticsStore statsStore,
-      final InternalAdapterStore internalAdapterStore) {
-    final boolean retVal =
-        MapReduceDataStoreOperations.super.mergeStats(statsStore, internalAdapterStore);
+  public boolean mergeStats(final DataStatisticsStore statsStore) {
+    final boolean retVal = MapReduceDataStoreOperations.super.mergeStats(statsStore);
     return retVal;
   }
 

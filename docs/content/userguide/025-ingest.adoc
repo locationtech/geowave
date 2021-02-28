@@ -57,9 +57,19 @@ Available ingest formats currently registered as plugins:
     This can read an Avro file encoded with the SimpleFeatureCollection schema.  This schema is also used by the export tool, so this format handles re-ingesting exported datasets.
 ....
 
-=== Statistics and Time Configuration
+=== Statistics
 
-Sometimes it is necessary to provide additional configuration information for a vector ingest.  For example, if you have multiple time fields and need to specify which one should be use for a temporal index, or if you wanted to add some statistics prior to the ingest process. In these cases, the system property `SIMPLE_FEATURE_CONFIG_FILE` may be assigned to the name of a locally accessible JSON file defining the configuration.
+When ingesting a large amount of data, it can be beneficial to configure the statistics on the data types to be ingested prior to actually ingesting any data in order to avoid having to run full table scans to calculate the initial value of those statistics.  This can be done by performing the following steps:
+
+1. Add the data types for the data that will be ingested by using the link:commands.html#type-add[`type add`] command, which is nearly identical to link:commands.html#ingest-localToGW[`ingest localToGW`], but does not ingest any data.  If the data that is going to be ingested is not local, this command can still be used as long as there is a local source that matches the schema of the data to be ingested, such as a file with a single feature exported from the full data set.
+2. Add any number of statistics to those data types by using the link:commands.html#stat-add[`stat add`] command.
+3. Ingest the data using any of the ingest commands.
+
+Using this method, the initial values of all added statistics will be calculated during the ingest process.
+
+=== Time Configuration
+
+Sometimes it is necessary to provide additional configuration information for a vector ingest.  For example, if you have multiple time fields and need to specify which one should be use for a temporal index. In these cases, the system property `SIMPLE_FEATURE_CONFIG_FILE` may be assigned to the name of a locally accessible JSON file defining the configuration.
 
 [[ingest-example]]
 ==== Example
@@ -83,7 +93,6 @@ $ geowave -J-DSIMPLE_FEATURE_CONFIG_FILE=myconfigfile.json ingest localtogw ./in
 This configuration file serves the following purposes:
 [arabic]
 . Selecting which temporal attribute to use in temporal indices.
-. Adding statistics to one or more attributes.
 . Determining which attribute contains visibility information for other attributes.
 . Setting the names of the indices to update in WFS-T transactions via the GeoServer plugin.
 
@@ -118,60 +127,6 @@ For example, if you had a feature type named `myFeatureTypeName` with two time a
   }
 }
 ....
-
-==== Statistics Configuration
-
-Statistics can be configured under a class named {adapter-vector}/adapter/vector/stats/StatsConfigurationCollection.java[`org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection$SimpleFeatureStatsConfigurationCollection`]. This configuration has a single attribute called `attConfig` which contains all of the attributes that are being configured with statistics.  Each attribute under `attConfig` also contains a single property called `configurationsForAttribute`, which is a list of all statistics configurations that should be assigned to that attribute. The following table shows the types of built-in statistics that can be assigned to an attribute.
-
-NOTE: Bounding box and range statistics are automatically captured for geometry and temporal attributes.
-
-[frame="topbot", width="100%", cols="12%,25%,20%,43%", grid="rows", options="header"]
-|=========================================================
-|Attribute Type | Statistic Name|Statistic Configuration Attributes (with default values)|Statistic Class
-.3+| Numeric
-| Fixed Bin Histogram | minValue=-&#8734;, maxValue=&#8734;, bins=32 | {adapter-vector}/adapter/vector/stats/FeatureFixedBinNumericStatistics.java[`org.locationtech.geowave.adapter.vector.stats.
-FeatureFixedBinNumericStatistics$FeatureFixedBinConfig`]
-
-| Dynamic Histogram | | {adapter-vector}/adapter/vector/stats/FeatureNumericHistogramStatistics.java[`org.locationtech.geowave.adapter.vector.stats.
-FeatureNumericHistogramStatistics$FeatureNumericHistogramConfig`]
-
-| Numeric Range | | {adapter-vector}/adapter/vector/stats/FeatureNumericRangeStatistics.java[`org.locationtech.geowave.adapter.vector.stats.
-FeatureNumericRangeStatistics$FeatureNumericRangeConfig`]
-
-.2+| String
-| Count Min Sketch | errorFactor=0.001, probabilityOfCorrectness=0.98 | {adapter-vector}/adapter/vector/stats/FeatureCountMinSketchStatistics.java[`org.locationtech.geowave.adapter.vector.stats.
-FeatureCountMinSketchStatistics$FeatureCountMinSketchConfig`]
-
-| Hyper Log Log | precision=16 | {adapter-vector}/adapter/vector/stats/FeatureHyperLogLogStatistics.java[`org.locationtech.geowave.adapter.vector.stats.
-FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig`]
-
-|=========================================================
-
-For example, if you wanted to add a numeric range statistic on an attribute called `population` in a type called `myFeatureTypeName`, the configuration would look like the following:
-
-[%nowrap]
-....
-{
-  "configurations": {
-    "myFeatureTypeName" : [
-      {
-        "@class" : "org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection$SimpleFeatureStatsConfigurationCollection",
-        "attConfig" : {
-          "population" : {
-            "configurationsForAttribute" :  [
-              {
-                "@class" : "org.locationtech.geowave.adapter.vector.stats.FeatureNumericRangeStatistics$FeatureNumericRangeConfig"
-              }
-            ]
-          }
-        }
-      }
-    ]
-  }
-}
-....
-
-Note that the numeric range statistic does not require any additional configuration attributes.
 
 ==== Visibility Configuration
 
@@ -220,31 +175,6 @@ All of the above configurations can be combined into a single configuration file
       {
         "@class": "org.locationtech.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration",
         "indexNames": ["SPATIAL_IDX"]
-      }
-      {
-        "@class" : "org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection$SimpleFeatureStatsConfigurationCollection",
-        "attConfig" : {
-          "population" : {
-            "configurationsForAttribute" :  [
-              {
-                "@class" : "org.locationtech.geowave.adapter.vector.stats.FeatureFixedBinNumericStatistics$FeatureFixedBinConfig",
-                "bins" : 24
-              }
-            ]
-          },
-          "country" : {
-            "configurationsForAttribute" :  [
-              {
-                "@class" : "org.locationtech.geowave.adapter.vector.stats.FeatureCountMinSketchStatistics$FeatureCountMinSketchConfig",
-                "probabilityOfCorrectness" : 0.98,
-                "errorFactor" :0.001
-              },
-              {
-                "@class" : "org.locationtech.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig"
-              }
-            ]
-          }
-        }
       }
     ]
   }

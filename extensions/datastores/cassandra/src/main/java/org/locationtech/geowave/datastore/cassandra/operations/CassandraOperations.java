@@ -410,8 +410,7 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
     return false;
   }
 
-  @Override
-  public MetadataWriter createMetadataWriter(final MetadataType metadataType) {
+  private String ensureTableExists(final MetadataType metadataType) {
     final String tableName = getMetadataTableName(metadataType);
     // this checks for existence prior to create
     synchronized (CREATE_TABLE_MUTEX) {
@@ -420,13 +419,16 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
           // create table
           final Create create = getCreateTable(tableName);
           create.addPartitionKey(CassandraMetadataWriter.PRIMARY_ID_KEY, DataType.blob());
-          if (MetadataType.STATS.equals(metadataType)
+          if (MetadataType.STATISTICS.equals(metadataType)
+              || MetadataType.STATISTIC_VALUES.equals(metadataType)
+              || MetadataType.LEGACY_STATISTICS.equals(metadataType)
               || MetadataType.INTERNAL_ADAPTER.equals(metadataType)) {
             create.addClusteringColumn(CassandraMetadataWriter.SECONDARY_ID_KEY, DataType.blob());
             create.addClusteringColumn(
                 CassandraMetadataWriter.TIMESTAMP_ID_KEY,
                 DataType.timeuuid());
-            if (MetadataType.STATS.equals(metadataType)) {
+            if (MetadataType.STATISTIC_VALUES.equals(metadataType)
+                || MetadataType.LEGACY_STATISTICS.equals(metadataType)) {
               create.addColumn(CassandraMetadataWriter.VISIBILITY_KEY, DataType.blob());
             }
           }
@@ -437,16 +439,24 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
         LOGGER.warn("Unable to check if table exists", e);
       }
     }
+    return tableName;
+  }
+
+  @Override
+  public MetadataWriter createMetadataWriter(final MetadataType metadataType) {
+    final String tableName = ensureTableExists(metadataType);
     return new CassandraMetadataWriter(this, tableName);
   }
 
   @Override
   public MetadataReader createMetadataReader(final MetadataType metadataType) {
+    ensureTableExists(metadataType);
     return new CassandraMetadataReader(this, metadataType);
   }
 
   @Override
   public MetadataDeleter createMetadataDeleter(final MetadataType metadataType) {
+    ensureTableExists(metadataType);
     return new CassandraMetadataDeleter(this, metadataType);
   }
 
@@ -576,7 +586,7 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
   }
 
   public String getMetadataTableName(final MetadataType metadataType) {
-    final String tableName = metadataType.name() + "_" + AbstractGeoWavePersistence.METADATA_TABLE;
+    final String tableName = metadataType.id() + "_" + AbstractGeoWavePersistence.METADATA_TABLE;
     return tableName;
   }
 

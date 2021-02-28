@@ -23,7 +23,6 @@ import org.junit.runner.RunWith;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorAggregationQueryBuilder;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
-import org.locationtech.geowave.core.geotime.store.query.api.VectorStatisticsQueryBuilder;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.lexicoder.Lexicoders;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -33,6 +32,8 @@ import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
+import org.locationtech.geowave.core.store.api.StatisticQuery;
+import org.locationtech.geowave.core.store.api.StatisticQueryBuilder;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.base.BaseDataStore;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
@@ -40,6 +41,8 @@ import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
+import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic;
+import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic.CountValue;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.TestUtils.DimensionalityType;
@@ -128,8 +131,10 @@ public class DataIndexOnlyIT extends AbstractGeoWaveBasicVectorIT {
             VectorAggregationQueryBuilder.newBuilder().count(adapter.getTypeName()).build());
     Assert.assertTrue(count > 0);
     Assert.assertEquals(originalCount, count);
-    final VectorStatisticsQueryBuilder bldr = VectorStatisticsQueryBuilder.newBuilder();
-    count = dataIdxStore.aggregateStatistics(bldr.factory().count().build());
+    StatisticQuery<CountValue, Long> query =
+        StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
+            adapter.getTypeName()).build();
+    count = dataIdxStore.aggregateStatistics(query).getValue();
     Assert.assertEquals(originalCount, count);
     count = 0L;
     final String[] idsToRemove = new String[3];
@@ -153,8 +158,9 @@ public class DataIndexOnlyIT extends AbstractGeoWaveBasicVectorIT {
               idBldr.constraints(
                   idBldr.constraintsFactory().dataIds(StringUtils.stringToBinary(id))).build()));
     }
-    count = dataIdxStore.aggregateStatistics(bldr.factory().count().build());
-    Assert.assertEquals(originalCount - 3, (long) count);
+
+    count = dataIdxStore.aggregateStatistics(query).getValue();
+    Assert.assertEquals((long) originalCount - 3, (long) count);
 
     TestUtils.deleteAll(dataStoreOptions);
     TestUtils.deleteAll(dataIdxOnlyDataStoreOptions);
@@ -373,6 +379,36 @@ public class DataIndexOnlyIT extends AbstractGeoWaveBasicVectorIT {
         final byte[] bytes = fieldValue.toBinary();
         return bytes;
       }
+    }
+
+    @Override
+    public boolean isCommonIndexField(CommonIndexModel indexModel, String fieldName) {
+      return false;
+    }
+
+    @Override
+    public int getFieldCount() {
+      return 0;
+    }
+
+    @Override
+    public Class<?> getFieldClass(int fieldIndex) {
+      return null;
+    }
+
+    @Override
+    public String getFieldName(int fieldIndex) {
+      return null;
+    }
+
+    @Override
+    public Object getFieldValue(LatLonTime entry, String fieldName) {
+      return null;
+    }
+
+    @Override
+    public Class<LatLonTime> getDataClass() {
+      return LatLonTime.class;
     }
   }
 }

@@ -17,7 +17,6 @@ import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.DataIndexReaderParams;
@@ -31,6 +30,7 @@ import org.locationtech.geowave.core.store.operations.ReaderParams;
 import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.operations.RowWriter;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import org.locationtech.geowave.datastore.rocksdb.config.RocksDBOptions;
 import org.locationtech.geowave.datastore.rocksdb.util.RocksDBClient;
 import org.locationtech.geowave.datastore.rocksdb.util.RocksDBClientCache;
@@ -96,18 +96,15 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
     client.mergeData();
   }
 
-  @Override
-  public boolean mergeStats(
-      final DataStatisticsStore statsStore,
-      final InternalAdapterStore internalAdapterStore) {
-    final boolean retVal =
-        MapReduceDataStoreOperations.super.mergeStats(statsStore, internalAdapterStore);
-    compactMetadata();
-    return retVal;
-  }
-
   public void compactMetadata() {
     client.mergeMetadata();
+  }
+
+  @Override
+  public boolean mergeStats(final DataStatisticsStore statsStore) {
+    final boolean retVal = MapReduceDataStoreOperations.super.mergeStats(statsStore);
+    compactMetadata();
+    return retVal;
   }
 
   @Override

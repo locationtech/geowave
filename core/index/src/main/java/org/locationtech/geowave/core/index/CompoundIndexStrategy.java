@@ -307,19 +307,28 @@ public class CompoundIndexStrategy implements NumericIndexStrategy {
     @Override
     public byte[] toBinary() {
       final byte[] metaBytes = PersistenceUtils.toBinary(metaData);
-      final ByteBuffer buf = ByteBuffer.allocate(1 + metaBytes.length);
+      int length =
+          metaBytes.length
+              + VarintUtils.unsignedIntByteLength(metaBytes.length)
+              + 1
+              + VarintUtils.unsignedIntByteLength(partition1Length);
+      final ByteBuffer buf = ByteBuffer.allocate(length);
+      VarintUtils.writeUnsignedInt(metaBytes.length, buf);
       buf.put(metaBytes);
       buf.put(index);
+      VarintUtils.writeUnsignedInt(partition1Length, buf);
       return buf.array();
     }
 
     @Override
     public void fromBinary(final byte[] bytes) {
       final ByteBuffer buf = ByteBuffer.wrap(bytes);
-      final byte[] metaBytes = new byte[bytes.length - 1];
+      int metaBytesLength = VarintUtils.readUnsignedInt(buf);
+      final byte[] metaBytes = new byte[metaBytesLength];
       buf.get(metaBytes);
       metaData = (IndexMetaData) PersistenceUtils.fromBinary(metaBytes);
       index = buf.get();
+      partition1Length = VarintUtils.readUnsignedInt(buf);
     }
 
     @Override

@@ -24,7 +24,6 @@ import org.locationtech.geowave.core.geotime.index.api.SpatialIndexBuilder;
 import org.locationtech.geowave.core.geotime.index.api.SpatialTemporalIndexBuilder;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
-import org.locationtech.geowave.core.geotime.store.query.api.VectorStatisticsQueryBuilder;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.CustomIndexStrategy;
@@ -34,9 +33,11 @@ import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.StatisticQueryBuilder;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.CustomIndex;
+import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic;
 import org.locationtech.geowave.examples.ingest.SimpleIngest;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
@@ -156,7 +157,7 @@ public class GeoWaveCustomIndexIT {
     Assert.assertEquals(
         513L,
         (long) dataStore.aggregateStatistics(
-            VectorStatisticsQueryBuilder.newBuilder().factory().count().build()));
+            StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).build()).getValue());
     final Date endQueryTime = cal.getTime();
     if (spatialTemporal) {
       // if spatial/temporal indexing exists explicitly set the appropriate one

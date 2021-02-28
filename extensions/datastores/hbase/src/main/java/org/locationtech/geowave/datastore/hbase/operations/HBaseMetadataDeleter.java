@@ -44,7 +44,7 @@ public class HBaseMetadataDeleter implements MetadataDeleter {
       final BufferedMutator deleter = operations.getBufferedMutator(tableName);
 
       final Delete delete = new Delete(query.getPrimaryId());
-      delete.addColumns(StringUtils.stringToBinary(metadataType.name()), query.getSecondaryId());
+      delete.addColumns(StringUtils.stringToBinary(metadataType.id()), query.getSecondaryId());
 
       deleter.mutate(delete);
       deleter.close();

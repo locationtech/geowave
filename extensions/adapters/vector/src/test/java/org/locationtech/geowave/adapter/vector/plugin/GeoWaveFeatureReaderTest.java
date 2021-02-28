@@ -61,9 +61,9 @@ public class GeoWaveFeatureReaderTest extends BaseDataStoreTest {
         DataUtilities.createType(
             "GeoWaveFeatureReaderTest",
             "geometry:Geometry:srid=4326,start:Date,end:Date,pop:java.lang.Long,pid:String");
-    ((GeoWaveGTDataStore) dataStore).getIndexStore().addIndex(
+    ((GeoWaveGTDataStore) dataStore).getDataStore().addIndex(
         new SpatialIndexBuilder().createIndex());
-    ((GeoWaveGTDataStore) dataStore).getIndexStore().addIndex(
+    ((GeoWaveGTDataStore) dataStore).getDataStore().addIndex(
         new SpatialTemporalIndexBuilder().createIndex());
     dataStore.createSchema(type);
 

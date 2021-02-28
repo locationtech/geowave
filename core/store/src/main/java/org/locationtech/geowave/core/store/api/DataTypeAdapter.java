@@ -60,6 +60,15 @@ public interface DataTypeAdapter<T> extends DataReader<Object>, DataWriter<T, Ob
   public AdapterPersistenceEncoding encode(T entry, CommonIndexModel indexModel);
 
   /**
+   * Determines if a given field is part of the given common index model.
+   * 
+   * @param indexModel the index model to check
+   * @param fieldName the field name
+   * @return {@code true} if the field is used in the common index model
+   */
+  public boolean isCommonIndexField(CommonIndexModel indexModel, String fieldName);
+
+  /**
    * for efficiency we assume fields have some pre-defined ordering. If the field belongs in the
    * common index model it should be one of the first n positions where n is the number of fields in
    * the common index model.
@@ -79,6 +88,45 @@ public interface DataTypeAdapter<T> extends DataReader<Object>, DataWriter<T, Ob
    *         name
    */
   public String getFieldNameForPosition(CommonIndexModel model, int position);
+
+  /**
+   * Returns the number of fields represented by this data type.
+   * 
+   * @return the number of fields
+   */
+  public int getFieldCount();
+
+  /**
+   * Returns the class of the data that is represented by the field at the given index.
+   * 
+   * @param fieldIndex the field index
+   * @return the class of the data for the field
+   */
+  public Class<?> getFieldClass(int fieldIndex);
+
+  /**
+   * Returns the name of the field at the given index.
+   * 
+   * @param fieldIndex the field index
+   * @return the name of the field
+   */
+  public String getFieldName(int fieldIndex);
+
+  /**
+   * Returns the value of the field with the given name from the entry.
+   * 
+   * @param entry the entry
+   * @param fieldName the field name
+   * @return the value of the field on the entry
+   */
+  public Object getFieldValue(T entry, String fieldName);
+
+  /**
+   * Return the class that represents the data stored by this adapter.
+   * 
+   * @return the class of the data
+   */
+  public Class<T> getDataClass();
 
   /**
    * Get the Description of the data type this adapater is for

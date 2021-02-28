@@ -21,12 +21,12 @@ import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.base.dataidx.DefaultDataIndexRowWriterWrapper;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import com.google.common.collect.Iterators;
 import com.google.common.primitives.Bytes;
@@ -178,10 +178,8 @@ public interface DataStoreOperations {
   }
 
 
-  default boolean mergeStats(
-      final DataStatisticsStore statsStore,
-      final InternalAdapterStore internalAdapterStore) {
-    return DataStoreUtils.mergeStats(statsStore, internalAdapterStore);
+  default boolean mergeStats(final DataStatisticsStore statsStore) {
+    return statsStore.mergeStats();
   }
 }
 

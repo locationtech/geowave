@@ -23,11 +23,11 @@ import org.slf4j.LoggerFactory;
 public class AccumuloMetadataWriter implements MetadataWriter {
   private static final Logger LOGGER = LoggerFactory.getLogger(AccumuloMetadataWriter.class);
   private final BatchWriter writer;
-  private final Text metadataTypeName;
+  private final Text metadataTypeId;
 
   public AccumuloMetadataWriter(final BatchWriter writer, final MetadataType metadataType) {
     this.writer = writer;
-    metadataTypeName = getSafeText(metadataType.name());
+    metadataTypeId = getSafeText(metadataType.id());
   }
 
   @Override
@@ -42,7 +42,7 @@ public class AccumuloMetadataWriter implements MetadataWriter {
   @Override
   public void write(final GeoWaveMetadata metadata) {
     final Mutation mutation = new Mutation(new Text(metadata.getPrimaryId()));
-    final Text cf = metadataTypeName;
+    final Text cf = metadataTypeId;
     final Text cq =
         metadata.getSecondaryId() != null ? new Text(metadata.getSecondaryId()) : new Text();
     final byte[] visibility = metadata.getVisibility();

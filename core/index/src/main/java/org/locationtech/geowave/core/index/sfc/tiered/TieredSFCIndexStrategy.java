@@ -548,7 +548,7 @@ public class TieredSFCIndexStrategy implements HierarchicalNumericIndexStrategy 
 
     @Override
     public byte[] toBinary() {
-      int bufferSize = VarintUtils.unsignedIntByteLength(tierCounts.length);
+      int bufferSize = VarintUtils.unsignedIntByteLength(tierCounts.length) + tierCounts.length * 2;
       for (final int count : tierCounts) {
         bufferSize += VarintUtils.unsignedIntByteLength(count);
       }
@@ -557,12 +557,10 @@ public class TieredSFCIndexStrategy implements HierarchicalNumericIndexStrategy 
       for (final int count : tierCounts) {
         VarintUtils.writeUnsignedInt(count, buffer);
       }
-      // do not use orderedTierIdToSfcIndex on query
-      // for (final Entry<Byte,Integer > entry :
-      // orderedTierIdToSfcIndex.entrySet()) {
-      // buffer.put(entry.getKey().byteValue());
-      // buffer.put(entry.getValue().byteValue());
-      // }
+      for (final Entry<Byte, Integer> entry : orderedTierIdToSfcIndex.entrySet()) {
+        buffer.put(entry.getKey().byteValue());
+        buffer.put(entry.getValue().byteValue());
+      }
       return buffer.array();
     }
 
@@ -573,16 +571,11 @@ public class TieredSFCIndexStrategy implements HierarchicalNumericIndexStrategy 
       for (int i = 0; i < tierCounts.length; i++) {
         tierCounts[i] = VarintUtils.readUnsignedInt(buffer);
       }
-      // do not use orderedTierIdToSfcIndex on query
-      // final Builder<Byte,Integer> bimapBuilder =
-      // ImmutableBiMap.builder();
-      // for (int i = 0; i < tierCounts.length; i++) {
-      // bimapBuilder.put(
-      // buffer.get(),
-      // Byte.valueOf(buffer.get()).intValue()
-      // );
-      // }
-      // orderedTierIdToSfcIndex = bimapBuilder.build();
+      final Builder<Byte, Integer> bimapBuilder = ImmutableBiMap.builder();
+      for (int i = 0; i < tierCounts.length; i++) {
+        bimapBuilder.put(buffer.get(), Byte.valueOf(buffer.get()).intValue());
+      }
+      orderedTierIdToSfcIndex = bimapBuilder.build();
     }
 
     @Override
@@ -616,6 +609,11 @@ public class TieredSFCIndexStrategy implements HierarchicalNumericIndexStrategy 
               partitionIds.getSortKeys().size();
         }
       }
+    }
+
+    @Override
+    public String toString() {
+      return "Tier Metadata[Tier Counts:" + Arrays.toString(tierCounts) + "]";
     }
 
     /** Convert Tiered Index Metadata statistics to a JSON object */

@@ -9,6 +9,11 @@ Commands for managing GeoWave types.
 
 include::manpages/type/geowave-listtypes.txt[]
 
+[[type-add]]
+=== Add Type
+
+include::manpages/type/geowave-addtype.txt[]
+
 [[type-rm]]
 === Remove Type
 

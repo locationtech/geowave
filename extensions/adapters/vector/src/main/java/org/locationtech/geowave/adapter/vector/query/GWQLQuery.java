@@ -77,6 +77,9 @@ public class GWQLQuery extends DefaultOperation implements Command {
     for (final QueryOutputFormatSpi format : serviceLoader) {
       if ((outputFormat != null) && outputFormat.equalsIgnoreCase(format.name())) {
         output = format;
+        if (output instanceof ConsoleQueryOutputFormat) {
+          ((ConsoleQueryOutputFormat) output).setConsole(params.getConsole());
+        }
         outputFound = true;
         break;
       }

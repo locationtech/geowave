@@ -199,4 +199,3 @@ $ geowave vector query -f csv -o myfile.csv "SELECT name, population FROM exampl
 $ geowave vector query -f shp -o results.shp "SELECT * FROM example.countries WHERE CQL(population>100000000)"
 ....
 
-

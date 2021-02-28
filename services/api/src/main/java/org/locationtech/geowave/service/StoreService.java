@@ -108,7 +108,7 @@ public interface StoreService {
       @QueryParam("maxConnections") Integer maxConnections,
       @QueryParam("protocol") String protocol,
       @QueryParam("enableCacheResponseMetadata") Boolean enableCacheResponseMetadata,
-      @QueryParam("geowaveNamespace") String geowaveNamespace,
+      @QueryParam("gwNamespace") String gwNamespace,
       @QueryParam("persistAdapter") Boolean persistAdapter,
       @QueryParam("persistIndex") Boolean persistIndex,
       @QueryParam("persistDataStatistics") Boolean persistDataStatistics,

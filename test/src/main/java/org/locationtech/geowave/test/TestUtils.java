@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.test;
 
+import static org.junit.Assert.assertTrue;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.io.BufferedOutputStream;
@@ -70,14 +71,16 @@ import org.locationtech.geowave.core.ingest.spark.SparkIngestDriver;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
+import org.locationtech.geowave.core.store.api.Statistic;
+import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.cli.VisibilityOptions;
-import org.locationtech.geowave.core.store.cli.stats.ListStatsCommand;
 import org.locationtech.geowave.core.store.cli.store.AddStoreCommand;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.IndexPluginOptions;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
@@ -94,7 +97,6 @@ import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.beust.jcommander.JCommander;
-import com.beust.jcommander.ParameterException;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class TestUtils {
@@ -282,7 +284,10 @@ public class TestUtils {
     addStore.setPluginOptions(dataStore);
     addStore.execute(params);
 
+
     final IndexStore indexStore = dataStore.createIndexStore();
+    org.locationtech.geowave.core.store.api.DataStore geowaveDataStore =
+        dataStore.createDataStore();
 
     // Add indices
     final StringBuilder indexParam = new StringBuilder();
@@ -290,7 +295,7 @@ public class TestUtils {
       final String indexName = "test-index" + i;
       if (indexStore.getIndex(indexName) == null) {
         indexOptions.get(i).setName(indexName);
-        indexStore.addIndex(indexOptions.get(i).createIndex());
+        geowaveDataStore.addIndex(indexOptions.get(i).createIndex());
       }
       indexParam.append(indexName + ",");
     }
@@ -338,13 +343,15 @@ public class TestUtils {
     addStore.execute(operationParams);
 
     final IndexStore indexStore = dataStore.createIndexStore();
+    final org.locationtech.geowave.core.store.api.DataStore geowaveDataStore =
+        dataStore.createDataStore();
 
     final StringBuilder indexParam = new StringBuilder();
     for (int i = 0; i < indexOptions.size(); i++) {
       final String indexName = "test-index" + i;
       if (indexStore.getIndex(indexName) == null) {
         indexOptions.get(i).setName(indexName);
-        indexStore.addIndex(indexOptions.get(i).createIndex());
+        geowaveDataStore.addIndex(indexOptions.get(i).createIndex());
       }
       indexParam.append(indexName + ",");
     }
@@ -408,6 +415,8 @@ public class TestUtils {
     addStore.execute(operationParams);
 
     final IndexStore indexStore = dataStore.createIndexStore();
+    final org.locationtech.geowave.core.store.api.DataStore geowaveDataStore =
+        dataStore.createDataStore();
 
     final String[] indexTypes = dimensionalityType.getDimensionalityArg().split(",");
     for (final String indexType : indexTypes) {
@@ -416,7 +425,7 @@ public class TestUtils {
         pluginOptions.selectPlugin(indexType);
         pluginOptions.setName(indexType);
         pluginOptions.save(props, IndexPluginOptions.getIndexNamespace(indexType));
-        indexStore.addIndex(pluginOptions.createIndex());
+        geowaveDataStore.addIndex(pluginOptions.createIndex());
       }
 
     }
@@ -436,21 +445,14 @@ public class TestUtils {
   }
 
   private static void verifyStats(final DataStorePluginOptions dataStore) throws Exception {
-    final ListStatsCommand listStats = new ListStatsCommand();
-    listStats.setParameters("test", null);
-
-    final File configFile = File.createTempFile("test_stats", null);
-    final ManualOperationParams params = new ManualOperationParams();
-
-    params.getContext().put(ConfigOptions.PROPERTIES_FILE_CONTEXT, configFile);
-    final AddStoreCommand addStore = new AddStoreCommand();
-    addStore.setParameters("test");
-    addStore.setPluginOptions(dataStore);
-    addStore.execute(params);
-    try {
-      listStats.execute(params);
-    } catch (final ParameterException e) {
-      throw new RuntimeException(e);
+    // There should be some stats after ingest.
+    final DataStatisticsStore statsStore = dataStore.createDataStatisticsStore();
+    try (CloseableIterator<? extends Statistic<? extends StatisticValue<?>>> statistics =
+        statsStore.getAllStatistics(null)) {
+      try (CloseableIterator<? extends StatisticValue<?>> values =
+          statsStore.getStatisticValues(statistics, null)) {
+        assertTrue(values.hasNext());
+      }
     }
   }
 

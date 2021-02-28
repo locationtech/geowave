@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import org.locationtech.geowave.adapter.vector.index.IndexQueryStrategySPI.QueryHint;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction;
+import org.locationtech.geowave.adapter.vector.plugin.transaction.StatisticsCache;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.TransactionsAllocator;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
@@ -22,9 +23,6 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InitializeWithIndicesDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
@@ -33,6 +31,7 @@ import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandl
 import org.locationtech.geowave.core.store.data.visibility.UniformVisibilityWriter;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import org.opengis.feature.simple.SimpleFeature;
 import org.spark_project.guava.collect.Maps;
 
@@ -62,18 +61,12 @@ public class GeoWaveDataStoreComponents {
     this.transactionAllocator = transactionAllocator;
   }
 
+  @SuppressWarnings("unchecked")
   public void initForWrite() {
     // this is ensuring the adapter is properly initialized with the
     // indices and writing it to the adapterStore, in cases where the
     // featuredataadapter was created from geotools datastore's createSchema
-    if (adapter instanceof InitializeWithIndicesDataAdapter) {
-      ((InitializeWithIndicesDataAdapter) adapter).init(adapterIndices);
-    }
-    final short internalAdapterId =
-        gtStore.getInternalAdapterStore().getAdapterId(adapter.getTypeName());
-    final InternalDataAdapter<?> internalDataAdapter =
-        new InternalDataAdapterWrapper(adapter, internalAdapterId);
-    gtStore.adapterStore.addAdapter(internalDataAdapter);
+    dataStore.addType(adapter, adapterIndices);
   }
 
   public IndexStore getIndexStore() {
@@ -101,7 +94,7 @@ public class GeoWaveDataStoreComponents {
   }
 
   public CloseableIterator<Index> getIndices(
-      final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> stats,
+      final StatisticsCache statisticsCache,
       final BasicQueryByClass query,
       final boolean spatialOnly) {
     final GeoWaveGTDataStore gtStore = getGTstore();
@@ -113,7 +106,12 @@ public class GeoWaveDataStoreComponents {
     if (spatialOnly && (indices.length == 0)) {
       throw new UnsupportedOperationException("Query required spatial index, but none were found.");
     }
-    return gtStore.getIndexQueryStrategy().getIndices(stats, query, indices, adapter, queryHints);
+    return gtStore.getIndexQueryStrategy().getIndices(
+        dataStatisticsStore,
+        query,
+        indices,
+        adapter,
+        queryHints);
   }
 
   public void remove(final SimpleFeature feature, final GeoWaveTransaction transaction)

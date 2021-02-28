@@ -426,6 +426,61 @@ public class PersistenceEncodingTest {
       }
       return null;
     }
+
+    @Override
+    public int getFieldCount() {
+      return 4;
+    }
+
+    @Override
+    public Class<?> getFieldClass(int fieldIndex) {
+      switch (fieldIndex) {
+        case 0:
+          return Geometry.class;
+        case 1:
+          return String.class;
+        case 2:
+          return Date.class;
+        case 3:
+          return Date.class;
+      }
+      return null;
+    }
+
+    @Override
+    public String getFieldName(int fieldIndex) {
+      switch (fieldIndex) {
+        case 0:
+          return GEOM;
+        case 1:
+          return ID;
+        case 2:
+          return START_TIME;
+        case 3:
+          return END_TIME;
+      }
+      return null;
+    }
+
+    @Override
+    public Object getFieldValue(GeoObj entry, String fieldName) {
+      switch (fieldName) {
+        case GEOM:
+          return entry.geometry;
+        case ID:
+          return entry.id;
+        case START_TIME:
+          return entry.startTime;
+        case END_TIME:
+          return entry.endTime;
+      }
+      return null;
+    }
+
+    @Override
+    public Class<GeoObj> getDataClass() {
+      return GeoObj.class;
+    }
   }
 
   private static class GeoObj {

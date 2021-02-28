@@ -28,14 +28,10 @@ import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.EntryVisibilityHandler;
 import org.locationtech.geowave.core.store.adapter.AbstractDataAdapter;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
 import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
-import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
-import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
@@ -47,7 +43,6 @@ import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
-import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
@@ -238,8 +233,7 @@ public class AccumuloRangeQueryTest {
     return new TestGeometryAdapter();
   }
 
-  public static class TestGeometryAdapter extends AbstractDataAdapter<TestGeometry> implements
-      StatisticsProvider<TestGeometry> {
+  public static class TestGeometryAdapter extends AbstractDataAdapter<TestGeometry> {
     private static final String GEOM = "myGeo";
     private static final String ID = "myId";
     private static final PersistentIndexFieldHandler<TestGeometry, ? extends CommonIndexValue, Object> GEOM_FIELD_HANDLER =
@@ -406,29 +400,46 @@ public class AccumuloRangeQueryTest {
     }
 
     @Override
-    public StatisticsId[] getSupportedStatistics() {
-      return new StatisticsId[0];
+    public int getFieldCount() {
+      return 2;
     }
 
     @Override
-    public InternalDataStatistics<TestGeometry, ?, ?> createDataStatistics(
-        final StatisticsId statisticsId) {
+    public Class<?> getFieldClass(int fieldIndex) {
+      switch (fieldIndex) {
+        case 0:
+          return Geometry.class;
+        case 1:
+          return String.class;
+      }
       return null;
     }
 
     @Override
-    public EntryVisibilityHandler<TestGeometry> getVisibilityHandler(
-        final CommonIndexModel indexModel,
-        final DataTypeAdapter<TestGeometry> adapter,
-        final StatisticsId statisticsId) {
-      // TODO Auto-generated method stub
-      return new EntryVisibilityHandler<AccumuloRangeQueryTest.TestGeometry>() {
+    public String getFieldName(int fieldIndex) {
+      switch (fieldIndex) {
+        case 0:
+          return GEOM;
+        case 1:
+          return ID;
+      }
+      return null;
+    }
 
-        @Override
-        public byte[] getVisibility(final TestGeometry entry, final GeoWaveRow... kvs) {
-          return null;
-        }
-      };
+    @Override
+    public Object getFieldValue(TestGeometry entry, String fieldName) {
+      switch (fieldName) {
+        case GEOM:
+          return entry.geom;
+        case ID:
+          return entry.id;
+      }
+      return null;
+    }
+
+    @Override
+    public Class<TestGeometry> getDataClass() {
+      return TestGeometry.class;
     }
   }
 }

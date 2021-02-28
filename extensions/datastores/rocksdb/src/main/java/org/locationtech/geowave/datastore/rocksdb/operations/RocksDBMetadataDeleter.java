@@ -31,7 +31,7 @@ public class RocksDBMetadataDeleter implements MetadataDeleter {
     boolean atLeastOneDeletion = false;
 
     try (CloseableIterator<GeoWaveMetadata> it =
-        new RocksDBMetadataReader(table, metadataType).query(query, false)) {
+        new RocksDBMetadataReader(table, metadataType).query(query)) {
       while (it.hasNext()) {
         table.remove(((RocksDBGeoWaveMetadata) it.next()).getKey());
         atLeastOneDeletion = true;

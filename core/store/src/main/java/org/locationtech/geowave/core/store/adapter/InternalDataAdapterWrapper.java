@@ -84,6 +84,11 @@ public class InternalDataAdapterWrapper<T> implements InternalDataAdapter<T> {
   }
 
   @Override
+  public boolean isCommonIndexField(final CommonIndexModel indexModel, final String fieldName) {
+    return adapter.isCommonIndexField(indexModel, fieldName);
+  }
+
+  @Override
   public int getPositionOfOrderedField(final CommonIndexModel model, final String fieldName) {
     return adapter.getPositionOfOrderedField(model, fieldName);
   }
@@ -96,5 +101,30 @@ public class InternalDataAdapterWrapper<T> implements InternalDataAdapter<T> {
   @Override
   public DataTypeAdapter<T> getAdapter() {
     return adapter;
+  }
+
+  @Override
+  public int getFieldCount() {
+    return adapter.getFieldCount();
+  }
+
+  @Override
+  public Class<?> getFieldClass(int fieldIndex) {
+    return adapter.getFieldClass(fieldIndex);
+  }
+
+  @Override
+  public String getFieldName(int fieldIndex) {
+    return adapter.getFieldName(fieldIndex);
+  }
+
+  @Override
+  public Object getFieldValue(T entry, String fieldName) {
+    return adapter.getFieldValue(entry, fieldName);
+  }
+
+  @Override
+  public Class<T> getDataClass() {
+    return adapter.getDataClass();
   }
 }

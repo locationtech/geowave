@@ -128,4 +128,15 @@ public class PersistenceUtils {
     retVal.fromBinary(persistableBinary);
     return retVal;
   }
+
+  public static byte[] stripClassId(final byte[] bytes) {
+    if ((bytes == null) || (bytes.length < 2)) {
+      return null;
+    }
+    final ByteBuffer buf = ByteBuffer.wrap(bytes);
+    buf.getShort();
+    final byte[] persistableBinary = new byte[bytes.length - 2];
+    buf.get(persistableBinary);
+    return persistableBinary;
+  }
 }

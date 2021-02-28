@@ -12,14 +12,24 @@ public class MetadataQuery {
   private final byte[] primaryId;
   private final byte[] secondaryId;
   private final String[] authorizations;
+  private final boolean primaryIdPrefix;
 
   public MetadataQuery(
       final byte[] primaryId,
       final byte[] secondaryId,
       final String... authorizations) {
+    this(primaryId, secondaryId, false, authorizations);
+  }
+
+  public MetadataQuery(
+      final byte[] primaryId,
+      final byte[] secondaryId,
+      final boolean primaryIdPrefix,
+      final String... authorizations) {
     this.primaryId = primaryId;
     this.secondaryId = secondaryId;
     this.authorizations = authorizations;
+    this.primaryIdPrefix = primaryIdPrefix;
   }
 
   public byte[] getPrimaryId() {
@@ -36,6 +46,14 @@ public class MetadataQuery {
 
   public boolean hasSecondaryId() {
     return (secondaryId != null) && (secondaryId.length > 0);
+  }
+
+  public boolean isExact() {
+    return !primaryIdPrefix;
+  }
+
+  public boolean isPrefix() {
+    return primaryIdPrefix;
   }
 
   public String[] getAuthorizations() {

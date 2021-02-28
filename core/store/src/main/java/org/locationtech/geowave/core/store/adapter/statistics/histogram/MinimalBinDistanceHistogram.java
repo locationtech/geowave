@@ -350,6 +350,11 @@ public class MinimalBinDistanceHistogram implements NumericHistogram {
   }
 
   @Override
+  public String toString() {
+    return NumericHistogram.histogramToString(this);
+  }
+
+  @Override
   public int bufferSize() {
     return VarintUtils.unsignedLongByteLength(totalCount)
         + VarintUtils.unsignedIntByteLength(nbins)

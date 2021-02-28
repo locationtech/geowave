@@ -32,7 +32,7 @@ public class FileSystemMetadataDeleter implements MetadataDeleter {
     boolean atLeastOneDeletion = false;
 
     try (CloseableIterator<GeoWaveMetadata> it =
-        new FileSystemMetadataReader(table, metadataType).query(query, false)) {
+        new FileSystemMetadataReader(table, metadataType).query(query)) {
       while (it.hasNext()) {
         table.remove(((FileSystemGeoWaveMetadata) it.next()).getKey());
         atLeastOneDeletion = true;

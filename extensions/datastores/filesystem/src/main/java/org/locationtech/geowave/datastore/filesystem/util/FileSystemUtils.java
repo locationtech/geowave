@@ -142,7 +142,7 @@ public class FileSystemUtils {
         DataFormatterCache.getInstance().getFormatter(
             format,
             visibilityEnabled).getMetadataDirectory();
-    return getSubdirectory(subDirectory, metadataDirectory, type.name());
+    return getSubdirectory(subDirectory, metadataDirectory, type.id());
   }
 
   public static FileSystemIndexTable getIndexTable(

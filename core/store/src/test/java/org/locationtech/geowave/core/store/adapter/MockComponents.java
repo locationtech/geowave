@@ -14,7 +14,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import org.apache.commons.lang3.Range;
 import org.locationtech.geowave.core.index.Coordinate;
 import org.locationtech.geowave.core.index.CoordinateRange;
 import org.locationtech.geowave.core.index.IndexMetaData;
@@ -31,18 +30,9 @@ import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.index.sfc.data.NumericValue;
-import org.locationtech.geowave.core.store.EntryVisibilityHandler;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
-import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.FieldNameStatisticVisibility;
-import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsQueryBuilder;
-import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsType;
-import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.NumericRangeDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
-import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
-import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
+import org.locationtech.geowave.core.store.api.Statistic;
+import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
@@ -51,6 +41,8 @@ import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
+import org.locationtech.geowave.core.store.statistics.DefaultStatisticsProvider;
+import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Bytes;
 
@@ -58,7 +50,7 @@ public class MockComponents {
   // Mock class instantiating abstract class so we can test logic
   // contained in abstract class.
   public static class MockAbstractDataAdapter extends AbstractDataAdapter<Integer> implements
-      StatisticsProvider<Integer> {
+      DefaultStatisticsProvider {
     private String id = ID;
 
     public MockAbstractDataAdapter() {
@@ -107,8 +99,8 @@ public class MockComponents {
       }
     }
 
-    protected static final String INTEGER = "TestInteger";
-    protected static final String ID = "TestIntegerAdapter";
+    public static final String INTEGER = "TestInteger";
+    public static final String ID = "TestIntegerAdapter";
 
     public MockAbstractDataAdapter(final List<PersistentIndexFieldHandler<Integer, // RowType
         ? extends CommonIndexValue, // IndexFieldType
@@ -223,20 +215,6 @@ public class MockComponents {
     }
 
     @Override
-    public StatisticsId[] getSupportedStatistics() {
-      return new StatisticsId[] {CountDataStatistics.STATS_TYPE.newBuilder().build().getId(),};
-    }
-
-    @Override
-    public <R, B extends StatisticsQueryBuilder<R, B>> InternalDataStatistics<Integer, R, B> createDataStatistics(
-        final StatisticsId statisticsId) {
-      if (statisticsId.getType().equals(CountDataStatistics.STATS_TYPE)) {
-        return (InternalDataStatistics<Integer, R, B>) new CountDataStatistics<Integer>();
-      }
-      return (InternalDataStatistics<Integer, R, B>) new IntegerRangeDataStatistics(getTypeName());
-    }
-
-    @Override
     public int getPositionOfOrderedField(final CommonIndexModel model, final String fieldName) {
       int i = 0;
       for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
@@ -275,35 +253,57 @@ public class MockComponents {
     }
 
     @Override
-    public EntryVisibilityHandler<Integer> getVisibilityHandler(
-        final CommonIndexModel indexModel,
-        final DataTypeAdapter<Integer> adapter,
-        final StatisticsId statisticsId) {
-      return new FieldNameStatisticVisibility<>(
-          new TestDimensionField().fieldName,
-          indexModel,
-          adapter);
-    }
-  } // class MockAbstractDataAdapter
-
-  public static class IntegerRangeDataStatistics extends
-      NumericRangeDataStatistics<Integer, FieldStatisticsQueryBuilder<Range<Double>>> {
-    protected static final FieldStatisticsType<Range<Double>> TYPE =
-        new FieldStatisticsType<>("Integer_Range");
-
-    public IntegerRangeDataStatistics() {
-      super(TYPE);
-    }
-
-    public IntegerRangeDataStatistics(final String fieldName) {
-      super(null, TYPE, fieldName);
+    public int getFieldCount() {
+      return 2;
     }
 
     @Override
-    protected NumericRange getRange(final Integer entry) {
-      return new NumericRange(entry.doubleValue(), entry.doubleValue());
+    public Class<?> getFieldClass(int fieldIndex) {
+      switch (fieldIndex) {
+        case 0:
+          return Integer.class;
+        case 1:
+          return String.class;
+      }
+      return null;
     }
-  }
+
+    @Override
+    public String getFieldName(int fieldIndex) {
+      switch (fieldIndex) {
+        case 0:
+          return INTEGER;
+        case 1:
+          return ID;
+      }
+      return null;
+    }
+
+    @Override
+    public Object getFieldValue(Integer entry, String fieldName) {
+      switch (fieldName) {
+        case INTEGER:
+          return entry;
+        case ID:
+          return entry.toString();
+      }
+      return null;
+    }
+
+    @Override
+    public Class<Integer> getDataClass() {
+      return Integer.class;
+    }
+
+    @Override
+    public List<Statistic<? extends StatisticValue<?>>> getDefaultStatistics() {
+      List<Statistic<? extends StatisticValue<?>>> statistics = Lists.newArrayList();
+      CountStatistic count = new CountStatistic(getTypeName());
+      count.setInternal();
+      statistics.add(count);
+      return statistics;
+    }
+  } // class MockAbstractDataAdapter
 
   // *************************************************************************
   //

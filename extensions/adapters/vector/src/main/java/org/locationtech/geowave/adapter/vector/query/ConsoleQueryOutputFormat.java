@@ -13,7 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.locationtech.geowave.adapter.vector.query.gwql.Result;
 import org.locationtech.geowave.adapter.vector.query.gwql.ResultSet;
-import org.locationtech.geowave.core.cli.utils.ConsolePrinter;
+import org.locationtech.geowave.core.cli.utils.ConsoleTablePrinter;
+import com.beust.jcommander.internal.Console;
 
 public class ConsoleQueryOutputFormat extends QueryOutputFormatSpi {
 
@@ -22,8 +23,14 @@ public class ConsoleQueryOutputFormat extends QueryOutputFormatSpi {
   private static final int RESULTS_PER_PAGE = 24;
   private static final int MIN_COLUMN_SIZE = 5;
 
+  private Console console = null;
+
   public ConsoleQueryOutputFormat() {
     super(FORMAT_NAME);
+  }
+
+  public void setConsole(final Console console) {
+    this.console = console;
   }
 
   @Override
@@ -34,8 +41,9 @@ public class ConsoleQueryOutputFormat extends QueryOutputFormatSpi {
       headers.add(results.columnName(i));
     }
 
-    ConsolePrinter consolePrinter = new ConsolePrinter(MIN_COLUMN_SIZE, RESULTS_PER_PAGE);
-    consolePrinter.print(headers, getRows(results, headers.size()));
+    ConsoleTablePrinter printer =
+        new ConsoleTablePrinter(MIN_COLUMN_SIZE, RESULTS_PER_PAGE, console);
+    printer.print(headers, getRows(results, headers.size()));
     // If more results exist, we will paginate
     while (results.hasNext()) {
       System.out.println("Press <Enter> for more results...");
@@ -44,7 +52,7 @@ public class ConsoleQueryOutputFormat extends QueryOutputFormatSpi {
       } catch (final IOException ignore) {
         break;
       }
-      consolePrinter.print(headers, getRows(results, headers.size()));
+      printer.print(headers, getRows(results, headers.size()));
     }
   }
 

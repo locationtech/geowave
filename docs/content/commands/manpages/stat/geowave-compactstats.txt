@@ -4,7 +4,7 @@
 [[stat-compact-name]]
 ==== NAME
 
-geowave-stat-compact - Combine all statistics in a data store
+geowave-stat-compact - Compact all statistics in a data store
 
 [[stat-compact-synopsis]]
 ==== SYNOPSIS
@@ -14,7 +14,7 @@ geowave-stat-compact - Combine all statistics in a data store
 [[stat-compact-description]]
 ==== DESCRIPTION
 
-This command combines all statistics in a GeoWave data store, which can make the data store more efficient.
+Whenever new data is ingested into a type, additional statistics are calculated for the new data.  If data is frequently ingested, the number of rows that need to be merged to compute a statistic may begin to have an impact on performance.  This command aggregates all of those statistic values down into a single value to improve performance in those cases.
 
 [[stat-compact-examples]]
 ==== EXAMPLES

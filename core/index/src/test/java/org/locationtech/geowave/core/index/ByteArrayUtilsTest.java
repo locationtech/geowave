@@ -38,6 +38,51 @@ public class ByteArrayUtilsTest {
     testVariableLengthValue(Long.MIN_VALUE);
   }
 
+  @Test
+  public void testReplace() {
+    byte[] source = "test byte array".getBytes();
+    byte[] find = "e".getBytes();
+    byte[] replace = "xx".getBytes();
+    byte[] replaced = ByteArrayUtils.replace(source, find, replace);
+    Assert.assertArrayEquals("txxst bytxx array".getBytes(), replaced);
+
+    source = "test byte array".getBytes();
+    find = "test".getBytes();
+    replace = "".getBytes();
+    replaced = ByteArrayUtils.replace(source, find, replace);
+    Assert.assertArrayEquals(" byte array".getBytes(), replaced);
+
+    source = "test byte array".getBytes();
+    find = "array".getBytes();
+    replace = "".getBytes();
+    replaced = ByteArrayUtils.replace(source, find, replace);
+    Assert.assertArrayEquals("test byte ".getBytes(), replaced);
+
+    source = "test byte test".getBytes();
+    find = "test".getBytes();
+    replace = "____".getBytes();
+    replaced = ByteArrayUtils.replace(source, find, replace);
+    Assert.assertArrayEquals("____ byte ____".getBytes(), replaced);
+
+    source = "test byte array".getBytes();
+    find = "".getBytes();
+    replace = "____".getBytes();
+    replaced = ByteArrayUtils.replace(source, find, replace);
+    Assert.assertArrayEquals("test byte array".getBytes(), replaced);
+
+    source = "test byte array".getBytes();
+    find = null;
+    replace = "____".getBytes();
+    replaced = ByteArrayUtils.replace(source, find, replace);
+    Assert.assertArrayEquals("test byte array".getBytes(), replaced);
+
+    source = "test byte array".getBytes();
+    find = "none".getBytes();
+    replace = "____".getBytes();
+    replaced = ByteArrayUtils.replace(source, find, replace);
+    Assert.assertArrayEquals("test byte array".getBytes(), replaced);
+  }
+
   private void testVariableLengthValue(final long value) {
     final byte[] encoded = ByteArrayUtils.variableLengthEncode(value);
     final long result = ByteArrayUtils.variableLengthDecode(encoded);

@@ -18,8 +18,8 @@ import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexRetrieval;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
-import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
-import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
+import org.locationtech.geowave.core.store.statistics.index.DifferingVisibilityCountStatistic.DifferingVisibilityCountValue;
+import org.locationtech.geowave.core.store.statistics.index.FieldVisibilityCountStatistic.FieldVisibilityCountValue;
 
 /** Represents a query operation using a row prefix. */
 class BaseRowPrefixQuery<T> extends AbstractBaseRowQuery<T> {
@@ -30,8 +30,8 @@ class BaseRowPrefixQuery<T> extends AbstractBaseRowQuery<T> {
       final byte[] partitionKey,
       final byte[] sortKeyPrefix,
       final ScanCallback<T, ?> scanCallback,
-      final DifferingFieldVisibilityEntryCount differingVisibilityCounts,
-      final FieldVisibilityCount visibilityCounts,
+      final DifferingVisibilityCountValue differingVisibilityCounts,
+      final FieldVisibilityCountValue visibilityCounts,
       final DataIndexRetrieval dataIndexRetrieval,
       final String[] authorizations) {
     super(

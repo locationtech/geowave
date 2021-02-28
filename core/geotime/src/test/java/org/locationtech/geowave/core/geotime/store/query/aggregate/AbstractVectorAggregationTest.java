@@ -17,7 +17,7 @@ import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.query.aggregate.AbstractAggregationTest;
 import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Point;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import com.google.common.collect.Lists;
@@ -37,7 +37,7 @@ public class AbstractVectorAggregationTest<P extends Persistable, R> extends
     final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
     final AttributeTypeBuilder ab = new AttributeTypeBuilder();
     typeBuilder.setName("features");
-    typeBuilder.add(ab.binding(Geometry.class).nillable(false).buildDescriptor(GEOMETRY_COLUMN));
+    typeBuilder.add(ab.binding(Point.class).nillable(false).buildDescriptor(GEOMETRY_COLUMN));
     typeBuilder.add(ab.binding(Date.class).nillable(true).buildDescriptor(TIMESTAMP_COLUMN));
     typeBuilder.add(ab.binding(Double.class).nillable(false).buildDescriptor(LATITUDE_COLUMN));
     typeBuilder.add(ab.binding(Double.class).nillable(false).buildDescriptor(LONGITUDE_COLUMN));

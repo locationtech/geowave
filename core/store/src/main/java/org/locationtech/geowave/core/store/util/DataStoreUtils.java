@@ -45,14 +45,9 @@ import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
@@ -76,7 +71,6 @@ import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.CustomIndex;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
-import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.operations.RangeReaderParams;
 import org.locationtech.geowave.core.store.operations.ReaderParamsBuilder;
 import org.locationtech.geowave.core.store.operations.RowDeleter;
@@ -84,11 +78,16 @@ import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.core.store.query.constraints.CustomQueryConstraints.InternalCustomConstraints;
 import org.locationtech.geowave.core.store.query.options.CommonQueryOptions.HintKey;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.statistics.binning.CompositeBinningStrategy;
+import org.locationtech.geowave.core.store.statistics.binning.DataTypeBinningStrategy;
+import org.locationtech.geowave.core.store.statistics.binning.PartitionBinningStrategy;
+import org.locationtech.geowave.core.store.statistics.index.RowRangeHistogramStatistic;
+import org.locationtech.geowave.core.store.statistics.index.RowRangeHistogramStatistic.RowRangeHistogramValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.beust.jcommander.ParameterException;
 import com.clearspring.analytics.util.Lists;
-import com.google.common.collect.Iterators;
 import com.google.common.collect.Maps;
 
 /*
@@ -162,24 +161,18 @@ public class DataStoreUtils {
   }
 
 
-  public static boolean startsWithIfStats(
+  public static boolean startsWithIfPrefix(
       final byte[] source,
       final byte[] match,
-      final MetadataType metadataType) {
-    if (!metadataType.equals(MetadataType.STATS)) {
+      final boolean prefix) {
+    if (!prefix) {
       if (match.length != (source.length)) {
         return false;
       }
     } else if (match.length > (source.length)) {
       return false;
     }
-
-    for (int i = 0; i < match.length; i++) {
-      if (source[i] != match[i]) {
-        return false;
-      }
-    }
-    return true;
+    return ByteArrayUtils.startsWith(source, match);
   }
 
   public static List<String> getUniqueDimensionFields(final CommonIndexModel model) {
@@ -193,21 +186,26 @@ public class DataStoreUtils {
   }
 
   public static <T> long cardinality(
+      final DataStatisticsStore statisticsStore,
+      final RowRangeHistogramStatistic rowRangeHistogramStatistic,
+      final DataTypeAdapter<?> adapter,
       final Index index,
-      final Map<StatisticsId, InternalDataStatistics<T, ?, ?>> stats,
       final QueryRanges queryRanges) {
 
     long count = 0;
     for (final SinglePartitionQueryRanges partitionRange : queryRanges.getPartitionQueryRanges()) {
-      final RowRangeHistogramStatistics rangeStats =
-          (RowRangeHistogramStatistics) stats.get(
-              StatisticsQueryBuilder.newBuilder().factory().rowHistogram().indexName(
-                  index.getName()).partition(partitionRange.getPartitionKey()).build().getId());
-      if (rangeStats == null) {
+      final RowRangeHistogramValue value =
+          statisticsStore.getStatisticValue(
+              rowRangeHistogramStatistic,
+              CompositeBinningStrategy.getBin(
+                  DataTypeBinningStrategy.getBin(adapter),
+                  PartitionBinningStrategy.getBin(partitionRange.getPartitionKey())),
+              false);
+      if (value == null) {
         return Long.MAX_VALUE - 1;
       }
       for (final ByteArrayRange range : partitionRange.getSortKeyRanges()) {
-        count += rangeStats.cardinality(range.getStart(), range.getEnd());
+        count += value.cardinality(range.getStart(), range.getEnd());
       }
     }
     return count;
@@ -327,14 +325,14 @@ public class DataStoreUtils {
 
   public static QueryRanges constraintsToQueryRanges(
       final List<MultiDimensionalNumericData> constraints,
-      Index index,
+      final Index index,
       final double[] targetResolutionPerDimensionForHierarchicalIndex,
       final int maxRanges,
       final IndexMetaData... hints) {
-    if (index instanceof CustomIndex
-        && constraints != null
-        && constraints.size() == 1
-        && constraints.get(0) instanceof InternalCustomConstraints) {
+    if ((index instanceof CustomIndex)
+        && (constraints != null)
+        && (constraints.size() == 1)
+        && (constraints.get(0) instanceof InternalCustomConstraints)) {
       return ((CustomIndex) index).getQueryRanges(
           ((InternalCustomConstraints) constraints.get(0)).getCustomConstraints());
     }
@@ -475,25 +473,6 @@ public class DataStoreUtils {
     return buffer.array();
   }
 
-  public static boolean mergeStats(
-      final DataStatisticsStore statsStore,
-      final InternalAdapterStore internalAdapterStore) {
-    // Get all statistics, remove all statistics, then re-add
-    for (final short adapterId : internalAdapterStore.getAdapterIds()) {
-      InternalDataStatistics<?, ?, ?>[] statsArray;
-      try (final CloseableIterator<InternalDataStatistics<?, ?, ?>> stats =
-          statsStore.getDataStatistics(adapterId)) {
-        statsArray = Iterators.toArray(stats, InternalDataStatistics.class);
-      }
-      // Clear all existing stats
-      statsStore.removeAllStatistics(adapterId);
-      for (final InternalDataStatistics<?, ?, ?> stats : statsArray) {
-        statsStore.incorporateStatistics(stats);
-      }
-    }
-    return true;
-  }
-
   public static GeoWaveRow mergeSingleRowValues(
       final GeoWaveRow singleRow,
       final RowTransform rowTransform) {
@@ -608,11 +587,11 @@ public class DataStoreUtils {
   }
 
   public static List<Index> loadIndices(final IndexStore indexStore, final String indexNames) {
-    List<Index> loadedIndices = Lists.newArrayList();
+    final List<Index> loadedIndices = Lists.newArrayList();
     // Is there a comma?
     final String[] indices = indexNames.split(",");
     for (final String idxName : indices) {
-      Index index = indexStore.getIndex(idxName);
+      final Index index = indexStore.getIndex(idxName);
       if (index == null) {
         throw new ParameterException("Unable to find index with name: " + idxName);
       }
@@ -622,13 +601,13 @@ public class DataStoreUtils {
   }
 
   public static List<Index> loadIndices(final DataStore dataStore, final String indexNames) {
-    List<Index> loadedIndices = Lists.newArrayList();
+    final List<Index> loadedIndices = Lists.newArrayList();
     // Is there a comma?
     final String[] indices = indexNames.split(",");
     final Index[] dataStoreIndices = dataStore.getIndices();
     for (final String idxName : indices) {
       boolean found = false;
-      for (Index index : dataStoreIndices) {
+      for (final Index index : dataStoreIndices) {
         if (index.getName().equals(idxName)) {
           loadedIndices.add(index);
           found = true;

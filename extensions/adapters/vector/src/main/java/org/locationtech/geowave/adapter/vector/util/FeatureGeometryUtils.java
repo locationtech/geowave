@@ -8,14 +8,16 @@
  */
 package org.locationtech.geowave.adapter.vector.util;
 
-import org.locationtech.geowave.core.geotime.store.query.api.VectorStatisticsQueryBuilder;
-import org.locationtech.geowave.core.geotime.store.statistics.FeatureBoundingBoxStatistics;
+import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic;
+import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic.BoundingBoxValue;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
-import org.locationtech.geowave.core.store.api.StatisticsQuery;
+import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Statistic;
+import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import org.locationtech.jts.geom.Envelope;
 
 public class FeatureGeometryUtils {
@@ -26,25 +28,22 @@ public class FeatureGeometryUtils {
       final String geomField) {
     final DataStatisticsStore statisticsStore = dataStorePlugin.createDataStatisticsStore();
     final InternalAdapterStore internalAdapterStore = dataStorePlugin.createInternalAdapterStore();
+    final PersistentAdapterStore adapterStore = dataStorePlugin.createAdapterStore();
     final short adapterId = internalAdapterStore.getAdapterId(typeName);
-    final StatisticsQuery<Envelope> query =
-        VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(geomField).build();
-    try (final CloseableIterator<InternalDataStatistics<?, ?, ?>> geoStatIt =
-        statisticsStore.getDataStatistics(
-            adapterId,
-            query.getExtendedId(),
-            query.getStatsType(),
-            query.getAuthorizations())) {
-      if (geoStatIt.hasNext()) {
-        final InternalDataStatistics<?, ?, ?> geoStat = geoStatIt.next();
-        if (geoStat != null) {
-          if (geoStat instanceof FeatureBoundingBoxStatistics) {
-            final FeatureBoundingBoxStatistics bbStats = (FeatureBoundingBoxStatistics) geoStat;
-            return new Envelope(
-                bbStats.getMinX(),
-                bbStats.getMaxX(),
-                bbStats.getMinY(),
-                bbStats.getMaxY());
+    final DataTypeAdapter<?> adapter = adapterStore.getAdapter(adapterId);
+
+    try (CloseableIterator<? extends Statistic<? extends StatisticValue<?>>> statIter =
+        statisticsStore.getFieldStatistics(
+            adapter,
+            BoundingBoxStatistic.STATS_TYPE,
+            geomField,
+            null)) {
+      if (statIter.hasNext()) {
+        BoundingBoxStatistic statistic = (BoundingBoxStatistic) statIter.next();
+        if (statistic != null) {
+          BoundingBoxValue value = statisticsStore.getStatisticValue(statistic);
+          if (value != null) {
+            return value.getValue();
           }
         }
       }

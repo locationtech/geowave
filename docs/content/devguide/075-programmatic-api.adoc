@@ -155,27 +155,24 @@ You can also create aggregations for any custom {core-store}/core/store/api/Aggr
 
 === Querying Statistics
 
-Statistics queries can be performed by using an appropriate {core-store}/core/store/api/StatisticsQueryBuilder.java[`StatisticsQueryBuilder`].  The following is an example of querying the bounding box statistic of a vector type in the data store:
+Statistic queries can be performed by using an appropriate {core-store}/core/store/api/StatisticQueryBuilder.java[`StatisticQueryBuilder`].  The following is an example of querying the bounding box statistic of a vector type in the data store:
 
 [source, java]
 ----
-// Create the statistics query builder
-VectorStatisticsQueryBuilder<Object> statisticsQueryBuilder = VectorStatisticsQueryBuilder.newBuilder();
-
-// Create the query by vector statistics type factory
-QueryByVectorStatisticsTypeFactory queryByStatTypeFactory = statisticsQueryBuilder.factory();
-
-// Create the bounding box query builder
-FieldStatisticsQueryBuilder<Envelope> builder = queryByStatTypeFactory.bbox();
+// Create the statistic query builder
+FieldStatisticQueryBuilder<BoundingBoxValue, Envelope> builder = SpatialTemporalStatisticQueryBuilder.bbox();
 
 // Specify the type name
-builder.dataType(pointTypeAdapter.getTypeName());
+builder.typeName(pointTypeAdapter.getTypeName());
 
 // Create the bounding box statistics query
-StatisticsQuery<Envelope> bboxQuery = builder.build();
+StatisticQuery<BoundingBoxValue, Envelope> bboxQuery = builder.build();
 
 // Aggregate the statistic into a single result
-Envelope bbox = myStore.aggregateStatistics(bboxQuery);
+BoundingBoxValue bboxStatValue = myStore.aggregateStatistics(bboxQuery);
+
+// Get the value
+Envelope bbox = bboxStatValue.getValue();
 ----
 
 NOTE: Specifying the type name in the statistics query is optional and serves to filter statistics to the type we are interested in.  If the type name is not supplied, bounding box statistics for all types will be aggregated.

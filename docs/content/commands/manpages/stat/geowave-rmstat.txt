@@ -9,7 +9,7 @@ geowave-stat-rm - Remove a statistic from a data store
 [[stat-rm-synopsis]]
 ==== SYNOPSIS
 
-  geowave stat rm [options] <store name> <type name> <stat type>
+  geowave stat rm [options] <store name>
 
 [[stat-rm-description]]
 ==== DESCRIPTION
@@ -19,18 +19,33 @@ This command removes a statistic from a GeoWave data store.
 [[stat-rm-options]]
 ==== OPTIONS
 
-*--fieldName*::
-  The field name for the statistic, if the statistic is maintained per field.
+*--all*::
+  If specified, all matching statistics will be removed.
+  
+*--force*::
+  Force an internal statistic to be removed.  IMPORTANT: Removing statistics that are marked as `internal` can have a detrimental impact on performance!
+  
+*-t, --type* _<type>_::
+  The type of the statistic.
 
+*--typeName* _<name>_::
+  The name of the data type adapter, for field and type statistics.
+  
+*--indexName* _<name>_::
+  The name of the index, for index statistics.
+  
+*--fieldName* _<name>_::
+  The name of the field, for field statistics.
+  
+*--tag* _<tag>_::
+  The tag of the statistic.
+  
 *--auth* _<authorizations>_::
-  The authorizations used for the statistics calculation.  By default all authorizations are used.
-
-*--json*::
-  If specified, output will be formatted in JSON.
+  The authorizations used when querying statistics.
 
 [[stat-rm-examples]]
 ==== EXAMPLES
 
 Remove the `BOUNDING_BOX` statistic of the `hail` type in the `example` data store:
 
-  geowave stat rm example hail BOUNDING_BOX
+  geowave stat rm example -t BOUNDING_BOX --typeName hail

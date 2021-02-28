@@ -31,17 +31,33 @@ public class HBaseMetadataWriter implements MetadataWriter {
 
   public HBaseMetadataWriter(final BufferedMutator writer, final MetadataType metadataType) {
     this.writer = writer;
-    metadataTypeBytes = StringUtils.stringToBinary(metadataType.name());
+    metadataTypeBytes = StringUtils.stringToBinary(metadataType.id());
   }
 
   @Override
   public void close() throws Exception {
     try {
-      writer.close();
+      synchronized (duplicateRowTracker) {
+        safeFlush();
+        writer.close();
+      }
     } catch (final IOException e) {
       LOGGER.warn("Unable to close metadata writer", e);
     }
   }
+
+  @Override
+  public void flush() {
+    try {
+      synchronized (duplicateRowTracker) {
+        safeFlush();
+      }
+    } catch (final IOException e) {
+      LOGGER.warn("Unable to flush metadata writer", e);
+    }
+  }
+
+  private long lastFlush = -1;
 
   @Override
   public void write(final GeoWaveMetadata metadata) {
@@ -66,8 +82,7 @@ public class HBaseMetadataWriter implements MetadataWriter {
       synchronized (duplicateRowTracker) {
         final ByteArray primaryId = new ByteArray(metadata.getPrimaryId());
         if (!duplicateRowTracker.add(primaryId)) {
-          writer.flush();
-          duplicateRowTracker.clear();
+          safeFlush();
           duplicateRowTracker.add(primaryId);
         }
       }
@@ -77,15 +92,16 @@ public class HBaseMetadataWriter implements MetadataWriter {
     }
   }
 
-  @Override
-  public void flush() {
-    try {
-      synchronized (duplicateRowTracker) {
-        writer.flush();
-        duplicateRowTracker.clear();
+  private void safeFlush() throws IOException {
+    while (System.currentTimeMillis() <= lastFlush) {
+      try {
+        Thread.sleep(10);
+      } catch (final InterruptedException e) {
+        LOGGER.warn("Unable to wait for new time", e);
       }
-    } catch (final IOException e) {
-      LOGGER.warn("Unable to flush metadata writer", e);
     }
+    writer.flush();
+    lastFlush = System.currentTimeMillis();
+    duplicateRowTracker.clear();
   }
 }

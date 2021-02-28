@@ -40,6 +40,7 @@ import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.CustomNameIndex;
 import org.locationtech.geowave.core.store.index.IndexStore;
@@ -107,6 +108,13 @@ public abstract class GeoWaveAnalyticJobRunner extends Configured implements
 
   public Class<?> getScope() {
     return this.getClass();
+  }
+
+  public DataStore getDataStore(final PropertyManagement runTimeProperties) throws Exception {
+    final PersistableStore store =
+        (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
+            runTimeProperties);
+    return store.getDataStoreOptions().createDataStore();
   }
 
   public PersistentAdapterStore getAdapterStore(final PropertyManagement runTimeProperties)
@@ -305,6 +313,7 @@ public abstract class GeoWaveAnalyticJobRunner extends Configured implements
     final String indexName = runTimeProperties.getPropertyAsString(indexIdEnum, defaultIdxName);
 
     final IndexStore indexStore = getIndexStore(runTimeProperties);
+    final DataStore dataStore = getDataStore(runTimeProperties);
 
     Index index = indexStore.getIndex(indexName);
     if (index == null) {
@@ -315,7 +324,7 @@ public abstract class GeoWaveAnalyticJobRunner extends Configured implements
               defaultSpatialIndex.getIndexStrategy(),
               defaultSpatialIndex.getIndexModel(),
               indexName);
-      indexStore.addIndex(index);
+      dataStore.addIndex(index);
     }
     return indexName;
   }

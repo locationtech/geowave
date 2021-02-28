@@ -227,18 +227,20 @@ public class TimeUtils {
   }
 
   public static Interval getInterval(final SimpleFeature entry, final String fieldName) {
+    return getInterval(entry.getAttribute(fieldName));
+  }
 
-    final Object o = entry.getAttribute(fieldName);
+  public static Interval getInterval(final Object timeObject) {
     final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-    if (o == null) {
+    if (timeObject == null) {
       return null;
     }
-    if (o instanceof Date) {
-      c.setTime((Date) o);
-    } else if (o instanceof Calendar) {
+    if (timeObject instanceof Date) {
+      c.setTime((Date) timeObject);
+    } else if (timeObject instanceof Calendar) {
       c.setTime(c.getTime());
-    } else if (o instanceof Number) {
-      c.setTimeInMillis(((Number) o).longValue());
+    } else if (timeObject instanceof Number) {
+      c.setTimeInMillis(((Number) timeObject).longValue());
     }
     final Instant time = Instant.ofEpochMilli(c.getTimeInMillis());
     return Interval.of(time, time);

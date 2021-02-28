@@ -52,7 +52,7 @@ public class BigTableOperations extends HBaseOperations {
 
   @Override
   protected String getMetadataTableName(final MetadataType type) {
-    return AbstractGeoWavePersistence.METADATA_TABLE + "_" + type.name();
+    return AbstractGeoWavePersistence.METADATA_TABLE + "_" + type.id();
   }
 
   @Override

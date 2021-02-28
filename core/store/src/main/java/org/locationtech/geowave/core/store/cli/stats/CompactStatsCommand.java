@@ -15,10 +15,10 @@ import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
-import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.store.StoreLoader;
+import org.locationtech.geowave.core.store.operations.DataStoreOperations;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -52,11 +52,9 @@ public class CompactStatsCommand extends DefaultOperation implements Command {
       inputStoreOptions = inputStoreLoader.getDataStorePlugin();
     }
 
-    // Get all statistics, remove all statistics, then re-add
     final DataStatisticsStore statsStore = inputStoreOptions.createDataStatisticsStore();
-    final InternalAdapterStore internalAdapterStore =
-        inputStoreOptions.createInternalAdapterStore();
-    inputStoreOptions.createDataStoreOperations().mergeStats(statsStore, internalAdapterStore);
+    final DataStoreOperations operations = inputStoreOptions.createDataStoreOperations();
+    operations.mergeStats(statsStore);
   }
 
   public List<String> getParameters() {

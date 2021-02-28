@@ -216,6 +216,11 @@ public class FixedBinNumericHistogram implements NumericHistogram {
     }
   }
 
+  @Override
+  public String toString() {
+    return NumericHistogram.histogramToString(this);
+  }
+
   /** @return the total number of consumed values */
   @Override
   public long getTotalCount() {

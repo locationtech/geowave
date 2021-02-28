@@ -24,15 +24,18 @@ import org.apache.hadoop.hbase.client.RegionLocator;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.IndexMetaData;
-import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.store.adapter.AdapterStoreWrapper;
+import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
+import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import org.locationtech.geowave.core.store.adapter.statistics.PartitionStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.statistics.InternalStatisticsHelper;
+import org.locationtech.geowave.core.store.statistics.index.PartitionsStatistic.PartitionsValue;
+import org.locationtech.geowave.core.store.statistics.index.RowRangeHistogramStatistic.RowRangeHistogramValue;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.datastore.hbase.operations.HBaseOperations;
 import org.locationtech.geowave.mapreduce.splits.GeoWaveRowRange;
@@ -42,6 +45,7 @@ import org.locationtech.geowave.mapreduce.splits.SplitInfo;
 import org.locationtech.geowave.mapreduce.splits.SplitsProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.clearspring.analytics.util.Lists;
 
 public class HBaseSplitsProvider extends SplitsProvider {
   private static final Logger LOGGER = LoggerFactory.getLogger(HBaseSplitsProvider.class);
@@ -52,8 +56,9 @@ public class HBaseSplitsProvider extends SplitsProvider {
       final DataStoreOperations operations,
       final Index index,
       final List<Short> adapterIds,
-      final Map<Pair<Index, ByteArray>, RowRangeHistogramStatistics<?>> statsCache,
+      final Map<Pair<Index, ByteArray>, RowRangeHistogramValue> statsCache,
       final TransientAdapterStore adapterStore,
+      final InternalAdapterStore internalAdapterStore,
       final DataStatisticsStore statsStore,
       final Integer maxSplits,
       final QueryConstraints query,
@@ -101,15 +106,21 @@ public class HBaseSplitsProvider extends SplitsProvider {
                 indexMetadata).getCompositeQueryRanges();
       }
     }
-
+    PersistentAdapterStore persistentAdapterStore =
+        new AdapterStoreWrapper(adapterStore, internalAdapterStore);
     if (ranges == null) { // get partition ranges from stats
-      final PartitionStatistics<?> statistics =
-          getPartitionStats(index, adapterIds, statsStore, authorizations);
+      final PartitionsValue statistics =
+          InternalStatisticsHelper.getPartitions(
+              index,
+              adapterIds,
+              persistentAdapterStore,
+              statsStore,
+              authorizations);
       if (statistics != null) {
-        ranges = new ArrayList();
+        ranges = Lists.newArrayList();
 
         byte[] prevKey = HConstants.EMPTY_BYTE_ARRAY;
-        final TreeSet<ByteArray> sortedPartitions = new TreeSet<>(statistics.getPartitionKeys());
+        final TreeSet<ByteArray> sortedPartitions = new TreeSet<>(statistics.getValue());
         for (final ByteArray partitionKey : sortedPartitions) {
           final ByteArrayRange range = new ByteArrayRange(prevKey, partitionKey.getBytes());
 
@@ -146,7 +157,7 @@ public class HBaseSplitsProvider extends SplitsProvider {
                   getHistStats(
                       index,
                       adapterIds,
-                      adapterStore,
+                      persistentAdapterStore,
                       statsStore,
                       statsCache,
                       new ByteArray(gwRange.getPartitionKey()),

@@ -20,7 +20,7 @@ import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
-import org.locationtech.geowave.core.cli.utils.ConsolePrinter;
+import org.locationtech.geowave.core.cli.utils.ConsoleTablePrinter;
 import org.locationtech.geowave.core.cli.utils.FirstElementListComparator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +45,7 @@ public class ListStoresCommand extends ServiceEnabledCommand<Map<String, String>
     });
 
     Collections.sort(rows, new FirstElementListComparator());
-    new ConsolePrinter().print(Arrays.asList("Data Store", "Type"), rows);
+    new ConsoleTablePrinter(params.getConsole()).print(Arrays.asList("Data Store", "Type"), rows);
   }
 
   @Override
