@@ -152,7 +152,7 @@ public class RocksDBClient implements Closeable {
       if (getClass() != obj.getClass()) {
         return false;
       }
-      final IndexCacheKey other = (IndexCacheKey) obj;
+      final DataIndexCacheKey other = (DataIndexCacheKey) obj;
       if (adapterId != other.adapterId) {
         return false;
       }
