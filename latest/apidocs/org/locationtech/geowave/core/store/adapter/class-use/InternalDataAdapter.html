@@ -428,12 +428,12 @@
                <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>&nbsp;query)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;,<a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;?,?,?&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">BaseConstraintsQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/base/BaseConstraintsQuery.html#getAggregation--">getAggregation</a></span>()</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;,<a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;?,?,?&gt;&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">BaseQueryOptions.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/base/BaseQueryOptions.html#getAggregation--">getAggregation</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;,<a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;?,?,?&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">BaseConstraintsQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/base/BaseConstraintsQuery.html#getAggregation--">getAggregation</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;&gt;&gt;</code></td>
@@ -916,19 +916,12 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><span class="typeNameLabel">RecalculateStatsCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/stats/RecalculateStatsCommand.html#performStatsCommand-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.cli.stats.StatsCommandLineOptions-com.beust.jcommander.internal.Console-">performStatsCommand</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;storeOptions,
-                   <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter,
-                   <a href="../../../../../../../org/locationtech/geowave/core/store/cli/stats/StatsCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.cli.stats">StatsCommandLineOptions</a>&nbsp;statsOptions,
-                   com.beust.jcommander.internal.Console&nbsp;console)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><span class="typeNameLabel">CalculateStatCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/stats/CalculateStatCommand.html#performStatsCommand-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.cli.stats.StatsCommandLineOptions-com.beust.jcommander.internal.Console-">performStatsCommand</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;storeOptions,
                    <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter,
                    <a href="../../../../../../../org/locationtech/geowave/core/store/cli/stats/StatsCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.cli.stats">StatsCommandLineOptions</a>&nbsp;statsOptions,
                    com.beust.jcommander.internal.Console&nbsp;console)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected abstract boolean</code></td>
 <td class="colLast"><span class="typeNameLabel">AbstractStatsCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/stats/AbstractStatsCommand.html#performStatsCommand-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.cli.stats.StatsCommandLineOptions-com.beust.jcommander.internal.Console-">performStatsCommand</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;options,
                    <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter,
@@ -937,9 +930,16 @@
 <div class="block">Abstracted command method to be called when command selected</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><span class="typeNameLabel">RemoveStatCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/stats/RemoveStatCommand.html#performStatsCommand-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.cli.stats.StatsCommandLineOptions-com.beust.jcommander.internal.Console-">performStatsCommand</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;storeOptions,
+                   <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter,
+                   <a href="../../../../../../../org/locationtech/geowave/core/store/cli/stats/StatsCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.cli.stats">StatsCommandLineOptions</a>&nbsp;statsOptions,
+                   com.beust.jcommander.internal.Console&nbsp;console)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">RecalculateStatsCommand.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/stats/RecalculateStatsCommand.html#performStatsCommand-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.cli.stats.StatsCommandLineOptions-com.beust.jcommander.internal.Console-">performStatsCommand</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;storeOptions,
                    <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter,
                    <a href="../../../../../../../org/locationtech/geowave/core/store/cli/stats/StatsCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.cli.stats">StatsCommandLineOptions</a>&nbsp;statsOptions,
                    com.beust.jcommander.internal.Console&nbsp;console)</code>&nbsp;</td>
@@ -1695,17 +1695,17 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../../../org/locationtech/geowave/mapreduce/input/AsyncInputFormatIteratorWrapper.html" title="type parameter in AsyncInputFormatIteratorWrapper">T</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">AsyncInputFormatIteratorWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/mapreduce/input/AsyncInputFormatIteratorWrapper.html#decodeRowToEntry-org.locationtech.geowave.core.store.entities.GeoWaveRow-org.locationtech.geowave.core.store.query.filter.QueryFilter:A-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.api.Index-">decodeRowToEntry</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row,
-                <a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>[]&nbsp;clientFilters,
-                <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/mapreduce/input/AsyncInputFormatIteratorWrapper.html" title="type parameter in AsyncInputFormatIteratorWrapper">T</a>&gt;&nbsp;adapter,
-                <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>protected org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html" title="type parameter in InputFormatIteratorWrapper">T</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">InputFormatIteratorWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html#decodeRowToEntry-org.locationtech.geowave.core.store.entities.GeoWaveRow-org.locationtech.geowave.core.store.query.filter.QueryFilter:A-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.api.Index-">decodeRowToEntry</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row,
                 <a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>[]&nbsp;clientFilters,
                 <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/mapreduce/input/InputFormatIteratorWrapper.html" title="type parameter in InputFormatIteratorWrapper">T</a>&gt;&nbsp;adapter,
+                <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../../org/locationtech/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in org.locationtech.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../../../org/locationtech/geowave/mapreduce/input/AsyncInputFormatIteratorWrapper.html" title="type parameter in AsyncInputFormatIteratorWrapper">T</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">AsyncInputFormatIteratorWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/mapreduce/input/AsyncInputFormatIteratorWrapper.html#decodeRowToEntry-org.locationtech.geowave.core.store.entities.GeoWaveRow-org.locationtech.geowave.core.store.query.filter.QueryFilter:A-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.api.Index-">decodeRowToEntry</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row,
+                <a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html" title="interface in org.locationtech.geowave.core.store.query.filter">QueryFilter</a>[]&nbsp;clientFilters,
+                <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/mapreduce/input/AsyncInputFormatIteratorWrapper.html" title="type parameter in AsyncInputFormatIteratorWrapper">T</a>&gt;&nbsp;adapter,
                 <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
