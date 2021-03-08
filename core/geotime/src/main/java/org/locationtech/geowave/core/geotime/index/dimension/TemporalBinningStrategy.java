@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
-import org.locationtech.geowave.core.index.FloatCompareUtils;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
@@ -22,6 +22,7 @@ import org.locationtech.geowave.core.index.dimension.bin.BinValue;
 import org.locationtech.geowave.core.index.dimension.bin.BinningStrategy;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
+import org.threeten.extra.Interval;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
@@ -215,6 +216,12 @@ public class TemporalBinningStrategy implements BinningStrategy {
     }
   }
 
+  public byte[] getBinId(final long millis) {
+    final Calendar valueCal = Calendar.getInstance(TimeZone.getTimeZone(timezone));
+    valueCal.setTimeInMillis(millis);
+    return getBinId(valueCal);
+  }
+
   private byte[] getBinId(final Calendar value) {
     // this is assuming we want human-readable bin ID's but alternatively we
     // could consider returning a more compressed representation
@@ -229,7 +236,7 @@ public class TemporalBinningStrategy implements BinningStrategy {
                 + TWO_DIGIT_NUMBER.format(value.get(Calendar.MONTH))));
       case WEEK:
         return StringUtils.stringToBinary(
-            Integer.toString(value.get(Calendar.YEAR))
+            Integer.toString(value.getWeekYear())
                 + "_"
                 + TWO_DIGIT_NUMBER.format(value.get(Calendar.WEEK_OF_YEAR)));
       case DAY:
@@ -293,25 +300,53 @@ public class TemporalBinningStrategy implements BinningStrategy {
         break; // special handling for week
       case WEEK:
         final int yr = Integer.parseInt(str.substring(0, 4));
-        cal.set(Calendar.YEAR, yr);
         final int weekOfYear = Integer.parseInt(str.substring(5, 7));
-        cal.set(Calendar.WEEK_OF_YEAR, weekOfYear);
+        cal.setWeekDate(yr, weekOfYear, cal.getActualMinimum(Calendar.DAY_OF_WEEK));
         break;
     }
     setToEpoch(cal);
     return cal;
   }
 
-  @Override
-  public BinRange[] getNormalizedRanges(final NumericData range) {
-    if ((range == null) || (range.getMax() < range.getMin())) {
-      return new BinRange[] {};
+  private Calendar getEndExclusive(final Calendar startOfEpoch) {
+    final Calendar endExclusive = Calendar.getInstance(TimeZone.getTimeZone(timezone));
+    endExclusive.setTime(startOfEpoch.getTime());
+    switch (unit) {
+      case MINUTE:
+        endExclusive.add(Calendar.MINUTE, 1);
+        return endExclusive;
+      case HOUR:
+        endExclusive.add(Calendar.HOUR_OF_DAY, 1);
+        return endExclusive;
+      case DAY:
+        endExclusive.add(Calendar.DAY_OF_MONTH, 1);
+        return endExclusive;
+      case MONTH:
+        endExclusive.add(Calendar.MONTH, 1);
+        return endExclusive;
+      case DECADE:
+        endExclusive.add(Calendar.YEAR, 10);
+        return endExclusive;
+      case WEEK:
+        endExclusive.add(Calendar.WEEK_OF_YEAR, 1);
+        return endExclusive;
+      case YEAR:
+      default:
+        endExclusive.add(Calendar.YEAR, 1);
+        return endExclusive;
     }
+  }
+
+  public BinRange[] getNormalizedRanges(final Interval range) {
+    return getNormalizedRanges(range.getStart().toEpochMilli(), range.getEnd().toEpochMilli());
+  }
+
+  private BinRange[] getNormalizedRanges(final long min, final long max) {
     final Calendar startEpoch = Calendar.getInstance(TimeZone.getTimeZone(timezone));
     final long binSizeMillis = getBinSizeMillis();
     // initialize the epoch to the range min and then reset appropriate
     // values to 0 based on the units
-    startEpoch.setTimeInMillis((long) range.getMin());
+    startEpoch.setTimeInMillis(min);
     setToEpoch(startEpoch);
     // now make sure all bin definitions between the start and end bins
     // are covered
@@ -320,7 +355,7 @@ public class TemporalBinningStrategy implements BinningStrategy {
     final List<BinRange> bins = new ArrayList<>();
     // track this, so that we can easily declare a range to be the full
     // extent and use the information to perform a more efficient scan
-    boolean firstBin = ((long) range.getMin() != startEpochMillis);
+    boolean firstBin = (min != startEpochMillis);
     boolean lastBin = false;
     do {
       // because not every year has 366 days, and not every month has 31
@@ -338,18 +373,18 @@ public class TemporalBinningStrategy implements BinningStrategy {
       cal.setTimeInMillis(epochIterator);
       long startMillis, endMillis;
       boolean fullExtent;
-      if ((long) range.getMax() <= maxOfBin) {
+      if (max <= maxOfBin) {
         lastBin = true;
-        endMillis = (long) range.getMax();
+        endMillis = max;
         // its questionable whether we use
-        fullExtent = FloatCompareUtils.checkDoublesEqual(range.getMax(), maxOfBin);
+        fullExtent = (max == maxOfBin);
       } else {
         endMillis = maxOfBin;
         fullExtent = !firstBin;
       }
 
       if (firstBin) {
-        startMillis = (long) range.getMin();
+        startMillis = min;
         firstBin = false;
       } else {
         startMillis = epochIterator;
@@ -366,6 +401,14 @@ public class TemporalBinningStrategy implements BinningStrategy {
       // iterate until we reach our end epoch
     } while (!lastBin);
     return bins.toArray(new BinRange[bins.size()]);
+  }
+
+  @Override
+  public BinRange[] getNormalizedRanges(final NumericData range) {
+    if ((range == null) || (range.getMax() < range.getMin())) {
+      return new BinRange[] {};
+    }
+    return getNormalizedRanges((long) range.getMin(), (long) range.getMax());
   }
 
   @Override
@@ -435,5 +478,11 @@ public class TemporalBinningStrategy implements BinningStrategy {
     final long minMillis = startOfEpochMillis + (long) binnedRange.getNormalizedMin();
     final long maxMillis = startOfEpochMillis + (long) binnedRange.getNormalizedMax();
     return new NumericRange(minMillis, maxMillis);
+  }
+
+  public Interval getInterval(final byte[] binId) {
+    final Calendar startOfEpoch = getStartEpoch(binId);
+    final String bin = new ByteArray(binId).getString();
+    return Interval.of(startOfEpoch.toInstant(), getEndExclusive(startOfEpoch).toInstant());
   }
 }

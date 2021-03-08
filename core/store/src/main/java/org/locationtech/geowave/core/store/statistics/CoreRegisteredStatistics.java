@@ -15,26 +15,32 @@ import org.locationtech.geowave.core.store.statistics.binning.DataTypeBinningStr
 import org.locationtech.geowave.core.store.statistics.binning.FieldValueBinningStrategy;
 import org.locationtech.geowave.core.store.statistics.binning.NumericRangeFieldValueBinningStrategy;
 import org.locationtech.geowave.core.store.statistics.binning.PartitionBinningStrategy;
+import org.locationtech.geowave.core.store.statistics.field.BloomFilterStatistic;
+import org.locationtech.geowave.core.store.statistics.field.BloomFilterStatistic.BloomFilterValue;
 import org.locationtech.geowave.core.store.statistics.field.CountMinSketchStatistic;
+import org.locationtech.geowave.core.store.statistics.field.CountMinSketchStatistic.CountMinSketchValue;
 import org.locationtech.geowave.core.store.statistics.field.FixedBinNumericHistogramStatistic;
-import org.locationtech.geowave.core.store.statistics.field.HyperLogLogStatistic;
-import org.locationtech.geowave.core.store.statistics.field.NumericHistogramStatistic;
 import org.locationtech.geowave.core.store.statistics.field.FixedBinNumericHistogramStatistic.FixedBinNumericHistogramValue;
+import org.locationtech.geowave.core.store.statistics.field.HyperLogLogStatistic;
 import org.locationtech.geowave.core.store.statistics.field.HyperLogLogStatistic.HyperLogLogPlusValue;
+import org.locationtech.geowave.core.store.statistics.field.NumericHistogramStatistic;
 import org.locationtech.geowave.core.store.statistics.field.NumericHistogramStatistic.NumericHistogramValue;
 import org.locationtech.geowave.core.store.statistics.field.NumericMeanStatistic;
 import org.locationtech.geowave.core.store.statistics.field.NumericMeanStatistic.NumericMeanValue;
 import org.locationtech.geowave.core.store.statistics.field.NumericRangeStatistic;
-import org.locationtech.geowave.core.store.statistics.field.CountMinSketchStatistic.CountMinSketchValue;
 import org.locationtech.geowave.core.store.statistics.field.NumericRangeStatistic.NumericRangeValue;
+import org.locationtech.geowave.core.store.statistics.field.NumericStatsStatistic;
+import org.locationtech.geowave.core.store.statistics.field.NumericStatsStatistic.NumericStatsValue;
+import org.locationtech.geowave.core.store.statistics.field.TDigestNumericHistogramStatistic;
+import org.locationtech.geowave.core.store.statistics.field.TDigestNumericHistogramStatistic.TDigestNumericHistogramValue;
 import org.locationtech.geowave.core.store.statistics.index.DifferingVisibilityCountStatistic;
 import org.locationtech.geowave.core.store.statistics.index.DifferingVisibilityCountStatistic.DifferingVisibilityCountValue;
 import org.locationtech.geowave.core.store.statistics.index.DuplicateEntryCountStatistic;
+import org.locationtech.geowave.core.store.statistics.index.DuplicateEntryCountStatistic.DuplicateEntryCountValue;
 import org.locationtech.geowave.core.store.statistics.index.FieldVisibilityCountStatistic;
+import org.locationtech.geowave.core.store.statistics.index.FieldVisibilityCountStatistic.FieldVisibilityCountValue;
 import org.locationtech.geowave.core.store.statistics.index.IndexMetaDataSetStatistic;
 import org.locationtech.geowave.core.store.statistics.index.IndexMetaDataSetStatistic.IndexMetaDataSetValue;
-import org.locationtech.geowave.core.store.statistics.index.FieldVisibilityCountStatistic.FieldVisibilityCountValue;
-import org.locationtech.geowave.core.store.statistics.index.DuplicateEntryCountStatistic.DuplicateEntryCountValue;
 import org.locationtech.geowave.core.store.statistics.index.MaxDuplicatesStatistic;
 import org.locationtech.geowave.core.store.statistics.index.MaxDuplicatesStatistic.MaxDuplicatesValue;
 import org.locationtech.geowave.core.store.statistics.index.PartitionsStatistic;
@@ -135,7 +141,25 @@ public class CoreRegisteredStatistics implements StatisticsRegistrySPI {
             NumericMeanStatistic::new,
             NumericMeanValue::new,
             (short) 2026,
-            (short) 2027),};
+            (short) 2027),
+        new RegisteredStatistic(
+            NumericStatsStatistic.STATS_TYPE,
+            NumericStatsStatistic::new,
+            NumericStatsValue::new,
+            (short) 2028,
+            (short) 2029),
+        new RegisteredStatistic(
+            TDigestNumericHistogramStatistic.STATS_TYPE,
+            TDigestNumericHistogramStatistic::new,
+            TDigestNumericHistogramValue::new,
+            (short) 2030,
+            (short) 2031),
+        new RegisteredStatistic(
+            BloomFilterStatistic.STATS_TYPE,
+            BloomFilterStatistic::new,
+            BloomFilterValue::new,
+            (short) 2032,
+            (short) 2033),};
   }
 
   @Override

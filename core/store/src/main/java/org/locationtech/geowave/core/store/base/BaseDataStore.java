@@ -1889,7 +1889,8 @@ public class BaseDataStore implements DataStore {
         Maps.newHashMap();
     for (final Statistic<? extends StatisticValue<?>> statistic : statistics) {
       if (!allowExisting && statisticsStore.exists(statistic)) {
-        throw new IllegalArgumentException("The statistic already exists.");
+        throw new IllegalArgumentException(
+            "The statistic already exists.  If adding it is still desirable, use a 'tag' to make the statistic unique.");
       }
       if (statistic instanceof IndexStatistic) {
         final IndexStatistic<?> indexStat = (IndexStatistic<?>) statistic;

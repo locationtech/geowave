@@ -8,15 +8,16 @@
  */
 package org.locationtech.geowave.test;
 
+import org.apache.kudu.test.cluster.FakeDNS;
 import org.locationtech.geowave.core.store.GenericStoreFactory;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.datastore.kudu.KuduStoreFactoryFamily;
+import org.locationtech.geowave.datastore.kudu.cli.KuduLocal;
 import org.locationtech.geowave.datastore.kudu.config.KuduRequiredOptions;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.locationtech.geowave.datastore.kudu.cli.KuduLocal;
 
 public class KuduStoreTestEnvironment extends StoreTestEnvironment {
 
@@ -41,11 +42,7 @@ public class KuduStoreTestEnvironment extends StoreTestEnvironment {
 
   @Override
   public void setup() throws Exception {
-    // Make sure we clean up any old processes first
-    if (kuduLocal.isRunning()) {
-      kuduLocal.stop();
-    }
-
+    FakeDNS.getInstance().install();
     if (!kuduLocal.start()) {
       LOGGER.error("Kudu database startup failed");
     }
@@ -75,7 +72,7 @@ public class KuduStoreTestEnvironment extends StoreTestEnvironment {
   @Override
   protected void initOptions(final StoreFactoryOptions options) {
     final KuduRequiredOptions kuduOptions = (KuduRequiredOptions) options;
-    kuduOptions.setKuduMaster("127.0.0.1:7051");
+    kuduOptions.setKuduMaster(kuduLocal.getMasterAddressesAsString());
   }
 
   @Override

@@ -44,7 +44,7 @@ public abstract class IndexStatistic<V extends StatisticValue<?>> extends BaseSt
   }
 
   @Override
-  public boolean isCompatibleWith(Class<?> indexClass) {
+  public boolean isCompatibleWith(final Class<?> indexClass) {
     return true;
   }
 
@@ -58,7 +58,7 @@ public abstract class IndexStatistic<V extends StatisticValue<?>> extends BaseSt
   }
 
   /**
-   * 
+   *
    * @return
    */
   protected String internalUniqueId() {
@@ -73,16 +73,16 @@ public abstract class IndexStatistic<V extends StatisticValue<?>> extends BaseSt
   }
 
   @Override
-  protected void writeBytes(ByteBuffer buffer) {
+  protected void writeBytes(final ByteBuffer buffer) {
     super.writeBytes(buffer);
     VarintUtils.writeUnsignedShort((short) indexName.length(), buffer);
     buffer.put(StringUtils.stringToBinary(indexName));
   }
 
   @Override
-  protected void readBytes(ByteBuffer buffer) {
+  protected void readBytes(final ByteBuffer buffer) {
     super.readBytes(buffer);
-    byte[] nameBytes = new byte[VarintUtils.readUnsignedShort(buffer)];
+    final byte[] nameBytes = new byte[VarintUtils.readUnsignedShort(buffer)];
     buffer.get(nameBytes);
     indexName = StringUtils.stringFromBinary(nameBytes);
   }

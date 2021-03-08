@@ -19,6 +19,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
@@ -44,10 +45,8 @@ public class CompositeBinningStrategy implements StatisticBinningStrategy {
     childBinningStrategies = new StatisticBinningStrategy[0];
   }
 
-  public CompositeBinningStrategy(
-      final StatisticBinningStrategy left,
-      final StatisticBinningStrategy right) {
-    childBinningStrategies = new StatisticBinningStrategy[] {left, right};
+  public CompositeBinningStrategy(final StatisticBinningStrategy... childBinningStrategies) {
+    this.childBinningStrategies = childBinningStrategies;
   }
 
   @Override
@@ -106,6 +105,24 @@ public class CompositeBinningStrategy implements StatisticBinningStrategy {
       strVal.append(childBinningStrategies[i].binToString(new ByteArray(subBin)));
     }
     return strVal.toString();
+  }
+
+  public Pair<StatisticBinningStrategy, ByteArray>[] getSubBins(final ByteArray bin) {
+    final ByteBuffer buffer = ByteBuffer.wrap(bin.getBytes());
+    buffer.position(buffer.limit() - 1);
+    final int[] byteLengths =
+        Arrays.stream(childBinningStrategies).mapToInt(
+            s -> VarintUtils.readUnsignedIntReversed(buffer)).toArray();
+    buffer.rewind();
+    @SuppressWarnings("unchecked")
+    final Pair<StatisticBinningStrategy, ByteArray>[] retVal =
+        new Pair[childBinningStrategies.length];
+    for (int i = 0; i < childBinningStrategies.length; i++) {
+      final byte[] subBin = new byte[byteLengths[i]];
+      buffer.get(subBin);
+      retVal[i] = Pair.of(childBinningStrategies[i], new ByteArray(subBin));
+    }
+    return retVal;
   }
 
   public boolean binMatches(

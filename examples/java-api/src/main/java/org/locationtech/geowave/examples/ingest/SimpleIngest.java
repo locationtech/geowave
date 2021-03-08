@@ -11,6 +11,7 @@ package org.locationtech.geowave.examples.ingest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -86,16 +87,23 @@ public class SimpleIngest {
     // overwrite the existing feature)
     int featureId = firstFeatureId;
     final List<SimpleFeature> feats = new ArrayList<>();
+    // January 1 00:00:00, 2021
+    final long epochTime = 1609459200000L;
     for (int longitude = -180; longitude <= 180; longitude += 5) {
       for (int latitude = -90; latitude <= 90; latitude += 5) {
         pointBuilder.set(
             GEOMETRY_FIELD,
             GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(longitude, latitude)));
-        pointBuilder.set("TimeStamp", new Date());
+        pointBuilder.set(
+            "TimeStamp",
+            new Date(
+                epochTime
+                    + TimeUnit.DAYS.toMillis(longitude + 180)
+                    + TimeUnit.MINUTES.toMillis(latitude + 90)));
         pointBuilder.set("Latitude", latitude);
         pointBuilder.set("Longitude", longitude);
         // Note since trajectoryID and comment are marked as nillable we
-        // don't need to set them (they default ot null).
+        // don't need to set them (they default to null).
 
         final SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
         feats.add(sft);
@@ -108,8 +116,8 @@ public class SimpleIngest {
   public static SimpleFeature createRandomFeature(
       final SimpleFeatureBuilder pointBuilder,
       final int featureId) {
-    final double latitude = Math.random() * 340 - 170;
-    final double longitude = Math.random() * 160 - 80;
+    final double latitude = (Math.random() * 340) - 170;
+    final double longitude = (Math.random() * 160) - 80;
     pointBuilder.set(
         GEOMETRY_FIELD,
         GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(latitude, longitude)));

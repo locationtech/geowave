@@ -10,6 +10,10 @@ package org.locationtech.geowave.core.store.statistics.binning;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.ArrayUtils;
@@ -41,6 +45,28 @@ public class NumericRangeFieldValueBinningStrategy extends FieldValueBinningStra
   public String getStrategyName() {
     return NAME;
   }
+
+  public NumericRangeFieldValueBinningStrategy() {
+    super();
+  }
+
+  public NumericRangeFieldValueBinningStrategy(final String... fields) {
+    super(fields);
+  }
+
+  public NumericRangeFieldValueBinningStrategy(final double interval, final String... fields) {
+    this(interval, 0.0, fields);
+  }
+
+  public NumericRangeFieldValueBinningStrategy(
+      final double interval,
+      final double offset,
+      final String... fields) {
+    super(fields);
+    this.interval = interval;
+    this.offset = offset;
+  }
+
 
   @Override
   public String getDescription() {
@@ -115,8 +141,43 @@ public class NumericRangeFieldValueBinningStrategy extends FieldValueBinningStra
     offset = buf.getDouble();
   }
 
+  public Range<Double> getRange(final ByteArray bytes) {
+    final Map<String, Range<Double>> allRanges = getRanges(bytes);
+    final Optional<Range<Double>> mergedRange =
+        allRanges.values().stream().filter(Objects::nonNull).reduce(
+            (r1, r2) -> Range.between(
+                Math.min(r1.getMinimum(), r2.getMinimum()),
+                Math.max(r1.getMaximum(), r2.getMaximum())));
+    if (mergedRange.isPresent()) {
+      return mergedRange.get();
+    }
+    return null;
+  }
+
+  public Map<String, Range<Double>> getRanges(final ByteArray bytes) {
+    return getRanges(ByteBuffer.wrap(bytes.getBytes()));
+  }
+
+  private Map<String, Range<Double>> getRanges(final ByteBuffer buffer) {
+    final Map<String, Range<Double>> retVal = new HashMap<>();
+    for (final String field : fields) {
+      if (!buffer.hasRemaining()) {
+        return retVal;
+      }
+      if (buffer.get() == 0x0) {
+        retVal.put(field, null);
+      } else {
+        retVal.put(field, getRange(buffer));
+        if (buffer.hasRemaining()) {
+          buffer.getChar();
+        }
+      }
+    }
+    return retVal;
+  }
+
   private Range<Double> getRange(final ByteBuffer buffer) {
-    byte[] longBuffer = new byte[Long.BYTES];
+    final byte[] longBuffer = new byte[Long.BYTES];
     buffer.get(longBuffer);
     final double low = (Lexicoders.LONG.fromByteArray(longBuffer) * interval) - offset;
     return Range.between(low, low + interval);

@@ -14,7 +14,6 @@ import org.locationtech.geowave.core.geotime.util.TimeUtils;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Statistic;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.statistics.StatisticType;
 import org.locationtech.geowave.core.store.statistics.field.FieldStatistic;
 import org.locationtech.geowave.core.store.statistics.field.FieldStatisticType;
 import org.threeten.extra.Interval;
@@ -42,7 +41,7 @@ public class TimeRangeStatistic extends FieldStatistic<TimeRangeStatistic.TimeRa
   }
 
   @Override
-  public boolean isCompatibleWith(Class<?> fieldClass) {
+  public boolean isCompatibleWith(final Class<?> fieldClass) {
     return Date.class.isAssignableFrom(fieldClass)
         || Calendar.class.isAssignableFrom(fieldClass)
         || Number.class.isAssignableFrom(fieldClass);
@@ -59,8 +58,11 @@ public class TimeRangeStatistic extends FieldStatistic<TimeRangeStatistic.TimeRa
     }
 
     @Override
-    protected <T> Interval getInterval(DataTypeAdapter<T> adapter, T entry, GeoWaveRow... rows) {
-      Object fieldValue =
+    protected <T> Interval getInterval(
+        final DataTypeAdapter<T> adapter,
+        final T entry,
+        final GeoWaveRow... rows) {
+      final Object fieldValue =
           adapter.getFieldValue(entry, ((TimeRangeStatistic) statistic).getFieldName());
       return TimeUtils.getInterval(fieldValue);
     }

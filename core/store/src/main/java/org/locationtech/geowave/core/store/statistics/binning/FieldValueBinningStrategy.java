@@ -57,7 +57,9 @@ public class FieldValueBinningStrategy implements StatisticBinningStrategy {
       final DataTypeAdapter<T> adapter,
       final T entry,
       final GeoWaveRow... rows) {
-    if (fields.size() == 1) {
+    if (fields.isEmpty()) {
+      return new ByteArray[0];
+    } else if (fields.size() == 1) {
       return new ByteArray[] {getSingleBin(adapter.getFieldValue(entry, fields.get(0)))};
     }
     final ByteArray[] fieldValues =
@@ -67,8 +69,8 @@ public class FieldValueBinningStrategy implements StatisticBinningStrategy {
     for (final ByteArray fieldValue : fieldValues) {
       length += fieldValue.getBytes().length;
     }
-    final byte[] finalBin = new byte[length + Character.BYTES * (fieldValues.length - 1)];
-    ByteBuffer binBuffer = ByteBuffer.wrap(finalBin);
+    final byte[] finalBin = new byte[length + (Character.BYTES * (fieldValues.length - 1))];
+    final ByteBuffer binBuffer = ByteBuffer.wrap(finalBin);
     for (final ByteArray fieldValue : fieldValues) {
       binBuffer.put(fieldValue.getBytes());
       if (binBuffer.remaining() > 0) {

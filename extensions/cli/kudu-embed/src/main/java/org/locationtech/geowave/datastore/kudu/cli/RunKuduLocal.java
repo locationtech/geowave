@@ -25,12 +25,12 @@ public class RunKuduLocal extends DefaultOperation implements Command {
   private static final Logger LOGGER = LoggerFactory.getLogger(RunKuduLocal.class);
 
   @ParametersDelegate
-  private RunKuduLocalOptions options = new RunKuduLocalOptions();
+  private final RunKuduLocalOptions options = new RunKuduLocalOptions();
   @Parameter(
       names = {"--interactive", "-i"},
       arity = 1,
       description = "Whether to prompt for user input to end the process")
-  private boolean interactive = true;
+  private final boolean interactive = true;
 
   /**
    * Prep the driver & run the operation.
@@ -39,8 +39,9 @@ public class RunKuduLocal extends DefaultOperation implements Command {
   public void execute(final OperationParams params) {
     try {
       final KuduLocal server = options.getServer();
+      params.getConsole().println("Starting Kudu...");
       server.start();
-
+      params.getConsole().println("Kudu master running at " + server.getMasterAddressesAsString());
       if (interactive) {
         System.out.println("Press Enter to shutdown..");
         System.in.read();

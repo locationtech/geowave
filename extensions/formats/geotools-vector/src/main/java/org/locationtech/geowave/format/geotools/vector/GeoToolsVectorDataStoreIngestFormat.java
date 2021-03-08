@@ -54,7 +54,7 @@ public class GeoToolsVectorDataStoreIngestFormat implements
 
   @Override
   public String getIngestFormatDescription() {
-    return "all file-based vector datastores supported within geotools";
+    return "all vector datastores supported within geotools";
   }
 
   @Override
