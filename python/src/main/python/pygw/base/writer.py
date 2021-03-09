@@ -6,10 +6,11 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 
 from .geowave_object import GeoWaveObject
 from .write_results import WriteResults
+
 
 class Writer(GeoWaveObject):
     """
@@ -19,7 +20,6 @@ class Writer(GeoWaveObject):
     def __init__(self, java_ref):
         super().__init__(java_ref)
         self.is_open = True
-
 
     def write(self, data):
         """

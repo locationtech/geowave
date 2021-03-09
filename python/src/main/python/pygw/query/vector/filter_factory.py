@@ -6,7 +6,7 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 
 from datetime import datetime
 
@@ -18,8 +18,10 @@ from pygw.config import java_gateway
 from pygw.config import java_pkg
 from pygw.config import reflection_util
 
+
 def _j_match_action(match_action):
     return java_pkg.org.opengis.filter.MultiValuedFilter.MatchAction.valueOf(match_action.upper())
+
 
 # These functions are needed in order to invoke java methods that are named with
 # reserved python keywords such as and, or, and not
@@ -30,21 +32,23 @@ def _invoke_filter_list_method_by_name(j_filter_factory, name, filters):
     class_array[0] = list_class
     method = filter_factory_class.getMethod(name, class_array)
     filter_list = java_pkg.java.util.ArrayList()
-    for filter in filters:
-        filter_list.append(filter)
+    for filter_object in filters:
+        filter_list.append(filter_object)
     objects_array = java_gateway.new_array(java_pkg.java.lang.Object, 1)
     objects_array[0] = filter_list
     return method.invoke(j_filter_factory, objects_array)
 
-def _invoke_filter_method_by_name(j_filter_factory, name, filter):
+
+def _invoke_filter_method_by_name(j_filter_factory, name, filter_object):
     filter_factory_class = j_filter_factory.getClass()
     filter_class = reflection_util.classForName("org.opengis.filter.Filter")
     class_array = java_gateway.new_array(java_pkg.java.lang.Class, 1)
     class_array[0] = filter_class
     method = filter_factory_class.getMethod(name, class_array)
     objects_array = java_gateway.new_array(java_pkg.java.lang.Object, 1)
-    objects_array[0] = filter
+    objects_array[0] = filter_object
     return method.invoke(j_filter_factory, objects_array)
+
 
 class FilterFactory(GeoWaveObject):
     """
@@ -74,27 +78,27 @@ class FilterFactory(GeoWaveObject):
                 j_fids[idx] = fid
         return self._java_ref.id(j_fids)
 
-    def feature_id(self, id):
+    def feature_id(self, fid):
         """
         Constructs a filter that matches a specific feature ID.
 
         Args:
-            id (str): The feature ID.
+            fid (str): The feature ID.
         Returns:
             A Filter with the given feature ID.
         """
-        return self._java_ref.featureId(id)
+        return self._java_ref.featureId(fid)
 
-    def gml_object_id(self, id):
+    def gml_object_id(self, object_id):
         """
         Constructs a filter that matches a specific gml object ID.
 
         Args:
-            id (str): The gml object ID.
+            object_id (str): The gml object ID.
         Returns:
             A Filter with the given gml object ID.
         """
-        return self._java_ref.gmlObjectId(id)
+        return self._java_ref.gmlObjectId(object_id)
 
     def property(self, name):
         """
@@ -218,16 +222,16 @@ class FilterFactory(GeoWaveObject):
         """
         return _invoke_filter_list_method_by_name(self._java_ref, "or", filters)
 
-    def not_(self, filter):
+    def not_(self, filter_to_check):
         """
         Constructs a filter that passes when the given filter does NOT pass.
 
         Args:
-            filter (Filter): The filter to check.
+            filter_to_check (Filter): The filter to check.
         Returns:
             A Filter that passes when the given filter does NOT pass.
         """
-        return _invoke_filter_method_by_name(self._java_ref, "not", filter)
+        return _invoke_filter_method_by_name(self._java_ref, "not", filter_to_check)
 
     def between(self, expr, lower, upper, match_action=None):
         """
@@ -414,7 +418,8 @@ class FilterFactory(GeoWaveObject):
         elif match_action is None:
             return self._java_ref.like(expr, pattern, wildcard, single_char, escape, match_case)
         else:
-            return self._java_ref.like(expr, pattern, wildcard, single_char, escape, match_case, _j_match_action(match_action))
+            return self._java_ref.like(expr, pattern, wildcard, single_char, escape, match_case,
+                                       _j_match_action(match_action))
 
     def is_null(self, expr):
         """
@@ -444,9 +449,10 @@ class FilterFactory(GeoWaveObject):
             A Filter that passes when the given geometry is within the bounding box.
         """
         if match_action is None:
-            return self._java_ref.bbox(geometry_expr, minx*1.0, miny*1.0, maxx*1.0, maxy*1.0, srs)
+            return self._java_ref.bbox(geometry_expr, minx * 1.0, miny * 1.0, maxx * 1.0, maxy * 1.0, srs)
         else:
-            return self._java_ref.bbox(geometry_expr, minx*1.0, miny*1.0, maxx*1.0, maxy*1.0, srs, _j_match_action(match_action))
+            return self._java_ref.bbox(geometry_expr, minx * 1.0, miny * 1.0, maxx * 1.0, maxy * 1.0, srs,
+                                       _j_match_action(match_action))
 
     def bbox_expr(self, geometry_expr, bbox_expr):
         """
@@ -477,9 +483,10 @@ class FilterFactory(GeoWaveObject):
             geometry.
         """
         if match_action is None:
-            return self._java_ref.beyond(geometry_expr1, geometry_expr2, distance*1.0, units)
+            return self._java_ref.beyond(geometry_expr1, geometry_expr2, distance * 1.0, units)
         else:
-            return self._java_ref.beyond(geometry_expr1, geometry_expr2, distance*1.0, units, _j_match_action(match_action))
+            return self._java_ref.beyond(geometry_expr1, geometry_expr2, distance * 1.0, units,
+                                         _j_match_action(match_action))
 
     def contains(self, geometry_expr1, geometry_expr2, match_action=None):
         """
@@ -610,9 +617,10 @@ class FilterFactory(GeoWaveObject):
             second geometry.
         """
         if match_action is None:
-            return self._java_ref.dwithin(geometry_expr1, geometry_expr2, distance*1.0, units)
+            return self._java_ref.dwithin(geometry_expr1, geometry_expr2, distance * 1.0, units)
         else:
-            return self._java_ref.dwithin(geometry_expr1, geometry_expr2, distance*1.0, units, _j_match_action(match_action))
+            return self._java_ref.dwithin(geometry_expr1, geometry_expr2, distance * 1.0, units,
+                                          _j_match_action(match_action))
 
     def after(self, expr1, expr2, match_action=None):
         """

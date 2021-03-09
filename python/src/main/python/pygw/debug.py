@@ -6,12 +6,17 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 """
-This module exposes a function called `print_obj` that can be used to help with debugging raw java objects. It will print information about the object in question on both the Python side and on the Java server side. There's a `verbose` flag that will give you more information about the object in question.
+This module exposes a function called `print_obj` that can be used to help with debugging raw java objects. It will
+print information about the object in question on both the Python side and on the Java server side. There's a `verbose`
+flag that will give you more information about the object in question.
+
+NOTE: These functions are only available when using the GeoWave Py4J Gateway provided by the GeoWave CLI Tools.
 """
 from pygw.config import java_gateway
 from pygw.base import GeoWaveObject
+
 
 def print_obj(to_print, verbose=False):
     """

@@ -6,12 +6,13 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 
 from pygw.base import GeoWaveObject
 from pygw.base.type_conversions import GeometryType
 
 from .simple_feature_type import SimpleFeatureType
+
 
 class SimpleFeature(GeoWaveObject):
     """
@@ -99,8 +100,9 @@ class SimpleFeature(GeoWaveObject):
         """
         j_values = self._java_ref.getAttributes()
         descriptors = self._feature_type.get_attribute_descriptors()
-        feature_dict = {}
-        feature_dict[id_column] = self._java_ref.getID()
+        feature_dict = {
+            id_column: self._java_ref.getID()
+        }
         for i in range(len(j_values)):
             feature_dict[descriptors[i].descriptor] = descriptors[i].from_java(j_values[i])
         return feature_dict

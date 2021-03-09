@@ -6,10 +6,10 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 
 from decimal import Decimal
-from datetime import date
+from datetime import date, timezone
 from datetime import datetime
 
 from py4j.java_gateway import JavaClass
@@ -30,14 +30,15 @@ from pygw.config import java_gateway
 _wkb_reader = java_pkg.org.locationtech.jts.io.WKBReader()
 _wkb_writer = java_pkg.org.locationtech.jts.io.WKBWriter()
 
+
 def _type_to_string(py_type):
-    if (isinstance(py_type, tuple)):
+    if isinstance(py_type, tuple):
         return ", ".join(t.__name__ for t in py_type)
     else:
         return py_type.__name__
 
 
-class AttributeType():
+class AttributeType:
     """
     Base class for attributes that can be converted to and from Java variants.
     """
@@ -91,7 +92,7 @@ class ArrayAttributeType(AttributeType):
     Base class for attributes that represent an array of values.
     """
 
-    def __init__(self, subtype, py_type=list):
+    def __init__(self, subtype, py_type=(list, tuple)):
         self.subtype = subtype
         self._j_class = JavaClass(self.subtype.binding, java_gateway._gateway_client)
         super().__init__("[L%s;" % self.subtype.binding, py_type)
@@ -442,10 +443,10 @@ class DateType(AttributeType):
         super().__init__("java.util.Date", date)
 
     def _to_java(self, value):
-        return java_pkg.java.util.Date(int(value.timestamp() * 1000))
+        return java_pkg.java.util.Date(int(value.replace(tzinfo=timezone.utc).timestamp() * 1000))
 
     def _from_java(self, value):
-        return datetime.fromtimestamp(value.getTime() / 1000)
+        return datetime.utcfromtimestamp(value.getTime() / 1000)
 
 
 class DateArrayType(ArrayAttributeType):

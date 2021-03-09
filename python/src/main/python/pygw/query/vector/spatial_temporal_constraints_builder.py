@@ -6,7 +6,7 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 
 from pygw.base import GeoWaveObject
 from pygw.base.type_conversions import GeometryType
@@ -14,6 +14,7 @@ from pygw.base.type_conversions import DateType
 from pygw.config import geowave_pkg
 
 from ..query_constraints import QueryConstraints
+
 
 class SpatialTemporalConstraintsBuilder(GeoWaveObject):
     """
@@ -68,7 +69,8 @@ class SpatialTemporalConstraintsBuilder(GeoWaveObject):
         Returns:
             This spatial temporal constraints builder.
         """
-        j_compare_op = geowave_pkg.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation.valueOf(spatial_compare_op.upper())
+        j_compare_op = geowave_pkg.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation.valueOf(
+            spatial_compare_op.upper())
         self._java_ref.spatialConstraintsCompareOperation(j_compare_op)
         return self
 
@@ -79,7 +81,7 @@ class SpatialTemporalConstraintsBuilder(GeoWaveObject):
         Returns:
             This spatial temporal constraints builder.
         """
-        self.java_ref.noTemporalConstraints()
+        self._java_ref.noTemporalConstraints()
         return self
 
     def add_time_range(self, start_time, end_time):

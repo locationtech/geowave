@@ -33,6 +33,7 @@ from pygw.geotools import AttributeDescriptor
 from pygw.geotools import FeatureDataAdapter
 from pygw.index import SpatialIndexBuilder
 from pygw.query import VectorQueryBuilder
+from pygw.query import VectorAggregationQueryBuilder
 
 # Create a RocksDB data store
 options = RocksDBOptions()
@@ -86,6 +87,14 @@ for feature in results:
     print(feature.get_id())
     print(feature.get_default_geometry())
 results.close()
+
+# Perform a count aggregation on the data (with a CQL constraint)
+aggregation_query_builder = VectorAggregationQueryBuilder()
+constraints = aggregation_query_builder.constraints_factory().cql_constraints("BBOX(the_geom, 0.5, 0.5, 5.5, 5.5)")
+aggregation_query_builder.constraints(constraints)
+aggregation_query_builder.count(point_type_adapter.get_type_name())
+count = datastore.aggregate(aggregation_query_builder.build())
+print(count)
 ```
 ## Dev Notes:
 

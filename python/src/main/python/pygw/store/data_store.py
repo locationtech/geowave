@@ -6,7 +6,7 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 
 from pygw.base import GeoWaveObject
 from pygw.base import CloseableIterator
@@ -15,7 +15,9 @@ from pygw.base import DataTypeAdapter
 from pygw.config import java_gateway
 from pygw.config import geowave_pkg
 from pygw.query import Query
+from pygw.query import AggregationQuery
 from pygw.index import Index
+
 
 class DataStore(GeoWaveObject):
     """
@@ -39,7 +41,8 @@ class DataStore(GeoWaveObject):
             ingest_options: Options for ingest (Not yet supported).
         """
         # TODO: Ingest Options
-        if ingest_options: raise NotImplementedError()
+        if ingest_options:
+            raise NotImplementedError()
 
         assert isinstance(url, str)
 
@@ -47,7 +50,7 @@ class DataStore(GeoWaveObject):
         j_index_class = geowave_pkg.core.store.api.Index
         j_index_arr = java_gateway.new_array(j_index_class, n)
         for idx, name in enumerate(indices):
-                j_index_arr[idx] = name._java_ref
+            j_index_arr[idx] = name._java_ref
         java_url = java_gateway.jvm.java.net.URL(url)
         self._java_ref.ingest(java_url, ingest_options, j_index_arr)
 
@@ -61,15 +64,31 @@ class DataStore(GeoWaveObject):
         Args:
             q (pygw.query.query.Query): The query to preform.
         Returns:
-            A closeable iterable of results.  The `pygw.base.closeable_iterator.CloseableIterator.close` method should be called
-            on the iterator when it is done being used.
+            A closeable iterable of results.  The `pygw.base.closeable_iterator.CloseableIterator.close` method should
+            be called on the iterator when it is done being used.
         """
         assert isinstance(q, Query)
         j_query = q._java_ref
         return iter(CloseableIterator(self._java_ref.query(j_query), q.result_transformer))
 
     def aggregate(self, q):
-        raise NotImplementedError
+        """
+        Perform an aggregation on the data and just return the aggregated result. The query criteria is
+        very similar to querying the individual entries except in this case it defines the input to the
+        aggregation function, and the aggregation function produces a single result. Examples of this
+        might be simply counting matched entries, producing a bounding box or other range/extent for
+        matched entries, or producing a histogram.
+
+        Args:
+            q (pygw.query.AggregationQuery): The query to preform.
+        Returns:
+            The single result of the aggregation.
+        """
+        assert isinstance(q, AggregationQuery)
+        j_query = q._java_ref
+        if q.result_transformer is None:
+            return self._java_ref.aggregate(j_query)
+        return q.result_transformer.transform(self._java_ref.aggregate(j_query))
 
     def get_types(self):
         """
@@ -132,15 +151,15 @@ class DataStore(GeoWaveObject):
             type_name (str): Name of data type to register indices to.
             *indices (pygw.index.index.Index): Index to add.
         """
-        assert isinstance(type_name,str)
+        assert isinstance(type_name, str)
 
         n = len(indices)
         j_index_class = geowave_pkg.core.store.api.Index
-        j_index_arr = java_gateway.new_array(j_index_class,n)
+        j_index_arr = java_gateway.new_array(j_index_class, n)
         for idx, py_obj in enumerate(indices):
-                j_index_arr[idx] = py_obj._java_ref
+            j_index_arr[idx] = py_obj._java_ref
 
-        self._java_ref.addIndex(type_name,j_index_arr)
+        self._java_ref.addIndex(type_name, j_index_arr)
 
     def remove_index(self, index_name, type_name=None):
         """
@@ -155,10 +174,9 @@ class DataStore(GeoWaveObject):
             Exception: If the index was the last index of a type.
         """
         if type_name:
-            self._java_ref.removeIndex(index_name,type_name)
+            self._java_ref.removeIndex(index_name, type_name)
         else:
             self._java_ref.removeIndex(index_name)
-
 
     def remove_type(self, type_name):
         """
@@ -170,7 +188,6 @@ class DataStore(GeoWaveObject):
         assert isinstance(type_name, str)
 
         self._java_ref.removeType(type_name)
-
 
     def delete(self, q):
         """
@@ -203,15 +220,15 @@ class DataStore(GeoWaveObject):
             type_adapter (pygw.base.data_type_adapter.DataTypeAdapter): The data type adapter to add to the data store.
             *initial_indices (pygw.index.index.Index): The initial indices for this type.
         """
-        assert isinstance(type_adapter,DataTypeAdapter)
+        assert isinstance(type_adapter, DataTypeAdapter)
 
         n = len(initial_indices)
         j_index_class = geowave_pkg.core.store.api.Index
-        j_index_arr = java_gateway.new_array(j_index_class,n)
+        j_index_arr = java_gateway.new_array(j_index_class, n)
         for idx, py_obj in enumerate(initial_indices):
-                j_index_arr[idx] = py_obj._java_ref
+            j_index_arr[idx] = py_obj._java_ref
 
-        self._java_ref.addType(type_adapter._java_ref,j_index_arr)
+        self._java_ref.addType(type_adapter._java_ref, j_index_arr)
 
     def create_writer(self, type_adapter_name):
         """
@@ -221,7 +238,7 @@ class DataStore(GeoWaveObject):
         more indices have been provided for this type.
 
         Args:
-            type_name (str): The name of the type to write to.
+            type_adapter_name (str): The name of the type to write to.
         Returns:
             A `pygw.base.writer.Writer`, which can be used to write entries into the data store of the given type.
         """

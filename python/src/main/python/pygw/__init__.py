@@ -6,9 +6,10 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 """
-This project aims to provide Python classes that allow users to interact with a GeoWave data store using the same workflows that are available in the programmatic Java API.
+This project aims to provide Python classes that allow users to interact with a GeoWave data store using the same
+workflows that are available in the programmatic Java API.
 
 ## Environment
 - Python >=3,<=3.7
@@ -20,7 +21,8 @@ This project aims to provide Python classes that allow users to interact with a 
 - Install requirements: `pip install -r requirements.txt`
 
 ## Usage
-In order to use `pygw`, you must have an instance of GeoWave Py4J Java Gateway Server running.  The gateway can be started by using the GeoWave command `geowave python rungateway`.
+In order to use `pygw`, you must have an instance of GeoWave Py4J Java Gateway Server running.  The gateway can be
+started by using the GeoWave command `geowave util python rungateway`.
 
 You can then import `pygw` classes into your Python environment.
 
@@ -39,6 +41,7 @@ from pygw.geotools import AttributeDescriptor
 from pygw.geotools import FeatureDataAdapter
 from pygw.index import SpatialIndexBuilder
 from pygw.query import VectorQueryBuilder
+from pygw.query import VectorAggregationQueryBuilder
 
 # Create a RocksDB data store
 options = RocksDBOptions()
@@ -92,6 +95,14 @@ for feature in results:
     print(feature.get_id())
     print(feature.get_default_geometry())
 results.close()
+
+# Perform a count aggregation on the data (with a CQL constraint)
+aggregation_query_builder = VectorAggregationQueryBuilder()
+constraints = aggregation_query_builder.constraints_factory().cql_constraints("BBOX(the_geom, 0.5, 0.5, 5.5, 5.5)")
+aggregation_query_builder.constraints(constraints)
+aggregation_query_builder.count(point_type_adapter.get_type_name())
+count = datastore.aggregate(aggregation_query_builder.build())
+print(count)
 ```
 """
 from pkg_resources import get_distribution
@@ -101,6 +112,7 @@ try:
     version = get_distribution('pygw').version
 except DistributionNotFound:
     from maven_version import get_maven_version
-    version = get_maven_version();
+
+    version = get_maven_version()
 
 __version__ = version

@@ -47,7 +47,7 @@ public class VectorAggregationQueryBuilderImpl<P extends Persistable, R> extends
       final String timeFieldName) {
     options =
         new AggregateTypeQueryOptions(
-            new VectorBoundingBoxAggregation(new FieldNameParam(timeFieldName)),
+            new VectorTimeRangeAggregation(new FieldNameParam(timeFieldName)),
             typeName);
     return this;
   }

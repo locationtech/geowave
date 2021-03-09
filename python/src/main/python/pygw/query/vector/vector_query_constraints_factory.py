@@ -6,11 +6,12 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 
 from ..query_constraints_factory import QueryConstraintsFactory
 from ..query_constraints import QueryConstraints
 from .spatial_temporal_constraints_builder import SpatialTemporalConstraintsBuilder
+
 
 class VectorQueryConstraintsFactory(QueryConstraintsFactory):
     """
@@ -30,16 +31,16 @@ class VectorQueryConstraintsFactory(QueryConstraintsFactory):
         """
         return SpatialTemporalConstraintsBuilder(self._java_ref.spatialTemporalConstraints())
 
-    def filter_constraints(self, filter):
+    def filter_constraints(self, filter_constraint):
         """
         Constrain a query using a filter created by pygw.query.FilterFactory.
 
         Args:
-            filter (filter): The filter to constrain the query by.
+            filter_constraint (filter): The filter to constrain the query by.
         Returns:
             A `pygw.query.query_constraints.QueryConstraints` with the given filter.
         """
-        return QueryConstraints(self._java_ref.filterConstraints(filter))
+        return QueryConstraints(self._java_ref.filterConstraints(filter_constraint))
 
     def cql_constraints(self, cql_expression):
         """

@@ -6,11 +6,12 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 
 from pygw.config import geowave_pkg
 from pygw.config import java_pkg
 from pygw.store import DataStoreOptions
+
 
 class DynamoDBOptions(DataStoreOptions):
     """
@@ -26,7 +27,7 @@ class DynamoDBOptions(DataStoreOptions):
         (specify either endpoint or region not both).
 
         Args:
-            region (str): The AWS region to use.
+            region (str, None): The AWS region to use.
         """
         if region is None:
             j_region = None
@@ -113,7 +114,7 @@ class DynamoDBOptions(DataStoreOptions):
         Sets the protocol of the connection to use. Either 'http' or 'https'.
 
         Args:
-            protocol (str): The protocol to use.
+            protocol (str, None): The protocol to use.
         """
         if protocol is None:
             j_protocol = None
