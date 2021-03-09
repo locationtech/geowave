@@ -95,22 +95,21 @@ public class StatisticUpdateHandler<T, V extends StatisticValue<R>, R> implement
   }
 
   @Override
-  public void entryIngested(final T entry, final GeoWaveRow... rows) {
+  public synchronized void entryIngested(final T entry, final GeoWaveRow... rows) {
     if (supportsIngestCallback) {
       handleEntry(ingestHandler, entry, rows);
     }
   }
 
   @Override
-  public void entryDeleted(final T entry, final GeoWaveRow... rows) {
+  public synchronized void entryDeleted(final T entry, final GeoWaveRow... rows) {
     if (supportsDeleteCallback) {
       handleEntry(deleteHandler, entry, rows);
     }
-
   }
 
   @Override
-  public void entryScanned(final T entry, final GeoWaveRow row) {
+  public synchronized void entryScanned(final T entry, final GeoWaveRow row) {
     if (supportsIngestCallback) {
       handleEntry(ingestHandler, entry, row);
     }
