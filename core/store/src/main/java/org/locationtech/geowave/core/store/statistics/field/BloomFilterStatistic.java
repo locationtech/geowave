@@ -32,7 +32,7 @@ public class BloomFilterStatistic extends FieldStatistic<BloomFilterStatistic.Bl
   @Parameter(
       names = "--expectedInsertions",
       description = "The number of expected insertions, used for appropriate sizing of bloom filter.")
-  private final long expectedInsertions = 100000000;
+  private final long expectedInsertions = 10000;
 
   @Parameter(
       names = "--desiredFpp",
@@ -118,22 +118,25 @@ public class BloomFilterStatistic extends FieldStatistic<BloomFilterStatistic.Bl
 
     @Override
     public byte[] toBinary() {
-      final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      try {
+      try (final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
         bloomFilter.writeTo(baos);
+        baos.flush();
+        return baos.toByteArray();
       } catch (final IOException e) {
         LOGGER.warn("Unable to write bloom filter", e);
       }
-      return baos.toByteArray();
+      return new byte[0];
     }
 
     @Override
     public void fromBinary(final byte[] bytes) {
-      try {
-        bloomFilter =
-            BloomFilter.readFrom(new ByteArrayInputStream(bytes), Funnels.unencodedCharsFunnel());
-      } catch (final IOException e) {
-        LOGGER.error("Unable to read Bloom Filter", e);
+      if (bytes.length > 0) {
+        try {
+          bloomFilter =
+              BloomFilter.readFrom(new ByteArrayInputStream(bytes), Funnels.unencodedCharsFunnel());
+        } catch (final IOException e) {
+          LOGGER.error("Unable to read Bloom Filter", e);
+        }
       }
     }
   }

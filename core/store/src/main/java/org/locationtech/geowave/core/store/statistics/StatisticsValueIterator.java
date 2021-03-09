@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.store.statistics;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Objects;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.BinConstraints.ByteArrayConstraints;
 import org.locationtech.geowave.core.store.api.Statistic;
@@ -62,7 +63,7 @@ public class StatisticsValueIterator implements CloseableIterator<StatisticValue
                             nextStat,
                             bin,
                             binConstraints.isPrefix(),
-                            authorizations)).iterator());
+                            authorizations)).filter(Objects::nonNull).iterator());
           } else {
             continue;
           }

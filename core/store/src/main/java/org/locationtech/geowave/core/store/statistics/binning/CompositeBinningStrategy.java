@@ -10,7 +10,6 @@ package org.locationtech.geowave.core.store.statistics.binning;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.List;
@@ -18,7 +17,6 @@ import java.util.OptionalInt;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.VarintUtils;
@@ -220,33 +218,57 @@ public class CompositeBinningStrategy implements StatisticBinningStrategy {
       final StatisticBinningStrategy[] binningStrategies) {
     // this will handle merging bins together per constraint-binningStrategy pair
     if (constraints.length == binningStrategies.length) {
-      final ByteArray[][] perStrategyBins =
+      final List<ByteArrayConstraints> perStrategyConstraints =
           IntStream.range(0, constraints.length).mapToObj(
-              i -> binningStrategies[i].constraints(constraints[i])).toArray(ByteArray[][]::new);
-      return new ExplicitConstraints(getAllCombinations(perStrategyBins));
+              i -> binningStrategies[i].constraints(constraints[i])).collect(Collectors.toList());
+      return concat(perStrategyConstraints);
     }
     // if there's not the same number of constraints as binning strategies, use default logic
     return StatisticBinningStrategy.super.constraints(constraints);
   }
 
-  private static ByteArray[] getAllCombinations(final ByteArray[][] perStrategyBins) {
-    final List<ByteArray[]> combinedConstraintCombos = new ArrayList<>();
-    combos(0, perStrategyBins, new ByteArray[0], combinedConstraintCombos);
-    return combinedConstraintCombos.stream().map(CompositeBinningStrategy::getBin).toArray(
-        ByteArray[]::new);
+  private ByteArrayConstraints concat(final List<ByteArrayConstraints> perStrategyConstraints) {
+    final ByteArray[][] c = new ByteArray[perStrategyConstraints.size()][];
+    boolean allBins = true;
+    for (int i = 0; i < perStrategyConstraints.size(); i++) {
+      final ByteArrayConstraints constraints = perStrategyConstraints.get(i);
+      if (constraints.isAllBins()) {
+        if (!allBins) {
+          throw new IllegalArgumentException(
+              "Cannot use 'all bins' query for one strategy and not the other");
+        }
+      } else {
+        allBins = false;
+      }
+      if (constraints.isPrefix()) {
+        // can only use a prefix if its the last field or the rest of the fields are 'all bins'
+        boolean isValid = true;
+        for (final int j = i + 1; i < perStrategyConstraints.size(); i++) {
+          final ByteArrayConstraints innerConstraints = perStrategyConstraints.get(j);
+          if (!innerConstraints.isAllBins()) {
+            isValid = false;
+            break;
+          } else {
+            c[i] = new ByteArray[] {new ByteArray()};
+          }
+        }
+        if (isValid) {
+          return new ExplicitConstraints(getAllCombinations(c), true);
+        } else {
+          throw new IllegalArgumentException(
+              "Cannot use 'prefix' query for a strategy that is also using exact constraints on a subsequent strategy");
+        }
+      }
+      c[i] = constraints.getBins();
+    }
+    return new ExplicitConstraints(getAllCombinations(c), false);
   }
 
-  private static void combos(
-      final int pos,
-      final ByteArray[][] c,
-      final ByteArray[] soFar,
-      final List<ByteArray[]> finalList) {
-    if (pos == c.length) {
-      finalList.add(soFar);
-      return;
-    }
-    for (int i = 0; i != c[pos].length; i++) {
-      combos(pos + 1, c, (ByteArray[]) ArrayUtils.add(soFar, c[pos][i]), finalList);
-    }
+  private static ByteArray[] getAllCombinations(final ByteArray[][] perStrategyBins) {
+    return BinningStrategyUtils.getAllCombinations(
+        perStrategyBins,
+        CompositeBinningStrategy::getBin);
   }
+
+
 }

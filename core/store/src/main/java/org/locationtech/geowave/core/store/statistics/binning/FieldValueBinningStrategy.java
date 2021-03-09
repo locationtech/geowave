@@ -11,12 +11,17 @@ package org.locationtech.geowave.core.store.statistics.binning;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.store.api.BinConstraints.ByteArrayConstraints;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.StatisticBinningStrategy;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
+import org.locationtech.geowave.core.store.statistics.query.BinConstraintsImpl.ExplicitConstraints;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Strings;
 import com.clearspring.analytics.util.Lists;
@@ -65,6 +70,10 @@ public class FieldValueBinningStrategy implements StatisticBinningStrategy {
     final ByteArray[] fieldValues =
         fields.stream().map(field -> getSingleBin(adapter.getFieldValue(entry, field))).toArray(
             ByteArray[]::new);
+    return new ByteArray[] {getBin(fieldValues)};
+  }
+
+  private static ByteArray getBin(final ByteArray[] fieldValues) {
     int length = 0;
     for (final ByteArray fieldValue : fieldValues) {
       length += fieldValue.getBytes().length;
@@ -77,21 +86,12 @@ public class FieldValueBinningStrategy implements StatisticBinningStrategy {
         binBuffer.putChar('|');
       }
     }
-    return new ByteArray[] {new ByteArray(binBuffer.array())};
+    return new ByteArray(binBuffer.array());
   }
 
   @Override
   public String getDefaultTag() {
     return Strings.join("|", fields);
-  }
-
-  public static ByteArray getBin(final Object... values) {
-    if (values == null) {
-      return new ByteArray();
-    }
-    return new ByteArray(
-        Arrays.stream(values).map(value -> value == null ? "" : value.toString()).collect(
-            Collectors.joining("|")));
   }
 
   protected ByteArray getSingleBin(final Object value) {
@@ -114,5 +114,94 @@ public class FieldValueBinningStrategy implements StatisticBinningStrategy {
   @Override
   public String binToString(final ByteArray bin) {
     return bin.getString();
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public Class<?>[] supportedConstraintClasses() {
+    if (fields.size() > 1) {
+      return ArrayUtils.addAll(
+          StatisticBinningStrategy.super.supportedConstraintClasses(),
+          Map.class,
+          Pair[].class);
+    }
+    return StatisticBinningStrategy.super.supportedConstraintClasses();
+  }
+
+  protected ByteArrayConstraints singleFieldConstraints(final Object constraint) {
+    return StatisticBinningStrategy.super.constraints(constraint);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public ByteArrayConstraints constraints(final Object constraint) {
+    if (fields.isEmpty() && (constraint != null)) {
+      throw new IllegalArgumentException(
+          "There are no fields in the binning strategy for these constraints");
+    } else if (fields.size() > 1) {
+
+      Map<String, Object> constraintMap;
+      if (constraint instanceof Map) {
+        constraintMap = (Map<String, Object>) constraint;
+
+      } else if (constraint instanceof Pair[]) {
+        if (((Pair[]) constraint).length != fields.size()) {
+          throw new IllegalArgumentException(
+              "org.apache.commons.lang3.tuple.Pair[] constraint of length "
+                  + ((Pair[]) constraint).length
+                  + " must be the same length as the number of fields "
+                  + fields.size());
+        }
+        constraintMap =
+            Arrays.stream(((Pair[]) constraint)).collect(
+                Collectors.toMap((p) -> p.getKey().toString(), Pair::getValue));
+      } else {
+        throw new IllegalArgumentException(
+            "There are multiple fields in the binning strategy; A java.util.Map or org.apache.commons.lang3.tuple.Pair[] constraint must be used with keys associated with field names and values of constraints per field");
+      }
+      final ByteArray[][] c = new ByteArray[fields.size()][];
+      boolean allBins = true;
+      for (int i = 0; i < fields.size(); i++) {
+        final String field = fields.get(i);
+        final ByteArrayConstraints constraints = singleFieldConstraints(constraintMap.get(field));
+        if (constraints.isAllBins()) {
+          if (!allBins) {
+            throw new IllegalArgumentException(
+                "Cannot use 'all bins' query for one field and not the other");
+          }
+        } else {
+          allBins = false;
+        }
+        if (constraints.isPrefix()) {
+          // can only use a prefix if its the last field or the rest of the fields are 'all bins'
+          boolean isValid = true;
+          for (final int j = i + 1; i < fields.size(); i++) {
+            final String innerField = fields.get(j);
+            final ByteArrayConstraints innerConstraints =
+                singleFieldConstraints(constraintMap.get(innerField));
+            if (!innerConstraints.isAllBins()) {
+              isValid = false;
+              break;
+            } else {
+              c[i] = new ByteArray[] {new ByteArray()};
+            }
+          }
+          if (isValid) {
+            return new ExplicitConstraints(getAllCombinations(c), true);
+          } else {
+            throw new IllegalArgumentException(
+                "Cannot use 'prefix' query for a field that is preceding additional constraints");
+          }
+        }
+        c[i] = constraints.getBins();
+      }
+      return new ExplicitConstraints(getAllCombinations(c), false);
+    } else {
+      return singleFieldConstraints(constraint);
+    }
+  }
+
+  private static ByteArray[] getAllCombinations(final ByteArray[][] perFieldBins) {
+    return BinningStrategyUtils.getAllCombinations(perFieldBins, FieldValueBinningStrategy::getBin);
   }
 }

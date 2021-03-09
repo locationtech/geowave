@@ -19,6 +19,7 @@ import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStra
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import org.locationtech.geowave.core.geotime.util.TimeUtils;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
 import org.locationtech.geowave.core.store.api.BinConstraints.ByteArrayConstraints;
@@ -97,9 +98,8 @@ public class TimeRangeFieldValueBinningStrategy extends FieldValueBinningStrateg
         Interval[].class);
   }
 
-  @SuppressWarnings("unchecked")
   @Override
-  public ByteArrayConstraints constraints(final Object constraint) {
+  public ByteArrayConstraints singleFieldConstraints(final Object constraint) {
     if (constraint instanceof Interval) {
       return new ExplicitConstraints(getNumericBins((Interval) constraint));
     } else if (constraint instanceof Interval[]) {
@@ -136,10 +136,16 @@ public class TimeRangeFieldValueBinningStrategy extends FieldValueBinningStrateg
   @Override
   public byte[] toBinary() {
     final byte[] parentBinary = super.toBinary();
+    final byte[] timezoneBytes = StringUtils.stringToBinary(timezone);
     final ByteBuffer buf =
         ByteBuffer.allocate(
-            parentBinary.length + VarintUtils.unsignedIntByteLength(periodicity.ordinal()));
+            parentBinary.length
+                + VarintUtils.unsignedIntByteLength(periodicity.ordinal())
+                + VarintUtils.unsignedIntByteLength(timezoneBytes.length)
+                + timezoneBytes.length);
     VarintUtils.writeUnsignedInt(periodicity.ordinal(), buf);
+    VarintUtils.writeUnsignedInt(timezoneBytes.length, buf);
+    buf.put(timezoneBytes);
     buf.put(parentBinary);
     return buf.array();
   }
@@ -148,6 +154,10 @@ public class TimeRangeFieldValueBinningStrategy extends FieldValueBinningStrateg
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     periodicity = Unit.values()[VarintUtils.readUnsignedInt(buf)];
+    final byte[] timezoneBinary = new byte[VarintUtils.readUnsignedInt(buf)];
+    buf.get(timezoneBinary);
+    timezone = StringUtils.stringFromBinary(timezoneBinary);
+    binningStrategy = new TemporalBinningStrategy(periodicity, timezone);
     final byte[] parentBinary = new byte[buf.remaining()];
     buf.get(parentBinary);
     super.fromBinary(parentBinary);

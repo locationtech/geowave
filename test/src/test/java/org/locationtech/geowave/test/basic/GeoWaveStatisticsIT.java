@@ -18,8 +18,11 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
 import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.tuple.Pair;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -40,6 +43,7 @@ import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.TDigestNumericHistogram;
+import org.locationtech.geowave.core.store.api.BinConstraints;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Query;
@@ -232,47 +236,47 @@ public class GeoWaveStatisticsIT extends AbstractGeoWaveBasicVectorIT {
 
   @Test
   public void testAddStatisticWithBinningStrategy() {
-    final DataStore ds = dataStore.createDataStore();
+    DataStore ds = dataStore.createDataStore();
 
-    final NumericRangeStatistic longitudeRange =
+    NumericRangeStatistic longitudeRange =
         new NumericRangeStatistic(SimpleIngest.FEATURE_NAME, "Longitude");
     // binning by the same as the statistic should be easy to sanity check
     longitudeRange.setBinningStrategy(new NumericRangeFieldValueBinningStrategy("Longitude"));
-    final NumericRangeStatistic latitudeRange =
+    NumericRangeStatistic latitudeRange =
         new NumericRangeStatistic(SimpleIngest.FEATURE_NAME, "Latitude");
     latitudeRange.setBinningStrategy(new NumericRangeFieldValueBinningStrategy(45, "Latitude"));
 
-    final TimeRangeStatistic timeRangeHourBin =
+    TimeRangeStatistic timeRangeHourBin =
         new TimeRangeStatistic(SimpleIngest.FEATURE_NAME, "TimeStamp");
     timeRangeHourBin.setBinningStrategy(
         new TimeRangeFieldValueBinningStrategy(Unit.HOUR, "TimeStamp"));
     timeRangeHourBin.setTag("hour");
-    final TimeRangeStatistic timeRangeDayBin =
+    TimeRangeStatistic timeRangeDayBin =
         new TimeRangeStatistic(SimpleIngest.FEATURE_NAME, "TimeStamp");
     timeRangeDayBin.setBinningStrategy(
         new TimeRangeFieldValueBinningStrategy(Unit.DAY, "TimeStamp"));
     timeRangeDayBin.setTag("day");
-    final TimeRangeStatistic timeRangeWeekBin =
+    TimeRangeStatistic timeRangeWeekBin =
         new TimeRangeStatistic(SimpleIngest.FEATURE_NAME, "TimeStamp");
     timeRangeWeekBin.setBinningStrategy(
         new TimeRangeFieldValueBinningStrategy(Unit.WEEK, "TimeStamp"));
     timeRangeWeekBin.setTag("week");
-    final TimeRangeStatistic timeRangeMonthBin =
+    TimeRangeStatistic timeRangeMonthBin =
         new TimeRangeStatistic(SimpleIngest.FEATURE_NAME, "TimeStamp");
     timeRangeMonthBin.setBinningStrategy(
         new TimeRangeFieldValueBinningStrategy(Unit.MONTH, "TimeStamp"));
     timeRangeMonthBin.setTag("month");
-    final TimeRangeStatistic timeRangeYearBin =
+    TimeRangeStatistic timeRangeYearBin =
         new TimeRangeStatistic(SimpleIngest.FEATURE_NAME, "TimeStamp");
     timeRangeYearBin.setBinningStrategy(
         new TimeRangeFieldValueBinningStrategy(Unit.YEAR, "TimeStamp"));
     timeRangeYearBin.setTag("year");
 
-    final CountStatistic countByGridUsingMultifield = new CountStatistic(SimpleIngest.FEATURE_NAME);
+    CountStatistic countByGridUsingMultifield = new CountStatistic(SimpleIngest.FEATURE_NAME);
     countByGridUsingMultifield.setTag("multifield-latlon");
     countByGridUsingMultifield.setBinningStrategy(
         new NumericRangeFieldValueBinningStrategy(45, "Latitude", "Longitude"));
-    final CountStatistic countByGridUsingComposite = new CountStatistic(SimpleIngest.FEATURE_NAME);
+    CountStatistic countByGridUsingComposite = new CountStatistic(SimpleIngest.FEATURE_NAME);
     countByGridUsingComposite.setTag("composite-latlon");
     countByGridUsingComposite.setBinningStrategy(
         new CompositeBinningStrategy(
@@ -299,6 +303,60 @@ public class GeoWaveStatisticsIT extends AbstractGeoWaveBasicVectorIT {
         timeRangeYearBin,
         countByGridUsingMultifield,
         countByGridUsingComposite);
+    // let's make sure seralization/deserialization works for stats
+    ds = dataStore.createDataStore();
+    longitudeRange =
+        (NumericRangeStatistic) ds.getFieldStatistic(
+            longitudeRange.getStatisticType(),
+            longitudeRange.getTypeName(),
+            longitudeRange.getFieldName(),
+            longitudeRange.getTag());
+    latitudeRange =
+        (NumericRangeStatistic) ds.getFieldStatistic(
+            latitudeRange.getStatisticType(),
+            latitudeRange.getTypeName(),
+            latitudeRange.getFieldName(),
+            latitudeRange.getTag());
+    timeRangeHourBin =
+        (TimeRangeStatistic) ds.getFieldStatistic(
+            timeRangeHourBin.getStatisticType(),
+            timeRangeHourBin.getTypeName(),
+            timeRangeHourBin.getFieldName(),
+            timeRangeHourBin.getTag());
+    timeRangeDayBin =
+        (TimeRangeStatistic) ds.getFieldStatistic(
+            timeRangeDayBin.getStatisticType(),
+            timeRangeDayBin.getTypeName(),
+            timeRangeDayBin.getFieldName(),
+            timeRangeDayBin.getTag());
+    timeRangeWeekBin =
+        (TimeRangeStatistic) ds.getFieldStatistic(
+            timeRangeWeekBin.getStatisticType(),
+            timeRangeWeekBin.getTypeName(),
+            timeRangeWeekBin.getFieldName(),
+            timeRangeWeekBin.getTag());
+    timeRangeMonthBin =
+        (TimeRangeStatistic) ds.getFieldStatistic(
+            timeRangeMonthBin.getStatisticType(),
+            timeRangeMonthBin.getTypeName(),
+            timeRangeMonthBin.getFieldName(),
+            timeRangeMonthBin.getTag());
+    timeRangeYearBin =
+        (TimeRangeStatistic) ds.getFieldStatistic(
+            timeRangeYearBin.getStatisticType(),
+            timeRangeYearBin.getTypeName(),
+            timeRangeYearBin.getFieldName(),
+            timeRangeYearBin.getTag());
+    countByGridUsingMultifield =
+        (CountStatistic) ds.getDataTypeStatistic(
+            countByGridUsingMultifield.getStatisticType(),
+            countByGridUsingMultifield.getTypeName(),
+            countByGridUsingMultifield.getTag());
+    countByGridUsingComposite =
+        (CountStatistic) ds.getDataTypeStatistic(
+            countByGridUsingComposite.getStatisticType(),
+            countByGridUsingComposite.getTypeName(),
+            countByGridUsingComposite.getTag());
     Range<Double> rangeValue = ds.getStatisticValue(longitudeRange);
     assertEquals(-165.0, rangeValue.getMinimum(), 0.1);
     assertEquals(180.0, rangeValue.getMaximum(), 0.1);
@@ -377,96 +435,23 @@ public class GeoWaveStatisticsIT extends AbstractGeoWaveBasicVectorIT {
       }
       assertEquals(4, count);
     }
-    try (CloseableIterator<Pair<ByteArray, Interval>> iterator =
-        ds.getBinnedStatisticValues(timeRangeHourBin)) {
-      int count = 0;
-      while (iterator.hasNext()) {
-        final Pair<ByteArray, Interval> binValue = iterator.next();
+    assertTimeBinning(ds, timeRangeHourBin, 20, (i) -> Duration.ofHours(1L), overallInterval);
+    assertTimeBinning(ds, timeRangeDayBin, 20, (i) -> Duration.ofDays(1L), overallInterval);
+    assertTimeBinning(ds, timeRangeWeekBin, 20, (i) -> Duration.ofDays(7L), overallInterval);
+    assertTimeBinning(ds, timeRangeMonthBin, 12, (i) -> {
+      final Calendar cal = Calendar.getInstance();
+      cal.setTimeInMillis(i.getStart().toEpochMilli());
+      return Duration.ofDays(cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+    }, overallInterval);
+    assertTimeBinning(ds, timeRangeYearBin, 1, (i) -> {
+      final Calendar cal = Calendar.getInstance();
+      cal.setTimeInMillis(i.getStart().toEpochMilli());
+      return Duration.ofDays(cal.getActualMaximum(Calendar.DAY_OF_YEAR));
+    }, overallInterval);
 
-        final Interval binRange =
-            ((TimeRangeFieldValueBinningStrategy) timeRangeHourBin.getBinningStrategy()).getInterval(
-                binValue.getKey());
-        assertEquals(Duration.ofHours(1L), binRange.toDuration());
-        assertTrue(binRange.encloses(binValue.getValue()));
-        assertTrue(overallInterval.encloses(binValue.getValue()));
-        count++;
-      }
-      assertEquals(20, count);
-    }
-    try (CloseableIterator<Pair<ByteArray, Interval>> iterator =
-        ds.getBinnedStatisticValues(timeRangeDayBin)) {
-      int count = 0;
-      while (iterator.hasNext()) {
-        final Pair<ByteArray, Interval> binValue = iterator.next();
 
-        final Interval binRange =
-            ((TimeRangeFieldValueBinningStrategy) timeRangeDayBin.getBinningStrategy()).getInterval(
-                binValue.getKey());
-        assertEquals(Duration.ofDays(1), binRange.toDuration());
-        assertTrue(binRange.encloses(binValue.getValue()));
-        assertTrue(overallInterval.encloses(binValue.getValue()));
-        count++;
-      }
-      assertEquals(20, count);
-    }
-    try (CloseableIterator<Pair<ByteArray, Interval>> iterator =
-        ds.getBinnedStatisticValues(timeRangeWeekBin)) {
-      int count = 0;
-      while (iterator.hasNext()) {
-        final Pair<ByteArray, Interval> binValue = iterator.next();
-
-        final Interval binRange =
-            ((TimeRangeFieldValueBinningStrategy) timeRangeWeekBin.getBinningStrategy()).getInterval(
-                binValue.getKey());
-
-        assertEquals(Duration.ofDays(7), binRange.toDuration());
-        assertTrue(binRange.encloses(binValue.getValue()));
-        assertTrue(overallInterval.encloses(binValue.getValue()));
-        count++;
-      }
-      assertEquals(20, count);
-    }
-    try (CloseableIterator<Pair<ByteArray, Interval>> iterator =
-        ds.getBinnedStatisticValues(timeRangeMonthBin)) {
-      int count = 0;
-      while (iterator.hasNext()) {
-        final Pair<ByteArray, Interval> binValue = iterator.next();
-
-        final Interval binRange =
-            ((TimeRangeFieldValueBinningStrategy) timeRangeMonthBin.getBinningStrategy()).getInterval(
-                binValue.getKey());
-        final Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(binValue.getValue().getStart().toEpochMilli());
-
-        assertEquals(
-            Duration.ofDays(cal.getActualMaximum(Calendar.DAY_OF_MONTH)),
-            binRange.toDuration());
-        assertTrue(binRange.encloses(binValue.getValue()));
-        assertTrue(overallInterval.encloses(binValue.getValue()));
-        count++;
-      }
-      assertEquals(12, count);
-    }
-    try (CloseableIterator<Pair<ByteArray, Interval>> iterator =
-        ds.getBinnedStatisticValues(timeRangeYearBin)) {
-      int count = 0;
-      while (iterator.hasNext()) {
-        final Pair<ByteArray, Interval> binValue = iterator.next();
-
-        final Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(binValue.getValue().getStart().toEpochMilli());
-        final Interval binRange =
-            ((TimeRangeFieldValueBinningStrategy) timeRangeYearBin.getBinningStrategy()).getInterval(
-                binValue.getKey());
-        assertEquals(
-            Duration.ofDays(cal.getActualMaximum(Calendar.DAY_OF_YEAR)),
-            binRange.toDuration());
-        assertTrue(binRange.encloses(binValue.getValue()));
-        assertTrue(overallInterval.encloses(binValue.getValue()));
-        count++;
-      }
-      assertEquals(1, count);
-    }
+    final Set<ByteArray> multiFieldFilteredExpectedResults = new HashSet<>();
+    int multiFieldFilteredExpectedCount = 0;
     try (CloseableIterator<Pair<ByteArray, Long>> iterator =
         ds.getBinnedStatisticValues(countByGridUsingMultifield)) {
       int count = 0;
@@ -487,10 +472,55 @@ public class GeoWaveStatisticsIT extends AbstractGeoWaveBasicVectorIT {
         // this ensures the offset is 0
         assertEquals(0.0, latRange.getMinimum() % 45.0, 0.1);
         assertEquals(0.0, lonRange.getMinimum() % 45.0, 0.1);
+        if (latRange.isOverlappedBy(Range.is(12.0))
+            && lonRange.isOverlappedBy(Range.between(-89.0, 89.0))) {
+          multiFieldFilteredExpectedResults.add(binValue.getKey());
+          multiFieldFilteredExpectedCount += binValue.getValue();
+        }
         count++;
       }
       assertEquals(20, count);
     }
+    // now query by object constraints on the gridded bins
+    try (CloseableIterator<Pair<ByteArray, Long>> iterator =
+        ds.getBinnedStatisticValues(
+            countByGridUsingMultifield,
+            BinConstraints.ofObject(
+                new Pair[] {
+                    Pair.of("Latitude", Double.valueOf(12.0)),
+                    Pair.of("Longitude", Range.between(-89.0, 89.0))}))) {
+      final Set<ByteArray> multiFieldFilteredActualResults = new HashSet<>();
+      int count = 0;
+      while (iterator.hasNext()) {
+        final Pair<ByteArray, Long> binValue = iterator.next();
+
+        final Map<String, Range<Double>> rangePerField =
+            ((NumericRangeFieldValueBinningStrategy) countByGridUsingMultifield.getBinningStrategy()).getRanges(
+                binValue.getKey());
+
+        assertEquals(1L, binValue.getValue().longValue());
+        assertEquals(2, rangePerField.size());
+        final Range<Double> latRange = rangePerField.get("Latitude");
+        final Range<Double> lonRange = rangePerField.get("Longitude");
+        // this ensures the interval is 45
+        assertEquals(0.0, latRange.getMinimum(), 0.1);
+        assertEquals(45.0, latRange.getMaximum(), 0.1);
+        assertEquals(45, lonRange.getMaximum() - lonRange.getMinimum(), 0.1);
+        assertTrue(lonRange.getMaximum() < 90.1);
+        assertTrue(lonRange.getMinimum() > -90.1);
+        // this ensures the offset is 0
+        assertEquals(0.0, latRange.getMinimum() % 45.0, 0.1);
+        assertEquals(0.0, lonRange.getMinimum() % 45.0, 0.1);
+        count += binValue.getValue();
+        multiFieldFilteredActualResults.add(binValue.getKey());
+      }
+      assertEquals(multiFieldFilteredExpectedCount, count);
+      assertTrue(multiFieldFilteredExpectedResults.containsAll(multiFieldFilteredActualResults));
+      assertTrue(multiFieldFilteredActualResults.containsAll(multiFieldFilteredExpectedResults));
+    }
+
+    final Set<ByteArray> compositeFilteredExpectedResults = new HashSet<>();
+    int compositeFilteredExpectedCount = 0;
     try (CloseableIterator<Pair<ByteArray, Long>> iterator =
         ds.getBinnedStatisticValues(countByGridUsingComposite)) {
       int count = 0;
@@ -516,9 +546,78 @@ public class GeoWaveStatisticsIT extends AbstractGeoWaveBasicVectorIT {
         assertEquals(22.5, Math.abs(latRange.getMinimum() % 45.0), 0.1);
         assertEquals(45.0, Math.abs(lonRange.getMinimum() % 90.0), 0.1);
         count++;
+
+        if (latRange.isOverlappedBy(Range.between(-44.0, 44.0))
+            && lonRange.isOverlappedBy(Range.between(-179.0, 89.0))) {
+          compositeFilteredExpectedResults.add(binValue.getKey());
+          compositeFilteredExpectedCount += binValue.getValue();
+        }
       }
       assertEquals(16, count);
       assertEquals(20, totalCount);
+    }
+    try (CloseableIterator<Pair<ByteArray, Long>> iterator =
+        ds.getBinnedStatisticValues(
+            countByGridUsingComposite,
+            BinConstraints.ofObject(
+                new Range[] {Range.between(-44.0, 44.0), Range.between(-179.0, 89.0)}))) {
+      final Set<ByteArray> compositeFilteredActualResults = new HashSet<>();
+      int totalCount = 0;
+      while (iterator.hasNext()) {
+        final Pair<ByteArray, Long> binValue = iterator.next();
+
+        totalCount += binValue.getValue();
+        final Pair<StatisticBinningStrategy, ByteArray>[] bins =
+            ((CompositeBinningStrategy) countByGridUsingComposite.getBinningStrategy()).getSubBins(
+                binValue.getKey());
+        assertEquals(2, bins.length);
+        final Range<Double> latRange =
+            ((NumericRangeFieldValueBinningStrategy) bins[0].getLeft()).getRange(
+                bins[0].getRight());
+        final Range<Double> lonRange =
+            ((NumericRangeFieldValueBinningStrategy) bins[1].getLeft()).getRange(
+                bins[1].getRight());
+        // this ensures the interval is 45 and 90 respectively
+        assertEquals(45, latRange.getMaximum() - latRange.getMinimum(), 0.1);
+        assertEquals(90, lonRange.getMaximum() - lonRange.getMinimum(), 0.1);
+        // this ensures the offset is 22.5 and 45 respectively
+        assertEquals(22.5, Math.abs(latRange.getMinimum() % 45.0), 0.1);
+        assertEquals(45.0, Math.abs(lonRange.getMinimum() % 90.0), 0.1);
+        assertTrue(latRange.getMaximum() < 67.6);
+        assertTrue(latRange.getMinimum() > -67.6);
+        assertTrue(lonRange.getMaximum() < 135.1);
+        assertTrue(lonRange.getMinimum() > -225.1);
+        compositeFilteredActualResults.add(binValue.getKey());
+      }
+
+      assertTrue(compositeFilteredExpectedResults.containsAll(compositeFilteredActualResults));
+      assertTrue(compositeFilteredActualResults.containsAll(compositeFilteredExpectedResults));
+      assertEquals(compositeFilteredExpectedCount, totalCount);
+    }
+  }
+
+  private static void assertTimeBinning(
+      final DataStore ds,
+      final TimeRangeStatistic stat,
+      final int expectedCount,
+      final Function<Interval, Duration> expectedDuration,
+      final Interval overallInterval) {
+
+    try (
+        CloseableIterator<Pair<ByteArray, Interval>> iterator = ds.getBinnedStatisticValues(stat)) {
+      int count = 0;
+      while (iterator.hasNext()) {
+        final Pair<ByteArray, Interval> binValue = iterator.next();
+
+        final Interval binRange =
+            ((TimeRangeFieldValueBinningStrategy) stat.getBinningStrategy()).getInterval(
+                binValue.getKey());
+        assertEquals(expectedDuration.apply(binValue.getValue()), binRange.toDuration());
+        assertTrue(binRange.encloses(binValue.getValue()));
+        assertTrue(overallInterval.encloses(binValue.getValue()));
+        count++;
+      }
+      assertEquals(expectedCount, count);
     }
   }
 

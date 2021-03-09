@@ -482,7 +482,6 @@ public class TemporalBinningStrategy implements BinningStrategy {
 
   public Interval getInterval(final byte[] binId) {
     final Calendar startOfEpoch = getStartEpoch(binId);
-    final String bin = new ByteArray(binId).getString();
     return Interval.of(startOfEpoch.toInstant(), getEndExclusive(startOfEpoch).toInstant());
   }
 }
