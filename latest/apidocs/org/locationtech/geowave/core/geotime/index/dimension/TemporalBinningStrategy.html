@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -214,20 +214,24 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/dim
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>double</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/index/dimension/TemporalBinningStrategy.html#getBinMax--">getBinMax</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code>byte[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/index/dimension/TemporalBinningStrategy.html#getBinId-long-">getBinId</a></span>(long&nbsp;millis)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>double</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/index/dimension/TemporalBinningStrategy.html#getBinMin--">getBinMin</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/index/dimension/TemporalBinningStrategy.html#getBinMax--">getBinMax</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/index/dimension/TemporalBinningStrategy.html#getBinMin--">getBinMin</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinValue.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinValue</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/index/dimension/TemporalBinningStrategy.html#getBinnedValue-double-">getBinnedValue</a></span>(double&nbsp;value)</code>
 <div class="block">Method used to bin a raw date in milliseconds to a binned value of the Binning Strategy.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/index/dimension/TemporalBinningStrategy.html#getDenormalizedRanges-org.locationtech.geowave.core.index.dimension.bin.BinRange-">getDenormalizedRanges</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>&nbsp;binnedRange)</code>
 <div class="block">Given a set of normalized ranges (each of which are confined to the normalized min and max of
@@ -235,28 +239,36 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/dim
  unbinned range.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/index/dimension/TemporalBinningStrategy.html#getFixedBinIdSize--">getFixedBinIdSize</a></span>()</code>
 <div class="block">Return the fixed size for the bin ID used by this binning strategy</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>org.threeten.extra.Interval</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/index/dimension/TemporalBinningStrategy.html#getInterval-byte:A-">getInterval</a></span>(byte[]&nbsp;binId)</code>&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/index/dimension/TemporalBinningStrategy.html#getNormalizedRanges-org.threeten.extra.Interval-">getNormalizedRanges</a></span>(org.threeten.extra.Interval&nbsp;range)</code>&nbsp;</td>
+</tr>
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/index/dimension/TemporalBinningStrategy.html#getNormalizedRanges-org.locationtech.geowave.core.index.sfc.data.NumericData-">getNormalizedRanges</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">NumericData</a>&nbsp;range)</code>
 <div class="block">Return a set of normalized ranges (each of which are confined to the normalized min and max of
  this binning strategy) with a bin for each of the ranges.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/index/dimension/TemporalBinningStrategy.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/index/dimension/TemporalBinningStrategy.html#setToEpoch-java.util.Calendar-">setToEpoch</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Calendar.html?is-external=true" title="class or interface in java.util">Calendar</a>&nbsp;value)</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/index/dimension/TemporalBinningStrategy.html#toBinary--">toBinary</a></span>()</code>
 <div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
@@ -415,6 +427,24 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/dim
 </dl>
 </li>
 </ul>
+<a name="getBinId-long-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getBinId</h4>
+<pre>public&nbsp;byte[]&nbsp;getBinId(long&nbsp;millis)</pre>
+</li>
+</ul>
+<a name="getNormalizedRanges-org.threeten.extra.Interval-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNormalizedRanges</h4>
+<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>[]&nbsp;getNormalizedRanges(org.threeten.extra.Interval&nbsp;range)</pre>
+</li>
+</ul>
 <a name="getNormalizedRanges-org.locationtech.geowave.core.index.sfc.data.NumericData-">
 <!--   -->
 </a>
@@ -498,7 +528,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/dim
 <a name="getDenormalizedRanges-org.locationtech.geowave.core.index.dimension.bin.BinRange-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getDenormalizedRanges</h4>
 <pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a>&nbsp;getDenormalizedRanges(<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>&nbsp;binnedRange)</pre>
@@ -514,6 +544,15 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/dim
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the original query range represented by the normalized and binned range</dd>
 </dl>
+</li>
+</ul>
+<a name="getInterval-byte:A-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getInterval</h4>
+<pre>public&nbsp;org.threeten.extra.Interval&nbsp;getInterval(byte[]&nbsp;binId)</pre>
 </li>
 </ul>
 </li>

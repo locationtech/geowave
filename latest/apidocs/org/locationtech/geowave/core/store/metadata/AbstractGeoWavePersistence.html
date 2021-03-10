@@ -234,12 +234,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                      <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;secondaryId)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code>protected static boolean</code></td>
+<td class="colFirst"><code>protected static &lt;T extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>&gt;<br>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/metadata/AbstractGeoWavePersistence.html#deleteObjects-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.store.operations.DataStoreOperations-org.locationtech.geowave.core.store.operations.MetadataType-org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence-java.lang.String...-">deleteObjects</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;primaryId,
              <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;secondaryId,
              <a href="../../../../../../org/locationtech/geowave/core/store/operations/DataStoreOperations.html" title="interface in org.locationtech.geowave.core.store.operations">DataStoreOperations</a>&nbsp;operations,
              <a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataType.html" title="enum in org.locationtech.geowave.core.store.operations">MetadataType</a>&nbsp;type,
-             <a href="../../../../../../org/locationtech/geowave/core/store/metadata/AbstractGeoWavePersistence.html" title="class in org.locationtech.geowave.core.store.metadata">AbstractGeoWavePersistence</a>&nbsp;cacheDeleter,
+             <a href="../../../../../../org/locationtech/geowave/core/store/metadata/AbstractGeoWavePersistence.html" title="class in org.locationtech.geowave.core.store.metadata">AbstractGeoWavePersistence</a>&lt;T&gt;&nbsp;cacheDeleter,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -725,12 +725,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>deleteObjects</h4>
-<pre>protected static&nbsp;boolean&nbsp;deleteObjects(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;primaryId,
-                                       <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;secondaryId,
-                                       <a href="../../../../../../org/locationtech/geowave/core/store/operations/DataStoreOperations.html" title="interface in org.locationtech.geowave.core.store.operations">DataStoreOperations</a>&nbsp;operations,
-                                       <a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataType.html" title="enum in org.locationtech.geowave.core.store.operations">MetadataType</a>&nbsp;type,
-                                       <a href="../../../../../../org/locationtech/geowave/core/store/metadata/AbstractGeoWavePersistence.html" title="class in org.locationtech.geowave.core.store.metadata">AbstractGeoWavePersistence</a>&nbsp;cacheDeleter,
-                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
+<pre>protected static&nbsp;&lt;T extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>&gt;&nbsp;boolean&nbsp;deleteObjects(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;primaryId,
+                                                               <a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;secondaryId,
+                                                               <a href="../../../../../../org/locationtech/geowave/core/store/operations/DataStoreOperations.html" title="interface in org.locationtech.geowave.core.store.operations">DataStoreOperations</a>&nbsp;operations,
+                                                               <a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataType.html" title="enum in org.locationtech.geowave.core.store.operations">MetadataType</a>&nbsp;type,
+                                                               <a href="../../../../../../org/locationtech/geowave/core/store/metadata/AbstractGeoWavePersistence.html" title="class in org.locationtech.geowave.core.store.metadata">AbstractGeoWavePersistence</a>&lt;T&gt;&nbsp;cacheDeleter,
+                                                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
 </li>
 </ul>
 </li>

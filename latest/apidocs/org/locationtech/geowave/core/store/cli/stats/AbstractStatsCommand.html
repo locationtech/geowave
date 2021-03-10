@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li>Prev&nbsp;Class</li>
-<li><a href="../../../../../../../org/locationtech/geowave/core/store/cli/stats/CalculateStatCommand.html" title="class in org.locationtech.geowave.core.store.cli.stats"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/store/cli/stats/AddStatCommand.html" title="class in org.locationtech.geowave.core.store.cli.stats"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?org/locationtech/geowave/core/store/cli/stats/AbstractStatsCommand.html" target="_top">Frames</a></li>
@@ -123,7 +123,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../../../../org/locationtech/geowave/core/store/cli/stats/CalculateStatCommand.html" title="class in org.locationtech.geowave.core.store.cli.stats">CalculateStatCommand</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/cli/stats/ListStatsCommand.html" title="class in org.locationtech.geowave.core.store.cli.stats">ListStatsCommand</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/cli/stats/RecalculateStatsCommand.html" title="class in org.locationtech.geowave.core.store.cli.stats">RecalculateStatsCommand</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/cli/stats/RemoveStatCommand.html" title="class in org.locationtech.geowave.core.store.cli.stats">RemoveStatCommand</a></dd>
+<dd><a href="../../../../../../../org/locationtech/geowave/core/store/cli/stats/ListStatsCommand.html" title="class in org.locationtech.geowave.core.store.cli.stats">ListStatsCommand</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/cli/stats/RecalculateStatsCommand.html" title="class in org.locationtech.geowave.core.store.cli.stats">RecalculateStatsCommand</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/cli/stats/RemoveStatCommand.html" title="class in org.locationtech.geowave.core.store.cli.stats">RemoveStatCommand</a></dd>
 </dl>
 <hr>
 <br>
@@ -203,8 +203,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/cli/api/Serv
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>protected abstract boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/stats/AbstractStatsCommand.html#performStatsCommand-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.cli.stats.StatsCommandLineOptions-com.beust.jcommander.internal.Console-">performStatsCommand</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;options,
-                   <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/cli/stats/AbstractStatsCommand.html#performStatsCommand-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-org.locationtech.geowave.core.store.cli.stats.StatsCommandLineOptions-com.beust.jcommander.internal.Console-">performStatsCommand</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;options,
                    <a href="../../../../../../../org/locationtech/geowave/core/store/cli/stats/StatsCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.cli.stats">StatsCommandLineOptions</a>&nbsp;statsOptions,
                    com.beust.jcommander.internal.Console&nbsp;console)</code>
 <div class="block">Abstracted command method to be called when command selected</div>
@@ -327,14 +326,13 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/cli/api/Serv
 <pre>public&nbsp;void&nbsp;setStatsOptions(<a href="../../../../../../../org/locationtech/geowave/core/store/cli/stats/StatsCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.cli.stats">StatsCommandLineOptions</a>&nbsp;statsOptions)</pre>
 </li>
 </ul>
-<a name="performStatsCommand-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.cli.stats.StatsCommandLineOptions-com.beust.jcommander.internal.Console-">
+<a name="performStatsCommand-org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions-org.locationtech.geowave.core.store.cli.stats.StatsCommandLineOptions-com.beust.jcommander.internal.Console-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>performStatsCommand</h4>
 <pre>protected abstract&nbsp;boolean&nbsp;performStatsCommand(<a href="../../../../../../../org/locationtech/geowave/core/store/cli/store/DataStorePluginOptions.html" title="class in org.locationtech.geowave.core.store.cli.store">DataStorePluginOptions</a>&nbsp;options,
-                                               <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter,
                                                <a href="../../../../../../../org/locationtech/geowave/core/store/cli/stats/StatsCommandLineOptions.html" title="class in org.locationtech.geowave.core.store.cli.stats">StatsCommandLineOptions</a>&nbsp;statsOptions,
                                                com.beust.jcommander.internal.Console&nbsp;console)
                                         throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
@@ -388,7 +386,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/cli/api/Serv
 <div class="subNav">
 <ul class="navList">
 <li>Prev&nbsp;Class</li>
-<li><a href="../../../../../../../org/locationtech/geowave/core/store/cli/stats/CalculateStatCommand.html" title="class in org.locationtech.geowave.core.store.cli.stats"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/store/cli/stats/AddStatCommand.html" title="class in org.locationtech.geowave.core.store.cli.stats"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?org/locationtech/geowave/core/store/cli/stats/AbstractStatsCommand.html" target="_top">Frames</a></li>

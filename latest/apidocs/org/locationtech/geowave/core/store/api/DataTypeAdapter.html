@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":18,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6};
+var methods = {"i0":6,"i1":18,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -162,29 +162,67 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/data/Data
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="type parameter in DataTypeAdapter">T</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getDataClass--">getDataClass</a></span>()</code>
+<div class="block">Return the class that represents the data stored by this adapter.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getDataId-T-">getDataId</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="type parameter in DataTypeAdapter">T</a>&nbsp;entry)</code>
 <div class="block">Get a data ID for the entry</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getFieldClass-int-">getFieldClass</a></span>(int&nbsp;fieldIndex)</code>
+<div class="block">Returns the class of the data that is represented by the field at the given index.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getFieldCount--">getFieldCount</a></span>()</code>
+<div class="block">Returns the number of fields represented by this data type.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getFieldName-int-">getFieldName</a></span>(int&nbsp;fieldIndex)</code>
+<div class="block">Returns the name of the field at the given index.</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getFieldNameForPosition-org.locationtech.geowave.core.store.index.CommonIndexModel-int-">getFieldNameForPosition</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
                        int&nbsp;position)</code>
 <div class="block">Get the field name for the position</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getFieldValue-T-java.lang.String-">getFieldValue</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="type parameter in DataTypeAdapter">T</a>&nbsp;entry,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>
+<div class="block">Returns the value of the field with the given name from the entry.</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getPositionOfOrderedField-org.locationtech.geowave.core.store.index.CommonIndexModel-java.lang.String-">getPositionOfOrderedField</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>
 <div class="block">for efficiency we assume fields have some pre-defined ordering.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getTypeName--">getTypeName</a></span>()</code>
 <div class="block">Return the data adapter's type name.</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#isCommonIndexField-org.locationtech.geowave.core.store.index.CommonIndexModel-java.lang.String-">isCommonIndexField</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>
+<div class="block">Determines if a given field is part of the given common index model.</div>
 </td>
 </tr>
 </table>
@@ -293,6 +331,24 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/data/Data
 </dl>
 </li>
 </ul>
+<a name="isCommonIndexField-org.locationtech.geowave.core.store.index.CommonIndexModel-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isCommonIndexField</h4>
+<pre>boolean&nbsp;isCommonIndexField(<a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
+<div class="block">Determines if a given field is part of the given common index model.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>indexModel</code> - the index model to check</dd>
+<dd><code>fieldName</code> - the field name</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd><code>true</code> if the field is used in the common index model</dd>
+</dl>
+</li>
+</ul>
 <a name="getPositionOfOrderedField-org.locationtech.geowave.core.store.index.CommonIndexModel-java.lang.String-">
 <!--   -->
 </a>
@@ -329,6 +385,86 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/data/Data
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the field name, if its part of the common index model, it should be the common field
          name</dd>
+</dl>
+</li>
+</ul>
+<a name="getFieldCount--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFieldCount</h4>
+<pre>int&nbsp;getFieldCount()</pre>
+<div class="block">Returns the number of fields represented by this data type.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the number of fields</dd>
+</dl>
+</li>
+</ul>
+<a name="getFieldClass-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFieldClass</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;getFieldClass(int&nbsp;fieldIndex)</pre>
+<div class="block">Returns the class of the data that is represented by the field at the given index.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fieldIndex</code> - the field index</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the class of the data for the field</dd>
+</dl>
+</li>
+</ul>
+<a name="getFieldName-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFieldName</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getFieldName(int&nbsp;fieldIndex)</pre>
+<div class="block">Returns the name of the field at the given index.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fieldIndex</code> - the field index</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the name of the field</dd>
+</dl>
+</li>
+</ul>
+<a name="getFieldValue-java.lang.Object-java.lang.String-">
+<!--   -->
+</a><a name="getFieldValue-T-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFieldValue</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;getFieldValue(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="type parameter in DataTypeAdapter">T</a>&nbsp;entry,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
+<div class="block">Returns the value of the field with the given name from the entry.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>entry</code> - the entry</dd>
+<dd><code>fieldName</code> - the field name</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the value of the field on the entry</dd>
+</dl>
+</li>
+</ul>
+<a name="getDataClass--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDataClass</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="type parameter in DataTypeAdapter">T</a>&gt;&nbsp;getDataClass()</pre>
+<div class="block">Return the class that represents the data stored by this adapter.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the class of the data</dd>
 </dl>
 </li>
 </ul>

@@ -86,10 +86,6 @@
 <td class="colFirst"><a href="#org.locationtech.geowave.core.store.metadata">org.locationtech.geowave.core.store.metadata</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.datastore.bigtable">org.locationtech.geowave.datastore.bigtable</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
 </tbody>
 </table>
 </li>
@@ -120,9 +116,7 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/metadata/DataStatisticsStoreImpl.html" title="class in org.locationtech.geowave.core.store.metadata">DataStatisticsStoreImpl</a></span></code>
-<div class="block">This class will persist Index objects within an Accumulo table for GeoWave metadata.</div>
-</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/metadata/DataStatisticsStoreImpl.html" title="class in org.locationtech.geowave.core.store.metadata">DataStatisticsStoreImpl</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
@@ -140,34 +134,13 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected static boolean</code></td>
+<td class="colFirst"><code>protected static &lt;T extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>&gt;<br>boolean</code></td>
 <td class="colLast"><span class="typeNameLabel">AbstractGeoWavePersistence.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/metadata/AbstractGeoWavePersistence.html#deleteObjects-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.store.operations.DataStoreOperations-org.locationtech.geowave.core.store.operations.MetadataType-org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence-java.lang.String...-">deleteObjects</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;primaryId,
              <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&nbsp;secondaryId,
              <a href="../../../../../../../org/locationtech/geowave/core/store/operations/DataStoreOperations.html" title="interface in org.locationtech.geowave.core.store.operations">DataStoreOperations</a>&nbsp;operations,
              <a href="../../../../../../../org/locationtech/geowave/core/store/operations/MetadataType.html" title="enum in org.locationtech.geowave.core.store.operations">MetadataType</a>&nbsp;type,
-             <a href="../../../../../../../org/locationtech/geowave/core/store/metadata/AbstractGeoWavePersistence.html" title="class in org.locationtech.geowave.core.store.metadata">AbstractGeoWavePersistence</a>&nbsp;cacheDeleter,
+             <a href="../../../../../../../org/locationtech/geowave/core/store/metadata/AbstractGeoWavePersistence.html" title="class in org.locationtech.geowave.core.store.metadata">AbstractGeoWavePersistence</a>&lt;T&gt;&nbsp;cacheDeleter,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="org.locationtech.geowave.datastore.bigtable">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/metadata/AbstractGeoWavePersistence.html" title="class in org.locationtech.geowave.core.store.metadata">AbstractGeoWavePersistence</a> in <a href="../../../../../../../org/locationtech/geowave/datastore/bigtable/package-summary.html">org.locationtech.geowave.datastore.bigtable</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
-<caption><span>Subclasses of <a href="../../../../../../../org/locationtech/geowave/core/store/metadata/AbstractGeoWavePersistence.html" title="class in org.locationtech.geowave.core.store.metadata">AbstractGeoWavePersistence</a> in <a href="../../../../../../../org/locationtech/geowave/datastore/bigtable/package-summary.html">org.locationtech.geowave.datastore.bigtable</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Class and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/bigtable/BigTableDataStatisticsStore.html" title="class in org.locationtech.geowave.datastore.bigtable">BigTableDataStatisticsStore</a></span></code>
-<div class="block">Big Table needs to safe guard its column qualifiers against control characters (rather than use
- the default byte array from shorts as the cq)</div>
-</td>
 </tr>
 </tbody>
 </table>

@@ -2285,6 +2285,27 @@
 <ul class="blockList">
 <li class="blockList">
 <table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>org.locationtech.geowave.core.geotime.store.statistics.binning.<a href="org/locationtech/geowave/core/geotime/store/statistics/binning/TimeRangeFieldValueBinningStrategy.html" title="class in org.locationtech.geowave.core.geotime.store.statistics.binning">TimeRangeFieldValueBinningStrategy</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.core.geotime.store.statistics.binning.TimeRangeFieldValueBinningStrategy.NAME">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="org/locationtech/geowave/core/geotime/store/statistics/binning/TimeRangeFieldValueBinningStrategy.html#NAME">NAME</a></code></td>
+<td class="colLast"><code>"TIME_FIELD_VALUE"</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<ul class="blockList">
+<li class="blockList">
+<table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
 <caption><span>org.locationtech.geowave.core.geotime.util.<a href="org/locationtech/geowave/core/geotime/util/GeometryUtils.html" title="class in org.locationtech.geowave.core.geotime.util">GeometryUtils</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
@@ -2643,7 +2664,7 @@
 <ul class="blockList">
 <li class="blockList">
 <table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
-<caption><span>org.locationtech.geowave.core.store.adapter.statistics.<a href="org/locationtech/geowave/core/store/adapter/statistics/StatsCompositionTool.html" title="class in org.locationtech.geowave.core.store.adapter.statistics">StatsCompositionTool</a>&lt;<a href="org/locationtech/geowave/core/store/adapter/statistics/StatsCompositionTool.html" title="type parameter in StatsCompositionTool">T</a>&gt;</span><span class="tabEnd">&nbsp;</span></caption>
+<caption><span>org.locationtech.geowave.core.store.api.<a href="org/locationtech/geowave/core/store/api/Statistic.html" title="interface in org.locationtech.geowave.core.store.api">Statistic</a>&lt;<a href="org/locationtech/geowave/core/store/api/Statistic.html" title="type parameter in Statistic">V</a> extends <a href="org/locationtech/geowave/core/store/api/StatisticValue.html" title="class in org.locationtech.geowave.core.store.api">StatisticValue</a>&lt;?&gt;&gt;</span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th scope="col">Constant Field</th>
@@ -2651,11 +2672,18 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a name="org.locationtech.geowave.core.store.adapter.statistics.StatsCompositionTool.FLUSH_STATS_THRESHOLD">
+<td class="colFirst"><a name="org.locationtech.geowave.core.store.api.Statistic.DEFAULT_TAG">
 <!--   -->
-</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
-<td><code><a href="org/locationtech/geowave/core/store/adapter/statistics/StatsCompositionTool.html#FLUSH_STATS_THRESHOLD">FLUSH_STATS_THRESHOLD</a></code></td>
-<td class="colLast"><code>1000000</code></td>
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="org/locationtech/geowave/core/store/api/Statistic.html#DEFAULT_TAG">DEFAULT_TAG</a></code></td>
+<td class="colLast"><code>"default"</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="org.locationtech.geowave.core.store.api.Statistic.INTERNAL_TAG">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="org/locationtech/geowave/core/store/api/Statistic.html#INTERNAL_TAG">INTERNAL_TAG</a></code></td>
+<td class="colLast"><code>"internal"</code></td>
 </tr>
 </tbody>
 </table>
@@ -2881,6 +2909,103 @@
 </a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td><code><a href="org/locationtech/geowave/core/store/server/ServerOpHelper.html#ROW_MERGING_VISIBILITY_SUFFIX">ROW_MERGING_VISIBILITY_SUFFIX</a></code></td>
 <td class="colLast"><code>"_VISIBILITY_COMBINER"</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<ul class="blockList">
+<li class="blockList">
+<table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>org.locationtech.geowave.core.store.statistics.binning.<a href="org/locationtech/geowave/core/store/statistics/binning/CompositeBinningStrategy.html" title="class in org.locationtech.geowave.core.store.statistics.binning">CompositeBinningStrategy</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.core.store.statistics.binning.CompositeBinningStrategy.NAME">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="org/locationtech/geowave/core/store/statistics/binning/CompositeBinningStrategy.html#NAME">NAME</a></code></td>
+<td class="colLast"><code>"COMPOSITE"</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>org.locationtech.geowave.core.store.statistics.binning.<a href="org/locationtech/geowave/core/store/statistics/binning/DataTypeBinningStrategy.html" title="class in org.locationtech.geowave.core.store.statistics.binning">DataTypeBinningStrategy</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.core.store.statistics.binning.DataTypeBinningStrategy.NAME">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="org/locationtech/geowave/core/store/statistics/binning/DataTypeBinningStrategy.html#NAME">NAME</a></code></td>
+<td class="colLast"><code>"DATA_TYPE"</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>org.locationtech.geowave.core.store.statistics.binning.<a href="org/locationtech/geowave/core/store/statistics/binning/FieldValueBinningStrategy.html" title="class in org.locationtech.geowave.core.store.statistics.binning">FieldValueBinningStrategy</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.core.store.statistics.binning.FieldValueBinningStrategy.NAME">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="org/locationtech/geowave/core/store/statistics/binning/FieldValueBinningStrategy.html#NAME">NAME</a></code></td>
+<td class="colLast"><code>"FIELD_VALUE"</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>org.locationtech.geowave.core.store.statistics.binning.<a href="org/locationtech/geowave/core/store/statistics/binning/NumericRangeFieldValueBinningStrategy.html" title="class in org.locationtech.geowave.core.store.statistics.binning">NumericRangeFieldValueBinningStrategy</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.core.store.statistics.binning.NumericRangeFieldValueBinningStrategy.NAME">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="org/locationtech/geowave/core/store/statistics/binning/NumericRangeFieldValueBinningStrategy.html#NAME">NAME</a></code></td>
+<td class="colLast"><code>"NUMERIC_FIELD_VALUE"</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>org.locationtech.geowave.core.store.statistics.binning.<a href="org/locationtech/geowave/core/store/statistics/binning/PartitionBinningStrategy.html" title="class in org.locationtech.geowave.core.store.statistics.binning">PartitionBinningStrategy</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.core.store.statistics.binning.PartitionBinningStrategy.NAME">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="org/locationtech/geowave/core/store/statistics/binning/PartitionBinningStrategy.html#NAME">NAME</a></code></td>
+<td class="colLast"><code>"PARTITION"</code></td>
 </tr>
 </tbody>
 </table>
@@ -5226,6 +5351,13 @@
 <td><code><a href="org/locationtech/geowave/examples/ingest/SimpleIngest.html#FEATURE_NAME">FEATURE_NAME</a></code></td>
 <td class="colLast"><code>"GridPoint"</code></td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="org.locationtech.geowave.examples.ingest.SimpleIngest.GEOMETRY_FIELD">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td><code><a href="org/locationtech/geowave/examples/ingest/SimpleIngest.html#GEOMETRY_FIELD">GEOMETRY_FIELD</a></code></td>
+<td class="colLast"><code>"geometry"</code></td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -6659,6 +6791,46 @@
 </li>
 <li class="blockList">
 <table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>org.locationtech.geowave.service.grpc.protobuf.<a href="org/locationtech/geowave/service/grpc/protobuf/AddStatCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">AddStatCommandParametersProtos</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.AddStatCommandParametersProtos.BINNINGSTRATEGYNAME_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/AddStatCommandParametersProtos.html#BINNINGSTRATEGYNAME_FIELD_NUMBER">BINNINGSTRATEGYNAME_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>2</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.AddStatCommandParametersProtos.PARAMETERS_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/AddStatCommandParametersProtos.html#PARAMETERS_FIELD_NUMBER">PARAMETERS_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>1</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.AddStatCommandParametersProtos.SKIPCALCULATION_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/AddStatCommandParametersProtos.html#SKIPCALCULATION_FIELD_NUMBER">SKIPCALCULATION_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>3</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.AddStatCommandParametersProtos.STATTYPE_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/AddStatCommandParametersProtos.html#STATTYPE_FIELD_NUMBER">STATTYPE_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>4</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
 <caption><span>org.locationtech.geowave.service.grpc.protobuf.<a href="org/locationtech/geowave/service/grpc/protobuf/AddStoreCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">AddStoreCommandParametersProtos</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
@@ -6699,6 +6871,46 @@
 </li>
 <li class="blockList">
 <table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>org.locationtech.geowave.service.grpc.protobuf.<a href="org/locationtech/geowave/service/grpc/protobuf/AddTypeCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">AddTypeCommandParametersProtos</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.AddTypeCommandParametersProtos.EXTENSIONS_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/AddTypeCommandParametersProtos.html#EXTENSIONS_FIELD_NUMBER">EXTENSIONS_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>3</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.AddTypeCommandParametersProtos.FORMATS_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/AddTypeCommandParametersProtos.html#FORMATS_FIELD_NUMBER">FORMATS_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>4</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.AddTypeCommandParametersProtos.PARAMETERS_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/AddTypeCommandParametersProtos.html#PARAMETERS_FIELD_NUMBER">PARAMETERS_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>1</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.AddTypeCommandParametersProtos.VISIBILITY_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/AddTypeCommandParametersProtos.html#VISIBILITY_FIELD_NUMBER">VISIBILITY_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>2</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
 <caption><span>org.locationtech.geowave.service.grpc.protobuf.<a href="org/locationtech/geowave/service/grpc/protobuf/AnalyticMapreduceGrpc.html" title="class in org.locationtech.geowave.service.grpc.protobuf">AnalyticMapreduceGrpc</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
@@ -6731,46 +6943,6 @@
 </a><code>public&nbsp;static&nbsp;final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td><code><a href="org/locationtech/geowave/service/grpc/protobuf/AnalyticSparkGrpc.html#SERVICE_NAME">SERVICE_NAME</a></code></td>
 <td class="colLast"><code>"AnalyticSpark"</code></td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList">
-<table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
-<caption><span>org.locationtech.geowave.service.grpc.protobuf.<a href="org/locationtech/geowave/service/grpc/protobuf/CalculateStatCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">CalculateStatCommandParametersProtos</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th scope="col">Constant Field</th>
-<th class="colLast" scope="col">Value</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.CalculateStatCommandParametersProtos.AUTHORIZATIONS_FIELD_NUMBER">
-<!--   -->
-</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
-<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/CalculateStatCommandParametersProtos.html#AUTHORIZATIONS_FIELD_NUMBER">AUTHORIZATIONS_FIELD_NUMBER</a></code></td>
-<td class="colLast"><code>3</code></td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.CalculateStatCommandParametersProtos.FIELDNAME_FIELD_NUMBER">
-<!--   -->
-</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
-<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/CalculateStatCommandParametersProtos.html#FIELDNAME_FIELD_NUMBER">FIELDNAME_FIELD_NUMBER</a></code></td>
-<td class="colLast"><code>2</code></td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.CalculateStatCommandParametersProtos.JSONFORMATFLAG_FIELD_NUMBER">
-<!--   -->
-</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
-<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/CalculateStatCommandParametersProtos.html#JSONFORMATFLAG_FIELD_NUMBER">JSONFORMATFLAG_FIELD_NUMBER</a></code></td>
-<td class="colLast"><code>4</code></td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.CalculateStatCommandParametersProtos.PARAMETERS_FIELD_NUMBER">
-<!--   -->
-</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
-<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/CalculateStatCommandParametersProtos.html#PARAMETERS_FIELD_NUMBER">PARAMETERS_FIELD_NUMBER</a></code></td>
-<td class="colLast"><code>1</code></td>
 </tr>
 </tbody>
 </table>
@@ -8536,28 +8708,110 @@
 <!--   -->
 </a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
 <td><code><a href="org/locationtech/geowave/service/grpc/protobuf/ListStatsCommandParametersProtos.html#AUTHORIZATIONS_FIELD_NUMBER">AUTHORIZATIONS_FIELD_NUMBER</a></code></td>
-<td class="colLast"><code>3</code></td>
+<td class="colLast"><code>9</code></td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.ListStatsCommandParametersProtos.JSONFORMATFLAG_FIELD_NUMBER">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.ListStatsCommandParametersProtos.CSV_FIELD_NUMBER">
 <!--   -->
 </a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
-<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/ListStatsCommandParametersProtos.html#JSONFORMATFLAG_FIELD_NUMBER">JSONFORMATFLAG_FIELD_NUMBER</a></code></td>
-<td class="colLast"><code>4</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/ListStatsCommandParametersProtos.html#CSV_FIELD_NUMBER">CSV_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>3</code></td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.ListStatsCommandParametersProtos.FIELDNAME_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/ListStatsCommandParametersProtos.html#FIELDNAME_FIELD_NUMBER">FIELDNAME_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>7</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.ListStatsCommandParametersProtos.INDEXNAME_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/ListStatsCommandParametersProtos.html#INDEXNAME_FIELD_NUMBER">INDEXNAME_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>5</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.ListStatsCommandParametersProtos.LIMIT_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/ListStatsCommandParametersProtos.html#LIMIT_FIELD_NUMBER">LIMIT_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>2</code></td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.ListStatsCommandParametersProtos.PARAMETERS_FIELD_NUMBER">
 <!--   -->
 </a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
 <td><code><a href="org/locationtech/geowave/service/grpc/protobuf/ListStatsCommandParametersProtos.html#PARAMETERS_FIELD_NUMBER">PARAMETERS_FIELD_NUMBER</a></code></td>
-<td class="colLast"><code>2</code></td>
+<td class="colLast"><code>1</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.ListStatsCommandParametersProtos.STATTYPE_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/ListStatsCommandParametersProtos.html#STATTYPE_FIELD_NUMBER">STATTYPE_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>4</code></td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.ListStatsCommandParametersProtos.TAG_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/ListStatsCommandParametersProtos.html#TAG_FIELD_NUMBER">TAG_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>8</code></td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.ListStatsCommandParametersProtos.TYPENAME_FIELD_NUMBER">
 <!--   -->
 </a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
 <td><code><a href="org/locationtech/geowave/service/grpc/protobuf/ListStatsCommandParametersProtos.html#TYPENAME_FIELD_NUMBER">TYPENAME_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>6</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table class="constantsSummary" border="0" cellpadding="3" cellspacing="0" summary="Constant Field Values table, listing constant fields, and values">
+<caption><span>org.locationtech.geowave.service.grpc.protobuf.<a href="org/locationtech/geowave/service/grpc/protobuf/ListStatTypesCommandParametersProtos.html" title="class in org.locationtech.geowave.service.grpc.protobuf">ListStatTypesCommandParametersProtos</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th scope="col">Constant Field</th>
+<th class="colLast" scope="col">Value</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.ListStatTypesCommandParametersProtos.BINNINGSTRATEGIES_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/ListStatTypesCommandParametersProtos.html#BINNINGSTRATEGIES_FIELD_NUMBER">BINNINGSTRATEGIES_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>5</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.ListStatTypesCommandParametersProtos.FIELDNAME_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/ListStatTypesCommandParametersProtos.html#FIELDNAME_FIELD_NUMBER">FIELDNAME_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>4</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.ListStatTypesCommandParametersProtos.INDEXNAME_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/ListStatTypesCommandParametersProtos.html#INDEXNAME_FIELD_NUMBER">INDEXNAME_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>2</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.ListStatTypesCommandParametersProtos.PARAMETERS_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/ListStatTypesCommandParametersProtos.html#PARAMETERS_FIELD_NUMBER">PARAMETERS_FIELD_NUMBER</a></code></td>
 <td class="colLast"><code>1</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.ListStatTypesCommandParametersProtos.TYPENAME_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/ListStatTypesCommandParametersProtos.html#TYPENAME_FIELD_NUMBER">TYPENAME_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>3</code></td>
 </tr>
 </tbody>
 </table>
@@ -9048,17 +9302,31 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.RecalculateStatsCommandParametersProtos.ALL_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/RecalculateStatsCommandParametersProtos.html#ALL_FIELD_NUMBER">ALL_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>2</code></td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.RecalculateStatsCommandParametersProtos.AUTHORIZATIONS_FIELD_NUMBER">
 <!--   -->
 </a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
 <td><code><a href="org/locationtech/geowave/service/grpc/protobuf/RecalculateStatsCommandParametersProtos.html#AUTHORIZATIONS_FIELD_NUMBER">AUTHORIZATIONS_FIELD_NUMBER</a></code></td>
-<td class="colLast"><code>3</code></td>
+<td class="colLast"><code>8</code></td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.RecalculateStatsCommandParametersProtos.JSONFORMATFLAG_FIELD_NUMBER">
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.RecalculateStatsCommandParametersProtos.FIELDNAME_FIELD_NUMBER">
 <!--   -->
 </a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
-<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/RecalculateStatsCommandParametersProtos.html#JSONFORMATFLAG_FIELD_NUMBER">JSONFORMATFLAG_FIELD_NUMBER</a></code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/RecalculateStatsCommandParametersProtos.html#FIELDNAME_FIELD_NUMBER">FIELDNAME_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>6</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.RecalculateStatsCommandParametersProtos.INDEXNAME_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/RecalculateStatsCommandParametersProtos.html#INDEXNAME_FIELD_NUMBER">INDEXNAME_FIELD_NUMBER</a></code></td>
 <td class="colLast"><code>4</code></td>
 </tr>
 <tr class="altColor">
@@ -9066,14 +9334,28 @@
 <!--   -->
 </a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
 <td><code><a href="org/locationtech/geowave/service/grpc/protobuf/RecalculateStatsCommandParametersProtos.html#PARAMETERS_FIELD_NUMBER">PARAMETERS_FIELD_NUMBER</a></code></td>
-<td class="colLast"><code>2</code></td>
+<td class="colLast"><code>1</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.RecalculateStatsCommandParametersProtos.STATTYPE_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/RecalculateStatsCommandParametersProtos.html#STATTYPE_FIELD_NUMBER">STATTYPE_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>3</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.RecalculateStatsCommandParametersProtos.TAG_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/RecalculateStatsCommandParametersProtos.html#TAG_FIELD_NUMBER">TAG_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>7</code></td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.RecalculateStatsCommandParametersProtos.TYPENAME_FIELD_NUMBER">
 <!--   -->
 </a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
 <td><code><a href="org/locationtech/geowave/service/grpc/protobuf/RecalculateStatsCommandParametersProtos.html#TYPENAME_FIELD_NUMBER">TYPENAME_FIELD_NUMBER</a></code></td>
-<td class="colLast"><code>1</code></td>
+<td class="colLast"><code>5</code></td>
 </tr>
 </tbody>
 </table>
@@ -9107,25 +9389,39 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.RemoveStatCommandParametersProtos.ALL_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersProtos.html#ALL_FIELD_NUMBER">ALL_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>2</code></td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.RemoveStatCommandParametersProtos.AUTHORIZATIONS_FIELD_NUMBER">
 <!--   -->
 </a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
 <td><code><a href="org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersProtos.html#AUTHORIZATIONS_FIELD_NUMBER">AUTHORIZATIONS_FIELD_NUMBER</a></code></td>
-<td class="colLast"><code>3</code></td>
+<td class="colLast"><code>9</code></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.RemoveStatCommandParametersProtos.FIELDNAME_FIELD_NUMBER">
 <!--   -->
 </a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
 <td><code><a href="org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersProtos.html#FIELDNAME_FIELD_NUMBER">FIELDNAME_FIELD_NUMBER</a></code></td>
-<td class="colLast"><code>2</code></td>
+<td class="colLast"><code>7</code></td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.RemoveStatCommandParametersProtos.JSONFORMATFLAG_FIELD_NUMBER">
+<tr class="rowColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.RemoveStatCommandParametersProtos.FORCE_FIELD_NUMBER">
 <!--   -->
 </a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
-<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersProtos.html#JSONFORMATFLAG_FIELD_NUMBER">JSONFORMATFLAG_FIELD_NUMBER</a></code></td>
-<td class="colLast"><code>4</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersProtos.html#FORCE_FIELD_NUMBER">FORCE_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>3</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.RemoveStatCommandParametersProtos.INDEXNAME_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersProtos.html#INDEXNAME_FIELD_NUMBER">INDEXNAME_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>5</code></td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.RemoveStatCommandParametersProtos.PARAMETERS_FIELD_NUMBER">
@@ -9133,6 +9429,27 @@
 </a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
 <td><code><a href="org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersProtos.html#PARAMETERS_FIELD_NUMBER">PARAMETERS_FIELD_NUMBER</a></code></td>
 <td class="colLast"><code>1</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.RemoveStatCommandParametersProtos.STATTYPE_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersProtos.html#STATTYPE_FIELD_NUMBER">STATTYPE_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>4</code></td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.RemoveStatCommandParametersProtos.TAG_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersProtos.html#TAG_FIELD_NUMBER">TAG_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>8</code></td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a name="org.locationtech.geowave.service.grpc.protobuf.RemoveStatCommandParametersProtos.TYPENAME_FIELD_NUMBER">
+<!--   -->
+</a><code>public&nbsp;static&nbsp;final&nbsp;int</code></td>
+<td><code><a href="org/locationtech/geowave/service/grpc/protobuf/RemoveStatCommandParametersProtos.html#TYPENAME_FIELD_NUMBER">TYPENAME_FIELD_NUMBER</a></code></td>
+<td class="colLast"><code>6</code></td>
 </tr>
 </tbody>
 </table>

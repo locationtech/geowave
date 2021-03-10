@@ -251,8 +251,7 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 </tr>
 <tr id="i21" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/operations/RocksDBOperations.html#mergeStats-org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-">mergeStats</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
-          <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/operations/RocksDBOperations.html#mergeStats-org.locationtech.geowave.core.store.statistics.DataStatisticsStore-">mergeStats</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.statistics">DataStatisticsStore</a>&nbsp;statsStore)</code>&nbsp;</td>
 </tr>
 <tr id="i22" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -323,20 +322,6 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 <pre>public&nbsp;void&nbsp;compactData()</pre>
 </li>
 </ul>
-<a name="mergeStats-org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>mergeStats</h4>
-<pre>public&nbsp;boolean&nbsp;mergeStats(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
-                          <a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/DataStoreOperations.html#mergeStats-org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore-org.locationtech.geowave.core.store.adapter.InternalAdapterStore-">mergeStats</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/operations/DataStoreOperations.html" title="interface in org.locationtech.geowave.core.store.operations">DataStoreOperations</a></code></dd>
-</dl>
-</li>
-</ul>
 <a name="compactMetadata--">
 <!--   -->
 </a>
@@ -344,6 +329,19 @@ implements <a href="../../../../../../org/locationtech/geowave/mapreduce/MapRedu
 <li class="blockList">
 <h4>compactMetadata</h4>
 <pre>public&nbsp;void&nbsp;compactMetadata()</pre>
+</li>
+</ul>
+<a name="mergeStats-org.locationtech.geowave.core.store.statistics.DataStatisticsStore-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>mergeStats</h4>
+<pre>public&nbsp;boolean&nbsp;mergeStats(<a href="../../../../../../org/locationtech/geowave/core/store/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.statistics">DataStatisticsStore</a>&nbsp;statsStore)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/DataStoreOperations.html#mergeStats-org.locationtech.geowave.core.store.statistics.DataStatisticsStore-">mergeStats</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/operations/DataStoreOperations.html" title="interface in org.locationtech.geowave.core.store.operations">DataStoreOperations</a></code></dd>
+</dl>
 </li>
 </ul>
 <a name="indexExists-java.lang.String-">

@@ -18,8 +18,8 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
+var methods = {"i0":18,"i1":6};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -135,12 +135,19 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/ingest/Da
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t5" class="tableTab"><span><a href="javascript:show(16);">Default Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>default <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html" title="type parameter in IngestPluginBase">O</a>&gt;[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html#getDataAdapters-java.net.URL-java.lang.String-">getDataAdapters</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;url,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>
+<div class="block">Get all writable adapters used by this plugin for the given URL</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html" title="type parameter in IngestPluginBase">O</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html#toGeoWaveData-I-java.lang.String:A-java.lang.String-">toGeoWaveData</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html" title="type parameter in IngestPluginBase">I</a>&nbsp;input,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
@@ -171,6 +178,26 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/ingest/Da
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="getDataAdapters-java.net.URL-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDataAdapters</h4>
+<pre>default&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html" title="type parameter in IngestPluginBase">O</a>&gt;[]&nbsp;getDataAdapters(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;url,
+                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</pre>
+<div class="block">Get all writable adapters used by this plugin for the given URL</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>url</code> - the URL of the data to ingest</dd>
+<dd><code>globalVisibility</code> - If on the command-line the user specifies a global visibility to write
+        to the visibility column in GeoWave, it is passed along here. It is assumed that this is
+        the same visibility string that will be passed to IngestPluginBase.toGeoWaveData()</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>An array of adapters that may be used by this plugin</dd>
+</dl>
+</li>
+</ul>
 <a name="toGeoWaveData-java.lang.Object-java.lang.String:A-java.lang.String-">
 <!--   -->
 </a><a name="toGeoWaveData-I-java.lang.String:A-java.lang.String-">

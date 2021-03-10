@@ -34,6 +34,7 @@ org.locationtech.geowave.adapter.vector.query.gwql.parse
 org.locationtech.geowave.adapter.vector.query.gwql.statement
 org.locationtech.geowave.adapter.vector.render
 org.locationtech.geowave.adapter.vector.stats
+org.locationtech.geowave.adapter.vector.stats.legacy
 org.locationtech.geowave.adapter.vector.util
 org.locationtech.geowave.analytic
 org.locationtech.geowave.analytic.clustering
@@ -125,6 +126,7 @@ org.locationtech.geowave.core.geotime.store.query.aggregate
 org.locationtech.geowave.core.geotime.store.query.api
 org.locationtech.geowave.core.geotime.store.query.filter
 org.locationtech.geowave.core.geotime.store.statistics
+org.locationtech.geowave.core.geotime.store.statistics.binning
 org.locationtech.geowave.core.geotime.util
 org.locationtech.geowave.core.index
 org.locationtech.geowave.core.index.dimension
@@ -153,7 +155,6 @@ org.locationtech.geowave.core.ingest.spi
 org.locationtech.geowave.core.store
 org.locationtech.geowave.core.store.adapter
 org.locationtech.geowave.core.store.adapter.exceptions
-org.locationtech.geowave.core.store.adapter.statistics
 org.locationtech.geowave.core.store.adapter.statistics.histogram
 org.locationtech.geowave.core.store.api
 org.locationtech.geowave.core.store.base
@@ -187,6 +188,13 @@ org.locationtech.geowave.core.store.query.filter
 org.locationtech.geowave.core.store.query.options
 org.locationtech.geowave.core.store.server
 org.locationtech.geowave.core.store.spi
+org.locationtech.geowave.core.store.statistics
+org.locationtech.geowave.core.store.statistics.adapter
+org.locationtech.geowave.core.store.statistics.binning
+org.locationtech.geowave.core.store.statistics.field
+org.locationtech.geowave.core.store.statistics.index
+org.locationtech.geowave.core.store.statistics.query
+org.locationtech.geowave.core.store.statistics.visibility
 org.locationtech.geowave.core.store.util
 org.locationtech.geowave.datastore.accumulo
 org.locationtech.geowave.datastore.accumulo.cli
@@ -248,6 +256,7 @@ org.locationtech.geowave.examples.ingest
 org.locationtech.geowave.examples.ingest.bulk
 org.locationtech.geowave.examples.query
 org.locationtech.geowave.examples.spark
+org.locationtech.geowave.examples.stats
 org.locationtech.geowave.format.avro
 org.locationtech.geowave.format.gdelt
 org.locationtech.geowave.format.geolife

@@ -525,7 +525,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#ingest-overview">Overview</a></li>
 <li><a href="#ingest-plugins">Ingest Plugins</a></li>
-<li><a href="#statistics-and-time-configuration">Statistics and Time Configuration</a></li>
+<li><a href="#statistics">Statistics</a></li>
+<li><a href="#time-configuration">Time Configuration</a></li>
 </ul>
 </li>
 <li><a href="#vector-queries">Vector Queries</a>
@@ -535,6 +536,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#delete-statement">DELETE Statement</a></li>
 <li><a href="#output-formats">Output Formats</a></li>
 <li><a href="#examples-6">Examples</a></li>
+</ul>
+</li>
+<li><a href="#statistics-2">Statistics</a>
+<ul class="sectlevel2">
+<li><a href="#overview-2">Overview</a></li>
+<li><a href="#examples-7">Examples</a></li>
 </ul>
 </li>
 <li><a href="#analytics">Analytics</a>
@@ -971,9 +978,31 @@ test-store spatial-idx</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="statistics-and-time-configuration"><a class="anchor" href="#statistics-and-time-configuration"></a>Statistics and Time Configuration</h3>
+<h3 id="statistics"><a class="anchor" href="#statistics"></a>Statistics</h3>
 <div class="paragraph">
-<p>Sometimes it is necessary to provide additional configuration information for a vector ingest.  For example, if you have multiple time fields and need to specify which one should be use for a temporal index, or if you wanted to add some statistics prior to the ingest process. In these cases, the system property <code>SIMPLE_FEATURE_CONFIG_FILE</code> may be assigned to the name of a locally accessible JSON file defining the configuration.</p>
+<p>When ingesting a large amount of data, it can be beneficial to configure the statistics on the data types to be ingested prior to actually ingesting any data in order to avoid having to run full table scans to calculate the initial value of those statistics.  This can be done by performing the following steps:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Add the data types for the data that will be ingested by using the <a href="commands.html#type-add"><code>type add</code></a> command, which is nearly identical to <a href="commands.html#ingest-localToGW"><code>ingest localToGW</code></a>, but does not ingest any data.  If the data that is going to be ingested is not local, this command can still be used as long as there is a local source that matches the schema of the data to be ingested, such as a file with a single feature exported from the full data set.</p>
+</li>
+<li>
+<p>Add any number of statistics to those data types by using the <a href="commands.html#stat-add"><code>stat add</code></a> command.</p>
+</li>
+<li>
+<p>Ingest the data using any of the ingest commands.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Using this method, the initial values of all added statistics will be calculated during the ingest process.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="time-configuration"><a class="anchor" href="#time-configuration"></a>Time Configuration</h3>
+<div class="paragraph">
+<p>Sometimes it is necessary to provide additional configuration information for a vector ingest.  For example, if you have multiple time fields and need to specify which one should be use for a temporal index. In these cases, the system property <code>SIMPLE_FEATURE_CONFIG_FILE</code> may be assigned to the name of a locally accessible JSON file defining the configuration.</p>
 </div>
 <div class="sect3">
 <h4 id="ingest-example"><a class="anchor" href="#ingest-example"></a>Example</h4>
@@ -1011,9 +1040,6 @@ $ geowave ingest localtogw ./ingest_data mystore myindex</code></pre>
 <p>Selecting which temporal attribute to use in temporal indices.</p>
 </li>
 <li>
-<p>Adding statistics to one or more attributes.</p>
-</li>
-<li>
 <p>Determining which attribute contains visibility information for other attributes.</p>
 </li>
 <li>
@@ -1028,7 +1054,7 @@ $ geowave ingest localtogw ./ingest_data mystore myindex</code></pre>
 <div class="sect3">
 <h4 id="temporal-configuration"><a class="anchor" href="#temporal-configuration"></a>Temporal Configuration</h4>
 <div class="paragraph">
-<p>Temporal configuration may be necessary if your vector feature type has more than one temporal attribute.  The class name for this configuration is <a href="https://github.com/locationtech/geowave/blob/56102cf055cf6f140ccb6789584b83235e33e0a2/core/geotime/src/main/java/org/locationtech/geowave/core/geotime/util/TimeDescriptors.java"><code>org.locationtech.geowave.core.geotime.util.TimeDescriptors$TimeDescriptorConfiguration</code></a>.</p>
+<p>Temporal configuration may be necessary if your vector feature type has more than one temporal attribute.  The class name for this configuration is <a href="https://github.com/locationtech/geowave/blob/fa8832deb99d90e1bff0cc6f81a6bd034c2ec4b7/core/geotime/src/main/java/org/locationtech/geowave/core/geotime/util/TimeDescriptors.java"><code>org.locationtech.geowave.core.geotime.util.TimeDescriptors$TimeDescriptorConfiguration</code></a>.</p>
 </div>
 <div class="paragraph">
 <p>There are three attributes for the temporal configuration:</p>
@@ -1070,108 +1096,12 @@ $ geowave ingest localtogw ./ingest_data mystore myindex</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="statistics-configuration"><a class="anchor" href="#statistics-configuration"></a>Statistics Configuration</h4>
-<div class="paragraph">
-<p>Statistics can be configured under a class named <a href="https://github.com/locationtech/geowave/blob/56102cf055cf6f140ccb6789584b83235e33e0a2/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/StatsConfigurationCollection.java"><code>org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection$SimpleFeatureStatsConfigurationCollection</code></a>. This configuration has a single attribute called <code>attConfig</code> which contains all of the attributes that are being configured with statistics.  Each attribute under <code>attConfig</code> also contains a single property called <code>configurationsForAttribute</code>, which is a list of all statistics configurations that should be assigned to that attribute. The following table shows the types of built-in statistics that can be assigned to an attribute.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Bounding box and range statistics are automatically captured for geometry and temporal attributes.
-</td>
-</tr>
-</table>
-</div>
-<table class="tableblock frame-topbot grid-rows spread">
-<colgroup>
-<col style="width: 12%;">
-<col style="width: 25%;">
-<col style="width: 20%;">
-<col style="width: 43%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Attribute Type</th>
-<th class="tableblock halign-left valign-top">Statistic Name</th>
-<th class="tableblock halign-left valign-top">Statistic Configuration Attributes (with default values)</th>
-<th class="tableblock halign-left valign-top">Statistic Class</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top" rowspan="3"><p class="tableblock">Numeric</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Fixed Bin Histogram</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">minValue=-&#8734;, maxValue=&#8734;, bins=32</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/locationtech/geowave/blob/56102cf055cf6f140ccb6789584b83235e33e0a2/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/FeatureFixedBinNumericStatistics.java"><code>org.locationtech.geowave.adapter.vector.stats.
-FeatureFixedBinNumericStatistics$FeatureFixedBinConfig</code></a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Dynamic Histogram</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/locationtech/geowave/blob/56102cf055cf6f140ccb6789584b83235e33e0a2/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/FeatureNumericHistogramStatistics.java"><code>org.locationtech.geowave.adapter.vector.stats.
-FeatureNumericHistogramStatistics$FeatureNumericHistogramConfig</code></a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric Range</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/locationtech/geowave/blob/56102cf055cf6f140ccb6789584b83235e33e0a2/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/FeatureNumericRangeStatistics.java"><code>org.locationtech.geowave.adapter.vector.stats.
-FeatureNumericRangeStatistics$FeatureNumericRangeConfig</code></a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Count Min Sketch</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">errorFactor=0.001, probabilityOfCorrectness=0.98</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/locationtech/geowave/blob/56102cf055cf6f140ccb6789584b83235e33e0a2/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/FeatureCountMinSketchStatistics.java"><code>org.locationtech.geowave.adapter.vector.stats.
-FeatureCountMinSketchStatistics$FeatureCountMinSketchConfig</code></a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Hyper Log Log</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">precision=16</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/locationtech/geowave/blob/56102cf055cf6f140ccb6789584b83235e33e0a2/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/FeatureHyperLogLogStatistics.java"><code>org.locationtech.geowave.adapter.vector.stats.
-FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig</code></a></p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>For example, if you wanted to add a numeric range statistic on an attribute called <code>population</code> in a type called <code>myFeatureTypeName</code>, the configuration would look like the following:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre class="nowrap">{
-  "configurations": {
-    "myFeatureTypeName" : [
-      {
-        "@class" : "org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection$SimpleFeatureStatsConfigurationCollection",
-        "attConfig" : {
-          "population" : {
-            "configurationsForAttribute" :  [
-              {
-                "@class" : "org.locationtech.geowave.adapter.vector.stats.FeatureNumericRangeStatistics$FeatureNumericRangeConfig"
-              }
-            ]
-          }
-        }
-      }
-    ]
-  }
-}</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Note that the numeric range statistic does not require any additional configuration attributes.</p>
-</div>
-</div>
-<div class="sect3">
 <h4 id="visibility-configuration"><a class="anchor" href="#visibility-configuration"></a>Visibility Configuration</h4>
 <div class="paragraph">
 <p>Visibility configuration consists of a visibility manager and an attribute which contains the visibility information.</p>
 </div>
 <div class="paragraph">
-<p>A visibility manager extends <a href="https://github.com/locationtech/geowave/blob/56102cf055cf6f140ccb6789584b83235e33e0a2/core/store/src/main/java/org/locationtech/geowave/core/store/data/visibility/VisibilityManagement.java"><code>org.locationtech.geowave.core.store.data.visibility.VisibilityManagement</code></a>. An instance of this class interprets the contents of a visibility attribute within a simple feature to determine the visibility constraints of the other attributes in that simple feature. The default visibility management class is <a href="https://github.com/locationtech/geowave/blob/56102cf055cf6f140ccb6789584b83235e33e0a2/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.java"><code>org.locationtech.geowave.adapter.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement</code></a>, which is used by the default visibility configuration class <a href="https://github.com/locationtech/geowave/blob/56102cf055cf6f140ccb6789584b83235e33e0a2/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/plugin/visibility/VisibilityConfiguration.java"><code>org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration</code></a>.</p>
+<p>A visibility manager extends <a href="https://github.com/locationtech/geowave/blob/fa8832deb99d90e1bff0cc6f81a6bd034c2ec4b7/core/store/src/main/java/org/locationtech/geowave/core/store/data/visibility/VisibilityManagement.java"><code>org.locationtech.geowave.core.store.data.visibility.VisibilityManagement</code></a>. An instance of this class interprets the contents of a visibility attribute within a simple feature to determine the visibility constraints of the other attributes in that simple feature. The default visibility management class is <a href="https://github.com/locationtech/geowave/blob/fa8832deb99d90e1bff0cc6f81a6bd034c2ec4b7/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.java"><code>org.locationtech.geowave.adapter.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement</code></a>, which is used by the default visibility configuration class <a href="https://github.com/locationtech/geowave/blob/fa8832deb99d90e1bff0cc6f81a6bd034c2ec4b7/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/plugin/visibility/VisibilityConfiguration.java"><code>org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration</code></a>.</p>
 </div>
 <div class="paragraph">
 <p>For example, if you had an attribute called <code>vis</code> that contained the visibility constraints in a type called <code>myFeatureTypeName</code>, the configuration would look like the following:</p>
@@ -1194,7 +1124,7 @@ FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig</code></a></p></td>
 <div class="sect3">
 <h4 id="primary-index-identifiers"><a class="anchor" href="#primary-index-identifiers"></a>Primary Index Identifiers</h4>
 <div class="paragraph">
-<p>The class <a href="https://github.com/locationtech/geowave/blob/56102cf055cf6f140ccb6789584b83235e33e0a2/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/index/SimpleFeaturePrimaryIndexConfiguration.java"><code>org.locationtech.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration</code></a> is used to maintain the configuration of primary indices used for adding or updating simple features via the GeoServer plugin.</p>
+<p>The class <a href="https://github.com/locationtech/geowave/blob/fa8832deb99d90e1bff0cc6f81a6bd034c2ec4b7/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/index/SimpleFeaturePrimaryIndexConfiguration.java"><code>org.locationtech.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration</code></a> is used to maintain the configuration of primary indices used for adding or updating simple features via the GeoServer plugin.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1220,31 +1150,6 @@ FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig</code></a></p></td>
       {
         "@class": "org.locationtech.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration",
         "indexNames": ["SPATIAL_IDX"]
-      }
-      {
-        "@class" : "org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection$SimpleFeatureStatsConfigurationCollection",
-        "attConfig" : {
-          "population" : {
-            "configurationsForAttribute" :  [
-              {
-                "@class" : "org.locationtech.geowave.adapter.vector.stats.FeatureFixedBinNumericStatistics$FeatureFixedBinConfig",
-                "bins" : 24
-              }
-            ]
-          },
-          "country" : {
-            "configurationsForAttribute" :  [
-              {
-                "@class" : "org.locationtech.geowave.adapter.vector.stats.FeatureCountMinSketchStatistics$FeatureCountMinSketchConfig",
-                "probabilityOfCorrectness" : 0.98,
-                "errorFactor" :0.001
-              },
-              {
-                "@class" : "org.locationtech.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig"
-              }
-            ]
-          }
-        }
       }
     ]
   }
@@ -1574,6 +1479,73 @@ When all of the data of a given type is removed, that type is removed from the d
 <div class="title">Output countries with a population greater than 100 million to a Shapefile:</div>
 <div class="content">
 <pre>$ geowave vector query -f shp -o results.shp "SELECT * FROM example.countries WHERE CQL(population&gt;100000000)"</pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="statistics-2"><a class="anchor" href="#statistics-2"></a>Statistics</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="overview-2"><a class="anchor" href="#overview-2"></a>Overview</h3>
+<div class="paragraph">
+<p>GeoWave statistics are a way to maintain aggregated information about data stored within a data store.  They can be useful to avoid having to run aggregation queries over many rows whenever basic information is needed.  The statistics system is designed to be as flexible as possible to support a large number of use cases.</p>
+</div>
+<div class="sect3">
+<h4 id="statistic-types"><a class="anchor" href="#statistic-types"></a>Statistic Types</h4>
+<div class="paragraph">
+<p>There are three types of statistics in GeoWave:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Index Statistics</strong> - These statistics are aggregated over every row within an index.  These are usually fairly broad as they do not make assumptions about the data types that are stored in the index.  Some examples of index statistics used by GeoWave are row range histograms, index metadata, and duplicate entry counts.</p>
+</li>
+<li>
+<p><strong>Data Type Statistics</strong> - These statistics are aggregated over every row within a data type.  The most common data type statistic is the count statistic, which simply counts the number of entries in a given data type.</p>
+</li>
+<li>
+<p><strong>Field Statistics</strong> - These statistics are aggregated over every row within a data type, but are usually calculated from the value of a single field within the data type.  Statistics are usually designed to work on specific field types.  For example, a numeric mean statistic will calculate the mean value of a field across all rows in the data set.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The list of available statistic types can be discovered by using the <a href="commands.html#stat-listtypes"><code>stat listtypes</code></a> command.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="binning-strategies"><a class="anchor" href="#binning-strategies"></a>Binning Strategies</h4>
+<div class="paragraph">
+<p>While the various suppported statistics provide some general capabilities, a lot of the flexibility of the statistics system comes from using statistics with different binning strategies.  Binning strategies are a way to split a statistic by some algorithm.  For example, a data set with a categorical field such as <code>Color</code> could have a count statistic that is binned by that field.  The result would be a statistic that maintains the count of each <code>Color</code> in the entire data set.  Any statistic can be combined with any binning strategy for a plethora of possibilities.  Multiple different binning strategies can also be combined to provide even more customization.</p>
+</div>
+<div class="paragraph">
+<p>The list of available binning strategies can be discovered by using the <a href="commands.html#stat-listtypes"><code>stat listtypes</code></a> command with the <code>-b</code> command line option.</p>
+</div>
+<div class="paragraph">
+<p>For a full list of GeoWave statistics commands, including examples of each, see the statistics section of the <a href="commands.html#stat-commands">GeoWave CLI Documentation</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="examples-7"><a class="anchor" href="#examples-7"></a>Examples</h3>
+<div class="literalblock">
+<div class="title">Add a <code>COUNT</code> statistic to the <code>counties</code> type binned by the <code>state_code</code> field in the <code>example</code> data store:</div>
+<div class="content">
+<pre>$ geowave stat add example -t COUNT --typeName counties -b FIELD_VALUE --binField state_code</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">List all of the statistic values on the <code>counties</code> type in the <code>example</code> data store:</div>
+<div class="content">
+<pre>$ geowave stat list example --typeName counties</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">Recalculate all statistics in the <code>example</code> data store:</div>
+<div class="content">
+<pre>$ geowave stat recalc example --all</pre>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
@@ -2267,7 +2239,7 @@ When all of the data of a given type is removed, that type is removed from the d
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Additional authorization management strategies can be registered through the Java Service Provider Interface (SPI) model by implementing the <a href="https://github.com/locationtech/geowave/blob/56102cf055cf6f140ccb6789584b83235e33e0a2/extensions/adapters/auth/src/main/java/org/locationtech/geowave/adapter/auth/AuthorizationFactorySPI.java"><code>AuthorizationFactorySPI</code></a> interface. For more information on using SPI, see the <a href="https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html" target="_blank">Oracle documentation</a>.
+Additional authorization management strategies can be registered through the Java Service Provider Interface (SPI) model by implementing the <a href="https://github.com/locationtech/geowave/blob/fa8832deb99d90e1bff0cc6f81a6bd034c2ec4b7/extensions/adapters/auth/src/main/java/org/locationtech/geowave/adapter/auth/AuthorizationFactorySPI.java"><code>AuthorizationFactorySPI</code></a> interface. For more information on using SPI, see the <a href="https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html" target="_blank">Oracle documentation</a>.
 </td>
 </tr>
 </table>
@@ -2460,7 +2432,7 @@ this artifact.</p>
 <p>When data is written to GeoWave, it may contain visibility constraints. By default, the visibility expression attached to each attribute is empty, which means that the data is visible regardless of which authorizations are present. If a visibility expression is set for an attribute, only queries that supply the appropriate authorizations will be able to see it.</p>
 </div>
 <div class="paragraph">
-<p>The only provided visibility management strategy is <a href="https://github.com/locationtech/geowave/blob/56102cf055cf6f140ccb6789584b83235e33e0a2/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.java"><code>JsonDefinitionColumnVisibilityManagement</code></a>, which expects each feature to have an attribute that contains a JSON string describing the visibility for each attribute of the feature instance. This approach allows each feature to determine its own visibility criteria.</p>
+<p>The only provided visibility management strategy is <a href="https://github.com/locationtech/geowave/blob/fa8832deb99d90e1bff0cc6f81a6bd034c2ec4b7/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.java"><code>JsonDefinitionColumnVisibilityManagement</code></a>, which expects each feature to have an attribute that contains a JSON string describing the visibility for each attribute of the feature instance. This approach allows each feature to determine its own visibility criteria.</p>
 </div>
 <div class="paragraph">
 <p>Each name/value pair within the JSON structure defines the visibility for the associated attribute. In the following example, the <code>geometry</code> attribute is given a visibility <code>S</code> and the <code>eventName</code> attribute is given a visibility <code>TS</code>.  This means that a user with an authorization set of <code>["S","TS"]</code> would be able to see both attributes, while a user with only <code>["S"]</code> would only be able to see the <code>geometry</code> attribute.</p>
@@ -2501,7 +2473,7 @@ this artifact.</p>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Additional visibility management strategies can be registered through the Java Service Provider Interface (SPI) model by implementing the <a href="https://github.com/locationtech/geowave/blob/56102cf055cf6f140ccb6789584b83235e33e0a2/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/plugin/visibility/ColumnVisibilityManagementSpi.java"><code>ColumnVisibilityManagement</code></a> interface. For more information on using SPI, see the <a href="https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html" target="_blank">Oracle documentation</a>.
+Additional visibility management strategies can be registered through the Java Service Provider Interface (SPI) model by implementing the <a href="https://github.com/locationtech/geowave/blob/fa8832deb99d90e1bff0cc6f81a6bd034c2ec4b7/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/plugin/visibility/ColumnVisibilityManagementSpi.java"><code>ColumnVisibilityManagement</code></a> interface. For more information on using SPI, see the <a href="https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html" target="_blank">Oracle documentation</a>.
 </td>
 </tr>
 </table>
@@ -2513,7 +2485,7 @@ Additional visibility management strategies can be registered through the Java S
 <p>It is sometimes necessary to provide more complex visibility constraints on a particular attribute, such as allowing two different authorizations to have view permissions.  GeoWave handles this by using visibility expressions.  These expressions support AND and OR operations through the symbols <code>&amp;</code> and <code>|</code>.  It also supports parentheses for situations where more complex expressions are required.</p>
 </div>
 <div class="sect3">
-<h4 id="examples-7"><a class="anchor" href="#examples-7"></a>Examples</h4>
+<h4 id="examples-8"><a class="anchor" href="#examples-8"></a>Examples</h4>
 <div class="literalblock">
 <div class="title">Visibility expression that allows both <code>A</code> and <code>B</code> authorizations to see the data:</div>
 <div class="content">
@@ -2853,7 +2825,7 @@ var geowave_version = '1.3.0-SNAPSHOT';
 
 <div class="geowave-footer col-md-12 docs-footer">
   <div class="py-4 d-flex justify-content-center align-items-center">
-    <small><p class="footer-text">This page was generated on Friday, March 05, 2021 at 10:21 PM UTC<br><a href="https://github.com/locationtech/geowave/tree/56102cf055cf6f140ccb6789584b83235e33e0a2">View the commit it was generated from on GitHub</a></p></small>
+    <small><p class="footer-text">This page was generated on Wednesday, March 10, 2021 at 09:30 PM UTC<br><a href="https://github.com/locationtech/geowave/tree/fa8832deb99d90e1bff0cc6f81a6bd034c2ec4b7">View the commit it was generated from on GitHub</a></p></small>
   </div>
 </div>
 </div>
@@ -2864,7 +2836,7 @@ var geowave_version = '1.3.0-SNAPSHOT';
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-03-05 22:21:27 +00:00
+Last updated 2021-03-10 21:30:15 +00:00
 </div>
 </div>
 </body>

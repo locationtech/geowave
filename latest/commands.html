@@ -548,17 +548,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#type-commands">Type Commands</a>
 <ul class="sectlevel2">
 <li><a href="#type-list">List Types</a></li>
+<li><a href="#type-add">Add Type</a></li>
 <li><a href="#type-rm">Remove Type</a></li>
 <li><a href="#type-describe">Describe Type</a></li>
 </ul>
 </li>
 <li><a href="#statistics-commands">Statistics Commands</a>
 <ul class="sectlevel2">
-<li><a href="#stat-calc">Calculate Stat</a></li>
 <li><a href="#stat-list">List Stats</a></li>
-<li><a href="#stat-compact">Compact Stats</a></li>
-<li><a href="#stat-recalc">Recalculate Stats</a></li>
+<li><a href="#stat-listtypes">List Stat Types</a></li>
+<li><a href="#stat-calc">Add Stat</a></li>
 <li><a href="#stat-rm">Remove Stat</a></li>
+<li><a href="#stat-recalc">Recalculate Stats</a></li>
+<li><a href="#stat-compact">Compact Stats</a></li>
 </ul>
 </li>
 <li><a href="#ingest-commands">Ingest Commands</a>
@@ -2168,6 +2170,319 @@ The truststore file is used to validate client certificates.</p>
 </div>
 </div>
 <div class="sect2">
+<h3 id="type-add"><a class="anchor" href="#type-add"></a>Add Type</h3>
+<div class="sect3">
+<h4 id="type-add-name"><a class="anchor" href="#type-add-name"></a>NAME</h4>
+<div class="paragraph">
+<p>geowave-type-add - Add types to GeoWave</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="type-add-synopsis"><a class="anchor" href="#type-add-synopsis"></a>SYNOPSIS</h4>
+<div class="literalblock">
+<div class="content">
+<pre>geowave type add [options] &lt;file or directory&gt; &lt;store name&gt; &lt;comma delimited index list&gt;</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="type-add-description"><a class="anchor" href="#type-add-description"></a>DESCRIPTION</h4>
+<div class="paragraph">
+<p>This command is similar to <code>ingest localToGW</code>, but does not ingest any data.  It will use the specified format plugins to determine the available data types and add them to the data store.  This can be useful if a user would like to add statistics to a type prior to ingest.  Note that because this command uses the same format plugins as the ingest system, many of the option descriptions will mention <code>ingest</code>, but this command will only add data types.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="type-add-options"><a class="anchor" href="#type-add-options"></a>OPTIONS</h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><strong>-x, --extension</strong> <em>&lt;extensions&gt;</em></dt>
+<dd>
+<p>Individual or comma-delimited set of file extensions to accept.</p>
+</dd>
+<dt class="hdlist1"><strong>-f, --formats</strong> <em>&lt;formats&gt;</em></dt>
+<dd>
+<p>Explicitly set the formats by name (or multiple comma-delimited formats).  If not set, all available formats will be used.</p>
+</dd>
+<dt class="hdlist1"><strong>-v, --visibility</strong> <em>&lt;visibility&gt;</em></dt>
+<dd>
+<p>The default visibility for the data types.  Default is <code>public</code>.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>When the <code>avro</code> format is used, additional options are:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><strong>--avro.avro</strong></dt>
+<dd>
+<p>If specified, indicates that the operation should use Avro feature serialization.</p>
+</dd>
+<dt class="hdlist1"><strong>--avro.cql</strong> <em>&lt;filter&gt;</em></dt>
+<dd>
+<p>An optional CQL filter. If specified, only data matching the filter will be ingested.</p>
+</dd>
+<dt class="hdlist1"><strong>--avro.typename</strong> <em>&lt;types&gt;</em></dt>
+<dd>
+<p>A comma-delimitted set of type names to ingest, feature types matching the specified type names will be ingested.  By default, all type names will be ingested.</p>
+</dd>
+<dt class="hdlist1"><strong>--avro.maxVertices</strong> <em>&lt;count&gt;</em></dt>
+<dd>
+<p>Maximum number of vertices to allow for the feature. Features with over this vertice count will be discarded.</p>
+</dd>
+<dt class="hdlist1"><strong>--avro.minSimpVertices</strong> <em>&lt;count&gt;</em></dt>
+<dd>
+<p>Minimum vertex count to qualify for geometry simplification.</p>
+</dd>
+<dt class="hdlist1"><strong>--avro.tolerance</strong> <em>&lt;tolerance&gt;</em></dt>
+<dd>
+<p>Maximum error tolerance in geometry simplification. Should range from 0.0 to 1.0 (i.e. .1 = 10%).  Default is 0.02.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>When the <code>gdelt</code> format is used, additional options are:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><strong>--gdelt.avro</strong></dt>
+<dd>
+<p>A flag to indicate whether Avro feature serialization should be used.</p>
+</dd>
+<dt class="hdlist1"><strong>--gdelt.cql</strong> <em>&lt;filter&gt;</em></dt>
+<dd>
+<p>A CQL filter, only data matching this filter will be ingested.</p>
+</dd>
+<dt class="hdlist1"><strong>--gdelt.extended</strong></dt>
+<dd>
+<p>A flag to indicate whether extended data format should be used.</p>
+</dd>
+<dt class="hdlist1"><strong>--gdelt.typename</strong> <em>&lt;types&gt;</em></dt>
+<dd>
+<p>A comma-delimitted set of type names to ingest, feature types matching the specified type names will be ingested.  By default all types will be ingested.</p>
+</dd>
+<dt class="hdlist1"><strong>--gdelt.maxVertices</strong> <em>&lt;count&gt;</em></dt>
+<dd>
+<p>Maximum number of vertices to allow for the feature. Features with over this vertice count will be discarded.</p>
+</dd>
+<dt class="hdlist1"><strong>--gdelt.minSimpVertices</strong> <em>&lt;count&gt;</em></dt>
+<dd>
+<p>Minimum vertex count to qualify for geometry simplification.</p>
+</dd>
+<dt class="hdlist1"><strong>--gdelt.tolerance</strong> <em>&lt;tolerance&gt;</em></dt>
+<dd>
+<p>Maximum error tolerance in geometry simplification. Should range from 0.0 to 1.0 (i.e. .1 = 10%).  Default is 0.02.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>When the <code>geolife</code> format is used, additional options are:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><strong>--geolife.avro</strong></dt>
+<dd>
+<p>A flag to indicate whether Avro feature serialization should be used.</p>
+</dd>
+<dt class="hdlist1"><strong>--geolife.cql</strong> <em>&lt;filter&gt;</em></dt>
+<dd>
+<p>A CQL filter, only data matching this filter will be ingested.</p>
+</dd>
+<dt class="hdlist1"><strong>--geolife.typename</strong> <em>&lt;types&gt;</em></dt>
+<dd>
+<p>A comma-delimitted set of type names to ingest, feature types matching the specified typen ames will be ingested.  By default all types will be ingested.</p>
+</dd>
+<dt class="hdlist1"><strong>--geolife.maxVertices</strong> <em>&lt;count&gt;</em></dt>
+<dd>
+<p>Maximum number of vertices to allow for the feature. Features with over this vertice count will be discarded.</p>
+</dd>
+<dt class="hdlist1"><strong>--geolife.minSimpVertices</strong> <em>&lt;count&gt;</em></dt>
+<dd>
+<p>Minimum vertex count to qualify for geometry simplification.</p>
+</dd>
+<dt class="hdlist1"><strong>--geolife.tolerance</strong> <em>&lt;tolerance&gt;</em></dt>
+<dd>
+<p>Maximum error tolerance in geometry simplification. Should range from 0.0 to 1.0 (i.e. .1 = 10%).  Default is 0.02.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>When the <code>geotools-raster</code> format is used, additional options are:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><strong>--geotools-raster.coverage</strong> <em>&lt;name&gt;</em></dt>
+<dd>
+<p>Coverage name for the raster.  Default is the name of the file.</p>
+</dd>
+<dt class="hdlist1"><strong>--geotools-raster.crs</strong> <em>&lt;crs&gt;</em></dt>
+<dd>
+<p>A CRS override for the provided raster file.</p>
+</dd>
+<dt class="hdlist1"><strong>--geotools-raster.histogram</strong></dt>
+<dd>
+<p>If specified, build a histogram of samples per band on ingest for performing band equalization.</p>
+</dd>
+<dt class="hdlist1"><strong>--geotools-raster.mergeStrategy</strong> <em>&lt;strategy&gt;</em></dt>
+<dd>
+<p>The tile merge strategy to use for mosaic. Specifying <code>no-data</code> will mosaic the most recent tile over the previous tiles, except where there are no data values.  By default <code>none</code> is used.</p>
+</dd>
+<dt class="hdlist1"><strong>--geotools-raster.nodata</strong> <em>&lt;value&gt;</em></dt>
+<dd>
+<p>Optional parameter to set <code>no data</code> values, if 1 value is giving it is applied for each band, if multiple are given then the first <code>totalNoDataValues</code>/<code>totalBands</code> are applied to the first band and so on, so each band can have multiple differing <code>no data</code> values if needed.</p>
+</dd>
+<dt class="hdlist1"><strong>--geotools-raster.pyramid</strong></dt>
+<dd>
+<p>If specified, build an image pyramid on ingest for quick reduced resolution query.</p>
+</dd>
+<dt class="hdlist1"><strong>--geotools-raster.separateBands</strong></dt>
+<dd>
+<p>If specified, separate each band into its own coverage name. By default the coverage name will have <code>_Bn</code> appended to it where <code>n</code> is the band&#8217;s index.</p>
+</dd>
+<dt class="hdlist1"><strong>--geotools-raster.tileSize</strong> <em>&lt;size&gt;</em></dt>
+<dd>
+<p>The tile size of stored tiles.  Default is 256.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>When the <code>geotools-vector</code> format is used, additional options are:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><strong>--geotools-vector.cql</strong> <em>&lt;filter&gt;</em></dt>
+<dd>
+<p>A CQL filter, only data matching this filter will be ingested.</p>
+</dd>
+<dt class="hdlist1"><strong>--geotools-vector.data</strong> <em>&lt;fields&gt;</em></dt>
+<dd>
+<p>A map of date field names to the date format of the file. Use commas to separate each entry, then the first <code>:</code> character will separate the field name from the format. Use <code>\,</code> to include a comma in the format. For example: <code>time:MM:dd:YYYY,time2:YYYY/MM/dd hh:mm:ss</code> configures fields <code>time</code> and <code>time2</code> as dates with different formats.</p>
+</dd>
+<dt class="hdlist1"><strong>--geotools-vector.type</strong> <em>&lt;types&gt;</em></dt>
+<dd>
+<p>Optional parameter that specifies specific type name(s) from the source file.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>When the <code>gpx</code> format is used, additional options are:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><strong>--gpx.avro</strong></dt>
+<dd>
+<p>A flag to indicate whether Avro feature serialization should be used.</p>
+</dd>
+<dt class="hdlist1"><strong>--gpx.cql</strong> <em>&lt;filter&gt;</em></dt>
+<dd>
+<p>A CQL filter, only data matching this filter will be ingested.</p>
+</dd>
+<dt class="hdlist1"><strong>--gpx.typename</strong> <em>&lt;types&gt;</em></dt>
+<dd>
+<p>A comma-delimitted set of type names to ingest, feature types matching the specified type names will be ingested. By default all types will be ingested.</p>
+</dd>
+<dt class="hdlist1"><strong>--gpx.maxLength</strong> <em>&lt;degrees&gt;</em></dt>
+<dd>
+<p>Maximum extent (in both dimensions) for gpx track in degrees. Used to remove excessively long gpx tracks.</p>
+</dd>
+<dt class="hdlist1"><strong>--gpx.maxVertices</strong> <em>&lt;count&gt;</em></dt>
+<dd>
+<p>Maximum number of vertices to allow for the feature. Features with over this vertice count will be discarded.</p>
+</dd>
+<dt class="hdlist1"><strong>--gpx.minSimpVertices</strong> <em>&lt;count&gt;</em></dt>
+<dd>
+<p>Minimum vertex count to qualify for geometry simplification.</p>
+</dd>
+<dt class="hdlist1"><strong>--gpx.tolerance</strong> <em>&lt;tolerance&gt;</em></dt>
+<dd>
+<p>Maximum error tolerance in geometry simplification. Should range from 0.0 to 1.0 (i.e. .1 = 10%).  Default is 0.02.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>When the <code>tdrive</code> format is used, additional options are:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><strong>--tdrive.avro</strong></dt>
+<dd>
+<p>A flag to indicate whether Avro feature serialization should be used.</p>
+</dd>
+<dt class="hdlist1"><strong>--tdrive.cql</strong> <em>&lt;filter&gt;</em></dt>
+<dd>
+<p>A CQL filter, only data matching this filter will be ingested.</p>
+</dd>
+<dt class="hdlist1"><strong>--tdrive.typename</strong> <em>&lt;types&gt;</em></dt>
+<dd>
+<p>A comma-delimitted set of typen ames to ingest, feature types matching the specified type names will be ingested.  By default all types will be ingested.</p>
+</dd>
+<dt class="hdlist1"><strong>--tdrive.maxVertices</strong> <em>&lt;count&gt;</em></dt>
+<dd>
+<p>Maximum number of vertices to allow for the feature. Features with over this vertice count will be discarded.</p>
+</dd>
+<dt class="hdlist1"><strong>--tdrive.minSimpVertices</strong> <em>&lt;count&gt;</em></dt>
+<dd>
+<p>Minimum vertex count to qualify for geometry simplification.</p>
+</dd>
+<dt class="hdlist1"><strong>--tdrive.tolerance</strong> <em>&lt;tolerance&gt;</em></dt>
+<dd>
+<p>Maximum error tolerance in geometry simplification. Should range from 0.0 to 1.0 (i.e. .1 = 10%).  Default is 0.02.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>When the <code>twitter</code> format is used, additional options are:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><strong>--twitter.avro</strong></dt>
+<dd>
+<p>A flag to indicate whether Avro feature serialization should be used.</p>
+</dd>
+<dt class="hdlist1"><strong>--twitter.cql</strong> <em>&lt;filter&gt;</em></dt>
+<dd>
+<p>A CQL filter, only data matching this filter will be ingested.</p>
+</dd>
+<dt class="hdlist1"><strong>--twitter.typename</strong> <em>&lt;types&gt;</em></dt>
+<dd>
+<p>A comma-delimitted set of type names to ingest, feature types matching the specified type names will be ingested.  By default all types will be ingested.</p>
+</dd>
+<dt class="hdlist1"><strong>--twitter.maxVertices</strong> <em>&lt;count&gt;</em></dt>
+<dd>
+<p>Maximum number of vertices to allow for the feature. Features with over this vertice count will be discarded.</p>
+</dd>
+<dt class="hdlist1"><strong>--twitter.minSimpVertices</strong> <em>&lt;count&gt;</em></dt>
+<dd>
+<p>Minimum vertex count to qualify for geometry simplification.</p>
+</dd>
+<dt class="hdlist1"><strong>--twitter.tolerance</strong> <em>&lt;tolerance&gt;</em></dt>
+<dd>
+<p>Maximum error tolerance in geometry simplification. Should range from 0.0 to 1.0 (i.e. .1 = 10%).  Default is 0.02.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="type-add-examples"><a class="anchor" href="#type-add-examples"></a>EXAMPLES</h4>
+<div class="paragraph">
+<p>Add all types for GDELT data from an area around Germany from the <code>gdelt_data</code> directory to a GeoWave data store called <code>example</code> with the <code>spatial-idx</code> index:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>geowave type add -f gdelt --gdelt.cql "BBOX(geometry,5.87,47.2,15.04,54.95)" ./gdelt_data example spatial-idx</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Add the type from a shapefile called <code>states.shp</code> to the <code>example</code> data store with the <code>spatial-idx</code> index:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>geowave type add -f geotools-vector states.shp example spatial-idx</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="type-rm"><a class="anchor" href="#type-rm"></a>Remove Type</h3>
 <div class="sect3">
 <h4 id="type-rm-name"><a class="anchor" href="#type-rm-name"></a>NAME</h4>
@@ -2246,67 +2561,6 @@ The truststore file is used to validate client certificates.</p>
 <p>Commands to manage GeoWave statistics.</p>
 </div>
 <div class="sect2">
-<h3 id="stat-calc"><a class="anchor" href="#stat-calc"></a>Calculate Stat</h3>
-<div class="sect3">
-<h4 id="stat-calc-name"><a class="anchor" href="#stat-calc-name"></a>NAME</h4>
-<div class="paragraph">
-<p>geowave-stat-calc - Calculate a specific statistic in the remote store, given a type name and stat type</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="stat-calc-synopsis"><a class="anchor" href="#stat-calc-synopsis"></a>SYNOPSIS</h4>
-<div class="literalblock">
-<div class="content">
-<pre>geowave stat calc [options] &lt;store name&gt; &lt;type name&gt; &lt;stat type&gt;</pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="stat-calc-description"><a class="anchor" href="#stat-calc-description"></a>DESCRIPTION</h4>
-<div class="paragraph">
-<p>This command calculates a specific statistic in the data store, given a type name and statistic type.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="stat-calc-options"><a class="anchor" href="#stat-calc-options"></a>OPTIONS</h4>
-<div class="dlist">
-<dl>
-<dt class="hdlist1"><strong>--fieldName</strong></dt>
-<dd>
-<p>The field name for the statistic, if the statistic is maintained per field.</p>
-</dd>
-<dt class="hdlist1"><strong>--auth</strong> <em>&lt;authorizations&gt;</em></dt>
-<dd>
-<p>The authorizations used for the statistics calculation.  By default all authorizations are used.</p>
-</dd>
-<dt class="hdlist1"><strong>--json</strong></dt>
-<dd>
-<p>If specified, output will be formatted in JSON.</p>
-</dd>
-</dl>
-</div>
-</div>
-<div class="sect3">
-<h4 id="stat-calc-examples"><a class="anchor" href="#stat-calc-examples"></a>EXAMPLES</h4>
-<div class="paragraph">
-<p>Calculate the <code>COUNT_DATA</code> statistic on the <code>hail</code> type in the <code>example</code> data store:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>geowave stat calc example hail COUNT_DATA</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Calculate the numeric range statistic of the <code>AREA</code> attribute of the <code>hail</code> type in the <code>example</code> data store:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>geowave stat calc --fieldName AREA example hail FEATURE_NUMERIC_RANGE</pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
 <h3 id="stat-list"><a class="anchor" href="#stat-list"></a>List Stats</h3>
 <div class="sect3">
 <h4 id="stat-list-name"><a class="anchor" href="#stat-list-name"></a>NAME</h4>
@@ -2332,17 +2586,37 @@ The truststore file is used to validate client certificates.</p>
 <h4 id="stat-list-options"><a class="anchor" href="#stat-list-options"></a>OPTIONS</h4>
 <div class="dlist">
 <dl>
-<dt class="hdlist1"><strong>--typeName</strong> <em>&lt;type&gt;</em></dt>
+<dt class="hdlist1"><strong>--limit</strong> <em>&lt;limit&gt;</em></dt>
 <dd>
-<p>If specified, only statistics for the given type will be displayed.</p>
+<p>Limit the number or rows returned.  By default, all results will be displayed.</p>
+</dd>
+<dt class="hdlist1"><strong>--csv</strong></dt>
+<dd>
+<p>Output statistics in CSV format.</p>
+</dd>
+<dt class="hdlist1"><strong>-t, --type</strong> <em>&lt;type&gt;</em></dt>
+<dd>
+<p>The type of the statistic.</p>
+</dd>
+<dt class="hdlist1"><strong>--typeName</strong> <em>&lt;name&gt;</em></dt>
+<dd>
+<p>The name of the data type adapter, for field and type statistics.</p>
+</dd>
+<dt class="hdlist1"><strong>--indexName</strong> <em>&lt;name&gt;</em></dt>
+<dd>
+<p>The name of the index, for index statistics.</p>
+</dd>
+<dt class="hdlist1"><strong>--fieldName</strong> <em>&lt;name&gt;</em></dt>
+<dd>
+<p>The name of the field, for field statistics.</p>
+</dd>
+<dt class="hdlist1"><strong>--tag</strong> <em>&lt;tag&gt;</em></dt>
+<dd>
+<p>The tag of the statistic.</p>
 </dd>
 <dt class="hdlist1"><strong>--auth</strong> <em>&lt;authorizations&gt;</em></dt>
 <dd>
-<p>The authorizations used for the statistics calculation.  By default all authorizations are used.</p>
-</dd>
-<dt class="hdlist1"><strong>--json</strong></dt>
-<dd>
-<p>If specified, output will be formatted in JSON.</p>
+<p>The authorizations used when querying statistics.</p>
 </dd>
 </dl>
 </div>
@@ -2358,45 +2632,234 @@ The truststore file is used to validate client certificates.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>List all statistics for the <code>hail</code> type in the <code>example</code> store in JSON format:</p>
+<p>List all statistics for the <code>hail</code> type in the <code>example</code> store in CSV format:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>geowave stat list --json --typeName hail example</pre>
+<pre>geowave stat list example --csv --typeName hail</pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="stat-compact"><a class="anchor" href="#stat-compact"></a>Compact Stats</h3>
+<h3 id="stat-listtypes"><a class="anchor" href="#stat-listtypes"></a>List Stat Types</h3>
 <div class="sect3">
-<h4 id="stat-compact-name"><a class="anchor" href="#stat-compact-name"></a>NAME</h4>
+<h4 id="stat-listtypes-name"><a class="anchor" href="#stat-listtypes-name"></a>NAME</h4>
 <div class="paragraph">
-<p>geowave-stat-compact - Combine all statistics in a data store</p>
+<p>geowave-stat-listtypes - List statistic types that are compatible with the given data store, if no data store is provided, all registered statistics will be listed.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="stat-compact-synopsis"><a class="anchor" href="#stat-compact-synopsis"></a>SYNOPSIS</h4>
+<h4 id="stat-listtypes-synopsis"><a class="anchor" href="#stat-listtypes-synopsis"></a>SYNOPSIS</h4>
 <div class="literalblock">
 <div class="content">
-<pre>geowave stat compact &lt;store name&gt;</pre>
+<pre>geowave stat listtypes [options] [&lt;store name&gt;]</pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="stat-compact-description"><a class="anchor" href="#stat-compact-description"></a>DESCRIPTION</h4>
+<h4 id="stat-listtypes-description"><a class="anchor" href="#stat-listtypes-description"></a>DESCRIPTION</h4>
 <div class="paragraph">
-<p>This command combines all statistics in a GeoWave data store, which can make the data store more efficient.</p>
+<p>This command prints statistic types that are compatible with the given options to the standard output.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="stat-compact-examples"><a class="anchor" href="#stat-compact-examples"></a>EXAMPLES</h4>
+<h4 id="stat-listtypes-options"><a class="anchor" href="#stat-listtypes-options"></a>OPTIONS</h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><strong>--indexName</strong> <em>&lt;name&gt;</em></dt>
+<dd>
+<p>If specified, only statistics that are compatible with this index will be listed.</p>
+</dd>
+<dt class="hdlist1"><strong>--typeName</strong> <em>&lt;name&gt;</em></dt>
+<dd>
+<p>If specified, only statistics that are compatible with this type will be listed.</p>
+</dd>
+<dt class="hdlist1"><strong>--fieldName</strong> <em>&lt;name&gt;</em></dt>
+<dd>
+<p>If specified, only statistics that are compatible with this field will be displayed.</p>
+</dd>
+<dt class="hdlist1"><strong>-b, --binningStrategies</strong></dt>
+<dd>
+<p>If specified, a list of registered binning strategies will be displayed.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="stat-listtypes-examples"><a class="anchor" href="#stat-listtypes-examples"></a>EXAMPLES</h4>
 <div class="paragraph">
-<p>Compact all statistics in the <code>example</code> data store:</p>
+<p>List all registered statistics and binning strategies:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>geowave stat compact example</pre>
+<pre>geowave stat listtypes -b</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>List all compatible statistics for the <code>example</code> store:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>geowave stat listtypes example</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>List all compatible statistics for the <code>hail</code> type in the <code>example</code> store:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>geowave stat listtypes example --typeName hail</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="stat-calc"><a class="anchor" href="#stat-calc"></a>Add Stat</h3>
+<div class="sect3">
+<h4 id="stat-add-name"><a class="anchor" href="#stat-add-name"></a>NAME</h4>
+<div class="paragraph">
+<p>geowave-stat-add - Add a statistic to a data store</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="stat-add-synopsis"><a class="anchor" href="#stat-add-synopsis"></a>SYNOPSIS</h4>
+<div class="literalblock">
+<div class="content">
+<pre>geowave stat add [options] &lt;store name&gt;</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="stat-add-description"><a class="anchor" href="#stat-add-description"></a>DESCRIPTION</h4>
+<div class="paragraph">
+<p>This command adds a statistic from a GeoWave data store.  Each statistic and binning strategy can provide their own options.  For a list of binning strategies and statistics that are available, see <code>geowave stat listtypes</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="stat-add-options"><a class="anchor" href="#stat-add-options"></a>OPTIONS</h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><strong>* -t, --type</strong> <em>&lt;type&gt;</em></dt>
+<dd>
+<p>The statistic type to add.</p>
+</dd>
+<dt class="hdlist1"><strong>--indexName</strong> <em>&lt;name&gt;</em></dt>
+<dd>
+<p>The index for the statistic, if the statistic is an index statistic.</p>
+</dd>
+<dt class="hdlist1"><strong>--typeName</strong> <em>&lt;name&gt;</em></dt>
+<dd>
+<p>The type for the statistic, if the statistic is a field or type statistic.</p>
+</dd>
+<dt class="hdlist1"><strong>--fieldName</strong> <em>&lt;name&gt;</em></dt>
+<dd>
+<p>The field name for the statistic, if the statistic is a field statistic.</p>
+</dd>
+<dt class="hdlist1"><strong>--tag</strong> <em>&lt;tag&gt;</em></dt>
+<dd>
+<p>An optional tag to uniquely identify the statistic.  If none is specified, a default will be chosen.</p>
+</dd>
+<dt class="hdlist1"><strong>-b, --binningStrategy</strong> <em>&lt;strategy&gt;</em></dt>
+<dd>
+<p>The binning strategy to use for the statistic.  If none is specified, the statistic will be aggregated to a single bin.</p>
+</dd>
+<dt class="hdlist1"><strong>-skip, --skipCalculation</strong></dt>
+<dd>
+<p>If specified, the statistic will be added without calculating its initial value.  This can be useful if you plan on adding several statistics and then running <code>geowave stat recalc</code>.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="stat-add-examples"><a class="anchor" href="#stat-add-examples"></a>EXAMPLES</h4>
+<div class="paragraph">
+<p>Add a <code>COUNT</code> statistic to the <code>counties</code> type binned by the <code>state_code</code> field in the <code>example</code> data store:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>geowave stat add example -t COUNT --typeName counties -b FIELD_VALUE --binField state_code</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>List the options available for the <code>COUNT</code> statistic and <code>FIELD_VALUE</code> binning strategy:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>geowave help stat add example -t COUNT -b FIELD_VALUE</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="stat-rm"><a class="anchor" href="#stat-rm"></a>Remove Stat</h3>
+<div class="sect3">
+<h4 id="stat-rm-name"><a class="anchor" href="#stat-rm-name"></a>NAME</h4>
+<div class="paragraph">
+<p>geowave-stat-rm - Remove a statistic from a data store</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="stat-rm-synopsis"><a class="anchor" href="#stat-rm-synopsis"></a>SYNOPSIS</h4>
+<div class="literalblock">
+<div class="content">
+<pre>geowave stat rm [options] &lt;store name&gt;</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="stat-rm-description"><a class="anchor" href="#stat-rm-description"></a>DESCRIPTION</h4>
+<div class="paragraph">
+<p>This command removes a statistic from a GeoWave data store.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="stat-rm-options"><a class="anchor" href="#stat-rm-options"></a>OPTIONS</h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><strong>--all</strong></dt>
+<dd>
+<p>If specified, all matching statistics will be removed.</p>
+</dd>
+<dt class="hdlist1"><strong>--force</strong></dt>
+<dd>
+<p>Force an internal statistic to be removed.  IMPORTANT: Removing statistics that are marked as <code>internal</code> can have a detrimental impact on performance!</p>
+</dd>
+<dt class="hdlist1"><strong>-t, --type</strong> <em>&lt;type&gt;</em></dt>
+<dd>
+<p>The type of the statistic.</p>
+</dd>
+<dt class="hdlist1"><strong>--typeName</strong> <em>&lt;name&gt;</em></dt>
+<dd>
+<p>The name of the data type adapter, for field and type statistics.</p>
+</dd>
+<dt class="hdlist1"><strong>--indexName</strong> <em>&lt;name&gt;</em></dt>
+<dd>
+<p>The name of the index, for index statistics.</p>
+</dd>
+<dt class="hdlist1"><strong>--fieldName</strong> <em>&lt;name&gt;</em></dt>
+<dd>
+<p>The name of the field, for field statistics.</p>
+</dd>
+<dt class="hdlist1"><strong>--tag</strong> <em>&lt;tag&gt;</em></dt>
+<dd>
+<p>The tag of the statistic.</p>
+</dd>
+<dt class="hdlist1"><strong>--auth</strong> <em>&lt;authorizations&gt;</em></dt>
+<dd>
+<p>The authorizations used when querying statistics.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="stat-rm-examples"><a class="anchor" href="#stat-rm-examples"></a>EXAMPLES</h4>
+<div class="paragraph">
+<p>Remove the <code>BOUNDING_BOX</code> statistic of the <code>hail</code> type in the <code>example</code> data store:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>geowave stat rm example -t BOUNDING_BOX --typeName hail</pre>
 </div>
 </div>
 </div>
@@ -2427,17 +2890,33 @@ The truststore file is used to validate client certificates.</p>
 <h4 id="stat-recalc-options"><a class="anchor" href="#stat-recalc-options"></a>OPTIONS</h4>
 <div class="dlist">
 <dl>
-<dt class="hdlist1"><strong>--typeName</strong> <em>&lt;type&gt;</em></dt>
+<dt class="hdlist1"><strong>--all</strong> <em>&lt;name&gt;</em></dt>
 <dd>
-<p>If specified, only statistics for the given type will be recalculated.</p>
+<p>If specified, all matching statistics will be recalculated.</p>
+</dd>
+<dt class="hdlist1"><strong>-t, --type</strong> <em>&lt;type&gt;</em></dt>
+<dd>
+<p>The type of the statistic.</p>
+</dd>
+<dt class="hdlist1"><strong>--typeName</strong> <em>&lt;name&gt;</em></dt>
+<dd>
+<p>The name of the data type adapter, for field and type statistics.</p>
+</dd>
+<dt class="hdlist1"><strong>--indexName</strong> <em>&lt;name&gt;</em></dt>
+<dd>
+<p>The name of the index, for index statistics.</p>
+</dd>
+<dt class="hdlist1"><strong>--fieldName</strong> <em>&lt;name&gt;</em></dt>
+<dd>
+<p>The name of the field, for field statistics.</p>
+</dd>
+<dt class="hdlist1"><strong>--tag</strong> <em>&lt;tag&gt;</em></dt>
+<dd>
+<p>The tag of the statistic.</p>
 </dd>
 <dt class="hdlist1"><strong>--auth</strong> <em>&lt;authorizations&gt;</em></dt>
 <dd>
-<p>The authorizations used for the statistics calculation.  By default all authorizations are used.</p>
-</dd>
-<dt class="hdlist1"><strong>--json</strong></dt>
-<dd>
-<p>If specified, output will be formatted in JSON.</p>
+<p>The authorizations used when querying statistics.</p>
 </dd>
 </dl>
 </div>
@@ -2457,60 +2936,41 @@ The truststore file is used to validate client certificates.</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>geowave stat recalc --typeName hail example</pre>
+<pre>geowave stat recalc example --typeName hail</pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="stat-rm"><a class="anchor" href="#stat-rm"></a>Remove Stat</h3>
+<h3 id="stat-compact"><a class="anchor" href="#stat-compact"></a>Compact Stats</h3>
 <div class="sect3">
-<h4 id="stat-rm-name"><a class="anchor" href="#stat-rm-name"></a>NAME</h4>
+<h4 id="stat-compact-name"><a class="anchor" href="#stat-compact-name"></a>NAME</h4>
 <div class="paragraph">
-<p>geowave-stat-rm - Remove a statistic from a data store</p>
+<p>geowave-stat-compact - Compact all statistics in a data store</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="stat-rm-synopsis"><a class="anchor" href="#stat-rm-synopsis"></a>SYNOPSIS</h4>
+<h4 id="stat-compact-synopsis"><a class="anchor" href="#stat-compact-synopsis"></a>SYNOPSIS</h4>
 <div class="literalblock">
 <div class="content">
-<pre>geowave stat rm [options] &lt;store name&gt; &lt;type name&gt; &lt;stat type&gt;</pre>
+<pre>geowave stat compact &lt;store name&gt;</pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="stat-rm-description"><a class="anchor" href="#stat-rm-description"></a>DESCRIPTION</h4>
+<h4 id="stat-compact-description"><a class="anchor" href="#stat-compact-description"></a>DESCRIPTION</h4>
 <div class="paragraph">
-<p>This command removes a statistic from a GeoWave data store.</p>
+<p>Whenever new data is ingested into a type, additional statistics are calculated for the new data.  If data is frequently ingested, the number of rows that need to be merged to compute a statistic may begin to have an impact on performance.  This command aggregates all of those statistic values down into a single value to improve performance in those cases.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="stat-rm-options"><a class="anchor" href="#stat-rm-options"></a>OPTIONS</h4>
-<div class="dlist">
-<dl>
-<dt class="hdlist1"><strong>--fieldName</strong></dt>
-<dd>
-<p>The field name for the statistic, if the statistic is maintained per field.</p>
-</dd>
-<dt class="hdlist1"><strong>--auth</strong> <em>&lt;authorizations&gt;</em></dt>
-<dd>
-<p>The authorizations used for the statistics calculation.  By default all authorizations are used.</p>
-</dd>
-<dt class="hdlist1"><strong>--json</strong></dt>
-<dd>
-<p>If specified, output will be formatted in JSON.</p>
-</dd>
-</dl>
-</div>
-</div>
-<div class="sect3">
-<h4 id="stat-rm-examples"><a class="anchor" href="#stat-rm-examples"></a>EXAMPLES</h4>
+<h4 id="stat-compact-examples"><a class="anchor" href="#stat-compact-examples"></a>EXAMPLES</h4>
 <div class="paragraph">
-<p>Remove the <code>BOUNDING_BOX</code> statistic of the <code>hail</code> type in the <code>example</code> data store:</p>
+<p>Compact all statistics in the <code>example</code> data store:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>geowave stat rm example hail BOUNDING_BOX</pre>
+<pre>geowave stat compact example</pre>
 </div>
 </div>
 <hr>
@@ -8846,7 +9306,7 @@ var geowave_version = '1.3.0-SNAPSHOT';
 
 <div class="geowave-footer col-md-12 docs-footer">
   <div class="py-4 d-flex justify-content-center align-items-center">
-    <small><p class="footer-text">This page was generated on Friday, March 05, 2021 at 10:21 PM UTC<br><a href="https://github.com/locationtech/geowave/tree/56102cf055cf6f140ccb6789584b83235e33e0a2">View the commit it was generated from on GitHub</a></p></small>
+    <small><p class="footer-text">This page was generated on Wednesday, March 10, 2021 at 09:30 PM UTC<br><a href="https://github.com/locationtech/geowave/tree/fa8832deb99d90e1bff0cc6f81a6bd034c2ec4b7">View the commit it was generated from on GitHub</a></p></small>
   </div>
 </div>
 </div>
@@ -8856,7 +9316,7 @@ var geowave_version = '1.3.0-SNAPSHOT';
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-03-05 22:21:28 +00:00
+Last updated 2021-03-10 21:30:15 +00:00
 </div>
 </div>
 </body>

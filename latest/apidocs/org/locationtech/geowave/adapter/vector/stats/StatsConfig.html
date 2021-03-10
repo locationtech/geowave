@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/FeatureNumericRangeStatistics.FeatureNumericRangeConfig.html" title="class in org.locationtech.geowave.adapter.vector.stats"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li>Prev&nbsp;Class</li>
 <li><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/StatsConfigurationCollection.html" title="class in org.locationtech.geowave.adapter.vector.stats"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -105,7 +105,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/FeatureCountMinSketchStatistics.FeatureCountMinSketchConfig.html" title="class in org.locationtech.geowave.adapter.vector.stats">FeatureCountMinSketchStatistics.FeatureCountMinSketchConfig</a>, <a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/FeatureFixedBinNumericStatistics.FeatureFixedBinConfig.html" title="class in org.locationtech.geowave.adapter.vector.stats">FeatureFixedBinNumericStatistics.FeatureFixedBinConfig</a>, <a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/FeatureHyperLogLogStatistics.FeatureHyperLogLogConfig.html" title="class in org.locationtech.geowave.adapter.vector.stats">FeatureHyperLogLogStatistics.FeatureHyperLogLogConfig</a>, <a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/FeatureNumericHistogramStatistics.FeatureNumericHistogramConfig.html" title="class in org.locationtech.geowave.adapter.vector.stats">FeatureNumericHistogramStatistics.FeatureNumericHistogramConfig</a>, <a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/FeatureNumericRangeStatistics.FeatureNumericRangeConfig.html" title="class in org.locationtech.geowave.adapter.vector.stats">FeatureNumericRangeStatistics.FeatureNumericRangeConfig</a></dd>
+<dd><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/legacy/FeatureCountMinSketchConfig.html" title="class in org.locationtech.geowave.adapter.vector.stats.legacy">FeatureCountMinSketchConfig</a>, <a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/legacy/FeatureFixedBinConfig.html" title="class in org.locationtech.geowave.adapter.vector.stats.legacy">FeatureFixedBinConfig</a>, <a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/legacy/FeatureHyperLogLogConfig.html" title="class in org.locationtech.geowave.adapter.vector.stats.legacy">FeatureHyperLogLogConfig</a>, <a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/legacy/FeatureNumericHistogramConfig.html" title="class in org.locationtech.geowave.adapter.vector.stats.legacy">FeatureNumericHistogramConfig</a>, <a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/legacy/FeatureNumericRangeConfig.html" title="class in org.locationtech.geowave.adapter.vector.stats.legacy">FeatureNumericRangeConfig</a></dd>
 </dl>
 <hr>
 <br>
@@ -130,8 +130,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.h
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;<a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/StatsConfig.html" title="type parameter in StatsConfig">T</a>,?,?&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/StatsConfig.html#create-java.lang.Short-java.lang.String-">create</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;internalDataAdapterId,
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/Statistic.html" title="interface in org.locationtech.geowave.core.store.api">Statistic</a>&lt;?&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/StatsConfig.html#create-java.lang.String-java.lang.String-">create</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
 </tr>
 </table>
@@ -156,14 +156,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.h
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="create-java.lang.Short-java.lang.String-">
+<a name="create-java.lang.String-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>create</h4>
-<pre><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/InternalDataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">InternalDataStatistics</a>&lt;<a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/StatsConfig.html" title="type parameter in StatsConfig">T</a>,?,?&gt;&nbsp;create(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;internalDataAdapterId,
-                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
+<pre><a href="../../../../../../org/locationtech/geowave/core/store/api/Statistic.html" title="interface in org.locationtech.geowave.core.store.api">Statistic</a>&lt;?&gt;&nbsp;create(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
 </li>
 </ul>
 </li>
@@ -194,7 +194,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.h
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/FeatureNumericRangeStatistics.FeatureNumericRangeConfig.html" title="class in org.locationtech.geowave.adapter.vector.stats"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li>Prev&nbsp;Class</li>
 <li><a href="../../../../../../org/locationtech/geowave/adapter/vector/stats/StatsConfigurationCollection.html" title="class in org.locationtech.geowave.adapter.vector.stats"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

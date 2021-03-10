@@ -514,7 +514,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#data-stores">Data Stores</a></li>
 <li><a href="#indices">Indices</a></li>
-<li><a href="#adapters-types">Adapters/Types</a></li>
+<li><a href="#adapters-data-types">Adapters/Data Types</a></li>
 <li><a href="#statistics">Statistics</a></li>
 </ul>
 </li>
@@ -720,7 +720,7 @@ var doc_name = "Overview";
 </div>
 </div>
 <div class="sect2">
-<h3 id="adapters-types"><a class="anchor" href="#adapters-types"></a>Adapters/Types</h3>
+<h3 id="adapters-data-types"><a class="anchor" href="#adapters-data-types"></a>Adapters/Data Types</h3>
 <div class="paragraph">
 <p>In order to handle a multitude of input data types, an adapter is needed to translate the input data type into a format that can be understood and efficiently used by the GeoWave core.  Among others, GeoWave provides a data adapter implementation that supports <a href="http://docs.geotools.org/latest/javadocs/org/opengis/feature/simple/SimpleFeature.html" target="_blank">SimpleFeatures</a> by default, which should cover most use cases for vector data.</p>
 </div>
@@ -737,7 +737,7 @@ var doc_name = "Overview";
 <div class="sect2">
 <h3 id="statistics"><a class="anchor" href="#statistics"></a>Statistics</h3>
 <div class="paragraph">
-<p>Because GeoWave often deals with large amounts of data, it can be costly to calculate statistics on a particular attribute in a dataset. Sometimes it is useful to have statistics information about an attribute readily available without the need to traverse the entire data set each time. To address this problem, GeoWave has a statistics store that can be configured to keep track of a number of different types of statistics for individual attributes on an adapter. The types of statistics available depend on the adapter type and attribute type.  The types of statistics available out of the box include:</p>
+<p>Because GeoWave often deals with large amounts of data, it can be costly to calculate statistics information about a data set.  To address this problem, GeoWave has a statistics store that can be configured to keep track of statistics on indices, data types, and fields that can be queried without having to traverse the entire data set.  GeoWave provides a number of statistics out of the box that should address a majority of use cases.  Some of these include:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -759,18 +759,12 @@ var doc_name = "Overview";
 </ul>
 </div>
 <div class="paragraph">
-<p>Statistics are generally updated during ingest and deletion. Range and bounding box statistics, however, are not updated during deletion due to their nature. GeoWave does provides tools to recalculate those statistics if needed.</p>
-</div>
-<div class="paragraph">
-<p>These are the circumstances where recalculation of statistics is recommended:</p>
+<p>Statistics are generally updated during ingest and deletion. However, due to their nature, range and bounding box statistics are not updated during deletion and may require recalculation. These are the circumstances where recalculation of statistics is recommended:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
 <p>As items are removed from an index, the range and envelope statistics may lose their accuracy if the removed item contains an attribute that represents the minimum or maximum value for the population.</p>
-</li>
-<li>
-<p>New statistics added to the statistics store after data is ingested are not automatically computed and would not reflect the existing data.</p>
 </li>
 <li>
 <p>When a statistic algorithm is changed, the existing statistic data may not accurately represent the updated algorithm.</p>
@@ -994,7 +988,7 @@ var geowave_version = '1.3.0-SNAPSHOT';
 
 <div class="geowave-footer col-md-12 docs-footer">
   <div class="py-4 d-flex justify-content-center align-items-center">
-    <small><p class="footer-text">This page was generated on Friday, March 05, 2021 at 10:21 PM UTC<br><a href="https://github.com/locationtech/geowave/tree/56102cf055cf6f140ccb6789584b83235e33e0a2">View the commit it was generated from on GitHub</a></p></small>
+    <small><p class="footer-text">This page was generated on Wednesday, March 10, 2021 at 09:30 PM UTC<br><a href="https://github.com/locationtech/geowave/tree/fa8832deb99d90e1bff0cc6f81a6bd034c2ec4b7">View the commit it was generated from on GitHub</a></p></small>
   </div>
 </div>
 </div>
@@ -1002,7 +996,7 @@ var geowave_version = '1.3.0-SNAPSHOT';
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-03-05 22:21:27 +00:00
+Last updated 2021-03-10 21:30:15 +00:00
 </div>
 </div>
 </body>

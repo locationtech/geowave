@@ -1,0 +1,47 @@
+//:= geowave-stat-listtypes(1)
+:doctype: manpage
+
+[[stat-listtypes-name]]
+==== NAME
+
+geowave-stat-listtypes - List statistic types that are compatible with the given data store, if no data store is provided, all registered statistics will be listed.
+
+[[stat-listtypes-synopsis]]
+==== SYNOPSIS
+
+  geowave stat listtypes [options] [<store name>]
+
+[[stat-listtypes-description]]
+==== DESCRIPTION
+
+This command prints statistic types that are compatible with the given options to the standard output.
+
+[[stat-listtypes-options]]
+==== OPTIONS
+  
+*--indexName* _<name>_::
+  If specified, only statistics that are compatible with this index will be listed.
+  
+*--typeName* _<name>_::
+  If specified, only statistics that are compatible with this type will be listed.
+  
+*--fieldName* _<name>_::
+  If specified, only statistics that are compatible with this field will be displayed.
+  
+*-b, --binningStrategies*::
+  If specified, a list of registered binning strategies will be displayed.
+  
+[[stat-listtypes-examples]]
+==== EXAMPLES
+
+List all registered statistics and binning strategies:
+
+  geowave stat listtypes -b
+
+List all compatible statistics for the `example` store:
+
+  geowave stat listtypes example
+  
+List all compatible statistics for the `hail` type in the `example` store:
+
+  geowave stat listtypes example --typeName hail

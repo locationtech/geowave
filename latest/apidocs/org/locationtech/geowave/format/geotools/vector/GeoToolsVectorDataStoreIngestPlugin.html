@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -167,37 +167,44 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/ingest
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestPlugin.html#getDataAdapters-java.net.URL-java.lang.String-">getDataAdapters</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;url,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>
+<div class="block">Get all writable adapters used by this plugin for the given URL</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestPlugin.html#getFileExtensionFilters--">getFileExtensionFilters</a></span>()</code>
 <div class="block">Gets a list of file extensions that this plugin supports.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestPlugin.html#getRequiredIndices--">getRequiredIndices</a></span>()</code>
 <div class="block">Get an array of indices that are required by this ingest implementation.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../org/locationtech/geowave/core/store/index/CommonIndexValue.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexValue</a>&gt;[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestPlugin.html#getSupportedIndexableTypes--">getSupportedIndexableTypes</a></span>()</code>
 <div class="block">return a set of classes that can be indexed by this data adapter provider, used for
  compatibility checking with an index provider</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestPlugin.html#init-java.net.URL-">init</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;baseDirectory)</code>
 <div class="block">Initialize the plugin and give it the base directory that is provided by the user.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestPlugin.html#supportsFile-java.net.URL-">supportsFile</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file)</code>
 <div class="block">This method will be called for every file that matches the given extensions.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/ingest/GeoWaveData.html" title="class in org.locationtech.geowave.core.store.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestPlugin.html#toGeoWaveData-java.net.URL-java.lang.String:A-java.lang.String-">toGeoWaveData</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;input,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;indexNames,
@@ -327,6 +334,29 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/ingest
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html#getDataAdapters-java.lang.String-">getDataAdapters</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/ingest/DataAdapterProvider.html" title="interface in org.locationtech.geowave.core.store.ingest">DataAdapterProvider</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>globalVisibility</code> - If on the command-line the user specifies a global visibility to write
+        to the visibility column in GeoWave, it is passed along here. It is assumed that this is
+        the same visibility string that will be passed to IngestPluginBase.toGeoWaveData()</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>An array of adapters that may be used by this plugin</dd>
+</dl>
+</li>
+</ul>
+<a name="getDataAdapters-java.net.URL-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDataAdapters</h4>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;[]&nbsp;getDataAdapters(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;url,
+                                                                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html#getDataAdapters-java.net.URL-java.lang.String-">IngestPluginBase</a></code></span></div>
+<div class="block">Get all writable adapters used by this plugin for the given URL</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html#getDataAdapters-java.net.URL-java.lang.String-">getDataAdapters</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/ingest/IngestPluginBase.html" title="interface in org.locationtech.geowave.core.store.ingest">IngestPluginBase</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>url</code> - the URL of the data to ingest</dd>
 <dd><code>globalVisibility</code> - If on the command-line the user specifies a global visibility to write
         to the visibility column in GeoWave, it is passed along here. It is assumed that this is
         the same visibility string that will be passed to IngestPluginBase.toGeoWaveData()</dd>

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":10,"i3":6,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":6,"i11":9,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10};
+var methods = {"i0":9,"i1":9,"i2":10,"i3":6,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":6,"i12":9,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -217,71 +217,75 @@ implements org.apache.hadoop.util.Tool, <a href="../../../../../org/locationtech
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#getCounterValue-java.lang.Enum-">getCounterValue</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html?is-external=true" title="class or interface in java.lang">Enum</a>&lt;?&gt;&nbsp;counterEnum)</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#getDataStore-org.locationtech.geowave.analytic.PropertyManagement-">getDataStore</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/store/index/IndexStore.html" title="interface in org.locationtech.geowave.core.store.index">IndexStore</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#getIndexStore-org.locationtech.geowave.analytic.PropertyManagement-">getIndexStore</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/analytic/param/FormatConfiguration.html" title="interface in org.locationtech.geowave.analytic.param">FormatConfiguration</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#getInputFormatConfiguration--">getInputFormatConfiguration</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalAdapterStore</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#getInternalAdapterStore-org.locationtech.geowave.analytic.PropertyManagement-">getInternalAdapterStore</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>protected abstract <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#getJobName--">getJobName</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>protected static org.slf4j.Logger</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#getLogger--">getLogger</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/MapReduceIntegration.html" title="interface in org.locationtech.geowave.analytic.mapreduce">MapReduceIntegration</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#getMapReduceIntegrater--">getMapReduceIntegrater</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/analytic/param/FormatConfiguration.html" title="interface in org.locationtech.geowave.analytic.param">FormatConfiguration</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#getOutputFormatConfiguration--">getOutputFormatConfiguration</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../org/locationtech/geowave/analytic/param/ParameterEnum.html" title="interface in org.locationtech.geowave.analytic.param">ParameterEnum</a>&lt;?&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#getParameters--">getParameters</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#getReducerCount--">getReducerCount</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#getScope--">getScope</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;configuration,
    <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#run-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#run-java.lang.String:A-">run</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;args)</code>&nbsp;</td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#setInputFormatConfiguration-org.locationtech.geowave.analytic.param.FormatConfiguration-">setInputFormatConfiguration</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/param/FormatConfiguration.html" title="interface in org.locationtech.geowave.analytic.param">FormatConfiguration</a>&nbsp;inputFormat)</code>&nbsp;</td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#setMapReduceIntegrater-org.locationtech.geowave.analytic.mapreduce.MapReduceIntegration-">setMapReduceIntegrater</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/mapreduce/MapReduceIntegration.html" title="interface in org.locationtech.geowave.analytic.mapreduce">MapReduceIntegration</a>&nbsp;mapReduceIntegrater)</code>&nbsp;</td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#setOutputFormatConfiguration-org.locationtech.geowave.analytic.param.FormatConfiguration-">setOutputFormatConfiguration</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/param/FormatConfiguration.html" title="interface in org.locationtech.geowave.analytic.param">FormatConfiguration</a>&nbsp;outputFormat)</code>&nbsp;</td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#setReducerCount-int-">setReducerCount</a></span>(int&nbsp;reducerCount)</code>&nbsp;</td>
 </tr>
@@ -443,6 +447,20 @@ implements org.apache.hadoop.util.Tool, <a href="../../../../../org/locationtech
 <li class="blockList">
 <h4>getScope</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;getScope()</pre>
+</li>
+</ul>
+<a name="getDataStore-org.locationtech.geowave.analytic.PropertyManagement-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDataStore</h4>
+<pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;getDataStore(<a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)
+                       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
+</dl>
 </li>
 </ul>
 <a name="getAdapterStore-org.locationtech.geowave.analytic.PropertyManagement-">
