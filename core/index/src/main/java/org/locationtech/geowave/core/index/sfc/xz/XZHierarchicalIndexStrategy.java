@@ -456,6 +456,15 @@ public class XZHierarchicalIndexStrategy implements HierarchicalNumericIndexStra
     }
 
     @Override
+    public String toString() {
+      return "XZ Hierarchical Metadata[Point Curve Count:"
+          + pointCurveCount
+          + ", XZ Curve Count:"
+          + xzCurveCount
+          + "]";
+    }
+
+    @Override
     public void insertionIdsAdded(final InsertionIds insertionIds) {
       for (final SinglePartitionInsertionIds partitionId : insertionIds.getPartitionKeys()) {
         final byte first = partitionId.getPartitionKey()[0];

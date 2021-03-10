@@ -8,6 +8,9 @@
  */
 package org.locationtech.geowave.test.services;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.List;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -18,11 +21,17 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic;
+import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic.BoundingBoxValue;
+import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.StatisticQueryBuilder;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic;
+import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic.CountValue;
 import org.locationtech.geowave.examples.ingest.SimpleIngest;
 import org.locationtech.geowave.service.client.StatServiceClient;
 import org.locationtech.geowave.service.client.StoreServiceClient;
@@ -115,35 +124,6 @@ public class StatServicesIT extends BaseServiceIT {
   }
 
   @Test
-  public void testCalcStat() {
-    TestUtils.assertStatusCode(
-        "Should successfully calculate stat for existent store, adapterID, and statID",
-        200,
-        statServiceClient.calcStat(store_name, "GridPoint", "COUNT_DATA"));
-
-    // The following case should probably return a 404 based on the
-    // situation described in the test description
-    TestUtils.assertStatusCode(
-        "Returns a successful 200 status for calculate stat for existent store and adapterID, but a nonexistent statID.  A warning is output",
-        200,
-        statServiceClient.calcStat(store_name, "GridPoint", "nonexistent-stat"));
-
-    // The following case should probably return a 404 based on the
-    // situation described in the test description
-    TestUtils.assertStatusCode(
-        "Returns a successful 200 status for calculate stat for existent store and statID, but nonexistent adapterID.  A warning is output",
-        200,
-        statServiceClient.calcStat(store_name, "nonexistent-adapter", "COUNT_DATA"));
-
-    muteLogging();
-    TestUtils.assertStatusCode(
-        "Should fail to calculate stat for existent adapterID and statID, but nonexistent store",
-        400,
-        statServiceClient.calcStat("nonexistent-store", "GridPoint", "COUNT_DATA"));
-    unmuteLogging();
-  }
-
-  @Test
   public void testListStats() {
     TestUtils.assertStatusCode(
         "Should successfully liststats for existent store",
@@ -160,22 +140,101 @@ public class StatServicesIT extends BaseServiceIT {
 
   @Test
   public void testRecalcStats() {
+    final DataStore ds = dataStoreOptions.createDataStore();
+    final CountValue expectedCount;
+    final BoundingBoxValue expectedBoundingBox;
+    try (CloseableIterator<CountValue> iter =
+        ds.queryStatistics(
+            StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
+                SimpleIngest.FEATURE_NAME).build())) {
+      assertTrue(iter.hasNext());
+      expectedCount = iter.next();
+      assertFalse(iter.hasNext());
+    }
+
+    try (CloseableIterator<BoundingBoxValue> iter =
+        ds.queryStatistics(
+            StatisticQueryBuilder.newBuilder(BoundingBoxStatistic.STATS_TYPE).typeName(
+                SimpleIngest.FEATURE_NAME).build())) {
+      assertTrue(iter.hasNext());
+      expectedBoundingBox = iter.next();
+      assertFalse(iter.hasNext());
+    }
+
     TestUtils.assertStatusCode(
         "Should successfully recalc stats for existent store",
         200,
         statServiceClient.recalcStats(store_name));
 
+    // Verify that the statistic values are still correct
+    try (CloseableIterator<CountValue> iter =
+        ds.queryStatistics(
+            StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
+                SimpleIngest.FEATURE_NAME).build())) {
+      assertTrue(iter.hasNext());
+      final CountValue newCount = iter.next();
+      assertFalse(iter.hasNext());
+      assertEquals(expectedCount.getValue(), newCount.getValue());
+    }
+
+    try (CloseableIterator<BoundingBoxValue> iter =
+        ds.queryStatistics(
+            StatisticQueryBuilder.newBuilder(BoundingBoxStatistic.STATS_TYPE).typeName(
+                SimpleIngest.FEATURE_NAME).build())) {
+      assertTrue(iter.hasNext());
+      final BoundingBoxValue newBoundingBox = iter.next();
+      assertFalse(iter.hasNext());
+      assertEquals(expectedBoundingBox.getValue(), newBoundingBox.getValue());
+    }
+
     TestUtils.assertStatusCode(
         "Should successfully recalc stats for existent store and existent adapter",
         200,
-        statServiceClient.recalcStats(store_name, "GridPoint", null, null));
+        statServiceClient.recalcStats(
+            store_name,
+            null,
+            null,
+            SimpleIngest.FEATURE_NAME,
+            null,
+            null,
+            true,
+            null));
+
+    // Verify that the statistic values are still correct
+    try (CloseableIterator<CountValue> iter =
+        ds.queryStatistics(
+            StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
+                SimpleIngest.FEATURE_NAME).build())) {
+      assertTrue(iter.hasNext());
+      final CountValue newCount = iter.next();
+      assertFalse(iter.hasNext());
+      assertEquals(expectedCount.getValue(), newCount.getValue());
+    }
+
+    try (CloseableIterator<BoundingBoxValue> iter =
+        ds.queryStatistics(
+            StatisticQueryBuilder.newBuilder(BoundingBoxStatistic.STATS_TYPE).typeName(
+                SimpleIngest.FEATURE_NAME).build())) {
+      assertTrue(iter.hasNext());
+      final BoundingBoxValue newBoundingBox = iter.next();
+      assertFalse(iter.hasNext());
+      assertEquals(expectedBoundingBox.getValue(), newBoundingBox.getValue());
+    }
 
     // The following case should probably return a 404 based on the
     // situation described in the test description
     TestUtils.assertStatusCode(
-        "Returns a successful 200 status for recalc stats for existent store and nonexistent adapter",
-        200,
-        statServiceClient.recalcStats(store_name, "nonexistent-adapter", null, null));
+        "Returns a 400 status for recalc stats for existent store and nonexistent adapter",
+        400,
+        statServiceClient.recalcStats(
+            store_name,
+            null,
+            null,
+            "nonexistent-adapter",
+            null,
+            null,
+            true,
+            null));
 
     muteLogging();
     TestUtils.assertStatusCode(
@@ -190,27 +249,27 @@ public class StatServicesIT extends BaseServiceIT {
     TestUtils.assertStatusCode(
         "Should successfully remove stat for existent store, adapterID, and statID",
         200,
-        statServiceClient.removeStat(store_name, "GridPoint", "COUNT_DATA"));
+        statServiceClient.removeStat(store_name, "COUNT", "GridPoint", true));
 
     // The following case should probably return a 404 based on the
     // situation described in the test description
     TestUtils.assertStatusCode(
-        "Returns a successful 200 status for removing stat for existent store and type name, but a nonexistent stat type.  A warning is output.",
-        200,
-        statServiceClient.removeStat(store_name, "GridPoint", "nonexistent-stat"));
+        "Should fail to remove a nonexistent stat.",
+        400,
+        statServiceClient.removeStat(store_name, "nonexistent-stat", "GridPoint", true));
 
     // The following case should probably return a 404 based on the
     // situation described in the test description
     TestUtils.assertStatusCode(
-        "Returns a successful 200 status for removing stat for existent store and stat type, but nonexistent type name.  A warning is output",
-        200,
-        statServiceClient.removeStat(store_name, "nonexistent-type", "COUNT_DATA"));
+        "Should fail to remove a stat from a nonexistent type.",
+        400,
+        statServiceClient.removeStat(store_name, "COUNT", "nonexistent-type", true));
 
     muteLogging();
     TestUtils.assertStatusCode(
         "Should fail to remove for existent data type name and stat type, but nonexistent store",
         400,
-        statServiceClient.removeStat("nonexistent-store", "GridPoint", "COUNT_DATA"));
+        statServiceClient.removeStat("nonexistent-store", "COUNT", "GridPoint", true));
     unmuteLogging();
   }
 

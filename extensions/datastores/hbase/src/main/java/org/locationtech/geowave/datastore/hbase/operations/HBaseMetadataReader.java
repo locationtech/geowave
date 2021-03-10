@@ -55,7 +55,7 @@ public class HBaseMetadataReader implements MetadataReader {
     final Scan scanner = new Scan();
 
     try {
-      final byte[] columnFamily = StringUtils.stringToBinary(metadataType.name());
+      final byte[] columnFamily = StringUtils.stringToBinary(metadataType.id());
       final byte[] columnQualifier = query.getSecondaryId();
 
       if (columnQualifier != null) {
@@ -65,7 +65,7 @@ public class HBaseMetadataReader implements MetadataReader {
       }
 
       if (query.hasPrimaryId()) {
-        if (metadataType.equals(MetadataType.STATS)) {
+        if (query.isPrefix()) {
           scanner.setStartRow(query.getPrimaryId());
           scanner.setStopRow(ByteArrayUtils.getNextPrefix(query.getPrimaryId()));
         } else {
@@ -74,7 +74,7 @@ public class HBaseMetadataReader implements MetadataReader {
         }
       }
       final boolean clientsideStatsMerge =
-          (metadataType == MetadataType.STATS) && !options.isServerSideLibraryEnabled();
+          (metadataType.isStatValues()) && !options.isServerSideLibraryEnabled();
       if (clientsideStatsMerge) {
         scanner.setMaxVersions(); // Get all versions
       }
@@ -136,7 +136,6 @@ public class HBaseMetadataReader implements MetadataReader {
     if ((columnCells.size() == 1)) {
       return CellUtil.cloneValue(columnCells.get(0));
     }
-
     return URLClassloaderUtils.toBinary(HBaseUtils.getMergedStats(columnCells));
   }
 
@@ -144,7 +143,6 @@ public class HBaseMetadataReader implements MetadataReader {
     if (!clientsideStatsMerge || (result.size() == 1)) {
       return result.value();
     }
-
     return URLClassloaderUtils.toBinary(HBaseUtils.getMergedStats(result.listCells()));
   }
 }

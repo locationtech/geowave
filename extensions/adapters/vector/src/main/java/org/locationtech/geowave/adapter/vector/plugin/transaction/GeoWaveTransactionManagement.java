@@ -24,8 +24,6 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents;
 import org.locationtech.geowave.adapter.vector.plugin.lock.LockingManagement;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -51,7 +49,7 @@ public class GeoWaveTransactionManagement extends AbstractTransactionManagement 
   private final Map<String, SimpleFeature> addedFeatures = new ConcurrentHashMap<>();
   private final Multimap<String, SimpleFeature> removedFeatures = LinkedListMultimap.create();
 
-  private Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsCache = null;
+  private StatisticsCache statsCache = null;
 
   /** List of added feature ids; values stored in added above */
   private final Set<String> addedFidList = new HashSet<>();
@@ -365,7 +363,7 @@ public class GeoWaveTransactionManagement extends AbstractTransactionManagement 
   }
 
   @Override
-  public Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> getDataStatistics() {
+  public StatisticsCache getDataStatistics() {
     if (statsCache == null) {
       statsCache = super.getDataStatistics();
     }

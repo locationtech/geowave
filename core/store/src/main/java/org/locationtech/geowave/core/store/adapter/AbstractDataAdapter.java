@@ -189,6 +189,23 @@ public abstract class AbstractDataAdapter<T> implements DataTypeAdapter<T> {
     return new AdapterPersistenceEncoding(getDataId(entry), indexData, extendedData);
   }
 
+  @Override
+  public boolean isCommonIndexField(final CommonIndexModel indexModel, final String fieldName) {
+    for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
+
+      final IndexFieldHandler<T, ? extends CommonIndexValue, Object> fieldHandler =
+          getFieldHandler(dimension);
+      if (fieldHandler != null) {
+        for (String nativeField : fieldHandler.getNativeFieldNames()) {
+          if (nativeField.equals(fieldName)) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
   @SuppressWarnings("unchecked")
   @Override
   public T decode(final IndexedAdapterPersistenceEncoding data, final Index index) {

@@ -8,8 +8,13 @@
  */
 package org.locationtech.geowave.core.store.api;
 
+import java.util.List;
+import javax.annotation.Nullable;
+import org.apache.commons.lang3.tuple.Pair;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.statistics.StatisticType;
 
 /**
  * A DataStore can both ingest and query data based on persisted indices and data type adapters.
@@ -42,7 +47,7 @@ import org.locationtech.geowave.core.store.CloseableIterator;
  *  }
  * }
  * </pre>
- * 
+ *
  */
 public interface DataStore {
 
@@ -94,7 +99,7 @@ public interface DataStore {
 
   /**
    * Get the data type adapter with the given type name from the data store.
-   * 
+   *
    * @param typeName the name of the type to get
    * @return The data type adapter with the given name, or {@code null} if it couldn't be found
    */
@@ -108,28 +113,195 @@ public interface DataStore {
   DataTypeAdapter<?>[] getTypes();
 
   /**
+   * Add a statistic to the data store. The initial value of the statistic will not be calculated
+   * and if there is existing relevant data, this statistic will not be accurate without forcing a
+   * calculation. If instead it is not desire-able to calculate on add use {@code addStatistic}
+   * instead.
+   *
+   * @param statistics the statistics to add
+   */
+  void addEmptyStatistic(Statistic<?>... statistic);
+
+  /**
+   * Add a statistic to the data store. The initial value of the statistic will be calculated after
+   * being added. If this calculation is not desired use {@code addEmptyStatistic} instead.
+   *
+   * @param statistics the statistics to add
+   */
+  void addStatistic(Statistic<?>... statistic);
+
+  /**
+   * Remove statistics from the data store.
+   *
+   * @param statistic the statistics to remove
+   */
+  void removeStatistic(final Statistic<?>... statistic);
+
+  /**
+   * Force a recomputation of the stats
+   *
+   * @param statistic the statistics to recompute
+   */
+  void recalcStatistic(Statistic<?>... statistic);
+
+  /**
+   * Gets all of the statistics that are being tracked on the provided data type adapter.
+   *
+   * @param typeName the data type adapter to get the statistics for
+   * @return An array of all the statistics that are being tracked on the provided data type
+   *         adapter. Note this is the descriptors of the statistics, not the values.
+   */
+  Statistic<?>[] getDataTypeStatistics(final String typeName);
+
+  /**
+   * Gets the statistic that is being tracked for the data type, statistic type, and tag specified.
+   *
+   * @param <V> the StatisticValue implementation of the statistic
+   * @param <R> the raw value type of the statistic
+   * @param statisticType the statistic type for the statistic to get
+   * @param typeName the data type name to get the statistic for
+   * @param tag the tag of the statistic, if not specified, a tag will be inferred
+   * @return the statistic, or null if no statistic matches the criteria
+   */
+  <V extends StatisticValue<R>, R> Statistic<V> getDataTypeStatistic(
+      final StatisticType<V> statisticType,
+      final String typeName,
+      @Nullable final String tag);
+
+  /**
+   * Gets all of the statistics that are being tracked on the provided index.
+   *
+   * @param indexName the index name to retrieve statistics for
+   * @return An array of all the statistics that are being tracked on the provided index. Note this
+   *         is the descriptors of the statistics, not the values.
+   */
+  Statistic<?>[] getIndexStatistics(final String indexName);
+
+  /**
+   * Gets the statistic that is being tracked for the index, statistic type, and tag specified.
+   *
+   * @param <V> the StatisticValue implementation of the statistic
+   * @param <R> the raw value type of the statistic
+   * @param statisticType the statistic type for the statistic to get
+   * @param indexName
+   * @param tag the tag of the statistic, if not specified, a tag will be inferred
+   * @return the statistic, or null if no statistic matches the criteria
+   */
+  <V extends StatisticValue<R>, R> Statistic<V> getIndexStatistic(
+      final StatisticType<V> statisticType,
+      final String indexName,
+      @Nullable final String tag);
+
+  /**
+   * Gets all of the statistics that are being tracked on the provided type/field pair.
+   *
+   * @param typeName the data type name to get the statistics for
+   * @param fieldName the field name to get the statistics for
+   * @return An array of all the statistics that are being tracked on the provided field. Note this
+   *         is the descriptors of the statistics, not the values.
+   */
+  Statistic<?>[] getFieldStatistics(final String typeName, final String fieldName);
+
+  /**
+   * Gets the statistic that is being tracked for the data type, field, statistic type, and tag
+   * specified.
+   *
+   * @param <V> the StatisticValue implementation of the statistic
+   * @param <R> the raw value type of the statistic
+   * @param statisticType the statistic type for the statistic to get
+   * @param typeName the data type name to get the statistic for
+   * @param fieldName
+   * @param tag the tag of the statistic, if not specified, a tag will be inferred
+   * @return the statistic, or null if no statistic matches the criteria
+   */
+  <V extends StatisticValue<R>, R> Statistic<V> getFieldStatistic(
+      final StatisticType<V> statisticType,
+      final String typeName,
+      final String fieldName,
+      @Nullable final String tag);
+
+  /**
+   * The statistic value of this stat (if multiple bins match, it will automatically aggregate the
+   * resulting values together). For statistics with bins, it will always aggregate all bins.
+   *
+   * @param <V> the StatisticValue implementation of the statistic
+   * @param <R> the raw value type of the statistic
+   * @param stat the statistic to get the value for
+   * @return the statistic's value, aggregated together if there are multiple matching values.
+   */
+  default <V extends StatisticValue<R>, R> R getStatisticValue(final Statistic<V> stat) {
+    return getStatisticValue(stat, BinConstraints.allBins());
+  }
+
+  /**
+   * The statistic value of this stat (if multiple bins match, it will automatically aggregate the
+   * resulting values together).
+   *
+   * @param <V> the StatisticValue implementation of the statistic
+   * @param <R> the raw value type of the statistic
+   * @param stat the statistic to get the value for
+   * @param binConstraints the bin(s) to get the value for based on the constraints
+   * @return the statistic's value, aggregated together if there are multiple matching values.
+   */
+  <V extends StatisticValue<R>, R> R getStatisticValue(
+      Statistic<V> stat,
+      BinConstraints binConstraints);
+
+  /**
+   * Returns all of the statistic values of this stat as well as the associated bin. It will return
+   * each individual match as a bin-value pair.
+   *
+   * @param <V> the StatisticValue implementation of the statistic
+   * @param <R> the raw value type of the statistic
+   * @param stat the statistic to get the value for
+   * @return the statistic bin-value pairs, if there are multiple matching values which should only
+   *         be the case for different bins it will return each individual value. It will return an
+   *         empty iterator if there are no matching values.
+   */
+  default <V extends StatisticValue<R>, R> CloseableIterator<Pair<ByteArray, R>> getBinnedStatisticValues(
+      final Statistic<V> stat) {
+    return getBinnedStatisticValues(stat, BinConstraints.allBins());
+  }
+
+  /**
+   * The statistic values of this stat as well as the associated bin. If multiple bins match, it
+   * will return each individual match as a bin-value pair.
+   *
+   * @param <V> the StatisticValue implementation of the statistic
+   * @param <R> the raw value type of the statistic
+   * @param stat the statistic to get the value for
+   * @param binConstraints the bin(s) to get the value for based on the constraints
+   * @return the statistic bin-value pairs, if there are multiple matching values which should only
+   *         be the case for different bins it will return each individual value. It will return an
+   *         empty iterator if there are no matching values.
+   */
+  <V extends StatisticValue<R>, R> CloseableIterator<Pair<ByteArray, R>> getBinnedStatisticValues(
+      Statistic<V> stat,
+      BinConstraints binConstraints);
+
+  /**
    * Get data statistics that match the given query criteria
    *
-   * @param query the query criteria, use StatisticsQueryBuilder or its extensions and if you're
+   * @param query the query criteria, use StatisticQueryBuilder or its extensions and if you're
    *        interested in a particular common statistics type use StatisticsQueryBuilder.factory()
    * @return An array of statistics that result from the query
    */
-  <R> Statistics<R>[] queryStatistics(StatisticsQuery<R> query);
+  <V extends StatisticValue<R>, R> CloseableIterator<V> queryStatistics(StatisticQuery<V, R> query);
 
   /**
    * Get a single statistical result that matches the given query criteria
    *
-   * @param query the query criteria, use StatisticsQueryBuilder or its extensions and if you're
+   * @param query the query criteria, use StatisticQueryBuilder or its extensions and if you're
    *        interested in a particular common statistics type use StatisticsQueryBuilder.factory()
    * @return If the query does not define that statistics type it will return null as aggregation
    *         only makes sense within a single type, otherwise aggregates the results of the query
    *         into a single result that is returned
    */
-  <R> R aggregateStatistics(StatisticsQuery<R> query);
+  <V extends StatisticValue<R>, R> V aggregateStatistics(StatisticQuery<V, R> query);
 
   /**
    * Add an index to the data store.
-   * 
+   *
    * @param index the index to add
    */
   void addIndex(Index index);
@@ -145,9 +317,19 @@ public interface DataStore {
    * Get the indices that have been used within this data store for a particular type. If data type
    * name is null it will return all indices.
    *
+   * @param the data type name
+   *
    * @return An array of the indices for a given data type.
    */
   Index[] getIndices(String typeName);
+
+  /**
+   * Get a particular index by its index name. If one doesn't exist it will return null.
+   *
+   * @param indexName the index name for which to retrieve an index
+   * @return The index matching the specified index name or null if it doesn't exist
+   */
+  Index getIndex(String indexName);
 
   /**
    * copy all data from this store into a specified other store
@@ -218,6 +400,7 @@ public interface DataStore {
    */
   void deleteAll();
 
+
   /**
    * Add this type to the data store. This only needs to be called one time ever per type.
    *
@@ -227,6 +410,21 @@ public interface DataStore {
    *        be added
    */
   <T> void addType(DataTypeAdapter<T> dataTypeAdapter, Index... initialIndices);
+
+  /**
+   * Add this type to the data store with the given statistics. This only needs to be called one
+   * time ever per type.
+   *
+   * @param dataTypeAdapter the data type adapter for this type that is used to read and write
+   *        GeoWave entries
+   * @param statistics the initial set of statistics that will be used with this adapter
+   * @param initialIndices the initial indexing for this type, in the future additional indices can
+   *        be added
+   */
+  <T> void addType(
+      DataTypeAdapter<T> dataTypeAdapter,
+      List<Statistic<?>> statistics,
+      Index... initialIndices);
 
   /**
    * Returns an index writer to perform batched write operations for the given data type name. It

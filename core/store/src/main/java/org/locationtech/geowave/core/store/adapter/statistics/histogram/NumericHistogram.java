@@ -11,10 +11,10 @@ package org.locationtech.geowave.core.store.adapter.statistics.histogram;
 import java.nio.ByteBuffer;
 
 public interface NumericHistogram {
-  public void merge(final NumericHistogram other);
+  void merge(final NumericHistogram other);
 
   /** @param v The data point to add to the histogram approximation. */
-  public void add(final double v);
+  void add(final double v);
 
   /**
    * Gets an approximate quantile value from the current histogram. Some popular quantiles are 0.5
@@ -23,14 +23,14 @@ public interface NumericHistogram {
    * @param q The requested quantile, must be strictly within the range (0,1).
    * @return The quantile value.
    */
-  public double quantile(final double q);
+  double quantile(final double q);
 
   /**
    * Returns the fraction of all points added which are <= x.
    *
    * @return the cumulative distribution function (cdf) result
    */
-  public double cdf(final double val);
+  double cdf(final double val);
 
   /**
    * Estimate number of values consumed up to provided value.
@@ -38,18 +38,52 @@ public interface NumericHistogram {
    * @param val
    * @return the number of estimated points
    */
-  public double sum(final double val, boolean inclusive);
+  double sum(final double val, boolean inclusive);
 
   /** @return the amount of byte buffer space to serialize this histogram */
-  public int bufferSize();
+  int bufferSize();
 
-  public void toBinary(final ByteBuffer buffer);
+  void toBinary(final ByteBuffer buffer);
 
-  public void fromBinary(final ByteBuffer buffer);
+  void fromBinary(final ByteBuffer buffer);
 
-  public double getMaxValue();
+  double getMaxValue();
 
-  public double getMinValue();
+  double getMinValue();
 
-  public long getTotalCount();
+  long getTotalCount();
+
+  static String histogramToString(final NumericHistogram histogram) {
+    return "Numeric Histogram[Min: "
+        + histogram.getMinValue()
+        + ", Max: "
+        + histogram.getMaxValue()
+        + ", Median: "
+        + histogram.quantile(0.5)
+        + "]";
+  }
+
+  static double[] binQuantiles(final NumericHistogram histogram, final int bins) {
+    final double[] result = new double[bins];
+    final double binSize = 1.0 / bins;
+    for (int bin = 0; bin < bins; bin++) {
+      result[bin] = histogram.quantile(binSize * (bin + 1));
+    }
+    return result;
+  }
+
+  static long[] binCounts(final NumericHistogram histogram, final int bins) {
+    final long[] result = new long[bins];
+    double start = histogram.getMinValue();
+    final double range = histogram.getMaxValue() - start;
+    final double increment = range / bins;
+    start += increment;
+    long last = 0;
+    for (int bin = 0; bin < bins; bin++, start += increment) {
+      final long aggSum = (long) Math.ceil(histogram.sum(start, false));
+      result[bin] = aggSum - last;
+      last = aggSum;
+    }
+    return result;
+  }
 }

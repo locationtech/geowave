@@ -9,17 +9,18 @@
 package org.locationtech.geowave.test.secondary;
 
 import java.io.IOException;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.core.index.ByteArray;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
@@ -61,6 +62,11 @@ public class VisibilitySecondaryIndexIT {
     TestUtils.printEndOfTest(LOGGER, testName, startMillis);
   }
 
+  @After
+  public void deleteAll() {
+    TestUtils.deleteAll(dataStoreOptions);
+  }
+
   @Test
   public void testVisibility() {
     GeoWaveVisibilityIT.testIngestAndQueryVisibilityFields(
@@ -69,7 +75,7 @@ public class VisibilitySecondaryIndexIT {
         (differingVisibilities) -> Assert.assertEquals(
             "No entries should have differing visibility",
             0,
-            differingVisibilities.getEntriesWithDifferingFieldVisibilities()),
+            differingVisibilities.getValue().longValue()),
         (store, statsStore, internalAdapterId, spatial) -> {
           try {
             testQuery(store, statsStore, internalAdapterId, spatial);

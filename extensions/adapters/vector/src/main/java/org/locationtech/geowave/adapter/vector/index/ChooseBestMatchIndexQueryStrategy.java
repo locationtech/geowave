@@ -11,20 +11,23 @@ package org.locationtech.geowave.adapter.vector.index;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import org.locationtech.geowave.core.geotime.store.query.api.VectorStatisticsQueryBuilder;
 import org.locationtech.geowave.core.index.IndexUtils;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
-import org.locationtech.geowave.core.store.adapter.statistics.histogram.NumericHistogram;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.StatisticsQuery;
+import org.locationtech.geowave.core.store.api.Statistic;
+import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.statistics.StatisticId;
+import org.locationtech.geowave.core.store.statistics.binning.CompositeBinningStrategy;
+import org.locationtech.geowave.core.store.statistics.binning.DataTypeBinningStrategy;
+import org.locationtech.geowave.core.store.statistics.binning.PartitionBinningStrategy;
+import org.locationtech.geowave.core.store.statistics.index.IndexStatistic;
+import org.locationtech.geowave.core.store.statistics.index.RowRangeHistogramStatistic;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
-import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +43,7 @@ public class ChooseBestMatchIndexQueryStrategy implements IndexQueryStrategySPI 
 
   @Override
   public CloseableIterator<Index> getIndices(
-      final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> stats,
+      final DataStatisticsStore statisticsStore,
       final QueryConstraints query,
       final Index[] indices,
       final DataTypeAdapter<?> adapter,
@@ -61,21 +64,27 @@ public class ChooseBestMatchIndexQueryStrategy implements IndexQueryStrategySPI 
             continue;
           }
           final List<MultiDimensionalNumericData> constraints = query.getIndexConstraints(nextIdx);
-          boolean containsRowRangeHistograms = false;
 
-          final StatisticsQuery<NumericHistogram> query =
-              VectorStatisticsQueryBuilder.newBuilder().factory().rowHistogram().indexName(
-                  nextIdx.getName()).build();
-          for (final StatisticsId statsId : stats.keySet()) {
-            // find out if any partition histograms exist for this
-            // index ID by checking the prefix
-            if (statsId.getType().equals(query.getStatsType())
-                && statsId.getExtendedId().startsWith(query.getExtendedId())) {
-              containsRowRangeHistograms = true;
-              break;
+          RowRangeHistogramStatistic rowRangeHistogramStatistic = null;
+
+          try (CloseableIterator<? extends Statistic<? extends StatisticValue<?>>> stats =
+              statisticsStore.getIndexStatistics(
+                  nextIdx,
+                  RowRangeHistogramStatistic.STATS_TYPE,
+                  Statistic.INTERNAL_TAG)) {
+            if (stats.hasNext()) {
+              Statistic<?> statistic = stats.next();
+              if (statistic instanceof RowRangeHistogramStatistic
+                  && statistic.getBinningStrategy() instanceof CompositeBinningStrategy
+                  && ((CompositeBinningStrategy) statistic.getBinningStrategy()).isOfType(
+                      DataTypeBinningStrategy.class,
+                      PartitionBinningStrategy.class)) {
+                rowRangeHistogramStatistic = (RowRangeHistogramStatistic) statistic;
+              }
             }
           }
-          if (!containsRowRangeHistograms) {
+
+          if (rowRangeHistogramStatistic == null) {
             LOGGER.warn(
                 "Best Match Heuristic requires statistic RowRangeHistogramStatistics for each index to properly choose an index.");
           }
@@ -101,7 +110,13 @@ public class ChooseBestMatchIndexQueryStrategy implements IndexQueryStrategySPI 
                     nextIdx,
                     null,
                     maxRangeDecomposition);
-            final long temp = DataStoreUtils.cardinality(nextIdx, stats, ranges);
+            final long temp =
+                DataStoreUtils.cardinality(
+                    statisticsStore,
+                    rowRangeHistogramStatistic,
+                    adapter,
+                    nextIdx,
+                    ranges);
             if (temp < min) {
               bestIdx = nextIdx;
               min = temp;

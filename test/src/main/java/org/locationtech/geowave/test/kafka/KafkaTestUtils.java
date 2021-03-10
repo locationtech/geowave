@@ -17,6 +17,7 @@ import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import org.locationtech.geowave.core.ingest.operations.KafkaToGeoWaveCommand;
 import org.locationtech.geowave.core.ingest.operations.LocalToKafkaCommand;
 import org.locationtech.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
+import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.cli.store.AddStoreCommand;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.IndexPluginOptions;
@@ -94,9 +95,10 @@ public class KafkaTestUtils {
     addStore.execute(params);
 
     final IndexStore indexStore = options.createIndexStore();
+    final DataStore dataStore = options.createDataStore();
     if (indexStore.getIndex("testIndex") == null) {
       indexOption.setName("testIndex");
-      indexStore.addIndex(indexOption.createIndex());
+      dataStore.addIndex(indexOption.createIndex());
     }
 
     kafkaToGeowave.setPluginFormats(ingestFormatOptions);

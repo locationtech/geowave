@@ -73,6 +73,11 @@ public class BinaryDataAdapter implements DataTypeAdapter<Pair<byte[], byte[]>> 
   }
 
   @Override
+  public boolean isCommonIndexField(final CommonIndexModel model, final String fieldName) {
+    return false;
+  }
+
+  @Override
   public int getPositionOfOrderedField(final CommonIndexModel model, final String fieldName) {
     return 0;
   }
@@ -100,5 +105,31 @@ public class BinaryDataAdapter implements DataTypeAdapter<Pair<byte[], byte[]>> 
   @Override
   public byte[] getDataId(final Pair<byte[], byte[]> entry) {
     return entry.getKey();
+  }
+
+  @Override
+  public int getFieldCount() {
+    return 1;
+  }
+
+  @Override
+  public Class<?> getFieldClass(int fieldIndex) {
+    return byte[].class;
+  }
+
+  @Override
+  public String getFieldName(int fieldIndex) {
+    return SINGLETON_FIELD_NAME;
+  }
+
+  @Override
+  public Object getFieldValue(Pair<byte[], byte[]> entry, String fieldName) {
+    return entry.getValue();
+  }
+
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  @Override
+  public Class getDataClass() {
+    return Pair.class;
   }
 }

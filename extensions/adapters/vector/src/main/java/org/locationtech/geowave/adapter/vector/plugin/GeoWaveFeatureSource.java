@@ -9,7 +9,6 @@
 package org.locationtech.geowave.adapter.vector.plugin;
 
 import java.io.IOException;
-import java.util.Map;
 import org.geotools.data.FeatureReader;
 import org.geotools.data.FeatureWriter;
 import org.geotools.data.Query;
@@ -18,14 +17,14 @@ import org.geotools.data.store.ContentFeatureStore;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveEmptyTransaction;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveTransactionState;
+import org.locationtech.geowave.adapter.vector.plugin.transaction.StatisticsCache;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.TransactionsAllocator;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.store.query.api.VectorStatisticsQueryBuilder;
-import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
+import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic;
+import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic.BoundingBoxValue;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
-import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
+import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic;
+import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic.CountValue;
 import org.opengis.feature.FeatureVisitor;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -33,7 +32,6 @@ import org.opengis.filter.Filter;
 import org.opengis.geometry.BoundingBox;
 import org.opengis.util.ProgressListener;
 
-@SuppressWarnings("unchecked")
 public class GeoWaveFeatureSource extends ContentFeatureStore {
   private final GeoWaveDataStoreComponents components;
 
@@ -57,25 +55,24 @@ public class GeoWaveFeatureSource extends ContentFeatureStore {
     return components;
   }
 
-  @SuppressWarnings("rawtypes")
   @Override
   protected ReferencedEnvelope getBoundsInternal(final Query query) throws IOException {
     double minx = -90.0, maxx = 90.0, miny = -180.0, maxy = 180.0;
 
-    InternalDataStatistics<SimpleFeature, ?, ?> bboxStats = null;
+    BoundingBoxValue bboxStats = null;
     if (query.getFilter().equals(Filter.INCLUDE)) {
-      final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> stats =
+      final StatisticsCache statsCache =
           new GeoWaveEmptyTransaction(components).getDataStatistics();
       bboxStats =
-          stats.get(
-              VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
-                  getFeatureType().getGeometryDescriptor().getLocalName()).build().getId());
+          statsCache.getFieldStatistic(
+              BoundingBoxStatistic.STATS_TYPE,
+              getFeatureType().getGeometryDescriptor().getLocalName());
     }
     if (bboxStats != null) {
-      minx = ((BoundingBoxDataStatistics) bboxStats).getMinX();
-      maxx = ((BoundingBoxDataStatistics) bboxStats).getMaxX();
-      miny = ((BoundingBoxDataStatistics) bboxStats).getMinY();
-      maxy = ((BoundingBoxDataStatistics) bboxStats).getMaxY();
+      minx = bboxStats.getMinX();
+      maxx = bboxStats.getMaxX();
+      miny = bboxStats.getMinY();
+      maxy = bboxStats.getMaxY();
     } else {
 
       final FeatureReader<SimpleFeatureType, SimpleFeature> reader =
@@ -98,15 +95,13 @@ public class GeoWaveFeatureSource extends ContentFeatureStore {
     return new ReferencedEnvelope(minx, maxx, miny, maxy, GeometryUtils.getDefaultCRS());
   }
 
-  @SuppressWarnings("rawtypes")
   @Override
   protected int getCountInternal(final Query query) throws IOException {
-    final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> stats =
-        new GeoWaveEmptyTransaction(components).getDataStatistics();
-    final InternalDataStatistics<SimpleFeature, ?, ?> countStats =
-        stats.get(VectorStatisticsQueryBuilder.newBuilder().factory().count().build().getId());
-    if ((countStats != null) && query.getFilter().equals(Filter.INCLUDE)) {
-      return (int) ((CountDataStatistics) countStats).getCount();
+    final CountValue count =
+        new GeoWaveEmptyTransaction(components).getDataStatistics().getAdapterStatistic(
+            CountStatistic.STATS_TYPE);
+    if ((count != null) && query.getFilter().equals(Filter.INCLUDE)) {
+      return count.getValue().intValue();
     } else {
       try (GeoWaveFeatureReader reader =
           new GeoWaveFeatureReader(query, new GeoWaveEmptyTransaction(components), components)) {
@@ -146,11 +141,11 @@ public class GeoWaveFeatureSource extends ContentFeatureStore {
       final FeatureVisitor visitor,
       final ProgressListener progress) throws IOException {
     if (!GeoWaveGTPluginUtils.accepts(
+        components.getStatsStore(),
+        components.getAdapter(),
         visitor,
         progress,
-        getFeatureType(),
-        getDataStore().getMyTransactionState(transaction, this).getGeoWaveTransaction(
-            getFeatureType().getTypeName()).getDataStatistics())) {
+        getFeatureType())) {
       super.accepts(query, visitor, progress);
     }
   }

@@ -24,10 +24,12 @@ import org.geotools.filter.text.cql2.CQLException;
 import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.geowave.adapter.vector.BaseDataStoreTest;
+import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWavePluginException;
 import org.locationtech.geowave.adapter.vector.util.DateUtilities;
 import org.locationtech.geowave.core.geotime.store.query.TemporalRange;
-import org.locationtech.geowave.core.geotime.store.statistics.FeatureTimeRangeStatistics;
+import org.locationtech.geowave.core.geotime.store.statistics.TimeRangeStatistic;
+import org.locationtech.geowave.core.geotime.store.statistics.TimeRangeStatistic.TimeRangeValue;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.PrecisionModel;
@@ -72,11 +74,16 @@ public class TemporalRangeTest extends BaseDataStoreTest {
     newFeature.setAttribute("when", DateUtilities.parseISO("2005-05-19T19:32:56-04:00"));
     newFeature.setAttribute("geometry", factory.createPoint(new Coordinate(43.454, 28.232)));
 
-    final FeatureTimeRangeStatistics stats = new FeatureTimeRangeStatistics(null, "when");
-    stats.entryIngested(newFeature);
+    FeatureDataAdapter adapter = new FeatureDataAdapter(type);
+
+    final TimeRangeStatistic stats = new TimeRangeStatistic(type.getTypeName(), "when");
+    final TimeRangeValue statValue = stats.createEmpty();
+    statValue.entryIngested(adapter, newFeature);
 
     assertEquals(
         DateUtilities.parseISO("2005-05-19T23:32:56Z"),
-        stats.asTemporalRange().getStartTime());
+        statValue.asTemporalRange().getStartTime());
+    writer.close();
+    transaction1.close();
   }
 }

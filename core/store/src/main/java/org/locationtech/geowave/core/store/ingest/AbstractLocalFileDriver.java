@@ -37,7 +37,7 @@ public abstract class AbstractLocalFileDriver<P extends LocalPluginBase, R> {
   protected LocalInputCommandLineOptions localInput;
   protected Properties configProperties;
 
-  protected static boolean checkIndexesAgainstProvider(
+  public static boolean checkIndexesAgainstProvider(
       final String providerName,
       final DataAdapterProvider<?> adapterProvider,
       final List<Index> indices) {

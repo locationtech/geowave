@@ -11,7 +11,6 @@ package org.locationtech.geowave.core.store;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.metadata.AdapterIndexMappingStoreFactory;
@@ -21,6 +20,7 @@ import org.locationtech.geowave.core.store.metadata.IndexStoreFactory;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreFactory;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.DataStoreOperationsFactory;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 
 public class BaseDataStoreFamily implements StoreFactoryFamilySpi {
   private final String typeName;

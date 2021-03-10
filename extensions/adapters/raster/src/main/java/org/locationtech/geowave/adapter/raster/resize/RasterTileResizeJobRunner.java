@@ -174,7 +174,7 @@ public class RasterTileResizeJobRunner extends Configured implements Tool {
         // before the
         // distributed ingest
         outputStoreOptions.createDataStoreOperations().createMetadataWriter(
-            MetadataType.STATS).close();
+            MetadataType.STATISTIC_VALUES).close();
       } catch (final Exception e) {
         LOGGER.error("Unable to create stats writer", e);
       }

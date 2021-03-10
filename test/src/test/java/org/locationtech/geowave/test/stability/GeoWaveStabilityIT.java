@@ -196,9 +196,7 @@ public class GeoWaveStabilityIT extends AbstractGeoWaveBasicVectorIT {
       }
     }
     try {
-      badStoreOperations.mergeStats(
-          badDataStore.createDataStatisticsStore(),
-          badDataStore.createInternalAdapterStore());
+      badDataStore.createDataStatisticsStore().mergeStats();
     } catch (final Exception e) {
       LOGGER.info("Caught exception while merging bad stats.");
     }

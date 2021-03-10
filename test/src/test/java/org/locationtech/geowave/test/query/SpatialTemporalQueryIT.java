@@ -42,9 +42,7 @@ import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialTemporal
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
-import org.locationtech.geowave.core.store.adapter.statistics.DuplicateEntryCount;
-import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
+import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
@@ -55,6 +53,10 @@ import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.index.IndexPluginOptions.PartitionStrategy;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.statistics.InternalStatisticsHelper;
+import org.locationtech.geowave.core.store.statistics.index.DuplicateEntryCountStatistic;
+import org.locationtech.geowave.core.store.statistics.index.DuplicateEntryCountStatistic.DuplicateEntryCountValue;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
@@ -281,21 +283,21 @@ public class SpatialTemporalQueryIT {
         return new IndexQueryStrategySPI() {
 
           @Override
+          public boolean requiresStats() {
+            return false;
+          }
+
+          @Override
           public CloseableIterator<Index> getIndices(
-              final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> stats,
-              final QueryConstraints query,
-              final Index[] indices,
-              final DataTypeAdapter<?> adapter,
-              final Map<QueryHint, Object> hints) {
+              DataStatisticsStore statisticsStore,
+              QueryConstraints query,
+              Index[] indices,
+              DataTypeAdapter<?> adapter,
+              Map<QueryHint, Object> hints) {
             return new CloseableIteratorWrapper<>(new Closeable() {
               @Override
               public void close() throws IOException {}
             }, Collections.singleton(currentGeotoolsIndex).iterator());
-          }
-
-          @Override
-          public boolean requiresStats() {
-            return false;
           }
         };
       }
@@ -711,14 +713,17 @@ public class SpatialTemporalQueryIT {
     // year after 1970)
     final long numExpectedDuplicates = (DUPLICATE_DELETION_YEAR_MAX - DUPLICATE_DELETION_YEAR_MIN);
 
+    final PersistentAdapterStore adapterStore = dataStoreOptions.createAdapterStore();
+
     // check and count the number of entries with duplicates
-    DuplicateEntryCount dupeEntryCount =
-        DuplicateEntryCount.getDuplicateCounts(
+    DuplicateEntryCountValue dupeEntryCount =
+        InternalStatisticsHelper.getDuplicateCounts(
             YEAR_INDEX,
             Collections.singletonList(typeId),
+            adapterStore,
             ((BaseDataStore) dataStore).getStatisticsStore());
 
-    Assert.assertEquals(numExpectedEntries, dupeEntryCount.getEntriesWithDuplicatesCount());
+    Assert.assertEquals(numExpectedEntries, dupeEntryCount.getValue().longValue());
 
     // check and count the duplicates for 1970-1974
     dupeCounter = new DuplicateCountCallback<>();
@@ -751,15 +756,16 @@ public class SpatialTemporalQueryIT {
     // number of entries with duplicates should match the sanity query count
     // 3(1980-1987, 1987-1995, 1980-1990)
     dupeEntryCount =
-        DuplicateEntryCount.getDuplicateCounts(
+        InternalStatisticsHelper.getDuplicateCounts(
             YEAR_INDEX,
             Collections.singletonList(typeId),
+            adapterStore,
             ((BaseDataStore) dataStore).getStatisticsStore());
 
     // if delete works, it should not count the entry as having any
     // duplicates and the number of entries with duplicates should match the
     // sanity query count 3(1980-1987, 1987-1995, 1980-1990)
-    Assert.assertEquals(sanity_count, dupeEntryCount.getEntriesWithDuplicatesCount());
+    Assert.assertEquals(sanity_count, dupeEntryCount.getValue().longValue());
 
     // finally check we didn't accidentally delete any duplicates of the
     // sanity query range

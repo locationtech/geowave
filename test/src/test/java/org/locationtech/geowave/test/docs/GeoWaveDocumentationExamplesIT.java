@@ -24,20 +24,22 @@ import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStra
 import org.locationtech.geowave.core.geotime.store.query.api.VectorAggregationQueryBuilder;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryConstraintsFactory;
-import org.locationtech.geowave.core.geotime.store.query.api.VectorStatisticsQueryBuilder;
-import org.locationtech.geowave.core.geotime.store.query.api.VectorStatisticsQueryBuilder.QueryByVectorStatisticsTypeFactory;
+import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic;
+import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic.BoundingBoxValue;
+import org.locationtech.geowave.core.geotime.store.statistics.SpatialTemporalStatisticQueryBuilder;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
-import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsQueryBuilder;
 import org.locationtech.geowave.core.store.api.AggregationQuery;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataStoreFactory;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Query;
-import org.locationtech.geowave.core.store.api.StatisticsQuery;
+import org.locationtech.geowave.core.store.api.StatisticQuery;
+import org.locationtech.geowave.core.store.api.StatisticQueryBuilder;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.statistics.query.FieldStatisticQueryBuilder;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
@@ -229,24 +231,21 @@ public class GeoWaveDocumentationExamplesIT extends AbstractGeoWaveIT {
     // --------------------------------------------------------------------
     // Statistics Example !! See Note at Top of Test
     // --------------------------------------------------------------------
-    // Create the statistics query builder
-    VectorStatisticsQueryBuilder<Object> statisticsQueryBuilder =
-        VectorStatisticsQueryBuilder.newBuilder();
-
-    // Create the query by vector statistics type factory
-    QueryByVectorStatisticsTypeFactory queryByStatTypeFactory = statisticsQueryBuilder.factory();
-
-    // Create the bounding box query builder
-    FieldStatisticsQueryBuilder<Envelope> builder = queryByStatTypeFactory.bbox();
+    // Create the statistics query builder for the BoundingBoxStatistic
+    FieldStatisticQueryBuilder<BoundingBoxValue, Envelope> builder =
+        SpatialTemporalStatisticQueryBuilder.bbox();
 
     // Specify the type name
-    builder.dataType(pointTypeAdapter.getTypeName());
+    builder.typeName(pointTypeAdapter.getTypeName());
 
     // Create the bounding box statistics query
-    StatisticsQuery<Envelope> bboxQuery = builder.build();
+    StatisticQuery<BoundingBoxValue, Envelope> bboxQuery = builder.build();
 
     // Aggregate the statistic into a single result
-    Envelope bbox = myStore.aggregateStatistics(bboxQuery);
+    BoundingBoxValue bboxStatValue = myStore.aggregateStatistics(bboxQuery);
+
+    // Get the value
+    Envelope bbox = bboxStatValue.getValue();
     // --------------------------------------------------------------------
     // Verify example
     Assert.assertEquals(-5.0, bbox.getMinX(), 0.0001);

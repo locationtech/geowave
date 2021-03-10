@@ -25,14 +25,15 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.io.Text;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.IndexMetaData;
-import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.store.adapter.AdapterStoreWrapper;
+import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.statistics.index.RowRangeHistogramStatistic.RowRangeHistogramValue;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.datastore.accumulo.mapreduce.BackwardCompatibleTabletLocatorFactory.BackwardCompatibleTabletLocator;
 import org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations;
@@ -54,8 +55,9 @@ public class AccumuloSplitsProvider extends SplitsProvider {
       final DataStoreOperations operations,
       final Index index,
       final List<Short> adapterIds,
-      final Map<Pair<Index, ByteArray>, RowRangeHistogramStatistics<?>> statsCache,
+      final Map<Pair<Index, ByteArray>, RowRangeHistogramValue> statsCache,
       final TransientAdapterStore adapterStore,
+      final InternalAdapterStore internalAdapterStore,
       final DataStatisticsStore statsStore,
       final Integer maxSplits,
       final QueryConstraints constraints,
@@ -159,7 +161,7 @@ public class AccumuloSplitsProvider extends SplitsProvider {
                   getHistStats(
                       index,
                       adapterIds,
-                      adapterStore,
+                      new AdapterStoreWrapper(adapterStore, internalAdapterStore),
                       statsStore,
                       statsCache,
                       new ByteArray(rowRange.getPartitionKey()),

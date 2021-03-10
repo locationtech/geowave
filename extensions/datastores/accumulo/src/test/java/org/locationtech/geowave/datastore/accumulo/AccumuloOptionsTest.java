@@ -597,6 +597,49 @@ public class AccumuloOptionsTest {
       }
       return null;
     }
+
+    @Override
+    public int getFieldCount() {
+      return 2;
+    }
+
+    @Override
+    public Class<?> getFieldClass(int fieldIndex) {
+      switch (fieldIndex) {
+        case 0:
+          return Geometry.class;
+        case 1:
+          return String.class;
+      }
+      return null;
+    }
+
+    @Override
+    public String getFieldName(int fieldIndex) {
+      switch (fieldIndex) {
+        case 0:
+          return GEOM;
+        case 1:
+          return ID;
+      }
+      return null;
+    }
+
+    @Override
+    public Object getFieldValue(TestGeometry entry, String fieldName) {
+      switch (fieldName) {
+        case GEOM:
+          return entry.geom;
+        case ID:
+          return entry.id;
+      }
+      return null;
+    }
+
+    @Override
+    public Class<TestGeometry> getDataClass() {
+      return TestGeometry.class;
+    }
   }
 
   public static class AnotherAdapter extends TestGeometryAdapter {

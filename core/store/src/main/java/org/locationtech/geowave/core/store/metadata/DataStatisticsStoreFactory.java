@@ -11,7 +11,7 @@ package org.locationtech.geowave.core.store.metadata;
 import org.locationtech.geowave.core.store.BaseStoreFactory;
 import org.locationtech.geowave.core.store.StoreFactoryHelper;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 
 public class DataStatisticsStoreFactory extends BaseStoreFactory<DataStatisticsStore> {
   public DataStatisticsStoreFactory(

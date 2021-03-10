@@ -13,7 +13,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import java.io.IOException;
-import java.util.Map;
 import java.util.UUID;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataUtilities;
@@ -28,9 +27,8 @@ import org.geotools.filter.text.cql2.CQLException;
 import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.geowave.adapter.vector.BaseDataStoreTest;
-import org.locationtech.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
+import org.locationtech.geowave.adapter.vector.plugin.transaction.StatisticsCache;
+import org.locationtech.geowave.core.store.statistics.field.NumericRangeStatistic;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.PrecisionModel;
@@ -58,6 +56,10 @@ public class WFSTransactionTest extends BaseDataStoreTest {
             "geostuff",
             CQL.toFilter("BBOX(geometry,27.20,41.20,27.30,41.30)"),
             new String[] {"geometry", "pid"});
+    if (dataStore instanceof GeoWaveGTDataStore) {
+      ((GeoWaveGTDataStore) dataStore).dataStore.addEmptyStatistic(
+          new NumericRangeStatistic(type.getTypeName(), "pop"));
+    }
   }
 
   @Test
@@ -115,12 +117,9 @@ public class WFSTransactionTest extends BaseDataStoreTest {
         ((GeoWaveFeatureSource) ((GeoWaveGTDataStore) dataStore).getFeatureSource(
             "geostuff",
             transaction3)).getReaderInternal(query);
-    final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> transStats =
+    final StatisticsCache transStats =
         ((GeoWaveFeatureReader) reader).getTransaction().getDataStatistics();
-    assertNotNull(
-        transStats.get(
-            FeatureNumericRangeStatistics.STATS_TYPE.newBuilder().fieldName(
-                "pop").build().getId()));
+    assertNotNull(transStats.getFieldStatistic(NumericRangeStatistic.STATS_TYPE, "pop"));
     transaction3.close();
   }
 

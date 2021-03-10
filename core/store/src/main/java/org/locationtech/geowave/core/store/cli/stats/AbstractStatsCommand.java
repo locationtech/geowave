@@ -12,14 +12,8 @@ import java.io.IOException;
 import java.util.List;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
-import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
-import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
-import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.store.StoreLoader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.ParametersDelegate;
 import com.beust.jcommander.internal.Console;
@@ -33,63 +27,23 @@ public abstract class AbstractStatsCommand<T> extends ServiceEnabledCommand<T> {
     return true;
   }
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(RecalculateStatsCommand.class);
-
   @ParametersDelegate
   private StatsCommandLineOptions statsOptions = new StatsCommandLineOptions();
 
   public void run(final OperationParams params, final List<String> parameters) {
+    DataStorePluginOptions inputStoreOptions = null;
+    if (parameters.size() > 0) {
+      final String storeName = parameters.get(0);
 
-    final String storeName = parameters.get(0);
-    String typeName = null;
-    if (parameters.size() > 1) {
-      typeName = parameters.get(1);
-    }
-
-    // Attempt to load input store if not already provided (test purposes).
-
-    final StoreLoader inputStoreLoader = new StoreLoader(storeName);
-    if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params), params.getConsole())) {
-      throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
-    }
-    final DataStorePluginOptions inputStoreOptions = inputStoreLoader.getDataStorePlugin();
-
-    try {
-      // Various stores needed
-      final PersistentAdapterStore adapterStore = inputStoreOptions.createAdapterStore();
-
-      if (typeName != null) {
-        final InternalAdapterStore internalAdapterStore =
-            inputStoreOptions.createInternalAdapterStore();
-        final Short adapterId = internalAdapterStore.getAdapterId(typeName);
-        final InternalDataAdapter<?> adapter = adapterStore.getAdapter(adapterId);
-        if (adapter != null) {
-          performStatsCommand(inputStoreOptions, adapter, statsOptions, params.getConsole());
-        } else {
-          // If this adapter is not known, provide list of available
-          // adapters
-          LOGGER.error("Unknown adapter " + adapterId);
-          final StringBuffer buffer = new StringBuffer();
-          for (final String t : internalAdapterStore.getTypeNames()) {
-            buffer.append(t).append(' ');
-          }
-          LOGGER.info("Available data types: " + buffer.toString());
-        }
-      } else {
-        // Repeat the Command for every adapter found
-        try (CloseableIterator<InternalDataAdapter<?>> adapterIt = adapterStore.getAdapters()) {
-          while (adapterIt.hasNext()) {
-            final InternalDataAdapter<?> adapter = adapterIt.next();
-            if (!performStatsCommand(
-                inputStoreOptions,
-                adapter,
-                statsOptions,
-                params.getConsole())) {
-              LOGGER.info("Unable to calculate statistics for data type: " + adapter.getTypeName());
-            }
-          }
-        }
+      // Attempt to load input store if not already provided (test purposes).
+      final StoreLoader inputStoreLoader = new StoreLoader(storeName);
+      if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
+        throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
       }
+      inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+    }
+    try {
+      performStatsCommand(inputStoreOptions, statsOptions, params.getConsole());
     } catch (final IOException e) {
       throw new RuntimeException("Unable to parse stats tool arguments", e);
     }
@@ -102,7 +56,6 @@ public abstract class AbstractStatsCommand<T> extends ServiceEnabledCommand<T> {
   /** Abstracted command method to be called when command selected */
   protected abstract boolean performStatsCommand(
       final DataStorePluginOptions options,
-      final InternalDataAdapter<?> adapter,
       final StatsCommandLineOptions statsOptions,
       final Console console) throws IOException;
 

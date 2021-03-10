@@ -9,7 +9,6 @@
 package org.locationtech.geowave.datastore.accumulo;
 
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
-import org.locationtech.geowave.datastore.accumulo.AccumuloDataStoreStatsTest.GeoBoundingBoxStatistics;
 import org.locationtech.geowave.datastore.accumulo.AccumuloDataStoreStatsTest.TestGeometryAdapter;
 import org.locationtech.geowave.datastore.accumulo.AccumuloOptionsTest.AnotherAdapter;
 import org.locationtech.geowave.datastore.accumulo.query.AccumuloRangeQueryTest;
@@ -18,7 +17,6 @@ public class TestAccumuloPersistableRegistry implements PersistableRegistrySpi {
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {
     return new PersistableIdAndConstructor[] {
-        new PersistableIdAndConstructor((short) 10250, GeoBoundingBoxStatistics::new),
         new PersistableIdAndConstructor((short) 10251, TestGeometryAdapter::new),
         new PersistableIdAndConstructor(
             (short) 10252,

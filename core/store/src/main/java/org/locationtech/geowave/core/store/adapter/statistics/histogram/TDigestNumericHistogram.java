@@ -9,32 +9,32 @@
 package org.locationtech.geowave.core.store.adapter.statistics.histogram;
 
 import java.nio.ByteBuffer;
-import org.locationtech.geowave.core.index.ByteArrayUtils;
 import com.tdunning.math.stats.MergingDigest;
 import com.tdunning.math.stats.TDigest;
 
 public class TDigestNumericHistogram implements NumericHistogram {
   private static final double DEFAULT_COMPRESSION = 100;
   private TDigest tdigest;
-  private long count = 0;
 
   public TDigestNumericHistogram() {
+    this(DEFAULT_COMPRESSION);
+  }
+
+  public TDigestNumericHistogram(final double compression) {
     super();
     tdigest = TDigest.createMergingDigest(DEFAULT_COMPRESSION);
   }
 
   @Override
   public void merge(final NumericHistogram other) {
-    if (other instanceof TDigestNumericHistogram) {
+    if ((other instanceof TDigestNumericHistogram) && (other.getTotalCount() > 0)) {
       tdigest.add(((TDigestNumericHistogram) other).tdigest);
-      count += ((TDigestNumericHistogram) other).count;
     }
   }
 
   @Override
   public void add(final double v) {
     tdigest.add(v);
-    count++;
   }
 
   @Override
@@ -49,21 +49,17 @@ public class TDigestNumericHistogram implements NumericHistogram {
 
   @Override
   public int bufferSize() {
-    return tdigest.smallByteSize() + ByteArrayUtils.variableLengthEncode(count).length;
+    return tdigest.smallByteSize();
   }
 
   @Override
   public void toBinary(final ByteBuffer buffer) {
     tdigest.asSmallBytes(buffer);
-    buffer.put(ByteArrayUtils.variableLengthEncode(count));
   }
 
   @Override
   public void fromBinary(final ByteBuffer buffer) {
     tdigest = MergingDigest.fromBytes(buffer);
-    final byte[] remaining = new byte[buffer.remaining()];
-    buffer.get(remaining);
-    count = ByteArrayUtils.variableLengthDecode(remaining);
   }
 
   @Override
@@ -78,15 +74,24 @@ public class TDigestNumericHistogram implements NumericHistogram {
 
   @Override
   public long getTotalCount() {
-    return count;
+    return tdigest.size();
   }
 
   @Override
   public double sum(final double val, final boolean inclusive) {
-    final double sum = tdigest.cdf(val) * count;
+    final double sum = tdigest.cdf(val) * tdigest.size();
     if (inclusive && (sum < 1)) {
       return 1.0;
     }
     return sum;
+  }
+
+  @Override
+  public String toString() {
+    return NumericHistogram.histogramToString(this);
+  }
+
+  public TDigest getTdigest() {
+    return tdigest;
   }
 }

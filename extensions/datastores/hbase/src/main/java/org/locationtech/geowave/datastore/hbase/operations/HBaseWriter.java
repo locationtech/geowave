@@ -44,6 +44,7 @@ public class HBaseWriter implements RowWriter {
   public void close() {
     try {
       synchronized (duplicateRowTracker) {
+        safeFlush();
         mutator.close();
         duplicateRowTracker.clear();
       }
@@ -56,7 +57,7 @@ public class HBaseWriter implements RowWriter {
   public void flush() {
     try {
       synchronized (duplicateRowTracker) {
-        mutator.flush();
+        safeFlush();
         duplicateRowTracker.clear();
       }
     } catch (final IOException e) {
@@ -100,15 +101,7 @@ public class HBaseWriter implements RowWriter {
     // retain multiple versions)
     if (!duplicateRowTracker.add(rowId)) {
       try {
-        while (System.currentTimeMillis() <= lastFlush) {
-          try {
-            Thread.sleep(10);
-          } catch (final InterruptedException e) {
-            LOGGER.warn("Unable to wait for new time", e);
-          }
-        }
-        mutator.flush();
-        lastFlush = System.currentTimeMillis();
+        safeFlush();
         duplicateRowTracker.clear();
         duplicateRowTracker.add(rowId);
       } catch (final IOException e) {
@@ -138,5 +131,17 @@ public class HBaseWriter implements RowWriter {
     }
 
     return mutation;
+  }
+
+  private void safeFlush() throws IOException {
+    while (System.currentTimeMillis() <= lastFlush) {
+      try {
+        Thread.sleep(10);
+      } catch (final InterruptedException e) {
+        LOGGER.warn("Unable to wait for new time", e);
+      }
+    }
+    mutator.flush();
+    lastFlush = System.currentTimeMillis();
   }
 }

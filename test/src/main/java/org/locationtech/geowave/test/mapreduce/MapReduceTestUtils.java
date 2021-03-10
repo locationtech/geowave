@@ -18,6 +18,7 @@ import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import org.locationtech.geowave.core.ingest.operations.LocalToMapReduceToGeoWaveCommand;
 import org.locationtech.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
+import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.cli.store.AddStoreCommand;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.IndexPluginOptions;
@@ -150,13 +151,14 @@ public class MapReduceTestUtils {
     addStore.execute(operationParams);
 
     final IndexStore indexStore = dataStore.createIndexStore();
+    final DataStore geowaveDataStore = dataStore.createDataStore();
 
     final StringBuilder indexParam = new StringBuilder();
     for (int i = 0; i < indexOptions.size(); i++) {
       String indexName = "testIndex" + i;
       if (indexStore.getIndex(indexName) == null) {
         indexOptions.get(i).setName(indexName);
-        indexStore.addIndex(indexOptions.get(i).createIndex());
+        geowaveDataStore.addIndex(indexOptions.get(i).createIndex());
       }
       indexParam.append(indexName + ",");
     }

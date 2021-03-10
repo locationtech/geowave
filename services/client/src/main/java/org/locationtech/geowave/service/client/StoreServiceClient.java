@@ -376,7 +376,8 @@ public class StoreServiceClient implements StoreService {
     WebTarget internalAddStoreTarget = addStoreTarget.resolveTemplate("type", type);
     internalAddStoreTarget = internalAddStoreTarget.queryParam("name", name);
     if ((geowaveNamespace != null) && !geowaveNamespace.isEmpty()) {
-      internalAddStoreTarget = internalAddStoreTarget.queryParam("geowaveNamespace", name);
+      internalAddStoreTarget =
+          internalAddStoreTarget.queryParam("geowaveNamespace", geowaveNamespace);
     }
     for (final Entry<String, String> e : additionalQueryParams.entrySet()) {
       if (e.getKey().equals("protocol")) {

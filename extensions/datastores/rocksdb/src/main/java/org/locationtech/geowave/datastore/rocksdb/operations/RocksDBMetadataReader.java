@@ -13,11 +13,11 @@ import java.util.Iterator;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
+import org.locationtech.geowave.core.store.metadata.MetadataIterators;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
-import org.locationtech.geowave.core.store.util.StatisticsRowIterator;
 import org.locationtech.geowave.datastore.rocksdb.util.RocksDBMetadataTable;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
@@ -31,9 +31,8 @@ public class RocksDBMetadataReader implements MetadataReader {
     this.metadataType = metadataType;
   }
 
-  public CloseableIterator<GeoWaveMetadata> query(
-      final MetadataQuery query,
-      final boolean mergeStats) {
+  @Override
+  public CloseableIterator<GeoWaveMetadata> query(final MetadataQuery query) {
     CloseableIterator<GeoWaveMetadata> originalResults;
     Iterator<GeoWaveMetadata> resultsIt;
     if (query.hasPrimaryId()) {
@@ -49,10 +48,10 @@ public class RocksDBMetadataReader implements MetadataReader {
         @Override
         public boolean apply(final GeoWaveMetadata input) {
           if (query.hasPrimaryId()
-              && !DataStoreUtils.startsWithIfStats(
+              && !DataStoreUtils.startsWithIfPrefix(
                   input.getPrimaryId(),
                   query.getPrimaryId(),
-                  metadataType)) {
+                  query.isPrefix())) {
             return false;
           }
           if (query.hasSecondaryId()
@@ -63,14 +62,11 @@ public class RocksDBMetadataReader implements MetadataReader {
         }
       });
     }
-    final boolean isStats = MetadataType.STATS.equals(metadataType) && mergeStats;
-    final CloseableIterator<GeoWaveMetadata> retVal =
+    CloseableIterator<GeoWaveMetadata> retVal =
         new CloseableIteratorWrapper<>(originalResults, resultsIt);
-    return isStats ? new StatisticsRowIterator(retVal, query.getAuthorizations()) : retVal;
-  }
-
-  @Override
-  public CloseableIterator<GeoWaveMetadata> query(final MetadataQuery query) {
-    return query(query, true);
+    if (metadataType.isStatValues()) {
+      return MetadataIterators.clientVisibilityFilter(retVal, query.getAuthorizations());
+    }
+    return retVal;
   }
 }

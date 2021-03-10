@@ -14,7 +14,8 @@ import java.util.List;
 import org.bouncycastle.util.Arrays;
 import org.locationtech.geowave.adapter.raster.Resolution;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
-import org.locationtech.geowave.adapter.raster.stats.OverviewStatistics;
+import org.locationtech.geowave.adapter.raster.stats.RasterOverviewStatistic;
+import org.locationtech.geowave.adapter.raster.stats.RasterOverviewStatistic.RasterOverviewValue;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
@@ -23,17 +24,19 @@ import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.HierarchicalNumericIndexStrategy;
 import org.locationtech.geowave.core.index.HierarchicalNumericIndexStrategy.SubStrategy;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.PartitionStatistics;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
+import org.locationtech.geowave.core.store.api.Statistic;
+import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.store.StoreLoader;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.statistics.binning.DataTypeBinningStrategy;
+import org.locationtech.geowave.core.store.statistics.index.PartitionsStatistic;
+import org.locationtech.geowave.core.store.statistics.index.PartitionsStatistic.PartitionsValue;
 import org.locationtech.geowave.core.store.util.CompoundHierarchicalIndexStrategyWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -151,43 +154,62 @@ public class DeletePyramidLevelCommand extends DefaultOperation implements Comma
     // delete the resolution from the overview, delete the partitions, and delete the data
     if (inputStoreOptions.getFactoryOptions().getStoreOptions().isPersistDataStatistics()) {
       final DataStatisticsStore statsStore = inputStoreLoader.createDataStatisticsStore();
-      final InternalAdapterStore adapterIdStore = inputStoreLoader.createInternalAdapterStore();
-      OverviewStatistics ovStats = null;
-      PartitionStatistics<?> pStats = null;
-      try (CloseableIterator<InternalDataStatistics<?, ?, ?>> it =
-          statsStore.getDataStatistics(
-              adapterIdStore.getAdapterId(adapter.getTypeName()),
-              OverviewStatistics.STATS_TYPE)) {
+
+      boolean overviewStatsFound = false;
+      boolean partitionStatsFound = false;
+      try (CloseableIterator<? extends Statistic<? extends StatisticValue<?>>> it =
+          statsStore.getDataTypeStatistics(adapter, RasterOverviewStatistic.STATS_TYPE, null)) {
         while (it.hasNext()) {
-          final InternalDataStatistics<?, ?, ?> next = it.next();
-          if (next instanceof OverviewStatistics) {
-            ovStats = (OverviewStatistics) next;
-            break;
+          final Statistic<? extends StatisticValue<?>> next = it.next();
+          if ((next instanceof RasterOverviewStatistic) && (next.getBinningStrategy() == null)) {
+            final RasterOverviewStatistic statistic = (RasterOverviewStatistic) next;
+            final RasterOverviewValue value = statsStore.getStatisticValue(statistic);
+            if (!value.removeResolution(res)) {
+              LOGGER.error("Unable to remove resolution for pyramid level " + level);
+              return;
+            }
+            statsStore.setStatisticValue(statistic, value);
+            overviewStatsFound = true;
           }
         }
       }
-      if (ovStats == null) {
+      if (!overviewStatsFound) {
         LOGGER.error("Unable to find overview stats for coverage " + adapter.getTypeName());
         return;
       }
-      if (!ovStats.removeResolution(res)) {
-        LOGGER.error("Unable to remove resolution for pyramid level " + level);
-        return;
-      }
-      try (CloseableIterator<InternalDataStatistics<?, ?, ?>> it =
-          statsStore.getDataStatistics(
-              adapterIdStore.getAdapterId(adapter.getTypeName()),
-              i.getName(),
-              PartitionStatistics.STATS_TYPE)) {
+      try (CloseableIterator<? extends Statistic<? extends StatisticValue<?>>> it =
+          statsStore.getIndexStatistics(i, PartitionsStatistic.STATS_TYPE, null)) {
         while (it.hasNext()) {
-          final InternalDataStatistics<?, ?, ?> next = it.next();
-          if (next instanceof PartitionStatistics) {
-            pStats = (PartitionStatistics) next;
-            break;
+          final Statistic<? extends StatisticValue<?>> next = it.next();
+          if (next instanceof PartitionsStatistic) {
+            if ((next.getBinningStrategy() != null)
+                && (next.getBinningStrategy() instanceof DataTypeBinningStrategy)) {
+              final PartitionsStatistic statistic = (PartitionsStatistic) next;
+              final PartitionsValue value =
+                  statsStore.getStatisticValue(
+                      (PartitionsStatistic) next,
+                      DataTypeBinningStrategy.getBin(adapter),
+                      false);
+              for (final ByteArray p : partitions) {
+                if (!value.getValue().remove(p)) {
+                  LOGGER.error(
+                      "Unable to remove partition "
+                          + p.getHexString()
+                          + " for pyramid level "
+                          + level);
+                  return;
+                }
+              }
+              statsStore.setStatisticValue(
+                  statistic,
+                  value,
+                  DataTypeBinningStrategy.getBin(adapter));
+              partitionStatsFound = true;
+            }
           }
         }
       }
-      if (pStats == null) {
+      if (!partitionStatsFound) {
         LOGGER.error(
             "Unable to find partition stats for coverage "
                 + adapter.getTypeName()
@@ -195,15 +217,6 @@ public class DeletePyramidLevelCommand extends DefaultOperation implements Comma
                 + i.getName());
         return;
       }
-      for (final ByteArray p : partitions) {
-        if (!pStats.getPartitionKeys().remove(p)) {
-          LOGGER.error(
-              "Unable to remove partition " + p.getHexString() + " for pyramid level " + level);
-          return;
-        }
-      }
-      statsStore.setStatistics(ovStats);
-      statsStore.setStatistics(pStats);
     }
     for (final ByteArray p : partitions) {
       store.delete(

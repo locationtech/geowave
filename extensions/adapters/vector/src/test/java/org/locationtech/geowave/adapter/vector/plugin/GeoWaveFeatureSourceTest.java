@@ -10,6 +10,7 @@ package org.locationtech.geowave.adapter.vector.plugin;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.text.ParseException;
@@ -27,13 +28,21 @@ import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.junit.Test;
 import org.locationtech.geowave.adapter.vector.BaseDataStoreTest;
-import org.locationtech.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
 import org.locationtech.geowave.adapter.vector.util.DateUtilities;
-import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
-import org.locationtech.geowave.core.geotime.store.statistics.FeatureTimeRangeStatistics;
+import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic;
+import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic.BoundingBoxValue;
+import org.locationtech.geowave.core.geotime.store.statistics.TimeRangeStatistic;
+import org.locationtech.geowave.core.geotime.store.statistics.TimeRangeStatistic.TimeRangeValue;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Statistic;
+import org.locationtech.geowave.core.store.api.StatisticValue;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.statistics.InternalStatisticsHelper;
+import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic;
+import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic.CountValue;
+import org.locationtech.geowave.core.store.statistics.field.NumericRangeStatistic;
+import org.locationtech.geowave.core.store.statistics.field.NumericRangeStatistic.NumericRangeValue;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.PrecisionModel;
@@ -77,6 +86,8 @@ public class GeoWaveFeatureSourceTest extends BaseDataStoreTest {
             typeName,
             "geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String,when:Date");
     final DataStore dataStore = createDataStore();
+    final GeoWaveGTDataStore gwgtDataStore = (GeoWaveGTDataStore) dataStore;
+    gwgtDataStore.dataStatisticsStore.addStatistic(new NumericRangeStatistic(typeName, "pop"));
     populater.populate(type, dataStore);
     final SimpleFeatureSource source = dataStore.getFeatureSource(typeName);
     final ReferencedEnvelope env = source.getBounds();
@@ -88,45 +99,53 @@ public class GeoWaveFeatureSourceTest extends BaseDataStoreTest {
 
     final short internalAdapterId =
         ((GeoWaveGTDataStore) dataStore).getInternalAdapterStore().addTypeName(typeName);
-    try (final CloseableIterator<InternalDataStatistics<?, ?, ?>> stats =
-        ((GeoWaveGTDataStore) dataStore).getDataStatisticsStore().getDataStatistics(
-            internalAdapterId)) {
+    final DataStatisticsStore statsStore =
+        ((GeoWaveGTDataStore) dataStore).getDataStatisticsStore();
+    final DataTypeAdapter<?> adapter =
+        ((GeoWaveGTDataStore) dataStore).getAdapterStore().getAdapter(internalAdapterId);
+    BoundingBoxValue bboxStats = null;
+    CountValue cStats = null;
+    TimeRangeValue timeRangeStats = null;
+    NumericRangeValue popStats = null;
+    int count = 1;
+    cStats =
+        InternalStatisticsHelper.getDataTypeStatistic(
+            statsStore,
+            CountStatistic.STATS_TYPE,
+            typeName);
+    assertNotNull(cStats);
+
+    try (final CloseableIterator<? extends Statistic<? extends StatisticValue<?>>> stats =
+        statsStore.getFieldStatistics(adapter, null, null, null)) {
       assertTrue(stats.hasNext());
-      int count = 0;
-      BoundingBoxDataStatistics<SimpleFeature, ?> bboxStats = null;
-      CountDataStatistics<SimpleFeature> cStats = null;
-      FeatureTimeRangeStatistics timeRangeStats = null;
-      FeatureNumericRangeStatistics popStats = null;
       while (stats.hasNext()) {
-        final InternalDataStatistics<?, ?, ?> statsData = stats.next();
-        if (statsData instanceof BoundingBoxDataStatistics) {
-          bboxStats = (BoundingBoxDataStatistics<SimpleFeature, ?>) statsData;
-        } else if (statsData instanceof CountDataStatistics) {
-          cStats = (CountDataStatistics<SimpleFeature>) statsData;
-        } else if (statsData instanceof FeatureTimeRangeStatistics) {
-          timeRangeStats = (FeatureTimeRangeStatistics) statsData;
-        } else if (statsData instanceof FeatureNumericRangeStatistics) {
-          popStats = (FeatureNumericRangeStatistics) statsData;
+        final Statistic<?> stat = stats.next();
+        if (stat instanceof BoundingBoxStatistic) {
+          bboxStats = statsStore.getStatisticValue((BoundingBoxStatistic) stat);
+        } else if (stat instanceof TimeRangeStatistic) {
+          timeRangeStats = statsStore.getStatisticValue((TimeRangeStatistic) stat);
+        } else if (stat instanceof NumericRangeStatistic) {
+          popStats = statsStore.getStatisticValue((NumericRangeStatistic) stat);
         }
         count++;
       }
-      // rather than maintain an exact count on stats as we should be able
-      // to add them more dynamically, just make sure that there is some
-      // set of base stats found
-      assertTrue("Unexpectedly few stats found", count > 5);
-
-      assertEquals(66, popStats.getMin(), 0.001);
-      assertEquals(100, popStats.getMax(), 0.001);
-      assertEquals(
-          DateUtilities.parseISO("2005-05-17T20:32:56Z"),
-          timeRangeStats.asTemporalRange().getStartTime());
-      assertEquals(
-          DateUtilities.parseISO("2005-05-19T20:32:56Z"),
-          timeRangeStats.asTemporalRange().getEndTime());
-      assertEquals(43.454, bboxStats.getMaxX(), 0.0001);
-      assertEquals(27.232, bboxStats.getMinY(), 0.0001);
-      assertEquals(3, cStats.getCount());
     }
+    // rather than maintain an exact count on stats as we should be able
+    // to add them more dynamically, just make sure that there is some
+    // set of base stats found
+    assertTrue("Unexpectedly few stats found", count >= 4);
+
+    assertEquals(66, popStats.getMin(), 0.001);
+    assertEquals(100, popStats.getMax(), 0.001);
+    assertEquals(
+        DateUtilities.parseISO("2005-05-17T20:32:56Z"),
+        timeRangeStats.asTemporalRange().getStartTime());
+    assertEquals(
+        DateUtilities.parseISO("2005-05-19T20:32:56Z"),
+        timeRangeStats.asTemporalRange().getEndTime());
+    assertEquals(43.454, bboxStats.getMaxX(), 0.0001);
+    assertEquals(27.232, bboxStats.getMinY(), 0.0001);
+    assertEquals(3, (long) cStats.getValue());
   }
 
   public void testPartial(final Populater populater, final String ext)

@@ -99,6 +99,10 @@
 			<version>2.1.7</version>
 		</dependency>
 		<dependency>
+			<groupId>com.clearspring.analytics</groupId>
+			<artifactId>stream</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.curator</groupId>
 			<artifactId>curator-test</artifactId>
 			<version>2.5.0</version>

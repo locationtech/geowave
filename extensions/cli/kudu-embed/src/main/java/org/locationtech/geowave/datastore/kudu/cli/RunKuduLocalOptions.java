@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.datastore.kudu.cli;
 
-import java.io.File;
 import java.io.IOException;
 import com.beust.jcommander.Parameter;
 

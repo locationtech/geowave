@@ -11,31 +11,21 @@ package org.locationtech.geowave.datastore.accumulo.operations;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map.Entry;
 import org.apache.accumulo.core.client.BatchScanner;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.PartialKey;
 import org.apache.accumulo.core.data.Range;
-import org.apache.accumulo.core.data.Value;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.WritableComparator;
-import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.DataStoreOptions;
-import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
-import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.datastore.accumulo.util.ScannerClosableWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +53,7 @@ public class AccumuloMetadataReader implements MetadataReader {
           operations.createBatchScanner(
               AbstractGeoWavePersistence.METADATA_TABLE,
               query.getAuthorizations());
-      final String columnFamily = metadataType.name();
+      final String columnFamily = metadataType.id();
       final byte[] columnQualifier = query.getSecondaryId();
       if (columnFamily != null) {
         if (columnQualifier != null) {
@@ -74,7 +64,7 @@ public class AccumuloMetadataReader implements MetadataReader {
       }
       final Collection<Range> ranges = new ArrayList<>();
       if (query.hasPrimaryId()) {
-        if (metadataType.equals(MetadataType.STATS)) {
+        if (query.isPrefix()) {
           ranges.add(Range.prefix(new Text(query.getPrimaryId())));
         } else {
           ranges.add(Range.exact(new Text(query.getPrimaryId())));
@@ -83,53 +73,6 @@ public class AccumuloMetadataReader implements MetadataReader {
         ranges.add(new Range());
       }
       scanner.setRanges(ranges);
-
-      // For stats w/ no server-side support, need to merge here
-      if ((metadataType == MetadataType.STATS) && !options.isServerSideLibraryEnabled()) {
-        try {
-          // final HashMap<Text, Key> keyMap = new HashMap<>();
-          final HashMap<Pair<Text, Text>, InternalDataStatistics<?, ?, ?>> mergedDataMap =
-              new HashMap<>();
-          final Iterator<Entry<Key, Value>> it = scanner.iterator();
-
-          while (it.hasNext()) {
-            final Entry<Key, Value> row = it.next();
-
-            final InternalDataStatistics<?, ?, ?> stats =
-                (InternalDataStatistics<?, ?, ?>) PersistenceUtils.fromBinary(row.getValue().get());
-            final Pair<Text, Text> rowCqPair =
-                ImmutablePair.of(row.getKey().getRow(), row.getKey().getColumnQualifier());
-            final InternalDataStatistics<?, ?, ?> mergedStats = mergedDataMap.get(rowCqPair);
-            stats.setVisibility(row.getKey().getColumnVisibility().getBytes());
-            if (mergedStats != null) {
-              mergedStats.merge(stats);
-              mergedStats.setVisibility(
-                  DataStoreUtils.mergeVisibilities(
-                      mergedStats.getVisibility(),
-                      stats.getVisibility()));
-            } else {
-              mergedDataMap.put(rowCqPair, stats);
-            }
-          }
-
-          final List<GeoWaveMetadata> metadataList = new ArrayList<>();
-          for (final Entry<Pair<Text, Text>, InternalDataStatistics<?, ?, ?>> entry : mergedDataMap.entrySet()) {
-            final Pair<Text, Text> key = entry.getKey();
-            final InternalDataStatistics<?, ?, ?> mergedStats = entry.getValue();
-
-            metadataList.add(
-                new GeoWaveMetadata(
-                    key.getLeft().getBytes(),
-                    key.getRight().getBytes(),
-                    mergedStats.getVisibility(),
-                    PersistenceUtils.toBinary(mergedStats)));
-          }
-
-          return new CloseableIterator.Wrapper<>(metadataList.iterator());
-        } finally {
-          scanner.close();
-        }
-      }
 
       return new CloseableIteratorWrapper<>(
           new ScannerClosableWrapper(scanner),

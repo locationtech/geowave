@@ -24,14 +24,16 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.adapter.AdapterStoreWrapper;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
+import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.ByteUtils;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
-import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
-import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.statistics.InternalStatisticsHelper;
+import org.locationtech.geowave.core.store.statistics.index.DifferingVisibilityCountStatistic.DifferingVisibilityCountValue;
+import org.locationtech.geowave.core.store.statistics.index.FieldVisibilityCountStatistic.FieldVisibilityCountValue;
+import org.locationtech.geowave.core.store.statistics.index.RowRangeHistogramStatistic.RowRangeHistogramValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +51,7 @@ public class IntermediateSplitInfo implements Comparable<IntermediateSplitInfo> 
     }
 
     public IndexRangeLocation split(
-        final RowRangeHistogramStatistics<?> stats,
+        final RowRangeHistogramValue stats,
         final double currentCardinality,
         final double targetCardinality) {
 
@@ -190,7 +192,7 @@ public class IntermediateSplitInfo implements Comparable<IntermediateSplitInfo> 
    * @return the new split.
    */
   synchronized IntermediateSplitInfo split(
-      final Map<Pair<Index, ByteArray>, RowRangeHistogramStatistics<?>> statsCache) {
+      final Map<Pair<Index, ByteArray>, RowRangeHistogramValue> statsCache) {
     // generically you'd want the split to be as limiting to total
     // locations as possible and then as limiting as possible to total
     // indices, but in this case split() is only called when all ranges
@@ -305,22 +307,26 @@ public class IntermediateSplitInfo implements Comparable<IntermediateSplitInfo> 
     }
     for (final SplitInfo si : splitInfo.values()) {
       final List<Short> adapterIds = indexIdToAdaptersMap.get(si.getIndex().getName());
-      final DifferingFieldVisibilityEntryCount differingVisibilityCounts =
-          DifferingFieldVisibilityEntryCount.getVisibilityCounts(
+      final PersistentAdapterStore persistentAdapterStore =
+          new AdapterStoreWrapper(adapterStore, internalAdapterStore);
+      final DifferingVisibilityCountValue differingVisibilityCounts =
+          InternalStatisticsHelper.getDifferingVisibilityCounts(
               si.getIndex(),
               adapterIds,
+              persistentAdapterStore,
               statisticsStore,
               authorizations);
-      final FieldVisibilityCount visibilityCounts =
-          FieldVisibilityCount.getVisibilityCounts(
+      final FieldVisibilityCountValue visibilityCounts =
+          InternalStatisticsHelper.getVisibilityCounts(
               si.getIndex(),
               adapterIds,
+              persistentAdapterStore,
               statisticsStore,
               authorizations);
 
       si.setClientsideRowMerging(
           BaseDataStoreUtils.isRowMerging(
-              new AdapterStoreWrapper(adapterStore, internalAdapterStore),
+              persistentAdapterStore,
               ArrayUtils.toPrimitive(adapterIds.toArray(new Short[0]))));
       si.setMixedVisibility(
           (differingVisibilityCounts == null)

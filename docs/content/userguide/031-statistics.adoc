@@ -1,0 +1,45 @@
+<<<
+
+:linkattrs:
+
+== Statistics
+
+=== Overview
+
+GeoWave statistics are a way to maintain aggregated information about data stored within a data store.  They can be useful to avoid having to run aggregation queries over many rows whenever basic information is needed.  The statistics system is designed to be as flexible as possible to support a large number of use cases.
+
+==== Statistic Types
+
+There are three types of statistics in GeoWave:
+
+1. *Index Statistics* - These statistics are aggregated over every row within an index.  These are usually fairly broad as they do not make assumptions about the data types that are stored in the index.  Some examples of index statistics used by GeoWave are row range histograms, index metadata, and duplicate entry counts.
+2. *Data Type Statistics* - These statistics are aggregated over every row within a data type.  The most common data type statistic is the count statistic, which simply counts the number of entries in a given data type.
+3. *Field Statistics* - These statistics are aggregated over every row within a data type, but are usually calculated from the value of a single field within the data type.  Statistics are usually designed to work on specific field types.  For example, a numeric mean statistic will calculate the mean value of a field across all rows in the data set.
+
+The list of available statistic types can be discovered by using the link:commands.html#stat-listtypes[`stat listtypes`] command.
+
+==== Binning Strategies
+
+While the various suppported statistics provide some general capabilities, a lot of the flexibility of the statistics system comes from using statistics with different binning strategies.  Binning strategies are a way to split a statistic by some algorithm.  For example, a data set with a categorical field such as `Color` could have a count statistic that is binned by that field.  The result would be a statistic that maintains the count of each `Color` in the entire data set.  Any statistic can be combined with any binning strategy for a plethora of possibilities.  Multiple different binning strategies can also be combined to provide even more customization.
+
+The list of available binning strategies can be discovered by using the link:commands.html#stat-listtypes[`stat listtypes`] command with the `-b` command line option.
+
+For a full list of GeoWave statistics commands, including examples of each, see the statistics section of the link:commands.html#stat-commands[GeoWave CLI Documentation].
+
+=== Examples
+
+.Add a `COUNT` statistic to the `counties` type binned by the `state_code` field in the `example` data store:
+....
+$ geowave stat add example -t COUNT --typeName counties -b FIELD_VALUE --binField state_code
+....
+
+.List all of the statistic values on the `counties` type in the `example` data store:
+....
+$ geowave stat list example --typeName counties
+....
+
+.Recalculate all statistics in the `example` data store:
+....
+$ geowave stat recalc example --all
+....
+

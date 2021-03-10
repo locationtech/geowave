@@ -5,28 +5,81 @@
 
 === Overview
 
-GeoWave statistics are stored as metadata and can be queried for aggregated information about a particular adapter. Statistics retain the same visibility constraints as the data they are associated with. For example, let's say there is an adapter that has several rows with a visibility expression of `A&B`, and several more rows with a visibility expression of `A&C`.  If there was count statistic on this data, then there would be two rows in the statistics table, one for the number of rows with the `A&B` visibility, and another for the number of rows with the `A&C` visibility.
+GeoWave statistics are stored as metadata and can be queried for aggregated information about a particular data type, field, or index. Statistics retain the same visibility constraints as the data they are associated with. For example, let's say there is an data type that has several rows with a visibility expression of `A&B`, and several more rows with a visibility expression of `A&C`.  If there was count statistic on this data, then there would be two rows in the statistics table, one for the number of rows with the `A&B` visibility, and another for the number of rows with the `A&C` visibility.
+
+=== Statistic Types
+
+There are three different types of statistics, each of which extend from a different base statistic class.
+
+==== Index Statistics
+
+Index statistics are statistics that are tracked for all rows in a given GeoWave index.  They derive from {core-store}/core/store/statistics/index/IndexStatistic.java[`IndexStatistic`] and include an option that specifies the index name that the statistic belongs to.  These statistics are usually quite broad as they cannot make assumptions about the data types that are included in the index.  Some examples of index statistics are row range histograms, index metadata, and duplicate entry counts.  Many of these statistics are binned using the {core-store}/core/store/statistics/binning/DataTypeBinningStrategy.java[`DataTypeBinningStrategy`] so that information about any of these statistics can be queried on a per-data-type basis if needed.
+
+==== Data Type Statistics
+
+Data type statistics are statistics that are tracked for all rows for a given data type.  They derive from {core-store}/core/store/statistics/adapter/DataTypeStatistic.java[`DataTypeStatistic`] and include an option that specifies the data type name that the statistic belongs to.  The main example of this type is the count statistic, which simply counts the number of entries in a given data type.
+
+==== Field Statistics
+
+Field statistics are statistics that are tracked for a given field of a single data type.  They derive from {core-store}/core/store/statistics/field/FieldStatistic.java[`FieldStatistic`] and include options for both the data type name and the field name to use.  Each field statistic includes a method that determines whether or not it is compatible with the java class of a given field.  For example, a numeric mean statistic only supports fields that derive from `Number` so that it can calculate the mean value of the field over the entire data set.  This compatibility check allows statistics to be implemented and re-used across all data types that use the same field class.
+
+=== Binning Strategies
+
+Sometimes it is desirable to split up a statistic into several bins using some arbitrary method.  Each bin is identified by a unique byte array and contains its own statistic value for all rows that fall into it.  GeoWave includes a few binning strategies that cover a majority of simple use cases.
+
+* _DataTypeBinningStrategy_: The {core-store}/core/store/statistics/binning/DataTypeBinningStrategy.java[`DataTypeBinningStrategy`] is a binning strategy that can be used on index statistics to create a separate bin for each data type in the index.
+* _PartitionBinningStrategy_: The {core-store}/core/store/statistics/binning/PartitionBinningStrategy.java[`PartitionBinningStrategy`] is a binning strategy that is generally only used by internal statistics that creates a separate bin for each partition that the data resides on.
+* _FieldValueBinningStrategy_: The {core-store}/core/store/statistics/binning/FieldValueBinningStrategy.java[`FieldValueBinningStrategy`] is a binning strategy that can be used on any statistic to create a separate bin for each unique value of a given field or set of fields.  For example, if a data type had a `CountryCode` field, this binning strategy could be used on a `COUNT` statistic to count the number of entries for each unique `CountryCode` value.  If a data type had both `Shape` and `Color` fields, this strategy could be used to combine both to count the number of entries for each `Shape`/`Color` combination.
+* _NumericRangeFieldValueBinningStrategy_: The {core-store}/core/store/statistics/binning/NumericRangeFieldValueBinningStrategy.java[`NumericRangeFieldValueBinningStrategy`] is a binning strategy that can be used on any statistic to create a separate bin for defined ranges of a given numeric field or set of fields.  For example, if a data type had a numeric `Angle` field, this binning strategy could be used on a `COUNT` statistic to count the number of entries in each angle range defined by a user-supplied interval.  Like the `FieldValueBinningStrategy`, this strategy can be used with multiple numeric fields.
+* _TimeRangeFieldValueBinningStrategy_: The {core-geotime}/core/geotime/store/statistics/binning/TimeRangeFieldValueBinningStrategy.java[`TimeRangeFieldValueBinningStrategy`] is a binning strategy that can be used on any statistic to create a separate bin for defined ranges of a given temporal field or set of fields.  For example, if a data type had a time field called `StartTime`, this binning strategy could be used on a `COUNT` statistic to count the number of entries in each year, month, week, day, hour, or minute defined by the `StartTime` of the entry.  Like the `FieldValueBinningStrategy`, this strategy can be used with multiple temporal fields.
+* _CompositeBinningStrategy_: The {core-store}/core/store/statistics/binning/CompositeBinningStrategy.java[`CompositeBinningStrategy`] allows two binning strategies to be combined.  This strategy can be used when a single binning strategy is not sufficient to split the statistic in the desired way.
+
+In order to provide as much flexibility as possible to developers, the {core-store}/core/store/api/StatisticBinningStrategy.java[`StatisticBinningStrategy`] interface has been made available so that new binning strategies can be added as the need arises.  This is described in more detail below.
 
 === Table Structure
 
-The following diagram describes the default structure of statistics data in a GeoWave data store.
+Statistics are composed of two different types of objects that are stored within the GeoWave metadata tables: statistics and the statistic values.
+
+The statistic table contains all of the tracked statistics for the data store.  Each row of this table describes one statistic and contains all of the information needed to properly calculate the statistic as data is ingested and deleted.
+
+The following diagram describes the default structure of a statistic in a GeoWave data store.
 
 image::stats.svg[scaledwidth="100%",width="100%",alt="Statistics Structure", title="Statistics Structure"]
 
-* _Statistic ID_: An identifier for the statistic that is unique to the adapter. This will usually be the type of statistic, and (if the statistic is on a particular attribute) the attribute name.
-* _Internal Adapter ID_:  This is a short which represents the adapter that the statistic belongs to. This internal ID is used instead of the full adapter name to save space. A mapping between internal adapter ID and adapter exists in the metadata tables of the GeoWave data store. This is encoded with variable length encoding.
-* _Visibility_: The visibility expression used by this row of data.  It is possible for a dataset to have different visibility expressions on the same attribute for different rows.  In this case, there will be a row of statistics data for each unique visibility expression.
-* _Statistic Value_: The serialized statistic.
+* _Unique ID_: A unique identifier for the statistic within a given statistic group.  The unique identifier is composed of the statistic type, a field name (for field statistics), and a tag.  Different statistic groups can have a statistic with the same unique identifier.  For example, two different data types could have a `COUNT` statistic with a tag of `internal` because they are in different statistic groups.
+* _Group ID_:  The group that the statistic belongs to.  This identifier is composed of a type specifier and a group, which can vary based on the type of statistic.  The type specifier is a single byte that indicates if the statistic is an index statistic, a data type statistic, or a field statistic.  The group is the index or type name that the statistic is associated with.
+* _Serialized Statistic_: All information needed to calculate the statistic when data is ingested or deleted.  This includes any binning strategies or other options used by the statistic.
 
-Statistics are written to the database using a {core-store}/core/store/operations/MetadataWriter.java[`MetadataWriter`] implementation for the given data store. This implementation will dictate how these structures are used to store the data, so the final structure may vary.
+The values of these statistics are stored separately as GeoWave metadata with a similar structure.
 
-=== Querying
+image::stat_values.svg[scaledwidth="100%",width="100%",alt="Statistic Value Structure", title="Statistic Value Structure"]
 
-Statistics can be queried by using a {core-store}/core/store/api/StatisticsQueryBuilder.java[`StatisticsQueryBuilder`].  For example, vector queries can be performed by creating a query with the {core-geotime}/core/geotime/store/query/api/VectorStatisticsQueryBuilder.java[`VectorStatisticsQueryBuilder`] and then passing the resulting {core-store}/core/store/api/StatisticsQuery.java[`StatisticsQuery`] object to the `aggregateStatistics` function of the {core-store}/core/store/api/DataStore.java[`DataStore`].
+* _Statistic Unique ID_: The unique ID of the underlying statistic.
+* _Bin_: The bin for the statistic, if the statistic uses a binning strategy.
+* _Statistic Group ID_: The group ID of the underlying statistic.
+* _Visibility_: The visibility expression represented by this statistic value.  It is possible for a dataset to have different visibility expressions on different rows.  In this case, there will be a separate statistic value for each unique visibility expression.
+* _Statistic Value_: The serialized value for this bin.
 
-=== Merging
+=== Getting Statistic Values
 
-When querying statistics with varying visibilities, GeoWave will merge all statistics that match the provided authorizations. Using the above example, providing no authorizations would return a count of _0_, providing `A` and `B` authorizations would return the number of rows with the `A&B` visibility expression.  Providing `A`, `B`, and `C` authorizations would result in a statistics merge and the result would be the combined count of both rows.
+There are two primary ways to get the value of a given statistic.  The first and easiest way is to use the `Statistic` object itself as a parameter to `getStatisticValue` or `getBinnedStatisticValues` on the `DataStore` interface.  If the statistic uses a binning strategy, a set of bin constraints can also be supplied to filter down the bins that are returned by the query.  Each binning strategy supports different types of constraints, which can be discovered through the `supportedConstraintClasses` method.  These constraint classes can be converted into bin constraints by passing them to the `constraints` method on the binning strategy.  For example, `TimeRangeFieldValueBinningStrategy` supports `Interval` as a constraint class.  All bins within a given time interval could be queried by passing the result of `constraints(interval)` to the `getStatisticValue` method on the `DataStore`.  These methods do not take visibility of rows into account and will get the values for all visibilities by default.
+
+The second way statistic values can be retrieved is to query the statistic by using a {core-store}/core/store/api/StatisticQueryBuilder.java[`StatisticQueryBuilder`].  A query builder of the appropriate type can be obtained by calling one of the `newBuilder` static methods on `StatisticQueryBuilder` with the `StatisticType` to query.  Once all of the query parameters and optional constraints have been set and the query is built, the resulting {core-store}/core/store/api/StatisticQuery.java[`StatisticQuery`] object can then be passed to the `queryStatistics` or `aggregateStatistics` functions of the {core-store}/core/store/api/DataStore.java[`DataStore`].  Each of these functions performs the same query, but outputs different values. The `queryStatistics` function will return one `StatisticValue` instance for every bin for each statistic that matched the query parameters, while the `aggregateStatistics` function will merge all of those values down to a single `StatisticValue` instance.  A statistic query allows you to provide authorizations if the result should be filtered by visibility.
+
+[NOTE]
+====
+When querying statistics with varying visibilities, GeoWave will merge all statistics that match the provided authorizations.  Using the following example, providing no authorizations would return a count of _0_, providing `A` and `B` authorizations would return the number of rows with the `A&B` visibility expression.  Providing `A`, `B`, and `C` authorizations would result in a statistics merge and the result would be the combined count of both rows.
 
 image::stat_merge.svg[scaledwidth="100%",width="100%",alt="Statistics Merge", title="Statistics Merge"]
+====
+
+=== Implementing New Statistics and Binning Strategies
+
+New statistics can be implemented by extending the appropriate statistic type ({core-store}/core/store/statistics/index/IndexStatistic.java[`IndexStatistic`], {core-store}/core/store/statistics/adapter/DataTypeStatistic.java[`DataTypeStatistic`], or {core-store}/core/store/statistics/field/FieldStatistic.java[`FieldStatistic`]) and implementing a corresponding {core-store}/core/store/api/StatisticValue.java[`StatisticValue`].  It is recommended that a public static `STATS_TYPE` variable be made available to make the `StatisticType` of the statistic readily available to users.
+
+New binning strategies can also be added by implementing the {core-store}/core/store/api/StatisticBinningStrategy.java[`StatisticBinningStrategy`] interface.  The binning strategy can use information from the `DataTypeAdapter`, the raw entry, and the `GeoWaveRow`(s) that the entry was serialized to in order to determine the bin that should be used.  It is also recommended to provide some level of support for constraints that would be relevant to the binning strategy to make it easier for end users to constrain statistics queries.
+
+All statistics and binning strategies are discovered by GeoWave using Service Provider Interfaces (SPI). In order to add new statistics and binning strategies, extend the {core-store}/core/store/statistics/StatisticsRegistrySPI.java[`StatisticsRegistrySPI`] and make sure the JAR containing both the registry and the statistic/statistic value classes are on the classpath when running GeoWave. For more information on using SPI, see the link:https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html[Oracle documentation, window="_blank"].
+
+An example that shows how to add a word count statistic is available in the {tree-root}/examples/java-api/{source-root}/examples/stats[GeoWave examples project].
 

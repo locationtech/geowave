@@ -20,7 +20,7 @@ import org.apache.hadoop.hbase.client.RowMutations;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
+import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.server.ServerOpConfig.ServerOpScope;
 import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
 import com.google.common.base.Function;
@@ -28,7 +28,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 
-@SuppressWarnings("rawtypes")
 public class HBaseUtils {
   public static String getQualifiedTableName(
       final String tableNamespace,
@@ -111,12 +110,11 @@ public class HBaseUtils {
     }
   }
 
-  public static InternalDataStatistics<?, ?, ?> getMergedStats(final List<Cell> rowCells) {
-    InternalDataStatistics<?, ?, ?> mergedStats = null;
+  public static StatisticValue<?> getMergedStats(final List<Cell> rowCells) {
+    StatisticValue<?> mergedStats = null;
     for (final Cell cell : rowCells) {
       final byte[] byteValue = CellUtil.cloneValue(cell);
-      final InternalDataStatistics<?, ?, ?> stats =
-          (InternalDataStatistics) URLClassloaderUtils.fromBinary(byteValue);
+      final StatisticValue<?> stats = (StatisticValue<?>) URLClassloaderUtils.fromBinary(byteValue);
 
       if (mergedStats != null) {
         mergedStats.merge(stats);

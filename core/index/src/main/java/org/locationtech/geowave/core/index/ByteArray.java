@@ -60,7 +60,7 @@ public class ByteArray implements java.io.Serializable, Comparable<ByteArray> {
 
   @Override
   public String toString() {
-    return "ByteArrayId [getString()=" + getString() + "]";
+    return "ByteArray[" + bytes.length + "]=\"" + getString() + "\"";
   }
 
   @Override

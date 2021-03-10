@@ -15,6 +15,7 @@ public class IngestOperationProvider implements CLIOperationProviderSpi {
   private static final Class<?>[] OPERATIONS =
       new Class<?>[] {
           IngestSection.class,
+          AddTypeCommand.class,
           KafkaToGeoWaveCommand.class,
           ListIngestPluginsCommand.class,
           LocalToGeoWaveCommand.class,

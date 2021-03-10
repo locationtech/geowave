@@ -14,10 +14,10 @@ import org.bouncycastle.util.Arrays;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
+import org.locationtech.geowave.core.store.metadata.MetadataIterators;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
-import org.locationtech.geowave.core.store.util.StatisticsRowIterator;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
@@ -41,16 +41,17 @@ public class CassandraMetadataReader implements MetadataReader {
   public CloseableIterator<GeoWaveMetadata> query(final MetadataQuery query) {
     final String tableName = operations.getMetadataTableName(metadataType);
     String[] selectedColumns = getSelectedColumns(query);
-    final boolean isStatsQuery = MetadataType.STATS.equals(metadataType);
     Predicate<Row> clientFilter = null;
-    if (isStatsQuery) {
+    if (metadataType.isStatValues()) {
       selectedColumns = Arrays.append(selectedColumns, CassandraMetadataWriter.VISIBILITY_KEY);
+    }
+    if (query.isPrefix()) {
       if (query.hasPrimaryId()) {
         clientFilter = new PrimaryIDPrefixFilter(query.getPrimaryId());
       }
     }
     final Select select = operations.getSelect(tableName, selectedColumns);
-    if (query.hasPrimaryId() && !isStatsQuery) {
+    if (query.hasPrimaryId() && query.isExact()) {
       final Where where =
           select.where(
               QueryBuilder.eq(
@@ -75,7 +76,7 @@ public class CassandraMetadataReader implements MetadataReader {
             Iterators.transform(
                 clientFilter != null ? Iterators.filter(rows, clientFilter) : rows,
                 result -> new GeoWaveMetadata(
-                    query.hasPrimaryId() ? query.getPrimaryId()
+                    (query.hasPrimaryId() && query.isExact()) ? query.getPrimaryId()
                         : result.get(
                             CassandraMetadataWriter.PRIMARY_ID_KEY,
                             ByteBuffer.class).array(),
@@ -83,13 +84,15 @@ public class CassandraMetadataReader implements MetadataReader {
                         : result.get(
                             CassandraMetadataWriter.SECONDARY_ID_KEY,
                             ByteBuffer.class).array(),
-                    getVisibility(result),
+                    getVisibility(query, result),
                     result.get(CassandraMetadataWriter.VALUE_KEY, ByteBuffer.class).array())));
-    return isStatsQuery ? new StatisticsRowIterator(retVal, query.getAuthorizations()) : retVal;
+    return query.getAuthorizations() != null
+        ? MetadataIterators.clientVisibilityFilter(retVal, query.getAuthorizations())
+        : retVal;
   }
 
-  private byte[] getVisibility(final Row result) {
-    if (MetadataType.STATS.equals(metadataType)) {
+  private byte[] getVisibility(final MetadataQuery query, final Row result) {
+    if (metadataType.isStatValues()) {
       final ByteBuffer buf = result.get(CassandraMetadataWriter.VISIBILITY_KEY, ByteBuffer.class);
       if (buf != null) {
         return buf.array();
@@ -99,7 +102,7 @@ public class CassandraMetadataReader implements MetadataReader {
   }
 
   private String[] getSelectedColumns(final MetadataQuery query) {
-    if (query.hasPrimaryId() && !MetadataType.STATS.equals(metadataType)) {
+    if (query.hasPrimaryId() && query.isExact()) {
       if (useSecondaryId(query)) {
         return new String[] {CassandraMetadataWriter.VALUE_KEY};
       }
@@ -120,7 +123,8 @@ public class CassandraMetadataReader implements MetadataReader {
   }
 
   private boolean useSecondaryId(final MetadataQuery query) {
-    return !(MetadataType.STATS.equals(metadataType)
+    return !(MetadataType.STATISTICS.equals(metadataType)
+        || MetadataType.STATISTIC_VALUES.equals(metadataType)
         || MetadataType.INTERNAL_ADAPTER.equals(metadataType)) || query.hasSecondaryId();
   }
 

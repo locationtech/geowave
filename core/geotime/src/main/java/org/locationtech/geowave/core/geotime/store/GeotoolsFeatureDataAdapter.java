@@ -9,14 +9,11 @@
 package org.locationtech.geowave.core.geotime.store;
 
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
-import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-public interface GeotoolsFeatureDataAdapter<T extends SimpleFeature> extends
-    DataTypeAdapter<T>,
-    StatisticsProvider<T> {
+public interface GeotoolsFeatureDataAdapter<T extends SimpleFeature> extends DataTypeAdapter<T> {
   SimpleFeatureType getFeatureType();
 
   TimeDescriptors getTimeDescriptors();

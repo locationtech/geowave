@@ -57,6 +57,7 @@ public class GeoWaveOutputFormat extends OutputFormat<GeoWaveOutputKey<Object>, 
       final Map<String, String> configOptions = getStoreOptionsMap(context);
 
       final IndexStore persistentIndexStore = GeoWaveStoreFinder.createIndexStore(configOptions);
+      final DataStore dataStore = GeoWaveStoreFinder.createDataStore(configOptions);
       final Index[] indices = JobContextIndexStore.getIndices(context);
       if (LOGGER.isDebugEnabled()) {
         final StringBuilder sbDebug = new StringBuilder();
@@ -83,14 +84,13 @@ public class GeoWaveOutputFormat extends OutputFormat<GeoWaveOutputKey<Object>, 
 
       for (final Index i : indices) {
         if (!persistentIndexStore.indexExists(i.getName())) {
-          persistentIndexStore.addIndex(i);
+          dataStore.addIndex(i);
         }
       }
       final TransientAdapterStore jobContextAdapterStore =
           GeoWaveConfiguratorBase.getJobContextAdapterStore(CLASS, context);
       final IndexStore jobContextIndexStore =
           new JobContextIndexStore(context, persistentIndexStore);
-      final DataStore dataStore = GeoWaveStoreFinder.createDataStore(configOptions);
       return new GeoWaveRecordWriter(
           context,
           dataStore,

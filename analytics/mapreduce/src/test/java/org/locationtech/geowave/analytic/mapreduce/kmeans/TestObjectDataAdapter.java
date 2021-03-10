@@ -246,4 +246,52 @@ public class TestObjectDataAdapter extends AbstractDataAdapter<TestObject> imple
     }
     return null;
   }
+
+  @Override
+  public int getFieldCount() {
+    return 3;
+  }
+
+  @Override
+  public Class<?> getFieldClass(int fieldIndex) {
+    switch (fieldIndex) {
+      case 0:
+        return Geometry.class;
+      case 1:
+      case 2:
+        return String.class;
+    }
+    return null;
+  }
+
+  @Override
+  public String getFieldName(int fieldIndex) {
+    switch (fieldIndex) {
+      case 0:
+        return GEOM;
+      case 1:
+        return ID;
+      case 2:
+        return GROUP_ID;
+    }
+    return null;
+  }
+
+  @Override
+  public Object getFieldValue(TestObject entry, String fieldName) {
+    switch (fieldName) {
+      case GEOM:
+        return entry.geo;
+      case ID:
+        return entry.id;
+      case GROUP_ID:
+        return entry.groupID;
+    }
+    return null;
+  }
+
+  @Override
+  public Class<TestObject> getDataClass() {
+    return TestObject.class;
+  }
 }

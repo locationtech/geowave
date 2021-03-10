@@ -17,14 +17,14 @@ import org.locationtech.geowave.core.store.operations.MetadataType;
 public class AccumuloMetadataDeleter implements MetadataDeleter {
 
   private final AccumuloOperations operations;
-  private final String metadataTypeName;
+  private final String metadataTypeId;
 
   public AccumuloMetadataDeleter(
       final AccumuloOperations operations,
       final MetadataType metadataType) {
     super();
     this.operations = operations;
-    metadataTypeName = metadataType.name();
+    metadataTypeId = metadataType.id();
   }
 
   @Override
@@ -37,7 +37,7 @@ public class AccumuloMetadataDeleter implements MetadataDeleter {
     return operations.delete(
         AbstractGeoWavePersistence.METADATA_TABLE,
         new ByteArray(query.getPrimaryId()),
-        metadataTypeName,
+        metadataTypeId,
         query.getSecondaryId() != null ? query.getSecondaryId() : null,
         query.getAuthorizations());
   }

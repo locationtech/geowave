@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.apache.avro.Schema;
 import org.apache.avro.file.DataFileStream;
 import org.apache.avro.specific.SpecificDatumReader;
@@ -27,6 +28,7 @@ import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestWithMapper;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIterator.Wrapper;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.ingest.GeoWaveData;
@@ -35,6 +37,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.internal.Maps;
 
 /**
  * This plugin is used for ingesting any GPX formatted data from a local file system into GeoWave as
@@ -149,6 +152,28 @@ public class GeoWaveAvroIngestPlugin extends
   }
 
   @Override
+  public DataTypeAdapter<SimpleFeature>[] getDataAdapters(
+      final URL url,
+      final String globalVisibility) {
+    Map<String, FeatureDataAdapter> adapters = Maps.newHashMap();
+    try (final CloseableIterator<AvroSimpleFeatureCollection> avroObjects = toAvroObjects(url)) {
+      while (avroObjects.hasNext()) {
+        final AvroFeatureDefinition featureDefinition = avroObjects.next().getFeatureType();
+        try {
+          final SimpleFeatureType featureType =
+              GeoWaveAvroFeatureUtils.avroFeatureDefinitionToGTSimpleFeatureType(featureDefinition);
+          final FeatureDataAdapter adapter = new FeatureDataAdapter(featureType);
+          adapters.put(adapter.getTypeName(), adapter);
+        } catch (ClassNotFoundException e) {
+          LOGGER.warn("Unable to read simple feature type from Avro", e);
+        }
+      }
+    }
+    return adapters.values().toArray(new FeatureDataAdapter[adapters.size()]);
+
+  }
+
+  @Override
   protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
       final AvroSimpleFeatureCollection featureCollection,
       final String[] indexNames,
@@ -202,6 +227,7 @@ public class GeoWaveAvroIngestPlugin extends
     return new IngestAvroFeaturesFromHdfs(this);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Class<? extends CommonIndexValue>[] getSupportedIndexableTypes() {
     return new Class[] {GeometryWrapper.class, Time.class};

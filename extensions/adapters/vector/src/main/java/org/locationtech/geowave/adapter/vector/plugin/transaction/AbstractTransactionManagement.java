@@ -8,14 +8,7 @@
  */
 package org.locationtech.geowave.adapter.vector.plugin.transaction;
 
-import java.util.HashMap;
-import java.util.Map;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents;
-import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
-import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
-import org.opengis.feature.simple.SimpleFeature;
 
 public abstract class AbstractTransactionManagement implements GeoWaveTransaction {
 
@@ -27,25 +20,10 @@ public abstract class AbstractTransactionManagement implements GeoWaveTransactio
   }
 
   @Override
-  @SuppressWarnings("unchecked")
-  public Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> getDataStatistics() {
-    final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> stats = new HashMap<>();
-    final GeotoolsFeatureDataAdapter adapter = components.getAdapter();
-    final short internalAdapterId =
-        components.getGTstore().getInternalAdapterStore().getAdapterId(adapter.getTypeName());
-
-    try (CloseableIterator<InternalDataStatistics<?, ?, ?>> it =
-        components.getStatsStore().getDataStatistics(internalAdapterId, composeAuthorizations())) {
-      while (it.hasNext()) {
-        final InternalDataStatistics<?, ?, ?> stat = it.next();
-        stats.put(
-            new StatisticsId(stat.getType(), stat.getExtendedId()),
-            (InternalDataStatistics<SimpleFeature, ?, ?>) stat);
-      }
-
-    } catch (final Exception e) {
-      GeoWaveTransactionManagement.LOGGER.error("Failed to access statistics from data store", e);
-    }
-    return stats;
+  public StatisticsCache getDataStatistics() {
+    return new StatisticsCache(
+        components.getStatsStore(),
+        components.getAdapter(),
+        composeAuthorizations());
   }
 }

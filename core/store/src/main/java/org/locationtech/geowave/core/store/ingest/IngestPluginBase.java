@@ -8,7 +8,9 @@
  */
 package org.locationtech.geowave.core.store.ingest;
 
+import java.net.URL;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 
 /**
  * An interface required for ingest plugins to implement a conversion from an expected input format
@@ -18,6 +20,20 @@ import org.locationtech.geowave.core.store.CloseableIterator;
  * @param <O> The type that represents each data entry being ingested
  */
 public interface IngestPluginBase<I, O> extends DataAdapterProvider<O> {
+
+  /**
+   * Get all writable adapters used by this plugin for the given URL
+   *
+   * @param url the URL of the data to ingest
+   * @param globalVisibility If on the command-line the user specifies a global visibility to write
+   *        to the visibility column in GeoWave, it is passed along here. It is assumed that this is
+   *        the same visibility string that will be passed to IngestPluginBase.toGeoWaveData()
+   * @return An array of adapters that may be used by this plugin
+   */
+  default DataTypeAdapter<O>[] getDataAdapters(final URL url, String globalVisibility) {
+    return getDataAdapters(globalVisibility);
+  }
+
   /**
    * Convert from an expected input format to a data format that can be directly ingested into
    * GeoWave
@@ -30,7 +46,7 @@ public interface IngestPluginBase<I, O> extends DataAdapterProvider<O> {
    *        the same visibility string that will be passed to DataAdapterProvider.getDataAdapters()
    * @return The objects that can be directly ingested into GeoWave
    */
-  public CloseableIterator<GeoWaveData<O>> toGeoWaveData(
+  CloseableIterator<GeoWaveData<O>> toGeoWaveData(
       I input,
       String[] indexNames,
       String globalVisibility);

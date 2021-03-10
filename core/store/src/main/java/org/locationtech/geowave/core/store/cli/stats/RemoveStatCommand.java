@@ -13,10 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
-import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
-import org.locationtech.geowave.core.store.adapter.statistics.BaseStatisticsType;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Statistic;
+import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.index.IndexStore;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -26,15 +28,19 @@ import com.beust.jcommander.internal.Console;
 @Parameters(commandDescription = "Remove a statistic from a data store")
 public class RemoveStatCommand extends AbstractStatsCommand<Void> {
 
-  @Parameter(description = "<store name> <datatype name> <stat type>")
-  private final List<String> parameters = new ArrayList<>();
+  @Parameter(description = "<store name>")
+  private List<String> parameters = new ArrayList<>();
 
   @Parameter(
-      names = {"--fieldName"},
-      description = "If the statistic is maintained per field, optionally provide a field name")
-  private String fieldName;
+      names = "--all",
+      description = "If specified, all matching statistics will be removed.")
+  private boolean all = false;
 
-  private String statType = null;
+  @Parameter(
+      names = "--force",
+      description = "Force an internal statistic to be removed.  IMPORTANT: Removing statistics "
+          + "that are marked as \"internal\" can have a detrimental impact on performance!")
+  private boolean force = false;
 
   @Override
   public void execute(final OperationParams params) {
@@ -44,21 +50,43 @@ public class RemoveStatCommand extends AbstractStatsCommand<Void> {
   @Override
   protected boolean performStatsCommand(
       final DataStorePluginOptions storeOptions,
-      final InternalDataAdapter<?> adapter,
       final StatsCommandLineOptions statsOptions,
       final Console console) throws IOException {
 
-    // Remove the stat
+    final DataStore dataStore = storeOptions.createDataStore();
     final DataStatisticsStore statStore = storeOptions.createDataStatisticsStore();
-    final String[] authorizations = getAuthorizations(statsOptions.getAuthorizations());
+    final IndexStore indexStore = storeOptions.createIndexStore();
 
-    if (!statStore.removeStatistics(
-        adapter.getAdapterId(),
-        fieldName,
-        new BaseStatisticsType<>(statType),
-        authorizations)) {
-      throw new RuntimeException("Unable to remove statistic: " + statType);
+    final List<Statistic<? extends StatisticValue<?>>> toRemove =
+        statsOptions.resolveMatchingStatistics(dataStore, statStore, indexStore);
+
+    if (!force) {
+      for (Statistic<?> stat : toRemove) {
+        if (stat.isInternal()) {
+          throw new ParameterException(
+              "Unable to remove an internal statistic without specifying the --force option. "
+                  + "Removing an internal statistic can have a detrimental impact on performance.");
+        }
+      }
     }
+    if (toRemove.isEmpty()) {
+      throw new ParameterException("A matching statistic could not be found");
+    } else if (toRemove.size() > 1 && !all) {
+      throw new ParameterException(
+          "Multiple statistics matched the given parameters.  If this is intentional, "
+              + "supply the --all option, otherwise provide additional parameters to "
+              + "specify which statistic to delete.");
+    }
+
+    if (!statStore.removeStatistics(toRemove.iterator())) {
+      throw new RuntimeException("Unable to remove statistics");
+    }
+
+    console.println(
+        toRemove.size()
+            + " statistic"
+            + (toRemove.size() == 1 ? " was" : "s were")
+            + " successfully removed.");
 
     return true;
   }
@@ -66,11 +94,9 @@ public class RemoveStatCommand extends AbstractStatsCommand<Void> {
   @Override
   public Void computeResults(final OperationParams params) {
     // Ensure we have all the required arguments
-    if (parameters.size() != 3) {
-      throw new ParameterException("Requires arguments: <store name> <datatype name> <stat type>");
+    if (parameters.size() != 1) {
+      throw new ParameterException("Requires argument: <store name>");
     }
-
-    statType = parameters.get(2);
 
     super.run(params, parameters);
     return null;

@@ -9,7 +9,6 @@
 package org.locationtech.geowave.core.store;
 
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
-import org.locationtech.geowave.core.store.adapter.MockComponents.IntegerRangeDataStatistics;
 import org.locationtech.geowave.core.store.adapter.MockComponents.MockAbstractDataAdapter;
 import org.locationtech.geowave.core.store.adapter.MockComponents.MockAbstractDataAdapter.TestIndexFieldHandler;
 import org.locationtech.geowave.core.store.adapter.MockComponents.MockIndexStrategy;
@@ -25,7 +24,6 @@ public class TestStorePersistableRegistry implements PersistableRegistrySpi {
   public PersistableIdAndConstructor[] getSupportedPersistables() {
     return new PersistableIdAndConstructor[] {
         new PersistableIdAndConstructor((short) 10200, MockAbstractDataAdapter::new),
-        new PersistableIdAndConstructor((short) 10201, IntegerRangeDataStatistics::new),
         new PersistableIdAndConstructor((short) 10202, TestPersistentIndexFieldHandler::new),
         new PersistableIdAndConstructor((short) 10203, TestDimensionField::new),
         new PersistableIdAndConstructor((short) 10204, MockIndexStrategy::new),

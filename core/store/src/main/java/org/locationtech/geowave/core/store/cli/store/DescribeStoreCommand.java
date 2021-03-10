@@ -21,7 +21,7 @@ import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
-import org.locationtech.geowave.core.cli.utils.ConsolePrinter;
+import org.locationtech.geowave.core.cli.utils.ConsoleTablePrinter;
 import org.locationtech.geowave.core.cli.utils.FirstElementListComparator;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -58,7 +58,9 @@ public class DescribeStoreCommand extends ServiceEnabledCommand<Map<String, Stri
     }
 
     Collections.sort(rows, new FirstElementListComparator());
-    new ConsolePrinter().print(Arrays.asList("Config Parameter", "Value"), rows);
+    new ConsoleTablePrinter(params.getConsole()).print(
+        Arrays.asList("Config Parameter", "Value"),
+        rows);
   }
 
   @Override

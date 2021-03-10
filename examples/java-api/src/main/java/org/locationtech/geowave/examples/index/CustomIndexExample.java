@@ -209,7 +209,7 @@ public class CustomIndexExample {
      */
     @Override
     public InsertionIds getInsertionIds(final SimpleFeature entry) {
-      final String featureUUID = (String) entry.getAttribute(uuidField);;
+      final String featureUUID = (String) entry.getAttribute(uuidField);
       return new InsertionIds(Lists.newArrayList(StringUtils.stringToBinary(featureUUID)));
     }
 

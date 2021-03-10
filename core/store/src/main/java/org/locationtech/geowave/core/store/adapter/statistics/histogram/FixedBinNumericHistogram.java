@@ -69,12 +69,7 @@ public class FixedBinNumericHistogram implements NumericHistogram {
   }
 
   public double[] quantile(final int bins) {
-    final double[] result = new double[bins];
-    final double binSize = 1.0 / bins;
-    for (int bin = 0; bin < bins; bin++) {
-      result[bin] = quantile(binSize * (bin + 1));
-    }
-    return result;
+    return NumericHistogram.binQuantiles(this, bins);
   }
 
   @Override
@@ -145,18 +140,7 @@ public class FixedBinNumericHistogram implements NumericHistogram {
   }
 
   public long[] count(final int bins) {
-    final long[] result = new long[bins];
-    double start = minValue;
-    final double range = maxValue - minValue;
-    final double increment = range / bins;
-    start += increment;
-    long last = 0;
-    for (int bin = 0; bin < bins; bin++, start += increment) {
-      final long aggSum = (long) Math.ceil(sum(start, false));
-      result[bin] = aggSum - last;
-      last = aggSum;
-    }
-    return result;
+    return NumericHistogram.binCounts(this, bins);
   }
 
   @Override
@@ -214,6 +198,11 @@ public class FixedBinNumericHistogram implements NumericHistogram {
     for (int i = 0; i < s; i++) {
       count[i] = VarintUtils.readUnsignedLong(buffer);
     }
+  }
+
+  @Override
+  public String toString() {
+    return NumericHistogram.histogramToString(this);
   }
 
   /** @return the total number of consumed values */

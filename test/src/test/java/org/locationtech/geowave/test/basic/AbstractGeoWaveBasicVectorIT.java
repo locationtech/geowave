@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.test.basic;
 
+import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -17,14 +18,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
-import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math.util.MathUtils;
@@ -35,30 +35,21 @@ import org.locationtech.geowave.adapter.raster.util.ZipUtils;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.export.VectorLocalExportCommand;
 import org.locationtech.geowave.adapter.vector.export.VectorLocalExportOptions;
-import org.locationtech.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.OptimalCQLQuery;
-import org.locationtech.geowave.core.geotime.store.query.api.VectorStatisticsQueryBuilder;
+import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic;
+import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic.BoundingBoxValue;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InitializeWithIndicesDataAdapter;
-import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
-import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import org.locationtech.geowave.core.store.adapter.statistics.DuplicateEntryCount;
-import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.PartitionStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
-import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.AggregationQuery;
 import org.locationtech.geowave.core.store.api.AggregationQueryBuilder;
@@ -66,21 +57,26 @@ import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
-import org.locationtech.geowave.core.store.api.StatisticsQuery;
+import org.locationtech.geowave.core.store.api.Statistic;
+import org.locationtech.geowave.core.store.api.StatisticQuery;
+import org.locationtech.geowave.core.store.api.StatisticQueryBuilder;
+import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.callback.IngestCallback;
 import org.locationtech.geowave.core.store.cli.store.AddStoreCommand;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
-import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
-import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.index.IndexMetaDataSet;
 import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.locationtech.geowave.core.store.memory.MemoryAdapterStore;
 import org.locationtech.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import org.locationtech.geowave.core.store.query.constraints.DataIdQuery;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.statistics.DefaultStatisticsProvider;
+import org.locationtech.geowave.core.store.statistics.StatisticId;
+import org.locationtech.geowave.core.store.statistics.StatisticsIngestCallback;
+import org.locationtech.geowave.core.store.statistics.field.FieldStatistic;
 import org.locationtech.geowave.format.geotools.vector.GeoToolsVectorDataStoreIngestPlugin;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.TestUtils.DimensionalityType;
@@ -93,6 +89,8 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.Lists;
+import jersey.repackaged.com.google.common.collect.Maps;
 
 public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractGeoWaveBasicVectorIT.class);
@@ -699,6 +697,7 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
     return exportDir;
   }
 
+  @SuppressWarnings("unchecked")
   protected void testStats(
       final URL[] inputFiles,
       final boolean multithreaded,
@@ -711,8 +710,6 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
     final Map<String, StatisticsCache> statsCache = new HashMap<>();
     final String[] indexNames =
         Arrays.stream(indices).map(i -> i.getName()).toArray(i -> new String[i]);
-    final InternalAdapterStore internalAdapterStore =
-        getDataStorePluginOptions().createInternalAdapterStore();
     final MathTransform mathTransform = TestUtils.transformFromCrs(crs);
     for (final URL inputFile : inputFiles) {
       LOGGER.warn(
@@ -732,13 +729,10 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
             adapterCache.addAdapter(adapter);
           }
           // it should be a statistical data adapter
-          if (adapter instanceof StatisticsProvider) {
+          if (adapter instanceof DefaultStatisticsProvider) {
             StatisticsCache cachedValues = statsCache.get(adapter.getTypeName());
             if (cachedValues == null) {
-              cachedValues =
-                  new StatisticsCache(
-                      (StatisticsProvider<SimpleFeature>) adapter,
-                      internalAdapterStore.getAdapterId(adapter.getTypeName()));
+              cachedValues = new StatisticsCache(adapter, crs);
               statsCache.put(adapter.getTypeName(), cachedValues);
             }
             cachedValues.entryIngested(
@@ -760,92 +754,78 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
         final FeatureDataAdapter adapter = (FeatureDataAdapter) internalDataAdapter.getAdapter();
         final StatisticsCache cachedValue = statsCache.get(adapter.getTypeName());
         Assert.assertNotNull(cachedValue);
-        final Collection<InternalDataStatistics<SimpleFeature, ?, ?>> expectedStats =
-            cachedValue.statsCache.values();
-        try (CloseableIterator<InternalDataStatistics<?, ?, ?>> statsIterator =
-            statsStore.getDataStatistics(internalDataAdapter.getAdapterId())) {
-          int statsCount = 0;
+        final Set<Entry<Statistic<?>, Map<ByteArray, StatisticValue<?>>>> expectedStats =
+            cachedValue.statsCache.entrySet();
+        int statsCount = 0;
+        try (CloseableIterator<? extends Statistic<? extends StatisticValue<?>>> statsIterator =
+            statsStore.getDataTypeStatistics(adapter, null, null)) {
           while (statsIterator.hasNext()) {
-            final InternalDataStatistics<?, ?, ?> nextStats = statsIterator.next();
-            if ((nextStats instanceof RowRangeHistogramStatistics)
-                || (nextStats instanceof IndexMetaDataSet)
-                || (nextStats instanceof FieldVisibilityCount)
-                || (nextStats instanceof DifferingFieldVisibilityEntryCount)
-                || (nextStats instanceof DuplicateEntryCount)
-                || (nextStats instanceof PartitionStatistics)) {
-              continue;
-            }
+            statsIterator.next();
             statsCount++;
           }
-          Assert.assertEquals(
-              "The number of stats for data adapter '"
-                  + adapter.getTypeName()
-                  + "' do not match count expected",
-              expectedStats.size(),
-              statsCount);
         }
-        for (final InternalDataStatistics<SimpleFeature, ?, ?> expectedStat : expectedStats) {
-          try (final CloseableIterator<InternalDataStatistics<?, ?, ?>> actualStatsIt =
-              statsStore.getDataStatistics(
-                  internalDataAdapter.getAdapterId(),
-                  expectedStat.getExtendedId(),
-                  expectedStat.getType())) {
-            if (actualStatsIt.hasNext()) {
-              final InternalDataStatistics<?, ?, ?> actualStats = actualStatsIt.next();
-
-              // Only test RANGE and COUNT in the multithreaded
-              // case. None
-              // of the other statistics will match!
-              if (multithreaded) {
-                if (!(expectedStat.getType().getString().startsWith(
-                    FeatureNumericRangeStatistics.STATS_TYPE.getString())
-                    || expectedStat.getType().equals(CountDataStatistics.STATS_TYPE)
-                    || expectedStat.getType().getString().startsWith("BOUNDING_BOX"))) {
-                  continue;
-                }
-              }
-
-              Assert.assertNotNull(actualStats);
-              // if the stats are the same, their binary
-              // serialization should be the same
-              Assert.assertArrayEquals(
-                  actualStats.toString() + " = " + expectedStat.toString(),
-                  expectedStat.toBinary(),
-                  actualStats.toBinary());
+        try (CloseableIterator<? extends Statistic<? extends StatisticValue<?>>> statsIterator =
+            statsStore.getFieldStatistics(adapter, null, null, null)) {
+          while (statsIterator.hasNext()) {
+            statsIterator.next();
+            statsCount++;
+          }
+        }
+        Assert.assertEquals(
+            "The number of stats for data adapter '"
+                + adapter.getTypeName()
+                + "' do not match count expected",
+            expectedStats.size(),
+            statsCount);
+        for (final Entry<Statistic<?>, Map<ByteArray, StatisticValue<?>>> expectedStat : expectedStats) {
+          for (final Entry<ByteArray, StatisticValue<?>> expectedValues : expectedStat.getValue().entrySet()) {
+            StatisticValue<Object> actual;
+            if (expectedValues.getKey().equals(StatisticValue.NO_BIN)) {
+              actual =
+                  statsStore.getStatisticValue(
+                      (Statistic<StatisticValue<Object>>) expectedStat.getKey());
+            } else {
+              actual =
+                  statsStore.getStatisticValue(
+                      (Statistic<StatisticValue<Object>>) expectedStat.getKey(),
+                      expectedValues.getKey(),
+                      false);
             }
+            assertEquals(expectedValues.getValue().getValue(), actual.getValue());
           }
         }
         // finally check the one stat that is more manually calculated -
         // the bounding box
-        final StatisticsQuery<Envelope> query =
-            VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
-                adapter.getFeatureType().getGeometryDescriptor().getLocalName()).dataType(
+        StatisticQuery<BoundingBoxValue, Envelope> query =
+            StatisticQueryBuilder.newBuilder(BoundingBoxStatistic.STATS_TYPE).fieldName(
+                adapter.getFeatureType().getGeometryDescriptor().getLocalName()).typeName(
                     adapter.getTypeName()).build();
-        final StatisticsId id = query.getId();
-        final Envelope bboxStat =
+        BoundingBoxValue bboxStat =
             getDataStorePluginOptions().createDataStore().aggregateStatistics(query);
-        validateBBox(bboxStat, cachedValue);
+        validateBBox(bboxStat.getValue(), cachedValue);
+
         // now make sure it works without giving field name because there is only one geometry field
         // anyways
-        validateBBox(
-            getDataStorePluginOptions().createDataStore().aggregateStatistics(
-                VectorStatisticsQueryBuilder.newBuilder().factory().bbox().dataType(
-                    adapter.getTypeName()).build()),
-            cachedValue);
+        query =
+            StatisticQueryBuilder.newBuilder(BoundingBoxStatistic.STATS_TYPE).typeName(
+                adapter.getTypeName()).build();
+        bboxStat = getDataStorePluginOptions().createDataStore().aggregateStatistics(query);
+        validateBBox(bboxStat.getValue(), cachedValue);
+
+        final StatisticId<BoundingBoxValue> bboxStatId =
+            FieldStatistic.generateStatisticId(
+                adapter.getTypeName(),
+                BoundingBoxStatistic.STATS_TYPE,
+                adapter.getFeatureType().getGeometryDescriptor().getLocalName(),
+                Statistic.INTERNAL_TAG);
+
         Assert.assertTrue(
             "Unable to remove individual stat",
-            statsStore.removeStatistics(
-                internalDataAdapter.getAdapterId(),
-                id.getExtendedId(),
-                id.getType()));
+            statsStore.removeStatistic(statsStore.getStatisticById(bboxStatId)));
 
-        try (final CloseableIterator<InternalDataStatistics<?, ?, ?>> statsIt =
-            statsStore.getDataStatistics(
-                internalDataAdapter.getAdapterId(),
-                id.getExtendedId(),
-                id.getType())) {
-          Assert.assertFalse("Individual stat was not successfully removed", statsIt.hasNext());
-        }
+        Assert.assertNull(
+            "Individual stat was not successfully removed",
+            statsStore.getStatisticById(bboxStatId));
       }
     }
   }
@@ -878,30 +858,47 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
     // assume a bounding box statistic exists and calculate the value
     // separately to ensure calculation works
     private double minX = Double.MAX_VALUE;
-    private double minY = Double.MAX_VALUE;;
-    private double maxX = -Double.MAX_VALUE;;
-    private double maxY = -Double.MAX_VALUE;;
-    protected final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsCache =
+    private double minY = Double.MAX_VALUE;
+    private double maxX = -Double.MAX_VALUE;
+    private double maxY = -Double.MAX_VALUE;
+    protected final Map<Statistic<?>, Map<ByteArray, StatisticValue<?>>> statsCache =
         new HashMap<>();
+    private final DataTypeAdapter<SimpleFeature> adapter;
 
     // otherwise use the statistics interface to calculate every statistic
     // and compare results to what is available in the statistics data store
     private StatisticsCache(
-        final StatisticsProvider<SimpleFeature> dataAdapter,
-        final short internalAdapterId) {
-      final StatisticsId[] statsIds = dataAdapter.getSupportedStatistics();
-      for (final StatisticsId statsId : statsIds) {
-        final InternalDataStatistics<SimpleFeature, ?, ?> stats =
-            dataAdapter.createDataStatistics(statsId);
-        stats.setAdapterId(internalAdapterId);
-        statsCache.put(statsId, stats);
+        final DataTypeAdapter<SimpleFeature> adapter,
+        final CoordinateReferenceSystem crs) {
+      this.adapter = adapter;
+      final List<Statistic<?>> stats = ((DefaultStatisticsProvider) adapter).getDefaultStatistics();
+      for (final Statistic<?> stat : stats) {
+        if (stat instanceof BoundingBoxStatistic) {
+          ((BoundingBoxStatistic) stat).setSourceCrs(crs);
+        }
+        statsCache.put(stat, Maps.newHashMap());
       }
     }
 
     @Override
     public void entryIngested(final SimpleFeature entry, final GeoWaveRow... geowaveRows) {
-      for (final InternalDataStatistics<SimpleFeature, ?, ?> stats : statsCache.values()) {
-        stats.entryIngested(entry, geowaveRows);
+      for (final Statistic<?> stat : statsCache.keySet()) {
+        ByteArray[] bins;
+        if (stat.getBinningStrategy() == null) {
+          bins = new ByteArray[] {StatisticValue.NO_BIN};
+        } else {
+          bins = stat.getBinningStrategy().getBins(adapter, entry, geowaveRows);
+        }
+        final Map<ByteArray, StatisticValue<?>> binValues = statsCache.get(stat);
+        for (final ByteArray bin : bins) {
+          if (!binValues.containsKey(bin)) {
+            binValues.put(bin, stat.createEmpty());
+          }
+          final StatisticValue<?> value = binValues.get(bin);
+          if (value instanceof StatisticsIngestCallback) {
+            ((StatisticsIngestCallback) value).entryIngested(adapter, entry, geowaveRows);
+          }
+        }
       }
       final Geometry geometry = ((Geometry) entry.getDefaultGeometry());
       if ((geometry != null) && !geometry.isEmpty()) {

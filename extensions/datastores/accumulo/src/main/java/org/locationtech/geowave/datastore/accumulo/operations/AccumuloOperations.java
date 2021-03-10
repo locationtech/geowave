@@ -8,10 +8,41 @@
  */
 package org.locationtech.geowave.datastore.accumulo.operations;
 
-import com.aol.cyclops.util.function.TriFunction;
-import com.google.common.collect.*;
+import java.io.Closeable;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.BatchDeleter;
+import org.apache.accumulo.core.client.BatchScanner;
+import org.apache.accumulo.core.client.BatchWriter;
+import org.apache.accumulo.core.client.BatchWriterConfig;
+import org.apache.accumulo.core.client.ClientSideIteratorScanner;
+import org.apache.accumulo.core.client.Connector;
+import org.apache.accumulo.core.client.Instance;
+import org.apache.accumulo.core.client.IteratorSetting;
+import org.apache.accumulo.core.client.MutationsRejectedException;
+import org.apache.accumulo.core.client.RowIterator;
 import org.apache.accumulo.core.client.Scanner;
-import org.apache.accumulo.core.client.*;
+import org.apache.accumulo.core.client.ScannerBase;
+import org.apache.accumulo.core.client.TableExistsException;
+import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.client.admin.NewTableConfiguration;
 import org.apache.accumulo.core.conf.Property;
 import org.apache.accumulo.core.data.Key;
@@ -24,8 +55,13 @@ import org.apache.accumulo.core.security.Authorizations;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
-import org.locationtech.geowave.core.index.*;
+import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
+import org.locationtech.geowave.core.index.IndexUtils;
+import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray.ArrayOfArrays;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
@@ -34,7 +70,6 @@ import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
@@ -43,13 +78,26 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreImpl;
-import org.locationtech.geowave.core.store.operations.*;
+import org.locationtech.geowave.core.store.operations.DataIndexReaderParams;
+import org.locationtech.geowave.core.store.operations.Deleter;
+import org.locationtech.geowave.core.store.operations.MetadataDeleter;
+import org.locationtech.geowave.core.store.operations.MetadataReader;
+import org.locationtech.geowave.core.store.operations.MetadataType;
+import org.locationtech.geowave.core.store.operations.MetadataWriter;
+import org.locationtech.geowave.core.store.operations.QueryAndDeleteByRow;
+import org.locationtech.geowave.core.store.operations.RangeReaderParams;
+import org.locationtech.geowave.core.store.operations.ReaderParams;
+import org.locationtech.geowave.core.store.operations.RowDeleter;
+import org.locationtech.geowave.core.store.operations.RowReader;
+import org.locationtech.geowave.core.store.operations.RowReaderWrapper;
+import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import org.locationtech.geowave.core.store.server.BasicOptionProvider;
 import org.locationtech.geowave.core.store.server.RowMergingAdapterOptionProvider;
 import org.locationtech.geowave.core.store.server.ServerOpConfig.ServerOpScope;
 import org.locationtech.geowave.core.store.server.ServerOpHelper;
 import org.locationtech.geowave.core.store.server.ServerSideOperations;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.util.DataAdapterAndIndexCache;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
@@ -58,19 +106,27 @@ import org.locationtech.geowave.datastore.accumulo.MergingCombiner;
 import org.locationtech.geowave.datastore.accumulo.MergingVisibilityCombiner;
 import org.locationtech.geowave.datastore.accumulo.config.AccumuloOptions;
 import org.locationtech.geowave.datastore.accumulo.config.AccumuloRequiredOptions;
-import org.locationtech.geowave.datastore.accumulo.iterators.*;
+import org.locationtech.geowave.datastore.accumulo.iterators.AggregationIterator;
+import org.locationtech.geowave.datastore.accumulo.iterators.AttributeSubsettingIterator;
+import org.locationtech.geowave.datastore.accumulo.iterators.FixedCardinalitySkippingIterator;
+import org.locationtech.geowave.datastore.accumulo.iterators.NumericIndexStrategyFilterIterator;
+import org.locationtech.geowave.datastore.accumulo.iterators.QueryFilterIterator;
+import org.locationtech.geowave.datastore.accumulo.iterators.VersionIterator;
+import org.locationtech.geowave.datastore.accumulo.iterators.WholeRowAggregationIterator;
+import org.locationtech.geowave.datastore.accumulo.iterators.WholeRowQueryFilterIterator;
 import org.locationtech.geowave.datastore.accumulo.mapreduce.AccumuloSplitsProvider;
 import org.locationtech.geowave.datastore.accumulo.util.AccumuloUtils;
 import org.locationtech.geowave.datastore.accumulo.util.ConnectorPool;
 import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
 import org.locationtech.geowave.mapreduce.splits.GeoWaveRowRange;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
-import java.io.Closeable;
-import java.io.IOException;
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
+import com.aol.cyclops.util.function.TriFunction;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.google.common.collect.Streams;
 
 /**
  * This class holds all parameters necessary for establishing Accumulo connections and provides
@@ -390,7 +446,6 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
       final String columnFamily,
       final byte[] columnQualifier,
       final String... authorizations) {
-
     boolean success = true;
     BatchDeleter deleter = null;
     try {
@@ -1315,7 +1370,7 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
   public MetadataWriter createMetadataWriter(final MetadataType metadataType) {
     // this checks for existence prior to create
     createTable(AbstractGeoWavePersistence.METADATA_TABLE, false, options.isEnableBlockCache());
-    if (MetadataType.STATS.equals(metadataType) && options.isServerSideLibraryEnabled()) {
+    if (metadataType.isStatValues() && options.isServerSideLibraryEnabled()) {
       synchronized (this) {
         if (!iteratorsAttached) {
           iteratorsAttached = true;
@@ -1373,13 +1428,11 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
   }
 
   @Override
-  public boolean mergeStats(
-      final DataStatisticsStore statsStore,
-      final InternalAdapterStore internalAdapterStore) {
+  public boolean mergeStats(final DataStatisticsStore statsStore) {
     if (options.isServerSideLibraryEnabled()) {
       return compactTable(AbstractGeoWavePersistence.METADATA_TABLE);
     } else {
-      return DataStoreUtils.mergeStats(statsStore, internalAdapterStore);
+      return statsStore.mergeStats();
     }
   }
 

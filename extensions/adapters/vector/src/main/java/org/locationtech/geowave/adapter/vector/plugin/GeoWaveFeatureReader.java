@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import org.geotools.data.FeatureReader;
@@ -28,6 +27,7 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.operation.transform.ProjectiveTransform;
 import org.geotools.renderer.lite.RendererUtilities;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction;
+import org.locationtech.geowave.adapter.vector.plugin.transaction.StatisticsCache;
 import org.locationtech.geowave.adapter.vector.render.DistributedRenderAggregation;
 import org.locationtech.geowave.adapter.vector.render.DistributedRenderOptions;
 import org.locationtech.geowave.adapter.vector.render.DistributedRenderResult;
@@ -48,8 +48,6 @@ import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
-import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintsByClass;
@@ -205,12 +203,12 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
         && (Boolean) this.query.getHints().get(SubsampleProcess.SUBSAMPLE_ENABLED)) {
       spatialOnly = true;
     }
-    final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap =
+    final StatisticsCache statsCache =
         getComponents().getGTstore().getIndexQueryStrategy().requiresStats()
             ? transaction.getDataStatistics()
             : null;
     try (CloseableIterator<Index> indexIt =
-        getComponents().getIndices(statsMap, query, spatialOnly)) {
+        getComponents().getIndices(statsCache, query, spatialOnly)) {
       while (indexIt.hasNext()) {
         final Index index = indexIt.next();
 
@@ -531,9 +529,9 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
 
   protected Geometry clipIndexedBBOXConstraints(final Geometry bbox) {
     return QueryIndexHelper.clipIndexedBBOXConstraints(
+        transaction.getDataStatistics(),
         getFeatureType(),
-        bbox,
-        transaction.getDataStatistics());
+        bbox);
   }
 
   private boolean subsetRequested() {

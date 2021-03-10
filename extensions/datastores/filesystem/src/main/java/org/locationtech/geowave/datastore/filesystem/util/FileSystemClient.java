@@ -56,10 +56,10 @@ public class FileSystemClient {
     protected final MetadataType type;
 
     public MetadataCacheKey(final MetadataType type) {
-      // stats also store a timestamp because stats can be the exact same but
+      // stat values also store a timestamp because they can be the exact same but
       // need to still be unique (consider multiple count statistics that are
       // exactly the same count, but need to be merged)
-      super(type.equals(MetadataType.STATS));
+      super(type.isStatValues());
       this.type = type;
     }
 

@@ -349,6 +349,11 @@ public class DistortionGroupManagement {
     }
 
     @Override
+    public boolean isCommonIndexField(final CommonIndexModel model, final String fieldName) {
+      return false;
+    }
+
+    @Override
     public byte[] toBinary() {
       return new byte[] {};
     }
@@ -402,6 +407,31 @@ public class DistortionGroupManagement {
         }
       }
       return null;
+    }
+
+    @Override
+    public int getFieldCount() {
+      return 1;
+    }
+
+    @Override
+    public Class<?> getFieldClass(int fieldIndex) {
+      return Double.class;
+    }
+
+    @Override
+    public String getFieldName(int fieldIndex) {
+      return DISTORTION_FIELD_NAME;
+    }
+
+    @Override
+    public Object getFieldValue(DistortionEntry entry, String fieldName) {
+      return entry.getDistortionValue();
+    }
+
+    @Override
+    public Class<DistortionEntry> getDataClass() {
+      return DistortionEntry.class;
     }
   }
 }

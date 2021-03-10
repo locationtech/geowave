@@ -21,10 +21,10 @@ import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import org.locationtech.geowave.core.geotime.index.api.SpatialIndexBuilder;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
+import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.store.StoreLoader;
-import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
@@ -90,12 +90,13 @@ public class VectorIngestRunnerTest {
   }
 
   private void createIndices(final OperationParams params) {
-    final IndexStore indexStore = getStorePluginOptions(params).createIndexStore();
+    DataStore dataStore = getStorePluginOptions(params).createDataStore();
+
     // Create the spatial index
     final SpatialIndexBuilder builder = new SpatialIndexBuilder();
     builder.setName("spatialindex");
     builder.setNumPartitions(1);
     builder.setIncludeTimeInCommonIndexModel(false);
-    indexStore.addIndex(builder.createIndex());
+    dataStore.addIndex(builder.createIndex());
   }
 }

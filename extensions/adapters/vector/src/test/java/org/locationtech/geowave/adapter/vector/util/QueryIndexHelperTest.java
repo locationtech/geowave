@@ -12,9 +12,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
@@ -22,6 +20,8 @@ import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.referencing.CRS;
 import org.junit.Before;
 import org.junit.Test;
+import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
+import org.locationtech.geowave.adapter.vector.plugin.transaction.StatisticsCache;
 import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.index.SpatialOptions;
 import org.locationtech.geowave.core.geotime.index.SpatialTemporalDimensionalityTypeProvider;
@@ -29,19 +29,21 @@ import org.locationtech.geowave.core.geotime.index.SpatialTemporalOptions;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraints;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import org.locationtech.geowave.core.geotime.store.query.TemporalRange;
-import org.locationtech.geowave.core.geotime.store.query.api.VectorStatisticsQueryBuilder;
-import org.locationtech.geowave.core.geotime.store.statistics.FeatureBoundingBoxStatistics;
-import org.locationtech.geowave.core.geotime.store.statistics.FeatureTimeRangeStatistics;
+import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic;
+import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic.BoundingBoxValue;
+import org.locationtech.geowave.core.geotime.store.statistics.TimeRangeStatistic;
+import org.locationtech.geowave.core.geotime.store.statistics.TimeRangeStatistic.TimeRangeValue;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors.TimeDescriptorConfiguration;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
 import org.locationtech.geowave.core.store.query.constraints.Constraints;
+import org.locationtech.geowave.core.store.statistics.StatisticId;
+import org.locationtech.geowave.core.store.statistics.StatisticType;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
@@ -53,6 +55,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.MathTransform;
+import com.google.common.primitives.Bytes;
 
 public class QueryIndexHelperTest {
   private static final Index SPATIAL_INDEX =
@@ -146,27 +149,26 @@ public class QueryIndexHelperTest {
     final Date stime1 = DateUtilities.parseISO("2005-05-18T20:32:56Z");
     final Date etime1 = DateUtilities.parseISO("2005-05-19T20:32:56Z");
 
-    final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap = new HashMap<>();
-    final FeatureTimeRangeStatistics whenStats = new FeatureTimeRangeStatistics("when");
-    statsMap.put(
-        VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
-            "when").build().getId(),
-        whenStats);
+    final TestStatisticsCache statsCache = new TestStatisticsCache();
+    final TimeRangeStatistic whenStats = new TimeRangeStatistic(singleType.getTypeName(), "when");
+    final TimeRangeValue whenValue = whenStats.createEmpty();
+    statsCache.putFieldStatistic(TimeRangeStatistic.STATS_TYPE, "when", whenValue);
 
     final TemporalConstraintsSet constraintsSet = new TemporalConstraintsSet();
     constraintsSet.getConstraintsFor("when").add(new TemporalRange(stime, etime));
 
+    final FeatureDataAdapter singleDataAdapter = new FeatureDataAdapter(singleType);
     final SimpleFeature notIntersectSingle1 = createSingleTimeFeature(startTime);
 
-    whenStats.entryIngested(notIntersectSingle1);
+    whenValue.entryIngested(singleDataAdapter, notIntersectSingle1);
 
     final SimpleFeature notIntersectSingle = createSingleTimeFeature(endTime);
 
-    whenStats.entryIngested(notIntersectSingle);
+    whenValue.entryIngested(singleDataAdapter, notIntersectSingle);
 
     final TemporalConstraintsSet resultConstraintsSet =
         QueryIndexHelper.clipIndexedTemporalConstraints(
-            statsMap,
+            statsCache,
             singleTimeDescriptors,
             constraintsSet);
 
@@ -181,7 +183,7 @@ public class QueryIndexHelperTest {
 
     final TemporalConstraintsSet resultConstraintsSet1 =
         QueryIndexHelper.clipIndexedTemporalConstraints(
-            statsMap,
+            statsCache,
             singleTimeDescriptors,
             constraintsSet1);
 
@@ -195,18 +197,14 @@ public class QueryIndexHelperTest {
   @Test
   public void testGetTemporalConstraintsForRangeClippedFullRange() throws ParseException {
 
-    final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap = new HashMap<>();
-    final FeatureTimeRangeStatistics startStats = new FeatureTimeRangeStatistics("start");
-    statsMap.put(
-        VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
-            "start").build().getId(),
-        startStats);
+    final TestStatisticsCache statsCache = new TestStatisticsCache();
+    final TimeRangeStatistic startStats = new TimeRangeStatistic("type", "start");
+    final TimeRangeValue startValue = startStats.createEmpty();
+    statsCache.putFieldStatistic(TimeRangeStatistic.STATS_TYPE, "start", startValue);
 
-    final FeatureTimeRangeStatistics endStats = new FeatureTimeRangeStatistics("end");
-    statsMap.put(
-        VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
-            "end").build().getId(),
-        endStats);
+    final TimeRangeStatistic endStats = new TimeRangeStatistic("type", "end");
+    final TimeRangeValue endValue = endStats.createEmpty();
+    statsCache.putFieldStatistic(TimeRangeStatistic.STATS_TYPE, "end", endValue);
 
     final Date statsStart1 = DateUtilities.parseISO("2005-05-18T20:32:56Z");
     final Date statsStart2 = DateUtilities.parseISO("2005-05-20T20:32:56Z");
@@ -214,16 +212,17 @@ public class QueryIndexHelperTest {
     final Date statsEnd2 = DateUtilities.parseISO("2005-05-24T20:32:56Z");
 
     final SimpleFeature firstRangFeature = createFeature(statsStart1, statsEnd1);
+    FeatureDataAdapter adapter = new FeatureDataAdapter(firstRangFeature.getFeatureType());
 
-    startStats.entryIngested(firstRangFeature);
+    startValue.entryIngested(adapter, firstRangFeature);
 
-    endStats.entryIngested(firstRangFeature);
+    endValue.entryIngested(adapter, firstRangFeature);
 
     final SimpleFeature secondRangFeature = createFeature(statsStart2, statsEnd2);
 
-    startStats.entryIngested(secondRangFeature);
+    startValue.entryIngested(adapter, secondRangFeature);
 
-    endStats.entryIngested(secondRangFeature);
+    endValue.entryIngested(adapter, secondRangFeature);
 
     final Date stime = DateUtilities.parseISO("2005-05-18T20:32:56Z");
     final Date etime = DateUtilities.parseISO("2005-05-19T20:32:56Z");
@@ -234,7 +233,7 @@ public class QueryIndexHelperTest {
 
     final TemporalConstraintsSet resultConstraintsSet =
         QueryIndexHelper.clipIndexedTemporalConstraints(
-            statsMap,
+            statsCache,
             rangeTimeDescriptors,
             constraintsSet);
 
@@ -249,18 +248,14 @@ public class QueryIndexHelperTest {
   @Test
   public void testComposeQueryWithTimeRange() throws ParseException {
 
-    final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap = new HashMap<>();
-    final FeatureTimeRangeStatistics startStats = new FeatureTimeRangeStatistics("start");
-    statsMap.put(
-        VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
-            "start").build().getId(),
-        startStats);
+    final TestStatisticsCache statsCache = new TestStatisticsCache();
+    final TimeRangeStatistic startStats = new TimeRangeStatistic("type", "start");
+    final TimeRangeValue startValue = startStats.createEmpty();
+    statsCache.putFieldStatistic(TimeRangeStatistic.STATS_TYPE, "start", startValue);
 
-    final FeatureTimeRangeStatistics endStats = new FeatureTimeRangeStatistics("end");
-    statsMap.put(
-        VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
-            "end").build().getId(),
-        endStats);
+    final TimeRangeStatistic endStats = new TimeRangeStatistic("type", "end");
+    final TimeRangeValue endValue = endStats.createEmpty();
+    statsCache.putFieldStatistic(TimeRangeStatistic.STATS_TYPE, "end", endValue);
 
     final Date statsStart1 = DateUtilities.parseISO("2005-05-18T20:32:56Z");
     final Date statsStart2 = DateUtilities.parseISO("2005-05-20T20:32:56Z");
@@ -268,16 +263,17 @@ public class QueryIndexHelperTest {
     final Date statsEnd2 = DateUtilities.parseISO("2005-05-24T20:32:56Z");
 
     final SimpleFeature firstRangFeature = createFeature(statsStart1, statsEnd1);
+    FeatureDataAdapter adapter = new FeatureDataAdapter(firstRangFeature.getFeatureType());
 
-    startStats.entryIngested(firstRangFeature);
+    startValue.entryIngested(adapter, firstRangFeature);
 
-    endStats.entryIngested(firstRangFeature);
+    endValue.entryIngested(adapter, firstRangFeature);
 
     final SimpleFeature secondRangFeature = createFeature(statsStart2, statsEnd2);
 
-    startStats.entryIngested(secondRangFeature);
+    startValue.entryIngested(adapter, secondRangFeature);
 
-    endStats.entryIngested(secondRangFeature);
+    endValue.entryIngested(adapter, secondRangFeature);
 
     final Date stime = DateUtilities.parseISO("2005-05-18T20:32:56Z");
     final Date etime = DateUtilities.parseISO("2005-05-19T20:32:56Z");
@@ -288,9 +284,9 @@ public class QueryIndexHelperTest {
     final BasicQueryByClass query =
         new BasicQueryByClass(
             QueryIndexHelper.composeConstraints(
+                statsCache,
                 rangeType,
                 rangeTimeDescriptors,
-                statsMap,
                 factory.toGeometry(
                     factory.createPoint(new Coordinate(27.25, 41.25)).getEnvelopeInternal()),
                 constraintsSet));
@@ -302,9 +298,9 @@ public class QueryIndexHelperTest {
     final BasicQueryByClass query1 =
         new BasicQueryByClass(
             QueryIndexHelper.composeConstraints(
+                statsCache,
                 rangeType,
                 rangeTimeDescriptors,
-                statsMap,
                 factory.toGeometry(
                     factory.createPoint(new Coordinate(27.25, 41.25)).getEnvelopeInternal()),
                 null));
@@ -317,31 +313,31 @@ public class QueryIndexHelperTest {
 
   @Test
   public void testComposeQueryWithOutTimeRange() {
-    final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap = new HashMap<>();
-    final FeatureBoundingBoxStatistics geoStats = new FeatureBoundingBoxStatistics("geometry");
-    statsMap.put(
-        VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
-            "geometry").build().getId(),
-        geoStats);
+
+    final TestStatisticsCache statsCache = new TestStatisticsCache();
+    final BoundingBoxStatistic geoStats = new BoundingBoxStatistic("type", "geometry");
+    final BoundingBoxValue value = geoStats.createEmpty();
+    statsCache.putFieldStatistic(BoundingBoxStatistic.STATS_TYPE, "geometry", value);
 
     final SimpleFeature firstFeature =
         createGeoFeature(factory.createPoint(new Coordinate(22.25, 42.25)));
+    FeatureDataAdapter adapter = new FeatureDataAdapter(firstFeature.getFeatureType());
 
-    geoStats.entryIngested(firstFeature);
+    value.entryIngested(adapter, firstFeature);
 
     final SimpleFeature secondFeature =
         createGeoFeature(factory.createPoint(new Coordinate(27.25, 41.25)));
 
-    geoStats.entryIngested(secondFeature);
+    value.entryIngested(adapter, secondFeature);
 
     final Envelope bounds = new Envelope(21.23, 26.23, 41.75, 43.1);
 
     final BasicQueryByClass query =
         new BasicQueryByClass(
             QueryIndexHelper.composeConstraints(
+                statsCache,
                 geoType,
                 geoTimeDescriptors,
-                statsMap,
                 new GeometryFactory().toGeometry(bounds),
                 null));
 
@@ -354,30 +350,29 @@ public class QueryIndexHelperTest {
 
   @Test
   public void testGetBBOX() {
-    final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap = new HashMap<>();
-    final FeatureBoundingBoxStatistics geoStats = new FeatureBoundingBoxStatistics("geometry");
-    statsMap.put(
-        VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
-            "geometry").build().getId(),
-        geoStats);
+    final TestStatisticsCache statsCache = new TestStatisticsCache();
+    final BoundingBoxStatistic geoStats = new BoundingBoxStatistic("type", "geometry");
+    final BoundingBoxValue value = geoStats.createEmpty();
+    statsCache.putFieldStatistic(BoundingBoxStatistic.STATS_TYPE, "geometry", value);
 
     final SimpleFeature firstFeature =
         createGeoFeature(factory.createPoint(new Coordinate(22.25, 42.25)));
+    FeatureDataAdapter adapter = new FeatureDataAdapter(firstFeature.getFeatureType());
 
-    geoStats.entryIngested(firstFeature);
+    value.entryIngested(adapter, firstFeature);
 
     final SimpleFeature secondFeature =
         createGeoFeature(factory.createPoint(new Coordinate(27.25, 41.25)));
 
-    geoStats.entryIngested(secondFeature);
+    value.entryIngested(adapter, secondFeature);
 
     final Envelope bounds = new Envelope(21.23, 26.23, 41.75, 43.1);
 
     final Geometry bbox =
         QueryIndexHelper.clipIndexedBBOXConstraints(
+            statsCache,
             geoType,
-            new GeometryFactory().toGeometry(bounds),
-            statsMap);
+            new GeometryFactory().toGeometry(bounds));
 
     final Envelope env = bbox.getEnvelopeInternal();
 
@@ -398,18 +393,23 @@ public class QueryIndexHelperTest {
     // approximately 180.0, 85.0
     final SimpleFeature defaultCRSFeat = GeometryUtils.crsTransform(mercFeat, geoType, transform);
 
-    final FeatureBoundingBoxStatistics geoStats =
-        new FeatureBoundingBoxStatistics("geometry", geoType, transform);
+    final BoundingBoxStatistic bboxStat =
+        new BoundingBoxStatistic(
+            geoType.getTypeName(),
+            geoType.getGeometryDescriptor().getLocalName(),
+            geoMercType.getCoordinateReferenceSystem(),
+            geoType.getCoordinateReferenceSystem());
 
-    geoStats.entryIngested(mercFeat);
+    final BoundingBoxValue bboxValue = bboxStat.createEmpty();
+    bboxValue.entryIngested(new FeatureDataAdapter(geoType), mercFeat);
 
     final Coordinate coord = ((Point) defaultCRSFeat.getDefaultGeometry()).getCoordinate();
 
     // coordinate should match reprojected feature
-    assertEquals(coord.x, geoStats.getMinX(), 0.0001);
-    assertEquals(coord.x, geoStats.getMaxX(), 0.0001);
-    assertEquals(coord.y, geoStats.getMinY(), 0.0001);
-    assertEquals(coord.y, geoStats.getMaxY(), 0.0001);
+    assertEquals(coord.x, bboxValue.getMinX(), 0.0001);
+    assertEquals(coord.x, bboxValue.getMaxX(), 0.0001);
+    assertEquals(coord.y, bboxValue.getMinY(), 0.0001);
+    assertEquals(coord.y, bboxValue.getMaxY(), 0.0001);
   }
 
   private SimpleFeature createGeoFeature(final Geometry geo) {
@@ -443,18 +443,14 @@ public class QueryIndexHelperTest {
   @Test
   public void testComposeSubsetConstraints() throws ParseException {
 
-    final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap = new HashMap<>();
-    final FeatureTimeRangeStatistics startStats = new FeatureTimeRangeStatistics("start");
-    statsMap.put(
-        VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
-            "start").build().getId(),
-        startStats);
+    final TestStatisticsCache statsCache = new TestStatisticsCache();
+    final TimeRangeStatistic startStats = new TimeRangeStatistic("type", "start");
+    final TimeRangeValue startValue = startStats.createEmpty();
+    statsCache.putFieldStatistic(TimeRangeStatistic.STATS_TYPE, "start", startValue);
 
-    final FeatureTimeRangeStatistics endStats = new FeatureTimeRangeStatistics("end");
-    statsMap.put(
-        VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
-            "end").build().getId(),
-        endStats);
+    final TimeRangeStatistic endStats = new TimeRangeStatistic("type", "end");
+    final TimeRangeValue endValue = endStats.createEmpty();
+    statsCache.putFieldStatistic(TimeRangeStatistic.STATS_TYPE, "end", endValue);
 
     final Date statsStart1 = DateUtilities.parseISO("2005-05-18T20:32:56Z");
     final Date statsStart2 = DateUtilities.parseISO("2005-05-20T20:32:56Z");
@@ -462,16 +458,17 @@ public class QueryIndexHelperTest {
     final Date statsEnd2 = DateUtilities.parseISO("2005-05-24T20:32:56Z");
 
     final SimpleFeature firstRangFeature = createFeature(statsStart1, statsEnd1);
+    FeatureDataAdapter adapter = new FeatureDataAdapter(firstRangFeature.getFeatureType());
 
-    startStats.entryIngested(firstRangFeature);
+    startValue.entryIngested(adapter, firstRangFeature);
 
-    endStats.entryIngested(firstRangFeature);
+    endValue.entryIngested(adapter, firstRangFeature);
 
     final SimpleFeature secondRangFeature = createFeature(statsStart2, statsEnd2);
 
-    startStats.entryIngested(secondRangFeature);
+    startValue.entryIngested(adapter, secondRangFeature);
 
-    endStats.entryIngested(secondRangFeature);
+    endValue.entryIngested(adapter, secondRangFeature);
 
     final Date stime = DateUtilities.parseISO("2005-05-18T20:32:56Z");
     final Date etime = DateUtilities.parseISO("2005-05-19T20:32:56Z");
@@ -488,26 +485,24 @@ public class QueryIndexHelperTest {
         constraints.getIndexConstraints(SPATIAL_TEMPORAL_INDEX);
     assertTrue(nd.isEmpty());
 
-    final FeatureBoundingBoxStatistics geoStats = new FeatureBoundingBoxStatistics("geometry");
-    statsMap.put(
-        VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
-            "geometry").build().getId(),
-        geoStats);
+    final BoundingBoxStatistic geoStats = new BoundingBoxStatistic("type", "geometry");
+    final BoundingBoxValue geoValue = geoStats.createEmpty();
+    statsCache.putFieldStatistic(BoundingBoxStatistic.STATS_TYPE, "geometry", geoValue);
 
     final SimpleFeature firstFeature =
         createGeoFeature(factory.createPoint(new Coordinate(22.25, 42.25)));
 
-    geoStats.entryIngested(firstFeature);
+    geoValue.entryIngested(adapter, firstFeature);
 
     final SimpleFeature secondFeature =
         createGeoFeature(factory.createPoint(new Coordinate(27.25, 41.25)));
-    geoStats.entryIngested(secondFeature);
+    geoValue.entryIngested(adapter, secondFeature);
 
     final Constraints constraints1 =
         QueryIndexHelper.composeConstraints(
+            statsCache,
             rangeType,
             rangeTimeDescriptors,
-            statsMap,
             null,
             constraintsSet);
     final List<MultiDimensionalNumericData> nd1 =
@@ -540,5 +535,65 @@ public class QueryIndexHelperTest {
     instance.setAttribute("end", eTime);
     instance.setAttribute("geometry", factory.createPoint(new Coordinate(27.25, 41.25)));
     return instance;
+  }
+
+  private static class TestStatisticsCache extends StatisticsCache {
+
+    public TestStatisticsCache() {
+      super(null, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <V extends StatisticValue<R>, R> V getFieldStatistic(
+        final StatisticType<V> statisticType,
+        final String fieldName) {
+      if (statisticType == null || fieldName == null) {
+        return null;
+      }
+      ByteArray key =
+          new ByteArray(
+              Bytes.concat(
+                  statisticType.getBytes(),
+                  StatisticId.UNIQUE_ID_SEPARATOR,
+                  fieldName.getBytes()));
+      if (cache.containsKey(key)) {
+        return (V) cache.get(key);
+      }
+      cache.put(key, null);
+      return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <V extends StatisticValue<R>, R> V getAdapterStatistic(
+        final StatisticType<V> statisticType) {
+      ByteArray key = statisticType;
+      if (cache.containsKey(key)) {
+        return (V) cache.get(key);
+      }
+      cache.put(key, null);
+      return null;
+    }
+
+    public void putFieldStatistic(
+        final StatisticType<?> statisticType,
+        final String fieldName,
+        final StatisticValue<?> value) {
+      ByteArray key =
+          new ByteArray(
+              Bytes.concat(
+                  statisticType.getBytes(),
+                  StatisticId.UNIQUE_ID_SEPARATOR,
+                  fieldName.getBytes()));
+      cache.put(key, value);
+    }
+
+    public void putAdapterStatistic(
+        final StatisticType<?> statisticType,
+        final StatisticValue<?> value) {
+      cache.put(statisticType, value);
+    }
+
   }
 }

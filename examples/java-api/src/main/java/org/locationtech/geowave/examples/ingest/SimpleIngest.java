@@ -11,6 +11,7 @@ package org.locationtech.geowave.examples.ingest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -33,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 public class SimpleIngest {
   public static final String FEATURE_NAME = "GridPoint";
+  public static final String GEOMETRY_FIELD = "geometry";
   private static Logger log = LoggerFactory.getLogger(SimpleIngest.class);
 
   public static void main(final String[] args) {
@@ -85,16 +87,23 @@ public class SimpleIngest {
     // overwrite the existing feature)
     int featureId = firstFeatureId;
     final List<SimpleFeature> feats = new ArrayList<>();
+    // January 1 00:00:00, 2021
+    final long epochTime = 1609459200000L;
     for (int longitude = -180; longitude <= 180; longitude += 5) {
       for (int latitude = -90; latitude <= 90; latitude += 5) {
         pointBuilder.set(
-            "geometry",
+            GEOMETRY_FIELD,
             GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(longitude, latitude)));
-        pointBuilder.set("TimeStamp", new Date());
+        pointBuilder.set(
+            "TimeStamp",
+            new Date(
+                epochTime
+                    + TimeUnit.DAYS.toMillis(longitude + 180)
+                    + TimeUnit.MINUTES.toMillis(latitude + 90)));
         pointBuilder.set("Latitude", latitude);
         pointBuilder.set("Longitude", longitude);
         // Note since trajectoryID and comment are marked as nillable we
-        // don't need to set them (they default ot null).
+        // don't need to set them (they default to null).
 
         final SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
         feats.add(sft);
@@ -104,6 +113,21 @@ public class SimpleIngest {
     return feats;
   }
 
+  public static SimpleFeature createRandomFeature(
+      final SimpleFeatureBuilder pointBuilder,
+      final int featureId) {
+    final double latitude = (Math.random() * 340) - 170;
+    final double longitude = (Math.random() * 160) - 80;
+    pointBuilder.set(
+        GEOMETRY_FIELD,
+        GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(latitude, longitude)));
+    pointBuilder.set("TimeStamp", new Date());
+    pointBuilder.set("Latitude", latitude);
+    pointBuilder.set("Longitude", longitude);
+
+    return pointBuilder.buildFeature(String.valueOf(featureId));
+  }
+
   /**
    * * The dataadapter interface describes how to serialize a data type. Here we are using an
    * implementation that understands how to serialize OGC SimpleFeature types.
@@ -111,7 +135,8 @@ public class SimpleIngest {
    * @param sft simple feature type you want to generate an adapter from
    * @return data adapter that handles serialization of the sft simple feature type
    */
-  public static GeotoolsFeatureDataAdapter createDataAdapter(final SimpleFeatureType sft) {
+  public static GeotoolsFeatureDataAdapter<SimpleFeature> createDataAdapter(
+      final SimpleFeatureType sft) {
     return new FeatureDataAdapter(sft);
   }
 
@@ -175,7 +200,7 @@ public class SimpleIngest {
     // as the geometry contains that information. But it's
     // convienent in many use cases to get a text representation without
     // having to handle geometries.
-    builder.add(ab.binding(Geometry.class).nillable(false).buildDescriptor("geometry"));
+    builder.add(ab.binding(Geometry.class).nillable(false).buildDescriptor(GEOMETRY_FIELD));
     builder.add(ab.binding(Date.class).nillable(true).buildDescriptor("TimeStamp"));
     builder.add(ab.binding(Double.class).nillable(false).buildDescriptor("Latitude"));
     builder.add(ab.binding(Double.class).nillable(false).buildDescriptor("Longitude"));
