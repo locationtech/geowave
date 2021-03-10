@@ -110,12 +110,14 @@ public class NumericRangeFieldValueBinningStrategy extends FieldValueBinningStra
     final long bin = (long) Math.floor(((value.doubleValue() + offset) / interval));
     return getBinId(bin);
   }
+
   private ByteArray getBinId(final long bin) {
     final ByteBuffer buffer = ByteBuffer.allocate(1 + Long.BYTES);
     buffer.put((byte) 0x1);
     buffer.putLong(Lexicoders.LONG.lexicode(bin));
     return new ByteArray(buffer.array());
   }
+
   private ByteArray[] getNumericBins(final Range<? extends Number> value) {
     final long minBin = (long) Math.floor(((value.getMinimum().doubleValue() + offset) / interval));
     final long maxBin = (long) Math.floor(((value.getMaximum().doubleValue() + offset) / interval));

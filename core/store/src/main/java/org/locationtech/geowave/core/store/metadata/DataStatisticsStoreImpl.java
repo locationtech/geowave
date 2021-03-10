@@ -51,7 +51,9 @@ public class DataStatisticsStoreImpl extends
   public static final int STATS_COMBINER_PRIORITY = 10;
   public static final String STATISTICS_COMBINER_NAME = "STATS_COMBINER";
 
-  public DataStatisticsStoreImpl(final DataStoreOperations operations, final DataStoreOptions options) {
+  public DataStatisticsStoreImpl(
+      final DataStoreOperations operations,
+      final DataStoreOptions options) {
     super(operations, options, MetadataType.STATISTICS);
   }
 
@@ -213,7 +215,8 @@ public class DataStatisticsStoreImpl extends
       final @Nullable String tag) {
     if (statisticType != null) {
       if (fieldName != null) {
-        final ByteArray primaryId = FieldStatisticId.generateUniqueId(statisticType, fieldName, tag);
+        final ByteArray primaryId =
+            FieldStatisticId.generateUniqueId(statisticType, fieldName, tag);
         if (tag != null) {
           return getCachedObject(primaryId, secondaryId);
         } else {
@@ -277,12 +280,10 @@ public class DataStatisticsStoreImpl extends
 
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public CloseableIterator<? extends Statistic<? extends StatisticValue<?>>> getAllStatistics(
       final @Nullable StatisticType<? extends StatisticValue<?>> statisticType) {
-    return getAllStatisticsInternal(
-        statisticType);
+    return getAllStatisticsInternal(statisticType);
   }
 
   @SuppressWarnings("unchecked")
@@ -300,7 +301,9 @@ public class DataStatisticsStoreImpl extends
 
 
   @Override
-  public <V extends StatisticValue<R>, R> void setStatisticValue(final Statistic<V> statistic, final V value) {
+  public <V extends StatisticValue<R>, R> void setStatisticValue(
+      final Statistic<V> statistic,
+      final V value) {
     if (statistic.getBinningStrategy() != null) {
       throw new UnsupportedOperationException(
           "The given statistic uses a binning strategy, but no bin was specified.");
