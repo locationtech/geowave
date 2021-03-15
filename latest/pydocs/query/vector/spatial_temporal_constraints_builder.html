@@ -30,7 +30,7 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 
 from pygw.base import GeoWaveObject
 from pygw.base.type_conversions import GeometryType
@@ -38,6 +38,7 @@ from pygw.base.type_conversions import DateType
 from pygw.config import geowave_pkg
 
 from ..query_constraints import QueryConstraints
+
 
 class SpatialTemporalConstraintsBuilder(GeoWaveObject):
     &#34;&#34;&#34;
@@ -92,7 +93,8 @@ class SpatialTemporalConstraintsBuilder(GeoWaveObject):
         Returns:
             This spatial temporal constraints builder.
         &#34;&#34;&#34;
-        j_compare_op = geowave_pkg.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation.valueOf(spatial_compare_op.upper())
+        j_compare_op = geowave_pkg.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation.valueOf(
+            spatial_compare_op.upper())
         self._java_ref.spatialConstraintsCompareOperation(j_compare_op)
         return self
 
@@ -103,7 +105,7 @@ class SpatialTemporalConstraintsBuilder(GeoWaveObject):
         Returns:
             This spatial temporal constraints builder.
         &#34;&#34;&#34;
-        self.java_ref.noTemporalConstraints()
+        self._java_ref.noTemporalConstraints()
         return self
 
     def add_time_range(self, start_time, end_time):
@@ -202,7 +204,8 @@ the vector query constraints factory.</p></section>
         Returns:
             This spatial temporal constraints builder.
         &#34;&#34;&#34;
-        j_compare_op = geowave_pkg.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation.valueOf(spatial_compare_op.upper())
+        j_compare_op = geowave_pkg.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation.valueOf(
+            spatial_compare_op.upper())
         self._java_ref.spatialConstraintsCompareOperation(j_compare_op)
         return self
 
@@ -213,7 +216,7 @@ the vector query constraints factory.</p></section>
         Returns:
             This spatial temporal constraints builder.
         &#34;&#34;&#34;
-        self.java_ref.noTemporalConstraints()
+        self._java_ref.noTemporalConstraints()
         return self
 
     def add_time_range(self, start_time, end_time):
@@ -333,7 +336,7 @@ This is the default.</p>
     Returns:
         This spatial temporal constraints builder.
     &#34;&#34;&#34;
-    self.java_ref.noTemporalConstraints()
+    self._java_ref.noTemporalConstraints()
     return self</code></pre>
 </details>
 </dd>
@@ -394,7 +397,8 @@ Default is <code>intersects</code>. Possible values are <code>contains</code>,
     Returns:
         This spatial temporal constraints builder.
     &#34;&#34;&#34;
-    j_compare_op = geowave_pkg.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation.valueOf(spatial_compare_op.upper())
+    j_compare_op = geowave_pkg.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation.valueOf(
+        spatial_compare_op.upper())
     self._java_ref.spatialConstraintsCompareOperation(j_compare_op)
     return self</code></pre>
 </details>

@@ -30,18 +30,20 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 
 from pygw.base.type_conversions import *
 from pygw.geotools import SimpleFeatureTypeBuilder
 from pygw.geotools import SimpleFeatureBuilder
 from pygw.geotools import AttributeDescriptor
 
-def check_attribute(sft, attr_name, nilable, type):
+
+def check_attribute(sft, attr_name, nilable, attr_type):
     attr = sft.get_attribute(attr_name)
     assert attr.descriptor == attr_name
     assert attr.is_nilable == nilable
-    assert isinstance(attr.field, type)
+    assert isinstance(attr.field, attr_type)
+
 
 def test_simple_feature_type():
     sftb = SimpleFeatureTypeBuilder()
@@ -153,6 +155,7 @@ def test_simple_feature_type():
     # Get non-existent attribute
     assert sft.get_attribute(&#34;nonexistent&#34;) is None
 
+
 def test_simple_feature():
     sftb = SimpleFeatureTypeBuilder()
     sftb.set_name(&#34;TestPointType&#34;)
@@ -201,17 +204,17 @@ def test_simple_feature():
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="pygw.test.geotools_test.check_attribute"><code class="name flex">
-<span>def <span class="ident">check_attribute</span></span>(<span>sft, attr_name, nilable, type)</span>
+<span>def <span class="ident">check_attribute</span></span>(<span>sft, attr_name, nilable, attr_type)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def check_attribute(sft, attr_name, nilable, type):
+<pre><code class="python">def check_attribute(sft, attr_name, nilable, attr_type):
     attr = sft.get_attribute(attr_name)
     assert attr.descriptor == attr_name
     assert attr.is_nilable == nilable
-    assert isinstance(attr.field, type)</code></pre>
+    assert isinstance(attr.field, attr_type)</code></pre>
 </details>
 </dd>
 <dt id="pygw.test.geotools_test.test_simple_feature"><code class="name flex">

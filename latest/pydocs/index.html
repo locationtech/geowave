@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.6.3" />
 <title>pygw API documentation</title>
-<meta name="description" content="This project aims to provide Python classes that allow users to interact with a GeoWave data store using the same workflows that are available in the …" />
+<meta name="description" content="This project aims to provide Python classes that allow users to interact with a GeoWave data store using the same
+workflows that are available in the …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -20,7 +21,8 @@
 <h1 class="title">Module <code>pygw</code></h1>
 </header>
 <section id="section-intro">
-<p>This project aims to provide Python classes that allow users to interact with a GeoWave data store using the same workflows that are available in the programmatic Java API.</p>
+<p>This project aims to provide Python classes that allow users to interact with a GeoWave data store using the same
+workflows that are available in the programmatic Java API.</p>
 <h2 id="environment">Environment</h2>
 <ul>
 <li>Python &gt;=3,&lt;=3.7</li>
@@ -34,7 +36,8 @@
 </ul>
 <h2 id="usage">Usage</h2>
 <p>In order to use <a title="pygw" href="#pygw"><code>pygw</code></a>, you must have an instance of GeoWave Py4J Java Gateway Server running.
-The gateway can be started by using the GeoWave command <code>geowave python rungateway</code>.</p>
+The gateway can be
+started by using the GeoWave command <code>geowave util python rungateway</code>.</p>
 <p>You can then import <a title="pygw" href="#pygw"><code>pygw</code></a> classes into your Python environment.</p>
 <h2 id="example">Example</h2>
 <p>The following is an example of how <a title="pygw" href="#pygw"><code>pygw</code></a> might be used to write and query some feature data:</p>
@@ -50,6 +53,7 @@ from pygw.geotools import AttributeDescriptor
 from pygw.geotools import FeatureDataAdapter
 from pygw.index import SpatialIndexBuilder
 from pygw.query import VectorQueryBuilder
+from pygw.query import VectorAggregationQueryBuilder
 
 # Create a RocksDB data store
 options = RocksDBOptions()
@@ -103,6 +107,14 @@ for feature in results:
     print(feature.get_id())
     print(feature.get_default_geometry())
 results.close()
+
+# Perform a count aggregation on the data (with a CQL constraint)
+aggregation_query_builder = VectorAggregationQueryBuilder()
+constraints = aggregation_query_builder.constraints_factory().cql_constraints(&quot;BBOX(the_geom, 0.5, 0.5, 5.5, 5.5)&quot;)
+aggregation_query_builder.constraints(constraints)
+aggregation_query_builder.count(point_type_adapter.get_type_name())
+count = datastore.aggregate(aggregation_query_builder.build())
+print(count)
 </code></pre>
 <details class="source">
 <summary>Source code</summary>
@@ -114,9 +126,10 @@ results.close()
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 &#34;&#34;&#34;
-This project aims to provide Python classes that allow users to interact with a GeoWave data store using the same workflows that are available in the programmatic Java API.
+This project aims to provide Python classes that allow users to interact with a GeoWave data store using the same
+workflows that are available in the programmatic Java API.
 
 ## Environment
 - Python &gt;=3,&lt;=3.7
@@ -128,7 +141,8 @@ This project aims to provide Python classes that allow users to interact with a 
 - Install requirements: `pip install -r requirements.txt`
 
 ## Usage
-In order to use `pygw`, you must have an instance of GeoWave Py4J Java Gateway Server running.  The gateway can be started by using the GeoWave command `geowave python rungateway`.
+In order to use `pygw`, you must have an instance of GeoWave Py4J Java Gateway Server running.  The gateway can be
+started by using the GeoWave command `geowave util python rungateway`.
 
 You can then import `pygw` classes into your Python environment.
 
@@ -147,6 +161,7 @@ from pygw.geotools import AttributeDescriptor
 from pygw.geotools import FeatureDataAdapter
 from pygw.index import SpatialIndexBuilder
 from pygw.query import VectorQueryBuilder
+from pygw.query import VectorAggregationQueryBuilder
 
 # Create a RocksDB data store
 options = RocksDBOptions()
@@ -200,6 +215,14 @@ for feature in results:
     print(feature.get_id())
     print(feature.get_default_geometry())
 results.close()
+
+# Perform a count aggregation on the data (with a CQL constraint)
+aggregation_query_builder = VectorAggregationQueryBuilder()
+constraints = aggregation_query_builder.constraints_factory().cql_constraints(&#34;BBOX(the_geom, 0.5, 0.5, 5.5, 5.5)&#34;)
+aggregation_query_builder.constraints(constraints)
+aggregation_query_builder.count(point_type_adapter.get_type_name())
+count = datastore.aggregate(aggregation_query_builder.build())
+print(count)
 ```
 &#34;&#34;&#34;
 from pkg_resources import get_distribution
@@ -209,7 +232,8 @@ try:
     version = get_distribution(&#39;pygw&#39;).version
 except DistributionNotFound:
     from maven_version import get_maven_version
-    version = get_maven_version();
+
+    version = get_maven_version()
 
 __version__ = version</code></pre>
 </details>
@@ -220,20 +244,31 @@ __version__ = version</code></pre>
 <dt><code class="name"><a title="pygw.base" href="base/index.html">pygw.base</a></code></dt>
 <dd>
 <section class="desc"><p>This module includes common classes that are used by other modules.
-This includes the base <code>GeoWaveObject</code> class that serves as a python wrapper for …</p></section>
+This includes the base <code>GeoWaveObject</code> class that
+serves as a python wrapper for …</p></section>
 </dd>
 <dt><code class="name"><a title="pygw.config" href="config.html">pygw.config</a></code></dt>
 <dd>
-<section class="desc"><p>The <a title="pygw.config" href="config.html"><code>pygw.config</code></a> module includes a singleton object of type GeoWaveConfiguration called <code>gw_config</code> that handles all communication between python and the …</p></section>
+<section class="desc"><p>The <a title="pygw.config" href="config.html"><code>pygw.config</code></a> module includes several shortcut objects to make accessing the Py4J Java gateway more convenient.
+These
+include:
+- <em><code>java_gateway</code></em> Py4J …</p></section>
 </dd>
 <dt><code class="name"><a title="pygw.debug" href="debug.html">pygw.debug</a></code></dt>
 <dd>
-<section class="desc"><p>This module exposes a function called <code>print_obj</code> that can be used to help with debugging raw java objects. It will print information about the object …</p></section>
+<section class="desc"><p>This module exposes a function called <code>print_obj</code> that can be used to help with debugging raw java objects. It will
+print information about the object …</p></section>
+</dd>
+<dt><code class="name"><a title="pygw.gateway" href="gateway.html">pygw.gateway</a></code></dt>
+<dd>
+<section class="desc"><p>The <a title="pygw.gateway" href="gateway.html"><code>pygw.gateway</code></a> module includes a singleton object of type GatewayConfiguration called <code>gateway_config</code> that handles all
+communication between python …</p></section>
 </dd>
 <dt><code class="name"><a title="pygw.geotools" href="geotools/index.html">pygw.geotools</a></code></dt>
 <dd>
 <section class="desc"><p>This module contains classes that wrap the functionality of geotools SimpleFeatures and SimpleFeatureTypes.
-These classes can be used to create …</p></section>
+These
+classes can be used to create …</p></section>
 </dd>
 <dt><code class="name"><a title="pygw.index" href="index/index.html">pygw.index</a></code></dt>
 <dd>
@@ -246,7 +281,8 @@ These classes can be used to create …</p></section>
 <dt><code class="name"><a title="pygw.store" href="store/index.html">pygw.store</a></code></dt>
 <dd>
 <section class="desc"><p>This module contains classes that can be used to establish connections to the various GeoWave backends.
-Each store type has a submodule which …</p></section>
+Each store type
+has a submodule which …</p></section>
 </dd>
 <dt><code class="name"><a title="pygw.test" href="test/index.html">pygw.test</a></code></dt>
 <dd>
@@ -279,6 +315,7 @@ Each store type has a submodule which …</p></section>
 <li><code><a title="pygw.base" href="base/index.html">pygw.base</a></code></li>
 <li><code><a title="pygw.config" href="config.html">pygw.config</a></code></li>
 <li><code><a title="pygw.debug" href="debug.html">pygw.debug</a></code></li>
+<li><code><a title="pygw.gateway" href="gateway.html">pygw.gateway</a></code></li>
 <li><code><a title="pygw.geotools" href="geotools/index.html">pygw.geotools</a></code></li>
 <li><code><a title="pygw.index" href="index/index.html">pygw.index</a></code></li>
 <li><code><a title="pygw.query" href="query/index.html">pygw.query</a></code></li>

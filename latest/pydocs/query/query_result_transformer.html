@@ -30,9 +30,9 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 
-class QueryResultTransformer():
+class QueryResultTransformer:
     &#34;&#34;&#34;
     Base class for transforming GeoWave query results from Java objects to
     their Python counterparts.  All extending classes should overwrite the `transform`
@@ -73,7 +73,7 @@ All extending classes should overwrite the <code>transform</code>
 method to perform the transformation.</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class QueryResultTransformer():
+<pre><code class="python">class QueryResultTransformer:
     &#34;&#34;&#34;
     Base class for transforming GeoWave query results from Java objects to
     their Python counterparts.  All extending classes should overwrite the `transform`
@@ -95,7 +95,9 @@ method to perform the transformation.</p></section>
 </details>
 <h3>Subclasses</h3>
 <ul class="hlist">
-<li><a title="pygw.query.vector.simple_feature_transformer.SimpleFeatureTransformer" href="vector/simple_feature_transformer.html#pygw.query.vector.simple_feature_transformer.SimpleFeatureTransformer">SimpleFeatureTransformer</a></li>
+<li><a title="pygw.query.vector.result_transformers.EnvelopeTransformer" href="vector/result_transformers.html#pygw.query.vector.result_transformers.EnvelopeTransformer">EnvelopeTransformer</a></li>
+<li><a title="pygw.query.vector.result_transformers.IntervalTransformer" href="vector/result_transformers.html#pygw.query.vector.result_transformers.IntervalTransformer">IntervalTransformer</a></li>
+<li><a title="pygw.query.vector.result_transformers.SimpleFeatureTransformer" href="vector/result_transformers.html#pygw.query.vector.result_transformers.SimpleFeatureTransformer">SimpleFeatureTransformer</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>

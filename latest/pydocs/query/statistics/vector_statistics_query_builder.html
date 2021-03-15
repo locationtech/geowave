@@ -30,11 +30,12 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 
 from pygw.config import geowave_pkg
 
 from ..query_builder import QueryBuilder
+
 
 class VectorStatisticsQueryBuilder(QueryBuilder):
     &#34;&#34;&#34;
@@ -43,7 +44,7 @@ class VectorStatisticsQueryBuilder(QueryBuilder):
 
     def __init__(self):
         j_stats_qbuilder = geowave_pkg.core.geotime.store.query.api.VectorStatisticsQueryBuilder.newBuilder()
-        super().__init__(j_stats_qbuilder)
+        super().__init__(j_stats_qbuilder, None)
 
     def bbox(self):
         # TODO: support FeatureBoundingBoxStatistics builder
@@ -77,7 +78,7 @@ class VectorStatisticsQueryBuilder(QueryBuilder):
 
     def __init__(self):
         j_stats_qbuilder = geowave_pkg.core.geotime.store.query.api.VectorStatisticsQueryBuilder.newBuilder()
-        super().__init__(j_stats_qbuilder)
+        super().__init__(j_stats_qbuilder, None)
 
     def bbox(self):
         # TODO: support FeatureBoundingBoxStatistics builder
@@ -90,6 +91,7 @@ class VectorStatisticsQueryBuilder(QueryBuilder):
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="pygw.query.query_builder.QueryBuilder" href="../query_builder.html#pygw.query.query_builder.QueryBuilder">QueryBuilder</a></li>
+<li><a title="pygw.query.base_query_builder.BaseQueryBuilder" href="../base_query_builder.html#pygw.query.base_query_builder.BaseQueryBuilder">BaseQueryBuilder</a></li>
 <li><a title="pygw.base.geowave_object.GeoWaveObject" href="../../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject">GeoWaveObject</a></li>
 </ul>
 <h3>Methods</h3>
@@ -123,22 +125,22 @@ class VectorStatisticsQueryBuilder(QueryBuilder):
 <ul class="hlist">
 <li><code><b><a title="pygw.query.query_builder.QueryBuilder" href="../query_builder.html#pygw.query.query_builder.QueryBuilder">QueryBuilder</a></b></code>:
 <ul class="hlist">
-<li><code><a title="pygw.query.query_builder.QueryBuilder.add_authorization" href="../query_builder.html#pygw.query.query_builder.QueryBuilder.add_authorization">add_authorization</a></code></li>
-<li><code><a title="pygw.query.query_builder.QueryBuilder.add_hint" href="../query_builder.html#pygw.query.query_builder.QueryBuilder.add_hint">add_hint</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.add_authorization" href="../base_query_builder.html#pygw.query.base_query_builder.BaseQueryBuilder.add_authorization">add_authorization</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.add_hint" href="../base_query_builder.html#pygw.query.base_query_builder.BaseQueryBuilder.add_hint">add_hint</a></code></li>
 <li><code><a title="pygw.query.query_builder.QueryBuilder.add_type_name" href="../query_builder.html#pygw.query.query_builder.QueryBuilder.add_type_name">add_type_name</a></code></li>
 <li><code><a title="pygw.query.query_builder.QueryBuilder.all_fields" href="../query_builder.html#pygw.query.query_builder.QueryBuilder.all_fields">all_fields</a></code></li>
-<li><code><a title="pygw.query.query_builder.QueryBuilder.all_indices" href="../query_builder.html#pygw.query.query_builder.QueryBuilder.all_indices">all_indices</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.all_indices" href="../base_query_builder.html#pygw.query.base_query_builder.BaseQueryBuilder.all_indices">all_indices</a></code></li>
 <li><code><a title="pygw.query.query_builder.QueryBuilder.all_types" href="../query_builder.html#pygw.query.query_builder.QueryBuilder.all_types">all_types</a></code></li>
 <li><code><a title="pygw.query.query_builder.QueryBuilder.build" href="../query_builder.html#pygw.query.query_builder.QueryBuilder.build">build</a></code></li>
-<li><code><a title="pygw.query.query_builder.QueryBuilder.constraints" href="../query_builder.html#pygw.query.query_builder.QueryBuilder.constraints">constraints</a></code></li>
-<li><code><a title="pygw.query.query_builder.QueryBuilder.constraints_factory" href="../query_builder.html#pygw.query.query_builder.QueryBuilder.constraints_factory">constraints_factory</a></code></li>
-<li><code><a title="pygw.query.query_builder.QueryBuilder.index_name" href="../query_builder.html#pygw.query.query_builder.QueryBuilder.index_name">index_name</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.constraints" href="../base_query_builder.html#pygw.query.base_query_builder.BaseQueryBuilder.constraints">constraints</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.constraints_factory" href="../base_query_builder.html#pygw.query.base_query_builder.BaseQueryBuilder.constraints_factory">constraints_factory</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.index_name" href="../base_query_builder.html#pygw.query.base_query_builder.BaseQueryBuilder.index_name">index_name</a></code></li>
 <li><code><a title="pygw.query.query_builder.QueryBuilder.is_instance_of" href="../../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject.is_instance_of">is_instance_of</a></code></li>
-<li><code><a title="pygw.query.query_builder.QueryBuilder.limit" href="../query_builder.html#pygw.query.query_builder.QueryBuilder.limit">limit</a></code></li>
-<li><code><a title="pygw.query.query_builder.QueryBuilder.no_authorizations" href="../query_builder.html#pygw.query.query_builder.QueryBuilder.no_authorizations">no_authorizations</a></code></li>
-<li><code><a title="pygw.query.query_builder.QueryBuilder.no_hints" href="../query_builder.html#pygw.query.query_builder.QueryBuilder.no_hints">no_hints</a></code></li>
-<li><code><a title="pygw.query.query_builder.QueryBuilder.no_limit" href="../query_builder.html#pygw.query.query_builder.QueryBuilder.no_limit">no_limit</a></code></li>
-<li><code><a title="pygw.query.query_builder.QueryBuilder.set_authorizations" href="../query_builder.html#pygw.query.query_builder.QueryBuilder.set_authorizations">set_authorizations</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.limit" href="../base_query_builder.html#pygw.query.base_query_builder.BaseQueryBuilder.limit">limit</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.no_authorizations" href="../base_query_builder.html#pygw.query.base_query_builder.BaseQueryBuilder.no_authorizations">no_authorizations</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.no_hints" href="../base_query_builder.html#pygw.query.base_query_builder.BaseQueryBuilder.no_hints">no_hints</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.no_limit" href="../base_query_builder.html#pygw.query.base_query_builder.BaseQueryBuilder.no_limit">no_limit</a></code></li>
+<li><code><a title="pygw.query.query_builder.QueryBuilder.set_authorizations" href="../base_query_builder.html#pygw.query.base_query_builder.BaseQueryBuilder.set_authorizations">set_authorizations</a></code></li>
 <li><code><a title="pygw.query.query_builder.QueryBuilder.set_type_names" href="../query_builder.html#pygw.query.query_builder.QueryBuilder.set_type_names">set_type_names</a></code></li>
 <li><code><a title="pygw.query.query_builder.QueryBuilder.subset_fields" href="../query_builder.html#pygw.query.query_builder.QueryBuilder.subset_fields">subset_fields</a></code></li>
 </ul>

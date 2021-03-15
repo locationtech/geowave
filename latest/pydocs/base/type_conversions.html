@@ -30,10 +30,10 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 
 from decimal import Decimal
-from datetime import date
+from datetime import date, timezone
 from datetime import datetime
 
 from py4j.java_gateway import JavaClass
@@ -54,14 +54,15 @@ from pygw.config import java_gateway
 _wkb_reader = java_pkg.org.locationtech.jts.io.WKBReader()
 _wkb_writer = java_pkg.org.locationtech.jts.io.WKBWriter()
 
+
 def _type_to_string(py_type):
-    if (isinstance(py_type, tuple)):
+    if isinstance(py_type, tuple):
         return &#34;, &#34;.join(t.__name__ for t in py_type)
     else:
         return py_type.__name__
 
 
-class AttributeType():
+class AttributeType:
     &#34;&#34;&#34;
     Base class for attributes that can be converted to and from Java variants.
     &#34;&#34;&#34;
@@ -115,7 +116,7 @@ class ArrayAttributeType(AttributeType):
     Base class for attributes that represent an array of values.
     &#34;&#34;&#34;
 
-    def __init__(self, subtype, py_type=list):
+    def __init__(self, subtype, py_type=(list, tuple)):
         self.subtype = subtype
         self._j_class = JavaClass(self.subtype.binding, java_gateway._gateway_client)
         super().__init__(&#34;[L%s;&#34; % self.subtype.binding, py_type)
@@ -466,10 +467,10 @@ class DateType(AttributeType):
         super().__init__(&#34;java.util.Date&#34;, date)
 
     def _to_java(self, value):
-        return java_pkg.java.util.Date(int(value.timestamp() * 1000))
+        return java_pkg.java.util.Date(int(value.replace(tzinfo=timezone.utc).timestamp() * 1000))
 
     def _from_java(self, value):
-        return datetime.fromtimestamp(value.getTime() / 1000)
+        return datetime.utcfromtimestamp(value.getTime() / 1000)
 
 
 class DateArrayType(ArrayAttributeType):
@@ -681,7 +682,7 @@ class GeometryArrayType(ArrayAttributeType):
 <dl>
 <dt id="pygw.base.type_conversions.ArrayAttributeType"><code class="flex name class">
 <span>class <span class="ident">ArrayAttributeType</span></span>
-<span>(</span><span>subtype, py_type=<class 'list'>)</span>
+<span>(</span><span>subtype, py_type=(<class 'list'>, <class 'tuple'>))</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Base class for attributes that represent an array of values.</p></section>
@@ -692,7 +693,7 @@ class GeometryArrayType(ArrayAttributeType):
     Base class for attributes that represent an array of values.
     &#34;&#34;&#34;
 
-    def __init__(self, subtype, py_type=list):
+    def __init__(self, subtype, py_type=(list, tuple)):
         self.subtype = subtype
         self._j_class = JavaClass(self.subtype.binding, java_gateway._gateway_client)
         super().__init__(&#34;[L%s;&#34; % self.subtype.binding, py_type)
@@ -756,7 +757,7 @@ class GeometryArrayType(ArrayAttributeType):
 <section class="desc"><p>Base class for attributes that can be converted to and from Java variants.</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class AttributeType():
+<pre><code class="python">class AttributeType:
     &#34;&#34;&#34;
     Base class for attributes that can be converted to and from Java variants.
     &#34;&#34;&#34;
@@ -1300,10 +1301,10 @@ class GeometryArrayType(ArrayAttributeType):
         super().__init__(&#34;java.util.Date&#34;, date)
 
     def _to_java(self, value):
-        return java_pkg.java.util.Date(int(value.timestamp() * 1000))
+        return java_pkg.java.util.Date(int(value.replace(tzinfo=timezone.utc).timestamp() * 1000))
 
     def _from_java(self, value):
-        return datetime.fromtimestamp(value.getTime() / 1000)</code></pre>
+        return datetime.utcfromtimestamp(value.getTime() / 1000)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">

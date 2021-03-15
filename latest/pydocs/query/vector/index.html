@@ -27,6 +27,7 @@ from pygw.query.vector import VectorQueryConstraintsFactory
 from pygw.query.vector import FilterFactory
 from pygw.query.vector import SimpleFeatureTransformer
 from pygw.query.vector import VectorQueryBuilder
+from pygw.query.vector import VectorAggregationQueryBuilder
 </code></pre>
 <details class="source">
 <summary>Source code</summary>
@@ -38,7 +39,7 @@ from pygw.query.vector import VectorQueryBuilder
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 &#34;&#34;&#34;
 This module contains the classes needed for querying vector data.
 
@@ -49,14 +50,16 @@ from pygw.query.vector import VectorQueryConstraintsFactory
 from pygw.query.vector import FilterFactory
 from pygw.query.vector import SimpleFeatureTransformer
 from pygw.query.vector import VectorQueryBuilder
+from pygw.query.vector import VectorAggregationQueryBuilder
 ```
 &#34;&#34;&#34;
 
 from .spatial_temporal_constraints_builder import SpatialTemporalConstraintsBuilder
 from .vector_query_constraints_factory import VectorQueryConstraintsFactory
 from .filter_factory import FilterFactory
-from .simple_feature_transformer import SimpleFeatureTransformer
-from .vector_query_builder import VectorQueryBuilder</code></pre>
+from .result_transformers import SimpleFeatureTransformer
+from .vector_query_builder import VectorQueryBuilder
+from .vector_aggregation_query_builder import VectorAggregationQueryBuilder</code></pre>
 </details>
 </section>
 <section>
@@ -66,11 +69,15 @@ from .vector_query_builder import VectorQueryBuilder</code></pre>
 <dd>
 <section class="desc"></section>
 </dd>
-<dt><code class="name"><a title="pygw.query.vector.simple_feature_transformer" href="simple_feature_transformer.html">pygw.query.vector.simple_feature_transformer</a></code></dt>
+<dt><code class="name"><a title="pygw.query.vector.result_transformers" href="result_transformers.html">pygw.query.vector.result_transformers</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
 <dt><code class="name"><a title="pygw.query.vector.spatial_temporal_constraints_builder" href="spatial_temporal_constraints_builder.html">pygw.query.vector.spatial_temporal_constraints_builder</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="pygw.query.vector.vector_aggregation_query_builder" href="vector_aggregation_query_builder.html">pygw.query.vector.vector_aggregation_query_builder</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
@@ -105,8 +112,9 @@ from .vector_query_builder import VectorQueryBuilder</code></pre>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
 <li><code><a title="pygw.query.vector.filter_factory" href="filter_factory.html">pygw.query.vector.filter_factory</a></code></li>
-<li><code><a title="pygw.query.vector.simple_feature_transformer" href="simple_feature_transformer.html">pygw.query.vector.simple_feature_transformer</a></code></li>
+<li><code><a title="pygw.query.vector.result_transformers" href="result_transformers.html">pygw.query.vector.result_transformers</a></code></li>
 <li><code><a title="pygw.query.vector.spatial_temporal_constraints_builder" href="spatial_temporal_constraints_builder.html">pygw.query.vector.spatial_temporal_constraints_builder</a></code></li>
+<li><code><a title="pygw.query.vector.vector_aggregation_query_builder" href="vector_aggregation_query_builder.html">pygw.query.vector.vector_aggregation_query_builder</a></code></li>
 <li><code><a title="pygw.query.vector.vector_query_builder" href="vector_query_builder.html">pygw.query.vector.vector_query_builder</a></code></li>
 <li><code><a title="pygw.query.vector.vector_query_constraints_factory" href="vector_query_constraints_factory.html">pygw.query.vector.vector_query_constraints_factory</a></code></li>
 </ul>

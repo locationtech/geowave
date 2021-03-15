@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.6.3" />
 <title>pygw.config API documentation</title>
-<meta name="description" content="The `config` module includes a singleton object of type GeoWaveConfiguration called `gw_config` that handles all communication between python and the …" />
+<meta name="description" content="The `config` module includes several shortcut objects to make accessing the Py4J Java gateway more convenient.
+These
+include:
+- *`java_gateway`* Py4J …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -20,21 +23,21 @@
 <h1 class="title">Module <code>pygw.config</code></h1>
 </header>
 <section id="section-intro">
-<p>The <code>config</code> module includes a singleton object of type GeoWaveConfiguration called <code>gw_config</code> that handles all communication between python and the Py4J Java Gateway.
-The module includes several shortcut objects to make accessing the gateway more convenient.
-These include:
+<p>The <code>config</code> module includes several shortcut objects to make accessing the Py4J Java gateway more convenient.
+These
+include:
 - <em><a title="pygw.config.java_gateway" href="#pygw.config.java_gateway"><code>java_gateway</code></a></em> Py4J Gateway Object
 - <em><a title="pygw.config.java_pkg" href="#pygw.config.java_pkg"><code>java_pkg</code></a></em>: Shortcut for <code>java_gateway.jvm</code>.
-Can be used to construct JVM objects like <code>java_pkg.org.geotools.feature.simple.SimpleFeatureTypeBuilder()</code>
+Can be used to construct JVM objects like
+<code>java_pkg.org.geotools.feature.simple.SimpleFeatureTypeBuilder()</code>
 - <em><a title="pygw.config.geowave_pkg" href="#pygw.config.geowave_pkg"><code>geowave_pkg</code></a></em>: Similar to <a title="pygw.config.java_pkg" href="#pygw.config.java_pkg"><code>java_pkg</code></a>, serves as a shortcut for <code>java_gateway.jvm.org.locationtech.geowave</code>.
 - <em><a title="pygw.config.reflection_util" href="#pygw.config.reflection_util"><code>reflection_util</code></a></em>: Direct access to the Py4J reflection utility.</p>
 <p>These objects can be imported directly using <code>from pygw.config import &lt;object_name&gt;</code>.</p>
-<p>By default, the configuration will attempt to connect to a Py4J Java Gateway running on the local machine.
-To use a gateway on a separate machine, the address and port
-can be specified with the <code>PYGW_GATEWAY_ADDRESS</code> and <code>PYGW_GATEWAY_PORT</code> environment variables.
-Alternatively, a JavaGateway can be supplied by creating a <code>pygw_gateway_config</code>
-module on the Python path that contains a JavaGateway named <code>gateway</code>.</p>
-<p>NOTE: the GeoWaveConfiguration has an <code>init()</code> method. This is INTENTIONALLY not an <code>__init__</code> method. Initialization is attempted when the configuration is imported.</p>
+<p>This module uses the <code>gateway</code> module to connect to the Py4J Java gateway.
+By default, the gateway module will attempt
+to connect to a locally running gateway.
+See the documentation of that module for information about configuring <a title="pygw" href="index.html"><code>pygw</code></a>
+to use other gateways.</p>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">#
@@ -45,94 +48,42 @@ module on the Python path that contains a JavaGateway named <code>gateway</code>
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 &#34;&#34;&#34;
-The `config` module includes a singleton object of type GeoWaveConfiguration called `gw_config` that handles all communication between python and the Py4J Java Gateway.
-The module includes several shortcut objects to make accessing the gateway more convenient.  These include:
+The `config` module includes several shortcut objects to make accessing the Py4J Java gateway more convenient.  These
+include:
 - *`java_gateway`* Py4J Gateway Object
-- *`java_pkg`*: Shortcut for `java_gateway.jvm`.  Can be used to construct JVM objects like `java_pkg.org.geotools.feature.simple.SimpleFeatureTypeBuilder()`
+- *`java_pkg`*: Shortcut for `java_gateway.jvm`.  Can be used to construct JVM objects like
+      `java_pkg.org.geotools.feature.simple.SimpleFeatureTypeBuilder()`
 - *`geowave_pkg`*: Similar to `java_pkg`, serves as a shortcut for `java_gateway.jvm.org.locationtech.geowave`.
 - *`reflection_util`*: Direct access to the Py4J reflection utility.
 
 These objects can be imported directly using `from pygw.config import &lt;object_name&gt;`.
 
-By default, the configuration will attempt to connect to a Py4J Java Gateway running on the local machine.  To use a gateway on a separate machine, the address and port
-can be specified with the `PYGW_GATEWAY_ADDRESS` and `PYGW_GATEWAY_PORT` environment variables.  Alternatively, a JavaGateway can be supplied by creating a `pygw_gateway_config`
-module on the Python path that contains a JavaGateway named `gateway`.
-
-NOTE: the GeoWaveConfiguration has an `init()` method. This is INTENTIONALLY not an `__init__` method. Initialization is attempted when the configuration is imported.
+This module uses the `gateway` module to connect to the Py4J Java gateway.  By default, the gateway module will attempt
+to connect to a locally running gateway.  See the documentation of that module for information about configuring `pygw`
+to use other gateways.
 &#34;&#34;&#34;
-from os import environ
+from pygw.gateway import gateway_config
 
-from py4j.java_gateway import JavaGateway
-from py4j.java_gateway import GatewayParameters
-from py4j.java_gateway import java_import
-from py4j.java_gateway import DEFAULT_ADDRESS
-from py4j.java_gateway import DEFAULT_PORT
+gateway_config.init()
 
-from py4j.protocol import Py4JNetworkError
-
-PYGW_ADDRESS_ENV = &#39;PYGW_GATEWAY_ADDRESS&#39;
-PYGW_PORT_ENV = &#39;PYGW_GATEWAY_PORT&#39;
-
-class GeoWaveConfiguration:
-    &#34;&#34;&#34;
-    This class sets up communication between Python and the GeoWave logic running
-    on a JVM.
-    &#34;&#34;&#34;
-
-    def __new__(cls):
-        if not hasattr(cls, &#39;instance&#39;):
-            cls.instance = super(GeoWaveConfiguration, cls).__new__(cls)
-        return cls.instance
-
-    def __init__(self):
-        self.is_initialized = False
-
-    def init(self):
-        &#34;&#34;&#34;
-        Sets up the Py4J Gateway, called automatically on import.
-        &#34;&#34;&#34;
-        if not self.is_initialized:
-            try:
-                try:
-                    from pygw_gateway_config import gateway
-                    self.GATEWAY = gateway
-                except ImportError:
-                    gateway_address = environ.get(PYGW_ADDRESS_ENV, DEFAULT_ADDRESS)
-                    gateway_port = environ.get(PYGW_PORT_ENV, DEFAULT_PORT)
-                    self.GATEWAY = JavaGateway(gateway_parameters=GatewayParameters(auto_field=True, address=gateway_address, port=gateway_port))
-
-                self.PKG = self.GATEWAY.jvm
-                self.GEOWAVE_PKG = self.GATEWAY.jvm.org.locationtech.geowave
-
-                ### Reflection utility ###
-                self.reflection_util= self.GATEWAY.jvm.py4j.reflection.ReflectionUtil
-                self.is_initialized = True
-            except Py4JNetworkError as e:
-                raise GeoWaveConfiguration.PyGwJavaGatewayNotStartedError(&#34;The GeoWave Py4J Java Gateway must be running before you can use pygw.&#34;) from e
-
-    class PyGwJavaGatewayNotStartedError(Exception): pass
-
-gw_config = GeoWaveConfiguration()
-gw_config.init()
-
-java_gateway = gw_config.GATEWAY
+java_gateway = gateway_config.GATEWAY
 &#34;&#34;&#34;py4j.java_gateway.JavaGateway: The gateway between pygw and the JVM.&#34;&#34;&#34;
 
-java_pkg = gw_config.PKG
+java_pkg = gateway_config.GATEWAY.jvm
 &#34;&#34;&#34;py4j.java_gateway.JVMView: A shortcut for accessing java packages directly.
 
 For example `java_pkg.org.geotools.feature.simple.SimpleFeatureTypeBuilder`.
 &#34;&#34;&#34;
 
-geowave_pkg = gw_config.GEOWAVE_PKG
+geowave_pkg = gateway_config.GATEWAY.jvm.org.locationtech.geowave
 &#34;&#34;&#34;py4j.java_gateway.JVMView: A shortcut for accessing geowave packages directly.
 
 For example `geowave_pkg.core.store.api.DataStoreFactory`.
 &#34;&#34;&#34;
 
-reflection_util = gw_config.reflection_util
+reflection_util = gateway_config.GATEWAY.jvm.py4j.reflection.ReflectionUtil
 &#34;&#34;&#34;py4j.java_gateway.JavaClass: A Java reflection utility.&#34;&#34;&#34;
 
 __all__ = [&#34;java_gateway&#34;, &#34;java_pkg&#34;, &#34;geowave_pkg&#34;, &#34;reflection_util&#34;]</code></pre>

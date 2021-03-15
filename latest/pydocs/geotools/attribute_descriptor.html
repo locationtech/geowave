@@ -30,16 +30,24 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
-
-from pygw.config import java_pkg
-from pygw.config import reflection_util
-from pygw.base import GeoWaveObject
-from pygw.base.type_conversions import *
-
+# ===============================================================================================
 from enum import Enum
 
+from pygw.base import GeoWaveObject
+from pygw.base.type_conversions import BigDecimalType, BigIntegerType, BigIntegerArrayType, BigDecimalArrayType, \
+    BooleanType, BooleanArrayType, FloatType, FloatArrayType, DoubleType, DoubleArrayType, ByteType, ByteArrayType, \
+    ShortType, ShortArrayType, IntegerType, IntegerArrayType, LongType, LongArrayType, PrimitiveBooleanArrayType, \
+    PrimitiveFloatArrayType, PrimitiveDoubleArrayType, PrimitiveByteArrayType, PrimitiveShortArrayType, \
+    PrimitiveLongArrayType, PrimitiveIntArrayType, StringType, StringArrayType, DateType, CalendarType, DateArrayType, \
+    CalendarArrayType, PointType, PointArrayType, MultiPointType, MultiPointArrayType, LineStringType, \
+    LineStringArrayType, MultiLineStringType, MultiLineStringArrayType, PolygonType, PolygonArrayType,\
+    MultiPolygonType, MultiPolygonArrayType, GeometryCollectionType, GeometryCollectionArrayType, GeometryType,\
+    GeometryArrayType
+from pygw.config import reflection_util, java_pkg
+
+
 _binding_map = {}
+
 
 class AttributeDescriptor(GeoWaveObject):
     &#34;&#34;&#34;
@@ -48,7 +56,8 @@ class AttributeDescriptor(GeoWaveObject):
 
     def __init__(self, attribute_type, is_nilable, descriptor, j_attribute=None):
         if not isinstance(attribute_type, AttributeDescriptor.Type):
-            raise AttributeDescriptor.UnknownTypeError(&#34;Invalid argument to `attribute_type`. Must be one of defined types in AttributeDescriptor.Type&#34;)
+            raise AttributeDescriptor.UnknownTypeError(
+                &#34;Invalid argument to `attribute_type`. Must be one of defined types in AttributeDescriptor.Type&#34;)
         self.field = attribute_type.value()
         self.is_nilable = is_nilable
         self.descriptor = descriptor
@@ -88,7 +97,7 @@ class AttributeDescriptor(GeoWaveObject):
         Constructs an attribute descriptor from a Java geotools attribute descriptor.
 
         Args:
-            java_attribute_descriptor (AttributeDescriptor): The Java attribute descriptor.
+            java_attribute_descriptor (java.AttributeDescriptor): The Java attribute descriptor.
         Retuurns:
             A `pygw.geotools.attribute_descriptor.AttributeDescriptor` that matches the Java one.
         &#34;&#34;&#34;
@@ -761,10 +770,12 @@ class AttributeDescriptor(GeoWaveObject):
         GEOMETRY = GeometryType
         GEOMETRY_ARRAY = GeometryArrayType
 
-    class UnknownTypeError(Exception): pass
+    class UnknownTypeError(Exception):
+        pass
+
 
 for attr in AttributeDescriptor.Type:
-    _binding_map[attr.value().binding]  = attr</code></pre>
+    _binding_map[attr.value().binding] = attr</code></pre>
 </details>
 </section>
 <section>
@@ -791,7 +802,8 @@ for attr in AttributeDescriptor.Type:
 
     def __init__(self, attribute_type, is_nilable, descriptor, j_attribute=None):
         if not isinstance(attribute_type, AttributeDescriptor.Type):
-            raise AttributeDescriptor.UnknownTypeError(&#34;Invalid argument to `attribute_type`. Must be one of defined types in AttributeDescriptor.Type&#34;)
+            raise AttributeDescriptor.UnknownTypeError(
+                &#34;Invalid argument to `attribute_type`. Must be one of defined types in AttributeDescriptor.Type&#34;)
         self.field = attribute_type.value()
         self.is_nilable = is_nilable
         self.descriptor = descriptor
@@ -831,7 +843,7 @@ for attr in AttributeDescriptor.Type:
         Constructs an attribute descriptor from a Java geotools attribute descriptor.
 
         Args:
-            java_attribute_descriptor (AttributeDescriptor): The Java attribute descriptor.
+            java_attribute_descriptor (java.AttributeDescriptor): The Java attribute descriptor.
         Retuurns:
             A `pygw.geotools.attribute_descriptor.AttributeDescriptor` that matches the Java one.
         &#34;&#34;&#34;
@@ -1504,7 +1516,8 @@ for attr in AttributeDescriptor.Type:
         GEOMETRY = GeometryType
         GEOMETRY_ARRAY = GeometryArrayType
 
-    class UnknownTypeError(Exception): pass</code></pre>
+    class UnknownTypeError(Exception):
+        pass</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -2010,7 +2023,7 @@ def float_array(cls, descriptor, is_nilable=False):
 <section class="desc"><p>Constructs an attribute descriptor from a Java geotools attribute descriptor.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>java_attribute_descriptor</code></strong> :&ensp;<a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="#pygw.geotools.attribute_descriptor.AttributeDescriptor"><code>AttributeDescriptor</code></a></dt>
+<dt><strong><code>java_attribute_descriptor</code></strong> :&ensp;<code>java.AttributeDescriptor</code></dt>
 <dd>The Java attribute descriptor.</dd>
 </dl>
 <h2 id="retuurns">Retuurns</h2>
@@ -2023,7 +2036,7 @@ def from_java_attribute_descriptor(cls, java_attribute_descriptor):
     Constructs an attribute descriptor from a Java geotools attribute descriptor.
 
     Args:
-        java_attribute_descriptor (AttributeDescriptor): The Java attribute descriptor.
+        java_attribute_descriptor (java.AttributeDescriptor): The Java attribute descriptor.
     Retuurns:
         A `pygw.geotools.attribute_descriptor.AttributeDescriptor` that matches the Java one.
     &#34;&#34;&#34;

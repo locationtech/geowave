@@ -30,7 +30,7 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 
 from datetime import datetime
 
@@ -42,8 +42,10 @@ from pygw.config import java_gateway
 from pygw.config import java_pkg
 from pygw.config import reflection_util
 
+
 def _j_match_action(match_action):
     return java_pkg.org.opengis.filter.MultiValuedFilter.MatchAction.valueOf(match_action.upper())
+
 
 # These functions are needed in order to invoke java methods that are named with
 # reserved python keywords such as and, or, and not
@@ -54,21 +56,23 @@ def _invoke_filter_list_method_by_name(j_filter_factory, name, filters):
     class_array[0] = list_class
     method = filter_factory_class.getMethod(name, class_array)
     filter_list = java_pkg.java.util.ArrayList()
-    for filter in filters:
-        filter_list.append(filter)
+    for filter_object in filters:
+        filter_list.append(filter_object)
     objects_array = java_gateway.new_array(java_pkg.java.lang.Object, 1)
     objects_array[0] = filter_list
     return method.invoke(j_filter_factory, objects_array)
 
-def _invoke_filter_method_by_name(j_filter_factory, name, filter):
+
+def _invoke_filter_method_by_name(j_filter_factory, name, filter_object):
     filter_factory_class = j_filter_factory.getClass()
     filter_class = reflection_util.classForName(&#34;org.opengis.filter.Filter&#34;)
     class_array = java_gateway.new_array(java_pkg.java.lang.Class, 1)
     class_array[0] = filter_class
     method = filter_factory_class.getMethod(name, class_array)
     objects_array = java_gateway.new_array(java_pkg.java.lang.Object, 1)
-    objects_array[0] = filter
+    objects_array[0] = filter_object
     return method.invoke(j_filter_factory, objects_array)
+
 
 class FilterFactory(GeoWaveObject):
     &#34;&#34;&#34;
@@ -98,27 +102,27 @@ class FilterFactory(GeoWaveObject):
                 j_fids[idx] = fid
         return self._java_ref.id(j_fids)
 
-    def feature_id(self, id):
+    def feature_id(self, fid):
         &#34;&#34;&#34;
         Constructs a filter that matches a specific feature ID.
 
         Args:
-            id (str): The feature ID.
+            fid (str): The feature ID.
         Returns:
             A Filter with the given feature ID.
         &#34;&#34;&#34;
-        return self._java_ref.featureId(id)
+        return self._java_ref.featureId(fid)
 
-    def gml_object_id(self, id):
+    def gml_object_id(self, object_id):
         &#34;&#34;&#34;
         Constructs a filter that matches a specific gml object ID.
 
         Args:
-            id (str): The gml object ID.
+            object_id (str): The gml object ID.
         Returns:
             A Filter with the given gml object ID.
         &#34;&#34;&#34;
-        return self._java_ref.gmlObjectId(id)
+        return self._java_ref.gmlObjectId(object_id)
 
     def property(self, name):
         &#34;&#34;&#34;
@@ -242,16 +246,16 @@ class FilterFactory(GeoWaveObject):
         &#34;&#34;&#34;
         return _invoke_filter_list_method_by_name(self._java_ref, &#34;or&#34;, filters)
 
-    def not_(self, filter):
+    def not_(self, filter_to_check):
         &#34;&#34;&#34;
         Constructs a filter that passes when the given filter does NOT pass.
 
         Args:
-            filter (Filter): The filter to check.
+            filter_to_check (Filter): The filter to check.
         Returns:
             A Filter that passes when the given filter does NOT pass.
         &#34;&#34;&#34;
-        return _invoke_filter_method_by_name(self._java_ref, &#34;not&#34;, filter)
+        return _invoke_filter_method_by_name(self._java_ref, &#34;not&#34;, filter_to_check)
 
     def between(self, expr, lower, upper, match_action=None):
         &#34;&#34;&#34;
@@ -438,7 +442,8 @@ class FilterFactory(GeoWaveObject):
         elif match_action is None:
             return self._java_ref.like(expr, pattern, wildcard, single_char, escape, match_case)
         else:
-            return self._java_ref.like(expr, pattern, wildcard, single_char, escape, match_case, _j_match_action(match_action))
+            return self._java_ref.like(expr, pattern, wildcard, single_char, escape, match_case,
+                                       _j_match_action(match_action))
 
     def is_null(self, expr):
         &#34;&#34;&#34;
@@ -468,9 +473,10 @@ class FilterFactory(GeoWaveObject):
             A Filter that passes when the given geometry is within the bounding box.
         &#34;&#34;&#34;
         if match_action is None:
-            return self._java_ref.bbox(geometry_expr, minx*1.0, miny*1.0, maxx*1.0, maxy*1.0, srs)
+            return self._java_ref.bbox(geometry_expr, minx * 1.0, miny * 1.0, maxx * 1.0, maxy * 1.0, srs)
         else:
-            return self._java_ref.bbox(geometry_expr, minx*1.0, miny*1.0, maxx*1.0, maxy*1.0, srs, _j_match_action(match_action))
+            return self._java_ref.bbox(geometry_expr, minx * 1.0, miny * 1.0, maxx * 1.0, maxy * 1.0, srs,
+                                       _j_match_action(match_action))
 
     def bbox_expr(self, geometry_expr, bbox_expr):
         &#34;&#34;&#34;
@@ -501,9 +507,10 @@ class FilterFactory(GeoWaveObject):
             geometry.
         &#34;&#34;&#34;
         if match_action is None:
-            return self._java_ref.beyond(geometry_expr1, geometry_expr2, distance*1.0, units)
+            return self._java_ref.beyond(geometry_expr1, geometry_expr2, distance * 1.0, units)
         else:
-            return self._java_ref.beyond(geometry_expr1, geometry_expr2, distance*1.0, units, _j_match_action(match_action))
+            return self._java_ref.beyond(geometry_expr1, geometry_expr2, distance * 1.0, units,
+                                         _j_match_action(match_action))
 
     def contains(self, geometry_expr1, geometry_expr2, match_action=None):
         &#34;&#34;&#34;
@@ -634,9 +641,10 @@ class FilterFactory(GeoWaveObject):
             second geometry.
         &#34;&#34;&#34;
         if match_action is None:
-            return self._java_ref.dwithin(geometry_expr1, geometry_expr2, distance*1.0, units)
+            return self._java_ref.dwithin(geometry_expr1, geometry_expr2, distance * 1.0, units)
         else:
-            return self._java_ref.dwithin(geometry_expr1, geometry_expr2, distance*1.0, units, _j_match_action(match_action))
+            return self._java_ref.dwithin(geometry_expr1, geometry_expr2, distance * 1.0, units,
+                                          _j_match_action(match_action))
 
     def after(self, expr1, expr2, match_action=None):
         &#34;&#34;&#34;
@@ -937,27 +945,27 @@ in additional method calls.</p></section>
                 j_fids[idx] = fid
         return self._java_ref.id(j_fids)
 
-    def feature_id(self, id):
+    def feature_id(self, fid):
         &#34;&#34;&#34;
         Constructs a filter that matches a specific feature ID.
 
         Args:
-            id (str): The feature ID.
+            fid (str): The feature ID.
         Returns:
             A Filter with the given feature ID.
         &#34;&#34;&#34;
-        return self._java_ref.featureId(id)
+        return self._java_ref.featureId(fid)
 
-    def gml_object_id(self, id):
+    def gml_object_id(self, object_id):
         &#34;&#34;&#34;
         Constructs a filter that matches a specific gml object ID.
 
         Args:
-            id (str): The gml object ID.
+            object_id (str): The gml object ID.
         Returns:
             A Filter with the given gml object ID.
         &#34;&#34;&#34;
-        return self._java_ref.gmlObjectId(id)
+        return self._java_ref.gmlObjectId(object_id)
 
     def property(self, name):
         &#34;&#34;&#34;
@@ -1081,16 +1089,16 @@ in additional method calls.</p></section>
         &#34;&#34;&#34;
         return _invoke_filter_list_method_by_name(self._java_ref, &#34;or&#34;, filters)
 
-    def not_(self, filter):
+    def not_(self, filter_to_check):
         &#34;&#34;&#34;
         Constructs a filter that passes when the given filter does NOT pass.
 
         Args:
-            filter (Filter): The filter to check.
+            filter_to_check (Filter): The filter to check.
         Returns:
             A Filter that passes when the given filter does NOT pass.
         &#34;&#34;&#34;
-        return _invoke_filter_method_by_name(self._java_ref, &#34;not&#34;, filter)
+        return _invoke_filter_method_by_name(self._java_ref, &#34;not&#34;, filter_to_check)
 
     def between(self, expr, lower, upper, match_action=None):
         &#34;&#34;&#34;
@@ -1277,7 +1285,8 @@ in additional method calls.</p></section>
         elif match_action is None:
             return self._java_ref.like(expr, pattern, wildcard, single_char, escape, match_case)
         else:
-            return self._java_ref.like(expr, pattern, wildcard, single_char, escape, match_case, _j_match_action(match_action))
+            return self._java_ref.like(expr, pattern, wildcard, single_char, escape, match_case,
+                                       _j_match_action(match_action))
 
     def is_null(self, expr):
         &#34;&#34;&#34;
@@ -1307,9 +1316,10 @@ in additional method calls.</p></section>
             A Filter that passes when the given geometry is within the bounding box.
         &#34;&#34;&#34;
         if match_action is None:
-            return self._java_ref.bbox(geometry_expr, minx*1.0, miny*1.0, maxx*1.0, maxy*1.0, srs)
+            return self._java_ref.bbox(geometry_expr, minx * 1.0, miny * 1.0, maxx * 1.0, maxy * 1.0, srs)
         else:
-            return self._java_ref.bbox(geometry_expr, minx*1.0, miny*1.0, maxx*1.0, maxy*1.0, srs, _j_match_action(match_action))
+            return self._java_ref.bbox(geometry_expr, minx * 1.0, miny * 1.0, maxx * 1.0, maxy * 1.0, srs,
+                                       _j_match_action(match_action))
 
     def bbox_expr(self, geometry_expr, bbox_expr):
         &#34;&#34;&#34;
@@ -1340,9 +1350,10 @@ in additional method calls.</p></section>
             geometry.
         &#34;&#34;&#34;
         if match_action is None:
-            return self._java_ref.beyond(geometry_expr1, geometry_expr2, distance*1.0, units)
+            return self._java_ref.beyond(geometry_expr1, geometry_expr2, distance * 1.0, units)
         else:
-            return self._java_ref.beyond(geometry_expr1, geometry_expr2, distance*1.0, units, _j_match_action(match_action))
+            return self._java_ref.beyond(geometry_expr1, geometry_expr2, distance * 1.0, units,
+                                         _j_match_action(match_action))
 
     def contains(self, geometry_expr1, geometry_expr2, match_action=None):
         &#34;&#34;&#34;
@@ -1473,9 +1484,10 @@ in additional method calls.</p></section>
             second geometry.
         &#34;&#34;&#34;
         if match_action is None:
-            return self._java_ref.dwithin(geometry_expr1, geometry_expr2, distance*1.0, units)
+            return self._java_ref.dwithin(geometry_expr1, geometry_expr2, distance * 1.0, units)
         else:
-            return self._java_ref.dwithin(geometry_expr1, geometry_expr2, distance*1.0, units, _j_match_action(match_action))
+            return self._java_ref.dwithin(geometry_expr1, geometry_expr2, distance * 1.0, units,
+                                          _j_match_action(match_action))
 
     def after(self, expr1, expr2, match_action=None):
         &#34;&#34;&#34;
@@ -1921,9 +1933,10 @@ Default is 'ANY'.</dd>
         A Filter that passes when the given geometry is within the bounding box.
     &#34;&#34;&#34;
     if match_action is None:
-        return self._java_ref.bbox(geometry_expr, minx*1.0, miny*1.0, maxx*1.0, maxy*1.0, srs)
+        return self._java_ref.bbox(geometry_expr, minx * 1.0, miny * 1.0, maxx * 1.0, maxy * 1.0, srs)
     else:
-        return self._java_ref.bbox(geometry_expr, minx*1.0, miny*1.0, maxx*1.0, maxy*1.0, srs, _j_match_action(match_action))</code></pre>
+        return self._java_ref.bbox(geometry_expr, minx * 1.0, miny * 1.0, maxx * 1.0, maxy * 1.0, srs,
+                                   _j_match_action(match_action))</code></pre>
 </details>
 </dd>
 <dt id="pygw.query.vector.filter_factory.FilterFactory.bbox_expr"><code class="name flex">
@@ -2175,9 +2188,10 @@ Default is 'ANY'.</dd>
         geometry.
     &#34;&#34;&#34;
     if match_action is None:
-        return self._java_ref.beyond(geometry_expr1, geometry_expr2, distance*1.0, units)
+        return self._java_ref.beyond(geometry_expr1, geometry_expr2, distance * 1.0, units)
     else:
-        return self._java_ref.beyond(geometry_expr1, geometry_expr2, distance*1.0, units, _j_match_action(match_action))</code></pre>
+        return self._java_ref.beyond(geometry_expr1, geometry_expr2, distance * 1.0, units,
+                                     _j_match_action(match_action))</code></pre>
 </details>
 </dd>
 <dt id="pygw.query.vector.filter_factory.FilterFactory.contains"><code class="name flex">
@@ -2406,9 +2420,10 @@ Default is 'ANY'.</dd>
         second geometry.
     &#34;&#34;&#34;
     if match_action is None:
-        return self._java_ref.dwithin(geometry_expr1, geometry_expr2, distance*1.0, units)
+        return self._java_ref.dwithin(geometry_expr1, geometry_expr2, distance * 1.0, units)
     else:
-        return self._java_ref.dwithin(geometry_expr1, geometry_expr2, distance*1.0, units, _j_match_action(match_action))</code></pre>
+        return self._java_ref.dwithin(geometry_expr1, geometry_expr2, distance * 1.0, units,
+                                      _j_match_action(match_action))</code></pre>
 </details>
 </dd>
 <dt id="pygw.query.vector.filter_factory.FilterFactory.ended_by"><code class="name flex">
@@ -2565,29 +2580,29 @@ Default is 'ANY'.</dd>
 </details>
 </dd>
 <dt id="pygw.query.vector.filter_factory.FilterFactory.feature_id"><code class="name flex">
-<span>def <span class="ident">feature_id</span></span>(<span>self, id)</span>
+<span>def <span class="ident">feature_id</span></span>(<span>self, fid)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Constructs a filter that matches a specific feature ID.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>id</code></strong> :&ensp;<code>str</code></dt>
+<dt><strong><code>fid</code></strong> :&ensp;<code>str</code></dt>
 <dd>The feature ID.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>A Filter with the given feature ID.</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def feature_id(self, id):
+<pre><code class="python">def feature_id(self, fid):
     &#34;&#34;&#34;
     Constructs a filter that matches a specific feature ID.
 
     Args:
-        id (str): The feature ID.
+        fid (str): The feature ID.
     Returns:
         A Filter with the given feature ID.
     &#34;&#34;&#34;
-    return self._java_ref.featureId(id)</code></pre>
+    return self._java_ref.featureId(fid)</code></pre>
 </details>
 </dd>
 <dt id="pygw.query.vector.filter_factory.FilterFactory.function"><code class="name flex">
@@ -2623,29 +2638,29 @@ Default is 'ANY'.</dd>
 </details>
 </dd>
 <dt id="pygw.query.vector.filter_factory.FilterFactory.gml_object_id"><code class="name flex">
-<span>def <span class="ident">gml_object_id</span></span>(<span>self, id)</span>
+<span>def <span class="ident">gml_object_id</span></span>(<span>self, object_id)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Constructs a filter that matches a specific gml object ID.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>id</code></strong> :&ensp;<code>str</code></dt>
+<dt><strong><code>object_id</code></strong> :&ensp;<code>str</code></dt>
 <dd>The gml object ID.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>A Filter with the given gml object ID.</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def gml_object_id(self, id):
+<pre><code class="python">def gml_object_id(self, object_id):
     &#34;&#34;&#34;
     Constructs a filter that matches a specific gml object ID.
 
     Args:
-        id (str): The gml object ID.
+        object_id (str): The gml object ID.
     Returns:
         A Filter with the given gml object ID.
     &#34;&#34;&#34;
-    return self._java_ref.gmlObjectId(id)</code></pre>
+    return self._java_ref.gmlObjectId(object_id)</code></pre>
 </details>
 </dd>
 <dt id="pygw.query.vector.filter_factory.FilterFactory.greater"><code class="name flex">
@@ -2989,7 +3004,8 @@ Default is 'ANY'.</dd>
     elif match_action is None:
         return self._java_ref.like(expr, pattern, wildcard, single_char, escape, match_case)
     else:
-        return self._java_ref.like(expr, pattern, wildcard, single_char, escape, match_case, _j_match_action(match_action))</code></pre>
+        return self._java_ref.like(expr, pattern, wildcard, single_char, escape, match_case,
+                                   _j_match_action(match_action))</code></pre>
 </details>
 </dd>
 <dt id="pygw.query.vector.filter_factory.FilterFactory.literal"><code class="name flex">
@@ -3149,29 +3165,29 @@ Default is 'ANY'.</dd>
 </details>
 </dd>
 <dt id="pygw.query.vector.filter_factory.FilterFactory.not_"><code class="name flex">
-<span>def <span class="ident">not_</span></span>(<span>self, filter)</span>
+<span>def <span class="ident">not_</span></span>(<span>self, filter_to_check)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Constructs a filter that passes when the given filter does NOT pass.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>filter</code></strong> :&ensp;<code>Filter</code></dt>
+<dt><strong><code>filter_to_check</code></strong> :&ensp;<code>Filter</code></dt>
 <dd>The filter to check.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>A Filter that passes when the given filter does NOT pass.</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def not_(self, filter):
+<pre><code class="python">def not_(self, filter_to_check):
     &#34;&#34;&#34;
     Constructs a filter that passes when the given filter does NOT pass.
 
     Args:
-        filter (Filter): The filter to check.
+        filter_to_check (Filter): The filter to check.
     Returns:
         A Filter that passes when the given filter does NOT pass.
     &#34;&#34;&#34;
-    return _invoke_filter_method_by_name(self._java_ref, &#34;not&#34;, filter)</code></pre>
+    return _invoke_filter_method_by_name(self._java_ref, &#34;not&#34;, filter_to_check)</code></pre>
 </details>
 </dd>
 <dt id="pygw.query.vector.filter_factory.FilterFactory.not_equal"><code class="name flex">
