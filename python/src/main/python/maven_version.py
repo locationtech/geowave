@@ -5,18 +5,19 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 import subprocess
 import re
 
+
 def get_maven_version():
     version = subprocess.check_output([
-        "mvn", "-q", "-Dexec.executable=echo", "-Dexec.args='${project.version}'", "-f", "../../../..", "--non-recursive", "exec:exec"
+        "mvn", "help:evaluate", "-Dexpression=project.version", "-q", "-DforceStdout", "-f", "../../../.."
     ]).strip().decode().replace("-", ".")
-    if ("SNAPSHOT" in version):
+    if "SNAPSHOT" in version:
         git_description = subprocess.check_output(["git", "describe", "--always"]).strip().decode()
         count_search = re.search("-(.*)-", git_description)
-        if (count_search is not None):
+        if count_search is not None:
             dev_count = count_search.group(1)
         else:
             dev_count = "0"

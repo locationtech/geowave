@@ -7,13 +7,14 @@
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
 # ===============================================================================================
-"""
-This module contains classes specific to HBase data stores.
 
-It contains the following import shortcuts:
-```python
-from pygw.store.hbase import HBaseOptions
-```
-"""
+from .query import Query
 
-from .options import HBaseOptions
+
+class AggregationQuery(Query):
+    """
+    Base aggregation query class that wraps GeoWave aggregation queries.
+    """
+
+    def __init__(self, java_ref, result_transformer):
+        super().__init__(java_ref, result_transformer)

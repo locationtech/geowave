@@ -37,7 +37,7 @@ The build process can take several minutes, but once this is completed, the comp
 
 === Running Integration Tests
 
-By default, integration tests are not run as part of the normal build process.  This is because integration tests can be run for a multitude of key/value store backends, and tests for a single backend can take a significant amount of time to complete.  Usually these integration tests are run as part of the link:travis-ci.org/locationtech/geowave[Travis CI, window="_blank"] build process, but it can be useful to run them locally when working on code that could potentially impact one of the tests.
+By default, integration tests are not run as part of the normal build process.  This is because integration tests can be run for a multitude of key/value store backends, and tests for a single backend can take a significant amount of time to complete.  Usually these integration tests are run through link:https://github.com/locationtech/geowave/actions/workflows/test.yml[GitHub Actions, window="_blank"], but it can be useful to run them locally when working on code that could potentially impact one of the tests.
 
 Integration tests are all written in the `geowave-tests` project and are run using a series of Maven profiles.  The following table shows the various profiles available along with a description of the tests that are run:
 
@@ -76,7 +76,7 @@ $ mvn clean install -rf :geowave-test -Procksdb-it
 [[build-python-bindings]]
 === Building Python Bindings
 
-The Python bindings for GeoWave (`pygw`) use a different build process than the Java component. The Python source code for `pygw` can be found in the `python/src/main/python` directory.  In order to install `pygw` from source, you will need link:python.org[Python 3, window="_blank"] (up to Python 3.7) and link:virtualenv.pypa.io/en/stable[Virtualenv, window="_blank"].
+The Python bindings for GeoWave (`pygw`) use a different build process than the Java component. The Python source code for `pygw` can be found in the `python/src/main/python` directory.  In order to install `pygw` from source, you will need link:https://www.python.org[Python 3, window="_blank"] (up to Python 3.7) and link:https://virtualenv.pypa.io/en/stable[Virtualenv, window="_blank"].
 
 ==== Building the Wheel
 

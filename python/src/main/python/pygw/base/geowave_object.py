@@ -6,9 +6,10 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 
 from pygw.config import java_gateway
+
 
 class GeoWaveObject:
     """
@@ -22,7 +23,7 @@ class GeoWaveObject:
         return "pygw {} Object with JavaRef@{}".format(self.__class__, self._java_ref)
 
     def __eq__(self, other):
-        if not isinstance(other, PyGwJavaWrapper):
+        if not isinstance(other, GeoWaveObject):
             return False
         return self._java_ref == other._java_ref
 

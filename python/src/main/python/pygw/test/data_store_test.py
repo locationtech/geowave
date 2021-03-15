@@ -6,7 +6,7 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 
 import pytest
 import os
@@ -28,6 +28,7 @@ from .conftest import POINT_TYPE_ADAPTER
 from .conftest import TEST_DATA
 from .conftest import write_test_data
 from .conftest import results_as_list
+
 
 # Test Additions #
 def test_add_type(test_ds):
@@ -158,6 +159,7 @@ def test_delete(test_ds):
     assert len(test_ds.get_types()) == 1
     assert len(res) == (len(TEST_DATA) - 10)
 
+
 # Test Delete All #
 def test_delete_all(test_ds):
     # given
@@ -214,6 +216,7 @@ def test_copy(test_ds):
 
     ds2.delete_all()
 
+
 def test_copy_by_query(test_ds):
     # given
     options = RocksDBOptions()
@@ -251,6 +254,7 @@ def test_copy_by_query(test_ds):
     assert len(res) == 10
 
     ds2.delete_all()
+
 
 # Test Writer #
 def test_create_writer(test_ds):
@@ -304,6 +308,7 @@ def test_write(test_ds):
     # then
     assert len(res) == len(TEST_DATA)
 
+
 def _test_base_options(options, server_side_possible=True):
     options.set_geowave_namespace("test_namespace")
     assert options.get_geowave_namespace() == "test_namespace"
@@ -326,7 +331,7 @@ def _test_base_options(options, server_side_possible=True):
     if server_side_possible:
         assert options.is_server_side_library_enabled() == server_side_library
     else:
-        assert options.is_server_side_library_enabled() == False
+        assert options.is_server_side_library_enabled() is False
 
     options.set_max_range_decomposition(42)
     assert options.get_max_range_decomposition() == 42
@@ -354,6 +359,7 @@ def test_accumulo_options():
     assert options.is_use_locality_groups() == locality_groups
     _test_base_options(options)
 
+
 def test_bigtable_options():
     options = BigTableOptions()
     options.set_scan_cache_size(42)
@@ -363,6 +369,7 @@ def test_bigtable_options():
     options.set_instance_id("test_instance_id")
     assert options.get_instance_id() == "test_instance_id"
     _test_base_options(options)
+
 
 def test_cassandra_options():
     options = CassandraOptions()
@@ -376,6 +383,7 @@ def test_cassandra_options():
     options.set_replication_factor(43)
     assert options.get_replication_factor() == 43
     _test_base_options(options, False)
+
 
 def test_dynamodb_options():
     options = DynamoDBOptions()
@@ -400,6 +408,7 @@ def test_dynamodb_options():
     assert options.get_max_connections() == 44
     _test_base_options(options, False)
 
+
 def test_hbase_options():
     options = HBaseOptions()
     options.set_zookeeper("test_zookeeper")
@@ -414,11 +423,13 @@ def test_hbase_options():
     assert options.get_coprocessor_jar() == "test_jar"
     _test_base_options(options)
 
+
 def test_kudu_options():
     options = KuduOptions()
     options.set_kudu_master("test_master")
     assert options.get_kudu_master() == "test_master"
     _test_base_options(options, False)
+
 
 def test_redis_options():
     options = RedisOptions()
@@ -427,6 +438,7 @@ def test_redis_options():
     options.set_compression("L4Z")
     assert options.get_compression() == "L4Z"
     _test_base_options(options, False)
+
 
 def test_rocksdb_options():
     options = RocksDBOptions()

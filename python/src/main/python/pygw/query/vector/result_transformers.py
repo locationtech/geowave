@@ -6,13 +6,47 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
-
-from pygw.geotools import SimpleFeature
-from pygw.geotools import SimpleFeatureType
-from pygw.geotools import AttributeDescriptor
+# ===============================================================================================
+from datetime import datetime
 
 from ..query_result_transformer import QueryResultTransformer
+from ...geotools import AttributeDescriptor, SimpleFeatureType, SimpleFeature
+
+
+class EnvelopeTransformer(QueryResultTransformer):
+    """
+    Transforms Java Envelope results into a tuple.
+    """
+
+    def transform(self, j_result):
+        """
+        Transform the given Java Envelope into a tuple.
+
+        Args:
+            j_result (Java Envelope): An Envelope Java object.
+        Returns:
+            A tuple of (minX, minY, maxX, maxY) of the envelope.
+        """
+        return j_result.getMinX(), j_result.getMinY(), j_result.getMaxX(), j_result.getMaxY()
+
+
+class IntervalTransformer(QueryResultTransformer):
+    """
+    Transforms Java Interval results into a tuple.
+    """
+
+    def transform(self, j_result):
+        """
+        Transform the given Java Interval into a tuple.
+
+        Args:
+            j_result (Java Envelope): An Interval Java object.
+        Returns:
+            A tuple of (start, end) of the interval.
+        """
+        return datetime.utcfromtimestamp(j_result.getStart().getEpochSecond()), datetime.utcfromtimestamp(
+            j_result.getEnd().getEpochSecond())
+
 
 class SimpleFeatureTransformer(QueryResultTransformer):
     """
@@ -21,6 +55,7 @@ class SimpleFeatureTransformer(QueryResultTransformer):
     has to be constructed from the feature.  In order to avoid doing this for every
     result, there is a feature type cache that the transform function can pull from.
     """
+
     def __init__(self):
         self._feature_type_cache = {}
 

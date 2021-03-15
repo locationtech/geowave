@@ -6,13 +6,14 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 
 from pygw.config import java_pkg
 from pygw.base import GeoWaveObject
 
 from .simple_feature_type import SimpleFeatureType
 from .simple_feature import SimpleFeature
+
 
 class SimpleFeatureBuilder(GeoWaveObject):
     """
@@ -48,16 +49,16 @@ class SimpleFeatureBuilder(GeoWaveObject):
         self._java_ref.set(descriptor, j_value)
         return self
 
-    def build(self, id):
+    def build(self, fid):
         """
         Constructs the configured feature.
 
         Args:
-            id (str): The feature ID to use.
+            fid (str): The feature ID to use.
         Returns:
             The constructed `pygw.geotools.simple_feature.SimpleFeature`.
         """
-        j_feature = self._java_ref.buildFeature(str(id))
+        j_feature = self._java_ref.buildFeature(str(fid))
         return SimpleFeature(self._feature_type, j_feature)
 
     class NoSuchAttributeInTypeError(Exception):

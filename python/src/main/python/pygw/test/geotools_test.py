@@ -6,18 +6,20 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 
 from pygw.base.type_conversions import *
 from pygw.geotools import SimpleFeatureTypeBuilder
 from pygw.geotools import SimpleFeatureBuilder
 from pygw.geotools import AttributeDescriptor
 
-def check_attribute(sft, attr_name, nilable, type):
+
+def check_attribute(sft, attr_name, nilable, attr_type):
     attr = sft.get_attribute(attr_name)
     assert attr.descriptor == attr_name
     assert attr.is_nilable == nilable
-    assert isinstance(attr.field, type)
+    assert isinstance(attr.field, attr_type)
+
 
 def test_simple_feature_type():
     sftb = SimpleFeatureTypeBuilder()
@@ -128,6 +130,7 @@ def test_simple_feature_type():
 
     # Get non-existent attribute
     assert sft.get_attribute("nonexistent") is None
+
 
 def test_simple_feature():
     sftb = SimpleFeatureTypeBuilder()

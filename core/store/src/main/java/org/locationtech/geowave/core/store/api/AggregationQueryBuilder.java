@@ -10,7 +10,6 @@ package org.locationtech.geowave.core.store.api;
 
 import java.util.Map;
 import org.locationtech.geowave.core.index.persist.Persistable;
-import org.locationtech.geowave.core.index.persist.PersistableList;
 import org.locationtech.geowave.core.store.query.BaseQueryBuilder;
 import org.locationtech.geowave.core.store.query.aggregate.AggregationBinningStrategy;
 import org.locationtech.geowave.core.store.query.aggregate.AggregationQueryBuilderImpl;

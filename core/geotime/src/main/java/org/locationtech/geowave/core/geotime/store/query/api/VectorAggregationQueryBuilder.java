@@ -41,7 +41,7 @@ public interface VectorAggregationQueryBuilder<P extends Persistable, R> extends
   }
 
   /**
-   * convenience method for getting a bounding box of the results of a query. It uses the default
+   * Convenience method for getting a bounding box of the results of a query. It uses the default
    * geometry for a feature type which is also the indexed geometry.
    *
    * @param typeNames the type names to constrain by
@@ -50,9 +50,9 @@ public interface VectorAggregationQueryBuilder<P extends Persistable, R> extends
   VectorAggregationQueryBuilder<P, R> bboxOfResults(String... typeNames);
 
   /**
-   * convenience method for getting a bounding box of the results of a query this can be
+   * Convenience method for getting a bounding box of the results of a query. This can be
    * particularly useful if you want to calculate the bbox on a different field than the
-   * default/indexed Geometry
+   * default/indexed Geometry.
    *
    * @param typeName the type name
    * @param geomAttributeName the geometry attribute name
@@ -63,9 +63,8 @@ public interface VectorAggregationQueryBuilder<P extends Persistable, R> extends
       String geomAttributeName);
 
   /**
-   * convenience method for getting a time range of the results of a query. this has to use inferred
-   * or hinted temporal attribute names if uncertain what implicit time attributes are being used
-   * then explicitly set timeAttributeName in other method
+   * Convenience method for getting a time range of the results of a query. This has to use inferred
+   * or hinted temporal attribute names.
    *
    * @param typeNames the type names to constrain by
    * @return this builder
@@ -73,8 +72,8 @@ public interface VectorAggregationQueryBuilder<P extends Persistable, R> extends
   VectorAggregationQueryBuilder<P, R> timeRangeOfResults(String... typeNames);
 
   /**
-   * convenience method for getting a time range of the results of a query this can be particularly
-   * useful if you want to calculate the time range on a specific time field
+   * Convenience method for getting a time range of the results of a query. This can be particularly
+   * useful if you want to calculate the time range on a specific time field.
    *
    * @param typeName the type names to constrain by
    * @param timeAttributeName the time attribute name
