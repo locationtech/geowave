@@ -47,6 +47,7 @@ public class MapReduceMemoryOperations extends MemoryDataStoreOperations impleme
         new ReaderParams(
             readerParams.getIndex(),
             readerParams.getAdapterStore(),
+            readerParams.getAdapterIndexMappingStore(),
             readerParams.getInternalAdapterStore(),
             readerParams.getAdapterIds(),
             readerParams.getMaxResolutionSubsamplingPerDimension(),

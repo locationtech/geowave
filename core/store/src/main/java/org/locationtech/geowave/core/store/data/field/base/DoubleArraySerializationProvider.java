@@ -24,7 +24,7 @@ public class DoubleArraySerializationProvider implements FieldSerializationProvi
   }
 
   @Override
-  public FieldWriter<Object, Double[]> getFieldWriter() {
+  public FieldWriter<Double[]> getFieldWriter() {
     return new DoubleArrayWriter();
   }
 
@@ -34,7 +34,7 @@ public class DoubleArraySerializationProvider implements FieldSerializationProvi
     }
   }
 
-  private static class DoubleArrayWriter extends FixedSizeObjectArrayWriter<Object, Double> {
+  private static class DoubleArrayWriter extends FixedSizeObjectArrayWriter<Double> {
     public DoubleArrayWriter() {
       super(new DoubleWriter());
     }

@@ -9,8 +9,11 @@
 package org.locationtech.geowave.mapreduce.input;
 
 import java.util.Iterator;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import org.apache.commons.lang3.tuple.Pair;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
@@ -21,6 +24,7 @@ import org.locationtech.geowave.core.store.base.dataidx.DataIndexRetrieval;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.geowave.mapreduce.HadoopWritableSerializationTool;
+import com.beust.jcommander.internal.Maps;
 
 /**
  * This is used internally to translate GeoWave rows into native objects (using the appropriate data
@@ -37,12 +41,15 @@ public class InputFormatIteratorWrapper<T> implements Iterator<Pair<GeoWaveInput
   protected Pair<GeoWaveInputKey, T> nextEntry;
   private final Index index;
   private final DataIndexRetrieval dataIndexRetrieval;
+  private final AdapterIndexMappingStore mappingStore;
+  private final Map<Short, AdapterToIndexMapping> indexMappings;
 
   public InputFormatIteratorWrapper(
       final Iterator<GeoWaveRow> reader,
       final QueryFilter[] queryFilters,
       final TransientAdapterStore adapterStore,
       final InternalAdapterStore internalAdapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final Index index,
       final boolean isOutputWritable,
       final DataIndexRetrieval dataIndexRetrieval) {
@@ -53,18 +60,26 @@ public class InputFormatIteratorWrapper<T> implements Iterator<Pair<GeoWaveInput
         new HadoopWritableSerializationTool(adapterStore, internalAdapterStore);
     this.isOutputWritable = isOutputWritable;
     this.dataIndexRetrieval = dataIndexRetrieval;
+    this.mappingStore = mappingStore;
+    this.indexMappings = Maps.newHashMap();
   }
 
   protected void findNext() {
     while ((this.nextEntry == null) && reader.hasNext()) {
       final GeoWaveRow nextRow = reader.next();
       if (nextRow != null) {
+        if (!indexMappings.containsKey(nextRow.getAdapterId())) {
+          indexMappings.put(
+              nextRow.getAdapterId(),
+              mappingStore.getMapping(nextRow.getAdapterId(), index.getName()));
+        }
         final Pair<GeoWaveInputKey, T> decodedValue =
             decodeRowToEntry(
                 nextRow,
                 queryFilters,
                 (InternalDataAdapter<T>) serializationTool.getInternalAdapter(
                     nextRow.getAdapterId()),
+                indexMappings.get(nextRow.getAdapterId()),
                 index);
         if (decodedValue != null) {
           nextEntry = decodedValue;
@@ -79,6 +94,7 @@ public class InputFormatIteratorWrapper<T> implements Iterator<Pair<GeoWaveInput
       final GeoWaveRow row,
       final QueryFilter[] clientFilters,
       final InternalDataAdapter<T> adapter,
+      final AdapterToIndexMapping indexMapping,
       final Index index) {
     Object value = null;
     try {
@@ -87,6 +103,8 @@ public class InputFormatIteratorWrapper<T> implements Iterator<Pair<GeoWaveInput
               row,
               clientFilters,
               adapter,
+              indexMapping,
+              null,
               null,
               index,
               null,
@@ -107,8 +125,9 @@ public class InputFormatIteratorWrapper<T> implements Iterator<Pair<GeoWaveInput
       final GeoWaveRow row,
       final QueryFilter[] clientFilters,
       final InternalDataAdapter<T> adapter,
+      final AdapterToIndexMapping indexMapping,
       final Index index) {
-    final Object value = decodeRowToValue(row, clientFilters, adapter, index);
+    final Object value = decodeRowToValue(row, clientFilters, adapter, indexMapping, index);
     if (value == null) {
       return null;
     }

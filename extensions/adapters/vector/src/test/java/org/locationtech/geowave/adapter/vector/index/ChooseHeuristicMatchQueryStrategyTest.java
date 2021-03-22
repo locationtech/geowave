@@ -23,11 +23,8 @@ import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.NullIndex;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintData;
@@ -172,13 +169,14 @@ public class ChooseHeuristicMatchQueryStrategyTest {
       final ChooseHeuristicMatchIndexQueryStrategy strategy) {
     return strategy.getIndices(
         statsStore,
+        null,
         query,
         indices.toArray(new Index[indices.size()]),
         null,
         Maps.newHashMap());
   }
 
-  public static class ConstrainedIndexValue extends NumericRange implements CommonIndexValue {
+  public static class ConstrainedIndexValue extends NumericRange {
 
     /** */
     private static final long serialVersionUID = 1L;
@@ -186,19 +184,6 @@ public class ChooseHeuristicMatchQueryStrategyTest {
     public ConstrainedIndexValue(final double min, final double max) {
       super(min, max);
       //
-    }
-
-    @Override
-    public byte[] getVisibility() {
-      return new byte[0];
-    }
-
-    @Override
-    public void setVisibility(final byte[] visibility) {}
-
-    @Override
-    public boolean overlaps(final NumericDimensionField[] field, final NumericData[] rangeData) {
-      return false;
     }
   }
 

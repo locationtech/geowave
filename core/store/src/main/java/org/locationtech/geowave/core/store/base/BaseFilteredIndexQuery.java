@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.DataStoreOptions;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
@@ -71,6 +72,7 @@ abstract class BaseFilteredIndexQuery extends BaseQuery {
       final DataStoreOperations datastoreOperations,
       final DataStoreOptions options,
       final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final InternalAdapterStore internalAdapterStore,
       final double[] maxResolutionSubsamplingPerDimension,
       final double[] targetResolutionPerDimensionForHierarchicalIndex,
@@ -82,6 +84,7 @@ abstract class BaseFilteredIndexQuery extends BaseQuery {
             datastoreOperations,
             options,
             adapterStore,
+            mappingStore,
             internalAdapterStore,
             maxResolutionSubsamplingPerDimension,
             targetResolutionPerDimensionForHierarchicalIndex,
@@ -90,6 +93,7 @@ abstract class BaseFilteredIndexQuery extends BaseQuery {
             getRowTransformer(
                 options,
                 adapterStore,
+                mappingStore,
                 maxResolutionSubsamplingPerDimension,
                 !isCommonIndexAggregation()),
             delete);
@@ -108,6 +112,7 @@ abstract class BaseFilteredIndexQuery extends BaseQuery {
       final DataStoreOperations datastoreOperations,
       final DataStoreOptions options,
       final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final InternalAdapterStore internalAdapterStore,
       final double[] maxResolutionSubsamplingPerDimension,
       final double[] targetResolutionPerDimensionForHierarchicalIndex,
@@ -130,6 +135,7 @@ abstract class BaseFilteredIndexQuery extends BaseQuery {
         datastoreOperations,
         options,
         adapterStore,
+        mappingStore,
         internalAdapterStore,
         maxResolutionSubsamplingPerDimension,
         targetResolutionPerDimensionForHierarchicalIndex,
@@ -156,6 +162,7 @@ abstract class BaseFilteredIndexQuery extends BaseQuery {
   private <T> GeoWaveRowIteratorTransformer<T> getRowTransformer(
       final DataStoreOptions options,
       final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final double[] maxResolutionSubsamplingPerDimension,
       final boolean decodePersistenceEncoding) {
     final @Nullable QueryFilter[] clientFilters = getClientFilters(options);
@@ -171,6 +178,7 @@ abstract class BaseFilteredIndexQuery extends BaseQuery {
           public Iterator<T> apply(final Iterator<GeoWaveRow> input) {
             return new MergingEntryIterator(
                 adapterStore,
+                mappingStore,
                 index,
                 input,
                 clientFilters,
@@ -190,6 +198,7 @@ abstract class BaseFilteredIndexQuery extends BaseQuery {
       public Iterator<T> apply(final Iterator<GeoWaveRow> input) {
         return (Iterator<T>) GeoWaveRowIteratorFactory.iterator(
             adapterStore,
+            mappingStore,
             index,
             input,
             clientFilters,

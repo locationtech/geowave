@@ -14,8 +14,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import org.locationtech.geowave.core.index.Coordinate;
 import org.locationtech.geowave.core.index.CoordinateRange;
+import org.locationtech.geowave.core.index.IndexDimensionHint;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRanges;
@@ -25,32 +27,31 @@ import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
-import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.index.sfc.data.NumericValue;
-import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.IndexFieldMapper;
 import org.locationtech.geowave.core.store.api.Statistic;
 import org.locationtech.geowave.core.store.api.StatisticValue;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
-import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.statistics.DefaultStatisticsProvider;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.google.common.primitives.Bytes;
 
 public class MockComponents {
   // Mock class instantiating abstract class so we can test logic
   // contained in abstract class.
-  public static class MockAbstractDataAdapter extends AbstractDataAdapter<Integer> implements
-      DefaultStatisticsProvider {
+  public static class MockAbstractDataAdapter implements
+      DefaultStatisticsProvider,
+      DataTypeAdapter<Integer> {
     private String id = ID;
 
     public MockAbstractDataAdapter() {
@@ -58,58 +59,21 @@ public class MockComponents {
     }
 
     public MockAbstractDataAdapter(final String id) {
-      super(Lists.newArrayList(), Lists.newArrayList());
+      super();
       this.id = id;
-      final List<IndexFieldHandler<Integer, TestIndexFieldType, Object>> handlers =
-          new ArrayList<>();
-      handlers.add(new TestIndexFieldHandler());
-      super.init(handlers, null);
-    }
-
-    public static class TestIndexFieldHandler implements
-        IndexFieldHandler<Integer, TestIndexFieldType, Object>,
-        Persistable {
-      @Override
-      public String[] getNativeFieldNames() {
-        return new String[] {INTEGER};
-      }
-
-      @Override
-      public TestIndexFieldType toIndexValue(final Integer row) {
-        return new TestIndexFieldType(row);
-      }
-
-      @Override
-      public PersistentValue<Object>[] toNativeValues(final TestIndexFieldType indexValue) {
-        return new PersistentValue[] {new PersistentValue<>(INTEGER, indexValue.indexValue)};
-      }
-
-      @Override
-      public byte[] toBinary() {
-        return new byte[0];
-      }
-
-      @Override
-      public void fromBinary(final byte[] bytes) {}
-
-      @Override
-      public TestIndexFieldType toIndexValue(
-          final PersistentDataset<Object> adapterPersistenceEncoding) {
-        return new TestIndexFieldType((Integer) adapterPersistenceEncoding.getValue(INTEGER));
-      }
+      // final List<IndexFieldHandler<Integer, TestIndexFieldType, Object>> handlers =
+      // new ArrayList<>();
+      // handlers.add(new TestIndexFieldHandler());
+      // super.init(handlers, null);
     }
 
     public static final String INTEGER = "TestInteger";
     public static final String ID = "TestIntegerAdapter";
-
-    public MockAbstractDataAdapter(final List<PersistentIndexFieldHandler<Integer, // RowType
-        ? extends CommonIndexValue, // IndexFieldType
-        Object // NativeFieldType
-    >> _indexFieldHandlers, final List<NativeFieldHandler<Integer, // RowType
-        Object // FieldType
-    >> _nativeFieldHandlers) {
-      super(_indexFieldHandlers, _nativeFieldHandlers);
-    }
+    private static final FieldDescriptor<?>[] FIELDS =
+        new FieldDescriptor[] {
+            new FieldDescriptorBuilder<>(Integer.class).indexHint(
+                TestDimensionField.TEST_DIMENSION_HINT).fieldName(INTEGER).build(),
+            new FieldDescriptorBuilder<>(String.class).fieldName(ID).build()};
 
     @Override
     public String getTypeName() {
@@ -163,10 +127,7 @@ public class MockComponents {
     @Override
     public byte[] toBinary() {
       final byte[] idBinary = StringUtils.stringToBinary(id);
-      return Bytes.concat(
-          ByteBuffer.allocate(4).putInt(idBinary.length).array(),
-          idBinary,
-          super.toBinary());
+      return Bytes.concat(ByteBuffer.allocate(4).putInt(idBinary.length).array(), idBinary);
     }
 
     @Override
@@ -175,14 +136,11 @@ public class MockComponents {
       final byte[] idBinary = new byte[buf.getInt()];
       buf.get(idBinary);
       id = StringUtils.stringFromBinary(idBinary);
-      final byte[] superBytes = new byte[bytes.length - 4 - idBinary.length];
-      buf.get(superBytes);
-      super.fromBinary(superBytes);
     }
 
     @Override
-    protected RowBuilder<Integer, Object> newBuilder() {
-      return new RowBuilder<Integer, Object>() {
+    public RowBuilder<Integer> newRowBuilder(final FieldDescriptor<?>[] outputFieldDescriptors) {
+      return new RowBuilder<Integer>() {
         @SuppressWarnings("unused")
         private String myid;
 
@@ -215,93 +173,48 @@ public class MockComponents {
     }
 
     @Override
-    public int getPositionOfOrderedField(final CommonIndexModel model, final String fieldName) {
-      int i = 0;
-      for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
-        if (fieldName.equals(dimensionField.getFieldName())) {
-          return i;
-        }
-        i++;
-      }
-      if (fieldName.equals(INTEGER)) {
-        return i;
-      } else if (fieldName.equals(ID)) {
-        return i + 1;
-      }
-      return -1;
-    }
-
-    @Override
-    public String getFieldNameForPosition(final CommonIndexModel model, final int position) {
-      if (position < model.getDimensions().length) {
-        int i = 0;
-        for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
-          if (i == position) {
-            return dimensionField.getFieldName();
-          }
-          i++;
-        }
-      } else {
-        final int numDimensions = model.getDimensions().length;
-        if (position == numDimensions) {
-          return INTEGER;
-        } else if (position == (numDimensions + 1)) {
-          return ID;
-        }
-      }
-      return null;
-    }
-
-    @Override
-    public int getFieldCount() {
-      return 2;
-    }
-
-    @Override
-    public Class<?> getFieldClass(int fieldIndex) {
-      switch (fieldIndex) {
-        case 0:
-          return Integer.class;
-        case 1:
-          return String.class;
-      }
-      return null;
-    }
-
-    @Override
-    public String getFieldName(int fieldIndex) {
-      switch (fieldIndex) {
-        case 0:
-          return INTEGER;
-        case 1:
-          return ID;
-      }
-      return null;
-    }
-
-    @Override
-    public Object getFieldValue(Integer entry, String fieldName) {
-      switch (fieldName) {
-        case INTEGER:
-          return entry;
-        case ID:
-          return entry.toString();
-      }
-      return null;
-    }
-
-    @Override
     public Class<Integer> getDataClass() {
       return Integer.class;
     }
 
     @Override
     public List<Statistic<? extends StatisticValue<?>>> getDefaultStatistics() {
-      List<Statistic<? extends StatisticValue<?>>> statistics = Lists.newArrayList();
-      CountStatistic count = new CountStatistic(getTypeName());
+      final List<Statistic<? extends StatisticValue<?>>> statistics = Lists.newArrayList();
+      final CountStatistic count = new CountStatistic(getTypeName());
       count.setInternal();
       statistics.add(count);
       return statistics;
+    }
+
+    @Override
+    public Object getFieldValue(final Integer entry, final String fieldName) {
+      switch (fieldName) {
+        case INTEGER:
+          return entry;
+        case ID:
+          return entry.toString();
+        default:
+          break;
+      }
+      return null;
+    }
+
+    @Override
+    public FieldDescriptor[] getFieldDescriptors() {
+      return FIELDS;
+    }
+
+    @Override
+    public FieldDescriptor getFieldDescriptor(final String fieldName) {
+      switch (fieldName) {
+        case INTEGER:
+          return FIELDS[0];
+        case ID:
+          return FIELDS[1];
+        default:
+          break;
+      }
+      return null;
     }
   } // class MockAbstractDataAdapter
 
@@ -310,176 +223,42 @@ public class MockComponents {
   // Test index field type for dimension.
   //
   // *************************************************************************
-  public static class TestIndexFieldType implements CommonIndexValue {
+  public static class TestIndexFieldType {
     private final Integer indexValue;
 
     public TestIndexFieldType(final Integer _indexValue) {
       indexValue = _indexValue;
     }
-
-    @Override
-    public byte[] getVisibility() {
-      return null;
-    }
-
-    @Override
-    public void setVisibility(final byte[] visibility) {}
-
-    @Override
-    public boolean overlaps(
-        final NumericDimensionField[] dimensions,
-        final NumericData[] rangeData) {
-      return (rangeData[0].getMin() <= indexValue) && (rangeData[0].getMax() >= indexValue);
-    }
   }
 
-  // *************************************************************************
-  //
-  // Test class that implements PersistentIndexFieldHandler<T> for
-  // instantiation of MockAbstractDataAdapter object.
-  //
-  // *************************************************************************
-  public static class TestPersistentIndexFieldHandler implements
-      PersistentIndexFieldHandler<Integer, TestIndexFieldType, Object> {
-
-    public TestPersistentIndexFieldHandler() {}
+  public static class TestIndexFieldTypeMapper extends
+      IndexFieldMapper<Integer, TestIndexFieldType> {
 
     @Override
-    public String[] getNativeFieldNames() {
-      return new String[] {MockAbstractDataAdapter.INTEGER};
-    }
-
-    // toIndexValue simply increments each digit in number.
-    @Override
-    public TestIndexFieldType toIndexValue(final Integer row) {
-
-      final String sRow = row.toString();
-      final int numDigits = sRow.length();
-      String sNewRow = new String();
-      final char[] newDigit = new char[1];
-      for (int i = 0; i < numDigits; i++) {
-        final char digit = sRow.charAt(i);
-        switch (digit) {
-          case '0':
-            newDigit[0] = '1';
-            break;
-          case '1':
-            newDigit[0] = '2';
-            break;
-          case '2':
-            newDigit[0] = '3';
-            break;
-          case '3':
-            newDigit[0] = '4';
-            break;
-          case '4':
-            newDigit[0] = '5';
-            break;
-          case '5':
-            newDigit[0] = '6';
-            break;
-          case '6':
-            newDigit[0] = '7';
-            break;
-          case '7':
-            newDigit[0] = '8';
-            break;
-          case '8':
-            newDigit[0] = '9';
-            break;
-          case '9':
-            newDigit[0] = '0';
-            break;
-        }
-        sNewRow = sNewRow.concat(new String(newDigit));
-      }
-      return new TestIndexFieldType(Integer.decode(sNewRow));
-    }
-
-    // toNativeValues decrements each digit in the value.
-    @SuppressWarnings("unchecked")
-    @Override
-    public PersistentValue<Object>[] toNativeValues(final TestIndexFieldType _indexValue) {
-
-      final String sRow = _indexValue.indexValue.toString();
-      final int numDigits = sRow.length();
-      String sNewRow = new String();
-      final char[] newDigit = new char[1];
-      for (int i = 0; i < numDigits; i++) {
-        final char digit = sRow.charAt(i);
-        switch (digit) {
-          case '0':
-            newDigit[0] = '9';
-            break;
-          case '1':
-            newDigit[0] = '0';
-            break;
-          case '2':
-            newDigit[0] = '1';
-            break;
-          case '3':
-            newDigit[0] = '2';
-            break;
-          case '4':
-            newDigit[0] = '3';
-            break;
-          case '5':
-            newDigit[0] = '4';
-            break;
-          case '6':
-            newDigit[0] = '5';
-            break;
-          case '7':
-            newDigit[0] = '6';
-            break;
-          case '8':
-            newDigit[0] = '7';
-            break;
-          case '9':
-            newDigit[0] = '8';
-            break;
-        }
-        sNewRow = sNewRow.concat(new String(newDigit));
-      }
-      final Integer newValue = Integer.decode(sNewRow);
-
-      return new PersistentValue[] {
-          new PersistentValue<Object>(MockAbstractDataAdapter.INTEGER, newValue)};
+    public TestIndexFieldType toIndex(List<Integer> nativeFieldValues) {
+      return new TestIndexFieldType(nativeFieldValues.get(0));
     }
 
     @Override
-    public byte[] toBinary() {
-      return new byte[0];
+    public List<Integer> toAdapter(TestIndexFieldType indexFieldValue) {
+      return Lists.newArrayList(indexFieldValue.indexValue);
     }
 
     @Override
-    public void fromBinary(final byte[] bytes) {}
-
-    @Override
-    public TestIndexFieldType toIndexValue(
-        final PersistentDataset<Object> adapterPersistenceEncoding) {
-      return toIndexValue(
-          (Integer) adapterPersistenceEncoding.getValue(MockAbstractDataAdapter.INTEGER));
-    }
-  }
-
-  // *************************************************************************
-  //
-  // Test class that implements NativeFieldHandler<RowType,FieldType>
-  // for instantiation of MockAbstractDataAdapter object.
-  //
-  // *************************************************************************
-  public static class TestNativeFieldHandler implements NativeFieldHandler<Integer, Object> {
-
-    @Override
-    public String getFieldName() {
-      return MockAbstractDataAdapter.INTEGER;
+    public Class<TestIndexFieldType> indexFieldType() {
+      return TestIndexFieldType.class;
     }
 
     @Override
-    public Object getFieldValue(final Integer row) {
-      return row;
+    public Class<Integer> adapterFieldType() {
+      return Integer.class;
     }
+
+    @Override
+    public short adapterFieldCount() {
+      return 1;
+    }
+
   }
 
   // *************************************************************************
@@ -490,9 +269,12 @@ public class MockComponents {
   // *************************************************************************
   public static class TestDimensionField implements NumericDimensionField<TestIndexFieldType> {
     final String fieldName;
+    public static String FIELD = "TestDimensionField1";
+
+    public static IndexDimensionHint TEST_DIMENSION_HINT = new IndexDimensionHint("TEST_DIMENSION");
 
     public TestDimensionField() {
-      fieldName = "TestDimensionField1";
+      fieldName = FIELD;
     }
 
     @Override
@@ -524,7 +306,7 @@ public class MockComponents {
     }
 
     @Override
-    public FieldWriter<Object, TestIndexFieldType> getWriter() {
+    public FieldWriter<TestIndexFieldType> getWriter() {
       return new IntegerWriter();
     }
 
@@ -539,7 +321,7 @@ public class MockComponents {
     }
 
     @Override
-    public boolean isCompatibleWith(Class<? extends CommonIndexValue> clazz) {
+    public boolean isCompatibleWith(final Class<?> clazz) {
       return TestIndexFieldType.class.isAssignableFrom(clazz);
     }
 
@@ -571,6 +353,16 @@ public class MockComponents {
     @Override
     public NumericData getFullRange() {
       return null;
+    }
+
+    @Override
+    public Class<TestIndexFieldType> getFieldClass() {
+      return TestIndexFieldType.class;
+    }
+
+    @Override
+    public Set<IndexDimensionHint> getDimensionHints() {
+      return Sets.newHashSet(TEST_DIMENSION_HINT);
     }
   }
 
@@ -712,15 +504,15 @@ public class MockComponents {
     }
 
     @Override
-    public FieldReader<CommonIndexValue> getReader(final String fieldName) {
+    public FieldReader<Object> getReader(final String fieldName) {
       final FieldReader<?> reader = dimensionFields[0].getReader();
-      return (FieldReader<CommonIndexValue>) reader;
+      return (FieldReader<Object>) reader;
     }
 
     @Override
-    public FieldWriter<Object, CommonIndexValue> getWriter(final String fieldName) {
-      final FieldWriter<?, ?> writer = dimensionFields[0].getWriter();
-      return (FieldWriter<Object, CommonIndexValue>) writer;
+    public FieldWriter<Object> getWriter(final String fieldName) {
+      final FieldWriter<?> writer = dimensionFields[0].getWriter();
+      return (FieldWriter<Object>) writer;
     }
 
     @Override
@@ -750,15 +542,7 @@ public class MockComponents {
     }
   }
 
-  public static class IntegerWriter implements FieldWriter<Object, TestIndexFieldType> {
-
-    @Override
-    public byte[] getVisibility(
-        final Object rowValue,
-        final String fieldName,
-        final TestIndexFieldType fieldValue) {
-      return fieldValue.getVisibility();
-    }
+  public static class IntegerWriter implements FieldWriter<TestIndexFieldType> {
 
     @Override
     public byte[] writeField(final TestIndexFieldType fieldValue) {

@@ -23,7 +23,6 @@ import org.geotools.filter.text.cql2.CQLException;
 import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import org.locationtech.geowave.core.store.statistics.field.NumericHistogramStatistic;
 import org.locationtech.geowave.core.store.statistics.field.NumericHistogramStatistic.NumericHistogramValue;
 import org.locationtech.jts.geom.Coordinate;
@@ -45,10 +44,7 @@ public class NumericHistogramStatisticsTest {
         DataUtilities.createType(
             "sp.geostuff",
             "geometry:Geometry:srid=4326,pop:java.lang.Long,when:Date,whennot:Date,somewhere:Polygon,pid:String");
-    dataAdapter =
-        new FeatureDataAdapter(
-            schema,
-            new GlobalVisibilityHandler<SimpleFeature, Object>("default"));
+    dataAdapter = new FeatureDataAdapter(schema);
   }
 
   private SimpleFeature create(final Double val) {

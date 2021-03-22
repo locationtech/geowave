@@ -42,7 +42,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.adapter.raster.util.ZipUtils;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
-import org.locationtech.geowave.core.store.adapter.InitializeWithIndicesDataAdapter;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
@@ -198,12 +197,6 @@ public class BasicMapReduceIT extends AbstractGeoWaveIT {
         DimensionalityType.SPATIAL_AND_SPATIAL_TEMPORAL,
         OSM_GPX_INPUT_DIR);
     final DataTypeAdapter<SimpleFeature>[] adapters = new GpxIngestPlugin().getDataAdapters(null);
-
-    for (final DataTypeAdapter<SimpleFeature> adapter : adapters) {
-      if (adapter instanceof InitializeWithIndicesDataAdapter) {
-        ((InitializeWithIndicesDataAdapter) adapter).init(TestUtils.DEFAULT_SPATIAL_INDEX);
-      }
-    }
 
     final org.locationtech.geowave.core.store.api.DataStore geowaveStore =
         dataStorePluginOptions.createDataStore();

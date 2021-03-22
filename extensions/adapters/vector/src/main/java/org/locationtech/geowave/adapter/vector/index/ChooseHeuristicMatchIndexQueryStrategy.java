@@ -10,6 +10,8 @@ package org.locationtech.geowave.adapter.vector.index;
 
 import java.util.Map;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
@@ -34,12 +36,14 @@ public class ChooseHeuristicMatchIndexQueryStrategy implements IndexQueryStrateg
   @Override
   public CloseableIterator<Index> getIndices(
       final DataStatisticsStore statisticsStore,
+      final AdapterIndexMappingStore indexMappingStore,
       final QueryConstraints query,
       final Index[] indices,
-      final DataTypeAdapter<?> adapter,
+      final InternalDataAdapter<?> adapter,
       final Map<QueryHint, Object> hints) {
     return new CloseableIterator.Wrapper<>(
-        Iterators.singletonIterator(BaseDataStoreUtils.chooseBestIndex(indices, query, adapter)));
+        Iterators.singletonIterator(
+            BaseDataStoreUtils.chooseBestIndex(indices, query, adapter, indexMappingStore)));
   }
 
   @Override

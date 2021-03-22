@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
@@ -26,7 +25,6 @@ import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.query.filter.BasicQueryFilter;
-import org.locationtech.geowave.core.store.util.GenericTypeResolver;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
 import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
@@ -251,9 +249,7 @@ public class SpatialQueryFilter extends BasicQueryFilter {
   }
 
   public static boolean isSpatial(final NumericDimensionField<?> d) {
-    final Class<?> commonIndexType =
-        GenericTypeResolver.resolveTypeArgument(d.getClass(), NumericDimensionField.class);
-    return GeometryWrapper.class.isAssignableFrom(commonIndexType);
+    return Geometry.class.isAssignableFrom(d.getFieldClass());
   }
 
   @Override
@@ -271,9 +267,9 @@ public class SpatialQueryFilter extends BasicQueryFilter {
       if (persistenceEncoding.isAsync()) {
         return false;
       }
-      if ((geomObj != null) && (geomObj instanceof GeometryWrapper)) {
-        final GeometryWrapper geom = (GeometryWrapper) geomObj;
-        if (geometryPasses(geom.getGeometry())) {
+      if ((geomObj != null) && (geomObj instanceof Geometry)) {
+        final Geometry geom = (Geometry) geomObj;
+        if (geometryPasses(geom)) {
           geometryPasses = true;
           break;
         }

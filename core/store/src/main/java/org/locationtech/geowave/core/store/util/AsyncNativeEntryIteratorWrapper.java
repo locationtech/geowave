@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.store.util;
 
 import java.util.Iterator;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.dataidx.BatchDataIndexRetrieval;
@@ -22,6 +23,7 @@ public class AsyncNativeEntryIteratorWrapper<T> extends NativeEntryIteratorWrapp
 
   public AsyncNativeEntryIteratorWrapper(
       final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final Index index,
       final Iterator<GeoWaveRow> scannerIt,
       final QueryFilter[] clientFilters,
@@ -32,6 +34,7 @@ public class AsyncNativeEntryIteratorWrapper<T> extends NativeEntryIteratorWrapp
       final BatchDataIndexRetrieval dataIndexRetrieval) {
     super(
         adapterStore,
+        mappingStore,
         index,
         scannerIt,
         clientFilters,

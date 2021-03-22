@@ -24,7 +24,7 @@ public class DateSerializationProvider implements FieldSerializationProviderSpi<
   }
 
   @Override
-  public FieldWriter<Object, Date> getFieldWriter() {
+  public FieldWriter<Date> getFieldWriter() {
     return new DateWriter();
   }
 
@@ -50,7 +50,7 @@ public class DateSerializationProvider implements FieldSerializationProviderSpi<
     }
   }
 
-  protected static class DateWriter implements FieldWriter<Object, Date> {
+  protected static class DateWriter implements FieldWriter<Date> {
     @Override
     public byte[] writeField(final Date fieldData) {
       if (fieldData == null) {

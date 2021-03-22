@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.store.operations;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
@@ -16,6 +17,7 @@ import org.locationtech.geowave.core.store.api.Aggregation;
 
 public abstract class BaseReaderParams<T> {
   private final PersistentAdapterStore adapterStore;
+  private final AdapterIndexMappingStore mappingStore;
   private final InternalAdapterStore internalAdapterStore;
   private final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation;
   private final Pair<String[], InternalDataAdapter<?>> fieldSubsets;
@@ -24,12 +26,14 @@ public abstract class BaseReaderParams<T> {
 
   public BaseReaderParams(
       final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final InternalAdapterStore internalAdapterStore,
       final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
       final Pair<String[], InternalDataAdapter<?>> fieldSubsets,
       final boolean isAuthorizationsLimiting,
       final String[] additionalAuthorizations) {
     this.adapterStore = adapterStore;
+    this.mappingStore = mappingStore;
     this.internalAdapterStore = internalAdapterStore;
     this.aggregation = aggregation;
     this.fieldSubsets = fieldSubsets;
@@ -40,6 +44,10 @@ public abstract class BaseReaderParams<T> {
 
   public PersistentAdapterStore getAdapterStore() {
     return adapterStore;
+  }
+
+  public AdapterIndexMappingStore getAdapterIndexMappingStore() {
+    return mappingStore;
   }
 
   public InternalAdapterStore getInternalAdapterStore() {

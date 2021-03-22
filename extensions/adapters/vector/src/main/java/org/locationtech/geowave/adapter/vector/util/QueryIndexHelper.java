@@ -8,7 +8,12 @@
  */
 package org.locationtech.geowave.adapter.vector.util;
 
+import java.util.HashMap;
+import java.util.Map;
+import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.StatisticsCache;
+import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
+import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialTemporalQuery;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraints;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet;
@@ -19,16 +24,26 @@ import org.locationtech.geowave.core.geotime.store.statistics.TimeRangeStatistic
 import org.locationtech.geowave.core.geotime.store.statistics.TimeRangeStatistic.TimeRangeValue;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils.GeoConstraintsWrapper;
+import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
+import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
 import org.locationtech.geowave.core.geotime.util.TimeUtils;
+import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintData;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintSet;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintsByClass;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.TransformException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class QueryIndexHelper {
+  private static final Logger LOGGER = LoggerFactory.getLogger(QueryIndexHelper.class);
 
   private static TemporalRange getTimeRange(
       final StatisticsCache statisticsCache,
@@ -96,12 +111,25 @@ public class QueryIndexHelper {
    */
   public static Geometry clipIndexedBBOXConstraints(
       final StatisticsCache statisticsCache,
-      final SimpleFeatureType featureType,
+      final SimpleFeatureType adapterFeatureType,
+      final CoordinateReferenceSystem indexCRS,
       final Geometry bbox) {
-    final BoundingBoxValue bounds = getBounds(statisticsCache, featureType.getGeometryDescriptor());
+    final BoundingBoxValue bounds =
+        getBounds(statisticsCache, adapterFeatureType.getGeometryDescriptor());
     if ((bounds != null) && bounds.isSet() && (bbox != null)) {
-      final Geometry geo = new GeometryFactory().toGeometry(bounds.getValue());
-      return geo.intersection(bbox);
+      CoordinateReferenceSystem bboxCRS =
+          ((BoundingBoxStatistic) bounds.getStatistic()).getDestinationCrs();
+      if (bboxCRS == null) {
+        bboxCRS = adapterFeatureType.getCoordinateReferenceSystem();
+      }
+      try {
+        final Geometry geo =
+            new GeometryFactory().toGeometry(
+                new ReferencedEnvelope(bounds.getValue(), bboxCRS).transform(indexCRS, true));
+        return geo.intersection(bbox);
+      } catch (MismatchedDimensionException | TransformException | FactoryException e) {
+        LOGGER.warn("Unable to transform bounding box statistic to index CRS");
+      }
     }
     return bbox;
   }
@@ -128,13 +156,6 @@ public class QueryIndexHelper {
       }
     }
     return new ConstraintSet();
-  }
-
-  public static ConstraintSet getBBOXIndexConstraintsFromIndex(
-      final StatisticsCache statisticsCache,
-      final SimpleFeatureType featureType) {
-    final BoundingBoxValue bounds = getBounds(statisticsCache, featureType.getGeometryDescriptor());
-    return (bounds != null) ? bounds.getConstraints() : new ConstraintSet();
   }
 
   /**

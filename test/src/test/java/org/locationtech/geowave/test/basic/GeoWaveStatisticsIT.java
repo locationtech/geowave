@@ -18,7 +18,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -35,7 +34,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
@@ -44,16 +42,7 @@ import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatist
 import org.locationtech.geowave.core.geotime.store.statistics.TimeRangeStatistic;
 import org.locationtech.geowave.core.geotime.store.statistics.binning.TimeRangeFieldValueBinningStrategy;
 import org.locationtech.geowave.core.index.ByteArray;
-import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
-import org.locationtech.geowave.core.index.sfc.SFCFactory.SFCType;
-import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
-import org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
-import org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.NumericHistogram;
 import org.locationtech.geowave.core.store.api.BinConstraints;
 import org.locationtech.geowave.core.store.api.DataStore;
@@ -68,8 +57,6 @@ import org.locationtech.geowave.core.store.api.StatisticQueryBuilder;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
-import org.locationtech.geowave.core.store.index.BasicIndexModel;
-import org.locationtech.geowave.core.store.index.CustomNameIndex;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataType;
@@ -78,7 +65,6 @@ import org.locationtech.geowave.core.store.statistics.StatisticsRegistry;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic.CountValue;
 import org.locationtech.geowave.core.store.statistics.binning.CompositeBinningStrategy;
-import org.locationtech.geowave.core.store.statistics.binning.IndexBinningStrategy;
 import org.locationtech.geowave.core.store.statistics.binning.NumericRangeFieldValueBinningStrategy;
 import org.locationtech.geowave.core.store.statistics.field.BloomFilterStatistic;
 import org.locationtech.geowave.core.store.statistics.field.NumericHistogramStatistic;
@@ -145,7 +131,7 @@ public class GeoWaveStatisticsIT extends AbstractGeoWaveBasicVectorIT {
   }
 
   @Before
-  public void initialize() throws MismatchedIndexToAdapterMapping, IOException {
+  public void initialize() throws IOException {
     final DataStore ds = dataStore.createDataStore();
     final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
     final Index idx = SimpleIngest.createSpatialIndex();
@@ -307,20 +293,6 @@ public class GeoWaveStatisticsIT extends AbstractGeoWaveBasicVectorIT {
         new CompositeBinningStrategy(
             new NumericRangeFieldValueBinningStrategy(45, 22.5, "Latitude"),
             new NumericRangeFieldValueBinningStrategy(90, 45, "Longitude")));
-    CountStatistic countBySpatialIndex = new CountStatistic(SimpleIngest.FEATURE_NAME);
-    countBySpatialIndex.setTag("spatial-idx-latlon");
-    final SFCDimensionDefinition[] dimensions =
-        new SFCDimensionDefinition[] {
-            new SFCDimensionDefinition(SpatialDimensionalityTypeProvider.SPATIAL_DIMENSIONS[0], 4),
-            new SFCDimensionDefinition(SpatialDimensionalityTypeProvider.SPATIAL_DIMENSIONS[1], 4)};
-    final TieredSFCIndexStrategy indexStrategy =
-        TieredSFCIndexFactory.createSingleTierStrategy(dimensions, SFCType.HILBERT);
-    countBySpatialIndex.setBinningStrategy(
-        new IndexBinningStrategy(
-            new CustomNameIndex(
-                indexStrategy,
-                new BasicIndexModel(SpatialDimensionalityTypeProvider.getSpatialFields(null)),
-                "Spatial Binning Index")));
     long min = Long.MAX_VALUE, max = Long.MIN_VALUE;
     try (CloseableIterator<SimpleFeature> it = ds.query(VectorQueryBuilder.newBuilder().build())) {
 
@@ -341,8 +313,7 @@ public class GeoWaveStatisticsIT extends AbstractGeoWaveBasicVectorIT {
         timeRangeMonthBin,
         timeRangeYearBin,
         countByGridUsingMultifield,
-        countByGridUsingComposite,
-        countBySpatialIndex);
+        countByGridUsingComposite);
     // let's make sure seralization/deserialization works for stats
     ds = dataStore.createDataStore();
     longitudeRange =
@@ -397,11 +368,6 @@ public class GeoWaveStatisticsIT extends AbstractGeoWaveBasicVectorIT {
             countByGridUsingComposite.getStatisticType(),
             countByGridUsingComposite.getTypeName(),
             countByGridUsingComposite.getTag());
-    countBySpatialIndex =
-        (CountStatistic) ds.getDataTypeStatistic(
-            countBySpatialIndex.getStatisticType(),
-            countBySpatialIndex.getTypeName(),
-            countBySpatialIndex.getTag());
     Range<Double> rangeValue = ds.getStatisticValue(longitudeRange);
     assertEquals(-165.0, rangeValue.getMinimum(), 0.1);
     assertEquals(180.0, rangeValue.getMaximum(), 0.1);
@@ -638,91 +604,6 @@ public class GeoWaveStatisticsIT extends AbstractGeoWaveBasicVectorIT {
       assertTrue(compositeFilteredExpectedResults.containsAll(compositeFilteredActualResults));
       assertTrue(compositeFilteredActualResults.containsAll(compositeFilteredExpectedResults));
       assertEquals(compositeFilteredExpectedCount, totalCount);
-    }
-    final Set<ByteArray> spatialIndexFilteredExpectedResults = new HashSet<>();
-    int spatialIndexFilteredExpectedCount = 0;
-    try (CloseableIterator<Pair<ByteArray, Long>> iterator =
-        ds.getBinnedStatisticValues(countBySpatialIndex)) {
-      int count = 0;
-      int totalCount = 0;
-      while (iterator.hasNext()) {
-        final Pair<ByteArray, Long> binValue = iterator.next();
-
-        totalCount += binValue.getValue();
-        final MultiDimensionalNumericData range =
-            indexStrategy.getRangeForId(
-                new byte[] {binValue.getKey().getBytes()[0]},
-                Arrays.copyOfRange(
-                    binValue.getKey().getBytes(),
-                    1,
-                    binValue.getKey().getBytes().length));
-
-        assertEquals(2, range.getDimensionCount());
-        final NumericData lonRange = range.getDataPerDimension()[0];
-        final NumericData latRange = range.getDataPerDimension()[1];
-
-        // this ensures the interval is 22.5
-        assertEquals(22.5, latRange.getMax() - latRange.getMin(), 0.1);
-        assertEquals(22.5, lonRange.getMax() - lonRange.getMin(), 0.1);
-        // this ensures the offset is 0
-        assertEquals(0.0, Math.abs(latRange.getMin() % 22.5), 0.1);
-        assertEquals(0.0, Math.abs(lonRange.getMin() % 22.5), 0.1);
-        count++;
-        if (Range.between(latRange.getMin(), latRange.getMax()).isOverlappedBy(
-            Range.between(44.0, 59.0))
-            && Range.between(lonRange.getMin(), lonRange.getMax()).isOverlappedBy(
-                Range.between(89.0, 145.0))) {
-          spatialIndexFilteredExpectedResults.add(binValue.getKey());
-          spatialIndexFilteredExpectedCount += binValue.getValue();
-        }
-      }
-      assertEquals(20, count);
-      assertEquals(20, totalCount);
-    }
-    try (CloseableIterator<Pair<ByteArray, Long>> iterator =
-        ds.getBinnedStatisticValues(
-            countBySpatialIndex,
-            BinConstraints.ofObject(
-                new BasicNumericDataset(
-                    new NumericData[] {
-                        new NumericRange(89.0, 145.0),
-                        new NumericRange(44.0, 59.0)})))) {
-      final Set<ByteArray> spatialIndexFilteredActualResults = new HashSet<>();
-      int totalCount = 0;
-      while (iterator.hasNext()) {
-        final Pair<ByteArray, Long> binValue = iterator.next();
-
-        totalCount += binValue.getValue();
-        final MultiDimensionalNumericData range =
-            indexStrategy.getRangeForId(
-                new byte[] {binValue.getKey().getBytes()[0]},
-                Arrays.copyOfRange(
-                    binValue.getKey().getBytes(),
-                    1,
-                    binValue.getKey().getBytes().length));
-
-        assertEquals(2, range.getDimensionCount());
-        final NumericData lonRange = range.getDataPerDimension()[0];
-        final NumericData latRange = range.getDataPerDimension()[1];
-        // this ensures the interval is 22.5
-        assertEquals(22.5, latRange.getMax() - latRange.getMin(), 0.1);
-        assertEquals(22.5, lonRange.getMax() - lonRange.getMin(), 0.1);
-        // this ensures the offset is 0
-        assertEquals(0.0, Math.abs(latRange.getMin() % 22.5), 0.1);
-        assertEquals(0.0, Math.abs(lonRange.getMin() % 22.5), 0.1);
-
-        assertTrue(latRange.getMax() < 45.1);
-        assertTrue(latRange.getMin() > 22.4);
-        assertTrue(lonRange.getMax() < 157.6);
-        assertTrue(lonRange.getMin() > 67.4);
-        spatialIndexFilteredActualResults.add(binValue.getKey());
-      }
-
-      assertTrue(
-          spatialIndexFilteredExpectedResults.containsAll(spatialIndexFilteredActualResults));
-      assertTrue(
-          spatialIndexFilteredActualResults.containsAll(spatialIndexFilteredExpectedResults));
-      assertEquals(spatialIndexFilteredExpectedCount, totalCount);
     }
   }
 

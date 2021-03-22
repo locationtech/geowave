@@ -174,10 +174,12 @@ public class CustomIndexExample {
    * in the index. This implementation allows the user to supply the field name for the UUID field
    * to offer some flexibility.
    */
-  private static class UUIDIndexStrategy implements
+  public static class UUIDIndexStrategy implements
       CustomIndexStrategy<SimpleFeature, UUIDConstraints> {
 
     private String uuidField;
+
+    public UUIDIndexStrategy() {}
 
     public UUIDIndexStrategy(final String uuidField) {
       this.uuidField = uuidField;
@@ -222,6 +224,11 @@ public class CustomIndexExample {
     public QueryRanges getQueryRanges(final UUIDConstraints constraints) {
       final byte[] sortKey = StringUtils.stringToBinary(constraints.uuid());
       return new QueryRanges(new ByteArrayRange(sortKey, sortKey));
+    }
+
+    @Override
+    public Class<UUIDConstraints> getConstraintsClass() {
+      return UUIDConstraints.class;
     }
 
   }

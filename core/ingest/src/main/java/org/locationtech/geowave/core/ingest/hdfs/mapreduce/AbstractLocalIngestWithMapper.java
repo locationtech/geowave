@@ -18,7 +18,6 @@ import org.locationtech.geowave.core.ingest.avro.AbstractStageWholeFileToAvro;
 import org.locationtech.geowave.core.ingest.avro.AvroWholeFile;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.slf4j.Logger;
@@ -103,8 +102,8 @@ public abstract class AbstractLocalIngestWithMapper<T> extends AbstractStageWhol
     }
 
     @Override
-    public Class<? extends CommonIndexValue>[] getSupportedIndexableTypes() {
-      return parentPlugin.getSupportedIndexableTypes();
+    public String[] getSupportedIndexTypes() {
+      return parentPlugin.getSupportedIndexTypes();
     }
   }
 }

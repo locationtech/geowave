@@ -82,9 +82,7 @@ public class QueryOptionsIT {
     type1 = getSimpleFeatureType("type1");
     type2 = getSimpleFeatureType("type2");
     dataAdapter1 = new FeatureDataAdapter(type1);
-    dataAdapter1.init(index);
     dataAdapter2 = new FeatureDataAdapter(type2);
-    dataAdapter2.init(index);
   }
 
   @Before

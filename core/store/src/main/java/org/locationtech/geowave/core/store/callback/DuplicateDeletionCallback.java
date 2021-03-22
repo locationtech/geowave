@@ -18,6 +18,7 @@ import java.util.Set;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Query;
@@ -32,6 +33,7 @@ public class DuplicateDeletionCallback<T> implements DeleteCallback<T, GeoWaveRo
   private final BaseDataStore dataStore;
   private final InternalDataAdapter<?> adapter;
   private final Index index;
+  private final AdapterToIndexMapping indexMapping;
   private final Map<ByteArray, Set<InsertionIdData>> insertionIdsNotYetDeletedByDataId;
 
   private boolean closed = false;
@@ -39,9 +41,11 @@ public class DuplicateDeletionCallback<T> implements DeleteCallback<T, GeoWaveRo
   public DuplicateDeletionCallback(
       final BaseDataStore store,
       final InternalDataAdapter<?> adapter,
+      final AdapterToIndexMapping indexMapping,
       final Index index) {
     this.adapter = adapter;
     this.index = index;
+    this.indexMapping = indexMapping;
     dataStore = store;
     insertionIdsNotYetDeletedByDataId = new HashMap<>();
   }
@@ -84,7 +88,8 @@ public class DuplicateDeletionCallback<T> implements DeleteCallback<T, GeoWaveRo
           insertionIds = new HashSet<>();
           insertionIdsNotYetDeletedByDataId.put(dataId, insertionIds);
           // we haven't visited this data ID yet so we need to start tracking it
-          final InsertionIds ids = DataStoreUtils.getInsertionIdsForEntry(entry, adapter, index);
+          final InsertionIds ids =
+              DataStoreUtils.getInsertionIdsForEntry(entry, adapter, indexMapping, index);
           for (final SinglePartitionInsertionIds insertId : ids.getPartitionKeys()) {
             for (final byte[] sortKey : insertId.getSortKeys()) {
               byte[] partitionKey = insertId.getPartitionKey();

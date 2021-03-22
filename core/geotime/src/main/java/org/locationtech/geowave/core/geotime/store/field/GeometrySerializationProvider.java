@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.core.geotime.store.field;
 
+import javax.annotation.Nullable;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldSerializationProviderSpi;
@@ -16,17 +17,42 @@ import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.jts.geom.Geometry;
 
 public class GeometrySerializationProvider implements FieldSerializationProviderSpi<Geometry> {
-  @Override
-  public FieldReader<Geometry> getFieldReader() {
-    return new GeometryReader();
+  private Integer geometryPrecision;
+
+  public GeometrySerializationProvider() {
+    geometryPrecision = GeometryUtils.MAX_GEOMETRY_PRECISION;
+  }
+
+  public GeometrySerializationProvider(@Nullable final Integer geometryPrecision) {
+    super();
+    this.geometryPrecision = geometryPrecision;
   }
 
   @Override
-  public FieldWriter<Object, Geometry> getFieldWriter() {
-    return new GeometryWriter();
+  public FieldReader<Geometry> getFieldReader() {
+    return new GeometryReader(geometryPrecision);
+  }
+
+  @Override
+  public FieldWriter<Geometry> getFieldWriter() {
+    return new GeometryWriter(geometryPrecision);
   }
 
   protected static class GeometryReader implements FieldReader<Geometry> {
+    private Integer geometryPrecision;
+
+    public GeometryReader() {
+      geometryPrecision = GeometryUtils.MAX_GEOMETRY_PRECISION;
+    }
+
+    public GeometryReader(@Nullable final Integer geometryPrecision) {
+      this.geometryPrecision = geometryPrecision;
+    }
+
+    public void setPrecision(@Nullable final Integer geometryPrecision) {
+      this.geometryPrecision = geometryPrecision;
+    }
+
     @Override
     public Geometry readField(final byte[] fieldData) {
       if ((fieldData == null) || (fieldData.length < 1)) {
@@ -34,7 +60,7 @@ public class GeometrySerializationProvider implements FieldSerializationProvider
       }
       return GeometryUtils.geometryFromBinary(
           fieldData,
-          GeometryUtils.MAX_GEOMETRY_PRECISION,
+          geometryPrecision,
           FieldUtils.SERIALIZATION_VERSION);
     }
 
@@ -43,20 +69,31 @@ public class GeometrySerializationProvider implements FieldSerializationProvider
       if ((fieldData == null) || (fieldData.length < 1)) {
         return null;
       }
-      return GeometryUtils.geometryFromBinary(
-          fieldData,
-          GeometryUtils.MAX_GEOMETRY_PRECISION,
-          serializationVersion);
+      return GeometryUtils.geometryFromBinary(fieldData, geometryPrecision, serializationVersion);
     }
   }
 
-  protected static class GeometryWriter implements FieldWriter<Object, Geometry> {
+  protected static class GeometryWriter implements FieldWriter<Geometry> {
+    private Integer geometryPrecision;
+
+    public GeometryWriter() {
+      geometryPrecision = GeometryUtils.MAX_GEOMETRY_PRECISION;
+    }
+
+    public GeometryWriter(@Nullable final Integer geometryPrecision) {
+      this.geometryPrecision = geometryPrecision;
+    }
+
+    public void setPrecision(@Nullable final Integer geometryPrecision) {
+      this.geometryPrecision = geometryPrecision;
+    }
+
     @Override
     public byte[] writeField(final Geometry fieldValue) {
       if (fieldValue == null) {
         return new byte[] {};
       }
-      return GeometryUtils.geometryToBinary(fieldValue, GeometryUtils.MAX_GEOMETRY_PRECISION);
+      return GeometryUtils.geometryToBinary(fieldValue, geometryPrecision);
     }
   }
 }

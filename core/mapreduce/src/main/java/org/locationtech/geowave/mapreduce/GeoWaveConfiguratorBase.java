@@ -25,6 +25,7 @@ import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.collect.Lists;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -216,31 +217,32 @@ public class GeoWaveConfiguratorBase {
         Short.toString(internalAdapterId));
   }
 
-  public static void addAdapterToIndexMapping(
+  public static void addAdapterToIndexMappings(
       final Class<?> implementingClass,
       final Configuration conf,
-      final AdapterToIndexMapping adapterToIndexMapping) {
-    if (adapterToIndexMapping != null) {
+      final AdapterToIndexMapping[] adapterToIndexMappings) {
+    if (adapterToIndexMappings != null && adapterToIndexMappings.length > 0) {
       conf.set(
           enumToConfKey(
               implementingClass,
               GeoWaveConfg.ADAPTER_TO_INDEX,
-              Short.toString(adapterToIndexMapping.getAdapterId())),
-          ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(adapterToIndexMapping)));
+              Short.toString(adapterToIndexMappings[0].getAdapterId())),
+          ByteArrayUtils.byteArrayToString(
+              PersistenceUtils.toBinary(Lists.newArrayList(adapterToIndexMappings))));
     }
   }
 
-  public static AdapterToIndexMapping getAdapterToIndexMapping(
+  public static AdapterToIndexMapping[] getAdapterToIndexMappings(
       final Class<?> implementingClass,
       final JobContext context,
       final short internalAdapterId) {
-    return getAdapterToIndexMappingInternal(
+    return getAdapterToIndexMappingsInternal(
         implementingClass,
         getConfiguration(context),
         internalAdapterId);
   }
 
-  private static AdapterToIndexMapping getAdapterToIndexMappingInternal(
+  private static AdapterToIndexMapping[] getAdapterToIndexMappingsInternal(
       final Class<?> implementingClass,
       final Configuration configuration,
       final short internalAdapterId) {
@@ -252,7 +254,8 @@ public class GeoWaveConfiguratorBase {
                 Short.toString(internalAdapterId)));
     if (input != null) {
       final byte[] dataAdapterBytes = ByteArrayUtils.byteArrayFromString(input);
-      return (AdapterToIndexMapping) PersistenceUtils.fromBinary(dataAdapterBytes);
+      return PersistenceUtils.fromBinaryAsList(dataAdapterBytes).toArray(
+          new AdapterToIndexMapping[0]);
     }
     return null;
   }

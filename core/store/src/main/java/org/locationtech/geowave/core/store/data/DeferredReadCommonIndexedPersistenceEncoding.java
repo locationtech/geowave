@@ -10,12 +10,11 @@ package org.locationtech.geowave.core.store.data;
 
 import java.util.List;
 import org.locationtech.geowave.core.store.adapter.AbstractAdapterPersistenceEncoding;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.flatten.FlattenedFieldInfo;
 import org.locationtech.geowave.core.store.flatten.FlattenedUnreadData;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 
 /**
  * Consults adapter to lookup field readers based on bitmasked fieldIds when converting unknown data
@@ -34,7 +33,7 @@ public class DeferredReadCommonIndexedPersistenceEncoding extends
       final byte[] partitionKey,
       final byte[] sortKey,
       final int duplicateCount,
-      final PersistentDataset<CommonIndexValue> commonData,
+      final PersistentDataset<Object> commonData,
       final FlattenedUnreadData unreadData) {
     super(
         adapterId,
@@ -49,7 +48,9 @@ public class DeferredReadCommonIndexedPersistenceEncoding extends
   }
 
   @Override
-  public void convertUnknownValues(final DataTypeAdapter<?> adapter, final CommonIndexModel model) {
+  public void convertUnknownValues(
+      final InternalDataAdapter<?> adapter,
+      final CommonIndexModel model) {
     if (unreadData != null) {
       final List<FlattenedFieldInfo> fields = unreadData.finishRead();
       for (final FlattenedFieldInfo field : fields) {

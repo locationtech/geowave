@@ -337,11 +337,13 @@ public class GeometryUtils {
    */
   public static NumericData xRangeFromGeometry(final Geometry geometry) {
     if ((geometry == null) || geometry.isEmpty()) {
-      return new NumericRange(0, 0);
+      return new NumericValue(0);
     }
     // Get the envelope of the geometry being held
     final Envelope env = geometry.getEnvelopeInternal();
-
+    if (env.getWidth() <= 0) {
+      return new NumericValue(env.getMinX());
+    }
     // Create a NumericRange object using the x axis
     return new NumericRange(env.getMinX(), env.getMaxX());
   }
@@ -354,11 +356,13 @@ public class GeometryUtils {
    */
   public static NumericData yRangeFromGeometry(final Geometry geometry) {
     if ((geometry == null) || geometry.isEmpty()) {
-      return new NumericRange(0, 0);
+      return new NumericValue(0);
     }
     // Get the envelope of the geometry being held
     final Envelope env = geometry.getEnvelopeInternal();
-
+    if (env.getHeight() <= 0) {
+      return new NumericValue(env.getMinY());
+    }
     // Create a NumericRange object using the y axis
     return new NumericRange(env.getMinY(), env.getMaxY());
   }
@@ -495,7 +499,7 @@ public class GeometryUtils {
 
     CoordinateReferenceSystem indexCrs = null;
 
-    if (index.getIndexModel() instanceof CustomCrsIndexModel) {
+    if (index != null && index.getIndexModel() instanceof CustomCrsIndexModel) {
       indexCrs = ((CustomCrsIndexModel) index.getIndexModel()).getCrs();
     } else {
       indexCrs = getDefaultCRS();

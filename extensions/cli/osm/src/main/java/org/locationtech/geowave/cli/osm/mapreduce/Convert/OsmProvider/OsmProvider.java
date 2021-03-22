@@ -38,7 +38,6 @@ import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
-import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.datastore.accumulo.config.AccumuloRequiredOptions;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
@@ -53,11 +52,9 @@ public class OsmProvider {
   private static final Logger LOGGER = LoggerFactory.getLogger(OsmProvider.class);
   private Connector conn = null;
   private BatchScanner bs = null;
-  private final FieldWriter<?, Long> longWriter = FieldUtils.getDefaultWriterForClass(Long.class);
   private final FieldReader<Long> longReader = FieldUtils.getDefaultReaderForClass(Long.class);
   private final FieldReader<Double> doubleReader =
       FieldUtils.getDefaultReaderForClass(Double.class);
-  private static final byte EMPTY_BYTES[] = new byte[0];
 
   public OsmProvider(final OSMIngestCommandArgs args, final AccumuloRequiredOptions store)
       throws AccumuloSecurityException, AccumuloException, TableNotFoundException {

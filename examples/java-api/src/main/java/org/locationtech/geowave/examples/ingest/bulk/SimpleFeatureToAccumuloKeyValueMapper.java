@@ -21,10 +21,11 @@ import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.index.SpatialOptions;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
-import org.locationtech.geowave.core.store.adapter.InitializeWithIndicesDataAdapter;
-import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.data.visibility.UnconstrainedVisibilityHandler;
 import org.locationtech.geowave.core.store.data.visibility.UniformVisibilityWriter;
@@ -37,19 +38,19 @@ public class SimpleFeatureToAccumuloKeyValueMapper extends Mapper<LongWritable, 
 
   private final DataTypeAdapter<SimpleFeature> adapter =
       new FeatureDataAdapter(GeonamesSimpleFeatureType.getInstance());
+  // this is not the most robust way to assign an internal adapter ID
+  // but is simple and will work in a majority of cases
+  private final InternalDataAdapter<SimpleFeature> internalAdapter =
+      adapter.asInternalAdapter(
+          InternalAdapterStoreImpl.getLazyInitialAdapterId(adapter.getTypeName()));
   private final Index index =
       new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
+  private final AdapterToIndexMapping indexMapping =
+      BaseDataStoreUtils.mapAdapterToIndex(internalAdapter, index);
   private final VisibilityWriter<SimpleFeature> visibilityWriter =
       new UniformVisibilityWriter<>(new UnconstrainedVisibilityHandler<SimpleFeature, Object>());
   private final AccumuloKeyValuePairGenerator<SimpleFeature> generator =
-      new AccumuloKeyValuePairGenerator<>(
-          // this is not the most robust way to assign an internal adapter ID
-          // but is simple and will work in a majority of cases
-          new InternalDataAdapterWrapper<>(
-              adapter,
-              InternalAdapterStoreImpl.getLazyInitialAdapterId(adapter.getTypeName())),
-          index,
-          visibilityWriter);
+      new AccumuloKeyValuePairGenerator<>(internalAdapter, index, indexMapping, visibilityWriter);
   private SimpleFeature simpleFeature;
   private List<KeyValue> keyValuePairs;
   private final SimpleFeatureBuilder builder =
@@ -65,7 +66,6 @@ public class SimpleFeatureToAccumuloKeyValueMapper extends Mapper<LongWritable, 
       throws IOException, InterruptedException {
 
     simpleFeature = parseGeonamesValue(value);
-    ((InitializeWithIndicesDataAdapter) adapter).init(index);
 
     // build Geowave-formatted Accumulo [Key,Value] pairs
     keyValuePairs = generator.constructKeyValuePairs(simpleFeature);

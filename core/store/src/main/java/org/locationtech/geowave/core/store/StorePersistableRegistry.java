@@ -9,11 +9,13 @@
 package org.locationtech.geowave.core.store;
 
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
+import org.locationtech.geowave.core.store.adapter.BaseFieldDescriptor;
 import org.locationtech.geowave.core.store.adapter.BinaryDataAdapter;
-import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapterImpl;
 import org.locationtech.geowave.core.store.adapter.SimpleRowTransform;
 import org.locationtech.geowave.core.store.api.AggregationQuery;
 import org.locationtech.geowave.core.store.api.Query;
+import org.locationtech.geowave.core.store.dimension.BasicNumericDimensionField;
 import org.locationtech.geowave.core.store.index.BasicIndexModel;
 import org.locationtech.geowave.core.store.index.CustomIndex;
 import org.locationtech.geowave.core.store.index.CustomNameIndex;
@@ -54,7 +56,6 @@ import org.locationtech.geowave.core.store.query.options.FilterByTypeQueryOption
 import org.locationtech.geowave.core.store.query.options.QueryAllIndices;
 import org.locationtech.geowave.core.store.query.options.QueryAllTypes;
 import org.locationtech.geowave.core.store.query.options.QuerySingleIndex;
-import org.locationtech.geowave.core.store.statistics.binning.IndexBinningStrategy;
 
 public class StorePersistableRegistry implements PersistableRegistrySpi {
 
@@ -62,7 +63,9 @@ public class StorePersistableRegistry implements PersistableRegistrySpi {
   public PersistableIdAndConstructor[] getSupportedPersistables() {
     return new PersistableIdAndConstructor[] {
         new PersistableIdAndConstructor((short) 200, AdapterToIndexMapping::new),
-        // 201-207 Unused
+        new PersistableIdAndConstructor((short) 201, BaseFieldDescriptor::new),
+        // 202 is used by CoreRegisteredIndexFieldMappers
+        // 203-207 Unused
         new PersistableIdAndConstructor((short) 208, AdapterIdQueryFilter::new),
         new PersistableIdAndConstructor((short) 209, BasicQueryFilter::new),
         new PersistableIdAndConstructor((short) 210, DataIdQueryFilter::new),
@@ -108,7 +111,7 @@ public class StorePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 259, BasicOrderedConstraintQuery::new),
         new PersistableIdAndConstructor((short) 260, BasicQuery::new),
         new PersistableIdAndConstructor((short) 261, BinaryDataAdapter::new),
-        new PersistableIdAndConstructor((short) 262, InternalDataAdapterWrapper::new),
+        // 262 is Unused
         new PersistableIdAndConstructor((short) 263, CustomIndex::new),
         new PersistableIdAndConstructor((short) 264, CustomQueryConstraints::new),
         new PersistableIdAndConstructor((short) 265, InternalCustomConstraints::new),
@@ -116,8 +119,7 @@ public class StorePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 267, BinningAggregation::new),
         new PersistableIdAndConstructor((short) 268, CustomQueryConstraintsWithFilter::new),
         new PersistableIdAndConstructor((short) 269, InternalCustomQueryFilter::new),
-        // this is intentionally not in the statistics registry because its best for programmatic
-        // access, there are no ways to just use it through the CLI
-        new PersistableIdAndConstructor((short) 270, IndexBinningStrategy::new),};
+        new PersistableIdAndConstructor((short) 270, InternalDataAdapterImpl::new),
+        new PersistableIdAndConstructor((short) 271, BasicNumericDimensionField::new)};
   }
 }

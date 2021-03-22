@@ -8,12 +8,13 @@
  */
 package org.locationtech.geowave.core.store.dimension;
 
+import java.util.Set;
+import org.locationtech.geowave.core.index.IndexDimensionHint;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
+import org.locationtech.geowave.core.store.api.IndexFieldMapper.IndexFieldOptions;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.util.GenericTypeResolver;
 
 /**
  * This interface provides in addition to the index dimension definition, a way to read and write a
@@ -21,8 +22,7 @@ import org.locationtech.geowave.core.store.util.GenericTypeResolver;
  *
  * @param <T>
  */
-public interface NumericDimensionField<T extends CommonIndexValue> extends
-    NumericDimensionDefinition {
+public interface NumericDimensionField<T> extends NumericDimensionDefinition {
   /**
    * Decode a numeric value or range from the raw field value
    *
@@ -39,12 +39,18 @@ public interface NumericDimensionField<T extends CommonIndexValue> extends
    */
   String getFieldName();
 
+  default IndexFieldOptions getIndexFieldOptions() {
+    return null;
+  }
+
+  Set<IndexDimensionHint> getDimensionHints();
+
   /**
    * Get a writer that can handle serializing values for this field
    *
    * @return the field writer for this field
    */
-  FieldWriter<?, T> getWriter();
+  FieldWriter<T> getWriter();
 
   /**
    * Get a reader that can handle deserializing binary data into values for this field
@@ -60,15 +66,15 @@ public interface NumericDimensionField<T extends CommonIndexValue> extends
    */
   NumericDimensionDefinition getBaseDefinition();
 
+  Class<T> getFieldClass();
+
   /**
    * Determines if the given field type is compatible with this field.
    *
    * @param clazz the field type to check
    * @return true if the given field type is assignable
    */
-  default boolean isCompatibleWith(final Class<? extends CommonIndexValue> clazz) {
-    return GenericTypeResolver.resolveTypeArgument(
-        getClass(),
-        NumericDimensionField.class).isAssignableFrom(clazz);
+  default boolean isCompatibleWith(final Class<?> clazz) {
+    return getFieldClass().isAssignableFrom(clazz);
   }
 }

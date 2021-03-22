@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.store.cli.stats;
 
 import java.util.List;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataTypeStatistic;
@@ -107,7 +108,7 @@ public class StatsCommandLineOptions {
       final DataStatisticsStore statsStore,
       final IndexStore indexStore) {
     final List<Statistic<? extends StatisticValue<?>>> matching = Lists.newArrayList();
-    if (indexName != null && (typeName != null || fieldName != null)) {
+    if ((indexName != null) && ((typeName != null) || (fieldName != null))) {
       throw new ParameterException(
           "Unable to process index statistics for a single type. Specify either an index name or a type name.");
     }
@@ -138,7 +139,7 @@ public class StatsCommandLineOptions {
           throw new ParameterException(
               "A type name must be supplied when specifying a data type statistic type.");
         }
-        DataTypeAdapter<?> adapter = dataStore.getType(typeName);
+        final DataTypeAdapter<?> adapter = dataStore.getType(typeName);
         if (adapter == null) {
           throw new ParameterException("Unable to find an type named: " + typeName);
         }
@@ -151,7 +152,7 @@ public class StatsCommandLineOptions {
           throw new ParameterException(
               "A type name must be supplied when specifying a field statistic type.");
         }
-        DataTypeAdapter<?> adapter = dataStore.getType(typeName);
+        final DataTypeAdapter<?> adapter = dataStore.getType(typeName);
         if (adapter == null) {
           throw new ParameterException("Unable to find an type named: " + typeName);
         }
@@ -160,8 +161,9 @@ public class StatsCommandLineOptions {
               "A field name must be supplied when specifying a field statistic type.");
         }
         boolean fieldFound = false;
-        for (int i = 0; i < adapter.getFieldCount(); i++) {
-          if (adapter.getFieldName(i).equals(fieldName)) {
+        final FieldDescriptor[] fields = adapter.getFieldDescriptors();
+        for (int i = 0; i < fields.length; i++) {
+          if (fields[i].fieldName().equals(fieldName)) {
             fieldFound = true;
             break;
           }
@@ -180,10 +182,10 @@ public class StatsCommandLineOptions {
           statsStore.getAllStatistics(null)) {
         stats.forEachRemaining(stat -> {
           // This could all be optimized to one giant check, but it's split for readability
-          if (tag != null && !tag.equals(stat.getTag())) {
+          if ((tag != null) && !tag.equals(stat.getTag())) {
             return;
           }
-          if (indexName != null
+          if ((indexName != null)
               && (!(stat instanceof IndexStatistic)
                   || !indexName.equals(((IndexStatistic) stat).getIndexName()))) {
             return;
@@ -192,16 +194,16 @@ public class StatsCommandLineOptions {
             if (stat instanceof IndexStatistic) {
               return;
             }
-            if (stat instanceof DataTypeStatistic
+            if ((stat instanceof DataTypeStatistic)
                 && !typeName.equals(((DataTypeStatistic) stat).getTypeName())) {
               return;
             }
-            if (stat instanceof FieldStatistic
+            if ((stat instanceof FieldStatistic)
                 && !typeName.equals(((FieldStatistic) stat).getTypeName())) {
               return;
             }
           }
-          if (fieldName != null
+          if ((fieldName != null)
               && (!(stat instanceof FieldStatistic)
                   || !fieldName.equals(((FieldStatistic) stat).getFieldName()))) {
             return;

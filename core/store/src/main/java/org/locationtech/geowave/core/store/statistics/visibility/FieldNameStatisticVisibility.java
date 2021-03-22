@@ -10,7 +10,7 @@ package org.locationtech.geowave.core.store.statistics.visibility;
 
 import java.util.List;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.flatten.BitmaskUtils;
@@ -26,7 +26,7 @@ public class FieldNameStatisticVisibility<T> implements EntryVisibilityHandler<T
   public FieldNameStatisticVisibility(
       final String fieldName,
       final CommonIndexModel model,
-      final DataTypeAdapter<T> adapter) {
+      final InternalDataAdapter<T> adapter) {
     this.bitPosition = adapter.getPositionOfOrderedField(model, fieldName);
   }
 

@@ -22,12 +22,15 @@ import org.junit.Test;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.index.SpatialOptions;
+import org.locationtech.geowave.core.geotime.store.InternalGeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.ExplicitCQLQuery;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
 import org.locationtech.geowave.core.store.query.filter.FilterList;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.jts.geom.Coordinate;
@@ -70,8 +73,11 @@ public class CQLQueryFilterTest {
         new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 
     final FeatureDataAdapter adapter = new FeatureDataAdapter(type);
-    adapter.init(spatialIndex);
-    final ExplicitCQLQuery cqlQuery = new ExplicitCQLQuery(null, f, adapter);
+    final AdapterToIndexMapping indexMapping =
+        BaseDataStoreUtils.mapAdapterToIndex(adapter.asInternalAdapter((short) -1), spatialIndex);
+    final InternalGeotoolsFeatureDataAdapter<SimpleFeature> internalAdapter =
+        (InternalGeotoolsFeatureDataAdapter<SimpleFeature>) adapter.asInternalAdapter((short) -1);
+    final ExplicitCQLQuery cqlQuery = new ExplicitCQLQuery(null, f, internalAdapter, indexMapping);
 
     final List<QueryFilter> filters = cqlQuery.createFilters(spatialIndex);
     final List<QueryFilter> dFilters = new ArrayList<>();
@@ -86,7 +92,7 @@ public class CQLQueryFilterTest {
             spatialIndex.getIndexModel(),
             getEncodings(
                 spatialIndex,
-                adapter.encode(createFeature(), spatialIndex.getIndexModel())).get(0)));
+                internalAdapter.encode(createFeature(), indexMapping, spatialIndex)).get(0)));
   }
 
   private static List<IndexedAdapterPersistenceEncoding> getEncodings(

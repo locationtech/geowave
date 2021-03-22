@@ -20,7 +20,7 @@ public class BigIntegerSerializationProvider implements FieldSerializationProvid
   }
 
   @Override
-  public FieldWriter<Object, BigInteger> getFieldWriter() {
+  public FieldWriter<BigInteger> getFieldWriter() {
     return new BigIntegerWriter();
   }
 
@@ -34,7 +34,7 @@ public class BigIntegerSerializationProvider implements FieldSerializationProvid
     }
   }
 
-  protected static class BigIntegerWriter implements FieldWriter<Object, BigInteger> {
+  protected static class BigIntegerWriter implements FieldWriter<BigInteger> {
     @Override
     public byte[] writeField(final BigInteger fieldValue) {
       if (fieldValue == null) {

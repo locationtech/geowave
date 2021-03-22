@@ -12,6 +12,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,11 +33,13 @@ import org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveTransac
 import org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveTransactionState;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.MemoryTransactionsAllocator;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.TransactionsAllocator;
-import org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityManagementHelper;
 import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.index.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.InternalGeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.SpatialIndexUtils;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -44,17 +47,15 @@ import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
-import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.data.visibility.VisibilityManagement;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
-import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.Name;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
@@ -73,8 +74,6 @@ public class GeoWaveGTDataStore extends ContentDataStore {
   protected AdapterIndexMappingStore adapterIndexMappingStore;
   private final Map<String, Index[]> preferredIndexes = new ConcurrentHashMap<>();
 
-  private final VisibilityManagement<SimpleFeature> visibilityManagement =
-      VisibilityManagementHelper.loadVisibilityManagement();
   private final AuthorizationSPI authorizationSPI;
   private final IndexQueryStrategySPI indexQueryStrategy;
   private final URI featureNameSpaceURI;
@@ -130,6 +129,10 @@ public class GeoWaveGTDataStore extends ContentDataStore {
     return internalAdapterStore;
   }
 
+  public AdapterIndexMappingStore getAdapterIndexMappingStore() {
+    return adapterIndexMappingStore;
+  }
+
   public IndexStore getIndexStore() {
     return indexStore;
   }
@@ -151,6 +154,10 @@ public class GeoWaveGTDataStore extends ContentDataStore {
     return unfiltered;
   }
 
+  public void setPreferredIndices(final GeotoolsFeatureDataAdapter adapter, final Index[] indices) {
+    preferredIndexes.put(adapter.getFeatureType().getName().toString(), indices);
+  }
+
   protected Index[] getIndicesForAdapter(
       final GeotoolsFeatureDataAdapter adapter,
       final boolean spatialOnly) {
@@ -161,10 +168,12 @@ public class GeoWaveGTDataStore extends ContentDataStore {
 
     final short internalAdapterId = internalAdapterStore.getAdapterId(adapter.getTypeName());
 
-    final AdapterToIndexMapping adapterIndexMapping =
+    final AdapterToIndexMapping[] adapterIndexMappings =
         adapterIndexMappingStore.getIndicesForAdapter(internalAdapterId);
-    if ((adapterIndexMapping != null) && adapterIndexMapping.isNotEmpty()) {
-      currentSelections = adapterIndexMapping.getIndices(indexStore);
+    if ((adapterIndexMappings != null) && adapterIndexMappings.length > 0) {
+      currentSelections =
+          Arrays.stream(adapterIndexMappings).map(mapping -> mapping.getIndex(indexStore)).toArray(
+              Index[]::new);
     } else {
       currentSelections = getPreferredIndices(adapter);
     }
@@ -177,13 +186,9 @@ public class GeoWaveGTDataStore extends ContentDataStore {
     if (featureType.getGeometryDescriptor() == null) {
       throw new UnsupportedOperationException("Schema missing geometry");
     }
-    final FeatureDataAdapter adapter = new FeatureDataAdapter(featureType, visibilityManagement);
+    final FeatureDataAdapter adapter = new FeatureDataAdapter(featureType);
     final short adapterId = internalAdapterStore.addTypeName(adapter.getTypeName());
     if (!adapterStore.adapterExists(adapterId)) {
-      // it is questionable whether createSchema *should* write the
-      // adapter to the store, it is missing the proper index information
-      // at this stage
-      adapter.init(new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()));
       if (featureNameSpaceURI != null) {
         adapter.setNamespace(featureNameSpaceURI.toString());
       }
@@ -191,17 +196,17 @@ public class GeoWaveGTDataStore extends ContentDataStore {
     }
   }
 
-  private GeotoolsFeatureDataAdapter getAdapter(final String typeName) {
-    final GeotoolsFeatureDataAdapter featureAdapter;
+  private InternalGeotoolsFeatureDataAdapter getAdapter(final String typeName) {
+    final InternalGeotoolsFeatureDataAdapter featureAdapter;
     final Short adapterId = internalAdapterStore.getAdapterId(typeName);
     if (adapterId == null) {
       return null;
     }
     final InternalDataAdapter<?> adapter = adapterStore.getAdapter(adapterId);
-    if ((adapter == null) || !(adapter.getAdapter() instanceof GeotoolsFeatureDataAdapter)) {
+    if ((adapter == null) || !(adapter instanceof InternalGeotoolsFeatureDataAdapter)) {
       return null;
     }
-    featureAdapter = (GeotoolsFeatureDataAdapter) adapter.getAdapter();
+    featureAdapter = (InternalGeotoolsFeatureDataAdapter) adapter;
     if (featureNameSpaceURI != null) {
       featureAdapter.setNamespace(featureNameSpaceURI.toString());
     }
@@ -317,17 +322,23 @@ public class GeoWaveGTDataStore extends ContentDataStore {
      * Requires the indices to EXIST prior to set up of the adapter. Otherwise, only Geospatial is
      * chosen and the index Names are ignored.
      */
+    CoordinateReferenceSystem selectedCRS = null;
     try (CloseableIterator<Index> indices = indexStore.getIndices()) {
       while (indices.hasNext()) {
         final Index index = indices.next();
+        final CoordinateReferenceSystem indexCRS = GeometryUtils.getIndexCrs(index);
+        if (selectedCRS != null && !selectedCRS.equals(indexCRS)) {
+          continue;
+        }
         if (!indexNames.isEmpty()) {
           // Only used selected preferred indices
           if (indexNames.contains(index.getName())) {
+            selectedCRS = indexCRS;
             currentSelectionsList.add(index);
           }
         }
-        @SuppressWarnings("rawtypes")
-        final NumericDimensionField[] dims = index.getIndexModel().getDimensions();
+
+        final NumericDimensionField<?>[] dims = index.getIndexModel().getDimensions();
         boolean hasLat = false;
         boolean hasLong = false;
         boolean hasTime = false;
@@ -341,6 +352,7 @@ public class GeoWaveGTDataStore extends ContentDataStore {
           // If not requiring time OR (requires time AND has time
           // constraints)
           if (!hasTime || canUseTime) {
+            selectedCRS = indexCRS;
             currentSelectionsList.add(index);
           }
         }

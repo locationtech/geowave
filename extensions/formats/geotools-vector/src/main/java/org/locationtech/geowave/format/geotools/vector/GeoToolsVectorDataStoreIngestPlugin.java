@@ -25,14 +25,12 @@ import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.util.SimpleFeatureUserDataConfigurationSet;
-import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
-import org.locationtech.geowave.core.geotime.store.dimension.Time;
+import org.locationtech.geowave.core.geotime.store.dimension.SpatialField;
+import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.locationtech.geowave.format.geotools.vector.RetypingVectorDataPlugin.RetypingVectorDataSource;
@@ -160,13 +158,7 @@ public class GeoToolsVectorDataStoreIngestPlugin implements LocalFileIngestPlugi
             retypedSchema = source.getRetypedSimpleFeatureType();
           }
         }
-        if ((globalVisibility == null) || globalVisibility.isEmpty()) {
-          return new FeatureDataAdapter(retypedSchema);
-        } else {
-          return new FeatureDataAdapter(
-              retypedSchema,
-              new GlobalVisibilityHandler<SimpleFeature, Object>(globalVisibility));
-        }
+        return new FeatureDataAdapter(retypedSchema);
       }).toArray(FeatureDataAdapter[]::new);
     }
 
@@ -252,9 +244,8 @@ public class GeoToolsVectorDataStoreIngestPlugin implements LocalFileIngestPlugi
     return new Index[] {};
   }
 
-  @SuppressWarnings("unchecked")
   @Override
-  public Class<? extends CommonIndexValue>[] getSupportedIndexableTypes() {
-    return new Class[] {GeometryWrapper.class, Time.class};
+  public String[] getSupportedIndexTypes() {
+    return new String[] {SpatialField.DEFAULT_GEOMETRY_FIELD_NAME, TimeField.DEFAULT_FIELD_ID};
   }
 }

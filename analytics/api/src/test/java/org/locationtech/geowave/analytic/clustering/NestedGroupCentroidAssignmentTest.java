@@ -83,7 +83,6 @@ public class NestedGroupCentroidAssignmentTest {
 
     final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
     final FeatureDataAdapter adapter = new FeatureDataAdapter(ftype);
-    adapter.init(index);
     final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
     final StoreFactoryFamilySpi storeFamily = new MemoryStoreFactoryFamily();
     final StoreFactoryOptions opts = storeFamily.getDataStoreFactory().createOptionsInstance();

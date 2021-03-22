@@ -28,12 +28,11 @@ import org.locationtech.geowave.adapter.raster.RasterUtils;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
+import org.locationtech.geowave.core.geotime.store.dimension.SpatialField;
 import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
-import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.api.AggregationQueryBuilder;
 import org.locationtech.geowave.core.store.api.BinConstraints;
 import org.locationtech.geowave.core.store.api.DataStore;
@@ -513,8 +512,7 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
   }
 
   @Test
-  public void testIngestAndQueryMixedVisibilityFields()
-      throws MismatchedIndexToAdapterMapping, IOException {
+  public void testIngestAndQueryMixedVisibilityFields() throws IOException {
     testIngestAndQueryVisibilityFields(
         dataStoreOptions,
         getFeatureVisWriter(),
@@ -581,7 +579,7 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
               final String fieldId,
               final Object fieldValue) {
 
-            final boolean isGeom = fieldId.equals(GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME);
+            final boolean isGeom = fieldId.equals(SpatialField.DEFAULT_GEOMETRY_FIELD_NAME);
             final int fieldValueInt;
             if (isGeom) {
               fieldValueInt = Integer.parseInt(rowValue.getID());

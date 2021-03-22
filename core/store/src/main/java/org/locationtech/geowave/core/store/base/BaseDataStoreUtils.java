@@ -21,6 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
@@ -34,6 +35,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.CustomIndexStrategy;
+import org.locationtech.geowave.core.index.IndexDimensionHint;
 import org.locationtech.geowave.core.index.IndexUtils;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.StringUtils;
@@ -45,6 +47,7 @@ import org.locationtech.geowave.core.store.CloseableIterator.Wrapper;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.AsyncPersistenceEncoding;
+import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
 import org.locationtech.geowave.core.store.adapter.FullAsyncPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
@@ -58,6 +61,8 @@ import org.locationtech.geowave.core.store.adapter.exceptions.AdapterException;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexFieldMapper;
+import org.locationtech.geowave.core.store.api.IndexFieldMapper.IndexFieldOptions;
 import org.locationtech.geowave.core.store.base.IntermediaryWriteEntryInfo.FieldInfo;
 import org.locationtech.geowave.core.store.base.dataidx.BatchDataIndexRetrieval;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexRetrieval;
@@ -67,13 +72,14 @@ import org.locationtech.geowave.core.store.data.DataWriter;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
+import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.entities.GeoWaveValueImpl;
 import org.locationtech.geowave.core.store.flatten.BitmaskUtils;
 import org.locationtech.geowave.core.store.flatten.BitmaskedPairComparator;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
+import org.locationtech.geowave.core.store.index.IndexFieldMapperRegistry;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import org.locationtech.geowave.core.store.query.constraints.AdapterAndIndexBasedQueryConstraints;
@@ -83,10 +89,12 @@ import org.locationtech.geowave.core.store.statistics.DefaultStatisticsProvider;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 public class BaseDataStoreUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(BaseDataStoreUtils.class);
@@ -94,11 +102,13 @@ public class BaseDataStoreUtils {
   public static <T> GeoWaveRow[] getGeoWaveRows(
       final T entry,
       final InternalDataAdapter<T> adapter,
+      final AdapterToIndexMapping indexMapping,
       final Index index,
       final VisibilityWriter<T> customFieldVisibilityWriter) {
     return getWriteInfo(
         entry,
         adapter,
+        indexMapping,
         index,
         customFieldVisibilityWriter,
         false,
@@ -141,7 +151,9 @@ public class BaseDataStoreUtils {
       final GeoWaveRow geowaveRow,
       final QueryFilter[] clientFilters,
       final InternalDataAdapter<T> adapter,
+      final AdapterToIndexMapping indexMapping,
       final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final Index index,
       final ScanCallback scanCallback,
       final byte[] fieldSubsetBitmask,
@@ -159,6 +171,13 @@ public class BaseDataStoreUtils {
 
     if (!decodePackage.setOrRetrieveAdapter(adapter, internalAdapterId, adapterStore)) {
       final String msg = "Could not retrieve adapter " + internalAdapterId + " from adapter store.";
+      LOGGER.error(msg);
+      throw new AdapterException(msg);
+    }
+
+    if (!decodePackage.setOrRetrieveIndexMapping(indexMapping, internalAdapterId, mappingStore)) {
+      final String msg =
+          "Could not retrieve adapter index mapping for adapter " + internalAdapterId;
       LOGGER.error(msg);
       throw new AdapterException(msg);
     }
@@ -208,6 +227,7 @@ public class BaseDataStoreUtils {
                   (BatchDataIndexRetrieval) dataIndexRetrieval,
                   decodePackage.getDataAdapter(),
                   decodePackage.getIndex().getIndexModel(),
+                  decodePackage.getIndexMapping(),
                   fieldSubsetBitmask,
                   Suppliers.memoize(
                       () -> dataIndexRetrieval.getData(
@@ -233,6 +253,7 @@ public class BaseDataStoreUtils {
                 row.getNumberOfDuplicates(),
                 decodePackage.getDataAdapter(),
                 decodePackage.getIndex().getIndexModel(),
+                decodePackage.getIndexMapping(),
                 fieldSubsetBitmask,
                 Suppliers.memoize(
                     () -> dataIndexRetrieval.getData(
@@ -249,6 +270,7 @@ public class BaseDataStoreUtils {
               row.getNumberOfDuplicates(),
               decodePackage.getDataAdapter(),
               decodePackage.getIndex().getIndexModel(),
+              decodePackage.getIndexMapping(),
               fieldSubsetBitmask,
               row.getFieldValues(),
               false);
@@ -268,6 +290,7 @@ public class BaseDataStoreUtils {
             final T decodedRow =
                 decodePackage.getDataAdapter().decode(
                     r,
+                    decodePackage.getIndexMapping(),
                     isSecondaryIndex ? DataIndexUtils.DATA_ID_INDEX : decodePackage.getIndex());
             if (r.isAsync()) {
               return i;
@@ -298,6 +321,7 @@ public class BaseDataStoreUtils {
               row.getNumberOfDuplicates(),
               decodePackage.getDataAdapter(),
               decodePackage.getIndex().getIndexModel(),
+              decodePackage.getIndexMapping(),
               fieldSubsetBitmask,
               fv,
               true))).thenApply((r) -> function.apply(r, (Integer) obj));
@@ -341,13 +365,14 @@ public class BaseDataStoreUtils {
   protected static <T> IntermediaryWriteEntryInfo getWriteInfo(
       final T entry,
       final InternalDataAdapter<T> adapter,
+      final AdapterToIndexMapping indexMapping,
       final Index index,
       final VisibilityWriter<T> customFieldVisibilityWriter,
       final boolean secondaryIndex,
       final boolean dataIdIndex,
       final boolean visibilityEnabled) {
     final CommonIndexModel indexModel = index.getIndexModel();
-    final AdapterPersistenceEncoding encodedData = adapter.encode(entry, indexModel);
+    final AdapterPersistenceEncoding encodedData = adapter.encode(entry, indexMapping, index);
     final InsertionIds insertionIds;
     if (index instanceof CustomIndexStrategy) {
       insertionIds = ((CustomIndexStrategy) index).getInsertionIds(entry);
@@ -362,7 +387,7 @@ public class BaseDataStoreUtils {
       if (secondaryIndex && DataIndexUtils.adapterSupportsDataIndex(adapter) && !dataIdIndex) {
         byte[] indexModelVisibility = new byte[0];
         if (visibilityEnabled) {
-          for (final Entry<String, CommonIndexValue> fieldValue : encodedData.getCommonData().getValues().entrySet()) {
+          for (final Entry<String, Object> fieldValue : encodedData.getCommonData().getValues().entrySet()) {
             indexModelVisibility =
                 DataStoreUtils.mergeVisibilities(
                     indexModelVisibility,
@@ -458,7 +483,7 @@ public class BaseDataStoreUtils {
       final boolean visibilityEnabled,
       final List<FieldInfo<?>> fieldInfoList) {
 
-    for (final Entry<String, CommonIndexValue> fieldValue : encodedData.getCommonData().getValues().entrySet()) {
+    for (final Entry<String, Object> fieldValue : encodedData.getCommonData().getValues().entrySet()) {
       final FieldInfo<?> fieldInfo =
           getFieldInfo(
               indexModel,
@@ -482,7 +507,7 @@ public class BaseDataStoreUtils {
   private static <T> GeoWaveValue[] composeFlattenedFields(
       final List<FieldInfo<?>> originalList,
       final CommonIndexModel model,
-      final DataTypeAdapter<?> writableAdapter,
+      final InternalDataAdapter<?> writableAdapter,
       final boolean dataIdIndex) {
     if (originalList.isEmpty()) {
       return new GeoWaveValue[0];
@@ -599,10 +624,7 @@ public class BaseDataStoreUtils {
       return new FieldInfo(
           fieldName,
           fieldWriter.writeField(fieldValue),
-          visibilityEnabled
-              ? DataStoreUtils.mergeVisibilities(
-                  customVisibilityHandler.getVisibility(entry, fieldName, fieldValue),
-                  fieldWriter.getVisibility(entry, fieldName, fieldValue))
+          visibilityEnabled ? customVisibilityHandler.getVisibility(entry, fieldName, fieldValue)
               : new byte[0]);
     } else if (fieldValue != null) {
       LOGGER.warn(
@@ -633,6 +655,133 @@ public class BaseDataStoreUtils {
     });
   }
 
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public static AdapterToIndexMapping mapAdapterToIndex(
+      InternalDataAdapter<?> adapter,
+      Index index) {
+    // Build up a list of index field mappers
+    final Map<String, IndexFieldMapper<?, ?>> mappers = Maps.newHashMap();
+
+    // Get index model dimensions
+    final NumericDimensionField<?>[] dimensions = index.getIndexModel().getDimensions();
+
+    // Map dimensions to index fields
+    final Map<String, List<NumericDimensionField<?>>> indexFields =
+        Arrays.stream(dimensions).collect(
+            Collectors.groupingBy(
+                dim -> dim.getFieldName(),
+                Collectors.mapping(dim -> dim, Collectors.toList())));
+
+    // Get adapter fields
+    final FieldDescriptor<?>[] adapterFields = adapter.getFieldDescriptors();
+
+    for (Entry<String, List<NumericDimensionField<?>>> indexField : indexFields.entrySet()) {
+      // Get the hints used by all dimensions of the field
+      final Set<IndexDimensionHint> dimensionHints = Sets.newHashSet();
+      indexField.getValue().forEach(dim -> dimensionHints.addAll(dim.getDimensionHints()));
+
+      final Class<?> indexFieldClass = indexField.getValue().get(0).getFieldClass();
+      final String indexFieldName = indexField.getKey();
+      final IndexFieldOptions indexFieldOptions =
+          indexField.getValue().get(0).getIndexFieldOptions();
+
+      // Get available mappers for the field class
+      final List<IndexFieldMapper<?, ?>> availableMappers =
+          IndexFieldMapperRegistry.instance().getAvailableMappers(indexFieldClass);
+      if (availableMappers.size() == 0) {
+        throw new IllegalArgumentException(
+            "No index field mappers were found for the type: " + indexFieldClass.getName());
+      }
+
+      // Get any adapter fields that have been hinted for this field
+      final List<FieldDescriptor<?>> hintedFields =
+          Arrays.stream(adapterFields).filter(
+              field -> dimensionHints.stream().anyMatch(field.indexHints()::contains)).collect(
+                  Collectors.toList());
+
+      if (hintedFields.size() > 0) {
+        Class<?> hintedFieldClass = hintedFields.get(0).bindingClass();
+        for (int i = 1; i < hintedFields.size(); i++) {
+          if (!hintedFieldClass.equals(hintedFields.get(i).bindingClass())) {
+            throw new IllegalArgumentException("All hinted fields must be of the same type.");
+          }
+        }
+        boolean mapperFound = false;
+        // Find a mapper that matches
+        for (IndexFieldMapper<?, ?> mapper : availableMappers) {
+          if (mapper.isCompatibleWith(hintedFieldClass)
+              && mapper.adapterFieldCount() == hintedFields.size()) {
+            mapper.init(indexField.getKey(), (List) hintedFields, indexFieldOptions);
+            mappers.put(indexField.getKey(), mapper);
+            mapperFound = true;
+            break;
+          }
+        }
+        if (!mapperFound) {
+          throw new IllegalArgumentException(
+              "No registered index field mappers were found for the type: "
+                  + hintedFieldClass.getName()
+                  + "["
+                  + hintedFields.size()
+                  + "] -> "
+                  + indexFieldClass.getName());
+        }
+      } else {
+        // Attempt to infer the field to use
+
+        // See if a direct mapper is available
+        boolean mapperFound = false;
+        for (final FieldDescriptor<?> fieldDescriptor : adapterFields) {
+          if (fieldDescriptor.bindingClass().equals(indexFieldClass)) {
+            Optional<IndexFieldMapper<?, ?>> matchingMapper =
+                availableMappers.stream().filter(
+                    mapper -> mapper.isCompatibleWith(fieldDescriptor.bindingClass())
+                        && mapper.adapterFieldCount() == 1).findFirst();
+            if (matchingMapper.isPresent()) {
+              IndexFieldMapper<?, ?> mapper = matchingMapper.get();
+              mapper.init(
+                  indexFieldName,
+                  (List) Lists.newArrayList(fieldDescriptor),
+                  indexFieldOptions);
+              mappers.put(indexFieldName, mapper);
+              mapperFound = true;
+              break;
+            }
+          }
+        }
+
+        // Check other mappers
+        if (!mapperFound) {
+          for (IndexFieldMapper<?, ?> mapper : availableMappers) {
+            List<FieldDescriptor<?>> matchingFields =
+                Arrays.stream(adapterFields).filter(
+                    field -> mapper.isCompatibleWith(field.bindingClass())).collect(
+                        Collectors.toList());
+            if (matchingFields.size() >= mapper.adapterFieldCount()) {
+              mapperFound = true;
+              mapper.init(
+                  indexFieldName,
+                  (List) matchingFields.stream().limit(mapper.adapterFieldCount()).collect(
+                      Collectors.toList()),
+                  indexFieldOptions);
+              mappers.put(indexFieldName, mapper);
+            }
+          }
+        }
+
+        if (!mapperFound) {
+          throw new IllegalArgumentException(
+              "No suitable index field mapper could be found for the index field "
+                  + indexFieldName);
+        }
+      }
+    }
+    return new AdapterToIndexMapping(
+        adapter.getAdapterId(),
+        index.getName(),
+        mappers.values().stream().collect(Collectors.toList()));
+  }
+
   public static <T> List<Pair<Index, List<T>>> combineByIndex(final List<Pair<Index, T>> input) {
     final List<Pair<Index, List<T>>> result = new ArrayList<>();
     sortInPlace(input);
@@ -657,14 +806,16 @@ public class BaseDataStoreUtils {
 
   public static List<Pair<Index, List<InternalDataAdapter<?>>>> chooseBestIndex(
       final List<Pair<Index, List<InternalDataAdapter<?>>>> indexAdapterPairList,
-      final QueryConstraints query) {
-    return chooseBestIndex(indexAdapterPairList, query, Function.identity());
+      final QueryConstraints query,
+      final AdapterIndexMappingStore mappingStore) {
+    return chooseBestIndex(indexAdapterPairList, mappingStore, query, Function.identity());
   }
 
   public static <T> List<Pair<Index, List<T>>> chooseBestIndex(
       final List<Pair<Index, List<T>>> indexAdapterPairList,
+      final AdapterIndexMappingStore mappingStore,
       final QueryConstraints query,
-      final Function<T, ? extends DataTypeAdapter<?>> adapterLookup)
+      final Function<T, ? extends InternalDataAdapter<?>> adapterLookup)
       throws IllegalArgumentException {
     if (indexAdapterPairList.size() <= 1) {
       return indexAdapterPairList;
@@ -690,7 +841,8 @@ public class BaseDataStoreUtils {
               : chooseBestIndex(
                   e.getValue().toArray(new Index[0]),
                   query,
-                  adapterLookup.apply(e.getKey()));
+                  adapterLookup.apply(e.getKey()),
+                  mappingStore);
       List<T> adapters = retVal.get(index);
       if (adapters == null) {
         adapters = new ArrayList<>();
@@ -705,7 +857,8 @@ public class BaseDataStoreUtils {
   public static Index chooseBestIndex(
       final Index[] indices,
       final QueryConstraints query,
-      final DataTypeAdapter<?> adapter) {
+      final InternalDataAdapter<?> adapter,
+      final AdapterIndexMappingStore mappingStore) {
     final boolean isConstraintsAdapterIndexSpecific =
         query instanceof AdapterAndIndexBasedQueryConstraints;
     Index nextIdx = null;
@@ -726,7 +879,10 @@ public class BaseDataStoreUtils {
       QueryConstraints adapterIndexConstraints;
       if (isConstraintsAdapterIndexSpecific) {
         adapterIndexConstraints =
-            ((AdapterAndIndexBasedQueryConstraints) query).createQueryConstraints(adapter, nextIdx);
+            ((AdapterAndIndexBasedQueryConstraints) query).createQueryConstraints(
+                adapter,
+                nextIdx,
+                mappingStore.getMapping(adapter.getAdapterId(), nextIdx.getName()));
         if (adapterIndexConstraints == null) {
           continue;
         }
@@ -803,11 +959,15 @@ public class BaseDataStoreUtils {
                 internalAdapterStore,
                 adapterIndexMappingStore,
                 indexStore)),
+        adapterIndexMappingStore,
         constraints,
         adapterId -> {
           final String typeName = internalAdapterStore.getTypeName(adapterId);
           if (typeName != null) {
-            return adapterStore.getAdapter(typeName);
+            final DataTypeAdapter<?> adapter = adapterStore.getAdapter(typeName);
+            if (adapter != null) {
+              return adapter.asInternalAdapter(adapterId);
+            }
           }
           return null;
         });
@@ -833,13 +993,14 @@ public class BaseDataStoreUtils {
     }
     final List<Pair<Index, Short>> result = new ArrayList<>();
     for (final Short adapterId : adapterIds) {
-      final AdapterToIndexMapping indices =
+      final AdapterToIndexMapping[] indices =
           adapterIndexMappingStore.getIndicesForAdapter(adapterId);
-      if ((indexName != null) && indices.contains(indexName)) {
+      if ((indexName != null)
+          && Arrays.stream(indices).anyMatch(mapping -> mapping.getIndexName().equals(indexName))) {
         result.add(Pair.of(indexStore.getIndex(indexName), adapterId));
-      } else if (indices.isNotEmpty()) {
-        for (final String name : indices.getIndexNames()) {
-          final Index pIndex = indexStore.getIndex(name);
+      } else if (indices.length > 0) {
+        for (final AdapterToIndexMapping mapping : indices) {
+          final Index pIndex = mapping.getIndex(indexStore);
           // this could happen if persistent was turned off
           if (pIndex != null) {
             result.add(Pair.of(pIndex, adapterId));
@@ -852,16 +1013,15 @@ public class BaseDataStoreUtils {
 
   protected static <T> List<Pair<Index, List<T>>> reduceIndicesAndGroupByIndex(
       final List<Pair<Index, T>> input) {
-    final List<Pair<Index, T>> result = new ArrayList<>();
-    // sort by index to eliminate the amount of indices returned
-    sortInPlace(input);
-    final Set<T> adapterSet = new HashSet<>();
-    for (final Pair<Index, T> item : input) {
-      if (adapterSet.add(item.getRight())) {
-        result.add(item);
+    final Map<Index, List<T>> result = Maps.newHashMap();
+    input.forEach(pair -> {
+      if (!result.containsKey(pair.getLeft())) {
+        result.put(pair.getLeft(), Lists.newArrayList());
       }
-    }
-    return combineByIndex(result);
+      result.get(pair.getLeft()).add(pair.getRight());
+    });
+    return result.entrySet().stream().map(
+        entry -> Pair.of(entry.getKey(), entry.getValue())).collect(Collectors.toList());
   }
 
   public static DefaultStatisticsProvider getDefaultStatisticsProvider(

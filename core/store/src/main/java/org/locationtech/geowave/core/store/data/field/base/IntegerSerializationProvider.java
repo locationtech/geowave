@@ -23,7 +23,7 @@ public class IntegerSerializationProvider implements FieldSerializationProviderS
   }
 
   @Override
-  public FieldWriter<Object, Integer> getFieldWriter() {
+  public FieldWriter<Integer> getFieldWriter() {
     return new IntegerWriter();
   }
 
@@ -49,7 +49,7 @@ public class IntegerSerializationProvider implements FieldSerializationProviderS
     }
   }
 
-  protected static class IntegerWriter implements FieldWriter<Object, Integer> {
+  protected static class IntegerWriter implements FieldWriter<Integer> {
     @Override
     public byte[] writeField(final Integer fieldValue) {
       if (fieldValue == null) {

@@ -23,8 +23,8 @@ import org.locationtech.geowave.analytic.AnalyticItemWrapperFactory;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
-import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
+import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
+import org.locationtech.geowave.core.store.adapter.FieldDescriptorBuilder;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.DataStore;
@@ -33,14 +33,9 @@ import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
-import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
-import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
-import org.locationtech.geowave.core.store.data.field.FieldWriter;
-import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.index.NullIndex;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
@@ -300,15 +295,12 @@ public class DistortionGroupManagement {
   public static class DistortionDataAdapter implements DataTypeAdapter<DistortionEntry> {
     public static final String ADAPTER_TYPE_NAME = "distortion";
     private static final String DISTORTION_FIELD_NAME = "distortion";
-    private final FieldVisibilityHandler<DistortionEntry, Object> distortionVisibilityHandler;
+    private static final FieldDescriptor<Double> DESC =
+        new FieldDescriptorBuilder<>(Double.class).fieldName(DISTORTION_FIELD_NAME).build();
+    private static final FieldDescriptor<?>[] DESC_ARRAY = new FieldDescriptor[] {DESC};
 
     public DistortionDataAdapter() {
-      this(null);
-    }
-
-    public DistortionDataAdapter(
-        final FieldVisibilityHandler<DistortionEntry, Object> distortionVisibilityHandler) {
-      this.distortionVisibilityHandler = distortionVisibilityHandler;
+      super();
     }
 
     @Override
@@ -322,35 +314,11 @@ public class DistortionGroupManagement {
     }
 
     @Override
-    public DistortionEntry decode(final IndexedAdapterPersistenceEncoding data, final Index index) {
-      return new DistortionEntry(
-          data.getDataId(),
-          (Double) data.getAdapterExtendedData().getValue(DISTORTION_FIELD_NAME));
-    }
-
-    @Override
-    public AdapterPersistenceEncoding encode(
-        final DistortionEntry entry,
-        final CommonIndexModel indexModel) {
-      final Map<String, Object> fieldNameToValueMap = new HashMap<>();
-      fieldNameToValueMap.put(DISTORTION_FIELD_NAME, entry.getDistortionValue());
-      return new AdapterPersistenceEncoding(
-          entry.getDataId(),
-          new MultiFieldPersistentDataset<CommonIndexValue>(),
-          new MultiFieldPersistentDataset<>(fieldNameToValueMap));
-    }
-
-    @Override
     public FieldReader<Object> getReader(final String fieldId) {
       if (DISTORTION_FIELD_NAME.equals(fieldId)) {
         return (FieldReader) FieldUtils.getDefaultReaderForClass(Double.class);
       }
       return null;
-    }
-
-    @Override
-    public boolean isCommonIndexField(final CommonIndexModel model, final String fieldName) {
-      return false;
     }
 
     @Override
@@ -362,76 +330,49 @@ public class DistortionGroupManagement {
     public void fromBinary(final byte[] bytes) {}
 
     @Override
-    public FieldWriter<DistortionEntry, Object> getWriter(final String fieldId) {
-      if (DISTORTION_FIELD_NAME.equals(fieldId)) {
-        if (distortionVisibilityHandler != null) {
-          return (FieldWriter) FieldUtils.getDefaultWriterForClass(
-              Double.class,
-              distortionVisibilityHandler);
-        } else {
-          return (FieldWriter) FieldUtils.getDefaultWriterForClass(Double.class);
-        }
-      }
-      return null;
-    }
-
-    @Override
-    public int getPositionOfOrderedField(final CommonIndexModel model, final String fieldName) {
-      int i = 0;
-      for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
-        if (fieldName.equals(dimensionField.getFieldName())) {
-          return i;
-        }
-        i++;
-      }
-      if (fieldName.equals(DISTORTION_FIELD_NAME)) {
-        return i;
-      }
-      return -1;
-    }
-
-    @Override
-    public String getFieldNameForPosition(final CommonIndexModel model, final int position) {
-      if (position < model.getDimensions().length) {
-        int i = 0;
-        for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
-          if (i == position) {
-            return dimensionField.getFieldName();
-          }
-          i++;
-        }
-      } else {
-        final int numDimensions = model.getDimensions().length;
-        if (position == numDimensions) {
-          return DISTORTION_FIELD_NAME;
-        }
-      }
-      return null;
-    }
-
-    @Override
-    public int getFieldCount() {
-      return 1;
-    }
-
-    @Override
-    public Class<?> getFieldClass(int fieldIndex) {
-      return Double.class;
-    }
-
-    @Override
-    public String getFieldName(int fieldIndex) {
-      return DISTORTION_FIELD_NAME;
-    }
-
-    @Override
-    public Object getFieldValue(DistortionEntry entry, String fieldName) {
+    public Object getFieldValue(final DistortionEntry entry, final String fieldName) {
       return entry.getDistortionValue();
     }
 
     @Override
     public Class<DistortionEntry> getDataClass() {
       return DistortionEntry.class;
+    }
+
+    @Override
+    public RowBuilder<DistortionEntry> newRowBuilder(
+        final FieldDescriptor<?>[] outputFieldDescriptors) {
+      return new RowBuilder<DistortionEntry>() {
+        Double fieldValue;
+
+        @Override
+        public void setField(final String fieldName, final Object fieldValue) {
+          if (DISTORTION_FIELD_NAME.equals(fieldName) && (fieldValue instanceof Double)) {
+            this.fieldValue = (Double) fieldValue;
+          }
+        }
+
+        @Override
+        public void setFields(final Map<String, Object> values) {
+          values.entrySet().forEach((e) -> setField(e.getKey(), e.getValue()));
+        }
+
+        @Override
+        public DistortionEntry buildRow(final byte[] dataId) {
+          return new DistortionEntry(dataId, fieldValue);
+        }
+
+      };
+    }
+
+    @Override
+    public FieldDescriptor<?>[] getFieldDescriptors() {
+      return DESC_ARRAY;
+    }
+
+    @Override
+    public FieldDescriptor<?> getFieldDescriptor(final String fieldName) {
+      return DESC;
     }
   }
 }

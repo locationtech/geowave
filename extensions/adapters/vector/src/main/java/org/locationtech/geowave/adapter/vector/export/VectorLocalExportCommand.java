@@ -125,8 +125,7 @@ public class VectorLocalExportCommand extends DefaultOperation implements Comman
         }
       }
       for (final GeotoolsFeatureDataAdapter adapter : featureAdapters) {
-        final SimpleFeatureType sft = adapter.getFeatureType();
-        params.getConsole().println("Exporting type '" + sft.getTypeName() + "'");
+        params.getConsole().println("Exporting type '" + adapter.getTypeName() + "'");
         final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
 
         if (options.getIndexName() != null) {
@@ -143,29 +142,27 @@ public class VectorLocalExportCommand extends DefaultOperation implements Comman
             final AvroSimpleFeatureCollection simpleFeatureCollection =
                 new AvroSimpleFeatureCollection();
 
+            SimpleFeature next = it.next();
+            SimpleFeatureType featureType = next.getFeatureType();
             simpleFeatureCollection.setFeatureType(
-                GeoWaveAvroFeatureUtils.buildFeatureDefinition(null, sft, null, ""));
+                GeoWaveAvroFeatureUtils.buildFeatureDefinition(null, featureType, null, ""));
             final List<AvroAttributeValues> avList = new ArrayList<>(options.getBatchSize());
+            avList.add(GeoWaveAvroFeatureUtils.buildAttributeValue(next, featureType));
             while (it.hasNext() && (avList.size() < options.getBatchSize())) {
-              final Object obj = it.next();
-              if (obj instanceof SimpleFeature) {
-                final AvroAttributeValues av =
-                    GeoWaveAvroFeatureUtils.buildAttributeValue((SimpleFeature) obj, sft);
-                avList.add(av);
-              }
+              avList.add(GeoWaveAvroFeatureUtils.buildAttributeValue(it.next(), featureType));
             }
             params.getConsole().println(
                 "Exported "
                     + (avList.size() + (iteration * options.getBatchSize()))
                     + " features from '"
-                    + sft.getTypeName()
+                    + adapter.getTypeName()
                     + "'");
             iteration++;
             simpleFeatureCollection.setSimpleFeatureCollection(avList);
             dfw.append(simpleFeatureCollection);
             dfw.flush();
           }
-          params.getConsole().println("Finished exporting '" + sft.getTypeName() + "'");
+          params.getConsole().println("Finished exporting '" + adapter.getTypeName() + "'");
         }
       }
     }

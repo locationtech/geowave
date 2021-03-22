@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.store.util;
 
 import java.util.Iterator;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexRetrieval;
@@ -19,6 +20,7 @@ import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 public class NativeEntryTransformer<T> implements GeoWaveRowIteratorTransformer<T> {
   private final PersistentAdapterStore adapterStore;
+  private final AdapterIndexMappingStore mappingStore;
   private final Index index;
   private final QueryFilter[] clientFilters;
   private final ScanCallback<T, ? extends GeoWaveRow> scanCallback;
@@ -29,6 +31,7 @@ public class NativeEntryTransformer<T> implements GeoWaveRowIteratorTransformer<
 
   public NativeEntryTransformer(
       final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final Index index,
       final QueryFilter[] clientFilters,
       final ScanCallback<T, ? extends GeoWaveRow> scanCallback,
@@ -37,6 +40,7 @@ public class NativeEntryTransformer<T> implements GeoWaveRowIteratorTransformer<
       final boolean decodePersistenceEncoding,
       final DataIndexRetrieval dataIndexRetrieval) {
     this.adapterStore = adapterStore;
+    this.mappingStore = mappingStore;
     this.index = index;
     this.clientFilters = clientFilters;
     this.scanCallback = scanCallback;
@@ -50,6 +54,7 @@ public class NativeEntryTransformer<T> implements GeoWaveRowIteratorTransformer<
   public Iterator<T> apply(final Iterator<GeoWaveRow> rowIter) {
     return GeoWaveRowIteratorFactory.iterator(
         adapterStore,
+        mappingStore,
         index,
         rowIter,
         clientFilters,

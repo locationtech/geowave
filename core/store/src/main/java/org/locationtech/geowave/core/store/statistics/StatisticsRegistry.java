@@ -17,6 +17,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi.PersistableIdAndConstructor;
+import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Statistic;
 import org.locationtech.geowave.core.store.api.StatisticBinningStrategy;
@@ -37,9 +38,9 @@ public class StatisticsRegistry {
 
   private static StatisticsRegistry INSTANCE = null;
 
-  private Map<String, RegisteredStatistic> statistics = Maps.newHashMap();
+  private final Map<String, RegisteredStatistic> statistics = Maps.newHashMap();
 
-  private Map<String, RegisteredBinningStrategy> binningStrategies = Maps.newHashMap();
+  private final Map<String, RegisteredBinningStrategy> binningStrategies = Maps.newHashMap();
 
   private StatisticsRegistry() {
     final ServiceLoader<StatisticsRegistrySPI> serviceLoader =
@@ -51,7 +52,7 @@ public class StatisticsRegistry {
     }
   }
 
-  private void putStat(RegisteredStatistic stat) {
+  private void putStat(final RegisteredStatistic stat) {
     final String key = stat.getStatisticsType().getString().toLowerCase();
     if (statistics.containsKey(key)) {
       LOGGER.warn(
@@ -61,7 +62,7 @@ public class StatisticsRegistry {
     statistics.put(key, stat);
   }
 
-  private void putBinningStrategy(RegisteredBinningStrategy strategy) {
+  private void putBinningStrategy(final RegisteredBinningStrategy strategy) {
     final String key = strategy.getStrategyName().toLowerCase();
     if (binningStrategies.containsKey(key)) {
       LOGGER.warn(
@@ -81,13 +82,14 @@ public class StatisticsRegistry {
 
   @SuppressWarnings("unchecked")
   public PersistableIdAndConstructor[] getPersistables() {
-    Collection<RegisteredStatistic> registeredStatistics = statistics.values();
-    Collection<RegisteredBinningStrategy> registeredBinningStrategies = binningStrategies.values();
-    PersistableIdAndConstructor[] persistables =
-        new PersistableIdAndConstructor[registeredStatistics.size() * 2
+    final Collection<RegisteredStatistic> registeredStatistics = statistics.values();
+    final Collection<RegisteredBinningStrategy> registeredBinningStrategies =
+        binningStrategies.values();
+    final PersistableIdAndConstructor[] persistables =
+        new PersistableIdAndConstructor[(registeredStatistics.size() * 2)
             + registeredBinningStrategies.size()];
     int persistableIndex = 0;
-    for (RegisteredStatistic statistic : registeredStatistics) {
+    for (final RegisteredStatistic statistic : registeredStatistics) {
       persistables[persistableIndex++] =
           new PersistableIdAndConstructor(
               statistic.getStatisticPersistableId(),
@@ -97,7 +99,7 @@ public class StatisticsRegistry {
               statistic.getValuePersistableId(),
               (Supplier<Persistable>) (Supplier<?>) statistic.getValueConstructor());
     }
-    for (RegisteredBinningStrategy binningStrategy : registeredBinningStrategies) {
+    for (final RegisteredBinningStrategy binningStrategy : registeredBinningStrategies) {
       persistables[persistableIndex++] =
           new PersistableIdAndConstructor(
               binningStrategy.getPersistableId(),
@@ -108,12 +110,12 @@ public class StatisticsRegistry {
 
   /**
    * Get registered index statistics that are compatible with the given index class.
-   * 
+   *
    * @param indexClass the class of the index
    * @return a list of index statistics
    */
   public List<? extends Statistic<? extends StatisticValue<?>>> getRegisteredIndexStatistics(
-      Class<?> indexClass) {
+      final Class<?> indexClass) {
     return statistics.values().stream().filter(
         s -> s.isIndexStatistic() && s.isCompatibleWith(indexClass)).map(
             s -> s.getStatisticConstructor().get()).collect(Collectors.toList());
@@ -121,12 +123,12 @@ public class StatisticsRegistry {
 
   /**
    * Get registered data type statistics that are compatible with the the data type class.
-   * 
+   *
    * @param adapterDataClass the class of the entries of the data type adapter
    * @return a list of compatible statistics
    */
   public List<? extends Statistic<? extends StatisticValue<?>>> getRegisteredDataTypeStatistics(
-      Class<?> adapterDataClass) {
+      final Class<?> adapterDataClass) {
     return statistics.values().stream().filter(
         s -> s.isDataTypeStatistic() && s.isCompatibleWith(adapterDataClass)).map(
             s -> s.getStatisticConstructor().get()).collect(Collectors.toList());
@@ -134,22 +136,22 @@ public class StatisticsRegistry {
 
   /**
    * Get registered field statistics that are compatible with the the provided type.
-   * 
+   *
    * @param type the type to get compatible statistics for
    * @param fieldName the field to get compatible statistics for
    * @return a map of compatible statistics, keyed by field name
    */
   public Map<String, List<? extends Statistic<? extends StatisticValue<?>>>> getRegisteredFieldStatistics(
-      DataTypeAdapter<?> type,
-      String fieldName) {
-    Map<String, List<? extends Statistic<? extends StatisticValue<?>>>> fieldStatistics =
+      final DataTypeAdapter<?> type,
+      final String fieldName) {
+    final Map<String, List<? extends Statistic<? extends StatisticValue<?>>>> fieldStatistics =
         Maps.newHashMap();
-    final int fieldCount = type.getFieldCount();
-    for (int i = 0; i < fieldCount; i++) {
-      String name = type.getFieldName(i);
-      Class<?> fieldClass = type.getFieldClass(i);
-      if (fieldName == null || fieldName.equals(name)) {
-        List<Statistic<StatisticValue<Object>>> fieldOptions =
+    final FieldDescriptor[] fieldDescriptors = type.getFieldDescriptors();
+    for (int i = 0; i < fieldDescriptors.length; i++) {
+      final String name = fieldDescriptors[i].fieldName();
+      final Class<?> fieldClass = fieldDescriptors[i].bindingClass();
+      if ((fieldName == null) || fieldName.equals(name)) {
+        final List<Statistic<StatisticValue<Object>>> fieldOptions =
             statistics.values().stream().filter(
                 s -> s.isFieldStatistic() && s.isCompatibleWith(fieldClass)).map(
                     s -> s.getStatisticConstructor().get()).collect(Collectors.toList());
@@ -161,7 +163,7 @@ public class StatisticsRegistry {
 
   /**
    * Get all registered statistics.
-   * 
+   *
    * @return a list of registered statistics
    */
   public List<? extends Statistic<? extends StatisticValue<?>>> getAllRegisteredStatistics() {
@@ -171,7 +173,7 @@ public class StatisticsRegistry {
 
   /**
    * Get all registered binning strategies.
-   * 
+   *
    * @return a list of registered binning strategies
    */
   public List<StatisticBinningStrategy> getAllRegisteredBinningStrategies() {
@@ -181,7 +183,7 @@ public class StatisticsRegistry {
 
   /**
    * Retrieves the statistic of the given statistic type.
-   * 
+   *
    * @param statType the statistic type
    * @return the statistic that matches the given name, or {@code null} if it could not be found
    */
@@ -191,12 +193,12 @@ public class StatisticsRegistry {
 
   /**
    * Retrieves the statistic of the given statistic type.
-   * 
+   *
    * @param statType the statistic type
    * @return the statistic that matches the given name, or {@code null} if it could not be found
    */
   public Statistic<StatisticValue<Object>> getStatistic(final String statType) {
-    RegisteredStatistic statistic = statistics.get(statType.toLowerCase());
+    final RegisteredStatistic statistic = statistics.get(statType.toLowerCase());
     if (statistic == null) {
       return null;
     }
@@ -206,12 +208,12 @@ public class StatisticsRegistry {
 
   /**
    * Retrieves the statistic type that matches the given string.
-   * 
+   *
    * @param statType the statistic type to get
    * @return the statistic type, or {@code null} if a matching statistic type could not be found
    */
   public StatisticType<StatisticValue<Object>> getStatisticType(final String statType) {
-    RegisteredStatistic statistic = statistics.get(statType.toLowerCase());
+    final RegisteredStatistic statistic = statistics.get(statType.toLowerCase());
     if (statistic == null) {
       return null;
     }
@@ -220,12 +222,13 @@ public class StatisticsRegistry {
 
   /**
    * Retrieves the binning strategy that matches the given string.
-   * 
+   *
    * @param binningStrategyType the binning strategy to get
    * @return the binning strategy, or {@code null} if a matching binning strategy could not be found
    */
   public StatisticBinningStrategy getBinningStrategy(final String binningStrategyType) {
-    RegisteredBinningStrategy strategy = binningStrategies.get(binningStrategyType.toLowerCase());
+    final RegisteredBinningStrategy strategy =
+        binningStrategies.get(binningStrategyType.toLowerCase());
     if (strategy == null) {
       return null;
     }

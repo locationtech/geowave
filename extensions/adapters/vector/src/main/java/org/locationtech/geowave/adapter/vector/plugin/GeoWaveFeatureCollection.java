@@ -165,7 +165,7 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
     if (GeoWaveFeatureCollection.isDistributedRenderQuery(query)) {
       return getDistributedRenderFeatureType();
     }
-    return reader.getComponents().getAdapter().getFeatureType();
+    return reader.getComponents().getFeatureType();
   }
 
   private Filter getFilter(final Query query) {
@@ -268,11 +268,11 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
       return new GeometryFactory().toGeometry(envelope);
     }
     final String geomAtrributeName =
-        reader.getComponents().getAdapter().getFeatureType().getGeometryDescriptor().getLocalName();
+        reader.getComponents().getFeatureType().getGeometryDescriptor().getLocalName();
     final ExtractGeometryFilterVisitorResult geoAndCompareOp =
         ExtractGeometryFilterVisitor.getConstraints(
             query.getFilter(),
-            reader.getComponents().getAdapter().getFeatureType().getCoordinateReferenceSystem(),
+            reader.getComponents().getCRS(),
             geomAtrributeName);
     if (geoAndCompareOp == null) {
       return reader.clipIndexedBBOXConstraints(null);

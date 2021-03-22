@@ -15,7 +15,6 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
-import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputFormat;
@@ -63,7 +62,7 @@ public class HadoopWritableSerializationTool {
     if (adapter instanceof InternalDataAdapter) {
       return (InternalDataAdapter<?>) adapter;
     }
-    return new InternalDataAdapterWrapper<>(adapter, adapterId);
+    return adapter.asInternalAdapter(adapterId);
   }
 
   public DataTypeAdapter<?> getAdapter(final String typeName) {

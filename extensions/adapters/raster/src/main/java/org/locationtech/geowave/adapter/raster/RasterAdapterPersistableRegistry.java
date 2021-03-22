@@ -39,6 +39,8 @@ public class RasterAdapterPersistableRegistry implements PersistableRegistrySpi 
         new PersistableIdAndConstructor((short) 609, HistogramConfig::new),
         new PersistableIdAndConstructor((short) 614, ServerMergeableRasterTile::new),
         new PersistableIdAndConstructor((short) 615, SingleAdapterServerMergeStrategy::new),
-        new PersistableIdAndConstructor((short) 616, ClientMergeableRasterTile::new),};
+        new PersistableIdAndConstructor((short) 616, ClientMergeableRasterTile::new),
+        // 617 used by RasterRegisteredIndexFieldMappers
+    };
   }
 }

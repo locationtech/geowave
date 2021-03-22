@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.store.util;
 
 import java.util.Iterator;
 import java.util.Map;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform;
@@ -28,12 +29,13 @@ public class RewritingMergingEntryIterator<T> extends MergingEntryIterator<T> {
 
   public RewritingMergingEntryIterator(
       final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final Index index,
       final Iterator<GeoWaveRow> scannerIt,
       final Map<Short, RowMergingDataAdapter> mergingAdapters,
       final RowWriter writer,
       final RowDeleter deleter) {
-    super(adapterStore, index, scannerIt, null, null, mergingAdapters, null, null);
+    super(adapterStore, mappingStore, index, scannerIt, null, null, mergingAdapters, null, null);
     this.writer = writer;
     this.deleter = deleter;
   }

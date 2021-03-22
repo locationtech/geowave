@@ -18,7 +18,6 @@ import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.util.SimpleFeatureUserDataConfigurationSet;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
-import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.locationtech.geowave.format.geotools.vector.RetypingVectorDataPlugin.RetypingVectorDataSource;
 import org.opengis.feature.simple.SimpleFeature;
@@ -58,14 +57,7 @@ public class SimpleFeatureGeoWaveWrapper implements CloseableIterator<GeoWaveDat
           builder = new SimpleFeatureBuilder(retypedSchema);
         }
       }
-      if ((visibility == null) || visibility.isEmpty()) {
-        dataAdapter = new FeatureDataAdapter(retypedSchema);
-      } else {
-        dataAdapter =
-            new FeatureDataAdapter(
-                retypedSchema,
-                new GlobalVisibilityHandler<SimpleFeature, Object>(visibility));
-      }
+      dataAdapter = new FeatureDataAdapter(retypedSchema);
     }
 
     @Override

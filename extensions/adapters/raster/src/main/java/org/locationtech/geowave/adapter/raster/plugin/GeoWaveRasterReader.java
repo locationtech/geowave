@@ -16,6 +16,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -227,12 +228,11 @@ public class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
       return crs;
     }
 
-    final AdapterToIndexMapping adapterMapping =
+    final AdapterToIndexMapping[] adapterMappings =
         geowaveAdapterIndexMappingStore.getIndicesForAdapter(getAdapterId(coverageName));
-    final Index[] indices = adapterMapping.getIndices(geowaveIndexStore);
 
-    if ((indices != null) && (indices.length > 0)) {
-      crs = GeometryUtils.getIndexCrs(indices[0]);
+    if ((adapterMappings != null) && (adapterMappings.length > 0)) {
+      crs = GeometryUtils.getIndexCrs(adapterMappings[0].getIndex(geowaveIndexStore));
       crsCache.put(coverageName, crs);
     }
     return crs;
@@ -731,14 +731,13 @@ public class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
       final RasterDataAdapter adapter,
       final QueryConstraints query,
       final double[] targetResolutionPerDimension) {
-    final AdapterToIndexMapping adapterIndexMapping =
+    final AdapterToIndexMapping[] adapterIndexMappings =
         geowaveAdapterIndexMappingStore.getIndicesForAdapter(getAdapterId(adapter.getTypeName()));
-    final Index[] indices = adapterIndexMapping.getIndices(geowaveIndexStore);
     // just work on the first spatial only index that contains this adapter
     // ID
     // TODO consider the best strategy for handling temporal queries here
-    for (final Index rasterIndex : indices) {
-      if (SpatialDimensionalityTypeProvider.isSpatial(rasterIndex)) {
+    for (final AdapterToIndexMapping indexMapping : adapterIndexMappings) {
+      if (SpatialDimensionalityTypeProvider.isSpatial(indexMapping.getIndex(geowaveIndexStore))) {
         return (CloseableIterator) geowaveDataStore.query(
             QueryBuilder.newBuilder().setAuthorizations(
                 authorizationSPI.getAuthorizations()).addTypeName(

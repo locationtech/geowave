@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.store.base.dataidx;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
@@ -20,6 +21,7 @@ public class DataIndexRetrievalImpl implements DataIndexRetrieval {
 
   private final DataStoreOperations operations;
   private final PersistentAdapterStore adapterStore;
+  private final AdapterIndexMappingStore mappingStore;
   private final InternalAdapterStore internalAdapterStore;
   private final Pair<String[], InternalDataAdapter<?>> fieldSubsets;
   private final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation;
@@ -29,12 +31,14 @@ public class DataIndexRetrievalImpl implements DataIndexRetrieval {
   public DataIndexRetrievalImpl(
       final DataStoreOperations operations,
       final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final InternalAdapterStore internalAdapterStore,
       final Pair<String[], InternalDataAdapter<?>> fieldSubsets,
       final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
       final String[] additionalAuthorizations) {
     this.operations = operations;
     this.adapterStore = adapterStore;
+    this.mappingStore = mappingStore;
     this.internalAdapterStore = internalAdapterStore;
     this.fieldSubsets = fieldSubsets;
     this.aggregation = aggregation;
@@ -46,6 +50,7 @@ public class DataIndexRetrievalImpl implements DataIndexRetrieval {
     return DataIndexUtils.getFieldValuesFromDataIdIndex(
         operations,
         adapterStore,
+        mappingStore,
         internalAdapterStore,
         fieldSubsets,
         aggregation,

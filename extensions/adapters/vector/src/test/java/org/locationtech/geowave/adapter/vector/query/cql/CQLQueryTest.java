@@ -21,10 +21,12 @@ import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProv
 import org.locationtech.geowave.core.geotime.index.SpatialOptions;
 import org.locationtech.geowave.core.geotime.index.SpatialTemporalDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.index.SpatialTemporalOptions;
+import org.locationtech.geowave.core.geotime.store.InternalGeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.ExplicitCQLQuery;
 import org.locationtech.geowave.core.geotime.store.query.OptimalCQLQuery;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.api.Index;
+import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 public class CQLQueryTest {
@@ -33,7 +35,7 @@ public class CQLQueryTest {
   private static final Index SPATIAL_TEMPORAL_INDEX =
       new SpatialTemporalDimensionalityTypeProvider().createIndex(new SpatialTemporalOptions());
   SimpleFeatureType type;
-  FeatureDataAdapter adapter;
+  InternalGeotoolsFeatureDataAdapter<SimpleFeature> adapter;
 
   @Before
   public void init() throws SchemaException {
@@ -41,8 +43,8 @@ public class CQLQueryTest {
         DataUtilities.createType(
             "geostuff",
             "geometry:Geometry:srid=4326,pop:java.lang.Long,when:Date,pid:String");
-    adapter = new FeatureDataAdapter(type);
-    adapter.init(SPATIAL_INDEX, SPATIAL_TEMPORAL_INDEX);
+    final FeatureDataAdapter a = new FeatureDataAdapter(type);
+    adapter = (InternalGeotoolsFeatureDataAdapter<SimpleFeature>) a.asInternalAdapter((short) -1);
   }
 
   @Test
@@ -126,8 +128,9 @@ public class CQLQueryTest {
         DataUtilities.createType(
             "geostuff",
             "geometry:Geometry:srid=4326,pop:java.lang.Long,start:Date,end:Date,pid:String");
-    final FeatureDataAdapter adapter = new FeatureDataAdapter(type);
-    adapter.init(SPATIAL_INDEX);
+    final FeatureDataAdapter a = new FeatureDataAdapter(type);
+    final InternalGeotoolsFeatureDataAdapter<SimpleFeature> adapter =
+        (InternalGeotoolsFeatureDataAdapter<SimpleFeature>) a.asInternalAdapter((short) -1);
     final ExplicitCQLQuery query =
         (ExplicitCQLQuery) OptimalCQLQuery.createOptimalQuery(
             "BBOX(geometry,27.20,41.30,27.30,41.20) and start during 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z",

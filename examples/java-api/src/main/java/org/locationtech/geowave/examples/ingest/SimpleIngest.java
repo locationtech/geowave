@@ -29,13 +29,10 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class SimpleIngest {
   public static final String FEATURE_NAME = "GridPoint";
   public static final String GEOMETRY_FIELD = "geometry";
-  private static Logger log = LoggerFactory.getLogger(SimpleIngest.class);
 
   public static void main(final String[] args) {
     final SimpleIngest si = new SimpleIngest();
@@ -58,7 +55,7 @@ public class SimpleIngest {
 
     // This is an adapter, that is needed to describe how to persist the
     // data type passed
-    final GeotoolsFeatureDataAdapter dataTypeAdapter = createDataAdapter(point);
+    final GeotoolsFeatureDataAdapter<SimpleFeature> dataTypeAdapter = createDataAdapter(point);
 
     // This describes how to index the data
     final Index index = createSpatialIndex();

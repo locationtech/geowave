@@ -18,15 +18,14 @@ import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.junit.Test;
 import org.locationtech.geowave.core.geotime.binning.SpatialBinningType;
-import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.geotime.store.dimension.SpatialField;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.SingleFieldPersistentDataset;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
@@ -57,11 +56,11 @@ public class GeohashBinningStrategyTest {
 
   private static CommonIndexedPersistenceEncoding createCommonIndexData(
       final Coordinate coordinate) {
-    final PersistentDataset<CommonIndexValue> commonData = new SingleFieldPersistentDataset<>();
+    final PersistentDataset<Object> commonData = new SingleFieldPersistentDataset<>();
 
     commonData.addValue(
-        GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME,
-        new GeometryWrapper(geoFactory.createPoint(coordinate)));
+        SpatialField.DEFAULT_GEOMETRY_FIELD_NAME,
+        geoFactory.createPoint(coordinate));
 
     return new CommonIndexedPersistenceEncoding(
         (short) 1,

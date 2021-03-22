@@ -349,9 +349,6 @@ public class GpxUtils {
             "MagneticVariation"));
     simpleFeatureTypeBuilder.add(
         attributeTypeBuilder.binding(Double.class).nillable(true).buildDescriptor("GeoHeight"));
-    simpleFeatureTypeBuilder.add(
-        attributeTypeBuilder.binding(Double.class).nillable(true).buildDescriptor("Elevation"));
-
     return simpleFeatureTypeBuilder.buildFeatureType();
   }
 

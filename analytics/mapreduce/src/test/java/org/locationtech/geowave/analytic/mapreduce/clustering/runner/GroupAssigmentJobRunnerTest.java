@@ -45,7 +45,6 @@ import org.locationtech.geowave.analytic.store.PersistableStore;
 import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.index.SpatialOptions;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
-import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.memory.MemoryRequiredOptions;
@@ -164,11 +163,8 @@ public class GroupAssigmentJobRunnerTest {
     runTimeProperties.store(StoreParam.INPUT_STORE, store);
 
     final FeatureDataAdapter adapter = new FeatureDataAdapter(ftype);
-    final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
-    adapter.init(index);
     pluginOptions.createAdapterStore().addAdapter(
-        new InternalDataAdapterWrapper<>(
-            adapter,
+        adapter.asInternalAdapter(
             pluginOptions.createInternalAdapterStore().addTypeName(adapter.getTypeName())));
   }
 

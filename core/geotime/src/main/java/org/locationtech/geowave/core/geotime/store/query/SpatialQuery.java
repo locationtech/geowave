@@ -47,19 +47,20 @@ public class SpatialQuery extends AbstractVectorConstraints<ExplicitSpatialQuery
   }
 
   @Override
-  protected Filter getFilter(final GeotoolsFeatureDataAdapter adapter) {
-    return getFilter(adapter, delegateConstraints);
+  protected Filter getFilter(final GeotoolsFeatureDataAdapter adapter, final Index index) {
+    return getFilter(adapter, index, delegateConstraints);
   }
 
   protected static Filter getFilter(
       final GeotoolsFeatureDataAdapter adapter,
+      final Index index,
       final ExplicitSpatialQuery delegateConstraints) {
     final GeometryDescriptor geomDesc = adapter.getFeatureType().getGeometryDescriptor();
-    final CoordinateReferenceSystem adapterCrs = geomDesc.getCoordinateReferenceSystem();
+    final CoordinateReferenceSystem indexCrs = GeometryUtils.getIndexCrs(index);
     return GeometryUtils.geometryToSpatialOperator(
-        transformToAdapter(adapterCrs, delegateConstraints),
+        transformToAdapter(indexCrs, delegateConstraints),
         geomDesc.getLocalName(),
-        adapterCrs == null ? GeometryUtils.getDefaultCRS() : adapterCrs);
+        indexCrs);
   }
 
   private static Geometry transformToAdapter(

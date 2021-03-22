@@ -23,7 +23,7 @@ public class PrimitiveBooleanArraySerializationProvider implements
   }
 
   @Override
-  public FieldWriter<Object, boolean[]> getFieldWriter() {
+  public FieldWriter<boolean[]> getFieldWriter() {
     return new PrimitiveBooleanArrayWriter();
   }
 
@@ -45,7 +45,7 @@ public class PrimitiveBooleanArraySerializationProvider implements
     }
   }
 
-  private static class PrimitiveBooleanArrayWriter implements FieldWriter<Object, boolean[]> {
+  private static class PrimitiveBooleanArrayWriter implements FieldWriter<boolean[]> {
     @Override
     public byte[] writeField(final boolean[] fieldValue) {
       if (fieldValue == null) {
@@ -55,7 +55,7 @@ public class PrimitiveBooleanArraySerializationProvider implements
       for (int i = 0; i < fieldValue.length; i++) {
         bits.set(i, fieldValue[i]);
       }
-      byte[] bytes = bits.toByteArray();
+      final byte[] bytes = bits.toByteArray();
       int size = VarintUtils.unsignedIntByteLength(fieldValue.length);
       size += bytes.length;
       final ByteBuffer buf = ByteBuffer.allocate(size);

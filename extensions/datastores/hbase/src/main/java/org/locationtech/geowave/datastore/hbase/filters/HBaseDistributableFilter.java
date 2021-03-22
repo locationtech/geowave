@@ -19,9 +19,10 @@ import org.apache.hadoop.hbase.exceptions.DeserializationException;
 import org.apache.hadoop.hbase.filter.FilterBase;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.adapter.AbstractAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.DeferredReadCommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
@@ -32,7 +33,6 @@ import org.locationtech.geowave.core.store.flatten.FlattenedDataSet;
 import org.locationtech.geowave.core.store.flatten.FlattenedFieldInfo;
 import org.locationtech.geowave.core.store.flatten.FlattenedUnreadData;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.IndexImpl;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
@@ -54,7 +54,7 @@ public class HBaseDistributableFilter extends FilterBase {
   private List<String> commonIndexFieldIds = new ArrayList<>();
 
   // CACHED decoded data:
-  private PersistentDataset<CommonIndexValue> commonData;
+  private PersistentDataset<Object> commonData;
   private FlattenedUnreadData unreadData;
   private CommonIndexedPersistenceEncoding persistenceEncoding;
   private IndexedAdapterPersistenceEncoding adapterEncoding;
@@ -79,6 +79,7 @@ public class HBaseDistributableFilter extends FilterBase {
 
     final byte[] filterBytes = new byte[buf.remaining()];
     buf.get(filterBytes);
+
 
     final HBaseDistributableFilter newInstance = new HBaseDistributableFilter();
     newInstance.setWholeRowFilter(wholeRow);
@@ -237,7 +238,7 @@ public class HBaseDistributableFilter extends FilterBase {
 
   protected static CommonIndexedPersistenceEncoding getPersistenceEncoding(
       final GeoWaveKeyImpl rowKey,
-      final PersistentDataset<CommonIndexValue> commonData,
+      final PersistentDataset<Object> commonData,
       final FlattenedUnreadData unreadData) {
 
     return new DeferredReadCommonIndexedPersistenceEncoding(
@@ -254,7 +255,8 @@ public class HBaseDistributableFilter extends FilterBase {
     return persistenceEncoding;
   }
 
-  public IndexedAdapterPersistenceEncoding getAdapterEncoding(final DataTypeAdapter dataAdapter) {
+  public IndexedAdapterPersistenceEncoding getAdapterEncoding(
+      final InternalDataAdapter<?> dataAdapter) {
     final PersistentDataset<Object> adapterExtendedValues = new MultiFieldPersistentDataset<>();
     if (persistenceEncoding instanceof AbstractAdapterPersistenceEncoding) {
       ((AbstractAdapterPersistenceEncoding) persistenceEncoding).convertUnknownValues(
@@ -282,8 +284,13 @@ public class HBaseDistributableFilter extends FilterBase {
   }
 
   // Called by the aggregation endpoint, after filtering the current row
-  public Object decodeRow(final DataTypeAdapter dataAdapter) {
-    return dataAdapter.decode(getAdapterEncoding(dataAdapter), new IndexImpl(null, model));
+  public Object decodeRow(
+      final InternalDataAdapter<?> dataAdapter,
+      final AdapterToIndexMapping indexMapping) {
+    return dataAdapter.decode(
+        getAdapterEncoding(dataAdapter),
+        indexMapping,
+        new IndexImpl(null, model));
   }
 
   protected boolean filterInternal(final CommonIndexedPersistenceEncoding encoding) {
@@ -313,7 +320,7 @@ public class HBaseDistributableFilter extends FilterBase {
 
   protected FlattenedUnreadData aggregateFieldData(
       final Cell cell,
-      final PersistentDataset<CommonIndexValue> commonData) throws IOException {
+      final PersistentDataset<Object> commonData) throws IOException {
     final byte[] qualBuf = CellUtil.cloneQualifier(cell);
     final byte[] valBuf = CellUtil.cloneValue(cell);
 
@@ -330,10 +337,9 @@ public class HBaseDistributableFilter extends FilterBase {
 
       if (ordinal < commonIndexFieldIds.size()) {
         final String commonIndexFieldName = commonIndexFieldIds.get(ordinal);
-        final FieldReader<? extends CommonIndexValue> reader =
-            model.getReader(commonIndexFieldName);
+        final FieldReader<?> reader = model.getReader(commonIndexFieldName);
         if (reader != null) {
-          final CommonIndexValue fieldValue = reader.readField(fieldInfo.getValue());
+          final Object fieldValue = reader.readField(fieldInfo.getValue());
           commonData.addValue(commonIndexFieldName, fieldValue);
         } else {
           LOGGER.error("Could not find reader for common index field: " + commonIndexFieldName);

@@ -42,9 +42,10 @@ import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialTemporal
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.DataStore;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.base.BaseDataStore;
@@ -55,7 +56,6 @@ import org.locationtech.geowave.core.store.index.IndexPluginOptions.PartitionStr
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.statistics.InternalStatisticsHelper;
-import org.locationtech.geowave.core.store.statistics.index.DuplicateEntryCountStatistic;
 import org.locationtech.geowave.core.store.statistics.index.DuplicateEntryCountStatistic.DuplicateEntryCountValue;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
@@ -148,7 +148,6 @@ public class SpatialTemporalQueryIT {
     builder.add("geo", Point.class);
     builder.add("timestamp", Date.class);
     timeStampAdapter = new FeatureDataAdapter(builder.buildFeatureType());
-    timeStampAdapter.init(YEAR_INDEX, MONTH_INDEX, DAY_INDEX);
 
     builder = new SimpleFeatureTypeBuilder();
     builder.setName("simpletimerange");
@@ -156,7 +155,6 @@ public class SpatialTemporalQueryIT {
     builder.add("startTime", Date.class);
     builder.add("endTime", Date.class);
     timeRangeAdapter = new FeatureDataAdapter(builder.buildFeatureType());
-    timeRangeAdapter.init(YEAR_INDEX, MONTH_INDEX, DAY_INDEX);
 
     Calendar cal = getInitialDayCalendar();
     final GeometryFactory geomFactory = new GeometryFactory();
@@ -289,11 +287,12 @@ public class SpatialTemporalQueryIT {
 
           @Override
           public CloseableIterator<Index> getIndices(
-              DataStatisticsStore statisticsStore,
-              QueryConstraints query,
-              Index[] indices,
-              DataTypeAdapter<?> adapter,
-              Map<QueryHint, Object> hints) {
+              final DataStatisticsStore statisticsStore,
+              final AdapterIndexMappingStore mappingStore,
+              final QueryConstraints query,
+              final Index[] indices,
+              final InternalDataAdapter<?> adapter,
+              final Map<QueryHint, Object> hints) {
             return new CloseableIteratorWrapper<>(new Closeable() {
               @Override
               public void close() throws IOException {}

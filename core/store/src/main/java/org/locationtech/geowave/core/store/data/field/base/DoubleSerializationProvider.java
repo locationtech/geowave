@@ -20,7 +20,7 @@ public class DoubleSerializationProvider implements FieldSerializationProviderSp
   }
 
   @Override
-  public FieldWriter<Object, Double> getFieldWriter() {
+  public FieldWriter<Double> getFieldWriter() {
     return new DoubleWriter();
   }
 
@@ -34,7 +34,7 @@ public class DoubleSerializationProvider implements FieldSerializationProviderSp
     }
   }
 
-  protected static class DoubleWriter implements FieldWriter<Object, Double> {
+  protected static class DoubleWriter implements FieldWriter<Double> {
     @Override
     public byte[] writeField(final Double fieldValue) {
       if (fieldValue == null) {

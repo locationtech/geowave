@@ -13,6 +13,7 @@ import java.util.List;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.KeyValue;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
@@ -28,15 +29,18 @@ import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 public class HBaseCellGenerator<T> {
   private final InternalDataAdapter<T> adapter;
   private final Index index;
+  private final AdapterToIndexMapping indexMapping;
   private final VisibilityWriter<T> visibilityWriter;
 
   public HBaseCellGenerator(
       final InternalDataAdapter<T> adapter,
       final Index index,
+      final AdapterToIndexMapping indexMapping,
       final VisibilityWriter<T> visibilityWriter) {
     super();
     this.adapter = adapter;
     this.index = index;
+    this.indexMapping = indexMapping;
     this.visibilityWriter = visibilityWriter;
   }
 
@@ -44,7 +48,7 @@ public class HBaseCellGenerator<T> {
 
     final List<Cell> keyValuePairs = new ArrayList<>();
     final GeoWaveRow[] rows =
-        BaseDataStoreUtils.getGeoWaveRows(entry, adapter, index, visibilityWriter);
+        BaseDataStoreUtils.getGeoWaveRows(entry, adapter, indexMapping, index, visibilityWriter);
 
     if ((rows != null) && (rows.length > 0)) {
       for (final GeoWaveRow row : rows) {

@@ -9,16 +9,20 @@
 package org.locationtech.geowave.core.store.query.constraints;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.locationtech.geowave.core.index.CustomIndexStrategy;
 import org.locationtech.geowave.core.index.CustomIndexStrategy.PersistableBiPredicate;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.adapter.AbstractAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
@@ -26,12 +30,12 @@ import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.IndexImpl;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
-import org.locationtech.geowave.core.store.util.GenericTypeResolver;
 import com.google.common.primitives.Bytes;
 
 public class CustomQueryConstraintsWithFilter<T, C extends Persistable> extends
     CustomQueryConstraints<C> {
-  private DataTypeAdapter<T> adapter;
+  private InternalDataAdapter<T> adapter;
+  private Map<String, AdapterToIndexMapping> indexMappings;
 
   public CustomQueryConstraintsWithFilter() {
     super();
@@ -39,17 +43,24 @@ public class CustomQueryConstraintsWithFilter<T, C extends Persistable> extends
 
   public CustomQueryConstraintsWithFilter(
       final C customConstraints,
-      final DataTypeAdapter<T> adapter) {
+      final InternalDataAdapter<T> adapter,
+      final AdapterToIndexMapping[] indexMappings) {
     super(customConstraints);
     this.adapter = adapter;
+    this.indexMappings =
+        Arrays.stream(indexMappings).collect(
+            Collectors.toMap(AdapterToIndexMapping::getIndexName, mapping -> mapping));
   }
 
   @Override
   public byte[] toBinary() {
     final byte[] adapterBinary = PersistenceUtils.toBinary(adapter);
+    final byte[] mappingBinary = PersistenceUtils.toBinary(indexMappings.values());
     return Bytes.concat(
         VarintUtils.writeUnsignedInt(adapterBinary.length),
         adapterBinary,
+        VarintUtils.writeUnsignedInt(mappingBinary.length),
+        mappingBinary,
         super.toBinary());
   }
 
@@ -58,7 +69,13 @@ public class CustomQueryConstraintsWithFilter<T, C extends Persistable> extends
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     final byte[] adapterBinary = new byte[VarintUtils.readUnsignedInt(buf)];
     buf.get(adapterBinary);
-    adapter = (DataTypeAdapter<T>) PersistenceUtils.fromBinary(adapterBinary);
+    adapter = (InternalDataAdapter<T>) PersistenceUtils.fromBinary(adapterBinary);
+    final byte[] mappingBinary = new byte[VarintUtils.readUnsignedInt(buf)];
+    buf.get(mappingBinary);
+    List<AdapterToIndexMapping> mappings = (List) PersistenceUtils.fromBinaryAsList(mappingBinary);
+    indexMappings =
+        mappings.stream().collect(
+            Collectors.toMap(AdapterToIndexMapping::getIndexName, mapping -> mapping));
     final byte[] superBinary = new byte[buf.remaining()];
     buf.get(superBinary);
     super.fromBinary(superBinary);
@@ -67,15 +84,12 @@ public class CustomQueryConstraintsWithFilter<T, C extends Persistable> extends
   @Override
   public List<QueryFilter> createFilters(final Index index) {
     if (index instanceof CustomIndexStrategy) {
-      final Class<?>[] genericClasses =
-          GenericTypeResolver.resolveTypeArguments(index.getClass(), CustomIndexStrategy.class);
-      if ((genericClasses != null)
-          && (genericClasses.length == 2)
-          && genericClasses[1].isInstance(getCustomConstraints())) {
+      if (((CustomIndexStrategy) index).getConstraintsClass().isInstance(getCustomConstraints())) {
         return Collections.singletonList(
             new InternalCustomQueryFilter(
                 getCustomConstraints(),
                 adapter,
+                indexMappings.get(index.getName()),
                 ((CustomIndexStrategy) index).getFilter(getCustomConstraints())));
       }
     }
@@ -84,18 +98,21 @@ public class CustomQueryConstraintsWithFilter<T, C extends Persistable> extends
 
   public static class InternalCustomQueryFilter<T, C extends Persistable> implements QueryFilter {
     private C customConstraints;
-    private DataTypeAdapter<T> adapter;
+    private InternalDataAdapter<T> adapter;
+    private AdapterToIndexMapping indexMapping;
     private PersistableBiPredicate<T, C> predicate;
 
     public InternalCustomQueryFilter() {}
 
     public InternalCustomQueryFilter(
         final C customConstraints,
-        final DataTypeAdapter<T> adapter,
+        final InternalDataAdapter<T> adapter,
+        final AdapterToIndexMapping indexMapping,
         final PersistableBiPredicate<T, C> predicate) {
       super();
       this.customConstraints = customConstraints;
       this.adapter = adapter;
+      this.indexMapping = indexMapping;
       this.predicate = predicate;
     }
 
@@ -106,10 +123,13 @@ public class CustomQueryConstraintsWithFilter<T, C extends Persistable> extends
     @Override
     public byte[] toBinary() {
       final byte[] adapterBytes = PersistenceUtils.toBinary(adapter);
+      final byte[] mappingBytes = PersistenceUtils.toBinary(indexMapping);
       final byte[] predicateBytes = PersistenceUtils.toBinary(predicate);
       return Bytes.concat(
           VarintUtils.writeUnsignedInt(adapterBytes.length),
           adapterBytes,
+          VarintUtils.writeUnsignedInt(mappingBytes.length),
+          mappingBytes,
           VarintUtils.writeUnsignedInt(predicateBytes.length),
           predicateBytes,
           PersistenceUtils.toBinary(customConstraints));
@@ -120,7 +140,10 @@ public class CustomQueryConstraintsWithFilter<T, C extends Persistable> extends
       final ByteBuffer buf = ByteBuffer.wrap(bytes);
       final byte[] adapterBytes = new byte[VarintUtils.readUnsignedInt(buf)];
       buf.get(adapterBytes);
-      adapter = (DataTypeAdapter<T>) PersistenceUtils.fromBinary(adapterBytes);
+      adapter = (InternalDataAdapter<T>) PersistenceUtils.fromBinary(adapterBytes);
+      final byte[] mappingBytes = new byte[VarintUtils.readUnsignedInt(buf)];
+      buf.get(mappingBytes);
+      indexMapping = (AdapterToIndexMapping) PersistenceUtils.fromBinary(mappingBytes);
       final byte[] predicateBytes = new byte[VarintUtils.readUnsignedInt(buf)];
       buf.get(predicateBytes);
       predicate = (PersistableBiPredicate<T, C>) PersistenceUtils.fromBinary(predicateBytes);
@@ -209,6 +232,7 @@ public class CustomQueryConstraintsWithFilter<T, C extends Persistable> extends
         final T entry =
             adapter.decode(
                 encoding,
+                indexMapping,
                 new IndexImpl(
                     null,
                     // we have to assume this adapter doesn't use the numeric index strategy
@@ -227,8 +251,9 @@ public class CustomQueryConstraintsWithFilter<T, C extends Persistable> extends
 
   @Override
   public QueryConstraints createQueryConstraints(
-      final DataTypeAdapter<?> adapter,
-      final Index index) {
+      final InternalDataAdapter<?> adapter,
+      final Index index,
+      final AdapterToIndexMapping indexMapping) {
     return this;
   }
 

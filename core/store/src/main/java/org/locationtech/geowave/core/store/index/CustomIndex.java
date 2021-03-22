@@ -99,4 +99,9 @@ public class CustomIndex<E, C extends Persistable> extends NullIndex implements
     indexStrategy = (CustomIndexStrategy<E, C>) PersistenceUtils.fromBinary(additionalBinary);
   }
 
+  @Override
+  public Class<C> getConstraintsClass() {
+    return indexStrategy.getConstraintsClass();
+  }
+
 }

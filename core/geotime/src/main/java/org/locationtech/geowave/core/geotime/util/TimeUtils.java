@@ -230,7 +230,7 @@ public class TimeUtils {
     return getInterval(entry.getAttribute(fieldName));
   }
 
-  public static Interval getInterval(final Object timeObject) {
+  public static Instant getInstant(final Object timeObject) {
     final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
     if (timeObject == null) {
       return null;
@@ -242,8 +242,30 @@ public class TimeUtils {
     } else if (timeObject instanceof Number) {
       c.setTimeInMillis(((Number) timeObject).longValue());
     }
-    final Instant time = Instant.ofEpochMilli(c.getTimeInMillis());
+    return Instant.ofEpochMilli(c.getTimeInMillis());
+  }
+
+  public static Interval getInterval(final Object timeObject) {
+    final Instant time = getInstant(timeObject);
+    if (time == null) {
+      return null;
+    }
     return Interval.of(time, time);
+  }
+
+  public static Interval getInterval(final Object startTimeObject, final Object endTimeObject) {
+    final Instant startTime = getInstant(startTimeObject);
+    final Instant endTime = getInstant(endTimeObject);
+    if (startTime == null) {
+      if (endTime != null) {
+        return Interval.of(endTime, endTime);
+      }
+      return null;
+    }
+    if (endTime == null) {
+      return Interval.of(startTime, startTime);
+    }
+    return Interval.of(startTime, endTime);
   }
 
   /**

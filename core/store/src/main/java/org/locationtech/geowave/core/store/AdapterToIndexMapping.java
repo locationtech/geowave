@@ -9,49 +9,63 @@
 package org.locationtech.geowave.core.store;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
+import java.util.List;
+import org.apache.commons.collections.CollectionUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
+import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexFieldMapper;
 import org.locationtech.geowave.core.store.index.IndexStore;
 
 /** Meta-data for retaining Adapter to Index association */
 public class AdapterToIndexMapping implements Persistable {
   private short adapterId;
-  private String[] indexNames;
+  private String indexName;
+  private List<IndexFieldMapper<?, ?>> fieldMappers;
 
   public AdapterToIndexMapping() {}
 
-  public AdapterToIndexMapping(final short adapterId, final Index[] indices) {
+  public AdapterToIndexMapping(
+      final short adapterId,
+      final Index index,
+      final List<IndexFieldMapper<?, ?>> fieldMappers) {
     super();
     this.adapterId = adapterId;
-    indexNames = new String[indices.length];
-    for (int i = 0; i < indices.length; i++) {
-      indexNames[i] = indices[i].getName();
-    }
+    this.indexName = index.getName();
+    this.fieldMappers = fieldMappers;
   }
 
-  public AdapterToIndexMapping(final short adapterId, final String... indexNames) {
+  public AdapterToIndexMapping(
+      final short adapterId,
+      final String indexName,
+      final List<IndexFieldMapper<?, ?>> fieldMappers) {
     super();
     this.adapterId = adapterId;
-    this.indexNames = indexNames;
+    this.indexName = indexName;
+    this.fieldMappers = fieldMappers;
   }
 
   public short getAdapterId() {
     return adapterId;
   }
 
-  public String[] getIndexNames() {
-    return indexNames;
+  public String getIndexName() {
+    return indexName;
   }
 
-  public Index[] getIndices(final IndexStore indexStore) {
-    final Index[] indices = new Index[indexNames.length];
-    for (int i = 0; i < indexNames.length; i++) {
-      indices[i] = indexStore.getIndex(indexNames[i]);
-    }
-    return indices;
+  public List<IndexFieldMapper<?, ?>> getIndexFieldMappers() {
+    return fieldMappers;
+  }
+
+  public IndexFieldMapper<?, ?> getMapperForIndexField(final String indexFieldName) {
+    return fieldMappers.stream().filter(
+        mapper -> mapper.indexFieldName().equals(indexFieldName)).findFirst().orElse(null);
+  }
+
+  public Index getIndex(final IndexStore indexStore) {
+    return indexStore.getIndex(indexName);
   }
 
   @Override
@@ -59,7 +73,7 @@ public class AdapterToIndexMapping implements Persistable {
     final int prime = 31;
     int result = 1;
     result = (prime * result) + ((adapterId == 0) ? 0 : Short.hashCode(adapterId));
-    result = (prime * result) + Arrays.hashCode(indexNames);
+    result = (prime * result) + indexName.hashCode();
     return result;
   }
 
@@ -82,41 +96,42 @@ public class AdapterToIndexMapping implements Persistable {
     } else if (adapterId != other.adapterId) {
       return false;
     }
-    if (!Arrays.equals(indexNames, other.indexNames)) {
+    if (!indexName.equals(other.indexName)) {
       return false;
     }
-    return true;
-  }
-
-  public boolean contains(final String indexName) {
-    for (final String id : indexNames) {
-      if (id.equals(indexName)) {
-        return true;
-      }
+    if (fieldMappers == null || other.fieldMappers == null) {
+      return fieldMappers == null && other.fieldMappers == null;
     }
-    return false;
-  }
-
-  public boolean isNotEmpty() {
-    return indexNames.length > 0;
+    return CollectionUtils.isEqualCollection(fieldMappers, other.fieldMappers);
   }
 
   @Override
   public byte[] toBinary() {
-    final byte[] indexIdBytes = StringUtils.stringsToBinary(indexNames);
+    final byte[] indexIdBytes = StringUtils.stringToBinary(indexName);
+    final byte[] mapperBytes = PersistenceUtils.toBinary(fieldMappers);
     final ByteBuffer buf =
-        ByteBuffer.allocate(VarintUtils.unsignedShortByteLength(adapterId) + indexIdBytes.length);
+        ByteBuffer.allocate(
+            VarintUtils.unsignedShortByteLength(adapterId)
+                + VarintUtils.unsignedShortByteLength((short) indexIdBytes.length)
+                + indexIdBytes.length
+                + mapperBytes.length);
     VarintUtils.writeUnsignedShort(adapterId, buf);
+    VarintUtils.writeUnsignedShort((short) indexIdBytes.length, buf);
     buf.put(indexIdBytes);
+    buf.put(mapperBytes);
     return buf.array();
   }
 
+  @SuppressWarnings({"unchecked", "rawtypes"})
   @Override
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     adapterId = VarintUtils.readUnsignedShort(buf);
-    final byte[] indexNamesBytes = new byte[buf.remaining()];
-    buf.get(indexNamesBytes);
-    indexNames = StringUtils.stringsFromBinary(indexNamesBytes);
+    final byte[] indexNameBytes = new byte[VarintUtils.readUnsignedShort(buf)];
+    buf.get(indexNameBytes);
+    indexName = StringUtils.stringFromBinary(indexNameBytes);
+    final byte[] mapperBytes = new byte[buf.remaining()];
+    buf.get(mapperBytes);
+    fieldMappers = (List) PersistenceUtils.fromBinaryAsList(mapperBytes);
   }
 }

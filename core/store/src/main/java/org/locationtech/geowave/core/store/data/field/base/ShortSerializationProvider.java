@@ -21,7 +21,7 @@ public class ShortSerializationProvider implements FieldSerializationProviderSpi
   }
 
   @Override
-  public FieldWriter<Object, Short> getFieldWriter() {
+  public FieldWriter<Short> getFieldWriter() {
     return new ShortWriter();
   }
 
@@ -35,7 +35,7 @@ public class ShortSerializationProvider implements FieldSerializationProviderSpi
     }
   }
 
-  protected static class ShortWriter implements FieldWriter<Object, Short> {
+  protected static class ShortWriter implements FieldWriter<Short> {
     @Override
     public byte[] writeField(final Short fieldValue) {
       if (fieldValue == null) {

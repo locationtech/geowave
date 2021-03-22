@@ -15,6 +15,7 @@ message BulkDeleteRequest {
   optional int32 cacheSize = 8;
   required uint32 rowBatchSize = 9;
   optional uint64 timestamp = 10;
+  optional bytes indexMapping = 11;
 
    enum BulkDeleteType {
     ROW = 0;

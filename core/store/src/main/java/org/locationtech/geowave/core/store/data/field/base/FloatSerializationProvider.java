@@ -20,7 +20,7 @@ public class FloatSerializationProvider implements FieldSerializationProviderSpi
   }
 
   @Override
-  public FieldWriter<Object, Float> getFieldWriter() {
+  public FieldWriter<Float> getFieldWriter() {
     return new FloatWriter();
   }
 
@@ -34,7 +34,7 @@ public class FloatSerializationProvider implements FieldSerializationProviderSpi
     }
   }
 
-  protected static class FloatWriter implements FieldWriter<Object, Float> {
+  protected static class FloatWriter implements FieldWriter<Float> {
     @Override
     public byte[] writeField(final Float fieldValue) {
       if (fieldValue == null) {

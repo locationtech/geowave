@@ -22,6 +22,7 @@ message AggregationRequest {
   optional int32 cacheSize = 10;
   optional bool wholeRowFilter = 11;
   optional int32 partitionKeyLength = 12;
+  optional bytes indexMapping = 13;
 }
 
 message AggregationResponse {

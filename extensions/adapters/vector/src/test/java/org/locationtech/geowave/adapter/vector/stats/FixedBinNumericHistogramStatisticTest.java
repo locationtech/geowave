@@ -22,7 +22,6 @@ import org.geotools.filter.text.cql2.CQLException;
 import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import org.locationtech.geowave.core.store.statistics.field.FixedBinNumericHistogramStatistic;
 import org.locationtech.geowave.core.store.statistics.field.FixedBinNumericHistogramStatistic.FixedBinNumericHistogramValue;
 import org.locationtech.jts.geom.Coordinate;
@@ -44,10 +43,7 @@ public class FixedBinNumericHistogramStatisticTest {
         DataUtilities.createType(
             "sp.geostuff",
             "geometry:Geometry:srid=4326,pop:java.lang.Double,when:Date,whennot:Date,somewhere:Polygon,pid:String");
-    dataAdapter =
-        new FeatureDataAdapter(
-            schema,
-            new GlobalVisibilityHandler<SimpleFeature, Object>("default"));
+    dataAdapter = new FeatureDataAdapter(schema);
   }
 
   private SimpleFeature create(final Double val) {

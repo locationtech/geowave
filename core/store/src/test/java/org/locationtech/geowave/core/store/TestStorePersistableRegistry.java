@@ -9,12 +9,11 @@
 package org.locationtech.geowave.core.store;
 
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
+import org.locationtech.geowave.core.store.adapter.BasicDataTypeAdapterTest.TestTypeBasicDataAdapter;
 import org.locationtech.geowave.core.store.adapter.MockComponents.MockAbstractDataAdapter;
-import org.locationtech.geowave.core.store.adapter.MockComponents.MockAbstractDataAdapter.TestIndexFieldHandler;
 import org.locationtech.geowave.core.store.adapter.MockComponents.MockIndexStrategy;
 import org.locationtech.geowave.core.store.adapter.MockComponents.TestDimensionField;
 import org.locationtech.geowave.core.store.adapter.MockComponents.TestIndexModel;
-import org.locationtech.geowave.core.store.adapter.MockComponents.TestPersistentIndexFieldHandler;
 import org.locationtech.geowave.core.store.query.BasicQueryByClassTest.ExampleDimensionOne;
 import org.locationtech.geowave.core.store.query.BasicQueryByClassTest.ExampleNumericIndexStrategy;
 
@@ -24,12 +23,11 @@ public class TestStorePersistableRegistry implements PersistableRegistrySpi {
   public PersistableIdAndConstructor[] getSupportedPersistables() {
     return new PersistableIdAndConstructor[] {
         new PersistableIdAndConstructor((short) 10200, MockAbstractDataAdapter::new),
-        new PersistableIdAndConstructor((short) 10202, TestPersistentIndexFieldHandler::new),
-        new PersistableIdAndConstructor((short) 10203, TestDimensionField::new),
-        new PersistableIdAndConstructor((short) 10204, MockIndexStrategy::new),
-        new PersistableIdAndConstructor((short) 10205, TestIndexModel::new),
-        new PersistableIdAndConstructor((short) 10206, ExampleNumericIndexStrategy::new),
-        new PersistableIdAndConstructor((short) 10207, ExampleDimensionOne::new),
-        new PersistableIdAndConstructor((short) 10208, TestIndexFieldHandler::new)};
+        new PersistableIdAndConstructor((short) 10201, TestDimensionField::new),
+        new PersistableIdAndConstructor((short) 10202, MockIndexStrategy::new),
+        new PersistableIdAndConstructor((short) 10203, TestIndexModel::new),
+        new PersistableIdAndConstructor((short) 10204, ExampleNumericIndexStrategy::new),
+        new PersistableIdAndConstructor((short) 10205, ExampleDimensionOne::new),
+        new PersistableIdAndConstructor((short) 10206, TestTypeBasicDataAdapter::new)};
   }
 }

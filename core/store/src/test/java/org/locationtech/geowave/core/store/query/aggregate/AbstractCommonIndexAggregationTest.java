@@ -15,17 +15,16 @@ import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding
 import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.SingleFieldPersistentDataset;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import com.google.common.collect.Lists;
 
 public abstract class AbstractCommonIndexAggregationTest<P extends Persistable, R> extends
     AbstractAggregationTest<P, R, CommonIndexedPersistenceEncoding> {
 
   public static List<CommonIndexedPersistenceEncoding> generateObjects(final int count) {
-    List<CommonIndexedPersistenceEncoding> objects = Lists.newArrayListWithCapacity(count);
+    final List<CommonIndexedPersistenceEncoding> objects = Lists.newArrayListWithCapacity(count);
     for (int i = 0; i < count; i++) {
-      String dataId = "entry" + i;
-      PersistentDataset<CommonIndexValue> commonData = new MultiFieldPersistentDataset<>();
+      final String dataId = "entry" + i;
+      final PersistentDataset<Object> commonData = new MultiFieldPersistentDataset<>();
       commonData.addValue("value", new MockComponents.TestIndexFieldType(i));
       objects.add(
           new CommonIndexedPersistenceEncoding(

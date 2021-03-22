@@ -22,7 +22,7 @@ public class PrimitiveShortArraySerializationProvider implements
   }
 
   @Override
-  public FieldWriter<Object, short[]> getFieldWriter() {
+  public FieldWriter<short[]> getFieldWriter() {
     return new PrimitiveShortArrayWriter();
   }
 
@@ -40,7 +40,7 @@ public class PrimitiveShortArraySerializationProvider implements
     }
   }
 
-  private static class PrimitiveShortArrayWriter implements FieldWriter<Object, short[]> {
+  private static class PrimitiveShortArrayWriter implements FieldWriter<short[]> {
     @Override
     public byte[] writeField(final short[] fieldValue) {
       if (fieldValue == null) {

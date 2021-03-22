@@ -4,3 +4,5 @@ org.locationtech.geowave.core.geotime.store.field.DateArraySerializationProvider
 org.locationtech.geowave.core.geotime.store.field.DateSerializationProvider
 org.locationtech.geowave.core.geotime.store.field.GeometryArraySerializationProvider
 org.locationtech.geowave.core.geotime.store.field.GeometrySerializationProvider
+org.locationtech.geowave.core.geotime.store.field.IntervalArraySerializationProvider
+org.locationtech.geowave.core.geotime.store.field.IntervalSerializationProvider

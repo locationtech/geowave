@@ -9,9 +9,12 @@
 package org.locationtech.geowave.core.geotime.store.dimension;
 
 import java.nio.ByteBuffer;
+import java.util.Set;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
+import org.locationtech.geowave.core.geotime.store.field.IntervalSerializationProvider;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
+import org.locationtech.geowave.core.index.IndexDimensionHint;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
@@ -19,25 +22,33 @@ import org.locationtech.geowave.core.index.dimension.bin.BinRange;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
+import org.locationtech.geowave.core.index.sfc.data.NumericValue;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
+import org.threeten.extra.Interval;
+import com.google.common.collect.Sets;
 
 /**
  * This field definition can be used for temporal data (either as a time range or a single instant
  * in time).
  */
-public class TimeField implements NumericDimensionField<Time> {
-  private static final String DEFAULT_FIELD_ID = "default_time_dimension";
+public class TimeField implements NumericDimensionField<Interval> {
+  public static final String DEFAULT_FIELD_ID = "default_time_dimension";
+  public static final IndexDimensionHint TIME_DIMENSION_HINT = new IndexDimensionHint("TIME");
+  public static final IndexDimensionHint START_TIME_DIMENSION_HINT =
+      new IndexDimensionHint("START_TIME");
+  public static final IndexDimensionHint END_TIME_DIMENSION_HINT =
+      new IndexDimensionHint("END_TIME");
   private NumericDimensionDefinition baseDefinition;
-  private final TimeReader reader;
-  private final TimeWriter writer;
+  private final FieldReader<Interval> reader;
+  private final FieldWriter<Interval> writer;
   private String fieldName;
 
   public TimeField() {
-    reader = new TimeReader();
-    writer = new TimeWriter();
+    final IntervalSerializationProvider serializationProvider = new IntervalSerializationProvider();
+    reader = serializationProvider.getFieldReader();
+    writer = serializationProvider.getFieldWriter();
     fieldName = DEFAULT_FIELD_ID;
   }
 
@@ -56,8 +67,9 @@ public class TimeField implements NumericDimensionField<Time> {
 
   public TimeField(final NumericDimensionDefinition baseDefinition, final String fieldName) {
     this.baseDefinition = baseDefinition;
-    reader = new TimeReader();
-    writer = new TimeWriter();
+    final IntervalSerializationProvider serializationProvider = new IntervalSerializationProvider();
+    reader = serializationProvider.getFieldReader();
+    writer = serializationProvider.getFieldWriter();
     this.fieldName = fieldName;
   }
 
@@ -97,8 +109,13 @@ public class TimeField implements NumericDimensionField<Time> {
   }
 
   @Override
-  public NumericData getNumericData(final Time dataElement) {
-    return dataElement.toNumericData();
+  public NumericData getNumericData(final Interval dataElement) {
+    if (dataElement.getStart().equals(dataElement.getEnd())) {
+      return new NumericValue(dataElement.getStart().toEpochMilli());
+    }
+    return new NumericRange(
+        dataElement.getStart().toEpochMilli(),
+        dataElement.getEnd().toEpochMilli());
   }
 
   @Override
@@ -107,18 +124,13 @@ public class TimeField implements NumericDimensionField<Time> {
   }
 
   @Override
-  public FieldWriter<?, Time> getWriter() {
+  public FieldWriter<Interval> getWriter() {
     return writer;
   }
 
   @Override
-  public FieldReader<Time> getReader() {
+  public FieldReader<Interval> getReader() {
     return reader;
-  }
-
-  @Override
-  public boolean isCompatibleWith(Class<? extends CommonIndexValue> clazz) {
-    return Time.class.isAssignableFrom(clazz);
   }
 
   @Override
@@ -189,5 +201,15 @@ public class TimeField implements NumericDimensionField<Time> {
       return false;
     }
     return true;
+  }
+
+  @Override
+  public Class<Interval> getFieldClass() {
+    return Interval.class;
+  }
+
+  @Override
+  public Set<IndexDimensionHint> getDimensionHints() {
+    return Sets.newHashSet(TIME_DIMENSION_HINT, START_TIME_DIMENSION_HINT, END_TIME_DIMENSION_HINT);
   }
 }

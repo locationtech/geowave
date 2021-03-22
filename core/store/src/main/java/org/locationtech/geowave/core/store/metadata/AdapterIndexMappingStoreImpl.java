@@ -8,18 +8,21 @@
  */
 package org.locationtech.geowave.core.store.metadata;
 
-import java.util.Arrays;
-import org.apache.commons.lang3.ArrayUtils;
+import java.util.List;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
+import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
+import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
+import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.common.collect.Streams;
+import com.google.common.collect.Lists;
 
 /**
  * This class will persist Adapter Index Mappings within a table for GeoWave metadata. The mappings
@@ -44,9 +47,7 @@ public class AdapterIndexMappingStoreImpl extends AbstractGeoWavePersistence<Ada
   }
 
   public boolean mappingExists(final AdapterToIndexMapping persistedObject) {
-    return objectExists(
-        new ByteArray(ByteArrayUtils.shortToByteArray(persistedObject.getAdapterId())),
-        null);
+    return objectExists(getPrimaryId(persistedObject), getSecondaryId(persistedObject));
   }
 
   @Override
@@ -55,38 +56,40 @@ public class AdapterIndexMappingStoreImpl extends AbstractGeoWavePersistence<Ada
   }
 
   @Override
-  public AdapterToIndexMapping getIndicesForAdapter(final short adapterId) {
+  protected ByteArray getSecondaryId(final AdapterToIndexMapping persistedObject) {
+    return new ByteArray(StringUtils.stringToBinary(persistedObject.getIndexName()));
+  }
 
-    final AdapterToIndexMapping mapping =
-        super.internalGetObject(
-            new ByteArray(ByteArrayUtils.shortToByteArray(adapterId)),
-            null,
-            false,
-            null);
-    return (mapping != null) ? mapping : new AdapterToIndexMapping(adapterId, new String[0]);
+  @Override
+  public AdapterToIndexMapping[] getIndicesForAdapter(final short adapterId) {
+    List<Object> indexMappings = Lists.newLinkedList();
+    try (CloseableIterator<AdapterToIndexMapping> iter =
+        super.internalGetObjects(
+            new MetadataQuery(ByteArrayUtils.shortToByteArray(adapterId), null, false))) {
+      while (iter.hasNext()) {
+        indexMappings.add(iter.next());
+      }
+    }
+    return indexMappings.toArray(new AdapterToIndexMapping[indexMappings.size()]);
+  }
+
+  @Override
+  public AdapterToIndexMapping getMapping(final short adapterId, final String indexName) {
+    if (indexName.equals(DataIndexUtils.DATA_ID_INDEX.getName())) {
+      return new AdapterToIndexMapping(adapterId, indexName, Lists.newArrayList());
+    }
+    final ByteArray primaryId = new ByteArray(ByteArrayUtils.shortToByteArray(adapterId));
+    final ByteArray secondaryId = new ByteArray(StringUtils.stringToBinary(indexName));
+    return super.getObject(primaryId, secondaryId);
   }
 
   @Override
   public void addAdapterIndexMapping(final AdapterToIndexMapping mapping) {
-    final ByteArray adapterId =
-        new ByteArray(ByteArrayUtils.shortToByteArray(mapping.getAdapterId()));
-    if (objectExists(adapterId, null)) {
-      final AdapterToIndexMapping oldMapping = super.getObject(adapterId, null, null);
-      if (!oldMapping.equals(mapping)) {
-        // combine the 2 arrays and remove duplicates (get unique set of
-        // index names)
-        final String[] uniqueCombinedIndices =
-            Streams.concat(
-                Arrays.stream(mapping.getIndexNames()),
-                Arrays.stream(oldMapping.getIndexNames())).distinct().toArray(
-                    size -> new String[size]);
-        if (LOGGER.isInfoEnabled()) {
-          LOGGER.info(
-              "Updating indices for datatype to " + ArrayUtils.toString(uniqueCombinedIndices));
-        }
-        remove(adapterId);
-        addObject(new AdapterToIndexMapping(mapping.getAdapterId(), uniqueCombinedIndices));
-      }
+    final ByteArray primaryId = getPrimaryId(mapping);
+    final ByteArray secondaryId = getSecondaryId(mapping);
+
+    if (objectExists(primaryId, secondaryId)) {
+      LOGGER.warn("Adapter to index mapping already existed, skipping add.");
     } else {
       addObject(mapping);
     }
@@ -100,44 +103,11 @@ public class AdapterIndexMappingStoreImpl extends AbstractGeoWavePersistence<Ada
   @Override
   public boolean remove(final short internalAdapterId, final String indexName) {
     final ByteArray adapterId = new ByteArray(ByteArrayUtils.shortToByteArray(internalAdapterId));
-    if (!objectExists(adapterId, null)) {
+    final ByteArray secondaryId = new ByteArray(StringUtils.stringToBinary(indexName));
+    if (!objectExists(adapterId, secondaryId)) {
       return false;
     }
 
-    final AdapterToIndexMapping oldMapping = super.getObject(adapterId, null, null);
-
-    boolean found = false;
-    final String[] indexNames = oldMapping.getIndexNames();
-    for (int i = 0; i < indexNames.length; i++) {
-      if (indexNames[i].compareTo(indexName) == 0) {
-        found = true;
-        break;
-      }
-    }
-
-    if (!found) {
-      return false;
-    }
-
-    if (indexNames.length > 1) {
-      // update the mapping and reset it
-      final String[] newIndices = new String[indexNames.length - 1];
-      int count = 0;
-      for (int i = 0; i < indexNames.length; i++) {
-        if (indexNames[i].compareTo(indexName) == 0) {
-          continue;
-        } else {
-          newIndices[count] = indexNames[i];
-          count++;
-        }
-      }
-      remove(adapterId);
-      addObject(new AdapterToIndexMapping(internalAdapterId, newIndices));
-    } else {
-      // otherwise just remove the mapping
-      remove(adapterId);
-    }
-
-    return true;
+    return super.deleteObject(adapterId, secondaryId);
   }
 }

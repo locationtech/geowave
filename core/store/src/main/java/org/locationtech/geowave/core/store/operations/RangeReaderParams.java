@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.store.operations;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
@@ -27,6 +28,7 @@ public abstract class RangeReaderParams<T> extends BaseReaderParams<T> {
   public RangeReaderParams(
       final Index index,
       final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final InternalAdapterStore internalAdapterStore,
       final short[] adapterIds,
       final double[] maxResolutionSubsamplingPerDimension,
@@ -40,6 +42,7 @@ public abstract class RangeReaderParams<T> extends BaseReaderParams<T> {
       final String[] additionalAuthorizations) {
     super(
         adapterStore,
+        mappingStore,
         internalAdapterStore,
         aggregation,
         fieldSubsets,

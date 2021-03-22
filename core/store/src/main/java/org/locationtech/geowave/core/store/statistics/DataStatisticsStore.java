@@ -12,7 +12,9 @@ import java.util.Iterator;
 import javax.annotation.Nullable;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.BinConstraints.ByteArrayConstraints;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataTypeStatistic;
@@ -244,7 +246,8 @@ public interface DataStatisticsStore {
    */
   <T> StatisticUpdateCallback<T> createUpdateCallback(
       Index index,
-      DataTypeAdapter<T> type,
+      AdapterToIndexMapping indexMapping,
+      InternalDataAdapter<T> type,
       boolean updateAdapterStats);
 
   /**

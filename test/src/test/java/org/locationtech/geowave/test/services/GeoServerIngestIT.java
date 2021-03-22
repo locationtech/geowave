@@ -165,6 +165,13 @@ public class GeoServerIngestIT extends BaseServiceIT {
     int ingestedFeatures = 0;
     final int featuresPer5Percent = features.size() / 20;
     ds.addType(fda, spatialIdx, spatialTemporalIdx);
+    final BoundingBoxStatistic mercatorBounds =
+        new BoundingBoxStatistic(fda.getTypeName(), sft.getGeometryDescriptor().getLocalName());
+    mercatorBounds.setSourceCrs(
+        fda.getFeatureType().getGeometryDescriptor().getCoordinateReferenceSystem());
+    mercatorBounds.setDestinationCrs(TestUtils.CUSTOM_CRS);
+    mercatorBounds.setTag("MERCATOR_BOUNDS");
+    ds.addStatistic(mercatorBounds);
     try (Writer writer = ds.createWriter(fda.getTypeName())) {
       for (final SimpleFeature feat : features) {
         writer.write(feat);
@@ -180,7 +187,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
     final BoundingBoxValue env =
         ds.aggregateStatistics(
             StatisticQueryBuilder.newBuilder(BoundingBoxStatistic.STATS_TYPE).typeName(
-                fda.getTypeName()).fieldName(sft.getGeometryDescriptor().getLocalName()).build());
+                fda.getTypeName()).fieldName(sft.getGeometryDescriptor().getLocalName()).tag(
+                    "MERCATOR_BOUNDS").build());
     TestUtils.assertStatusCode(
         "Should Create 'testomatic' Workspace",
         201,

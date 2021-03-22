@@ -9,6 +9,7 @@
 package org.locationtech.geowave.mapreduce.copy;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -42,11 +43,14 @@ public class StoreCopyReducer extends GeoWaveWritableInputReducer<GeoWaveOutputK
       throws IOException, InterruptedException {
     final Iterator<Object> objects = values.iterator();
     while (objects.hasNext()) {
-      final AdapterToIndexMapping mapping = store.getIndicesForAdapter(key.getInternalAdapterId());
+      final AdapterToIndexMapping[] mapping =
+          store.getIndicesForAdapter(key.getInternalAdapterId());
+      final String[] indexNames =
+          Arrays.stream(mapping).map(AdapterToIndexMapping::getIndexName).toArray(String[]::new);
       context.write(
           new GeoWaveOutputKey<>(
-              internalAdapterStore.getTypeName(mapping.getAdapterId()),
-              mapping.getIndexNames()),
+              internalAdapterStore.getTypeName(mapping[0].getAdapterId()),
+              indexNames),
           objects.next());
     }
   }

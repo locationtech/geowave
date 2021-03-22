@@ -35,6 +35,7 @@ import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.simple.RoundRobinKeyIndexStrategy;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
@@ -46,6 +47,7 @@ import org.locationtech.geowave.core.store.base.BaseDataStore;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
+import org.locationtech.geowave.core.store.metadata.AdapterIndexMappingStoreImpl;
 import org.locationtech.geowave.core.store.metadata.AdapterStoreImpl;
 import org.locationtech.geowave.core.store.metadata.IndexStoreImpl;
 import org.locationtech.geowave.core.store.query.filter.DedupeFilter;
@@ -382,6 +384,8 @@ public class AccumuloUtils {
         new AccumuloOperations(connector, namespace, new AccumuloOptions());
     final IndexStore indexStore = new IndexStoreImpl(operations, options);
     final PersistentAdapterStore adapterStore = new AdapterStoreImpl(operations, options);
+    final AdapterIndexMappingStore mappingStore =
+        new AdapterIndexMappingStoreImpl(operations, options);
 
     if (indexStore.indexExists(index.getName())) {
       final ScannerBase scanner = operations.createBatchScanner(index.getName());
@@ -393,6 +397,7 @@ public class AccumuloUtils {
       final Iterator<Entry<Key, Value>> it =
           new IteratorWrapper(
               adapterStore,
+              mappingStore,
               index,
               scanner.iterator(),
               new QueryFilter[] {new DedupeFilter()});
@@ -406,16 +411,19 @@ public class AccumuloUtils {
 
     private final Iterator<Entry<Key, Value>> scannerIt;
     private final PersistentAdapterStore adapterStore;
+    private final AdapterIndexMappingStore mappingStore;
     private final Index index;
     private final QueryFilter[] clientFilters;
     private Entry<Key, Value> nextValue;
 
     public IteratorWrapper(
         final PersistentAdapterStore adapterStore,
+        final AdapterIndexMappingStore mappingStore,
         final Index index,
         final Iterator<Entry<Key, Value>> scannerIt,
         final QueryFilter[] clientFilters) {
       this.adapterStore = adapterStore;
+      this.mappingStore = mappingStore;
       this.index = index;
       this.scannerIt = scannerIt;
       this.clientFilters = clientFilters;
@@ -449,7 +457,9 @@ public class AccumuloUtils {
                 false),
             clientFilters,
             null,
+            null,
             adapterStore,
+            mappingStore,
             index,
             null,
             null,

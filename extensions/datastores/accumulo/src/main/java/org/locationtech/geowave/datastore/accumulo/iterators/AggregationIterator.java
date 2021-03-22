@@ -22,6 +22,7 @@ import org.apache.hadoop.io.Text;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.adapter.AbstractAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
@@ -31,7 +32,6 @@ import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.flatten.FlattenedUnreadData;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.IndexImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +42,7 @@ public class AggregationIterator extends ExceptionHandlingFilter {
   public static final String AGGREGATION_OPTION_NAME = "AGGREGATION";
   public static final String PARAMETER_OPTION_NAME = "PARAMETER";
   public static final String ADAPTER_OPTION_NAME = "ADAPTER";
+  public static final String ADAPTER_INDEX_MAPPING_OPTION_NAME = "INDEX_MAPPING";
   public static final String INDEX_STRATEGY_OPTION_NAME = "INDEX_STRATEGY";
   public static final String CONSTRAINTS_OPTION_NAME = "CONSTRAINTS";
   public static final String MAX_DECOMPOSITION_OPTION_NAME = "MAX_DECOMP";
@@ -49,6 +50,7 @@ public class AggregationIterator extends ExceptionHandlingFilter {
   protected QueryFilterIterator queryFilterIterator;
   private Aggregation aggregationFunction;
   private InternalDataAdapter adapter;
+  private AdapterToIndexMapping indexMapping;
   private boolean aggregationReturned = false;
   private Text startRowOfAggregation = null;
   private final Text currentRow = new Text();
@@ -99,7 +101,7 @@ public class AggregationIterator extends ExceptionHandlingFilter {
   @Override
   protected boolean acceptInternal(final Key key, final Value value) {
     if (queryFilterIterator != null) {
-      final PersistentDataset<CommonIndexValue> commonData = new MultiFieldPersistentDataset<>();
+      final PersistentDataset<Object> commonData = new MultiFieldPersistentDataset<>();
       key.getRow(currentRow);
       final FlattenedUnreadData unreadData =
           queryFilterIterator.aggregateFieldData(key, value, commonData);
@@ -164,7 +166,7 @@ public class AggregationIterator extends ExceptionHandlingFilter {
       // data, we pass along a null strategy to eliminate the necessity to
       // send a serialization of the strategy in the options of this
       // iterator
-      final Object row = adapter.decode(encoding, new IndexImpl(null, model));
+      final Object row = adapter.decode(encoding, indexMapping, new IndexImpl(null, model));
 
       if (row != null) {
         // for now ignore field info
@@ -192,6 +194,9 @@ public class AggregationIterator extends ExceptionHandlingFilter {
         final String adapterStr = options.get(ADAPTER_OPTION_NAME);
         final byte[] adapterBytes = ByteArrayUtils.byteArrayFromString(adapterStr);
         adapter = (InternalDataAdapter) PersistenceUtils.fromBinary(adapterBytes);
+        final String mappingStr = options.get(ADAPTER_INDEX_MAPPING_OPTION_NAME);
+        final byte[] mappingBytes = ByteArrayUtils.byteArrayFromString(mappingStr);
+        indexMapping = (AdapterToIndexMapping) PersistenceUtils.fromBinary(mappingBytes);
       }
     } catch (final Exception e) {
       throw new IllegalArgumentException(e);

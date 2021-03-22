@@ -9,7 +9,6 @@
 package org.locationtech.geowave.core.store.ingest;
 
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 
 /**
  * This interface is applicable for plugins that need to provide writable data adapters for ingest.
@@ -28,10 +27,10 @@ public interface DataAdapterProvider<T> {
   public DataTypeAdapter<T>[] getDataAdapters(String globalVisibility);
 
   /**
-   * return a set of classes that can be indexed by this data adapter provider, used for
+   * return a set of index types that can be indexed by this data adapter provider, used for
    * compatibility checking with an index provider
    *
-   * @return the classes that are indexable by this adapter provider
+   * @return the named dimensions that are indexable by this adapter provider
    */
-  public Class<? extends CommonIndexValue>[] getSupportedIndexableTypes();
+  public String[] getSupportedIndexTypes();
 }

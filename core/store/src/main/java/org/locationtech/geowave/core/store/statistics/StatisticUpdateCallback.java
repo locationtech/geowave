@@ -11,7 +11,8 @@ package org.locationtech.geowave.core.store.statistics;
 import java.io.Closeable;
 import java.io.Flushable;
 import java.util.List;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Statistic;
 import org.locationtech.geowave.core.store.api.StatisticValue;
@@ -57,11 +58,13 @@ public class StatisticUpdateCallback<T> implements
       final List<Statistic<? extends StatisticValue<?>>> statistics,
       final DataStatisticsStore statisticsStore,
       final Index index,
-      final DataTypeAdapter<T> type) {
+      final AdapterToIndexMapping indexMapping,
+      final InternalDataAdapter<T> type) {
     this.statisticsStore = statisticsStore;
     statisticUpdateHandlers = Lists.newArrayListWithCapacity(statistics.size());
     for (Statistic<?> statistic : statistics) {
-      StatisticUpdateHandler handler = new StatisticUpdateHandler(statistic, index, type);
+      StatisticUpdateHandler handler =
+          new StatisticUpdateHandler(statistic, index, indexMapping, type);
       statisticUpdateHandlers.add(handler);
     }
 

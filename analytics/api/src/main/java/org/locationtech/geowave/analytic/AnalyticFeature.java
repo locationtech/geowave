@@ -95,9 +95,6 @@ public class AnalyticFeature {
         builder.add(extraDim, Double.class);
       }
       final FeatureDataAdapter adapter = new FeatureDataAdapter(builder.buildFeatureType());
-      // TODO any consumers of this method will not be able to utilize
-      // custom CRS
-      adapter.init(new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()));
       return adapter;
     } catch (final Exception e) {
       LOGGER.warn("Schema Creation Error.  Hint: Check the SRID.", e);

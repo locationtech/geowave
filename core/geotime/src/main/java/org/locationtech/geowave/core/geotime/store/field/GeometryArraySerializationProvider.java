@@ -25,7 +25,7 @@ public class GeometryArraySerializationProvider implements
   }
 
   @Override
-  public FieldWriter<Object, Geometry[]> getFieldWriter() {
+  public FieldWriter<Geometry[]> getFieldWriter() {
     return new GeometryArrayWriter();
   }
 
@@ -35,7 +35,7 @@ public class GeometryArraySerializationProvider implements
     }
   }
 
-  private static class GeometryArrayWriter extends VariableSizeObjectArrayWriter<Object, Geometry> {
+  private static class GeometryArrayWriter extends VariableSizeObjectArrayWriter<Geometry> {
     public GeometryArrayWriter() {
       super(new GeometryWriter());
     }

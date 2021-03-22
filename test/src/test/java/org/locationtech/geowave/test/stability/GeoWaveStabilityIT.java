@@ -18,7 +18,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.InternalGeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.OptimalCQLQuery;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
@@ -168,13 +170,15 @@ public class GeoWaveStabilityIT extends AbstractGeoWaveBasicVectorIT {
     try (CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters()) {
       while (it.hasNext()) {
         final InternalDataAdapter<?> adapter = it.next();
-        for (final Index index : indexMappingStore.getIndicesForAdapter(
-            adapter.getAdapterId()).getIndices(indexStore)) {
+        for (final AdapterToIndexMapping indexMapping : indexMappingStore.getIndicesForAdapter(
+            adapter.getAdapterId())) {
           final boolean rowMerging = BaseDataStoreUtils.isRowMerging(adapter);
+          final Index index = indexMapping.getIndex(indexStore);
           final ReaderParamsBuilder bldr =
               new ReaderParamsBuilder(
                   index,
                   adapterStore,
+                  indexMappingStore,
                   internalAdapterStore,
                   GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER);
           bldr.adapterIds(new short[] {adapter.getAdapterId()});
@@ -207,11 +211,12 @@ public class GeoWaveStabilityIT extends AbstractGeoWaveBasicVectorIT {
     final PersistentAdapterStore badAdapterStore = badDataStore.createAdapterStore();
     try (CloseableIterator<InternalDataAdapter<?>> dataAdapters = badAdapterStore.getAdapters()) {
       final InternalDataAdapter<?> adapter = dataAdapters.next();
+      Assert.assertTrue(adapter instanceof InternalGeotoolsFeatureDataAdapter);
       Assert.assertTrue(adapter.getAdapter() instanceof GeotoolsFeatureDataAdapter);
       final QueryConstraints constraints =
           OptimalCQLQuery.createOptimalQuery(
               "BBOX(geom,-105,28,-87,44) and STATE = 'IL'",
-              (GeotoolsFeatureDataAdapter) adapter.getAdapter(),
+              (InternalGeotoolsFeatureDataAdapter) adapter,
               null,
               null);
       final QueryBuilder<?, ?> bldr = QueryBuilder.newBuilder();

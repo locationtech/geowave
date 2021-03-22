@@ -142,9 +142,13 @@ public abstract class AbstractMapReduceIngest<T extends Persistable & DataAdapte
         // context of the datastore before distributing ingest
         // however, after ingest we should cleanup any pre-created
         // metadata for which there is no data
-        store.addType(dataAdapter, indices);
+        try {
+          store.addType(dataAdapter, indices);
 
-        GeoWaveOutputFormat.addDataAdapter(job.getConfiguration(), dataAdapter);
+          GeoWaveOutputFormat.addDataAdapter(job.getConfiguration(), dataAdapter);
+        } catch (IllegalArgumentException e) {
+          // Skip any adapters that can't be mapped to the input indices
+        }
       }
     } else {
       // if the adapter is unknown by the ingest format, at least add the

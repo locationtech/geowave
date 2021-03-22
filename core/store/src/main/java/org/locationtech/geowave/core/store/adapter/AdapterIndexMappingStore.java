@@ -21,7 +21,9 @@ public interface AdapterIndexMappingStore {
    * @param internalAdapterId the internal adapter ID of the adapter
    * @return the adapter to index mapping
    */
-  public AdapterToIndexMapping getIndicesForAdapter(short internalAdapterId);
+  public AdapterToIndexMapping[] getIndicesForAdapter(short internalAdapterId);
+
+  public AdapterToIndexMapping getMapping(short adapterId, String indexName);
 
   /**
    * If an adapter is already associated with indices and the provided indices do not match, update

@@ -53,26 +53,26 @@ public class BasicIndexModel implements CommonIndexModel {
 
   @SuppressWarnings("unchecked")
   @Override
-  public FieldWriter<Object, CommonIndexValue> getWriter(final String fieldName) {
+  public FieldWriter<Object> getWriter(final String fieldName) {
     final NumericDimensionField<?> dimension = fieldIdToPeristenceMap.get(fieldName);
     if (dimension != null) {
-      return (FieldWriter<Object, CommonIndexValue>) dimension.getWriter();
+      return (FieldWriter<Object>) dimension.getWriter();
     }
     return null;
   }
 
   @SuppressWarnings("unchecked")
   @Override
-  public FieldReader<CommonIndexValue> getReader(final String fieldName) {
+  public FieldReader<Object> getReader(final String fieldName) {
     final NumericDimensionField<?> dimension = fieldIdToPeristenceMap.get(fieldName);
     if (dimension != null) {
-      return (FieldReader<CommonIndexValue>) dimension.getReader();
+      return (FieldReader<Object>) dimension.getReader();
     }
     return null;
   }
 
   @Override
-  public NumericDimensionField<? extends CommonIndexValue>[] getDimensions() {
+  public NumericDimensionField<?>[] getDimensions() {
     return dimensions;
   }
 

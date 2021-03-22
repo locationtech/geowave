@@ -94,9 +94,7 @@ public class DBScanMapReduceTest {
         SimpleFeatureProjection.class,
         Projection.class);
 
-    final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
     final FeatureDataAdapter adapter = new FeatureDataAdapter(ftype);
-    adapter.init(index);
     JobContextAdapterStore.addDataAdapter(mapDriver.getConfiguration(), adapter);
 
     JobContextAdapterStore.addDataAdapter(reduceDriver.getConfiguration(), adapter);

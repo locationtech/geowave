@@ -328,6 +328,11 @@ public class GeoWaveCustomIndexIT {
     @Override
     public void fromBinary(final byte[] bytes) {}
 
+    @Override
+    public Class<TestEnumConstraints> getConstraintsClass() {
+      return TestEnumConstraints.class;
+    }
+
   }
   public static class TestEnumConstraints implements Persistable {
     private TestEnum testEnum;

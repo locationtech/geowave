@@ -8,12 +8,14 @@
  */
 package org.locationtech.geowave.core.geotime;
 
+import org.locationtech.geowave.core.geotime.adapter.SpatialFieldDescriptor;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.SimpleTimeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.SimpleTimeIndexStrategy;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
+import org.locationtech.geowave.core.geotime.store.InternalGeotoolsDataAdapterWrapper;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSBoundedSpatialDimension;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSBoundedSpatialDimensionX;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSBoundedSpatialDimensionY;
@@ -24,10 +26,6 @@ import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSUnboundedS
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import org.locationtech.geowave.core.geotime.store.dimension.LatitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.LongitudeField;
-import org.locationtech.geowave.core.geotime.store.dimension.SpatialArrayField;
-import org.locationtech.geowave.core.geotime.store.dimension.Time.TimeRange;
-import org.locationtech.geowave.core.geotime.store.dimension.Time.Timestamp;
-import org.locationtech.geowave.core.geotime.store.dimension.TimeArrayField;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
 import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
 import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialTemporalQuery;
@@ -47,7 +45,6 @@ import org.locationtech.geowave.core.geotime.store.query.aggregate.OptimalVector
 import org.locationtech.geowave.core.geotime.store.query.aggregate.VectorBoundingBoxAggregation;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.VectorTimeRangeAggregation;
 import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter;
-import org.locationtech.geowave.core.index.dimension.bin.BasicBinningStrategy;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 
 public class GeoTimePersistableRegistry implements PersistableRegistrySpi {
@@ -61,10 +58,7 @@ public class GeoTimePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 303, TimeDefinition::new),
         new PersistableIdAndConstructor((short) 304, LatitudeField::new),
         new PersistableIdAndConstructor((short) 305, LongitudeField::new),
-        new PersistableIdAndConstructor((short) 306, SpatialArrayField::new),
-        new PersistableIdAndConstructor((short) 307, TimeRange::new),
-        new PersistableIdAndConstructor((short) 308, Timestamp::new),
-        new PersistableIdAndConstructor((short) 309, TimeArrayField::new),
+        // 306-309 are unused
         new PersistableIdAndConstructor((short) 310, TimeField::new),
         new PersistableIdAndConstructor((short) 311, SpatialQueryFilter::new),
         new PersistableIdAndConstructor((short) 312, ExplicitSpatialQuery::new),
@@ -75,7 +69,7 @@ public class GeoTimePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 317, ExplicitSpatialTemporalQuery::new),
         new PersistableIdAndConstructor((short) 318, ExplicitTemporalQuery::new),
         new PersistableIdAndConstructor((short) 319, CustomCRSUnboundedSpatialDimension::new),
-        new PersistableIdAndConstructor((short) 320, BasicBinningStrategy::new),
+        // 320 is unused
         new PersistableIdAndConstructor((short) 321, CustomCRSUnboundedSpatialDimensionX::new),
         new PersistableIdAndConstructor((short) 322, CustomCRSUnboundedSpatialDimensionY::new),
         new PersistableIdAndConstructor((short) 323, VectorTimeRangeAggregation::new),
@@ -94,6 +88,8 @@ public class GeoTimePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 336, CustomCRSBoundedSpatialDimensionX::new),
         new PersistableIdAndConstructor((short) 337, CustomCRSBoundedSpatialDimensionY::new),
         new PersistableIdAndConstructor((short) 338, SpatialSimpleFeatureBinningStrategy::new),
-        new PersistableIdAndConstructor((short) 339, SpatialCommonIndexedBinningStrategy::new)};
+        new PersistableIdAndConstructor((short) 339, SpatialCommonIndexedBinningStrategy::new),
+        new PersistableIdAndConstructor((short) 340, InternalGeotoolsDataAdapterWrapper::new),
+        new PersistableIdAndConstructor((short) 341, SpatialFieldDescriptor::new)};
   }
 }

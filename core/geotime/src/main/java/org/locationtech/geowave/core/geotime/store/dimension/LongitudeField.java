@@ -8,11 +8,15 @@
  */
 package org.locationtech.geowave.core.geotime.store.dimension;
 
+import java.util.Set;
 import javax.annotation.Nullable;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.index.IndexDimensionHint;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
+import org.locationtech.jts.geom.Geometry;
+import com.google.common.collect.Sets;
 
 /**
  * This field can be used as a EPSG:4326 longitude dimension within GeoWave. It can utilize JTS
@@ -22,22 +26,22 @@ public class LongitudeField extends SpatialField {
   public LongitudeField() {}
 
   public LongitudeField(final @Nullable Integer geometryPrecision) {
-    this(geometryPrecision, GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME);
-  }
-
-  public LongitudeField(final @Nullable Integer geometryPrecision, final String fieldName) {
-    this(new LongitudeDefinition(), geometryPrecision, fieldName);
+    this(new LongitudeDefinition(), geometryPrecision);
   }
 
   public LongitudeField(
       final NumericDimensionDefinition baseDefinition,
-      final @Nullable Integer geometryPrecision,
-      final String fieldName) {
-    super(baseDefinition, geometryPrecision, fieldName);
+      final @Nullable Integer geometryPrecision) {
+    super(baseDefinition, geometryPrecision);
   }
 
   @Override
-  public NumericData getNumericData(final GeometryWrapper geometry) {
-    return GeometryUtils.xRangeFromGeometry(geometry.getGeometry());
+  public NumericData getNumericData(final Geometry geometry) {
+    return GeometryUtils.xRangeFromGeometry(geometry);
+  }
+
+  @Override
+  public Set<IndexDimensionHint> getDimensionHints() {
+    return Sets.newHashSet(SpatialField.LONGITUDE_DIMENSION_HINT);
   }
 }

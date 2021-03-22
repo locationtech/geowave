@@ -24,7 +24,7 @@ public class StringArraySerializationProvider implements FieldSerializationProvi
   }
 
   @Override
-  public FieldWriter<Object, String[]> getFieldWriter() {
+  public FieldWriter<String[]> getFieldWriter() {
     return new StringArrayWriter();
   }
 
@@ -34,7 +34,7 @@ public class StringArraySerializationProvider implements FieldSerializationProvi
     }
   }
 
-  private static class StringArrayWriter extends VariableSizeObjectArrayWriter<Object, String> {
+  private static class StringArrayWriter extends VariableSizeObjectArrayWriter<String> {
     public StringArrayWriter() {
       super(new StringWriter());
     }

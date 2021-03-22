@@ -44,7 +44,7 @@ public class AdapterStoreWrapper implements PersistentAdapterStore {
     if (adapter instanceof InternalDataAdapter) {
       return (InternalDataAdapter<?>) adapter;
     }
-    return new InternalDataAdapterWrapper<>(adapter, adapterId);
+    return adapter.asInternalAdapter(adapterId);
   }
 
   @Override
@@ -62,9 +62,11 @@ public class AdapterStoreWrapper implements PersistentAdapterStore {
       if (adapter instanceof InternalDataAdapter) {
         return (InternalDataAdapter<?>) adapter;
       }
-      return new InternalDataAdapterWrapper<>(
-          adapter,
-          internalAdapterStore.getAdapterId(adapter.getTypeName()));
+      final Short adapterId = internalAdapterStore.getAdapterId(adapter.getTypeName());
+      if (adapterId == null) {
+        return null;
+      }
+      return adapter.asInternalAdapter(adapterId);
     }));
   }
 

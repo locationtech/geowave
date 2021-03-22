@@ -8,22 +8,17 @@
  */
 package org.locationtech.geowave.core.store.adapter;
 
-import java.util.ArrayList;
 import org.junit.Assert;
 import org.junit.Test;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.adapter.MockComponents.MockAbstractDataAdapter;
-import org.locationtech.geowave.core.store.adapter.MockComponents.TestNativeFieldHandler;
-import org.locationtech.geowave.core.store.adapter.MockComponents.TestPersistentIndexFieldHandler;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
 import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.IndexImpl;
+import org.locationtech.geowave.core.store.index.CustomNameIndex;
 
 public class AbstractDataAdapterTest {
-
-  public static void main(final String[] args) {
-    new AbstractDataAdapterTest().testAbstractDataAdapterPersistance();
-  }
 
   @Test
   // *************************************************************************
@@ -33,23 +28,19 @@ public class AbstractDataAdapterTest {
   //
   // *************************************************************************
   public void testAbstractDataAdapterEncodeDecode() {
-    // To instantiate MockAbstractDataAdapter, need to create
-    // array of indexFieldHandlers and array of nativeFieldHandlers.
-    final ArrayList<PersistentIndexFieldHandler<Integer, ? extends CommonIndexValue, Object>> indexFieldHandlers =
-        new ArrayList<>();
-    indexFieldHandlers.add(new MockComponents.TestPersistentIndexFieldHandler());
-
-    final ArrayList<NativeFieldHandler<Integer, Object>> nativeFieldHandlers = new ArrayList<>();
-    nativeFieldHandlers.add(new MockComponents.TestNativeFieldHandler());
 
     final MockComponents.MockAbstractDataAdapter mockAbstractDataAdapter =
-        new MockComponents.MockAbstractDataAdapter(indexFieldHandlers, nativeFieldHandlers);
+        new MockComponents.MockAbstractDataAdapter();
     final MockComponents.TestIndexModel testIndexModel = new MockComponents.TestIndexModel();
     final Integer beforeValue = 123456;
+    final InternalDataAdapter<Integer> adapter =
+        mockAbstractDataAdapter.asInternalAdapter((short) -1);
+    final Index index = new CustomNameIndex(null, testIndexModel, "idx");
+    final AdapterToIndexMapping indexMapping = BaseDataStoreUtils.mapAdapterToIndex(adapter, index);
     final AdapterPersistenceEncoding testEncoding =
-        mockAbstractDataAdapter.encode(beforeValue, testIndexModel);
+        adapter.encode(beforeValue, indexMapping, index);
     final Integer afterValue =
-        mockAbstractDataAdapter.decode(
+        adapter.decode(
             new IndexedAdapterPersistenceEncoding(
                 testEncoding.getInternalAdapterId(),
                 testEncoding.getDataId(),
@@ -59,22 +50,15 @@ public class AbstractDataAdapterTest {
                 testEncoding.getCommonData(),
                 new MultiFieldPersistentDataset<byte[]>(),
                 testEncoding.getAdapterExtendedData()),
-            new IndexImpl(null, testIndexModel));
+            indexMapping,
+            index);
 
     Assert.assertEquals("EncodeDecode_test", beforeValue, afterValue);
   }
 
   @Test
   public void testAbstractDataAdapterPersistance() {
-    final ArrayList<PersistentIndexFieldHandler<Integer, ? extends CommonIndexValue, Object>> indexFieldHandlers =
-        new ArrayList<>();
-    indexFieldHandlers.add(new TestPersistentIndexFieldHandler());
-
-    final ArrayList<NativeFieldHandler<Integer, Object>> nativeFieldHandlers = new ArrayList<>();
-    nativeFieldHandlers.add(new TestNativeFieldHandler());
-
-    final MockAbstractDataAdapter mockAbstractDataAdapter =
-        new MockAbstractDataAdapter(indexFieldHandlers, nativeFieldHandlers);
+    final MockAbstractDataAdapter mockAbstractDataAdapter = new MockAbstractDataAdapter();
 
     final MockAbstractDataAdapter obj =
         (MockAbstractDataAdapter) PersistenceUtils.fromBinary(

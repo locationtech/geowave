@@ -30,16 +30,16 @@ public class OSMMapperBase<T> extends Mapper<AvroKey<T>, NullWritable, Text, Mut
 
   private static final Logger log = LoggerFactory.getLogger(OSMMapperBase.class);
 
-  protected final FieldWriter<?, Long> longWriter = FieldUtils.getDefaultWriterForClass(Long.class);
-  protected final FieldWriter<?, Integer> intWriter =
+  protected final FieldWriter<Long> longWriter = FieldUtils.getDefaultWriterForClass(Long.class);
+  protected final FieldWriter<Integer> intWriter =
       FieldUtils.getDefaultWriterForClass(Integer.class);
-  protected final FieldWriter<?, String> stringWriter =
+  protected final FieldWriter<String> stringWriter =
       FieldUtils.getDefaultWriterForClass(String.class);
-  protected final FieldWriter<?, Double> doubleWriter =
+  protected final FieldWriter<Double> doubleWriter =
       FieldUtils.getDefaultWriterForClass(Double.class);
-  protected final FieldWriter<?, Boolean> booleanWriter =
+  protected final FieldWriter<Boolean> booleanWriter =
       FieldUtils.getDefaultWriterForClass(Boolean.class);
-  protected final FieldWriter<?, Calendar> calendarWriter =
+  protected final FieldWriter<Calendar> calendarWriter =
       FieldUtils.getDefaultWriterForClass(Calendar.class);
 
   protected ColumnVisibility _visibility =

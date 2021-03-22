@@ -20,7 +20,7 @@ public class ByteArraySerializationProvider implements FieldSerializationProvide
   }
 
   @Override
-  public FieldWriter<Object, Byte[]> getFieldWriter() {
+  public FieldWriter<Byte[]> getFieldWriter() {
     return new ByteArrayWriter();
   }
 
@@ -34,7 +34,7 @@ public class ByteArraySerializationProvider implements FieldSerializationProvide
     }
   }
 
-  public static class ByteArrayWriter implements FieldWriter<Object, Byte[]> {
+  public static class ByteArrayWriter implements FieldWriter<Byte[]> {
     @Override
     public byte[] writeField(final Byte[] fieldValue) {
       if (fieldValue == null) {

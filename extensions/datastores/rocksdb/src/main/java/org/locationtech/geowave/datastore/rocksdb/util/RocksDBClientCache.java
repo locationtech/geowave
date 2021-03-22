@@ -8,10 +8,15 @@
  */
 package org.locationtech.geowave.datastore.rocksdb.util;
 
+import java.io.File;
+import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 
 public class RocksDBClientCache {
+  private static Logger LOGGER = LoggerFactory.getLogger(RocksDBClientCache.class);
   private static RocksDBClientCache singletonInstance;
 
   public static synchronized RocksDBClientCache getInstance() {
@@ -105,7 +110,13 @@ public class RocksDBClientCache {
         final int batchSize,
         final boolean walOnBatchWrite) {
       super();
-      this.directory = directory;
+      String path = directory;
+      try {
+        path = new File(directory).getCanonicalPath();
+      } catch (final IOException e) {
+        LOGGER.error("Error getting canonical path", e);
+      }
+      this.directory = path;
       this.visibilityEnabled = visibilityEnabled;
       this.compactOnWrite = compactOnWrite;
       this.batchSize = batchSize;

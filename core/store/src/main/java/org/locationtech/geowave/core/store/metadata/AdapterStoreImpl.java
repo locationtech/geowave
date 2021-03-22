@@ -14,7 +14,6 @@ import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
-import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
@@ -61,9 +60,7 @@ public class AdapterStoreImpl extends AbstractGeoWavePersistence<InternalDataAda
     if (adapter instanceof InternalDataAdapter) {
       return (InternalDataAdapter<?>) adapter;
     }
-    return new InternalDataAdapterWrapper<>(
-        adapter,
-        ByteArrayUtils.byteArrayToShort(entry.getPrimaryId()));
+    return adapter.asInternalAdapter(ByteArrayUtils.byteArrayToShort(entry.getPrimaryId()));
   }
 
   @Override

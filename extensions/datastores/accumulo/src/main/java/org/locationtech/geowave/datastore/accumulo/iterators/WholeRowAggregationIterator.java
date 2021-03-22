@@ -25,7 +25,6 @@ import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.UnreadFieldDataList;
 import org.locationtech.geowave.core.store.flatten.FlattenedUnreadData;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 
 public class WholeRowAggregationIterator extends WholeRowQueryFilterIterator {
   private AggregationIterator aggregationIterator;
@@ -37,7 +36,7 @@ public class WholeRowAggregationIterator extends WholeRowQueryFilterIterator {
   @Override
   protected boolean filter(final Text currentRow, final List<Key> keys, final List<Value> values) {
     if ((aggregationIterator != null) && (aggregationIterator.queryFilterIterator != null)) {
-      final PersistentDataset<CommonIndexValue> commonData = new MultiFieldPersistentDataset<>();
+      final PersistentDataset<Object> commonData = new MultiFieldPersistentDataset<>();
       final List<FlattenedUnreadData> unreadData = new ArrayList<>();
       for (int i = 0; (i < keys.size()) && (i < values.size()); i++) {
         final Key key = keys.get(i);

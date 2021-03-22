@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.store.data.field.base;
 
-import java.util.Arrays;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldSerializationProviderSpi;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
@@ -21,7 +20,7 @@ public class PrimitiveByteArraySerializationProvider implements
   }
 
   @Override
-  public FieldWriter<Object, byte[]> getFieldWriter() {
+  public FieldWriter<byte[]> getFieldWriter() {
     return new PrimitiveByteArrayWriter();
   }
 
@@ -31,11 +30,11 @@ public class PrimitiveByteArraySerializationProvider implements
       if ((fieldData == null) || (fieldData.length < 1)) {
         return null;
       }
-      return Arrays.copyOf(fieldData, fieldData.length);
+      return fieldData;
     }
   }
 
-  private static class PrimitiveByteArrayWriter implements FieldWriter<Object, byte[]> {
+  private static class PrimitiveByteArrayWriter implements FieldWriter<byte[]> {
     @Override
     public byte[] writeField(final byte[] fieldValue) {
       if (fieldValue == null) {

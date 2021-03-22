@@ -35,6 +35,7 @@ import org.locationtech.geowave.analytic.spark.sparksql.udf.UDFRegistrySPI;
 import org.locationtech.geowave.analytic.spark.sparksql.udf.UDFRegistrySPI.UDFNameAndConstructor;
 import org.locationtech.geowave.analytic.spark.spatial.SpatialJoinRunner;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.api.Index;
@@ -251,21 +252,20 @@ public class SqlQueryRunner {
       joinRunner.setNegativeTest(negativePredicate);
 
       // Setup store info for runner
-      final Index[] leftIndices =
+      final AdapterToIndexMapping[] leftMappings =
           leftStore.getOrCreateAdapterIndexMappingStore().getIndicesForAdapter(
-              leftStore.getOrCreateInternalAdapterStore().getAdapterId(
-                  leftStore.typeName)).getIndices(leftStore.getOrCreateIndexStore());
-      final Index[] rightIndices =
+              leftStore.getOrCreateInternalAdapterStore().getAdapterId(leftStore.typeName));
+      final AdapterToIndexMapping[] rightMappings =
           rightStore.getOrCreateAdapterIndexMappingStore().getIndicesForAdapter(
-              rightStore.getOrCreateInternalAdapterStore().getAdapterId(
-                  rightStore.typeName)).getIndices(rightStore.getOrCreateIndexStore());;
+              rightStore.getOrCreateInternalAdapterStore().getAdapterId(rightStore.typeName));
       NumericIndexStrategy leftStrat = null;
-      if (leftIndices.length > 0) {
-        leftStrat = leftIndices[0].getIndexStrategy();
+      if (leftMappings.length > 0) {
+        leftStrat = leftMappings[0].getIndex(leftStore.getOrCreateIndexStore()).getIndexStrategy();
       }
       NumericIndexStrategy rightStrat = null;
-      if (rightIndices.length > 0) {
-        rightStrat = rightIndices[0].getIndexStrategy();
+      if (rightMappings.length > 0) {
+        rightStrat =
+            rightMappings[0].getIndex(rightStore.getOrCreateIndexStore()).getIndexStrategy();
       }
       joinRunner.setLeftRDD(
           GeoWaveRDDLoader.loadIndexedRDD(session.sparkContext(), leftStore.rdd, leftStrat));

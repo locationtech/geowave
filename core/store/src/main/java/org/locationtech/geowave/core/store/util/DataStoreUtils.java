@@ -37,6 +37,7 @@ import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
@@ -68,7 +69,6 @@ import org.locationtech.geowave.core.store.flatten.FlattenedFieldInfo;
 import org.locationtech.geowave.core.store.flatten.FlattenedUnreadData;
 import org.locationtech.geowave.core.store.flatten.FlattenedUnreadDataSingleRow;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.CustomIndex;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
@@ -134,7 +134,7 @@ public class DataStoreUtils {
   public static FlattenedUnreadData aggregateFieldData(
       final GeoWaveKey key,
       final GeoWaveValue value,
-      final PersistentDataset<CommonIndexValue> commonData,
+      final PersistentDataset<Object> commonData,
       final CommonIndexModel model,
       final List<String> commonIndexFieldIds) {
     final byte[] fieldMask = value.getFieldMask();
@@ -151,11 +151,9 @@ public class DataStoreUtils {
       final int ordinal = fieldInfo.getFieldPosition();
       if (ordinal < commonIndexFieldIds.size()) {
         final String commonIndexFieldName = commonIndexFieldIds.get(ordinal);
-        final FieldReader<? extends CommonIndexValue> reader =
-            model.getReader(commonIndexFieldName);
+        final FieldReader<?> reader = model.getReader(commonIndexFieldName);
         if (reader != null) {
-          final CommonIndexValue fieldValue = reader.readField(fieldInfo.getValue());
-          fieldValue.setVisibility(value.getVisibility());
+          final Object fieldValue = reader.readField(fieldInfo.getValue());
           commonData.addValue(commonIndexFieldName, fieldValue);
         } else {
           LOGGER.error("Could not find reader for common index field: " + commonIndexFieldName);
@@ -182,7 +180,7 @@ public class DataStoreUtils {
 
   public static List<String> getUniqueDimensionFields(final CommonIndexModel model) {
     final List<String> dimensionFieldIds = new ArrayList<>();
-    for (final NumericDimensionField<? extends CommonIndexValue> dimension : model.getDimensions()) {
+    for (final NumericDimensionField<?> dimension : model.getDimensions()) {
       if (!dimensionFieldIds.contains(dimension.getFieldName())) {
         dimensionFieldIds.add(dimension.getFieldName());
       }
@@ -219,11 +217,12 @@ public class DataStoreUtils {
   public static <T> InsertionIds getInsertionIdsForEntry(
       final T entry,
       final InternalDataAdapter adapter,
+      final AdapterToIndexMapping indexMapping,
       final Index index) {
     if (index instanceof CustomIndexStrategy) {
       return ((CustomIndexStrategy) index).getInsertionIds(entry);
     } else {
-      final AdapterPersistenceEncoding encoding = adapter.encode(entry, index.getIndexModel());
+      final AdapterPersistenceEncoding encoding = adapter.encode(entry, indexMapping, index);
       return encoding.getInsertionIds(index);
     }
   }
@@ -545,6 +544,7 @@ public class DataStoreUtils {
           new ReaderParamsBuilder<>(
               index,
               adapterStore,
+              adapterIndexMappingStore,
               internalAdapterStore,
               GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER).isClientsideRowMerging(
                   true).maxRangeDecomposition(maxRangeDecomposition);
@@ -560,6 +560,7 @@ public class DataStoreUtils {
           final RewritingMergingEntryIterator<?> iterator =
               new RewritingMergingEntryIterator(
                   adapterStore,
+                  adapterIndexMappingStore,
                   index,
                   reader,
                   Maps.transformValues(mergingAdapters, v -> v.getAdapter()),

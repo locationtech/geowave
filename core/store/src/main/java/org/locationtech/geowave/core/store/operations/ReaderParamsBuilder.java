@@ -12,6 +12,7 @@ import java.util.List;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.Index;
@@ -30,9 +31,10 @@ public class ReaderParamsBuilder<T> extends RangeReaderParamsBuilder<T, ReaderPa
   public ReaderParamsBuilder(
       final Index index,
       final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final InternalAdapterStore internalAdapterStore,
       final GeoWaveRowIteratorTransformer<T> rowTransformer) {
-    super(index, adapterStore, internalAdapterStore);
+    super(index, adapterStore, mappingStore, internalAdapterStore);
     this.rowTransformer = rowTransformer;
   }
 
@@ -81,6 +83,7 @@ public class ReaderParamsBuilder<T> extends RangeReaderParamsBuilder<T, ReaderPa
     return new ReaderParams<>(
         index,
         adapterStore,
+        mappingStore,
         internalAdapterStore,
         adapterIds,
         maxResolutionSubsamplingPerDimension,

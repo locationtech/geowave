@@ -28,6 +28,7 @@ import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
+import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

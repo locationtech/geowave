@@ -1,2 +1,3 @@
 org.locationtech.geowave.core.store.StorePersistableRegistry
 org.locationtech.geowave.core.store.statistics.StatisticsPersistableRegistry
+org.locationtech.geowave.core.store.index.IndexFieldMapperPersistableRegistry

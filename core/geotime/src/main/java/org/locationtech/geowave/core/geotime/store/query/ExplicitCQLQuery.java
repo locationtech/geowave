@@ -12,12 +12,13 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.InternalGeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.filter.CQLQueryFilter;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.constraints.TypeConstraintQuery;
@@ -37,13 +38,14 @@ public class ExplicitCQLQuery implements QueryConstraints, TypeConstraintQuery {
   public ExplicitCQLQuery(
       final QueryConstraints baseQuery,
       final Filter filter,
-      final GeotoolsFeatureDataAdapter adapter) {
+      final InternalGeotoolsFeatureDataAdapter<?> adapter,
+      final AdapterToIndexMapping indexMapping) {
     // TODO consider ensuring the baseQuery amd the filter are in the
     // coordinate reference system of the adapter
     // only if the query has spatial predicate(s)
     this.baseQuery = baseQuery;
     cqlFilter = filter;
-    this.filter = new CQLQueryFilter(filter, adapter);
+    this.filter = new CQLQueryFilter(filter, adapter, indexMapping);
   }
 
   @Override

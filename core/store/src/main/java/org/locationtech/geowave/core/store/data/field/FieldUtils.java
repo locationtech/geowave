@@ -25,7 +25,7 @@ public class FieldUtils {
   public static final byte SERIALIZATION_VERSION = 0x1;
   private static final Logger LOGGER = LoggerFactory.getLogger(FieldUtils.class);
   private static Map<Class<?>, FieldReader<?>> fieldReaderRegistry = null;
-  private static Map<Class<?>, FieldWriter<?, ?>> fieldWriterRegistry = null;
+  private static Map<Class<?>, FieldWriter<?>> fieldWriterRegistry = null;
 
   private static synchronized Map<Class<?>, FieldReader<?>> getRegisteredFieldReaders() {
     if (fieldReaderRegistry == null) {
@@ -34,7 +34,7 @@ public class FieldUtils {
     return fieldReaderRegistry;
   }
 
-  private static synchronized Map<Class<?>, FieldWriter<?, ?>> getRegisteredFieldWriters() {
+  private static synchronized Map<Class<?>, FieldWriter<?>> getRegisteredFieldWriters() {
     if (fieldWriterRegistry == null) {
       initRegistry();
     }
@@ -63,7 +63,7 @@ public class FieldUtils {
             fieldReaderRegistry.put(type, reader);
           }
         }
-        final FieldWriter<?, ?> writer = serializationProvider.getFieldWriter();
+        final FieldWriter<?> writer = serializationProvider.getFieldWriter();
         if (writer != null) {
           if (fieldWriterRegistry.containsKey(type)) {
             LOGGER.warn(
@@ -80,23 +80,36 @@ public class FieldUtils {
   public static <T> FieldReader<T> getDefaultReaderForClass(final Class<T> myClass) {
     final Map<Class<?>, FieldReader<?>> internalFieldReaders = getRegisteredFieldReaders();
     // try concrete class
-    final FieldReader<T> reader = (FieldReader<T>) internalFieldReaders.get(myClass);
+    FieldReader<T> reader = (FieldReader<T>) internalFieldReaders.get(myClass);
     if (reader != null) {
       return reader;
     }
     // if the concrete class lookup failed, try inheritance
-    return (FieldReader<T>) getAssignableValueFromClassMap(myClass, internalFieldReaders);
+    synchronized (internalFieldReaders) {
+      reader = (FieldReader<T>) getAssignableValueFromClassMap(myClass, internalFieldReaders);
+      if (reader != null) {
+        internalFieldReaders.put(myClass, reader);
+      }
+    }
+    return reader;
   }
 
   @SuppressWarnings("unchecked")
-  public static <T> FieldWriter<?, T> getDefaultWriterForClass(final Class<T> myClass) {
-    final Map<Class<?>, FieldWriter<?, ?>> internalFieldWriters = getRegisteredFieldWriters();
+  public static <T> FieldWriter<T> getDefaultWriterForClass(final Class<T> myClass) {
+    final Map<Class<?>, FieldWriter<?>> internalFieldWriters = getRegisteredFieldWriters();
     // try concrete class
-    final FieldWriter<?, T> writer = (FieldWriter<?, T>) internalFieldWriters.get(myClass);
+    FieldWriter<T> writer = (FieldWriter<T>) internalFieldWriters.get(myClass);
     if (writer != null) {
       return writer;
     } // if the concrete class lookup failed, try inheritance
-    return (FieldWriter<?, T>) getAssignableValueFromClassMap(myClass, internalFieldWriters);
+    synchronized (internalFieldWriters) {
+      writer = (FieldWriter<T>) getAssignableValueFromClassMap(myClass, internalFieldWriters);
+
+      if (writer != null) {
+        internalFieldWriters.put(myClass, writer);
+      }
+    }
+    return writer;
   }
 
   public static <T> T getAssignableValueFromClassMap(
@@ -112,9 +125,4 @@ public class FieldUtils {
     return null;
   }
 
-  public static <RowType, FieldType> FieldWriter<RowType, FieldType> getDefaultWriterForClass(
-      final Class<FieldType> myClass,
-      final FieldVisibilityHandler<RowType, Object> visibilityHandler) {
-    return new BasicWriter<>(getDefaultWriterForClass(myClass), visibilityHandler);
-  }
 }

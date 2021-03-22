@@ -42,7 +42,7 @@ public class GeoWaveFeatureWriter implements FeatureWriter<SimpleFeatureType, Si
     components.initForWrite();
     this.transaction = transaction;
     myReader = reader;
-    featureType = components.getAdapter().getFeatureType();
+    featureType = components.getFeatureType();
   }
 
   @Override

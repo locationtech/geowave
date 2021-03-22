@@ -13,12 +13,10 @@ import java.util.function.Function;
 /**
  * This interface serializes a field's value into a byte array
  *
- * @param <RowType>
+ *
  * @param <FieldType>
  */
-public interface FieldWriter<RowType, FieldType> extends
-    FieldVisibilityHandler<RowType, FieldType>,
-    Function<FieldType, byte[]> {
+public interface FieldWriter<FieldType> extends Function<FieldType, byte[]> {
 
   /**
    * Serializes the entry into binary data that will be stored as the value for the row
@@ -31,13 +29,5 @@ public interface FieldWriter<RowType, FieldType> extends
   @Override
   default byte[] apply(final FieldType fieldValue) {
     return writeField(fieldValue);
-  }
-
-  @Override
-  default byte[] getVisibility(
-      final RowType rowValue,
-      final String fieldName,
-      final FieldType fieldValue) {
-    return new byte[] {};
   }
 }

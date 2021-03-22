@@ -15,6 +15,7 @@ import org.apache.accumulo.core.data.ColumnUpdate;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.KeyValue;
 import org.apache.accumulo.core.data.Mutation;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
@@ -37,22 +38,25 @@ public class AccumuloKeyValuePairGenerator<T> {
 
   private final InternalDataAdapter<T> adapter;
   private final Index index;
+  private final AdapterToIndexMapping indexMapping;
   private final VisibilityWriter<T> visibilityWriter;
 
   public AccumuloKeyValuePairGenerator(
       final InternalDataAdapter<T> adapter,
       final Index index,
+      final AdapterToIndexMapping indexMapping,
       final VisibilityWriter<T> visibilityWriter) {
     super();
     this.adapter = adapter;
     this.index = index;
+    this.indexMapping = indexMapping;
     this.visibilityWriter = visibilityWriter;
   }
 
   public List<KeyValue> constructKeyValuePairs(final T entry) {
     final List<KeyValue> keyValuePairs = new ArrayList<>();
     final GeoWaveRow[] rows =
-        BaseDataStoreUtils.getGeoWaveRows(entry, adapter, index, visibilityWriter);
+        BaseDataStoreUtils.getGeoWaveRows(entry, adapter, indexMapping, index, visibilityWriter);
     if ((rows != null) && (rows.length > 0)) {
       for (final GeoWaveRow row : rows) {
         final Mutation m = AccumuloWriter.rowToMutation(row);

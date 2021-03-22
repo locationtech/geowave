@@ -10,7 +10,10 @@ package org.locationtech.geowave.core.geotime.store.dimension;
 
 import java.nio.ByteBuffer;
 import javax.annotation.Nullable;
-import org.locationtech.geowave.core.index.ByteArrayUtils;
+import org.geotools.referencing.CRS;
+import org.locationtech.geowave.core.geotime.store.field.GeometrySerializationProvider;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.index.IndexDimensionHint;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
@@ -18,50 +21,72 @@ import org.locationtech.geowave.core.index.dimension.bin.BinRange;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
+import org.locationtech.geowave.core.store.api.IndexFieldMapper.IndexFieldOptions;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
+import org.locationtech.jts.geom.Geometry;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** A base class for EPSG:4326 latitude/longitude fields that use JTS geometry */
-public abstract class SpatialField implements NumericDimensionField<GeometryWrapper> {
+public abstract class SpatialField implements NumericDimensionField<Geometry> {
+  private static final Logger LOGGER = LoggerFactory.getLogger(SpatialField.class);
+  public static final String DEFAULT_GEOMETRY_FIELD_NAME = "default_geom_dimension";
+  public static final IndexDimensionHint LONGITUDE_DIMENSION_HINT =
+      new IndexDimensionHint("LONGITUDE");
+  public static final IndexDimensionHint LATITUDE_DIMENSION_HINT =
+      new IndexDimensionHint("LATITUDE");
   protected NumericDimensionDefinition baseDefinition;
-  private final GeometryWrapperReader geometryReader;
-  private final GeometryWrapperWriter geometryWriter;
-  private String fieldName;
+  private FieldReader<Geometry> geometryReader;
+  private FieldWriter<Geometry> geometryWriter;
   private Integer geometryPrecision;
+  private CoordinateReferenceSystem crs = GeometryUtils.getDefaultCRS();
 
   protected SpatialField() {
-    this(null);
+    this(null, null, null);
   }
 
   protected SpatialField(@Nullable final Integer geometryPrecision) {
-    geometryReader = new GeometryWrapperReader(geometryPrecision);
-    geometryWriter = new GeometryWrapperWriter(geometryPrecision);
-    fieldName = GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME;
-    this.geometryPrecision = geometryPrecision;
+    this(null, geometryPrecision, null);
   }
 
   public SpatialField(
       final NumericDimensionDefinition baseDefinition,
       final @Nullable Integer geometryPrecision) {
-    this(baseDefinition, geometryPrecision, GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME);
-  }
-
-  @Override
-  public NumericData getFullRange() {
-    return baseDefinition.getFullRange();
+    this(baseDefinition, geometryPrecision, null);
   }
 
   public SpatialField(
       final NumericDimensionDefinition baseDefinition,
       final @Nullable Integer geometryPrecision,
-      final String fieldName) {
+      final @Nullable CoordinateReferenceSystem crs) {
+    if (crs != null) {
+      this.crs = crs;
+    }
     this.baseDefinition = baseDefinition;
-    this.fieldName = fieldName;
     this.geometryPrecision = geometryPrecision;
-    geometryReader = new GeometryWrapperReader(geometryPrecision);
-    geometryWriter = new GeometryWrapperWriter(geometryPrecision);
+    final GeometrySerializationProvider serialization =
+        new GeometrySerializationProvider(geometryPrecision);
+    geometryReader = serialization.getFieldReader();
+    geometryWriter = serialization.getFieldWriter();
+  }
+
+  @Override
+  public IndexFieldOptions getIndexFieldOptions() {
+    return new SpatialIndexFieldOptions(crs);
+  }
+
+  @Override
+  public Class<Geometry> getFieldClass() {
+    return Geometry.class;
+  }
+
+  @Override
+  public NumericData getFullRange() {
+    return baseDefinition.getFullRange();
   }
 
   @Override
@@ -101,16 +126,16 @@ public abstract class SpatialField implements NumericDimensionField<GeometryWrap
 
   @Override
   public String getFieldName() {
-    return fieldName;
+    return DEFAULT_GEOMETRY_FIELD_NAME;
   }
 
   @Override
-  public FieldWriter<?, GeometryWrapper> getWriter() {
+  public FieldWriter<Geometry> getWriter() {
     return geometryWriter;
   }
 
   @Override
-  public FieldReader<GeometryWrapper> getReader() {
+  public FieldReader<Geometry> getReader() {
     return geometryReader;
   }
 
@@ -120,38 +145,30 @@ public abstract class SpatialField implements NumericDimensionField<GeometryWrap
   }
 
   @Override
-  public boolean isCompatibleWith(Class<? extends CommonIndexValue> clazz) {
-    return GeometryWrapper.class.isAssignableFrom(clazz);
-  }
-
-  @Override
   public byte[] toBinary() {
     final byte[] dimensionBinary = PersistenceUtils.toBinary(baseDefinition);
-    final byte[] fieldNameBytes = StringUtils.stringToBinary(fieldName);
+    final byte[] crsBinary = StringUtils.stringToBinary(CRS.toSRS(crs));
     final ByteBuffer buf =
         ByteBuffer.allocate(
-            dimensionBinary.length
-                + fieldNameBytes.length
-                + VarintUtils.unsignedIntByteLength(fieldNameBytes.length)
-                + 1);
-    VarintUtils.writeUnsignedInt(fieldNameBytes.length, buf);
-    buf.put(fieldNameBytes);
+            VarintUtils.unsignedShortByteLength((short) dimensionBinary.length)
+                + dimensionBinary.length
+                + 1
+                + crsBinary.length);
+    VarintUtils.writeUnsignedShort((short) dimensionBinary.length, buf);
     buf.put(dimensionBinary);
     if (geometryPrecision == null) {
       buf.put(Byte.MAX_VALUE);
     } else {
       buf.put((byte) geometryPrecision.intValue());
     }
+    buf.put(crsBinary);
     return buf.array();
   }
 
   @Override
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
-    final int fieldNameLength = VarintUtils.readUnsignedInt(buf);
-    final byte[] fieldNameBytes = ByteArrayUtils.safeRead(buf, fieldNameLength);
-    fieldName = StringUtils.stringFromBinary(fieldNameBytes);
-    final byte[] dimensionBinary = new byte[buf.remaining() - 1];
+    final byte[] dimensionBinary = new byte[VarintUtils.readUnsignedShort(buf)];
     buf.get(dimensionBinary);
     baseDefinition = (NumericDimensionDefinition) PersistenceUtils.fromBinary(dimensionBinary);
     final byte precision = buf.get();
@@ -160,8 +177,18 @@ public abstract class SpatialField implements NumericDimensionField<GeometryWrap
     } else {
       geometryPrecision = Integer.valueOf(precision);
     }
-    geometryReader.setPrecision(geometryPrecision);
-    geometryWriter.setPrecision(geometryPrecision);
+    final GeometrySerializationProvider serialization =
+        new GeometrySerializationProvider(geometryPrecision);
+    geometryReader = serialization.getFieldReader();
+    geometryWriter = serialization.getFieldWriter();
+    final byte[] crsBinary = new byte[buf.remaining()];
+    buf.get(crsBinary);
+    try {
+      this.crs = CRS.decode(StringUtils.stringFromBinary(crsBinary), true);
+    } catch (FactoryException e) {
+      LOGGER.warn("Unable to decode index field CRS");
+      this.crs = GeometryUtils.getDefaultCRS();
+    }
   }
 
   @Override
@@ -171,7 +198,6 @@ public abstract class SpatialField implements NumericDimensionField<GeometryWrap
     final String className = getClass().getName();
     result = (prime * result) + ((className == null) ? 0 : className.hashCode());
     result = (prime * result) + ((baseDefinition == null) ? 0 : baseDefinition.hashCode());
-    result = (prime * result) + ((fieldName == null) ? 0 : fieldName.hashCode());
     result = (prime * result) + ((geometryPrecision == null) ? 0 : geometryPrecision.hashCode());
     return result;
   }
@@ -195,13 +221,6 @@ public abstract class SpatialField implements NumericDimensionField<GeometryWrap
     } else if (!baseDefinition.equals(other.baseDefinition)) {
       return false;
     }
-    if (fieldName == null) {
-      if (other.fieldName != null) {
-        return false;
-      }
-    } else if (!fieldName.equals(other.fieldName)) {
-      return false;
-    }
     if (geometryPrecision == null) {
       if (other.geometryPrecision != null) {
         return false;
@@ -210,5 +229,17 @@ public abstract class SpatialField implements NumericDimensionField<GeometryWrap
       return false;
     }
     return true;
+  }
+
+  public static class SpatialIndexFieldOptions implements IndexFieldOptions {
+    private final CoordinateReferenceSystem indexCRS;
+
+    public SpatialIndexFieldOptions(final CoordinateReferenceSystem indexCRS) {
+      this.indexCRS = indexCRS;
+    }
+
+    public CoordinateReferenceSystem crs() {
+      return this.indexCRS;
+    }
   }
 }

@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
-import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
@@ -41,7 +40,7 @@ public class KafkaIngestRunData implements Closeable {
 
   public synchronized Writer getIndexWriter(
       final DataTypeAdapter<?> adapter,
-      final Index... requiredIndices) throws MismatchedIndexToAdapterMapping {
+      final Index... requiredIndices) {
     Writer indexWriter = adapterIdToWriterCache.get(adapter.getTypeName());
     if (indexWriter == null) {
       dataStore.addType(adapter, requiredIndices);

@@ -22,15 +22,14 @@ import org.locationtech.geowave.adapter.vector.avro.AvroAttributeValues;
 import org.locationtech.geowave.adapter.vector.avro.AvroFeatureDefinition;
 import org.locationtech.geowave.adapter.vector.avro.AvroSimpleFeatureCollection;
 import org.locationtech.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
-import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
-import org.locationtech.geowave.core.geotime.store.dimension.Time;
+import org.locationtech.geowave.core.geotime.store.dimension.SpatialField;
+import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestWithMapper;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIterator.Wrapper;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.ingest.IngestPluginBase;
 import org.opengis.feature.simple.SimpleFeature;
@@ -155,7 +154,7 @@ public class GeoWaveAvroIngestPlugin extends
   public DataTypeAdapter<SimpleFeature>[] getDataAdapters(
       final URL url,
       final String globalVisibility) {
-    Map<String, FeatureDataAdapter> adapters = Maps.newHashMap();
+    final Map<String, FeatureDataAdapter> adapters = Maps.newHashMap();
     try (final CloseableIterator<AvroSimpleFeatureCollection> avroObjects = toAvroObjects(url)) {
       while (avroObjects.hasNext()) {
         final AvroFeatureDefinition featureDefinition = avroObjects.next().getFeatureType();
@@ -164,7 +163,7 @@ public class GeoWaveAvroIngestPlugin extends
               GeoWaveAvroFeatureUtils.avroFeatureDefinitionToGTSimpleFeatureType(featureDefinition);
           final FeatureDataAdapter adapter = new FeatureDataAdapter(featureType);
           adapters.put(adapter.getTypeName(), adapter);
-        } catch (ClassNotFoundException e) {
+        } catch (final ClassNotFoundException e) {
           LOGGER.warn("Unable to read simple feature type from Avro", e);
         }
       }
@@ -220,6 +219,11 @@ public class GeoWaveAvroIngestPlugin extends
     public IngestAvroFeaturesFromHdfs(final GeoWaveAvroIngestPlugin parentPlugin) {
       super(parentPlugin);
     }
+
+    @Override
+    public String[] getSupportedIndexTypes() {
+      return new String[] {SpatialField.DEFAULT_GEOMETRY_FIELD_NAME, TimeField.DEFAULT_FIELD_ID};
+    }
   }
 
   @Override
@@ -227,9 +231,9 @@ public class GeoWaveAvroIngestPlugin extends
     return new IngestAvroFeaturesFromHdfs(this);
   }
 
-  @SuppressWarnings("unchecked")
   @Override
-  public Class<? extends CommonIndexValue>[] getSupportedIndexableTypes() {
-    return new Class[] {GeometryWrapper.class, Time.class};
+  public String[] getSupportedIndexTypes() {
+    return new String[] {SpatialField.DEFAULT_GEOMETRY_FIELD_NAME, TimeField.DEFAULT_FIELD_ID};
   }
+
 }

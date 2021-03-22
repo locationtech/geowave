@@ -103,12 +103,12 @@ public class StoreCopyJobRunner extends Configured implements Tool {
 
         GeoWaveOutputFormat.addDataAdapter(job.getConfiguration(), dataAdapter);
 
-        final AdapterToIndexMapping mapping =
+        final AdapterToIndexMapping[] mappings =
             adapterIndexMappingStore.getIndicesForAdapter(dataAdapter.getAdapterId());
 
         JobContextAdapterIndexMappingStore.addAdapterToIndexMapping(
             job.getConfiguration(),
-            mapping);
+            mappings);
         JobContextInternalAdapterStore.addTypeName(
             job.getConfiguration(),
             dataAdapter.getTypeName(),

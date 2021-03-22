@@ -21,7 +21,7 @@ public class StringSerializationProvider implements FieldSerializationProviderSp
   }
 
   @Override
-  public FieldWriter<Object, String> getFieldWriter() {
+  public FieldWriter<String> getFieldWriter() {
     return new StringWriter();
   }
 
@@ -41,7 +41,7 @@ public class StringSerializationProvider implements FieldSerializationProviderSp
     }
   }
 
-  protected static class StringWriter implements FieldWriter<Object, String> {
+  protected static class StringWriter implements FieldWriter<String> {
     @Override
     public byte[] writeField(final String fieldValue) {
       if (fieldValue == null) {

@@ -15,10 +15,10 @@ import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
-import org.locationtech.geowave.core.store.util.GenericTypeResolver;
 
 public class CustomQueryConstraints<C extends Persistable> implements
     AdapterAndIndexBasedQueryConstraints {
@@ -54,11 +54,7 @@ public class CustomQueryConstraints<C extends Persistable> implements
   @Override
   public List<MultiDimensionalNumericData> getIndexConstraints(final Index index) {
     if (index instanceof CustomIndexStrategy) {
-      final Class<?>[] genericClasses =
-          GenericTypeResolver.resolveTypeArguments(index.getClass(), CustomIndexStrategy.class);
-      if ((genericClasses != null)
-          && (genericClasses.length == 2)
-          && genericClasses[1].isInstance(customConstraints)) {
+      if (((CustomIndexStrategy) index).getConstraintsClass().isInstance(customConstraints)) {
         return Collections.singletonList(new InternalCustomConstraints(customConstraints));
       }
     }
@@ -152,11 +148,15 @@ public class CustomQueryConstraints<C extends Persistable> implements
 
   @Override
   public QueryConstraints createQueryConstraints(
-      final DataTypeAdapter<?> adapter,
-      final Index index) {
+      final InternalDataAdapter<?> adapter,
+      final Index index,
+      final AdapterToIndexMapping indexMapping) {
     if ((index instanceof CustomIndexStrategy)
         && (((CustomIndexStrategy) index).getFilter(getCustomConstraints()) != null)) {
-      return new CustomQueryConstraintsWithFilter(getCustomConstraints(), adapter);
+      return new CustomQueryConstraintsWithFilter(
+          getCustomConstraints(),
+          adapter,
+          new AdapterToIndexMapping[] {indexMapping});
     }
     return this;
   }

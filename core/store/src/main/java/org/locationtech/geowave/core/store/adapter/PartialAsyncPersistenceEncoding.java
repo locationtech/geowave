@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.store.adapter;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.base.dataidx.BatchDataIndexRetrieval;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
@@ -33,6 +34,7 @@ public class PartialAsyncPersistenceEncoding extends LazyReadPersistenceEncoding
       final BatchDataIndexRetrieval asyncRetrieval,
       final InternalDataAdapter<?> dataAdapter,
       final CommonIndexModel indexModel,
+      final AdapterToIndexMapping indexMapping,
       final byte[] fieldSubsetBitmask,
       final Supplier<GeoWaveValue[]> fieldValues) {
     super(
@@ -43,6 +45,7 @@ public class PartialAsyncPersistenceEncoding extends LazyReadPersistenceEncoding
         duplicateCount,
         dataAdapter,
         indexModel,
+        indexMapping,
         fieldSubsetBitmask,
         fieldValues);
     this.asyncRetrieval = asyncRetrieval;

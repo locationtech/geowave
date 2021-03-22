@@ -18,7 +18,6 @@ import java.util.Properties;
 import org.locationtech.geowave.core.index.SPIServiceRegistry;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
@@ -60,17 +59,15 @@ public class IngestUtils {
   public static boolean isCompatible(
       final DataAdapterProvider<?> adapterProvider,
       final Index index) {
-    final Class<? extends CommonIndexValue>[] supportedTypes =
-        adapterProvider.getSupportedIndexableTypes();
+    final String[] supportedTypes = adapterProvider.getSupportedIndexTypes();
     if ((supportedTypes == null) || (supportedTypes.length == 0)) {
       return false;
     }
-    final NumericDimensionField<? extends CommonIndexValue>[] requiredDimensions =
-        index.getIndexModel().getDimensions();
-    for (final NumericDimensionField<? extends CommonIndexValue> requiredDimension : requiredDimensions) {
+    final NumericDimensionField<?>[] requiredDimensions = index.getIndexModel().getDimensions();
+    for (final NumericDimensionField<?> requiredDimension : requiredDimensions) {
       boolean fieldFound = false;
-      for (final Class<? extends CommonIndexValue> supportedType : supportedTypes) {
-        if (requiredDimension.isCompatibleWith(supportedType)) {
+      for (final String supportedType : supportedTypes) {
+        if (requiredDimension.getFieldName().equals(supportedType)) {
           fieldFound = true;
           break;
         }

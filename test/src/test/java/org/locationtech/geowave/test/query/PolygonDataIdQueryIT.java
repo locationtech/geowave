@@ -91,7 +91,6 @@ public class PolygonDataIdQueryIT extends AbstractGeoWaveIT {
   public static void setupData() throws IOException {
     simpleFeatureType = getSimpleFeatureType();
     dataAdapter = new FeatureDataAdapter(simpleFeatureType);
-    dataAdapter.init(index);
 
     startMillis = System.currentTimeMillis();
     LOGGER.warn("-----------------------------------------");

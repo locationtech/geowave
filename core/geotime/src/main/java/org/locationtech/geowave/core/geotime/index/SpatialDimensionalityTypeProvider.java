@@ -117,7 +117,8 @@ public class SpatialDimensionalityTypeProvider implements
       crsCode = "EPSG:4326";
     } else {
       decodeCRS(options.crs);
-      final CoordinateSystem cs = decodeCRS(options.crs).getCoordinateSystem();
+      final CoordinateReferenceSystem crs = decodeCRS(options.crs);
+      final CoordinateSystem cs = crs.getCoordinateSystem();
       isDefaultCRS = false;
       crsCode = options.crs;
       dimensions = new NumericDimensionDefinition[cs.getDimension()];
@@ -134,14 +135,16 @@ public class SpatialDimensionalityTypeProvider implements
             fields_temporal[d] =
                 new CustomCRSSpatialField(
                     (CustomCRSBoundedSpatialDimension) dimensions[d],
-                    geometryPrecision);
+                    geometryPrecision,
+                    crs);
           } else {
             dimensions[d] =
                 new CustomCRSUnboundedSpatialDimension(DEFAULT_UNBOUNDED_CRS_INTERVAL, (byte) d);
             fields_temporal[d] =
                 new CustomCRSSpatialField(
                     (CustomCRSUnboundedSpatialDimension) dimensions[d],
-                    geometryPrecision);
+                    geometryPrecision,
+                    crs);
           }
         }
         fields_temporal[dimensions.length] = new TimeField(Unit.YEAR);
@@ -158,7 +161,8 @@ public class SpatialDimensionalityTypeProvider implements
               fields[d] =
                   new CustomCRSSpatialField(
                       (CustomCRSBoundedSpatialDimensionX) dimensions[d],
-                      geometryPrecision);
+                      geometryPrecision,
+                      crs);
             }
             if (d == 1) {
               dimensions[d] =
@@ -168,7 +172,8 @@ public class SpatialDimensionalityTypeProvider implements
               fields[d] =
                   new CustomCRSSpatialField(
                       (CustomCRSBoundedSpatialDimensionY) dimensions[d],
-                      geometryPrecision);
+                      geometryPrecision,
+                      crs);
             }
           } else {
             if (d == 0) {
@@ -177,7 +182,8 @@ public class SpatialDimensionalityTypeProvider implements
               fields[d] =
                   new CustomCRSSpatialField(
                       (CustomCRSUnboundedSpatialDimensionX) dimensions[d],
-                      geometryPrecision);
+                      geometryPrecision,
+                      crs);
             }
             if (d == 1) {
               dimensions[d] =
@@ -185,7 +191,8 @@ public class SpatialDimensionalityTypeProvider implements
               fields[d] =
                   new CustomCRSSpatialField(
                       (CustomCRSUnboundedSpatialDimensionY) dimensions[d],
-                      geometryPrecision);
+                      geometryPrecision,
+                      crs);
             }
           }
         }

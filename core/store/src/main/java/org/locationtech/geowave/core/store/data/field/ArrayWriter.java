@@ -12,7 +12,7 @@ import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.VarintUtils;
 
 /** This class contains the basic object array writer field types */
-public abstract class ArrayWriter<RowType, FieldType> implements FieldWriter<RowType, FieldType[]> {
+public abstract class ArrayWriter<FieldType> implements FieldWriter<FieldType[]> {
   public static enum Encoding {
     FIXED_SIZE_ENCODING((byte) 0), VARIABLE_SIZE_ENCODING((byte) 1);
 
@@ -27,18 +27,10 @@ public abstract class ArrayWriter<RowType, FieldType> implements FieldWriter<Row
     }
   }
 
-  private FieldVisibilityHandler<RowType, Object> visibilityHandler;
-  private FieldWriter<RowType, FieldType> writer;
+  private final FieldWriter<FieldType> writer;
 
-  public ArrayWriter(final FieldWriter<RowType, FieldType> writer) {
-    this(writer, null);
-  }
-
-  public ArrayWriter(
-      final FieldWriter<RowType, FieldType> writer,
-      final FieldVisibilityHandler<RowType, Object> visibilityHandler) {
+  public ArrayWriter(final FieldWriter<FieldType> writer) {
     this.writer = writer;
-    this.visibilityHandler = visibilityHandler;
   }
 
   protected byte[] writeFixedSizeField(final FieldType[] fieldValue) {
@@ -118,17 +110,6 @@ public abstract class ArrayWriter<RowType, FieldType> implements FieldWriter<Row
     return buf.array();
   }
 
-  @Override
-  public byte[] getVisibility(
-      final RowType rowValue,
-      final String fieldName,
-      final FieldType[] fieldValue) {
-    if (visibilityHandler != null) {
-      return visibilityHandler.getVisibility(rowValue, fieldName, fieldValue);
-    }
-    return new byte[] {};
-  }
-
   private byte[][] getBytes(final FieldType[] fieldData) {
 
     final byte[][] bytes = new byte[fieldData.length][];
@@ -150,16 +131,9 @@ public abstract class ArrayWriter<RowType, FieldType> implements FieldWriter<Row
     return length;
   }
 
-  public static class FixedSizeObjectArrayWriter<RowType, FieldType> extends
-      ArrayWriter<RowType, FieldType> {
-    public FixedSizeObjectArrayWriter(final FieldWriter<RowType, FieldType> writer) {
+  public static class FixedSizeObjectArrayWriter<FieldType> extends ArrayWriter<FieldType> {
+    public FixedSizeObjectArrayWriter(final FieldWriter<FieldType> writer) {
       super(writer);
-    }
-
-    public FixedSizeObjectArrayWriter(
-        final FieldWriter<RowType, FieldType> writer,
-        final FieldVisibilityHandler<RowType, Object> visibilityHandler) {
-      super(writer, visibilityHandler);
     }
 
     @Override
@@ -168,16 +142,9 @@ public abstract class ArrayWriter<RowType, FieldType> implements FieldWriter<Row
     }
   }
 
-  public static class VariableSizeObjectArrayWriter<RowType, FieldType> extends
-      ArrayWriter<RowType, FieldType> {
-    public VariableSizeObjectArrayWriter(final FieldWriter<RowType, FieldType> writer) {
+  public static class VariableSizeObjectArrayWriter<FieldType> extends ArrayWriter<FieldType> {
+    public VariableSizeObjectArrayWriter(final FieldWriter<FieldType> writer) {
       super(writer);
-    }
-
-    public VariableSizeObjectArrayWriter(
-        final FieldWriter<RowType, FieldType> writer,
-        final FieldVisibilityHandler<RowType, Object> visibilityHandler) {
-      super(writer, visibilityHandler);
     }
 
     @Override
