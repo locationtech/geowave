@@ -1371,8 +1371,7 @@ public class BaseDataStore implements DataStore {
       final List<CloseableIterator<? extends StatisticValue<?>>> iterators = new ArrayList<>();
       for (final Statistic<?> stat : statistics) {
         if (stat.getBinningStrategy() != null) {
-          final ByteArrayConstraints bins =
-              stat.getBinningStrategy().constraints(query.binConstraints());
+          final ByteArrayConstraints bins = query.binConstraints().constraints(stat);
           // we really don't need to check if the binning strategy supports the class considering
           // the binning strategy won't return bin constraints if it doesn't support the object
           if ((bins != null) && ((bins.getBins().length > 0) || bins.isAllBins())) {

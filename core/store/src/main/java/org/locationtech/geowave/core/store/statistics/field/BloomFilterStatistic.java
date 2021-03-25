@@ -11,7 +11,9 @@ package org.locationtech.geowave.core.store.statistics.field;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.Mergeable;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
@@ -32,12 +34,12 @@ public class BloomFilterStatistic extends FieldStatistic<BloomFilterStatistic.Bl
   @Parameter(
       names = "--expectedInsertions",
       description = "The number of expected insertions, used for appropriate sizing of bloom filter.")
-  private final long expectedInsertions = 10000;
+  private long expectedInsertions = 10000;
 
   @Parameter(
       names = "--desiredFpp",
       description = "The desired False Positive Probability, directly related to the expected number of insertions. Higher FPP results in more compact Bloom Filter and lower FPP results in more accuracy.")
-  private final double desiredFalsePositiveProbability = 0.03;
+  private double desiredFalsePositiveProbability = 0.03;
 
   public static final FieldStatisticType<BloomFilterValue> STATS_TYPE =
       new FieldStatisticType<>("BLOOM_FILTER");
@@ -48,6 +50,22 @@ public class BloomFilterStatistic extends FieldStatistic<BloomFilterStatistic.Bl
 
   public BloomFilterStatistic(final String typeName, final String fieldName) {
     super(STATS_TYPE, typeName, fieldName);
+  }
+
+  public void setExpectedInsertions(final long expectedInsertions) {
+    this.expectedInsertions = expectedInsertions;
+  }
+
+  public long getExpectedInsertions() {
+    return this.expectedInsertions;
+  }
+
+  public void setDesiredFalsePositiveProbability(final double desiredFalsePositiveProbability) {
+    this.desiredFalsePositiveProbability = desiredFalsePositiveProbability;
+  }
+
+  public double getDesiredFalsePositiveProbability() {
+    return this.desiredFalsePositiveProbability;
   }
 
   @Override
@@ -63,6 +81,27 @@ public class BloomFilterStatistic extends FieldStatistic<BloomFilterStatistic.Bl
   @Override
   public BloomFilterValue createEmpty() {
     return new BloomFilterValue(this);
+  }
+
+  @Override
+  protected int byteLength() {
+    return super.byteLength()
+        + VarintUtils.unsignedLongByteLength(expectedInsertions)
+        + Double.BYTES;
+  }
+
+  @Override
+  protected void writeBytes(ByteBuffer buffer) {
+    super.writeBytes(buffer);
+    VarintUtils.writeUnsignedLong(expectedInsertions, buffer);
+    buffer.putDouble(desiredFalsePositiveProbability);
+  }
+
+  @Override
+  protected void readBytes(ByteBuffer buffer) {
+    super.readBytes(buffer);
+    expectedInsertions = VarintUtils.readUnsignedLong(buffer);
+    desiredFalsePositiveProbability = buffer.getDouble();
   }
 
   public static class BloomFilterValue extends StatisticValue<BloomFilter<CharSequence>> implements

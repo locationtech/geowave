@@ -10,8 +10,8 @@
 
 from pygw.config import geowave_pkg
 
+from ...geotools.simple_feature import SimpleFeatureTransformer
 from ..query_builder import QueryBuilder
-from .result_transformers import SimpleFeatureTransformer
 from .vector_query_constraints_factory import VectorQueryConstraintsFactory
 
 

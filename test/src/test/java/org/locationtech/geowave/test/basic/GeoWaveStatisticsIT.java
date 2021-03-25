@@ -14,6 +14,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Calendar;
@@ -42,7 +44,7 @@ import org.locationtech.geowave.core.geotime.store.statistics.binning.TimeRangeF
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
-import org.locationtech.geowave.core.store.adapter.statistics.histogram.TDigestNumericHistogram;
+import org.locationtech.geowave.core.store.adapter.statistics.histogram.NumericHistogram;
 import org.locationtech.geowave.core.store.api.BinConstraints;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
@@ -57,15 +59,19 @@ import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.statistics.StatisticsRegistry;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic.CountValue;
+import org.locationtech.geowave.core.store.statistics.adapter.DataTypeStatistic;
 import org.locationtech.geowave.core.store.statistics.binning.CompositeBinningStrategy;
 import org.locationtech.geowave.core.store.statistics.binning.NumericRangeFieldValueBinningStrategy;
 import org.locationtech.geowave.core.store.statistics.field.BloomFilterStatistic;
+import org.locationtech.geowave.core.store.statistics.field.FieldStatistic;
 import org.locationtech.geowave.core.store.statistics.field.NumericRangeStatistic;
 import org.locationtech.geowave.core.store.statistics.field.NumericRangeStatistic.NumericRangeValue;
 import org.locationtech.geowave.core.store.statistics.field.NumericStatsStatistic;
-import org.locationtech.geowave.core.store.statistics.field.TDigestNumericHistogramStatistic;
+import org.locationtech.geowave.core.store.statistics.field.NumericHistogramStatistic;
+import org.locationtech.geowave.core.store.statistics.index.IndexStatistic;
 import org.locationtech.geowave.examples.ingest.SimpleIngest;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
@@ -77,6 +83,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.threeten.extra.Interval;
+import com.beust.jcommander.Parameter;
 import com.google.common.hash.BloomFilter;
 import com.google.common.math.DoubleMath;
 import com.google.common.math.Stats;
@@ -168,9 +175,14 @@ public class GeoWaveStatisticsIT extends AbstractGeoWaveBasicVectorIT {
         new NumericStatsStatistic(SimpleIngest.FEATURE_NAME, "Latitude");
     final BloomFilterStatistic latitudeBloomFilter =
         new BloomFilterStatistic(SimpleIngest.FEATURE_NAME, "Latitude");
-    final TDigestNumericHistogramStatistic latitudeTdigest =
-        new TDigestNumericHistogramStatistic(SimpleIngest.FEATURE_NAME, "Latitude");
-    ds.addStatistic(longitudeRange, timeRange, latitudeStats, latitudeBloomFilter, latitudeTdigest);
+    final NumericHistogramStatistic latitudeHistogram =
+        new NumericHistogramStatistic(SimpleIngest.FEATURE_NAME, "Latitude");
+    ds.addStatistic(
+        longitudeRange,
+        timeRange,
+        latitudeStats,
+        latitudeBloomFilter,
+        latitudeHistogram);
     ds.addEmptyStatistic(latitudeRange);
 
     try (CloseableIterator<NumericRangeValue> iterator =
@@ -227,11 +239,11 @@ public class GeoWaveStatisticsIT extends AbstractGeoWaveBasicVectorIT {
         expectLat = !expectLat;
       }
     }
-    final TDigestNumericHistogram tdigest = ds.getStatisticValue(latitudeTdigest);
-    assertEquals(20L, tdigest.getTotalCount(), 0.1);
-    assertEquals(-90.0, tdigest.getMinValue(), 0.1);
-    assertEquals(85.0, tdigest.getMaxValue(), 0.1);
-    assertEquals(0.0, tdigest.quantile(0.5), 0.1);
+    final NumericHistogram histogram = ds.getStatisticValue(latitudeHistogram);
+    assertEquals(20L, histogram.getTotalCount(), 0.1);
+    assertEquals(-90.0, histogram.getMinValue(), 0.1);
+    assertEquals(85.0, histogram.getMaxValue(), 0.1);
+    assertEquals(0.0, histogram.quantile(0.5), 0.1);
   }
 
   @Test
@@ -762,6 +774,35 @@ public class GeoWaveStatisticsIT extends AbstractGeoWaveBasicVectorIT {
         operations.createMetadataReader(MetadataType.STATISTIC_VALUES).query(query)) {
       final int valueCount = Iterators.size(iter);
       assertTrue(valueCount == 1);
+    }
+  }
+
+  @Test
+  public void testStatisticParameters() {
+    assertNoFinalParameters(Statistic.class);
+    assertNoFinalParameters(IndexStatistic.class);
+    assertNoFinalParameters(DataTypeStatistic.class);
+    assertNoFinalParameters(FieldStatistic.class);
+    assertNoFinalParameters(StatisticBinningStrategy.class);
+    List<? extends Statistic<?>> statistics =
+        StatisticsRegistry.instance().getAllRegisteredStatistics();
+    for (Statistic<?> statistic : statistics) {
+      assertNoFinalParameters(statistic.getClass());
+    }
+    List<StatisticBinningStrategy> binningStrategies =
+        StatisticsRegistry.instance().getAllRegisteredBinningStrategies();
+    for (StatisticBinningStrategy binningStrategy : binningStrategies) {
+      assertNoFinalParameters(binningStrategy.getClass());
+    }
+  }
+
+  private void assertNoFinalParameters(Class<?> clazz) {
+    for (Field field : clazz.getDeclaredFields()) {
+      if (field.isAnnotationPresent(Parameter.class)) {
+        assertFalse(
+            clazz.getName() + " contains final CLI Parameter: " + field.getName(),
+            Modifier.isFinal(field.getModifiers()));
+      }
     }
   }
 

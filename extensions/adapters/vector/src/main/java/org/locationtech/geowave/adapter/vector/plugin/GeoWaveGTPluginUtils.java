@@ -23,7 +23,6 @@ import org.geotools.feature.visitor.MinVisitor;
 import org.locationtech.geowave.core.geotime.store.statistics.TimeRangeStatistic;
 import org.locationtech.geowave.core.geotime.store.statistics.TimeRangeStatistic.TimeRangeValue;
 import org.locationtech.geowave.core.geotime.util.ExtractAttributesFilter;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Statistic;
@@ -86,14 +85,16 @@ class GeoWaveGTPluginUtils {
               acceptedCount++;
             }
           } else if (stat instanceof NumericRangeStatistic) {
-            final NumericRangeValue statValue =
-                statisticsStore.getStatisticValue(
-                    (NumericRangeStatistic) stat,
-                    new ByteArray(),
-                    true);
-            if (statValue != null) {
-              minVisitor.setValue(convertToType(attr, statValue.getMin(), featureType));
-              acceptedCount++;
+            try (CloseableIterator<NumericRangeValue> values =
+                statisticsStore.getStatisticValues((NumericRangeStatistic) stat)) {
+              NumericRangeValue statValue = ((NumericRangeStatistic) stat).createEmpty();
+              while (values.hasNext()) {
+                statValue.merge(values.next());
+              }
+              if (statValue.isSet()) {
+                minVisitor.setValue(convertToType(attr, statValue.getMin(), featureType));
+                acceptedCount++;
+              }
             }
           }
         }
@@ -124,14 +125,16 @@ class GeoWaveGTPluginUtils {
               acceptedCount++;
             }
           } else if (stat instanceof NumericRangeStatistic) {
-            final NumericRangeValue statValue =
-                statisticsStore.getStatisticValue(
-                    (NumericRangeStatistic) stat,
-                    new ByteArray(),
-                    true);
-            if (statValue != null) {
-              maxVisitor.setValue(convertToType(attr, statValue.getMax(), featureType));
-              acceptedCount++;
+            try (CloseableIterator<NumericRangeValue> values =
+                statisticsStore.getStatisticValues((NumericRangeStatistic) stat)) {
+              NumericRangeValue statValue = ((NumericRangeStatistic) stat).createEmpty();
+              while (values.hasNext()) {
+                statValue.merge(values.next());
+              }
+              if (statValue.isSet()) {
+                maxVisitor.setValue(convertToType(attr, statValue.getMax(), featureType));
+                acceptedCount++;
+              }
             }
           }
         }

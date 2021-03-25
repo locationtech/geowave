@@ -788,8 +788,7 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
               actual =
                   statsStore.getStatisticValue(
                       (Statistic<StatisticValue<Object>>) expectedStat.getKey(),
-                      expectedValues.getKey(),
-                      false);
+                      expectedValues.getKey());
             }
             assertEquals(expectedValues.getValue().getValue(), actual.getValue());
           }

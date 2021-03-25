@@ -23,7 +23,7 @@ from pygw.store.rocksdb import RocksDBOptions
 from pygw.index import SpatialIndexBuilder
 from pygw.query import VectorQueryBuilder
 
-from .conftest import TEST_DIR
+from .conftest import TEST_DIR, POINT_NUMBER_FIELD, POINT_TYPE_NAME
 from .conftest import POINT_TYPE_ADAPTER
 from .conftest import TEST_DATA
 from .conftest import write_test_data
@@ -31,6 +31,11 @@ from .conftest import results_as_list
 
 
 # Test Additions #
+from ..statistics.data_type import CountStatistic
+from ..statistics.field import NumericRangeStatistic
+from ..statistics.index import DuplicateEntryCountStatistic
+
+
 def test_add_type(test_ds):
     # given
     index = SpatialIndexBuilder().create_index()
@@ -307,6 +312,119 @@ def test_write(test_ds):
 
     # then
     assert len(res) == len(TEST_DATA)
+
+
+def test_add_get_statistics(test_ds):
+    # given
+    adapter = POINT_TYPE_ADAPTER
+    index = SpatialIndexBuilder().set_name('idx').create_index()
+    test_ds.add_type(adapter, index)
+    write_test_data(test_ds, index)
+
+    duplicate_entry_count_stat = DuplicateEntryCountStatistic('idx')
+    duplicate_entry_count_stat.set_tag('test')
+    count_stat = CountStatistic(POINT_TYPE_NAME)
+    count_stat.set_tag('test')
+    numeric_range_statistic = NumericRangeStatistic(POINT_TYPE_NAME, POINT_NUMBER_FIELD)
+    numeric_range_statistic.set_tag('test')
+
+    # when
+    test_ds.add_statistic(duplicate_entry_count_stat, count_stat, numeric_range_statistic)
+
+    # then
+    duplicate_entry_count_stat = test_ds.get_index_statistic(DuplicateEntryCountStatistic.STATS_TYPE, 'idx', 'test')
+    assert isinstance(duplicate_entry_count_stat, DuplicateEntryCountStatistic)
+    assert duplicate_entry_count_stat.get_tag() == 'test'
+    assert duplicate_entry_count_stat.get_index_name() == 'idx'
+    count_stat = test_ds.get_data_type_statistic(CountStatistic.STATS_TYPE, POINT_TYPE_NAME, 'test')
+    assert isinstance(count_stat, CountStatistic)
+    assert count_stat.get_tag() == 'test'
+    assert count_stat.get_type_name() == POINT_TYPE_NAME
+    numeric_range_statistic = test_ds.get_field_statistic(
+        NumericRangeStatistic.STATS_TYPE, POINT_TYPE_NAME, POINT_NUMBER_FIELD, 'test')
+    assert isinstance(numeric_range_statistic, NumericRangeStatistic)
+    assert numeric_range_statistic.get_tag() == 'test'
+    assert numeric_range_statistic.get_type_name() == POINT_TYPE_NAME
+    assert numeric_range_statistic.get_field_name() == POINT_NUMBER_FIELD
+
+    index_stats = test_ds.get_index_statistics('idx')
+    assert any(stat.get_tag() == 'test' and isinstance(stat, DuplicateEntryCountStatistic) for stat in index_stats)
+    data_type_stats = test_ds.get_data_type_statistics(POINT_TYPE_NAME)
+    assert any(stat.get_tag() == 'test' and isinstance(stat, CountStatistic) for stat in data_type_stats)
+    field_stats = test_ds.get_field_statistics(POINT_TYPE_NAME, POINT_NUMBER_FIELD)
+    assert any(stat.get_tag() == 'test' and isinstance(stat, NumericRangeStatistic) for stat in field_stats)
+
+
+def test_stat_recalc_statistics(test_ds):
+    # given
+    adapter = POINT_TYPE_ADAPTER
+    index = SpatialIndexBuilder().set_name('idx').create_index()
+    test_ds.add_type(adapter, index)
+    write_test_data(test_ds, index)
+
+    duplicate_entry_count_stat = DuplicateEntryCountStatistic('idx')
+    duplicate_entry_count_stat.set_tag('test')
+    count_stat = CountStatistic(POINT_TYPE_NAME)
+    count_stat.set_tag('test')
+    numeric_range_statistic = NumericRangeStatistic(POINT_TYPE_NAME, POINT_NUMBER_FIELD)
+    numeric_range_statistic.set_tag('test')
+    test_ds.add_empty_statistic(duplicate_entry_count_stat, count_stat, numeric_range_statistic)
+    assert test_ds.get_statistic_value(duplicate_entry_count_stat) == 0
+    assert test_ds.get_statistic_value(count_stat) == 0
+    numeric_range = test_ds.get_statistic_value(numeric_range_statistic)
+    assert numeric_range.get_minimum() == 0
+    assert numeric_range.get_maximum() == 0
+
+    # when
+    test_ds.recalc_statistic(duplicate_entry_count_stat, count_stat, numeric_range_statistic)
+
+    # then
+    assert test_ds.get_statistic_value(duplicate_entry_count_stat) == 0
+    assert test_ds.get_statistic_value(count_stat) == 360
+    numeric_range = test_ds.get_statistic_value(numeric_range_statistic)
+    assert numeric_range.get_minimum() == -180
+    assert numeric_range.get_maximum() == 179
+
+def test_remove_statistics(test_ds):
+    # given
+    adapter = POINT_TYPE_ADAPTER
+    index = SpatialIndexBuilder().set_name('idx').create_index()
+    test_ds.add_type(adapter, index)
+    write_test_data(test_ds, index)
+
+    duplicate_entry_count_stat = DuplicateEntryCountStatistic('idx')
+    duplicate_entry_count_stat.set_tag('test')
+    count_stat = CountStatistic(POINT_TYPE_NAME)
+    count_stat.set_tag('test')
+    numeric_range_statistic = NumericRangeStatistic(POINT_TYPE_NAME, POINT_NUMBER_FIELD)
+    numeric_range_statistic.set_tag('test')
+
+    test_ds.add_statistic(duplicate_entry_count_stat, count_stat, numeric_range_statistic)
+
+    # and
+    duplicate_entry_count_stat = test_ds.get_index_statistic(DuplicateEntryCountStatistic.STATS_TYPE, 'idx', 'test')
+    assert isinstance(duplicate_entry_count_stat, DuplicateEntryCountStatistic)
+    assert duplicate_entry_count_stat.get_tag() == 'test'
+    assert duplicate_entry_count_stat.get_index_name() == 'idx'
+    count_stat = test_ds.get_data_type_statistic(CountStatistic.STATS_TYPE, POINT_TYPE_NAME, 'test')
+    assert isinstance(count_stat, CountStatistic)
+    assert count_stat.get_tag() == 'test'
+    assert count_stat.get_type_name() == POINT_TYPE_NAME
+    numeric_range_statistic = test_ds.get_field_statistic(
+        NumericRangeStatistic.STATS_TYPE, POINT_TYPE_NAME, POINT_NUMBER_FIELD, 'test')
+    assert isinstance(numeric_range_statistic, NumericRangeStatistic)
+    assert numeric_range_statistic.get_tag() == 'test'
+    assert numeric_range_statistic.get_type_name() == POINT_TYPE_NAME
+    assert numeric_range_statistic.get_field_name() == POINT_NUMBER_FIELD
+
+    # when
+    test_ds.remove_statistic(duplicate_entry_count_stat, count_stat, numeric_range_statistic)
+
+    # then
+    assert test_ds.get_index_statistic(DuplicateEntryCountStatistic.STATS_TYPE, 'idx', 'test') is None
+    assert test_ds.get_data_type_statistic(CountStatistic.STATS_TYPE, POINT_TYPE_NAME, 'test') is None
+    assert test_ds.get_field_statistic(
+        NumericRangeStatistic.STATS_TYPE, POINT_TYPE_NAME, POINT_NUMBER_FIELD, 'test') is None
 
 
 def _test_base_options(options, server_side_possible=True):

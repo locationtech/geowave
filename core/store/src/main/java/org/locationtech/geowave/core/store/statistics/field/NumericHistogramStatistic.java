@@ -10,37 +10,64 @@ package org.locationtech.geowave.core.store.statistics.field;
 
 import java.nio.ByteBuffer;
 import java.util.Date;
-import java.util.zip.DataFormatException;
-import org.HdrHistogram.AbstractHistogram;
-import org.HdrHistogram.DoubleHistogram;
-import org.HdrHistogram.Histogram;
-import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.Mergeable;
+import org.locationtech.geowave.core.store.adapter.statistics.histogram.NumericHistogram;
+import org.locationtech.geowave.core.store.adapter.statistics.histogram.TDigestNumericHistogram;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
-import org.locationtech.geowave.core.store.api.Statistic;
 import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.statistics.StatisticsIngestCallback;
+import com.beust.jcommander.Parameter;
 
 /**
- * Dynamic histogram provide very high accuracy for CDF and quantiles over the a numeric attribute.
+ * Uses a T-Digest data structure to very efficiently calculate and store the histogram.
+ * https://www.sciencedirect.com/science/article/pii/S2665963820300403
+ *
+ * <p> The default compression is 100.
  */
 public class NumericHistogramStatistic extends
     FieldStatistic<NumericHistogramStatistic.NumericHistogramValue> {
+
   public static final FieldStatisticType<NumericHistogramValue> STATS_TYPE =
       new FieldStatisticType<>("NUMERIC_HISTOGRAM");
+
+  @Parameter(
+      names = "--compression",
+      description = "The compression parameter. 100 is a common value for normal uses. 1000 is extremely large. The number of centroids retained will be a smallish (usually less than 10) multiple of this number.")
+  private double compression = 100;
 
   public NumericHistogramStatistic() {
     super(STATS_TYPE);
   }
 
   public NumericHistogramStatistic(final String typeName, final String fieldName) {
+    this(typeName, fieldName, 100);
+  }
+
+  public NumericHistogramStatistic(
+      final String typeName,
+      final String fieldName,
+      final double compression) {
     super(STATS_TYPE, typeName, fieldName);
+    this.compression = compression;
+  }
+
+  public void setCompression(final double compression) {
+    this.compression = compression;
+  }
+
+  public double getCompression() {
+    return compression;
+  }
+
+  @Override
+  public boolean isCompatibleWith(final Class<?> fieldClass) {
+    return Number.class.isAssignableFrom(fieldClass) || Date.class.isAssignableFrom(fieldClass);
   }
 
   @Override
   public String getDescription() {
-    return "Provides a dynamic histogram for very high accuracy CDF and quantiles over a numeric attribute.";
+    return "A numeric histogram using an efficient t-digest data structure.";
   }
 
   @Override
@@ -49,71 +76,114 @@ public class NumericHistogramStatistic extends
   }
 
   @Override
-  public boolean isCompatibleWith(Class<?> fieldClass) {
-    return fieldClass.isAssignableFrom(Number.class) || fieldClass.isAssignableFrom(Date.class);
+  protected int byteLength() {
+    return super.byteLength() + Double.BYTES;
   }
 
-  public static class NumericHistogramValue extends
-      StatisticValue<Pair<DoubleHistogram, DoubleHistogram>> implements
-      StatisticsIngestCallback {
-    // Max value is determined by the level of accuracy required, using a
-    // formula provided
-    private final double maxValue = (Math.pow(2, 63) / Math.pow(2, 14)) - 1;
-    private final double minValue = -(maxValue);
+  @Override
+  protected void writeBytes(ByteBuffer buffer) {
+    super.writeBytes(buffer);
+    buffer.putDouble(compression);
+  }
 
-    private DoubleHistogram positiveHistogram = new LocalDoubleHistogram();
-    private DoubleHistogram negativeHistogram = null;
+  @Override
+  protected void readBytes(ByteBuffer buffer) {
+    super.readBytes(buffer);
+    compression = buffer.getDouble();
+  }
+
+  public static class NumericHistogramValue extends StatisticValue<NumericHistogram> implements
+      StatisticsIngestCallback {
+
+    private TDigestNumericHistogram histogram;
 
     public NumericHistogramValue() {
-      this(null);
+      super(null);
+      histogram = null;
     }
 
-    private NumericHistogramValue(final Statistic<?> statistic) {
+    public NumericHistogramValue(final NumericHistogramStatistic statistic) {
       super(statistic);
+      histogram = new TDigestNumericHistogram(statistic.compression);
     }
 
-    private double percentageNegative() {
-      final long nc = negativeHistogram == null ? 0 : negativeHistogram.getTotalCount();
-      final long tc = positiveHistogram.getTotalCount() + nc;
-      return (double) nc / (double) tc;
+    @Override
+    public void merge(final Mergeable merge) {
+      if ((merge != null) && (merge instanceof NumericHistogramValue)) {
+        // here it is important not to use "getValue()" because we want to be able to check for
+        // null, and not just get an empty histogram
+        final TDigestNumericHistogram other = ((NumericHistogramValue) merge).histogram;
+        if ((histogram != null) && (histogram.getTotalCount() > 0)) {
+          if ((other != null) && (other.getTotalCount() > 0)) {
+            histogram.merge(other);
+          }
+        } else {
+          histogram = other;
+        }
+
+      }
+    }
+
+    @Override
+    public <T> void entryIngested(
+        final DataTypeAdapter<T> adapter,
+        final T entry,
+        final GeoWaveRow... rows) {
+      final Object o =
+          adapter.getFieldValue(entry, ((NumericHistogramStatistic) getStatistic()).getFieldName());
+      if (o == null) {
+        return;
+      }
+      double value;
+      if (o instanceof Date) {
+        value = ((Date) o).getTime();
+      } else if (o instanceof Number) {
+        value = ((Number) o).doubleValue();
+      } else {
+        return;
+      }
+      if (histogram == null) {
+        histogram = new TDigestNumericHistogram();
+      }
+      histogram.add(value);
+    }
+
+    @Override
+    public TDigestNumericHistogram getValue() {
+      if (histogram == null) {
+        histogram = new TDigestNumericHistogram();
+      }
+      return histogram;
+    }
+
+    @Override
+    public byte[] toBinary() {
+      if (histogram == null) {
+        return new byte[0];
+      }
+      final ByteBuffer buffer = ByteBuffer.allocate(histogram.bufferSize());
+      histogram.toBinary(buffer);
+      return buffer.array();
+    }
+
+    @Override
+    public void fromBinary(final byte[] bytes) {
+      histogram = new TDigestNumericHistogram();
+      if (bytes.length > 0) {
+        histogram.fromBinary(ByteBuffer.wrap(bytes));
+      }
     }
 
     public double[] quantile(final int bins) {
-      final double[] result = new double[bins];
-      final double binSize = 1.0 / bins;
-      for (int bin = 0; bin < bins; bin++) {
-        result[bin] = quantile(binSize * (bin + 1));
-      }
-      return result;
+      return NumericHistogram.binQuantiles(histogram, bins);
     }
 
     public double cdf(final double val) {
-      final double percentageNegative = percentageNegative();
-      if ((val < 0) || ((1.0 - percentageNegative) < 0.000000001)) {
-        // subtract one from percentage since negative is negated so
-        // percentage is inverted
-        return (percentageNegative > 0)
-            ? percentageNegative
-                * (1.0 - (negativeHistogram.getPercentileAtOrBelowValue(-val) / 100.0))
-            : 0.0;
-      } else {
-        return percentageNegative
-            + ((1.0 - percentageNegative)
-                * (positiveHistogram.getPercentileAtOrBelowValue(val) / 100.0));
-      }
+      return histogram.cdf(val);
     }
 
     public double quantile(final double percentage) {
-      final double percentageNegative = percentageNegative();
-      if (percentage < percentageNegative) {
-        // subtract one from percentage since negative is negated so
-        // percentage is inverted
-        return -negativeHistogram.getValueAtPercentile(
-            (1.0 - (percentage / percentageNegative)) * 100.0);
-      } else {
-        return positiveHistogram.getValueAtPercentile(
-            (percentage / (1.0 - percentageNegative)) * 100.0);
-      }
+      return histogram.quantile(percentage);
     }
 
     public double percentPopulationOverRange(final double start, final double stop) {
@@ -121,168 +191,11 @@ public class NumericHistogramStatistic extends
     }
 
     public long totalSampleSize() {
-      return positiveHistogram.getTotalCount()
-          + (negativeHistogram == null ? 0 : negativeHistogram.getTotalCount());
+      return histogram.getTotalCount();
     }
 
-    public long[] count(final int bins) {
-      final long[] result = new long[bins];
-      final double max = positiveHistogram.getMaxValue();
-      final double min =
-          negativeHistogram == null ? positiveHistogram.getMinValue()
-              : -negativeHistogram.getMaxValue();
-      final double binSize = (max - min) / (bins);
-      long last = 0;
-      final long tc = totalSampleSize();
-      for (int bin = 0; bin < bins; bin++) {
-        final double val = cdf(min + ((bin + 1.0) * binSize)) * tc;
-        final long next = (long) val - last;
-        result[bin] = next;
-        last += next;
-      }
-      return result;
-    }
-
-    private DoubleHistogram getNegativeHistogram() {
-      if (negativeHistogram == null) {
-        negativeHistogram = new LocalDoubleHistogram();
-      }
-      return negativeHistogram;
-    }
-
-    @Override
-    public void merge(Mergeable merge) {
-      if (merge instanceof NumericHistogramValue) {
-        positiveHistogram.add(((NumericHistogramValue) merge).positiveHistogram);
-        if (((NumericHistogramValue) merge).negativeHistogram != null) {
-          if (negativeHistogram != null) {
-            negativeHistogram.add(((NumericHistogramValue) merge).negativeHistogram);
-          } else {
-            negativeHistogram = ((NumericHistogramValue) merge).negativeHistogram;
-          }
-        }
-      }
-    }
-
-    @Override
-    public <T> void entryIngested(DataTypeAdapter<T> adapter, T entry, GeoWaveRow... rows) {
-      final Object o =
-          adapter.getFieldValue(entry, ((NumericHistogramStatistic) statistic).getFieldName());
-      if (o == null) {
-        return;
-      }
-      if (o instanceof Date) {
-        add(((Date) o).getTime());
-      } else if (o instanceof Number) {
-        add(((Number) o).doubleValue());
-      }
-    }
-
-    protected void add(final double num) {
-      if ((num < minValue) || (num > maxValue) || Double.isNaN(num)) {
-        return;
-      }
-      if (num >= 0) {
-        positiveHistogram.recordValue(num);
-      } else {
-        getNegativeHistogram().recordValue(-num);
-      }
-    }
-
-    @Override
-    public Pair<DoubleHistogram, DoubleHistogram> getValue() {
-      return Pair.of(negativeHistogram, positiveHistogram);
-    }
-
-    @Override
-    public byte[] toBinary() {
-      final int positiveBytes = positiveHistogram.getEstimatedFootprintInBytes();
-      final int bytesNeeded =
-          positiveBytes
-              + (negativeHistogram == null ? 0 : negativeHistogram.getEstimatedFootprintInBytes());
-      final ByteBuffer buffer = ByteBuffer.allocate(bytesNeeded + 5);
-      final int startPosition = buffer.position();
-      buffer.putInt(startPosition); // buffer out an int
-      positiveHistogram.encodeIntoCompressedByteBuffer(buffer);
-      final int endPosition = buffer.position();
-      buffer.position(startPosition);
-      buffer.putInt(endPosition);
-      buffer.position(endPosition);
-      if (negativeHistogram != null) {
-        buffer.put((byte) 0x01);
-        negativeHistogram.encodeIntoCompressedByteBuffer(buffer);
-      } else {
-        buffer.put((byte) 0x00);
-      }
-      final byte result[] = new byte[buffer.position() + 1];
-      buffer.rewind();
-      buffer.get(result);
-      return result;
-    }
-
-    @Override
-    public void fromBinary(byte[] bytes) {
-      final ByteBuffer buffer = ByteBuffer.wrap(bytes);
-      final int endPosition = buffer.getInt();
-      try {
-        positiveHistogram =
-            DoubleHistogram.decodeFromCompressedByteBuffer(buffer, LocalInternalHistogram.class, 0);
-        buffer.position(endPosition);
-        positiveHistogram.setAutoResize(true);
-        if (buffer.get() == (byte) 0x01) {
-          negativeHistogram =
-              DoubleHistogram.decodeFromCompressedByteBuffer(
-                  buffer,
-                  LocalInternalHistogram.class,
-                  0);
-          negativeHistogram.setAutoResize(true);
-        }
-      } catch (final DataFormatException e) {
-        throw new RuntimeException("Cannot decode statistic", e);
-      }
-    }
-  }
-
-  public static class LocalDoubleHistogram extends DoubleHistogram {
-
-    public LocalDoubleHistogram() {
-      super(2, 4, LocalInternalHistogram.class);
-      super.setAutoResize(true);
-    }
-
-    /** */
-    private static final long serialVersionUID = 5504684423053828467L;
-  }
-
-  @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(value = {"HE_INHERITS_EQUALS_USE_HASHCODE"})
-  public static class LocalInternalHistogram extends Histogram {
-    /** */
-    private static final long serialVersionUID = 4369054277576423915L;
-
-    public LocalInternalHistogram(final AbstractHistogram source) {
-      super(source);
-      source.setAutoResize(true);
-      super.setAutoResize(true);
-    }
-
-    public LocalInternalHistogram(final int numberOfSignificantValueDigits) {
-      super(numberOfSignificantValueDigits);
-      super.setAutoResize(true);
-    }
-
-    public LocalInternalHistogram(
-        final long highestTrackableValue,
-        final int numberOfSignificantValueDigits) {
-      super(highestTrackableValue, numberOfSignificantValueDigits);
-      super.setAutoResize(true);
-    }
-
-    public LocalInternalHistogram(
-        final long lowestDiscernibleValue,
-        final long highestTrackableValue,
-        final int numberOfSignificantValueDigits) {
-      super(lowestDiscernibleValue, highestTrackableValue, numberOfSignificantValueDigits);
-      super.setAutoResize(true);
+    public long[] count(final int binSize) {
+      return NumericHistogram.binCounts(histogram, binSize);
     }
   }
 }

@@ -199,8 +199,7 @@ public class DataStoreUtils {
               rowRangeHistogramStatistic,
               CompositeBinningStrategy.getBin(
                   DataTypeBinningStrategy.getBin(adapter),
-                  PartitionBinningStrategy.getBin(partitionRange.getPartitionKey())),
-              false);
+                  PartitionBinningStrategy.getBin(partitionRange.getPartitionKey())));
       if (value == null) {
         return Long.MAX_VALUE - 1;
       }

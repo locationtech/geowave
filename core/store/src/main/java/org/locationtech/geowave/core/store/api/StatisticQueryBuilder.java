@@ -11,9 +11,7 @@ package org.locationtech.geowave.core.store.api;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.HdrHistogram.DoubleHistogram;
 import org.apache.commons.lang3.Range;
-import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.FixedBinNumericHistogram;
@@ -21,6 +19,8 @@ import org.locationtech.geowave.core.store.adapter.statistics.histogram.NumericH
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic.CountValue;
 import org.locationtech.geowave.core.store.statistics.adapter.DataTypeStatisticType;
+import org.locationtech.geowave.core.store.statistics.field.BloomFilterStatistic;
+import org.locationtech.geowave.core.store.statistics.field.BloomFilterStatistic.BloomFilterValue;
 import org.locationtech.geowave.core.store.statistics.field.CountMinSketchStatistic;
 import org.locationtech.geowave.core.store.statistics.field.CountMinSketchStatistic.CountMinSketchValue;
 import org.locationtech.geowave.core.store.statistics.field.FieldStatisticType;
@@ -34,6 +34,8 @@ import org.locationtech.geowave.core.store.statistics.field.NumericMeanStatistic
 import org.locationtech.geowave.core.store.statistics.field.NumericMeanStatistic.NumericMeanValue;
 import org.locationtech.geowave.core.store.statistics.field.NumericRangeStatistic;
 import org.locationtech.geowave.core.store.statistics.field.NumericRangeStatistic.NumericRangeValue;
+import org.locationtech.geowave.core.store.statistics.field.NumericStatsStatistic;
+import org.locationtech.geowave.core.store.statistics.field.NumericStatsStatistic.NumericStatsValue;
 import org.locationtech.geowave.core.store.statistics.index.DifferingVisibilityCountStatistic;
 import org.locationtech.geowave.core.store.statistics.index.DifferingVisibilityCountStatistic.DifferingVisibilityCountValue;
 import org.locationtech.geowave.core.store.statistics.index.DuplicateEntryCountStatistic;
@@ -54,6 +56,8 @@ import org.locationtech.geowave.core.store.statistics.query.FieldStatisticQueryB
 import org.locationtech.geowave.core.store.statistics.query.IndexStatisticQueryBuilder;
 import com.clearspring.analytics.stream.cardinality.HyperLogLogPlus;
 import com.clearspring.analytics.stream.frequency.CountMinSketch;
+import com.google.common.hash.BloomFilter;
+import com.google.common.math.Stats;
 
 /**
  * Base interface for constructing statistic queries.
@@ -220,6 +224,15 @@ public interface StatisticQueryBuilder<V extends StatisticValue<R>, R, B extends
   }
 
   /**
+   * Create a new field statistic query builder for a bloom filter statistic.
+   * 
+   * @return the field statistic query builder
+   */
+  static FieldStatisticQueryBuilder<BloomFilterValue, BloomFilter<CharSequence>> bloomFilter() {
+    return newBuilder(BloomFilterStatistic.STATS_TYPE);
+  }
+
+  /**
    * Create a new field statistic query builder for a count min sketch statistic.
    * 
    * @return the field statistic query builder
@@ -251,7 +264,7 @@ public interface StatisticQueryBuilder<V extends StatisticValue<R>, R, B extends
    * 
    * @return the field statistic query builder
    */
-  static FieldStatisticQueryBuilder<NumericHistogramValue, Pair<DoubleHistogram, DoubleHistogram>> numericHistogram() {
+  static FieldStatisticQueryBuilder<NumericHistogramValue, NumericHistogram> numericHistogram() {
     return newBuilder(NumericHistogramStatistic.STATS_TYPE);
   }
 
@@ -271,5 +284,14 @@ public interface StatisticQueryBuilder<V extends StatisticValue<R>, R, B extends
    */
   static FieldStatisticQueryBuilder<NumericRangeValue, Range<Double>> numericRange() {
     return newBuilder(NumericRangeStatistic.STATS_TYPE);
+  }
+
+  /**
+   * Create a new field statistic query builder for a numeric stats statistic.
+   * 
+   * @return the field statistic query builder
+   */
+  static FieldStatisticQueryBuilder<NumericStatsValue, Stats> numericStats() {
+    return newBuilder(NumericStatsStatistic.STATS_TYPE);
   }
 }

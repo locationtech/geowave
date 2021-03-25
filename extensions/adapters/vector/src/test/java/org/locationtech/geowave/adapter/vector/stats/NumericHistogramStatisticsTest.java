@@ -246,7 +246,7 @@ public class NumericHistogramStatisticsTest {
 
     assertEquals(1.0, statValue.cdf(max), 0.00001);
 
-    assertEquals(297, sum(statValue.count(10)));
+    assertEquals(298, sum(statValue.count(10)));
   }
 
   private long sum(final long[] list) {

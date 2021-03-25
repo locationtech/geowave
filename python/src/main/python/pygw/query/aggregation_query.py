@@ -16,5 +16,5 @@ class AggregationQuery(Query):
     Base aggregation query class that wraps GeoWave aggregation queries.
     """
 
-    def __init__(self, java_ref, result_transformer):
-        super().__init__(java_ref, result_transformer)
+    def __init__(self, java_ref, java_transformer):
+        super().__init__(java_ref, java_transformer)

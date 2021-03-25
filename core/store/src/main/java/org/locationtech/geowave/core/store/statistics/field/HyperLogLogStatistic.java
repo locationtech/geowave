@@ -9,7 +9,9 @@
 package org.locationtech.geowave.core.store.statistics.field;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.Mergeable;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
@@ -51,6 +53,14 @@ public class HyperLogLogStatistic extends
     this.precision = precision;
   }
 
+  public void setPrecision(final short precision) {
+    this.precision = precision;
+  }
+
+  public int getPrecision() {
+    return precision;
+  }
+
   @Override
   public String getDescription() {
     return "Provides an estimated cardinality of the number of unqiue values for an attribute.";
@@ -64,6 +74,23 @@ public class HyperLogLogStatistic extends
   @Override
   public boolean isCompatibleWith(Class<?> fieldClass) {
     return true;
+  }
+
+  @Override
+  protected int byteLength() {
+    return super.byteLength() + VarintUtils.unsignedIntByteLength(precision);
+  }
+
+  @Override
+  protected void writeBytes(ByteBuffer buffer) {
+    super.writeBytes(buffer);
+    VarintUtils.writeUnsignedInt(precision, buffer);
+  }
+
+  @Override
+  protected void readBytes(ByteBuffer buffer) {
+    super.readBytes(buffer);
+    precision = VarintUtils.readUnsignedInt(buffer);
   }
 
   public static class HyperLogLogPlusValue extends StatisticValue<HyperLogLogPlus> implements

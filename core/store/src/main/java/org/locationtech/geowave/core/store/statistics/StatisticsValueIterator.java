@@ -10,8 +10,11 @@ package org.locationtech.geowave.core.store.statistics;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.api.BinConstraints.ByteArrayConstraints;
 import org.locationtech.geowave.core.store.api.Statistic;
 import org.locationtech.geowave.core.store.api.StatisticValue;
@@ -56,14 +59,26 @@ public class StatisticsValueIterator implements CloseableIterator<StatisticValue
             && (binConstraints != null)
             && !binConstraints.isAllBins()) {
           if (binConstraints.getBins().length > 0) {
-            current =
-                new CloseableIterator.Wrapper<>(
-                    Arrays.stream(binConstraints.getBins()).map(
-                        bin -> statisticsStore.getStatisticValue(
-                            nextStat,
-                            bin,
-                            binConstraints.isPrefix(),
-                            authorizations)).filter(Objects::nonNull).iterator());
+            if (binConstraints.isPrefix()) {
+              List<CloseableIterator<StatisticValue<Object>>> iters =
+                  Arrays.stream(binConstraints.getBins()).map(
+                      bin -> statisticsStore.getStatisticValues(
+                          nextStat,
+                          bin,
+                          authorizations)).collect(Collectors.toList());
+              current =
+                  (CloseableIterator<StatisticValue<Object>>) new CloseableIteratorWrapper<>(
+                      () -> iters.forEach(CloseableIterator::close),
+                      Iterators.concat(iters.iterator()));
+            } else {
+              current =
+                  new CloseableIterator.Wrapper<>(
+                      Arrays.stream(binConstraints.getBins()).map(
+                          bin -> statisticsStore.getStatisticValue(
+                              nextStat,
+                              bin,
+                              authorizations)).filter(Objects::nonNull).iterator());
+            }
           } else {
             continue;
           }

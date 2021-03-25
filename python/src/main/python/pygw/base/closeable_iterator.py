@@ -9,6 +9,7 @@
 # ===============================================================================================
 
 from .geowave_object import GeoWaveObject
+from .java_transformer import NoOpTransformer
 
 
 class CloseableIterator(GeoWaveObject):
@@ -16,8 +17,8 @@ class CloseableIterator(GeoWaveObject):
     A wrapper for GeoWave CloseableIterators.
     """
 
-    def __init__(self, java_ref, result_transformer=None):
-        self._result_transformer = result_transformer
+    def __init__(self, java_ref, java_transformer=NoOpTransformer()):
+        self._java_transformer = java_transformer
         super().__init__(java_ref)
 
     def __iter__(self):
@@ -25,10 +26,7 @@ class CloseableIterator(GeoWaveObject):
 
     def __next__(self):
         if self._java_ref.hasNext():
-            if self._result_transformer is None:
-                return self._java_ref.next()
-            else:
-                return self._result_transformer.transform(self._java_ref.next())
+            return self._java_transformer.transform(self._java_ref.next())
         else:
             raise StopIteration
 

@@ -276,14 +276,26 @@ public interface DataStatisticsStore {
    *
    * @param statistic the statistic to get the value of
    * @param bin the bin of the value to get
-   * @param binPrefixScan whether the bin is meant to be an exact match or a prefix
    * @param authorizations authorizations for the query
    * @return the value of the statistic, or {@code null} if it was not found
    */
   <V extends StatisticValue<R>, R> V getStatisticValue(
       final Statistic<V> statistic,
       ByteArray bin,
-      boolean binPrefixScan,
+      String... authorizations);
+
+  /**
+   * Return the values of the given statistic that have bins that start with the given prefix. This
+   * method is not applicable to statistics that do not use a binning strategy.
+   *
+   * @param statistic the statistic to get the value of
+   * @param binPrefix the bin prefix to get values for
+   * @param authorizations authorizations for the query
+   * @return the matching values of the statistic
+   */
+  <V extends StatisticValue<R>, R> CloseableIterator<V> getStatisticValues(
+      final Statistic<V> statistic,
+      ByteArray binPrefix,
       String... authorizations);
 
   /**

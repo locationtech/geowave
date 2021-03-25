@@ -11,6 +11,7 @@ package org.locationtech.geowave.core.store.statistics.field;
 import java.nio.ByteBuffer;
 import java.util.Date;
 import org.locationtech.geowave.core.index.Mergeable;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.FixedBinNumericHistogram;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.StatisticValue;
@@ -77,6 +78,30 @@ public class FixedBinNumericHistogramStatistic extends
     this.maxValue = maxValue;
   }
 
+  public void setNumBins(final int numBins) {
+    this.numBins = numBins;
+  }
+
+  public int getNumBins() {
+    return numBins;
+  }
+
+  public void setMinValue(final Double minValue) {
+    this.minValue = minValue;
+  }
+
+  public Double getMinValue() {
+    return minValue;
+  }
+
+  public void setMaxValue(final Double maxValue) {
+    this.maxValue = maxValue;
+  }
+
+  public Double getMaxValue() {
+    return maxValue;
+  }
+
   @Override
   public boolean isCompatibleWith(Class<?> fieldClass) {
     return Number.class.isAssignableFrom(fieldClass) || Date.class.isAssignableFrom(fieldClass);
@@ -90,6 +115,48 @@ public class FixedBinNumericHistogramStatistic extends
   @Override
   public FixedBinNumericHistogramValue createEmpty() {
     return new FixedBinNumericHistogramValue(this);
+  }
+
+  @Override
+  protected int byteLength() {
+    int length = super.byteLength() + VarintUtils.unsignedIntByteLength(numBins) + 2;
+    length += minValue == null ? 0 : Double.BYTES;
+    length += maxValue == null ? 0 : Double.BYTES;
+    return length;
+  }
+
+  @Override
+  protected void writeBytes(ByteBuffer buffer) {
+    super.writeBytes(buffer);
+    VarintUtils.writeUnsignedInt(numBins, buffer);
+    if (minValue == null) {
+      buffer.put((byte) 0);
+    } else {
+      buffer.put((byte) 1);
+      buffer.putDouble(minValue);
+    }
+    if (maxValue == null) {
+      buffer.put((byte) 0);
+    } else {
+      buffer.put((byte) 1);
+      buffer.putDouble(maxValue);
+    }
+  }
+
+  @Override
+  protected void readBytes(ByteBuffer buffer) {
+    super.readBytes(buffer);
+    numBins = VarintUtils.readUnsignedInt(buffer);
+    if (buffer.get() == 1) {
+      minValue = buffer.getDouble();
+    } else {
+      minValue = null;
+    }
+    if (buffer.get() == 1) {
+      maxValue = buffer.getDouble();
+    } else {
+      maxValue = null;
+    }
   }
 
   public static class FixedBinNumericHistogramValue extends StatisticValue<FixedBinNumericHistogram>

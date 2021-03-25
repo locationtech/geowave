@@ -21,7 +21,6 @@ from .conftest import write_test_data
 from .conftest import results_as_list
 
 
-# Test Deleting #
 def test_cql_query(test_ds):
     # given
     index = SpatialIndexBuilder().set_name("idx1").create_index()

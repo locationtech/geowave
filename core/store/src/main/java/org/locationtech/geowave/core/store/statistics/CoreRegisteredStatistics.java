@@ -31,8 +31,6 @@ import org.locationtech.geowave.core.store.statistics.field.NumericRangeStatisti
 import org.locationtech.geowave.core.store.statistics.field.NumericRangeStatistic.NumericRangeValue;
 import org.locationtech.geowave.core.store.statistics.field.NumericStatsStatistic;
 import org.locationtech.geowave.core.store.statistics.field.NumericStatsStatistic.NumericStatsValue;
-import org.locationtech.geowave.core.store.statistics.field.TDigestNumericHistogramStatistic;
-import org.locationtech.geowave.core.store.statistics.field.TDigestNumericHistogramStatistic.TDigestNumericHistogramValue;
 import org.locationtech.geowave.core.store.statistics.index.DifferingVisibilityCountStatistic;
 import org.locationtech.geowave.core.store.statistics.index.DifferingVisibilityCountStatistic.DifferingVisibilityCountValue;
 import org.locationtech.geowave.core.store.statistics.index.DuplicateEntryCountStatistic;
@@ -131,12 +129,6 @@ public class CoreRegisteredStatistics implements StatisticsRegistrySPI {
             (short) 2022,
             (short) 2023),
         new RegisteredStatistic(
-            NumericHistogramStatistic.STATS_TYPE,
-            NumericHistogramStatistic::new,
-            NumericHistogramValue::new,
-            (short) 2024,
-            (short) 2025),
-        new RegisteredStatistic(
             NumericMeanStatistic.STATS_TYPE,
             NumericMeanStatistic::new,
             NumericMeanValue::new,
@@ -149,9 +141,9 @@ public class CoreRegisteredStatistics implements StatisticsRegistrySPI {
             (short) 2028,
             (short) 2029),
         new RegisteredStatistic(
-            TDigestNumericHistogramStatistic.STATS_TYPE,
-            TDigestNumericHistogramStatistic::new,
-            TDigestNumericHistogramValue::new,
+            NumericHistogramStatistic.STATS_TYPE,
+            NumericHistogramStatistic::new,
+            NumericHistogramValue::new,
             (short) 2030,
             (short) 2031),
         new RegisteredStatistic(

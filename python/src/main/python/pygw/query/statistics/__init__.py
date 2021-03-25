@@ -8,5 +8,11 @@
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
 # ===============================================================================================
 """
-This module contains the classes needed for querying statistics.  This module has not been fully implemented.
+This module contains the classes needed for querying statistics.
 """
+
+from .statistic_query_builder import StatisticQueryBuilder
+from .statistic_query_builder import DataTypeStatisticQueryBuilder
+from .statistic_query_builder import FieldStatisticQueryBuilder
+from .statistic_query_builder import IndexStatisticQueryBuilder
+from .statistic_query import StatisticQuery
