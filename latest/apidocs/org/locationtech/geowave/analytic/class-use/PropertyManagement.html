@@ -253,16 +253,16 @@
 <td class="colLast"><span class="typeNameLabel">GeoWaveAnalyticJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#getAdapterStore-org.locationtech.geowave.analytic.PropertyManagement-">getAdapterStore</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static org.apache.hadoop.conf.Configuration</code></td>
-<td class="colLast"><span class="typeNameLabel">MapReduceJobController.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/MapReduceJobController.html#getConfiguration-org.locationtech.geowave.analytic.PropertyManagement-">getConfiguration</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;pm)</code>&nbsp;</td>
+<td class="colFirst"><code>org.apache.hadoop.conf.Configuration</code></td>
+<td class="colLast"><span class="typeNameLabel">ToolRunnerMapReduceIntegration.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/ToolRunnerMapReduceIntegration.html#getConfiguration-org.locationtech.geowave.analytic.PropertyManagement-">getConfiguration</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>org.apache.hadoop.conf.Configuration</code></td>
 <td class="colLast"><span class="typeNameLabel">MapReduceIntegration.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/MapReduceIntegration.html#getConfiguration-org.locationtech.geowave.analytic.PropertyManagement-">getConfiguration</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>org.apache.hadoop.conf.Configuration</code></td>
-<td class="colLast"><span class="typeNameLabel">ToolRunnerMapReduceIntegration.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/ToolRunnerMapReduceIntegration.html#getConfiguration-org.locationtech.geowave.analytic.PropertyManagement-">getConfiguration</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
+<td class="colFirst"><code>static org.apache.hadoop.conf.Configuration</code></td>
+<td class="colLast"><span class="typeNameLabel">MapReduceJobController.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/MapReduceJobController.html#getConfiguration-org.locationtech.geowave.analytic.PropertyManagement-">getConfiguration</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;pm)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a></code></td>
@@ -278,12 +278,12 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><span class="typeNameLabel">GeoWaveAnalyticJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;configuration,
+<td class="colLast"><span class="typeNameLabel">MapReduceJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/MapReduceJobRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
    <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><span class="typeNameLabel">MapReduceJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/MapReduceJobRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
+<td class="colLast"><span class="typeNameLabel">GeoWaveAnalyticJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;configuration,
    <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -306,28 +306,28 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">SequenceFileInputFormatConfiguration.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/SequenceFileInputFormatConfiguration.html#setup-org.locationtech.geowave.analytic.PropertyManagement-org.apache.hadoop.conf.Configuration-">setup</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
-     org.apache.hadoop.conf.Configuration&nbsp;configuration)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">GeoWaveInputFormatConfiguration.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/GeoWaveInputFormatConfiguration.html#setup-org.locationtech.geowave.analytic.PropertyManagement-org.apache.hadoop.conf.Configuration-">setup</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
      org.apache.hadoop.conf.Configuration&nbsp;configuration)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">SequenceFileOutputFormatConfiguration.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/SequenceFileOutputFormatConfiguration.html#setup-org.locationtech.geowave.analytic.PropertyManagement-org.apache.hadoop.conf.Configuration-">setup</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
      org.apache.hadoop.conf.Configuration&nbsp;configuration)</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">SequenceFileInputFormatConfiguration.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/SequenceFileInputFormatConfiguration.html#setup-org.locationtech.geowave.analytic.PropertyManagement-org.apache.hadoop.conf.Configuration-">setup</a></span>(<a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
+     org.apache.hadoop.conf.Configuration&nbsp;configuration)</code>&nbsp;</td>
+</tr>
 <tr class="altColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><span class="typeNameLabel">MapReduceIntegration.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/MapReduceIntegration.html#submit-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-org.locationtech.geowave.analytic.mapreduce.GeoWaveAnalyticJobRunner-">submit</a></span>(org.apache.hadoop.conf.Configuration&nbsp;configuration,
+<td class="colLast"><span class="typeNameLabel">ToolRunnerMapReduceIntegration.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/ToolRunnerMapReduceIntegration.html#submit-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-org.locationtech.geowave.analytic.mapreduce.GeoWaveAnalyticJobRunner-">submit</a></span>(org.apache.hadoop.conf.Configuration&nbsp;configuration,
       <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
       <a href="../../../../../org/locationtech/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html" title="class in org.locationtech.geowave.analytic.mapreduce">GeoWaveAnalyticJobRunner</a>&nbsp;tool)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><span class="typeNameLabel">ToolRunnerMapReduceIntegration.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/ToolRunnerMapReduceIntegration.html#submit-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-org.locationtech.geowave.analytic.mapreduce.GeoWaveAnalyticJobRunner-">submit</a></span>(org.apache.hadoop.conf.Configuration&nbsp;configuration,
+<td class="colLast"><span class="typeNameLabel">MapReduceIntegration.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/MapReduceIntegration.html#submit-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-org.locationtech.geowave.analytic.mapreduce.GeoWaveAnalyticJobRunner-">submit</a></span>(org.apache.hadoop.conf.Configuration&nbsp;configuration,
       <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties,
       <a href="../../../../../org/locationtech/geowave/analytic/mapreduce/GeoWaveAnalyticJobRunner.html" title="class in org.locationtech.geowave.analytic.mapreduce">GeoWaveAnalyticJobRunner</a>&nbsp;tool)</code>&nbsp;</td>
 </tr>
@@ -358,22 +358,22 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><span class="typeNameLabel">GeoWaveAnalyticExtractJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/clustering/runner/GeoWaveAnalyticExtractJobRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
-   <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>int</code></td>
 <td class="colLast"><span class="typeNameLabel">GroupAssigmentJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/clustering/runner/GroupAssigmentJobRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
    <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><span class="typeNameLabel">MultiLevelClusteringJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/clustering/runner/MultiLevelClusteringJobRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;configuration,
    <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;propertyManagement)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><span class="typeNameLabel">ConvexHullJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/clustering/runner/ConvexHullJobRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
+   <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveAnalyticExtractJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/clustering/runner/GeoWaveAnalyticExtractJobRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
    <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -439,27 +439,7 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><span class="typeNameLabel">SampleMultipleSetsJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/kmeans/runner/SampleMultipleSetsJobRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
-   <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>int</code></td>
-<td class="colLast"><span class="typeNameLabel">UpdateCentroidCostJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/kmeans/runner/UpdateCentroidCostJobRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
-   <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>int</code></td>
 <td class="colLast"><span class="typeNameLabel">KMeansIterationsJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/kmeans/runner/KMeansIterationsJobRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
-   <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>int</code></td>
-<td class="colLast"><span class="typeNameLabel">KMeansParallelJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/kmeans/runner/KMeansParallelJobRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;configuration,
-   <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;propertyManagement)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>int</code></td>
-<td class="colLast"><span class="typeNameLabel">KMeansJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/kmeans/runner/KMeansJobRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;configuration,
    <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -469,12 +449,22 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><span class="typeNameLabel">KSamplerJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/kmeans/runner/KSamplerJobRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
+<td class="colLast"><span class="typeNameLabel">KMeansParallelJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/kmeans/runner/KMeansParallelJobRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;configuration,
+   <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;propertyManagement)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><span class="typeNameLabel">IterationCountCalculateRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/kmeans/runner/IterationCountCalculateRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
+   <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><span class="typeNameLabel">StripWeakCentroidsRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/kmeans/runner/StripWeakCentroidsRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
    <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><span class="typeNameLabel">RankSamplerJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/kmeans/runner/RankSamplerJobRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
+<td class="colLast"><span class="typeNameLabel">KMeansJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/kmeans/runner/KMeansJobRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;configuration,
    <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -484,18 +474,28 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><span class="typeNameLabel">StripWeakCentroidsRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/kmeans/runner/StripWeakCentroidsRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
-   <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">KMeansJumpJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/kmeans/runner/KMeansJumpJobRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;configuration,
+   <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;propertyManagement)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><span class="typeNameLabel">IterationCountCalculateRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/kmeans/runner/IterationCountCalculateRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
+<td class="colLast"><span class="typeNameLabel">SampleMultipleSetsJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/kmeans/runner/SampleMultipleSetsJobRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
    <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><span class="typeNameLabel">KMeansJumpJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/kmeans/runner/KMeansJumpJobRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;configuration,
-   <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;propertyManagement)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">RankSamplerJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/kmeans/runner/RankSamplerJobRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
+   <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><span class="typeNameLabel">UpdateCentroidCostJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/kmeans/runner/UpdateCentroidCostJobRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
+   <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><span class="typeNameLabel">KSamplerJobRunner.</span><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/analytic/mapreduce/kmeans/runner/KSamplerJobRunner.html#run-org.apache.hadoop.conf.Configuration-org.locationtech.geowave.analytic.PropertyManagement-">run</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
+   <a href="../../../../../org/locationtech/geowave/analytic/PropertyManagement.html" title="class in org.locationtech.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>int</code></td>

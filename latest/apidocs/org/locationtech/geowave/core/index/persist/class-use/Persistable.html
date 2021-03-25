@@ -2877,11 +2877,11 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></td>
-<td class="colLast"><span class="typeNameLabel">CountAggregation.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountAggregation.html#getParameters--">getParameters</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">MergingAggregation.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/MergingAggregation.html#getParameters--">getParameters</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></td>
-<td class="colLast"><span class="typeNameLabel">MergingAggregation.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/MergingAggregation.html#getParameters--">getParameters</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">CountAggregation.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountAggregation.html#getParameters--">getParameters</a></span>()</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -2894,11 +2894,11 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">CountAggregation.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountAggregation.html#setParameters-org.locationtech.geowave.core.index.persist.Persistable-">setParameters</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>&nbsp;parameters)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">MergingAggregation.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/MergingAggregation.html#setParameters-org.locationtech.geowave.core.index.persist.Persistable-">setParameters</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>&nbsp;parameters)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">MergingAggregation.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/MergingAggregation.html#setParameters-org.locationtech.geowave.core.index.persist.Persistable-">setParameters</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>&nbsp;parameters)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">CountAggregation.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountAggregation.html#setParameters-org.locationtech.geowave.core.index.persist.Persistable-">setParameters</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>&nbsp;parameters)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -3256,7 +3256,7 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/binning/CompositeBinningStrategy.html" title="class in org.locationtech.geowave.core.store.statistics.binning">CompositeBinningStrategy</a></span></code>
-<div class="block">Statistic binning strategy that combines two other binning strategies.</div>
+<div class="block">Statistic binning strategy that combines two or more other binning strategies.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -3349,7 +3349,7 @@
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.html" title="class in org.locationtech.geowave.core.store.statistics.field">NumericHistogramStatistic</a></span></code>
-<div class="block">Dynamic histogram provide very high accuracy for CDF and quantiles over the a numeric attribute.</div>
+<div class="block">Uses a T-Digest data structure to very efficiently calculate and store the histogram.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -3383,16 +3383,6 @@
 <tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericStatsStatistic.NumericStatsValue.html" title="class in org.locationtech.geowave.core.store.statistics.field">NumericStatsStatistic.NumericStatsValue</a></span></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/TDigestNumericHistogramStatistic.html" title="class in org.locationtech.geowave.core.store.statistics.field">TDigestNumericHistogramStatistic</a></span></code>
-<div class="block">Uses a T-Digest data structure to very efficiently calculate and store the histogram.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/TDigestNumericHistogramStatistic.TDigestNumericHistogramValue.html" title="class in org.locationtech.geowave.core.store.statistics.field">TDigestNumericHistogramStatistic.TDigestNumericHistogramValue</a></span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

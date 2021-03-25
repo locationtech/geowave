@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.6.3" />
 <title>pygw.query.statistics API documentation</title>
-<meta name="description" content="This module contains the classes needed for querying statistics.
-This module has not been fully implemented." />
+<meta name="description" content="This module contains the classes needed for querying statistics." />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -21,8 +20,7 @@ This module has not been fully implemented." />
 <h1 class="title">Module <code>pygw.query.statistics</code></h1>
 </header>
 <section id="section-intro">
-<p>This module contains the classes needed for querying statistics.
-This module has not been fully implemented.</p>
+<p>This module contains the classes needed for querying statistics.</p>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">#
@@ -35,14 +33,24 @@ This module has not been fully implemented.</p>
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
 # ===============================================================================================
 &#34;&#34;&#34;
-This module contains the classes needed for querying statistics.  This module has not been fully implemented.
-&#34;&#34;&#34;</code></pre>
+This module contains the classes needed for querying statistics.
+&#34;&#34;&#34;
+
+from .statistic_query_builder import StatisticQueryBuilder
+from .statistic_query_builder import DataTypeStatisticQueryBuilder
+from .statistic_query_builder import FieldStatisticQueryBuilder
+from .statistic_query_builder import IndexStatisticQueryBuilder
+from .statistic_query import StatisticQuery</code></pre>
 </details>
 </section>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
-<dt><code class="name"><a title="pygw.query.statistics.vector_statistics_query_builder" href="vector_statistics_query_builder.html">pygw.query.statistics.vector_statistics_query_builder</a></code></dt>
+<dt><code class="name"><a title="pygw.query.statistics.statistic_query" href="statistic_query.html">pygw.query.statistics.statistic_query</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="pygw.query.statistics.statistic_query_builder" href="statistic_query_builder.html">pygw.query.statistics.statistic_query_builder</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
@@ -68,7 +76,8 @@ This module contains the classes needed for querying statistics.  This module ha
 </li>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
-<li><code><a title="pygw.query.statistics.vector_statistics_query_builder" href="vector_statistics_query_builder.html">pygw.query.statistics.vector_statistics_query_builder</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query" href="statistic_query.html">pygw.query.statistics.statistic_query</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder" href="statistic_query_builder.html">pygw.query.statistics.statistic_query_builder</a></code></li>
 </ul>
 </li>
 </ul>

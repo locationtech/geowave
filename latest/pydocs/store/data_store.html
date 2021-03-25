@@ -41,6 +41,13 @@ from pygw.config import geowave_pkg
 from pygw.query import Query
 from pygw.query import AggregationQuery
 from pygw.index import Index
+from pygw.query.statistics.statistic_query import StatisticQuery
+from pygw.statistics.bin_constraints import BinConstraints
+from pygw.statistics.statistic import Statistic
+from pygw.statistics.statistic_mappings import map_statistic
+from pygw.statistics.statistic_type import StatisticType
+from pygw.statistics.statistic_value import StatisticValueTransformer
+from pygw.statistics.transformers import BinnedStatisticTransformer
 
 
 class DataStore(GeoWaveObject):
@@ -70,11 +77,7 @@ class DataStore(GeoWaveObject):
 
         assert isinstance(url, str)
 
-        n = len(indices)
-        j_index_class = geowave_pkg.core.store.api.Index
-        j_index_arr = java_gateway.new_array(j_index_class, n)
-        for idx, name in enumerate(indices):
-            j_index_arr[idx] = name._java_ref
+        j_index_arr = GeoWaveObject.to_java_array(geowave_pkg.core.store.api.Index, indices)
         java_url = java_gateway.jvm.java.net.URL(url)
         self._java_ref.ingest(java_url, ingest_options, j_index_arr)
 
@@ -93,7 +96,7 @@ class DataStore(GeoWaveObject):
         &#34;&#34;&#34;
         assert isinstance(q, Query)
         j_query = q._java_ref
-        return iter(CloseableIterator(self._java_ref.query(j_query), q.result_transformer))
+        return iter(CloseableIterator(self._java_ref.query(j_query), q.java_transformer))
 
     def aggregate(self, q):
         &#34;&#34;&#34;
@@ -110,9 +113,7 @@ class DataStore(GeoWaveObject):
         &#34;&#34;&#34;
         assert isinstance(q, AggregationQuery)
         j_query = q._java_ref
-        if q.result_transformer is None:
-            return self._java_ref.aggregate(j_query)
-        return q.result_transformer.transform(self._java_ref.aggregate(j_query))
+        return q.java_transformer.transform(self._java_ref.aggregate(j_query))
 
     def get_types(self):
         &#34;&#34;&#34;
@@ -124,11 +125,81 @@ class DataStore(GeoWaveObject):
         j_adapter_arr = self._java_ref.getTypes()
         return [DataTypeAdapter(j_adpt) for j_adpt in j_adapter_arr]
 
-    def query_statistics(self, q):
-        raise NotImplementedError
+    def add_empty_statistic(self, *statistic):
+        j_stat_array = GeoWaveObject.to_java_array(geowave_pkg.core.store.api.Statistic, statistic)
+        self._java_ref.addEmptyStatistic(j_stat_array)
 
-    def aggregate_statistics(self, q):
-        raise NotImplementedError
+    def add_statistic(self, *statistic):
+        j_stat_array = GeoWaveObject.to_java_array(geowave_pkg.core.store.api.Statistic, statistic)
+        self._java_ref.addStatistic(j_stat_array)
+
+    def remove_statistic(self, *statistic):
+        j_stat_array = GeoWaveObject.to_java_array(geowave_pkg.core.store.api.Statistic, statistic)
+        self._java_ref.removeStatistic(j_stat_array)
+
+    def recalc_statistic(self, *statistic):
+        j_stat_array = GeoWaveObject.to_java_array(geowave_pkg.core.store.api.Statistic, statistic)
+        self._java_ref.recalcStatistic(j_stat_array)
+
+    def get_data_type_statistics(self, type_name):
+        return map(map_statistic, self._java_ref.getDataTypeStatistics(type_name))
+
+    def get_data_type_statistic(self, statistic_type, type_name, tag):
+        if not isinstance(statistic_type, StatisticType):
+            raise AttributeError(&#39;Invalid statistic type, should be of class StatisticType&#39;)
+        return map_statistic(self._java_ref.getDataTypeStatistic(statistic_type.java_ref(), type_name, tag))
+
+    def get_index_statistics(self, index_name):
+        return map(map_statistic, self._java_ref.getIndexStatistics(index_name))
+
+    def get_index_statistic(self, statistic_type, index_name, tag):
+        if not isinstance(statistic_type, StatisticType):
+            raise AttributeError(&#39;Invalid statistic type, should be of class StatisticType&#39;)
+        return map_statistic(self._java_ref.getIndexStatistic(statistic_type.java_ref(), index_name, tag))
+
+    def get_field_statistics(self, type_name, field_name):
+        return map(map_statistic, self._java_ref.getFieldStatistics(type_name, field_name))
+
+    def get_field_statistic(self, statistic_type, type_name, field_name, tag):
+        if not isinstance(statistic_type, StatisticType):
+            raise AttributeError(&#39;Invalid statistic type, should be of class StatisticType&#39;)
+        return map_statistic(self._java_ref.getFieldStatistic(statistic_type.java_ref(), type_name, field_name, tag))
+
+    def get_statistic_value(self, statistic, bin_constraints=None):
+        if not isinstance(statistic, Statistic):
+            raise AttributeError(&#39;Invalid statistic&#39;)
+        if bin_constraints is None:
+            value = self._java_ref.getStatisticValue(statistic.java_ref())
+        else:
+            if not isinstance(bin_constraints, BinConstraints):
+                raise AttributeError(&#39;Invalid bin constraints&#39;)
+            value = self._java_ref.getStatisticValue(statistic.java_ref(), bin_constraints.java_ref())
+        return statistic.java_transformer.transform(value)
+
+    def get_binned_statistic_values(self, statistic, bin_constraints=None):
+        if not isinstance(statistic, Statistic):
+            raise AttributeError(&#39;Invalid statistic&#39;)
+        if bin_constraints is None:
+            j_result_iter = self._java_ref.getBinnedStatisticValues(statistic.java_ref())
+        else:
+            if not isinstance(bin_constraints, BinConstraints):
+                raise AttributeError(&#39;Invalid bin constraints&#39;)
+            j_result_iter = self._java_ref.getBinnedStatisticValues(statistic.java_ref(), bin_constraints.java_ref())
+        return iter(
+            CloseableIterator(
+                j_result_iter,
+                BinnedStatisticTransformer(statistic.java_transformer)
+            ))
+
+    def query_statistics(self, query):
+        if not isinstance(query, StatisticQuery):
+            raise AttributeError(&#39;Invalid statistic query&#39;)
+        return iter(CloseableIterator(self._java_ref.queryStatistics(query.java_ref()), StatisticValueTransformer()))
+
+    def aggregate_statistics(self, query):
+        if not isinstance(query, StatisticQuery):
+            raise AttributeError(&#39;Invalid statistic query&#39;)
+        return StatisticValueTransformer().transform(self._java_ref.aggregateStatistics(query.java_ref()))
 
     def get_indices(self, type_name=None):
         &#34;&#34;&#34;
@@ -177,12 +248,7 @@ class DataStore(GeoWaveObject):
         &#34;&#34;&#34;
         assert isinstance(type_name, str)
 
-        n = len(indices)
-        j_index_class = geowave_pkg.core.store.api.Index
-        j_index_arr = java_gateway.new_array(j_index_class, n)
-        for idx, py_obj in enumerate(indices):
-            j_index_arr[idx] = py_obj._java_ref
-
+        j_index_arr = GeoWaveObject.to_java_array(geowave_pkg.core.store.api.Index, indices)
         self._java_ref.addIndex(type_name, j_index_arr)
 
     def remove_index(self, index_name, type_name=None):
@@ -246,12 +312,7 @@ class DataStore(GeoWaveObject):
         &#34;&#34;&#34;
         assert isinstance(type_adapter, DataTypeAdapter)
 
-        n = len(initial_indices)
-        j_index_class = geowave_pkg.core.store.api.Index
-        j_index_arr = java_gateway.new_array(j_index_class, n)
-        for idx, py_obj in enumerate(initial_indices):
-            j_index_arr[idx] = py_obj._java_ref
-
+        j_index_arr = GeoWaveObject.to_java_array(geowave_pkg.core.store.api.Index, initial_indices)
         self._java_ref.addType(type_adapter._java_ref, j_index_arr)
 
     def create_writer(self, type_adapter_name):
@@ -318,11 +379,7 @@ class DataStore(GeoWaveObject):
 
         assert isinstance(url, str)
 
-        n = len(indices)
-        j_index_class = geowave_pkg.core.store.api.Index
-        j_index_arr = java_gateway.new_array(j_index_class, n)
-        for idx, name in enumerate(indices):
-            j_index_arr[idx] = name._java_ref
+        j_index_arr = GeoWaveObject.to_java_array(geowave_pkg.core.store.api.Index, indices)
         java_url = java_gateway.jvm.java.net.URL(url)
         self._java_ref.ingest(java_url, ingest_options, j_index_arr)
 
@@ -341,7 +398,7 @@ class DataStore(GeoWaveObject):
         &#34;&#34;&#34;
         assert isinstance(q, Query)
         j_query = q._java_ref
-        return iter(CloseableIterator(self._java_ref.query(j_query), q.result_transformer))
+        return iter(CloseableIterator(self._java_ref.query(j_query), q.java_transformer))
 
     def aggregate(self, q):
         &#34;&#34;&#34;
@@ -358,9 +415,7 @@ class DataStore(GeoWaveObject):
         &#34;&#34;&#34;
         assert isinstance(q, AggregationQuery)
         j_query = q._java_ref
-        if q.result_transformer is None:
-            return self._java_ref.aggregate(j_query)
-        return q.result_transformer.transform(self._java_ref.aggregate(j_query))
+        return q.java_transformer.transform(self._java_ref.aggregate(j_query))
 
     def get_types(self):
         &#34;&#34;&#34;
@@ -372,11 +427,81 @@ class DataStore(GeoWaveObject):
         j_adapter_arr = self._java_ref.getTypes()
         return [DataTypeAdapter(j_adpt) for j_adpt in j_adapter_arr]
 
-    def query_statistics(self, q):
-        raise NotImplementedError
+    def add_empty_statistic(self, *statistic):
+        j_stat_array = GeoWaveObject.to_java_array(geowave_pkg.core.store.api.Statistic, statistic)
+        self._java_ref.addEmptyStatistic(j_stat_array)
 
-    def aggregate_statistics(self, q):
-        raise NotImplementedError
+    def add_statistic(self, *statistic):
+        j_stat_array = GeoWaveObject.to_java_array(geowave_pkg.core.store.api.Statistic, statistic)
+        self._java_ref.addStatistic(j_stat_array)
+
+    def remove_statistic(self, *statistic):
+        j_stat_array = GeoWaveObject.to_java_array(geowave_pkg.core.store.api.Statistic, statistic)
+        self._java_ref.removeStatistic(j_stat_array)
+
+    def recalc_statistic(self, *statistic):
+        j_stat_array = GeoWaveObject.to_java_array(geowave_pkg.core.store.api.Statistic, statistic)
+        self._java_ref.recalcStatistic(j_stat_array)
+
+    def get_data_type_statistics(self, type_name):
+        return map(map_statistic, self._java_ref.getDataTypeStatistics(type_name))
+
+    def get_data_type_statistic(self, statistic_type, type_name, tag):
+        if not isinstance(statistic_type, StatisticType):
+            raise AttributeError(&#39;Invalid statistic type, should be of class StatisticType&#39;)
+        return map_statistic(self._java_ref.getDataTypeStatistic(statistic_type.java_ref(), type_name, tag))
+
+    def get_index_statistics(self, index_name):
+        return map(map_statistic, self._java_ref.getIndexStatistics(index_name))
+
+    def get_index_statistic(self, statistic_type, index_name, tag):
+        if not isinstance(statistic_type, StatisticType):
+            raise AttributeError(&#39;Invalid statistic type, should be of class StatisticType&#39;)
+        return map_statistic(self._java_ref.getIndexStatistic(statistic_type.java_ref(), index_name, tag))
+
+    def get_field_statistics(self, type_name, field_name):
+        return map(map_statistic, self._java_ref.getFieldStatistics(type_name, field_name))
+
+    def get_field_statistic(self, statistic_type, type_name, field_name, tag):
+        if not isinstance(statistic_type, StatisticType):
+            raise AttributeError(&#39;Invalid statistic type, should be of class StatisticType&#39;)
+        return map_statistic(self._java_ref.getFieldStatistic(statistic_type.java_ref(), type_name, field_name, tag))
+
+    def get_statistic_value(self, statistic, bin_constraints=None):
+        if not isinstance(statistic, Statistic):
+            raise AttributeError(&#39;Invalid statistic&#39;)
+        if bin_constraints is None:
+            value = self._java_ref.getStatisticValue(statistic.java_ref())
+        else:
+            if not isinstance(bin_constraints, BinConstraints):
+                raise AttributeError(&#39;Invalid bin constraints&#39;)
+            value = self._java_ref.getStatisticValue(statistic.java_ref(), bin_constraints.java_ref())
+        return statistic.java_transformer.transform(value)
+
+    def get_binned_statistic_values(self, statistic, bin_constraints=None):
+        if not isinstance(statistic, Statistic):
+            raise AttributeError(&#39;Invalid statistic&#39;)
+        if bin_constraints is None:
+            j_result_iter = self._java_ref.getBinnedStatisticValues(statistic.java_ref())
+        else:
+            if not isinstance(bin_constraints, BinConstraints):
+                raise AttributeError(&#39;Invalid bin constraints&#39;)
+            j_result_iter = self._java_ref.getBinnedStatisticValues(statistic.java_ref(), bin_constraints.java_ref())
+        return iter(
+            CloseableIterator(
+                j_result_iter,
+                BinnedStatisticTransformer(statistic.java_transformer)
+            ))
+
+    def query_statistics(self, query):
+        if not isinstance(query, StatisticQuery):
+            raise AttributeError(&#39;Invalid statistic query&#39;)
+        return iter(CloseableIterator(self._java_ref.queryStatistics(query.java_ref()), StatisticValueTransformer()))
+
+    def aggregate_statistics(self, query):
+        if not isinstance(query, StatisticQuery):
+            raise AttributeError(&#39;Invalid statistic query&#39;)
+        return StatisticValueTransformer().transform(self._java_ref.aggregateStatistics(query.java_ref()))
 
     def get_indices(self, type_name=None):
         &#34;&#34;&#34;
@@ -425,12 +550,7 @@ class DataStore(GeoWaveObject):
         &#34;&#34;&#34;
         assert isinstance(type_name, str)
 
-        n = len(indices)
-        j_index_class = geowave_pkg.core.store.api.Index
-        j_index_arr = java_gateway.new_array(j_index_class, n)
-        for idx, py_obj in enumerate(indices):
-            j_index_arr[idx] = py_obj._java_ref
-
+        j_index_arr = GeoWaveObject.to_java_array(geowave_pkg.core.store.api.Index, indices)
         self._java_ref.addIndex(type_name, j_index_arr)
 
     def remove_index(self, index_name, type_name=None):
@@ -494,12 +614,7 @@ class DataStore(GeoWaveObject):
         &#34;&#34;&#34;
         assert isinstance(type_adapter, DataTypeAdapter)
 
-        n = len(initial_indices)
-        j_index_class = geowave_pkg.core.store.api.Index
-        j_index_arr = java_gateway.new_array(j_index_class, n)
-        for idx, py_obj in enumerate(initial_indices):
-            j_index_arr[idx] = py_obj._java_ref
-
+        j_index_arr = GeoWaveObject.to_java_array(geowave_pkg.core.store.api.Index, initial_indices)
         self._java_ref.addType(type_adapter._java_ref, j_index_arr)
 
     def create_writer(self, type_adapter_name):
@@ -527,6 +642,18 @@ class DataStore(GeoWaveObject):
 </ul>
 <h3>Methods</h3>
 <dl>
+<dt id="pygw.store.data_store.DataStore.add_empty_statistic"><code class="name flex">
+<span>def <span class="ident">add_empty_statistic</span></span>(<span>self, *statistic)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_empty_statistic(self, *statistic):
+    j_stat_array = GeoWaveObject.to_java_array(geowave_pkg.core.store.api.Statistic, statistic)
+    self._java_ref.addEmptyStatistic(j_stat_array)</code></pre>
+</details>
+</dd>
 <dt id="pygw.store.data_store.DataStore.add_index"><code class="name flex">
 <span>def <span class="ident">add_index</span></span>(<span>self, type_name, *indices)</span>
 </code></dt>
@@ -555,13 +682,20 @@ process for lots of data.</p>
     &#34;&#34;&#34;
     assert isinstance(type_name, str)
 
-    n = len(indices)
-    j_index_class = geowave_pkg.core.store.api.Index
-    j_index_arr = java_gateway.new_array(j_index_class, n)
-    for idx, py_obj in enumerate(indices):
-        j_index_arr[idx] = py_obj._java_ref
-
+    j_index_arr = GeoWaveObject.to_java_array(geowave_pkg.core.store.api.Index, indices)
     self._java_ref.addIndex(type_name, j_index_arr)</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store.DataStore.add_statistic"><code class="name flex">
+<span>def <span class="ident">add_statistic</span></span>(<span>self, *statistic)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_statistic(self, *statistic):
+    j_stat_array = GeoWaveObject.to_java_array(geowave_pkg.core.store.api.Statistic, statistic)
+    self._java_ref.addStatistic(j_stat_array)</code></pre>
 </details>
 </dd>
 <dt id="pygw.store.data_store.DataStore.add_type"><code class="name flex">
@@ -588,12 +722,7 @@ process for lots of data.</p>
     &#34;&#34;&#34;
     assert isinstance(type_adapter, DataTypeAdapter)
 
-    n = len(initial_indices)
-    j_index_class = geowave_pkg.core.store.api.Index
-    j_index_arr = java_gateway.new_array(j_index_class, n)
-    for idx, py_obj in enumerate(initial_indices):
-        j_index_arr[idx] = py_obj._java_ref
-
+    j_index_arr = GeoWaveObject.to_java_array(geowave_pkg.core.store.api.Index, initial_indices)
     self._java_ref.addType(type_adapter._java_ref, j_index_arr)</code></pre>
 </details>
 </dd>
@@ -630,20 +759,20 @@ matched entries, or producing a histogram.</p>
     &#34;&#34;&#34;
     assert isinstance(q, AggregationQuery)
     j_query = q._java_ref
-    if q.result_transformer is None:
-        return self._java_ref.aggregate(j_query)
-    return q.result_transformer.transform(self._java_ref.aggregate(j_query))</code></pre>
+    return q.java_transformer.transform(self._java_ref.aggregate(j_query))</code></pre>
 </details>
 </dd>
 <dt id="pygw.store.data_store.DataStore.aggregate_statistics"><code class="name flex">
-<span>def <span class="ident">aggregate_statistics</span></span>(<span>self, q)</span>
+<span>def <span class="ident">aggregate_statistics</span></span>(<span>self, query)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def aggregate_statistics(self, q):
-    raise NotImplementedError</code></pre>
+<pre><code class="python">def aggregate_statistics(self, query):
+    if not isinstance(query, StatisticQuery):
+        raise AttributeError(&#39;Invalid statistic query&#39;)
+    return StatisticValueTransformer().transform(self._java_ref.aggregateStatistics(query.java_ref()))</code></pre>
 </details>
 </dd>
 <dt id="pygw.store.data_store.DataStore.copy_to"><code class="name flex">
@@ -764,6 +893,101 @@ more indices have been provided for this type.</p>
     return self._java_ref.deleteAll()</code></pre>
 </details>
 </dd>
+<dt id="pygw.store.data_store.DataStore.get_binned_statistic_values"><code class="name flex">
+<span>def <span class="ident">get_binned_statistic_values</span></span>(<span>self, statistic, bin_constraints=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_binned_statistic_values(self, statistic, bin_constraints=None):
+    if not isinstance(statistic, Statistic):
+        raise AttributeError(&#39;Invalid statistic&#39;)
+    if bin_constraints is None:
+        j_result_iter = self._java_ref.getBinnedStatisticValues(statistic.java_ref())
+    else:
+        if not isinstance(bin_constraints, BinConstraints):
+            raise AttributeError(&#39;Invalid bin constraints&#39;)
+        j_result_iter = self._java_ref.getBinnedStatisticValues(statistic.java_ref(), bin_constraints.java_ref())
+    return iter(
+        CloseableIterator(
+            j_result_iter,
+            BinnedStatisticTransformer(statistic.java_transformer)
+        ))</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store.DataStore.get_data_type_statistic"><code class="name flex">
+<span>def <span class="ident">get_data_type_statistic</span></span>(<span>self, statistic_type, type_name, tag)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_data_type_statistic(self, statistic_type, type_name, tag):
+    if not isinstance(statistic_type, StatisticType):
+        raise AttributeError(&#39;Invalid statistic type, should be of class StatisticType&#39;)
+    return map_statistic(self._java_ref.getDataTypeStatistic(statistic_type.java_ref(), type_name, tag))</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store.DataStore.get_data_type_statistics"><code class="name flex">
+<span>def <span class="ident">get_data_type_statistics</span></span>(<span>self, type_name)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_data_type_statistics(self, type_name):
+    return map(map_statistic, self._java_ref.getDataTypeStatistics(type_name))</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store.DataStore.get_field_statistic"><code class="name flex">
+<span>def <span class="ident">get_field_statistic</span></span>(<span>self, statistic_type, type_name, field_name, tag)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_field_statistic(self, statistic_type, type_name, field_name, tag):
+    if not isinstance(statistic_type, StatisticType):
+        raise AttributeError(&#39;Invalid statistic type, should be of class StatisticType&#39;)
+    return map_statistic(self._java_ref.getFieldStatistic(statistic_type.java_ref(), type_name, field_name, tag))</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store.DataStore.get_field_statistics"><code class="name flex">
+<span>def <span class="ident">get_field_statistics</span></span>(<span>self, type_name, field_name)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_field_statistics(self, type_name, field_name):
+    return map(map_statistic, self._java_ref.getFieldStatistics(type_name, field_name))</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store.DataStore.get_index_statistic"><code class="name flex">
+<span>def <span class="ident">get_index_statistic</span></span>(<span>self, statistic_type, index_name, tag)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_index_statistic(self, statistic_type, index_name, tag):
+    if not isinstance(statistic_type, StatisticType):
+        raise AttributeError(&#39;Invalid statistic type, should be of class StatisticType&#39;)
+    return map_statistic(self._java_ref.getIndexStatistic(statistic_type.java_ref(), index_name, tag))</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store.DataStore.get_index_statistics"><code class="name flex">
+<span>def <span class="ident">get_index_statistics</span></span>(<span>self, index_name)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_index_statistics(self, index_name):
+    return map(map_statistic, self._java_ref.getIndexStatistics(index_name))</code></pre>
+</details>
+</dd>
 <dt id="pygw.store.data_store.DataStore.get_indices"><code class="name flex">
 <span>def <span class="ident">get_indices</span></span>(<span>self, type_name=None)</span>
 </code></dt>
@@ -795,6 +1019,25 @@ more indices have been provided for this type.</p>
     else:
         j_indices = self._java_ref.getIndices()
     return [Index(j_index) for j_index in j_indices]</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store.DataStore.get_statistic_value"><code class="name flex">
+<span>def <span class="ident">get_statistic_value</span></span>(<span>self, statistic, bin_constraints=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_statistic_value(self, statistic, bin_constraints=None):
+    if not isinstance(statistic, Statistic):
+        raise AttributeError(&#39;Invalid statistic&#39;)
+    if bin_constraints is None:
+        value = self._java_ref.getStatisticValue(statistic.java_ref())
+    else:
+        if not isinstance(bin_constraints, BinConstraints):
+            raise AttributeError(&#39;Invalid bin constraints&#39;)
+        value = self._java_ref.getStatisticValue(statistic.java_ref(), bin_constraints.java_ref())
+    return statistic.java_transformer.transform(value)</code></pre>
 </details>
 </dd>
 <dt id="pygw.store.data_store.DataStore.get_types"><code class="name flex">
@@ -855,11 +1098,7 @@ that works for a given file.</p>
 
     assert isinstance(url, str)
 
-    n = len(indices)
-    j_index_class = geowave_pkg.core.store.api.Index
-    j_index_arr = java_gateway.new_array(j_index_class, n)
-    for idx, name in enumerate(indices):
-        j_index_arr[idx] = name._java_ref
+    j_index_arr = GeoWaveObject.to_java_array(geowave_pkg.core.store.api.Index, indices)
     java_url = java_gateway.jvm.java.net.URL(url)
     self._java_ref.ingest(java_url, ingest_options, j_index_arr)</code></pre>
 </details>
@@ -898,18 +1137,32 @@ be called on the iterator when it is done being used.</p></section>
     &#34;&#34;&#34;
     assert isinstance(q, Query)
     j_query = q._java_ref
-    return iter(CloseableIterator(self._java_ref.query(j_query), q.result_transformer))</code></pre>
+    return iter(CloseableIterator(self._java_ref.query(j_query), q.java_transformer))</code></pre>
 </details>
 </dd>
 <dt id="pygw.store.data_store.DataStore.query_statistics"><code class="name flex">
-<span>def <span class="ident">query_statistics</span></span>(<span>self, q)</span>
+<span>def <span class="ident">query_statistics</span></span>(<span>self, query)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def query_statistics(self, q):
-    raise NotImplementedError</code></pre>
+<pre><code class="python">def query_statistics(self, query):
+    if not isinstance(query, StatisticQuery):
+        raise AttributeError(&#39;Invalid statistic query&#39;)
+    return iter(CloseableIterator(self._java_ref.queryStatistics(query.java_ref()), StatisticValueTransformer()))</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store.DataStore.recalc_statistic"><code class="name flex">
+<span>def <span class="ident">recalc_statistic</span></span>(<span>self, *statistic)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def recalc_statistic(self, *statistic):
+    j_stat_array = GeoWaveObject.to_java_array(geowave_pkg.core.store.api.Statistic, statistic)
+    self._java_ref.recalcStatistic(j_stat_array)</code></pre>
 </details>
 </dd>
 <dt id="pygw.store.data_store.DataStore.remove_index"><code class="name flex">
@@ -948,6 +1201,18 @@ be called on the iterator when it is done being used.</p></section>
         self._java_ref.removeIndex(index_name, type_name)
     else:
         self._java_ref.removeIndex(index_name)</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.data_store.DataStore.remove_statistic"><code class="name flex">
+<span>def <span class="ident">remove_statistic</span></span>(<span>self, *statistic)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def remove_statistic(self, *statistic):
+    j_stat_array = GeoWaveObject.to_java_array(geowave_pkg.core.store.api.Statistic, statistic)
+    self._java_ref.removeStatistic(j_stat_array)</code></pre>
 </details>
 </dd>
 <dt id="pygw.store.data_store.DataStore.remove_type"><code class="name flex">
@@ -1003,7 +1268,9 @@ be called on the iterator when it is done being used.</p></section>
 <li>
 <h4><code><a title="pygw.store.data_store.DataStore" href="#pygw.store.data_store.DataStore">DataStore</a></code></h4>
 <ul class="">
+<li><code><a title="pygw.store.data_store.DataStore.add_empty_statistic" href="#pygw.store.data_store.DataStore.add_empty_statistic">add_empty_statistic</a></code></li>
 <li><code><a title="pygw.store.data_store.DataStore.add_index" href="#pygw.store.data_store.DataStore.add_index">add_index</a></code></li>
+<li><code><a title="pygw.store.data_store.DataStore.add_statistic" href="#pygw.store.data_store.DataStore.add_statistic">add_statistic</a></code></li>
 <li><code><a title="pygw.store.data_store.DataStore.add_type" href="#pygw.store.data_store.DataStore.add_type">add_type</a></code></li>
 <li><code><a title="pygw.store.data_store.DataStore.aggregate" href="#pygw.store.data_store.DataStore.aggregate">aggregate</a></code></li>
 <li><code><a title="pygw.store.data_store.DataStore.aggregate_statistics" href="#pygw.store.data_store.DataStore.aggregate_statistics">aggregate_statistics</a></code></li>
@@ -1011,12 +1278,22 @@ be called on the iterator when it is done being used.</p></section>
 <li><code><a title="pygw.store.data_store.DataStore.create_writer" href="#pygw.store.data_store.DataStore.create_writer">create_writer</a></code></li>
 <li><code><a title="pygw.store.data_store.DataStore.delete" href="#pygw.store.data_store.DataStore.delete">delete</a></code></li>
 <li><code><a title="pygw.store.data_store.DataStore.delete_all" href="#pygw.store.data_store.DataStore.delete_all">delete_all</a></code></li>
+<li><code><a title="pygw.store.data_store.DataStore.get_binned_statistic_values" href="#pygw.store.data_store.DataStore.get_binned_statistic_values">get_binned_statistic_values</a></code></li>
+<li><code><a title="pygw.store.data_store.DataStore.get_data_type_statistic" href="#pygw.store.data_store.DataStore.get_data_type_statistic">get_data_type_statistic</a></code></li>
+<li><code><a title="pygw.store.data_store.DataStore.get_data_type_statistics" href="#pygw.store.data_store.DataStore.get_data_type_statistics">get_data_type_statistics</a></code></li>
+<li><code><a title="pygw.store.data_store.DataStore.get_field_statistic" href="#pygw.store.data_store.DataStore.get_field_statistic">get_field_statistic</a></code></li>
+<li><code><a title="pygw.store.data_store.DataStore.get_field_statistics" href="#pygw.store.data_store.DataStore.get_field_statistics">get_field_statistics</a></code></li>
+<li><code><a title="pygw.store.data_store.DataStore.get_index_statistic" href="#pygw.store.data_store.DataStore.get_index_statistic">get_index_statistic</a></code></li>
+<li><code><a title="pygw.store.data_store.DataStore.get_index_statistics" href="#pygw.store.data_store.DataStore.get_index_statistics">get_index_statistics</a></code></li>
 <li><code><a title="pygw.store.data_store.DataStore.get_indices" href="#pygw.store.data_store.DataStore.get_indices">get_indices</a></code></li>
+<li><code><a title="pygw.store.data_store.DataStore.get_statistic_value" href="#pygw.store.data_store.DataStore.get_statistic_value">get_statistic_value</a></code></li>
 <li><code><a title="pygw.store.data_store.DataStore.get_types" href="#pygw.store.data_store.DataStore.get_types">get_types</a></code></li>
 <li><code><a title="pygw.store.data_store.DataStore.ingest" href="#pygw.store.data_store.DataStore.ingest">ingest</a></code></li>
 <li><code><a title="pygw.store.data_store.DataStore.query" href="#pygw.store.data_store.DataStore.query">query</a></code></li>
 <li><code><a title="pygw.store.data_store.DataStore.query_statistics" href="#pygw.store.data_store.DataStore.query_statistics">query_statistics</a></code></li>
+<li><code><a title="pygw.store.data_store.DataStore.recalc_statistic" href="#pygw.store.data_store.DataStore.recalc_statistic">recalc_statistic</a></code></li>
 <li><code><a title="pygw.store.data_store.DataStore.remove_index" href="#pygw.store.data_store.DataStore.remove_index">remove_index</a></code></li>
+<li><code><a title="pygw.store.data_store.DataStore.remove_statistic" href="#pygw.store.data_store.DataStore.remove_statistic">remove_statistic</a></code></li>
 <li><code><a title="pygw.store.data_store.DataStore.remove_type" href="#pygw.store.data_store.DataStore.remove_type">remove_type</a></code></li>
 </ul>
 </li>

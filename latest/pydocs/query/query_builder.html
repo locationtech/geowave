@@ -45,8 +45,8 @@ class QueryBuilder(BaseQueryBuilder):
     `pygw.query.vector.vector_query_builder.VectorQueryBuilder`.
     &#34;&#34;&#34;
 
-    def __init__(self, java_ref, result_transformer):
-        super().__init__(java_ref, result_transformer)
+    def __init__(self, java_ref, java_transformer):
+        super().__init__(java_ref, java_transformer)
 
     def all_types(self):
         &#34;&#34;&#34;
@@ -113,7 +113,7 @@ class QueryBuilder(BaseQueryBuilder):
         Returns:
             The final constructed `pygw.query.query.Query`.
         &#34;&#34;&#34;
-        return Query(self._java_ref.build(), self._result_transformer)</code></pre>
+        return Query(self._java_ref.build(), self._java_transformer)</code></pre>
 </details>
 </section>
 <section>
@@ -127,7 +127,7 @@ class QueryBuilder(BaseQueryBuilder):
 <dl>
 <dt id="pygw.query.query_builder.QueryBuilder"><code class="flex name class">
 <span>class <span class="ident">QueryBuilder</span></span>
-<span>(</span><span>java_ref, result_transformer)</span>
+<span>(</span><span>java_ref, java_transformer)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Base query builder for constructing GeoWave queries.
@@ -144,8 +144,8 @@ Instead, use one of the derived classes such as
     `pygw.query.vector.vector_query_builder.VectorQueryBuilder`.
     &#34;&#34;&#34;
 
-    def __init__(self, java_ref, result_transformer):
-        super().__init__(java_ref, result_transformer)
+    def __init__(self, java_ref, java_transformer):
+        super().__init__(java_ref, java_transformer)
 
     def all_types(self):
         &#34;&#34;&#34;
@@ -212,7 +212,7 @@ Instead, use one of the derived classes such as
         Returns:
             The final constructed `pygw.query.query.Query`.
         &#34;&#34;&#34;
-        return Query(self._java_ref.build(), self._result_transformer)</code></pre>
+        return Query(self._java_ref.build(), self._java_transformer)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -222,7 +222,6 @@ Instead, use one of the derived classes such as
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="pygw.query.vector.vector_query_builder.VectorQueryBuilder" href="vector/vector_query_builder.html#pygw.query.vector.vector_query_builder.VectorQueryBuilder">VectorQueryBuilder</a></li>
-<li><a title="pygw.query.statistics.vector_statistics_query_builder.VectorStatisticsQueryBuilder" href="statistics/vector_statistics_query_builder.html#pygw.query.statistics.vector_statistics_query_builder.VectorStatisticsQueryBuilder">VectorStatisticsQueryBuilder</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
@@ -311,7 +310,7 @@ default.</p>
     Returns:
         The final constructed `pygw.query.query.Query`.
     &#34;&#34;&#34;
-    return Query(self._java_ref.build(), self._result_transformer)</code></pre>
+    return Query(self._java_ref.build(), self._java_transformer)</code></pre>
 </details>
 </dd>
 <dt id="pygw.query.query_builder.QueryBuilder.set_type_names"><code class="name flex">

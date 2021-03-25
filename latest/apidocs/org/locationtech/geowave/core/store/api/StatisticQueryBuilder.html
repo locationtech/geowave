@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":17,"i5":17,"i6":17,"i7":17,"i8":17,"i9":17,"i10":17,"i11":17,"i12":6,"i13":17,"i14":17,"i15":17,"i16":17,"i17":17,"i18":17,"i19":17,"i20":17,"i21":17,"i22":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":17,"i4":6,"i5":17,"i6":17,"i7":17,"i8":17,"i9":17,"i10":17,"i11":17,"i12":17,"i13":6,"i14":17,"i15":17,"i16":17,"i17":17,"i18":17,"i19":17,"i20":17,"i21":17,"i22":17,"i23":17,"i24":6};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -150,120 +150,132 @@ var activeTableTab = "activeTableTab";
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/statistics/query/FieldStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">FieldStatisticQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/field/BloomFilterStatistic.BloomFilterValue.html" title="class in org.locationtech.geowave.core.store.statistics.field">BloomFilterStatistic.BloomFilterValue</a>,com.google.common.hash.BloomFilter&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&gt;&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html#bloomFilter--">bloomFilter</a></span>()</code>
+<div class="block">Create a new field statistic query builder for a bloom filter statistic.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQuery.html" title="interface in org.locationtech.geowave.core.store.api">StatisticQuery</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html" title="type parameter in StatisticQueryBuilder">V</a>,<a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html" title="type parameter in StatisticQueryBuilder">R</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html#build--">build</a></span>()</code>
 <div class="block">Build the statistic query.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/statistics/query/DataTypeStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">DataTypeStatisticQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/adapter/CountStatistic.CountValue.html" title="class in org.locationtech.geowave.core.store.statistics.adapter">CountStatistic.CountValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html#count--">count</a></span>()</code>
 <div class="block">Create a new data type statistic query builder for a count statistic.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/statistics/query/FieldStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">FieldStatisticQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/field/CountMinSketchStatistic.CountMinSketchValue.html" title="class in org.locationtech.geowave.core.store.statistics.field">CountMinSketchStatistic.CountMinSketchValue</a>,com.clearspring.analytics.stream.frequency.CountMinSketch&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html#countMinSketch--">countMinSketch</a></span>()</code>
 <div class="block">Create a new field statistic query builder for a count min sketch statistic.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/statistics/query/IndexStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">IndexStatisticQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/index/DifferingVisibilityCountStatistic.DifferingVisibilityCountValue.html" title="class in org.locationtech.geowave.core.store.statistics.index">DifferingVisibilityCountStatistic.DifferingVisibilityCountValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html#differingVisibilityCount--">differingVisibilityCount</a></span>()</code>
 <div class="block">Create a new index statistic query builder for a differing visibility count statistic.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/statistics/query/IndexStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">IndexStatisticQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/index/DuplicateEntryCountStatistic.DuplicateEntryCountValue.html" title="class in org.locationtech.geowave.core.store.statistics.index">DuplicateEntryCountStatistic.DuplicateEntryCountValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html#duplicateEntryCount--">duplicateEntryCount</a></span>()</code>
 <div class="block">Create a new index statistic query builder for a duplicate entry count statistic.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/statistics/query/IndexStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">IndexStatisticQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/index/FieldVisibilityCountStatistic.FieldVisibilityCountValue.html" title="class in org.locationtech.geowave.core.store.statistics.index">FieldVisibilityCountStatistic.FieldVisibilityCountValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html#fieldVisibilityCount--">fieldVisibilityCount</a></span>()</code>
 <div class="block">Create a new index statistic query builder for a field visibility count statistic.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/statistics/query/FieldStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">FieldStatisticQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/field/FixedBinNumericHistogramStatistic.FixedBinNumericHistogramValue.html" title="class in org.locationtech.geowave.core.store.statistics.field">FixedBinNumericHistogramStatistic.FixedBinNumericHistogramValue</a>,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/histogram/FixedBinNumericHistogram.html" title="class in org.locationtech.geowave.core.store.adapter.statistics.histogram">FixedBinNumericHistogram</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html#fixedBinNumericHistogram--">fixedBinNumericHistogram</a></span>()</code>
 <div class="block">Create a new field statistic query builder for a fixed bin numeric histogram statistic.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/statistics/query/FieldStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">FieldStatisticQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/field/HyperLogLogStatistic.HyperLogLogPlusValue.html" title="class in org.locationtech.geowave.core.store.statistics.field">HyperLogLogStatistic.HyperLogLogPlusValue</a>,com.clearspring.analytics.stream.cardinality.HyperLogLogPlus&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html#hyperLogLog--">hyperLogLog</a></span>()</code>
 <div class="block">Create a new field statistic query builder for a hyper log log statistic.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/statistics/query/IndexStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">IndexStatisticQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexMetaDataSetStatistic.IndexMetaDataSetValue.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexMetaDataSetStatistic.IndexMetaDataSetValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/IndexMetaData.html" title="interface in org.locationtech.geowave.core.index">IndexMetaData</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html#indexMetaDataSet--">indexMetaDataSet</a></span>()</code>
 <div class="block">Create a new index statistic query builder for an index metadata set statistic.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html" title="type parameter in StatisticQueryBuilder">B</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html#internal--">internal</a></span>()</code>
 <div class="block">Set the tag filter to internal statistics.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/statistics/query/IndexStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">IndexStatisticQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/index/MaxDuplicatesStatistic.MaxDuplicatesValue.html" title="class in org.locationtech.geowave.core.store.statistics.index">MaxDuplicatesStatistic.MaxDuplicatesValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html#maxDuplicates--">maxDuplicates</a></span>()</code>
 <div class="block">Create a new index statistic query builder for a max duplicates statistic.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>static &lt;V extends <a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticValue.html" title="class in org.locationtech.geowave.core.store.api">StatisticValue</a>&lt;R&gt;,R&gt;<br><a href="../../../../../../org/locationtech/geowave/core/store/statistics/query/DataTypeStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">DataTypeStatisticQueryBuilder</a>&lt;V,R&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html#newBuilder-org.locationtech.geowave.core.store.statistics.adapter.DataTypeStatisticType-">newBuilder</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/statistics/adapter/DataTypeStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.adapter">DataTypeStatisticType</a>&lt;V&gt;&nbsp;statisticType)</code>
 <div class="block">Create a new data type statistic query builder for the given statistic type.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>static &lt;V extends <a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticValue.html" title="class in org.locationtech.geowave.core.store.api">StatisticValue</a>&lt;R&gt;,R&gt;<br><a href="../../../../../../org/locationtech/geowave/core/store/statistics/query/FieldStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">FieldStatisticQueryBuilder</a>&lt;V,R&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html#newBuilder-org.locationtech.geowave.core.store.statistics.field.FieldStatisticType-">newBuilder</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/statistics/field/FieldStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.field">FieldStatisticType</a>&lt;V&gt;&nbsp;statisticType)</code>
 <div class="block">Create a new field statistic query builder for the given statistic type.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>static &lt;V extends <a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticValue.html" title="class in org.locationtech.geowave.core.store.api">StatisticValue</a>&lt;R&gt;,R&gt;<br><a href="../../../../../../org/locationtech/geowave/core/store/statistics/query/IndexStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">IndexStatisticQueryBuilder</a>&lt;V,R&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html#newBuilder-org.locationtech.geowave.core.store.statistics.index.IndexStatisticType-">newBuilder</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexStatisticType</a>&lt;V&gt;&nbsp;statisticType)</code>
 <div class="block">Create a new index statistic query builder for the given statistic type.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
-<td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/statistics/query/FieldStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">FieldStatisticQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.NumericHistogramValue.html" title="class in org.locationtech.geowave.core.store.statistics.field">NumericHistogramStatistic.NumericHistogramValue</a>,org.apache.commons.lang3.tuple.Pair&lt;org.HdrHistogram.DoubleHistogram,org.HdrHistogram.DoubleHistogram&gt;&gt;</code></td>
+<tr id="i18" class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/statistics/query/FieldStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">FieldStatisticQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.NumericHistogramValue.html" title="class in org.locationtech.geowave.core.store.statistics.field">NumericHistogramStatistic.NumericHistogramValue</a>,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics.histogram">NumericHistogram</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html#numericHistogram--">numericHistogram</a></span>()</code>
 <div class="block">Create a new field statistic query builder for a numeric histogram statistic.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/statistics/query/FieldStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">FieldStatisticQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericMeanStatistic.NumericMeanValue.html" title="class in org.locationtech.geowave.core.store.statistics.field">NumericMeanStatistic.NumericMeanValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html#numericMean--">numericMean</a></span>()</code>
 <div class="block">Create a new field statistic query builder for a numeric mean statistic.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/statistics/query/FieldStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">FieldStatisticQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericRangeStatistic.NumericRangeValue.html" title="class in org.locationtech.geowave.core.store.statistics.field">NumericRangeStatistic.NumericRangeValue</a>,org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html#numericRange--">numericRange</a></span>()</code>
 <div class="block">Create a new field statistic query builder for a numeric range statistic.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i21" class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/statistics/query/FieldStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">FieldStatisticQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericStatsStatistic.NumericStatsValue.html" title="class in org.locationtech.geowave.core.store.statistics.field">NumericStatsStatistic.NumericStatsValue</a>,com.google.common.math.Stats&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html#numericStats--">numericStats</a></span>()</code>
+<div class="block">Create a new field statistic query builder for a numeric stats statistic.</div>
+</td>
+</tr>
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/statistics/query/IndexStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">IndexStatisticQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/index/PartitionsStatistic.PartitionsValue.html" title="class in org.locationtech.geowave.core.store.statistics.index">PartitionsStatistic.PartitionsValue</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html#partitions--">partitions</a></span>()</code>
 <div class="block">Create a new index statistic query builder for a partitions statistic.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/statistics/query/IndexStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">IndexStatisticQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/index/RowRangeHistogramStatistic.RowRangeHistogramValue.html" title="class in org.locationtech.geowave.core.store.statistics.index">RowRangeHistogramStatistic.RowRangeHistogramValue</a>,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics.histogram">NumericHistogram</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html#rowRangeHistogram--">rowRangeHistogram</a></span>()</code>
 <div class="block">Create a new index statistic query builder for a row range histogram statistic.</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html" title="type parameter in StatisticQueryBuilder">B</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html#tag-java.lang.String-">tag</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tag)</code>
 <div class="block">Set the tag for the query.</div>
@@ -539,6 +551,20 @@ var activeTableTab = "activeTableTab";
 </dl>
 </li>
 </ul>
+<a name="bloomFilter--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>bloomFilter</h4>
+<pre>static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/query/FieldStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">FieldStatisticQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/field/BloomFilterStatistic.BloomFilterValue.html" title="class in org.locationtech.geowave.core.store.statistics.field">BloomFilterStatistic.BloomFilterValue</a>,com.google.common.hash.BloomFilter&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&gt;&gt;&nbsp;bloomFilter()</pre>
+<div class="block">Create a new field statistic query builder for a bloom filter statistic.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the field statistic query builder</dd>
+</dl>
+</li>
+</ul>
 <a name="countMinSketch--">
 <!--   -->
 </a>
@@ -587,7 +613,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>numericHistogram</h4>
-<pre>static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/query/FieldStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">FieldStatisticQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.NumericHistogramValue.html" title="class in org.locationtech.geowave.core.store.statistics.field">NumericHistogramStatistic.NumericHistogramValue</a>,org.apache.commons.lang3.tuple.Pair&lt;org.HdrHistogram.DoubleHistogram,org.HdrHistogram.DoubleHistogram&gt;&gt;&nbsp;numericHistogram()</pre>
+<pre>static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/query/FieldStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">FieldStatisticQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.NumericHistogramValue.html" title="class in org.locationtech.geowave.core.store.statistics.field">NumericHistogramStatistic.NumericHistogramValue</a>,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics.histogram">NumericHistogram</a>&gt;&nbsp;numericHistogram()</pre>
 <div class="block">Create a new field statistic query builder for a numeric histogram statistic.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -612,11 +638,25 @@ var activeTableTab = "activeTableTab";
 <a name="numericRange--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>numericRange</h4>
 <pre>static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/query/FieldStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">FieldStatisticQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericRangeStatistic.NumericRangeValue.html" title="class in org.locationtech.geowave.core.store.statistics.field">NumericRangeStatistic.NumericRangeValue</a>,org.apache.commons.lang3.Range&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&gt;&nbsp;numericRange()</pre>
 <div class="block">Create a new field statistic query builder for a numeric range statistic.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the field statistic query builder</dd>
+</dl>
+</li>
+</ul>
+<a name="numericStats--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>numericStats</h4>
+<pre>static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/query/FieldStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">FieldStatisticQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericStatsStatistic.NumericStatsValue.html" title="class in org.locationtech.geowave.core.store.statistics.field">NumericStatsStatistic.NumericStatsValue</a>,com.google.common.math.Stats&gt;&nbsp;numericStats()</pre>
+<div class="block">Create a new field statistic query builder for a numeric stats statistic.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the field statistic query builder</dd>

@@ -39,11 +39,12 @@ from ..base.type_conversions import StringArrayType
 
 class AggregationQueryBuilder(BaseQueryBuilder):
     &#34;&#34;&#34;
-    A builder for creating aggregation queries.
+    A builder for creating aggregation queries. This class should not be used directly.  Instead, use one of the derived
+    classes such as `pygw.query.vector.VectorAggregationQueryBuilder`.
     &#34;&#34;&#34;
 
     def __init__(self, java_ref):
-        super().__init__(java_ref, None)
+        super().__init__(java_ref)
 
     def count(self, *type_names):
         &#34;&#34;&#34;
@@ -81,7 +82,7 @@ class AggregationQueryBuilder(BaseQueryBuilder):
         Returns:
             The final constructed `pygw.query.AggregationQuery`.
         &#34;&#34;&#34;
-        return AggregationQuery(self._java_ref.build(), self._result_transformer)</code></pre>
+        return AggregationQuery(self._java_ref.build(), self._java_transformer)</code></pre>
 </details>
 </section>
 <section>
@@ -98,16 +99,19 @@ class AggregationQueryBuilder(BaseQueryBuilder):
 <span>(</span><span>java_ref)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>A builder for creating aggregation queries.</p></section>
+<section class="desc"><p>A builder for creating aggregation queries. This class should not be used directly.
+Instead, use one of the derived
+classes such as <code>pygw.query.vector.VectorAggregationQueryBuilder</code>.</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class AggregationQueryBuilder(BaseQueryBuilder):
     &#34;&#34;&#34;
-    A builder for creating aggregation queries.
+    A builder for creating aggregation queries. This class should not be used directly.  Instead, use one of the derived
+    classes such as `pygw.query.vector.VectorAggregationQueryBuilder`.
     &#34;&#34;&#34;
 
     def __init__(self, java_ref):
-        super().__init__(java_ref, None)
+        super().__init__(java_ref)
 
     def count(self, *type_names):
         &#34;&#34;&#34;
@@ -145,7 +149,7 @@ class AggregationQueryBuilder(BaseQueryBuilder):
         Returns:
             The final constructed `pygw.query.AggregationQuery`.
         &#34;&#34;&#34;
-        return AggregationQuery(self._java_ref.build(), self._result_transformer)</code></pre>
+        return AggregationQuery(self._java_ref.build(), self._java_transformer)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -204,7 +208,7 @@ class AggregationQueryBuilder(BaseQueryBuilder):
     Returns:
         The final constructed `pygw.query.AggregationQuery`.
     &#34;&#34;&#34;
-    return AggregationQuery(self._java_ref.build(), self._result_transformer)</code></pre>
+    return AggregationQuery(self._java_ref.build(), self._java_transformer)</code></pre>
 </details>
 </dd>
 <dt id="pygw.query.aggregation_query_builder.AggregationQueryBuilder.count"><code class="name flex">

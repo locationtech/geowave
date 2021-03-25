@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.6.3" />
-<title>pygw.query.query_result_transformer API documentation</title>
+<title>pygw.statistics.index.duplicate_entry_count_statistic API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,7 +17,7 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>pygw.query.query_result_transformer</code></h1>
+<h1 class="title">Module <code>pygw.statistics.index.duplicate_entry_count_statistic</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
@@ -31,26 +31,24 @@
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
 # ===============================================================================================
+from pygw.config import geowave_pkg
+from ..statistic import IndexStatistic
+from ..statistic_type import IndexStatisticType
 
-class QueryResultTransformer:
+
+class DuplicateEntryCountStatistic(IndexStatistic):
     &#34;&#34;&#34;
-    Base class for transforming GeoWave query results from Java objects to
-    their Python counterparts.  All extending classes should overwrite the `transform`
-    method to perform the transformation.
+    Counts the number of entries with duplicates in the index.
     &#34;&#34;&#34;
+    STATS_TYPE = IndexStatisticType(geowave_pkg.core.store.statistics.index.DuplicateEntryCountStatistic.STATS_TYPE)
 
-    def transform(self, j_result):
-        &#34;&#34;&#34;
-        Transforms a Java query result into a Python-friendly variant.
-
-        Args:
-            j_result (java object): The java object to transform.
-        Raises:
-            NotImplementedError: This is a base class and not intended to be used directly.
-        Returns:
-            A Python-friendly equivalent of the query result.
-        &#34;&#34;&#34;
-        raise NotImplementedError</code></pre>
+    def __init__(self, index_name=None, java_ref=None):
+        if java_ref is None:
+            if index_name is None:
+                java_ref = geowave_pkg.core.store.statistics.index.DuplicateEntryCountStatistic()
+            else:
+                java_ref = geowave_pkg.core.store.statistics.index.DuplicateEntryCountStatistic(index_name)
+        super().__init__(java_ref)</code></pre>
 </details>
 </section>
 <section>
@@ -62,79 +60,59 @@ class QueryResultTransformer:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="pygw.query.query_result_transformer.QueryResultTransformer"><code class="flex name class">
-<span>class <span class="ident">QueryResultTransformer</span></span>
-<span>(</span><span>*args, **kwargs)</span>
+<dt id="pygw.statistics.index.duplicate_entry_count_statistic.DuplicateEntryCountStatistic"><code class="flex name class">
+<span>class <span class="ident">DuplicateEntryCountStatistic</span></span>
+<span>(</span><span>index_name=None, java_ref=None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Base class for transforming GeoWave query results from Java objects to
-their Python counterparts.
-All extending classes should overwrite the <code>transform</code>
-method to perform the transformation.</p></section>
+<section class="desc"><p>Counts the number of entries with duplicates in the index.</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class QueryResultTransformer:
+<pre><code class="python">class DuplicateEntryCountStatistic(IndexStatistic):
     &#34;&#34;&#34;
-    Base class for transforming GeoWave query results from Java objects to
-    their Python counterparts.  All extending classes should overwrite the `transform`
-    method to perform the transformation.
+    Counts the number of entries with duplicates in the index.
     &#34;&#34;&#34;
+    STATS_TYPE = IndexStatisticType(geowave_pkg.core.store.statistics.index.DuplicateEntryCountStatistic.STATS_TYPE)
 
-    def transform(self, j_result):
-        &#34;&#34;&#34;
-        Transforms a Java query result into a Python-friendly variant.
-
-        Args:
-            j_result (java object): The java object to transform.
-        Raises:
-            NotImplementedError: This is a base class and not intended to be used directly.
-        Returns:
-            A Python-friendly equivalent of the query result.
-        &#34;&#34;&#34;
-        raise NotImplementedError</code></pre>
+    def __init__(self, index_name=None, java_ref=None):
+        if java_ref is None:
+            if index_name is None:
+                java_ref = geowave_pkg.core.store.statistics.index.DuplicateEntryCountStatistic()
+            else:
+                java_ref = geowave_pkg.core.store.statistics.index.DuplicateEntryCountStatistic(index_name)
+        super().__init__(java_ref)</code></pre>
 </details>
-<h3>Subclasses</h3>
+<h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="pygw.query.vector.result_transformers.EnvelopeTransformer" href="vector/result_transformers.html#pygw.query.vector.result_transformers.EnvelopeTransformer">EnvelopeTransformer</a></li>
-<li><a title="pygw.query.vector.result_transformers.IntervalTransformer" href="vector/result_transformers.html#pygw.query.vector.result_transformers.IntervalTransformer">IntervalTransformer</a></li>
-<li><a title="pygw.query.vector.result_transformers.SimpleFeatureTransformer" href="vector/result_transformers.html#pygw.query.vector.result_transformers.SimpleFeatureTransformer">SimpleFeatureTransformer</a></li>
+<li><a title="pygw.statistics.statistic.IndexStatistic" href="../statistic.html#pygw.statistics.statistic.IndexStatistic">IndexStatistic</a></li>
+<li><a title="pygw.statistics.statistic.Statistic" href="../statistic.html#pygw.statistics.statistic.Statistic">Statistic</a></li>
+<li><a title="pygw.base.geowave_object.GeoWaveObject" href="../../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject">GeoWaveObject</a></li>
 </ul>
-<h3>Methods</h3>
+<h3>Class variables</h3>
 <dl>
-<dt id="pygw.query.query_result_transformer.QueryResultTransformer.transform"><code class="name flex">
-<span>def <span class="ident">transform</span></span>(<span>self, j_result)</span>
-</code></dt>
+<dt id="pygw.statistics.index.duplicate_entry_count_statistic.DuplicateEntryCountStatistic.STATS_TYPE"><code class="name">var <span class="ident">STATS_TYPE</span></code></dt>
 <dd>
-<section class="desc"><p>Transforms a Java query result into a Python-friendly variant.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>j_result</code></strong> :&ensp;<code>java</code> <code>object</code></dt>
-<dd>The java object to transform.</dd>
-</dl>
-<h2 id="raises">Raises</h2>
-<dl>
-<dt><strong><code>NotImplementedError</code></strong></dt>
-<dd>This is a base class and not intended to be used directly.</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<p>A Python-friendly equivalent of the query result.</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def transform(self, j_result):
-    &#34;&#34;&#34;
-    Transforms a Java query result into a Python-friendly variant.
-
-    Args:
-        j_result (java object): The java object to transform.
-    Raises:
-        NotImplementedError: This is a base class and not intended to be used directly.
-    Returns:
-        A Python-friendly equivalent of the query result.
-    &#34;&#34;&#34;
-    raise NotImplementedError</code></pre>
-</details>
+<section class="desc"></section>
 </dd>
 </dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.statistics.statistic.IndexStatistic" href="../statistic.html#pygw.statistics.statistic.IndexStatistic">IndexStatistic</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.statistics.statistic.IndexStatistic.get_binning_strategy" href="../statistic.html#pygw.statistics.statistic.Statistic.get_binning_strategy">get_binning_strategy</a></code></li>
+<li><code><a title="pygw.statistics.statistic.IndexStatistic.get_description" href="../statistic.html#pygw.statistics.statistic.Statistic.get_description">get_description</a></code></li>
+<li><code><a title="pygw.statistics.statistic.IndexStatistic.get_index_name" href="../statistic.html#pygw.statistics.statistic.IndexStatistic.get_index_name">get_index_name</a></code></li>
+<li><code><a title="pygw.statistics.statistic.IndexStatistic.get_statistic_type" href="../statistic.html#pygw.statistics.statistic.Statistic.get_statistic_type">get_statistic_type</a></code></li>
+<li><code><a title="pygw.statistics.statistic.IndexStatistic.get_tag" href="../statistic.html#pygw.statistics.statistic.Statistic.get_tag">get_tag</a></code></li>
+<li><code><a title="pygw.statistics.statistic.IndexStatistic.is_instance_of" href="../../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject.is_instance_of">is_instance_of</a></code></li>
+<li><code><a title="pygw.statistics.statistic.IndexStatistic.is_internal" href="../statistic.html#pygw.statistics.statistic.Statistic.is_internal">is_internal</a></code></li>
+<li><code><a title="pygw.statistics.statistic.IndexStatistic.set_binning_strategy" href="../statistic.html#pygw.statistics.statistic.Statistic.set_binning_strategy">set_binning_strategy</a></code></li>
+<li><code><a title="pygw.statistics.statistic.IndexStatistic.set_index_name" href="../statistic.html#pygw.statistics.statistic.IndexStatistic.set_index_name">set_index_name</a></code></li>
+<li><code><a title="pygw.statistics.statistic.IndexStatistic.set_internal" href="../statistic.html#pygw.statistics.statistic.Statistic.set_internal">set_internal</a></code></li>
+<li><code><a title="pygw.statistics.statistic.IndexStatistic.set_tag" href="../statistic.html#pygw.statistics.statistic.Statistic.set_tag">set_tag</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 </dl>
 </section>
@@ -147,15 +125,15 @@ method to perform the transformation.</p></section>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="pygw.query" href="index.html">pygw.query</a></code></li>
+<li><code><a title="pygw.statistics.index" href="index.html">pygw.statistics.index</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="pygw.query.query_result_transformer.QueryResultTransformer" href="#pygw.query.query_result_transformer.QueryResultTransformer">QueryResultTransformer</a></code></h4>
+<h4><code><a title="pygw.statistics.index.duplicate_entry_count_statistic.DuplicateEntryCountStatistic" href="#pygw.statistics.index.duplicate_entry_count_statistic.DuplicateEntryCountStatistic">DuplicateEntryCountStatistic</a></code></h4>
 <ul class="">
-<li><code><a title="pygw.query.query_result_transformer.QueryResultTransformer.transform" href="#pygw.query.query_result_transformer.QueryResultTransformer.transform">transform</a></code></li>
+<li><code><a title="pygw.statistics.index.duplicate_entry_count_statistic.DuplicateEntryCountStatistic.STATS_TYPE" href="#pygw.statistics.index.duplicate_entry_count_statistic.DuplicateEntryCountStatistic.STATS_TYPE">STATS_TYPE</a></code></li>
 </ul>
 </li>
 </ul>

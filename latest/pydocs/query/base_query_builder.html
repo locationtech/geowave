@@ -38,16 +38,17 @@ from pygw.base.type_conversions import StringArrayType
 from .query_constraints_factory import QueryConstraintsFactory
 from .query_hint_key import QueryHintKey
 from .query_constraints import QueryConstraints
+from ..base.java_transformer import NoOpTransformer
 
 
 class BaseQueryBuilder(GeoWaveObject):
     &#34;&#34;&#34;
     A base class for building queries.  This class should not be used directly.  Instead, use one of the derived classes
-    such as `pygw.query.vector.VectorQueryBuilder` or `pygw.query.aggregation.AggregationQueryBuilder`.
+    such as `pygw.query.vector.VectorQueryBuilder` or `pygw.query.vector.VectorAggregationQueryBuilder`.
     &#34;&#34;&#34;
 
-    def __init__(self, java_ref, result_transformer):
-        self._result_transformer = result_transformer
+    def __init__(self, java_ref, java_transformer=NoOpTransformer()):
+        self._java_transformer = java_transformer
         super().__init__(java_ref)
 
     def constraints_factory(self):
@@ -203,23 +204,23 @@ class BaseQueryBuilder(GeoWaveObject):
 <dl>
 <dt id="pygw.query.base_query_builder.BaseQueryBuilder"><code class="flex name class">
 <span>class <span class="ident">BaseQueryBuilder</span></span>
-<span>(</span><span>java_ref, result_transformer)</span>
+<span>(</span><span>java_ref, java_transformer=<pygw.base.java_transformer.NoOpTransformer object at 0x7fa1b4cbd128>)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>A base class for building queries.
 This class should not be used directly.
 Instead, use one of the derived classes
-such as <code>pygw.query.vector.VectorQueryBuilder</code> or <code>pygw.query.aggregation.AggregationQueryBuilder</code>.</p></section>
+such as <code>pygw.query.vector.VectorQueryBuilder</code> or <code>pygw.query.vector.VectorAggregationQueryBuilder</code>.</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class BaseQueryBuilder(GeoWaveObject):
     &#34;&#34;&#34;
     A base class for building queries.  This class should not be used directly.  Instead, use one of the derived classes
-    such as `pygw.query.vector.VectorQueryBuilder` or `pygw.query.aggregation.AggregationQueryBuilder`.
+    such as `pygw.query.vector.VectorQueryBuilder` or `pygw.query.vector.VectorAggregationQueryBuilder`.
     &#34;&#34;&#34;
 
-    def __init__(self, java_ref, result_transformer):
-        self._result_transformer = result_transformer
+    def __init__(self, java_ref, java_transformer=NoOpTransformer()):
+        self._java_transformer = java_transformer
         super().__init__(java_ref)
 
     def constraints_factory(self):

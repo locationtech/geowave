@@ -41,6 +41,7 @@ from datetime import datetime
 
 from shapely.geometry import Point
 
+from pygw.base import CloseableIterator
 from pygw.store import DataStoreFactory
 from pygw.store.rocksdb import RocksDBOptions
 from pygw.geotools import SimpleFeatureTypeBuilder
@@ -53,11 +54,15 @@ POINT_TYPE_NAME = &#34;TestPointType&#34;
 POINT_GEOMETRY_FIELD = &#34;the_geom&#34;
 POINT_TIME_FIELD = &#34;date&#34;
 POINT_NUMBER_FIELD = &#34;flt&#34;
+POINT_COLOR_FIELD = &#34;color&#34;
+POINT_SHAPE_FIELD = &#34;shape&#34;
 _point_type_builder = SimpleFeatureTypeBuilder()
 _point_type_builder.set_name(POINT_TYPE_NAME)
 _point_type_builder.add(AttributeDescriptor.point(POINT_GEOMETRY_FIELD))
 _point_type_builder.add(AttributeDescriptor.date(POINT_TIME_FIELD))
 _point_type_builder.add(AttributeDescriptor.float(POINT_NUMBER_FIELD))
+_point_type_builder.add(AttributeDescriptor.string(POINT_COLOR_FIELD))
+_point_type_builder.add(AttributeDescriptor.string(POINT_SHAPE_FIELD))
 POINT_TYPE = _point_type_builder.build_feature_type()
 
 # &#34;Point&#34; Type Adapter
@@ -66,17 +71,29 @@ POINT_TYPE_ADAPTER = FeatureDataAdapter(POINT_TYPE)
 # &#34;Point&#34; Feature builder
 POINT_FEATURE_BUILDER = SimpleFeatureBuilder(POINT_TYPE)
 
+COLORS = [&#39;RED&#39;, &#39;GREEN&#39;, &#39;BLUE&#39;]
+SHAPES = [&#39;SQUARE&#39;, &#39;CIRCLE&#39;, &#39;TRIANGLE&#39;, &#39;RECTANGLE&#39;]
+
 
 def _create_feature(fid, geometry, timestamp):
     POINT_FEATURE_BUILDER.set_attr(POINT_GEOMETRY_FIELD, geometry)
     POINT_FEATURE_BUILDER.set_attr(POINT_TIME_FIELD, datetime.utcfromtimestamp(timestamp))
     POINT_FEATURE_BUILDER.set_attr(POINT_NUMBER_FIELD, timestamp)
+    POINT_FEATURE_BUILDER.set_attr(POINT_COLOR_FIELD, COLORS[timestamp % 3])
+    POINT_FEATURE_BUILDER.set_attr(POINT_SHAPE_FIELD, SHAPES[timestamp % 4])
     return POINT_FEATURE_BUILDER.build(fid)
 
 
+def latitude(lon_value):
+    if lon_value &lt; 0:
+        return lon_value % -90
+    return lon_value % 90
+
+
 TEST_DATA = [
-    _create_feature(id_, Point(i, j), i) for
-    id_, (i, j) in enumerate(zip(range(-180, 180), range(-180, 180)))]
+    _create_feature(id_, Point(i, latitude(i)), i) for
+    id_, i in enumerate(range(-180, 180))]
+
 
 # Test Directory
 TEST_DIR = os.path.join(os.getcwd(), &#34;test&#34;)
@@ -109,6 +126,7 @@ def write_test_data(ds, *expected_indices):
 
 
 def results_as_list(results):
+    assert isinstance(results, CloseableIterator)
     res = [d for d in results]
     results.close()
     return res</code></pre>
@@ -121,6 +139,19 @@ def results_as_list(results):
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="pygw.test.conftest.latitude"><code class="name flex">
+<span>def <span class="ident">latitude</span></span>(<span>lon_value)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def latitude(lon_value):
+    if lon_value &lt; 0:
+        return lon_value % -90
+    return lon_value % 90</code></pre>
+</details>
+</dd>
 <dt id="pygw.test.conftest.results_as_list"><code class="name flex">
 <span>def <span class="ident">results_as_list</span></span>(<span>results)</span>
 </code></dt>
@@ -129,6 +160,7 @@ def results_as_list(results):
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def results_as_list(results):
+    assert isinstance(results, CloseableIterator)
     res = [d for d in results]
     results.close()
     return res</code></pre>
@@ -192,6 +224,7 @@ def test_ds():
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="pygw.test.conftest.latitude" href="#pygw.test.conftest.latitude">latitude</a></code></li>
 <li><code><a title="pygw.test.conftest.results_as_list" href="#pygw.test.conftest.results_as_list">results_as_list</a></code></li>
 <li><code><a title="pygw.test.conftest.test_ds" href="#pygw.test.conftest.test_ds">test_ds</a></code></li>
 <li><code><a title="pygw.test.conftest.write_test_data" href="#pygw.test.conftest.write_test_data">write_test_data</a></code></li>

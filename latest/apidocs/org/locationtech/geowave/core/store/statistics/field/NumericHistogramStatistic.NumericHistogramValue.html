@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.LocalInternalHistogram.html" title="class in org.locationtech.geowave.core.store.statistics.field"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.html" title="class in org.locationtech.geowave.core.store.statistics.field"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericMeanStatistic.html" title="class in org.locationtech.geowave.core.store.statistics.field"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -100,7 +100,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticValue.html" title="class in org.locationtech.geowave.core.store.api">org.locationtech.geowave.core.store.api.StatisticValue</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;org.HdrHistogram.DoubleHistogram,org.HdrHistogram.DoubleHistogram&gt;&gt;</li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticValue.html" title="class in org.locationtech.geowave.core.store.api">org.locationtech.geowave.core.store.api.StatisticValue</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics.histogram">NumericHistogram</a>&gt;</li>
 <li>
 <ul class="inheritance">
 <li>org.locationtech.geowave.core.store.statistics.field.NumericHistogramStatistic.NumericHistogramValue</li>
@@ -123,7 +123,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public static class <span class="typeNameLabel">NumericHistogramStatistic.NumericHistogramValue</span>
-extends <a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticValue.html" title="class in org.locationtech.geowave.core.store.api">StatisticValue</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;org.HdrHistogram.DoubleHistogram,org.HdrHistogram.DoubleHistogram&gt;&gt;
+extends <a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticValue.html" title="class in org.locationtech.geowave.core.store.api">StatisticValue</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics.histogram">NumericHistogram</a>&gt;
 implements <a href="../../../../../../../org/locationtech/geowave/core/store/statistics/StatisticsIngestCallback.html" title="interface in org.locationtech.geowave.core.store.statistics">StatisticsIngestCallback</a></pre>
 </li>
 </ul>
@@ -160,6 +160,9 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/sta
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.NumericHistogramValue.html#NumericHistogramValue--">NumericHistogramValue</a></span>()</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.NumericHistogramValue.html#NumericHistogramValue-org.locationtech.geowave.core.store.statistics.field.NumericHistogramStatistic-">NumericHistogramValue</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.html" title="class in org.locationtech.geowave.core.store.statistics.field">NumericHistogramStatistic</a>&nbsp;statistic)</code>&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -176,18 +179,14 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/sta
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.NumericHistogramValue.html#add-double-">add</a></span>(double&nbsp;num)</code>&nbsp;</td>
-</tr>
-<tr id="i1" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.NumericHistogramValue.html#cdf-double-">cdf</a></span>(double&nbsp;val)</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>long[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.NumericHistogramValue.html#count-int-">count</a></span>(int&nbsp;bins)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.NumericHistogramValue.html#count-int-">count</a></span>(int&nbsp;binSize)</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.NumericHistogramValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
              T&nbsp;entry,
@@ -195,44 +194,44 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/sta
 <div class="block">Called when an entry is added to the data store.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.NumericHistogramValue.html#fromBinary-byte:A-">fromBinary</a></span>(byte[]&nbsp;bytes)</code>
 <div class="block">Convert a stream of binary bytes to fields and data within an object.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>org.apache.commons.lang3.tuple.Pair&lt;org.HdrHistogram.DoubleHistogram,org.HdrHistogram.DoubleHistogram&gt;</code></td>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/histogram/TDigestNumericHistogram.html" title="class in org.locationtech.geowave.core.store.adapter.statistics.histogram">TDigestNumericHistogram</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.NumericHistogramValue.html#getValue--">getValue</a></span>()</code>
 <div class="block">Get the raw value of the statistic value.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.NumericHistogramValue.html#merge-org.locationtech.geowave.core.index.Mergeable-">merge</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>&nbsp;merge)</code>
 <div class="block">Merge another statistic value into this one.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.NumericHistogramValue.html#percentPopulationOverRange-double-double-">percentPopulationOverRange</a></span>(double&nbsp;start,
                           double&nbsp;stop)</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.NumericHistogramValue.html#quantile-double-">quantile</a></span>(double&nbsp;percentage)</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.NumericHistogramValue.html#quantile-int-">quantile</a></span>(int&nbsp;bins)</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.NumericHistogramValue.html#toBinary--">toBinary</a></span>()</code>
 <div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.NumericHistogramValue.html#totalSampleSize--">totalSampleSize</a></span>()</code>&nbsp;</td>
 </tr>
@@ -268,10 +267,19 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/sta
 <a name="NumericHistogramValue--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>NumericHistogramValue</h4>
 <pre>public&nbsp;NumericHistogramValue()</pre>
+</li>
+</ul>
+<a name="NumericHistogramValue-org.locationtech.geowave.core.store.statistics.field.NumericHistogramStatistic-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>NumericHistogramValue</h4>
+<pre>public&nbsp;NumericHistogramValue(<a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.html" title="class in org.locationtech.geowave.core.store.statistics.field">NumericHistogramStatistic</a>&nbsp;statistic)</pre>
 </li>
 </ul>
 </li>
@@ -282,6 +290,96 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/sta
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="merge-org.locationtech.geowave.core.index.Mergeable-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>merge</h4>
+<pre>public&nbsp;void&nbsp;merge(<a href="../../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>&nbsp;merge)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticValue.html#merge-org.locationtech.geowave.core.index.Mergeable-">StatisticValue</a></code></span></div>
+<div class="block">Merge another statistic value into this one.
+ 
+ IMPORTANT: This function cannot guarantee that the Statistic will be available. Any variables
+ needed from the statistic for merging must be serialized with the value.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/Mergeable.html#merge-org.locationtech.geowave.core.index.Mergeable-">merge</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticValue.html#merge-org.locationtech.geowave.core.index.Mergeable-">merge</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticValue.html" title="class in org.locationtech.geowave.core.store.api">StatisticValue</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics.histogram">NumericHistogram</a>&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a name="entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-java.lang.Object-org.locationtech.geowave.core.store.entities.GeoWaveRow:A-">
+<!--   -->
+</a><a name="entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>entryIngested</h4>
+<pre>public&nbsp;&lt;T&gt;&nbsp;void&nbsp;entryIngested(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
+                              T&nbsp;entry,
+                              <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/StatisticsIngestCallback.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">StatisticsIngestCallback</a></code></span></div>
+<div class="block">Called when an entry is added to the data store.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/StatisticsIngestCallback.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/StatisticsIngestCallback.html" title="interface in org.locationtech.geowave.core.store.statistics">StatisticsIngestCallback</a></code></dd>
+<dd><code>entry</code> - the ingested entry</dd>
+<dd><code>rows</code> - the GeoWave rows associated with the entry</dd>
+</dl>
+</li>
+</ul>
+<a name="getValue--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getValue</h4>
+<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/histogram/TDigestNumericHistogram.html" title="class in org.locationtech.geowave.core.store.adapter.statistics.histogram">TDigestNumericHistogram</a>&nbsp;getValue()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticValue.html#getValue--">StatisticValue</a></code></span></div>
+<div class="block">Get the raw value of the statistic value.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticValue.html#getValue--">getValue</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticValue.html" title="class in org.locationtech.geowave.core.store.api">StatisticValue</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics.histogram">NumericHistogram</a>&gt;</code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the raw value</dd>
+</dl>
+</li>
+</ul>
+<a name="toBinary--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>toBinary</h4>
+<pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
+<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an array of bytes representing a binary stream representation of the object.</dd>
+</dl>
+</li>
+</ul>
+<a name="fromBinary-byte:A-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>fromBinary</h4>
+<pre>public&nbsp;void&nbsp;fromBinary(byte[]&nbsp;bytes)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#fromBinary-byte:A-">Persistable</a></code></span></div>
+<div class="block">Convert a stream of binary bytes to fields and data within an object.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#fromBinary-byte:A-">fromBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
+</dl>
+</li>
+</ul>
 <a name="quantile-int-">
 <!--   -->
 </a>
@@ -331,109 +429,10 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/sta
 <a name="count-int-">
 <!--   -->
 </a>
-<ul class="blockList">
-<li class="blockList">
-<h4>count</h4>
-<pre>public&nbsp;long[]&nbsp;count(int&nbsp;bins)</pre>
-</li>
-</ul>
-<a name="merge-org.locationtech.geowave.core.index.Mergeable-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>merge</h4>
-<pre>public&nbsp;void&nbsp;merge(<a href="../../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>&nbsp;merge)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticValue.html#merge-org.locationtech.geowave.core.index.Mergeable-">StatisticValue</a></code></span></div>
-<div class="block">Merge another statistic value into this one.
- 
- IMPORTANT: This function cannot guarantee that the Statistic will be available. Any variables
- needed from the statistic for merging must be serialized with the value.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/Mergeable.html#merge-org.locationtech.geowave.core.index.Mergeable-">merge</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a></code></dd>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticValue.html#merge-org.locationtech.geowave.core.index.Mergeable-">merge</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticValue.html" title="class in org.locationtech.geowave.core.store.api">StatisticValue</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;org.HdrHistogram.DoubleHistogram,org.HdrHistogram.DoubleHistogram&gt;&gt;</code></dd>
-</dl>
-</li>
-</ul>
-<a name="entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-java.lang.Object-org.locationtech.geowave.core.store.entities.GeoWaveRow:A-">
-<!--   -->
-</a><a name="entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>entryIngested</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;void&nbsp;entryIngested(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
-                              T&nbsp;entry,
-                              <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/StatisticsIngestCallback.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">StatisticsIngestCallback</a></code></span></div>
-<div class="block">Called when an entry is added to the data store.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/StatisticsIngestCallback.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/StatisticsIngestCallback.html" title="interface in org.locationtech.geowave.core.store.statistics">StatisticsIngestCallback</a></code></dd>
-<dd><code>entry</code> - the ingested entry</dd>
-<dd><code>rows</code> - the GeoWave rows associated with the entry</dd>
-</dl>
-</li>
-</ul>
-<a name="add-double-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>add</h4>
-<pre>protected&nbsp;void&nbsp;add(double&nbsp;num)</pre>
-</li>
-</ul>
-<a name="getValue--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getValue</h4>
-<pre>public&nbsp;org.apache.commons.lang3.tuple.Pair&lt;org.HdrHistogram.DoubleHistogram,org.HdrHistogram.DoubleHistogram&gt;&nbsp;getValue()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticValue.html#getValue--">StatisticValue</a></code></span></div>
-<div class="block">Get the raw value of the statistic value.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticValue.html#getValue--">getValue</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticValue.html" title="class in org.locationtech.geowave.core.store.api">StatisticValue</a>&lt;org.apache.commons.lang3.tuple.Pair&lt;org.HdrHistogram.DoubleHistogram,org.HdrHistogram.DoubleHistogram&gt;&gt;</code></dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the raw value</dd>
-</dl>
-</li>
-</ul>
-<a name="toBinary--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>toBinary</h4>
-<pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
-<div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>an array of bytes representing a binary stream representation of the object.</dd>
-</dl>
-</li>
-</ul>
-<a name="fromBinary-byte:A-">
-<!--   -->
-</a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>fromBinary</h4>
-<pre>public&nbsp;void&nbsp;fromBinary(byte[]&nbsp;bytes)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#fromBinary-byte:A-">Persistable</a></code></span></div>
-<div class="block">Convert a stream of binary bytes to fields and data within an object.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html#fromBinary-byte:A-">fromBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></code></dd>
-</dl>
+<h4>count</h4>
+<pre>public&nbsp;long[]&nbsp;count(int&nbsp;binSize)</pre>
 </li>
 </ul>
 </li>
@@ -464,7 +463,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/sta
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.LocalInternalHistogram.html" title="class in org.locationtech.geowave.core.store.statistics.field"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.html" title="class in org.locationtech.geowave.core.store.statistics.field"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericMeanStatistic.html" title="class in org.locationtech.geowave.core.store.statistics.field"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

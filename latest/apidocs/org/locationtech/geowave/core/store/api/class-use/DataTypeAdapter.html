@@ -314,7 +314,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><span class="typeNameLabel">RasterHistogramStatistic.RasterHistogramValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/raster/stats/RasterHistogramStatistic.RasterHistogramValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
+<td class="colLast"><span class="typeNameLabel">RasterFootprintStatistic.RasterFootprintValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/raster/stats/RasterFootprintStatistic.RasterFootprintValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
              T&nbsp;entry,
              <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
 </tr>
@@ -326,7 +326,7 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><span class="typeNameLabel">RasterFootprintStatistic.RasterFootprintValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/raster/stats/RasterFootprintStatistic.RasterFootprintValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
+<td class="colLast"><span class="typeNameLabel">RasterHistogramStatistic.RasterHistogramValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/raster/stats/RasterHistogramStatistic.RasterHistogramValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
              T&nbsp;entry,
              <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
 </tr>
@@ -377,21 +377,13 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">ChooseHeuristicMatchIndexQueryStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/index/ChooseHeuristicMatchIndexQueryStrategy.html#getIndices-org.locationtech.geowave.core.store.statistics.DataStatisticsStore-org.locationtech.geowave.core.store.query.constraints.QueryConstraints-org.locationtech.geowave.core.store.api.Index:A-org.locationtech.geowave.core.store.api.DataTypeAdapter-java.util.Map-">getIndices</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.statistics">DataStatisticsStore</a>&nbsp;statisticsStore,
+<td class="colLast"><span class="typeNameLabel">IndexQueryStrategySPI.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/index/IndexQueryStrategySPI.html#getIndices-org.locationtech.geowave.core.store.statistics.DataStatisticsStore-org.locationtech.geowave.core.store.query.constraints.QueryConstraints-org.locationtech.geowave.core.store.api.Index:A-org.locationtech.geowave.core.store.api.DataTypeAdapter-java.util.Map-">getIndices</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.statistics">DataStatisticsStore</a>&nbsp;statisticsStore,
           <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>&nbsp;query,
           <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>[]&nbsp;indices,
           <a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter,
           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../org/locationtech/geowave/adapter/vector/index/IndexQueryStrategySPI.QueryHint.html" title="enum in org.locationtech.geowave.adapter.vector.index">IndexQueryStrategySPI.QueryHint</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;hints)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">ChooseBestMatchIndexQueryStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/index/ChooseBestMatchIndexQueryStrategy.html#getIndices-org.locationtech.geowave.core.store.statistics.DataStatisticsStore-org.locationtech.geowave.core.store.query.constraints.QueryConstraints-org.locationtech.geowave.core.store.api.Index:A-org.locationtech.geowave.core.store.api.DataTypeAdapter-java.util.Map-">getIndices</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.statistics">DataStatisticsStore</a>&nbsp;statisticsStore,
-          <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>&nbsp;query,
-          <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>[]&nbsp;indices,
-          <a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter,
-          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../org/locationtech/geowave/adapter/vector/index/IndexQueryStrategySPI.QueryHint.html" title="enum in org.locationtech.geowave.adapter.vector.index">IndexQueryStrategySPI.QueryHint</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;hints)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">ChooseLocalityPreservingQueryStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/index/ChooseLocalityPreservingQueryStrategy.html#getIndices-org.locationtech.geowave.core.store.statistics.DataStatisticsStore-org.locationtech.geowave.core.store.query.constraints.QueryConstraints-org.locationtech.geowave.core.store.api.Index:A-org.locationtech.geowave.core.store.api.DataTypeAdapter-java.util.Map-">getIndices</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.statistics">DataStatisticsStore</a>&nbsp;statisticsStore,
           <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>&nbsp;query,
@@ -399,9 +391,17 @@
           <a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter,
           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../org/locationtech/geowave/adapter/vector/index/IndexQueryStrategySPI.QueryHint.html" title="enum in org.locationtech.geowave.adapter.vector.index">IndexQueryStrategySPI.QueryHint</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;hints)</code>&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">ChooseBestMatchIndexQueryStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/index/ChooseBestMatchIndexQueryStrategy.html#getIndices-org.locationtech.geowave.core.store.statistics.DataStatisticsStore-org.locationtech.geowave.core.store.query.constraints.QueryConstraints-org.locationtech.geowave.core.store.api.Index:A-org.locationtech.geowave.core.store.api.DataTypeAdapter-java.util.Map-">getIndices</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.statistics">DataStatisticsStore</a>&nbsp;statisticsStore,
+          <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>&nbsp;query,
+          <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>[]&nbsp;indices,
+          <a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter,
+          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../org/locationtech/geowave/adapter/vector/index/IndexQueryStrategySPI.QueryHint.html" title="enum in org.locationtech.geowave.adapter.vector.index">IndexQueryStrategySPI.QueryHint</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;hints)</code>&nbsp;</td>
+</tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">IndexQueryStrategySPI.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/index/IndexQueryStrategySPI.html#getIndices-org.locationtech.geowave.core.store.statistics.DataStatisticsStore-org.locationtech.geowave.core.store.query.constraints.QueryConstraints-org.locationtech.geowave.core.store.api.Index:A-org.locationtech.geowave.core.store.api.DataTypeAdapter-java.util.Map-">getIndices</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.statistics">DataStatisticsStore</a>&nbsp;statisticsStore,
+<td class="colLast"><span class="typeNameLabel">ChooseHeuristicMatchIndexQueryStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/index/ChooseHeuristicMatchIndexQueryStrategy.html#getIndices-org.locationtech.geowave.core.store.statistics.DataStatisticsStore-org.locationtech.geowave.core.store.query.constraints.QueryConstraints-org.locationtech.geowave.core.store.api.Index:A-org.locationtech.geowave.core.store.api.DataTypeAdapter-java.util.Map-">getIndices</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.statistics">DataStatisticsStore</a>&nbsp;statisticsStore,
           <a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a>&nbsp;query,
           <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>[]&nbsp;indices,
           <a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter,
@@ -691,12 +691,12 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
-<td class="colLast"><span class="typeNameLabel">AbstractVectorConstraints.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/AbstractVectorConstraints.html#createQueryConstraints-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.api.Index-">createQueryConstraints</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter,
+<td class="colLast"><span class="typeNameLabel">OptimalCQLQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/OptimalCQLQuery.html#createQueryConstraints-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.api.Index-">createQueryConstraints</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter,
                       <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
-<td class="colLast"><span class="typeNameLabel">OptimalCQLQuery.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/OptimalCQLQuery.html#createQueryConstraints-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.api.Index-">createQueryConstraints</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter,
+<td class="colLast"><span class="typeNameLabel">AbstractVectorConstraints.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/query/AbstractVectorConstraints.html#createQueryConstraints-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.api.Index-">createQueryConstraints</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter,
                       <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -734,13 +734,13 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><span class="typeNameLabel">AbstractBoundingBoxValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/AbstractBoundingBoxValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
+<td class="colLast"><span class="typeNameLabel">AbstractTimeRangeValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/AbstractTimeRangeValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
              T&nbsp;entry,
              <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><span class="typeNameLabel">AbstractTimeRangeValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/AbstractTimeRangeValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
+<td class="colLast"><span class="typeNameLabel">AbstractBoundingBoxValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/AbstractBoundingBoxValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
              T&nbsp;entry,
              <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
 </tr>
@@ -757,14 +757,14 @@
            <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected abstract &lt;T&gt;&nbsp;org.threeten.extra.Interval</code></td>
-<td class="colLast"><span class="typeNameLabel">AbstractTimeRangeValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/AbstractTimeRangeValue.html#getInterval-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">getInterval</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
+<td class="colFirst"><code>protected &lt;T&gt;&nbsp;org.threeten.extra.Interval</code></td>
+<td class="colLast"><span class="typeNameLabel">TimeRangeStatistic.TimeRangeValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/TimeRangeStatistic.TimeRangeValue.html#getInterval-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">getInterval</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
            T&nbsp;entry,
            <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected &lt;T&gt;&nbsp;org.threeten.extra.Interval</code></td>
-<td class="colLast"><span class="typeNameLabel">TimeRangeStatistic.TimeRangeValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/TimeRangeStatistic.TimeRangeValue.html#getInterval-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">getInterval</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
+<td class="colFirst"><code>protected abstract &lt;T&gt;&nbsp;org.threeten.extra.Interval</code></td>
+<td class="colLast"><span class="typeNameLabel">AbstractTimeRangeValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/statistics/AbstractTimeRangeValue.html#getInterval-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">getInterval</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
            T&nbsp;entry,
            <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
 </tr>
@@ -966,12 +966,12 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapterWrapper.html" title="type parameter in InternalDataAdapterWrapper">T</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">InternalDataAdapterWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapterWrapper.html#getAdapter--">getAdapter</a></span>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="type parameter in InternalDataAdapter">T</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">InternalDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html#getAdapter--">getAdapter</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapterWrapper.html" title="type parameter in InternalDataAdapterWrapper">T</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">InternalDataAdapterWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapterWrapper.html#getAdapter--">getAdapter</a></span>()</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -1427,12 +1427,12 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
-<td class="colLast"><span class="typeNameLabel">AdapterAndIndexBasedQueryConstraints.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/AdapterAndIndexBasedQueryConstraints.html#createQueryConstraints-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.api.Index-">createQueryConstraints</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter,
+<td class="colLast"><span class="typeNameLabel">CustomQueryConstraints.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/CustomQueryConstraints.html#createQueryConstraints-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.api.Index-">createQueryConstraints</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter,
                       <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/QueryConstraints.html" title="interface in org.locationtech.geowave.core.store.query.constraints">QueryConstraints</a></code></td>
-<td class="colLast"><span class="typeNameLabel">CustomQueryConstraints.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/CustomQueryConstraints.html#createQueryConstraints-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.api.Index-">createQueryConstraints</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter,
+<td class="colLast"><span class="typeNameLabel">AdapterAndIndexBasedQueryConstraints.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/constraints/AdapterAndIndexBasedQueryConstraints.html#createQueryConstraints-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.api.Index-">createQueryConstraints</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter,
                       <a href="../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -1593,25 +1593,25 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>[]</code></td>
-<td class="colLast"><span class="typeNameLabel">DataTypeBinningStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/binning/DataTypeBinningStrategy.html#getBins-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">getBins</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
-       T&nbsp;entry,
-       <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>[]</code></td>
-<td class="colLast"><span class="typeNameLabel">FieldValueBinningStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/binning/FieldValueBinningStrategy.html#getBins-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">getBins</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
-       T&nbsp;entry,
-       <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">CompositeBinningStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/binning/CompositeBinningStrategy.html#getBins-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">getBins</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
        T&nbsp;entry,
        <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>[]</code></td>
+<td class="colLast"><span class="typeNameLabel">DataTypeBinningStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/binning/DataTypeBinningStrategy.html#getBins-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">getBins</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
+       T&nbsp;entry,
+       <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">PartitionBinningStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/binning/PartitionBinningStrategy.html#getBins-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">getBins</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
+       T&nbsp;entry,
+       <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>[]</code></td>
+<td class="colLast"><span class="typeNameLabel">FieldValueBinningStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/binning/FieldValueBinningStrategy.html#getBins-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">getBins</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
        T&nbsp;entry,
        <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
 </tr>
@@ -1637,19 +1637,19 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><span class="typeNameLabel">BloomFilterStatistic.BloomFilterValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/BloomFilterStatistic.BloomFilterValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
+<td class="colLast"><span class="typeNameLabel">NumericStatsStatistic.NumericStatsValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericStatsStatistic.NumericStatsValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
              T&nbsp;entry,
              <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><span class="typeNameLabel">NumericRangeStatistic.NumericRangeValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericRangeStatistic.NumericRangeValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
+<td class="colLast"><span class="typeNameLabel">HyperLogLogStatistic.HyperLogLogPlusValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/HyperLogLogStatistic.HyperLogLogPlusValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
              T&nbsp;entry,
              <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><span class="typeNameLabel">NumericStatsStatistic.NumericStatsValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericStatsStatistic.NumericStatsValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
+<td class="colLast"><span class="typeNameLabel">CountMinSketchStatistic.CountMinSketchValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/CountMinSketchStatistic.CountMinSketchValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
              T&nbsp;entry,
              <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
 </tr>
@@ -1661,35 +1661,29 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><span class="typeNameLabel">NumericHistogramStatistic.NumericHistogramValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.NumericHistogramValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
+<td class="colLast"><span class="typeNameLabel">NumericRangeStatistic.NumericRangeValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericRangeStatistic.NumericRangeValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
              T&nbsp;entry,
              <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><span class="typeNameLabel">TDigestNumericHistogramStatistic.TDigestNumericHistogramValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/TDigestNumericHistogramStatistic.TDigestNumericHistogramValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
-             T&nbsp;entry,
-             <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
 <td class="colLast"><span class="typeNameLabel">FixedBinNumericHistogramStatistic.FixedBinNumericHistogramValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/FixedBinNumericHistogramStatistic.FixedBinNumericHistogramValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
              T&nbsp;entry,
              <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
+<td class="colLast"><span class="typeNameLabel">BloomFilterStatistic.BloomFilterValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/BloomFilterStatistic.BloomFilterValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
+             T&nbsp;entry,
+             <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
+</tr>
 <tr class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><span class="typeNameLabel">CountMinSketchStatistic.CountMinSketchValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/CountMinSketchStatistic.CountMinSketchValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
+<td class="colLast"><span class="typeNameLabel">NumericHistogramStatistic.NumericHistogramValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/NumericHistogramStatistic.NumericHistogramValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
              T&nbsp;entry,
              <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><span class="typeNameLabel">HyperLogLogStatistic.HyperLogLogPlusValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/HyperLogLogStatistic.HyperLogLogPlusValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
-             T&nbsp;entry,
-             <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/EntryVisibilityHandler.html" title="interface in org.locationtech.geowave.core.store">EntryVisibilityHandler</a>&lt;T&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">FieldStatistic.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/field/FieldStatistic.html#getVisibilityHandler-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.api.DataTypeAdapter-">getVisibilityHandler</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
                     <a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter)</code>&nbsp;</td>
@@ -1710,9 +1704,21 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
+<td class="colLast"><span class="typeNameLabel">IndexMetaDataSetStatistic.IndexMetaDataSetValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexMetaDataSetStatistic.IndexMetaDataSetValue.html#entryDeleted-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryDeleted</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
+            T&nbsp;entry,
+            <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
 <td class="colLast"><span class="typeNameLabel">DuplicateEntryCountStatistic.DuplicateEntryCountValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/index/DuplicateEntryCountStatistic.DuplicateEntryCountValue.html#entryDeleted-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryDeleted</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
             T&nbsp;entry,
             <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
+<td class="colLast"><span class="typeNameLabel">DifferingVisibilityCountStatistic.DifferingVisibilityCountValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/index/DifferingVisibilityCountStatistic.DifferingVisibilityCountValue.html#entryDeleted-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryDeleted</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
+            T&nbsp;entry,
+            <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;kvs)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
@@ -1722,55 +1728,43 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><span class="typeNameLabel">IndexMetaDataSetStatistic.IndexMetaDataSetValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexMetaDataSetStatistic.IndexMetaDataSetValue.html#entryDeleted-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryDeleted</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
-            T&nbsp;entry,
-            <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><span class="typeNameLabel">DifferingVisibilityCountStatistic.DifferingVisibilityCountValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/index/DifferingVisibilityCountStatistic.DifferingVisibilityCountValue.html#entryDeleted-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryDeleted</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
-            T&nbsp;entry,
-            <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;kvs)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><span class="typeNameLabel">DuplicateEntryCountStatistic.DuplicateEntryCountValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/index/DuplicateEntryCountStatistic.DuplicateEntryCountValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
-             T&nbsp;entry,
-             <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><span class="typeNameLabel">FieldVisibilityCountStatistic.FieldVisibilityCountValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/index/FieldVisibilityCountStatistic.FieldVisibilityCountValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
-             T&nbsp;entry,
-             <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><span class="typeNameLabel">PartitionsStatistic.PartitionsValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/index/PartitionsStatistic.PartitionsValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
-             T&nbsp;entry,
-             <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
 <td class="colLast"><span class="typeNameLabel">RowRangeHistogramStatistic.RowRangeHistogramValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/index/RowRangeHistogramStatistic.RowRangeHistogramValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
              T&nbsp;entry,
              <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
 <td class="colLast"><span class="typeNameLabel">IndexMetaDataSetStatistic.IndexMetaDataSetValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexMetaDataSetStatistic.IndexMetaDataSetValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
              T&nbsp;entry,
              <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
 <td class="colLast"><span class="typeNameLabel">MaxDuplicatesStatistic.MaxDuplicatesValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/index/MaxDuplicatesStatistic.MaxDuplicatesValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
+             T&nbsp;entry,
+             <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
+<td class="colLast"><span class="typeNameLabel">DuplicateEntryCountStatistic.DuplicateEntryCountValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/index/DuplicateEntryCountStatistic.DuplicateEntryCountValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
              T&nbsp;entry,
              <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
 <td class="colLast"><span class="typeNameLabel">DifferingVisibilityCountStatistic.DifferingVisibilityCountValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/index/DifferingVisibilityCountStatistic.DifferingVisibilityCountValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
+             T&nbsp;entry,
+             <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
+<td class="colLast"><span class="typeNameLabel">PartitionsStatistic.PartitionsValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/index/PartitionsStatistic.PartitionsValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
+             T&nbsp;entry,
+             <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
+<td class="colLast"><span class="typeNameLabel">FieldVisibilityCountStatistic.FieldVisibilityCountValue.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/index/FieldVisibilityCountStatistic.FieldVisibilityCountValue.html#entryIngested-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
              T&nbsp;entry,
              <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
 </tr>

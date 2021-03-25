@@ -1,0 +1,962 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>pygw.statistics.statistic API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>pygw.statistics.statistic</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">#
+# Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
+
+#
+# See the NOTICE file distributed with this work for additional information regarding copyright
+# ownership. All rights reserved. This program and the accompanying materials are made available
+# under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+# available at http://www.apache.org/licenses/LICENSE-2.0.txt
+# ===============================================================================================
+from pygw.base import GeoWaveObject
+from .statistic_binning_strategy import StatisticBinningStrategy
+from .statistic_type import DataTypeStatisticType, IndexStatisticType, FieldStatisticType
+from .binning_strategy_mappings import map_binning_strategy
+from ..base.java_transformer import NoOpTransformer
+
+
+class Statistic(GeoWaveObject):
+    &#34;&#34;&#34;
+    Base GeoWave statistic.
+    &#34;&#34;&#34;
+
+    def __init__(self, java_ref, java_transformer=NoOpTransformer()):
+        self.java_transformer = java_transformer
+        super().__init__(java_ref)
+
+    def get_statistic_type(self):
+        &#34;&#34;&#34;
+        Get the statistic type associated with the statistic.
+
+        Returns:
+            The type of this statistic.
+        &#34;&#34;&#34;
+        pass
+
+    def get_description(self):
+        &#34;&#34;&#34;
+        Gets a description of the statistic.
+
+        Returns:
+            A description of the statistic.
+        &#34;&#34;&#34;
+        return self._java_ref.getDescription()
+
+    def set_tag(self, tag):
+        &#34;&#34;&#34;
+        Sets the tag of the statistic.
+
+        Args:
+            tag (str): The tag to use for the statistic
+        &#34;&#34;&#34;
+        self._java_ref.setTag(tag)
+
+    def get_tag(self):
+        &#34;&#34;&#34;
+        Get the tag for the statistic.
+
+        Returns:
+            The tag for this statistic.
+        &#34;&#34;&#34;
+        return self._java_ref.getTag()
+
+    def set_internal(self):
+        &#34;&#34;&#34;
+        Set the tag of this statistic to the default internal statistic tag.
+        &#34;&#34;&#34;
+        self._java_ref.setInternal()
+
+    def is_internal(self):
+        &#34;&#34;&#34;
+        Checks if the statistic is an internal statistic.
+
+        Returns:
+            True if the statistic is internal.
+        &#34;&#34;&#34;
+        return self._java_ref.isInternal()
+
+    def set_binning_strategy(self, binning_strategy):
+        &#34;&#34;&#34;
+        Sets the binning strategy of the statistic.
+
+        Args:
+            binning_strategy (StatisticBinningStrategy): The binning strategy to use for the statistic.
+        &#34;&#34;&#34;
+        if not isinstance(binning_strategy, StatisticBinningStrategy):
+            raise AttributeError(&#39;Expected an instance of StatisticBinningStrategy&#39;)
+        self._java_ref.setBinningStrategy(binning_strategy.java_ref())
+
+    def get_binning_strategy(self):
+        &#34;&#34;&#34;
+        Gets the binning strategy used by the statistic.
+
+        Returns:
+            The binning strategy used by the statistic.
+        &#34;&#34;&#34;
+        return map_binning_strategy(self._java_ref.getBinningStrategy())
+
+
+class IndexStatistic(Statistic):
+
+    def get_statistic_type(self):
+        &#34;&#34;&#34;
+        Get the statistic type associated with the statistic.
+
+        Returns:
+            The type of this statistic.
+        &#34;&#34;&#34;
+        return IndexStatisticType(self._java_ref.getStatisticType())
+
+    def set_index_name(self, name):
+        &#34;&#34;&#34;
+        Sets the index name of the statistic.
+
+        Args:
+            name (str): The index name to use for the statistic
+        &#34;&#34;&#34;
+        self._java_ref.setIndexName(name)
+
+    def get_index_name(self):
+        &#34;&#34;&#34;
+        Get the index name associated with the statistic.
+
+        Returns:
+            The index name of this statistic.
+        &#34;&#34;&#34;
+        return self._java_ref.getIndexName()
+
+
+class DataTypeStatistic(Statistic):
+
+    def get_statistic_type(self):
+        &#34;&#34;&#34;
+        Get the statistic type associated with the statistic.
+
+        Returns:
+            The type of this statistic.
+        &#34;&#34;&#34;
+        return DataTypeStatisticType(self._java_ref.getStatisticType())
+
+    def set_type_name(self, name):
+        &#34;&#34;&#34;
+        Sets the type name of the statistic.
+
+        Args:
+            name (str): The type name to use for the statistic
+        &#34;&#34;&#34;
+        self._java_ref.setTypeName(name)
+
+    def get_type_name(self):
+        &#34;&#34;&#34;
+        Get the type name associated with the statistic.
+
+        Returns:
+            The type name of this statistic.
+        &#34;&#34;&#34;
+        return self._java_ref.getTypeName()
+
+
+class FieldStatistic(Statistic):
+
+    def get_statistic_type(self):
+        &#34;&#34;&#34;
+        Get the statistic type associated with the statistic.
+
+        Returns:
+            The type of this statistic.
+        &#34;&#34;&#34;
+        return FieldStatisticType(self._java_ref.getStatisticType())
+
+    def set_type_name(self, name):
+        &#34;&#34;&#34;
+        Sets the type name of the statistic.
+
+        Args:
+            name (str): The type name to use for the statistic
+        &#34;&#34;&#34;
+        self._java_ref.setTypeName(name)
+
+    def get_type_name(self):
+        &#34;&#34;&#34;
+        Get the type name associated with the statistic.
+
+        Returns:
+            The type name of this statistic.
+        &#34;&#34;&#34;
+        return self._java_ref.getTypeName()
+
+    def set_field_name(self, field_name):
+        &#34;&#34;&#34;
+        Sets the field name of the statistic.
+
+        Args:
+            field_name (str): The field name to use for the statistic
+        &#34;&#34;&#34;
+        self._java_ref.setFieldName(field_name)
+
+    def get_field_name(self):
+        &#34;&#34;&#34;
+        Get the field name associated with the statistic.
+
+        Returns:
+            The field name of this statistic.
+        &#34;&#34;&#34;
+        return self._java_ref.getFieldName()</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="pygw.statistics.statistic.DataTypeStatistic"><code class="flex name class">
+<span>class <span class="ident">DataTypeStatistic</span></span>
+<span>(</span><span>java_ref, java_transformer=<pygw.base.java_transformer.NoOpTransformer object at 0x7fa1b4cc73c8>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Base GeoWave statistic.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class DataTypeStatistic(Statistic):
+
+    def get_statistic_type(self):
+        &#34;&#34;&#34;
+        Get the statistic type associated with the statistic.
+
+        Returns:
+            The type of this statistic.
+        &#34;&#34;&#34;
+        return DataTypeStatisticType(self._java_ref.getStatisticType())
+
+    def set_type_name(self, name):
+        &#34;&#34;&#34;
+        Sets the type name of the statistic.
+
+        Args:
+            name (str): The type name to use for the statistic
+        &#34;&#34;&#34;
+        self._java_ref.setTypeName(name)
+
+    def get_type_name(self):
+        &#34;&#34;&#34;
+        Get the type name associated with the statistic.
+
+        Returns:
+            The type name of this statistic.
+        &#34;&#34;&#34;
+        return self._java_ref.getTypeName()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.statistics.statistic.Statistic" href="#pygw.statistics.statistic.Statistic">Statistic</a></li>
+<li><a title="pygw.base.geowave_object.GeoWaveObject" href="../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject">GeoWaveObject</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="pygw.statistics.data_type.count_statistic.CountStatistic" href="data_type/count_statistic.html#pygw.statistics.data_type.count_statistic.CountStatistic">CountStatistic</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="pygw.statistics.statistic.DataTypeStatistic.get_type_name"><code class="name flex">
+<span>def <span class="ident">get_type_name</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get the type name associated with the statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>The type name of this statistic.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_type_name(self):
+    &#34;&#34;&#34;
+    Get the type name associated with the statistic.
+
+    Returns:
+        The type name of this statistic.
+    &#34;&#34;&#34;
+    return self._java_ref.getTypeName()</code></pre>
+</details>
+</dd>
+<dt id="pygw.statistics.statistic.DataTypeStatistic.set_type_name"><code class="name flex">
+<span>def <span class="ident">set_type_name</span></span>(<span>self, name)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets the type name of the statistic.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The type name to use for the statistic</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_type_name(self, name):
+    &#34;&#34;&#34;
+    Sets the type name of the statistic.
+
+    Args:
+        name (str): The type name to use for the statistic
+    &#34;&#34;&#34;
+    self._java_ref.setTypeName(name)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.statistics.statistic.Statistic" href="#pygw.statistics.statistic.Statistic">Statistic</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.statistics.statistic.Statistic.get_binning_strategy" href="#pygw.statistics.statistic.Statistic.get_binning_strategy">get_binning_strategy</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.get_description" href="#pygw.statistics.statistic.Statistic.get_description">get_description</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.get_statistic_type" href="#pygw.statistics.statistic.Statistic.get_statistic_type">get_statistic_type</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.get_tag" href="#pygw.statistics.statistic.Statistic.get_tag">get_tag</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.is_instance_of" href="../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject.is_instance_of">is_instance_of</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.is_internal" href="#pygw.statistics.statistic.Statistic.is_internal">is_internal</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.set_binning_strategy" href="#pygw.statistics.statistic.Statistic.set_binning_strategy">set_binning_strategy</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.set_internal" href="#pygw.statistics.statistic.Statistic.set_internal">set_internal</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.set_tag" href="#pygw.statistics.statistic.Statistic.set_tag">set_tag</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.statistics.statistic.FieldStatistic"><code class="flex name class">
+<span>class <span class="ident">FieldStatistic</span></span>
+<span>(</span><span>java_ref, java_transformer=<pygw.base.java_transformer.NoOpTransformer object at 0x7fa1b4cc73c8>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Base GeoWave statistic.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class FieldStatistic(Statistic):
+
+    def get_statistic_type(self):
+        &#34;&#34;&#34;
+        Get the statistic type associated with the statistic.
+
+        Returns:
+            The type of this statistic.
+        &#34;&#34;&#34;
+        return FieldStatisticType(self._java_ref.getStatisticType())
+
+    def set_type_name(self, name):
+        &#34;&#34;&#34;
+        Sets the type name of the statistic.
+
+        Args:
+            name (str): The type name to use for the statistic
+        &#34;&#34;&#34;
+        self._java_ref.setTypeName(name)
+
+    def get_type_name(self):
+        &#34;&#34;&#34;
+        Get the type name associated with the statistic.
+
+        Returns:
+            The type name of this statistic.
+        &#34;&#34;&#34;
+        return self._java_ref.getTypeName()
+
+    def set_field_name(self, field_name):
+        &#34;&#34;&#34;
+        Sets the field name of the statistic.
+
+        Args:
+            field_name (str): The field name to use for the statistic
+        &#34;&#34;&#34;
+        self._java_ref.setFieldName(field_name)
+
+    def get_field_name(self):
+        &#34;&#34;&#34;
+        Get the field name associated with the statistic.
+
+        Returns:
+            The field name of this statistic.
+        &#34;&#34;&#34;
+        return self._java_ref.getFieldName()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.statistics.statistic.Statistic" href="#pygw.statistics.statistic.Statistic">Statistic</a></li>
+<li><a title="pygw.base.geowave_object.GeoWaveObject" href="../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject">GeoWaveObject</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="pygw.statistics.field.bloom_filter_statistic.BloomFilterStatistic" href="field/bloom_filter_statistic.html#pygw.statistics.field.bloom_filter_statistic.BloomFilterStatistic">BloomFilterStatistic</a></li>
+<li><a title="pygw.statistics.field.bounding_box_statistic.BoundingBoxStatistic" href="field/bounding_box_statistic.html#pygw.statistics.field.bounding_box_statistic.BoundingBoxStatistic">BoundingBoxStatistic</a></li>
+<li><a title="pygw.statistics.field.count_min_sketch_statistic.CountMinSketchStatistic" href="field/count_min_sketch_statistic.html#pygw.statistics.field.count_min_sketch_statistic.CountMinSketchStatistic">CountMinSketchStatistic</a></li>
+<li><a title="pygw.statistics.field.fixed_bin_numeric_histogram_statistic.FixedBinNumericHistogramStatistic" href="field/fixed_bin_numeric_histogram_statistic.html#pygw.statistics.field.fixed_bin_numeric_histogram_statistic.FixedBinNumericHistogramStatistic">FixedBinNumericHistogramStatistic</a></li>
+<li><a title="pygw.statistics.field.hyper_log_log_statistic.HyperLogLogStatistic" href="field/hyper_log_log_statistic.html#pygw.statistics.field.hyper_log_log_statistic.HyperLogLogStatistic">HyperLogLogStatistic</a></li>
+<li><a title="pygw.statistics.field.numeric_histogram_statistic.NumericHistogramStatistic" href="field/numeric_histogram_statistic.html#pygw.statistics.field.numeric_histogram_statistic.NumericHistogramStatistic">NumericHistogramStatistic</a></li>
+<li><a title="pygw.statistics.field.numeric_mean_statistic.NumericMeanStatistic" href="field/numeric_mean_statistic.html#pygw.statistics.field.numeric_mean_statistic.NumericMeanStatistic">NumericMeanStatistic</a></li>
+<li><a title="pygw.statistics.field.numeric_range_statistic.NumericRangeStatistic" href="field/numeric_range_statistic.html#pygw.statistics.field.numeric_range_statistic.NumericRangeStatistic">NumericRangeStatistic</a></li>
+<li><a title="pygw.statistics.field.numeric_stats_statistic.NumericStatsStatistic" href="field/numeric_stats_statistic.html#pygw.statistics.field.numeric_stats_statistic.NumericStatsStatistic">NumericStatsStatistic</a></li>
+<li><a title="pygw.statistics.field.time_range_statistic.TimeRangeStatistic" href="field/time_range_statistic.html#pygw.statistics.field.time_range_statistic.TimeRangeStatistic">TimeRangeStatistic</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="pygw.statistics.statistic.FieldStatistic.get_field_name"><code class="name flex">
+<span>def <span class="ident">get_field_name</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get the field name associated with the statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>The field name of this statistic.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_field_name(self):
+    &#34;&#34;&#34;
+    Get the field name associated with the statistic.
+
+    Returns:
+        The field name of this statistic.
+    &#34;&#34;&#34;
+    return self._java_ref.getFieldName()</code></pre>
+</details>
+</dd>
+<dt id="pygw.statistics.statistic.FieldStatistic.get_type_name"><code class="name flex">
+<span>def <span class="ident">get_type_name</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get the type name associated with the statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>The type name of this statistic.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_type_name(self):
+    &#34;&#34;&#34;
+    Get the type name associated with the statistic.
+
+    Returns:
+        The type name of this statistic.
+    &#34;&#34;&#34;
+    return self._java_ref.getTypeName()</code></pre>
+</details>
+</dd>
+<dt id="pygw.statistics.statistic.FieldStatistic.set_field_name"><code class="name flex">
+<span>def <span class="ident">set_field_name</span></span>(<span>self, field_name)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets the field name of the statistic.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>field_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The field name to use for the statistic</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_field_name(self, field_name):
+    &#34;&#34;&#34;
+    Sets the field name of the statistic.
+
+    Args:
+        field_name (str): The field name to use for the statistic
+    &#34;&#34;&#34;
+    self._java_ref.setFieldName(field_name)</code></pre>
+</details>
+</dd>
+<dt id="pygw.statistics.statistic.FieldStatistic.set_type_name"><code class="name flex">
+<span>def <span class="ident">set_type_name</span></span>(<span>self, name)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets the type name of the statistic.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The type name to use for the statistic</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_type_name(self, name):
+    &#34;&#34;&#34;
+    Sets the type name of the statistic.
+
+    Args:
+        name (str): The type name to use for the statistic
+    &#34;&#34;&#34;
+    self._java_ref.setTypeName(name)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.statistics.statistic.Statistic" href="#pygw.statistics.statistic.Statistic">Statistic</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.statistics.statistic.Statistic.get_binning_strategy" href="#pygw.statistics.statistic.Statistic.get_binning_strategy">get_binning_strategy</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.get_description" href="#pygw.statistics.statistic.Statistic.get_description">get_description</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.get_statistic_type" href="#pygw.statistics.statistic.Statistic.get_statistic_type">get_statistic_type</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.get_tag" href="#pygw.statistics.statistic.Statistic.get_tag">get_tag</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.is_instance_of" href="../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject.is_instance_of">is_instance_of</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.is_internal" href="#pygw.statistics.statistic.Statistic.is_internal">is_internal</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.set_binning_strategy" href="#pygw.statistics.statistic.Statistic.set_binning_strategy">set_binning_strategy</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.set_internal" href="#pygw.statistics.statistic.Statistic.set_internal">set_internal</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.set_tag" href="#pygw.statistics.statistic.Statistic.set_tag">set_tag</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.statistics.statistic.IndexStatistic"><code class="flex name class">
+<span>class <span class="ident">IndexStatistic</span></span>
+<span>(</span><span>java_ref, java_transformer=<pygw.base.java_transformer.NoOpTransformer object at 0x7fa1b4cc73c8>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Base GeoWave statistic.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class IndexStatistic(Statistic):
+
+    def get_statistic_type(self):
+        &#34;&#34;&#34;
+        Get the statistic type associated with the statistic.
+
+        Returns:
+            The type of this statistic.
+        &#34;&#34;&#34;
+        return IndexStatisticType(self._java_ref.getStatisticType())
+
+    def set_index_name(self, name):
+        &#34;&#34;&#34;
+        Sets the index name of the statistic.
+
+        Args:
+            name (str): The index name to use for the statistic
+        &#34;&#34;&#34;
+        self._java_ref.setIndexName(name)
+
+    def get_index_name(self):
+        &#34;&#34;&#34;
+        Get the index name associated with the statistic.
+
+        Returns:
+            The index name of this statistic.
+        &#34;&#34;&#34;
+        return self._java_ref.getIndexName()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.statistics.statistic.Statistic" href="#pygw.statistics.statistic.Statistic">Statistic</a></li>
+<li><a title="pygw.base.geowave_object.GeoWaveObject" href="../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject">GeoWaveObject</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="pygw.statistics.index.differing_visibility_count_statistic.DifferingVisibilityCountStatistic" href="index/differing_visibility_count_statistic.html#pygw.statistics.index.differing_visibility_count_statistic.DifferingVisibilityCountStatistic">DifferingVisibilityCountStatistic</a></li>
+<li><a title="pygw.statistics.index.duplicate_entry_count_statistic.DuplicateEntryCountStatistic" href="index/duplicate_entry_count_statistic.html#pygw.statistics.index.duplicate_entry_count_statistic.DuplicateEntryCountStatistic">DuplicateEntryCountStatistic</a></li>
+<li><a title="pygw.statistics.index.field_visibility_count_statistic.FieldVisibilityCountStatistic" href="index/field_visibility_count_statistic.html#pygw.statistics.index.field_visibility_count_statistic.FieldVisibilityCountStatistic">FieldVisibilityCountStatistic</a></li>
+<li><a title="pygw.statistics.index.index_meta_data_set_statistic.IndexMetaDataSetStatistic" href="index/index_meta_data_set_statistic.html#pygw.statistics.index.index_meta_data_set_statistic.IndexMetaDataSetStatistic">IndexMetaDataSetStatistic</a></li>
+<li><a title="pygw.statistics.index.max_duplicates_statistic.MaxDuplicatesStatistic" href="index/max_duplicates_statistic.html#pygw.statistics.index.max_duplicates_statistic.MaxDuplicatesStatistic">MaxDuplicatesStatistic</a></li>
+<li><a title="pygw.statistics.index.partitions_statistic.PartitionsStatistic" href="index/partitions_statistic.html#pygw.statistics.index.partitions_statistic.PartitionsStatistic">PartitionsStatistic</a></li>
+<li><a title="pygw.statistics.index.row_range_histogram_statistic.RowRangeHistogramStatistic" href="index/row_range_histogram_statistic.html#pygw.statistics.index.row_range_histogram_statistic.RowRangeHistogramStatistic">RowRangeHistogramStatistic</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="pygw.statistics.statistic.IndexStatistic.get_index_name"><code class="name flex">
+<span>def <span class="ident">get_index_name</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get the index name associated with the statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>The index name of this statistic.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_index_name(self):
+    &#34;&#34;&#34;
+    Get the index name associated with the statistic.
+
+    Returns:
+        The index name of this statistic.
+    &#34;&#34;&#34;
+    return self._java_ref.getIndexName()</code></pre>
+</details>
+</dd>
+<dt id="pygw.statistics.statistic.IndexStatistic.set_index_name"><code class="name flex">
+<span>def <span class="ident">set_index_name</span></span>(<span>self, name)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets the index name of the statistic.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The index name to use for the statistic</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_index_name(self, name):
+    &#34;&#34;&#34;
+    Sets the index name of the statistic.
+
+    Args:
+        name (str): The index name to use for the statistic
+    &#34;&#34;&#34;
+    self._java_ref.setIndexName(name)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.statistics.statistic.Statistic" href="#pygw.statistics.statistic.Statistic">Statistic</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.statistics.statistic.Statistic.get_binning_strategy" href="#pygw.statistics.statistic.Statistic.get_binning_strategy">get_binning_strategy</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.get_description" href="#pygw.statistics.statistic.Statistic.get_description">get_description</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.get_statistic_type" href="#pygw.statistics.statistic.Statistic.get_statistic_type">get_statistic_type</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.get_tag" href="#pygw.statistics.statistic.Statistic.get_tag">get_tag</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.is_instance_of" href="../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject.is_instance_of">is_instance_of</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.is_internal" href="#pygw.statistics.statistic.Statistic.is_internal">is_internal</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.set_binning_strategy" href="#pygw.statistics.statistic.Statistic.set_binning_strategy">set_binning_strategy</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.set_internal" href="#pygw.statistics.statistic.Statistic.set_internal">set_internal</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.set_tag" href="#pygw.statistics.statistic.Statistic.set_tag">set_tag</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.statistics.statistic.Statistic"><code class="flex name class">
+<span>class <span class="ident">Statistic</span></span>
+<span>(</span><span>java_ref, java_transformer=<pygw.base.java_transformer.NoOpTransformer object at 0x7fa1b4cc73c8>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Base GeoWave statistic.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Statistic(GeoWaveObject):
+    &#34;&#34;&#34;
+    Base GeoWave statistic.
+    &#34;&#34;&#34;
+
+    def __init__(self, java_ref, java_transformer=NoOpTransformer()):
+        self.java_transformer = java_transformer
+        super().__init__(java_ref)
+
+    def get_statistic_type(self):
+        &#34;&#34;&#34;
+        Get the statistic type associated with the statistic.
+
+        Returns:
+            The type of this statistic.
+        &#34;&#34;&#34;
+        pass
+
+    def get_description(self):
+        &#34;&#34;&#34;
+        Gets a description of the statistic.
+
+        Returns:
+            A description of the statistic.
+        &#34;&#34;&#34;
+        return self._java_ref.getDescription()
+
+    def set_tag(self, tag):
+        &#34;&#34;&#34;
+        Sets the tag of the statistic.
+
+        Args:
+            tag (str): The tag to use for the statistic
+        &#34;&#34;&#34;
+        self._java_ref.setTag(tag)
+
+    def get_tag(self):
+        &#34;&#34;&#34;
+        Get the tag for the statistic.
+
+        Returns:
+            The tag for this statistic.
+        &#34;&#34;&#34;
+        return self._java_ref.getTag()
+
+    def set_internal(self):
+        &#34;&#34;&#34;
+        Set the tag of this statistic to the default internal statistic tag.
+        &#34;&#34;&#34;
+        self._java_ref.setInternal()
+
+    def is_internal(self):
+        &#34;&#34;&#34;
+        Checks if the statistic is an internal statistic.
+
+        Returns:
+            True if the statistic is internal.
+        &#34;&#34;&#34;
+        return self._java_ref.isInternal()
+
+    def set_binning_strategy(self, binning_strategy):
+        &#34;&#34;&#34;
+        Sets the binning strategy of the statistic.
+
+        Args:
+            binning_strategy (StatisticBinningStrategy): The binning strategy to use for the statistic.
+        &#34;&#34;&#34;
+        if not isinstance(binning_strategy, StatisticBinningStrategy):
+            raise AttributeError(&#39;Expected an instance of StatisticBinningStrategy&#39;)
+        self._java_ref.setBinningStrategy(binning_strategy.java_ref())
+
+    def get_binning_strategy(self):
+        &#34;&#34;&#34;
+        Gets the binning strategy used by the statistic.
+
+        Returns:
+            The binning strategy used by the statistic.
+        &#34;&#34;&#34;
+        return map_binning_strategy(self._java_ref.getBinningStrategy())</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.geowave_object.GeoWaveObject" href="../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject">GeoWaveObject</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="pygw.statistics.statistic.IndexStatistic" href="#pygw.statistics.statistic.IndexStatistic">IndexStatistic</a></li>
+<li><a title="pygw.statistics.statistic.DataTypeStatistic" href="#pygw.statistics.statistic.DataTypeStatistic">DataTypeStatistic</a></li>
+<li><a title="pygw.statistics.statistic.FieldStatistic" href="#pygw.statistics.statistic.FieldStatistic">FieldStatistic</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="pygw.statistics.statistic.Statistic.get_binning_strategy"><code class="name flex">
+<span>def <span class="ident">get_binning_strategy</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Gets the binning strategy used by the statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>The binning strategy used by the statistic.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_binning_strategy(self):
+    &#34;&#34;&#34;
+    Gets the binning strategy used by the statistic.
+
+    Returns:
+        The binning strategy used by the statistic.
+    &#34;&#34;&#34;
+    return map_binning_strategy(self._java_ref.getBinningStrategy())</code></pre>
+</details>
+</dd>
+<dt id="pygw.statistics.statistic.Statistic.get_description"><code class="name flex">
+<span>def <span class="ident">get_description</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Gets a description of the statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>A description of the statistic.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_description(self):
+    &#34;&#34;&#34;
+    Gets a description of the statistic.
+
+    Returns:
+        A description of the statistic.
+    &#34;&#34;&#34;
+    return self._java_ref.getDescription()</code></pre>
+</details>
+</dd>
+<dt id="pygw.statistics.statistic.Statistic.get_statistic_type"><code class="name flex">
+<span>def <span class="ident">get_statistic_type</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get the statistic type associated with the statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>The type of this statistic.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_statistic_type(self):
+    &#34;&#34;&#34;
+    Get the statistic type associated with the statistic.
+
+    Returns:
+        The type of this statistic.
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="pygw.statistics.statistic.Statistic.get_tag"><code class="name flex">
+<span>def <span class="ident">get_tag</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get the tag for the statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>The tag for this statistic.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_tag(self):
+    &#34;&#34;&#34;
+    Get the tag for the statistic.
+
+    Returns:
+        The tag for this statistic.
+    &#34;&#34;&#34;
+    return self._java_ref.getTag()</code></pre>
+</details>
+</dd>
+<dt id="pygw.statistics.statistic.Statistic.is_internal"><code class="name flex">
+<span>def <span class="ident">is_internal</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Checks if the statistic is an internal statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>True if the statistic is internal.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def is_internal(self):
+    &#34;&#34;&#34;
+    Checks if the statistic is an internal statistic.
+
+    Returns:
+        True if the statistic is internal.
+    &#34;&#34;&#34;
+    return self._java_ref.isInternal()</code></pre>
+</details>
+</dd>
+<dt id="pygw.statistics.statistic.Statistic.set_binning_strategy"><code class="name flex">
+<span>def <span class="ident">set_binning_strategy</span></span>(<span>self, binning_strategy)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets the binning strategy of the statistic.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>binning_strategy</code></strong> :&ensp;<code>StatisticBinningStrategy</code></dt>
+<dd>The binning strategy to use for the statistic.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_binning_strategy(self, binning_strategy):
+    &#34;&#34;&#34;
+    Sets the binning strategy of the statistic.
+
+    Args:
+        binning_strategy (StatisticBinningStrategy): The binning strategy to use for the statistic.
+    &#34;&#34;&#34;
+    if not isinstance(binning_strategy, StatisticBinningStrategy):
+        raise AttributeError(&#39;Expected an instance of StatisticBinningStrategy&#39;)
+    self._java_ref.setBinningStrategy(binning_strategy.java_ref())</code></pre>
+</details>
+</dd>
+<dt id="pygw.statistics.statistic.Statistic.set_internal"><code class="name flex">
+<span>def <span class="ident">set_internal</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set the tag of this statistic to the default internal statistic tag.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_internal(self):
+    &#34;&#34;&#34;
+    Set the tag of this statistic to the default internal statistic tag.
+    &#34;&#34;&#34;
+    self._java_ref.setInternal()</code></pre>
+</details>
+</dd>
+<dt id="pygw.statistics.statistic.Statistic.set_tag"><code class="name flex">
+<span>def <span class="ident">set_tag</span></span>(<span>self, tag)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets the tag of the statistic.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>tag</code></strong> :&ensp;<code>str</code></dt>
+<dd>The tag to use for the statistic</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_tag(self, tag):
+    &#34;&#34;&#34;
+    Sets the tag of the statistic.
+
+    Args:
+        tag (str): The tag to use for the statistic
+    &#34;&#34;&#34;
+    self._java_ref.setTag(tag)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.geowave_object.GeoWaveObject" href="../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject">GeoWaveObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.geowave_object.GeoWaveObject.is_instance_of" href="../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject.is_instance_of">is_instance_of</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pygw.statistics" href="index.html">pygw.statistics</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pygw.statistics.statistic.DataTypeStatistic" href="#pygw.statistics.statistic.DataTypeStatistic">DataTypeStatistic</a></code></h4>
+<ul class="">
+<li><code><a title="pygw.statistics.statistic.DataTypeStatistic.get_type_name" href="#pygw.statistics.statistic.DataTypeStatistic.get_type_name">get_type_name</a></code></li>
+<li><code><a title="pygw.statistics.statistic.DataTypeStatistic.set_type_name" href="#pygw.statistics.statistic.DataTypeStatistic.set_type_name">set_type_name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pygw.statistics.statistic.FieldStatistic" href="#pygw.statistics.statistic.FieldStatistic">FieldStatistic</a></code></h4>
+<ul class="">
+<li><code><a title="pygw.statistics.statistic.FieldStatistic.get_field_name" href="#pygw.statistics.statistic.FieldStatistic.get_field_name">get_field_name</a></code></li>
+<li><code><a title="pygw.statistics.statistic.FieldStatistic.get_type_name" href="#pygw.statistics.statistic.FieldStatistic.get_type_name">get_type_name</a></code></li>
+<li><code><a title="pygw.statistics.statistic.FieldStatistic.set_field_name" href="#pygw.statistics.statistic.FieldStatistic.set_field_name">set_field_name</a></code></li>
+<li><code><a title="pygw.statistics.statistic.FieldStatistic.set_type_name" href="#pygw.statistics.statistic.FieldStatistic.set_type_name">set_type_name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pygw.statistics.statistic.IndexStatistic" href="#pygw.statistics.statistic.IndexStatistic">IndexStatistic</a></code></h4>
+<ul class="">
+<li><code><a title="pygw.statistics.statistic.IndexStatistic.get_index_name" href="#pygw.statistics.statistic.IndexStatistic.get_index_name">get_index_name</a></code></li>
+<li><code><a title="pygw.statistics.statistic.IndexStatistic.set_index_name" href="#pygw.statistics.statistic.IndexStatistic.set_index_name">set_index_name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pygw.statistics.statistic.Statistic" href="#pygw.statistics.statistic.Statistic">Statistic</a></code></h4>
+<ul class="">
+<li><code><a title="pygw.statistics.statistic.Statistic.get_binning_strategy" href="#pygw.statistics.statistic.Statistic.get_binning_strategy">get_binning_strategy</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.get_description" href="#pygw.statistics.statistic.Statistic.get_description">get_description</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.get_statistic_type" href="#pygw.statistics.statistic.Statistic.get_statistic_type">get_statistic_type</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.get_tag" href="#pygw.statistics.statistic.Statistic.get_tag">get_tag</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.is_internal" href="#pygw.statistics.statistic.Statistic.is_internal">is_internal</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.set_binning_strategy" href="#pygw.statistics.statistic.Statistic.set_binning_strategy">set_binning_strategy</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.set_internal" href="#pygw.statistics.statistic.Statistic.set_internal">set_internal</a></code></li>
+<li><code><a title="pygw.statistics.statistic.Statistic.set_tag" href="#pygw.statistics.statistic.Statistic.set_tag">set_tag</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

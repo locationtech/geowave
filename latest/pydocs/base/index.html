@@ -32,6 +32,9 @@ convert Python types to Java types that are commonly used in GeoWave.</p>
 from pygw.base import CloseableIterator
 from pygw.base import DataTypeAdapter
 from pygw.base import Writer
+from pygw.base import Envelope
+from pygw.base import Interval
+from pygw.base import Range
 </code></pre>
 <details class="source">
 <summary>Source code</summary>
@@ -55,13 +58,19 @@ from pygw.base import GeoWaveObject
 from pygw.base import CloseableIterator
 from pygw.base import DataTypeAdapter
 from pygw.base import Writer
+from pygw.base import Envelope
+from pygw.base import Interval
+from pygw.base import Range
 ```
 &#34;&#34;&#34;
 
 from .geowave_object import GeoWaveObject
 from .closeable_iterator import CloseableIterator
 from .data_type_adapter import DataTypeAdapter
-from .writer import Writer</code></pre>
+from .writer import Writer
+from .envelope import Envelope
+from .interval import Interval
+from .range import Range</code></pre>
 </details>
 </section>
 <section>
@@ -75,7 +84,23 @@ from .writer import Writer</code></pre>
 <dd>
 <section class="desc"></section>
 </dd>
+<dt><code class="name"><a title="pygw.base.envelope" href="envelope.html">pygw.base.envelope</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
 <dt><code class="name"><a title="pygw.base.geowave_object" href="geowave_object.html">pygw.base.geowave_object</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="pygw.base.interval" href="interval.html">pygw.base.interval</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="pygw.base.java_transformer" href="java_transformer.html">pygw.base.java_transformer</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="pygw.base.range" href="range.html">pygw.base.range</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
@@ -115,7 +140,11 @@ from .writer import Writer</code></pre>
 <ul>
 <li><code><a title="pygw.base.closeable_iterator" href="closeable_iterator.html">pygw.base.closeable_iterator</a></code></li>
 <li><code><a title="pygw.base.data_type_adapter" href="data_type_adapter.html">pygw.base.data_type_adapter</a></code></li>
+<li><code><a title="pygw.base.envelope" href="envelope.html">pygw.base.envelope</a></code></li>
 <li><code><a title="pygw.base.geowave_object" href="geowave_object.html">pygw.base.geowave_object</a></code></li>
+<li><code><a title="pygw.base.interval" href="interval.html">pygw.base.interval</a></code></li>
+<li><code><a title="pygw.base.java_transformer" href="java_transformer.html">pygw.base.java_transformer</a></code></li>
+<li><code><a title="pygw.base.range" href="range.html">pygw.base.range</a></code></li>
 <li><code><a title="pygw.base.type_conversions" href="type_conversions.html">pygw.base.type_conversions</a></code></li>
 <li><code><a title="pygw.base.write_results" href="write_results.html">pygw.base.write_results</a></code></li>
 <li><code><a title="pygw.base.writer" href="writer.html">pygw.base.writer</a></code></li>

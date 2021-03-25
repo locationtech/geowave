@@ -33,11 +33,11 @@
 # ===============================================================================================
 
 from pygw.config import geowave_pkg
+from ...base.envelope import EnvelopeTransformer
+from ...base.interval import IntervalTransformer
 
 from ...base.type_conversions import StringArrayType
 from ..aggregation_query_builder import AggregationQueryBuilder
-from .result_transformers import EnvelopeTransformer
-from .result_transformers import IntervalTransformer
 from .vector_query_constraints_factory import VectorQueryConstraintsFactory
 
 
@@ -70,7 +70,7 @@ class VectorAggregationQueryBuilder(AggregationQueryBuilder):
         Returns:
             This query builder.
         &#34;&#34;&#34;
-        self._result_transformer = EnvelopeTransformer()
+        self._java_transformer = EnvelopeTransformer()
         if type_names is None:
             self._java_ref.bboxOfResults()
         else:
@@ -88,7 +88,7 @@ class VectorAggregationQueryBuilder(AggregationQueryBuilder):
         Returns:
             This query builder.
         &#34;&#34;&#34;
-        self._result_transformer = EnvelopeTransformer()
+        self._java_transformer = EnvelopeTransformer()
         self._java_ref.bboxOfResultsForGeometryField(type_name, geometry_field_name)
         return self
 
@@ -102,7 +102,7 @@ class VectorAggregationQueryBuilder(AggregationQueryBuilder):
         Returns:
             This query builder.
         &#34;&#34;&#34;
-        self._result_transformer = IntervalTransformer()
+        self._java_transformer = IntervalTransformer()
         self._java_ref.timeRangeOfResults(StringArrayType().to_java(type_names))
         return self
 
@@ -117,7 +117,7 @@ class VectorAggregationQueryBuilder(AggregationQueryBuilder):
         Returns:
             This query builder.
         &#34;&#34;&#34;
-        self._result_transformer = IntervalTransformer()
+        self._java_transformer = IntervalTransformer()
         self._java_ref.timeRangeOfResultsForTimeField(type_name, time_field_name)
         return self
 
@@ -209,7 +209,7 @@ class VectorAggregationQueryBuilder(AggregationQueryBuilder):
         Returns:
             This query builder.
         &#34;&#34;&#34;
-        self._result_transformer = EnvelopeTransformer()
+        self._java_transformer = EnvelopeTransformer()
         if type_names is None:
             self._java_ref.bboxOfResults()
         else:
@@ -227,7 +227,7 @@ class VectorAggregationQueryBuilder(AggregationQueryBuilder):
         Returns:
             This query builder.
         &#34;&#34;&#34;
-        self._result_transformer = EnvelopeTransformer()
+        self._java_transformer = EnvelopeTransformer()
         self._java_ref.bboxOfResultsForGeometryField(type_name, geometry_field_name)
         return self
 
@@ -241,7 +241,7 @@ class VectorAggregationQueryBuilder(AggregationQueryBuilder):
         Returns:
             This query builder.
         &#34;&#34;&#34;
-        self._result_transformer = IntervalTransformer()
+        self._java_transformer = IntervalTransformer()
         self._java_ref.timeRangeOfResults(StringArrayType().to_java(type_names))
         return self
 
@@ -256,7 +256,7 @@ class VectorAggregationQueryBuilder(AggregationQueryBuilder):
         Returns:
             This query builder.
         &#34;&#34;&#34;
-        self._result_transformer = IntervalTransformer()
+        self._java_transformer = IntervalTransformer()
         self._java_ref.timeRangeOfResultsForTimeField(type_name, time_field_name)
         return self
 
@@ -335,7 +335,7 @@ feature type which is also the indexed geometry.</p>
     Returns:
         This query builder.
     &#34;&#34;&#34;
-    self._result_transformer = EnvelopeTransformer()
+    self._java_transformer = EnvelopeTransformer()
     if type_names is None:
         self._java_ref.bboxOfResults()
     else:
@@ -372,7 +372,7 @@ want to calculate the bbox on a different field than the default/indexed Geometr
     Returns:
         This query builder.
     &#34;&#34;&#34;
-    self._result_transformer = EnvelopeTransformer()
+    self._java_transformer = EnvelopeTransformer()
     self._java_ref.bboxOfResultsForGeometryField(type_name, geometry_field_name)
     return self</code></pre>
 </details>
@@ -518,7 +518,7 @@ temporal attribute names.</p>
     Returns:
         This query builder.
     &#34;&#34;&#34;
-    self._result_transformer = IntervalTransformer()
+    self._java_transformer = IntervalTransformer()
     self._java_ref.timeRangeOfResults(StringArrayType().to_java(type_names))
     return self</code></pre>
 </details>
@@ -552,7 +552,7 @@ want to calculate the time range on a specific time field.</p>
     Returns:
         This query builder.
     &#34;&#34;&#34;
-    self._result_transformer = IntervalTransformer()
+    self._java_transformer = IntervalTransformer()
     self._java_ref.timeRangeOfResultsForTimeField(type_name, time_field_name)
     return self</code></pre>
 </details>
