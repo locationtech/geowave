@@ -59,7 +59,7 @@ public class CountMinSketchStatistic extends
     this.probabilityOfCorrectness = probabilityOfCorrectness;
   }
 
-  public void setErrorFactor(double errorFactor) {
+  public void setErrorFactor(final double errorFactor) {
     this.errorFactor = errorFactor;
   }
 
@@ -67,7 +67,7 @@ public class CountMinSketchStatistic extends
     return this.errorFactor;
   }
 
-  public void setProbabilityOfCorrectness(double probabilityOfCorrectness) {
+  public void setProbabilityOfCorrectness(final double probabilityOfCorrectness) {
     this.probabilityOfCorrectness = probabilityOfCorrectness;
   }
 

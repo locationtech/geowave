@@ -30,7 +30,7 @@ import org.locationtech.geowave.core.store.statistics.query.BinConstraintsImpl.E
 import com.google.common.collect.Lists;
 
 /**
- * Statistic binning strategy that combines two other binning strategies.
+ * Statistic binning strategy that combines two or more other binning strategies.
  */
 public class CompositeBinningStrategy implements StatisticBinningStrategy {
 

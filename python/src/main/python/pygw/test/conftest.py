@@ -17,6 +17,7 @@ from datetime import datetime
 
 from shapely.geometry import Point
 
+from pygw.base import CloseableIterator
 from pygw.store import DataStoreFactory
 from pygw.store.rocksdb import RocksDBOptions
 from pygw.geotools import SimpleFeatureTypeBuilder
@@ -29,11 +30,15 @@ POINT_TYPE_NAME = "TestPointType"
 POINT_GEOMETRY_FIELD = "the_geom"
 POINT_TIME_FIELD = "date"
 POINT_NUMBER_FIELD = "flt"
+POINT_COLOR_FIELD = "color"
+POINT_SHAPE_FIELD = "shape"
 _point_type_builder = SimpleFeatureTypeBuilder()
 _point_type_builder.set_name(POINT_TYPE_NAME)
 _point_type_builder.add(AttributeDescriptor.point(POINT_GEOMETRY_FIELD))
 _point_type_builder.add(AttributeDescriptor.date(POINT_TIME_FIELD))
 _point_type_builder.add(AttributeDescriptor.float(POINT_NUMBER_FIELD))
+_point_type_builder.add(AttributeDescriptor.string(POINT_COLOR_FIELD))
+_point_type_builder.add(AttributeDescriptor.string(POINT_SHAPE_FIELD))
 POINT_TYPE = _point_type_builder.build_feature_type()
 
 # "Point" Type Adapter
@@ -42,17 +47,29 @@ POINT_TYPE_ADAPTER = FeatureDataAdapter(POINT_TYPE)
 # "Point" Feature builder
 POINT_FEATURE_BUILDER = SimpleFeatureBuilder(POINT_TYPE)
 
+COLORS = ['RED', 'GREEN', 'BLUE']
+SHAPES = ['SQUARE', 'CIRCLE', 'TRIANGLE', 'RECTANGLE']
+
 
 def _create_feature(fid, geometry, timestamp):
     POINT_FEATURE_BUILDER.set_attr(POINT_GEOMETRY_FIELD, geometry)
     POINT_FEATURE_BUILDER.set_attr(POINT_TIME_FIELD, datetime.utcfromtimestamp(timestamp))
     POINT_FEATURE_BUILDER.set_attr(POINT_NUMBER_FIELD, timestamp)
+    POINT_FEATURE_BUILDER.set_attr(POINT_COLOR_FIELD, COLORS[timestamp % 3])
+    POINT_FEATURE_BUILDER.set_attr(POINT_SHAPE_FIELD, SHAPES[timestamp % 4])
     return POINT_FEATURE_BUILDER.build(fid)
 
 
+def latitude(lon_value):
+    if lon_value < 0:
+        return lon_value % -90
+    return lon_value % 90
+
+
 TEST_DATA = [
-    _create_feature(id_, Point(i, j), i) for
-    id_, (i, j) in enumerate(zip(range(-180, 180), range(-180, 180)))]
+    _create_feature(id_, Point(i, latitude(i)), i) for
+    id_, i in enumerate(range(-180, 180))]
+
 
 # Test Directory
 TEST_DIR = os.path.join(os.getcwd(), "test")
@@ -85,6 +102,7 @@ def write_test_data(ds, *expected_indices):
 
 
 def results_as_list(results):
+    assert isinstance(results, CloseableIterator)
     res = [d for d in results]
     results.close()
     return res

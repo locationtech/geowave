@@ -15,11 +15,12 @@ from ..base.type_conversions import StringArrayType
 
 class AggregationQueryBuilder(BaseQueryBuilder):
     """
-    A builder for creating aggregation queries.
+    A builder for creating aggregation queries. This class should not be used directly.  Instead, use one of the derived
+    classes such as `pygw.query.vector.VectorAggregationQueryBuilder`.
     """
 
     def __init__(self, java_ref):
-        super().__init__(java_ref, None)
+        super().__init__(java_ref)
 
     def count(self, *type_names):
         """
@@ -57,4 +58,4 @@ class AggregationQueryBuilder(BaseQueryBuilder):
         Returns:
             The final constructed `pygw.query.AggregationQuery`.
         """
-        return AggregationQuery(self._java_ref.build(), self._result_transformer)
+        return AggregationQuery(self._java_ref.build(), self._java_transformer)

@@ -10,8 +10,10 @@
 
 from pygw.base import GeoWaveObject
 from pygw.base.type_conversions import GeometryType
+from . import AttributeDescriptor
 
 from .simple_feature_type import SimpleFeatureType
+from ..base.java_transformer import JavaTransformer
 
 
 class SimpleFeature(GeoWaveObject):
@@ -106,3 +108,36 @@ class SimpleFeature(GeoWaveObject):
         for i in range(len(j_values)):
             feature_dict[descriptors[i].descriptor] = descriptors[i].from_java(j_values[i])
         return feature_dict
+
+
+class SimpleFeatureTransformer(JavaTransformer):
+    """
+    Transforms Java SimpleFeatures into pgyw.geotools.SimpleFeatures.  In order to accomplish this, the pygw variant of
+    the SimpleFeatureType has to be constructed from the feature.  In order to avoid doing this multiple times, there
+    is a feature type cache that the transform function can pull from.
+    """
+
+    def __init__(self):
+        self._feature_type_cache = {}
+
+    def transform(self, j_object):
+        """
+        Transform the given Java SimpleFeature into a pygw.geotools.SimpleFeature.
+
+        Args:
+            j_object (Java SimpleFeature): A geotools SimpleFeature Java object.
+        Returns:
+            A `pygw.geotools.simple_feature.SimpleFeature`.
+        """
+        j_sft = j_object.getFeatureType()
+        type_name = j_sft.getTypeName()
+        if type_name in self._feature_type_cache:
+            sft = self._feature_type_cache[type_name]
+        else:
+            j_attrs = j_sft.getAttributeDescriptors().iterator()
+            descriptors = []
+            while j_attrs.hasNext():
+                descriptors.append(AttributeDescriptor.from_java_attribute_descriptor(j_attrs.next()))
+            sft = SimpleFeatureType(j_sft, descriptors)
+            self._feature_type_cache[type_name] = sft
+        return SimpleFeature(sft, j_object)

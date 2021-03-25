@@ -21,8 +21,8 @@ class QueryBuilder(BaseQueryBuilder):
     `pygw.query.vector.vector_query_builder.VectorQueryBuilder`.
     """
 
-    def __init__(self, java_ref, result_transformer):
-        super().__init__(java_ref, result_transformer)
+    def __init__(self, java_ref, java_transformer):
+        super().__init__(java_ref, java_transformer)
 
     def all_types(self):
         """
@@ -89,4 +89,4 @@ class QueryBuilder(BaseQueryBuilder):
         Returns:
             The final constructed `pygw.query.query.Query`.
         """
-        return Query(self._java_ref.build(), self._result_transformer)
+        return Query(self._java_ref.build(), self._java_transformer)

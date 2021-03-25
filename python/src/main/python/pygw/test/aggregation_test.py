@@ -15,6 +15,7 @@ from pygw.query import VectorAggregationQueryBuilder
 
 from .conftest import POINT_TYPE_ADAPTER, POINT_GEOMETRY_FIELD, POINT_TIME_FIELD, POINT_TYPE_NAME, POINT_NUMBER_FIELD
 from .conftest import write_test_data
+from ..base import Envelope, Interval
 
 
 def setup_query_builder(test_ds):
@@ -41,22 +42,22 @@ def test_bbox_aggregation(test_ds):
     res = test_ds.aggregate(qbldr.build())
 
     # then
-    assert len(res) == 4
-    assert res[0] == 1.0  # Min X
-    assert res[1] == 1.0  # Min Y
-    assert res[2] == 10.0  # Max X
-    assert res[3] == 10.0  # Max Y
+    assert isinstance(res, Envelope)
+    assert res.get_min_x() == 1.0
+    assert res.get_min_y() == 1.0
+    assert res.get_max_x() == 10.0
+    assert res.get_max_y() == 10.0
 
     # when
     qbldr.bbox_of_results_for_geometry_field(POINT_TYPE_NAME, POINT_GEOMETRY_FIELD)
     res = test_ds.aggregate(qbldr.build())
 
     # then
-    assert len(res) == 4
-    assert res[0] == 1.0  # Min X
-    assert res[1] == 1.0  # Min Y
-    assert res[2] == 10.0  # Max X
-    assert res[3] == 10.0  # Max Y
+    assert isinstance(res, Envelope)
+    assert res.get_min_x() == 1.0
+    assert res.get_min_y() == 1.0
+    assert res.get_max_x() == 10.0
+    assert res.get_max_y() == 10.0
 
 
 def test_time_range_aggregation(test_ds):
@@ -68,18 +69,18 @@ def test_time_range_aggregation(test_ds):
     res = test_ds.aggregate(qbldr.build())
 
     # then
-    assert len(res) == 2
-    assert res[0] == datetime.utcfromtimestamp(1)  # Start Date
-    assert res[1] == datetime.utcfromtimestamp(10)  # End Date
+    assert isinstance(res, Interval)
+    assert res.get_start() == datetime.utcfromtimestamp(1)  # Start Date
+    assert res.get_end() == datetime.utcfromtimestamp(10)  # End Date
 
     # when
     qbldr.time_range_of_results_for_time_field(POINT_TYPE_NAME, POINT_TIME_FIELD)
     res = test_ds.aggregate(qbldr.build())
 
     # then
-    assert len(res) == 2
-    assert res[0] == datetime.utcfromtimestamp(1)  # Start Date
-    assert res[1] == datetime.utcfromtimestamp(10)  # End Date
+    assert isinstance(res, Interval)
+    assert res.get_start() == datetime.utcfromtimestamp(1)  # Start Date
+    assert res.get_end() == datetime.utcfromtimestamp(10)  # End Date
 
 
 def test_math_aggregations(test_ds):

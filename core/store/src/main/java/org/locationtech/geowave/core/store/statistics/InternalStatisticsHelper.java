@@ -262,7 +262,6 @@ public class InternalStatisticsHelper {
                 CompositeBinningStrategy.getBin(
                     DataTypeBinningStrategy.getBin(adapterStore.getAdapter(adapterId)),
                     PartitionBinningStrategy.getBin(partitionKey.getBytes())),
-                false,
                 authorizations);
         if (value != null) {
           if (combinedValue == null) {
@@ -310,7 +309,6 @@ public class InternalStatisticsHelper {
           CompositeBinningStrategy.getBin(
               DataTypeBinningStrategy.getBin(typeName),
               PartitionBinningStrategy.getBin(partitionKey.getBytes())),
-          false,
           authorizations);
     }
     return null;
@@ -335,7 +333,6 @@ public class InternalStatisticsHelper {
             statisticsStore.getStatisticValue(
                 stat,
                 DataTypeBinningStrategy.getBin(adapter),
-                false,
                 authorizations);
         if (combinedValue == null) {
           combinedValue = value;

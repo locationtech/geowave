@@ -9,11 +9,11 @@
 # ===============================================================================================
 
 from pygw.config import geowave_pkg
+from ...base.envelope import EnvelopeTransformer
+from ...base.interval import IntervalTransformer
 
 from ...base.type_conversions import StringArrayType
 from ..aggregation_query_builder import AggregationQueryBuilder
-from .result_transformers import EnvelopeTransformer
-from .result_transformers import IntervalTransformer
 from .vector_query_constraints_factory import VectorQueryConstraintsFactory
 
 
@@ -46,7 +46,7 @@ class VectorAggregationQueryBuilder(AggregationQueryBuilder):
         Returns:
             This query builder.
         """
-        self._result_transformer = EnvelopeTransformer()
+        self._java_transformer = EnvelopeTransformer()
         if type_names is None:
             self._java_ref.bboxOfResults()
         else:
@@ -64,7 +64,7 @@ class VectorAggregationQueryBuilder(AggregationQueryBuilder):
         Returns:
             This query builder.
         """
-        self._result_transformer = EnvelopeTransformer()
+        self._java_transformer = EnvelopeTransformer()
         self._java_ref.bboxOfResultsForGeometryField(type_name, geometry_field_name)
         return self
 
@@ -78,7 +78,7 @@ class VectorAggregationQueryBuilder(AggregationQueryBuilder):
         Returns:
             This query builder.
         """
-        self._result_transformer = IntervalTransformer()
+        self._java_transformer = IntervalTransformer()
         self._java_ref.timeRangeOfResults(StringArrayType().to_java(type_names))
         return self
 
@@ -93,7 +93,7 @@ class VectorAggregationQueryBuilder(AggregationQueryBuilder):
         Returns:
             This query builder.
         """
-        self._result_transformer = IntervalTransformer()
+        self._java_transformer = IntervalTransformer()
         self._java_ref.timeRangeOfResultsForTimeField(type_name, time_field_name)
         return self
 

@@ -352,13 +352,21 @@ public class ChooseBestMatchIndexQueryStrategyTest {
     public <V extends StatisticValue<R>, R> V getStatisticValue(
         final Statistic<V> statistic,
         final ByteArray bin,
-        final boolean isPrefixScan,
         final String... authorizations) {
       final Map<ByteArray, StatisticValue<?>> values = statisticValues.get(statistic.getId());
       if (values != null) {
         return (V) values.get(bin);
       }
       return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <V extends StatisticValue<R>, R> CloseableIterator<V> getStatisticValues(
+        final Statistic<V> statistic,
+        final ByteArray binPrefix,
+        final String... authorizations) {
+      throw new UnsupportedOperationException();
     }
 
     @SuppressWarnings("unchecked")

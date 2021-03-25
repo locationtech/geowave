@@ -15,7 +15,6 @@ It contains the following import shortcuts:
 from pygw.query.vector import SpatialTemporalConstraintsBuilder
 from pygw.query.vector import VectorQueryConstraintsFactory
 from pygw.query.vector import FilterFactory
-from pygw.query.vector import SimpleFeatureTransformer
 from pygw.query.vector import VectorQueryBuilder
 from pygw.query.vector import VectorAggregationQueryBuilder
 ```
@@ -24,6 +23,5 @@ from pygw.query.vector import VectorAggregationQueryBuilder
 from .spatial_temporal_constraints_builder import SpatialTemporalConstraintsBuilder
 from .vector_query_constraints_factory import VectorQueryConstraintsFactory
 from .filter_factory import FilterFactory
-from .result_transformers import SimpleFeatureTransformer
 from .vector_query_builder import VectorQueryBuilder
 from .vector_aggregation_query_builder import VectorAggregationQueryBuilder

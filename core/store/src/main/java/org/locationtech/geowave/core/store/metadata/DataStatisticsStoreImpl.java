@@ -481,7 +481,6 @@ public class DataStatisticsStoreImpl extends
   public <V extends StatisticValue<R>, R> V getStatisticValue(
       final Statistic<V> statistic,
       final ByteArray bin,
-      final boolean binPrefixScan,
       final String... authorizations) {
     if (statistic.getBinningStrategy() == null) {
       throw new UnsupportedOperationException(
@@ -489,12 +488,24 @@ public class DataStatisticsStoreImpl extends
     }
     // allow for bin prefix scans
     try (StatisticValueReader<V, R> reader =
-        createStatisticValueReader(statistic, bin, !binPrefixScan, authorizations)) {
+        createStatisticValueReader(statistic, bin, true, authorizations)) {
       if (reader.hasNext()) {
         return reader.next();
       }
     }
     return null;
+  }
+
+  @Override
+  public <V extends StatisticValue<R>, R> CloseableIterator<V> getStatisticValues(
+      final Statistic<V> statistic,
+      final ByteArray binPrefix,
+      final String... authorizations) {
+    if (statistic.getBinningStrategy() == null) {
+      throw new UnsupportedOperationException(
+          "The given statistic does not use a binning strategy, but a bin was specified.");
+    }
+    return createStatisticValueReader(statistic, binPrefix, false, authorizations);
   }
 
   @Override

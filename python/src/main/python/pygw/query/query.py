@@ -10,7 +10,7 @@
 
 from pygw.base import GeoWaveObject
 
-from .query_result_transformer import QueryResultTransformer
+from ..base.java_transformer import JavaTransformer
 
 
 class Query(GeoWaveObject):
@@ -18,8 +18,8 @@ class Query(GeoWaveObject):
     Base Query class that wraps a GeoWave query.
     """
 
-    def __init__(self, java_ref, result_transformer):
-        if result_transformer is not None:
-            assert isinstance(result_transformer, QueryResultTransformer)
-        self.result_transformer = result_transformer
+    def __init__(self, java_ref, java_transformer):
+        if java_transformer is not None:
+            assert isinstance(java_transformer, JavaTransformer)
+        self.java_transformer = java_transformer
         super().__init__(java_ref)

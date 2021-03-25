@@ -18,6 +18,9 @@ from pygw.base import GeoWaveObject
 from pygw.base import CloseableIterator
 from pygw.base import DataTypeAdapter
 from pygw.base import Writer
+from pygw.base import Envelope
+from pygw.base import Interval
+from pygw.base import Range
 ```
 """
 
@@ -25,3 +28,6 @@ from .geowave_object import GeoWaveObject
 from .closeable_iterator import CloseableIterator
 from .data_type_adapter import DataTypeAdapter
 from .writer import Writer
+from .envelope import Envelope
+from .interval import Interval
+from .range import Range

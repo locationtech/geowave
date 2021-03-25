@@ -14,16 +14,17 @@ from pygw.base.type_conversions import StringArrayType
 from .query_constraints_factory import QueryConstraintsFactory
 from .query_hint_key import QueryHintKey
 from .query_constraints import QueryConstraints
+from ..base.java_transformer import NoOpTransformer
 
 
 class BaseQueryBuilder(GeoWaveObject):
     """
     A base class for building queries.  This class should not be used directly.  Instead, use one of the derived classes
-    such as `pygw.query.vector.VectorQueryBuilder` or `pygw.query.aggregation.AggregationQueryBuilder`.
+    such as `pygw.query.vector.VectorQueryBuilder` or `pygw.query.vector.VectorAggregationQueryBuilder`.
     """
 
-    def __init__(self, java_ref, result_transformer):
-        self._result_transformer = result_transformer
+    def __init__(self, java_ref, java_transformer=NoOpTransformer()):
+        self._java_transformer = java_transformer
         super().__init__(java_ref)
 
     def constraints_factory(self):

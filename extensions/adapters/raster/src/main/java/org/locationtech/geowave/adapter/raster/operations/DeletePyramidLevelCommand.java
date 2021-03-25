@@ -188,8 +188,7 @@ public class DeletePyramidLevelCommand extends DefaultOperation implements Comma
               final PartitionsValue value =
                   statsStore.getStatisticValue(
                       (PartitionsStatistic) next,
-                      DataTypeBinningStrategy.getBin(adapter),
-                      false);
+                      DataTypeBinningStrategy.getBin(adapter));
               for (final ByteArray p : partitions) {
                 if (!value.getValue().remove(p)) {
                   LOGGER.error(

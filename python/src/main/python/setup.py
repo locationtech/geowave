@@ -4,6 +4,7 @@ from setuptools import setup, find_packages
 with open('README.md', 'r') as fh:
     long_description = fh.read()
 
+
 def get_version():
     try:
         from maven_version import get_maven_version
@@ -14,6 +15,7 @@ def get_version():
         from pkg_resources import DistributionNotFound
         version = get_distribution('pygw').version
     return version
+
 
 setup(
     name='pygw',
@@ -42,6 +44,6 @@ setup(
         'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
     ],
-    install_requires=['py4j==0.10.8.1','shapely==1.7'],
-    python_requires='>=3,<3.8' # py4j does not support python 3.8 yet
+    install_requires=['py4j==0.10.8.1', 'shapely==1.7'],
+    python_requires='>=3,<3.8'  # py4j does not support python 3.8 yet
 )
