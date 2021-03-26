@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.store.statistics.query;
 
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.store.api.BinConstraints;
 import org.locationtech.geowave.core.store.api.Statistic;
 
@@ -34,6 +35,11 @@ public class BinConstraintsImpl implements BinConstraints {
     constraints = new ExplicitConstraints(bins, isPrefix);
   }
 
+  public BinConstraintsImpl(final ByteArrayRange[] binRanges) {
+    super();
+    constraints = new ExplicitConstraints(binRanges);
+  }
+
   public BinConstraintsImpl(final Object object) {
     super();
     this.object = object;
@@ -53,6 +59,7 @@ public class BinConstraintsImpl implements BinConstraints {
 
   public static class ExplicitConstraints implements ByteArrayConstraints {
     private final ByteArray[] bins;
+    private final ByteArrayRange[] binRanges;
     private final boolean isPrefix;
     private final boolean isAllBins;
 
@@ -70,6 +77,10 @@ public class BinConstraintsImpl implements BinConstraints {
       this(bins, false);
     }
 
+    public ExplicitConstraints(final ByteArrayRange[] binRanges) {
+      this(new ByteArray[0], binRanges, false, false);
+    }
+
     public ExplicitConstraints(final ByteArray[] bins, final boolean isPrefix) {
       this(bins, isPrefix, false);
     }
@@ -78,7 +89,16 @@ public class BinConstraintsImpl implements BinConstraints {
         final ByteArray[] bins,
         final boolean isPrefix,
         final boolean isAllBins) {
+      this(bins, new ByteArrayRange[0], isPrefix, isAllBins);
+    }
+
+    public ExplicitConstraints(
+        final ByteArray[] bins,
+        final ByteArrayRange[] binRanges,
+        final boolean isPrefix,
+        final boolean isAllBins) {
       this.bins = bins;
+      this.binRanges = binRanges;
       this.isPrefix = isPrefix;
       this.isAllBins = isAllBins;
     }
@@ -96,6 +116,11 @@ public class BinConstraintsImpl implements BinConstraints {
     @Override
     public boolean isAllBins() {
       return isAllBins;
+    }
+
+    @Override
+    public ByteArrayRange[] getBinRanges() {
+      return binRanges;
     }
   }
 

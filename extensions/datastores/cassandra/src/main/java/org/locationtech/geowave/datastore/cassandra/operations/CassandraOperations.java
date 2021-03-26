@@ -77,6 +77,7 @@ import com.datastax.driver.core.querybuilder.Insert;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.driver.core.querybuilder.Select;
 import com.datastax.driver.core.schemabuilder.Create;
+import com.datastax.driver.core.schemabuilder.Drop;
 import com.datastax.driver.core.schemabuilder.SchemaBuilder;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterators;
@@ -105,7 +106,7 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
     this(options, SessionPool.getInstance().getSession(options.getContactPoint()));
   }
 
-  public CassandraOperations(final CassandraRequiredOptions options, Session session) {
+  public CassandraOperations(final CassandraRequiredOptions options, final Session session) {
     if ((options.getGeoWaveNamespace() == null) || options.getGeoWaveNamespace().equals("")) {
       gwNamespace = "geowave";
     } else {
@@ -149,6 +150,11 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
   private void executeCreateTable(final Create create, final String safeTableName) {
     session.execute(create);
     state.tableExistsCache.put(safeTableName, true);
+  }
+
+  private void executeDropTable(final Drop drop, final String safeTableName) {
+    session.execute(drop);
+    state.tableExistsCache.put(safeTableName, false);
   }
 
   public Insert getInsert(final String table) {
@@ -408,6 +414,14 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
       }
     }
     return false;
+  }
+
+  public void dropMetadataTable(final MetadataType metadataType) {
+    final String tableName = getMetadataTableName(metadataType);
+    // this checks for existence prior to drop
+    synchronized (CREATE_TABLE_MUTEX) {
+      executeDropTable(SchemaBuilder.dropTable(gwNamespace, tableName).ifExists(), tableName);
+    }
   }
 
   private String ensureTableExists(final MetadataType metadataType) {

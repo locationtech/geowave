@@ -14,6 +14,7 @@ from .binning_strategy.data_type_binning_strategy import DataTypeBinningStrategy
 from .binning_strategy.field_value_binning_strategy import FieldValueBinningStrategy
 from .binning_strategy.numeric_range_field_value_binning_strategy import NumericRangeFieldValueBinningStrategy
 from .binning_strategy.partition_binning_strategy import PartitionBinningStrategy
+from .binning_strategy.spatial_field_value_binning_strategy import SpatialFieldValueBinningStrategy
 from .binning_strategy.time_range_field_value_binning_strategy import TimeRangeFieldValueBinningStrategy
 
 __binning_strategy_mappings = {
@@ -25,6 +26,8 @@ __binning_strategy_mappings = {
         PartitionBinningStrategy,
     geowave_pkg.core.store.statistics.binning.NumericRangeFieldValueBinningStrategy.NAME:
         NumericRangeFieldValueBinningStrategy,
+    geowave_pkg.core.geotime.store.statistics.binning.SpatialFieldValueBinningStrategy.NAME:
+        SpatialFieldValueBinningStrategy,
     geowave_pkg.core.geotime.store.statistics.binning.TimeRangeFieldValueBinningStrategy.NAME:
         TimeRangeFieldValueBinningStrategy,
     geowave_pkg.core.store.statistics.binning.FieldValueBinningStrategy.NAME:

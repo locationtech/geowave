@@ -54,6 +54,7 @@ import org.locationtech.geowave.core.store.query.options.FilterByTypeQueryOption
 import org.locationtech.geowave.core.store.query.options.QueryAllIndices;
 import org.locationtech.geowave.core.store.query.options.QueryAllTypes;
 import org.locationtech.geowave.core.store.query.options.QuerySingleIndex;
+import org.locationtech.geowave.core.store.statistics.binning.IndexBinningStrategy;
 
 public class StorePersistableRegistry implements PersistableRegistrySpi {
 
@@ -114,6 +115,9 @@ public class StorePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 266, BinningAggregationOptions::new),
         new PersistableIdAndConstructor((short) 267, BinningAggregation::new),
         new PersistableIdAndConstructor((short) 268, CustomQueryConstraintsWithFilter::new),
-        new PersistableIdAndConstructor((short) 269, InternalCustomQueryFilter::new),};
+        new PersistableIdAndConstructor((short) 269, InternalCustomQueryFilter::new),
+        // this is intentionally not in the statistics registry because its best for programmatic
+        // access, there are no ways to just use it through the CLI
+        new PersistableIdAndConstructor((short) 270, IndexBinningStrategy::new),};
   }
 }

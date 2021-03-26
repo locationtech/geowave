@@ -25,6 +25,7 @@ import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
@@ -35,7 +36,10 @@ import org.locationtech.geowave.core.index.sfc.data.NumericValue;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.BinConstraints.ByteArrayConstraints;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeStatistic;
+import org.locationtech.geowave.core.store.api.FieldStatistic;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexStatistic;
 import org.locationtech.geowave.core.store.api.Statistic;
 import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
@@ -57,7 +61,6 @@ import org.locationtech.geowave.core.store.statistics.StatisticsIngestCallback;
 import org.locationtech.geowave.core.store.statistics.binning.CompositeBinningStrategy;
 import org.locationtech.geowave.core.store.statistics.binning.DataTypeBinningStrategy;
 import org.locationtech.geowave.core.store.statistics.binning.PartitionBinningStrategy;
-import org.locationtech.geowave.core.store.statistics.index.IndexStatistic;
 import org.locationtech.geowave.core.store.statistics.index.RowRangeHistogramStatistic;
 import org.locationtech.geowave.core.store.statistics.index.RowRangeHistogramStatistic.RowRangeHistogramValue;
 import com.beust.jcommander.internal.Lists;
@@ -293,12 +296,13 @@ public class ChooseBestMatchIndexQueryStrategyTest {
       throw new UnsupportedOperationException();
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
-    public CloseableIterator<? extends Statistic<? extends StatisticValue<?>>> getIndexStatistics(
+    public CloseableIterator<? extends IndexStatistic<? extends StatisticValue<?>>> getIndexStatistics(
         final Index index,
         final StatisticType<? extends StatisticValue<?>> statisticType,
         final String name) {
-      return new CloseableIterator.Wrapper<>(
+      return new CloseableIterator.Wrapper(
           statistics.stream().filter(
               stat -> (stat instanceof IndexStatistic)
                   && ((IndexStatistic<?>) stat).getIndexName().equals(index.getName())
@@ -307,7 +311,7 @@ public class ChooseBestMatchIndexQueryStrategyTest {
     }
 
     @Override
-    public CloseableIterator<? extends Statistic<? extends StatisticValue<?>>> getDataTypeStatistics(
+    public CloseableIterator<? extends DataTypeStatistic<? extends StatisticValue<?>>> getDataTypeStatistics(
         final DataTypeAdapter<?> type,
         final StatisticType<? extends StatisticValue<?>> statisticType,
         final String name) {
@@ -315,7 +319,7 @@ public class ChooseBestMatchIndexQueryStrategyTest {
     }
 
     @Override
-    public CloseableIterator<? extends Statistic<? extends StatisticValue<?>>> getFieldStatistics(
+    public CloseableIterator<? extends FieldStatistic<? extends StatisticValue<?>>> getFieldStatistics(
         final DataTypeAdapter<?> type,
         final StatisticType<? extends StatisticValue<?>> statisticType,
         final String fieldName,
@@ -464,6 +468,14 @@ public class ChooseBestMatchIndexQueryStrategyTest {
     @Override
     public boolean mergeStats() {
       return false;
+    }
+
+    @Override
+    public <V extends StatisticValue<R>, R> CloseableIterator<V> getStatisticValues(
+        final Statistic<V> statistic,
+        final ByteArrayRange[] ranges,
+        final String... authorizations) {
+      throw new UnsupportedOperationException();
     }
 
   }

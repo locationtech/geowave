@@ -9,6 +9,7 @@
 package org.locationtech.geowave.datastore.accumulo.operations;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import org.apache.accumulo.core.client.BatchScanner;
@@ -26,6 +27,7 @@ import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
+import org.locationtech.geowave.datastore.accumulo.util.AccumuloUtils;
 import org.locationtech.geowave.datastore.accumulo.util.ScannerClosableWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,6 +71,10 @@ public class AccumuloMetadataReader implements MetadataReader {
         } else {
           ranges.add(Range.exact(new Text(query.getPrimaryId())));
         }
+      } else if (query.hasPrimaryIdRanges()) {
+        ranges.addAll(
+            AccumuloUtils.byteArrayRangesToAccumuloRanges(
+                Arrays.asList(query.getPrimaryIdRanges())));
       } else {
         ranges.add(new Range());
       }

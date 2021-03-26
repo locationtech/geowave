@@ -131,7 +131,7 @@ public class AggregationIterator extends ExceptionHandlingFilter {
       final CommonIndexModel model,
       final CommonIndexedPersistenceEncoding persistenceEncoding) {
     if (adapter == null) {
-      aggregationFunction.aggregate(persistenceEncoding);
+      aggregationFunction.aggregate(null, persistenceEncoding);
       if (startRowOfAggregation == null) {
         startRowOfAggregation = currentRow;
       }
@@ -168,7 +168,7 @@ public class AggregationIterator extends ExceptionHandlingFilter {
 
       if (row != null) {
         // for now ignore field info
-        aggregationFunction.aggregate(row);
+        aggregationFunction.aggregate(adapter, row);
         if (startRowOfAggregation == null) {
           startRowOfAggregation = currentRow;
         }

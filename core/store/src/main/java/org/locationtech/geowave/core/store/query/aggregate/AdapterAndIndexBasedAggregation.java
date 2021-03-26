@@ -57,5 +57,5 @@ public interface AdapterAndIndexBasedAggregation<P extends Persistable, R, T> ex
   default void clearResult() {}
 
   @Override
-  default void aggregate(final T entry) {}
+  default void aggregate(final DataTypeAdapter<T> adapter, final T entry) {}
 }

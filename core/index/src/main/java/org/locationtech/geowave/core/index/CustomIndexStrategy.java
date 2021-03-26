@@ -36,7 +36,7 @@ public interface CustomIndexStrategy<E, C extends Persistable> extends Persistab
 
   /**
    * This is the function that is called on query, when given a query with the constraints type. The
-   * constraints type can be any arbtitrary type although should be persistable so that it can work
+   * constraints type can be any arbitrary type although should be persistable so that it can work
    * outside of just client code (such as server-side filtering, map-reduce, or spark).
    *
    * The query ranges are a set of partition keys and ranges of sort keys that fully include all

@@ -382,6 +382,20 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
     return false;
   }
 
+  public void dropMetadataTable(MetadataType type) {
+    String tableName = getMetadataTableName(type);
+    synchronized (DynamoDBOperations.tableExistsCache) {
+      final Boolean tableExists = DynamoDBOperations.tableExistsCache.get(tableName);
+      if (tableExists == null || tableExists) {
+        final boolean tableDropped =
+            TableUtils.deleteTableIfExists(client, new DeleteTableRequest(tableName));
+        if (tableDropped) {
+          DynamoDBOperations.tableExistsCache.put(tableName, false);
+        }
+      }
+    }
+  }
+
   public void ensureTableExists(final String tableName) {
     synchronized (DynamoDBOperations.tableExistsCache) {
       final Boolean tableExists = DynamoDBOperations.tableExistsCache.get(tableName);

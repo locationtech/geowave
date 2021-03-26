@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.core.geotime.store.query.aggregate;
 
+import org.locationtech.geowave.core.geotime.binning.SpatialBinningType;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 
@@ -15,27 +16,34 @@ import org.opengis.feature.simple.SimpleFeature;
 /**
  * A GeohashBinningStrategy that bins SimpleFeature values.
  *
- * @see GeohashBinningStrategy
+ * @see SpatialBinningStrategy
  */
-public class GeohashSimpleFeatureBinningStrategy extends GeohashBinningStrategy<SimpleFeature> {
+public class SpatialSimpleFeatureBinningStrategy extends SpatialBinningStrategy<SimpleFeature> {
 
   /**
    * Create a binning strategy using a small number of bins. Usage of this method is not
    * recommended, if you are to use this, it should be through serialization.
    */
-  public GeohashSimpleFeatureBinningStrategy() {
-    this(2);
+  public SpatialSimpleFeatureBinningStrategy() {
+    this(SpatialBinningType.S2, 3, true);
   }
 
   /**
-   * @see GeohashBinningStrategy#GeohashBinningStrategy(int)
+   * @param type S2, H3, or GeoHash
+   * @param precision the resolution/length of the hash
+   * @param useCentroidOnly desired behavior for complex geometry such as lines and polygons whether
+   *        to just aggregate one hash value based on the centroid or to apply the aggregation to
+   *        all overlapping centroids
    */
-  public GeohashSimpleFeatureBinningStrategy(int precision) {
-    super(precision);
+  public SpatialSimpleFeatureBinningStrategy(
+      final SpatialBinningType type,
+      final int precision,
+      final boolean useCentroidOnly) {
+    super(type, precision, useCentroidOnly);
   }
 
   @Override
-  public Geometry getGeometry(SimpleFeature entry) {
+  public Geometry getGeometry(final SimpleFeature entry) {
     return (Geometry) entry.getDefaultGeometry();
   }
 }

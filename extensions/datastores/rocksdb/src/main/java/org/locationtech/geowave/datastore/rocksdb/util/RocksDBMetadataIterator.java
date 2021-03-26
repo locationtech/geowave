@@ -30,7 +30,6 @@ public class RocksDBMetadataIterator extends AbstractRocksDBIterator<GeoWaveMeta
       final boolean containsTimestamp,
       final boolean visibilityEnabled) {
     super(options, it);
-    this.options = options;
     this.it = it;
     this.containsTimestamp = containsTimestamp;
     this.visibilityEnabled = visibilityEnabled;

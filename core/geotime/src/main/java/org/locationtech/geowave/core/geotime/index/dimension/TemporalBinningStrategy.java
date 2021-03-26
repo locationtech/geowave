@@ -19,7 +19,7 @@ import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
 import org.locationtech.geowave.core.index.dimension.bin.BinValue;
-import org.locationtech.geowave.core.index.dimension.bin.BinningStrategy;
+import org.locationtech.geowave.core.index.dimension.bin.IndexBinningStrategy;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.threeten.extra.Interval;
@@ -34,7 +34,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * hour period, the unit should not be a day, but could be perhaps a month or a year (depending on
  * the temporal extent of the dataset).
  */
-public class TemporalBinningStrategy implements BinningStrategy {
+public class TemporalBinningStrategy implements IndexBinningStrategy {
   public static enum Unit {
     MINUTE(Calendar.MINUTE),
     HOUR(Calendar.HOUR_OF_DAY),

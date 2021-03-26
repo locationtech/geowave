@@ -9,6 +9,7 @@
 package org.locationtech.geowave.datastore.dynamodb.operations;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -46,56 +47,101 @@ public class DynamoDBMetadataReader implements MetadataReader {
     final String tableName = operations.getMetadataTableName(metadataType);
 
     final boolean needsVisibility = metadataType.isStatValues();
+    final Iterator<Map<String, AttributeValue>> iterator;
+    if (!query.hasPrimaryIdRanges()) {
+      if (query.hasPrimaryId() && query.isExact()) {
+        final QueryRequest queryRequest = new QueryRequest(tableName);
 
-    if (query.hasPrimaryId() && query.isExact()) {
-      final QueryRequest queryRequest = new QueryRequest(tableName);
+        if (query.hasSecondaryId()) {
+          queryRequest.withFilterExpression(
+              DynamoDBOperations.METADATA_SECONDARY_ID_KEY
+                  + " = :secVal").addExpressionAttributeValuesEntry(
+                      ":secVal",
+                      new AttributeValue().withB(ByteBuffer.wrap(query.getSecondaryId())));
+        }
+        queryRequest.withKeyConditionExpression(
+            DynamoDBOperations.METADATA_PRIMARY_ID_KEY
+                + " = :priVal").addExpressionAttributeValuesEntry(
+                    ":priVal",
+                    new AttributeValue().withB(ByteBuffer.wrap(query.getPrimaryId())));
 
-      if (query.hasSecondaryId()) {
-        queryRequest.withFilterExpression(
-            DynamoDBOperations.METADATA_SECONDARY_ID_KEY
-                + " = :secVal").addExpressionAttributeValuesEntry(
-                    ":secVal",
-                    new AttributeValue().withB(ByteBuffer.wrap(query.getSecondaryId())));
+        final QueryResult queryResult = operations.getClient().query(queryRequest);
+
+        return wrapIterator(queryResult.getItems().iterator(), query, needsVisibility);
       }
-      queryRequest.withKeyConditionExpression(
-          DynamoDBOperations.METADATA_PRIMARY_ID_KEY
-              + " = :priVal").addExpressionAttributeValuesEntry(
-                  ":priVal",
-                  new AttributeValue().withB(ByteBuffer.wrap(query.getPrimaryId())));
 
-      final QueryResult queryResult = operations.getClient().query(queryRequest);
+      final ScanRequest scan = new ScanRequest(tableName);
+      if (query.hasPrimaryId()) {
+        scan.addScanFilterEntry(
+            DynamoDBOperations.METADATA_PRIMARY_ID_KEY,
+            new Condition().withAttributeValueList(
+                new AttributeValue().withB(
+                    ByteBuffer.wrap(query.getPrimaryId()))).withComparisonOperator(
+                        ComparisonOperator.BEGINS_WITH));
+      }
+      if (query.hasSecondaryId()) {
+        scan.addScanFilterEntry(
+            DynamoDBOperations.METADATA_SECONDARY_ID_KEY,
+            new Condition().withAttributeValueList(
+                new AttributeValue().withB(
+                    ByteBuffer.wrap(query.getSecondaryId()))).withComparisonOperator(
+                        ComparisonOperator.EQ));
+      }
+      final ScanResult scanResult = operations.getClient().scan(scan);
 
-      return wrapIterator(queryResult.getItems().iterator(), query, needsVisibility);
+
+      if (needsVisibility) {
+        iterator = new LazyPaginatedScan(scanResult, scan, operations.getClient());
+      } else {
+        iterator = scanResult.getItems().iterator();
+      }
+    } else {
+      iterator = Iterators.concat(Arrays.stream(query.getPrimaryIdRanges()).map(r -> {
+        final ScanRequest scan = new ScanRequest(tableName);
+        if (query.hasSecondaryId()) {
+          scan.addScanFilterEntry(
+              DynamoDBOperations.METADATA_SECONDARY_ID_KEY,
+              new Condition().withAttributeValueList(
+                  new AttributeValue().withB(
+                      ByteBuffer.wrap(query.getSecondaryId()))).withComparisonOperator(
+                          ComparisonOperator.EQ));
+        }
+        if (r.getStart() != null) {
+          if (r.getEnd() != null) {
+            scan.addScanFilterEntry(
+                DynamoDBOperations.METADATA_PRIMARY_ID_KEY,
+                new Condition().withAttributeValueList(
+                    new AttributeValue().withB(ByteBuffer.wrap(r.getStart())),
+                    new AttributeValue().withB(ByteBuffer.wrap(r.getEnd()))).withComparisonOperator(
+                        ComparisonOperator.BETWEEN));
+
+          } else {
+            scan.addScanFilterEntry(
+                DynamoDBOperations.METADATA_PRIMARY_ID_KEY,
+                new Condition().withAttributeValueList(
+                    new AttributeValue().withB(
+                        ByteBuffer.wrap(r.getStart()))).withComparisonOperator(
+                            ComparisonOperator.GE));
+          }
+        } else if (r.getEnd() != null) {
+          scan.addScanFilterEntry(
+              DynamoDBOperations.METADATA_PRIMARY_ID_KEY,
+              new Condition().withAttributeValueList(
+                  new AttributeValue().withB(
+                      ByteBuffer.wrap(r.getEndAsNextPrefix()))).withComparisonOperator(
+                          ComparisonOperator.LT));
+        }
+        final ScanResult scanResult = operations.getClient().scan(scan);
+        Iterator<Map<String, AttributeValue>> internalIterator;
+        if (needsVisibility) {
+          internalIterator = new LazyPaginatedScan(scanResult, scan, operations.getClient());
+        } else {
+          internalIterator = scanResult.getItems().iterator();
+        }
+        return internalIterator;
+      }).iterator());
     }
-
-    final ScanRequest scan = new ScanRequest(tableName);
-    if (query.hasPrimaryId()) {
-      scan.addScanFilterEntry(
-          DynamoDBOperations.METADATA_PRIMARY_ID_KEY,
-          new Condition().withAttributeValueList(
-              new AttributeValue().withB(
-                  ByteBuffer.wrap(query.getPrimaryId()))).withComparisonOperator(
-                      ComparisonOperator.BEGINS_WITH));
-    }
-    if (query.hasSecondaryId()) {
-      scan.addScanFilterEntry(
-          DynamoDBOperations.METADATA_SECONDARY_ID_KEY,
-          new Condition().withAttributeValueList(
-              new AttributeValue().withB(
-                  ByteBuffer.wrap(query.getSecondaryId()))).withComparisonOperator(
-                      ComparisonOperator.EQ));
-    }
-    final ScanResult scanResult = operations.getClient().scan(scan);
-
-
-    if (needsVisibility) {
-      return wrapIterator(
-          new LazyPaginatedScan(scanResult, scan, operations.getClient()),
-          query,
-          true);
-    }
-
-    return wrapIterator(scanResult.getItems().iterator(), query, false);
+    return wrapIterator(iterator, query, needsVisibility);
   }
 
   private CloseableIterator<GeoWaveMetadata> wrapIterator(

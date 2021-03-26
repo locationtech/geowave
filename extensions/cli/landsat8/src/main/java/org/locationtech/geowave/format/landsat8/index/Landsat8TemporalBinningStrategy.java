@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
 import org.locationtech.geowave.core.index.dimension.bin.BinValue;
-import org.locationtech.geowave.core.index.dimension.bin.BinningStrategy;
+import org.locationtech.geowave.core.index.dimension.bin.IndexBinningStrategy;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 
@@ -21,7 +21,7 @@ import org.locationtech.geowave.core.index.sfc.data.NumericRange;
  * This class is useful for establishing a consistent binning strategy with the bin size being 256 *
  * 16 days.
  */
-public class Landsat8TemporalBinningStrategy implements BinningStrategy {
+public class Landsat8TemporalBinningStrategy implements IndexBinningStrategy {
   protected static final long MILLIS_PER_DAY = 86400000L;
   protected static final long BIN_SIZE_MILLIS = MILLIS_PER_DAY * 16 * 256;
   protected static final long ORIGIN_MILLIS = 1420070400L;

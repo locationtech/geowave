@@ -8,11 +8,18 @@
  */
 package org.locationtech.geowave.core.geotime.store.query.aggregate;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import java.util.UUID;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.junit.Test;
+import org.locationtech.geowave.core.geotime.binning.SpatialBinningType;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
@@ -25,11 +32,7 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
-import java.util.UUID;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
+import com.github.davidmoten.geo.GeoHash;
 
 public class GeohashBinningStrategyTest {
 
@@ -39,13 +42,13 @@ public class GeohashBinningStrategyTest {
   static {
     try {
       schema = DataUtilities.createType("testGeo", "location:Point:srid=4326,name:String");
-    } catch (SchemaException e) {
+    } catch (final SchemaException e) {
       throw new RuntimeException(e);
     }
   }
 
-  private static SimpleFeature createSimpleFeature(Coordinate c) {
-    String name = UUID.randomUUID().toString();
+  private static SimpleFeature createSimpleFeature(final Coordinate c) {
+    final String name = UUID.randomUUID().toString();
     return SimpleFeatureBuilder.build(
         GeohashBinningStrategyTest.schema,
         new Object[] {geoFactory.createPoint(c), name},
@@ -73,39 +76,54 @@ public class GeohashBinningStrategyTest {
   @Test
   public void testPrecisionConstructor() {
     for (int i = 0; i < 100; i++) {
-      assertThat(new GeohashSimpleFeatureBinningStrategy(i).getPrecision(), is(i));
-      assertThat(new GeohashCommonIndexedBinningStrategy(i).getPrecision(), is(i));
+      assertThat(
+          new SpatialSimpleFeatureBinningStrategy(
+              SpatialBinningType.GEOHASH,
+              i,
+              true).getPrecision(),
+          is(i));
+      assertThat(
+          new SpatialCommonIndexedBinningStrategy(
+              SpatialBinningType.GEOHASH,
+              i,
+              true).getPrecision(),
+          is(i));
     }
   }
 
   @Test
   public void testNoGeometry() throws SchemaException {
-    SimpleFeatureType noGeoType = DataUtilities.createType("testNoGeo", "name:String");
-    SimpleFeature noGeoFeature =
+    final SimpleFeatureType noGeoType = DataUtilities.createType("testNoGeo", "name:String");
+    final SimpleFeature noGeoFeature =
         SimpleFeatureBuilder.build(noGeoType, new Object[] {"NAME!"}, "NAME!");
-    GeohashBinningStrategy<SimpleFeature> sfStrat = new GeohashSimpleFeatureBinningStrategy(4);
+    final SpatialBinningStrategy<SimpleFeature> sfStrat =
+        new SpatialSimpleFeatureBinningStrategy(SpatialBinningType.GEOHASH, 4, true);
 
     // If the feature does not have a geometry, null is returned by binEntry.
-    String[] bin = sfStrat.binEntry(noGeoFeature);
+    ByteArray[] bin = sfStrat.getBins(null, noGeoFeature);
     assertNull(bin);
 
-    GeohashBinningStrategy<CommonIndexedPersistenceEncoding> ciStrat =
-        new GeohashCommonIndexedBinningStrategy(4, "NotTheGeoField");
+    final SpatialBinningStrategy<CommonIndexedPersistenceEncoding> ciStrat =
+        new SpatialCommonIndexedBinningStrategy(
+            SpatialBinningType.GEOHASH,
+            4,
+            true,
+            "NotTheGeoField");
 
     // we are looking in the wrong field for the geometry type here, so therefore no Geometry will
     // be found.
-    bin = ciStrat.binEntry(createCommonIndexData(new Coordinate(1, 1, 1)));
+    bin = ciStrat.getBins(null, createCommonIndexData(new Coordinate(1, 1, 1)));
     assertNull(bin);
   }
 
   @Test
   public void testEncodeToGeohash() {
-    Coordinate coord = new Coordinate(49.619, -5.821);
-    Point point = geoFactory.createPoint(coord);
+    final Coordinate coord = new Coordinate(49.619, -5.821);
+    final Point point = geoFactory.createPoint(coord);
     // calculated this beforehand.
-    String hash = "gbgf78c78u5b";
+    final String hash = "mngqch76nwb";
     for (int i = 1; i < hash.length(); i++) {
-      assertThat(hash.substring(0, i), is(GeohashBinningStrategy.encodeToGeohash(point, i)));
+      assertThat(hash.substring(0, i), is(GeoHash.encodeHash(point.getY(), point.getX(), i)));
     }
   }
 
@@ -115,62 +133,63 @@ public class GeohashBinningStrategyTest {
 
     // same coord, but different name, make sure it still works in this simple case
     SimpleFeature feature2 = createSimpleFeature(new Coordinate(40, 40));
-    SimpleFeature feature3 = createSimpleFeature(new Coordinate(40, 40));
+    final SimpleFeature feature3 = createSimpleFeature(new Coordinate(40, 40));
 
-    GeohashBinningStrategy<SimpleFeature> strat = new GeohashSimpleFeatureBinningStrategy(4);
+    SpatialBinningStrategy<SimpleFeature> strat =
+        new SpatialSimpleFeatureBinningStrategy(SpatialBinningType.GEOHASH, 4, true);
 
-    String bin1 = strat.binEntry(feature1)[0];
-    String bin2 = strat.binEntry(feature2)[0];
-    String bin3 = strat.binEntry(feature3)[0];
+    ByteArray bin1 = strat.getBins(null, feature1)[0];
+    ByteArray bin2 = strat.getBins(null, feature2)[0];
+    final ByteArray bin3 = strat.getBins(null, feature3)[0];
 
     assertThat(bin1, is(not(bin2)));
     assertThat(bin2, is(bin3));
 
-    strat = new GeohashSimpleFeatureBinningStrategy(1);
+    strat = new SpatialSimpleFeatureBinningStrategy(SpatialBinningType.GEOHASH, 1, true);
 
     feature1 = createSimpleFeature(new Coordinate(0, 0));
     feature2 = createSimpleFeature(new Coordinate(0.01, 0.01));
 
-    bin1 = strat.binEntry(feature1)[0];
-    bin2 = strat.binEntry(feature2)[0];
+    bin1 = strat.getBins(null, feature1)[0];
+    bin2 = strat.getBins(null, feature2)[0];
     // even though they are different coords, they are binned together due to precision.
     assertThat(bin1, is(bin2));
   }
 
   @Test
   public void testBinCommonIndexModel() {
-    GeohashBinningStrategy<CommonIndexedPersistenceEncoding> strat =
-        new GeohashCommonIndexedBinningStrategy(4);
+    SpatialBinningStrategy<CommonIndexedPersistenceEncoding> strat =
+        new SpatialCommonIndexedBinningStrategy(SpatialBinningType.GEOHASH, 4, true);
 
     CommonIndexedPersistenceEncoding data1 = createCommonIndexData(new Coordinate(0, 0));
     CommonIndexedPersistenceEncoding data2 = createCommonIndexData(new Coordinate(40, 40));
 
-    String bin1 = strat.binEntry(data1)[0];
-    String bin2 = strat.binEntry(data2)[0];
+    ByteArray bin1 = strat.getBins(null, data1)[0];
+    ByteArray bin2 = strat.getBins(null, data2)[0];
     assertThat(bin1, is(not(bin2)));
 
-    strat = new GeohashCommonIndexedBinningStrategy(1);
+    strat = new SpatialCommonIndexedBinningStrategy(SpatialBinningType.GEOHASH, 1, true);
 
     data1 = createCommonIndexData(new Coordinate(0, 0));
     data2 = createCommonIndexData(new Coordinate(0.01, 0.01));
 
-    bin1 = strat.binEntry(data1)[0];
-    bin2 = strat.binEntry(data2)[0];
+    bin1 = strat.getBins(null, data1)[0];
+    bin2 = strat.getBins(null, data2)[0];
     // even though they are different coords, they are binned together.
     assertThat(bin1, is(bin2));
   }
 
   @Test
   public void testSerialize() {
-    GeohashBinningStrategy<?> strat = new GeohashSimpleFeatureBinningStrategy();
+    SpatialBinningStrategy<?> strat = new SpatialSimpleFeatureBinningStrategy();
     byte[] stratBytes = PersistenceUtils.toBinary(strat);
-    GeohashBinningStrategy<?> roundtrip =
-        (GeohashSimpleFeatureBinningStrategy) PersistenceUtils.fromBinary(stratBytes);
+    SpatialBinningStrategy<?> roundtrip =
+        (SpatialSimpleFeatureBinningStrategy) PersistenceUtils.fromBinary(stratBytes);
     assertThat(strat.getPrecision(), is(roundtrip.getPrecision()));
 
-    strat = new GeohashCommonIndexedBinningStrategy();
+    strat = new SpatialCommonIndexedBinningStrategy();
     stratBytes = PersistenceUtils.toBinary(strat);
-    roundtrip = (GeohashCommonIndexedBinningStrategy) PersistenceUtils.fromBinary(stratBytes);
+    roundtrip = (SpatialCommonIndexedBinningStrategy) PersistenceUtils.fromBinary(stratBytes);
     assertThat(strat.getPrecision(), is(roundtrip.getPrecision()));
   }
 }

@@ -70,6 +70,9 @@ TEST_DATA = [
     _create_feature(id_, Point(i, latitude(i)), i) for
     id_, i in enumerate(range(-180, 180))]
 
+TEST_DATA_OFFSET = [
+    _create_feature(id_, Point(i+0.5, latitude(i+0.5)), i) for
+    id_, i in enumerate(range(-180, 180))]
 
 # Test Directory
 TEST_DIR = os.path.join(os.getcwd(), "test")
@@ -89,10 +92,12 @@ def test_ds():
     while os.path.isdir(TEST_DIR):
         time.sleep(0.01)
 
+def write_test_data_offset(ds, *expected_indices):
+    write_test_data(ds, *expected_indices, data=TEST_DATA_OFFSET)
 
-def write_test_data(ds, *expected_indices):
+def write_test_data(ds, *expected_indices, data=TEST_DATA):
     writer = ds.create_writer(POINT_TYPE_ADAPTER.get_type_name())
-    for pt in TEST_DATA:
+    for pt in data:
         results = writer.write(pt)
         assert not results.is_empty()
         written_indices = results.get_written_index_names()

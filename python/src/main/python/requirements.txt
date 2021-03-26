@@ -1,5 +1,5 @@
 py4j==0.10.8.1
-shapely==1.7
+shapely==1.7.1
 pytest==4.3.1
 pytest-cov==2.7.1
 pdoc3==0.6.3

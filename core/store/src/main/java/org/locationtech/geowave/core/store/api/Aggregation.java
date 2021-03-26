@@ -90,9 +90,10 @@ public interface Aggregation<P extends Persistable, R, T> extends Persistable {
   /**
    * Update the aggregation result using the new entry provided
    *
+   * @param adapter the adapter for this entry
    * @param entry the new entry to compute an updated aggregation result on
    */
-  void aggregate(T entry);
+  void aggregate(DataTypeAdapter<T> adapter, T entry);
 
   /**
    * Because the serialization of aggregation is just the function without the parameters or the
@@ -108,7 +109,7 @@ public interface Aggregation<P extends Persistable, R, T> extends Persistable {
    * result, its expected that there's nothing to deserialize
    */
   @Override
-  default void fromBinary(byte[] bytes) {}
+  default void fromBinary(final byte[] bytes) {}
 
 
 }

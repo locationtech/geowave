@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.FieldNameParam;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.api.Aggregation;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.opengis.feature.simple.SimpleFeature;
 
 /**
@@ -52,14 +53,14 @@ public class VectorCountAggregation implements Aggregation<FieldNameParam, Long,
   }
 
   @Override
-  public byte[] resultToBinary(Long result) {
+  public byte[] resultToBinary(final Long result) {
     final ByteBuffer buffer = ByteBuffer.allocate(VarintUtils.unsignedLongByteLength(result));
     VarintUtils.writeUnsignedLong(result, buffer);
     return buffer.array();
   }
 
   @Override
-  public Long resultFromBinary(byte[] binary) {
+  public Long resultFromBinary(final byte[] binary) {
     return VarintUtils.readUnsignedLong(ByteBuffer.wrap(binary));
   }
 
@@ -69,7 +70,7 @@ public class VectorCountAggregation implements Aggregation<FieldNameParam, Long,
   }
 
   @Override
-  public void aggregate(SimpleFeature entry) {
+  public void aggregate(final DataTypeAdapter<SimpleFeature> adapter, final SimpleFeature entry) {
     Object o;
     if ((fieldNameParam != null) && !fieldNameParam.isEmpty()) {
       o = entry.getAttribute(fieldNameParam.getFieldName());

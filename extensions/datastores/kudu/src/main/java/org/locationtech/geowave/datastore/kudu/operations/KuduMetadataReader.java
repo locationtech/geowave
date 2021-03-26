@@ -9,6 +9,7 @@
 package org.locationtech.geowave.datastore.kudu.operations;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.kudu.Schema;
@@ -49,41 +50,74 @@ public class KuduMetadataReader implements MetadataReader {
     try {
       final KuduTable table = operations.getTable(tableName);
       final Schema schema = table.getSchema();
-      KuduScanner.KuduScannerBuilder scannerBuilder = operations.getScannerBuilder(table);
-      if (query.hasPrimaryId()) {
-        if (metadataType.equals(MetadataType.STATISTICS)
-            || metadataType.equals(MetadataType.STATISTIC_VALUES)) {
-          final KuduPredicate primaryLowerPred =
-              KuduPredicate.newComparisonPredicate(
-                  schema.getColumn(KuduMetadataField.GW_PRIMARY_ID_KEY.getFieldName()),
-                  KuduPredicate.ComparisonOp.GREATER_EQUAL,
-                  query.getPrimaryId());
-          final KuduPredicate primaryUpperPred =
-              KuduPredicate.newComparisonPredicate(
-                  schema.getColumn(KuduMetadataField.GW_PRIMARY_ID_KEY.getFieldName()),
-                  KuduPredicate.ComparisonOp.LESS,
-                  ByteArrayUtils.getNextPrefix(query.getPrimaryId()));
-          scannerBuilder =
-              scannerBuilder.addPredicate(primaryLowerPred).addPredicate(primaryUpperPred);
-        } else {
-          final KuduPredicate primaryEqualsPred =
-              KuduPredicate.newComparisonPredicate(
-                  schema.getColumn(KuduMetadataField.GW_PRIMARY_ID_KEY.getFieldName()),
-                  KuduPredicate.ComparisonOp.EQUAL,
-                  query.getPrimaryId());
-          scannerBuilder = scannerBuilder.addPredicate(primaryEqualsPred);
+      if (query.hasPrimaryIdRanges()) {
+        Arrays.stream(query.getPrimaryIdRanges()).forEach(r -> {
+          KuduScanner.KuduScannerBuilder scannerBuilder = operations.getScannerBuilder(table);
+          if (r.getStart() != null) {
+            final KuduPredicate primaryLowerPred =
+                KuduPredicate.newComparisonPredicate(
+                    schema.getColumn(KuduMetadataField.GW_PRIMARY_ID_KEY.getFieldName()),
+                    KuduPredicate.ComparisonOp.GREATER_EQUAL,
+                    r.getStart());
+            scannerBuilder = scannerBuilder.addPredicate(primaryLowerPred);
+          }
+          if (r.getEnd() != null) {
+            final KuduPredicate primaryUpperPred =
+                KuduPredicate.newComparisonPredicate(
+                    schema.getColumn(KuduMetadataField.GW_PRIMARY_ID_KEY.getFieldName()),
+                    KuduPredicate.ComparisonOp.LESS,
+                    r.getEndAsNextPrefix());
+            scannerBuilder = scannerBuilder.addPredicate(primaryUpperPred);
+          }
+
+          if (query.hasSecondaryId()) {
+            final KuduPredicate secondaryPred =
+                KuduPredicate.newComparisonPredicate(
+                    schema.getColumn(KuduMetadataField.GW_SECONDARY_ID_KEY.getFieldName()),
+                    KuduPredicate.ComparisonOp.EQUAL,
+                    query.getSecondaryId());
+            scannerBuilder = scannerBuilder.addPredicate(secondaryPred);
+          }
+          final KuduScanner scanner = scannerBuilder.build();
+          KuduUtils.executeQuery(scanner, queryResult);
+        });
+      } else {
+        KuduScanner.KuduScannerBuilder scannerBuilder = operations.getScannerBuilder(table);
+        if (query.hasPrimaryId()) {
+          if (metadataType.equals(MetadataType.STATISTICS)
+              || metadataType.equals(MetadataType.STATISTIC_VALUES)) {
+            final KuduPredicate primaryLowerPred =
+                KuduPredicate.newComparisonPredicate(
+                    schema.getColumn(KuduMetadataField.GW_PRIMARY_ID_KEY.getFieldName()),
+                    KuduPredicate.ComparisonOp.GREATER_EQUAL,
+                    query.getPrimaryId());
+            final KuduPredicate primaryUpperPred =
+                KuduPredicate.newComparisonPredicate(
+                    schema.getColumn(KuduMetadataField.GW_PRIMARY_ID_KEY.getFieldName()),
+                    KuduPredicate.ComparisonOp.LESS,
+                    ByteArrayUtils.getNextPrefix(query.getPrimaryId()));
+            scannerBuilder =
+                scannerBuilder.addPredicate(primaryLowerPred).addPredicate(primaryUpperPred);
+          } else {
+            final KuduPredicate primaryEqualsPred =
+                KuduPredicate.newComparisonPredicate(
+                    schema.getColumn(KuduMetadataField.GW_PRIMARY_ID_KEY.getFieldName()),
+                    KuduPredicate.ComparisonOp.EQUAL,
+                    query.getPrimaryId());
+            scannerBuilder = scannerBuilder.addPredicate(primaryEqualsPred);
+          }
         }
+        if (query.hasSecondaryId()) {
+          final KuduPredicate secondaryPred =
+              KuduPredicate.newComparisonPredicate(
+                  schema.getColumn(KuduMetadataField.GW_SECONDARY_ID_KEY.getFieldName()),
+                  KuduPredicate.ComparisonOp.EQUAL,
+                  query.getSecondaryId());
+          scannerBuilder = scannerBuilder.addPredicate(secondaryPred);
+        }
+        final KuduScanner scanner = scannerBuilder.build();
+        KuduUtils.executeQuery(scanner, queryResult);
       }
-      if (query.hasSecondaryId()) {
-        final KuduPredicate secondaryPred =
-            KuduPredicate.newComparisonPredicate(
-                schema.getColumn(KuduMetadataField.GW_SECONDARY_ID_KEY.getFieldName()),
-                KuduPredicate.ComparisonOp.EQUAL,
-                query.getSecondaryId());
-        scannerBuilder = scannerBuilder.addPredicate(secondaryPred);
-      }
-      final KuduScanner scanner = scannerBuilder.build();
-      KuduUtils.executeQuery(scanner, queryResult);
     } catch (final KuduException e) {
       LOGGER.error("Encountered error while reading metadata row", e);
     }

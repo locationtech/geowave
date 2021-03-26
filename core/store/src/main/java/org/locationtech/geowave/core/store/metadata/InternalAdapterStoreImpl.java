@@ -296,7 +296,7 @@ public class InternalAdapterStoreImpl implements InternalAdapterStore {
       return new String[0];
     }
     final CloseableIterator<GeoWaveMetadata> results =
-        reader.query(new MetadataQuery(null, INTERNAL_TO_EXTERNAL_ID));
+        reader.query(new MetadataQuery(INTERNAL_TO_EXTERNAL_ID));
     try (CloseableIterator<String> it =
         new CloseableIteratorWrapper<>(
             results,
@@ -314,7 +314,7 @@ public class InternalAdapterStoreImpl implements InternalAdapterStore {
       return new short[0];
     }
     final CloseableIterator<GeoWaveMetadata> results =
-        reader.query(new MetadataQuery(null, EXTERNAL_TO_INTERNAL_ID));
+        reader.query(new MetadataQuery(EXTERNAL_TO_INTERNAL_ID));
     try (CloseableIterator<Short> it =
         new CloseableIteratorWrapper<>(
             results,

@@ -10,7 +10,7 @@ package org.locationtech.geowave.core.geotime.index.dimension;
 
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import org.locationtech.geowave.core.index.dimension.UnboundedDimensionDefinition;
-import org.locationtech.geowave.core.index.dimension.bin.BinningStrategy;
+import org.locationtech.geowave.core.index.dimension.bin.IndexBinningStrategy;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 
@@ -39,7 +39,7 @@ public class TimeDefinition extends UnboundedDimensionDefinition {
    *
    * @param binningStrategy a object which defines the bins
    */
-  public TimeDefinition(final BinningStrategy binningStrategy) {
+  public TimeDefinition(final IndexBinningStrategy binningStrategy) {
     super(binningStrategy);
   }
 

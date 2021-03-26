@@ -60,14 +60,14 @@ public class StatisticsValueIterator implements CloseableIterator<StatisticValue
             && !binConstraints.isAllBins()) {
           if (binConstraints.getBins().length > 0) {
             if (binConstraints.isPrefix()) {
-              List<CloseableIterator<StatisticValue<Object>>> iters =
+              final List<CloseableIterator<StatisticValue<Object>>> iters =
                   Arrays.stream(binConstraints.getBins()).map(
                       bin -> statisticsStore.getStatisticValues(
                           nextStat,
                           bin,
                           authorizations)).collect(Collectors.toList());
               current =
-                  (CloseableIterator<StatisticValue<Object>>) new CloseableIteratorWrapper<>(
+                  new CloseableIteratorWrapper<>(
                       () -> iters.forEach(CloseableIterator::close),
                       Iterators.concat(iters.iterator()));
             } else {
@@ -79,6 +79,15 @@ public class StatisticsValueIterator implements CloseableIterator<StatisticValue
                               bin,
                               authorizations)).filter(Objects::nonNull).iterator());
             }
+            // TODO should we allow for both prefix/bin constraints and range constraints or just
+            // use one or the other as now? there doesn't seem to be a good use case to require both
+          } else if (binConstraints.getBinRanges().length > 0) {
+            current =
+                statisticsStore.getStatisticValues(
+                    nextStat,
+                    binConstraints.getBinRanges(),
+                    authorizations);
+
           } else {
             continue;
           }

@@ -18,7 +18,7 @@ public interface StatisticsIngestCallback {
 
   /**
    * Called when an entry is added to the data store.
-   * 
+   *
    * @param type the data type that the entry belongs to
    * @param entry the ingested entry
    * @param rows the GeoWave rows associated with the entry

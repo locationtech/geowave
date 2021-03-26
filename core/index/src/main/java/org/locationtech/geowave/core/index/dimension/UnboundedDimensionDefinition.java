@@ -9,7 +9,7 @@
 package org.locationtech.geowave.core.index.dimension;
 
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
-import org.locationtech.geowave.core.index.dimension.bin.BinningStrategy;
+import org.locationtech.geowave.core.index.dimension.bin.IndexBinningStrategy;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
@@ -20,14 +20,14 @@ import org.locationtech.geowave.core.index.sfc.data.NumericRange;
  */
 public class UnboundedDimensionDefinition extends BasicDimensionDefinition {
 
-  protected BinningStrategy binningStrategy;
+  protected IndexBinningStrategy binningStrategy;
 
   public UnboundedDimensionDefinition() {
     super();
   }
 
   /** @param binningStrategy a bin strategy associated with the dimension */
-  public UnboundedDimensionDefinition(final BinningStrategy binningStrategy) {
+  public UnboundedDimensionDefinition(final IndexBinningStrategy binningStrategy) {
     super(binningStrategy.getBinMin(), binningStrategy.getBinMax());
     this.binningStrategy = binningStrategy;
   }
@@ -39,7 +39,7 @@ public class UnboundedDimensionDefinition extends BasicDimensionDefinition {
   }
 
   /** @return a bin strategy associated with the dimension */
-  public BinningStrategy getBinningStrategy() {
+  public IndexBinningStrategy getBinningStrategy() {
     return binningStrategy;
   }
 
@@ -90,7 +90,7 @@ public class UnboundedDimensionDefinition extends BasicDimensionDefinition {
 
   @Override
   public void fromBinary(final byte[] bytes) {
-    binningStrategy = (BinningStrategy) PersistenceUtils.fromBinary(bytes);
+    binningStrategy = (IndexBinningStrategy) PersistenceUtils.fromBinary(bytes);
     min = binningStrategy.getBinMin();
     max = binningStrategy.getBinMax();
   }

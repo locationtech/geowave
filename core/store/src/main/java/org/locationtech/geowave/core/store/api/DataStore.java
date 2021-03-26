@@ -151,7 +151,7 @@ public interface DataStore {
    * @return An array of all the statistics that are being tracked on the provided data type
    *         adapter. Note this is the descriptors of the statistics, not the values.
    */
-  Statistic<?>[] getDataTypeStatistics(final String typeName);
+  DataTypeStatistic<?>[] getDataTypeStatistics(final String typeName);
 
   /**
    * Gets the statistic that is being tracked for the data type, statistic type, and tag specified.
@@ -163,7 +163,7 @@ public interface DataStore {
    * @param tag the tag of the statistic, if not specified, a tag will be inferred
    * @return the statistic, or null if no statistic matches the criteria
    */
-  <V extends StatisticValue<R>, R> Statistic<V> getDataTypeStatistic(
+  <V extends StatisticValue<R>, R> DataTypeStatistic<V> getDataTypeStatistic(
       final StatisticType<V> statisticType,
       final String typeName,
       @Nullable final String tag);
@@ -175,7 +175,7 @@ public interface DataStore {
    * @return An array of all the statistics that are being tracked on the provided index. Note this
    *         is the descriptors of the statistics, not the values.
    */
-  Statistic<?>[] getIndexStatistics(final String indexName);
+  IndexStatistic<?>[] getIndexStatistics(final String indexName);
 
   /**
    * Gets the statistic that is being tracked for the index, statistic type, and tag specified.
@@ -187,7 +187,7 @@ public interface DataStore {
    * @param tag the tag of the statistic, if not specified, a tag will be inferred
    * @return the statistic, or null if no statistic matches the criteria
    */
-  <V extends StatisticValue<R>, R> Statistic<V> getIndexStatistic(
+  <V extends StatisticValue<R>, R> IndexStatistic<V> getIndexStatistic(
       final StatisticType<V> statisticType,
       final String indexName,
       @Nullable final String tag);
@@ -200,7 +200,7 @@ public interface DataStore {
    * @return An array of all the statistics that are being tracked on the provided field. Note this
    *         is the descriptors of the statistics, not the values.
    */
-  Statistic<?>[] getFieldStatistics(final String typeName, final String fieldName);
+  FieldStatistic<?>[] getFieldStatistics(final String typeName, final String fieldName);
 
   /**
    * Gets the statistic that is being tracked for the data type, field, statistic type, and tag
@@ -214,7 +214,7 @@ public interface DataStore {
    * @param tag the tag of the statistic, if not specified, a tag will be inferred
    * @return the statistic, or null if no statistic matches the criteria
    */
-  <V extends StatisticValue<R>, R> Statistic<V> getFieldStatistic(
+  <V extends StatisticValue<R>, R> FieldStatistic<V> getFieldStatistic(
       final StatisticType<V> statisticType,
       final String typeName,
       final String fieldName,

@@ -14,6 +14,7 @@ import org.locationtech.geowave.core.geotime.store.query.aggregate.FieldNamePara
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.api.Aggregation;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.opengis.feature.simple.SimpleFeature;
 
 /**
@@ -70,7 +71,7 @@ public abstract class VectorMathAggregation implements
   }
 
   @Override
-  public void aggregate(SimpleFeature entry) {
+  public void aggregate(final DataTypeAdapter<SimpleFeature> adapter, SimpleFeature entry) {
     Object o;
     if ((fieldNameParam != null) && !fieldNameParam.isEmpty()) {
       o = entry.getAttribute(fieldNameParam.getFieldName());

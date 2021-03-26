@@ -6,18 +6,16 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.core.store.statistics.adapter;
+package org.locationtech.geowave.core.store.api;
 
 import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
-import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import org.locationtech.geowave.core.store.statistics.BaseStatistic;
 import org.locationtech.geowave.core.store.statistics.StatisticId;
+import org.locationtech.geowave.core.store.statistics.adapter.DataTypeStatisticType;
 import org.locationtech.geowave.core.store.statistics.visibility.DefaultFieldStatisticVisibility;
 import com.beust.jcommander.Parameter;
 
@@ -25,7 +23,7 @@ import com.beust.jcommander.Parameter;
  * Base class for data type statistics. These statistics are generally updated without looking at
  * individual fields on the data type.
  */
-public abstract class DataTypeStatistic<V extends StatisticValue<?>> extends BaseStatistic<V> {
+public abstract class DataTypeStatistic<V extends StatisticValue<?>> extends Statistic<V> {
 
   @Parameter(
       names = "--typeName",

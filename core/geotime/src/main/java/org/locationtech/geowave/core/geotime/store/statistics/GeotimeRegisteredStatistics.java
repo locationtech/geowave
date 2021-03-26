@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.geotime.store.statistics;
 
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic.BoundingBoxValue;
 import org.locationtech.geowave.core.geotime.store.statistics.TimeRangeStatistic.TimeRangeValue;
+import org.locationtech.geowave.core.geotime.store.statistics.binning.SpatialFieldValueBinningStrategy;
 import org.locationtech.geowave.core.geotime.store.statistics.binning.TimeRangeFieldValueBinningStrategy;
 import org.locationtech.geowave.core.store.statistics.StatisticsRegistrySPI;
 
@@ -39,6 +40,10 @@ public class GeotimeRegisteredStatistics implements StatisticsRegistrySPI {
         new RegisteredBinningStrategy(
             TimeRangeFieldValueBinningStrategy.NAME,
             TimeRangeFieldValueBinningStrategy::new,
-            (short) 2150)};
+            (short) 2150),
+        new RegisteredBinningStrategy(
+            SpatialFieldValueBinningStrategy.NAME,
+            SpatialFieldValueBinningStrategy::new,
+            (short) 2151)};
   }
 }

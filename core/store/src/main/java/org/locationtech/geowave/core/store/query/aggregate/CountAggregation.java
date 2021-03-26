@@ -11,6 +11,7 @@ package org.locationtech.geowave.core.store.query.aggregate;
 import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 
 public class CountAggregation implements CommonIndexAggregation<Persistable, Long> {
@@ -28,7 +29,9 @@ public class CountAggregation implements CommonIndexAggregation<Persistable, Lon
   }
 
   @Override
-  public void aggregate(final CommonIndexedPersistenceEncoding entry) {
+  public void aggregate(
+      final DataTypeAdapter<CommonIndexedPersistenceEncoding> adapter,
+      final CommonIndexedPersistenceEncoding entry) {
     count++;
   }
 

@@ -13,9 +13,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.api.BinConstraints.ByteArrayConstraints;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
@@ -73,7 +75,7 @@ public class FieldValueBinningStrategy implements StatisticBinningStrategy {
     return new ByteArray[] {getBin(fieldValues)};
   }
 
-  private static ByteArray getBin(final ByteArray[] fieldValues) {
+  protected static ByteArray getBin(final ByteArray[] fieldValues) {
     int length = 0;
     for (final ByteArray fieldValue : fieldValues) {
       length += fieldValue.getBytes().length;
@@ -132,14 +134,17 @@ public class FieldValueBinningStrategy implements StatisticBinningStrategy {
     return StatisticBinningStrategy.super.constraints(constraint);
   }
 
+  protected ByteArrayConstraints handleEmptyField(final Object constraint) {
+    throw new IllegalArgumentException(
+        "There are no fields in the binning strategy for these constraints");
+  }
+
   @SuppressWarnings("unchecked")
   @Override
   public ByteArrayConstraints constraints(final Object constraint) {
     if (fields.isEmpty() && (constraint != null)) {
-      throw new IllegalArgumentException(
-          "There are no fields in the binning strategy for these constraints");
+      return handleEmptyField(constraint);
     } else if (fields.size() > 1) {
-
       Map<String, Object> constraintMap;
       if (constraint instanceof Map) {
         constraintMap = (Map<String, Object>) constraint;
@@ -172,7 +177,7 @@ public class FieldValueBinningStrategy implements StatisticBinningStrategy {
         } else {
           allBins = false;
         }
-        if (constraints.isPrefix()) {
+        if (constraints.isPrefix() || (constraints.getBinRanges().length > 0)) {
           // can only use a prefix if its the last field or the rest of the fields are 'all bins'
           boolean isValid = true;
           for (final int j = i + 1; i < fields.size(); i++) {
@@ -183,14 +188,37 @@ public class FieldValueBinningStrategy implements StatisticBinningStrategy {
               isValid = false;
               break;
             } else {
-              c[i] = new ByteArray[] {new ByteArray()};
+              c[j] = new ByteArray[] {new ByteArray()};
             }
           }
           if (isValid) {
-            return new ExplicitConstraints(getAllCombinations(c), true);
+            if (constraints.getBinRanges().length > 0) {
+              // we just prepend all combinations of prior byte arrays to the starts and the ends of
+              // the bin ranges
+              final ByteArray[][] ends = c.clone();
+              final ByteArray[][] starts = c;
+              starts[i] =
+                  Arrays.stream(constraints.getBinRanges()).map(ByteArrayRange::getStart).toArray(
+                      ByteArray[]::new);
+              final ByteArray[] startsCombined = getAllCombinations(starts);
+
+              ends[i] =
+                  Arrays.stream(constraints.getBinRanges()).map(ByteArrayRange::getEnd).toArray(
+                      ByteArray[]::new);
+              final ByteArray[] endsCombined = getAllCombinations(ends);
+              // now take these pair-wise and combine them back into ByteArrayRange's
+              return new ExplicitConstraints(
+                  IntStream.range(0, startsCombined.length).mapToObj(
+                      k -> new ByteArrayRange(
+                          startsCombined[k].getBytes(),
+                          endsCombined[k].getBytes())).toArray(ByteArrayRange[]::new));
+            } else {
+              c[i] = constraints.getBins();
+              return new ExplicitConstraints(getAllCombinations(c), true);
+            }
           } else {
             throw new IllegalArgumentException(
-                "Cannot use 'prefix' query for a field that is preceding additional constraints");
+                "Cannot use 'prefix' or 'range' query for a field that is preceding additional constraints");
           }
         }
         c[i] = constraints.getBins();
@@ -201,7 +229,7 @@ public class FieldValueBinningStrategy implements StatisticBinningStrategy {
     }
   }
 
-  private static ByteArray[] getAllCombinations(final ByteArray[][] perFieldBins) {
+  protected static ByteArray[] getAllCombinations(final ByteArray[][] perFieldBins) {
     return BinningStrategyUtils.getAllCombinations(perFieldBins, FieldValueBinningStrategy::getBin);
   }
 }

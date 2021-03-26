@@ -74,6 +74,11 @@ public class DynamoDBOptions extends StoreFactoryOptions {
     }
 
     @Override
+    protected boolean defaultEnableVisibility() {
+      return false;
+    }
+
+    @Override
     protected int defaultDataIndexBatchSize() {
       return 100;
     }

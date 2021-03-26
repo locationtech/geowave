@@ -8,9 +8,10 @@
  */
 package org.locationtech.geowave.core.store.query.aggregate;
 
+import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import java.nio.ByteBuffer;
+import org.locationtech.geowave.core.store.api.BinningStrategy;
 
 /**
  * The configuration parameters of a {@link BinningAggregation}
@@ -41,7 +42,7 @@ public class BinningAggregationOptions<P extends Persistable, T> implements Pers
   /**
    * The strategy that we use to bin entries with.
    */
-  AggregationBinningStrategy<T> binningStrategy;
+  BinningStrategy binningStrategy;
 
   /**
    * The maximum bins that the binning aggregation can support.
@@ -51,10 +52,10 @@ public class BinningAggregationOptions<P extends Persistable, T> implements Pers
   public BinningAggregationOptions() {}
 
   public BinningAggregationOptions(
-      byte[] baseBytes,
-      P baseParams,
-      AggregationBinningStrategy<T> binningStrategy,
-      int maxBins) {
+      final byte[] baseBytes,
+      final P baseParams,
+      final BinningStrategy binningStrategy,
+      final int maxBins) {
     this.baseBytes = baseBytes;
     this.baseParams = baseParams;
     this.binningStrategy = binningStrategy;
@@ -63,8 +64,8 @@ public class BinningAggregationOptions<P extends Persistable, T> implements Pers
 
   @Override
   public byte[] toBinary() {
-    byte[] paramsBytes = PersistenceUtils.toBinary(this.baseParams);
-    byte[] strategyBytes = PersistenceUtils.toBinary(this.binningStrategy);
+    final byte[] paramsBytes = PersistenceUtils.toBinary(this.baseParams);
+    final byte[] strategyBytes = PersistenceUtils.toBinary(this.binningStrategy);
     return ByteBuffer.allocate(
         16 + this.baseBytes.length + paramsBytes.length + strategyBytes.length).putInt(
             this.baseBytes.length).put(this.baseBytes).putInt(paramsBytes.length).put(
@@ -73,24 +74,23 @@ public class BinningAggregationOptions<P extends Persistable, T> implements Pers
   }
 
   @Override
-  public void fromBinary(byte[] bytes) {
-    ByteBuffer bb = ByteBuffer.wrap(bytes);
+  public void fromBinary(final byte[] bytes) {
+    final ByteBuffer bb = ByteBuffer.wrap(bytes);
 
-    int baseBytesLen = bb.getInt();
-    byte[] baseBytes = new byte[baseBytesLen];
+    final int baseBytesLen = bb.getInt();
+    final byte[] baseBytes = new byte[baseBytesLen];
     bb.get(baseBytes);
     this.baseBytes = baseBytes;
 
-    int paramsBytesLen = bb.getInt();
-    byte[] paramsBytes = new byte[paramsBytesLen];
+    final int paramsBytesLen = bb.getInt();
+    final byte[] paramsBytes = new byte[paramsBytesLen];
     bb.get(paramsBytes);
     this.baseParams = (P) PersistenceUtils.fromBinary(paramsBytes);
 
-    int strategyBytesLen = bb.getInt();
-    byte[] strategyBytes = new byte[strategyBytesLen];
+    final int strategyBytesLen = bb.getInt();
+    final byte[] strategyBytes = new byte[strategyBytesLen];
     bb.get(strategyBytes);
-    this.binningStrategy =
-        (AggregationBinningStrategy<T>) PersistenceUtils.fromBinary(strategyBytes);
+    this.binningStrategy = (BinningStrategy) PersistenceUtils.fromBinary(strategyBytes);
 
     this.maxBins = bb.getInt();
   }

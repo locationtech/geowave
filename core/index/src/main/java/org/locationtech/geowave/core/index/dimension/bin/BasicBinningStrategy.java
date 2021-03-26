@@ -12,7 +12,7 @@ import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 
-public class BasicBinningStrategy implements BinningStrategy {
+public class BasicBinningStrategy implements IndexBinningStrategy {
   private double interval;
   private double halfInterval;
 

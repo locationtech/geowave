@@ -8,11 +8,22 @@
  */
 package org.locationtech.geowave.core.store.operations;
 
+import org.locationtech.geowave.core.index.ByteArrayRange;
+
 public class MetadataQuery {
   private final byte[] primaryId;
   private final byte[] secondaryId;
   private final String[] authorizations;
   private final boolean primaryIdPrefix;
+  private final ByteArrayRange[] primaryIdRanges;
+
+  public MetadataQuery() {
+    this(null, null, false);
+  }
+
+  public MetadataQuery(final byte[] secondaryId, final String... authorizations) {
+    this(null, secondaryId, false, authorizations);
+  }
 
   public MetadataQuery(
       final byte[] primaryId,
@@ -27,9 +38,21 @@ public class MetadataQuery {
       final boolean primaryIdPrefix,
       final String... authorizations) {
     this.primaryId = primaryId;
+    primaryIdRanges = null;
     this.secondaryId = secondaryId;
     this.authorizations = authorizations;
     this.primaryIdPrefix = primaryIdPrefix;
+  }
+
+  public MetadataQuery(
+      final ByteArrayRange[] primaryIdRanges,
+      final byte[] secondaryId,
+      final String... authorizations) {
+    this.primaryIdRanges = primaryIdRanges;
+    primaryId = null;
+    this.secondaryId = secondaryId;
+    this.authorizations = authorizations;
+    primaryIdPrefix = false;
   }
 
   public byte[] getPrimaryId() {
@@ -48,12 +71,20 @@ public class MetadataQuery {
     return (secondaryId != null) && (secondaryId.length > 0);
   }
 
+  public boolean hasPrimaryIdRanges() {
+    return (primaryIdRanges != null) && (primaryIdRanges.length > 0);
+  }
+
   public boolean isExact() {
     return !primaryIdPrefix;
   }
 
   public boolean isPrefix() {
     return primaryIdPrefix;
+  }
+
+  public ByteArrayRange[] getPrimaryIdRanges() {
+    return primaryIdRanges;
   }
 
   public String[] getAuthorizations() {

@@ -176,7 +176,7 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable> {
 
   protected byte[] getValue(final T object) {
     final byte[] value = PersistenceUtils.toBinary(object);
-    if (object != null && (value == null || value.length == 0)) {
+    if ((object != null) && ((value == null) || (value.length == 0))) {
       throw new UnsupportedOperationException(
           "Object of class "
               + object.getClass().getName()
@@ -188,7 +188,7 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable> {
   protected CloseableIterator<T> getAllObjectsWithSecondaryId(
       final ByteArray secondaryId,
       final String... authorizations) {
-    return internalGetObjects(new MetadataQuery(null, secondaryId.getBytes(), authorizations));
+    return internalGetObjects(new MetadataQuery(secondaryId.getBytes(), authorizations));
   }
 
   protected T getObject(
@@ -254,7 +254,7 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable> {
   }
 
   protected CloseableIterator<T> getObjects(final String... authorizations) {
-    return internalGetObjects(new MetadataQuery(null, null, authorizations));
+    return internalGetObjects(new MetadataQuery(null, authorizations));
   }
 
   protected CloseableIterator<T> internalGetObjects(final MetadataQuery query) {
@@ -307,6 +307,24 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable> {
       final MetadataType type,
       final AbstractGeoWavePersistence<T> cacheDeleter,
       final String... authorizations) {
+    return deleteObjects(
+        primaryId,
+        secondaryId,
+        false,
+        operations,
+        type,
+        cacheDeleter,
+        authorizations);
+  }
+
+  protected static <T extends Persistable> boolean deleteObjects(
+      final ByteArray primaryId,
+      final ByteArray secondaryId,
+      final boolean primaryIdPrefix,
+      final DataStoreOperations operations,
+      final MetadataType type,
+      final AbstractGeoWavePersistence<T> cacheDeleter,
+      final String... authorizations) {
     try {
       if (!operations.metadataExists(type)) {
         return false;
@@ -316,22 +334,23 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable> {
       return false;
     }
     try (final MetadataDeleter deleter = operations.createMetadataDeleter(type)) {
-      if (primaryId != null) {
-        // TODO look at issue #1443, this should delete multiple - also
-        // in general does this delete from the cache???
-        return deleter.delete(
-            new MetadataQuery(
-                primaryId.getBytes(),
-                secondaryId != null ? secondaryId.getBytes() : null,
-                authorizations));
+      if ((primaryId == null) && (secondaryId == null)) {
+        // this is trying to delete everything, let's clear the cache (although there's an
+        // off-chance authorizations might not force the entire stats to be cleared, the cache is
+        // merely a performance optimization)
+        if (cacheDeleter != null) {
+          cacheDeleter.cache.invalidateAll();
+        }
+        return deleter.delete(new MetadataQuery((byte[]) null, (byte[]) null, authorizations));
       }
       boolean retVal = false;
       final MetadataReader reader = operations.createMetadataReader(type);
       try (final CloseableIterator<GeoWaveMetadata> it =
           reader.query(
               new MetadataQuery(
-                  null,
+                  primaryId != null ? primaryId.getBytes() : null,
                   secondaryId != null ? secondaryId.getBytes() : null,
+                  primaryIdPrefix,
                   authorizations))) {
 
         while (it.hasNext()) {

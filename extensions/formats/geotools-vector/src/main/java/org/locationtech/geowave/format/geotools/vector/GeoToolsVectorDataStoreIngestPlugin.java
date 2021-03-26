@@ -58,6 +58,15 @@ public class GeoToolsVectorDataStoreIngestPlugin implements LocalFileIngestPlugi
   private final Filter filter;
   private final List<String> featureTypeNames;
 
+  public GeoToolsVectorDataStoreIngestPlugin(final RetypingVectorDataPlugin retypingPlugin) {
+    // by default inherit the types of the original file
+    this(retypingPlugin, Filter.INCLUDE, new ArrayList<String>());
+  }
+
+  public GeoToolsVectorDataStoreIngestPlugin() {
+    this(Filter.INCLUDE);
+  }
+
   public GeoToolsVectorDataStoreIngestPlugin(final Filter filter) {
     // by default inherit the types of the original file
     this(null, filter, new ArrayList<String>());
@@ -139,13 +148,14 @@ public class GeoToolsVectorDataStoreIngestPlugin implements LocalFileIngestPlugi
       LOGGER.error("Exception getting a datastore instance", e);
     }
     if (dataStore != null) {
-      List<SimpleFeatureCollection> featureCollections = getFeatureCollections(dataStore, url);
+      final List<SimpleFeatureCollection> featureCollections =
+          getFeatureCollections(dataStore, url);
       return featureCollections.stream().map(featureCollection -> {
         final SimpleFeatureType originalSchema = featureCollection.getSchema();
         SimpleFeatureType retypedSchema =
             SimpleFeatureUserDataConfigurationSet.configureType(originalSchema);
         if (retypingPlugin != null) {
-          RetypingVectorDataSource source = retypingPlugin.getRetypingSource(originalSchema);
+          final RetypingVectorDataSource source = retypingPlugin.getRetypingSource(originalSchema);
           if (source != null) {
             retypedSchema = source.getRetypedSimpleFeatureType();
           }
@@ -176,7 +186,8 @@ public class GeoToolsVectorDataStoreIngestPlugin implements LocalFileIngestPlugi
       LOGGER.error("Exception getting a datastore instance", e);
     }
     if (dataStore != null) {
-      List<SimpleFeatureCollection> featureCollections = getFeatureCollections(dataStore, input);
+      final List<SimpleFeatureCollection> featureCollections =
+          getFeatureCollections(dataStore, input);
       if (featureCollections == null) {
         return null;
       }

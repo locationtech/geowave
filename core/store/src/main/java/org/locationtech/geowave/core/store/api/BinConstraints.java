@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.store.api;
 
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.store.statistics.query.BinConstraintsImpl;
 
 /**
@@ -38,10 +39,6 @@ public interface BinConstraints {
   }
 
   /**
-  
-   */
-
-  /**
    * Sets the bins of the query by prefix. If a queried statistic uses a binning strategy, only
    * values matching the bin prefix will be returned.
    *
@@ -50,6 +47,17 @@ public interface BinConstraints {
    */
   static BinConstraints ofPrefix(final ByteArray... prefixBins) {
     return new BinConstraintsImpl(prefixBins, true);
+  }
+
+  /**
+   * Sets the bins of the query by range. If a queried statistic uses a binning strategy, only
+   * values matching the range will be returned.
+   *
+   * @param binRanges the ranges used to match the bins
+   * @return a bin constraint representing the set of bin ranges
+   */
+  static BinConstraints ofRange(final ByteArrayRange... binRanges) {
+    return new BinConstraintsImpl(binRanges);
   }
 
   /**
@@ -97,6 +105,13 @@ public interface BinConstraints {
      * @return the bins to query for
      */
     ByteArray[] getBins();
+
+    /**
+     * get the bin ranges to query for
+     *
+     * @return the bin ranges to query for
+     */
+    ByteArrayRange[] getBinRanges();
 
     /**
      * is this meant to query all bins

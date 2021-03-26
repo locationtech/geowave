@@ -9,20 +9,24 @@
 package org.locationtech.geowave.core.store.query.aggregate;
 
 import java.nio.ByteBuffer;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import com.google.common.collect.Maps;
-import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.api.Aggregation;
+import org.locationtech.geowave.core.store.api.BinningStrategy;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import com.google.common.collect.Maps;
 
 /**
  * A Meta-Aggregation, to be used internally by an aggregation query. <p> This takes an
  * aggregation-supplier and a binning strategy. When new data is aggregated, it is binned, and if
  * that bin does not exist, a new one will be made, along with a new aggregation. <p> See
- * {@link org.locationtech.geowave.core.store.api.AggregationQueryBuilder#buildWithBinningStrategy(AggregationBinningStrategy, int)}
+ * {@link org.locationtech.geowave.core.store.api.AggregationQueryBuilder#buildWithBinningStrategy(BinningStrategy, int)}
  * AggregationQueryBuilder#bin} for usage
  *
  * @param <P> The configuration parameters of the inner aggregation.
@@ -30,7 +34,7 @@ import org.locationtech.geowave.core.store.api.Aggregation;
  * @param <T> The type of the data given to the aggregation.
  */
 public class BinningAggregation<P extends Persistable, R, T> implements
-    Aggregation<BinningAggregationOptions<P, T>, Map<String, R>, T> {
+    Aggregation<BinningAggregationOptions<P, T>, Map<ByteArray, R>, T> {
 
   /**
    * An Aggregation that doesn't get used for aggregation, but to forward various helper tasks with,
@@ -41,7 +45,7 @@ public class BinningAggregation<P extends Persistable, R, T> implements
   /**
    * The bins and their aggregations. This is not the final result, but will be used to compute it.
    */
-  private Map<String, Aggregation<P, R, T>> result;
+  private Map<ByteArray, Aggregation<P, R, T>> result;
 
   /**
    * The options that are needed to produce a correct aggregation.
@@ -67,9 +71,9 @@ public class BinningAggregation<P extends Persistable, R, T> implements
    *        computed after reaching the max, it will be silently dropped.
    */
   public BinningAggregation(
-      Aggregation<P, R, T> baseAggregation,
-      AggregationBinningStrategy<T> binningStrategy,
-      int maxBins) {
+      final Aggregation<P, R, T> baseAggregation,
+      final BinningStrategy binningStrategy,
+      final int maxBins) {
     this.options =
         new BinningAggregationOptions<>(
             PersistenceUtils.toBinary(baseAggregation),
@@ -80,13 +84,13 @@ public class BinningAggregation<P extends Persistable, R, T> implements
   }
 
   @Override
-  public Map<String, R> getResult() {
+  public Map<ByteArray, R> getResult() {
     return this.result.entrySet().stream().collect(
         Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getResult()));
   }
 
   @Override
-  public Map<String, R> merge(Map<String, R> result1, Map<String, R> result2) {
+  public Map<ByteArray, R> merge(final Map<ByteArray, R> result1, final Map<ByteArray, R> result2) {
     final Aggregation<P, R, T> agg = this.getHelperAggregation();
 
     return Stream.of(result1, result2).flatMap(m -> m.entrySet().stream()).collect(
@@ -94,14 +98,14 @@ public class BinningAggregation<P extends Persistable, R, T> implements
   }
 
   @Override
-  public void aggregate(T entry) {
-    final String[] bins = this.options.binningStrategy.binEntry(entry);
-    for (String bin : bins) {
+  public void aggregate(final DataTypeAdapter<T> adapter, final T entry) {
+    final ByteArray[] bins = this.options.binningStrategy.getBins(adapter, entry);
+    for (final ByteArray bin : bins) {
       if (this.result.containsKey(bin)) {
-        this.result.get(bin).aggregate(entry);
-      } else if (this.options.maxBins == -1 || this.result.size() < this.options.maxBins) {
+        this.result.get(bin).aggregate(adapter, entry);
+      } else if ((this.options.maxBins == -1) || (this.result.size() < this.options.maxBins)) {
         this.result.put(bin, this.instantiateBaseAggregation());
-        this.result.get(bin).aggregate(entry);
+        this.result.get(bin).aggregate(adapter, entry);
       }
     }
   }
@@ -119,7 +123,7 @@ public class BinningAggregation<P extends Persistable, R, T> implements
    * @return A fresh instance of the base aggregation for use in this class.
    */
   private Aggregation<P, R, T> instantiateBaseAggregation() {
-    Aggregation<P, R, T> agg =
+    final Aggregation<P, R, T> agg =
         (Aggregation<P, R, T>) PersistenceUtils.fromBinary(this.options.baseBytes);
     agg.setParameters(this.options.baseParams);
     return agg;
@@ -131,60 +135,52 @@ public class BinningAggregation<P extends Persistable, R, T> implements
   }
 
   @Override
-  public void setParameters(BinningAggregationOptions<P, T> parameters) {
+  public void setParameters(final BinningAggregationOptions<P, T> parameters) {
     this.options = parameters;
   }
 
   @Override
-  public byte[] resultToBinary(Map<String, R> result) {
+  public byte[] resultToBinary(final Map<ByteArray, R> result) {
     final Aggregation<P, R, T> agg = this.getHelperAggregation();
-    Map<String, byte[]> mapped =
+    final Map<ByteArray, byte[]> mapped =
         result.entrySet().stream().collect(
             Collectors.toMap(Map.Entry::getKey, e -> agg.resultToBinary(e.getValue())));
-    int totalDataSize =
-        mapped.entrySet().stream().map(e -> 8 + e.getKey().length() + e.getValue().length).reduce(
-            0,
-            Integer::sum);
-    ByteBuffer bb = ByteBuffer.allocate(4 + totalDataSize);
-    bb.putInt(mapped.size());
-    mapped.forEach(
-        (k, v) -> bb.putInt(k.length()).put(StringUtils.stringToBinary(k)).putInt(v.length).put(v));
+    final int totalDataSize =
+        mapped.entrySet().stream().mapToInt(
+            e -> (VarintUtils.unsignedIntByteLength(e.getKey().getBytes().length)
+                + e.getKey().getBytes().length
+                + VarintUtils.unsignedIntByteLength(e.getValue().length)
+                + e.getValue().length)).reduce(0, Integer::sum);
+    final ByteBuffer bb = ByteBuffer.allocate(totalDataSize);
+    mapped.forEach((k, v) -> {
+      VarintUtils.writeUnsignedInt(k.getBytes().length, bb);
+      bb.put(k.getBytes());
+      VarintUtils.writeUnsignedInt(v.length, bb);
+      bb.put(v);
+    });
     return bb.array();
   }
 
   @Override
-  public Map<String, R> resultFromBinary(byte[] binary) {
+  public Map<ByteArray, R> resultFromBinary(final byte[] binary) {
     final Aggregation<P, R, T> agg = this.getHelperAggregation();
-    ByteBuffer bb = ByteBuffer.wrap(binary);
-    int mapSize = bb.getInt();
-    Map<String, R> resultMap = Maps.newHashMapWithExpectedSize(mapSize);
-    for (int i = 0; i < mapSize; i++) {
-      int keyLen = bb.getInt();
-      byte[] keyBytes = new byte[keyLen];
+    final ByteBuffer bb = ByteBuffer.wrap(binary);
+    final Map<ByteArray, R> resultMap = new HashMap<>();
+    while (bb.hasRemaining()) {
+      final int keyLen = VarintUtils.readUnsignedInt(bb);
+      final byte[] keyBytes = new byte[keyLen];
       bb.get(keyBytes);
-      String key = StringUtils.stringFromBinary(keyBytes);
+      final ByteArray key = new ByteArray(keyBytes);
 
-      int valLen = bb.getInt();
-      byte[] valBytes = new byte[valLen];
+      final int valLen = VarintUtils.readUnsignedInt(bb);
+      final byte[] valBytes = new byte[valLen];
       bb.get(valBytes);
-      R val = agg.resultFromBinary(valBytes);
+      final R val = agg.resultFromBinary(valBytes);
 
       resultMap.put(key, val);
     }
     return resultMap;
   }
-
-  // TODO after rebasing with Rich's PR, these can be removed.
-  @Override
-  public byte[] toBinary() {
-    // the parameters and results are all that are needed to persist this object,
-    // and they are serialized in their own methods.
-    // we dont need to serialize anything else.
-    return new byte[0];
-  }
-
-  @Override
-  public void fromBinary(byte[] bytes) {}
 
   private Aggregation<P, R, T> getHelperAggregation() {
     if (this.helperAggregation == null) {

@@ -16,7 +16,7 @@ import org.locationtech.geowave.core.index.sfc.data.NumericRange;
  * This interface enables a dimension to define a methodology for applying bins to a full set of
  * values which can be used by a general purpose space filling curve implementation.
  */
-public interface BinningStrategy extends Persistable {
+public interface IndexBinningStrategy extends Persistable {
   /** @return the minimum value to be used by the space filling curve implementation */
   public double getBinMin();
 

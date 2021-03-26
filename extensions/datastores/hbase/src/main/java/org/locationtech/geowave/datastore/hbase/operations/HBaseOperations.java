@@ -200,6 +200,10 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
         (HBaseOptions) options.getStoreOptions());
   }
 
+  public HBaseOptions getOptions() {
+    return options;
+  }
+
   public Connection getConnection() {
     return conn;
   }

@@ -333,6 +333,9 @@ public class DynamoDBReader<T> implements RowReader<T> {
                 DynamoDBUtils.encodeSortableBase64(sortRange.getEndAsNextPrefix()));
       }
     }
+    // because this is using getEndAsNextPrefix and between is inclusive on the end, it seems this
+    // could include an additional result on a very unlikely corner case that the end prefix exactly
+    // matches a key (perhaps its better to use GE and LT to force strictly less than?)
     query.addKeyConditionsEntry(
         DynamoDBRow.GW_RANGE_KEY,
         new Condition().withComparisonOperator(ComparisonOperator.BETWEEN).withAttributeValueList(

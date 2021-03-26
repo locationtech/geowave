@@ -6,22 +6,21 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.core.store.statistics.index;
+package org.locationtech.geowave.core.store.api;
 
 import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
-import org.locationtech.geowave.core.store.api.StatisticValue;
-import org.locationtech.geowave.core.store.statistics.BaseStatistic;
 import org.locationtech.geowave.core.store.statistics.StatisticId;
+import org.locationtech.geowave.core.store.statistics.index.IndexStatisticType;
 import com.beust.jcommander.Parameter;
 
 /**
  * Base class for index statistics. These statistics are generally updated without using specific
  * details of the entry or the data type.
  */
-public abstract class IndexStatistic<V extends StatisticValue<?>> extends BaseStatistic<V> {
+public abstract class IndexStatistic<V extends StatisticValue<?>> extends Statistic<V> {
 
   @Parameter(names = "--indexName", required = true, description = "The index for the statistic.")
   private String indexName = null;

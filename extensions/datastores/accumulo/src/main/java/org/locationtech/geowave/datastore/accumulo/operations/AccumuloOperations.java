@@ -460,8 +460,14 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
       final Set<ByteArray> removeSet = new HashSet<>();
       final List<Range> rowRanges = new ArrayList<>();
       for (final ByteArray rowId : rowIds) {
-        rowRanges.add(Range.exact(new Text(rowId.getBytes())));
-        removeSet.add(new ByteArray(rowId.getBytes()));
+        if (rowId != null && rowId.getBytes() != null) {
+          rowRanges.add(Range.exact(new Text(rowId.getBytes())));
+          removeSet.add(new ByteArray(rowId.getBytes()));
+        }
+      }
+      if (!rowIds.isEmpty() && rowRanges.isEmpty()) {
+        // this implies a full delete
+        rowRanges.add(new Range());
       }
       deleter.setRanges(rowRanges);
 

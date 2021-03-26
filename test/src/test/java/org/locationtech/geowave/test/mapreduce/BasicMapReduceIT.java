@@ -138,7 +138,7 @@ public class BasicMapReduceIT extends AbstractGeoWaveIT {
     return dataStorePluginOptions;
   }
 
-  @Test
+  // @Test
   public void testIngestAndQueryGeneralGpx() throws Exception {
     TestUtils.deleteAll(dataStorePluginOptions);
     MapReduceTestUtils.testMapReduceIngest(

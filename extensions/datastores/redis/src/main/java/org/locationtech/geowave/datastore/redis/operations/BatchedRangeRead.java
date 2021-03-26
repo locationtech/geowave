@@ -12,7 +12,6 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -22,9 +21,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.ByteArray;
-import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
@@ -51,51 +50,6 @@ import com.google.common.primitives.UnsignedBytes;
 
 public class BatchedRangeRead<T> {
   private static final Logger LOGGER = LoggerFactory.getLogger(BatchedRangeRead.class);
-
-  private static class RangeReadInfo {
-    byte[] partitionKey;
-    double startScore;
-    double endScore;
-    byte[] explicitStartCheck, explicitEndCheck;
-
-    public RangeReadInfo(
-        final byte[] partitionKey,
-        final double startScore,
-        final double endScore,
-        final ByteArrayRange originalRange) {
-      this.partitionKey = partitionKey;
-      this.startScore = startScore;
-      this.endScore = endScore;
-      explicitStartCheck =
-          (originalRange.getStart() != null) && (originalRange.getStart().length > 6)
-              ? Arrays.copyOfRange(originalRange.getStart(), 6, originalRange.getStart().length)
-              : null;
-      final byte[] end = originalRange.getEndAsNextPrefix();
-      explicitEndCheck =
-          (end != null) && (end.length > 6) ? Arrays.copyOfRange(end, 6, end.length) : null;
-    }
-
-    public boolean passesExplicitChecks(final ScoredEntry<GeoWaveRedisPersistedRow> entry) {
-      final GeoWaveRedisPersistedRow row = entry.getValue();
-      if ((explicitStartCheck != null)
-          && (entry.getScore() == startScore)
-          && (row.getSortKeyPrecisionBeyondScore().length > 0)
-          && (UnsignedBytes.lexicographicalComparator().compare(
-              explicitStartCheck,
-              row.getSortKeyPrecisionBeyondScore()) > 0)) {
-        return false;
-      }
-      if ((explicitEndCheck != null)
-          && (entry.getScore() == endScore)
-          && (row.getSortKeyPrecisionBeyondScore().length > 0)
-          && (UnsignedBytes.lexicographicalComparator().compare(
-              explicitEndCheck,
-              row.getSortKeyPrecisionBeyondScore()) <= 0)) {
-        return false;
-      }
-      return true;
-    }
-  }
 
   private static class ScoreOrderComparator implements Comparator<RangeReadInfo>, Serializable {
     private static final long serialVersionUID = 1L;
@@ -181,28 +135,14 @@ public class BatchedRangeRead<T> {
   public CloseableIterator<T> results() {
     final List<RangeReadInfo> reads = new ArrayList<>();
     for (final SinglePartitionQueryRanges r : ranges) {
-      for (final ByteArrayRange range : r.getSortKeyRanges()) {
-        final double start =
-            range.getStart() != null ? RedisUtils.getScore(range.getStart())
-                : Double.NEGATIVE_INFINITY;
-        final double end =
-            range.getEnd() != null ? RedisUtils.getScore(range.getEndAsNextPrefix())
-                : Double.POSITIVE_INFINITY;
-        if ((start >= 0) && (end < 0)) {
-          // if we crossed 0 the two's complement of the byte array changes the sign of the score,
-          // break it into multiple ranges, an alternative is flipping the first bit of the score
-          // using bitwise XOR ^ 0x8000000000000000l but it ends up causing many more common sort
-          // keys to be within the precision lost by the double floating point score of the mantissa
-          // (eg. a sort key of 0 when the first bit is flipped becomes -Double.MAX_VALUE which
-          // results in precision lost)
-
-          reads.add(new RangeReadInfo(r.getPartitionKey(), start, Double.POSITIVE_INFINITY, range));
-
-          reads.add(new RangeReadInfo(r.getPartitionKey(), Double.NEGATIVE_INFINITY, end, range));
-        } else {
-          reads.add(new RangeReadInfo(r.getPartitionKey(), start, end, range));
-        }
-      }
+      reads.addAll(
+          r.getSortKeyRanges().stream().flatMap(
+              range -> RedisUtils.getScoreRangesFromByteArrays(range).map(
+                  scoreRange -> new RangeReadInfo(
+                      r.getPartitionKey(),
+                      scoreRange.getMinimum(),
+                      scoreRange.getMaximum(),
+                      range))).collect(Collectors.toList()));
     }
     if (async) {
       return executeQueryAsync(reads);
@@ -233,7 +173,7 @@ public class BatchedRangeRead<T> {
                       // because we have a finite precision we need to make
                       // sure the end is inclusive and do more precise client-side filtering
                       ((r.endScore <= r.startScore) || (r.explicitEndCheck != null)))).filter(
-                          e -> r.passesExplicitChecks(e)).iterator(),
+                          e -> r.passesExplicitRowChecks(e)).iterator(),
               r.partitionKey);
         }).iterator());
     return new CloseableIterator.Wrapper<>(transformAndFilter(result));
@@ -308,7 +248,7 @@ public class BatchedRangeRead<T> {
 
                   transformAndFilter(
                       result.stream().filter(
-                          e -> r.passesExplicitChecks(e)).iterator()).forEachRemaining(row -> {
+                          e -> r.passesExplicitRowChecks(e)).iterator()).forEachRemaining(row -> {
                             try {
                               results.put(row);
                             } catch (final InterruptedException e) {

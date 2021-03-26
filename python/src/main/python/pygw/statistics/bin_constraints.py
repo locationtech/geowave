@@ -8,8 +8,9 @@
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
 # ===============================================================================================
 from pygw.base import GeoWaveObject
-from pygw.base.type_conversions import PrimitiveByteArrayType
+from pygw.base.type_conversions import PrimitiveByteArrayType, GeometryType
 from pygw.config import geowave_pkg, java_gateway
+from shapely.geometry.base import BaseGeometry
 
 
 class BinConstraints(GeoWaveObject):
@@ -90,5 +91,7 @@ class BinConstraints(GeoWaveObject):
         """
         if isinstance(binning_strategy_constraint, GeoWaveObject):
             binning_strategy_constraint = binning_strategy_constraint.java_ref()
+        elif isinstance(binning_strategy_constraint, BaseGeometry):
+            binning_strategy_constraint = GeometryType().to_java(binning_strategy_constraint)
         j_constraints = geowave_pkg.core.store.api.BinConstraints.ofObject(binning_strategy_constraint)
         return BinConstraints(j_constraints)

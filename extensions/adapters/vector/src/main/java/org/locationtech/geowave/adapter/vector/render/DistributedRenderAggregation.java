@@ -22,6 +22,7 @@ import org.geoserver.wms.WMSMapContent;
 import org.geotools.map.FeatureLayer;
 import org.geotools.map.MapViewport;
 import org.locationtech.geowave.core.store.api.Aggregation;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
@@ -171,7 +172,7 @@ public class DistributedRenderAggregation implements
   }
 
   @Override
-  public void aggregate(final SimpleFeature entry) {
+  public void aggregate(final DataTypeAdapter<SimpleFeature> adapter, final SimpleFeature entry) {
     ensureOpen(entry.getFeatureType());
     queue.add(entry);
   }

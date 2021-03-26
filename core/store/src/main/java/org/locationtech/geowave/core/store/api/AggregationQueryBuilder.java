@@ -9,9 +9,9 @@
 package org.locationtech.geowave.core.store.api;
 
 import java.util.Map;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.query.BaseQueryBuilder;
-import org.locationtech.geowave.core.store.query.aggregate.AggregationBinningStrategy;
 import org.locationtech.geowave.core.store.query.aggregate.AggregationQueryBuilderImpl;
 import org.locationtech.geowave.core.store.query.aggregate.BinningAggregationOptions;
 
@@ -49,8 +49,8 @@ public interface AggregationQueryBuilder<P extends Persistable, R, T, A extends 
    * @param maxBins The maximum bins to allow in the aggregation. -1 for no limit.
    * @return A complete aggregation query, ready to consume data.
    */
-  AggregationQuery<BinningAggregationOptions<P, T>, Map<String, R>, T> buildWithBinningStrategy(
-      AggregationBinningStrategy<T> binningStrategy,
+  AggregationQuery<BinningAggregationOptions<P, T>, Map<ByteArray, R>, T> buildWithBinningStrategy(
+      BinningStrategy binningStrategy,
       int maxBins);
 
   /**

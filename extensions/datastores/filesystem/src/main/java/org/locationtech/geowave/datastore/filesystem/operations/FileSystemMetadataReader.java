@@ -10,6 +10,8 @@ package org.locationtech.geowave.datastore.filesystem.operations;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
@@ -40,6 +42,15 @@ public class FileSystemMetadataReader implements MetadataReader {
     if (query.hasPrimaryId()) {
       originalResults = table.iterator(query.getPrimaryId());
       resultsIt = originalResults;
+    } else if (query.hasPrimaryIdRanges()) {
+      final List<CloseableIterator<GeoWaveMetadata>> rangeIterators =
+          Arrays.stream(query.getPrimaryIdRanges()).map(table::iterator).collect(
+              Collectors.toList());
+      originalResults =
+          new CloseableIteratorWrapper<>(
+              (() -> rangeIterators.forEach(CloseableIterator::close)),
+              Iterators.concat(rangeIterators.iterator()));
+      resultsIt = originalResults;
     } else {
       originalResults = table.iterator();
       resultsIt = originalResults;
@@ -64,7 +75,7 @@ public class FileSystemMetadataReader implements MetadataReader {
         }
       });
     }
-    CloseableIterator<GeoWaveMetadata> retVal =
+    final CloseableIterator<GeoWaveMetadata> retVal =
         new CloseableIteratorWrapper<>(originalResults, resultsIt);
     if (metadataType.isStatValues()) {
       return MetadataIterators.clientVisibilityFilter(retVal, query.getAuthorizations());

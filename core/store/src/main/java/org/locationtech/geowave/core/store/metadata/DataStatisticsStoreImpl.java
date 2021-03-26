@@ -9,15 +9,20 @@
 package org.locationtech.geowave.core.store.metadata;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nullable;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.api.BinConstraints.ByteArrayConstraints;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeStatistic;
+import org.locationtech.geowave.core.store.api.FieldStatistic;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexStatistic;
 import org.locationtech.geowave.core.store.api.Statistic;
 import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
@@ -31,12 +36,9 @@ import org.locationtech.geowave.core.store.statistics.StatisticUpdateCallback;
 import org.locationtech.geowave.core.store.statistics.StatisticValueReader;
 import org.locationtech.geowave.core.store.statistics.StatisticValueWriter;
 import org.locationtech.geowave.core.store.statistics.StatisticsValueIterator;
-import org.locationtech.geowave.core.store.statistics.adapter.DataTypeStatistic;
 import org.locationtech.geowave.core.store.statistics.binning.CompositeBinningStrategy;
 import org.locationtech.geowave.core.store.statistics.binning.DataTypeBinningStrategy;
-import org.locationtech.geowave.core.store.statistics.field.FieldStatistic;
 import org.locationtech.geowave.core.store.statistics.field.FieldStatisticId;
-import org.locationtech.geowave.core.store.statistics.index.IndexStatistic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Iterators;
@@ -244,35 +246,38 @@ public class DataStatisticsStoreImpl extends
         new MetadataQuery(statisticType == null ? null : statisticType.getBytes(), null, true));
   }
 
+  @SuppressWarnings("unchecked")
   @Override
-  public CloseableIterator<? extends Statistic<? extends StatisticValue<?>>> getIndexStatistics(
+  public CloseableIterator<? extends IndexStatistic<? extends StatisticValue<?>>> getIndexStatistics(
       final Index index,
       final @Nullable StatisticType<? extends StatisticValue<?>> statisticType,
       final @Nullable String tag) {
-    return getBasicStatisticsInternal(
+    return (CloseableIterator<? extends IndexStatistic<? extends StatisticValue<?>>>) getBasicStatisticsInternal(
         IndexStatistic.generateGroupId(index.getName()),
         statisticType,
         tag);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
-  public CloseableIterator<? extends Statistic<? extends StatisticValue<?>>> getDataTypeStatistics(
+  public CloseableIterator<? extends DataTypeStatistic<? extends StatisticValue<?>>> getDataTypeStatistics(
       final DataTypeAdapter<?> type,
       final @Nullable StatisticType<? extends StatisticValue<?>> statisticType,
       final @Nullable String tag) {
-    return getBasicStatisticsInternal(
+    return (CloseableIterator<? extends DataTypeStatistic<? extends StatisticValue<?>>>) getBasicStatisticsInternal(
         DataTypeStatistic.generateGroupId(type.getTypeName()),
         statisticType,
         tag);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
-  public CloseableIterator<? extends Statistic<? extends StatisticValue<?>>> getFieldStatistics(
+  public CloseableIterator<? extends FieldStatistic<? extends StatisticValue<?>>> getFieldStatistics(
       final DataTypeAdapter<?> type,
       final @Nullable StatisticType<? extends StatisticValue<?>> statisticType,
       final @Nullable String fieldName,
       final @Nullable String tag) {
-    return getFieldStatisticsInternal(
+    return (CloseableIterator<? extends FieldStatistic<? extends StatisticValue<?>>>) getFieldStatisticsInternal(
         FieldStatistic.generateGroupId(type.getTypeName()),
         statisticType,
         fieldName,
@@ -381,6 +386,26 @@ public class DataStatisticsStoreImpl extends
             primaryId,
             statistic.getId().getGroupId().getBytes(),
             !exact,
+            authorizations);
+    return new StatisticValueReader<>(
+        operations.createMetadataReader(MetadataType.STATISTIC_VALUES).query(query),
+        statistic);
+  }
+
+  private <V extends StatisticValue<R>, R> StatisticValueReader<V, R> createStatisticValueReader(
+      final Statistic<V> statistic,
+      final ByteArrayRange[] binRanges,
+      final String... authorizations) {
+    final MetadataQuery query =
+        new MetadataQuery(
+            Arrays.stream(binRanges).map(
+                range -> new ByteArrayRange(
+                    range.getStart() == null ? null
+                        : StatisticValue.getValueId(statistic.getId(), range.getStart()),
+                    range.getEnd() == null ? null
+                        : StatisticValue.getValueId(statistic.getId(), range.getEnd()),
+                    range.isSingleValue())).toArray(ByteArrayRange[]::new),
+            statistic.getId().getGroupId().getBytes(),
             authorizations);
     return new StatisticValueReader<>(
         operations.createMetadataReader(MetadataType.STATISTIC_VALUES).query(query),
@@ -506,6 +531,14 @@ public class DataStatisticsStoreImpl extends
           "The given statistic does not use a binning strategy, but a bin was specified.");
     }
     return createStatisticValueReader(statistic, binPrefix, false, authorizations);
+  }
+
+  @Override
+  public <V extends StatisticValue<R>, R> CloseableIterator<V> getStatisticValues(
+      final Statistic<V> statistic,
+      final ByteArrayRange[] binRanges,
+      final String... authorizations) {
+    return createStatisticValueReader(statistic, binRanges, authorizations);
   }
 
   @Override
@@ -684,6 +717,5 @@ public class DataStatisticsStoreImpl extends
     public void close() {
       source.close();
     }
-
   }
 }
