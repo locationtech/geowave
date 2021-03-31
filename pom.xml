@@ -62,7 +62,7 @@
 		<geotools.version>20.0</geotools.version>
 		<jts.version>1.16.0</jts.version>
 		<imageio.ext.version>1.1.25</imageio.ext.version>
-		<guava.version>25.1-jre</guava.version>
+		<guava.version>29.0-jre</guava.version>
 		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
 		<geoserver.version>2.14.0</geoserver.version>
 		<accumulo.version>1.9.2</accumulo.version>
