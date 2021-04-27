@@ -23,8 +23,8 @@ import org.locationtech.geowave.adapter.vector.query.gwql.ResultSet;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
-import org.spark_project.guava.collect.Iterators;
 import com.beust.jcommander.Parameter;
+import com.google.common.collect.Iterators;
 
 public class GeoJsonQueryOutputFormat extends QueryOutputFormatSpi {
   public static final String FORMAT_NAME = "geojson";

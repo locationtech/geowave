@@ -73,13 +73,13 @@ public class InstallGdal {
       gdalEnv = DEFAULT_BASE;
     }
     if (isWindows()) {
-      file = "gdal-1.9.2-MSVC2010-x64.zip";
-      url = new URL(gdalEnv + "/windows/MSVC2010/" + file);
+      file = "win-x64-gdal204.zip";
+      url = new URL(gdalEnv + "/windows/MSVC2017/" + file);
     } else if (isMac()) {
       file = "gdal-1.9.2_macOSX.zip";
       url = new URL(gdalEnv + "/mac/" + file);
     } else {
-      file = "gdal192-CentOS5.8-gcc4.1.2-x86_64.tar.gz";
+      file = "linux-libgdal26.tar.gz";
       url = new URL(gdalEnv + "/linux/" + file);
     }
     final File downloadFile = new File(gdalDir, file);

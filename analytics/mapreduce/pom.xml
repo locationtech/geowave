@@ -29,7 +29,7 @@
 			<artifactId>mrunit</artifactId>
 			<version>1.1.0</version>
 			<scope>test</scope>
-			<classifier>${hadoop.env.classifier}</classifier>
+			<classifier>hadoop2</classifier>
 		</dependency>
 	</dependencies>
 	<profiles>

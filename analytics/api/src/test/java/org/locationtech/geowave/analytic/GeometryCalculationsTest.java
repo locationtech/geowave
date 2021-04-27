@@ -21,7 +21,7 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.TransformException;
-import tec.uom.se.unit.Units;
+import tech.units.indriya.unit.Units;
 
 public class GeometryCalculationsTest {
 

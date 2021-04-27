@@ -14,9 +14,8 @@ import org.locationtech.geowave.datastore.cassandra.CassandraRow;
 import org.locationtech.geowave.datastore.cassandra.CassandraRow.CassandraField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.core.TypeCodec;
+import com.datastax.oss.driver.api.core.cql.PreparedStatement;
+import com.datastax.oss.driver.api.core.type.codec.TypeCodecs;
 
 public class RowRead {
   private static final Logger LOGGER = LoggerFactory.getLogger(RowRead.class);
@@ -41,20 +40,18 @@ public class RowRead {
 
   public CassandraRow result() {
     if ((partitionKey != null) && (sortKey != null)) {
-      final BoundStatement boundRead = new BoundStatement(preparedRead);
-      boundRead.set(
-          CassandraField.GW_SORT_KEY.getBindMarkerName(),
-          ByteBuffer.wrap(sortKey),
-          ByteBuffer.class);
-      boundRead.set(
-          CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName(),
-          internalAdapterId,
-          TypeCodec.smallInt());
-      boundRead.set(
-          CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName(),
-          ByteBuffer.wrap(partitionKey),
-          ByteBuffer.class);
-      try (CloseableIterator<CassandraRow> it = operations.executeQuery(boundRead)) {
+      try (CloseableIterator<CassandraRow> it =
+          operations.executeQuery(
+              preparedRead.boundStatementBuilder().set(
+                  CassandraField.GW_SORT_KEY.getBindMarkerName(),
+                  ByteBuffer.wrap(sortKey),
+                  ByteBuffer.class).set(
+                      CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName(),
+                      internalAdapterId,
+                      TypeCodecs.SMALLINT).set(
+                          CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName(),
+                          ByteBuffer.wrap(partitionKey),
+                          ByteBuffer.class).build())) {
         if (it.hasNext()) {
           // there should only be one entry with this index
           return it.next();

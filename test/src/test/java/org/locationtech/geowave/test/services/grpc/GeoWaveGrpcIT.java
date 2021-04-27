@@ -49,7 +49,9 @@ import org.slf4j.LoggerFactory;
     value = {
         GeoWaveStoreType.ACCUMULO,
         GeoWaveStoreType.BIGTABLE,
-        GeoWaveStoreType.CASSANDRA,
+        // Cassandra is currently erroring with java.lang.ClassNotFoundException:
+        // org.eclipse.core.resources.IWorkspaceRoot on the spatial join
+        // GeoWaveStoreType.CASSANDRA,
         GeoWaveStoreType.DYNAMODB,
         GeoWaveStoreType.HBASE,
         GeoWaveStoreType.KUDU,

@@ -21,6 +21,7 @@ import org.apache.spark.api.java.JavaFutureAction;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFlatMapFunction;
 import org.apache.spark.broadcast.Broadcast;
@@ -340,7 +341,11 @@ public class TieredSpatialJoin extends JoinStrategy {
     }
 
     // Remove duplicates between tiers
-    combinedResults = javaSC.union(combinedResults, tierMatches);
+    combinedResults =
+        javaSC.union(
+            (JavaPairRDD[]) (ArrayUtils.add(
+                tierMatches.toArray(new JavaPairRDD[tierMatches.size()]),
+                combinedResults)));
     combinedResults = combinedResults.reduceByKey((id1, id2) -> id1);
 
     combinedResults =
@@ -526,7 +531,7 @@ public class TieredSpatialJoin extends JoinStrategy {
 
     final JavaPairRDD<GeoWaveInputKey, ByteArray> finalMatches =
         joinedTiers.flatMapValues(
-            (Function<Tuple2<Iterable<Tuple2<GeoWaveInputKey, Geometry>>, Iterable<Tuple2<GeoWaveInputKey, Geometry>>>, Iterable<GeoWaveInputKey>>) t -> {
+            (FlatMapFunction<Tuple2<Iterable<Tuple2<GeoWaveInputKey, Geometry>>, Iterable<Tuple2<GeoWaveInputKey, Geometry>>>, GeoWaveInputKey>) t -> {
               final GeomFunction predicate = geomPredicate.value();
 
               final HashSet<GeoWaveInputKey> results = Sets.newHashSet();
@@ -538,7 +543,7 @@ public class TieredSpatialJoin extends JoinStrategy {
                   }
                 }
               }
-              return results;
+              return results.iterator();
             }).mapToPair(Tuple2::swap).reduceByKey(partitioner, (id1, id2) -> id1).persist(
                 StorageLevel.MEMORY_ONLY_SER());
 

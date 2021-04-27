@@ -8,48 +8,66 @@
  */
 package org.locationtech.geowave.datastore.cassandra;
 
-import java.util.function.BiConsumer;
+import java.util.Arrays;
+import java.util.function.BiFunction;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.log4j.Logger;
-import org.bouncycastle.util.Arrays;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.entities.GeoWaveValueImpl;
 import org.locationtech.geowave.core.store.entities.MergeableGeoWaveRow;
 import org.locationtech.geowave.datastore.cassandra.util.CassandraUtils;
-import com.datastax.driver.core.DataType;
-import com.datastax.driver.core.Row;
-import com.datastax.driver.core.schemabuilder.Create;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.datastax.oss.driver.api.core.cql.Row;
+import com.datastax.oss.driver.api.core.type.DataType;
+import com.datastax.oss.driver.api.core.type.DataTypes;
+import com.datastax.oss.driver.api.querybuilder.schema.CreateTable;
+import com.datastax.oss.driver.api.querybuilder.schema.CreateTableStart;
+import com.datastax.oss.driver.api.querybuilder.schema.OngoingPartitionKey;
 
 public class CassandraRow extends MergeableGeoWaveRow {
-  private static final Logger LOGGER = Logger.getLogger(CassandraRow.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CassandraRow.class);
 
   private static enum ColumnType {
-    PARTITION_KEY((final Create c, final Pair<String, DataType> f) -> c.addPartitionKey(
+    PARTITION_KEY((
+        final OngoingPartitionKey c,
+        final Pair<String, DataType> f) -> c.withPartitionKey(f.getLeft(), f.getRight())),
+    CLUSTER_COLUMN((final CreateTable c, final Pair<String, DataType> f) -> c.withClusteringColumn(
         f.getLeft(),
-        f.getRight())),
-    CLUSTER_COLUMN((final Create c, final Pair<String, DataType> f) -> c.addClusteringColumn(
+        f.getRight()), null),
+    OTHER_COLUMN((final CreateTable c, final Pair<String, DataType> f) -> c.withClusteringColumn(
         f.getLeft(),
-        f.getRight())),
-    OTHER_COLUMN(
-        (final Create c, final Pair<String, DataType> f) -> c.addColumn(f.getLeft(), f.getRight()));
+        f.getRight()), null);
 
-    private BiConsumer<Create, Pair<String, DataType>> createFunction;
+    private BiFunction<CreateTable, Pair<String, DataType>, CreateTable> createFunction;
+    private BiFunction<OngoingPartitionKey, Pair<String, DataType>, CreateTable> createPartitionKeyFunction;
 
-    private ColumnType(final BiConsumer<Create, Pair<String, DataType>> createFunction) {
+    private ColumnType(
+        final BiFunction<OngoingPartitionKey, Pair<String, DataType>, CreateTable> createPartitionKeyFunction) {
+      this(
+          (final CreateTable c, final Pair<String, DataType> f) -> createPartitionKeyFunction.apply(
+              c,
+              f),
+          createPartitionKeyFunction);
+    }
+
+    private ColumnType(
+        final BiFunction<CreateTable, Pair<String, DataType>, CreateTable> createFunction,
+        final BiFunction<OngoingPartitionKey, Pair<String, DataType>, CreateTable> createPartitionKeyFunction) {
       this.createFunction = createFunction;
+      this.createPartitionKeyFunction = createPartitionKeyFunction;
     }
   }
 
   public static enum CassandraField {
-    GW_PARTITION_ID_KEY("partition", DataType.blob(), ColumnType.PARTITION_KEY, true),
-    GW_ADAPTER_ID_KEY("adapter_id", DataType.smallint(), ColumnType.CLUSTER_COLUMN, true),
-    GW_SORT_KEY("sort", DataType.blob(), ColumnType.CLUSTER_COLUMN),
-    GW_DATA_ID_KEY("data_id", DataType.blob(), ColumnType.CLUSTER_COLUMN),
-    GW_FIELD_VISIBILITY_KEY("vis", DataType.blob(), ColumnType.CLUSTER_COLUMN),
-    GW_NANO_TIME_KEY("nano_time", DataType.blob(), ColumnType.CLUSTER_COLUMN),
-    GW_FIELD_MASK_KEY("field_mask", DataType.blob(), ColumnType.OTHER_COLUMN),
-    GW_VALUE_KEY("value", DataType.blob(), ColumnType.OTHER_COLUMN, true),
-    GW_NUM_DUPLICATES_KEY("num_duplicates", DataType.tinyint(), ColumnType.OTHER_COLUMN);
+    GW_PARTITION_ID_KEY("partition", DataTypes.BLOB, ColumnType.PARTITION_KEY, true),
+    GW_ADAPTER_ID_KEY("adapter_id", DataTypes.SMALLINT, ColumnType.CLUSTER_COLUMN, true),
+    GW_SORT_KEY("sort", DataTypes.BLOB, ColumnType.CLUSTER_COLUMN),
+    GW_DATA_ID_KEY("data_id", DataTypes.BLOB, ColumnType.CLUSTER_COLUMN),
+    GW_FIELD_VISIBILITY_KEY("vis", DataTypes.BLOB, ColumnType.CLUSTER_COLUMN),
+    GW_NANO_TIME_KEY("nano_time", DataTypes.BLOB, ColumnType.CLUSTER_COLUMN),
+    GW_FIELD_MASK_KEY("field_mask", DataTypes.BLOB, ColumnType.OTHER_COLUMN),
+    GW_VALUE_KEY("value", DataTypes.BLOB, ColumnType.OTHER_COLUMN, true),
+    GW_NUM_DUPLICATES_KEY("num_duplicates", DataTypes.TINYINT, ColumnType.OTHER_COLUMN);
 
     private final String fieldName;
     private final DataType dataType;
@@ -78,6 +96,10 @@ public class CassandraRow extends MergeableGeoWaveRow {
       return isDataIndexColumn;
     }
 
+    public boolean isPartitionKey() {
+      return columnType.equals(ColumnType.PARTITION_KEY);
+    }
+
     public String getFieldName() {
       return fieldName;
     }
@@ -94,8 +116,12 @@ public class CassandraRow extends MergeableGeoWaveRow {
       return fieldName + "_max";
     }
 
-    public void addColumn(final Create create) {
-      columnType.createFunction.accept(create, Pair.of(fieldName, dataType));
+    public CreateTable addColumn(final CreateTable create) {
+      return columnType.createFunction.apply(create, Pair.of(fieldName, dataType));
+    }
+
+    public CreateTable addPartitionKey(final CreateTableStart start) {
+      return columnType.createPartitionKeyFunction.apply(start, Pair.of(fieldName, dataType));
     }
   }
 
@@ -113,18 +139,19 @@ public class CassandraRow extends MergeableGeoWaveRow {
 
   @Override
   public byte[] getDataId() {
-    return row.getBytes(CassandraField.GW_DATA_ID_KEY.getFieldName()).array();
+    return row.getByteBuffer(CassandraField.GW_DATA_ID_KEY.getFieldName()).array();
   }
 
   @Override
   public byte[] getSortKey() {
-    return row.getBytes(CassandraField.GW_SORT_KEY.getFieldName()).array();
+    return row.getByteBuffer(CassandraField.GW_SORT_KEY.getFieldName()).array();
   }
 
   @Override
   public byte[] getPartitionKey() {
-    byte[] partitionKey = row.getBytes(CassandraField.GW_PARTITION_ID_KEY.getFieldName()).array();
-    if (Arrays.areEqual(CassandraUtils.EMPTY_PARTITION_KEY, partitionKey)) {
+    final byte[] partitionKey =
+        row.getByteBuffer(CassandraField.GW_PARTITION_ID_KEY.getFieldName()).array();
+    if (Arrays.equals(CassandraUtils.EMPTY_PARTITION_KEY, partitionKey)) {
       // we shouldn't expose the reserved "empty" partition key externally
       return new byte[0];
     }
@@ -137,10 +164,11 @@ public class CassandraRow extends MergeableGeoWaveRow {
   }
 
   private static GeoWaveValue[] getFieldValues(final Row row) {
-    final byte[] fieldMask = row.getBytes(CassandraField.GW_FIELD_MASK_KEY.getFieldName()).array();
-    final byte[] value = row.getBytes(CassandraField.GW_VALUE_KEY.getFieldName()).array();
+    final byte[] fieldMask =
+        row.getByteBuffer(CassandraField.GW_FIELD_MASK_KEY.getFieldName()).array();
+    final byte[] value = row.getByteBuffer(CassandraField.GW_VALUE_KEY.getFieldName()).array();
     final byte[] visibility =
-        row.getBytes(CassandraField.GW_FIELD_VISIBILITY_KEY.getFieldName()).array();
+        row.getByteBuffer(CassandraField.GW_FIELD_VISIBILITY_KEY.getFieldName()).array();
 
     final GeoWaveValue[] fieldValues = new GeoWaveValueImpl[1];
     fieldValues[0] = new GeoWaveValueImpl(fieldMask, visibility, value);

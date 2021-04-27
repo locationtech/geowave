@@ -16,6 +16,7 @@ import org.geotools.data.Query;
 import org.geotools.data.store.DataFeatureCollection;
 import org.geotools.feature.FeatureIterator;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
+import org.geotools.filter.AttributeExpressionImpl;
 import org.geotools.filter.spatial.BBOXImpl;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.locationtech.geowave.adapter.vector.render.DistributedRenderOptions;
@@ -35,6 +36,8 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
+import org.opengis.filter.expression.Expression;
+import org.opengis.filter.expression.PropertyName;
 import org.opengis.geometry.BoundingBox;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
@@ -172,9 +175,14 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
     final Filter filter = query.getFilter();
     if (filter instanceof BBOXImpl) {
       final BBOXImpl bbox = ((BBOXImpl) filter);
-      final String propName = bbox.getPropertyName();
-      if ((propName == null) || propName.isEmpty()) {
-        bbox.setPropertyName(getSchema(reader, query).getGeometryDescriptor().getLocalName());
+      final Expression exp1 = bbox.getExpression1();
+      if (exp1 instanceof PropertyName) {
+        final String propName = ((PropertyName) exp1).getPropertyName();
+        if ((propName == null) || propName.isEmpty()) {
+          bbox.setExpression1(
+              new AttributeExpressionImpl(
+                  getSchema(reader, query).getGeometryDescriptor().getLocalName()));
+        }
       }
     }
     return filter;
@@ -210,8 +218,8 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
 
   private Iterator<SimpleFeature> openIterator(final QueryConstraints constraints) {
 
-    if ((constraints.jtsBounds != null && constraints.jtsBounds.isEmpty())
-        || (constraints.timeBounds != null && constraints.timeBounds.isEmpty())) {
+    if (((constraints.jtsBounds != null) && constraints.jtsBounds.isEmpty())
+        || ((constraints.timeBounds != null) && constraints.timeBounds.isEmpty())) {
       // return nothing if either constraint is empty
       featureCursor = reader.getNoData();
     } else if (query.getFilter() == Filter.EXCLUDE) {

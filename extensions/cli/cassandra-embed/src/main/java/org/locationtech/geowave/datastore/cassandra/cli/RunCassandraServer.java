@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.datastore.cassandra.cli;
 
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
@@ -17,21 +18,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
-import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "run", parentOperation = CassandraSection.class)
 @Parameters(
-    commandDescription = "Runs a standalone Cassandra server for test and debug with GeoWave")
+    commandDescription = "Runs a standalone Cassandra server for test and debug with GeoWave. The default file store will be './cassandra'.")
 public class RunCassandraServer extends DefaultOperation implements Command {
   private static final Logger LOGGER = LoggerFactory.getLogger(RunCassandraServer.class);
 
-  @ParametersDelegate
-  private RunCassandraServerOptions options = new RunCassandraServerOptions();
   @Parameter(
       names = {"--interactive", "-i"},
       arity = 1,
       description = "Whether to prompt for user input to end the process")
   private boolean interactive = true;
+  @Parameter(
+      names = {"--config", "-c"},
+      description = "Optionally, a URL to a valid cassandra YAML for configuration.")
+  private String config = "cassandra-default.yaml";
 
   /**
    * Prep the driver & run the operation.
@@ -39,7 +41,13 @@ public class RunCassandraServer extends DefaultOperation implements Command {
   @Override
   public void execute(final OperationParams params) {
     try {
-      final CassandraServer server = options.getServer();
+      System.setProperty("cassandra.config", config);
+      if (config.equals("cassandra-default.yaml")) {
+        if (!new File("cassandra").mkdirs()) {
+          LOGGER.warn("Unable to create cassandra directory");
+        }
+      }
+      final CassandraServer server = new CassandraServer();
       server.start();
 
       if (interactive) {
@@ -70,5 +78,21 @@ public class RunCassandraServer extends DefaultOperation implements Command {
       LOGGER.error("Unable to run embedded Cassandra server", e);
     }
 
+  }
+
+  public boolean isInteractive() {
+    return interactive;
+  }
+
+  public void setInteractive(final boolean interactive) {
+    this.interactive = interactive;
+  }
+
+  public String getConfig() {
+    return config;
+  }
+
+  public void setConfig(final String config) {
+    this.config = config;
   }
 }

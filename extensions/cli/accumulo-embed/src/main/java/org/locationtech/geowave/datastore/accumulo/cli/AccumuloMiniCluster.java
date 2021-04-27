@@ -11,8 +11,8 @@ package org.locationtech.geowave.datastore.accumulo.cli;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 import org.apache.accumulo.core.conf.Property;
-import org.apache.accumulo.minicluster.impl.MiniAccumuloClusterImpl;
-import org.apache.accumulo.minicluster.impl.MiniAccumuloConfigImpl;
+import org.apache.accumulo.minicluster.MiniAccumuloCluster;
+import org.apache.accumulo.minicluster.MiniAccumuloConfig;
 import org.apache.accumulo.monitor.Monitor;
 import org.apache.hadoop.util.VersionInfo;
 import org.apache.hadoop.util.VersionUtil;
@@ -48,21 +48,21 @@ public class AccumuloMiniCluster {
 
     final File tempDir = Files.createTempDir();
     final String instanceName = System.getProperty("instanceName", "accumulo");
-    final MiniAccumuloConfigImpl miniAccumuloConfig =
-        new MiniAccumuloConfigImpl(tempDir, password).setNumTservers(2).setInstanceName(
+    final MiniAccumuloConfig miniAccumuloConfig =
+        new MiniAccumuloConfig(tempDir, password).setNumTservers(2).setInstanceName(
             instanceName).setZooKeeperPort(2181);
 
-    miniAccumuloConfig.setRootUserName(user);
+    MiniAccumuloUtils.setRootUserName(miniAccumuloConfig, user);
 
-    miniAccumuloConfig.setProperty(Property.MONITOR_PORT, "9995");
+    MiniAccumuloUtils.setProperty(miniAccumuloConfig, Property.MONITOR_PORT, "9995");
 
-    final MiniAccumuloClusterImpl accumulo =
+    final MiniAccumuloCluster accumulo =
         MiniAccumuloClusterFactory.newAccumuloCluster(
             miniAccumuloConfig,
             AccumuloMiniCluster.class);
     accumulo.start();
 
-    accumulo.exec(Monitor.class);
+    MiniAccumuloUtils.exec(accumulo, Monitor.class);
 
     System.out.println("starting up ...");
     Thread.sleep(3000);

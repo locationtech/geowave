@@ -31,11 +31,11 @@ import org.locationtech.geowave.service.client.IngestServiceClient;
 import org.locationtech.geowave.service.client.StoreServiceClient;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
-import org.locationtech.geowave.test.ZookeeperTestEnvironment;
 import org.locationtech.geowave.test.annotation.Environments;
 import org.locationtech.geowave.test.annotation.Environments.Environment;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import org.locationtech.geowave.test.kafka.KafkaTestEnvironment;
 import org.locationtech.geowave.test.mapreduce.MapReduceTestEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -177,7 +177,10 @@ public class IngestIT extends BaseServiceIT {
   // latter requires the former to test
   @Test
   public void localToKafkaToGW() {
-    Response r = ingestServiceClient.localToKafka(OSM_GPX_INPUT_DIR);
+    Response r =
+        ingestServiceClient.localToKafka(
+            OSM_GPX_INPUT_DIR,
+            KafkaTestEnvironment.getInstance().getBootstrapServers());
     assertFinalIngestStatus("Should successfully complete ingest", "COMPLETE", r, 500);
 
     r =
@@ -187,7 +190,7 @@ public class IngestIT extends BaseServiceIT {
             null,
             null,
             "testGroup",
-            ZookeeperTestEnvironment.getInstance().getZookeeper(),
+            KafkaTestEnvironment.getInstance().getBootstrapServers(),
             null,
             null,
             null,
@@ -205,7 +208,7 @@ public class IngestIT extends BaseServiceIT {
             null,
             null,
             "testGroup",
-            ZookeeperTestEnvironment.getInstance().getZookeeper(),
+            KafkaTestEnvironment.getInstance().getBootstrapServers(),
             null,
             null,
             null,

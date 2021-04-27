@@ -10,8 +10,8 @@ package org.locationtech.geowave.adapter.vector.plugin.transaction;
 
 import java.io.IOException;
 import org.geotools.data.Transaction;
-import org.geotools.factory.Hints;
 import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.util.factory.Hints;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.opengis.feature.simple.SimpleFeature;

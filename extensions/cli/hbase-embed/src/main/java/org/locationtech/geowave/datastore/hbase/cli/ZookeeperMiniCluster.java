@@ -39,6 +39,7 @@ public class ZookeeperMiniCluster {
 
   public void setup() throws Exception {
     if ((zookeeper == null) || zookeeper.isEmpty()) {
+      System.setProperty("zookeeper.4lw.commands.whitelist", "*");
       try {
         final ClassLoader prevCl = Thread.currentThread().getContextClassLoader();
         final ClassLoader hbaseMiniClusterCl =

@@ -12,11 +12,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.apache.hadoop.io.DataInputByteBuffer;
-import org.apache.hadoop.io.DataOutputByteBuffer;
+import org.apache.hadoop.io.DataOutputBuffer;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mrunit.mapreduce.MapDriver;
 import org.apache.hadoop.mrunit.mapreduce.ReduceDriver;
@@ -36,11 +37,8 @@ import org.locationtech.geowave.analytic.mapreduce.nn.NNMapReduce.PartitionDataW
 import org.locationtech.geowave.analytic.param.CommonParameters;
 import org.locationtech.geowave.analytic.param.PartitionParameters;
 import org.locationtech.geowave.analytic.partitioner.Partitioner.PartitionData;
-import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
-import org.locationtech.geowave.core.geotime.index.SpatialOptions;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
-import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
@@ -226,11 +224,11 @@ public class NNMapReduceTest {
         new PartitionData(new ByteArray(new byte[] {}), new ByteArray("abd"), true));
     assertTrue(writable1.compareTo(writable2) < 0);
 
-    final DataOutputByteBuffer output = new DataOutputByteBuffer();
+    final DataOutputBuffer output = new DataOutputBuffer();
     writable1.write(output);
     output.flush();
     final DataInputByteBuffer input = new DataInputByteBuffer();
-    input.reset(output.getData());
+    input.reset(ByteBuffer.wrap(output.getData()));
 
     writable2.readFields(input);
     assertTrue(writable1.compareTo(writable2) == 0);

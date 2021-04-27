@@ -22,6 +22,7 @@ import org.eclipse.jetty.webapp.WebAppClassLoader;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestEnvironment;
+import org.locationtech.geowave.test.kafka.KafkaTestEnvironment;
 import org.locationtech.geowave.test.mapreduce.MapReduceTestEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -242,6 +243,8 @@ public class ServicesTestEnvironment implements TestEnvironment {
 
   @Override
   public TestEnvironment[] getDependentEnvironments() {
-    return new TestEnvironment[] {MapReduceTestEnvironment.getInstance()};
+    return new TestEnvironment[] {
+        MapReduceTestEnvironment.getInstance(),
+        KafkaTestEnvironment.getInstance()};
   }
 }

@@ -90,8 +90,7 @@ public class DistributedRenderCallback extends GetMapCallbackAdapter {
     final StyleFactory styleFactory = CommonFactoryFinder.getStyleFactory();
     final FeatureTypeStyle style = styleFactory.createFeatureTypeStyle();
     final Rule rule = styleFactory.createRule();
-    rule.setName("distributed render - direct raster");
-    rule.setTitle("Distributed Render - Direct Raster");
+    rule.setName("Distributed Render - Direct Raster");
 
     final RasterSymbolizer symbolizer = styleFactory.createRasterSymbolizer();
     symbolizer.setGeometryPropertyName(geometryPropertyName);

@@ -247,44 +247,23 @@ public class GeoWaveITRunner extends Suite {
 
   private void createRunnersForDataStores()
       throws InitializationError, SecurityException, GeoWaveITException {
-    final GeoWaveStoreRunnerConfig emptyConfig = new GeoWaveStoreRunnerConfig();
     List<GeoWaveStoreRunnerConfig> configs = new ArrayList<>();
 
     String storeTypeProp = System.getenv(STORE_TYPE_ENVIRONMENT_VARIABLE_NAME);
     if (!TestUtils.isSet(storeTypeProp)) {
       storeTypeProp = System.getProperty(STORE_TYPE_PROPERTY_NAME);
     }
+    final GeoWaveStoreType storeType;
+    final Set<String> dataStoreOptionFields = getDataStoreOptionFieldsForTypeAnnotation();
     // See if user specified a single store type
     if (TestUtils.isSet(storeTypeProp)) {
-      final Set<String> dataStoreOptionFields = getDataStoreOptionFieldsForTypeAnnotation();
-      final GeoWaveStoreType storeType = GeoWaveStoreType.valueOf(storeTypeProp);
-
-      // If no match, the configs list will be empty and the IT will be a
-      // no-op
-      if (containsAnnotationForType(storeType)) {
-        configs.add(new GeoWaveStoreRunnerConfig(storeType, dataStoreOptionFields));
-        storeTypes.add(storeType);
-      }
-    } else { // No user override - just use the IT's list of types
-      if (typeIsAnnotated()) {
-        if (fieldsAreAnnotated()) {
-          throw new GeoWaveITException(
-              "Only type or fields can be annotated with @GeoWaveTestStore, not both");
-        }
-        final Set<String> dataStoreOptionFields = getDataStoreOptionFieldsForTypeAnnotation();
-        final GeoWaveTestStore store =
-            getTestClass().getJavaClass().getAnnotation(GeoWaveTestStore.class);
-        for (final GeoWaveStoreType storeType : store.value()) {
-          configs.add(new GeoWaveStoreRunnerConfig(storeType, dataStoreOptionFields));
-          storeTypes.add(storeType);
-        }
-      } else {
-        configs.add(emptyConfig);
-        final List<FrameworkField> storeFields = getStoreAnnotatedFields();
-        for (final FrameworkField field : storeFields) {
-          configs = addRunnerConfigsForField(field, configs, storeTypes);
-        }
-      }
+      storeType = GeoWaveStoreType.valueOf(storeTypeProp);
+    } else { // No user override - just use RocksDB
+      storeType = GeoWaveStoreType.ROCKSDB;
+    }
+    if (containsAnnotationForType(storeType)) {
+      configs.add(new GeoWaveStoreRunnerConfig(storeType, dataStoreOptionFields));
+      storeTypes.add(storeType);
     }
 
     // Get the set of profile options from the profile, if any

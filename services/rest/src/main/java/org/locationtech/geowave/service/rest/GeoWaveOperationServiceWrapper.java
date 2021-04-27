@@ -163,7 +163,8 @@ public class GeoWaveOperationServiceWrapper<T> extends ServerResource {
               objValue = converter.newInstance().convert(strValue);
             } catch (final InstantiationException e) {
               LOGGER.warn(
-                  "Cannot convert parameter since converter does not have zero argument constructor");
+                  "Cannot convert parameter since converter does not have zero argument constructor",
+                  e);
             }
           }
         }

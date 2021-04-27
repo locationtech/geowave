@@ -13,8 +13,9 @@ import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.datastore.cassandra.CassandraRow.CassandraField;
-import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.PreparedStatement;
+import com.datastax.oss.driver.api.core.cql.BoundStatement;
+import com.datastax.oss.driver.api.core.cql.BoundStatementBuilder;
+import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 
 public class CassandraUtils {
 
@@ -45,25 +46,24 @@ public class CassandraUtils {
       final GeoWaveRow row,
       final boolean visibilityEnabled) {
     // the data ID becomes the partition key and the only other fields are the value and adapter ID
-    byte[] partitionKey = getCassandraSafePartitionKey(row.getDataId());
+    final byte[] partitionKey = getCassandraSafePartitionKey(row.getDataId());
     final BoundStatement[] retVal = new BoundStatement[row.getFieldValues().length];
     int i = 0;
     for (final GeoWaveValue value : row.getFieldValues()) {
       final ByteBuffer nanoBuffer = ByteBuffer.allocate(8);
       nanoBuffer.putLong(0, Long.MAX_VALUE - System.nanoTime());
-      retVal[i] = new BoundStatement(insertionStatement);
-      retVal[i].set(
+      final BoundStatementBuilder s = insertionStatement.boundStatementBuilder();
+      s.set(
           CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName(),
           ByteBuffer.wrap(partitionKey),
           ByteBuffer.class);
-      retVal[i].set(
-          CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName(),
-          row.getAdapterId(),
-          Short.class);
-      retVal[i].set(
+      s.set(CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName(), row.getAdapterId(), Short.class);
+      s.set(
           CassandraField.GW_VALUE_KEY.getBindMarkerName(),
           ByteBuffer.wrap(DataIndexUtils.serializeDataIndexValue(value, visibilityEnabled)),
           ByteBuffer.class);
+
+      retVal[i] = s.build();
       i++;
     }
     return retVal;
@@ -72,49 +72,41 @@ public class CassandraUtils {
   public static BoundStatement[] bindInsertion(
       final PreparedStatement insertionStatement,
       final GeoWaveRow row) {
-    byte[] partitionKey = getCassandraSafePartitionKey(row.getPartitionKey());
+    final byte[] partitionKey = getCassandraSafePartitionKey(row.getPartitionKey());
     final BoundStatement[] retVal = new BoundStatement[row.getFieldValues().length];
     int i = 0;
     for (final GeoWaveValue value : row.getFieldValues()) {
       final ByteBuffer nanoBuffer = ByteBuffer.allocate(8);
       nanoBuffer.putLong(0, Long.MAX_VALUE - System.nanoTime());
-      retVal[i] = new BoundStatement(insertionStatement);
-      retVal[i].set(
-          CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName(),
-          ByteBuffer.wrap(partitionKey),
-          ByteBuffer.class);
-      retVal[i].set(
-          CassandraField.GW_SORT_KEY.getBindMarkerName(),
-          ByteBuffer.wrap(row.getSortKey()),
-          ByteBuffer.class);
-      retVal[i].set(
-          CassandraField.GW_DATA_ID_KEY.getBindMarkerName(),
-          ByteBuffer.wrap(row.getDataId()),
-          ByteBuffer.class);
-      retVal[i].set(
-          CassandraField.GW_FIELD_VISIBILITY_KEY.getBindMarkerName(),
-          ByteBuffer.wrap(value.getVisibility()),
-          ByteBuffer.class);
-      retVal[i].set(
-          CassandraField.GW_NANO_TIME_KEY.getBindMarkerName(),
-          nanoBuffer,
-          ByteBuffer.class);
-      retVal[i].set(
-          CassandraField.GW_FIELD_MASK_KEY.getBindMarkerName(),
-          ByteBuffer.wrap(value.getFieldMask()),
-          ByteBuffer.class);
-      retVal[i].set(
-          CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName(),
-          row.getAdapterId(),
-          Short.class);
-      retVal[i].set(
-          CassandraField.GW_VALUE_KEY.getBindMarkerName(),
-          ByteBuffer.wrap(value.getValue()),
-          ByteBuffer.class);
-      retVal[i].set(
-          CassandraField.GW_NUM_DUPLICATES_KEY.getBindMarkerName(),
-          (byte) row.getNumberOfDuplicates(),
-          byte.class);
+      retVal[i] =
+          insertionStatement.boundStatementBuilder().set(
+              CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName(),
+              ByteBuffer.wrap(partitionKey),
+              ByteBuffer.class).set(
+                  CassandraField.GW_SORT_KEY.getBindMarkerName(),
+                  ByteBuffer.wrap(row.getSortKey()),
+                  ByteBuffer.class).set(
+                      CassandraField.GW_DATA_ID_KEY.getBindMarkerName(),
+                      ByteBuffer.wrap(row.getDataId()),
+                      ByteBuffer.class).set(
+                          CassandraField.GW_FIELD_VISIBILITY_KEY.getBindMarkerName(),
+                          ByteBuffer.wrap(value.getVisibility()),
+                          ByteBuffer.class).set(
+                              CassandraField.GW_NANO_TIME_KEY.getBindMarkerName(),
+                              nanoBuffer,
+                              ByteBuffer.class).set(
+                                  CassandraField.GW_FIELD_MASK_KEY.getBindMarkerName(),
+                                  ByteBuffer.wrap(value.getFieldMask()),
+                                  ByteBuffer.class).set(
+                                      CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName(),
+                                      row.getAdapterId(),
+                                      Short.class).set(
+                                          CassandraField.GW_VALUE_KEY.getBindMarkerName(),
+                                          ByteBuffer.wrap(value.getValue()),
+                                          ByteBuffer.class).set(
+                                              CassandraField.GW_NUM_DUPLICATES_KEY.getBindMarkerName(),
+                                              (byte) row.getNumberOfDuplicates(),
+                                              byte.class).build();
       i++;
     }
     return retVal;

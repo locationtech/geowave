@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-extension-parent</artifactId>
@@ -48,10 +50,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.geotools</groupId>
-			<artifactId>gt-data</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.geotools</groupId>
 			<artifactId>gt-wps</artifactId>
 		</dependency>
 		<dependency>
@@ -59,7 +57,7 @@
 			<artifactId>gt-shapefile</artifactId>
 		</dependency>
 		<dependency>
-  			<groupId>org.geotools</groupId>
+			<groupId>org.geotools</groupId>
 			<artifactId>gt-geojson</artifactId>
 		</dependency>
 		<dependency>
@@ -81,8 +79,8 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>com.aol.simplereact</groupId>
-			<artifactId>cyclops-react</artifactId>
+			<groupId>com.oath.cyclops</groupId>
+			<artifactId>cyclops</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.antlr</groupId>
@@ -132,18 +130,18 @@
 				<artifactId>avro-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
-		        <groupId>org.antlr</groupId>
-		        <artifactId>antlr4-maven-plugin</artifactId>
-		        <version>4.7.2</version>
-		        <executions>
-		            <execution>
-		                <id>antlr</id>
-			            <goals>
-			                <goal>antlr4</goal>
-			            </goals>
-		            </execution>
-		        </executions>
-	        </plugin>
+				<groupId>org.antlr</groupId>
+				<artifactId>antlr4-maven-plugin</artifactId>
+				<version>4.7.2</version>
+				<executions>
+					<execution>
+						<id>antlr</id>
+						<goals>
+							<goal>antlr4</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 </project>

@@ -39,7 +39,7 @@ import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.spark_project.guava.collect.Maps;
+import com.google.common.collect.Maps;
 
 public class GeoWaveDataStoreComponents {
   private final InternalGeotoolsFeatureDataAdapter adapter;

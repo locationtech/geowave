@@ -22,7 +22,7 @@ import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.TestUtils.DimensionalityType;
 import org.locationtech.geowave.test.basic.AbstractGeoWaveBasicVectorIT;
 import org.opengis.feature.simple.SimpleFeature;
-import com.aol.cyclops.util.function.TriConsumer;
+import net.openhft.chronicle.wire.TriConsumer;
 
 abstract public class AbstractSecondaryIndexIT extends AbstractGeoWaveBasicVectorIT {
   protected void testIngestAndQuery(

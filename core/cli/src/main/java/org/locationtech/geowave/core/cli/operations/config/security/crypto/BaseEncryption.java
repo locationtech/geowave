@@ -18,8 +18,8 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
 import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.operations.config.security.utils.SecurityUtils;
@@ -233,7 +233,7 @@ public abstract class BaseEncryption {
     keyGenerator.init(256);
     final SecretKey secretKey = keyGenerator.generateKey();
     final byte[] encoded = secretKey.getEncoded();
-    return DatatypeConverter.printBase64Binary(encoded);
+    return Base64.encodeBase64String(encoded);
   }
 
   /**

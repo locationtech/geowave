@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-extension-parent</artifactId>
@@ -22,13 +24,18 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.datastax.cassandra</groupId>
-			<artifactId>cassandra-driver-core</artifactId>
+			<groupId>com.datastax.oss</groupId>
+			<artifactId>java-driver-query-builder</artifactId>
 			<version>${cassandraclient.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.aol.simplereact</groupId>
-			<artifactId>cyclops-react</artifactId>
+			<groupId>com.datastax.oss</groupId>
+			<artifactId>java-driver-core</artifactId>
+			<version>${cassandraclient.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.oath.cyclops</groupId>
+			<artifactId>cyclops</artifactId>
 		</dependency>
 	</dependencies>
 	<profiles>

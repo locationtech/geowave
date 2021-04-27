@@ -26,13 +26,13 @@ import javax.measure.Unit;
 import javax.measure.quantity.Length;
 import org.apache.commons.lang3.tuple.Pair;
 import org.geotools.factory.CommonFactoryFinder;
-import org.geotools.factory.GeoTools;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.GeodeticCalculator;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
+import org.geotools.util.factory.GeoTools;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSBoundedSpatialDimensionX;
@@ -82,10 +82,10 @@ import com.google.uzaygezen.core.BitSetMath;
 import si.uom.NonSI;
 import si.uom.SI;
 import systems.uom.common.USCustomary;
-import tec.uom.se.AbstractUnit;
-import tec.uom.se.unit.AlternateUnit;
-import tec.uom.se.unit.BaseUnit;
-import tec.uom.se.unit.Units;
+import tech.units.indriya.AbstractUnit;
+import tech.units.indriya.unit.AlternateUnit;
+import tech.units.indriya.unit.BaseUnit;
+import tech.units.indriya.unit.Units;
 
 /**
  * This class contains a set of Geometry utility methods that are generally useful throughout the

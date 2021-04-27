@@ -9,10 +9,10 @@
 package org.locationtech.geowave.examples.adapter;
 
 import java.io.IOException;
-import org.geotools.factory.FactoryRegistryException;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
+import org.geotools.util.factory.FactoryRegistryException;
 import org.locationtech.geowave.core.geotime.adapter.SpatialFieldDescriptorBuilder;
 import org.locationtech.geowave.core.geotime.index.api.SpatialIndexBuilder;
 import org.locationtech.geowave.core.geotime.store.query.SpatialTemporalConstraintsBuilderImpl;
@@ -94,9 +94,9 @@ public class CustomAdapterExample {
               + "56.16 35.96, "
               + "-10.55 35.96"
               + "))";
-      Geometry queryPolygon =
+      final Geometry queryPolygon =
           new WKTReader(JTSFactoryFinder.getGeometryFactory()).read(queryPolygonDefinition);
-      SpatialTemporalConstraintsBuilder spatialConstraintsBuilder =
+      final SpatialTemporalConstraintsBuilder spatialConstraintsBuilder =
           new SpatialTemporalConstraintsBuilderImpl();
       final Query<POI> query =
           QueryBuilder.newBuilder(POI.class).addTypeName(adapter.getTypeName()).indexName(
@@ -130,15 +130,15 @@ public class CustomAdapterExample {
     }
 
     public String getName() {
-      return this.name;
+      return name;
     }
 
     public Double getLatitude() {
-      return this.latitude;
+      return latitude;
     }
 
     public Double getLongitude() {
-      return this.longitude;
+      return longitude;
     }
   }
 
@@ -173,7 +173,7 @@ public class CustomAdapterExample {
     }
 
     @Override
-    public Object getFieldValue(POI entry, String fieldName) {
+    public Object getFieldValue(final POI entry, final String fieldName) {
       switch (fieldName) {
         case NAME_FIELD_NAME:
           return entry.name;
@@ -186,7 +186,7 @@ public class CustomAdapterExample {
     }
 
     @Override
-    public POI buildObject(Object[] fieldValues) {
+    public POI buildObject(final Object[] fieldValues) {
       return new POI((String) fieldValues[0], (Double) fieldValues[1], (Double) fieldValues[2]);
     }
 

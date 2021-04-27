@@ -31,9 +31,9 @@ import org.locationtech.geowave.adapter.vector.query.gwql.ResultSet;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
-import org.spark_project.guava.collect.Iterators;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.internal.Maps;
+import com.google.common.collect.Iterators;
 
 /**
  * Since most of this class is basic geotools data store logic, it would be easy to abstract out the

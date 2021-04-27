@@ -24,6 +24,10 @@ package org.locationtech.geowave.core.cli.converters;
  * </ul>
  */
 public class OptionalPasswordConverter extends PasswordConverter {
+  public OptionalPasswordConverter() {
+    this("");
+  }
+
   public OptionalPasswordConverter(final String optionName) {
     super(optionName);
   }

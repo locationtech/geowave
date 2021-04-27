@@ -13,7 +13,7 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.spark_project.guava.collect.Lists;
+import com.google.common.collect.Lists;
 
 /**
  * A result set that wraps SimpleFeature results using a given set of column selectors.

@@ -154,7 +154,7 @@ public class OSMRunner extends Configured implements Tool {
     AccumuloOutputFormat.setDefaultTableName(job, ingestOptions.getQualifiedTableName());
     AccumuloOutputFormat.setZooKeeperInstance(
         job,
-        new ClientConfiguration().withInstance(accumuloOptions.getInstance()).withZkHosts(
+        ClientConfiguration.create().withInstance(accumuloOptions.getInstance()).withZkHosts(
             accumuloOptions.getZookeeper()));
 
     // reducer

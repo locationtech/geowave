@@ -35,7 +35,7 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
-import org.spark_project.guava.collect.Lists;
+import com.google.common.collect.Lists;
 
 /**
  * This class is intended to provide a self-contained, easy-to-follow example of how a custom index

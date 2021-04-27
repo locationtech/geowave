@@ -17,6 +17,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
+import org.glassfish.jersey.uri.UriComponent;
 import org.locationtech.geowave.service.StoreService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,17 +68,20 @@ public class StoreServiceClient implements StoreService {
     return target;
   }
 
+  @Override
   public Response listPlugins() {
     final Response resp = storeService.listPlugins();
     resp.bufferEntity();
     return resp;
   }
 
+  @Override
   public Response version(final String storeName) {
     final Response resp = storeService.version(storeName);
     return resp;
   }
 
+  @Override
   public Response clear(final String storeName) {
     final Response resp = storeService.clear(storeName);
     return resp;
@@ -384,7 +388,11 @@ public class StoreServiceClient implements StoreService {
         internalAddStoreTarget =
             internalAddStoreTarget.queryParam(e.getKey(), e.getValue().toUpperCase());
       } else {
-        internalAddStoreTarget = internalAddStoreTarget.queryParam(e.getKey(), e.getValue());
+        internalAddStoreTarget =
+            internalAddStoreTarget.queryParam(
+                e.getKey(),
+                // we want to allow curly braces to be in the config values
+                UriComponent.encodeTemplateNames(e.getValue()));
       }
     }
     return internalAddStoreTarget.request().accept(MediaType.APPLICATION_JSON).method("POST");
