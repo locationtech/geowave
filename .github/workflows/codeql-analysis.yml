@@ -29,7 +29,21 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
+      
+    - name: Set up JDK 1.8
+      uses: joschi/setup-jdk@v2
+      with:
+        java-version: '8'  
+        architecture: x64  
 
+    - name: Cache resources
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-geowave-resources
+      with:
+        key:  ${{ runner.os }}-Analyze
+        path: ~/.m2
+        
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1
