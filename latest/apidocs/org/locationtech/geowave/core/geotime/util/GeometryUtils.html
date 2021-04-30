@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9,"i30":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -134,6 +134,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.GeoConstraintsWrapper.html" title="class in org.locationtech.geowave.core.geotime.util">GeometryUtils.GeoConstraintsWrapper</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static interface&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.GeometryHandler.html" title="interface in org.locationtech.geowave.core.geotime.util">GeometryUtils.GeometryHandler</a></span></code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -357,19 +361,24 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#lookup-java.lang.String-">lookup</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>&nbsp;</td>
 </tr>
 <tr id="i27" class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#visitGeometry-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.geotime.util.GeometryUtils.GeometryHandler-">visitGeometry</a></span>(org.locationtech.jts.geom.Geometry&nbsp;geom,
+             <a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.GeometryHandler.html" title="interface in org.locationtech.geowave.core.geotime.util">GeometryUtils.GeometryHandler</a>&nbsp;geometryHandler)</code>&nbsp;</td>
+</tr>
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>static org.locationtech.jts.geom.Geometry</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#world-org.locationtech.jts.geom.GeometryFactory-org.opengis.referencing.crs.CoordinateReferenceSystem-">world</a></span>(org.locationtech.jts.geom.GeometryFactory&nbsp;factory,
      org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</code>
 <div class="block">Return a multi-polygon representing the bounded map regions split by the axis</div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">NumericData</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#xRangeFromGeometry-org.locationtech.jts.geom.Geometry-">xRangeFromGeometry</a></span>(org.locationtech.jts.geom.Geometry&nbsp;geometry)</code>
 <div class="block">Generate a longitude range from a JTS geometry</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">NumericData</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.html#yRangeFromGeometry-org.locationtech.jts.geom.Geometry-">yRangeFromGeometry</a></span>(org.locationtech.jts.geom.Geometry&nbsp;geometry)</code>
 <div class="block">Generate a latitude range from a JTS geometry</div>
@@ -462,6 +471,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public static&nbsp;org.opengis.filter.spatial.SpatialOperator&nbsp;geometryToSpatialOperator(org.locationtech.jts.geom.Geometry&nbsp;jtsGeom,
                                                                                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geometryAttributeName,
                                                                                    org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</pre>
+</li>
+</ul>
+<a name="visitGeometry-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.geotime.util.GeometryUtils.GeometryHandler-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>visitGeometry</h4>
+<pre>public static&nbsp;void&nbsp;visitGeometry(org.locationtech.jts.geom.Geometry&nbsp;geom,
+                                 <a href="../../../../../../org/locationtech/geowave/core/geotime/util/GeometryUtils.GeometryHandler.html" title="interface in org.locationtech.geowave.core.geotime.util">GeometryUtils.GeometryHandler</a>&nbsp;geometryHandler)</pre>
 </li>
 </ul>
 <a name="getDefaultCRS--">

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":18,"i2":6,"i3":6,"i4":6,"i5":6,"i6":18};
+var methods = {"i0":6,"i1":18,"i2":6,"i3":6,"i4":6,"i5":18};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../org/locationtech/geowave/core/store/api/Statistic.html" title="interface in org.locationtech.geowave.core.store.api"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/core/store/api/Statistic.html" title="class in org.locationtech.geowave.core.store.api"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQuery.html" title="interface in org.locationtech.geowave.core.store.api"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -101,16 +101,16 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></dd>
+<dd><a href="../../../../../../org/locationtech/geowave/core/store/api/BinningStrategy.html" title="interface in org.locationtech.geowave.core.store.api">BinningStrategy</a>, <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></dd>
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../../../../org/locationtech/geowave/core/store/statistics/binning/CompositeBinningStrategy.html" title="class in org.locationtech.geowave.core.store.statistics.binning">CompositeBinningStrategy</a>, <a href="../../../../../../org/locationtech/geowave/core/store/statistics/binning/DataTypeBinningStrategy.html" title="class in org.locationtech.geowave.core.store.statistics.binning">DataTypeBinningStrategy</a>, <a href="../../../../../../org/locationtech/geowave/core/store/statistics/binning/FieldValueBinningStrategy.html" title="class in org.locationtech.geowave.core.store.statistics.binning">FieldValueBinningStrategy</a>, <a href="../../../../../../org/locationtech/geowave/core/store/statistics/binning/NumericRangeFieldValueBinningStrategy.html" title="class in org.locationtech.geowave.core.store.statistics.binning">NumericRangeFieldValueBinningStrategy</a>, <a href="../../../../../../org/locationtech/geowave/core/store/statistics/binning/PartitionBinningStrategy.html" title="class in org.locationtech.geowave.core.store.statistics.binning">PartitionBinningStrategy</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/binning/TimeRangeFieldValueBinningStrategy.html" title="class in org.locationtech.geowave.core.geotime.store.statistics.binning">TimeRangeFieldValueBinningStrategy</a></dd>
+<dd><a href="../../../../../../org/locationtech/geowave/core/store/statistics/binning/CompositeBinningStrategy.html" title="class in org.locationtech.geowave.core.store.statistics.binning">CompositeBinningStrategy</a>, <a href="../../../../../../org/locationtech/geowave/core/store/statistics/binning/DataTypeBinningStrategy.html" title="class in org.locationtech.geowave.core.store.statistics.binning">DataTypeBinningStrategy</a>, <a href="../../../../../../org/locationtech/geowave/core/store/statistics/binning/FieldValueBinningStrategy.html" title="class in org.locationtech.geowave.core.store.statistics.binning">FieldValueBinningStrategy</a>, <a href="../../../../../../org/locationtech/geowave/core/store/statistics/binning/IndexBinningStrategy.html" title="class in org.locationtech.geowave.core.store.statistics.binning">IndexBinningStrategy</a>, <a href="../../../../../../org/locationtech/geowave/core/store/statistics/binning/NumericRangeFieldValueBinningStrategy.html" title="class in org.locationtech.geowave.core.store.statistics.binning">NumericRangeFieldValueBinningStrategy</a>, <a href="../../../../../../org/locationtech/geowave/core/store/statistics/binning/PartitionBinningStrategy.html" title="class in org.locationtech.geowave.core.store.statistics.binning">PartitionBinningStrategy</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/binning/SpatialFieldValueBinningStrategy.html" title="class in org.locationtech.geowave.core.geotime.store.statistics.binning">SpatialFieldValueBinningStrategy</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/store/statistics/binning/TimeRangeFieldValueBinningStrategy.html" title="class in org.locationtech.geowave.core.geotime.store.statistics.binning">TimeRangeFieldValueBinningStrategy</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">StatisticBinningStrategy</span>
-extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></pre>
+extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/BinningStrategy.html" title="interface in org.locationtech.geowave.core.store.api">BinningStrategy</a></pre>
 <div class="block">Base interface for statistic binning strategies. These strategies allow a statistic's values to
  be split up by an arbitrary strategy. This allows a simple statistic to be used in many different
  ways.</div>
@@ -143,36 +143,35 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticBinningStrategy.html#constraints-java.lang.Object-">constraints</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;constraints)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticBinningStrategy.html#getBins-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">getBins</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;type,
-       T&nbsp;entry,
-       <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>
-<div class="block">Get the bins used by the given entry.</div>
-</td>
-</tr>
-<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticBinningStrategy.html#getDefaultTag--">getDefaultTag</a></span>()</code>
 <div class="block">Get a default tag for statistics that use this binning strategy.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticBinningStrategy.html#getDescription--">getDescription</a></span>()</code>
 <div class="block">Get a human-readable description of the binning strategy.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticBinningStrategy.html#getStrategyName--">getStrategyName</a></span>()</code>
 <div class="block">Get the name of the binning strategy.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>default <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticBinningStrategy.html#supportedConstraintClasses--">supportedConstraintClasses</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.api.BinningStrategy">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.store.api.<a href="../../../../../../org/locationtech/geowave/core/store/api/BinningStrategy.html" title="interface in org.locationtech.geowave.core.store.api">BinningStrategy</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/core/store/api/BinningStrategy.html#getBins-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">getBins</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/BinningStrategy.html#getWeight-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">getWeight</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.index.persist.Persistable">
 <!--   -->
@@ -219,28 +218,6 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a description of the binning strategy</dd>
-</dl>
-</li>
-</ul>
-<a name="getBins-org.locationtech.geowave.core.store.api.DataTypeAdapter-java.lang.Object-org.locationtech.geowave.core.store.entities.GeoWaveRow:A-">
-<!--   -->
-</a><a name="getBins-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getBins</h4>
-<pre>&lt;T&gt;&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>[]&nbsp;getBins(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;type,
-                        T&nbsp;entry,
-                        <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</pre>
-<div class="block">Get the bins used by the given entry. Each bin will have a separate statistic value.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>type</code> - the data type</dd>
-<dd><code>entry</code> - the entry</dd>
-<dd><code>rows</code> - the rows created for the entry</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a set of bins used by the given entry</dd>
 </dl>
 </li>
 </ul>
@@ -320,7 +297,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../org/locationtech/geowave/core/store/api/Statistic.html" title="interface in org.locationtech.geowave.core.store.api"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/core/store/api/Statistic.html" title="class in org.locationtech.geowave.core.store.api"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../org/locationtech/geowave/core/store/api/StatisticQuery.html" title="interface in org.locationtech.geowave.core.store.api"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

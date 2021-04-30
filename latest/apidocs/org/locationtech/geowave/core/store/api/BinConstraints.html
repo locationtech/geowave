@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":17,"i1":6,"i2":17,"i3":17,"i4":17};
+var methods = {"i0":17,"i1":6,"i2":17,"i3":17,"i4":17,"i5":17};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -155,7 +155,7 @@ var activeTableTab = "activeTableTab";
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.ByteArrayConstraints.html" title="interface in org.locationtech.geowave.core.store.api">BinConstraints.ByteArrayConstraints</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.html#constraints-org.locationtech.geowave.core.store.api.Statistic-">constraints</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/Statistic.html" title="interface in org.locationtech.geowave.core.store.api">Statistic</a>&lt;?&gt;&nbsp;stat)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.html#constraints-org.locationtech.geowave.core.store.api.Statistic-">constraints</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/Statistic.html" title="class in org.locationtech.geowave.core.store.api">Statistic</a>&lt;?&gt;&nbsp;stat)</code>
 <div class="block">Used primarily internally to get the explicit bins for this constraint but can be used if there
  is a need to understand the bins being queried.</div>
 </td>
@@ -176,6 +176,12 @@ var activeTableTab = "activeTableTab";
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.html" title="interface in org.locationtech.geowave.core.store.api">BinConstraints</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.html#ofPrefix-org.locationtech.geowave.core.index.ByteArray...-">ofPrefix</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>...&nbsp;prefixBins)</code>
 <div class="block">Sets the bins of the query by prefix.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.html" title="interface in org.locationtech.geowave.core.store.api">BinConstraints</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.html#ofRange-org.locationtech.geowave.core.index.ByteArrayRange...-">ofRange</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>...&nbsp;binRanges)</code>
+<div class="block">Sets the bins of the query by range.</div>
 </td>
 </tr>
 </table>
@@ -241,6 +247,23 @@ var activeTableTab = "activeTableTab";
 </dl>
 </li>
 </ul>
+<a name="ofRange-org.locationtech.geowave.core.index.ByteArrayRange...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ofRange</h4>
+<pre>static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.html" title="interface in org.locationtech.geowave.core.store.api">BinConstraints</a>&nbsp;ofRange(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>...&nbsp;binRanges)</pre>
+<div class="block">Sets the bins of the query by range. If a queried statistic uses a binning strategy, only
+ values matching the range will be returned.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>binRanges</code> - the ranges used to match the bins</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a bin constraint representing the set of bin ranges</dd>
+</dl>
+</li>
+</ul>
 <a name="ofObject-java.lang.Object-">
 <!--   -->
 </a>
@@ -271,7 +294,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockListLast">
 <li class="blockList">
 <h4>constraints</h4>
-<pre><a href="../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.ByteArrayConstraints.html" title="interface in org.locationtech.geowave.core.store.api">BinConstraints.ByteArrayConstraints</a>&nbsp;constraints(<a href="../../../../../../org/locationtech/geowave/core/store/api/Statistic.html" title="interface in org.locationtech.geowave.core.store.api">Statistic</a>&lt;?&gt;&nbsp;stat)</pre>
+<pre><a href="../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.ByteArrayConstraints.html" title="interface in org.locationtech.geowave.core.store.api">BinConstraints.ByteArrayConstraints</a>&nbsp;constraints(<a href="../../../../../../org/locationtech/geowave/core/store/api/Statistic.html" title="class in org.locationtech.geowave.core.store.api">Statistic</a>&lt;?&gt;&nbsp;stat)</pre>
 <div class="block">Used primarily internally to get the explicit bins for this constraint but can be used if there
  is a need to understand the bins being queried.</div>
 <dl>

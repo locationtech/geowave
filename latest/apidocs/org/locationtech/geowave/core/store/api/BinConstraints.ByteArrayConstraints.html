@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.html" title="interface in org.locationtech.geowave.core.store.api"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/core/store/api/BinningStrategy.html" title="interface in org.locationtech.geowave.core.store.api"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/locationtech/geowave/core/store/api/BinConstraints.ByteArrayConstraints.html" target="_top">Frames</a></li>
@@ -130,18 +130,24 @@ var activeTableTab = "activeTableTab";
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.ByteArrayConstraints.html#getBinRanges--">getBinRanges</a></span>()</code>
+<div class="block">get the bin ranges to query for</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.ByteArrayConstraints.html#getBins--">getBins</a></span>()</code>
 <div class="block">get the bins to query for</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.ByteArrayConstraints.html#isAllBins--">isAllBins</a></span>()</code>
 <div class="block">is this meant to query all bins</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.ByteArrayConstraints.html#isPrefix--">isPrefix</a></span>()</code>
 <div class="block">is this a prefix query</div>
@@ -191,6 +197,20 @@ var activeTableTab = "activeTableTab";
 </dl>
 </li>
 </ul>
+<a name="getBinRanges--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getBinRanges</h4>
+<pre><a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>[]&nbsp;getBinRanges()</pre>
+<div class="block">get the bin ranges to query for</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the bin ranges to query for</dd>
+</dl>
+</li>
+</ul>
 <a name="isAllBins--">
 <!--   -->
 </a>
@@ -234,7 +254,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.html" title="interface in org.locationtech.geowave.core.store.api"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/core/store/api/BinningStrategy.html" title="interface in org.locationtech.geowave.core.store.api"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/locationtech/geowave/core/store/api/BinConstraints.ByteArrayConstraints.html" target="_top">Frames</a></li>

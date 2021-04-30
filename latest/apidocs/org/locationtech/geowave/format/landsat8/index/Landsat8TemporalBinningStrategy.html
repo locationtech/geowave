@@ -109,13 +109,13 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinningStrategy.html" title="interface in org.locationtech.geowave.core.index.dimension.bin">BinningStrategy</a>, <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></dd>
+<dd><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/IndexBinningStrategy.html" title="interface in org.locationtech.geowave.core.index.dimension.bin">IndexBinningStrategy</a>, <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">Landsat8TemporalBinningStrategy</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinningStrategy.html" title="interface in org.locationtech.geowave.core.index.dimension.bin">BinningStrategy</a></pre>
+implements <a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/IndexBinningStrategy.html" title="interface in org.locationtech.geowave.core.index.dimension.bin">IndexBinningStrategy</a></pre>
 <div class="block">This class is useful for establishing a consistent binning strategy with the bin size being 256 *
  16 days.</div>
 </li>
@@ -330,7 +330,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/dimens
 <pre>public&nbsp;double&nbsp;getBinMin()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinningStrategy.html#getBinMin--">getBinMin</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinningStrategy.html" title="interface in org.locationtech.geowave.core.index.dimension.bin">BinningStrategy</a></code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/IndexBinningStrategy.html#getBinMin--">getBinMin</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/IndexBinningStrategy.html" title="interface in org.locationtech.geowave.core.index.dimension.bin">IndexBinningStrategy</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the minimum value to be used by the space filling curve implementation</dd>
 </dl>
@@ -345,7 +345,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/dimens
 <pre>public&nbsp;double&nbsp;getBinMax()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinningStrategy.html#getBinMax--">getBinMax</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinningStrategy.html" title="interface in org.locationtech.geowave.core.index.dimension.bin">BinningStrategy</a></code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/IndexBinningStrategy.html#getBinMax--">getBinMax</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/IndexBinningStrategy.html" title="interface in org.locationtech.geowave.core.index.dimension.bin">IndexBinningStrategy</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the maximum value to be used by the space filling curve implementation</dd>
 </dl>
@@ -361,7 +361,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/dimens
 <div class="block">Method used to bin a raw date in milliseconds to a binned value of the Binning Strategy.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinningStrategy.html#getBinnedValue-double-">getBinnedValue</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinningStrategy.html" title="interface in org.locationtech.geowave.core.index.dimension.bin">BinningStrategy</a></code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/IndexBinningStrategy.html#getBinnedValue-double-">getBinnedValue</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/IndexBinningStrategy.html" title="interface in org.locationtech.geowave.core.index.dimension.bin">IndexBinningStrategy</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>value</code> - the value that needs to be normalized and binned</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -376,11 +376,11 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/dimens
 <li class="blockList">
 <h4>getFixedBinIdSize</h4>
 <pre>public&nbsp;int&nbsp;getFixedBinIdSize()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinningStrategy.html#getFixedBinIdSize--">BinningStrategy</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/IndexBinningStrategy.html#getFixedBinIdSize--">IndexBinningStrategy</a></code></span></div>
 <div class="block">Return the fixed size for the bin ID used by this binning strategy</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinningStrategy.html#getFixedBinIdSize--">getFixedBinIdSize</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinningStrategy.html" title="interface in org.locationtech.geowave.core.index.dimension.bin">BinningStrategy</a></code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/IndexBinningStrategy.html#getFixedBinIdSize--">getFixedBinIdSize</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/IndexBinningStrategy.html" title="interface in org.locationtech.geowave.core.index.dimension.bin">IndexBinningStrategy</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the length of the bin ID</dd>
 </dl>
@@ -393,14 +393,14 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/dimens
 <li class="blockList">
 <h4>getNormalizedRanges</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>[]&nbsp;getNormalizedRanges(<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">NumericData</a>&nbsp;range)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinningStrategy.html#getNormalizedRanges-org.locationtech.geowave.core.index.sfc.data.NumericData-">BinningStrategy</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/IndexBinningStrategy.html#getNormalizedRanges-org.locationtech.geowave.core.index.sfc.data.NumericData-">IndexBinningStrategy</a></code></span></div>
 <div class="block">Return a set of normalized ranges (each of which are confined to the normalized min and max of
  this binning strategy) with a bin for each of the ranges. If the passed in query range crosses
  multiple bins, a BinRange for each bin that it intersects will be returned, but if it is wholly
  contained within a single bin then a single BinRange will be returned</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinningStrategy.html#getNormalizedRanges-org.locationtech.geowave.core.index.sfc.data.NumericData-">getNormalizedRanges</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinningStrategy.html" title="interface in org.locationtech.geowave.core.index.dimension.bin">BinningStrategy</a></code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/IndexBinningStrategy.html#getNormalizedRanges-org.locationtech.geowave.core.index.sfc.data.NumericData-">getNormalizedRanges</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/IndexBinningStrategy.html" title="interface in org.locationtech.geowave.core.index.dimension.bin">IndexBinningStrategy</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>range</code> - the data representing the query range that needs to be normalized and binned</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -441,13 +441,13 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/dimens
 <li class="blockList">
 <h4>getDenormalizedRanges</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a>&nbsp;getDenormalizedRanges(<a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>&nbsp;binnedRange)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinningStrategy.html#getDenormalizedRanges-org.locationtech.geowave.core.index.dimension.bin.BinRange-">BinningStrategy</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/IndexBinningStrategy.html#getDenormalizedRanges-org.locationtech.geowave.core.index.dimension.bin.BinRange-">IndexBinningStrategy</a></code></span></div>
 <div class="block">Given a set of normalized ranges (each of which are confined to the normalized min and max of
  this binning strategy) with a bin for each of the ranges, this will calculate the original
  unbinned range.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinningStrategy.html#getDenormalizedRanges-org.locationtech.geowave.core.index.dimension.bin.BinRange-">getDenormalizedRanges</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinningStrategy.html" title="interface in org.locationtech.geowave.core.index.dimension.bin">BinningStrategy</a></code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/IndexBinningStrategy.html#getDenormalizedRanges-org.locationtech.geowave.core.index.dimension.bin.BinRange-">getDenormalizedRanges</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/dimension/bin/IndexBinningStrategy.html" title="interface in org.locationtech.geowave.core.index.dimension.bin">IndexBinningStrategy</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>binnedRange</code> - the normalized and binned range</dd>
 <dt><span class="returnLabel">Returns:</span></dt>

@@ -147,11 +147,19 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.core.geotime.index">org.locationtech.geowave.core.geotime.index</a></td>
+<td class="colFirst"><a href="#org.locationtech.geowave.core.geotime.binning">org.locationtech.geowave.core.geotime.binning</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.core.geotime.index">org.locationtech.geowave.core.geotime.index</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.geotime.index.dimension">org.locationtech.geowave.core.geotime.index.dimension</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.core.geotime.store.query.aggregate">org.locationtech.geowave.core.geotime.store.query.aggregate</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -648,6 +656,24 @@
 </tbody>
 </table>
 </li>
+<li class="blockList"><a name="org.locationtech.geowave.core.geotime.binning">
+<!--   -->
+</a>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../org/locationtech/geowave/core/index/package-summary.html">org.locationtech.geowave.core.index</a> used by <a href="../../../../../org/locationtech/geowave/core/geotime/binning/package-summary.html">org.locationtech.geowave.core.geotime.binning</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../org/locationtech/geowave/core/index/class-use/ByteArray.html#org.locationtech.geowave.core.geotime.binning">ByteArray</a>
+<div class="block">This class is a wrapper around a byte array to ensure equals and hashcode operations use the
+ values of the bytes rather than explicit object identity</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="org.locationtech.geowave.core.geotime.index">
 <!--   -->
 </a>
@@ -690,6 +716,24 @@
 <tr class="rowColor">
 <td class="colOne"><a href="../../../../../org/locationtech/geowave/core/index/class-use/SortedIndexStrategy.html#org.locationtech.geowave.core.geotime.index.dimension">SortedIndexStrategy</a>
 <div class="block">Interface which defines an index strategy.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.core.geotime.store.query.aggregate">
+<!--   -->
+</a>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../org/locationtech/geowave/core/index/package-summary.html">org.locationtech.geowave.core.index</a> used by <a href="../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/package-summary.html">org.locationtech.geowave.core.geotime.store.query.aggregate</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../org/locationtech/geowave/core/index/class-use/ByteArray.html#org.locationtech.geowave.core.geotime.store.query.aggregate">ByteArray</a>
+<div class="block">This class is a wrapper around a byte array to ensure equals and hashcode operations use the
+ values of the bytes rather than explicit object identity</div>
 </td>
 </tr>
 </tbody>
@@ -1150,18 +1194,23 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colOne"><a href="../../../../../org/locationtech/geowave/core/index/class-use/ByteArrayRange.html#org.locationtech.geowave.core.store.api">ByteArrayRange</a>
+<div class="block">Defines a unit interval on a number line</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colOne"><a href="../../../../../org/locationtech/geowave/core/index/class-use/IndexMetaData.html#org.locationtech.geowave.core.store.api">IndexMetaData</a>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../../org/locationtech/geowave/core/index/class-use/InsertionIds.html#org.locationtech.geowave.core.store.api">InsertionIds</a>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../../../../org/locationtech/geowave/core/index/class-use/Mergeable.html#org.locationtech.geowave.core.store.api">Mergeable</a>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../../org/locationtech/geowave/core/index/class-use/MultiDimensionalCoordinateRangesArray.html#org.locationtech.geowave.core.store.api">MultiDimensionalCoordinateRangesArray</a>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../../../../org/locationtech/geowave/core/index/class-use/NumericIndexStrategy.html#org.locationtech.geowave.core.store.api">NumericIndexStrategy</a>
 <div class="block">Interface which defines a numeric index strategy.</div>
 </td>
@@ -1276,6 +1325,11 @@
  values of the bytes rather than explicit object identity</div>
 </td>
 </tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../../../../org/locationtech/geowave/core/index/class-use/ByteArrayRange.html#org.locationtech.geowave.core.store.metadata">ByteArrayRange</a>
+<div class="block">Defines a unit interval on a number line</div>
+</td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -1289,9 +1343,14 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colOne"><a href="../../../../../org/locationtech/geowave/core/index/class-use/MultiDimensionalCoordinateRangesArray.html#org.locationtech.geowave.core.store.operations">MultiDimensionalCoordinateRangesArray</a>&nbsp;</td>
+<td class="colOne"><a href="../../../../../org/locationtech/geowave/core/index/class-use/ByteArrayRange.html#org.locationtech.geowave.core.store.operations">ByteArrayRange</a>
+<div class="block">Defines a unit interval on a number line</div>
+</td>
 </tr>
 <tr class="rowColor">
+<td class="colOne"><a href="../../../../../org/locationtech/geowave/core/index/class-use/MultiDimensionalCoordinateRangesArray.html#org.locationtech.geowave.core.store.operations">MultiDimensionalCoordinateRangesArray</a>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colOne"><a href="../../../../../org/locationtech/geowave/core/index/class-use/QueryRanges.html#org.locationtech.geowave.core.store.operations">QueryRanges</a>&nbsp;</td>
 </tr>
 </tbody>
@@ -1307,6 +1366,12 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colOne"><a href="../../../../../org/locationtech/geowave/core/index/class-use/ByteArray.html#org.locationtech.geowave.core.store.query.aggregate">ByteArray</a>
+<div class="block">This class is a wrapper around a byte array to ensure equals and hashcode operations use the
+ values of the bytes rather than explicit object identity</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../../org/locationtech/geowave/core/index/class-use/Mergeable.html#org.locationtech.geowave.core.store.query.aggregate">Mergeable</a>&nbsp;</td>
 </tr>
 </tbody>
@@ -1383,6 +1448,11 @@
 <td class="colOne"><a href="../../../../../org/locationtech/geowave/core/index/class-use/ByteArray.html#org.locationtech.geowave.core.store.statistics">ByteArray</a>
 <div class="block">This class is a wrapper around a byte array to ensure equals and hashcode operations use the
  values of the bytes rather than explicit object identity</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../../../../org/locationtech/geowave/core/index/class-use/ByteArrayRange.html#org.locationtech.geowave.core.store.statistics">ByteArrayRange</a>
+<div class="block">Defines a unit interval on a number line</div>
 </td>
 </tr>
 </tbody>
@@ -1485,6 +1555,11 @@
 <td class="colOne"><a href="../../../../../org/locationtech/geowave/core/index/class-use/ByteArray.html#org.locationtech.geowave.core.store.statistics.query">ByteArray</a>
 <div class="block">This class is a wrapper around a byte array to ensure equals and hashcode operations use the
  values of the bytes rather than explicit object identity</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../../../../org/locationtech/geowave/core/index/class-use/ByteArrayRange.html#org.locationtech.geowave.core.store.statistics.query">ByteArrayRange</a>
+<div class="block">Defines a unit interval on a number line</div>
 </td>
 </tr>
 </tbody>
@@ -1835,6 +1910,11 @@
 <td class="colOne"><a href="../../../../../org/locationtech/geowave/core/index/class-use/ByteArray.html#org.locationtech.geowave.datastore.redis.util">ByteArray</a>
 <div class="block">This class is a wrapper around a byte array to ensure equals and hashcode operations use the
  values of the bytes rather than explicit object identity</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../../../../org/locationtech/geowave/core/index/class-use/ByteArrayRange.html#org.locationtech.geowave.datastore.redis.util">ByteArrayRange</a>
+<div class="block">Defines a unit interval on a number line</div>
 </td>
 </tr>
 </tbody>

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -129,13 +129,25 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataQuery.html#MetadataQuery--">MetadataQuery</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataQuery.html#MetadataQuery-byte:A-byte:A-boolean-java.lang.String...-">MetadataQuery</a></span>(byte[]&nbsp;primaryId,
              byte[]&nbsp;secondaryId,
              boolean&nbsp;primaryIdPrefix,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataQuery.html#MetadataQuery-byte:A-byte:A-java.lang.String...-">MetadataQuery</a></span>(byte[]&nbsp;primaryId,
+             byte[]&nbsp;secondaryId,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataQuery.html#MetadataQuery-byte:A-java.lang.String...-">MetadataQuery</a></span>(byte[]&nbsp;secondaryId,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataQuery.html#MetadataQuery-org.locationtech.geowave.core.index.ByteArrayRange:A-byte:A-java.lang.String...-">MetadataQuery</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>[]&nbsp;primaryIdRanges,
              byte[]&nbsp;secondaryId,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
@@ -163,22 +175,30 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataQuery.html#getPrimaryId--">getPrimaryId</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataQuery.html#getPrimaryIdRanges--">getPrimaryIdRanges</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataQuery.html#getSecondaryId--">getSecondaryId</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataQuery.html#hasPrimaryId--">hasPrimaryId</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataQuery.html#hasPrimaryIdRanges--">hasPrimaryIdRanges</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataQuery.html#hasSecondaryId--">hasSecondaryId</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataQuery.html#isExact--">isExact</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/operations/MetadataQuery.html#isPrefix--">isPrefix</a></span>()</code>&nbsp;</td>
 </tr>
@@ -204,6 +224,25 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
+<a name="MetadataQuery--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>MetadataQuery</h4>
+<pre>public&nbsp;MetadataQuery()</pre>
+</li>
+</ul>
+<a name="MetadataQuery-byte:A-java.lang.String...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>MetadataQuery</h4>
+<pre>public&nbsp;MetadataQuery(byte[]&nbsp;secondaryId,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
+</li>
+</ul>
 <a name="MetadataQuery-byte:A-byte:A-java.lang.String...-">
 <!--   -->
 </a>
@@ -218,12 +257,23 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <a name="MetadataQuery-byte:A-byte:A-boolean-java.lang.String...-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>MetadataQuery</h4>
 <pre>public&nbsp;MetadataQuery(byte[]&nbsp;primaryId,
                      byte[]&nbsp;secondaryId,
                      boolean&nbsp;primaryIdPrefix,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
+</li>
+</ul>
+<a name="MetadataQuery-org.locationtech.geowave.core.index.ByteArrayRange:A-byte:A-java.lang.String...-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>MetadataQuery</h4>
+<pre>public&nbsp;MetadataQuery(<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>[]&nbsp;primaryIdRanges,
+                     byte[]&nbsp;secondaryId,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
 </li>
 </ul>
@@ -271,6 +321,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;boolean&nbsp;hasSecondaryId()</pre>
 </li>
 </ul>
+<a name="hasPrimaryIdRanges--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hasPrimaryIdRanges</h4>
+<pre>public&nbsp;boolean&nbsp;hasPrimaryIdRanges()</pre>
+</li>
+</ul>
 <a name="isExact--">
 <!--   -->
 </a>
@@ -287,6 +346,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>isPrefix</h4>
 <pre>public&nbsp;boolean&nbsp;isPrefix()</pre>
+</li>
+</ul>
+<a name="getPrimaryIdRanges--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPrimaryIdRanges</h4>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>[]&nbsp;getPrimaryIdRanges()</pre>
 </li>
 </ul>
 <a name="getAuthorizations--">

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/adapter/CountStatistic.html" title="class in org.locationtech.geowave.core.store.statistics.adapter"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/adapter/DataTypeStatistic.html" title="class in org.locationtech.geowave.core.store.statistics.adapter"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/adapter/DataTypeStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.adapter"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?org/locationtech/geowave/core/store/statistics/adapter/CountStatistic.CountValue.html" target="_top">Frames</a></li>
@@ -161,7 +161,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/sta
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/adapter/CountStatistic.CountValue.html#CountValue--">CountValue</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/adapter/CountStatistic.CountValue.html#CountValue-org.locationtech.geowave.core.store.api.Statistic-">CountValue</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Statistic.html" title="interface in org.locationtech.geowave.core.store.api">Statistic</a>&lt;?&gt;&nbsp;statistic)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/adapter/CountStatistic.CountValue.html#CountValue-org.locationtech.geowave.core.store.api.Statistic-">CountValue</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Statistic.html" title="class in org.locationtech.geowave.core.store.api">Statistic</a>&lt;?&gt;&nbsp;statistic)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -207,12 +207,16 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/sta
 </td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/adapter/CountStatistic.CountValue.html#getWeightedCount--">getWeightedCount</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/adapter/CountStatistic.CountValue.html#merge-org.locationtech.geowave.core.index.Mergeable-">merge</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>&nbsp;merge)</code>
 <div class="block">Merge another statistic value into this one.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/adapter/CountStatistic.CountValue.html#toBinary--">toBinary</a></span>()</code>
 <div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
@@ -262,7 +266,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/sta
 <ul class="blockListLast">
 <li class="blockList">
 <h4>CountValue</h4>
-<pre>public&nbsp;CountValue(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Statistic.html" title="interface in org.locationtech.geowave.core.store.api">Statistic</a>&lt;?&gt;&nbsp;statistic)</pre>
+<pre>public&nbsp;CountValue(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Statistic.html" title="class in org.locationtech.geowave.core.store.api">Statistic</a>&lt;?&gt;&nbsp;statistic)</pre>
 </li>
 </ul>
 </li>
@@ -288,6 +292,15 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/sta
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the raw value</dd>
 </dl>
+</li>
+</ul>
+<a name="getWeightedCount--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getWeightedCount</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;getWeightedCount()</pre>
 </li>
 </ul>
 <a name="entryDeleted-org.locationtech.geowave.core.store.api.DataTypeAdapter-java.lang.Object-org.locationtech.geowave.core.store.entities.GeoWaveRow:A-">
@@ -415,7 +428,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/sta
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/adapter/CountStatistic.html" title="class in org.locationtech.geowave.core.store.statistics.adapter"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/adapter/DataTypeStatistic.html" title="class in org.locationtech.geowave.core.store.statistics.adapter"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/adapter/DataTypeStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.adapter"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?org/locationtech/geowave/core/store/statistics/adapter/CountStatistic.CountValue.html" target="_top">Frames</a></li>

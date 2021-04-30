@@ -171,6 +171,9 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
                   boolean&nbsp;isPrefix)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/query/BinConstraintsImpl.html#BinConstraintsImpl-org.locationtech.geowave.core.index.ByteArrayRange:A-">BinConstraintsImpl</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>[]&nbsp;binRanges)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/query/BinConstraintsImpl.html#BinConstraintsImpl-java.lang.Object-">BinConstraintsImpl</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;object)</code>&nbsp;</td>
 </tr>
 </table>
@@ -190,7 +193,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.ByteArrayConstraints.html" title="interface in org.locationtech.geowave.core.store.api">BinConstraints.ByteArrayConstraints</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/query/BinConstraintsImpl.html#constraints-org.locationtech.geowave.core.store.api.Statistic-">constraints</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Statistic.html" title="interface in org.locationtech.geowave.core.store.api">Statistic</a>&lt;?&gt;&nbsp;stat)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/query/BinConstraintsImpl.html#constraints-org.locationtech.geowave.core.store.api.Statistic-">constraints</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Statistic.html" title="class in org.locationtech.geowave.core.store.api">Statistic</a>&lt;?&gt;&nbsp;stat)</code>
 <div class="block">Used primarily internally to get the explicit bins for this constraint but can be used if there
  is a need to understand the bins being queried.</div>
 </td>
@@ -208,7 +211,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.store.api.<a href="../../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.html" title="interface in org.locationtech.geowave.core.store.api">BinConstraints</a></h3>
-<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.html#allBins--">allBins</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.html#of-org.locationtech.geowave.core.index.ByteArray...-">of</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.html#ofObject-java.lang.Object-">ofObject</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.html#ofPrefix-org.locationtech.geowave.core.index.ByteArray...-">ofPrefix</a></code></li>
+<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.html#allBins--">allBins</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.html#of-org.locationtech.geowave.core.index.ByteArray...-">of</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.html#ofObject-java.lang.Object-">ofObject</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.html#ofPrefix-org.locationtech.geowave.core.index.ByteArray...-">ofPrefix</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.html#ofRange-org.locationtech.geowave.core.index.ByteArrayRange...-">ofRange</a></code></li>
 </ul>
 </li>
 </ul>
@@ -252,6 +255,15 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
                           boolean&nbsp;isPrefix)</pre>
 </li>
 </ul>
+<a name="BinConstraintsImpl-org.locationtech.geowave.core.index.ByteArrayRange:A-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>BinConstraintsImpl</h4>
+<pre>public&nbsp;BinConstraintsImpl(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>[]&nbsp;binRanges)</pre>
+</li>
+</ul>
 <a name="BinConstraintsImpl-java.lang.Object-">
 <!--   -->
 </a>
@@ -275,7 +287,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 <ul class="blockListLast">
 <li class="blockList">
 <h4>constraints</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.ByteArrayConstraints.html" title="interface in org.locationtech.geowave.core.store.api">BinConstraints.ByteArrayConstraints</a>&nbsp;constraints(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Statistic.html" title="interface in org.locationtech.geowave.core.store.api">Statistic</a>&lt;?&gt;&nbsp;stat)</pre>
+<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.ByteArrayConstraints.html" title="interface in org.locationtech.geowave.core.store.api">BinConstraints.ByteArrayConstraints</a>&nbsp;constraints(<a href="../../../../../../../org/locationtech/geowave/core/store/api/Statistic.html" title="class in org.locationtech.geowave.core.store.api">Statistic</a>&lt;?&gt;&nbsp;stat)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.html#constraints-org.locationtech.geowave.core.store.api.Statistic-">BinConstraints</a></code></span></div>
 <div class="block">Used primarily internally to get the explicit bins for this constraint but can be used if there
  is a need to understand the bins being queried.</div>

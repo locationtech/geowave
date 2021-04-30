@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -171,30 +171,34 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataS
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/cassandra/config/CassandraOptions.html#getBatchWriteSize--">getBatchWriteSize</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/cassandra/config/CassandraOptions.html#defaultEnableVisibility--">defaultEnableVisibility</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/cassandra/config/CassandraOptions.html#getReplicationFactor--">getReplicationFactor</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/cassandra/config/CassandraOptions.html#getBatchWriteSize--">getBatchWriteSize</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/cassandra/config/CassandraOptions.html#isDurableWrites--">isDurableWrites</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/cassandra/config/CassandraOptions.html#getReplicationFactor--">getReplicationFactor</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/cassandra/config/CassandraOptions.html#isServerSideLibraryEnabled--">isServerSideLibraryEnabled</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/cassandra/config/CassandraOptions.html#isDurableWrites--">isDurableWrites</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/cassandra/config/CassandraOptions.html#setBatchWriteSize-int-">setBatchWriteSize</a></span>(int&nbsp;batchWriteSize)</code>&nbsp;</td>
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/cassandra/config/CassandraOptions.html#isServerSideLibraryEnabled--">isServerSideLibraryEnabled</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/cassandra/config/CassandraOptions.html#setDurableWrites-boolean-">setDurableWrites</a></span>(boolean&nbsp;durableWrites)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/cassandra/config/CassandraOptions.html#setBatchWriteSize-int-">setBatchWriteSize</a></span>(int&nbsp;batchWriteSize)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/cassandra/config/CassandraOptions.html#setDurableWrites-boolean-">setDurableWrites</a></span>(boolean&nbsp;durableWrites)</code>&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/cassandra/config/CassandraOptions.html#setReplicationFactor-int-">setReplicationFactor</a></span>(int&nbsp;replicationFactor)</code>&nbsp;</td>
 </tr>
@@ -204,7 +208,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataS
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.store.<a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html" title="class in org.locationtech.geowave.core.store">BaseDataStoreOptions</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#defaultAggregationMaxRangeDecomposition--">defaultAggregationMaxRangeDecomposition</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#defaultDataIndexBatchSize--">defaultDataIndexBatchSize</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#defaultEnableVisibility--">defaultEnableVisibility</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#defaultMaxRangeDecomposition--">defaultMaxRangeDecomposition</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#getAggregationMaxRangeDecomposition--">getAggregationMaxRangeDecomposition</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#getDataIndexBatchSize--">getDataIndexBatchSize</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#getMaxRangeDecomposition--">getMaxRangeDecomposition</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#isEnableBlockCache--">isEnableBlockCache</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#isPersistDataStatistics--">isPersistDataStatistics</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#isSecondaryIndexing--">isSecondaryIndexing</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#isVisibilityEnabled--">isVisibilityEnabled</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setAggregationMaxRangeDecomposition-int-">setAggregationMaxRangeDecomposition</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setEnableBlockCache-boolean-">setEnableBlockCache</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setEnableVisibility-boolean-">setEnableVisibility</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setMaxRangeDecomposition-int-">setMaxRangeDecomposition</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setPersistDataStatistics-boolean-">setPersistDataStatistics</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setSecondaryIndexing-boolean-">setSecondaryIndexing</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setServerSideLibraryEnabled-boolean-">setServerSideLibraryEnabled</a></code></li>
+<code><a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#defaultAggregationMaxRangeDecomposition--">defaultAggregationMaxRangeDecomposition</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#defaultDataIndexBatchSize--">defaultDataIndexBatchSize</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#defaultMaxRangeDecomposition--">defaultMaxRangeDecomposition</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#getAggregationMaxRangeDecomposition--">getAggregationMaxRangeDecomposition</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#getDataIndexBatchSize--">getDataIndexBatchSize</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#getMaxRangeDecomposition--">getMaxRangeDecomposition</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#isEnableBlockCache--">isEnableBlockCache</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#isPersistDataStatistics--">isPersistDataStatistics</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#isSecondaryIndexing--">isSecondaryIndexing</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#isVisibilityEnabled--">isVisibilityEnabled</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setAggregationMaxRangeDecomposition-int-">setAggregationMaxRangeDecomposition</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setEnableBlockCache-boolean-">setEnableBlockCache</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setEnableVisibility-boolean-">setEnableVisibility</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setMaxRangeDecomposition-int-">setMaxRangeDecomposition</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setPersistDataStatistics-boolean-">setPersistDataStatistics</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setSecondaryIndexing-boolean-">setSecondaryIndexing</a>, <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#setServerSideLibraryEnabled-boolean-">setServerSideLibraryEnabled</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -301,7 +305,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataS
 <a name="isServerSideLibraryEnabled--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>isServerSideLibraryEnabled</h4>
 <pre>public&nbsp;boolean&nbsp;isServerSideLibraryEnabled()</pre>
@@ -310,6 +314,19 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/BaseDataS
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/DataStoreOptions.html#isServerSideLibraryEnabled--">isServerSideLibraryEnabled</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/DataStoreOptions.html" title="interface in org.locationtech.geowave.core.store">DataStoreOptions</a></code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#isServerSideLibraryEnabled--">isServerSideLibraryEnabled</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html" title="class in org.locationtech.geowave.core.store">BaseDataStoreOptions</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="defaultEnableVisibility--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>defaultEnableVisibility</h4>
+<pre>protected&nbsp;boolean&nbsp;defaultEnableVisibility()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html#defaultEnableVisibility--">defaultEnableVisibility</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/BaseDataStoreOptions.html" title="class in org.locationtech.geowave.core.store">BaseDataStoreOptions</a></code></dd>
 </dl>
 </li>
 </ul>

@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticBinningStrategy.html" title="interface in org.locationtech.geowave.core.store.api">StatisticBinningStrategy</a></dd>
+<dd><a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/api/BinningStrategy.html" title="interface in org.locationtech.geowave.core.store.api">BinningStrategy</a>, <a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticBinningStrategy.html" title="interface in org.locationtech.geowave.core.store.api">StatisticBinningStrategy</a></dd>
 </dl>
 <hr>
 <br>
@@ -263,6 +263,13 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 <h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.store.api.<a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticBinningStrategy.html" title="interface in org.locationtech.geowave.core.store.api">StatisticBinningStrategy</a></h3>
 <code><a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticBinningStrategy.html#supportedConstraintClasses--">supportedConstraintClasses</a></code></li>
 </ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.api.BinningStrategy">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.store.api.<a href="../../../../../../../org/locationtech/geowave/core/store/api/BinningStrategy.html" title="interface in org.locationtech.geowave.core.store.api">BinningStrategy</a></h3>
+<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/BinningStrategy.html#getWeight-org.locationtech.geowave.core.index.ByteArray-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">getWeight</a></code></li>
+</ul>
 </li>
 </ul>
 </li>
@@ -378,11 +385,16 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 <pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>[]&nbsp;getBins(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;T&gt;&nbsp;adapter,
                                T&nbsp;entry,
                                <a href="../../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticBinningStrategy.html#getBins-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">StatisticBinningStrategy</a></code></span></div>
-<div class="block">Get the bins used by the given entry. Each bin will have a separate statistic value.</div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/BinningStrategy.html#getBins-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">BinningStrategy</a></code></span></div>
+<div class="block">Get the bins used by the given entry. Each bin will have a separate value.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticBinningStrategy.html#getBins-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">getBins</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/StatisticBinningStrategy.html" title="interface in org.locationtech.geowave.core.store.api">StatisticBinningStrategy</a></code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/BinningStrategy.html#getBins-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">getBins</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/BinningStrategy.html" title="interface in org.locationtech.geowave.core.store.api">BinningStrategy</a></code></dd>
+<dt><span class="paramLabel">Type Parameters:</span></dt>
+<dd><code>T</code> - The type that will be used to bin on and the weight for a particular bin (if
+        multiple bins sometimes they can be weighted, a supplier is used to defer evaluation).
+        This could be anything, but you may see things like <code>SimpleFeature</code>, or
+        <code>CommonIndexedPersistenceEncoding</code> used mostly.</dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>adapter</code> - the data type</dd>
 <dd><code>entry</code> - the entry</dd>

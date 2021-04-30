@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -155,6 +155,15 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
                    boolean&nbsp;isPrefix,
                    boolean&nbsp;isAllBins)</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/query/BinConstraintsImpl.ExplicitConstraints.html#ExplicitConstraints-org.locationtech.geowave.core.index.ByteArray:A-org.locationtech.geowave.core.index.ByteArrayRange:A-boolean-boolean-">ExplicitConstraints</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>[]&nbsp;bins,
+                   <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>[]&nbsp;binRanges,
+                   boolean&nbsp;isPrefix,
+                   boolean&nbsp;isAllBins)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/query/BinConstraintsImpl.ExplicitConstraints.html#ExplicitConstraints-org.locationtech.geowave.core.index.ByteArrayRange:A-">ExplicitConstraints</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>[]&nbsp;binRanges)</code>&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -171,18 +180,24 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/query/BinConstraintsImpl.ExplicitConstraints.html#getBinRanges--">getBinRanges</a></span>()</code>
+<div class="block">get the bin ranges to query for</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/query/BinConstraintsImpl.ExplicitConstraints.html#getBins--">getBins</a></span>()</code>
 <div class="block">get the bins to query for</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/query/BinConstraintsImpl.ExplicitConstraints.html#isAllBins--">isAllBins</a></span>()</code>
 <div class="block">is this meant to query all bins</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/statistics/query/BinConstraintsImpl.ExplicitConstraints.html#isPrefix--">isPrefix</a></span>()</code>
 <div class="block">is this a prefix query</div>
@@ -237,6 +252,15 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 <pre>public&nbsp;ExplicitConstraints(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>[]&nbsp;bins)</pre>
 </li>
 </ul>
+<a name="ExplicitConstraints-org.locationtech.geowave.core.index.ByteArrayRange:A-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ExplicitConstraints</h4>
+<pre>public&nbsp;ExplicitConstraints(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>[]&nbsp;binRanges)</pre>
+</li>
+</ul>
 <a name="ExplicitConstraints-org.locationtech.geowave.core.index.ByteArray:A-boolean-">
 <!--   -->
 </a>
@@ -250,10 +274,22 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 <a name="ExplicitConstraints-org.locationtech.geowave.core.index.ByteArray:A-boolean-boolean-">
 <!--   -->
 </a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ExplicitConstraints</h4>
+<pre>public&nbsp;ExplicitConstraints(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>[]&nbsp;bins,
+                           boolean&nbsp;isPrefix,
+                           boolean&nbsp;isAllBins)</pre>
+</li>
+</ul>
+<a name="ExplicitConstraints-org.locationtech.geowave.core.index.ByteArray:A-org.locationtech.geowave.core.index.ByteArrayRange:A-boolean-boolean-">
+<!--   -->
+</a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ExplicitConstraints</h4>
 <pre>public&nbsp;ExplicitConstraints(<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>[]&nbsp;bins,
+                           <a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>[]&nbsp;binRanges,
                            boolean&nbsp;isPrefix,
                            boolean&nbsp;isAllBins)</pre>
 </li>
@@ -304,7 +340,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 <a name="isAllBins--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>isAllBins</h4>
 <pre>public&nbsp;boolean&nbsp;isAllBins()</pre>
@@ -315,6 +351,23 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/api
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.ByteArrayConstraints.html#isAllBins--">isAllBins</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.ByteArrayConstraints.html" title="interface in org.locationtech.geowave.core.store.api">BinConstraints.ByteArrayConstraints</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a flag indiciating if it is meant to query all bins</dd>
+</dl>
+</li>
+</ul>
+<a name="getBinRanges--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getBinRanges</h4>
+<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>[]&nbsp;getBinRanges()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.ByteArrayConstraints.html#getBinRanges--">BinConstraints.ByteArrayConstraints</a></code></span></div>
+<div class="block">get the bin ranges to query for</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.ByteArrayConstraints.html#getBinRanges--">getBinRanges</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/BinConstraints.ByteArrayConstraints.html" title="interface in org.locationtech.geowave.core.store.api">BinConstraints.ByteArrayConstraints</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the bin ranges to query for</dd>
 </dl>
 </li>
 </ul>

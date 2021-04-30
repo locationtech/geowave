@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li>Prev&nbsp;Class</li>
-<li><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationBinningStrategy.html" title="interface in org.locationtech.geowave.core.store.query.aggregate"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="class in org.locationtech.geowave.core.store.query.aggregate"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" target="_top">Frames</a></li>
@@ -131,7 +131,8 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/api/Ag
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>default void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html#aggregate-T-">aggregate</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" title="type parameter in AdapterAndIndexBasedAggregation">T</a>&nbsp;entry)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html#aggregate-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-">aggregate</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" title="type parameter in AdapterAndIndexBasedAggregation">T</a>&gt;&nbsp;adapter,
+         <a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" title="type parameter in AdapterAndIndexBasedAggregation">T</a>&nbsp;entry)</code>
 <div class="block">Update the aggregation result using the new entry provided</div>
 </td>
 </tr>
@@ -396,21 +397,23 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/api/Ag
 </dl>
 </li>
 </ul>
-<a name="aggregate-java.lang.Object-">
+<a name="aggregate-org.locationtech.geowave.core.store.api.DataTypeAdapter-java.lang.Object-">
 <!--   -->
-</a><a name="aggregate-T-">
+</a><a name="aggregate-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>aggregate</h4>
-<pre>default&nbsp;void&nbsp;aggregate(<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" title="type parameter in AdapterAndIndexBasedAggregation">T</a>&nbsp;entry)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#aggregate-T-">Aggregation</a></code></span></div>
+<pre>default&nbsp;void&nbsp;aggregate(<a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" title="type parameter in AdapterAndIndexBasedAggregation">T</a>&gt;&nbsp;adapter,
+                       <a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" title="type parameter in AdapterAndIndexBasedAggregation">T</a>&nbsp;entry)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#aggregate-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-">Aggregation</a></code></span></div>
 <div class="block">Update the aggregation result using the new entry provided</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#aggregate-T-">aggregate</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" title="type parameter in AdapterAndIndexBasedAggregation">P</a> extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" title="type parameter in AdapterAndIndexBasedAggregation">R</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" title="type parameter in AdapterAndIndexBasedAggregation">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#aggregate-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-">aggregate</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" title="type parameter in AdapterAndIndexBasedAggregation">P</a> extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" title="type parameter in AdapterAndIndexBasedAggregation">R</a>,<a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" title="type parameter in AdapterAndIndexBasedAggregation">T</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>adapter</code> - the adapter for this entry</dd>
 <dd><code>entry</code> - the new entry to compute an updated aggregation result on</dd>
 </dl>
 </li>
@@ -444,7 +447,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/api/Ag
 <div class="subNav">
 <ul class="navList">
 <li>Prev&nbsp;Class</li>
-<li><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationBinningStrategy.html" title="interface in org.locationtech.geowave.core.store.query.aggregate"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AggregationQueryBuilderImpl.html" title="class in org.locationtech.geowave.core.store.query.aggregate"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" target="_top">Frames</a></li>

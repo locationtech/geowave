@@ -111,10 +111,31 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><code>static &lt;V extends <a href="../../../../../../../../org/locationtech/geowave/core/store/api/StatisticValue.html" title="class in org.locationtech.geowave.core.store.api">StatisticValue</a>&lt;?&gt;&gt;<br><a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/StatisticId.html" title="class in org.locationtech.geowave.core.store.statistics">StatisticId</a>&lt;V&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">IndexStatistic.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/api/IndexStatistic.html#generateStatisticId-java.lang.String-org.locationtech.geowave.core.store.statistics.index.IndexStatisticType-java.lang.String-">generateStatisticId</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
+                   <a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexStatisticType</a>&lt;V&gt;&nbsp;statisticType,
+                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tag)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static &lt;V extends <a href="../../../../../../../../org/locationtech/geowave/core/store/api/StatisticValue.html" title="class in org.locationtech.geowave.core.store.api">StatisticValue</a>&lt;R&gt;,R&gt;<br><a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/query/IndexStatisticQueryBuilder.html" title="class in org.locationtech.geowave.core.store.statistics.query">IndexStatisticQueryBuilder</a>&lt;V,R&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">StatisticQueryBuilder.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/api/StatisticQueryBuilder.html#newBuilder-org.locationtech.geowave.core.store.statistics.index.IndexStatisticType-">newBuilder</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexStatisticType</a>&lt;V&gt;&nbsp;statisticType)</code>
 <div class="block">Create a new index statistic query builder for the given statistic type.</div>
 </td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../../../org/locationtech/geowave/core/store/api/package-summary.html">org.locationtech.geowave.core.store.api</a> with parameters of type <a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexStatisticType</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/api/IndexStatistic.html#IndexStatistic-org.locationtech.geowave.core.store.statistics.index.IndexStatisticType-">IndexStatistic</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexStatisticType</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/api/IndexStatistic.html" title="type parameter in IndexStatistic">V</a>&gt;&nbsp;statisticsType)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/api/IndexStatistic.html#IndexStatistic-org.locationtech.geowave.core.store.statistics.index.IndexStatisticType-java.lang.String-">IndexStatistic</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexStatisticType</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/api/IndexStatistic.html" title="type parameter in IndexStatistic">V</a>&gt;&nbsp;statisticsType,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -131,62 +152,32 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>static <a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexStatisticType</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/RowRangeHistogramStatistic.RowRangeHistogramValue.html" title="class in org.locationtech.geowave.core.store.statistics.index">RowRangeHistogramStatistic.RowRangeHistogramValue</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">RowRangeHistogramStatistic.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/RowRangeHistogramStatistic.html#STATS_TYPE">STATS_TYPE</a></span></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static <a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexStatisticType</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexMetaDataSetStatistic.IndexMetaDataSetValue.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexMetaDataSetStatistic.IndexMetaDataSetValue</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">IndexMetaDataSetStatistic.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexMetaDataSetStatistic.html#STATS_TYPE">STATS_TYPE</a></span></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexStatisticType</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/MaxDuplicatesStatistic.MaxDuplicatesValue.html" title="class in org.locationtech.geowave.core.store.statistics.index">MaxDuplicatesStatistic.MaxDuplicatesValue</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">MaxDuplicatesStatistic.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/MaxDuplicatesStatistic.html#STATS_TYPE">STATS_TYPE</a></span></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static <a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexStatisticType</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/DuplicateEntryCountStatistic.DuplicateEntryCountValue.html" title="class in org.locationtech.geowave.core.store.statistics.index">DuplicateEntryCountStatistic.DuplicateEntryCountValue</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">DuplicateEntryCountStatistic.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/DuplicateEntryCountStatistic.html#STATS_TYPE">STATS_TYPE</a></span></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static <a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexStatisticType</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/DifferingVisibilityCountStatistic.DifferingVisibilityCountValue.html" title="class in org.locationtech.geowave.core.store.statistics.index">DifferingVisibilityCountStatistic.DifferingVisibilityCountValue</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">DifferingVisibilityCountStatistic.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/DifferingVisibilityCountStatistic.html#STATS_TYPE">STATS_TYPE</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexStatisticType</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/PartitionsStatistic.PartitionsValue.html" title="class in org.locationtech.geowave.core.store.statistics.index">PartitionsStatistic.PartitionsValue</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">PartitionsStatistic.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/PartitionsStatistic.html#STATS_TYPE">STATS_TYPE</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static <a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexStatisticType</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/FieldVisibilityCountStatistic.FieldVisibilityCountValue.html" title="class in org.locationtech.geowave.core.store.statistics.index">FieldVisibilityCountStatistic.FieldVisibilityCountValue</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">FieldVisibilityCountStatistic.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/FieldVisibilityCountStatistic.html#STATS_TYPE">STATS_TYPE</a></span></code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/package-summary.html">org.locationtech.geowave.core.store.statistics.index</a> with parameters of type <a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexStatisticType</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>static &lt;V extends <a href="../../../../../../../../org/locationtech/geowave/core/store/api/StatisticValue.html" title="class in org.locationtech.geowave.core.store.api">StatisticValue</a>&lt;?&gt;&gt;<br><a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/StatisticId.html" title="class in org.locationtech.geowave.core.store.statistics">StatisticId</a>&lt;V&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">IndexStatistic.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatistic.html#generateStatisticId-java.lang.String-org.locationtech.geowave.core.store.statistics.index.IndexStatisticType-java.lang.String-">generateStatisticId</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
-                   <a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexStatisticType</a>&lt;V&gt;&nbsp;statisticType,
-                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tag)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
-<caption><span>Constructors in <a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/package-summary.html">org.locationtech.geowave.core.store.statistics.index</a> with parameters of type <a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexStatisticType</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Constructor and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatistic.html#IndexStatistic-org.locationtech.geowave.core.store.statistics.index.IndexStatisticType-">IndexStatistic</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexStatisticType</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatistic.html" title="type parameter in IndexStatistic">V</a>&gt;&nbsp;statisticsType)</code>&nbsp;</td>
+<td class="colFirst"><code>static <a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexStatisticType</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/RowRangeHistogramStatistic.RowRangeHistogramValue.html" title="class in org.locationtech.geowave.core.store.statistics.index">RowRangeHistogramStatistic.RowRangeHistogramValue</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">RowRangeHistogramStatistic.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/RowRangeHistogramStatistic.html#STATS_TYPE">STATS_TYPE</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatistic.html#IndexStatistic-org.locationtech.geowave.core.store.statistics.index.IndexStatisticType-java.lang.String-">IndexStatistic</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexStatisticType</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatistic.html" title="type parameter in IndexStatistic">V</a>&gt;&nbsp;statisticsType,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</code>&nbsp;</td>
+<td class="colFirst"><code>static <a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexStatisticType</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/DifferingVisibilityCountStatistic.DifferingVisibilityCountValue.html" title="class in org.locationtech.geowave.core.store.statistics.index">DifferingVisibilityCountStatistic.DifferingVisibilityCountValue</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">DifferingVisibilityCountStatistic.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/DifferingVisibilityCountStatistic.html#STATS_TYPE">STATS_TYPE</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexStatisticType</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/DuplicateEntryCountStatistic.DuplicateEntryCountValue.html" title="class in org.locationtech.geowave.core.store.statistics.index">DuplicateEntryCountStatistic.DuplicateEntryCountValue</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">DuplicateEntryCountStatistic.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/DuplicateEntryCountStatistic.html#STATS_TYPE">STATS_TYPE</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexStatisticType</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexMetaDataSetStatistic.IndexMetaDataSetValue.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexMetaDataSetStatistic.IndexMetaDataSetValue</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">IndexMetaDataSetStatistic.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexMetaDataSetStatistic.html#STATS_TYPE">STATS_TYPE</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/IndexStatisticType.html" title="class in org.locationtech.geowave.core.store.statistics.index">IndexStatisticType</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/FieldVisibilityCountStatistic.FieldVisibilityCountValue.html" title="class in org.locationtech.geowave.core.store.statistics.index">FieldVisibilityCountStatistic.FieldVisibilityCountValue</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">FieldVisibilityCountStatistic.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/statistics/index/FieldVisibilityCountStatistic.html#STATS_TYPE">STATS_TYPE</a></span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

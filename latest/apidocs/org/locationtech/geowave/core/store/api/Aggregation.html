@@ -146,7 +146,8 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#aggregate-T-">aggregate</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="type parameter in Aggregation">T</a>&nbsp;entry)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html#aggregate-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-">aggregate</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="type parameter in Aggregation">T</a>&gt;&nbsp;adapter,
+         <a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="type parameter in Aggregation">T</a>&nbsp;entry)</code>
 <div class="block">Update the aggregation result using the new entry provided</div>
 </td>
 </tr>
@@ -335,18 +336,20 @@ extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/P
 <div class="block">this will be called if the result should be reset to its default value</div>
 </li>
 </ul>
-<a name="aggregate-java.lang.Object-">
+<a name="aggregate-org.locationtech.geowave.core.store.api.DataTypeAdapter-java.lang.Object-">
 <!--   -->
-</a><a name="aggregate-T-">
+</a><a name="aggregate-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>aggregate</h4>
-<pre>void&nbsp;aggregate(<a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="type parameter in Aggregation">T</a>&nbsp;entry)</pre>
+<pre>void&nbsp;aggregate(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="type parameter in Aggregation">T</a>&gt;&nbsp;adapter,
+               <a href="../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="type parameter in Aggregation">T</a>&nbsp;entry)</pre>
 <div class="block">Update the aggregation result using the new entry provided</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>adapter</code> - the adapter for this entry</dd>
 <dd><code>entry</code> - the new entry to compute an updated aggregation result on</dd>
 </dl>
 </li>
