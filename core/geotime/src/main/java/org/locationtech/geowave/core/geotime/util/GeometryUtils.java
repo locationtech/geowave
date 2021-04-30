@@ -59,6 +59,7 @@ import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryCollection;
 import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.MultiPolygon;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
@@ -91,11 +92,18 @@ import tec.uom.se.unit.Units;
  * GeoWave core codebase
  */
 public class GeometryUtils {
+  public static interface GeometryHandler {
+    void handlePoint(Point point);
+
+    void handleLineString(LineString lineString);
+
+    void handlePolygon(Polygon polygon);
+  }
+
   public static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory();
   private static final Logger LOGGER = LoggerFactory.getLogger(GeometryUtils.class);
   private static final Object MUTEX = new Object();
   private static final Object MUTEX_DEFAULT_CRS = new Object();
-  private static final int DEFAULT_DIMENSIONALITY = 2;
   public static final String DEFAULT_CRS_STR = "EPSG:4326";
   private static CoordinateReferenceSystem defaultCrsSingleton;
   private static Set<ClassLoader> initializedClassLoaders = new HashSet<>();
@@ -117,6 +125,25 @@ public class GeometryUtils {
     // intersection operation so it will have to assume the same CRS as the
     // feature type
     return factory.intersects(factory.property(geometryAttributeName), factory.literal(jtsGeom));
+  }
+
+  public static void visitGeometry(final Geometry geom, final GeometryHandler geometryHandler) {
+    if (geom == null) {
+      return;
+    }
+    if (geom instanceof GeometryCollection) {
+      final int numGeom = ((GeometryCollection) geom).getNumGeometries();
+      for (int i = 0; i < numGeom; i++) {
+        visitGeometry(((GeometryCollection) geom).getGeometryN(i), geometryHandler);
+      }
+    } else if (geom instanceof LineString) {
+      geometryHandler.handleLineString((LineString) geom);
+    } else if (geom instanceof Polygon) {
+      geometryHandler.handlePolygon((Polygon) geom);
+    } else {
+      final Point centroid = geom.getCentroid();
+      geometryHandler.handlePoint(centroid);
+    }
   }
 
   @edu.umd.cs.findbugs.annotations.SuppressFBWarnings()

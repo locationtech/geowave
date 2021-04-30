@@ -14,8 +14,10 @@ from pygw.index import SpatialIndexBuilder
 
 from .conftest import POINT_TYPE_ADAPTER, POINT_TYPE_NAME, POINT_NUMBER_FIELD, POINT_GEOMETRY_FIELD, POINT_TIME_FIELD, \
     POINT_SHAPE_FIELD, POINT_COLOR_FIELD, results_as_list
-from .conftest import write_test_data
+from .conftest import write_test_data, write_test_data_offset
 from ..base import Interval, Envelope
+
+from shapely.geometry import Polygon
 from ..base.range import Range
 from ..query.statistics.statistic_query_builder import DataTypeStatisticQueryBuilder
 from ..query.statistics.statistic_query_builder import FieldStatisticQueryBuilder
@@ -25,7 +27,7 @@ from ..query.statistics.statistic_query import StatisticQuery
 from ..statistics import DataTypeStatisticType, FieldStatisticType, IndexStatisticType, BinConstraints, StatisticValue
 from ..statistics.binning_strategy import CompositeBinningStrategy, DataTypeBinningStrategy, \
     FieldValueBinningStrategy, NumericRangeFieldValueBinningStrategy, TimeRangeFieldValueBinningStrategy, \
-    PartitionBinningStrategy
+    PartitionBinningStrategy, SpatialFieldValueBinningStrategy
 from ..statistics.data_type import CountStatistic
 from ..statistics.field import BloomFilterStatistic, BoundingBoxStatistic, CountMinSketchStatistic, \
     FixedBinNumericHistogramStatistic, HyperLogLogStatistic, NumericHistogramStatistic, NumericMeanStatistic, \
@@ -288,7 +290,7 @@ def test_bounding_box_statistic(test_ds):
     bounding_box_stat.set_type_name(POINT_TYPE_NAME)
     bounding_box_stat.set_field_name(POINT_GEOMETRY_FIELD)
     test_ds.add_statistic(bounding_box_stat)
-    write_test_data(test_ds, index)
+    write_test_data_offset(test_ds, index)
 
     # then
     bounding_box_stat = test_ds.get_field_statistic(
@@ -306,10 +308,10 @@ def test_bounding_box_statistic(test_ds):
     assert bounding_box_stat.get_statistic_type().get_string() == 'BOUNDING_BOX'
     bounding_box = test_ds.get_statistic_value(bounding_box_stat)
     assert isinstance(bounding_box, Envelope)
-    assert bounding_box.get_min_x() == -180
-    assert bounding_box.get_min_y() == -89
-    assert bounding_box.get_max_x() == 179
-    assert bounding_box.get_max_y() == 89
+    assert bounding_box.get_min_x() == -179.5
+    assert bounding_box.get_min_y() == -89.5
+    assert bounding_box.get_max_x() == 179.5
+    assert bounding_box.get_max_y() == 89.5
 
     # test alternate constructors
     bounding_box_stat = BoundingBoxStatistic(POINT_TYPE_NAME, POINT_GEOMETRY_FIELD)
@@ -1073,7 +1075,7 @@ def test_numeric_range_field_value_binning_strategy(test_ds):
     count_stat = test_ds.get_data_type_statistic(CountStatistic.STATS_TYPE, POINT_TYPE_NAME, TEST_TAG)
     binning_strategy = count_stat.get_binning_strategy()
     assert isinstance(binning_strategy, NumericRangeFieldValueBinningStrategy)
-    assert binning_strategy.get_strategy_name() == 'NUMERIC_FIELD_VALUE'
+    assert binning_strategy.get_strategy_name() == 'NUMERIC_RANGE'
     assert binning_strategy.get_description() is not None
     assert test_ds.get_statistic_value(count_stat) == 360
     binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat))
@@ -1113,7 +1115,7 @@ def test_time_range_field_value_binning_strategy(test_ds):
     count_stat = test_ds.get_data_type_statistic(CountStatistic.STATS_TYPE, POINT_TYPE_NAME, TEST_TAG)
     binning_strategy = count_stat.get_binning_strategy()
     assert isinstance(binning_strategy, TimeRangeFieldValueBinningStrategy)
-    assert binning_strategy.get_strategy_name() == 'TIME_FIELD_VALUE'
+    assert binning_strategy.get_strategy_name() == 'TIME_RANGE'
     assert binning_strategy.get_description() is not None
     assert test_ds.get_statistic_value(count_stat) == 360
     binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat))
@@ -1132,6 +1134,50 @@ def test_time_range_field_value_binning_strategy(test_ds):
     for b, v in binned_values:
         assert isinstance(b, bytes)
         assert v == 60
+
+
+def test_spatial_field_value_binning_strategy(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    binning_strategy = SpatialFieldValueBinningStrategy(fields=[POINT_GEOMETRY_FIELD], type='GEOHASH', precision=1)
+    count_stat = CountStatistic()
+    count_stat.set_tag(TEST_TAG)
+    count_stat.set_type_name(POINT_TYPE_NAME)
+    count_stat.set_binning_strategy(binning_strategy)
+    test_ds.add_statistic(count_stat)
+    write_test_data_offset(test_ds, index)
+
+    # then
+    count_stat = test_ds.get_data_type_statistic(CountStatistic.STATS_TYPE, POINT_TYPE_NAME, TEST_TAG)
+    binning_strategy = count_stat.get_binning_strategy()
+    assert isinstance(binning_strategy, SpatialFieldValueBinningStrategy)
+    assert binning_strategy.get_strategy_name() == 'SPATIAL'
+    assert binning_strategy.get_description() is not None
+    assert test_ds.get_statistic_value(count_stat) == 360
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat))
+    assert len(binned_values) == 8
+    for b, v in binned_values:
+        assert isinstance(b, bytes)
+        assert v == 45
+
+    # test polygon constraint
+    bin_constraint = BinConstraints.of_object(Polygon([[0.5, 0.5], [0.5, 45.5], [45.5, 45.5], [45.5, 0.5], [0.5, 0.5]]))
+    assert isinstance(bin_constraint, BinConstraints)
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat, bin_constraint))
+    # There is a bin every 45 degrees so there should be 2 bins
+    assert len(binned_values) == 2
+    for b, v in binned_values:
+        assert isinstance(b, bytes)
+        assert v == 45
+
+    bin_constraint = BinConstraints.of_object(Envelope(min_x=1, min_y=1, max_x=91, max_y=90))
+    assert isinstance(bin_constraint, BinConstraints)
+    assert test_ds.get_statistic_value(count_stat, bin_constraint) == 135
+
 
 
 def test_partition_binning_strategy(test_ds):

@@ -1,12 +1,16 @@
 package org.locationtech.geowave.core.store.query.aggregate;
 
-import org.junit.Test;
-import org.locationtech.geowave.core.index.persist.Persistable;
-import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
+import org.junit.Test;
+import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.persist.Persistable;
+import org.locationtech.geowave.core.index.persist.PersistenceUtils;
+import org.locationtech.geowave.core.store.api.BinningStrategy;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
 public class BinningAggregationOptionsTest {
 
@@ -30,22 +34,25 @@ public class BinningAggregationOptionsTest {
 
     // build some blank objects just for serialization purposes,
     // to ensure its not just making everything null.
-    Persistable blankPersistable = new Persistable() {
+    final Persistable blankPersistable = new Persistable() {
       @Override
       public byte[] toBinary() {
         return new byte[0];
       }
 
       @Override
-      public void fromBinary(byte[] bytes) {
+      public void fromBinary(final byte[] bytes) {
 
       }
     };
 
-    AggregationBinningStrategy<Object> blankStrategy = new AggregationBinningStrategy<Object>() {
+    final BinningStrategy blankStrategy = new BinningStrategy() {
       @Override
-      public String[] binEntry(Object entry) {
-        return new String[0];
+      public <T> ByteArray[] getBins(
+          final DataTypeAdapter<T> type,
+          final T entry,
+          final GeoWaveRow... rows) {
+        return new ByteArray[0];
       }
 
       @Override
@@ -54,7 +61,7 @@ public class BinningAggregationOptionsTest {
       }
 
       @Override
-      public void fromBinary(byte[] bytes) {
+      public void fromBinary(final byte[] bytes) {
 
       }
     };

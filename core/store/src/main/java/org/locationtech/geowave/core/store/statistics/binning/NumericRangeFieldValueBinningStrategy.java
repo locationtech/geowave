@@ -32,7 +32,7 @@ import com.beust.jcommander.Parameter;
  * numeric ranges (Apache-Commons `Range<? extends Number>` class can be used as a constraint).
  */
 public class NumericRangeFieldValueBinningStrategy extends FieldValueBinningStrategy {
-  public static final String NAME = "NUMERIC_FIELD_VALUE";
+  public static final String NAME = "NUMERIC_RANGE";
   @Parameter(names = "--binInterval", description = "The interval between bins.  Defaults to 1.")
   private double interval = 1;
 

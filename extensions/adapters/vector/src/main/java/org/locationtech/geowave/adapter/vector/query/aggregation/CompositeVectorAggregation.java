@@ -13,6 +13,7 @@ import java.util.List;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistableList;
 import org.locationtech.geowave.core.store.api.Aggregation;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,7 @@ import com.google.common.collect.Lists;
 /**
  * Aggregation class that allows multiple aggregations to be performed in a single aggregation
  * query. The initial implementation does not take advantage of common index aggregations.
- * 
+ *
  * TODO: Update this class to derive from BaseOptimalVectorAggregation and if all sub aggregations
  * are common index aggregations, then the composite aggregation can run with only common index
  * data. Otherwise the feature needs to be decoded anyways, so all of the sub aggregations should be
@@ -37,7 +38,7 @@ public class CompositeVectorAggregation implements
 
   /**
    * Add an aggregation to this composite aggregation.
-   * 
+   *
    * @param aggregation the aggregation to add
    */
   public void add(final Aggregation<?, ?, SimpleFeature> aggregation) {
@@ -46,8 +47,8 @@ public class CompositeVectorAggregation implements
 
   @Override
   public PersistableList getParameters() {
-    List<Persistable> persistables = Lists.newArrayListWithCapacity(aggregations.size());
-    for (Aggregation agg : aggregations) {
+    final List<Persistable> persistables = Lists.newArrayListWithCapacity(aggregations.size());
+    for (final Aggregation agg : aggregations) {
       persistables.add(agg);
       persistables.add(agg.getParameters());
     }
@@ -56,19 +57,19 @@ public class CompositeVectorAggregation implements
 
   @Override
   public void setParameters(final PersistableList parameters) {
-    List<Persistable> persistables = parameters.getPersistables();
-    int numAggregations = persistables.size() / 2;
+    final List<Persistable> persistables = parameters.getPersistables();
+    final int numAggregations = persistables.size() / 2;
     aggregations = Lists.newArrayListWithCapacity(numAggregations);
     for (int i = 0; i < numAggregations; i++) {
-      Aggregation aggregation = (Aggregation) persistables.get(i * 2);
-      aggregation.setParameters(persistables.get(i * 2 + 1));
+      final Aggregation aggregation = (Aggregation) persistables.get(i * 2);
+      aggregation.setParameters(persistables.get((i * 2) + 1));
       aggregations.add(aggregation);
     }
   }
 
   @Override
   public List<Object> merge(final List<Object> result1, final List<Object> result2) {
-    List<Object> merged = Lists.newArrayListWithCapacity(aggregations.size());
+    final List<Object> merged = Lists.newArrayListWithCapacity(aggregations.size());
     for (int i = 0; i < aggregations.size(); i++) {
       merged.add(aggregations.get(i).merge(result1.get(i), result2.get(i)));
     }
@@ -82,7 +83,7 @@ public class CompositeVectorAggregation implements
 
   @Override
   public byte[] resultToBinary(final List<Object> result) {
-    List<byte[]> parts = Lists.newArrayListWithCapacity(aggregations.size());
+    final List<byte[]> parts = Lists.newArrayListWithCapacity(aggregations.size());
     int length = 0;
     for (int i = 0; i < aggregations.size(); i++) {
       final byte[] binary = aggregations.get(i).resultToBinary(result.get(i));
@@ -100,7 +101,7 @@ public class CompositeVectorAggregation implements
   @Override
   public List<Object> resultFromBinary(final byte[] binary) {
     final ByteBuffer buffer = ByteBuffer.wrap(binary);
-    List<Object> result = Lists.newArrayListWithCapacity(aggregations.size());
+    final List<Object> result = Lists.newArrayListWithCapacity(aggregations.size());
     final int length = aggregations.size();
     for (int i = 0; i < length; i++) {
       final int partLength = buffer.getInt();
@@ -117,8 +118,8 @@ public class CompositeVectorAggregation implements
   }
 
   @Override
-  public void aggregate(final SimpleFeature entry) {
-    aggregations.forEach(a -> a.aggregate(entry));
+  public void aggregate(final DataTypeAdapter<SimpleFeature> adapter, final SimpleFeature entry) {
+    aggregations.forEach(a -> a.aggregate(adapter, entry));
   }
 
 

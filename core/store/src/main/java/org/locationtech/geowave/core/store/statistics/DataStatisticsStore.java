@@ -11,14 +11,17 @@ package org.locationtech.geowave.core.store.statistics;
 import java.util.Iterator;
 import javax.annotation.Nullable;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.BinConstraints.ByteArrayConstraints;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeStatistic;
+import org.locationtech.geowave.core.store.api.FieldStatistic;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexStatistic;
 import org.locationtech.geowave.core.store.api.Statistic;
 import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.statistics.binning.DataTypeBinningStrategy;
-import org.locationtech.geowave.core.store.statistics.index.IndexStatistic;
 
 /**
  * This is responsible for persisting data statistics (either in memory or to disk depending on the
@@ -81,7 +84,7 @@ public interface DataStatisticsStore {
    * @param tag an optional tag filter
    * @return a list of index statistics for the given index
    */
-  CloseableIterator<? extends Statistic<? extends StatisticValue<?>>> getIndexStatistics(
+  CloseableIterator<? extends IndexStatistic<? extends StatisticValue<?>>> getIndexStatistics(
       final Index index,
       final @Nullable StatisticType<? extends StatisticValue<?>> statisticType,
       final @Nullable String tag);
@@ -94,7 +97,7 @@ public interface DataStatisticsStore {
    * @param tag an optional tag filter
    * @return a list of data type statistics for the given type
    */
-  CloseableIterator<? extends Statistic<? extends StatisticValue<?>>> getDataTypeStatistics(
+  CloseableIterator<? extends DataTypeStatistic<? extends StatisticValue<?>>> getDataTypeStatistics(
       final DataTypeAdapter<?> type,
       final @Nullable StatisticType<? extends StatisticValue<?>> statisticType,
       final @Nullable String tag);
@@ -109,7 +112,7 @@ public interface DataStatisticsStore {
    * @param tag an optional tag filter
    * @return a list of field statistics for the given type
    */
-  CloseableIterator<? extends Statistic<? extends StatisticValue<?>>> getFieldStatistics(
+  CloseableIterator<? extends FieldStatistic<? extends StatisticValue<?>>> getFieldStatistics(
       final DataTypeAdapter<?> type,
       final @Nullable StatisticType<? extends StatisticValue<?>> statisticType,
       final @Nullable String fieldName,
@@ -282,6 +285,20 @@ public interface DataStatisticsStore {
   <V extends StatisticValue<R>, R> V getStatisticValue(
       final Statistic<V> statistic,
       ByteArray bin,
+      String... authorizations);
+
+  /**
+   * Return the values of the given statistic that have bins that match the given ranges. This
+   * method is not applicable to statistics that do not use a binning strategy.
+   *
+   * @param statistic the statistic to get the value of
+   * @param binRanges the ranges of bins to get values for
+   * @param authorizations authorizations for the query
+   * @return the value of the statistic, or {@code null} if it was not found
+   */
+  <V extends StatisticValue<R>, R> CloseableIterator<V> getStatisticValues(
+      final Statistic<V> statistic,
+      ByteArrayRange[] binRanges,
       String... authorizations);
 
   /**

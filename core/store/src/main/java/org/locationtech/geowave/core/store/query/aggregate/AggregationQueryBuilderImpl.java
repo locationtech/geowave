@@ -9,10 +9,12 @@
 package org.locationtech.geowave.core.store.query.aggregate;
 
 import java.util.Map;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.AggregationQuery;
 import org.locationtech.geowave.core.store.api.AggregationQueryBuilder;
+import org.locationtech.geowave.core.store.api.BinningStrategy;
 import org.locationtech.geowave.core.store.query.BaseQueryBuilderImpl;
 import org.locationtech.geowave.core.store.query.options.AggregateTypeQueryOptions;
 
@@ -36,12 +38,12 @@ public class AggregationQueryBuilderImpl<P extends Persistable, R, T, A extends 
   }
 
   @Override
-  public AggregationQuery<BinningAggregationOptions<P, T>, Map<String, R>, T> buildWithBinningStrategy(
-      AggregationBinningStrategy<T> binningStrategy,
-      int maxBins) {
-    AggregateTypeQueryOptions<BinningAggregationOptions<P, T>, Map<String, R>, T> newOptions =
+  public AggregationQuery<BinningAggregationOptions<P, T>, Map<ByteArray, R>, T> buildWithBinningStrategy(
+      final BinningStrategy binningStrategy,
+      final int maxBins) {
+    final AggregateTypeQueryOptions<BinningAggregationOptions<P, T>, Map<ByteArray, R>, T> newOptions =
         new AggregateTypeQueryOptions<>(
-            new BinningAggregation<>(this.options.getAggregation(), binningStrategy, maxBins),
+            new BinningAggregation(this.options.getAggregation(), binningStrategy, maxBins),
             this.options.getTypeNames());
     return new AggregationQuery<>(
         newCommonQueryOptions(),

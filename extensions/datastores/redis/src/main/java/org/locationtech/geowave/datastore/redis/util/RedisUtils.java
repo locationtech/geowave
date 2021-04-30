@@ -15,8 +15,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
@@ -40,6 +43,27 @@ public class RedisUtils {
   protected static final int MAX_ROWS_FOR_PAGINATION = 1000000;
   public static int REDIS_DEFAULT_MAX_RANGE_DECOMPOSITION = 250;
   public static int REDIS_DEFAULT_AGGREGATION_MAX_RANGE_DECOMPOSITION = 250;
+
+  public static Stream<Range<Double>> getScoreRangesFromByteArrays(final ByteArrayRange range) {
+    final double start =
+        range.getStart() != null ? RedisUtils.getScore(range.getStart()) : Double.NEGATIVE_INFINITY;
+    final double end =
+        range.getEnd() != null ? RedisUtils.getScore(range.getEndAsNextPrefix())
+            : Double.POSITIVE_INFINITY;
+    if ((start >= 0) && (end < 0)) {
+      // if we crossed 0 the two's complement of the byte array changes the sign of the score,
+      // break it into multiple ranges, an alternative is flipping the first bit of the score
+      // using bitwise XOR ^ 0x8000000000000000l but it ends up causing many more common sort
+      // keys to be within the precision lost by the double floating point score of the mantissa
+      // (eg. a sort key of 0 when the first bit is flipped becomes -Double.MAX_VALUE which
+      // results in precision lost)
+      return Stream.of(
+          Range.between(start, Double.POSITIVE_INFINITY),
+          Range.between(Double.NEGATIVE_INFINITY, end));
+    } else {
+      return Stream.of(Range.between(start, end));
+    }
+  }
 
   public static RScoredSortedSet<GeoWaveMetadata> getMetadataSet(
       final RedissonClient client,

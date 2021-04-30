@@ -108,7 +108,8 @@ public class BaseDataStoreUtils {
 
   public static CloseableIterator<Object> aggregate(
       final CloseableIterator<Object> it,
-      final Aggregation<?, ?, Object> aggregationFunction) {
+      final Aggregation<?, ?, Object> aggregationFunction,
+      final DataTypeAdapter<Object> adapter) {
     if ((it != null) && it.hasNext()) {
       try {
         synchronized (aggregationFunction) {
@@ -116,7 +117,7 @@ public class BaseDataStoreUtils {
           while (it.hasNext()) {
             final Object input = it.next();
             if (input != null) {
-              aggregationFunction.aggregate(input);
+              aggregationFunction.aggregate(adapter, input);
             }
           }
         }

@@ -35,9 +35,9 @@ public abstract class AbstractAggregationTest<P extends Persistable, R, T> {
     agg2.setParameters((P) PersistenceUtils.fromBinary(aggregationParameters));
     for (int i = 0; i < objectsToAggregate.size(); i++) {
       if (i % 2 == 0) {
-        agg1.aggregate(objectsToAggregate.get(i));
+        agg1.aggregate(null, objectsToAggregate.get(i));
       } else {
-        agg2.aggregate(objectsToAggregate.get(i));
+        agg2.aggregate(null, objectsToAggregate.get(i));
       }
     }
     byte[] agg1ResultBinary = agg1.resultToBinary(agg1.getResult());

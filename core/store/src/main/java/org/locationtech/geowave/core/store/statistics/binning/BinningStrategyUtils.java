@@ -9,10 +9,12 @@
 package org.locationtech.geowave.core.store.statistics.binning;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import org.apache.commons.lang.ArrayUtils;
 import org.locationtech.geowave.core.index.ByteArray;
+import com.google.common.primitives.Bytes;
 
 /**
  * Static utility methods useful for binning strategies

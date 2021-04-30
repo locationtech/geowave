@@ -8,12 +8,15 @@
  */
 package org.locationtech.geowave.datastore.rocksdb.util;
 
+import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
+import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.rocksdb.ReadOptions;
 import org.rocksdb.RocksDB;
 import org.rocksdb.RocksDBException;
 import org.rocksdb.RocksIterator;
+import org.rocksdb.Slice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.primitives.Bytes;
@@ -86,6 +89,25 @@ public class RocksDBMetadataTable {
     } catch (final RocksDBException e) {
       LOGGER.warn("Unable to force compacting metadata", e);
     }
+  }
+
+  public CloseableIterator<GeoWaveMetadata> iterator(final ByteArrayRange range) {
+    final ReadOptions options;
+    final RocksIterator it;
+    if (range.getEnd() == null) {
+      options = null;
+      it = db.newIterator();
+    } else {
+      options = new ReadOptions().setIterateUpperBound(new Slice(range.getEndAsNextPrefix()));
+      it = db.newIterator(options);
+    }
+    if (range.getStart() == null) {
+      it.seekToFirst();
+    } else {
+      it.seek(range.getStart());
+    }
+
+    return new RocksDBMetadataIterator(options, it, requiresTimestamp, visibilityEnabled);
   }
 
   public CloseableIterator<GeoWaveMetadata> iterator(final byte[] primaryId) {

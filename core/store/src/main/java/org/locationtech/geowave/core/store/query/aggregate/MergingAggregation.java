@@ -12,6 +12,7 @@ import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.api.Aggregation;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 
 public class MergingAggregation<T extends Mergeable> implements Aggregation<Persistable, T, T> {
   private T result = null;
@@ -51,7 +52,7 @@ public class MergingAggregation<T extends Mergeable> implements Aggregation<Pers
   }
 
   @Override
-  public void aggregate(final T entry) {
+  public void aggregate(final DataTypeAdapter<T> adapter, final T entry) {
     if (result == null) {
       result = entry;
     } else {

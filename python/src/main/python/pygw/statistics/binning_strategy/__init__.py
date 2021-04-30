@@ -16,6 +16,7 @@ from pygw.statistics.binning_strategy import CompositeBinningStrategy
 from pygw.statistics.binning_strategy import DataTypeBinningStrategy
 from pygw.statistics.binning_strategy import FieldValueBinningStrategy
 from pygw.statistics.binning_strategy import NumericRangeFieldValueBinningStrategy
+from pygw.statistics.binning_strategy import SpatialFieldValueBinningStrategy
 from pygw.statistics.binning_strategy import TimeRangeFieldValueBinningStrategy
 from pygw.statistics.binning_strategy import PartitionBinningStrategy
 ```
@@ -25,5 +26,6 @@ from .composite_binning_strategy import CompositeBinningStrategy
 from .data_type_binning_strategy import DataTypeBinningStrategy
 from .field_value_binning_strategy import FieldValueBinningStrategy
 from .numeric_range_field_value_binning_strategy import NumericRangeFieldValueBinningStrategy
+from .spatial_field_value_binning_strategy import SpatialFieldValueBinningStrategy
 from .time_range_field_value_binning_strategy import TimeRangeFieldValueBinningStrategy
 from .partition_binning_strategy import PartitionBinningStrategy

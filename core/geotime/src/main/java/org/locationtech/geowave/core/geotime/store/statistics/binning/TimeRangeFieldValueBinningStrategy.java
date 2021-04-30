@@ -36,7 +36,7 @@ import com.beust.jcommander.Parameter;
  */
 public class TimeRangeFieldValueBinningStrategy extends FieldValueBinningStrategy {
   protected static Unit DEFAULT_PERIODICITY = Unit.DAY;
-  public static final String NAME = "TIME_FIELD_VALUE";
+  public static final String NAME = "TIME_RANGE";
 
   @Parameter(
       names = {"--binInteval"},

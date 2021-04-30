@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.locationtech.geowave.core.index.ByteArray;
@@ -457,27 +458,74 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
       if (typeStore == null) {
         return new CloseableIterator.Empty<>();
       }
-      final SortedSet<MemoryMetadataEntry> set =
-          typeStore.subSet(
-              new MemoryMetadataEntry(
-                  new GeoWaveMetadata(query.getPrimaryId(), query.getSecondaryId(), null, null),
-                  null),
-              new MemoryMetadataEntry(
-                  new GeoWaveMetadata(
-                      getNextPrefix(query.getPrimaryId()),
-                      getNextPrefix(query.getSecondaryId()),
-                      // this should be sufficient
-                      new byte[] {(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF},
-                      // this should be sufficient
-                      new byte[] {(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF}),
-                  new byte[] {
-                      (byte) 0xFF,
-                      (byte) 0xFF,
-                      (byte) 0xFF,
-                      (byte) 0xFF,
-                      (byte) 0xFF,
-                      (byte) 0xFF,
-                      (byte) 0xFF}));
+      final SortedSet<MemoryMetadataEntry> set;
+      if (query.hasPrimaryIdRanges()) {
+        set =
+            new TreeSet(
+                Arrays.stream(query.getPrimaryIdRanges()).flatMap(
+                    r -> typeStore.subSet(
+                        new MemoryMetadataEntry(
+                            new GeoWaveMetadata(r.getStart(), query.getSecondaryId(), null, null),
+                            null),
+                        new MemoryMetadataEntry(
+                            new GeoWaveMetadata(
+                                r.getEndAsNextPrefix(),
+                                getNextPrefix(query.getSecondaryId()),
+                                // this should be sufficient
+                                new byte[] {
+                                    (byte) 0xFF,
+                                    (byte) 0xFF,
+                                    (byte) 0xFF,
+                                    (byte) 0xFF,
+                                    (byte) 0xFF},
+                                // this should be sufficient
+                                new byte[] {
+                                    (byte) 0xFF,
+                                    (byte) 0xFF,
+                                    (byte) 0xFF,
+                                    (byte) 0xFF,
+                                    (byte) 0xFF}),
+                            new byte[] {
+                                (byte) 0xFF,
+                                (byte) 0xFF,
+                                (byte) 0xFF,
+                                (byte) 0xFF,
+                                (byte) 0xFF,
+                                (byte) 0xFF,
+                                (byte) 0xFF})).stream()).collect(Collectors.toSet()));
+      } else {
+        set =
+            typeStore.subSet(
+                new MemoryMetadataEntry(
+                    new GeoWaveMetadata(query.getPrimaryId(), query.getSecondaryId(), null, null),
+                    null),
+                new MemoryMetadataEntry(
+                    new GeoWaveMetadata(
+                        getNextPrefix(query.getPrimaryId()),
+                        getNextPrefix(query.getSecondaryId()),
+                        // this should be sufficient
+                        new byte[] {
+                            (byte) 0xFF,
+                            (byte) 0xFF,
+                            (byte) 0xFF,
+                            (byte) 0xFF,
+                            (byte) 0xFF},
+                        // this should be sufficient
+                        new byte[] {
+                            (byte) 0xFF,
+                            (byte) 0xFF,
+                            (byte) 0xFF,
+                            (byte) 0xFF,
+                            (byte) 0xFF}),
+                    new byte[] {
+                        (byte) 0xFF,
+                        (byte) 0xFF,
+                        (byte) 0xFF,
+                        (byte) 0xFF,
+                        (byte) 0xFF,
+                        (byte) 0xFF,
+                        (byte) 0xFF}));
+      }
       Iterator<MemoryMetadataEntry> it = set.iterator();
       if ((query.getAuthorizations() != null) && (query.getAuthorizations().length > 0)) {
         it =
@@ -500,7 +548,7 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
       // issues on the iterator that is linked back to the metadataStore
       // sortedSet (basically clone the iterator, so for example deletes
       // can occur while iterating through this query result)
-      CloseableIterator<GeoWaveMetadata> converted =
+      final CloseableIterator<GeoWaveMetadata> converted =
           new MemoryMetadataFilteringIterator(
               new CloseableIterator.Wrapper(
                   Iterators.forArray(Iterators.toArray(itTransformed, GeoWaveMetadata.class))),

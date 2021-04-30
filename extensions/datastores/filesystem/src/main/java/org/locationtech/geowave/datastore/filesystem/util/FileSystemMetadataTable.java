@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
@@ -77,6 +78,16 @@ public class FileSystemMetadataTable {
       key = Bytes.concat(value.getPrimaryId(), secondaryId, endBytes);
     }
     put(key, value.getValue());
+  }
+
+  public CloseableIterator<GeoWaveMetadata> iterator(final ByteArrayRange range) {
+    return new FileSystemMetadataIterator(
+        subDirectory,
+        range.getStart(),
+        range.getEndAsNextPrefix(),
+        requiresTimestamp,
+        visibilityEnabled);
+
   }
 
   public CloseableIterator<GeoWaveMetadata> iterator(final byte[] primaryId) {

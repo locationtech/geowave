@@ -13,6 +13,7 @@ import java.time.Instant;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.api.Aggregation;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.threeten.extra.Interval;
 
 public abstract class TimeRangeAggregation<P extends Persistable, T> implements
@@ -89,7 +90,7 @@ public abstract class TimeRangeAggregation<P extends Persistable, T> implements
   }
 
   @Override
-  public void aggregate(final T entry) {
+  public void aggregate(final DataTypeAdapter<T> adapter, final T entry) {
     final Interval env = getInterval(entry);
     aggregate(env);
   }

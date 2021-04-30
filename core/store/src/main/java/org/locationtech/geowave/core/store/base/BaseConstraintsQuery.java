@@ -25,6 +25,7 @@ import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.Aggregation;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexRetrieval;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
@@ -176,7 +177,10 @@ public class BaseConstraintsQuery extends BaseFilteredIndexQuery {
                 limit,
                 queryMaxRangeDecomposition,
                 false);
-        return BaseDataStoreUtils.aggregate(it, (Aggregation<?, ?, Object>) aggregation.getValue());
+        return BaseDataStoreUtils.aggregate(
+            it,
+            (Aggregation<?, ?, Object>) aggregation.getRight(),
+            (DataTypeAdapter) aggregation.getLeft());
       } else {
         // the aggregation is run server-side use the reader to
         // aggregate to a single value here

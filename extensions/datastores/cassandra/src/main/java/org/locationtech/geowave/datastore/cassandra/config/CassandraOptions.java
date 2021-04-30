@@ -77,4 +77,9 @@ public class CassandraOptions extends BaseDataStoreOptions {
   public boolean isServerSideLibraryEnabled() {
     return false;
   }
+
+  @Override
+  protected boolean defaultEnableVisibility() {
+    return false;
+  }
 }

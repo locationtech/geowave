@@ -9,6 +9,7 @@
 package org.locationtech.geowave.datastore.redis.operations;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
@@ -19,6 +20,7 @@ import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.datastore.redis.util.RedisUtils;
 import org.redisson.api.RScoredSortedSet;
+import org.redisson.client.protocol.ScoredEntry;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
@@ -52,6 +54,24 @@ public class RedisMetadataReader implements MetadataReader {
                 RedisUtils.getScore(ByteArrayUtils.getNextPrefix(query.getPrimaryId())),
                 false);
       }
+    } else if (query.hasPrimaryIdRanges()) {
+      results =
+          Arrays.stream(query.getPrimaryIdRanges()).flatMap(
+              range -> RedisUtils.getScoreRangesFromByteArrays(range).map(
+                  scoreRange -> new RangeReadInfo(
+                      scoreRange.getMinimum(),
+                      scoreRange.getMaximum(),
+                      range)).flatMap(r -> // Streams.stream(
+              set.entryRange(
+                  r.startScore,
+                  true,
+                  r.endScore,
+                  // because we have a finite precision we need to make
+                  // sure the end is inclusive and do more precise client-side
+                  // filtering
+                  ((r.endScore <= r.startScore) || (r.explicitEndCheck != null))).stream().filter(
+                      e -> r.passesExplicitMetadataRowChecks(e)))).map(
+                          ScoredEntry::getValue).collect(Collectors.toList());
     } else {
       results = set;
     }

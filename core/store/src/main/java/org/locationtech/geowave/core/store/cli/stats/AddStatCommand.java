@@ -19,7 +19,6 @@ import org.locationtech.geowave.core.store.api.Statistic;
 import org.locationtech.geowave.core.store.api.StatisticBinningStrategy;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.store.StoreLoader;
-import org.locationtech.geowave.core.store.statistics.BaseStatistic;
 import org.locationtech.geowave.core.store.statistics.StatisticsRegistry;
 import org.locationtech.geowave.core.store.statistics.binning.CompositeBinningStrategy;
 import com.beust.jcommander.Parameter;
@@ -48,14 +47,16 @@ public class AddStatCommand extends ServiceEnabledCommand<Void> {
   private String statType = null;
 
   @ParametersDelegate
-  Statistic<?> statOptions;
+  private Statistic<?> statOptions;
 
   @ParametersDelegate
-  StatisticBinningStrategy binningStrategy = null;
+  private StatisticBinningStrategy binningStrategy = null;
 
   @Override
   public boolean prepare(final OperationParams params) {
-    super.prepare(params);
+    if (!super.prepare(params)) {
+      return false;
+    }
 
     if (statType == null) {
       throw new ParameterException("Missing statistic type.");
@@ -102,8 +103,8 @@ public class AddStatCommand extends ServiceEnabledCommand<Void> {
 
     final DataStore dataStore = storeOptions.createDataStore();
 
-    if ((binningStrategy != null) && (statOptions instanceof BaseStatistic<?>)) {
-      ((BaseStatistic<?>) statOptions).setBinningStrategy(binningStrategy);
+    if (binningStrategy != null) {
+      statOptions.setBinningStrategy(binningStrategy);
     }
     if (skipCalculation) {
       dataStore.addEmptyStatistic(statOptions);
@@ -112,4 +113,21 @@ public class AddStatCommand extends ServiceEnabledCommand<Void> {
     }
     return null;
   }
+
+  void setBinningStrategyName(final String binningStrategyName) {
+    this.binningStrategyName = binningStrategyName;
+  }
+
+  void setStatType(final String statType) {
+    this.statType = statType;
+  }
+
+  void setSkipCalculation(final boolean skipCalculation) {
+    this.skipCalculation = skipCalculation;
+  }
+
+  void setParameters(final List<String> parameters) {
+    this.parameters = parameters;
+  }
+
 }

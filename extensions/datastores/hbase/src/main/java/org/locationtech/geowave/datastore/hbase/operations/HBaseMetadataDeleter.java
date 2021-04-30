@@ -9,13 +9,18 @@
 package org.locationtech.geowave.datastore.hbase.operations;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.BufferedMutator;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.log4j.Logger;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.operations.MetadataDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
+import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 
 public class HBaseMetadataDeleter implements MetadataDeleter {
@@ -39,21 +44,42 @@ public class HBaseMetadataDeleter implements MetadataDeleter {
     // well-defined and it is deleting a single entry at a time
     final TableName tableName =
         operations.getTableName(operations.getMetadataTableName(metadataType));
+    if (!query.hasPrimaryId() && !query.hasSecondaryId()) {
+      // bulk delete should be much faster
+      final MetadataReader reader = operations.createMetadataReader(metadataType);
+      final List<Delete> listOfBatchDelete = new ArrayList<>();
+      try (final CloseableIterator<GeoWaveMetadata> it = reader.query(query)) {
+        while (it.hasNext()) {
+          final GeoWaveMetadata entry = it.next();
+          final Delete delete = new Delete(entry.getPrimaryId());
+          delete.addColumns(StringUtils.stringToBinary(metadataType.id()), entry.getSecondaryId());
+          listOfBatchDelete.add(delete);
+        }
+      }
+      try {
+        final BufferedMutator deleter = operations.getBufferedMutator(tableName);
+        deleter.mutate(listOfBatchDelete);
+        deleter.close();
+        return true;
+      } catch (final IOException e) {
+        LOGGER.error("Error bulk deleting metadata", e);
+      }
+      return false;
+    } else {
+      try {
+        final BufferedMutator deleter = operations.getBufferedMutator(tableName);
 
-    try {
-      final BufferedMutator deleter = operations.getBufferedMutator(tableName);
+        final Delete delete = new Delete(query.getPrimaryId());
+        delete.addColumns(StringUtils.stringToBinary(metadataType.id()), query.getSecondaryId());
 
-      final Delete delete = new Delete(query.getPrimaryId());
-      delete.addColumns(StringUtils.stringToBinary(metadataType.id()), query.getSecondaryId());
+        deleter.mutate(delete);
+        deleter.close();
 
-      deleter.mutate(delete);
-      deleter.close();
-
-      return true;
-    } catch (final IOException e) {
-      LOGGER.error("Error deleting metadata", e);
+        return true;
+      } catch (final IOException e) {
+        LOGGER.error("Error deleting metadata", e);
+      }
     }
-
     return false;
   }
 

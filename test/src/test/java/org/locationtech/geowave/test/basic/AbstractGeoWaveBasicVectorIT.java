@@ -55,6 +55,7 @@ import org.locationtech.geowave.core.store.api.AggregationQuery;
 import org.locationtech.geowave.core.store.api.AggregationQueryBuilder;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.FieldStatistic;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.api.Statistic;
@@ -76,7 +77,6 @@ import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.statistics.DefaultStatisticsProvider;
 import org.locationtech.geowave.core.store.statistics.StatisticId;
 import org.locationtech.geowave.core.store.statistics.StatisticsIngestCallback;
-import org.locationtech.geowave.core.store.statistics.field.FieldStatistic;
 import org.locationtech.geowave.format.geotools.vector.GeoToolsVectorDataStoreIngestPlugin;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.TestUtils.DimensionalityType;
@@ -260,7 +260,9 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
     long count = 0;
 
     @Override
-    public void aggregate(final CommonIndexedPersistenceEncoding entry) {
+    public void aggregate(
+        final DataTypeAdapter<CommonIndexedPersistenceEncoding> adapter,
+        final CommonIndexedPersistenceEncoding entry) {
       if (!entry.isDuplicated()) {
         return;
       }

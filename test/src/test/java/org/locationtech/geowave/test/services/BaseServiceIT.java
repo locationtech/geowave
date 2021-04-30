@@ -43,6 +43,8 @@ public abstract class BaseServiceIT extends AbstractGeoWaveIT {
     loggerMap.entrySet().forEach(entry -> {
       LogManager.getLogger(entry.getKey()).setLevel(entry.getValue());
     });
+
+    org.apache.log4j.Logger.getRootLogger().setLevel(Level.WARN);
     loggerMap.clear();
   }
 }

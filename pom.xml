@@ -548,6 +548,12 @@
 			</dependency>
 			<dependency>
 				<groupId>org.geotools</groupId>
+				<artifactId>gt-geojsondatastore</artifactId>
+				<version>${geotools.version}</version>
+				<scope>${geotools.scope}</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.geotools</groupId>
 				<artifactId>gt-opengis</artifactId>
 				<version>${geotools.version}</version>
 				<scope>${geotools.scope}</scope>

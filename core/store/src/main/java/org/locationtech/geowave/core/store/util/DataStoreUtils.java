@@ -56,6 +56,7 @@ import org.locationtech.geowave.core.store.data.visibility.UniformVisibilityWrit
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
+import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowImpl;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
@@ -71,6 +72,10 @@ import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.CustomIndex;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
+import org.locationtech.geowave.core.store.operations.MetadataDeleter;
+import org.locationtech.geowave.core.store.operations.MetadataQuery;
+import org.locationtech.geowave.core.store.operations.MetadataReader;
+import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.operations.RangeReaderParams;
 import org.locationtech.geowave.core.store.operations.ReaderParamsBuilder;
 import org.locationtech.geowave.core.store.operations.RowDeleter;
@@ -618,5 +623,24 @@ public class DataStoreUtils {
       }
     }
     return Collections.unmodifiableList(loadedIndices);
+  }
+
+  public static void safeMetadataDelete(
+      final MetadataDeleter deleter,
+      final DataStoreOperations operations,
+      final MetadataType metadataType,
+      final MetadataQuery query) {
+    // we need to respect visibilities although this may be much slower
+    final MetadataReader reader = operations.createMetadataReader(metadataType);
+    try (final CloseableIterator<GeoWaveMetadata> it = reader.query(query)) {
+      while (it.hasNext()) {
+        final GeoWaveMetadata entry = it.next();
+        deleter.delete(
+            new MetadataQuery(
+                entry.getPrimaryId(),
+                entry.getSecondaryId(),
+                query.getAuthorizations()));
+      }
+    }
   }
 }

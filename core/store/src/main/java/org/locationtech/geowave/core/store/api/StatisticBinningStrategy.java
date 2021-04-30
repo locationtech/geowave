@@ -10,9 +10,9 @@ package org.locationtech.geowave.core.store.api;
 
 import java.util.Arrays;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.api.BinConstraints.ByteArrayConstraints;
-import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.statistics.query.BinConstraintsImpl.ExplicitConstraints;
 
 /**
@@ -20,30 +20,20 @@ import org.locationtech.geowave.core.store.statistics.query.BinConstraintsImpl.E
  * be split up by an arbitrary strategy. This allows a simple statistic to be used in many different
  * ways.
  */
-public interface StatisticBinningStrategy extends Persistable {
+public interface StatisticBinningStrategy extends Persistable, BinningStrategy {
   /**
    * Get the name of the binning strategy.
    *
    * @return the binning strategy name
    */
-  public String getStrategyName();
+  String getStrategyName();
 
   /**
    * Get a human-readable description of the binning strategy.
    *
    * @return a description of the binning strategy
    */
-  public String getDescription();
-
-  /**
-   * Get the bins used by the given entry. Each bin will have a separate statistic value.
-   *
-   * @param type the data type
-   * @param entry the entry
-   * @param rows the rows created for the entry
-   * @return a set of bins used by the given entry
-   */
-  public <T> ByteArray[] getBins(DataTypeAdapter<T> type, T entry, GeoWaveRow... rows);
+  String getDescription();
 
   /**
    * Get a human-readable string of a bin.
@@ -51,19 +41,21 @@ public interface StatisticBinningStrategy extends Persistable {
    * @param bin the bin
    * @return the string value of the bin
    */
-  public String binToString(final ByteArray bin);
+  String binToString(final ByteArray bin);
 
   /**
    * Get a default tag for statistics that use this binning strategy.
-   * 
+   *
    * @return the default tag
    */
-  public String getDefaultTag();
+  String getDefaultTag();
 
   default Class<?>[] supportedConstraintClasses() {
     return new Class<?>[] {
         ByteArray[].class,
         ByteArray.class,
+        ByteArrayRange[].class,
+        ByteArrayRange.class,
         String.class,
         String[].class,
         BinConstraints.class,
@@ -80,6 +72,10 @@ public interface StatisticBinningStrategy extends Persistable {
     } else if (constraints instanceof String[]) {
       return new ExplicitConstraints(
           Arrays.stream((String[]) constraints).map(ByteArray::new).toArray(ByteArray[]::new));
+    } else if (constraints instanceof ByteArrayRange) {
+      return new ExplicitConstraints(new ByteArrayRange[] {(ByteArrayRange) constraints});
+    } else if (constraints instanceof ByteArrayRange[]) {
+      return new ExplicitConstraints((ByteArrayRange[]) constraints);
     } else if (constraints instanceof ByteArrayConstraints) {
       return (ByteArrayConstraints) constraints;
     } else if (constraints instanceof BinConstraints) {

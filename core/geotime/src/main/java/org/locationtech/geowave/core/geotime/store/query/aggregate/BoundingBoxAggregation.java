@@ -11,6 +11,7 @@ package org.locationtech.geowave.core.geotime.store.query.aggregate;
 import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.api.Aggregation;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.jts.geom.Envelope;
 
 public abstract class BoundingBoxAggregation<P extends Persistable, T> implements
@@ -92,7 +93,7 @@ public abstract class BoundingBoxAggregation<P extends Persistable, T> implement
   }
 
   @Override
-  public void aggregate(final T entry) {
+  public void aggregate(DataTypeAdapter<T> adapter, final T entry) {
     final Envelope env = getEnvelope(entry);
     aggregate(env);
   }

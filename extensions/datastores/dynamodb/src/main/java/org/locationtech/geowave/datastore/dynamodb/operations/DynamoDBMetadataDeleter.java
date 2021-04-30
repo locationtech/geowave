@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import org.locationtech.geowave.core.store.operations.MetadataDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataType;
+import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
@@ -41,6 +42,16 @@ public class DynamoDBMetadataDeleter implements MetadataDeleter {
     // the nature of metadata deleter is that primary ID is always
     // well-defined and it is deleting a single entry at a time
     final String tableName = operations.getMetadataTableName(metadataType);
+    if (!metadata.hasPrimaryId() && !metadata.hasSecondaryId()) {
+      if (operations.getOptions().getBaseOptions().isVisibilityEnabled()) {
+        // we need to respect visibilities although this may be much slower
+        DataStoreUtils.safeMetadataDelete(this, operations, metadataType, metadata);
+      } else {
+        // without visibilities it is much faster to drop the table
+        operations.dropMetadataTable(metadataType);
+      }
+      return true;
+    }
     final QueryRequest queryRequest = new QueryRequest(tableName);
 
     if (metadata.hasSecondaryId()) {
@@ -50,11 +61,13 @@ public class DynamoDBMetadataDeleter implements MetadataDeleter {
                   ":secVal",
                   new AttributeValue().withB(ByteBuffer.wrap(metadata.getSecondaryId())));
     }
-    queryRequest.withKeyConditionExpression(
-        DynamoDBOperations.METADATA_PRIMARY_ID_KEY
-            + " = :priVal").addExpressionAttributeValuesEntry(
-                ":priVal",
-                new AttributeValue().withB(ByteBuffer.wrap(metadata.getPrimaryId())));
+    if (metadata.hasPrimaryId()) {
+      queryRequest.withKeyConditionExpression(
+          DynamoDBOperations.METADATA_PRIMARY_ID_KEY
+              + " = :priVal").addExpressionAttributeValuesEntry(
+                  ":priVal",
+                  new AttributeValue().withB(ByteBuffer.wrap(metadata.getPrimaryId())));
+    }
 
     final QueryResult queryResult = operations.getClient().query(queryRequest);
     for (final Map<String, AttributeValue> entry : queryResult.getItems()) {

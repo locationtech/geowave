@@ -71,8 +71,8 @@ public class StatisticUpdateHandler<T, V extends StatisticValue<R>, R> implement
       statisticsMap.put(visibility, binnedValues);
     }
     if (statistic.getBinningStrategy() != null) {
-      ByteArray[] bins = statistic.getBinningStrategy().getBins(adapter, entry, rows);
-      for (ByteArray bin : bins) {
+      final ByteArray[] bins = statistic.getBinningStrategy().getBins(adapter, entry, rows);
+      for (final ByteArray bin : bins) {
         handleBin(handler, binnedValues, bin, entry, rows);
       }
     } else {
@@ -82,13 +82,14 @@ public class StatisticUpdateHandler<T, V extends StatisticValue<R>, R> implement
 
   protected void handleBin(
       final Handler<T, V, R> handler,
-      Map<ByteArray, V> binnedValues,
-      ByteArray bin,
+      final Map<ByteArray, V> binnedValues,
+      final ByteArray bin,
       final T entry,
       final GeoWaveRow... rows) {
     V value = binnedValues.get(bin);
     if (value == null) {
       value = statistic.createEmpty();
+      value.setBin(bin);
       binnedValues.put(bin, value);
     }
     handler.handle(value, adapter, entry, rows);
@@ -122,8 +123,8 @@ public class StatisticUpdateHandler<T, V extends StatisticValue<R>, R> implement
     try (StatisticValueWriter<V> statWriter =
         statisticsStore.createStatisticValueWriter(statistic)) {
       for (final Entry<ByteArray, Map<ByteArray, V>> visibilityStatistic : statisticsMap.entrySet()) {
-        Map<ByteArray, V> bins = visibilityStatistic.getValue();
-        for (Entry<ByteArray, V> binValue : bins.entrySet()) {
+        final Map<ByteArray, V> bins = visibilityStatistic.getValue();
+        for (final Entry<ByteArray, V> binValue : bins.entrySet()) {
           statWriter.writeStatisticValue(
               binValue.getKey().getBytes(),
               visibilityStatistic.getKey().getBytes(),
@@ -131,7 +132,7 @@ public class StatisticUpdateHandler<T, V extends StatisticValue<R>, R> implement
         }
       }
       statisticsMap.clear();
-    } catch (Exception e) {
+    } catch (final Exception e) {
       LOGGER.error("Unable to write statistic value.", e);
     }
   }
@@ -146,9 +147,10 @@ public class StatisticUpdateHandler<T, V extends StatisticValue<R>, R> implement
 
   private static class IngestHandler<T, V extends StatisticValue<R>, R> implements
       Handler<T, V, R> {
+    @Override
     public void handle(
-        V value,
-        DataTypeAdapter<T> adapter,
+        final V value,
+        final DataTypeAdapter<T> adapter,
         final T entry,
         final GeoWaveRow... rows) {
       if (value instanceof StatisticsIngestCallback) {
@@ -159,9 +161,10 @@ public class StatisticUpdateHandler<T, V extends StatisticValue<R>, R> implement
 
   private static class DeleteHandler<T, V extends StatisticValue<R>, R> implements
       Handler<T, V, R> {
+    @Override
     public void handle(
-        V value,
-        DataTypeAdapter<T> adapter,
+        final V value,
+        final DataTypeAdapter<T> adapter,
         final T entry,
         final GeoWaveRow... rows) {
       if (value instanceof StatisticsDeleteCallback) {

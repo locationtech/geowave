@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.datastore.hbase.operations;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
+import org.apache.hadoop.hbase.filter.MultiRowRangeFilter;
 import org.apache.hadoop.hbase.security.visibility.Authorizations;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
@@ -63,14 +65,31 @@ public class HBaseMetadataReader implements MetadataReader {
       } else {
         scanner.addFamily(columnFamily);
       }
-
-      if (query.hasPrimaryId()) {
-        if (query.isPrefix()) {
-          scanner.setStartRow(query.getPrimaryId());
-          scanner.setStopRow(ByteArrayUtils.getNextPrefix(query.getPrimaryId()));
+      if (query.hasPrimaryIdRanges()) {
+        final MultiRowRangeFilter filter =
+            operations.getMultiRowRangeFilter(Arrays.asList(query.getPrimaryIdRanges()));
+        // TODO performance could be perhaps improved using parallel scanning logic but for now keep
+        // it simple
+        if (filter.getRowRanges().size() == 1) {
+          scanner.setStartRow(filter.getRowRanges().get(0).getStartRow());
+          scanner.setStopRow(filter.getRowRanges().get(0).getStopRow());
+        } else if (filter.getRowRanges().size() > 1) {
+          scanner.setFilter(filter);
+          scanner.setStartRow(filter.getRowRanges().get(0).getStartRow());
+          scanner.setStopRow(
+              filter.getRowRanges().get(filter.getRowRanges().size() - 1).getStopRow());
         } else {
-          scanner.setStartRow(query.getPrimaryId());
-          scanner.setStopRow(query.getPrimaryId());
+          return new CloseableIterator.Empty<>();
+        }
+      } else {
+        if (query.hasPrimaryId()) {
+          if (query.isPrefix()) {
+            scanner.setStartRow(query.getPrimaryId());
+            scanner.setStopRow(ByteArrayUtils.getNextPrefix(query.getPrimaryId()));
+          } else {
+            scanner.setStartRow(query.getPrimaryId());
+            scanner.setStopRow(query.getPrimaryId());
+          }
         }
       }
       final boolean clientsideStatsMerge =

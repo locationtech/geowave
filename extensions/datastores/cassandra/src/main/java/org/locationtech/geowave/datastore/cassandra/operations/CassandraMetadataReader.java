@@ -9,8 +9,9 @@
 package org.locationtech.geowave.datastore.cassandra.operations;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.Iterator;
-import org.bouncycastle.util.Arrays;
+import org.apache.commons.lang3.ArrayUtils;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
@@ -40,37 +41,62 @@ public class CassandraMetadataReader implements MetadataReader {
   @Override
   public CloseableIterator<GeoWaveMetadata> query(final MetadataQuery query) {
     final String tableName = operations.getMetadataTableName(metadataType);
-    String[] selectedColumns = getSelectedColumns(query);
+    final String[] selectedColumns =
+        metadataType.isStatValues()
+            ? ArrayUtils.add(getSelectedColumns(query), CassandraMetadataWriter.VISIBILITY_KEY)
+            : getSelectedColumns(query);
     Predicate<Row> clientFilter = null;
-    if (metadataType.isStatValues()) {
-      selectedColumns = Arrays.append(selectedColumns, CassandraMetadataWriter.VISIBILITY_KEY);
-    }
     if (query.isPrefix()) {
       if (query.hasPrimaryId()) {
         clientFilter = new PrimaryIDPrefixFilter(query.getPrimaryId());
       }
     }
-    final Select select = operations.getSelect(tableName, selectedColumns);
-    if (query.hasPrimaryId() && query.isExact()) {
-      final Where where =
-          select.where(
+
+    final Iterator<Row> rows;
+    if (!query.hasPrimaryIdRanges()) {
+      final Select select = operations.getSelect(tableName, selectedColumns);
+      if (query.hasPrimaryId() && query.isExact()) {
+        final Where where =
+            select.where(
+                QueryBuilder.eq(
+                    CassandraMetadataWriter.PRIMARY_ID_KEY,
+                    ByteBuffer.wrap(query.getPrimaryId())));
+        if (query.hasSecondaryId()) {
+          where.and(
               QueryBuilder.eq(
-                  CassandraMetadataWriter.PRIMARY_ID_KEY,
-                  ByteBuffer.wrap(query.getPrimaryId())));
-      if (query.hasSecondaryId()) {
-        where.and(
+                  CassandraMetadataWriter.SECONDARY_ID_KEY,
+                  ByteBuffer.wrap(query.getSecondaryId())));
+        }
+      } else if (query.hasSecondaryId()) {
+        select.allowFiltering().where(
             QueryBuilder.eq(
                 CassandraMetadataWriter.SECONDARY_ID_KEY,
                 ByteBuffer.wrap(query.getSecondaryId())));
       }
-    } else if (query.hasSecondaryId()) {
-      select.allowFiltering().where(
-          QueryBuilder.eq(
-              CassandraMetadataWriter.SECONDARY_ID_KEY,
-              ByteBuffer.wrap(query.getSecondaryId())));
+
+      final ResultSet rs = operations.getSession().execute(select);
+      rows = rs.iterator();
+    } else {
+      rows = Iterators.concat(Arrays.stream(query.getPrimaryIdRanges()).map((r) -> {
+        // TODO this is not as efficient as prepared bound statements if there are many
+        // ranges, but will work for now
+        final Select select = operations.getSelect(tableName, selectedColumns);
+        if (r.getStart() != null) {
+          select.allowFiltering().where(
+              QueryBuilder.gte(
+                  CassandraMetadataWriter.PRIMARY_ID_KEY,
+                  ByteBuffer.wrap(r.getStart())));
+        }
+        if (r.getEnd() != null) {
+          select.allowFiltering().where(
+              QueryBuilder.lt(
+                  CassandraMetadataWriter.PRIMARY_ID_KEY,
+                  ByteBuffer.wrap(r.getEndAsNextPrefix())));
+        }
+        final ResultSet rs = operations.getSession().execute(select);
+        return rs.iterator();
+      }).iterator());
     }
-    final ResultSet rs = operations.getSession().execute(select);
-    final Iterator<Row> rows = rs.iterator();
     final CloseableIterator<GeoWaveMetadata> retVal =
         new CloseableIterator.Wrapper<>(
             Iterators.transform(
@@ -140,7 +166,8 @@ public class CassandraMetadataReader implements MetadataReader {
       if (row == null) {
         return false;
       }
-      byte[] primaryId = row.get(CassandraMetadataWriter.PRIMARY_ID_KEY, ByteBuffer.class).array();
+      final byte[] primaryId =
+          row.get(CassandraMetadataWriter.PRIMARY_ID_KEY, ByteBuffer.class).array();
       return ByteArrayUtils.startsWith(primaryId, prefix);
     }
   }

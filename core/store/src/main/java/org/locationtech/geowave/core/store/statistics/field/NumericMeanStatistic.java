@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.FieldStatistic;
 import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.statistics.StatisticsDeleteCallback;
@@ -87,8 +88,15 @@ public class NumericMeanStatistic extends FieldStatistic<NumericMeanStatistic.Nu
       }
       final double num = ((Number) o).doubleValue();
       if (!Double.isNaN(num)) {
-        sum += num;
-        count++;
+        if (getBin() != null && getStatistic().getBinningStrategy() != null) {
+          final double weight =
+              getStatistic().getBinningStrategy().getWeight(getBin(), adapter, entry, rows);
+          sum += (num * weight);
+          count += (weight);
+        } else {
+          sum += num;
+          count++;
+        }
       }
     }
 
@@ -104,8 +112,15 @@ public class NumericMeanStatistic extends FieldStatistic<NumericMeanStatistic.Nu
       }
       final double num = ((Number) o).doubleValue();
       if (!Double.isNaN(num)) {
-        sum -= num;
-        count--;
+        if (getBin() != null && getStatistic().getBinningStrategy() != null) {
+          final double weight =
+              getStatistic().getBinningStrategy().getWeight(getBin(), adapter, entry, rows);
+          sum -= (num * weight);
+          count -= (weight);
+        } else {
+          sum -= num;
+          count--;
+        }
       }
     }
 

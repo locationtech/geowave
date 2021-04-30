@@ -248,15 +248,15 @@ public class AggregationEndpoint extends AggregationProtosServer.AggregationServ
               final Object row = hdFilter.decodeRow(dataAdapter);
 
               if (row != null) {
-                aggregation.aggregate(row);
+                aggregation.aggregate(dataAdapter, row);
               } else {
                 LOGGER.error("DataAdapter failed to decode row");
               }
             } else {
-              aggregation.aggregate(hdFilter.getPersistenceEncoding());
+              aggregation.aggregate(null, hdFilter.getPersistenceEncoding());
             }
           } else {
-            aggregation.aggregate(null);
+            aggregation.aggregate(dataAdapter, null);
           }
           results.clear();
         }

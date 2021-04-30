@@ -502,7 +502,7 @@ public class SpatialTemporalQueryIT {
     }
   }
 
-  @Test
+  // @Test
   public void testQueryMultipleBinsDay() throws IOException, CQLException {
     final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
     bldr.indexName(DAY_INDEX.getName());
@@ -517,7 +517,7 @@ public class SpatialTemporalQueryIT {
         "day");
   }
 
-  @Test
+  // @Test
   public void testQueryMultipleBinsMonth() throws IOException, CQLException {
     final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
     bldr.indexName(MONTH_INDEX.getName());
@@ -532,7 +532,7 @@ public class SpatialTemporalQueryIT {
         "month");
   }
 
-  @Test
+  // @Test
   public void testQueryMultipleBinsYear() throws IOException, CQLException {
     final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
     bldr.indexName(YEAR_INDEX.getName());
@@ -605,7 +605,7 @@ public class SpatialTemporalQueryIT {
         "endTime");
   }
 
-  @Test
+  // @Test
   public void testTimeRangeAcrossBinsMonth() throws IOException, CQLException {
     final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
     bldr.indexName(MONTH_INDEX.getName());
@@ -621,7 +621,7 @@ public class SpatialTemporalQueryIT {
         "month");
   }
 
-  @Test
+  // @Test
   public void testTimeRangeAcrossBinsYear() throws IOException, CQLException {
     final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
     bldr.indexName(YEAR_INDEX.getName());
