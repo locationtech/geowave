@@ -46,7 +46,9 @@ public class DynamoDBMetadataReader implements MetadataReader {
   public CloseableIterator<GeoWaveMetadata> query(final MetadataQuery query) {
     final String tableName = operations.getMetadataTableName(metadataType);
 
-    final boolean needsVisibility = metadataType.isStatValues();
+    final boolean needsVisibility =
+        metadataType.isStatValues()
+            && this.operations.getOptions().getBaseOptions().isVisibilityEnabled();
     final Iterator<Map<String, AttributeValue>> iterator;
     if (!query.hasPrimaryIdRanges()) {
       if (query.hasPrimaryId() && query.isExact()) {
@@ -89,12 +91,7 @@ public class DynamoDBMetadataReader implements MetadataReader {
       }
       final ScanResult scanResult = operations.getClient().scan(scan);
 
-
-      if (needsVisibility) {
-        iterator = new LazyPaginatedScan(scanResult, scan, operations.getClient());
-      } else {
-        iterator = scanResult.getItems().iterator();
-      }
+      iterator = new LazyPaginatedScan(scanResult, scan, operations.getClient());
     } else {
       iterator = Iterators.concat(Arrays.stream(query.getPrimaryIdRanges()).map(r -> {
         final ScanRequest scan = new ScanRequest(tableName);
@@ -132,13 +129,7 @@ public class DynamoDBMetadataReader implements MetadataReader {
                           ComparisonOperator.LT));
         }
         final ScanResult scanResult = operations.getClient().scan(scan);
-        Iterator<Map<String, AttributeValue>> internalIterator;
-        if (needsVisibility) {
-          internalIterator = new LazyPaginatedScan(scanResult, scan, operations.getClient());
-        } else {
-          internalIterator = scanResult.getItems().iterator();
-        }
-        return internalIterator;
+        return new LazyPaginatedScan(scanResult, scan, operations.getClient());
       }).iterator());
     }
     return wrapIterator(iterator, query, needsVisibility);
