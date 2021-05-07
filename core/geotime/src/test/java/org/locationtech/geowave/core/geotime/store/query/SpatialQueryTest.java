@@ -12,14 +12,13 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.index.SpatialOptions;
-import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
+import org.locationtech.geowave.core.geotime.store.dimension.SpatialField;
 import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
@@ -44,9 +43,9 @@ public class SpatialQueryTest {
   }
 
   private IndexedPersistenceEncoding createData(final Geometry geomData) {
-    final PersistentDataset<CommonIndexValue> commonData = new MultiFieldPersistentDataset<>();
+    final PersistentDataset<Object> commonData = new MultiFieldPersistentDataset<>();
 
-    commonData.addValue(GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME, new GeometryWrapper(geomData));
+    commonData.addValue(SpatialField.DEFAULT_GEOMETRY_FIELD_NAME, geomData);
 
     return new IndexedPersistenceEncoding(
         (short) 1,

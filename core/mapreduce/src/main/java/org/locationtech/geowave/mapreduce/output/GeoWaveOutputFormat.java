@@ -27,7 +27,6 @@ import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
-import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
@@ -243,7 +242,7 @@ public class GeoWaveOutputFormat extends OutputFormat<GeoWaveOutputKey<Object>, 
 
     private synchronized Writer<?> getIndexWriter(
         final DataTypeAdapter<?> adapter,
-        final String[] indexNames) throws MismatchedIndexToAdapterMapping {
+        final String[] indexNames) {
       Writer<?> writer = adapterTypeNameToIndexWriterCache.get(adapter.getTypeName());
       if (writer == null) {
         final Index[] indices = new Index[indexNames.length];

@@ -19,7 +19,7 @@ public class ByteSerializationProvider implements FieldSerializationProviderSpi<
   }
 
   @Override
-  public FieldWriter<Object, Byte> getFieldWriter() {
+  public FieldWriter<Byte> getFieldWriter() {
     return new ByteWriter();
   }
 
@@ -33,7 +33,7 @@ public class ByteSerializationProvider implements FieldSerializationProviderSpi<
     }
   }
 
-  public static class ByteWriter implements FieldWriter<Object, Byte> {
+  public static class ByteWriter implements FieldWriter<Byte> {
     @Override
     public byte[] writeField(final Byte fieldValue) {
       if (fieldValue == null) {

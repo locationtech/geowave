@@ -25,7 +25,7 @@ public class BigIntegerArraySerializationProvider implements
   }
 
   @Override
-  public FieldWriter<Object, BigInteger[]> getFieldWriter() {
+  public FieldWriter<BigInteger[]> getFieldWriter() {
     return new BigIntegerArrayWriter();
   }
 
@@ -35,8 +35,7 @@ public class BigIntegerArraySerializationProvider implements
     }
   }
 
-  private static class BigIntegerArrayWriter extends
-      VariableSizeObjectArrayWriter<Object, BigInteger> {
+  private static class BigIntegerArrayWriter extends VariableSizeObjectArrayWriter<BigInteger> {
     public BigIntegerArrayWriter() {
       super(new BigIntegerWriter());
     }

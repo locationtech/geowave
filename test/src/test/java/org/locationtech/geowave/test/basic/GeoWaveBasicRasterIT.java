@@ -32,6 +32,7 @@ import org.locationtech.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeS
 import org.locationtech.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.DataStore;
@@ -148,12 +149,15 @@ public class GeoWaveBasicRasterIT extends AbstractGeoWaveIT {
     final PersistentAdapterStore adapterStore = cpDataStoreOptions.createAdapterStore();
     final InternalAdapterStore internalAdapterStore =
         cpDataStoreOptions.createInternalAdapterStore();
+    final AdapterIndexMappingStore mappingStore =
+        cpDataStoreOptions.createAdapterIndexMappingStore();
     final short[] adapterIds = new short[1];
     adapterIds[0] = internalAdapterStore.getAdapterId(coverageName);
     final ReaderParams<GeoWaveRow> params =
         new ReaderParamsBuilder<>(
             TestUtils.DEFAULT_SPATIAL_INDEX,
             adapterStore,
+            mappingStore,
             internalAdapterStore,
             GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER).isClientsideRowMerging(
                 true).adapterIds(adapterIds).build();

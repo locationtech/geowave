@@ -372,6 +372,7 @@ public class QueryIndexHelperTest {
         QueryIndexHelper.clipIndexedBBOXConstraints(
             statsCache,
             geoType,
+            geoType.getCoordinateReferenceSystem(),
             new GeometryFactory().toGeometry(bounds));
 
     final Envelope env = bbox.getEnvelopeInternal();

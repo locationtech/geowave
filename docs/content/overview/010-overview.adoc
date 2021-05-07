@@ -45,9 +45,9 @@ Each index is assigned a name when it is created.  This index name is used to re
 
 === Adapters/Data Types
 
-In order to handle a multitude of input data types, an adapter is needed to translate the input data type into a format that can be understood and efficiently used by the GeoWave core.  Among others, GeoWave provides a data adapter implementation that supports link:http://docs.geotools.org/latest/javadocs/org/opengis/feature/simple/SimpleFeature.html[SimpleFeatures^, window="_blank"] by default, which should cover most use cases for vector data.
+In order to handle a multitude of input data types, an adapter is needed to describe the input data type so that can be translated to a format that GeoWave understands.  Among others, GeoWave provides a data adapter implementation that supports link:http://docs.geotools.org/latest/javadocs/org/opengis/feature/simple/SimpleFeature.html[SimpleFeatures^, window="_blank"] by default, which should cover most use cases for vector data.
 
-An example of this would be if a user had a shapefile and wanted to ingest it into GeoWave.  An adapter would be used that could transform all of the `SimpleFeature` data from the shapefile into the GeoWave format during ingest.  When that data is read by the user in the future, the adapter would be used to transform the GeoWave data back into `SimpleFeature` data.
+An example of this would be if a user had a shapefile and wanted to ingest it into GeoWave.  During the ingest process, an adapter would be created to describe and translate all of the fields for each feature in the shapefile so that GeoWave could index and store the data in an optimized format.  When that data is read by the user in the future, the adapter would be used to transform the GeoWave data back into `SimpleFeature` data.
 
 Data that has been added to GeoWave with an adapter is often referred to as a _type_.  Each _type_ has a name that can be used to interact with the data.  Throughout the documentation, this name is referred to as a _type name_.
 

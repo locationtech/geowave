@@ -49,7 +49,6 @@ import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
@@ -524,7 +523,7 @@ public class KDEJobRunner extends Configured implements Tool {
       final Job job,
       final String namespace,
       final DataTypeAdapter<?> adapter,
-      final Index index) throws IOException, MismatchedIndexToAdapterMapping {
+      final Index index) throws IOException {
     GeoWaveOutputFormat.setStoreOptions(job.getConfiguration(), outputDataStoreOptions);
 
     GeoWaveOutputFormat.addDataAdapter(job.getConfiguration(), adapter);

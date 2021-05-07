@@ -152,4 +152,9 @@ public class TextIndexStrategy<E> implements CustomIndexStrategy<E, TextSearch> 
     }
     return result;
   }
+
+  @Override
+  public Class<TextSearch> getConstraintsClass() {
+    return TextSearch.class;
+  }
 }

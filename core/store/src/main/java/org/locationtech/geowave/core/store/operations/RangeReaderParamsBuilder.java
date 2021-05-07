@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.core.store.operations;
 
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.Index;
@@ -25,8 +26,9 @@ public abstract class RangeReaderParamsBuilder<T, R extends RangeReaderParamsBui
   public RangeReaderParamsBuilder(
       final Index index,
       final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final InternalAdapterStore internalAdapterStore) {
-    super(adapterStore, internalAdapterStore);
+    super(adapterStore, mappingStore, internalAdapterStore);
     this.index = index;
   }
 

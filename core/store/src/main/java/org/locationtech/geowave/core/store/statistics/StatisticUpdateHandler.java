@@ -12,7 +12,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Statistic;
@@ -48,11 +50,15 @@ public class StatisticUpdateHandler<T, V extends StatisticValue<R>, R> implement
   public StatisticUpdateHandler(
       final Statistic<V> statistic,
       final Index index,
-      final DataTypeAdapter<T> adapter) {
+      final AdapterToIndexMapping indexMapping,
+      final InternalDataAdapter<T> adapter) {
     this.statistic = statistic;
     this.adapter = adapter;
     this.visibilityHandler =
-        statistic.getVisibilityHandler(index != null ? index.getIndexModel() : null, adapter);
+        statistic.getVisibilityHandler(
+            indexMapping,
+            index != null ? index.getIndexModel() : null,
+            adapter);
     this.ingestHandler = new IngestHandler<>();
     this.deleteHandler = new DeleteHandler<>();
     final V value = statistic.createEmpty();

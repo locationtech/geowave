@@ -21,6 +21,7 @@ import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.DataStoreOptions;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
@@ -157,6 +158,7 @@ public class BaseConstraintsQuery extends BaseFilteredIndexQuery {
       final DataStoreOperations datastoreOperations,
       final DataStoreOptions options,
       final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final InternalAdapterStore internalAdapterStore,
       final double[] maxResolutionSubsamplingPerDimension,
       final double[] targetResolutionPerDimensionForHierarchicalIndex,
@@ -171,6 +173,7 @@ public class BaseConstraintsQuery extends BaseFilteredIndexQuery {
                 datastoreOperations,
                 options,
                 adapterStore,
+                mappingStore,
                 internalAdapterStore,
                 maxResolutionSubsamplingPerDimension,
                 targetResolutionPerDimensionForHierarchicalIndex,
@@ -209,6 +212,7 @@ public class BaseConstraintsQuery extends BaseFilteredIndexQuery {
                 datastoreOperations,
                 options,
                 adapterStore,
+                mappingStore,
                 internalAdapterStore,
                 maxResolutionSubsamplingPerDimension,
                 targetResolutionPerDimensionForHierarchicalIndex,
@@ -247,6 +251,7 @@ public class BaseConstraintsQuery extends BaseFilteredIndexQuery {
         datastoreOperations,
         options,
         adapterStore,
+        mappingStore,
         internalAdapterStore,
         maxResolutionSubsamplingPerDimension,
         targetResolutionPerDimensionForHierarchicalIndex,

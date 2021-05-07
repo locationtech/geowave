@@ -130,23 +130,6 @@ public class BasicQueryByClass extends BasicQuery {
       return true;
     }
 
-    /**
-     * @param constraints
-     * @return true if all dimensions intersect
-     */
-    public boolean intersects(final ConstraintSet constraints) {
-      if (constraints.isEmpty() != isEmpty()) {
-        return true;
-      }
-      boolean intersects = true;
-      for (final Map.Entry<Class<? extends NumericDimensionDefinition>, ConstraintData> entry : constraintsPerTypeOfDimensionDefinition.entrySet()) {
-        final ConstraintData data =
-            constraints.constraintsPerTypeOfDimensionDefinition.get(entry.getKey());
-        intersects &= ((data != null) && data.intersects(entry.getValue()));
-      }
-      return intersects;
-    }
-
     /*
      * Makes the decision to provide a empty data set if an one dimension is left unconstrained.
      */

@@ -39,8 +39,6 @@ import org.locationtech.geowave.core.store.query.options.IndexQueryOptions;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
@@ -298,20 +296,22 @@ public class BaseQueryOptions {
     }
     final List<Pair<Index, InternalDataAdapter<?>>> result = new ArrayList<>();
     for (final InternalDataAdapter<?> adapter : adapters) {
-      final AdapterToIndexMapping indices =
+      final AdapterToIndexMapping[] indices =
           adapterIndexMappingStore.getIndicesForAdapter(adapter.getAdapterId());
       if ((index != null) && constrainToIndex) {
         result.add(Pair.of(index, adapter));
-      } else if ((indexName != null) && indices.contains(indexName) && constrainToIndex) {
+      } else if ((indexName != null)
+          && Arrays.stream(indices).anyMatch(mapping -> mapping.getIndexName().equals(indexName))
+          && constrainToIndex) {
         if (index == null) {
           index = indexStore.getIndex(indexName);
           result.add(Pair.of(index, adapter));
         }
-      } else if (indices.isNotEmpty()) {
+      } else if (indices.length > 0) {
 
         boolean noIndices = true;
-        for (final String name : indices.getIndexNames()) {
-          final Index pIndex = indexStore.getIndex(name);
+        for (final AdapterToIndexMapping mapping : indices) {
+          final Index pIndex = mapping.getIndex(indexStore);
           // this could happen if persistent was turned off
           if (pIndex != null) {
             noIndices = false;
@@ -426,25 +426,8 @@ public class BaseQueryOptions {
     return BaseDataStoreUtils.chooseBestIndex(
         BaseDataStoreUtils.combineByIndex(
             compileIndicesForAdapters(adapterStore, adapterIndexMappingStore, indexStore, true)),
-        query);
-  }
-
-  /**
-   * Return a set list adapter/index associations. If the adapters are not provided, then look up
-   * all of them. If the index is not provided, then look up all of them. The full set of
-   * adapter/index associations is reduced so that a single index is queried per adapter and the
-   * number indices queried is minimized.
-   *
-   * <p> DataStores are responsible for selecting a single adapter/index per query. For deletions,
-   * the Data Stores are interested in all the associations.
-   *
-   */
-  private List<Pair<Index, List<InternalDataAdapter<?>>>> getAdaptersWithMinimalSetOfIndices(
-      final PersistentAdapterStore adapterStore,
-      final AdapterIndexMappingStore adapterIndexMappingStore,
-      final IndexStore indexStore) {
-    return BaseDataStoreUtils.reduceIndicesAndGroupByIndex(
-        compileIndicesForAdapters(adapterStore, adapterIndexMappingStore, indexStore, true));
+        query,
+        adapterIndexMappingStore);
   }
 
   public boolean isAllIndices() {
@@ -470,8 +453,8 @@ public class BaseQueryOptions {
     final List<Short> validIds = new ArrayList<>();
     for (final short adapterId : adapterIds) {
       final AdapterToIndexMapping mapping =
-          adapterIndexMappingStore.getIndicesForAdapter(adapterId);
-      if (mapping.contains(indexName)) {
+          adapterIndexMappingStore.getMapping(adapterId, indexName);
+      if (mapping != null) {
         validIds.add(adapterId);
       }
     }

@@ -12,40 +12,32 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 import org.junit.Before;
 import org.junit.Test;
+import org.locationtech.geowave.core.geotime.adapter.SpatialFieldDescriptorBuilder;
+import org.locationtech.geowave.core.geotime.adapter.TemporalFieldDescriptorBuilder;
 import org.locationtech.geowave.core.geotime.index.SpatialTemporalDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.index.SpatialTemporalOptions;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
-import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
-import org.locationtech.geowave.core.geotime.store.dimension.Time;
-import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.SFCFactory.SFCType;
 import org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
-import org.locationtech.geowave.core.store.adapter.AbstractDataAdapter;
-import org.locationtech.geowave.core.store.adapter.DimensionMatchingIndexFieldHandler;
-import org.locationtech.geowave.core.store.adapter.NativeFieldHandler;
-import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
-import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
+import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
+import org.locationtech.geowave.core.store.adapter.FieldDescriptorBuilder;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
-import org.locationtech.geowave.core.store.data.PersistentValue;
-import org.locationtech.geowave.core.store.data.field.FieldReader;
-import org.locationtech.geowave.core.store.data.field.FieldUtils;
-import org.locationtech.geowave.core.store.data.field.FieldWriter;
-import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
+import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.IndexImpl;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
@@ -66,6 +58,7 @@ public class PersistenceEncodingTest {
   private static final CommonIndexModel model =
       new SpatialTemporalDimensionalityTypeProvider().createIndex(
           new SpatialTemporalOptions()).getIndexModel();
+
 
   private static final NumericIndexStrategy strategy =
       TieredSFCIndexFactory.createSingleTierStrategy(
@@ -88,13 +81,15 @@ public class PersistenceEncodingTest {
   @Test
   public void testPoint() {
 
-    final GeoObjDataAdapter adapter =
-        new GeoObjDataAdapter(NATIVE_FIELD_HANDLER_LIST, COMMON_FIELD_HANDLER_LIST);
+    final GeoObjDataAdapter adapter = new GeoObjDataAdapter(false);
+    final AdapterToIndexMapping indexMapping =
+        BaseDataStoreUtils.mapAdapterToIndex(adapter.asInternalAdapter((short) -1), index);
 
     final GeoObj entry =
         new GeoObj(factory.createPoint(new Coordinate(43.454, 28.232)), start, end, "g1");
     final List<byte[]> ids =
-        adapter.encode(entry, model).getInsertionIds(index).getCompositeInsertionIds();
+        adapter.asInternalAdapter((short) -1).encode(entry, indexMapping, index).getInsertionIds(
+            index).getCompositeInsertionIds();
 
     assertEquals(1, ids.size());
   }
@@ -102,8 +97,9 @@ public class PersistenceEncodingTest {
   @Test
   public void testLine() {
 
-    final GeoObjDataAdapter adapter =
-        new GeoObjDataAdapter(NATIVE_FIELD_HANDLER_LIST, COMMON_FIELD_HANDLER_LIST);
+    final GeoObjDataAdapter adapter = new GeoObjDataAdapter(false);
+    final AdapterToIndexMapping indexMapping =
+        BaseDataStoreUtils.mapAdapterToIndex(adapter.asInternalAdapter((short) -1), index);
     final GeoObj entry =
         new GeoObj(
             factory.createLineString(
@@ -112,8 +108,9 @@ public class PersistenceEncodingTest {
             end,
             "g1");
     final List<byte[]> ids =
-        adapter.encode(entry, model).getInsertionIds(index).getCompositeInsertionIds();
-    assertEquals(7, ids.size());
+        adapter.asInternalAdapter((short) -1).encode(entry, indexMapping, index).getInsertionIds(
+            index).getCompositeInsertionIds();
+    assertEquals(15, ids.size());
   }
 
   @Test
@@ -127,8 +124,11 @@ public class PersistenceEncodingTest {
 
     final Index index = new IndexImpl(strategy, model);
 
-    final GeoObjDataAdapter adapter =
-        new GeoObjDataAdapter(NATIVE_FIELD_HANDLER_LIST, COMMON_FIELD_HANDLER_LIST);
+    final GeoObjDataAdapter adapter = new GeoObjDataAdapter(false);
+
+    final AdapterToIndexMapping indexMapping =
+        BaseDataStoreUtils.mapAdapterToIndex(adapter.asInternalAdapter((short) -1), index);
+
     final GeoObj entry =
         new GeoObj(
             factory.createLineString(
@@ -145,14 +145,17 @@ public class PersistenceEncodingTest {
             new Date(352771200000l),
             "g1");
     final List<byte[]> ids =
-        adapter.encode(entry, model).getInsertionIds(index).getCompositeInsertionIds();
+        adapter.asInternalAdapter((short) -1).encode(entry, indexMapping, index).getInsertionIds(
+            index).getCompositeInsertionIds();
     assertEquals(4, ids.size());
   }
 
   @Test
   public void testPoly() {
-    final GeoObjDataAdapter adapter =
-        new GeoObjDataAdapter(NATIVE_FIELD_HANDLER_LIST, COMMON_FIELD_HANDLER_LIST);
+    final GeoObjDataAdapter adapter = new GeoObjDataAdapter(false);
+
+    final AdapterToIndexMapping indexMapping =
+        BaseDataStoreUtils.mapAdapterToIndex(adapter.asInternalAdapter((short) -1), index);
     final GeoObj entry =
         new GeoObj(
             factory.createLineString(
@@ -165,20 +168,23 @@ public class PersistenceEncodingTest {
             end,
             "g1");
     final List<byte[]> ids =
-        adapter.encode(entry, model).getInsertionIds(index).getCompositeInsertionIds();
-    assertEquals(18, ids.size());
+        adapter.asInternalAdapter((short) -1).encode(entry, indexMapping, index).getInsertionIds(
+            index).getCompositeInsertionIds();
+    assertEquals(27, ids.size());
   }
 
   @Test
   public void testPointRange() {
 
-    final GeoObjDataAdapter adapter =
-        new GeoObjDataAdapter(NATIVE_FIELD_RANGE_HANDLER_LIST, COMMON_FIELD_RANGE_HANDLER_LIST);
+    final GeoObjDataAdapter adapter = new GeoObjDataAdapter(true);
+    final AdapterToIndexMapping indexMapping =
+        BaseDataStoreUtils.mapAdapterToIndex(adapter.asInternalAdapter((short) -1), index);
 
     final GeoObj entry =
         new GeoObj(factory.createPoint(new Coordinate(43.454, 28.232)), start, end, "g1");
     final List<byte[]> ids =
-        adapter.encode(entry, model).getInsertionIds(index).getCompositeInsertionIds();
+        adapter.asInternalAdapter((short) -1).encode(entry, indexMapping, index).getInsertionIds(
+            index).getCompositeInsertionIds();
 
     assertEquals(8, ids.size());
   }
@@ -186,8 +192,9 @@ public class PersistenceEncodingTest {
   @Test
   public void testLineRnge() {
 
-    final GeoObjDataAdapter adapter =
-        new GeoObjDataAdapter(NATIVE_FIELD_RANGE_HANDLER_LIST, COMMON_FIELD_RANGE_HANDLER_LIST);
+    final GeoObjDataAdapter adapter = new GeoObjDataAdapter(true);
+    final AdapterToIndexMapping indexMapping =
+        BaseDataStoreUtils.mapAdapterToIndex(adapter.asInternalAdapter((short) -1), index);
     final GeoObj entry =
         new GeoObj(
             factory.createLineString(
@@ -196,107 +203,52 @@ public class PersistenceEncodingTest {
             end,
             "g1");
     final List<byte[]> ids =
-        adapter.encode(entry, model).getInsertionIds(index).getCompositeInsertionIds();
-    assertTrue(ids.size() < 100);
+        adapter.asInternalAdapter((short) -1).encode(entry, indexMapping, index).getInsertionIds(
+            index).getCompositeInsertionIds();
+    assertTrue(ids.size() < 200);
   }
 
   private static final String GEOM = "myGeo";
   private static final String ID = "myId";
   private static final String START_TIME = "startTime";
   private static final String END_TIME = "endTime";
+  private static final FieldDescriptor<Geometry> GEO_FIELD =
+      new SpatialFieldDescriptorBuilder<>(Geometry.class).spatialIndexHint().fieldName(
+          GEOM).build();
+  private static final FieldDescriptor<String> ID_FIELD =
+      new FieldDescriptorBuilder<>(String.class).fieldName(ID).build();
 
-  private static final List<NativeFieldHandler<GeoObj, Object>> NATIVE_FIELD_HANDLER_LIST =
-      new ArrayList<>();
-  private static final List<NativeFieldHandler<GeoObj, Object>> NATIVE_FIELD_RANGE_HANDLER_LIST =
-      new ArrayList<>();
-  private static final List<PersistentIndexFieldHandler<GeoObj, ? extends CommonIndexValue, Object>> COMMON_FIELD_HANDLER_LIST =
-      new ArrayList<>();
-  private static final List<PersistentIndexFieldHandler<GeoObj, ? extends CommonIndexValue, Object>> COMMON_FIELD_RANGE_HANDLER_LIST =
-      new ArrayList<>();
+  // Time fields for time instant tests
+  private static final FieldDescriptor<Date> START_TIME_FIELD =
+      new TemporalFieldDescriptorBuilder<>(Date.class).timeIndexHint().fieldName(
+          START_TIME).build();
+  private static final FieldDescriptor<Date> END_TIME_FIELD =
+      new TemporalFieldDescriptorBuilder<>(Date.class).fieldName(END_TIME).build();
 
-  private static final NativeFieldHandler<GeoObj, Object> END_TIME_FIELD_HANDLER =
-      new NativeFieldHandler<GeoObj, Object>() {
+  // Time fields for time range tests
+  private static final FieldDescriptor<Date> START_TIME_RANGE_FIELD =
+      new TemporalFieldDescriptorBuilder<>(Date.class).startTimeIndexHint().fieldName(
+          START_TIME).build();
+  private static final FieldDescriptor<Date> END_TIME_RANGE_FIELD =
+      new TemporalFieldDescriptorBuilder<>(Date.class).endTimeIndexHint().fieldName(
+          END_TIME).build();
 
-        @Override
-        public String getFieldName() {
-          return END_TIME;
-        }
+  private static final FieldDescriptor<?>[] TIME_DESCRIPTORS =
+      new FieldDescriptor[] {GEO_FIELD, ID_FIELD, START_TIME_FIELD, END_TIME_FIELD};
 
-        @Override
-        public Object getFieldValue(final GeoObj row) {
-          return row.endTime;
-        }
-      };
+  private static final FieldDescriptor<?>[] TIME_RANGE_DESCRIPTORS =
+      new FieldDescriptor[] {GEO_FIELD, ID_FIELD, START_TIME_RANGE_FIELD, END_TIME_RANGE_FIELD};
 
-  private static final NativeFieldHandler<GeoObj, Object> ID_FIELD_HANDLER =
-      new NativeFieldHandler<GeoObj, Object>() {
+  public static class GeoObjDataAdapter implements DataTypeAdapter<GeoObj> {
+    private boolean isTimeRange;
 
-        @Override
-        public String getFieldName() {
-          return ID;
-        }
-
-        @Override
-        public Object getFieldValue(final GeoObj row) {
-          return row.id;
-        }
-      };
-
-  private static final PersistentIndexFieldHandler<GeoObj, ? extends CommonIndexValue, Object> GEOM_FIELD_HANDLER =
-      new PersistentIndexFieldHandler<GeoObj, CommonIndexValue, Object>() {
-
-        @Override
-        public String[] getNativeFieldNames() {
-          return new String[] {GEOM};
-        }
-
-        @Override
-        public CommonIndexValue toIndexValue(final GeoObj row) {
-          return new GeometryWrapper(row.geometry, new byte[0]);
-        }
-
-        @Override
-        public PersistentValue<Object>[] toNativeValues(final CommonIndexValue indexValue) {
-          return new PersistentValue[] {
-              new PersistentValue<Object>(GEOM, ((GeometryWrapper) indexValue).getGeometry())};
-        }
-
-        @Override
-        public byte[] toBinary() {
-          return new byte[0];
-        }
-
-        @Override
-        public void fromBinary(final byte[] bytes) {}
-
-        @Override
-        public CommonIndexValue toIndexValue(
-            final PersistentDataset<Object> adapterPersistenceEncoding) {
-          return new GeometryWrapper(
-              (Geometry) adapterPersistenceEncoding.getValue(GEOM),
-              new byte[0]);
-        }
-      };
-
-  static {
-    COMMON_FIELD_HANDLER_LIST.add(GEOM_FIELD_HANDLER);
-    COMMON_FIELD_HANDLER_LIST.add(new TimeFieldHandler());
-    COMMON_FIELD_RANGE_HANDLER_LIST.add(GEOM_FIELD_HANDLER);
-    COMMON_FIELD_RANGE_HANDLER_LIST.add(new TimeRangeFieldHandler());
-    NATIVE_FIELD_HANDLER_LIST.add(ID_FIELD_HANDLER);
-    NATIVE_FIELD_HANDLER_LIST.add(END_TIME_FIELD_HANDLER);
-    NATIVE_FIELD_RANGE_HANDLER_LIST.add(ID_FIELD_HANDLER);
-  }
-
-  public static class GeoObjDataAdapter extends AbstractDataAdapter<GeoObj> {
     public GeoObjDataAdapter() {
-      super();
+      this(false);
     }
 
-    public GeoObjDataAdapter(
-        final List<NativeFieldHandler<GeoObj, Object>> nativeFields,
-        final List<PersistentIndexFieldHandler<GeoObj, ? extends CommonIndexValue, Object>> commonFields) {
-      super(commonFields, nativeFields);
+    public GeoObjDataAdapter(final boolean isTimeRange) {
+      super();
+      this.isTimeRange = isTimeRange;
     }
 
     @Override
@@ -310,36 +262,8 @@ public class PersistenceEncodingTest {
     }
 
     @Override
-    public FieldReader getReader(final String fieldId) {
-      if (fieldId.equals(GEOM)) {
-        return FieldUtils.getDefaultReaderForClass(Geometry.class);
-      } else if (fieldId.equals(ID)) {
-        return FieldUtils.getDefaultReaderForClass(String.class);
-      } else if (fieldId.equals(START_TIME)) {
-        return FieldUtils.getDefaultReaderForClass(Date.class);
-      } else if (fieldId.equals(END_TIME)) {
-        return FieldUtils.getDefaultReaderForClass(Date.class);
-      }
-      return null;
-    }
-
-    @Override
-    public FieldWriter getWriter(final String fieldId) {
-      if (fieldId.equals(GEOM)) {
-        return FieldUtils.getDefaultWriterForClass(Geometry.class);
-      } else if (fieldId.equals(ID)) {
-        return FieldUtils.getDefaultWriterForClass(String.class);
-      } else if (fieldId.equals(START_TIME)) {
-        return FieldUtils.getDefaultWriterForClass(Date.class);
-      } else if (fieldId.equals(END_TIME)) {
-        return FieldUtils.getDefaultWriterForClass(Date.class);
-      }
-      return null;
-    }
-
-    @Override
-    protected RowBuilder newBuilder() {
-      return new RowBuilder<GeoObj, Object>() {
+    public RowBuilder<GeoObj> newRowBuilder(final FieldDescriptor<?>[] outputFieldDescriptors) {
+      return new RowBuilder<GeoObj>() {
         private String id;
         private Geometry geom;
         private Date stime;
@@ -382,88 +306,7 @@ public class PersistenceEncodingTest {
     }
 
     @Override
-    public int getPositionOfOrderedField(final CommonIndexModel model, final String fieldId) {
-      int i = 0;
-      for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
-        if (fieldId.equals(dimensionField.getFieldName())) {
-          return i;
-        }
-        i++;
-      }
-      if (fieldId.equals(GEOM)) {
-        return i;
-      } else if (fieldId.equals(ID)) {
-        return i + 1;
-      } else if (fieldId.equals(START_TIME)) {
-        return i + 2;
-      } else if (fieldId.equals(END_TIME)) {
-        return i + 3;
-      }
-      return -1;
-    }
-
-    @Override
-    public String getFieldNameForPosition(final CommonIndexModel model, final int position) {
-      if (position < model.getDimensions().length) {
-        int i = 0;
-        for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
-          if (i == position) {
-            return dimensionField.getFieldName();
-          }
-          i++;
-        }
-      } else {
-        final int numDimensions = model.getDimensions().length;
-        if (position == numDimensions) {
-          return GEOM;
-        } else if (position == (numDimensions + 1)) {
-          return ID;
-        } else if (position == (numDimensions + 2)) {
-          return START_TIME;
-        } else if (position == (numDimensions + 3)) {
-          return END_TIME;
-        }
-      }
-      return null;
-    }
-
-    @Override
-    public int getFieldCount() {
-      return 4;
-    }
-
-    @Override
-    public Class<?> getFieldClass(int fieldIndex) {
-      switch (fieldIndex) {
-        case 0:
-          return Geometry.class;
-        case 1:
-          return String.class;
-        case 2:
-          return Date.class;
-        case 3:
-          return Date.class;
-      }
-      return null;
-    }
-
-    @Override
-    public String getFieldName(int fieldIndex) {
-      switch (fieldIndex) {
-        case 0:
-          return GEOM;
-        case 1:
-          return ID;
-        case 2:
-          return START_TIME;
-        case 3:
-          return END_TIME;
-      }
-      return null;
-    }
-
-    @Override
-    public Object getFieldValue(GeoObj entry, String fieldName) {
+    public Object getFieldValue(final GeoObj entry, final String fieldName) {
       switch (fieldName) {
         case GEOM:
           return entry.geometry;
@@ -480,6 +323,27 @@ public class PersistenceEncodingTest {
     @Override
     public Class<GeoObj> getDataClass() {
       return GeoObj.class;
+    }
+
+    @Override
+    public byte[] toBinary() {
+      return new byte[] {isTimeRange ? (byte) 1 : 0};
+    }
+
+    @Override
+    public void fromBinary(final byte[] bytes) {
+      isTimeRange = bytes[0] == 1;
+    }
+
+    @Override
+    public FieldDescriptor<?>[] getFieldDescriptors() {
+      return isTimeRange ? TIME_RANGE_DESCRIPTORS : TIME_DESCRIPTORS;
+    }
+
+    @Override
+    public FieldDescriptor<?> getFieldDescriptor(final String fieldName) {
+      return Arrays.stream(isTimeRange ? TIME_RANGE_DESCRIPTORS : TIME_DESCRIPTORS).filter(
+          field -> field.fieldName().equals(fieldName)).findFirst().orElse(null);
     }
   }
 
@@ -499,102 +363,6 @@ public class PersistenceEncodingTest {
       this.startTime = startTime;
       this.endTime = endTime;
       this.id = id;
-    }
-  }
-
-  public static class TimeFieldHandler implements
-      PersistentIndexFieldHandler<GeoObj, CommonIndexValue, Object>,
-      DimensionMatchingIndexFieldHandler<GeoObj, CommonIndexValue, Object> {
-
-    public TimeFieldHandler() {}
-
-    @Override
-    public String[] getNativeFieldNames() {
-      return new String[] {START_TIME};
-    }
-
-    @Override
-    public CommonIndexValue toIndexValue(final GeoObj row) {
-      return new Time.Timestamp(row.startTime.getTime(), new byte[0]);
-    }
-
-    @Override
-    public PersistentValue<Object>[] toNativeValues(final CommonIndexValue indexValue) {
-      return new PersistentValue[] {
-          new PersistentValue<Object>(
-              START_TIME,
-              new Date((long) ((Time.TimeRange) indexValue).toNumericData().getMin()))};
-    }
-
-    @Override
-    public String[] getSupportedIndexFieldNames() {
-      return new String[] {new TimeField(Unit.YEAR).getFieldName()};
-    }
-
-    @Override
-    public byte[] toBinary() {
-      return new byte[0];
-    }
-
-    @Override
-    public void fromBinary(final byte[] bytes) {}
-
-    @Override
-    public CommonIndexValue toIndexValue(
-        final PersistentDataset<Object> adapterPersistenceEncoding) {
-      return new Time.Timestamp(
-          ((Date) adapterPersistenceEncoding.getValue(START_TIME)).getTime(),
-          new byte[0]);
-    }
-  }
-
-  public static class TimeRangeFieldHandler implements
-      PersistentIndexFieldHandler<GeoObj, CommonIndexValue, Object>,
-      DimensionMatchingIndexFieldHandler<GeoObj, CommonIndexValue, Object> {
-
-    public TimeRangeFieldHandler() {}
-
-    @Override
-    public String[] getNativeFieldNames() {
-      return new String[] {START_TIME, END_TIME};
-    }
-
-    @Override
-    public CommonIndexValue toIndexValue(final GeoObj row) {
-      return new Time.TimeRange(row.startTime.getTime(), row.endTime.getTime(), new byte[0]);
-    }
-
-    @Override
-    public PersistentValue<Object>[] toNativeValues(final CommonIndexValue indexValue) {
-      return new PersistentValue[] {
-          new PersistentValue<Object>(
-              START_TIME,
-              new Date((long) ((Time.TimeRange) indexValue).toNumericData().getMin())),
-          new PersistentValue<Object>(
-              END_TIME,
-              new Date((long) ((Time.TimeRange) indexValue).toNumericData().getMin()))};
-    }
-
-    @Override
-    public String[] getSupportedIndexFieldNames() {
-      return new String[] {new TimeField(Unit.YEAR).getFieldName()};
-    }
-
-    @Override
-    public byte[] toBinary() {
-      return new byte[0];
-    }
-
-    @Override
-    public void fromBinary(final byte[] bytes) {}
-
-    @Override
-    public CommonIndexValue toIndexValue(
-        final PersistentDataset<Object> adapterPersistenceEncoding) {
-      return new Time.TimeRange(
-          ((Date) adapterPersistenceEncoding.getValue(START_TIME)).getTime(),
-          ((Date) adapterPersistenceEncoding.getValue(END_TIME)).getTime(),
-          new byte[0]);
     }
   }
 }

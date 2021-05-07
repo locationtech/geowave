@@ -11,6 +11,7 @@ package org.locationtech.geowave.core.store.base;
 import java.io.Closeable;
 import java.io.Flushable;
 import java.io.IOException;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.Index;
@@ -35,10 +36,12 @@ class BaseDataIndexWriter<T> implements Writer<T> {
   protected RowWriter writer;
 
   protected final InternalDataAdapter<T> adapter;
+  protected final AdapterToIndexMapping indexMapping;
   final Closeable closable;
 
   protected BaseDataIndexWriter(
       final InternalDataAdapter<T> adapter,
+      final AdapterToIndexMapping indexMapping,
       final DataStoreOperations operations,
       final DataStoreOptions options,
       final IngestCallback<T> callback,
@@ -48,6 +51,7 @@ class BaseDataIndexWriter<T> implements Writer<T> {
     this.callback = callback;
     this.adapter = adapter;
     this.closable = closable;
+    this.indexMapping = indexMapping;
   }
 
   @Override
@@ -73,6 +77,7 @@ class BaseDataIndexWriter<T> implements Writer<T> {
         BaseDataStoreUtils.getWriteInfo(
             entry,
             adapter,
+            indexMapping,
             DataIndexUtils.DATA_ID_INDEX,
             fieldVisibilityWriter,
             options.isSecondaryIndexing(),

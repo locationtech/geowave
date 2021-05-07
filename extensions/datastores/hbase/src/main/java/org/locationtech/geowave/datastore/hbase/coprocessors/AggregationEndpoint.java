@@ -27,8 +27,9 @@ import org.apache.hadoop.hbase.security.visibility.Authorizations;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.Aggregation;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.datastore.hbase.coprocessors.protobuf.AggregationProtosServer;
 import org.locationtech.geowave.datastore.hbase.filters.HBaseDistributableFilter;
 import org.locationtech.geowave.datastore.hbase.filters.HBaseNumericIndexStrategyFilter;
@@ -72,7 +73,8 @@ public class AggregationEndpoint extends AggregationProtosServer.AggregationServ
       final AggregationProtosServer.AggregationRequest request,
       final RpcCallback<AggregationProtosServer.AggregationResponse> done) {
     FilterList filterList = null;
-    DataTypeAdapter dataAdapter = null;
+    InternalDataAdapter<?> dataAdapter = null;
+    AdapterToIndexMapping indexMapping = null;
     Short internalAdapterId = null;
     AggregationProtosServer.AggregationResponse response = null;
     ByteString value = ByteString.EMPTY;
@@ -159,11 +161,15 @@ public class AggregationEndpoint extends AggregationProtosServer.AggregationServ
 
       if (request.hasAdapter()) {
         final byte[] adapterBytes = request.getAdapter().toByteArray();
-        dataAdapter = (DataTypeAdapter) URLClassloaderUtils.fromBinary(adapterBytes);
+        dataAdapter = (InternalDataAdapter<?>) URLClassloaderUtils.fromBinary(adapterBytes);
       }
       if (request.hasInternalAdapterId()) {
         final byte[] adapterIdBytes = request.getInternalAdapterId().toByteArray();
         internalAdapterId = ByteArrayUtils.byteArrayToShort(adapterIdBytes);
+      }
+      if (request.hasIndexMapping()) {
+        final byte[] mappingBytes = request.getIndexMapping().toByteArray();
+        indexMapping = (AdapterToIndexMapping) URLClassloaderUtils.fromBinary(mappingBytes);
       }
       final String[] authorizations;
       if (request.hasVisLabels()) {
@@ -183,6 +189,7 @@ public class AggregationEndpoint extends AggregationProtosServer.AggregationServ
                 aggregation,
                 filterList,
                 dataAdapter,
+                indexMapping,
                 internalAdapterId,
                 hdFilter,
                 request.getBlockCaching(),
@@ -211,7 +218,8 @@ public class AggregationEndpoint extends AggregationProtosServer.AggregationServ
   private Object getValue(
       final Aggregation aggregation,
       final Filter filter,
-      final DataTypeAdapter dataAdapter,
+      final InternalDataAdapter<?> dataAdapter,
+      final AdapterToIndexMapping indexMapping,
       final Short internalAdapterId,
       final HBaseDistributableFilter hdFilter,
       final boolean blockCaching,
@@ -245,7 +253,7 @@ public class AggregationEndpoint extends AggregationProtosServer.AggregationServ
         if (!results.isEmpty()) {
           if (hdFilter != null) {
             if (dataAdapter != null) {
-              final Object row = hdFilter.decodeRow(dataAdapter);
+              final Object row = hdFilter.decodeRow(dataAdapter, indexMapping);
 
               if (row != null) {
                 aggregation.aggregate(dataAdapter, row);

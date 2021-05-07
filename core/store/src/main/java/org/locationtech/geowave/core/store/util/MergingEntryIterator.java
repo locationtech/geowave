@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.Map;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform;
@@ -31,6 +32,7 @@ public class MergingEntryIterator<T> extends NativeEntryIteratorWrapper<T> {
 
   public MergingEntryIterator(
       final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final Index index,
       final Iterator<GeoWaveRow> scannerIt,
       final QueryFilter[] clientFilters,
@@ -40,6 +42,7 @@ public class MergingEntryIterator<T> extends NativeEntryIteratorWrapper<T> {
       final DataIndexRetrieval dataIndexRetrieval) {
     super(
         adapterStore,
+        mappingStore,
         index,
         scannerIt,
         clientFilters,

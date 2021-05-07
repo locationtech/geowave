@@ -228,6 +228,7 @@ public class SplitsProviderIT extends AbstractGeoWaveIT {
                 new RecordReaderParams(
                     splitInfo.getIndex(),
                     as,
+                    aim,
                     ias,
                     new short[] {ias.getAdapterId(fda.getTypeName())},
                     null,

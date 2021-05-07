@@ -25,7 +25,6 @@ import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProv
 import org.locationtech.geowave.core.geotime.index.api.SpatialIndexBuilder;
 import org.locationtech.geowave.core.index.FloatCompareUtils;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
-import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
@@ -39,8 +38,8 @@ public class WebMercatorRasterTest {
   public static final String CRS_STR = "EPSG:3857";
 
   @Test
-  public void testStoreRetrieve() throws MismatchedIndexToAdapterMapping, IOException,
-      MismatchedDimensionException, NoSuchAuthorityCodeException, FactoryException {
+  public void testStoreRetrieve() throws IOException, MismatchedDimensionException,
+      NoSuchAuthorityCodeException, FactoryException {
 
     GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
         "memory",

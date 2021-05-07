@@ -25,7 +25,7 @@ public class BigDecimalArraySerializationProvider implements
   }
 
   @Override
-  public FieldWriter<Object, BigDecimal[]> getFieldWriter() {
+  public FieldWriter<BigDecimal[]> getFieldWriter() {
     return new BigDecimalArrayWriter();
   }
 
@@ -35,8 +35,7 @@ public class BigDecimalArraySerializationProvider implements
     }
   }
 
-  private static class BigDecimalArrayWriter extends
-      VariableSizeObjectArrayWriter<Object, BigDecimal> {
+  private static class BigDecimalArrayWriter extends VariableSizeObjectArrayWriter<BigDecimal> {
     public BigDecimalArrayWriter() {
       super(new BigDecimalWriter());
     }

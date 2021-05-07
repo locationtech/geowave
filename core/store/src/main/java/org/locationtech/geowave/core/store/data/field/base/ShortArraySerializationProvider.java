@@ -23,11 +23,11 @@ public class ShortArraySerializationProvider implements FieldSerializationProvid
   }
 
   @Override
-  public FieldWriter<Object, Short[]> getFieldWriter() {
+  public FieldWriter<Short[]> getFieldWriter() {
     return new ShortArrayWriter();
   }
 
-  private static class ShortArrayWriter extends FixedSizeObjectArrayWriter<Object, Short> {
+  private static class ShortArrayWriter extends FixedSizeObjectArrayWriter<Short> {
     public ShortArrayWriter() {
       super(new ShortWriter());
     }

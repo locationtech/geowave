@@ -125,7 +125,7 @@ public class BaseMapReduceDataStore extends BaseDataStore implements MapReduceDa
         statsStore,
         internalAdapterStore,
         indexStore,
-        indexMappingStore,
+        aimStore,
         context,
         minSplits,
         maxSplits);

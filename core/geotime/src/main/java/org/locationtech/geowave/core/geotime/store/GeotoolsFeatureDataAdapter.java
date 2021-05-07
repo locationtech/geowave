@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.geotime.store;
 
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -21,4 +22,9 @@ public interface GeotoolsFeatureDataAdapter<T extends SimpleFeature> extends Dat
   boolean hasTemporalConstraints();
 
   void setNamespace(final String namespaceURI);
+
+  @Override
+  default InternalDataAdapter<T> asInternalAdapter(final short internalAdapterId) {
+    return new InternalGeotoolsDataAdapterWrapper<>(this, internalAdapterId);
+  }
 }

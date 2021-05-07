@@ -9,7 +9,6 @@
 package org.locationtech.geowave.analytic.extract;
 
 import java.util.Iterator;
-import org.locationtech.geowave.adapter.vector.FeatureGeometryHandler;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.referencing.ReferenceIdentifier;
@@ -26,9 +25,7 @@ public class SimpleFeatureGeometryExtractor extends EmptyDimensionExtractor<Simp
 
   @Override
   public Geometry getGeometry(final SimpleFeature anObject) {
-    final FeatureGeometryHandler handler =
-        new FeatureGeometryHandler(anObject.getDefaultGeometryProperty().getDescriptor());
-    final Geometry geometry = handler.toIndexValue(anObject).getGeometry();
+    final Geometry geometry = (Geometry) anObject.getDefaultGeometry();
     final int srid = getSRID(anObject);
     geometry.setSRID(srid);
     return geometry;

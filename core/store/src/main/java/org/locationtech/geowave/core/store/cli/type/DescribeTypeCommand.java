@@ -11,12 +11,11 @@ package org.locationtech.geowave.core.store.cli.type;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.cli.utils.ConsoleTablePrinter;
+import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
@@ -89,12 +88,12 @@ public class DescribeTypeCommand extends ServiceEnabledCommand<Void> {
         inputStoreOptions.createInternalAdapterStore();
     final DataTypeAdapter<?> type =
         adapterStore.getAdapter(internalAdapterStore.getAdapterId(typeName)).getAdapter();
-    final Map<String, String> description = type.describe();
+    final FieldDescriptor<?>[] typeFields = type.getFieldDescriptors();
     final List<List<Object>> rows = new ArrayList<>();
-    for (final Entry<String, String> entry : description.entrySet()) {
+    for (final FieldDescriptor<?> field : typeFields) {
       final List<Object> row = new ArrayList<>();
-      row.add(entry.getKey());
-      row.add(entry.getValue());
+      row.add(field.fieldName());
+      row.add(field.bindingClass().getName());
       rows.add(row);
     }
     final List<String> headers = new ArrayList<>();

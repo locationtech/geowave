@@ -11,10 +11,7 @@ package org.locationtech.geowave.datastore.accumulo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
@@ -26,28 +23,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.index.SpatialOptions;
-import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.AbstractDataAdapter;
-import org.locationtech.geowave.core.store.adapter.IndexFieldHandler;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
-import org.locationtech.geowave.core.store.adapter.NativeFieldHandler;
-import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.api.Writer;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
-import org.locationtech.geowave.core.store.data.PersistentValue;
-import org.locationtech.geowave.core.store.data.field.FieldReader;
-import org.locationtech.geowave.core.store.data.field.FieldUtils;
-import org.locationtech.geowave.core.store.data.field.FieldWriter;
-import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
-import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.metadata.AdapterStoreImpl;
 import org.locationtech.geowave.core.store.metadata.IndexStoreImpl;
@@ -55,10 +38,11 @@ import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import org.locationtech.geowave.core.store.query.constraints.DataIdQuery;
 import org.locationtech.geowave.core.store.query.constraints.EverythingQuery;
 import org.locationtech.geowave.core.store.query.constraints.InsertionIdQuery;
+import org.locationtech.geowave.datastore.accumulo.AccumuloDataStoreStatsTest.TestGeometry;
+import org.locationtech.geowave.datastore.accumulo.AccumuloDataStoreStatsTest.TestGeometryAdapter;
 import org.locationtech.geowave.datastore.accumulo.config.AccumuloOptions;
 import org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations;
 import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -412,234 +396,6 @@ public class AccumuloOptionsTest {
       count++;
     }
     assertEquals(0, count);
-  }
-
-  private static class TestGeometry {
-    private final Geometry geom;
-    private final String id;
-
-    public TestGeometry(final Geometry geom, final String id) {
-      this.geom = geom;
-      this.id = id;
-    }
-  }
-
-  protected static class TestGeometryAdapter extends AbstractDataAdapter<TestGeometry> {
-    private static final String GEOM = "myGeo";
-    private static final String ID = "myId";
-    private static final PersistentIndexFieldHandler<TestGeometry, ? extends CommonIndexValue, Object> GEOM_FIELD_HANDLER =
-        new PersistentIndexFieldHandler<TestGeometry, CommonIndexValue, Object>() {
-
-          @Override
-          public String[] getNativeFieldNames() {
-            return new String[] {GEOM};
-          }
-
-          @Override
-          public CommonIndexValue toIndexValue(final TestGeometry row) {
-            return new GeometryWrapper(row.geom, new byte[0]);
-          }
-
-          @Override
-          public PersistentValue<Object>[] toNativeValues(final CommonIndexValue indexValue) {
-            return new PersistentValue[] {
-                new PersistentValue<Object>(GEOM, ((GeometryWrapper) indexValue).getGeometry())};
-          }
-
-          @Override
-          public byte[] toBinary() {
-            return new byte[0];
-          }
-
-          @Override
-          public void fromBinary(final byte[] bytes) {}
-
-          @Override
-          public CommonIndexValue toIndexValue(
-              final PersistentDataset<Object> adapterPersistenceEncoding) {
-            return new GeometryWrapper(
-                (Geometry) adapterPersistenceEncoding.getValue(GEOM),
-                new byte[0]);
-          }
-        };
-    private static final NativeFieldHandler<TestGeometry, Object> ID_FIELD_HANDLER =
-        new NativeFieldHandler<TestGeometry, Object>() {
-
-          @Override
-          public String getFieldName() {
-            return ID;
-          }
-
-          @Override
-          public Object getFieldValue(final TestGeometry row) {
-            return row.id;
-          }
-        };
-
-    private static final List<NativeFieldHandler<TestGeometry, Object>> NATIVE_FIELD_HANDLER_LIST =
-        new ArrayList<>();
-    private static final List<PersistentIndexFieldHandler<TestGeometry, ? extends CommonIndexValue, Object>> COMMON_FIELD_HANDLER_LIST =
-        new ArrayList<>();
-
-    static {
-      COMMON_FIELD_HANDLER_LIST.add(GEOM_FIELD_HANDLER);
-      NATIVE_FIELD_HANDLER_LIST.add(ID_FIELD_HANDLER);
-    }
-
-    public TestGeometryAdapter() {
-      super(COMMON_FIELD_HANDLER_LIST, NATIVE_FIELD_HANDLER_LIST);
-    }
-
-    @Override
-    public String getTypeName() {
-      return "test";
-    }
-
-    @Override
-    protected void init(
-        final List<? extends IndexFieldHandler<TestGeometry, ? extends CommonIndexValue, Object>> indexFieldHandlers,
-        final Object defaultIndexHandlerData) {
-      nativeFieldHandlers = NATIVE_FIELD_HANDLER_LIST;
-      super.init(COMMON_FIELD_HANDLER_LIST, null);
-    }
-
-    @Override
-    public byte[] getDataId(final TestGeometry entry) {
-      return StringUtils.stringToBinary(entry.id);
-    }
-
-    @Override
-    public FieldReader getReader(final String fieldId) {
-      if (fieldId.equals(GEOM)) {
-        return FieldUtils.getDefaultReaderForClass(Geometry.class);
-      } else if (fieldId.equals(ID)) {
-        return FieldUtils.getDefaultReaderForClass(String.class);
-      }
-      return null;
-    }
-
-    @Override
-    public FieldWriter getWriter(final String fieldId) {
-      if (fieldId.equals(GEOM)) {
-        return FieldUtils.getDefaultWriterForClass(Geometry.class);
-      } else if (fieldId.equals(ID)) {
-        return FieldUtils.getDefaultWriterForClass(String.class);
-      }
-      return null;
-    }
-
-    @Override
-    protected RowBuilder newBuilder() {
-      return new RowBuilder<TestGeometry, Object>() {
-        private String id;
-        private Geometry geom;
-
-        @Override
-        public void setField(final String id, final Object fieldValue) {
-          if (id.equals(GEOM)) {
-            geom = (Geometry) fieldValue;
-          } else if (id.equals(ID)) {
-            this.id = (String) fieldValue;
-          }
-        }
-
-        @Override
-        public void setFields(final Map<String, Object> values) {
-          if (values.containsKey(GEOM)) {
-            geom = (Geometry) values.get(GEOM);
-          }
-          if (values.containsKey(ID)) {
-            id = (String) values.get(ID);
-          }
-        }
-
-        @Override
-        public TestGeometry buildRow(final byte[] dataId) {
-          return new TestGeometry(geom, id);
-        }
-      };
-    }
-
-    @Override
-    public int getPositionOfOrderedField(final CommonIndexModel model, final String fieldId) {
-      int i = 0;
-      for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
-        if (fieldId.equals(dimensionField.getFieldName())) {
-          return i;
-        }
-        i++;
-      }
-      if (fieldId.equals(GEOM)) {
-        return i;
-      } else if (fieldId.equals(ID)) {
-        return i + 1;
-      }
-      return -1;
-    }
-
-    @Override
-    public String getFieldNameForPosition(final CommonIndexModel model, final int position) {
-      if (position < model.getDimensions().length) {
-        int i = 0;
-        for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
-          if (i == position) {
-            return dimensionField.getFieldName();
-          }
-          i++;
-        }
-      } else {
-        final int numDimensions = model.getDimensions().length;
-        if (position == numDimensions) {
-          return GEOM;
-        } else if (position == (numDimensions + 1)) {
-          return ID;
-        }
-      }
-      return null;
-    }
-
-    @Override
-    public int getFieldCount() {
-      return 2;
-    }
-
-    @Override
-    public Class<?> getFieldClass(int fieldIndex) {
-      switch (fieldIndex) {
-        case 0:
-          return Geometry.class;
-        case 1:
-          return String.class;
-      }
-      return null;
-    }
-
-    @Override
-    public String getFieldName(int fieldIndex) {
-      switch (fieldIndex) {
-        case 0:
-          return GEOM;
-        case 1:
-          return ID;
-      }
-      return null;
-    }
-
-    @Override
-    public Object getFieldValue(TestGeometry entry, String fieldName) {
-      switch (fieldName) {
-        case GEOM:
-          return entry.geom;
-        case ID:
-          return entry.id;
-      }
-      return null;
-    }
-
-    @Override
-    public Class<TestGeometry> getDataClass() {
-      return TestGeometry.class;
-    }
   }
 
   public static class AnotherAdapter extends TestGeometryAdapter {

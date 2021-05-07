@@ -38,7 +38,6 @@ import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProv
 import org.locationtech.geowave.core.geotime.index.SpatialOptions;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
-import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
@@ -297,8 +296,7 @@ public abstract class GeoWaveAnalyticJobRunner extends Configured implements
               namespaceURI,
               ClusteringUtils.CLUSTERING_CRS);
       final short internalAdapterId = internalAdapterStore.addTypeName(adapter.getTypeName());
-      final InternalDataAdapter<?> internalAdapter =
-          new InternalDataAdapterWrapper<>(adapter, internalAdapterId);
+      final InternalDataAdapter<?> internalAdapter = adapter.asInternalAdapter(internalAdapterId);
       adapterStore.addAdapter(internalAdapter);
       return internalAdapter;
     }

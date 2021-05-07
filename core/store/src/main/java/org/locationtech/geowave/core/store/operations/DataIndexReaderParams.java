@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.store.operations;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
@@ -24,6 +25,7 @@ public class DataIndexReaderParams extends BaseReaderParams<GeoWaveRow> {
 
   public DataIndexReaderParams(
       final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final InternalAdapterStore internalAdapterStore,
       final short adapterId,
       final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
@@ -33,6 +35,7 @@ public class DataIndexReaderParams extends BaseReaderParams<GeoWaveRow> {
       final String[] additionalAuthorizations) {
     super(
         adapterStore,
+        mappingStore,
         internalAdapterStore,
         aggregation,
         fieldSubsets,
@@ -44,6 +47,7 @@ public class DataIndexReaderParams extends BaseReaderParams<GeoWaveRow> {
 
   public DataIndexReaderParams(
       final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final InternalAdapterStore internalAdapterStore,
       final short adapterId,
       final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
@@ -55,6 +59,7 @@ public class DataIndexReaderParams extends BaseReaderParams<GeoWaveRow> {
       final String[] additionalAuthorizations) {
     super(
         adapterStore,
+        mappingStore,
         internalAdapterStore,
         aggregation,
         fieldSubsets,

@@ -72,6 +72,11 @@ public class CustomSecondaryIndexIT {
       return new QueryRanges(new ByteArrayRange(sortKey, sortKey));
     }
 
+    @Override
+    public Class<TestCustomConstraints> getConstraintsClass() {
+      return TestCustomConstraints.class;
+    }
+
   }
 
   /**

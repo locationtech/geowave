@@ -48,6 +48,8 @@ public interface CustomIndexStrategy<E, C extends Persistable> extends Persistab
    */
   QueryRanges getQueryRanges(C constraints);
 
+  Class<C> getConstraintsClass();
+
   /**
    * Optionally a custom index strategy can enable additional filtering beyond just the query ranges
    * (termed "fine-grained" filtering in documentation). This requires reading rows from disk and

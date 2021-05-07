@@ -106,8 +106,11 @@ public class SplitsProvider {
         } else {
           indexAdapterConstraints =
               ((AdapterAndIndexBasedQueryConstraints) constraints).createQueryConstraints(
-                  adapter,
-                  indexAdapterIdPair.getLeft());
+                  adapter.asInternalAdapter(adapters.get(0)),
+                  indexAdapterIdPair.getLeft(),
+                  adapterIndexMappingStore.getMapping(
+                      adapters.get(0),
+                      indexAdapterIdPair.getLeft().getName()));
           if (indexAdapterConstraints == null) {
             continue;
           }
@@ -131,7 +134,7 @@ public class SplitsProvider {
           indexAdapterIdPair.getValue());
       IndexMetaData[] indexMetadata = null;
       if (indexAdapterConstraints != null) {
-        IndexMetaDataSetValue statValue =
+        final IndexMetaDataSetValue statValue =
             InternalStatisticsHelper.getIndexMetadata(
                 indexAdapterIdPair.getLeft(),
                 indexAdapterIdPair.getRight(),

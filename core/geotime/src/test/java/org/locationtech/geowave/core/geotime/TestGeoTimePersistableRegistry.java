@@ -9,8 +9,6 @@
 package org.locationtech.geowave.core.geotime;
 
 import org.locationtech.geowave.core.geotime.store.data.PersistenceEncodingTest.GeoObjDataAdapter;
-import org.locationtech.geowave.core.geotime.store.data.PersistenceEncodingTest.TimeFieldHandler;
-import org.locationtech.geowave.core.geotime.store.data.PersistenceEncodingTest.TimeRangeFieldHandler;
 import org.locationtech.geowave.core.geotime.util.GeometryUtilsTest.ExampleNumericIndexStrategy;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 
@@ -20,8 +18,6 @@ public class TestGeoTimePersistableRegistry implements PersistableRegistrySpi {
   public PersistableIdAndConstructor[] getSupportedPersistables() {
     return new PersistableIdAndConstructor[] {
         new PersistableIdAndConstructor((short) 10300, ExampleNumericIndexStrategy::new),
-        new PersistableIdAndConstructor((short) 10301, GeoObjDataAdapter::new),
-        new PersistableIdAndConstructor((short) 10302, TimeFieldHandler::new),
-        new PersistableIdAndConstructor((short) 10303, TimeRangeFieldHandler::new),};
+        new PersistableIdAndConstructor((short) 10301, GeoObjDataAdapter::new),};
   }
 }

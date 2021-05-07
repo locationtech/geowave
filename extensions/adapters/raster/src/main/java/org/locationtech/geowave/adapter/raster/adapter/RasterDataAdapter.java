@@ -78,9 +78,9 @@ import org.locationtech.geowave.adapter.raster.adapter.merge.SingleAdapterServer
 import org.locationtech.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import org.locationtech.geowave.adapter.raster.adapter.warp.WarpRIF;
 import org.locationtech.geowave.adapter.raster.stats.HistogramConfig;
+import org.locationtech.geowave.adapter.raster.stats.RasterBoundingBoxStatistic;
 import org.locationtech.geowave.adapter.raster.stats.RasterHistogramStatistic;
 import org.locationtech.geowave.adapter.raster.stats.RasterOverviewStatistic;
-import org.locationtech.geowave.adapter.raster.stats.RasterBoundingBoxStatistic;
 import org.locationtech.geowave.adapter.raster.util.SampleModelPersistenceUtils;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
@@ -99,22 +99,16 @@ import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
-import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
-import org.locationtech.geowave.core.store.adapter.FitToIndexPersistenceEncoding;
+import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
+import org.locationtech.geowave.core.store.adapter.FieldDescriptorBuilder;
 import org.locationtech.geowave.core.store.adapter.IndexDependentDataAdapter;
-import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Statistic;
 import org.locationtech.geowave.core.store.api.StatisticValue;
-import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
-import org.locationtech.geowave.core.store.data.SingleFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
-import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
-import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.statistics.DefaultStatisticsProvider;
 import org.locationtech.geowave.core.store.util.CompoundHierarchicalIndexStrategyWrapper;
 import org.locationtech.geowave.core.store.util.IteratorWrapper;
@@ -152,16 +146,20 @@ public class RasterDataAdapter implements
   private static Object CLASS_INIT_MUTEX = new Object();
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RasterDataAdapter.class);
-  private static final String DATA_FIELD_ID = "image";
+  protected static final String DATA_FIELD_ID = "image";
   public static final int DEFAULT_TILE_SIZE = 256;
   public static final boolean DEFAULT_BUILD_PYRAMID = false;
   public static final boolean DEFAULT_BUILD_HISTOGRAM = true;
+
+  private static final FieldDescriptor<RasterTile> IMAGE_FIELD =
+      new FieldDescriptorBuilder<>(RasterTile.class).fieldName(DATA_FIELD_ID).build();
+  private static final FieldDescriptor<?>[] FIELDS = new FieldDescriptor[] {IMAGE_FIELD};
 
   /** A transparent color for missing data. */
   private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
 
   private String coverageName;
-  private int tileSize;
+  protected int tileSize;
   private SampleModel sampleModel;
   private ColorModel colorModel;
   private Map<String, String> metadata;
@@ -834,16 +832,8 @@ public class RasterDataAdapter implements
   }
 
   @Override
-  public GridCoverage decode(final IndexedAdapterPersistenceEncoding data, final Index index) {
-    final Object rasterTile = data.getAdapterExtendedData().getValue(DATA_FIELD_ID);
-    if ((rasterTile == null) || !(rasterTile instanceof RasterTile)) {
-      return null;
-    }
-    return getCoverageFromRasterTile(
-        (RasterTile) rasterTile,
-        data.getInsertionPartitionKey(),
-        data.getInsertionSortKey(),
-        index);
+  public InternalDataAdapter<GridCoverage> asInternalAdapter(final short internalAdapterId) {
+    return new InternalRasterDataAdapter(this, internalAdapterId);
   }
 
   public GridCoverage getCoverageFromRasterTile(
@@ -1072,33 +1062,6 @@ public class RasterDataAdapter implements
     final SampleModel sm = sampleModel.createCompatibleSampleModel(tileSize, tileSize);
 
     return entry.getRenderedImage().copyData(new InternalWritableRaster(sm, new Point()));
-  }
-
-  @Override
-  public AdapterPersistenceEncoding encode(
-      final GridCoverage entry,
-      final CommonIndexModel indexModel) {
-    final PersistentDataset<Object> adapterExtendedData = new SingleFieldPersistentDataset<>();
-    adapterExtendedData.addValue(DATA_FIELD_ID, getRasterTileFromCoverage(entry));
-    final AdapterPersistenceEncoding encoding;
-    if (entry instanceof FitToIndexGridCoverage) {
-      encoding =
-          new FitToIndexPersistenceEncoding(
-              new byte[0],
-              new MultiFieldPersistentDataset<CommonIndexValue>(),
-              adapterExtendedData,
-              ((FitToIndexGridCoverage) entry).getPartitionKey(),
-              ((FitToIndexGridCoverage) entry).getSortKey());
-    } else {
-      // this shouldn't happen
-      LOGGER.warn("Grid coverage is not fit to the index");
-      encoding =
-          new AdapterPersistenceEncoding(
-              new byte[0],
-              new MultiFieldPersistentDataset<CommonIndexValue>(),
-              adapterExtendedData);
-    }
-    return encoding;
   }
 
   @Override
@@ -1453,7 +1416,7 @@ public class RasterDataAdapter implements
   }
 
   @Override
-  public FieldWriter<GridCoverage, Object> getWriter(final String fieldName) {
+  public FieldWriter<Object> getWriter(final String fieldName) {
     if (DATA_FIELD_ID.equals(fieldName)) {
       return (FieldWriter) new RasterTileWriter();
     }
@@ -1787,68 +1750,14 @@ public class RasterDataAdapter implements
   }
 
   @Override
-  public boolean isCommonIndexField(final CommonIndexModel model, final String fieldName) {
-    return false;
-  }
-
-  @Override
-  public int getPositionOfOrderedField(final CommonIndexModel model, final String fieldName) {
-    int i = 0;
-    for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
-      if (fieldName.equals(dimensionField.getFieldName())) {
-        return i;
-      }
-      i++;
-    }
-    if (fieldName.equals(DATA_FIELD_ID)) {
-      return i;
-    }
-    return -1;
-  }
-
-  @Override
-  public String getFieldNameForPosition(final CommonIndexModel model, final int position) {
-    if (position < model.getDimensions().length) {
-      int i = 0;
-      for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
-        if (i == position) {
-          return dimensionField.getFieldName();
-        }
-        i++;
-      }
-    } else {
-      final int numDimensions = model.getDimensions().length;
-      if (position == numDimensions) {
-        return DATA_FIELD_ID;
-      }
-    }
-    return null;
-  }
-
-  @Override
   public Map<String, String> describe() {
-    Map<String, String> description = new HashMap<>();
+    final Map<String, String> description = new HashMap<>();
     description.put("tile size", String.valueOf(tileSize));
     return description;
   }
 
   @Override
-  public int getFieldCount() {
-    return 1;
-  }
-
-  @Override
-  public Class<?> getFieldClass(int fieldIndex) {
-    return RasterTile.class;
-  }
-
-  @Override
-  public String getFieldName(int fieldIndex) {
-    return DATA_FIELD_ID;
-  }
-
-  @Override
-  public Object getFieldValue(GridCoverage entry, String fieldName) {
+  public Object getFieldValue(final GridCoverage entry, final String fieldName) {
     return getRasterTileFromCoverage(entry);
   }
 
@@ -1859,20 +1768,37 @@ public class RasterDataAdapter implements
 
   @Override
   public List<Statistic<? extends StatisticValue<?>>> getDefaultStatistics() {
-    List<Statistic<?>> statistics = Lists.newArrayList();
-    RasterOverviewStatistic overview = new RasterOverviewStatistic(getTypeName());
+    final List<Statistic<?>> statistics = Lists.newArrayList();
+    final RasterOverviewStatistic overview = new RasterOverviewStatistic(getTypeName());
     overview.setInternal();
     statistics.add(overview);
-    RasterBoundingBoxStatistic bbox = new RasterBoundingBoxStatistic(getTypeName());
+    final RasterBoundingBoxStatistic bbox = new RasterBoundingBoxStatistic(getTypeName());
     bbox.setInternal();
     statistics.add(bbox);
 
     if (histogramConfig != null) {
-      RasterHistogramStatistic histogram =
+      final RasterHistogramStatistic histogram =
           new RasterHistogramStatistic(getTypeName(), histogramConfig);
       histogram.setInternal();
       statistics.add(histogram);
     }
     return statistics;
+  }
+
+  @Override
+  public RowBuilder<GridCoverage> newRowBuilder(final FieldDescriptor<?>[] outputFieldDescriptors) {
+    // this is not used because the decode method of internal adapter is overridden with specialized
+    // logic
+    return null;
+  }
+
+  @Override
+  public FieldDescriptor[] getFieldDescriptors() {
+    return FIELDS;
+  }
+
+  @Override
+  public FieldDescriptor getFieldDescriptor(final String fieldName) {
+    return IMAGE_FIELD;
   }
 }

@@ -14,10 +14,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
@@ -26,21 +27,18 @@ import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.locationtech.geowave.core.geotime.adapter.SpatialFieldDescriptorBuilder;
 import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.index.SpatialOptions;
-import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic.BoundingBoxValue;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.EntryVisibilityHandler;
-import org.locationtech.geowave.core.store.adapter.AbstractDataAdapter;
+import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
+import org.locationtech.geowave.core.store.adapter.FieldDescriptorBuilder;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
-import org.locationtech.geowave.core.store.adapter.NativeFieldHandler;
-import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
-import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Query;
@@ -50,17 +48,9 @@ import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.base.BaseDataStore;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
-import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
-import org.locationtech.geowave.core.store.data.field.FieldReader;
-import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
-import org.locationtech.geowave.core.store.data.field.FieldWriter;
-import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreImpl;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import org.locationtech.geowave.core.store.query.constraints.DataIdQuery;
@@ -70,7 +60,6 @@ import org.locationtech.geowave.core.store.statistics.InternalStatisticsHelper;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic.CountValue;
 import org.locationtech.geowave.core.store.statistics.index.RowRangeHistogramStatistic.RowRangeHistogramValue;
-import org.locationtech.geowave.core.store.statistics.visibility.DefaultFieldStatisticVisibility;
 import org.locationtech.geowave.datastore.accumulo.config.AccumuloOptions;
 import org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations;
 import org.locationtech.jts.geom.Coordinate;
@@ -78,6 +67,7 @@ import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.common.base.Functions;
 import com.google.common.collect.Lists;
 
 public class AccumuloDataStoreStatsTest {
@@ -219,7 +209,7 @@ public class AccumuloDataStoreStatsTest {
 
     final short internalAdapterId = internalAdapterStore.getAdapterId(adapter.getTypeName());
 
-    CountStatistic countStat =
+    final CountStatistic countStat =
         (CountStatistic) statsStore.getDataTypeStatistics(
             adapter,
             CountStatistic.STATS_TYPE,
@@ -233,7 +223,7 @@ public class AccumuloDataStoreStatsTest {
     count = statsStore.getStatisticValue(countStat, "bbb");
     assertEquals(1, count.getValue().intValue());
 
-    BoundingBoxStatistic bboxStat =
+    final BoundingBoxStatistic bboxStat =
         (BoundingBoxStatistic) statsStore.getFieldStatistics(
             adapter,
             BoundingBoxStatistic.STATS_TYPE,
@@ -406,9 +396,9 @@ public class AccumuloDataStoreStatsTest {
     assertNull(histogram);
   }
 
-  protected static class TestGeometry {
-    private final Geometry geom;
-    private final String id;
+  public static class TestGeometry {
+    public final Geometry geom;
+    public final String id;
 
     public TestGeometry(final Geometry geom, final String id) {
       this.geom = geom;
@@ -416,76 +406,25 @@ public class AccumuloDataStoreStatsTest {
     }
   }
 
-  protected static class TestGeometryAdapter extends AbstractDataAdapter<TestGeometry> implements
+  public static class TestGeometryAdapter implements
+      DataTypeAdapter<TestGeometry>,
       DefaultStatisticsProvider {
     public static final String GEOM = "myGeo";
     public static final String ID = "myId";
 
-    private static final PersistentIndexFieldHandler<TestGeometry, ? extends CommonIndexValue, Object> GEOM_FIELD_HANDLER =
-        new PersistentIndexFieldHandler<TestGeometry, CommonIndexValue, Object>() {
-
-          @Override
-          public String[] getNativeFieldNames() {
-            return new String[] {GEOM};
-          }
-
-          @Override
-          public CommonIndexValue toIndexValue(final TestGeometry row) {
-            return new GeometryWrapper(row.geom, new byte[0]);
-          }
-
-          @SuppressWarnings("unchecked")
-          @Override
-          public PersistentValue<Object>[] toNativeValues(final CommonIndexValue indexValue) {
-            return new PersistentValue[] {
-                new PersistentValue<Object>(GEOM, ((GeometryWrapper) indexValue).getGeometry())};
-          }
-
-          @Override
-          public byte[] toBinary() {
-            return new byte[0];
-          }
-
-          @Override
-          public void fromBinary(final byte[] bytes) {}
-
-          @Override
-          public CommonIndexValue toIndexValue(
-              final PersistentDataset<Object> adapterPersistenceEncoding) {
-            return new GeometryWrapper(
-                (Geometry) adapterPersistenceEncoding.getValue(GEOM),
-                new byte[0]);
-          }
-        };
-
-    private static final EntryVisibilityHandler<TestGeometry> GEOMETRY_VISIBILITY_HANDLER =
-        new DefaultFieldStatisticVisibility();
-    private static final NativeFieldHandler<TestGeometry, Object> ID_FIELD_HANDLER =
-        new NativeFieldHandler<TestGeometry, Object>() {
-
-          @Override
-          public String getFieldName() {
-            return ID;
-          }
-
-          @Override
-          public Object getFieldValue(final TestGeometry row) {
-            return row.id;
-          }
-        };
-
-    private static final List<NativeFieldHandler<TestGeometry, Object>> NATIVE_FIELD_HANDLER_LIST =
-        new ArrayList<>();
-    private static final List<PersistentIndexFieldHandler<TestGeometry, ? extends CommonIndexValue, Object>> COMMON_FIELD_HANDLER_LIST =
-        new ArrayList<>();
-
-    static {
-      COMMON_FIELD_HANDLER_LIST.add(GEOM_FIELD_HANDLER);
-      NATIVE_FIELD_HANDLER_LIST.add(ID_FIELD_HANDLER);
-    }
+    private static final FieldDescriptor<Geometry> GEO_FIELD =
+        new SpatialFieldDescriptorBuilder<>(Geometry.class).spatialIndexHint().fieldName(
+            GEOM).build();
+    private static final FieldDescriptor<String> ID_FIELD =
+        new FieldDescriptorBuilder<>(String.class).fieldName(ID).build();
+    private static final FieldDescriptor<?>[] DESCRIPTORS =
+        new FieldDescriptor[] {GEO_FIELD, ID_FIELD};
+    private static final Map<String, FieldDescriptor<?>> DESCRIPTOR_MAP =
+        Arrays.stream(DESCRIPTORS).collect(
+            Collectors.toMap(FieldDescriptor::fieldName, Functions.identity()));
 
     public TestGeometryAdapter() {
-      super(COMMON_FIELD_HANDLER_LIST, NATIVE_FIELD_HANDLER_LIST);
+      super();
     }
 
     @Override
@@ -498,30 +437,10 @@ public class AccumuloDataStoreStatsTest {
       return StringUtils.stringToBinary(entry.id);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public FieldReader getReader(final String fieldId) {
-      if (fieldId.equals(GEOM)) {
-        return FieldUtils.getDefaultReaderForClass(Geometry.class);
-      } else if (fieldId.equals(ID)) {
-        return FieldUtils.getDefaultReaderForClass(String.class);
-      }
-      return null;
-    }
-
-    @Override
-    public FieldWriter getWriter(final String fieldId) {
-      if (fieldId.equals(GEOM)) {
-        return FieldUtils.getDefaultWriterForClass(Geometry.class);
-      } else if (fieldId.equals(ID)) {
-        return FieldUtils.getDefaultWriterForClass(String.class);
-      }
-      return null;
-    }
-
-    @Override
-    protected RowBuilder newBuilder() {
-      return new RowBuilder<TestGeometry, Object>() {
+    public RowBuilder<TestGeometry> newRowBuilder(
+        final FieldDescriptor<?>[] outputFieldDescriptors) {
+      return new RowBuilder<TestGeometry>() {
         private String id;
         private Geometry geom;
 
@@ -552,72 +471,7 @@ public class AccumuloDataStoreStatsTest {
     }
 
     @Override
-    public int getPositionOfOrderedField(final CommonIndexModel model, final String fieldId) {
-      int i = 0;
-      for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
-        if (fieldId.equals(dimensionField.getFieldName())) {
-          return i;
-        }
-        i++;
-      }
-      if (fieldId.equals(GEOM)) {
-        return i;
-      } else if (fieldId.equals(ID)) {
-        return i + 1;
-      }
-      return -1;
-    }
-
-    @Override
-    public String getFieldNameForPosition(final CommonIndexModel model, final int position) {
-      if (position < model.getDimensions().length) {
-        int i = 0;
-        for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
-          if (i == position) {
-            return dimensionField.getFieldName();
-          }
-          i++;
-        }
-      } else {
-        final int numDimensions = model.getDimensions().length;
-        if (position == numDimensions) {
-          return GEOM;
-        } else if (position == (numDimensions + 1)) {
-          return ID;
-        }
-      }
-      return null;
-    }
-
-    @Override
-    public int getFieldCount() {
-      return 2;
-    }
-
-    @Override
-    public Class<?> getFieldClass(int fieldIndex) {
-      switch (fieldIndex) {
-        case 0:
-          return Geometry.class;
-        case 1:
-          return String.class;
-      }
-      return null;
-    }
-
-    @Override
-    public String getFieldName(int fieldIndex) {
-      switch (fieldIndex) {
-        case 0:
-          return GEOM;
-        case 1:
-          return ID;
-      }
-      return null;
-    }
-
-    @Override
-    public Object getFieldValue(TestGeometry entry, String fieldName) {
+    public Object getFieldValue(final TestGeometry entry, final String fieldName) {
       switch (fieldName) {
         case GEOM:
           return entry.geom;
@@ -634,15 +488,33 @@ public class AccumuloDataStoreStatsTest {
 
     @Override
     public List<Statistic<? extends StatisticValue<?>>> getDefaultStatistics() {
-      List<Statistic<? extends StatisticValue<?>>> statistics = Lists.newArrayList();
-      CountStatistic count = new CountStatistic(getTypeName());
+      final List<Statistic<? extends StatisticValue<?>>> statistics = Lists.newArrayList();
+      final CountStatistic count = new CountStatistic(getTypeName());
       count.setInternal();
       statistics.add(count);
 
-      BoundingBoxStatistic bbox = new BoundingBoxStatistic(getTypeName(), GEOM);
+      final BoundingBoxStatistic bbox = new BoundingBoxStatistic(getTypeName(), GEOM);
       bbox.setInternal();
       statistics.add(bbox);
       return statistics;
+    }
+
+    @Override
+    public byte[] toBinary() {
+      return new byte[0];
+    }
+
+    @Override
+    public void fromBinary(final byte[] bytes) {}
+
+    @Override
+    public FieldDescriptor<?>[] getFieldDescriptors() {
+      return DESCRIPTORS;
+    }
+
+    @Override
+    public FieldDescriptor<?> getFieldDescriptor(final String fieldName) {
+      return DESCRIPTOR_MAP.get(fieldName);
     }
   }
 }

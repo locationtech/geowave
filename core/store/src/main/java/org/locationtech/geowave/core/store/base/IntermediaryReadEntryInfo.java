@@ -8,6 +8,8 @@
  */
 package org.locationtech.geowave.core.store.base;
 
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.Index;
@@ -18,6 +20,7 @@ class IntermediaryReadEntryInfo<T> {
   private final Index index;
 
   private InternalDataAdapter<T> dataAdapter;
+  private AdapterToIndexMapping indexMapping;
   private boolean adapterVerified;
 
   public IntermediaryReadEntryInfo(final Index index, final boolean decodeRow) {
@@ -41,6 +44,11 @@ class IntermediaryReadEntryInfo<T> {
     return hasDataAdapter();
   }
 
+  public boolean setIndexMapping(final AdapterToIndexMapping indexMapping) {
+    this.indexMapping = indexMapping;
+    return hasIndexMapping();
+  }
+
   public boolean verifyAdapter(final short internalAdapterId) {
     if ((this.dataAdapter == null) || (internalAdapterId == 0)) {
       return false;
@@ -55,6 +63,7 @@ class IntermediaryReadEntryInfo<T> {
       final InternalDataAdapter<T> adapter,
       final short internalAdapterId,
       final PersistentAdapterStore adapterStore) {
+
     // Verify the current data adapter
     if (setDataAdapter(adapter, false)) {
       return true;
@@ -70,7 +79,28 @@ class IntermediaryReadEntryInfo<T> {
       return true;
     }
 
+
     // No adapter set or retrieved
+    return false;
+  }
+
+  public boolean setOrRetrieveIndexMapping(
+      final AdapterToIndexMapping indexMapping,
+      final short adapterId,
+      final AdapterIndexMappingStore mappingStore) {
+
+    if (setIndexMapping(indexMapping)) {
+      return true;
+    }
+
+    if (mappingStore == null) {
+      return false;
+    }
+
+    if (setIndexMapping(mappingStore.getMapping(adapterId, index.getName()))) {
+      return true;
+    }
+
     return false;
   }
 
@@ -86,8 +116,16 @@ class IntermediaryReadEntryInfo<T> {
     return this.dataAdapter != null;
   }
 
+  public boolean hasIndexMapping() {
+    return this.indexMapping != null;
+  }
+
   public InternalDataAdapter<T> getDataAdapter() {
     return dataAdapter;
+  }
+
+  public AdapterToIndexMapping getIndexMapping() {
+    return indexMapping;
   }
 
   public String getTypeName() {

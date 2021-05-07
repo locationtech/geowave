@@ -32,7 +32,6 @@ import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.entities.GeoWaveValueImpl;
 import org.locationtech.geowave.core.store.flatten.FlattenedUnreadData;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
@@ -45,6 +44,7 @@ public class QueryFilterIterator extends ExceptionHandlingFilter {
   public static final int QUERY_ITERATOR_PRIORITY = 25;
   public static final String FILTER = "filter";
   public static final String MODEL = "model";
+  public static final String INDEX_MAPPING = "mapping";
   public static final String PARTITION_KEY_LENGTH = "partitionLength";
   private QueryFilter filter;
   protected CommonIndexModel model;
@@ -131,7 +131,7 @@ public class QueryFilterIterator extends ExceptionHandlingFilter {
   @Override
   public boolean acceptInternal(final Key key, final Value value) {
     if (isSet()) {
-      final PersistentDataset<CommonIndexValue> commonData = new MultiFieldPersistentDataset<>();
+      final PersistentDataset<Object> commonData = new MultiFieldPersistentDataset<>();
 
       final FlattenedUnreadData unreadData = aggregateFieldData(key, value, commonData);
       return applyRowFilter(key.getRow(currentRow), commonData, unreadData);
@@ -144,7 +144,7 @@ public class QueryFilterIterator extends ExceptionHandlingFilter {
   protected FlattenedUnreadData aggregateFieldData(
       final Key key,
       final Value value,
-      final PersistentDataset<CommonIndexValue> commonData) {
+      final PersistentDataset<Object> commonData) {
     final GeoWaveKey gwKey = new GeoWaveKeyImpl(key.getRow().copyBytes(), partitionKeyLength);
     final GeoWaveValue gwValue =
         new GeoWaveValueImpl(
@@ -171,7 +171,7 @@ public class QueryFilterIterator extends ExceptionHandlingFilter {
 
   protected boolean applyRowFilter(
       final Text currentRow,
-      final PersistentDataset<CommonIndexValue> commonData,
+      final PersistentDataset<Object> commonData,
       final FlattenedUnreadData unreadData) {
     return applyRowFilter(getEncoding(currentRow, partitionKeyLength, commonData, unreadData));
   }
@@ -179,7 +179,7 @@ public class QueryFilterIterator extends ExceptionHandlingFilter {
   protected static CommonIndexedPersistenceEncoding getEncoding(
       final Text currentRow,
       final int partitionKeyLength,
-      final PersistentDataset<CommonIndexValue> commonData,
+      final PersistentDataset<Object> commonData,
       final FlattenedUnreadData unreadData) {
     final GeoWaveKeyImpl rowId = new GeoWaveKeyImpl(currentRow.copyBytes(), partitionKeyLength);
     return new DeferredReadCommonIndexedPersistenceEncoding(

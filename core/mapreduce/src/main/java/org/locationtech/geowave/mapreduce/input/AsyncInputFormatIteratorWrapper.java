@@ -10,6 +10,8 @@ package org.locationtech.geowave.mapreduce.input;
 
 import java.util.Iterator;
 import org.apache.commons.lang3.tuple.Pair;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
@@ -27,6 +29,7 @@ public class AsyncInputFormatIteratorWrapper<T> extends InputFormatIteratorWrapp
       final QueryFilter[] queryFilters,
       final TransientAdapterStore adapterStore,
       final InternalAdapterStore internalAdapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final Index index,
       final boolean isOutputWritable,
       final BatchDataIndexRetrieval dataIndexRetrieval) {
@@ -35,6 +38,7 @@ public class AsyncInputFormatIteratorWrapper<T> extends InputFormatIteratorWrapp
         queryFilters,
         adapterStore,
         internalAdapterStore,
+        mappingStore,
         index,
         isOutputWritable,
         dataIndexRetrieval);
@@ -65,8 +69,9 @@ public class AsyncInputFormatIteratorWrapper<T> extends InputFormatIteratorWrapp
       final GeoWaveRow row,
       final QueryFilter[] clientFilters,
       final InternalDataAdapter<T> adapter,
+      final AdapterToIndexMapping indexMapping,
       final Index index) {
-    Object value = decodeRowToValue(row, clientFilters, adapter, index);
+    Object value = decodeRowToValue(row, clientFilters, adapter, indexMapping, index);
     if (value == null) {
       return null;
     }

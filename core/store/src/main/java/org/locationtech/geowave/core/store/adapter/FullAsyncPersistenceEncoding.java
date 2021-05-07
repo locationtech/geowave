@@ -13,7 +13,6 @@ import org.locationtech.geowave.core.store.base.dataidx.BatchDataIndexRetrieval;
 import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 
 /**
  * This is an implementation of persistence encoding that retrieves fields asynchronously
@@ -36,7 +35,7 @@ public class FullAsyncPersistenceEncoding extends IndexedAdapterPersistenceEncod
         partitionKey,
         sortKey,
         duplicateCount,
-        new MultiFieldPersistentDataset<CommonIndexValue>(),
+        new MultiFieldPersistentDataset<>(),
         new MultiFieldPersistentDataset<byte[]>(),
         new MultiFieldPersistentDataset<>());
     this.asyncRetrieval = asyncRetrieval;
@@ -73,7 +72,7 @@ public class FullAsyncPersistenceEncoding extends IndexedAdapterPersistenceEncod
   }
 
   @Override
-  public PersistentDataset<CommonIndexValue> getCommonData() {
+  public PersistentDataset<Object> getCommonData() {
     // defer any reading of fieldValues until necessary
     deferredReadFields();
     return super.getCommonData();

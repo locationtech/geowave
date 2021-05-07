@@ -24,7 +24,7 @@ public class BigDecimalSerializationProvider implements FieldSerializationProvid
   }
 
   @Override
-  public FieldWriter<Object, BigDecimal> getFieldWriter() {
+  public FieldWriter<BigDecimal> getFieldWriter() {
     return new BigDecimalWriter();
   }
 
@@ -58,7 +58,7 @@ public class BigDecimalSerializationProvider implements FieldSerializationProvid
     }
   }
 
-  protected static class BigDecimalWriter implements FieldWriter<Object, BigDecimal> {
+  protected static class BigDecimalWriter implements FieldWriter<BigDecimal> {
     @Override
     public byte[] writeField(final BigDecimal fieldValue) {
       if (fieldValue == null) {

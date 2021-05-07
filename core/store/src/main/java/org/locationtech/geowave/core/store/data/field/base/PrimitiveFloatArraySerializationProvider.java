@@ -22,7 +22,7 @@ public class PrimitiveFloatArraySerializationProvider implements
   }
 
   @Override
-  public FieldWriter<Object, float[]> getFieldWriter() {
+  public FieldWriter<float[]> getFieldWriter() {
     return new PrimitiveFloatArrayWriter();
   }
 
@@ -39,7 +39,7 @@ public class PrimitiveFloatArraySerializationProvider implements
     }
   }
 
-  private static class PrimitiveFloatArrayWriter implements FieldWriter<Object, float[]> {
+  private static class PrimitiveFloatArrayWriter implements FieldWriter<float[]> {
     @Override
     public byte[] writeField(final float[] fieldValue) {
       if (fieldValue == null) {

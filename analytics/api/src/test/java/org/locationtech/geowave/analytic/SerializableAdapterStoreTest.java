@@ -35,9 +35,7 @@ public class SerializableAdapterStoreTest {
             BasicFeatureTypes.DEFAULT_NAMESPACE,
             ClusteringUtils.CLUSTERING_CRS).getFeatureType();
 
-    final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
     final FeatureDataAdapter adapter = new FeatureDataAdapter(ftype);
-    adapter.init(index);
     final SerializableAdapterStore store =
         new SerializableAdapterStore(new MemoryAdapterStore(new DataTypeAdapter<?>[] {adapter}));
 

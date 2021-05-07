@@ -13,7 +13,6 @@ import java.nio.ByteBuffer;
 import java.util.Iterator;
 import org.apache.commons.lang.ArrayUtils;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.adapter.vector.GeoWaveAvroFeatureDataAdapter;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
@@ -23,9 +22,6 @@ import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestWithMapper;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
-import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
-import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.locationtech.jts.geom.Geometry;
@@ -111,27 +107,18 @@ public abstract class AbstractSimpleFeatureIngestPlugin<I> implements
     simpOptionProvider.fromBinary(geometrySimpBinary);
   }
 
-  protected DataTypeAdapter<SimpleFeature> newAdapter(
-      final SimpleFeatureType type,
-      final FieldVisibilityHandler<SimpleFeature, Object> fieldVisiblityHandler) {
-    if (serializationFormatOptionProvider.isAvro()) {
-      return new GeoWaveAvroFeatureDataAdapter(type);
-    }
-    return new FeatureDataAdapter(type, fieldVisiblityHandler);
+  protected DataTypeAdapter<SimpleFeature> newAdapter(final SimpleFeatureType type) {
+    return new FeatureDataAdapter(type);
   }
 
   protected abstract SimpleFeatureType[] getTypes();
 
   @Override
   public DataTypeAdapter<SimpleFeature>[] getDataAdapters(final String globalVisibility) {
-    final FieldVisibilityHandler<SimpleFeature, Object> fieldVisiblityHandler =
-        ((globalVisibility != null) && !globalVisibility.isEmpty())
-            ? new GlobalVisibilityHandler<>(globalVisibility)
-            : null;
     final SimpleFeatureType[] types = getTypes();
     final DataTypeAdapter<SimpleFeature>[] retVal = new DataTypeAdapter[types.length];
     for (int i = 0; i < types.length; i++) {
-      retVal[i] = newAdapter(types[i], fieldVisiblityHandler);
+      retVal[i] = newAdapter(types[i]);
     }
     return retVal;
   }
@@ -288,8 +275,8 @@ public abstract class AbstractSimpleFeatureIngestPlugin<I> implements
     }
 
     @Override
-    public Class<? extends CommonIndexValue>[] getSupportedIndexableTypes() {
-      return parentPlugin.getSupportedIndexableTypes();
+    public String[] getSupportedIndexTypes() {
+      return parentPlugin.getSupportedIndexTypes();
     }
   }
 }

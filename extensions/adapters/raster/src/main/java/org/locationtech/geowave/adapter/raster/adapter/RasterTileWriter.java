@@ -9,16 +9,8 @@
 package org.locationtech.geowave.adapter.raster.adapter;
 
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
-import org.opengis.coverage.grid.GridCoverage;
 
-public class RasterTileWriter implements FieldWriter<GridCoverage, RasterTile<?>> {
-  @Override
-  public byte[] getVisibility(
-      final GridCoverage rowValue,
-      final String fieldName,
-      final RasterTile<?> fieldValue) {
-    return new byte[] {};
-  }
+public class RasterTileWriter implements FieldWriter<RasterTile<?>> {
 
   @Override
   public byte[] writeField(final RasterTile<?> fieldValue) {

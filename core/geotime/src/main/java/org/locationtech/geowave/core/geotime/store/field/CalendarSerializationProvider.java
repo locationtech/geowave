@@ -26,7 +26,7 @@ public class CalendarSerializationProvider implements FieldSerializationProvider
   }
 
   @Override
-  public FieldWriter<Object, Calendar> getFieldWriter() {
+  public FieldWriter<Calendar> getFieldWriter() {
     return new CalendarWriter();
   }
 
@@ -56,7 +56,7 @@ public class CalendarSerializationProvider implements FieldSerializationProvider
     }
   }
 
-  protected static class CalendarWriter implements FieldWriter<Object, Calendar> {
+  protected static class CalendarWriter implements FieldWriter<Calendar> {
     @Override
     public byte[] writeField(final Calendar cal) {
       if (cal == null) {

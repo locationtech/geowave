@@ -9,19 +9,11 @@
 package org.locationtech.geowave.core.geotime.store.statistics;
 
 import java.nio.ByteBuffer;
-import java.util.HashMap;
-import java.util.Map;
-import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
-import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.index.Mergeable;
-import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Statistic;
 import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintData;
-import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintSet;
 import org.locationtech.geowave.core.store.statistics.StatisticsIngestCallback;
 import org.locationtech.jts.geom.Envelope;
 
@@ -68,24 +60,6 @@ public abstract class AbstractBoundingBoxValue extends StatisticValue<Envelope> 
 
   public double getHeight() {
     return maxY - minY;
-  }
-
-  public ConstraintSet getConstraints() {
-    // Create a NumericRange object using the x axis
-    final NumericRange rangeLongitude = new NumericRange(minX, maxX);
-
-    // Create a NumericRange object using the y axis
-    final NumericRange rangeLatitude = new NumericRange(minY, maxY);
-
-    final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerDimension =
-        new HashMap<>();
-    // Create and return a new IndexRange array with an x and y axis
-    // range
-    constraintsPerDimension.put(
-        LongitudeDefinition.class,
-        new ConstraintData(rangeLongitude, true));
-    constraintsPerDimension.put(LatitudeDefinition.class, new ConstraintData(rangeLatitude, true));
-    return new ConstraintSet(constraintsPerDimension);
   }
 
   @Override

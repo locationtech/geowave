@@ -10,17 +10,17 @@ package org.locationtech.geowave.core.store.adapter;
 
 import java.util.List;
 import java.util.function.Supplier;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
+import org.locationtech.geowave.core.store.api.IndexFieldMapper;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
-import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.entities.GeoWaveValueImpl;
 import org.locationtech.geowave.core.store.flatten.BitmaskUtils;
 import org.locationtech.geowave.core.store.flatten.FlattenedFieldInfo;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -41,6 +41,7 @@ public class LazyReadPersistenceEncoding extends IndexedAdapterPersistenceEncodi
       final int duplicateCount,
       final InternalDataAdapter<?> dataAdapter,
       final CommonIndexModel indexModel,
+      final AdapterToIndexMapping indexMapping,
       final byte[] fieldSubsetBitmask,
       final GeoWaveValue[] fieldValues,
       final boolean isSecondaryIndex) {
@@ -50,7 +51,7 @@ public class LazyReadPersistenceEncoding extends IndexedAdapterPersistenceEncodi
         partitionKey,
         sortKey,
         duplicateCount,
-        new MultiFieldPersistentDataset<CommonIndexValue>(),
+        new MultiFieldPersistentDataset<>(),
         new MultiFieldPersistentDataset<byte[]>(),
         new MultiFieldPersistentDataset<>());
     deferredFieldReader =
@@ -58,6 +59,7 @@ public class LazyReadPersistenceEncoding extends IndexedAdapterPersistenceEncodi
             fieldSubsetBitmask,
             dataAdapter,
             indexModel,
+            indexMapping,
             fieldValues,
             isSecondaryIndex);
   }
@@ -70,6 +72,7 @@ public class LazyReadPersistenceEncoding extends IndexedAdapterPersistenceEncodi
       final int duplicateCount,
       final InternalDataAdapter<?> dataAdapter,
       final CommonIndexModel indexModel,
+      final AdapterToIndexMapping indexMapping,
       final byte[] fieldSubsetBitmask,
       final Supplier<GeoWaveValue[]> fieldValues) {
     super(
@@ -78,7 +81,7 @@ public class LazyReadPersistenceEncoding extends IndexedAdapterPersistenceEncodi
         partitionKey,
         sortKey,
         duplicateCount,
-        new MultiFieldPersistentDataset<CommonIndexValue>(),
+        new MultiFieldPersistentDataset<>(),
         new MultiFieldPersistentDataset<byte[]>(),
         new MultiFieldPersistentDataset<>());
     deferredFieldReader =
@@ -86,6 +89,7 @@ public class LazyReadPersistenceEncoding extends IndexedAdapterPersistenceEncodi
             fieldSubsetBitmask,
             dataAdapter,
             indexModel,
+            indexMapping,
             fieldValues,
             true);
   }
@@ -105,7 +109,7 @@ public class LazyReadPersistenceEncoding extends IndexedAdapterPersistenceEncodi
   }
 
   @Override
-  public PersistentDataset<CommonIndexValue> getCommonData() {
+  public PersistentDataset<Object> getCommonData() {
     // defer any reading of fieldValues until necessary
     deferredReadFields();
     return super.getCommonData();
@@ -128,17 +132,20 @@ public class LazyReadPersistenceEncoding extends IndexedAdapterPersistenceEncodi
     private final byte[] fieldSubsetBitmask;
     private final InternalDataAdapter<?> dataAdapter;
     private final CommonIndexModel indexModel;
+    private final AdapterToIndexMapping indexMapping;
     private final boolean isSecondaryIndex;
 
     public FieldValueReader(
         final byte[] fieldSubsetBitmask,
         final InternalDataAdapter<?> dataAdapter,
         final CommonIndexModel indexModel,
+        final AdapterToIndexMapping indexMapping,
         final boolean isSecondaryIndex) {
       super();
       this.fieldSubsetBitmask = fieldSubsetBitmask;
       this.dataAdapter = dataAdapter;
       this.indexModel = indexModel;
+      this.indexMapping = indexMapping;
       this.isSecondaryIndex = isSecondaryIndex;
     }
 
@@ -172,13 +179,12 @@ public class LazyReadPersistenceEncoding extends IndexedAdapterPersistenceEncodi
             dataAdapter.getFieldNameForPosition(
                 isSecondaryIndex ? DataIndexUtils.DATA_ID_INDEX.getIndexModel() : indexModel,
                 fieldInfo.getFieldPosition());
-        FieldReader<? extends CommonIndexValue> indexFieldReader = null;
+        FieldReader<Object> indexFieldReader = null;
         if (!isSecondaryIndex) {
           indexFieldReader = indexModel.getReader(fieldName);
         }
         if (indexFieldReader != null) {
-          final CommonIndexValue indexValue = indexFieldReader.readField(fieldInfo.getValue());
-          indexValue.setVisibility(value.getVisibility());
+          final Object indexValue = indexFieldReader.readField(fieldInfo.getValue());
           commonData.addValue(fieldName, indexValue);
         } else {
           final FieldReader<?> extFieldReader = dataAdapter.getReader(fieldName);
@@ -192,12 +198,14 @@ public class LazyReadPersistenceEncoding extends IndexedAdapterPersistenceEncodi
           }
         }
       }
-      if (isSecondaryIndex && (dataAdapter.getAdapter() instanceof AbstractDataAdapter)) {
-        for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
-          final IndexFieldHandler<?, ? extends CommonIndexValue, Object> fieldHandler =
-              ((AbstractDataAdapter) dataAdapter.getAdapter()).getFieldHandler(dimension);
-          final CommonIndexValue commonIndexValue = fieldHandler.toIndexValue(adapterExtendedData);
-          commonData.addValue(dimension.getFieldName(), commonIndexValue);
+      if (isSecondaryIndex) {
+        for (IndexFieldMapper<?, ?> mapper : indexMapping.getIndexFieldMappers()) {
+          final Object commonIndexValue =
+              InternalAdapterUtils.entryToIndexValue(
+                  mapper,
+                  dataAdapter.getAdapter(),
+                  adapterExtendedData);
+          commonData.addValue(mapper.indexFieldName(), commonIndexValue);
         }
       }
     }
@@ -209,9 +217,10 @@ public class LazyReadPersistenceEncoding extends IndexedAdapterPersistenceEncodi
         final byte[] fieldSubsetBitmask,
         final InternalDataAdapter<?> dataAdapter,
         final CommonIndexModel indexModel,
+        final AdapterToIndexMapping indexMapping,
         final GeoWaveValue[] fieldValues,
         final boolean isSecondaryIndex) {
-      super(fieldSubsetBitmask, dataAdapter, indexModel, isSecondaryIndex);
+      super(fieldSubsetBitmask, dataAdapter, indexModel, indexMapping, isSecondaryIndex);
       this.fieldValues = fieldValues;
     }
 
@@ -227,9 +236,10 @@ public class LazyReadPersistenceEncoding extends IndexedAdapterPersistenceEncodi
         final byte[] fieldSubsetBitmask,
         final InternalDataAdapter<?> dataAdapter,
         final CommonIndexModel indexModel,
+        final AdapterToIndexMapping indexMapping,
         final Supplier<GeoWaveValue[]> fieldValues,
         final boolean isSecondaryIndex) {
-      super(fieldSubsetBitmask, dataAdapter, indexModel, isSecondaryIndex);
+      super(fieldSubsetBitmask, dataAdapter, indexModel, indexMapping, isSecondaryIndex);
       this.fieldValues = fieldValues;
     }
 

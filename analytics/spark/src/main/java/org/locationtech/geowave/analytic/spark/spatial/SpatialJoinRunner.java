@@ -11,6 +11,7 @@ package org.locationtech.geowave.analytic.spark.spatial;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
@@ -117,14 +118,15 @@ public class SpatialJoinRunner implements Serializable {
       final String typeName,
       final InternalAdapterStore internalAdapterStore,
       final IndexStore indexStore) {
-    return storeOptions.createAdapterIndexMappingStore().getIndicesForAdapter(
-        internalAdapterStore.getAdapterId(typeName)).getIndices(indexStore);
+    return Arrays.stream(
+        storeOptions.createAdapterIndexMappingStore().getIndicesForAdapter(
+            internalAdapterStore.getAdapterId(typeName))).map(
+                mapping -> mapping.getIndex(indexStore)).toArray(Index[]::new);
   }
 
   private FeatureDataAdapter createOutputAdapter(
       final DataStorePluginOptions originalOptions,
       final String originalTypeName,
-      final Index[] indices,
       String outputTypeName) {
 
     if (outputTypeName == null) {
@@ -132,7 +134,6 @@ public class SpatialJoinRunner implements Serializable {
     }
     final FeatureDataAdapter newAdapter =
         FeatureDataUtils.cloneFeatureDataAdapter(originalOptions, originalTypeName, outputTypeName);
-    newAdapter.init(indices);
     return newAdapter;
   }
 
@@ -145,7 +146,7 @@ public class SpatialJoinRunner implements Serializable {
               leftInternalAdapterStore,
               leftIndexStore);
       final FeatureDataAdapter newLeftAdapter =
-          createOutputAdapter(leftStore, leftAdapterTypeName, leftIndices, outLeftAdapterTypeName);
+          createOutputAdapter(leftStore, leftAdapterTypeName, outLeftAdapterTypeName);
 
       final Index[] rightIndices =
           getIndicesForAdapter(
@@ -154,11 +155,7 @@ public class SpatialJoinRunner implements Serializable {
               rightInternalAdapterStore,
               rightIndexStore);
       final FeatureDataAdapter newRightAdapter =
-          createOutputAdapter(
-              rightStore,
-              rightAdapterTypeName,
-              rightIndices,
-              outRightAdapterTypeName);
+          createOutputAdapter(rightStore, rightAdapterTypeName, outRightAdapterTypeName);
       // Write each feature set to new adapter and store using original
       // indexing methods.
       RDDUtils.writeRDDToGeoWave(sc, leftIndices, outputStore, newLeftAdapter, getLeftResults());

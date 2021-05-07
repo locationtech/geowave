@@ -55,7 +55,7 @@ public class SimpleFeatureSerializationProvider {
     }
   }
 
-  public static class WholeFeatureWriter implements FieldWriter<Object, Object[]> {
+  public static class WholeFeatureWriter implements FieldWriter<Object[]> {
     public WholeFeatureWriter() {
       super();
     }
@@ -90,14 +90,6 @@ public class SimpleFeatureSerializationProvider {
         LOGGER.error("Unable to write to output", e);
       }
       return baos.toByteArray();
-    }
-
-    @Override
-    public byte[] getVisibility(
-        final Object rowValue,
-        final String fieldName,
-        final Object[] fieldValue) {
-      return new byte[] {};
     }
   }
 }

@@ -21,7 +21,7 @@ public class BooleanSerializationProvider implements FieldSerializationProviderS
   }
 
   @Override
-  public FieldWriter<Object, Boolean> getFieldWriter() {
+  public FieldWriter<Boolean> getFieldWriter() {
     return new BooleanWriter();
   }
 
@@ -38,7 +38,7 @@ public class BooleanSerializationProvider implements FieldSerializationProviderS
     }
   }
 
-  protected static class BooleanWriter implements FieldWriter<Object, Boolean> {
+  protected static class BooleanWriter implements FieldWriter<Boolean> {
     @Override
     public byte[] writeField(final Boolean fieldValue) {
       return new byte[] {((fieldValue == null) || !fieldValue) ? (byte) 0 : (byte) 1};

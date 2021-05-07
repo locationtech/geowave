@@ -11,13 +11,14 @@ package org.locationtech.geowave.core.geotime.store.query.filter;
 import java.net.MalformedURLException;
 import java.nio.ByteBuffer;
 import org.geotools.filter.text.ecql.ECQL;
-import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.InternalGeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.util.FilterToCQLTool;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.adapter.AbstractAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
@@ -33,16 +34,21 @@ import org.slf4j.LoggerFactory;
 
 public class CQLQueryFilter implements QueryFilter {
   private static final Logger LOGGER = LoggerFactory.getLogger(CQLQueryFilter.class);
-  private GeotoolsFeatureDataAdapter adapter;
+  private InternalGeotoolsFeatureDataAdapter<?> adapter;
+  private AdapterToIndexMapping indexMapping;
   private Filter filter;
 
   public CQLQueryFilter() {
     super();
   }
 
-  public CQLQueryFilter(final Filter filter, final GeotoolsFeatureDataAdapter adapter) {
+  public CQLQueryFilter(
+      final Filter filter,
+      final InternalGeotoolsFeatureDataAdapter<?> adapter,
+      final AdapterToIndexMapping indexMapping) {
     this.filter = FilterToCQLTool.fixDWithin(filter);
     this.adapter = adapter;
+    this.indexMapping = indexMapping;
   }
 
   public String getTypeName() {
@@ -83,6 +89,7 @@ public class CQLQueryFilter implements QueryFilter {
       final SimpleFeature feature =
           (SimpleFeature) adapter.decode(
               encoding,
+              indexMapping,
               new IndexImpl(
                   null, // because we
                   // know the
@@ -123,14 +130,25 @@ public class CQLQueryFilter implements QueryFilter {
       LOGGER.warn("Feature Data Adapter is null");
       adapterBytes = new byte[] {};
     }
+    byte[] mappingBytes;
+    if (indexMapping != null) {
+      mappingBytes = PersistenceUtils.toBinary(indexMapping);
+    } else {
+      LOGGER.warn("Adapter to index mapping is null");
+      mappingBytes = new byte[] {};
+    }
     final ByteBuffer buf =
         ByteBuffer.allocate(
             filterBytes.length
                 + adapterBytes.length
-                + VarintUtils.unsignedIntByteLength(filterBytes.length));
+                + mappingBytes.length
+                + VarintUtils.unsignedIntByteLength(filterBytes.length)
+                + VarintUtils.unsignedIntByteLength(adapterBytes.length));
     VarintUtils.writeUnsignedInt(filterBytes.length, buf);
     buf.put(filterBytes);
+    VarintUtils.writeUnsignedInt(adapterBytes.length, buf);
     buf.put(adapterBytes);
+    buf.put(mappingBytes);
     return buf.array();
   }
 
@@ -156,18 +174,34 @@ public class CQLQueryFilter implements QueryFilter {
       filter = null;
     }
 
-    final int adapterBytesLength = buf.remaining();
+    final int adapterBytesLength = VarintUtils.readUnsignedInt(buf);
     if (adapterBytesLength > 0) {
       final byte[] adapterBytes = ByteArrayUtils.safeRead(buf, adapterBytesLength);
 
       try {
-        adapter = (GeotoolsFeatureDataAdapter) PersistenceUtils.fromBinary(adapterBytes);
+        adapter = (InternalGeotoolsFeatureDataAdapter<?>) PersistenceUtils.fromBinary(adapterBytes);
       } catch (final Exception e) {
         throw new IllegalArgumentException("Unable to read adapter from CQL filter binary", e);
       }
     } else {
       LOGGER.warn("Feature Data Adapter is empty bytes");
       adapter = null;
+    }
+
+    final int mappingBytesLength = buf.remaining();
+    if (adapterBytesLength > 0) {
+      final byte[] mappingBytes = ByteArrayUtils.safeRead(buf, mappingBytesLength);
+
+      try {
+        indexMapping = (AdapterToIndexMapping) PersistenceUtils.fromBinary(mappingBytes);
+      } catch (final Exception e) {
+        throw new IllegalArgumentException(
+            "Unable to read adapter to index mapping from CQL filter binary",
+            e);
+      }
+    } else {
+      LOGGER.warn("Adapter to index mapping is empty bytes");
+      indexMapping = null;
     }
   }
 }

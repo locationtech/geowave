@@ -125,7 +125,8 @@ public class SpatialTemporalDimensionalityTypeProvider implements
             fields[d] =
                 new CustomCRSSpatialField(
                     (CustomCRSBoundedSpatialDimensionX) dimensions[d],
-                    geometryPrecision);
+                    geometryPrecision,
+                    crs);
           }
           if (d == 1) {
             dimensions[d] =
@@ -133,7 +134,8 @@ public class SpatialTemporalDimensionalityTypeProvider implements
             fields[d] =
                 new CustomCRSSpatialField(
                     (CustomCRSBoundedSpatialDimensionY) dimensions[d],
-                    geometryPrecision);
+                    geometryPrecision,
+                    crs);
           }
         } else {
           if (d == 0) {
@@ -142,7 +144,8 @@ public class SpatialTemporalDimensionalityTypeProvider implements
             fields[d] =
                 new CustomCRSSpatialField(
                     (CustomCRSUnboundedSpatialDimensionX) dimensions[d],
-                    geometryPrecision);
+                    geometryPrecision,
+                    crs);
           }
           if (d == 1) {
             dimensions[d] =
@@ -150,7 +153,8 @@ public class SpatialTemporalDimensionalityTypeProvider implements
             fields[d] =
                 new CustomCRSSpatialField(
                     (CustomCRSUnboundedSpatialDimensionY) dimensions[d],
-                    geometryPrecision);
+                    geometryPrecision,
+                    crs);
           }
         }
       }

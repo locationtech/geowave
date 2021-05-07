@@ -25,7 +25,7 @@ public class CalendarArraySerializationProvider implements
   }
 
   @Override
-  public FieldWriter<Object, Calendar[]> getFieldWriter() {
+  public FieldWriter<Calendar[]> getFieldWriter() {
     return new CalendarArrayWriter();
   }
 
@@ -36,7 +36,7 @@ public class CalendarArraySerializationProvider implements
     }
   }
 
-  private static class CalendarArrayWriter extends VariableSizeObjectArrayWriter<Object, Calendar> {
+  private static class CalendarArrayWriter extends VariableSizeObjectArrayWriter<Calendar> {
     public CalendarArrayWriter() {
       super(new CalendarWriter());
     }

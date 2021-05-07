@@ -15,8 +15,10 @@ import java.util.List;
 import javax.annotation.Nullable;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.DataStoreOptions;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.BinConstraints.ByteArrayConstraints;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataTypeStatistic;
@@ -554,7 +556,8 @@ public class DataStatisticsStoreImpl extends
   @Override
   public <T> StatisticUpdateCallback<T> createUpdateCallback(
       final Index index,
-      final DataTypeAdapter<T> adapter,
+      final AdapterToIndexMapping indexMapping,
+      final InternalDataAdapter<T> adapter,
       final boolean updateAdapterStats) {
     final List<Statistic<? extends StatisticValue<?>>> statistics = Lists.newArrayList();
     if (index != null) {
@@ -579,7 +582,7 @@ public class DataStatisticsStoreImpl extends
         }
       }
     }
-    return new StatisticUpdateCallback<>(statistics, this, index, adapter);
+    return new StatisticUpdateCallback<>(statistics, this, index, indexMapping, adapter);
   }
 
   @Override

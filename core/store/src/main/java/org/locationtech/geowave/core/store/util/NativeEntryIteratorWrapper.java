@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.IndexUtils;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.AdapterException;
 import org.locationtech.geowave.core.store.api.Index;
@@ -30,6 +31,7 @@ public class NativeEntryIteratorWrapper<T> implements Iterator<T> {
   private boolean adapterValid = true;
   protected final DataIndexRetrieval dataIndexRetrieval;
   protected final PersistentAdapterStore adapterStore;
+  protected final AdapterIndexMappingStore mappingStore;
   protected final Index index;
   protected final Iterator<GeoWaveRow> scannerIt;
   protected final QueryFilter[] clientFilters;
@@ -39,6 +41,7 @@ public class NativeEntryIteratorWrapper<T> implements Iterator<T> {
 
   public NativeEntryIteratorWrapper(
       final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final Index index,
       final Iterator<GeoWaveRow> scannerIt,
       final QueryFilter[] clientFilters,
@@ -48,6 +51,7 @@ public class NativeEntryIteratorWrapper<T> implements Iterator<T> {
       final boolean decodePersistenceEncoding,
       final DataIndexRetrieval dataIndexRetrieval) {
     this.adapterStore = adapterStore;
+    this.mappingStore = mappingStore;
     this.index = index;
     this.scannerIt = scannerIt;
     this.clientFilters = clientFilters;
@@ -115,7 +119,9 @@ public class NativeEntryIteratorWrapper<T> implements Iterator<T> {
                 row,
                 clientFilters,
                 null,
+                null,
                 adapterStore,
+                mappingStore,
                 index,
                 scanCallback,
                 fieldSubsetBitmask,

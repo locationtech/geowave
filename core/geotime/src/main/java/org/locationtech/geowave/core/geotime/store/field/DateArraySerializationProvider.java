@@ -26,7 +26,7 @@ public class DateArraySerializationProvider implements FieldSerializationProvide
   }
 
   @Override
-  public FieldWriter<Object, Date[]> getFieldWriter() {
+  public FieldWriter<Date[]> getFieldWriter() {
     return new DateArrayWriter();
   }
 
@@ -62,7 +62,7 @@ public class DateArraySerializationProvider implements FieldSerializationProvide
   }
 
   // @see LongArraySerializationProvider.LongArrayWriter
-  private static class DateArrayWriter implements FieldWriter<Object, Date[]> {
+  private static class DateArrayWriter implements FieldWriter<Date[]> {
     @Override
     public byte[] writeField(final Date[] fieldValue) {
       if (fieldValue == null) {

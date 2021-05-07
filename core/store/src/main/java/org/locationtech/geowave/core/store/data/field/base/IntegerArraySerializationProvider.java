@@ -26,7 +26,7 @@ public class IntegerArraySerializationProvider implements FieldSerializationProv
   }
 
   @Override
-  public FieldWriter<Object, Integer[]> getFieldWriter() {
+  public FieldWriter<Integer[]> getFieldWriter() {
     return new IntegerArrayWriter();
   }
 
@@ -62,7 +62,7 @@ public class IntegerArraySerializationProvider implements FieldSerializationProv
   }
 
   // @see PrimitiveIntArraySerializationProvider.PrimitiveIntArrayWriter
-  private static class IntegerArrayWriter implements FieldWriter<Object, Integer[]> {
+  private static class IntegerArrayWriter implements FieldWriter<Integer[]> {
     @Override
     public byte[] writeField(final Integer[] fieldValue) {
       if (fieldValue == null) {

@@ -16,17 +16,16 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.locationtech.geowave.adapter.vector.FeatureAttributeDimensionField;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.simple.SimpleDoubleIndexStrategy;
-import org.locationtech.geowave.core.index.simple.SimpleLongIndexStrategy;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
+import org.locationtech.geowave.core.store.dimension.BasicNumericDimensionField;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.BasicIndexModel;
 import org.locationtech.geowave.core.store.index.CustomNameIndex;
@@ -192,28 +191,21 @@ public class SimpleQuerySecondaryIndexIT extends AbstractGeoWaveIT {
     final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
     final List<SimpleFeature> features =
         SimpleIngest.getGriddedFeatures(new SimpleFeatureBuilder(sft), 1234);
-    final Index timeIdx =
-        new CustomNameIndex(
-            new SimpleLongIndexStrategy(),
-            new BasicIndexModel(
-                new NumericDimensionField[] {
-                    new FeatureAttributeDimensionField(sft.getDescriptor("TimeStamp"))}),
-            "TimeStamp_IDX");
     final Index latIdx =
         new CustomNameIndex(
             new SimpleDoubleIndexStrategy(),
             new BasicIndexModel(
                 new NumericDimensionField[] {
-                    new FeatureAttributeDimensionField(sft.getDescriptor("Latitude"))}),
+                    new BasicNumericDimensionField<>("Latitude", Double.class)}),
             "Lat_IDX");
     final Index lonIdx =
         new CustomNameIndex(
             new SimpleDoubleIndexStrategy(),
             new BasicIndexModel(
                 new NumericDimensionField[] {
-                    new FeatureAttributeDimensionField(sft.getDescriptor("Longitude"))}),
+                    new BasicNumericDimensionField<>("Longitude", Double.class)}),
             "Lon_IDX");
-    ds.addType(fda, TestUtils.DEFAULT_SPATIAL_INDEX, timeIdx, latIdx, lonIdx);
+    ds.addType(fda, TestUtils.DEFAULT_SPATIAL_INDEX, latIdx, lonIdx);
     int ingestedFeatures = 0;
     try (Writer<SimpleFeature> writer = ds.createWriter(fda.getTypeName())) {
       for (final SimpleFeature feat : features) {

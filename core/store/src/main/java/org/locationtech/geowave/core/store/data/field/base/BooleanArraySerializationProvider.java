@@ -23,7 +23,7 @@ public class BooleanArraySerializationProvider implements FieldSerializationProv
   }
 
   @Override
-  public FieldWriter<Object, Boolean[]> getFieldWriter() {
+  public FieldWriter<Boolean[]> getFieldWriter() {
     return new BooleanArrayWriter();
   }
 
@@ -33,7 +33,7 @@ public class BooleanArraySerializationProvider implements FieldSerializationProv
     }
   }
 
-  private static class BooleanArrayWriter extends FixedSizeObjectArrayWriter<Object, Boolean> {
+  private static class BooleanArrayWriter extends FixedSizeObjectArrayWriter<Boolean> {
     public BooleanArrayWriter() {
       super(new BooleanWriter());
     }

@@ -10,11 +10,9 @@ package org.locationtech.geowave.core.store.adapter;
 
 import java.util.Map.Entry;
 import java.util.Set;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 
 /**
  * This is an implements of persistence encoding that also contains all of the extended data values
@@ -29,7 +27,7 @@ public class IndexedAdapterPersistenceEncoding extends AbstractAdapterPersistenc
       final byte[] partitionKey,
       final byte[] sortKey,
       final int duplicateCount,
-      final PersistentDataset<CommonIndexValue> commonData,
+      final PersistentDataset<Object> commonData,
       final PersistentDataset<byte[]> unknownData,
       final PersistentDataset<Object> adapterExtendedData) {
     super(
@@ -44,7 +42,9 @@ public class IndexedAdapterPersistenceEncoding extends AbstractAdapterPersistenc
   }
 
   @Override
-  public void convertUnknownValues(final DataTypeAdapter<?> adapter, final CommonIndexModel model) {
+  public void convertUnknownValues(
+      final InternalDataAdapter<?> adapter,
+      final CommonIndexModel model) {
     final Set<Entry<String, byte[]>> unknownDataValues = getUnknownData().getValues().entrySet();
     for (final Entry<String, byte[]> v : unknownDataValues) {
       final FieldReader<Object> reader = adapter.getReader(v.getKey());

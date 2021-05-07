@@ -26,7 +26,6 @@ import org.locationtech.geowave.analytic.clustering.DistortionGroupManagement.Di
 import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.index.SpatialOptions;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
-import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
@@ -57,7 +56,7 @@ public class DistortionGroupManagementTest {
     }
   }
 
-  public DistortionGroupManagementTest() throws MismatchedIndexToAdapterMapping, IOException {
+  public DistortionGroupManagementTest() throws IOException {
     ftype =
         AnalyticFeature.createGeometryFeatureAdapter(
             "centroid",
@@ -65,7 +64,6 @@ public class DistortionGroupManagementTest {
             BasicFeatureTypes.DEFAULT_NAMESPACE,
             ClusteringUtils.CLUSTERING_CRS).getFeatureType();
     adapter = new FeatureDataAdapter(ftype);
-    adapter.init(index);
     final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
 
     final StoreFactoryOptions opts =

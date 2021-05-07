@@ -14,7 +14,8 @@ import java.util.NoSuchElementException;
 import org.locationtech.geowave.core.index.IndexUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
@@ -36,9 +37,10 @@ public class ChooseLocalityPreservingQueryStrategy implements IndexQueryStrategy
   @Override
   public CloseableIterator<Index> getIndices(
       final DataStatisticsStore statisticsStore,
+      final AdapterIndexMappingStore mappingStore,
       final QueryConstraints query,
       final Index[] indices,
-      final DataTypeAdapter<?> adapter,
+      final InternalDataAdapter<?> adapter,
       final Map<QueryHint, Object> hints) {
     return new CloseableIterator<Index>() {
       Index nextIdx = null;

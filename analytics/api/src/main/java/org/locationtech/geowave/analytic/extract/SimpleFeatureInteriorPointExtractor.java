@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.analytic.extract;
 
-import org.locationtech.geowave.adapter.vector.FeatureGeometryHandler;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
 import org.opengis.feature.simple.SimpleFeature;
@@ -21,9 +20,7 @@ public class SimpleFeatureInteriorPointExtractor extends SimpleFeatureCentroidEx
     CentroidExtractor<SimpleFeature> {
   @Override
   public Point getCentroid(final SimpleFeature anObject) {
-    final FeatureGeometryHandler handler =
-        new FeatureGeometryHandler(anObject.getDefaultGeometryProperty().getDescriptor());
-    final Geometry geometry = handler.toIndexValue(anObject).getGeometry();
+    final Geometry geometry = (Geometry) anObject.getDefaultGeometry();
     final int srid = SimpleFeatureGeometryExtractor.getSRID(anObject);
     final Point point = geometry.getInteriorPoint();
     point.setSRID(srid);

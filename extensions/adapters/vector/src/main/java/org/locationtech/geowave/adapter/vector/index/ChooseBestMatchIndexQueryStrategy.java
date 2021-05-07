@@ -15,14 +15,14 @@ import org.locationtech.geowave.core.index.IndexUtils;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexStatistic;
 import org.locationtech.geowave.core.store.api.Statistic;
 import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
-import org.locationtech.geowave.core.store.statistics.StatisticId;
 import org.locationtech.geowave.core.store.statistics.binning.CompositeBinningStrategy;
 import org.locationtech.geowave.core.store.statistics.binning.DataTypeBinningStrategy;
 import org.locationtech.geowave.core.store.statistics.binning.PartitionBinningStrategy;
@@ -44,9 +44,10 @@ public class ChooseBestMatchIndexQueryStrategy implements IndexQueryStrategySPI 
   @Override
   public CloseableIterator<Index> getIndices(
       final DataStatisticsStore statisticsStore,
+      final AdapterIndexMappingStore mappingStore,
       final QueryConstraints query,
       final Index[] indices,
-      final DataTypeAdapter<?> adapter,
+      final InternalDataAdapter<?> adapter,
       final Map<QueryHint, Object> hints) {
     return new CloseableIterator<Index>() {
       Index nextIdx = null;
@@ -73,9 +74,9 @@ public class ChooseBestMatchIndexQueryStrategy implements IndexQueryStrategySPI 
                   RowRangeHistogramStatistic.STATS_TYPE,
                   Statistic.INTERNAL_TAG)) {
             if (stats.hasNext()) {
-              Statistic<?> statistic = stats.next();
-              if (statistic instanceof RowRangeHistogramStatistic
-                  && statistic.getBinningStrategy() instanceof CompositeBinningStrategy
+              final Statistic<?> statistic = stats.next();
+              if ((statistic instanceof RowRangeHistogramStatistic)
+                  && (statistic.getBinningStrategy() instanceof CompositeBinningStrategy)
                   && ((CompositeBinningStrategy) statistic.getBinningStrategy()).isOfType(
                       DataTypeBinningStrategy.class,
                       PartitionBinningStrategy.class)) {

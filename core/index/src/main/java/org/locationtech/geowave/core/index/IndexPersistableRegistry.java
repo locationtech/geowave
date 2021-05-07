@@ -12,6 +12,7 @@ import org.locationtech.geowave.core.index.CompoundIndexStrategy.CompoundIndexMe
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray.ArrayOfArrays;
 import org.locationtech.geowave.core.index.dimension.BasicDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.UnboundedDimensionDefinition;
+import org.locationtech.geowave.core.index.dimension.bin.BasicBinningStrategy;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 import org.locationtech.geowave.core.index.sfc.BasicSFCIndexStrategy;
 import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
@@ -85,6 +86,7 @@ public class IndexPersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 136, TextSearchPredicate::new),
         new PersistableIdAndConstructor((short) 137, TextIndexStrategy::new),
         new PersistableIdAndConstructor((short) 138, EnumIndexStrategy::new),
-        new PersistableIdAndConstructor((short) 139, EnumSearch::new),};
+        new PersistableIdAndConstructor((short) 139, EnumSearch::new),
+        new PersistableIdAndConstructor((short) 140, BasicBinningStrategy::new),};
   }
 }

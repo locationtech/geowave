@@ -26,8 +26,8 @@ import org.apache.hadoop.io.Text;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.jaitools.jts.CoordinateSequence2D;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
-import org.locationtech.geowave.core.geotime.store.dimension.Time;
+import org.locationtech.geowave.core.geotime.store.dimension.SpatialField;
+import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.FloatCompareUtils;
 import org.locationtech.geowave.core.ingest.avro.AbstractStageWholeFileToAvro;
@@ -39,9 +39,6 @@ import org.locationtech.geowave.core.ingest.hdfs.mapreduce.KeyValueData;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
-import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.NullIndex;
 import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.ingest.IngestPluginBase;
@@ -168,24 +165,20 @@ public class Stanag4676IngestPlugin extends AbstractStageWholeFileToAvro<Object>
     }
 
     @Override
-    public Class<? extends CommonIndexValue>[] getSupportedIndexableTypes() {
-      return new Class[] {GeometryWrapper.class, Time.class};
+    public String[] getSupportedIndexTypes() {
+      return new String[] {SpatialField.DEFAULT_GEOMETRY_FIELD_NAME, TimeField.DEFAULT_FIELD_ID};
     }
 
     @Override
     public DataTypeAdapter<Object>[] getDataAdapters(final String globalVisibility) {
-      final FieldVisibilityHandler fieldVisiblityHandler =
-          ((globalVisibility != null) && !globalVisibility.isEmpty())
-              ? new GlobalVisibilityHandler(globalVisibility)
-              : null;
 
       return new DataTypeAdapter[] {
-          new FeatureDataAdapter(pointType, fieldVisiblityHandler),
-          new FeatureDataAdapter(motionPointType, fieldVisiblityHandler),
-          new FeatureDataAdapter(trackType, fieldVisiblityHandler),
-          new FeatureDataAdapter(missionSummaryType, fieldVisiblityHandler),
-          new FeatureDataAdapter(missionFrameType, fieldVisiblityHandler),
-          new ImageChipDataAdapter(fieldVisiblityHandler)};
+          new FeatureDataAdapter(pointType),
+          new FeatureDataAdapter(motionPointType),
+          new FeatureDataAdapter(trackType),
+          new FeatureDataAdapter(missionSummaryType),
+          new FeatureDataAdapter(missionFrameType),
+          new ImageChipDataAdapter()};
     }
 
     @Override
@@ -608,7 +601,8 @@ public class Stanag4676IngestPlugin extends AbstractStageWholeFileToAvro<Object>
   }
 
   @Override
-  public Class<? extends CommonIndexValue>[] getSupportedIndexableTypes() {
-    return new Class[] {GeometryWrapper.class, Time.class};
+  public String[] getSupportedIndexTypes() {
+    return new String[] {SpatialField.DEFAULT_GEOMETRY_FIELD_NAME, TimeField.DEFAULT_FIELD_ID};
   }
+
 }

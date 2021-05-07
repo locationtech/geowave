@@ -22,7 +22,7 @@ public class PrimitiveDoubleArraySerializationProvider implements
   }
 
   @Override
-  public FieldWriter<Object, double[]> getFieldWriter() {
+  public FieldWriter<double[]> getFieldWriter() {
     return new PrimitiveDoubleArrayWriter();
   }
 
@@ -40,7 +40,7 @@ public class PrimitiveDoubleArraySerializationProvider implements
     }
   }
 
-  private static class PrimitiveDoubleArrayWriter implements FieldWriter<Object, double[]> {
+  private static class PrimitiveDoubleArrayWriter implements FieldWriter<double[]> {
     @Override
     public byte[] writeField(final double[] fieldValue) {
       if (fieldValue == null) {

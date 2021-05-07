@@ -13,6 +13,7 @@ import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.statistics.StatisticId;
 import org.locationtech.geowave.core.store.statistics.adapter.DataTypeStatisticType;
@@ -63,13 +64,7 @@ public abstract class DataTypeStatistic<V extends StatisticValue<?>> extends Sta
   }
 
   @Override
-  public <T> EntryVisibilityHandler<T> getVisibilityHandler(
-      CommonIndexModel indexModel,
-      DataTypeAdapter<T> adapter) {
-    return new DefaultFieldStatisticVisibility<>();
-  }
 
-  @Override
   protected int byteLength() {
     return super.byteLength()
         + VarintUtils.unsignedShortByteLength((short) typeName.length())

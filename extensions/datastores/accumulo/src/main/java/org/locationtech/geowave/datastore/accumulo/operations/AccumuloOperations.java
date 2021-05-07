@@ -63,6 +63,7 @@ import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray.ArrayOfArrays;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.DataStoreOptions;
@@ -71,7 +72,6 @@ import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.Aggregation;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
@@ -1092,6 +1092,13 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
             AggregationIterator.ADAPTER_OPTION_NAME,
             ByteArrayUtils.byteArrayToString(
                 PersistenceUtils.toBinary(params.getAggregation().getLeft())));
+        AdapterToIndexMapping mapping =
+            params.getAdapterIndexMappingStore().getMapping(
+                params.getAggregation().getLeft().getAdapterId(),
+                params.getIndex().getName());
+        iteratorSettings.addOption(
+            AggregationIterator.ADAPTER_INDEX_MAPPING_OPTION_NAME,
+            ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(mapping)));
       }
       final Aggregation aggr = params.getAggregation().getRight();
       iteratorSettings.addOption(
@@ -1185,7 +1192,7 @@ public class AccumuloOperations implements MapReduceDataStoreOperations, ServerS
       final ScannerBase scanner) {
     if ((params.getFieldSubsets() != null) && !params.isAggregation()) {
       final String[] fieldNames = params.getFieldSubsets().getLeft();
-      final DataTypeAdapter<?> associatedAdapter = params.getFieldSubsets().getRight();
+      final InternalDataAdapter<?> associatedAdapter = params.getFieldSubsets().getRight();
       if ((fieldNames != null) && (fieldNames.length > 0) && (associatedAdapter != null)) {
         final IteratorSetting iteratorSetting = AttributeSubsettingIterator.getIteratorSetting();
 

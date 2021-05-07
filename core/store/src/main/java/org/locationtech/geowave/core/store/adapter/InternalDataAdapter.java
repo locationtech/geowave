@@ -8,10 +8,26 @@
  */
 package org.locationtech.geowave.core.store.adapter;
 
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.index.CommonIndexModel;
 
 public interface InternalDataAdapter<T> extends DataTypeAdapter<T> {
-  public short getAdapterId();
+  short getAdapterId();
 
-  public DataTypeAdapter<T> getAdapter();
+  DataTypeAdapter<T> getAdapter();
+
+  int getPositionOfOrderedField(CommonIndexModel model, String fieldName);
+
+  String getFieldNameForPosition(CommonIndexModel model, int position);
+
+  AdapterPersistenceEncoding encode(T entry, AdapterToIndexMapping indexMapping, final Index index);
+
+  T decode(
+      IndexedAdapterPersistenceEncoding data,
+      AdapterToIndexMapping indexMapping,
+      final Index index);
+
+  boolean isCommonIndexField(AdapterToIndexMapping indexMapping, String fieldName);
 }

@@ -38,6 +38,11 @@ public class EnumIndexStrategy<E> implements CustomIndexStrategy<E, EnumSearch> 
   }
 
   @Override
+  public Class<EnumSearch> getConstraintsClass() {
+    return EnumSearch.class;
+  }
+
+  @Override
   public byte[] toBinary() {
     final byte[] converterBytes = PersistenceUtils.toBinary(converter);
     final byte[] termsBytes = StringUtils.stringsToBinary(exactMatchTerms);

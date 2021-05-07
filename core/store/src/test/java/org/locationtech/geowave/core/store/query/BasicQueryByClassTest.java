@@ -18,7 +18,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.junit.Test;
+import org.locationtech.geowave.core.index.IndexDimensionHint;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRanges;
@@ -40,7 +42,6 @@ import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.BasicIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.CustomNameIndex;
 import org.locationtech.geowave.core.store.index.IndexImpl;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
@@ -48,6 +49,7 @@ import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.C
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintSet;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintsByClass;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
+import com.beust.jcommander.internal.Sets;
 
 public class BasicQueryByClassTest {
 
@@ -312,7 +314,7 @@ public class BasicQueryByClassTest {
     }
   }
 
-  public static class ConstrainedIndexValue extends NumericRange implements CommonIndexValue {
+  public static class ConstrainedIndexValue extends NumericRange {
 
     /** */
     private static final long serialVersionUID = 1L;
@@ -320,19 +322,6 @@ public class BasicQueryByClassTest {
     public ConstrainedIndexValue(final double min, final double max) {
       super(min, max);
       //
-    }
-
-    @Override
-    public byte[] getVisibility() {
-      return new byte[0];
-    }
-
-    @Override
-    public void setVisibility(final byte[] visibility) {}
-
-    @Override
-    public boolean overlaps(final NumericDimensionField[] field, final NumericData[] rangeData) {
-      return false;
     }
   }
 
@@ -399,7 +388,7 @@ public class BasicQueryByClassTest {
     }
 
     @Override
-    public FieldWriter<?, ConstrainedIndexValue> getWriter() {
+    public FieldWriter<ConstrainedIndexValue> getWriter() {
       return null;
     }
 
@@ -414,8 +403,18 @@ public class BasicQueryByClassTest {
     }
 
     @Override
-    public boolean isCompatibleWith(Class<? extends CommonIndexValue> clazz) {
+    public boolean isCompatibleWith(final Class<?> clazz) {
       return ConstrainedIndexValue.class.isAssignableFrom(clazz);
+    }
+
+    @Override
+    public Class<ConstrainedIndexValue> getFieldClass() {
+      return ConstrainedIndexValue.class;
+    }
+
+    @Override
+    public Set<IndexDimensionHint> getDimensionHints() {
+      return Sets.newHashSet();
     }
   }
 

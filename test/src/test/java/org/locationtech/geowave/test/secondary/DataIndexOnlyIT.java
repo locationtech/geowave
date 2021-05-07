@@ -9,9 +9,9 @@
 package org.locationtech.geowave.test.secondary;
 
 import java.nio.ByteBuffer;
-import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -26,21 +26,18 @@ import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.lexicoder.Lexicoders;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
-import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
+import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
+import org.locationtech.geowave.core.store.adapter.FieldDescriptorBuilder;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
-import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.api.StatisticQuery;
 import org.locationtech.geowave.core.store.api.StatisticQueryBuilder;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.base.BaseDataStore;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
-import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic.CountValue;
 import org.locationtech.geowave.test.GeoWaveITRunner;
@@ -131,7 +128,7 @@ public class DataIndexOnlyIT extends AbstractGeoWaveBasicVectorIT {
             VectorAggregationQueryBuilder.newBuilder().count(adapter.getTypeName()).build());
     Assert.assertTrue(count > 0);
     Assert.assertEquals(originalCount, count);
-    StatisticQuery<CountValue, Long> query =
+    final StatisticQuery<CountValue, Long> query =
         StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
             adapter.getTypeName()).build();
     count = dataIdxStore.aggregateStatistics(query).getValue();
@@ -160,7 +157,7 @@ public class DataIndexOnlyIT extends AbstractGeoWaveBasicVectorIT {
     }
 
     count = dataIdxStore.aggregateStatistics(query).getValue();
-    Assert.assertEquals((long) originalCount - 3, (long) count);
+    Assert.assertEquals(originalCount - 3, (long) count);
 
     TestUtils.deleteAll(dataStoreOptions);
     TestUtils.deleteAll(dataIdxOnlyDataStoreOptions);
@@ -298,7 +295,11 @@ public class DataIndexOnlyIT extends AbstractGeoWaveBasicVectorIT {
   public static class LatLonTimeAdapter implements DataTypeAdapter<LatLonTime> {
     private static final FieldReader READER = new LatLonTimeReader();
     private static final FieldWriter WRITER = new LatLonTimeWriter();
-    private static final String SINGLETON_FIELD = "LLT";
+    protected static final String SINGLETON_FIELD_NAME = "LLT";
+    protected static final FieldDescriptor<LatLonTime> SINGLETON_FIELD_DESCRIPTOR =
+        new FieldDescriptorBuilder<>(LatLonTime.class).fieldName(SINGLETON_FIELD_NAME).build();
+    protected static final FieldDescriptor<?>[] SINGLETON_FIELD_DESCRIPTOR_ARRAY =
+        new FieldDescriptor[] {SINGLETON_FIELD_DESCRIPTOR};
 
     @Override
     public FieldReader<Object> getReader(final String fieldName) {
@@ -306,7 +307,7 @@ public class DataIndexOnlyIT extends AbstractGeoWaveBasicVectorIT {
     }
 
     @Override
-    public FieldWriter<LatLonTime, Object> getWriter(final String fieldName) {
+    public FieldWriter<Object> getWriter(final String fieldName) {
       return WRITER;
     }
 
@@ -331,40 +332,6 @@ public class DataIndexOnlyIT extends AbstractGeoWaveBasicVectorIT {
       return buf.array();
     }
 
-    @Override
-    public LatLonTime decode(final IndexedAdapterPersistenceEncoding data, final Index index) {
-      final LatLonTime retVal =
-          (LatLonTime) data.getAdapterExtendedData().getValue(SINGLETON_FIELD);
-      final ByteBuffer buf = ByteBuffer.wrap(data.getDataId());
-      buf.position(8);
-      final byte[] idBytes = new byte[4];
-      buf.get(idBytes);
-      final int id = Lexicoders.INT.fromByteArray(idBytes);
-      retVal.setId(id);
-      return retVal;
-    }
-
-
-    @Override
-    public AdapterPersistenceEncoding encode(
-        final LatLonTime entry,
-        final CommonIndexModel indexModel) {
-      return new AdapterPersistenceEncoding(
-          getDataId(entry),
-          new MultiFieldPersistentDataset<>(),
-          new MultiFieldPersistentDataset<>(Collections.singletonMap(SINGLETON_FIELD, entry)));
-    }
-
-    @Override
-    public int getPositionOfOrderedField(final CommonIndexModel model, final String fieldName) {
-      return 0;
-    }
-
-    @Override
-    public String getFieldNameForPosition(final CommonIndexModel model, final int position) {
-      return "LLT";
-    }
-
     private static class LatLonTimeReader implements FieldReader<LatLonTime> {
       @Override
       public LatLonTime readField(final byte[] fieldData) {
@@ -373,7 +340,7 @@ public class DataIndexOnlyIT extends AbstractGeoWaveBasicVectorIT {
         return retVal;
       }
     }
-    private static class LatLonTimeWriter implements FieldWriter<LatLonTime, LatLonTime> {
+    private static class LatLonTimeWriter implements FieldWriter<LatLonTime> {
       @Override
       public byte[] writeField(final LatLonTime fieldValue) {
         final byte[] bytes = fieldValue.toBinary();
@@ -382,33 +349,60 @@ public class DataIndexOnlyIT extends AbstractGeoWaveBasicVectorIT {
     }
 
     @Override
-    public boolean isCommonIndexField(CommonIndexModel indexModel, String fieldName) {
-      return false;
-    }
-
-    @Override
-    public int getFieldCount() {
-      return 0;
-    }
-
-    @Override
-    public Class<?> getFieldClass(int fieldIndex) {
-      return null;
-    }
-
-    @Override
-    public String getFieldName(int fieldIndex) {
-      return null;
-    }
-
-    @Override
-    public Object getFieldValue(LatLonTime entry, String fieldName) {
-      return null;
+    public Object getFieldValue(final LatLonTime entry, final String fieldName) {
+      return entry;
     }
 
     @Override
     public Class<LatLonTime> getDataClass() {
       return LatLonTime.class;
+    }
+
+    @Override
+    public RowBuilder<LatLonTime> newRowBuilder(final FieldDescriptor<?>[] outputFieldDescriptors) {
+      return new RowBuilder<DataIndexOnlyIT.LatLonTime>() {
+        LatLonTime fieldValue;
+
+        @Override
+        public void setField(final String fieldName, final Object fieldValue) {
+          if (SINGLETON_FIELD_NAME.equals(fieldName)
+              && ((fieldValue == null) || (fieldValue instanceof LatLonTime))) {
+            this.fieldValue = (LatLonTime) fieldValue;
+          }
+        }
+
+        @Override
+        public void setFields(final Map<String, Object> values) {
+          if (values.containsKey(SINGLETON_FIELD_NAME)) {
+            final Object obj = values.get(SINGLETON_FIELD_NAME);
+            setField(SINGLETON_FIELD_NAME, obj);
+          }
+        }
+
+        @Override
+        public LatLonTime buildRow(final byte[] dataId) {
+          if (fieldValue != null) {
+            final ByteBuffer buf = ByteBuffer.wrap(dataId);
+            final byte[] longBytes = new byte[Long.BYTES];
+            buf.get(longBytes);
+            final byte[] intBytes = new byte[Integer.BYTES];
+            buf.get(intBytes);
+            fieldValue.time = Lexicoders.LONG.fromByteArray(longBytes);
+            fieldValue.setId(Lexicoders.INT.fromByteArray(intBytes));
+          }
+          return fieldValue;
+        }
+      };
+    }
+
+    @Override
+    public FieldDescriptor<?>[] getFieldDescriptors() {
+      return SINGLETON_FIELD_DESCRIPTOR_ARRAY;
+    }
+
+    @Override
+    public FieldDescriptor<?> getFieldDescriptor(final String fieldName) {
+      return SINGLETON_FIELD_DESCRIPTOR;
     }
   }
 }

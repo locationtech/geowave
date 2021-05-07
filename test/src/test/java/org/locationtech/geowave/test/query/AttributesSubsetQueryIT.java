@@ -107,8 +107,6 @@ public class AttributesSubsetQueryIT extends AbstractGeoWaveIT {
 
     dataAdapter = new FeatureDataAdapter(simpleFeatureType);
 
-    dataAdapter.init(index);
-
     startMillis = System.currentTimeMillis();
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");

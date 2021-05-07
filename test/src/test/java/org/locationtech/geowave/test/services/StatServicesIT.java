@@ -24,7 +24,6 @@ import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic.BoundingBoxValue;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.StatisticQueryBuilder;
@@ -85,7 +84,7 @@ public class StatServicesIT extends BaseServiceIT {
   }
 
   @Before
-  public void initialize() throws MismatchedIndexToAdapterMapping, IOException {
+  public void initialize() throws IOException {
     statServiceClient = new StatServiceClient(ServicesTestEnvironment.GEOWAVE_BASE_URL);
     storeServiceClient = new StoreServiceClient(ServicesTestEnvironment.GEOWAVE_BASE_URL);
 

@@ -150,7 +150,6 @@ public class GeometryDataSetGenerator {
       throws IOException {
     final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
     final FeatureDataAdapter adapter = new FeatureDataAdapter(featureData.get(0).getFeatureType());
-    adapter.init(index);
     final SimpleFeatureBuilder featureBuilder =
         new SimpleFeatureBuilder(featureData.get(0).getFeatureType());
 

@@ -99,7 +99,6 @@ public class KMeansDistortionMapReduceTest {
             CommonParameters.Common.DISTANCE_FUNCTION_CLASS),
         FeatureCentroidDistanceFn.class,
         DistanceFn.class);
-    testObjectAdapter.init(index);
     JobContextAdapterStore.addDataAdapter(mapDriver.getConfiguration(), testObjectAdapter);
 
     JobContextAdapterStore.addDataAdapter(reduceDriver.getConfiguration(), testObjectAdapter);

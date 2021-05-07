@@ -11,13 +11,13 @@ package org.locationtech.geowave.core.geotime.store.query;
 import static org.junit.Assert.assertEquals;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 import org.junit.Test;
 import org.locationtech.geowave.core.geotime.index.SpatialTemporalDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.index.SpatialTemporalOptions;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
-import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
-import org.locationtech.geowave.core.geotime.store.dimension.Time.TimeRange;
+import org.locationtech.geowave.core.geotime.store.dimension.SpatialField;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
 import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation;
 import org.locationtech.geowave.core.index.StringUtils;
@@ -25,10 +25,10 @@ import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
+import org.threeten.extra.Interval;
 
 public class SpatialTemporalQueryTest {
   SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssz");
@@ -57,14 +57,14 @@ public class SpatialTemporalQueryTest {
       final Date end,
       final Coordinate[] coordinates) {
     final GeometryFactory factory = new GeometryFactory();
-    final PersistentDataset<CommonIndexValue> commonData = new MultiFieldPersistentDataset<>();
+    final PersistentDataset<Object> commonData = new MultiFieldPersistentDataset<>();
 
     commonData.addValue(
-        GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME,
-        new GeometryWrapper(factory.createLineString(coordinates)));
+        SpatialField.DEFAULT_GEOMETRY_FIELD_NAME,
+        factory.createLineString(coordinates));
     commonData.addValue(
         new TimeField(Unit.YEAR).getFieldName(),
-        new TimeRange(start.getTime(), end.getTime(), new byte[0]));
+        Interval.of(Instant.ofEpochMilli(start.getTime()), Instant.ofEpochMilli(end.getTime())));
 
     return new CommonIndexedPersistenceEncoding(
         (short) 1,

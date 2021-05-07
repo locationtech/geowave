@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.core.store.api;
 
+import java.util.Arrays;
 import org.locationtech.geowave.core.store.query.BaseQueryBuilder;
 import org.locationtech.geowave.core.store.query.QueryBuilderImpl;
 
@@ -66,5 +67,21 @@ public interface QueryBuilder<T, R extends QueryBuilder<T, R>> extends
    */
   static <T> QueryBuilder<T, ?> newBuilder() {
     return new QueryBuilderImpl<>();
+  }
+
+  static <T> QueryBuilder<T, ?> newBuilder(Class<T> clazz) {
+    return new QueryBuilderImpl<>();
+  }
+
+  @SafeVarargs
+  static <T> QueryBuilder<T, ?> newBuilder(
+      DataTypeAdapter<T> adapter,
+      DataTypeAdapter<T>... otherAdapters) {
+    QueryBuilder<T, ?> queryBuilder = new QueryBuilderImpl<>();
+    queryBuilder.addTypeName(adapter.getTypeName());
+    if (otherAdapters != null && otherAdapters.length > 0) {
+      Arrays.stream(otherAdapters).forEach(a -> queryBuilder.addTypeName(a.getTypeName()));
+    }
+    return queryBuilder;
   }
 }

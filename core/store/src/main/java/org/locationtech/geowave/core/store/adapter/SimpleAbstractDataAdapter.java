@@ -9,60 +9,65 @@
 package org.locationtech.geowave.core.store.adapter;
 
 import org.locationtech.geowave.core.index.persist.Persistable;
+import org.locationtech.geowave.core.index.persist.PersistableFactory;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
-import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
-import org.locationtech.geowave.core.store.data.SingleFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.data.field.PersistableReader;
 import org.locationtech.geowave.core.store.data.field.PersistableWriter;
-import org.locationtech.geowave.core.store.index.CommonIndexModel;
 
 abstract public class SimpleAbstractDataAdapter<T extends Persistable> implements
     DataTypeAdapter<T> {
   protected static final String SINGLETON_FIELD_NAME = "FIELD";
+  protected FieldDescriptor<T> singletonFieldDescriptor;
   private final FieldReader<Object> reader;
-  private final FieldWriter<T, Object> writer;
+  private final FieldWriter<Object> writer;
 
   public SimpleAbstractDataAdapter() {
     super();
-    reader = new PersistableReader(dataClassId());
+    singletonFieldDescriptor =
+        new FieldDescriptorBuilder<>(getDataClass()).fieldName(SINGLETON_FIELD_NAME).build();
+    reader =
+        new PersistableReader(
+            PersistableFactory.getInstance().getClassIdMapping().get(getDataClass()));
     writer = new PersistableWriter();
   }
 
-  abstract protected short dataClassId();
+  @Override
+  public byte[] toBinary() {
+    return new byte[0];
+  }
 
   @Override
-  public FieldWriter<T, Object> getWriter(final String fieldName) {
+  public void fromBinary(final byte[] bytes) {}
+
+  @Override
+  public Object getFieldValue(final T entry, final String fieldName) {
+    return entry;
+  }
+
+  @Override
+  public RowBuilder<T> newRowBuilder(final FieldDescriptor<?>[] outputFieldDescriptors) {
+    return new SingletonFieldRowBuilder<T>();
+  }
+
+  @Override
+  public FieldDescriptor<?>[] getFieldDescriptors() {
+    return new FieldDescriptor<?>[] {singletonFieldDescriptor};
+  }
+
+  @Override
+  public FieldDescriptor<?> getFieldDescriptor(final String fieldName) {
+    return singletonFieldDescriptor;
+  }
+
+  @Override
+  public FieldWriter<Object> getWriter(final String fieldName) {
     return writer;
   }
 
   @Override
   public FieldReader<Object> getReader(final String fieldName) {
     return reader;
-  }
-
-  @Override
-  public T decode(final IndexedAdapterPersistenceEncoding data, final Index index) {
-    return (T) data.getAdapterExtendedData().getValue(SINGLETON_FIELD_NAME);
-  }
-
-  @Override
-  public AdapterPersistenceEncoding encode(final T entry, final CommonIndexModel indexModel) {
-    return new AdapterPersistenceEncoding(
-        getDataId(entry),
-        new MultiFieldPersistentDataset<>(),
-        new SingleFieldPersistentDataset<>(SINGLETON_FIELD_NAME, entry));
-  }
-
-  @Override
-  public int getPositionOfOrderedField(final CommonIndexModel model, final String fieldName) {
-    return 0;
-  }
-
-  @Override
-  public String getFieldNameForPosition(final CommonIndexModel model, final int position) {
-    return SINGLETON_FIELD_NAME;
   }
 }

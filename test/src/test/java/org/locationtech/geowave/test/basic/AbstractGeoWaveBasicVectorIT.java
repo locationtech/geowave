@@ -28,7 +28,6 @@ import java.util.Set;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math.util.MathUtils;
-import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.locationtech.geowave.adapter.raster.util.ZipUtils;
@@ -38,15 +37,14 @@ import org.locationtech.geowave.adapter.vector.export.VectorLocalExportOptions;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.InternalGeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.OptimalCQLQuery;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic.BoundingBoxValue;
-import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.InitializeWithIndicesDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
@@ -86,7 +84,6 @@ import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.opengis.referencing.operation.MathTransform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
@@ -430,8 +427,8 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
 
     try (CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters()) {
       while (it.hasNext()) {
-        final GeotoolsFeatureDataAdapter adapter =
-            (GeotoolsFeatureDataAdapter) it.next().getAdapter();
+        final InternalGeotoolsFeatureDataAdapter<SimpleFeature> adapter =
+            (InternalGeotoolsFeatureDataAdapter<SimpleFeature>) it.next();
 
         // Create the CQL query
         final QueryConstraints query =
@@ -712,7 +709,6 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
     final Map<String, StatisticsCache> statsCache = new HashMap<>();
     final String[] indexNames =
         Arrays.stream(indices).map(i -> i.getName()).toArray(i -> new String[i]);
-    final MathTransform mathTransform = TestUtils.transformFromCrs(crs);
     for (final URL inputFile : inputFiles) {
       LOGGER.warn(
           "Calculating stats from file '"
@@ -724,12 +720,7 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
             new MemoryAdapterStore(localFileIngest.getDataAdapters(null));
         while (dataIterator.hasNext()) {
           final GeoWaveData<SimpleFeature> data = dataIterator.next();
-          final boolean needsInit = adapterCache.adapterExists(data.getTypeName());
           final DataTypeAdapter<SimpleFeature> adapter = data.getAdapter(adapterCache);
-          if (!needsInit && (adapter instanceof InitializeWithIndicesDataAdapter)) {
-            ((InitializeWithIndicesDataAdapter) adapter).init(indices);
-            adapterCache.addAdapter(adapter);
-          }
           // it should be a statistical data adapter
           if (adapter instanceof DefaultStatisticsProvider) {
             StatisticsCache cachedValues = statsCache.get(adapter.getTypeName());
@@ -737,13 +728,7 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
               cachedValues = new StatisticsCache(adapter, crs);
               statsCache.put(adapter.getTypeName(), cachedValues);
             }
-            cachedValues.entryIngested(
-                mathTransform != null
-                    ? GeometryUtils.crsTransform(
-                        data.getValue(),
-                        SimpleFeatureTypeBuilder.retype(data.getValue().getFeatureType(), crs),
-                        mathTransform)
-                    : data.getValue());
+            cachedValues.entryIngested(data.getValue());
           }
         }
       }

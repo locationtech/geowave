@@ -31,6 +31,7 @@ import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.AdapterStoreWrapper;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
@@ -161,14 +162,17 @@ public class GeoWaveRecordReader<T> extends RecordReader<GeoWaveInputKey, T> {
         // if adapters isn't null that also means this constraint is
         // AdapterAndIndexBasedQueryConstraints
         if (adapters != null) {
-          DataTypeAdapter<?> adapter = null;
+          InternalDataAdapter<?> adapter = null;
           if (adapters.length > 1) {
             // this should be a rare situation, but just in case, loop over adapters and fill the
             // iterator of results per adapter
             for (final short adapterId : adapters) {
               final String typeName = internalAdapterStore.getTypeName(adapterId);
               if (typeName != null) {
-                adapter = adapterStore.getAdapter(typeName);
+                final DataTypeAdapter<?> baseAdapter = adapterStore.getAdapter(typeName);
+                if (baseAdapter != null) {
+                  adapter = baseAdapter.asInternalAdapter(adapterId);
+                }
               }
 
               if (adapter == null) {
@@ -177,7 +181,9 @@ public class GeoWaveRecordReader<T> extends RecordReader<GeoWaveInputKey, T> {
               queryFilters =
                   ((AdapterAndIndexBasedQueryConstraints) constraints).createQueryConstraints(
                       adapter,
-                      splitInfo.getIndex()).createFilters(splitInfo.getIndex());
+                      splitInfo.getIndex(),
+                      aimStore.getMapping(adapterId, splitInfo.getIndex().getName())).createFilters(
+                          splitInfo.getIndex());
               sanitizedQueryOptions.setAdapterId(adapterId);
               fillIterators(
                   allIterators,
@@ -195,7 +201,10 @@ public class GeoWaveRecordReader<T> extends RecordReader<GeoWaveInputKey, T> {
           if (adapters.length == 1) {
             final String typeName = internalAdapterStore.getTypeName(adapters[0]);
             if (typeName != null) {
-              adapter = adapterStore.getAdapter(typeName);
+              final DataTypeAdapter<?> baseAdapter = adapterStore.getAdapter(typeName);
+              if (baseAdapter != null) {
+                adapter = baseAdapter.asInternalAdapter(adapters[0]);
+              }
             }
           }
           if (adapter == null) {
@@ -204,7 +213,10 @@ public class GeoWaveRecordReader<T> extends RecordReader<GeoWaveInputKey, T> {
           final QueryConstraints tempConstraints =
               ((AdapterAndIndexBasedQueryConstraints) constraints).createQueryConstraints(
                   adapter,
-                  splitInfo.getIndex());
+                  splitInfo.getIndex(),
+                  adapter != null
+                      ? aimStore.getMapping(adapter.getAdapterId(), splitInfo.getIndex().getName())
+                      : null);
           if (tempConstraints == null) {
             LOGGER.warn(
                 "Adapter and Index based constraints not satisfied for adapter '"
@@ -273,6 +285,7 @@ public class GeoWaveRecordReader<T> extends RecordReader<GeoWaveInputKey, T> {
           DataIndexUtils.getDataIndexRetrieval(
               operations,
               persistentAdapterStore,
+              aimStore,
               internalAdapterStore,
               splitInfo.getIndex(),
               sanitizedQueryOptions.getFieldIdsAdapterPair(),
@@ -290,6 +303,7 @@ public class GeoWaveRecordReader<T> extends RecordReader<GeoWaveInputKey, T> {
                     new RecordReaderParams(
                         splitInfo.getIndex(),
                         persistentAdapterStore,
+                        aimStore,
                         internalAdapterStore,
                         sanitizedQueryOptions.getAdapterIds(internalAdapterStore),
                         sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
@@ -329,6 +343,7 @@ public class GeoWaveRecordReader<T> extends RecordReader<GeoWaveInputKey, T> {
               filters,
               adapterStore,
               internalAdapterStore,
+              aimStore,
               index,
               isOutputWritable,
               (BatchDataIndexRetrieval) dataIndexRetrieval);
@@ -339,6 +354,7 @@ public class GeoWaveRecordReader<T> extends RecordReader<GeoWaveInputKey, T> {
               filters,
               adapterStore,
               internalAdapterStore,
+              aimStore,
               index,
               isOutputWritable,
               dataIndexRetrieval);

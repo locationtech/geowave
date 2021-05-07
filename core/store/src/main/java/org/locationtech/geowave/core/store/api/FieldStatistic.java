@@ -12,7 +12,9 @@ import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.statistics.StatisticId;
 import org.locationtech.geowave.core.store.statistics.field.FieldStatisticId;
@@ -95,9 +97,10 @@ public abstract class FieldStatistic<V extends StatisticValue<?>> extends Statis
 
   @Override
   public <T> EntryVisibilityHandler<T> getVisibilityHandler(
+      AdapterToIndexMapping indexMapping,
       CommonIndexModel indexModel,
-      DataTypeAdapter<T> adapter) {
-    if (indexModel != null && adapter.isCommonIndexField(indexModel, fieldName)) {
+      InternalDataAdapter<T> adapter) {
+    if (indexMapping != null && adapter.isCommonIndexField(indexMapping, fieldName)) {
       return new DefaultFieldStatisticVisibility<>();
     }
     return new FieldNameStatisticVisibility<>(fieldName, indexModel, adapter);

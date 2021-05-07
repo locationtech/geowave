@@ -25,7 +25,6 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
 import org.locationtech.geowave.core.store.adapter.MockComponents;
 import org.locationtech.geowave.core.store.adapter.MockComponents.MockAbstractDataAdapter;
-import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
@@ -53,7 +52,7 @@ import com.clearspring.analytics.util.Lists;
 public class MemoryDataStoreTest {
 
   @Test
-  public void test() throws IOException, MismatchedIndexToAdapterMapping {
+  public void test() throws IOException {
     final Index index =
         new IndexImpl(new MockComponents.MockIndexStrategy(), new MockComponents.TestIndexModel());
     final String namespace = "test_" + getClass().getName();
@@ -161,7 +160,7 @@ public class MemoryDataStoreTest {
   }
 
   @Test
-  public void testMultipleIndices() throws IOException, MismatchedIndexToAdapterMapping {
+  public void testMultipleIndices() throws IOException {
     final Index index1 =
         new IndexImpl(
             new MockComponents.MockIndexStrategy(),

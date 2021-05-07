@@ -42,7 +42,7 @@ public class TemporalQuery extends AbstractVectorConstraints<ExplicitTemporalQue
   }
 
   @Override
-  protected Filter getFilter(final GeotoolsFeatureDataAdapter adapter) {
+  protected Filter getFilter(final GeotoolsFeatureDataAdapter adapter, final Index index) {
     return getFilter(adapter, delegateConstraints);
   }
 

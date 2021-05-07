@@ -25,7 +25,7 @@ public class PrimitiveLongArraySerializationProvider implements
   }
 
   @Override
-  public FieldWriter<Object, long[]> getFieldWriter() {
+  public FieldWriter<long[]> getFieldWriter() {
     return new PrimitiveLongArrayWriter();
   }
 
@@ -61,7 +61,7 @@ public class PrimitiveLongArraySerializationProvider implements
     }
   }
 
-  private static class PrimitiveLongArrayWriter implements FieldWriter<Object, long[]> {
+  private static class PrimitiveLongArrayWriter implements FieldWriter<long[]> {
     public PrimitiveLongArrayWriter() {
       super();
     }

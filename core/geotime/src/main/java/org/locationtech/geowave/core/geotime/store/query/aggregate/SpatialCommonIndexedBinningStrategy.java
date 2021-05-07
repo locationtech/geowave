@@ -10,11 +10,10 @@ package org.locationtech.geowave.core.geotime.store.query.aggregate;
 
 import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.geotime.binning.SpatialBinningType;
-import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
+import org.locationtech.geowave.core.geotime.store.dimension.SpatialField;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.jts.geom.Geometry;
 
 /**
@@ -39,7 +38,7 @@ public class SpatialCommonIndexedBinningStrategy extends
       final SpatialBinningType type,
       final int precision,
       final boolean useCentroidOnly) {
-    this(type, precision, useCentroidOnly, GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME);
+    this(type, precision, useCentroidOnly, SpatialField.DEFAULT_GEOMETRY_FIELD_NAME);
   }
 
   /**
@@ -64,10 +63,10 @@ public class SpatialCommonIndexedBinningStrategy extends
 
   @Override
   public Geometry getGeometry(final CommonIndexedPersistenceEncoding entry) {
-    final PersistentDataset<CommonIndexValue> data = entry.getCommonData();
-    final CommonIndexValue geometryValue = data.getValue(geometryFieldName);
-    if (geometryValue instanceof GeometryWrapper) {
-      return ((GeometryWrapper) geometryValue).getGeometry();
+    final PersistentDataset<Object> data = entry.getCommonData();
+    final Object geometryValue = data.getValue(geometryFieldName);
+    if (geometryValue instanceof Geometry) {
+      return ((Geometry) geometryValue);
     } else {
       return null;
     }

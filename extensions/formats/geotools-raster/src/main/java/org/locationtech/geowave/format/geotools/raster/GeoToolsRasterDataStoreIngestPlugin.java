@@ -27,12 +27,11 @@ import org.geotools.referencing.CRS;
 import org.locationtech.geowave.adapter.raster.RasterUtils;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
-import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
+import org.locationtech.geowave.core.geotime.store.dimension.SpatialField;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIterator.Wrapper;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.opengis.coverage.grid.GridCoverage;
@@ -80,7 +79,7 @@ public class GeoToolsRasterDataStoreIngestPlugin implements LocalFileIngestPlugi
     // accepts this file because the finder should have previously validated
     // this, also don't allwo ingest from geowave raster format because its URL validation is way
     // too lenient (ie. the URL is probably not supported)
-    return (format != null && !(format instanceof GeoWaveGTRasterFormat));
+    return ((format != null) && !(format instanceof GeoWaveGTRasterFormat));
   }
 
   private static AbstractGridFormat prioritizedFindFormat(final URL input) {
@@ -155,7 +154,7 @@ public class GeoToolsRasterDataStoreIngestPlugin implements LocalFileIngestPlugi
           if ((mdNames != null) && (mdNames.length > 0)) {
             for (final String mdName : mdNames) {
               if (mdName != null) {
-                String value = reader.getMetadataValue(coverageName, mdName);
+                final String value = reader.getMetadataValue(coverageName, mdName);
                 if (value != null) {
                   metadata.put(mdName, value);
                 }
@@ -239,11 +238,11 @@ public class GeoToolsRasterDataStoreIngestPlugin implements LocalFileIngestPlugi
   public DataTypeAdapter<GridCoverage>[] getDataAdapters(
       final URL url,
       final String globalVisibility) {
-    Map<String, DataTypeAdapter<GridCoverage>> adapters = Maps.newHashMap();
+    final Map<String, DataTypeAdapter<GridCoverage>> adapters = Maps.newHashMap();
     try (CloseableIterator<GeoWaveData<GridCoverage>> dataIt =
         toGeoWaveData(url, new String[0], globalVisibility)) {
       while (dataIt.hasNext()) {
-        DataTypeAdapter<GridCoverage> adapter = dataIt.next().getAdapter();
+        final DataTypeAdapter<GridCoverage> adapter = dataIt.next().getAdapter();
         adapters.put(adapter.getTypeName(), adapter);
       }
     }
@@ -255,9 +254,8 @@ public class GeoToolsRasterDataStoreIngestPlugin implements LocalFileIngestPlugi
     return new Index[] {};
   }
 
-  @SuppressWarnings("unchecked")
   @Override
-  public Class<? extends CommonIndexValue>[] getSupportedIndexableTypes() {
-    return new Class[] {GeometryWrapper.class};
+  public String[] getSupportedIndexTypes() {
+    return new String[] {SpatialField.DEFAULT_GEOMETRY_FIELD_NAME};
   }
 }

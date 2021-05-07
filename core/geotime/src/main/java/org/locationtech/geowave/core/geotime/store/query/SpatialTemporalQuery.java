@@ -39,8 +39,8 @@ public class SpatialTemporalQuery extends AbstractVectorConstraints<ExplicitSpat
   }
 
   @Override
-  protected Filter getFilter(final GeotoolsFeatureDataAdapter adapter) {
-    final Filter spatialFilter = SpatialQuery.getFilter(adapter, delegateConstraints);
+  protected Filter getFilter(final GeotoolsFeatureDataAdapter adapter, final Index index) {
+    final Filter spatialFilter = SpatialQuery.getFilter(adapter, index, delegateConstraints);
     if (spatialFilter == null) {
       LOGGER.warn("Spatial filter does not apply to type '" + adapter.getTypeName() + "'");
       return null;

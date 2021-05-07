@@ -8,12 +8,12 @@
  */
 package org.locationtech.geowave.core.geotime.store.query.aggregate;
 
-import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
+import org.locationtech.geowave.core.geotime.store.dimension.SpatialField;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
 
 public class CommonIndexBoundingBoxAggregation<P extends Persistable> extends
     BoundingBoxAggregation<P, CommonIndexedPersistenceEncoding> implements
@@ -21,10 +21,9 @@ public class CommonIndexBoundingBoxAggregation<P extends Persistable> extends
 
   @Override
   protected Envelope getEnvelope(final CommonIndexedPersistenceEncoding entry) {
-    final CommonIndexValue v =
-        entry.getCommonData().getValue(GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME);
-    if ((v != null) && (v instanceof GeometryWrapper)) {
-      return ((GeometryWrapper) v).getGeometry().getEnvelopeInternal();
+    final Object v = entry.getCommonData().getValue(SpatialField.DEFAULT_GEOMETRY_FIELD_NAME);
+    if ((v != null) && (v instanceof Geometry)) {
+      return ((Geometry) v).getEnvelopeInternal();
     }
     return null;
   }

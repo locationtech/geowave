@@ -22,7 +22,7 @@ public class LongSerializationProvider implements FieldSerializationProviderSpi<
   }
 
   @Override
-  public FieldWriter<Object, Long> getFieldWriter() {
+  public FieldWriter<Long> getFieldWriter() {
     return new LongWriter();
   }
 
@@ -48,7 +48,7 @@ public class LongSerializationProvider implements FieldSerializationProviderSpi<
     }
   }
 
-  protected static class LongWriter implements FieldWriter<Object, Long> {
+  protected static class LongWriter implements FieldWriter<Long> {
     public LongWriter() {
       super();
     }

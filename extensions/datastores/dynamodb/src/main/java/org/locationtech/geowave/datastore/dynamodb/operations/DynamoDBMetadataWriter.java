@@ -23,6 +23,7 @@ public class DynamoDBMetadataWriter implements MetadataWriter {
 
   final DynamoDBOperations operations;
   private final String tableName;
+  private long lastWrite = -1;
 
   public DynamoDBMetadataWriter(final DynamoDBOperations operations, final String tableName) {
     this.operations = operations;
@@ -49,10 +50,9 @@ public class DynamoDBMetadataWriter implements MetadataWriter {
             new AttributeValue().withB(ByteBuffer.wrap(metadata.getVisibility())));
       }
     }
-
     map.put(
         DynamoDBOperations.METADATA_TIMESTAMP_KEY,
-        new AttributeValue().withN(Long.toString(System.currentTimeMillis())));
+        new AttributeValue().withN(Long.toString(safeWrite())));
     map.put(
         DynamoDBOperations.METADATA_VALUE_KEY,
         new AttributeValue().withB(ByteBuffer.wrap(metadata.getValue())));
@@ -62,6 +62,20 @@ public class DynamoDBMetadataWriter implements MetadataWriter {
     } catch (final Exception e) {
       LOGGER.error("Error writing metadata", e);
     }
+  }
+
+  private long safeWrite() {
+    long time = System.currentTimeMillis();
+    while (time <= lastWrite) {
+      try {
+        Thread.sleep(10);
+        time = System.currentTimeMillis();
+      } catch (final InterruptedException e) {
+        LOGGER.warn("Unable to wait for new time", e);
+      }
+    }
+    lastWrite = time;
+    return time;
   }
 
   @Override

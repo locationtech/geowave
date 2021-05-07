@@ -25,7 +25,7 @@ public class PrimitiveIntArraySerializationProvider implements
   }
 
   @Override
-  public FieldWriter<Object, int[]> getFieldWriter() {
+  public FieldWriter<int[]> getFieldWriter() {
     return new PrimitiveIntArrayWriter();
   }
 
@@ -61,7 +61,7 @@ public class PrimitiveIntArraySerializationProvider implements
     }
   }
 
-  private static class PrimitiveIntArrayWriter implements FieldWriter<Object, int[]> {
+  private static class PrimitiveIntArrayWriter implements FieldWriter<int[]> {
     @Override
     public byte[] writeField(final int[] fieldValue) {
       if (fieldValue == null) {

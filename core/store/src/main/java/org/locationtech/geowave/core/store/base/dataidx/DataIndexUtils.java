@@ -14,6 +14,7 @@ import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
@@ -127,6 +128,7 @@ public class DataIndexUtils {
   public static DataIndexRetrieval getDataIndexRetrieval(
       final DataStoreOperations operations,
       final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final InternalAdapterStore internalAdapterStore,
       final Index index,
       final Pair<String[], InternalDataAdapter<?>> fieldSubsets,
@@ -140,6 +142,7 @@ public class DataIndexUtils {
         return new BatchIndexRetrievalImpl(
             operations,
             adapterStore,
+            mappingStore,
             internalAdapterStore,
             fieldSubsets,
             aggregation,
@@ -149,6 +152,7 @@ public class DataIndexUtils {
       return new DataIndexRetrievalImpl(
           operations,
           adapterStore,
+          mappingStore,
           internalAdapterStore,
           fieldSubsets,
           aggregation,
@@ -160,6 +164,7 @@ public class DataIndexUtils {
   protected static GeoWaveValue[] getFieldValuesFromDataIdIndex(
       final DataStoreOperations operations,
       final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final InternalAdapterStore internalAdapterStore,
       final Pair<String[], InternalDataAdapter<?>> fieldSubsets,
       final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
@@ -170,6 +175,7 @@ public class DataIndexUtils {
         getRowReader(
             operations,
             adapterStore,
+            mappingStore,
             internalAdapterStore,
             fieldSubsets,
             aggregation,
@@ -197,6 +203,7 @@ public class DataIndexUtils {
   public static void delete(
       final DataStoreOperations operations,
       final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final InternalAdapterStore internalAdapterStore,
       final Pair<String[], InternalDataAdapter<?>> fieldSubsets,
       final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
@@ -207,6 +214,7 @@ public class DataIndexUtils {
     final DataIndexReaderParams readerParams =
         new DataIndexReaderParamsBuilder<>(
             adapterStore,
+            mappingStore,
             internalAdapterStore).additionalAuthorizations(
                 additionalAuthorizations).isAuthorizationsLimiting(false).adapterId(
                     adapterId).dataIds(dataIds).fieldSubsets(fieldSubsets).aggregation(
@@ -219,6 +227,7 @@ public class DataIndexUtils {
         final NativeEntryIteratorWrapper scanCallBackIterator =
             new NativeEntryIteratorWrapper(
                 adapterStore,
+                mappingStore,
                 DataIndexUtils.DATA_ID_INDEX,
                 rowReader,
                 null,
@@ -238,6 +247,7 @@ public class DataIndexUtils {
   public static void delete(
       final DataStoreOperations operations,
       final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final InternalAdapterStore internalAdapterStore,
       final Pair<String[], InternalDataAdapter<?>> fieldSubsets,
       final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
@@ -254,6 +264,7 @@ public class DataIndexUtils {
     final DataIndexReaderParams readerParams =
         new DataIndexReaderParamsBuilder<>(
             adapterStore,
+            mappingStore,
             internalAdapterStore).additionalAuthorizations(
                 additionalAuthorizations).isAuthorizationsLimiting(false).adapterId(
                     adapterId).dataIdsByRange(startDataId, endDataId).fieldSubsets(
@@ -267,6 +278,7 @@ public class DataIndexUtils {
     delete(
         operations,
         adapterStore,
+        mappingStore,
         internalAdapterStore,
         fieldSubsets,
         aggregation,
@@ -279,6 +291,7 @@ public class DataIndexUtils {
   public static RowReader<GeoWaveRow> getRowReader(
       final DataStoreOperations operations,
       final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final InternalAdapterStore internalAdapterStore,
       final Pair<String[], InternalDataAdapter<?>> fieldSubsets,
       final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
@@ -288,6 +301,7 @@ public class DataIndexUtils {
     final DataIndexReaderParams readerParams =
         new DataIndexReaderParamsBuilder<>(
             adapterStore,
+            mappingStore,
             internalAdapterStore).additionalAuthorizations(
                 additionalAuthorizations).isAuthorizationsLimiting(false).adapterId(
                     adapterId).dataIds(dataIds).fieldSubsets(fieldSubsets).aggregation(
@@ -298,6 +312,7 @@ public class DataIndexUtils {
   public static RowReader<GeoWaveRow> getRowReader(
       final DataStoreOperations operations,
       final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final InternalAdapterStore internalAdapterStore,
       final Pair<String[], InternalDataAdapter<?>> fieldSubsets,
       final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
@@ -309,6 +324,7 @@ public class DataIndexUtils {
     final DataIndexReaderParams readerParams =
         new DataIndexReaderParamsBuilder<>(
             adapterStore,
+            mappingStore,
             internalAdapterStore).additionalAuthorizations(
                 additionalAuthorizations).isAuthorizationsLimiting(false).adapterId(
                     adapterId).dataIdsByRange(startDataId, endDataId, reverse).fieldSubsets(
@@ -319,6 +335,7 @@ public class DataIndexUtils {
   public static RowReader<GeoWaveRow> getRowReader(
       final DataStoreOperations operations,
       final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final InternalAdapterStore internalAdapterStore,
       final Pair<String[], InternalDataAdapter<?>> fieldSubsets,
       final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
@@ -327,6 +344,7 @@ public class DataIndexUtils {
     final DataIndexReaderParams readerParams =
         new DataIndexReaderParamsBuilder<>(
             adapterStore,
+            mappingStore,
             internalAdapterStore).additionalAuthorizations(
                 additionalAuthorizations).isAuthorizationsLimiting(false).adapterId(
                     adapterId).fieldSubsets(fieldSubsets).aggregation(aggregation).build();

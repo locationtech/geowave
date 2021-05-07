@@ -16,6 +16,7 @@ import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.DataStoreOptions;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
@@ -97,6 +98,7 @@ abstract class BaseQuery {
       final DataStoreOperations operations,
       final DataStoreOptions options,
       final PersistentAdapterStore adapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final InternalAdapterStore internalAdapterStore,
       final double[] maxResolutionSubsamplingPerDimension,
       final double[] targetResolutionPerDimensionForHierarchicalIndex,
@@ -114,24 +116,31 @@ abstract class BaseQuery {
     }
 
     final ReaderParams<C> readerParams =
-        new ReaderParamsBuilder<>(index, adapterStore, internalAdapterStore, rowTransformer) //
-            .adapterIds(adapterIds) //
-            .maxResolutionSubsamplingPerDimension(maxResolutionSubsamplingPerDimension) //
-            .aggregation(getAggregation()) //
-            .fieldSubsets(getFieldSubsets()) //
-            .isMixedVisibility(isMixedVisibilityRows()) //
-            .isAuthorizationsLimiting(isAuthorizationsLimiting()) //
-            .isServersideAggregation(isServerSideAggregation(options)) //
-            .isClientsideRowMerging(isRowMerging(adapterStore)) //
-            .queryRanges(
-                getRanges(maxRangeDecomposition, targetResolutionPerDimensionForHierarchicalIndex)) //
-            .filter(getServerFilter(options)) //
-            .limit(limit) //
-            .maxRangeDecomposition(maxRangeDecomposition) //
-            .coordinateRanges(getCoordinateRanges()) //
-            .constraints(getConstraints()) //
-            .additionalAuthorizations(getAdditionalAuthorizations()) //
-            .build(); //
+        new ReaderParamsBuilder<>(
+            index,
+            adapterStore,
+            mappingStore,
+            internalAdapterStore,
+            rowTransformer) //
+                .adapterIds(adapterIds) //
+                .maxResolutionSubsamplingPerDimension(maxResolutionSubsamplingPerDimension) //
+                .aggregation(getAggregation()) //
+                .fieldSubsets(getFieldSubsets()) //
+                .isMixedVisibility(isMixedVisibilityRows()) //
+                .isAuthorizationsLimiting(isAuthorizationsLimiting()) //
+                .isServersideAggregation(isServerSideAggregation(options)) //
+                .isClientsideRowMerging(isRowMerging(adapterStore)) //
+                .queryRanges(
+                    getRanges(
+                        maxRangeDecomposition,
+                        targetResolutionPerDimensionForHierarchicalIndex)) //
+                .filter(getServerFilter(options)) //
+                .limit(limit) //
+                .maxRangeDecomposition(maxRangeDecomposition) //
+                .coordinateRanges(getCoordinateRanges()) //
+                .constraints(getConstraints()) //
+                .additionalAuthorizations(getAdditionalAuthorizations()) //
+                .build(); //
 
     if (delete) {
       scanCallback.waitUntilCallbackAdded();

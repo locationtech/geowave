@@ -18,10 +18,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.VarintUtils;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -143,11 +142,11 @@ public class BitmaskUtils {
   public static byte[] generateFieldSubsetBitmask(
       final CommonIndexModel indexModel,
       final String[] fieldNames,
-      final DataTypeAdapter<?> adapterAssociatedWithFieldIds) {
+      final InternalDataAdapter<?> adapterAssociatedWithFieldIds) {
     final SortedSet<Integer> fieldPositions = new TreeSet<>();
 
     // dimension fields must also be included
-    for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
+    for (final NumericDimensionField<?> dimension : indexModel.getDimensions()) {
       fieldPositions.add(
           adapterAssociatedWithFieldIds.getPositionOfOrderedField(
               indexModel,

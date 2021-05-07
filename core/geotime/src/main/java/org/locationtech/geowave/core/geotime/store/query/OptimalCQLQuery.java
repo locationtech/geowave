@@ -11,10 +11,9 @@ package org.locationtech.geowave.core.geotime.store.query;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
-import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.InternalGeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation;
 import org.locationtech.geowave.core.geotime.util.ExtractAttributesFilter;
 import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitor;
@@ -26,7 +25,8 @@ import org.locationtech.geowave.core.geotime.util.IndexOptimizationUtils;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
 import org.locationtech.geowave.core.geotime.util.TimeUtils;
 import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.query.constraints.AdapterAndIndexBasedQueryConstraints;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
@@ -36,6 +36,7 @@ import org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQu
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.filter.Filter;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,49 +45,67 @@ public class OptimalCQLQuery implements AdapterAndIndexBasedQueryConstraints, Qu
 
   public static QueryConstraints createOptimalQuery(
       final String cql,
-      final GeotoolsFeatureDataAdapter adapter,
-      final Index index) throws CQLException {
-    return createOptimalQuery(cql, adapter, index, null);
-  }
-
-  public static QueryConstraints createOptimalQuery(
-      final String cql,
-      final GeotoolsFeatureDataAdapter adapter,
+      final InternalGeotoolsFeatureDataAdapter<?> adapter,
       final Index index,
-      final BasicQueryByClass baseQuery) throws CQLException {
-    return createOptimalQuery(cql, adapter, CompareOperation.INTERSECTS, index, baseQuery);
+      final AdapterToIndexMapping indexMapping) throws CQLException {
+    return createOptimalQuery(cql, adapter, index, indexMapping, null);
   }
 
   public static QueryConstraints createOptimalQuery(
       final String cql,
-      final GeotoolsFeatureDataAdapter adapter,
+      final InternalGeotoolsFeatureDataAdapter<?> adapter,
+      final Index index,
+      final AdapterToIndexMapping indexMapping,
+      final BasicQueryByClass baseQuery) throws CQLException {
+    return createOptimalQuery(
+        cql,
+        adapter,
+        CompareOperation.INTERSECTS,
+        index,
+        indexMapping,
+        baseQuery);
+  }
+
+  public static QueryConstraints createOptimalQuery(
+      final String cql,
+      final InternalGeotoolsFeatureDataAdapter<?> adapter,
       final CompareOperation geoCompareOp,
       final Index index,
+      final AdapterToIndexMapping indexMapping,
       final BasicQueryByClass baseQuery) throws CQLException {
     final Filter cqlFilter = ECQL.toFilter(cql);
-    return createOptimalQuery(cqlFilter, adapter, geoCompareOp, index, baseQuery);
+    return createOptimalQuery(cqlFilter, adapter, geoCompareOp, index, indexMapping, baseQuery);
   }
 
   public static QueryConstraints createOptimalQuery(
       final Filter cqlFilter,
-      final GeotoolsFeatureDataAdapter adapter,
-      final Index index) {
-    return createOptimalQuery(cqlFilter, adapter, index, null);
-  }
-
-  public static QueryConstraints createOptimalQuery(
-      final Filter cqlFilter,
-      final GeotoolsFeatureDataAdapter adapter,
+      final InternalGeotoolsFeatureDataAdapter<?> adapter,
       final Index index,
-      final BasicQueryByClass baseQuery) {
-    return createOptimalQuery(cqlFilter, adapter, CompareOperation.INTERSECTS, index, baseQuery);
+      final AdapterToIndexMapping indexMapping) {
+    return createOptimalQuery(cqlFilter, adapter, index, indexMapping, null);
   }
 
   public static QueryConstraints createOptimalQuery(
       final Filter cqlFilter,
-      final GeotoolsFeatureDataAdapter adapter,
+      final InternalGeotoolsFeatureDataAdapter<?> adapter,
+      final Index index,
+      final AdapterToIndexMapping indexMapping,
+      final BasicQueryByClass baseQuery) {
+    return createOptimalQuery(
+        cqlFilter,
+        adapter,
+        CompareOperation.INTERSECTS,
+        index,
+        indexMapping,
+        baseQuery);
+  }
+
+  public static QueryConstraints createOptimalQuery(
+      final Filter cqlFilter,
+      final InternalGeotoolsFeatureDataAdapter<?> adapter,
       final CompareOperation geoCompareOp,
       final Index index,
+      final AdapterToIndexMapping indexMapping,
       BasicQueryByClass baseQuery) {
     final ExtractAttributesFilter attributesVisitor = new ExtractAttributesFilter();
 
@@ -124,11 +143,12 @@ public class OptimalCQLQuery implements AdapterAndIndexBasedQueryConstraints, Qu
       }
     }
     if (baseQuery == null) {
+      final CoordinateReferenceSystem indexCRS = GeometryUtils.getIndexCrs(index);
       // there is only space and time
       final ExtractGeometryFilterVisitorResult geometryAndCompareOp =
           ExtractGeometryFilterVisitor.getConstraints(
               cqlFilter,
-              adapter.getFeatureType().getCoordinateReferenceSystem(),
+              indexCRS,
               adapter.getFeatureType().getGeometryDescriptor().getLocalName());
       final TemporalConstraintsSet timeConstraintSet =
           new ExtractTimeFilterVisitor(adapter.getTimeDescriptors()).getConstraints(cqlFilter);
@@ -171,15 +191,14 @@ public class OptimalCQLQuery implements AdapterAndIndexBasedQueryConstraints, Qu
         // we have to assume the geometry was transformed to the feature
         // type's CRS, but SpatialQuery assumes the default CRS if not
         // specified, so specify a CRS if necessary
-        if (GeometryUtils.getDefaultCRS().equals(
-            adapter.getFeatureType().getCoordinateReferenceSystem())) {
+        if (GeometryUtils.getDefaultCRS().equals(indexCRS)) {
           baseQuery = new ExplicitSpatialQuery(constraints, geometry, extractedCompareOp);
         } else {
           baseQuery =
               new ExplicitSpatialQuery(
                   constraints,
                   geometry,
-                  GeometryUtils.getCrsCode(adapter.getFeatureType().getCoordinateReferenceSystem()),
+                  GeometryUtils.getCrsCode(indexCRS),
                   extractedCompareOp,
                   BasicQueryCompareOperation.INTERSECTS);
         }
@@ -214,7 +233,7 @@ public class OptimalCQLQuery implements AdapterAndIndexBasedQueryConstraints, Qu
     } else {
       // baseQuery is passed to CQLQuery just to extract out linear
       // constraints only
-      return new ExplicitCQLQuery(baseQuery, cqlFilter, adapter);
+      return new ExplicitCQLQuery(baseQuery, cqlFilter, adapter, indexMapping);
     }
   }
 
@@ -228,12 +247,13 @@ public class OptimalCQLQuery implements AdapterAndIndexBasedQueryConstraints, Qu
 
   @Override
   public QueryConstraints createQueryConstraints(
-      final DataTypeAdapter<?> adapter,
-      final Index index) {
-    final GeotoolsFeatureDataAdapter gtAdapter =
+      final InternalDataAdapter<?> adapter,
+      final Index index,
+      final AdapterToIndexMapping indexMapping) {
+    final InternalGeotoolsFeatureDataAdapter<?> gtAdapter =
         IndexOptimizationUtils.unwrapGeotoolsFeatureDataAdapter(adapter);
     if (gtAdapter != null) {
-      return createOptimalQuery(filter, gtAdapter, index);
+      return createOptimalQuery(filter, gtAdapter, index, indexMapping);
     }
     LOGGER.error("Adapter is not a geotools feature adapter.  Cannot apply CQL filter.");
     return null;

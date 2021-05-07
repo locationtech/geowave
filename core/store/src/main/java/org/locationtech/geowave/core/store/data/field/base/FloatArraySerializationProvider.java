@@ -24,7 +24,7 @@ public class FloatArraySerializationProvider implements FieldSerializationProvid
   }
 
   @Override
-  public FieldWriter<Object, Float[]> getFieldWriter() {
+  public FieldWriter<Float[]> getFieldWriter() {
     return new FloatArrayWriter();
   }
 
@@ -34,7 +34,7 @@ public class FloatArraySerializationProvider implements FieldSerializationProvid
     }
   }
 
-  private static class FloatArrayWriter extends FixedSizeObjectArrayWriter<Object, Float> {
+  private static class FloatArrayWriter extends FixedSizeObjectArrayWriter<Float> {
     public FloatArrayWriter() {
       super(new FloatWriter());
     }

@@ -71,6 +71,7 @@ public interface DataStoreOperations {
             new ReaderParams<>(
                 DataIndexUtils.DATA_ID_INDEX,
                 readerParams.getAdapterStore(),
+                readerParams.getAdapterIndexMappingStore(),
                 readerParams.getInternalAdapterStore(),
                 new short[] {readerParams.getAdapterId()},
                 null,
@@ -104,6 +105,7 @@ public interface DataStoreOperations {
                   new ReaderParams<>(
                       DataIndexUtils.DATA_ID_INDEX,
                       readerParams.getAdapterStore(),
+                      readerParams.getAdapterIndexMappingStore(),
                       readerParams.getInternalAdapterStore(),
                       new short[] {readerParams.getAdapterId()},
                       null,

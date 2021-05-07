@@ -97,9 +97,7 @@ public class NNMapReduceTest {
             BasicFeatureTypes.DEFAULT_NAMESPACE,
             ClusteringUtils.CLUSTERING_CRS).getFeatureType();
 
-    final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
     final FeatureDataAdapter adapter = new FeatureDataAdapter(ftype);
-    adapter.init(index);
 
     JobContextAdapterStore.addDataAdapter(mapDriver.getConfiguration(), adapter);
     internalAdapterId = InternalAdapterStoreImpl.getLazyInitialAdapterId(adapter.getTypeName());

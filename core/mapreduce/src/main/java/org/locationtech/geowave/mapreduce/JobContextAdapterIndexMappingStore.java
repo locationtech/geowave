@@ -8,12 +8,16 @@
  */
 package org.locationtech.geowave.mapreduce;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
+import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
+import com.google.common.collect.Lists;
 
 /**
  * This class implements an adapter index mapping store by first checking the job context for an
@@ -24,7 +28,7 @@ public class JobContextAdapterIndexMappingStore implements AdapterIndexMappingSt
   private static final Class<?> CLASS = JobContextAdapterIndexMappingStore.class;
   private final JobContext context;
   private final AdapterIndexMappingStore persistentAdapterIndexMappingStore;
-  private final Map<Short, AdapterToIndexMapping> adapterCache = new HashMap<>();
+  private final Map<Short, List<AdapterToIndexMapping>> adapterCache = new HashMap<>();
 
   public JobContextAdapterIndexMappingStore(
       final JobContext context,
@@ -33,16 +37,16 @@ public class JobContextAdapterIndexMappingStore implements AdapterIndexMappingSt
     this.persistentAdapterIndexMappingStore = persistentAdapterIndexMappingStore;
   }
 
-  private AdapterToIndexMapping getIndicesForAdapterInternal(final short internalAdapterId) {
+  private AdapterToIndexMapping[] getIndicesForAdapterInternal(final short internalAdapterId) {
     // first try to get it from the job context
-    AdapterToIndexMapping adapter = getAdapterToIndexMapping(context, internalAdapterId);
+    AdapterToIndexMapping[] adapter = getAdapterToIndexMapping(context, internalAdapterId);
     if (adapter == null) {
       // then try to get it from the persistent store
       adapter = persistentAdapterIndexMappingStore.getIndicesForAdapter(internalAdapterId);
     }
 
     if (adapter != null) {
-      adapterCache.put(internalAdapterId, adapter);
+      adapterCache.put(internalAdapterId, Lists.newArrayList(adapter));
     }
     return adapter;
   }
@@ -52,30 +56,43 @@ public class JobContextAdapterIndexMappingStore implements AdapterIndexMappingSt
     adapterCache.clear();
   }
 
-  protected static AdapterToIndexMapping getAdapterToIndexMapping(
+  protected static AdapterToIndexMapping[] getAdapterToIndexMapping(
       final JobContext context,
       final short internalAdapterId) {
-    return GeoWaveConfiguratorBase.getAdapterToIndexMapping(CLASS, context, internalAdapterId);
+    return GeoWaveConfiguratorBase.getAdapterToIndexMappings(CLASS, context, internalAdapterId);
   }
 
   public static void addAdapterToIndexMapping(
       final Configuration configuration,
-      final AdapterToIndexMapping adapter) {
-    GeoWaveConfiguratorBase.addAdapterToIndexMapping(CLASS, configuration, adapter);
+      final AdapterToIndexMapping[] adapter) {
+    GeoWaveConfiguratorBase.addAdapterToIndexMappings(CLASS, configuration, adapter);
   }
 
   @Override
-  public AdapterToIndexMapping getIndicesForAdapter(final short adapterId) {
-    AdapterToIndexMapping adapter = adapterCache.get(adapterId);
-    if (adapter == null) {
-      adapter = getIndicesForAdapterInternal(adapterId);
+  public AdapterToIndexMapping[] getIndicesForAdapter(final short adapterId) {
+    List<AdapterToIndexMapping> adapterList = adapterCache.get(adapterId);
+    if (adapterList == null) {
+      return getIndicesForAdapterInternal(adapterId);
     }
-    return adapter;
+    return adapterList.toArray(new AdapterToIndexMapping[adapterList.size()]);
+  }
+
+  @Override
+  public AdapterToIndexMapping getMapping(final short adapterId, final String indexName) {
+    if (indexName.equals(DataIndexUtils.DATA_ID_INDEX.getName())) {
+      return new AdapterToIndexMapping(adapterId, indexName, Lists.newArrayList());
+    }
+    final AdapterToIndexMapping[] adapterIndices = getIndicesForAdapter(adapterId);
+    return Arrays.stream(adapterIndices).filter(
+        mapping -> mapping.getIndexName().equals(indexName)).findFirst().orElse(null);
   }
 
   @Override
   public void addAdapterIndexMapping(final AdapterToIndexMapping mapping) {
-    adapterCache.put(mapping.getAdapterId(), mapping);
+    if (!adapterCache.containsKey(mapping.getAdapterId())) {
+      adapterCache.put(mapping.getAdapterId(), Lists.newArrayList());
+    }
+    adapterCache.get(mapping.getAdapterId()).add(mapping);
   }
 
   @Override
@@ -90,36 +107,21 @@ public class JobContextAdapterIndexMappingStore implements AdapterIndexMappingSt
       return false;
     }
 
-    final AdapterToIndexMapping mapping = adapterCache.get(internalAdapterId);
-    final String[] indexNames = mapping.getIndexNames();
-    boolean found = false;
-    for (int i = 0; i < indexNames.length; i++) {
-      if (indexNames[i].compareTo(indexName) == 0) {
-        found = true;
+    final List<AdapterToIndexMapping> mappings = adapterCache.get(internalAdapterId);
+    AdapterToIndexMapping found = null;
+    for (int i = 0; i < mappings.size(); i++) {
+      if (mappings.get(i).getIndexName().compareTo(indexName) == 0) {
+        found = mappings.get(i);
         break;
       }
     }
 
-    if (!found) {
+    if (found == null) {
       return false;
     }
 
-    if (indexNames.length > 1) {
-      // update the mapping and reset it
-      final String[] newIndices = new String[indexNames.length - 1];
-      int count = 0;
-      for (int i = 0; i < indexNames.length; i++) {
-        if (indexNames[i].compareTo(indexName) == 0) {
-          continue;
-        } else {
-          newIndices[count] = indexNames[i];
-          count++;
-        }
-      }
-      adapterCache.remove(internalAdapterId);
-      adapterCache.put(
-          mapping.getAdapterId(),
-          new AdapterToIndexMapping(internalAdapterId, newIndices));
+    if (mappings.size() > 1) {
+      mappings.remove(found);
     } else {
       // otherwise just remove the mapping
       adapterCache.remove(internalAdapterId);

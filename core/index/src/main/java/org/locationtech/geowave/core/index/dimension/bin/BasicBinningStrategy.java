@@ -52,7 +52,7 @@ public class BasicBinningStrategy implements IndexBinningStrategy {
 
   @Override
   public BinValue getBinnedValue(final double value) {
-    final double bin = Math.floor((value - halfInterval) / interval);
+    final double bin = Math.ceil((value - halfInterval) / interval);
     return new BinValue(intToBinary((int) bin), (value - (interval * bin)));
   }
 
