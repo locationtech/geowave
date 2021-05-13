@@ -22,8 +22,8 @@ import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.jts.util.Stopwatch;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -62,17 +62,11 @@ public class KmeansSparkCommand extends ServiceEnabledCommand<Void> implements C
     // Config file
     final File configFile = getGeoWaveConfigFile(params);
 
-    final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
-      throw new ParameterException("Cannot find input store: " + inputStoreLoader.getStoreName());
-    }
-    inputDataStore = inputStoreLoader.getDataStorePlugin();
+    // Attempt to load input store.
+    inputDataStore = CLIUtils.loadStore(inputStoreName, configFile, params.getConsole());
 
-    final StoreLoader outputStoreLoader = new StoreLoader(outputStoreName);
-    if (!outputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
-      throw new ParameterException("Cannot find output store: " + outputStoreLoader.getStoreName());
-    }
-    outputDataStore = outputStoreLoader.getDataStorePlugin();
+    // Attempt to load output store.
+    outputDataStore = CLIUtils.loadStore(outputStoreName, configFile, params.getConsole());
 
     // Save a reference to the store in the property management.
     final PersistableStore persistedStore = new PersistableStore(inputDataStore);

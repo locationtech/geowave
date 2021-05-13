@@ -19,8 +19,8 @@ import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import com.beust.jcommander.Parameter;
@@ -49,11 +49,9 @@ public class CompactIndexCommand extends DefaultOperation implements Command {
     final String inputStoreName = parameters.get(0);
     final String indexList = parameters.get(1);
 
-    final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params), params.getConsole())) {
-      throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
-    }
-    inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+    // Attempt to load store.
+    inputStoreOptions =
+        CLIUtils.loadStore(inputStoreName, getGeoWaveConfigFile(params), params.getConsole());
 
     // Load the Indexes
     inputIndices = DataStoreUtils.loadIndices(inputStoreOptions.createIndexStore(), indexList);

@@ -74,6 +74,14 @@ public abstract class SpatialField implements NumericDimensionField<Geometry> {
     geometryWriter = serialization.getFieldWriter();
   }
 
+  public CoordinateReferenceSystem getCRS() {
+    return crs;
+  }
+
+  public Integer getGeometryPrecision() {
+    return geometryPrecision;
+  }
+
   @Override
   public IndexFieldOptions getIndexFieldOptions() {
     return new SpatialIndexFieldOptions(crs);

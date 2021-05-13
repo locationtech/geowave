@@ -437,7 +437,7 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
               || MetadataType.STATISTIC_VALUES.equals(metadataType)
               || MetadataType.LEGACY_STATISTICS.equals(metadataType)
               || MetadataType.INTERNAL_ADAPTER.equals(metadataType)
-              || MetadataType.AIM.equals(metadataType)) {
+              || MetadataType.INDEX_MAPPINGS.equals(metadataType)) {
             create.addClusteringColumn(CassandraMetadataWriter.SECONDARY_ID_KEY, DataType.blob());
             create.addClusteringColumn(
                 CassandraMetadataWriter.TIMESTAMP_ID_KEY,

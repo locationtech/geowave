@@ -17,17 +17,19 @@ import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 
 public interface StoreFactoryFamilySpi extends GenericFactory {
-  public GenericStoreFactory<DataStore> getDataStoreFactory();
+  GenericStoreFactory<DataStore> getDataStoreFactory();
 
-  public GenericStoreFactory<DataStatisticsStore> getDataStatisticsStoreFactory();
+  GenericStoreFactory<DataStatisticsStore> getDataStatisticsStoreFactory();
 
-  public GenericStoreFactory<IndexStore> getIndexStoreFactory();
+  GenericStoreFactory<IndexStore> getIndexStoreFactory();
 
-  public GenericStoreFactory<PersistentAdapterStore> getAdapterStoreFactory();
+  GenericStoreFactory<PersistentAdapterStore> getAdapterStoreFactory();
 
-  public GenericStoreFactory<AdapterIndexMappingStore> getAdapterIndexMappingStoreFactory();
+  GenericStoreFactory<AdapterIndexMappingStore> getAdapterIndexMappingStoreFactory();
 
-  public GenericStoreFactory<InternalAdapterStore> getInternalAdapterStoreFactory();
+  GenericStoreFactory<InternalAdapterStore> getInternalAdapterStoreFactory();
 
-  public GenericStoreFactory<DataStoreOperations> getDataStoreOperationsFactory();
+  GenericStoreFactory<PropertyStore> getPropertyStoreFactory();
+
+  GenericStoreFactory<DataStoreOperations> getDataStoreOperationsFactory();
 }

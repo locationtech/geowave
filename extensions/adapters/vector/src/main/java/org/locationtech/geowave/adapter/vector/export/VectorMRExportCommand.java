@@ -18,8 +18,8 @@ import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -60,11 +60,7 @@ public class VectorMRExportCommand extends DefaultOperation implements Command {
 
     // Attempt to load store.
     if (storeOptions == null) {
-      final StoreLoader storeLoader = new StoreLoader(storeName);
-      if (!storeLoader.loadFromConfig(configFile, params.getConsole())) {
-        throw new ParameterException("Cannot find store name: " + storeLoader.getStoreName());
-      }
-      storeOptions = storeLoader.getDataStorePlugin();
+      storeOptions = CLIUtils.loadStore(storeName, configFile, params.getConsole());
     }
 
     final VectorMRExportJobRunner vectorRunner =

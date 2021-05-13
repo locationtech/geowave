@@ -18,9 +18,9 @@ import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.ingest.local.LocalFileIngestCLIDriver;
 import org.locationtech.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.VisibilityOptions;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
@@ -147,11 +147,7 @@ public class LocalToGeoWaveCommand extends ServiceEnabledCommand<Void> {
     // Config file
     final File configFile = getGeoWaveConfigFile(params);
 
-    final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
-      throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
-    }
-    inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+    inputStoreOptions = CLIUtils.loadStore(inputStoreName, configFile, params.getConsole());
 
     final IndexStore indexStore = inputStoreOptions.createIndexStore();
 

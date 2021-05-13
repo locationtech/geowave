@@ -19,8 +19,8 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,25 +66,18 @@ public class KdeCommand extends ServiceEnabledCommand<Void> {
     final File configFile = getGeoWaveConfigFile(params);
     Index outputPrimaryIndex = null;
 
-    final StoreLoader inputStoreLoader = new StoreLoader(inputStore);
-    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
-      throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
-    }
-    inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+    // Attempt to load input store.
+    inputStoreOptions = CLIUtils.loadStore(inputStore, configFile, params.getConsole());
 
     // Attempt to load output store.
-    final StoreLoader outputStoreLoader = new StoreLoader(outputStore);
-    if (!outputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
-      throw new ParameterException("Cannot find store name: " + outputStoreLoader.getStoreName());
-    }
-    outputStoreOptions = outputStoreLoader.getDataStorePlugin();
+    outputStoreOptions = CLIUtils.loadStore(outputStore, configFile, params.getConsole());
 
     if ((kdeOptions.getOutputIndex() != null) && !kdeOptions.getOutputIndex().trim().isEmpty()) {
       final String outputIndex = kdeOptions.getOutputIndex();
 
       // Load the Indices
       final List<Index> outputIndices =
-          DataStoreUtils.loadIndices(outputStoreLoader.createIndexStore(), outputIndex);
+          DataStoreUtils.loadIndices(outputStoreOptions.createIndexStore(), outputIndex);
 
       for (final Index primaryIndex : outputIndices) {
         if (SpatialDimensionalityTypeProvider.isSpatial(primaryIndex)) {

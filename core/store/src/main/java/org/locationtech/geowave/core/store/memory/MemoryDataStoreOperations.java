@@ -722,7 +722,7 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
 
   @Override
   public boolean metadataExists(final MetadataType type) throws IOException {
-    return true;
+    return metadataStore.containsKey(type);
   }
 
   public static class GeoWaveMetadataWithUUID extends GeoWaveMetadata {

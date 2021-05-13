@@ -1307,6 +1307,7 @@
 		<module>examples/java-api</module>
 		<module>extensions</module>
 		<module>python</module>
+		<module>migration</module>
 		<module>services</module>
 		<module>test</module>
 	</modules>

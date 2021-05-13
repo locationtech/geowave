@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.store.cli.stats;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,8 +27,8 @@ import org.locationtech.geowave.core.store.api.IndexStatistic;
 import org.locationtech.geowave.core.store.api.Statistic;
 import org.locationtech.geowave.core.store.api.StatisticBinningStrategy;
 import org.locationtech.geowave.core.store.api.StatisticValue;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.core.store.statistics.StatisticsRegistry;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -83,13 +82,8 @@ public class ListStatTypesCommand extends ServiceEnabledCommand<Void> {
     final String storeName = parameters.get(0);
 
     // Attempt to load store.
-    final File configFile = getGeoWaveConfigFile(params);
-
-    final StoreLoader inputStoreLoader = new StoreLoader(storeName);
-    if (!inputStoreLoader.loadFromConfig(configFile)) {
-      throw new ParameterException("Cannot find store name: " + storeName);
-    }
-    final DataStorePluginOptions storeOptions = inputStoreLoader.getDataStorePlugin();
+    final DataStorePluginOptions storeOptions =
+        CLIUtils.loadStore(storeName, getGeoWaveConfigFile(params), params.getConsole());
 
     final DataStore dataStore = storeOptions.createDataStore();
 

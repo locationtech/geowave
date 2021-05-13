@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.adapter.vector.delete;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.cli.ParseException;
@@ -27,7 +26,8 @@ import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Query;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,14 +90,9 @@ public class CQLDelete extends DefaultOperation implements Command {
 
     final String storeName = parameters.get(0);
 
-    // Config file
-    final File configFile = getGeoWaveConfigFile(params);
-
     // Attempt to load store.
-    final StoreLoader storeOptions = new StoreLoader(storeName);
-    if (!storeOptions.loadFromConfig(configFile, params.getConsole())) {
-      throw new ParameterException("Cannot find store name: " + storeOptions.getStoreName());
-    }
+    final DataStorePluginOptions storeOptions =
+        CLIUtils.loadStore(storeName, getGeoWaveConfigFile(params), params.getConsole());
 
     final DataStore dataStore = storeOptions.createDataStore();
     final PersistentAdapterStore adapterStore = storeOptions.createAdapterStore();

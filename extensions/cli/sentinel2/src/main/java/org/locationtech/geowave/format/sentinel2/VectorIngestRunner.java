@@ -17,8 +17,8 @@ import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -64,13 +64,9 @@ public class VectorIngestRunner extends AnalyzeRunner {
       // Config file
       final File configFile = (File) params.getContext().get(ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
-      // Attempt to load input store.
-      final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-      if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
-        throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
-      }
+      final DataStorePluginOptions storeOptions =
+          CLIUtils.loadStore(inputStoreName, configFile, params.getConsole());
 
-      final DataStorePluginOptions storeOptions = inputStoreLoader.getDataStorePlugin();
       final DataStore store = storeOptions.createDataStore();
 
       // Load the Indices

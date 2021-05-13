@@ -24,7 +24,8 @@ import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
 import org.locationtech.geowave.datastore.accumulo.config.AccumuloOptions;
 import org.locationtech.geowave.datastore.accumulo.config.AccumuloRequiredOptions;
@@ -66,12 +67,10 @@ public class MinimalFullTable extends DefaultOperation implements Command {
     final String storeName = parameters.get(0);
 
     // Attempt to load store.
-    final StoreLoader storeOptions = new StoreLoader(storeName);
-    if (!storeOptions.loadFromConfig(getGeoWaveConfigFile(params), params.getConsole())) {
-      throw new ParameterException("Cannot find store name: " + storeOptions.getStoreName());
-    }
+    final DataStorePluginOptions storeOptions =
+        CLIUtils.loadStore(storeName, getGeoWaveConfigFile(params), params.getConsole());
 
-    final String storeType = storeOptions.getDataStorePlugin().getType();
+    final String storeType = storeOptions.getType();
 
     if (storeType.equals(AccumuloStoreFactoryFamily.TYPE)) {
       try {

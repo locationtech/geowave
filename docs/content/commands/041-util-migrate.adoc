@@ -1,0 +1,9 @@
+<<<
+
+[[util-migrate]]
+=== Migration Command
+
+include::manpages/util/migrate/geowave-util-migrate.txt[]
+
+'''
+

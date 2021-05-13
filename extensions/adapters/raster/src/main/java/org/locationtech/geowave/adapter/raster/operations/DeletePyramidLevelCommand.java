@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.adapter.raster.operations;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import org.bouncycastle.util.Arrays;
@@ -31,8 +30,8 @@ import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.api.Statistic;
 import org.locationtech.geowave.core.store.api.StatisticValue;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.statistics.binning.DataTypeBinningStrategy;
 import org.locationtech.geowave.core.store.statistics.index.PartitionsStatistic;
@@ -82,16 +81,11 @@ public class DeletePyramidLevelCommand extends DefaultOperation implements Comma
 
     final String inputStoreName = parameters.get(0);
 
-    // Config file
-    final File configFile = getGeoWaveConfigFile(params);
+    // Attempt to load store.
+    inputStoreOptions =
+        CLIUtils.loadStore(inputStoreName, getGeoWaveConfigFile(params), params.getConsole());
 
-    // Attempt to load input store.
-    final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
-      throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
-    }
-    inputStoreOptions = inputStoreLoader.getDataStorePlugin();
-    final DataStore store = inputStoreLoader.createDataStore();
+    final DataStore store = inputStoreOptions.createDataStore();
     RasterDataAdapter adapter = null;
 
     for (final DataTypeAdapter<?> type : store.getTypes()) {
@@ -153,7 +147,7 @@ public class DeletePyramidLevelCommand extends DefaultOperation implements Comma
     }
     // delete the resolution from the overview, delete the partitions, and delete the data
     if (inputStoreOptions.getFactoryOptions().getStoreOptions().isPersistDataStatistics()) {
-      final DataStatisticsStore statsStore = inputStoreLoader.createDataStatisticsStore();
+      final DataStatisticsStore statsStore = inputStoreOptions.createDataStatisticsStore();
 
       boolean overviewStatsFound = false;
       boolean partitionStatsFound = false;

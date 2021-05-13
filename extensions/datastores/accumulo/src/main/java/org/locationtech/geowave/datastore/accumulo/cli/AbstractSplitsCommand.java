@@ -8,13 +8,12 @@
  */
 package org.locationtech.geowave.datastore.accumulo.cli;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.datastore.accumulo.split.SplitCommandLineOptions;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -41,14 +40,8 @@ public abstract class AbstractSplitsCommand extends DefaultOperation {
 
     final String inputStoreName = parameters.get(0);
 
-    // Config file
-    final File configFile = getGeoWaveConfigFile(params);
-
-    final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
-      throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
-    }
-    inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+    inputStoreOptions =
+        CLIUtils.loadStore(inputStoreName, getGeoWaveConfigFile(params), params.getConsole());
 
     doSplit();
   }

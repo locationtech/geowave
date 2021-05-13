@@ -20,8 +20,8 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,17 +60,11 @@ public class KDESparkCommand extends ServiceEnabledCommand<Void> implements Comm
     // Config file
     final File configFile = getGeoWaveConfigFile(params);
 
-    final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
-      throw new ParameterException("Cannot find input store: " + inputStoreLoader.getStoreName());
-    }
-    inputDataStore = inputStoreLoader.getDataStorePlugin();
+    // Attempt to load input store.
+    inputDataStore = CLIUtils.loadStore(inputStoreName, configFile, params.getConsole());
 
-    final StoreLoader outputStoreLoader = new StoreLoader(outputStoreName);
-    if (!outputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
-      throw new ParameterException("Cannot find output store: " + outputStoreLoader.getStoreName());
-    }
-    outputDataStore = outputStoreLoader.getDataStorePlugin();
+    // Attempt to load output store.
+    outputDataStore = CLIUtils.loadStore(outputStoreName, configFile, params.getConsole());
 
     final KDERunner runner = new KDERunner();
     runner.setAppName(kdeSparkOptions.getAppName());
@@ -92,7 +86,7 @@ public class KDESparkCommand extends ServiceEnabledCommand<Void> implements Comm
 
       // Load the Indices
       final List<Index> outputIndices =
-          DataStoreUtils.loadIndices(outputStoreLoader.createIndexStore(), outputIndex);
+          DataStoreUtils.loadIndices(outputDataStore.createIndexStore(), outputIndex);
 
       for (final Index primaryIndex : outputIndices) {
         if (SpatialDimensionalityTypeProvider.isSpatial(primaryIndex)) {

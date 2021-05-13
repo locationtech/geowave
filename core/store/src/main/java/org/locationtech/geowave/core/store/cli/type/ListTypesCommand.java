@@ -8,14 +8,13 @@
  */
 package org.locationtech.geowave.core.store.cli.type;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -55,15 +54,9 @@ public class ListTypesCommand extends ServiceEnabledCommand<String> {
     final String inputStoreName = parameters.get(0);
 
     // Attempt to load store.
-    final File configFile = getGeoWaveConfigFile(params);
+    inputStoreOptions =
+        CLIUtils.loadStore(inputStoreName, getGeoWaveConfigFile(params), params.getConsole());
 
-    // Attempt to load input store.
-    final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
-      throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
-    }
-
-    inputStoreOptions = inputStoreLoader.getDataStorePlugin();
     final String[] typeNames = inputStoreOptions.createInternalAdapterStore().getTypeNames();
     final StringBuffer buffer = new StringBuffer();
     for (final String typeName : typeNames) {

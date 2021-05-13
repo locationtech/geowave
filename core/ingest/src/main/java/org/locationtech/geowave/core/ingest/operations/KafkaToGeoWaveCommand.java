@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.ingest.operations;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,9 +19,9 @@ import org.locationtech.geowave.core.ingest.kafka.IngestFromKafkaDriver;
 import org.locationtech.geowave.core.ingest.kafka.KafkaConsumerCommandLineOptions;
 import org.locationtech.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.VisibilityOptions;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
@@ -150,14 +149,8 @@ public class KafkaToGeoWaveCommand extends ServiceEnabledCommand<Void> {
     final String inputStoreName = parameters.get(0);
     final String indexList = parameters.get(1);
 
-    // Config file
-    final File configFile = getGeoWaveConfigFile(params);
-
-    final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
-      throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
-    }
-    inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+    inputStoreOptions =
+        CLIUtils.loadStore(inputStoreName, getGeoWaveConfigFile(params), params.getConsole());
 
     final IndexStore indexStore = inputStoreOptions.createIndexStore();
     inputIndices = DataStoreUtils.loadIndices(indexStore, indexList);

@@ -47,7 +47,7 @@ public class FeatureAdapterPersistableRegistry implements PersistableRegistrySpi
   public PersistableIdAndConstructor[] getSupportedPersistables() {
     return new PersistableIdAndConstructor[] {
         // 500 is available
-        new PersistableIdAndConstructor((short) 501, FeatureDataAdapter::new),
+        // 501 is a legacy class (pre 2.0)
         new PersistableIdAndConstructor((short) 502, PersistableList::new),
         new PersistableIdAndConstructor((short) 503, CQLFilterOptionProvider::new),
         new PersistableIdAndConstructor((short) 504, DataSchemaOptionProvider::new),
@@ -81,6 +81,7 @@ public class FeatureAdapterPersistableRegistry implements PersistableRegistrySpi
         new PersistableIdAndConstructor((short) 537, VectorMinAggregation::new),
         new PersistableIdAndConstructor((short) 538, VectorMaxAggregation::new),
         new PersistableIdAndConstructor((short) 539, VectorSumAggregation::new),
-        new PersistableIdAndConstructor((short) 540, VectorTextIndexEntryConverter::new)};
+        new PersistableIdAndConstructor((short) 540, VectorTextIndexEntryConverter::new),
+        new PersistableIdAndConstructor((short) 541, FeatureDataAdapter::new)};
   }
 }

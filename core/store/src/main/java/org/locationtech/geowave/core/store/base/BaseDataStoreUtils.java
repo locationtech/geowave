@@ -16,13 +16,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -44,6 +43,8 @@ import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIterator.Wrapper;
+import org.locationtech.geowave.core.store.DataStoreProperty;
+import org.locationtech.geowave.core.store.PropertyStore;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.AsyncPersistenceEncoding;
@@ -68,6 +69,7 @@ import org.locationtech.geowave.core.store.base.dataidx.BatchDataIndexRetrieval;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexRetrieval;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
+import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.data.DataWriter;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
@@ -81,6 +83,8 @@ import org.locationtech.geowave.core.store.flatten.BitmaskedPairComparator;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.IndexFieldMapperRegistry;
 import org.locationtech.geowave.core.store.index.IndexStore;
+import org.locationtech.geowave.core.store.operations.DataStoreOperations;
+import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import org.locationtech.geowave.core.store.query.constraints.AdapterAndIndexBasedQueryConstraints;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
@@ -89,6 +93,7 @@ import org.locationtech.geowave.core.store.statistics.DefaultStatisticsProvider;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.Collections2;
@@ -98,6 +103,41 @@ import com.google.common.collect.Sets;
 
 public class BaseDataStoreUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(BaseDataStoreUtils.class);
+
+  public static final String DATA_VERSION_PROPERTY = "DATA_VERSION";
+  public static final Integer DATA_VERSION = 1;
+
+  public static void verifyCLIVersion(
+      final String storeName,
+      final DataStorePluginOptions options) {
+    final DataStoreOperations operations = options.createDataStoreOperations();
+    try {
+      if (!operations.metadataExists(MetadataType.ADAPTER)
+          && !operations.metadataExists(MetadataType.INDEX)) {
+        return;
+      }
+    } catch (final IOException e) {
+      LOGGER.error("Unable to determine existence of adapter or index metadata tables.", e);
+    }
+    final PropertyStore propertyStore = options.createPropertyStore();
+    final DataStoreProperty storeVersionProperty = propertyStore.getProperty(DATA_VERSION_PROPERTY);
+    final int storeVersion =
+        storeVersionProperty == null ? 0 : (Integer) storeVersionProperty.getValue();
+    if (storeVersion < DATA_VERSION) {
+      throw new ParameterException(
+          "The data store '"
+              + storeName
+              + "' is using an older serialization format.  Either use an older "
+              + "version of the CLI that is compatible with the data store, or migrate the data "
+              + "store to a later version using the `geowave util migrate` command.");
+    } else if (storeVersion > DATA_VERSION) {
+      throw new ParameterException(
+          "The data store '"
+              + storeName
+              + "' is using a newer serialization format.  Please update to a "
+              + "newer version of the CLI that is compatible with the data store.");
+    }
+  }
 
   public static <T> GeoWaveRow[] getGeoWaveRows(
       final T entry,
@@ -657,8 +697,8 @@ public class BaseDataStoreUtils {
 
   @SuppressWarnings({"unchecked", "rawtypes"})
   public static AdapterToIndexMapping mapAdapterToIndex(
-      InternalDataAdapter<?> adapter,
-      Index index) {
+      final InternalDataAdapter<?> adapter,
+      final Index index) {
     // Build up a list of index field mappers
     final Map<String, IndexFieldMapper<?, ?>> mappers = Maps.newHashMap();
 
@@ -675,7 +715,7 @@ public class BaseDataStoreUtils {
     // Get adapter fields
     final FieldDescriptor<?>[] adapterFields = adapter.getFieldDescriptors();
 
-    for (Entry<String, List<NumericDimensionField<?>>> indexField : indexFields.entrySet()) {
+    for (final Entry<String, List<NumericDimensionField<?>>> indexField : indexFields.entrySet()) {
       // Get the hints used by all dimensions of the field
       final Set<IndexDimensionHint> dimensionHints = Sets.newHashSet();
       indexField.getValue().forEach(dim -> dimensionHints.addAll(dim.getDimensionHints()));
@@ -700,7 +740,7 @@ public class BaseDataStoreUtils {
                   Collectors.toList());
 
       if (hintedFields.size() > 0) {
-        Class<?> hintedFieldClass = hintedFields.get(0).bindingClass();
+        final Class<?> hintedFieldClass = hintedFields.get(0).bindingClass();
         for (int i = 1; i < hintedFields.size(); i++) {
           if (!hintedFieldClass.equals(hintedFields.get(i).bindingClass())) {
             throw new IllegalArgumentException("All hinted fields must be of the same type.");
@@ -708,9 +748,9 @@ public class BaseDataStoreUtils {
         }
         boolean mapperFound = false;
         // Find a mapper that matches
-        for (IndexFieldMapper<?, ?> mapper : availableMappers) {
+        for (final IndexFieldMapper<?, ?> mapper : availableMappers) {
           if (mapper.isCompatibleWith(hintedFieldClass)
-              && mapper.adapterFieldCount() == hintedFields.size()) {
+              && (mapper.adapterFieldCount() == hintedFields.size())) {
             mapper.init(indexField.getKey(), (List) hintedFields, indexFieldOptions);
             mappers.put(indexField.getKey(), mapper);
             mapperFound = true;
@@ -733,12 +773,12 @@ public class BaseDataStoreUtils {
         boolean mapperFound = false;
         for (final FieldDescriptor<?> fieldDescriptor : adapterFields) {
           if (fieldDescriptor.bindingClass().equals(indexFieldClass)) {
-            Optional<IndexFieldMapper<?, ?>> matchingMapper =
+            final Optional<IndexFieldMapper<?, ?>> matchingMapper =
                 availableMappers.stream().filter(
                     mapper -> mapper.isCompatibleWith(fieldDescriptor.bindingClass())
-                        && mapper.adapterFieldCount() == 1).findFirst();
+                        && (mapper.adapterFieldCount() == 1)).findFirst();
             if (matchingMapper.isPresent()) {
-              IndexFieldMapper<?, ?> mapper = matchingMapper.get();
+              final IndexFieldMapper<?, ?> mapper = matchingMapper.get();
               mapper.init(
                   indexFieldName,
                   (List) Lists.newArrayList(fieldDescriptor),
@@ -752,8 +792,8 @@ public class BaseDataStoreUtils {
 
         // Check other mappers
         if (!mapperFound) {
-          for (IndexFieldMapper<?, ?> mapper : availableMappers) {
-            List<FieldDescriptor<?>> matchingFields =
+          for (final IndexFieldMapper<?, ?> mapper : availableMappers) {
+            final List<FieldDescriptor<?>> matchingFields =
                 Arrays.stream(adapterFields).filter(
                     field -> mapper.isCompatibleWith(field.bindingClass())).collect(
                         Collectors.toList());

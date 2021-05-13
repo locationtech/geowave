@@ -8,9 +8,10 @@
  */
 package org.locationtech.geowave.core.store.cli.type;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
@@ -19,8 +20,8 @@ import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.beust.jcommander.Parameter;
@@ -73,13 +74,8 @@ public class DescribeTypeCommand extends ServiceEnabledCommand<Void> {
     final String typeName = parameters.get(1);
 
     // Attempt to load store.
-    final File configFile = getGeoWaveConfigFile(params);
-
-    final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
-      throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
-    }
-    inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+    inputStoreOptions =
+        CLIUtils.loadStore(inputStoreName, getGeoWaveConfigFile(params), params.getConsole());
 
     LOGGER.info(
         "Describing everything in store: " + inputStoreName + " with type name: " + typeName);
@@ -97,10 +93,28 @@ public class DescribeTypeCommand extends ServiceEnabledCommand<Void> {
       rows.add(row);
     }
     final List<String> headers = new ArrayList<>();
-    headers.add("Property");
-    headers.add("Value");
+    headers.add("Field");
+    headers.add("Class");
+    params.getConsole().println("Data type class: " + type.getDataClass().getName());
+    params.getConsole().println("\nFields:");
     final ConsoleTablePrinter cp = new ConsoleTablePrinter(params.getConsole());
     cp.print(headers, rows);
+
+    final Map<String, String> additionalProperties = type.describe();
+    if (additionalProperties.size() > 0) {
+      rows.clear();
+      headers.clear();
+      headers.add("Property");
+      headers.add("Value");
+      params.getConsole().println("\nAdditional Properties:");
+      for (final Entry<String, String> property : additionalProperties.entrySet()) {
+        final List<Object> row = new ArrayList<>();
+        row.add(property.getKey());
+        row.add(property.getValue());
+        rows.add(row);
+      }
+      cp.print(headers, rows);
+    }
     return null;
   }
 }

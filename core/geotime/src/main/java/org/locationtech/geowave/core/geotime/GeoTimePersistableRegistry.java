@@ -56,13 +56,13 @@ public class GeoTimePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 301, LongitudeDefinition::new),
         new PersistableIdAndConstructor((short) 302, TemporalBinningStrategy::new),
         new PersistableIdAndConstructor((short) 303, TimeDefinition::new),
-        new PersistableIdAndConstructor((short) 304, LatitudeField::new),
-        new PersistableIdAndConstructor((short) 305, LongitudeField::new),
+        // 304 is a legacy class (pre 2.0)
+        // 305 is a legacy class (pre 2.0)
         // 306-309 are unused
         new PersistableIdAndConstructor((short) 310, TimeField::new),
         new PersistableIdAndConstructor((short) 311, SpatialQueryFilter::new),
         new PersistableIdAndConstructor((short) 312, ExplicitSpatialQuery::new),
-        new PersistableIdAndConstructor((short) 313, CustomCRSSpatialField::new),
+        // 313 is a legacy class (pre 2.0)
         new PersistableIdAndConstructor((short) 314, CustomCRSBoundedSpatialDimension::new),
         new PersistableIdAndConstructor((short) 315, CustomCrsIndexModel::new),
         new PersistableIdAndConstructor((short) 316, IndexOnlySpatialQuery::new),
@@ -90,6 +90,9 @@ public class GeoTimePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 338, SpatialSimpleFeatureBinningStrategy::new),
         new PersistableIdAndConstructor((short) 339, SpatialCommonIndexedBinningStrategy::new),
         new PersistableIdAndConstructor((short) 340, InternalGeotoolsDataAdapterWrapper::new),
-        new PersistableIdAndConstructor((short) 341, SpatialFieldDescriptor::new)};
+        new PersistableIdAndConstructor((short) 341, SpatialFieldDescriptor::new),
+        new PersistableIdAndConstructor((short) 342, LatitudeField::new),
+        new PersistableIdAndConstructor((short) 343, LongitudeField::new),
+        new PersistableIdAndConstructor((short) 344, CustomCRSSpatialField::new)};
   }
 }

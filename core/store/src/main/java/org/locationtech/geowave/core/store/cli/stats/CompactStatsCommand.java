@@ -15,8 +15,8 @@ import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import com.beust.jcommander.Parameter;
@@ -45,11 +45,9 @@ public class CompactStatsCommand extends DefaultOperation implements Command {
 
     // Attempt to load input store.
     if (inputStoreOptions == null) {
-      final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-      if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params), params.getConsole())) {
-        throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
-      }
-      inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+      // Attempt to load store.
+      inputStoreOptions =
+          CLIUtils.loadStore(inputStoreName, getGeoWaveConfigFile(params), params.getConsole());
     }
 
     final DataStatisticsStore statsStore = inputStoreOptions.createDataStatisticsStore();

@@ -39,7 +39,6 @@ import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptorBuilder;
-import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Statistic;
 import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
@@ -119,10 +118,6 @@ public class FeatureDataAdapter implements
     return SimpleFeature.class;
   }
 
-  public void init(Index... indices) {
-
-  }
-
   // -----------------------------------------------------------------------------------
   // -----------------------------------------------------------------------------------
 
@@ -151,20 +146,20 @@ public class FeatureDataAdapter implements
             new SpatialFieldDescriptorBuilder<>(attribute.getType().getBinding());
         builder.fieldName(attribute.getName().getLocalPart());
         builder.crs(((GeometryDescriptor) attribute).getCoordinateReferenceSystem());
-        if (featureType.getGeometryDescriptor() != null
+        if ((featureType.getGeometryDescriptor() != null)
             && featureType.getGeometryDescriptor().equals(attribute)) {
           builder.spatialIndexHint();
         }
         fieldDescriptors[i] = builder.build();
-      } else if (timeDescriptors != null && attribute.equals(timeDescriptors.getTime())) {
+      } else if ((timeDescriptors != null) && attribute.equals(timeDescriptors.getTime())) {
         fieldDescriptors[i] =
             new TemporalFieldDescriptorBuilder<>(attribute.getType().getBinding()).fieldName(
                 attribute.getName().getLocalPart()).timeIndexHint().build();
-      } else if (timeDescriptors != null && attribute.equals(timeDescriptors.getStartRange())) {
+      } else if ((timeDescriptors != null) && attribute.equals(timeDescriptors.getStartRange())) {
         fieldDescriptors[i] =
             new TemporalFieldDescriptorBuilder<>(attribute.getType().getBinding()).fieldName(
                 attribute.getName().getLocalPart()).startTimeIndexHint().build();
-      } else if (timeDescriptors != null && attribute.equals(timeDescriptors.getEndRange())) {
+      } else if ((timeDescriptors != null) && attribute.equals(timeDescriptors.getEndRange())) {
         fieldDescriptors[i] =
             new TemporalFieldDescriptorBuilder<>(attribute.getType().getBinding()).fieldName(
                 attribute.getName().getLocalPart()).endTimeIndexHint().build();
@@ -269,9 +264,9 @@ public class FeatureDataAdapter implements
       final FieldDescriptor<?>[] outputFieldDescriptors) {
     CoordinateReferenceSystem outputCRS = featureType.getCoordinateReferenceSystem();
     final String defaultGeometryField = featureType.getGeometryDescriptor().getLocalName();
-    for (FieldDescriptor<?> field : outputFieldDescriptors) {
+    for (final FieldDescriptor<?> field : outputFieldDescriptors) {
       if (field.fieldName().equals(defaultGeometryField)
-          && field instanceof SpatialFieldDescriptor) {
+          && (field instanceof SpatialFieldDescriptor)) {
         outputCRS = ((SpatialFieldDescriptor<?>) field).crs();
         break;
       }

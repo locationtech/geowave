@@ -62,7 +62,7 @@ public class StorePersistableRegistry implements PersistableRegistrySpi {
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {
     return new PersistableIdAndConstructor[] {
-        new PersistableIdAndConstructor((short) 200, AdapterToIndexMapping::new),
+        // 200 is a legacy class (pre 2.0)
         new PersistableIdAndConstructor((short) 201, BaseFieldDescriptor::new),
         // 202 is used by CoreRegisteredIndexFieldMappers
         // 203-207 Unused
@@ -120,6 +120,8 @@ public class StorePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 268, CustomQueryConstraintsWithFilter::new),
         new PersistableIdAndConstructor((short) 269, InternalCustomQueryFilter::new),
         new PersistableIdAndConstructor((short) 270, InternalDataAdapterImpl::new),
-        new PersistableIdAndConstructor((short) 271, BasicNumericDimensionField::new)};
+        new PersistableIdAndConstructor((short) 271, BasicNumericDimensionField::new),
+        new PersistableIdAndConstructor((short) 272, DataStoreProperty::new),
+        new PersistableIdAndConstructor((short) 273, AdapterToIndexMapping::new)};
   }
 }

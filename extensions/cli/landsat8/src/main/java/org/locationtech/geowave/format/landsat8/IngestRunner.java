@@ -16,14 +16,13 @@ import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.beust.jcommander.ParameterException;
 
 public class IngestRunner extends RasterIngestRunner {
   private static final Logger LOGGER = LoggerFactory.getLogger(IngestRunner.class);
@@ -57,12 +56,8 @@ public class IngestRunner extends RasterIngestRunner {
     if ((vectorOverrideOptions.getVectorStore() != null)
         && !vectorOverrideOptions.getVectorStore().trim().isEmpty()) {
       final String vectorStoreName = vectorOverrideOptions.getVectorStore();
-      final StoreLoader vectorStoreLoader = new StoreLoader(vectorStoreName);
-      if (!vectorStoreLoader.loadFromConfig(configFile, params.getConsole())) {
-        throw new ParameterException(
-            "Cannot find vector store name: " + vectorStoreLoader.getStoreName());
-      }
-      final DataStorePluginOptions vectorStoreOptions = vectorStoreLoader.getDataStorePlugin();
+      final DataStorePluginOptions vectorStoreOptions =
+          CLIUtils.loadStore(vectorStoreName, configFile, params.getConsole());
       vectorStore = vectorStoreOptions.createDataStore();
     } else {
       vectorStore = store;

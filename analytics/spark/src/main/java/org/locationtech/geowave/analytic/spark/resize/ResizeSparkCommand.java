@@ -17,8 +17,8 @@ import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -65,18 +65,10 @@ public class ResizeSparkCommand extends DefaultOperation implements Command {
     final File configFile = getGeoWaveConfigFile(params);
 
     // Attempt to load input store.
-    final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
-      throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
-    }
-    inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+    inputStoreOptions = CLIUtils.loadStore(inputStoreName, configFile, params.getConsole());
 
     // Attempt to load output store.
-    final StoreLoader outputStoreLoader = new StoreLoader(outputStoreName);
-    if (!outputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
-      throw new ParameterException("Cannot find store name: " + outputStoreLoader.getStoreName());
-    }
-    outputStoreOptions = outputStoreLoader.getDataStorePlugin();
+    outputStoreOptions = CLIUtils.loadStore(outputStoreName, configFile, params.getConsole());
 
 
     final RasterTileResizeSparkRunner runner =

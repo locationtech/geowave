@@ -13,6 +13,7 @@ import org.locationtech.geowave.core.store.metadata.AdapterStoreImpl;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreImpl;
 import org.locationtech.geowave.core.store.metadata.IndexStoreImpl;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
+import org.locationtech.geowave.core.store.metadata.PropertyStoreImpl;
 import org.locationtech.geowave.datastore.dynamodb.operations.DynamoDBOperations;
 import org.locationtech.geowave.mapreduce.BaseMapReduceDataStore;
 
@@ -27,6 +28,7 @@ public class DynamoDBDataStore extends BaseMapReduceDataStore {
         new AdapterIndexMappingStoreImpl(operations, operations.getOptions().getBaseOptions()),
         operations,
         operations.getOptions().getBaseOptions(),
-        new InternalAdapterStoreImpl(operations));
+        new InternalAdapterStoreImpl(operations),
+        new PropertyStoreImpl(operations, operations.getOptions().getBaseOptions()));
   }
 }

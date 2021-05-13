@@ -17,8 +17,8 @@ import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -29,7 +29,7 @@ import com.beust.jcommander.ParameterException;
 
 public class VectorIngestRunner extends AnalyzeRunner {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(RasterIngestRunner.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(VectorIngestRunner.class);
   protected final List<String> parameters;
   private Writer bandWriter;
   private Writer sceneWriter;
@@ -58,11 +58,8 @@ public class VectorIngestRunner extends AnalyzeRunner {
       final File configFile = (File) params.getContext().get(ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
       // Attempt to load input store.
-      final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-      if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
-        throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
-      }
-      final DataStorePluginOptions storeOptions = inputStoreLoader.getDataStorePlugin();
+      final DataStorePluginOptions storeOptions =
+          CLIUtils.loadStore(inputStoreName, configFile, params.getConsole());
       final DataStore store = storeOptions.createDataStore();
 
       // Load the Indices

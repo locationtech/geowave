@@ -9,7 +9,6 @@
 package org.locationtech.geowave.core.store.query.filter;
 
 import org.locationtech.geowave.core.index.persist.Persistable;
-import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 

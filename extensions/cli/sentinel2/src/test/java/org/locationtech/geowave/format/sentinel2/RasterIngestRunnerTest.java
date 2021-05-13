@@ -25,10 +25,9 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
-import com.beust.jcommander.ParameterException;
 import it.geosolutions.jaiext.JAIExt;
 
 public class RasterIngestRunnerTest {
@@ -133,12 +132,7 @@ public class RasterIngestRunnerTest {
   private DataStorePluginOptions getStorePluginOptions(final OperationParams params) {
     final File configFile = (File) params.getContext().get(ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
-    final StoreLoader inputStoreLoader = new StoreLoader("memorystore");
-    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
-      throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
-    }
-
-    return inputStoreLoader.getDataStorePlugin();
+    return CLIUtils.loadStore("memorystore", configFile, params.getConsole());
   }
 
   private void createIndices(final OperationParams params) {

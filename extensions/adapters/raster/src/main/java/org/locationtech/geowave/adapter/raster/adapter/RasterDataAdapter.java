@@ -1751,8 +1751,8 @@ public class RasterDataAdapter implements
 
   @Override
   public Map<String, String> describe() {
-    final Map<String, String> description = new HashMap<>();
-    description.put("tile size", String.valueOf(tileSize));
+    final Map<String, String> description = RowMergingDataAdapter.super.describe();
+    description.put("Tile Size", String.valueOf(tileSize));
     return description;
   }
 
