@@ -89,7 +89,7 @@ public class AdapterIndexMappingStoreImpl extends AbstractGeoWavePersistence<Ada
     final ByteArray secondaryId = getSecondaryId(mapping);
 
     if (objectExists(primaryId, secondaryId)) {
-      LOGGER.warn("Adapter to index mapping already existed, skipping add.");
+      LOGGER.info("Adapter to index mapping already existed, skipping add.");
     } else {
       addObject(mapping);
     }

@@ -169,16 +169,12 @@ public class BaseDataStore implements DataStore {
   }
 
   private void checkNewDataStore() {
-    try {
-      if (!baseOperations.metadataExists(MetadataType.ADAPTER)
-          && !baseOperations.metadataExists(MetadataType.INDEX)) {
-        propertyStore.setProperty(
-            new DataStoreProperty(
-                BaseDataStoreUtils.DATA_VERSION_PROPERTY,
-                BaseDataStoreUtils.DATA_VERSION));
-      }
-    } catch (final IOException e) {
-      LOGGER.error("Failed to read adapter or index metadata tables", e);
+    if (!BaseDataStoreUtils.hasMetadata(baseOperations, MetadataType.ADAPTER)
+        && !BaseDataStoreUtils.hasMetadata(baseOperations, MetadataType.INDEX)) {
+      propertyStore.setProperty(
+          new DataStoreProperty(
+              BaseDataStoreUtils.DATA_VERSION_PROPERTY,
+              BaseDataStoreUtils.DATA_VERSION));
     }
   }
 

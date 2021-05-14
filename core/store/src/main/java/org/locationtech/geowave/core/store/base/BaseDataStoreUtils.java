@@ -75,6 +75,7 @@ import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
+import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.entities.GeoWaveValueImpl;
@@ -84,6 +85,8 @@ import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.IndexFieldMapperRegistry;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
+import org.locationtech.geowave.core.store.operations.MetadataQuery;
+import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import org.locationtech.geowave.core.store.query.constraints.AdapterAndIndexBasedQueryConstraints;
@@ -111,13 +114,9 @@ public class BaseDataStoreUtils {
       final String storeName,
       final DataStorePluginOptions options) {
     final DataStoreOperations operations = options.createDataStoreOperations();
-    try {
-      if (!operations.metadataExists(MetadataType.ADAPTER)
-          && !operations.metadataExists(MetadataType.INDEX)) {
-        return;
-      }
-    } catch (final IOException e) {
-      LOGGER.error("Unable to determine existence of adapter or index metadata tables.", e);
+    if (!hasMetadata(operations, MetadataType.ADAPTER)
+        && !hasMetadata(operations, MetadataType.INDEX)) {
+      return;
     }
     final PropertyStore propertyStore = options.createPropertyStore();
     final DataStoreProperty storeVersionProperty = propertyStore.getProperty(DATA_VERSION_PROPERTY);
@@ -136,6 +135,22 @@ public class BaseDataStoreUtils {
               + storeName
               + "' is using a newer serialization format.  Please update to a "
               + "newer version of the CLI that is compatible with the data store.");
+    }
+  }
+
+  public static boolean hasMetadata(
+      final DataStoreOperations operations,
+      final MetadataType metadataType) {
+    try {
+      if (!operations.metadataExists(metadataType)) {
+        return false;
+      }
+    } catch (final IOException e) {
+      LOGGER.warn("Error while checking existence of metadata table", e);
+    }
+    final MetadataReader reader = operations.createMetadataReader(metadataType);
+    try (CloseableIterator<GeoWaveMetadata> it = reader.query(new MetadataQuery(null))) {
+      return it.hasNext();
     }
   }
 
