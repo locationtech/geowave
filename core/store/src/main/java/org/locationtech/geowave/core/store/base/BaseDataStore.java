@@ -169,8 +169,10 @@ public class BaseDataStore implements DataStore {
   }
 
   private void checkNewDataStore() {
-    if (!BaseDataStoreUtils.hasMetadata(baseOperations, MetadataType.ADAPTER)
+    if ((propertyStore.getProperty(BaseDataStoreUtils.DATA_VERSION_PROPERTY) == null)
+        && !BaseDataStoreUtils.hasMetadata(baseOperations, MetadataType.ADAPTER)
         && !BaseDataStoreUtils.hasMetadata(baseOperations, MetadataType.INDEX)) {
+      // Only set the data version if no adapters and indices have already been added
       propertyStore.setProperty(
           new DataStoreProperty(
               BaseDataStoreUtils.DATA_VERSION_PROPERTY,

@@ -114,14 +114,16 @@ public class BaseDataStoreUtils {
       final String storeName,
       final DataStorePluginOptions options) {
     final DataStoreOperations operations = options.createDataStoreOperations();
-    if (!hasMetadata(operations, MetadataType.ADAPTER)
-        && !hasMetadata(operations, MetadataType.INDEX)) {
-      return;
-    }
     final PropertyStore propertyStore = options.createPropertyStore();
     final DataStoreProperty storeVersionProperty = propertyStore.getProperty(DATA_VERSION_PROPERTY);
+    if ((storeVersionProperty == null)
+        && !hasMetadata(operations, MetadataType.ADAPTER)
+        && !hasMetadata(operations, MetadataType.INDEX)) {
+      // Nothing has been loaded into the store yet
+      return;
+    }
     final int storeVersion =
-        storeVersionProperty == null ? 0 : (Integer) storeVersionProperty.getValue();
+        storeVersionProperty == null ? 0 : (int) storeVersionProperty.getValue();
     if (storeVersion < DATA_VERSION) {
       throw new ParameterException(
           "The data store '"
