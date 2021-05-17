@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.store.cli.index;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
@@ -17,8 +16,8 @@ import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.cli.exceptions.TargetNotFoundException;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -46,32 +45,17 @@ public class ListIndicesCommand extends ServiceEnabledCommand<String> {
 
     final String inputStoreName = parameters.get(0);
 
-    // Get the config options from the properties file
+    // Attempt to load store.
+    final DataStorePluginOptions storeOptions =
+        CLIUtils.loadStore(inputStoreName, getGeoWaveConfigFile(params), params.getConsole());
 
-    final File configFile = getGeoWaveConfigFile(params);
-
-    // Attempt to load the desired input store
-
-    String result;
-
-    final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
-      throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
-    } else {
-
-      // Now that store is loaded, pull the list of indexes
-
-      final DataStorePluginOptions inputStoreOptions = inputStoreLoader.getDataStorePlugin();
-
-      final StringBuffer buffer = new StringBuffer();
-      try (final CloseableIterator<Index> it = inputStoreOptions.createIndexStore().getIndices()) {
-        while (it.hasNext()) {
-          final Index index = it.next();
-          buffer.append(index.getName()).append(' ');
-        }
+    final StringBuffer buffer = new StringBuffer();
+    try (final CloseableIterator<Index> it = storeOptions.createIndexStore().getIndices()) {
+      while (it.hasNext()) {
+        final Index index = it.next();
+        buffer.append(index.getName()).append(' ');
       }
-      result = "Available indexes: " + buffer.toString();
     }
-    return result;
+    return "Available indexes: " + buffer.toString();
   }
 }

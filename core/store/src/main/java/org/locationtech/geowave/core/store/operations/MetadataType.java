@@ -10,12 +10,14 @@ package org.locationtech.geowave.core.store.operations;
 
 public enum MetadataType {
   ADAPTER,
-  AIM,
+  INDEX_MAPPINGS,
   INDEX,
   STATISTICS,
-  INTERNAL_ADAPTER,
   STATISTIC_VALUES(true),
-  LEGACY_STATISTICS("STATS", true);
+  INTERNAL_ADAPTER,
+  STORE_PROPERTIES,
+  LEGACY_STATISTICS("STATS", true),
+  LEGACY_INDEX_MAPPINGS("AIM");
 
   private boolean statValues;
   private String id;

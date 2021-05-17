@@ -92,11 +92,7 @@ public interface DataTypeAdapter<T> extends DataReader<Object>, DataWriter<Objec
   FieldDescriptor<?> getFieldDescriptor(String fieldName);
 
   default Map<String, String> describe() {
-    Map<String, String> description = Maps.newHashMap();
-    for (FieldDescriptor<?> field : getFieldDescriptors()) {
-      description.put(field.fieldName(), field.bindingClass().getName());
-    }
-    return description;
+    return Maps.newHashMap();
   }
 
   /**

@@ -119,11 +119,6 @@
 				</dependency>
 				<dependency>
 					<groupId>org.locationtech.geowave</groupId>
-					<artifactId>geowave-datastore-redis</artifactId>
-					<version>${project.version}</version>
-				</dependency>
-				<dependency>
-					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-datastore-filesystem</artifactId>
 					<version>${project.version}</version>
 				</dependency>
@@ -204,6 +199,11 @@
 				<dependency>
 					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-python</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>org.locationtech.geowave</groupId>
+					<artifactId>geowave-migration</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 			</dependencies>

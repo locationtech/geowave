@@ -68,13 +68,12 @@ import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.internal.Console;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -1458,12 +1457,7 @@ public class GeoServerRestClient {
   }
 
   public DataStorePluginOptions getStorePlugin(final String storeName) {
-    final StoreLoader inputStoreLoader = new StoreLoader(storeName);
-    if (!inputStoreLoader.loadFromConfig(config.getPropFile(), console)) {
-      throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
-    }
-
-    return inputStoreLoader.getDataStorePlugin();
+    return CLIUtils.loadStore(storeName, config.getPropFile(), console);
   }
 
   public ArrayList<String> getStoreAdapters(final String storeName, final String adapterId) {

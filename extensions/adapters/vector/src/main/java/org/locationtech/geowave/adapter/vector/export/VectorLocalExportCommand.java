@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.adapter.vector.export;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +31,8 @@ import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -63,13 +62,9 @@ public class VectorLocalExportCommand extends DefaultOperation implements Comman
 
     final String storeName = parameters.get(0);
 
-    // Config file
-    final File configFile = getGeoWaveConfigFile(params);
-    final StoreLoader inputStoreLoader = new StoreLoader(storeName);
-    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
-      throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
-    }
-    inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+    // Attempt to load store.
+    inputStoreOptions =
+        CLIUtils.loadStore(storeName, getGeoWaveConfigFile(params), params.getConsole());
 
     final PersistentAdapterStore adapterStore = inputStoreOptions.createAdapterStore();
     final IndexStore indexStore = inputStoreOptions.createIndexStore();

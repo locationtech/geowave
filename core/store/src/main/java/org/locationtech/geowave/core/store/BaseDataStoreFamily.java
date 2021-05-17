@@ -18,6 +18,7 @@ import org.locationtech.geowave.core.store.metadata.AdapterStoreFactory;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreFactory;
 import org.locationtech.geowave.core.store.metadata.IndexStoreFactory;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreFactory;
+import org.locationtech.geowave.core.store.metadata.PropertyStoreFactory;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.DataStoreOperationsFactory;
 import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
@@ -80,5 +81,10 @@ public class BaseDataStoreFamily implements StoreFactoryFamilySpi {
   @Override
   public GenericStoreFactory<InternalAdapterStore> getInternalAdapterStoreFactory() {
     return new InternalAdapterStoreFactory(typeName, description, helper);
+  }
+
+  @Override
+  public GenericStoreFactory<PropertyStore> getPropertyStoreFactory() {
+    return new PropertyStoreFactory(typeName, description, helper);
   }
 }

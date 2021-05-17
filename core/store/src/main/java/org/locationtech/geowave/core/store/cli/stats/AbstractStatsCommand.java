@@ -12,9 +12,8 @@ import java.io.IOException;
 import java.util.List;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
-import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.ParametersDelegate;
 import com.beust.jcommander.internal.Console;
 
@@ -35,12 +34,9 @@ public abstract class AbstractStatsCommand<T> extends ServiceEnabledCommand<T> {
     if (parameters.size() > 0) {
       final String storeName = parameters.get(0);
 
-      // Attempt to load input store if not already provided (test purposes).
-      final StoreLoader inputStoreLoader = new StoreLoader(storeName);
-      if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
-        throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
-      }
-      inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+      // Attempt to load store.
+      inputStoreOptions =
+          CLIUtils.loadStore(storeName, getGeoWaveConfigFile(params), params.getConsole());
     }
     try {
       performStatsCommand(inputStoreOptions, statsOptions, params.getConsole());

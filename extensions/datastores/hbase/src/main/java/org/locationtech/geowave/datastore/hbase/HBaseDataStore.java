@@ -10,6 +10,7 @@
 package org.locationtech.geowave.datastore.hbase;
 
 import org.locationtech.geowave.core.store.DataStoreOptions;
+import org.locationtech.geowave.core.store.PropertyStore;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
@@ -22,6 +23,7 @@ import org.locationtech.geowave.core.store.metadata.AdapterStoreImpl;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreImpl;
 import org.locationtech.geowave.core.store.metadata.IndexStoreImpl;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
+import org.locationtech.geowave.core.store.metadata.PropertyStoreImpl;
 import org.locationtech.geowave.core.store.server.ServerOpHelper;
 import org.locationtech.geowave.core.store.server.ServerSideOperations;
 import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
@@ -41,7 +43,8 @@ public class HBaseDataStore extends BaseMapReduceDataStore {
         new AdapterIndexMappingStoreImpl(operations, options),
         operations,
         options,
-        new InternalAdapterStoreImpl(operations));
+        new InternalAdapterStoreImpl(operations),
+        new PropertyStoreImpl(operations, options));
   }
 
   public HBaseDataStore(
@@ -51,7 +54,8 @@ public class HBaseDataStore extends BaseMapReduceDataStore {
       final AdapterIndexMappingStore indexMappingStore,
       final MapReduceDataStoreOperations operations,
       final DataStoreOptions options,
-      final InternalAdapterStore adapterMappingStore) {
+      final InternalAdapterStore adapterMappingStore,
+      final PropertyStore propertyStore) {
     super(
         indexStore,
         adapterStore,
@@ -59,7 +63,8 @@ public class HBaseDataStore extends BaseMapReduceDataStore {
         indexMappingStore,
         operations,
         options,
-        adapterMappingStore);
+        adapterMappingStore,
+        propertyStore);
   }
 
   @Override

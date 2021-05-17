@@ -17,6 +17,7 @@ import org.locationtech.geowave.core.store.metadata.AdapterStoreImpl;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreImpl;
 import org.locationtech.geowave.core.store.metadata.IndexStoreImpl;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
+import org.locationtech.geowave.core.store.metadata.PropertyStoreImpl;
 import org.locationtech.geowave.datastore.bigtable.operations.BigTableOperations;
 import org.locationtech.geowave.datastore.bigtable.config.BigTableOptions;
 import org.locationtech.geowave.datastore.hbase.HBaseDataStore;
@@ -49,6 +50,7 @@ public class BigTableDataStoreFactory extends BaseDataStoreFactory {
         new AdapterIndexMappingStoreImpl(bigtableOperations, hbaseOptions),
         bigtableOperations,
         hbaseOptions,
-        new InternalAdapterStoreImpl(bigtableOperations));
+        new InternalAdapterStoreImpl(bigtableOperations),
+        new PropertyStoreImpl(bigtableOperations, hbaseOptions));
   }
 }

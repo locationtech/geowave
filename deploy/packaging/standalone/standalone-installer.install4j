@@ -50,6 +50,7 @@
       <mountPoint id="172" root="" location="lib/utilities/landsat8" mode="755" />
       <mountPoint id="173" root="" location="lib/utilities/sentinel2" mode="755" />
       <mountPoint id="620" root="" location="lib/utilities/python" mode="755" />
+      <mountPoint id="952" root="" location="lib/utilities/migration" mode="755" />
       <mountPoint id="175" root="" location="lib/analytics" mode="755" />
       <mountPoint id="176" root="" location="lib/analytics/spark" mode="755" />
       <mountPoint id="177" root="" location="lib/analytics/mapreduce" mode="755" />
@@ -140,6 +141,9 @@
         <exclude />
       </dirEntry>
       <dirEntry mountPoint="620" file="../../../python/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="952" file="../../../migration/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
         <exclude />
       </dirEntry>
       <dirEntry mountPoint="176" file="../../../analytics/spark/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
@@ -254,6 +258,15 @@
               <entry location="lib/utilities/python" fileType="regular" />
             </include>
             <dependencies />
+          </component>
+          <component name="Migration Utility" id="953" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
+            <description>Includes command to migrate GeoWave data to match the CLI version.</description>
+            <include all="false">
+              <entry location="lib/utilities/migration" fileType="regular" />
+            </include>
+            <dependencies>
+              <component id="59" />
+            </dependencies>
           </component>
         </components>
       </folder>
@@ -596,6 +609,7 @@
           <scanDirectory location="lib/utilities/landsat8" failOnError="false" />
           <scanDirectory location="lib/utilities/sentinel2" failOnError="false" />
           <scanDirectory location="lib/utilities/python" failOnError="false" />
+          <scanDirectory location="lib/utilities/migration" failOnError="false" />
           <scanDirectory location="lib/services/grpc" failOnError="false" />
           <scanDirectory location="lib/services/rest" failOnError="false" />
           <scanDirectory location="lib/services/third-party/embedded-geoserver" failOnError="false" />

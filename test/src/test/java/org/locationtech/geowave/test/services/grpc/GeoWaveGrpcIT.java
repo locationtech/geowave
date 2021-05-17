@@ -26,7 +26,6 @@ import org.locationtech.geowave.core.geotime.index.api.SpatialIndexBuilder;
 import org.locationtech.geowave.core.ingest.operations.ConfigAWSCommand;
 import org.locationtech.geowave.core.store.cli.store.AddStoreCommand;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceOptions;
 import org.locationtech.geowave.service.grpc.cli.StartGrpcServerCommand;
 import org.locationtech.geowave.service.grpc.cli.StartGrpcServerCommandOptions;
@@ -121,8 +120,6 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     // Create the index
     final SpatialIndexBuilder indexBuilder = new SpatialIndexBuilder();
     indexBuilder.setName(GeoWaveGrpcTestUtils.indexName);
-
-    IndexStore indexStore = dataStore.createIndexStore();
     dataStore.createDataStore().addIndex(indexBuilder.createIndex());
 
 
@@ -340,8 +337,6 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     TestUtils.deleteAll(dataStore);
 
     // Add the index again
-    // Index store could be invalid after running deleteAll, so recreate it
-    indexStore = dataStore.createIndexStore();
     dataStore.createDataStore().addIndex(indexBuilder.createIndex());
 
     client.vectorIngest(0, 10, 0, 10, 5, 5);
@@ -413,9 +408,7 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     Assert.assertTrue(client.ClearCommand());
 
     // Re-add the index
-    // Index store could be invalid after running deleteAll, so recreate it
-    indexStore = dataStore.createIndexStore();
-    indexStore.addIndex(indexBuilder.createIndex());
+    dataStore.createDataStore().addIndex(indexBuilder.createIndex());
 
     result = client.RemoveIndexCommand();
     Assert.assertEquals(

@@ -26,7 +26,7 @@ import com.google.common.collect.Lists;
 
 /**
  * This class will persist Adapter Index Mappings within a table for GeoWave metadata. The mappings
- * will be persisted in an "AIM" column family.
+ * will be persisted in an "INDEX_MAPPINGS" metadata table.
  *
  * <p> There is an LRU cache associated with it so staying in sync with external updates is not
  * practical - it assumes the objects are not updated often or at all. The objects are stored in
@@ -43,7 +43,7 @@ public class AdapterIndexMappingStoreImpl extends AbstractGeoWavePersistence<Ada
   public AdapterIndexMappingStoreImpl(
       final DataStoreOperations operations,
       final DataStoreOptions options) {
-    super(operations, options, MetadataType.AIM);
+    super(operations, options, MetadataType.INDEX_MAPPINGS);
   }
 
   public boolean mappingExists(final AdapterToIndexMapping persistedObject) {
@@ -89,7 +89,7 @@ public class AdapterIndexMappingStoreImpl extends AbstractGeoWavePersistence<Ada
     final ByteArray secondaryId = getSecondaryId(mapping);
 
     if (objectExists(primaryId, secondaryId)) {
-      LOGGER.warn("Adapter to index mapping already existed, skipping add.");
+      LOGGER.info("Adapter to index mapping already existed, skipping add.");
     } else {
       addObject(mapping);
     }

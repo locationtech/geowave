@@ -8,13 +8,13 @@
  */
 package org.locationtech.geowave.core.store.cli.store;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.beust.jcommander.Parameter;
@@ -65,14 +65,8 @@ public class ClearStoreCommand extends ServiceEnabledCommand<Void> {
     final String inputStoreName = parameters.get(0);
 
     // Attempt to load store.
-    final File configFile = getGeoWaveConfigFile(params);
-
-    // Attempt to load input store.
-    final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
-      throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
-    }
-    inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+    inputStoreOptions =
+        CLIUtils.loadStore(inputStoreName, getGeoWaveConfigFile(params), params.getConsole());
 
     LOGGER.info("Deleting everything in store: " + inputStoreName);
 

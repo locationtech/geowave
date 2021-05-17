@@ -17,6 +17,7 @@ import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.RecordWriter;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.locationtech.geowave.core.store.DataStoreOptions;
+import org.locationtech.geowave.core.store.PropertyStore;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
@@ -44,7 +45,8 @@ public class BaseMapReduceDataStore extends BaseDataStore implements MapReduceDa
       final AdapterIndexMappingStore indexMappingStore,
       final MapReduceDataStoreOperations operations,
       final DataStoreOptions options,
-      final InternalAdapterStore adapterMappingStore) {
+      final InternalAdapterStore adapterMappingStore,
+      final PropertyStore propertyStore) {
     super(
         indexStore,
         adapterStore,
@@ -52,7 +54,8 @@ public class BaseMapReduceDataStore extends BaseDataStore implements MapReduceDa
         indexMappingStore,
         operations,
         options,
-        adapterMappingStore);
+        adapterMappingStore,
+        propertyStore);
     splitsProvider = createSplitsProvider();
   }
 

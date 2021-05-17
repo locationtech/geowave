@@ -24,13 +24,12 @@ import org.locationtech.geowave.analytic.store.PersistableStore;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
-import com.beust.jcommander.internal.Console;
 
 @GeowaveOperation(name = "spatialjoin", parentOperation = AnalyticSection.class)
 @Parameters(commandDescription = "Spatial join using Spark ")
@@ -74,15 +73,15 @@ public class SpatialJoinCommand extends ServiceEnabledCommand<Void> {
 
     // Attempt to load stores.
     if (leftDataStore == null) {
-      leftDataStore = loadStore(leftStoreName, configFile, params.getConsole());
+      leftDataStore = CLIUtils.loadStore(leftStoreName, configFile, params.getConsole());
     }
 
     if (rightDataStore == null) {
-      rightDataStore = loadStore(rightStoreName, configFile, params.getConsole());
+      rightDataStore = CLIUtils.loadStore(rightStoreName, configFile, params.getConsole());
     }
 
     if (outputDataStore == null) {
-      outputDataStore = loadStore(outputStoreName, configFile, params.getConsole());
+      outputDataStore = CLIUtils.loadStore(outputStoreName, configFile, params.getConsole());
     }
 
     // Save a reference to the output store in the property management.
@@ -141,16 +140,5 @@ public class SpatialJoinCommand extends ServiceEnabledCommand<Void> {
     runner.run();
     runner.close();
     return null;
-  }
-
-  private DataStorePluginOptions loadStore(
-      final String storeName,
-      final File configFile,
-      final Console console) {
-    final StoreLoader storeLoader = new StoreLoader(storeName);
-    if (!storeLoader.loadFromConfig(configFile, console)) {
-      throw new ParameterException("Cannot find left store: " + storeLoader.getStoreName());
-    }
-    return storeLoader.getDataStorePlugin();
   }
 }

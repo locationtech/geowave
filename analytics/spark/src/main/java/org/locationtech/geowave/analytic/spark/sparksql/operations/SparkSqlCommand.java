@@ -24,8 +24,8 @@ import org.locationtech.geowave.analytic.spark.sparksql.SqlResultsWriter;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.jts.util.Stopwatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -175,11 +175,9 @@ public class SparkSqlCommand extends ServiceEnabledCommand<Void> {
                   + Arrays.toString(storeNameParts));
       }
 
-      final StoreLoader inputStoreLoader = new StoreLoader(storeName);
-      if (!inputStoreLoader.loadFromConfig(configFile, console)) {
-        throw new ParameterException("Cannot find input store: " + inputStoreLoader.getStoreName());
-      }
-      final DataStorePluginOptions storeOptions = inputStoreLoader.getDataStorePlugin();
+      // Attempt to load store.
+      final DataStorePluginOptions storeOptions =
+          CLIUtils.loadStore(storeName, configFile, console);
       viewName = sqlRunner.addInputStore(storeOptions, adapterName, viewName);
       if (viewName != null) {
         replacedSQL = StringUtils.replace(replacedSQL, originalStoreText, viewName, -1);

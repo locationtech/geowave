@@ -22,10 +22,9 @@ import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
-import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -122,11 +121,7 @@ public class IngestOSMToGeoWaveCommand extends DefaultOperation implements Comma
     final Properties configProperties = ConfigOptions.loadProperties(configFile);
     final String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
 
-    final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile, new JCommander().getConsole())) {
-      throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
-    }
-    inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+    inputStoreOptions = CLIUtils.loadStore(inputStoreName, configFile, params.getConsole());
 
     // Copy over options from main parameter to ingest options
     ingestOptions.setHdfsBasePath(basePath);

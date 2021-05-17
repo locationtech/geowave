@@ -8,13 +8,13 @@
  */
 package org.locationtech.geowave.core.store.cli.store;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import org.locationtech.geowave.core.cli.VersionUtils;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.server.ServerSideOperations;
 import com.beust.jcommander.Parameter;
@@ -45,43 +45,33 @@ public class VersionCommand extends ServiceEnabledCommand<String> {
 
     final String inputStoreName = parameters.get(0);
 
-    final File configFile = getGeoWaveConfigFile(params);
-
-    final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
-      final String ret = "Cannot find store name: " + inputStoreLoader.getStoreName();
-      throw new ParameterException(ret);
-    }
-
-    final DataStorePluginOptions inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+    final DataStorePluginOptions inputStoreOptions =
+        CLIUtils.loadStore(inputStoreName, getGeoWaveConfigFile(params), params.getConsole());
     // TODO: This return probably should be formatted as JSON
-    if (inputStoreOptions != null) {
-      final DataStoreOperations ops = inputStoreOptions.createDataStoreOperations();
-      if ((ops instanceof ServerSideOperations)
-          && inputStoreOptions.getFactoryOptions().getStoreOptions().isServerSideLibraryEnabled()) {
-        params.getConsole().println(
-            "Looking up remote datastore version for type ["
-                + inputStoreOptions.getType()
-                + "] and name ["
-                + inputStoreName
-                + "]");
-        final String version = "Version: " + ((ServerSideOperations) ops).getVersion();
-        params.getConsole().println(version);
-        return version;
-      } else {
-        final String ret1 =
-            "Datastore for type ["
-                + inputStoreOptions.getType()
-                + "] and name ["
-                + inputStoreName
-                + "] does not have a serverside library enabled.";
-        params.getConsole().println(ret1);
-        final String ret2 = "Commandline Version: " + VersionUtils.getVersion();
-        params.getConsole().println(ret2);
-        return ret1 + '\n' + ret2;
-      }
+    final DataStoreOperations ops = inputStoreOptions.createDataStoreOperations();
+    if ((ops instanceof ServerSideOperations)
+        && inputStoreOptions.getFactoryOptions().getStoreOptions().isServerSideLibraryEnabled()) {
+      params.getConsole().println(
+          "Looking up remote datastore version for type ["
+              + inputStoreOptions.getType()
+              + "] and name ["
+              + inputStoreName
+              + "]");
+      final String version = "Version: " + ((ServerSideOperations) ops).getVersion();
+      params.getConsole().println(version);
+      return version;
+    } else {
+      final String ret1 =
+          "Datastore for type ["
+              + inputStoreOptions.getType()
+              + "] and name ["
+              + inputStoreName
+              + "] does not have a serverside library enabled.";
+      params.getConsole().println(ret1);
+      final String ret2 = "Commandline Version: " + VersionUtils.getVersion();
+      params.getConsole().println(ret2);
+      return ret1 + '\n' + ret2;
     }
-    return null;
   }
 
   @Override

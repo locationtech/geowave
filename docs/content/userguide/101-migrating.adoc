@@ -1,0 +1,10 @@
+[[migrating]]
+<<<
+
+=== Migrating Data to Newer Versions
+
+When a major change is made to the GeoWave codebase that alters the serialization of data in a data store, a migration will need to be performed to make the data store compatible with the latest version of the programmatic API and the command-line tools.  Beginning in GeoWave 2.0, attempting to access a data store with an incompatible version of the CLI will propmpt the user with an error.  If the data store version is later than that of the CLI, it will ask that the CLI version be updated to a compatible version.  If the data store version is older, it will prompt the user to run the migration command to perform any updates needed to make the data store compatible with the CLI version. Performing this migration allows you to avoid a potentially costly re-ingest of your data.
+
+For more information about the migration command, see the link:commands.html#util-migrate[`util migrate`] documentation.
+
+

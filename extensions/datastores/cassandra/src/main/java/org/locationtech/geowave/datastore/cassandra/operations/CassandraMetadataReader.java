@@ -152,7 +152,7 @@ public class CassandraMetadataReader implements MetadataReader {
     return !(MetadataType.STATISTICS.equals(metadataType)
         || MetadataType.STATISTIC_VALUES.equals(metadataType)
         || MetadataType.INTERNAL_ADAPTER.equals(metadataType)
-        || MetadataType.AIM.equals(metadataType)) || query.hasSecondaryId();
+        || MetadataType.INDEX_MAPPINGS.equals(metadataType)) || query.hasSecondaryId();
   }
 
   private static class PrimaryIDPrefixFilter implements Predicate<Row> {

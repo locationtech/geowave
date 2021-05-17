@@ -45,9 +45,9 @@ import org.locationtech.geowave.core.ingest.operations.options.IngestFormatPlugi
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.VisibilityOptions;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.ingest.IngestUtils;
 import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
@@ -60,7 +60,6 @@ import org.locationtech.geowave.mapreduce.s3.GeoWaveAmazonS3Factory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.beust.jcommander.JCommander;
-import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.internal.Console;
 import com.google.common.collect.Lists;
 import com.upplication.s3fs.S3FileSystem;
@@ -236,15 +235,7 @@ public class SparkIngestDriver implements Serializable {
     final Map<String, LocalFileIngestPlugin<?>> ingestPlugins =
         pluginFormats.createLocalIngestPlugins();
 
-    final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(
-        configProperties,
-        DataStorePluginOptions.getStoreNamespace(inputStoreName),
-        configFile,
-        console)) {
-      throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
-    }
-    inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+    inputStoreOptions = CLIUtils.loadStore(configProperties, inputStoreName, configFile, console);
 
     final IndexStore indexStore = inputStoreOptions.createIndexStore();
     indices = DataStoreUtils.loadIndices(indexStore, indexList);

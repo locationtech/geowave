@@ -29,6 +29,8 @@ import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.DataStoreOptions;
+import org.locationtech.geowave.core.store.DataStoreProperty;
+import org.locationtech.geowave.core.store.PropertyStore;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
 import org.locationtech.geowave.core.store.adapter.IndexDependentDataAdapter;
@@ -119,6 +121,7 @@ public class BaseDataStore implements DataStore {
   protected final DataStoreOperations baseOperations;
   protected final DataStoreOptions baseOptions;
   protected final InternalAdapterStore internalAdapterStore;
+  protected final PropertyStore propertyStore;
 
   protected enum DeletionMode {
     DONT_DELETE, DELETE, DELETE_WITH_DUPLICATES;
@@ -131,17 +134,20 @@ public class BaseDataStore implements DataStore {
       final AdapterIndexMappingStore indexMappingStore,
       final DataStoreOperations operations,
       final DataStoreOptions options,
-      final InternalAdapterStore internalAdapterStore) {
+      final InternalAdapterStore internalAdapterStore,
+      final PropertyStore propertyStore) {
     this.indexStore = indexStore;
     this.adapterStore = adapterStore;
     this.statisticsStore = statisticsStore;
     this.indexMappingStore = indexMappingStore;
     this.internalAdapterStore = internalAdapterStore;
+    this.propertyStore = propertyStore;
     baseOperations = operations;
     baseOptions = options;
   }
 
   public void store(final Index index) {
+    checkNewDataStore();
     if (!indexStore.indexExists(index.getName())) {
       indexStore.addIndex(index);
       if (index instanceof DefaultStatisticsProvider) {
@@ -152,12 +158,25 @@ public class BaseDataStore implements DataStore {
   }
 
   protected synchronized void store(final InternalDataAdapter<?> adapter) {
+    checkNewDataStore();
     if (!adapterStore.adapterExists(adapter.getAdapterId())) {
       adapterStore.addAdapter(adapter);
       if (adapter.getAdapter() instanceof DefaultStatisticsProvider) {
         ((DefaultStatisticsProvider) adapter.getAdapter()).getDefaultStatistics().forEach(
             stat -> statisticsStore.addStatistic(stat));
       }
+    }
+  }
+
+  private void checkNewDataStore() {
+    if ((propertyStore.getProperty(BaseDataStoreUtils.DATA_VERSION_PROPERTY) == null)
+        && !BaseDataStoreUtils.hasMetadata(baseOperations, MetadataType.ADAPTER)
+        && !BaseDataStoreUtils.hasMetadata(baseOperations, MetadataType.INDEX)) {
+      // Only set the data version if no adapters and indices have already been added
+      propertyStore.setProperty(
+          new DataStoreProperty(
+              BaseDataStoreUtils.DATA_VERSION_PROPERTY,
+              BaseDataStoreUtils.DATA_VERSION));
     }
   }
 
@@ -1225,12 +1244,7 @@ public class BaseDataStore implements DataStore {
             Arrays.stream(indices).filter(i -> !indexNames.contains(i.getName())).toArray(
                 size -> new Index[size]);
         if (newIndices.length > 0) {
-          LOGGER.info(
-              "Indices already available for type '"
-                  + typeName
-                  + "'. Writing existing data to new indices for consistency.");
-
-          internalAddIndices(adapter, newIndices, true);
+          internalAddIndices(adapter, newIndices);
           try (Writer writer = createWriter(adapter, false, newIndices)) {
             try (
                 // TODO what about authorizations
@@ -1245,15 +1259,12 @@ public class BaseDataStore implements DataStore {
           LOGGER.info("Indices " + ArrayUtils.toString(indices) + " already added.");
         }
       } else {
-        internalAddIndices(adapter, indices, true);
+        internalAddIndices(adapter, indices);
       }
     }
   }
 
-  private void internalAddIndices(
-      final InternalDataAdapter<?> adapter,
-      final Index[] indices,
-      final boolean updateAdapter) {
+  private void internalAddIndices(final InternalDataAdapter<?> adapter, final Index[] indices) {
     for (final Index index : indices) {
       indexMappingStore.addAdapterIndexMapping(
           BaseDataStoreUtils.mapAdapterToIndex(adapter, index));
@@ -1287,7 +1298,7 @@ public class BaseDataStore implements DataStore {
     final boolean newAdapter = !adapterStore.adapterExists(adapter.getAdapterId());
     final Index[] initialIndicesUnique =
         Arrays.stream(initialIndices).distinct().toArray(size -> new Index[size]);
-    internalAddIndices(adapter, initialIndicesUnique, false);
+    internalAddIndices(adapter, initialIndicesUnique);
     store(adapter);
     return newAdapter;
   }
@@ -1313,7 +1324,7 @@ public class BaseDataStore implements DataStore {
       return null;
     }
     final AdapterToIndexMapping[] mappings = indexMappingStore.getIndicesForAdapter(adapterId);
-    if (mappings.length == 0 && !baseOptions.isSecondaryIndexing()) {
+    if ((mappings.length == 0) && !baseOptions.isSecondaryIndexing()) {
       LOGGER.warn(
           "No indices for type '"
               + typeName

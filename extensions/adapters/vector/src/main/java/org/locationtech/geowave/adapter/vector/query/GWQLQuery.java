@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.adapter.vector.query;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ServiceLoader;
@@ -22,9 +21,8 @@ import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
-import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spark_project.guava.collect.Iterators;
@@ -110,12 +108,11 @@ public class GWQLQuery extends DefaultOperation implements Command {
     final Statement statement = GWQLParser.parseStatement(query);
     DataStorePluginOptions storeOptions = null;
     if (statement.getStoreName() != null) {
-      final File configFile = (File) params.getContext().get(ConfigOptions.PROPERTIES_FILE_CONTEXT);
-      final StoreLoader storeLoader = new StoreLoader(statement.getStoreName());
-      if (!storeLoader.loadFromConfig(configFile, params.getConsole())) {
-        throw new ParameterException("Cannot find store name: " + storeLoader.getStoreName());
-      }
-      storeOptions = storeLoader.getDataStorePlugin();
+      storeOptions =
+          CLIUtils.loadStore(
+              statement.getStoreName(),
+              getGeoWaveConfigFile(params),
+              params.getConsole());
     } else {
       throw new ParameterException("Query requires a store name prefix on the type.");
     }

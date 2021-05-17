@@ -19,8 +19,8 @@ import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
 import org.locationtech.geowave.mapreduce.operations.HdfsHostPortConverter;
 import com.beust.jcommander.Parameter;
@@ -71,18 +71,10 @@ public class ResizeMRCommand extends DefaultOperation implements Command {
     final File configFile = getGeoWaveConfigFile(params);
 
     // Attempt to load input store.
-    final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
-      throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
-    }
-    inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+    inputStoreOptions = CLIUtils.loadStore(inputStoreName, configFile, params.getConsole());
 
     // Attempt to load output store.
-    final StoreLoader outputStoreLoader = new StoreLoader(outputStoreName);
-    if (!outputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
-      throw new ParameterException("Cannot find store name: " + outputStoreLoader.getStoreName());
-    }
-    outputStoreOptions = outputStoreLoader.getDataStorePlugin();
+    outputStoreOptions = CLIUtils.loadStore(outputStoreName, configFile, params.getConsole());
 
     if (hdfsHostPort == null) {
 

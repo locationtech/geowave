@@ -12,6 +12,7 @@ import java.util.Map;
 import org.locationtech.geowave.core.cli.api.DefaultPluginOptions;
 import org.locationtech.geowave.core.cli.api.PluginOptions;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
+import org.locationtech.geowave.core.store.PropertyStore;
 import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
@@ -127,6 +128,10 @@ public class DataStorePluginOptions extends DefaultPluginOptions implements Plug
 
   public InternalAdapterStore createInternalAdapterStore() {
     return getFactoryFamily().getInternalAdapterStoreFactory().createStore(getFactoryOptions());
+  }
+
+  public PropertyStore createPropertyStore() {
+    return getFactoryFamily().getPropertyStoreFactory().createStore(getFactoryOptions());
   }
 
   public DataStoreOperations createDataStoreOperations() {

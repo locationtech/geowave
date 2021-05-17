@@ -15,6 +15,7 @@ import org.locationtech.geowave.core.store.metadata.AdapterStoreImpl;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreImpl;
 import org.locationtech.geowave.core.store.metadata.IndexStoreImpl;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
+import org.locationtech.geowave.core.store.metadata.PropertyStoreImpl;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 
 public class BaseDataStoreFactory extends BaseStoreFactory<DataStore> {
@@ -36,6 +37,7 @@ public class BaseDataStoreFactory extends BaseStoreFactory<DataStore> {
         new AdapterIndexMappingStoreImpl(operations, options),
         operations,
         options,
-        new InternalAdapterStoreImpl(operations));
+        new InternalAdapterStoreImpl(operations),
+        new PropertyStoreImpl(operations, options));
   }
 }

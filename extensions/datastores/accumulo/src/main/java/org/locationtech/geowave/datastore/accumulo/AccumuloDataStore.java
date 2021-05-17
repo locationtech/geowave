@@ -19,6 +19,7 @@ import org.locationtech.geowave.core.store.metadata.AdapterStoreImpl;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreImpl;
 import org.locationtech.geowave.core.store.metadata.IndexStoreImpl;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
+import org.locationtech.geowave.core.store.metadata.PropertyStoreImpl;
 import org.locationtech.geowave.core.store.server.ServerOpHelper;
 import org.locationtech.geowave.core.store.server.ServerSideOperations;
 import org.locationtech.geowave.datastore.accumulo.config.AccumuloOptions;
@@ -51,7 +52,8 @@ public class AccumuloDataStore extends BaseMapReduceDataStore {
         new AdapterIndexMappingStoreImpl(accumuloOperations, accumuloOptions),
         accumuloOperations,
         accumuloOptions,
-        new InternalAdapterStoreImpl(accumuloOperations));
+        new InternalAdapterStoreImpl(accumuloOperations),
+        new PropertyStoreImpl(accumuloOperations, accumuloOptions));
   }
 
   @Override

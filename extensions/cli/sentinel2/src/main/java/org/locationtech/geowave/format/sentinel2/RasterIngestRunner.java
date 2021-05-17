@@ -39,8 +39,8 @@ import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
+import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.cli.store.StoreLoader;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.coverage.grid.GridCoverageReader;
@@ -58,6 +58,7 @@ import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -111,12 +112,9 @@ public class RasterIngestRunner extends DownloadRunner {
     final File configFile = (File) params.getContext().get(ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
     // Attempt to load input store.
-    final StoreLoader inputStoreLoader = new StoreLoader(inputStoreName);
-    if (!inputStoreLoader.loadFromConfig(configFile, params.getConsole())) {
-      throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
-    }
+    dataStorePluginOptions =
+        CLIUtils.loadStore(inputStoreName, configFile, new JCommander().getConsole());
 
-    dataStorePluginOptions = inputStoreLoader.getDataStorePlugin();
     store = dataStorePluginOptions.createDataStore();
 
     // Load the Indices
