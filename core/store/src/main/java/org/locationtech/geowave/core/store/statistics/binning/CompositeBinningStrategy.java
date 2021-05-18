@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Deque;
 import java.util.List;
 import java.util.OptionalInt;
+import java.util.Set;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -72,6 +73,13 @@ public class CompositeBinningStrategy implements StatisticBinningStrategy {
   public String getDefaultTag() {
     return Arrays.stream(childBinningStrategies).map(s -> s.getDefaultTag()).collect(
         Collectors.joining("|"));
+  }
+
+  @Override
+  public void getFieldsUsed(final Set<String> fieldsUsed) {
+    for (final StatisticBinningStrategy child : childBinningStrategies) {
+      child.getFieldsUsed(fieldsUsed);
+    }
   }
 
   @Override

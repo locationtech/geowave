@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.apache.commons.lang3.ArrayUtils;
@@ -57,6 +58,11 @@ public class FieldValueBinningStrategy implements StatisticBinningStrategy {
   @Override
   public String getDescription() {
     return "Bin the statistic by the value of one or more fields.";
+  }
+
+  @Override
+  public void getFieldsUsed(final Set<String> fieldsUsed) {
+    fieldsUsed.addAll(fields);
   }
 
   @Override

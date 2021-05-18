@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.store.api;
 
 import java.util.Arrays;
+import java.util.Set;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.persist.Persistable;
@@ -49,6 +50,11 @@ public interface StatisticBinningStrategy extends Persistable, BinningStrategy {
    * @return the default tag
    */
   String getDefaultTag();
+
+  /**
+   * Adds all of the field names used by the binning strategy to the provided set.
+   */
+  default void getFieldsUsed(final Set<String> fieldsUsed) {}
 
   default Class<?>[] supportedConstraintClasses() {
     return new Class<?>[] {

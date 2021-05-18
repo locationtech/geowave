@@ -12,12 +12,8 @@ import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
-import org.locationtech.geowave.core.store.EntryVisibilityHandler;
-import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
-import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.statistics.StatisticId;
 import org.locationtech.geowave.core.store.statistics.adapter.DataTypeStatisticType;
-import org.locationtech.geowave.core.store.statistics.visibility.DefaultFieldStatisticVisibility;
 import com.beust.jcommander.Parameter;
 
 /**
@@ -64,7 +60,6 @@ public abstract class DataTypeStatistic<V extends StatisticValue<?>> extends Sta
   }
 
   @Override
-
   protected int byteLength() {
     return super.byteLength()
         + VarintUtils.unsignedShortByteLength((short) typeName.length())
@@ -72,16 +67,16 @@ public abstract class DataTypeStatistic<V extends StatisticValue<?>> extends Sta
   }
 
   @Override
-  protected void writeBytes(ByteBuffer buffer) {
+  protected void writeBytes(final ByteBuffer buffer) {
     super.writeBytes(buffer);
     VarintUtils.writeUnsignedShort((short) typeName.length(), buffer);
     buffer.put(StringUtils.stringToBinary(typeName));
   }
 
   @Override
-  protected void readBytes(ByteBuffer buffer) {
+  protected void readBytes(final ByteBuffer buffer) {
     super.readBytes(buffer);
-    byte[] nameBytes = new byte[VarintUtils.readUnsignedShort(buffer)];
+    final byte[] nameBytes = new byte[VarintUtils.readUnsignedShort(buffer)];
     buffer.get(nameBytes);
     typeName = StringUtils.stringFromBinary(nameBytes);
   }
