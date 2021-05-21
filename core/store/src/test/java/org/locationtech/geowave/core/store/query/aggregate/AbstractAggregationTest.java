@@ -13,37 +13,39 @@ import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.api.Aggregation;
 
-public abstract class AbstractAggregationTest<P extends Persistable, R, T> {
+public abstract class AbstractAggregationTest {
 
   /**
    * Aggregate given objects into a given aggregation.
    *
    * Internally, this splits the objectsToAggregate and gives it to separate aggregations, and
    * returns the merged results.
-   * 
+   *
    * @param aggregation The aggregation to give data to for testing.
    * @param objectsToAggregate The test data to feed into the aggregation
    * @return The results of aggregating the data.
    */
   @SuppressWarnings({"unchecked", "rawtypes"})
-  protected R aggregateObjects(Aggregation<P, R, T> aggregation, List<T> objectsToAggregate) {
-    byte[] aggregationBytes = PersistenceUtils.toBinary(aggregation);
-    byte[] aggregationParameters = PersistenceUtils.toBinary(aggregation.getParameters());
-    Aggregation<P, R, T> agg1 = (Aggregation) PersistenceUtils.fromBinary(aggregationBytes);
-    Aggregation<P, R, T> agg2 = (Aggregation) PersistenceUtils.fromBinary(aggregationBytes);
+  protected <P extends Persistable, R, T> R aggregateObjects(
+      final Aggregation<P, R, T> aggregation,
+      final List<T> objectsToAggregate) {
+    final byte[] aggregationBytes = PersistenceUtils.toBinary(aggregation);
+    final byte[] aggregationParameters = PersistenceUtils.toBinary(aggregation.getParameters());
+    final Aggregation<P, R, T> agg1 = (Aggregation) PersistenceUtils.fromBinary(aggregationBytes);
+    final Aggregation<P, R, T> agg2 = (Aggregation) PersistenceUtils.fromBinary(aggregationBytes);
     agg1.setParameters((P) PersistenceUtils.fromBinary(aggregationParameters));
     agg2.setParameters((P) PersistenceUtils.fromBinary(aggregationParameters));
     for (int i = 0; i < objectsToAggregate.size(); i++) {
-      if (i % 2 == 0) {
+      if ((i % 2) == 0) {
         agg1.aggregate(null, objectsToAggregate.get(i));
       } else {
         agg2.aggregate(null, objectsToAggregate.get(i));
       }
     }
-    byte[] agg1ResultBinary = agg1.resultToBinary(agg1.getResult());
-    byte[] agg2ResultBinary = agg2.resultToBinary(agg2.getResult());
-    R agg1Result = agg1.resultFromBinary(agg1ResultBinary);
-    R agg2Result = agg2.resultFromBinary(agg2ResultBinary);
+    final byte[] agg1ResultBinary = agg1.resultToBinary(agg1.getResult());
+    final byte[] agg2ResultBinary = agg2.resultToBinary(agg2.getResult());
+    final R agg1Result = agg1.resultFromBinary(agg1ResultBinary);
+    final R agg2Result = agg2.resultFromBinary(agg2ResultBinary);
 
     return aggregation.merge(agg1Result, agg2Result);
   }

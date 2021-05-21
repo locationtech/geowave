@@ -15,7 +15,6 @@ import java.util.UUID;
 import org.junit.Test;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.persist.Persistable;
-import org.locationtech.geowave.core.index.persist.PersistableList;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.api.BinningStrategy;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
@@ -23,8 +22,7 @@ import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import com.google.common.collect.ImmutableMap;
 
-public class BinningAggregationTest extends
-    AbstractAggregationTest<PersistableList, Map<String, Long>, CommonIndexedPersistenceEncoding> {
+public class BinningAggregationTest extends AbstractAggregationTest {
 
   // place all entries into separate bins.
   private static final BinningStrategy randomBinStrategy = new BinningStrategy() {

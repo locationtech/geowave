@@ -14,7 +14,6 @@ import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
-import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.query.aggregate.AbstractAggregationTest;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Point;
@@ -22,8 +21,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import com.google.common.collect.Lists;
 
-public class AbstractVectorAggregationTest<P extends Persistable, R> extends
-    AbstractAggregationTest<P, R, SimpleFeature> {
+public class AbstractVectorAggregationTest extends AbstractAggregationTest {
 
   protected static final String GEOMETRY_COLUMN = "geometry";
   protected static final String TIMESTAMP_COLUMN = "TimeStamp";
@@ -48,10 +46,10 @@ public class AbstractVectorAggregationTest<P extends Persistable, R> extends
   }
 
   public static SimpleFeature createFeature(
-      SimpleFeatureBuilder featureBuilder,
-      int featureId,
-      int longitude,
-      int latitude) {
+      final SimpleFeatureBuilder featureBuilder,
+      final int featureId,
+      final int longitude,
+      final int latitude) {
     featureBuilder.set(
         GEOMETRY_COLUMN,
         GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(longitude, latitude)));
@@ -59,7 +57,7 @@ public class AbstractVectorAggregationTest<P extends Persistable, R> extends
     featureBuilder.set(LATITUDE_COLUMN, latitude);
     featureBuilder.set(LONGITUDE_COLUMN, longitude);
     featureBuilder.set(VALUE_COLUMN, (long) featureId);
-    if (featureId % 2 == 0) {
+    if ((featureId % 2) == 0) {
       featureBuilder.set(ODDS_NULL_COLUMN, "NotNull");
     }
     return featureBuilder.buildFeature(String.valueOf(featureId));
@@ -67,7 +65,7 @@ public class AbstractVectorAggregationTest<P extends Persistable, R> extends
 
   public static List<SimpleFeature> generateFeatures() {
 
-    List<SimpleFeature> features = Lists.newArrayList();
+    final List<SimpleFeature> features = Lists.newArrayList();
     final SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(getFeatureType());
 
     int featureId = 0;

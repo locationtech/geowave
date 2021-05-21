@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import java.util.List;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistableList;
+import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.opengis.feature.simple.SimpleFeature;
@@ -49,7 +50,6 @@ public class CompositeVectorAggregation implements
   public PersistableList getParameters() {
     final List<Persistable> persistables = Lists.newArrayListWithCapacity(aggregations.size());
     for (final Aggregation agg : aggregations) {
-      persistables.add(agg);
       persistables.add(agg.getParameters());
     }
     return new PersistableList(persistables);
@@ -58,12 +58,8 @@ public class CompositeVectorAggregation implements
   @Override
   public void setParameters(final PersistableList parameters) {
     final List<Persistable> persistables = parameters.getPersistables();
-    final int numAggregations = persistables.size() / 2;
-    aggregations = Lists.newArrayListWithCapacity(numAggregations);
-    for (int i = 0; i < numAggregations; i++) {
-      final Aggregation aggregation = (Aggregation) persistables.get(i * 2);
-      aggregation.setParameters(persistables.get((i * 2) + 1));
-      aggregations.add(aggregation);
+    for (int i = 0; (i < persistables.size()) && (i < aggregations.size()); i++) {
+      aggregations.get(i).setParameters(persistables.get(i));
     }
   }
 
@@ -122,5 +118,13 @@ public class CompositeVectorAggregation implements
     aggregations.forEach(a -> a.aggregate(adapter, entry));
   }
 
+  @Override
+  public byte[] toBinary() {
+    return PersistenceUtils.toBinary(aggregations);
+  }
 
+  @Override
+  public void fromBinary(final byte[] bytes) {
+    aggregations = (List) PersistenceUtils.fromBinaryAsList(bytes);
+  }
 }
