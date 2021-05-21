@@ -19,12 +19,11 @@ import org.locationtech.geowave.core.geotime.store.query.aggregate.AbstractVecto
 import org.locationtech.geowave.core.geotime.store.query.aggregate.FieldNameParam;
 import org.opengis.feature.simple.SimpleFeature;
 
-public class VectorMathAggregationTest extends
-    AbstractVectorAggregationTest<FieldNameParam, BigDecimal> {
+public class VectorMathAggregationTest extends AbstractVectorAggregationTest {
 
   @Test
   public void testVectorMaxAggregation() {
-    List<SimpleFeature> features = generateFeatures();
+    final List<SimpleFeature> features = generateFeatures();
     VectorMaxAggregation aggregation =
         new VectorMaxAggregation(new FieldNameParam(LATITUDE_COLUMN));
     BigDecimal result = aggregateObjects(aggregation, features);
@@ -37,7 +36,7 @@ public class VectorMathAggregationTest extends
 
   @Test
   public void testVectorMinAggregation() {
-    List<SimpleFeature> features = generateFeatures();
+    final List<SimpleFeature> features = generateFeatures();
     VectorMinAggregation aggregation =
         new VectorMinAggregation(new FieldNameParam(LATITUDE_COLUMN));
     BigDecimal result = aggregateObjects(aggregation, features);
@@ -50,7 +49,7 @@ public class VectorMathAggregationTest extends
 
   @Test
   public void testVectorSumAggregation() {
-    List<SimpleFeature> features = generateFeatures();
+    final List<SimpleFeature> features = generateFeatures();
     VectorSumAggregation aggregation =
         new VectorSumAggregation(new FieldNameParam(LATITUDE_COLUMN));
     BigDecimal result = aggregateObjects(aggregation, features);

@@ -16,12 +16,11 @@ import org.locationtech.geowave.core.geotime.store.query.aggregate.AbstractVecto
 import org.locationtech.geowave.core.geotime.store.query.aggregate.FieldNameParam;
 import org.opengis.feature.simple.SimpleFeature;
 
-public class VectorCountAggregationTest extends
-    AbstractVectorAggregationTest<FieldNameParam, Long> {
+public class VectorCountAggregationTest extends AbstractVectorAggregationTest {
 
   @Test
   public void testVectorCountAggregation() {
-    List<SimpleFeature> features = generateFeatures();
+    final List<SimpleFeature> features = generateFeatures();
     VectorCountAggregation aggregation = new VectorCountAggregation(null);
     Long result = aggregateObjects(aggregation, features);
     assertEquals(Long.valueOf(features.size()), result);
@@ -36,7 +35,7 @@ public class VectorCountAggregationTest extends
 
     aggregation = new VectorCountAggregation(new FieldNameParam(ODDS_NULL_COLUMN));
     result = aggregateObjects(aggregation, features);
-    assertEquals(Long.valueOf(features.size() / 2 + 1), result);
+    assertEquals(Long.valueOf((features.size() / 2) + 1), result);
   }
 
 }
