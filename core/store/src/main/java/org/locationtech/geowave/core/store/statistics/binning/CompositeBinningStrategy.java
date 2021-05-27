@@ -76,9 +76,9 @@ public class CompositeBinningStrategy implements StatisticBinningStrategy {
   }
 
   @Override
-  public void getFieldsUsed(final Set<String> fieldsUsed) {
+  public void addFieldsUsed(final Set<String> fieldsUsed) {
     for (final StatisticBinningStrategy child : childBinningStrategies) {
-      child.getFieldsUsed(fieldsUsed);
+      child.addFieldsUsed(fieldsUsed);
     }
   }
 

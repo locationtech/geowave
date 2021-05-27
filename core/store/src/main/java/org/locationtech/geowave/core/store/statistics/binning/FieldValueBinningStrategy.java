@@ -61,7 +61,7 @@ public class FieldValueBinningStrategy implements StatisticBinningStrategy {
   }
 
   @Override
-  public void getFieldsUsed(final Set<String> fieldsUsed) {
+  public void addFieldsUsed(final Set<String> fieldsUsed) {
     fieldsUsed.addAll(fields);
   }
 

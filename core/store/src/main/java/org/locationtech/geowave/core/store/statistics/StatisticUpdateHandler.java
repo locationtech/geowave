@@ -110,7 +110,7 @@ public class StatisticUpdateHandler<T, V extends StatisticValue<R>, R> implement
       usedFields.add(((FieldStatistic<?>) statistic).getFieldName());
     }
     if (statistic.getBinningStrategy() != null) {
-      statistic.getBinningStrategy().getFieldsUsed(usedFields);
+      statistic.getBinningStrategy().addFieldsUsed(usedFields);
     }
     boolean fieldDependent = false;
     for (final String fieldName : usedFields) {

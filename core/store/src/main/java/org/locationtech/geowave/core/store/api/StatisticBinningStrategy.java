@@ -54,7 +54,7 @@ public interface StatisticBinningStrategy extends Persistable, BinningStrategy {
   /**
    * Adds all of the field names used by the binning strategy to the provided set.
    */
-  default void getFieldsUsed(final Set<String> fieldsUsed) {}
+  default void addFieldsUsed(final Set<String> fieldsUsed) {}
 
   default Class<?>[] supportedConstraintClasses() {
     return new Class<?>[] {
