@@ -12,15 +12,9 @@ import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
-import org.locationtech.geowave.core.store.AdapterToIndexMapping;
-import org.locationtech.geowave.core.store.EntryVisibilityHandler;
-import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
-import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.statistics.StatisticId;
 import org.locationtech.geowave.core.store.statistics.field.FieldStatisticId;
 import org.locationtech.geowave.core.store.statistics.field.FieldStatisticType;
-import org.locationtech.geowave.core.store.statistics.visibility.DefaultFieldStatisticVisibility;
-import org.locationtech.geowave.core.store.statistics.visibility.FieldNameStatisticVisibility;
 import com.beust.jcommander.Parameter;
 
 
@@ -87,25 +81,6 @@ public abstract class FieldStatistic<V extends StatisticValue<?>> extends Statis
     return cachedStatisticId;
   }
 
-  /**
-   * 
-   * @return
-   */
-  protected String internalUniqueId() {
-    return null;
-  }
-
-  @Override
-  public <T> EntryVisibilityHandler<T> getVisibilityHandler(
-      AdapterToIndexMapping indexMapping,
-      CommonIndexModel indexModel,
-      InternalDataAdapter<T> adapter) {
-    if (indexMapping != null && adapter.isCommonIndexField(indexMapping, fieldName)) {
-      return new DefaultFieldStatisticVisibility<>();
-    }
-    return new FieldNameStatisticVisibility<>(fieldName, indexModel, adapter);
-  }
-
   @Override
   protected int byteLength() {
     return super.byteLength()
@@ -116,7 +91,7 @@ public abstract class FieldStatistic<V extends StatisticValue<?>> extends Statis
   }
 
   @Override
-  protected void writeBytes(ByteBuffer buffer) {
+  protected void writeBytes(final ByteBuffer buffer) {
     super.writeBytes(buffer);
     VarintUtils.writeUnsignedShort((short) typeName.length(), buffer);
     buffer.put(StringUtils.stringToBinary(typeName));
@@ -125,11 +100,11 @@ public abstract class FieldStatistic<V extends StatisticValue<?>> extends Statis
   }
 
   @Override
-  protected void readBytes(ByteBuffer buffer) {
+  protected void readBytes(final ByteBuffer buffer) {
     super.readBytes(buffer);
-    byte[] typeBytes = new byte[VarintUtils.readUnsignedShort(buffer)];
+    final byte[] typeBytes = new byte[VarintUtils.readUnsignedShort(buffer)];
     buffer.get(typeBytes);
-    byte[] nameBytes = new byte[VarintUtils.readUnsignedShort(buffer)];
+    final byte[] nameBytes = new byte[VarintUtils.readUnsignedShort(buffer)];
     buffer.get(nameBytes);
     typeName = StringUtils.stringFromBinary(typeBytes);
     fieldName = StringUtils.stringFromBinary(nameBytes);

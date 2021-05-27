@@ -11,11 +11,13 @@ package org.locationtech.geowave.core.store.statistics;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.FieldStatistic;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Statistic;
 import org.locationtech.geowave.core.store.api.StatisticValue;
@@ -23,9 +25,12 @@ import org.locationtech.geowave.core.store.callback.DeleteCallback;
 import org.locationtech.geowave.core.store.callback.IngestCallback;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
+import org.locationtech.geowave.core.store.statistics.visibility.DefaultStatisticVisibility;
+import org.locationtech.geowave.core.store.statistics.visibility.FieldDependentStatisticVisibility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 /**
  * This class handles updates for a single statistic. It is responsible for creating separate
@@ -39,7 +44,7 @@ public class StatisticUpdateHandler<T, V extends StatisticValue<R>, R> implement
   private final Statistic<V> statistic;
   private final Map<ByteArray, Map<ByteArray, V>> statisticsMap = new HashMap<>();
   private final EntryVisibilityHandler<T> visibilityHandler;
-  private final DataTypeAdapter<T> adapter;
+  private final InternalDataAdapter<T> adapter;
   private final IngestHandler<T, V, R> ingestHandler;
   private final DeleteHandler<T, V, R> deleteHandler;
   private final boolean supportsIngestCallback;
@@ -54,11 +59,7 @@ public class StatisticUpdateHandler<T, V extends StatisticValue<R>, R> implement
       final InternalDataAdapter<T> adapter) {
     this.statistic = statistic;
     this.adapter = adapter;
-    this.visibilityHandler =
-        statistic.getVisibilityHandler(
-            indexMapping,
-            index != null ? index.getIndexModel() : null,
-            adapter);
+    this.visibilityHandler = getVisibilityHandler(indexMapping, index);
     this.ingestHandler = new IngestHandler<>();
     this.deleteHandler = new DeleteHandler<>();
     final V value = statistic.createEmpty();
@@ -99,6 +100,34 @@ public class StatisticUpdateHandler<T, V extends StatisticValue<R>, R> implement
       binnedValues.put(bin, value);
     }
     handler.handle(value, adapter, entry, rows);
+  }
+
+  private EntryVisibilityHandler<T> getVisibilityHandler(
+      final AdapterToIndexMapping indexMapping,
+      final Index index) {
+    final Set<String> usedFields = Sets.newHashSet();
+    if (statistic instanceof FieldStatistic) {
+      usedFields.add(((FieldStatistic<?>) statistic).getFieldName());
+    }
+    if (statistic.getBinningStrategy() != null) {
+      statistic.getBinningStrategy().addFieldsUsed(usedFields);
+    }
+    boolean fieldDependent = false;
+    for (final String fieldName : usedFields) {
+      // If all of the used fields are part of the common index model, we can use the default
+      // visibility
+      if ((indexMapping != null) && !adapter.isCommonIndexField(indexMapping, fieldName)) {
+        fieldDependent = true;
+        break;
+      }
+    }
+    if (fieldDependent) {
+      return new FieldDependentStatisticVisibility<>(
+          index != null ? index.getIndexModel() : null,
+          adapter,
+          usedFields.toArray(new String[usedFields.size()]));
+    }
+    return new DefaultStatisticVisibility<>();
   }
 
   @Override

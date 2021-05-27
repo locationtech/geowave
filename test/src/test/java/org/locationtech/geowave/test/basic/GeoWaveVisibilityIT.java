@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.test.basic;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
@@ -46,6 +47,7 @@ import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic.CountValue;
 import org.locationtech.geowave.core.store.statistics.binning.DataTypeBinningStrategy;
+import org.locationtech.geowave.core.store.statistics.binning.FieldValueBinningStrategy;
 import org.locationtech.geowave.core.store.statistics.index.DifferingVisibilityCountStatistic;
 import org.locationtech.geowave.core.store.statistics.index.DifferingVisibilityCountStatistic.DifferingVisibilityCountValue;
 import org.locationtech.geowave.test.GeoWaveITRunner;
@@ -541,7 +543,8 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
     final FeatureDataAdapter adapter = new FeatureDataAdapter(getType());
     final DataStore store = dataStoreOptions.createDataStore();
     store.addType(adapter, TestUtils.DEFAULT_SPATIAL_INDEX);
-    try (Writer writer = store.createWriter(adapter.getTypeName())) {
+
+    try (Writer<SimpleFeature> writer = store.createWriter(adapter.getTypeName())) {
       for (int i = 0; i < totalFeatures; i++) {
         bldr.set("a", Integer.toString(i));
         bldr.set("b", Integer.toString(i));
@@ -564,6 +567,114 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
     verifyDifferingVisibilities.accept(count);
     verifyQuery.accept(store, statsStore, internalAdapterId, false);
     verifyQuery.accept(store, statsStore, internalAdapterId, true);
+  }
+
+  @Test
+  public void testMixedVisibilityStatistics() throws IOException {
+    testMixedVisibilityStatistics(dataStoreOptions, getFieldIDFeatureVisWriter(), TOTAL_FEATURES);
+  }
+
+  static final String[] A_FIELD_VALUES = new String[] {"A_1", "A_2", "A_3"};
+  static final String[] B_FIELD_VALUES = new String[] {"B_1", "B_2", "B_3"};
+  static final String[] C_FIELD_VALUES = new String[] {"C_1", "C_2", "C_3"};
+
+  public static void testMixedVisibilityStatistics(
+      final DataStorePluginOptions dataStoreOptions,
+      final VisibilityWriter<SimpleFeature> visibilityWriter,
+      final int totalFeatures) {
+    final SimpleFeatureBuilder bldr = new SimpleFeatureBuilder(getType());
+    final FeatureDataAdapter adapter = new FeatureDataAdapter(getType());
+    final DataStore store = dataStoreOptions.createDataStore();
+    store.addType(adapter, TestUtils.DEFAULT_SPATIAL_INDEX);
+
+    // Add some statistics
+    final CountStatistic geomCount = new CountStatistic();
+    geomCount.setTag("testGeom");
+    geomCount.setTypeName(adapter.getTypeName());
+    geomCount.setBinningStrategy(new FieldValueBinningStrategy("geometry"));
+    store.addStatistic(geomCount);
+
+    final CountStatistic visCountC = new CountStatistic();
+    visCountC.setTag("testC");
+    visCountC.setTypeName(adapter.getTypeName());
+    visCountC.setBinningStrategy(new FieldValueBinningStrategy("c"));
+    store.addStatistic(visCountC);
+
+    final CountStatistic visCountAB = new CountStatistic();
+    visCountAB.setTag("testAB");
+    visCountAB.setTypeName(adapter.getTypeName());
+    visCountAB.setBinningStrategy(new FieldValueBinningStrategy("a", "b"));
+    store.addStatistic(visCountAB);
+
+    try (Writer<SimpleFeature> writer = store.createWriter(adapter.getTypeName())) {
+      for (int i = 0; i < totalFeatures; i++) {
+        bldr.set("a", A_FIELD_VALUES[i % 3]);
+        bldr.set("b", B_FIELD_VALUES[i % 3]);
+        bldr.set("c", C_FIELD_VALUES[i % 3]);
+        bldr.set("geometry", new GeometryFactory().createPoint(new Coordinate(0, 0)));
+        writer.write(bldr.buildFeature(Integer.toString(i)), visibilityWriter);
+      }
+    }
+    final DataStore dataStore = dataStoreOptions.createDataStore();
+
+    // Since each field is only visible if you provide that field ID as an authorization, each
+    // statistic should only reveal those counts if the appropriate authorization is set. Because
+    // these statistics are using a field value binning strategy, the actual bins of the statistic
+    // may reveal information that is not authorized to the user and should be hidden.
+    final CountValue countCNoAuth =
+        dataStore.aggregateStatistics(
+            StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
+                adapter.getTypeName()).tag("testC").build());
+    assertEquals(0, countCNoAuth.getValue().longValue());
+
+    // When providing the "c" auth, all values should be present
+    final CountValue countCAuth =
+        dataStore.aggregateStatistics(
+            StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
+                adapter.getTypeName()).tag("testC").addAuthorization("c").build());
+    assertEquals(totalFeatures, countCAuth.getValue().longValue());
+
+    // For the AB count statistic, the values should only be present if both "a" and "b"
+    // authorizations are provided
+    final CountValue countABNoAuth =
+        dataStore.aggregateStatistics(
+            StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
+                adapter.getTypeName()).tag("testAB").build());
+    assertEquals(0, countABNoAuth.getValue().longValue());
+
+    final CountValue countABOnlyAAuth =
+        dataStore.aggregateStatistics(
+            StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
+                adapter.getTypeName()).tag("testAB").addAuthorization("a").build());
+    assertEquals(0, countABOnlyAAuth.getValue().longValue());
+
+    final CountValue countABOnlyBAuth =
+        dataStore.aggregateStatistics(
+            StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
+                adapter.getTypeName()).tag("testAB").addAuthorization("b").build());
+    assertEquals(0, countABOnlyBAuth.getValue().longValue());
+
+    final CountValue countABAuth =
+        dataStore.aggregateStatistics(
+            StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
+                adapter.getTypeName()).tag("testAB").addAuthorization("a").addAuthorization(
+                    "b").build());
+    assertEquals(totalFeatures, countABAuth.getValue().longValue());
+
+    // It should also work if additional authorizations are provided
+    final CountValue countABCAuth =
+        dataStore.aggregateStatistics(
+            StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
+                adapter.getTypeName()).tag("testAB").addAuthorization("a").addAuthorization(
+                    "b").addAuthorization("c").build());
+    assertEquals(totalFeatures, countABCAuth.getValue().longValue());
+
+    // Since the geometry field has no visibility, no authorizations should be required
+    final CountValue countGeomNoAuth =
+        dataStore.aggregateStatistics(
+            StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
+                adapter.getTypeName()).tag("testGeom").build());
+    assertEquals(totalFeatures, countGeomNoAuth.getValue().longValue());
   }
 
   private VisibilityWriter<SimpleFeature> getFeatureVisWriter() {
@@ -636,6 +747,29 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
       }
     };
   }
+
+  private VisibilityWriter<SimpleFeature> getFieldIDFeatureVisWriter() {
+    return new VisibilityWriter<SimpleFeature>() {
+      @Override
+      public FieldVisibilityHandler<SimpleFeature, Object> getFieldVisibilityHandler(
+          final String fieldId) {
+        return new FieldVisibilityHandler<SimpleFeature, Object>() {
+
+          @Override
+          public byte[] getVisibility(
+              final SimpleFeature rowValue,
+              final String fieldId,
+              final Object fieldValue) {
+            if (fieldId.equals(SpatialField.DEFAULT_GEOMETRY_FIELD_NAME)) {
+              return new byte[] {};
+            }
+            return fieldId.getBytes();
+          }
+        };
+      }
+    };
+  }
+
 
   private static void testQueryMixed(
       final DataStore store,

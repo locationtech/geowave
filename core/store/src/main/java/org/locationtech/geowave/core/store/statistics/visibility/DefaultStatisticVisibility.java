@@ -8,8 +8,6 @@
  */
 package org.locationtech.geowave.core.store.statistics.visibility;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
@@ -18,35 +16,27 @@ import org.locationtech.geowave.core.store.flatten.BitmaskUtils;
 /**
  * This assigns the visibility of the key-value with the most-significant field bitmask (the first
  * fields in the bitmask are the indexed fields, and all indexed fields should be the default
- * visibility which should be the minimal set of visibility contraints of any field)
+ * visibility which should be the minimal set of visibility constraints of any field)
  */
-public class DefaultFieldStatisticVisibility<T> implements EntryVisibilityHandler<T> {
-  private static List<GeoWaveValue> getAllVisibilities(final GeoWaveRow... kvs) {
-    final List<GeoWaveValue> retVal = new ArrayList<>();
-    for (final GeoWaveRow kv : kvs) {
-      for (final GeoWaveValue v : kv.getFieldValues()) {
-        retVal.add(v);
-      }
-    }
-    return retVal;
-  }
+public class DefaultStatisticVisibility<T> implements EntryVisibilityHandler<T> {
 
   @Override
   public byte[] getVisibility(final T entry, final GeoWaveRow... kvs) {
-    final List<GeoWaveValue> allVis = getAllVisibilities(kvs);
-    if (allVis.size() == 1) {
-      return allVis.get(0).getVisibility();
+    if (kvs.length == 1 && kvs[0].getFieldValues().length == 1) {
+      return kvs[0].getFieldValues()[0].getVisibility();
     }
     int lowestOrdinal = Integer.MAX_VALUE;
     byte[] lowestOrdinalVisibility = null;
-    for (final GeoWaveValue v : allVis) {
-      final int pos = BitmaskUtils.getLowestFieldPosition(v.getFieldMask());
-      if (pos == 0) {
-        return v.getVisibility();
-      }
-      if (pos <= lowestOrdinal) {
-        lowestOrdinal = pos;
-        lowestOrdinalVisibility = v.getVisibility();
+    for (final GeoWaveRow kv : kvs) {
+      for (final GeoWaveValue v : kv.getFieldValues()) {
+        final int pos = BitmaskUtils.getLowestFieldPosition(v.getFieldMask());
+        if (pos == 0) {
+          return v.getVisibility();
+        }
+        if (pos <= lowestOrdinal) {
+          lowestOrdinal = pos;
+          lowestOrdinalVisibility = v.getVisibility();
+        }
       }
     }
     return lowestOrdinalVisibility;

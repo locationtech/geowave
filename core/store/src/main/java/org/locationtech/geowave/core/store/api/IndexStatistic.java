@@ -56,14 +56,6 @@ public abstract class IndexStatistic<V extends StatisticValue<?>> extends Statis
     return cachedStatisticId;
   }
 
-  /**
-   *
-   * @return
-   */
-  protected String internalUniqueId() {
-    return null;
-  }
-
   @Override
   protected int byteLength() {
     return super.byteLength()

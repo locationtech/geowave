@@ -49,6 +49,16 @@ public class BitmaskUtils {
     return false;
   }
 
+  public static boolean bitmaskOverlaps(final byte[] bitmask1, final byte[] bitmask2) {
+    final int length = Math.min(bitmask1.length, bitmask2.length);
+    for (int i = 0; i < length; i++) {
+      if ((bitmask1[i] & bitmask2[i]) != 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   /**
    * Generates a composite bitmask given a list of field positions. The composite bitmask represents
    * a true bit for every positive field position
