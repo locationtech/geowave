@@ -42,7 +42,7 @@ jobs:
               env:
                 cache-name: cache-resources
               with:
-                key: ${{ runner.os }}-other
+                key: ${{ runner.os }}-other-${{ secrets.CACHE_ID }}
                 restore-keys: |
                       ${{ runner.os }}-other
                 path: |  
@@ -99,7 +99,7 @@ jobs:
               env:
                 cache-name: cache-resources
               with:
-                key: ${{ runner.os }}-other
+                key: ${{ runner.os }}-other-${{ secrets.CACHE_ID }}
                 restore-keys: |
                       ${{ runner.os }}-other
                 path: |  
@@ -171,7 +171,7 @@ jobs:
               env:
                 cache-name: cache-resources
               with:
-                key: ${{ runner.os }}-other
+                key: ${{ runner.os }}-other-${{ secrets.CACHE_ID }}
                 restore-keys: |
                       ${{ runner.os }}-other
                 path: |  
