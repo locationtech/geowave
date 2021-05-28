@@ -44,7 +44,7 @@ jobs:
               with:
                 key: ${{ runner.os }}-other-${{ secrets.CACHE_ID }}
                 restore-keys: |
-                      ${{ runner.os }}-other
+                      ${{ runner.os }}-other-${{ secrets.CACHE_ID }}
                 path: |  
                       ~/.downloads
                       test/landsat8
@@ -101,7 +101,7 @@ jobs:
               with:
                 key: ${{ runner.os }}-other-${{ secrets.CACHE_ID }}
                 restore-keys: |
-                      ${{ runner.os }}-other
+                      ${{ runner.os }}-other-${{ secrets.CACHE_ID }}
                 path: |  
                       ~/.downloads
                       test/landsat8
@@ -173,7 +173,7 @@ jobs:
               with:
                 key: ${{ runner.os }}-other-${{ secrets.CACHE_ID }}
                 restore-keys: |
-                      ${{ runner.os }}-other
+                      ${{ runner.os }}-other-${{ secrets.CACHE_ID }}
                 path: |  
                       ~/.downloads
                       test/landsat8
