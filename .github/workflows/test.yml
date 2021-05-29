@@ -52,7 +52,7 @@ jobs:
                       test/target/temp/gdal
 
             - name: Run
-              run: ./.utility/run-tests.sh
+              run: ./.utility/retry ./.utility/run-tests.sh
 
             - name: Publish Unit Test Results
               uses: scacap/action-surefire-report@v1
@@ -109,7 +109,7 @@ jobs:
                       test/target/temp/gdal
 
             - name: Run
-              run: ./.utility/run-tests.sh
+              run: ./.utility/retry ./.utility/run-tests.sh
 
             - name: Python Test Results
               uses: scacap/action-surefire-report@v1
@@ -181,7 +181,7 @@ jobs:
                       test/target/temp/gdal
 
             - name: Run
-              run: ./.utility/run-tests.sh
+              run: ./.utility/retry ./.utility/run-tests.sh
 
             - name: Publish Integration Test ${{ matrix.profile }} Results
               uses: scacap/action-surefire-report@v1
