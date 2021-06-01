@@ -9,7 +9,6 @@
 package org.locationtech.geowave.datastore.hbase.coprocessors;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -334,37 +333,5 @@ public class HBaseBulkDeleteEndpoint extends BulkDeleteService implements Region
   @Override
   public void stop(final CoprocessorEnvironment env) throws IOException {
     // nothing to do
-  }
-
-  public static void main(final String[] args) throws Exception {
-    doRegular();
-    doReflection();
-  }
-
-  public static class A {
-    public void doSomeThing() {}
-  }
-
-  public static void doRegular() throws Exception {
-    final long start = System.currentTimeMillis();
-    final A a = new A();
-    for (int i = 0; i < 1000000; i++) {
-      a.doSomeThing();
-    }
-    System.out.println(System.currentTimeMillis() - start);
-  }
-
-  public static void doReflection() throws Exception {
-    final long start = System.currentTimeMillis();
-    System.err.println(A.class.getName());
-    final Class<?> cls =
-        Class.forName(
-            "org.locationtech.geowave.datastore.hbase.coprocessors.HBaseBulkDeleteEndpoint$A");
-    final Method m = cls.getMethod("doSomeThing");
-    final A a = new A();
-    for (int i = 0; i < 1000000; i++) {
-      m.invoke(a);
-    }
-    System.out.println(System.currentTimeMillis() - start);
   }
 }

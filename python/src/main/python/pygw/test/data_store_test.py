@@ -501,7 +501,9 @@ def test_cassandra_options():
     options.set_durable_writes(durable_writes)
     assert options.is_durable_writes() == durable_writes
     options.set_replication_factor(43)
-    assert options.get_replication_factor() == 43
+    assert options.get_replication_factor() == 43    
+    options.set_gc_grace_seconds(44)
+    assert options.get_gc_grace_seconds() == 44
     table_options = {
         "test_key_1": "test_value_1",
         "test_key_2": "test_value_2"

@@ -20,7 +20,6 @@ import javax.imageio.ImageIO;
 import javax.media.jai.Interpolation;
 import javax.media.jai.PlanarImage;
 import org.apache.commons.lang.SystemUtils;
-import org.gdal.gdal.gdal;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.geometry.GeneralEnvelope;
 import org.geotools.referencing.operation.projection.MapProjection;
@@ -118,10 +117,6 @@ public class CustomCRSLandsatIT extends AbstractGeoWaveIT {
 
   @BeforeClass
   public static void startTimer() {
-
-    // GDAL version >= 2.3.0
-    System.loadLibrary("gdalalljni");
-    gdal.AllRegister();
     startMillis = System.currentTimeMillis();
     LOGGER.warn("-----------------------------------------");
     LOGGER.warn("*                                       *");
