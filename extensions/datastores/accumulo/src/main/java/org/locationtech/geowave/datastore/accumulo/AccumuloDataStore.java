@@ -102,6 +102,11 @@ public class AccumuloDataStore extends BaseMapReduceDataStore implements Closeab
     }
   }
 
+  /**
+   * This is not a typical resource, it references a static Accumulo connector used by all DataStore
+   * instances with common connection parameters. Closing this is only recommended when the JVM no
+   * longer needs any connection to this Accumulo store with common connection parameters.
+   */
   @Override
   public void close() {
     ((AccumuloOperations) baseOperations).close();
