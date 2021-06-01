@@ -9,6 +9,7 @@
 package org.locationtech.geowave.adapter.raster;
 
 import org.locationtech.geowave.adapter.raster.adapter.ClientMergeableRasterTile;
+import org.locationtech.geowave.adapter.raster.adapter.InternalRasterDataAdapter;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.raster.adapter.RasterTile;
 import org.locationtech.geowave.adapter.raster.adapter.ServerMergeableRasterTile;
@@ -41,6 +42,6 @@ public class RasterAdapterPersistableRegistry implements PersistableRegistrySpi 
         new PersistableIdAndConstructor((short) 615, SingleAdapterServerMergeStrategy::new),
         new PersistableIdAndConstructor((short) 616, ClientMergeableRasterTile::new),
         // 617 used by RasterRegisteredIndexFieldMappers
-    };
+        new PersistableIdAndConstructor((short) 618, InternalRasterDataAdapter::new)};
   }
 }

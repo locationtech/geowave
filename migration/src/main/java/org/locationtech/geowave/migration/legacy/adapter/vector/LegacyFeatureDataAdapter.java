@@ -15,8 +15,6 @@ import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.referencing.CRS;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration;
-import org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection;
 import org.locationtech.geowave.adapter.vector.util.FeatureDataUtils;
 import org.locationtech.geowave.adapter.vector.util.SimpleFeatureUserDataConfigurationSet;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
@@ -26,8 +24,12 @@ import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
+import org.locationtech.geowave.core.store.data.visibility.JsonFieldLevelVisibilityHandler;
+import org.locationtech.geowave.core.store.data.visibility.UnconstrainedVisibilityHandler;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
@@ -85,6 +87,38 @@ public class LegacyFeatureDataAdapter implements DataTypeAdapter<SimpleFeature> 
     return updatedAdapter;
   }
 
+  public VisibilityHandler getVisibilityHandler() {
+    VisibilityHandler visibilityHandler = new UnconstrainedVisibilityHandler();
+    for (final AttributeDescriptor attrDesc : persistedFeatureType.getAttributeDescriptors()) {
+      if (attrDesc.getUserData().containsKey("visibility")
+          && Boolean.TRUE.equals(attrDesc.getUserData().get("visibility"))) {
+        final Object visMgr = persistedFeatureType.getUserData().get("visibilityManagerClass");
+        if (visMgr == null) {
+          // If no visibility manager is present, then can't configure
+          break;
+        }
+        if (visMgr.toString().equals(
+            "org.locationtech.geowave.adapter.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement")
+            || visMgr.toString().equals(
+                "org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration")) {
+          // Pre 2.0, this was the only configurable visibility manager supported by GeoWave
+          visibilityHandler = new JsonFieldLevelVisibilityHandler(attrDesc.getLocalName());
+        } else {
+          // Custom visibility management classes can't be migrated
+          LOGGER.warn(
+              "Custom visibility manager '"
+                  + visMgr
+                  + "' is not supported by the migration, a default unconstrained visibility handler will be used.");
+        }
+      }
+    }
+    return visibilityHandler;
+  }
+
+  public SimpleFeatureType getFeatureType() {
+    return persistedFeatureType;
+  }
+
   @Override
   public byte[] toBinary() {
     final String encodedType = DataUtilities.encodeType(persistedFeatureType);
@@ -101,10 +135,7 @@ public class LegacyFeatureDataAdapter implements DataTypeAdapter<SimpleFeature> 
         new TimeDescriptorConfiguration(persistedFeatureType));
     userDataConfiguration.addConfigurations(
         typeName,
-        new SimpleFeatureStatsConfigurationCollection(persistedFeatureType));
-    userDataConfiguration.addConfigurations(
-        typeName,
-        new VisibilityConfiguration(persistedFeatureType));
+        new LegacyVisibilityConfiguration(persistedFeatureType));
     final byte[] attrBytes = userDataConfiguration.toBinary();
     final String namespace = reprojectedFeatureType.getName().getNamespaceURI();
 
@@ -217,13 +248,9 @@ public class LegacyFeatureDataAdapter implements DataTypeAdapter<SimpleFeature> 
 
         final SimpleFeatureUserDataConfigurationSet userDataConfiguration =
             new SimpleFeatureUserDataConfigurationSet();
-        userDataConfiguration.addConfigurations(typeName, new TimeDescriptorConfiguration(myType));
-        userDataConfiguration.addConfigurations(
-            typeName,
-            new SimpleFeatureStatsConfigurationCollection(myType));
-        userDataConfiguration.addConfigurations(typeName, new VisibilityConfiguration(myType));
         userDataConfiguration.fromBinary(attrBytes);
         userDataConfiguration.updateType(myType);
+        persistedFeatureType = myType;
         updatedAdapter = new FeatureDataAdapter(myType);
       } catch (final SchemaException e) {
         LOGGER.error("Unable to deserialized feature type", e);

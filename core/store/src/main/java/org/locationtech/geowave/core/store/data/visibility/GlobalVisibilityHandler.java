@@ -9,29 +9,38 @@
 package org.locationtech.geowave.core.store.data.visibility;
 
 import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 
 /**
  * Basic implementation of a visibility handler where the decision of visibility is not determined
  * on a per field or even per row basis, but rather a single visibility is globally assigned for
  * every field written.
- *
- * @param <RowType>
- * @param <FieldType>
  */
-public class GlobalVisibilityHandler<RowType, FieldType> implements
-    FieldVisibilityHandler<RowType, FieldType> {
-  private final String globalVisibility;
+public class GlobalVisibilityHandler implements VisibilityHandler {
+  private String globalVisibility;
+
+  public GlobalVisibilityHandler() {}
 
   public GlobalVisibilityHandler(final String globalVisibility) {
     this.globalVisibility = globalVisibility;
   }
 
   @Override
-  public byte[] getVisibility(
-      final RowType rowValue,
-      final String fieldName,
-      final FieldType fieldValue) {
+  public <T> String getVisibility(
+      final DataTypeAdapter<T> adapter,
+      final T rowValue,
+      final String fieldName) {
+    return globalVisibility;
+  }
+
+  @Override
+  public byte[] toBinary() {
     return StringUtils.stringToBinary(globalVisibility);
+  }
+
+  @Override
+  public void fromBinary(byte[] bytes) {
+    this.globalVisibility = StringUtils.stringFromBinary(bytes);
   }
 }

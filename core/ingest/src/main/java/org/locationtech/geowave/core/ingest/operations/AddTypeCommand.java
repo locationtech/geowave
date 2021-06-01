@@ -63,7 +63,7 @@ public class AddTypeCommand extends ServiceEnabledCommand<Void> {
   private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate
-  private VisibilityOptions ingestOptions = new VisibilityOptions();
+  private VisibilityOptions visibilityOptions = new VisibilityOptions();
 
   @ParametersDelegate
   private LocalInputCommandLineOptions localInputOptions = new LocalInputCommandLineOptions();
@@ -111,12 +111,12 @@ public class AddTypeCommand extends ServiceEnabledCommand<Void> {
     parameters.add(commaDelimitedIndexes);
   }
 
-  public VisibilityOptions getIngestOptions() {
-    return ingestOptions;
+  public VisibilityOptions getVisibilityOptions() {
+    return visibilityOptions;
   }
 
-  public void setIngestOptions(final VisibilityOptions ingestOptions) {
-    this.ingestOptions = ingestOptions;
+  public void setVisibilityOptions(final VisibilityOptions visibilityOptions) {
+    this.visibilityOptions = visibilityOptions;
   }
 
   public LocalInputCommandLineOptions getLocalInputOptions() {
@@ -171,7 +171,11 @@ public class AddTypeCommand extends ServiceEnabledCommand<Void> {
       final DataStore dataStore = inputStoreOptions.createDataStore();
       final Index[] indices = inputIndices.toArray(new Index[inputIndices.size()]);
       adapters.forEach(adapter -> {
-        dataStore.addType(adapter, indices);
+        dataStore.addType(
+            adapter,
+            visibilityOptions.getConfiguredVisibilityHandler(),
+            Lists.newArrayList(),
+            indices);
         params.getConsole().println("Added type: " + adapter.getTypeName());
       });
     } catch (IOException e) {
@@ -195,10 +199,9 @@ public class AddTypeCommand extends ServiceEnabledCommand<Void> {
 
       localFileIngestPlugins.put(pluginEntry.getKey(), pluginEntry.getValue());
 
-      Arrays.stream(pluginEntry.getValue().getDataAdapters(ingestOptions.getVisibility())).forEach(
-          adapter -> {
-            adapters.put(adapter.getTypeName(), adapter);
-          });
+      Arrays.stream(pluginEntry.getValue().getDataAdapters()).forEach(adapter -> {
+        adapters.put(adapter.getTypeName(), adapter);
+      });
     }
 
     Properties configProperties = null;
@@ -223,8 +226,7 @@ public class AddTypeCommand extends ServiceEnabledCommand<Void> {
         new DataAdapterFileVisitor(
             localFileIngestPlugins,
             localInputOptions.getExtensions(),
-            adapters,
-            ingestOptions.getVisibility());
+            adapters);
     Files.walkFileTree(path, fileURLs);
 
     return Lists.newArrayList(adapters.values());
@@ -240,13 +242,11 @@ public class AddTypeCommand extends ServiceEnabledCommand<Void> {
 
     private final List<PluginVisitor<LocalFileIngestPlugin<?>>> pluginVisitors;
     private final Map<String, DataTypeAdapter<?>> adapters;
-    private final String globalVisibility;
 
     public DataAdapterFileVisitor(
         final Map<String, LocalFileIngestPlugin<?>> localPlugins,
         final String[] userExtensions,
-        final Map<String, DataTypeAdapter<?>> adapters,
-        final String globalVisibility) {
+        final Map<String, DataTypeAdapter<?>> adapters) {
       pluginVisitors = new ArrayList<>(localPlugins.size());
       for (final Entry<String, LocalFileIngestPlugin<?>> localPluginBase : localPlugins.entrySet()) {
         pluginVisitors.add(
@@ -256,7 +256,6 @@ public class AddTypeCommand extends ServiceEnabledCommand<Void> {
                 userExtensions));
       }
       this.adapters = adapters;
-      this.globalVisibility = globalVisibility;
     }
 
     @Override
@@ -277,11 +276,9 @@ public class AddTypeCommand extends ServiceEnabledCommand<Void> {
       final URL file = path.toUri().toURL();
       for (final PluginVisitor<LocalFileIngestPlugin<?>> visitor : pluginVisitors) {
         if (visitor.supportsFile(file)) {
-          Arrays.stream(
-              visitor.getLocalPluginBase().getDataAdapters(file, globalVisibility)).forEach(
-                  adapter -> {
-                    adapters.put(adapter.getTypeName(), adapter);
-                  });
+          Arrays.stream(visitor.getLocalPluginBase().getDataAdapters(file)).forEach(adapter -> {
+            adapters.put(adapter.getTypeName(), adapter);
+          });
         }
       }
       return FileVisitResult.CONTINUE;

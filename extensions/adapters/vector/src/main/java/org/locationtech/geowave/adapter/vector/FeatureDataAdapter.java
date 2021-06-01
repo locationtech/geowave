@@ -20,8 +20,6 @@ import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.referencing.CRS;
-import org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration;
-import org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection;
 import org.locationtech.geowave.adapter.vector.util.FeatureDataUtils;
 import org.locationtech.geowave.adapter.vector.util.SimpleFeatureUserDataConfigurationSet;
 import org.locationtech.geowave.core.geotime.adapter.SpatialFieldDescriptor;
@@ -61,27 +59,15 @@ import com.beust.jcommander.internal.Lists;
 
 /**
  * This data adapter will handle all reading/writing concerns for storing and retrieving GeoTools
- * SimpleFeature objects to and from a GeoWave persistent store in Accumulo. <br> <br> If the
- * implementor needs to write rows with particular visibility, this can be done by providing a
- * FieldVisibilityHandler to a constructor or a VisibilityManagement to a constructor. When using
- * VisibilityManagement, the feature attribute to contain the visibility meta-data is, by default,
- * called GEOWAVE_VISIBILITY. This can be overridden by setting the UserData property 'visibility'
- * to Boolean.TRUE for the feature attribute that describes the attribute that contains the
- * visibility meta-data. persistedType.getDescriptor("someAttributeName").getUserData().put(
- * "visibility", Boolean.TRUE)<br> <br> The adapter will use the SimpleFeature's default geometry
- * for spatial indexing.<br> <br> The adaptor will use the first temporal attribute (a Calendar or
- * Date object) as the timestamp of a temporal index.<br> <br> If the feature type contains a
- * UserData property 'time' for a specific time attribute with Boolean.TRUE, then the attribute is
- * used as the timestamp of a temporal index.<br> <br> If the feature type contains UserData
- * properties 'start' and 'end' for two different time attributes with value Boolean.TRUE, then the
- * attributes are used for a range index.<br> <br> If the feature type contains a UserData property
- * 'time' for *all* time attributes with Boolean.FALSE, then a temporal index is not used.<br> <br>
- * Statistics configurations are maintained in UserData. Each attribute may have a UserData property
- * called 'stats'. The associated value is an instance of
- * {@link org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection} . The
- * collection maintains a set of {@link org.locationtech.geowave.adapter.vector.stats.StatsConfig},
- * one for each type of statistic. The default statistics for geometry and temporal constraints
- * cannot be changed, as they are critical components to the efficiency of query processing.
+ * SimpleFeature objects to and from a GeoWave persistent store. <br> <br> The adapter will use the
+ * SimpleFeature's default geometry for spatial indexing.<br> <br> The adaptor will use the first
+ * temporal attribute (a Calendar or Date object) as the timestamp of a temporal index.<br> <br> If
+ * the feature type contains a UserData property 'time' for a specific time attribute with
+ * Boolean.TRUE, then the attribute is used as the timestamp of a temporal index.<br> <br> If the
+ * feature type contains UserData properties 'start' and 'end' for two different time attributes
+ * with value Boolean.TRUE, then the attributes are used for a range index.<br> <br> If the feature
+ * type contains a UserData property 'time' for *all* time attributes with Boolean.FALSE, then a
+ * temporal index is not used.
  */
 public class FeatureDataAdapter implements
     GeotoolsFeatureDataAdapter<SimpleFeature>,
@@ -405,10 +391,6 @@ public class FeatureDataAdapter implements
     final SimpleFeatureUserDataConfigurationSet userDataConfiguration =
         new SimpleFeatureUserDataConfigurationSet();
     userDataConfiguration.addConfigurations(typeName, new TimeDescriptorConfiguration(featureType));
-    userDataConfiguration.addConfigurations(
-        typeName,
-        new SimpleFeatureStatsConfigurationCollection(featureType));
-    userDataConfiguration.addConfigurations(typeName, new VisibilityConfiguration(featureType));
     final byte[] attrBytes = userDataConfiguration.toBinary();
     final String namespace = featureType.getName().getNamespaceURI();
 
@@ -490,11 +472,6 @@ public class FeatureDataAdapter implements
 
       final SimpleFeatureUserDataConfigurationSet userDataConfiguration =
           new SimpleFeatureUserDataConfigurationSet();
-      userDataConfiguration.addConfigurations(typeName, new TimeDescriptorConfiguration(myType));
-      userDataConfiguration.addConfigurations(
-          typeName,
-          new SimpleFeatureStatsConfigurationCollection(myType));
-      userDataConfiguration.addConfigurations(typeName, new VisibilityConfiguration(myType));
       userDataConfiguration.fromBinary(attrBytes);
       userDataConfiguration.updateType(myType);
       setFeatureType(myType);

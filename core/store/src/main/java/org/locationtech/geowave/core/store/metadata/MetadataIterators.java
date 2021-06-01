@@ -15,9 +15,9 @@ import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
+import org.locationtech.geowave.core.store.data.visibility.VisibilityExpression;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
-import org.locationtech.geowave.core.store.util.VisibilityExpression;
 import com.google.common.collect.Iterators;
 
 public class MetadataIterators {

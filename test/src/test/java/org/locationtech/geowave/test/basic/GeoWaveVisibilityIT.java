@@ -14,6 +14,8 @@ import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import org.apache.commons.lang3.tuple.Pair;
@@ -31,20 +33,22 @@ import org.locationtech.geowave.adapter.raster.RasterUtils;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.store.dimension.SpatialField;
 import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.DataStoreProperty;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.api.AggregationQueryBuilder;
 import org.locationtech.geowave.core.store.api.BinConstraints;
 import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.api.StatisticQueryBuilder;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.api.Writer;
+import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.data.VisibilityWriter;
-import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
+import org.locationtech.geowave.core.store.data.visibility.FieldMappedVisibilityHandler;
+import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic.CountValue;
@@ -63,6 +67,9 @@ import org.locationtech.jts.geom.Point;
 import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import jersey.repackaged.com.google.common.collect.Iterators;
 
 @RunWith(GeoWaveITRunner.class)
 public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
@@ -540,10 +547,13 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
 
   public static void testIngestAndQueryVisibilityFields(
       final DataStorePluginOptions dataStoreOptions,
-      final VisibilityWriter<SimpleFeature> visibilityWriter,
+      final VisibilityHandler visibilityHandler,
       final Consumer<DifferingVisibilityCountValue> verifyDifferingVisibilities,
       final BiConsumer<Pair<DataStore, DataStatisticsStore>, Pair<Short, Boolean>> verifyQuery,
       final int totalFeatures) {
+    // Specify visibility at the global level
+    dataStoreOptions.createPropertyStore().setProperty(
+        new DataStoreProperty(BaseDataStoreUtils.GLOBAL_VISIBILITY_PROPERTY, visibilityHandler));
     final SimpleFeatureBuilder bldr = new SimpleFeatureBuilder(getType());
     final FeatureDataAdapter adapter = new FeatureDataAdapter(getType());
     final DataStore store = dataStoreOptions.createDataStore();
@@ -554,7 +564,7 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
         bldr.set("b", Integer.toString(i));
         bldr.set("c", Integer.toString(i));
         bldr.set("geometry", new GeometryFactory().createPoint(new Coordinate(0, 0)));
-        writer.write(bldr.buildFeature(Integer.toString(i)), visibilityWriter);
+        writer.write(bldr.buildFeature(Integer.toString(i)), visibilityHandler);
       }
     }
     final DataStore dataStore = dataStoreOptions.createDataStore();
@@ -573,6 +583,67 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
     verifyQuery.accept(Pair.of(store, statsStore), Pair.of(internalAdapterId, true));
   }
 
+
+  @Test
+  public void testMixedIndexFieldVisibility() {
+    testMixedIndexFieldVisibility(
+        dataStoreOptions,
+        getMixedIndexFieldFeatureVisWriter(),
+        TOTAL_FEATURES);
+  }
+
+  public static void testMixedIndexFieldVisibility(
+      final DataStorePluginOptions dataStoreOptions,
+      final VisibilityHandler visibilityHandler,
+      final int totalFeatures) {
+    final SimpleFeatureBuilder bldr = new SimpleFeatureBuilder(getType());
+    final FeatureDataAdapter adapter = new FeatureDataAdapter(getType());
+    final DataStore store = dataStoreOptions.createDataStore();
+    store.addType(adapter, TestUtils.DEFAULT_SPATIAL_TEMPORAL_INDEX);
+
+    // Specify visibility at the writer level
+    try (Writer<SimpleFeature> writer =
+        store.createWriter(adapter.getTypeName(), visibilityHandler)) {
+      for (int i = 0; i < totalFeatures; i++) {
+        bldr.set("t", new Date());
+        bldr.set("a", A_FIELD_VALUES[i % 3]);
+        bldr.set("b", B_FIELD_VALUES[i % 3]);
+        bldr.set("c", C_FIELD_VALUES[i % 3]);
+        bldr.set("geometry", new GeometryFactory().createPoint(new Coordinate(0, 0)));
+        writer.write(bldr.buildFeature(Integer.toString(i)));
+      }
+    }
+    final DataStore dataStore = dataStoreOptions.createDataStore();
+
+    try (CloseableIterator<?> it =
+        dataStore.query(
+            QueryBuilder.newBuilder().addTypeName(adapter.getTypeName()).addAuthorization(
+                "g").build())) {
+      // Geometry and time both have their own visibility, so without providing the authorization
+      // for both, nothing should be visible.
+      Assert.assertFalse(it.hasNext());
+    }
+
+    try (CloseableIterator<?> it =
+        dataStore.query(
+            QueryBuilder.newBuilder().addTypeName(adapter.getTypeName()).addAuthorization(
+                "t").build())) {
+      // Geometry and time both have their own visibility, so without providing the authorization
+      // for both, nothing should be visible.
+      Assert.assertFalse(it.hasNext());
+    }
+
+    try (CloseableIterator<?> it =
+        dataStore.query(
+            QueryBuilder.newBuilder().addTypeName(adapter.getTypeName()).addAuthorization(
+                "g").addAuthorization("t").build())) {
+      // When the authorization for both time and geometry are provided, everything should be
+      // visible
+      Assert.assertTrue(it.hasNext());
+      assertEquals(totalFeatures, Iterators.size(it));
+    }
+  }
+
   @Test
   public void testMixedVisibilityStatistics() throws IOException {
     testMixedVisibilityStatistics(dataStoreOptions, getFieldIDFeatureVisWriter(), TOTAL_FEATURES);
@@ -584,31 +655,34 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
 
   public static void testMixedVisibilityStatistics(
       final DataStorePluginOptions dataStoreOptions,
-      final VisibilityWriter<SimpleFeature> visibilityWriter,
+      final VisibilityHandler visibilityHandler,
       final int totalFeatures) {
     final SimpleFeatureBuilder bldr = new SimpleFeatureBuilder(getType());
     final FeatureDataAdapter adapter = new FeatureDataAdapter(getType());
     final DataStore store = dataStoreOptions.createDataStore();
-    store.addType(adapter, TestUtils.DEFAULT_SPATIAL_INDEX);
 
     // Add some statistics
     final CountStatistic geomCount = new CountStatistic();
     geomCount.setTag("testGeom");
     geomCount.setTypeName(adapter.getTypeName());
     geomCount.setBinningStrategy(new FieldValueBinningStrategy("geometry"));
-    store.addStatistic(geomCount);
 
     final CountStatistic visCountC = new CountStatistic();
     visCountC.setTag("testC");
     visCountC.setTypeName(adapter.getTypeName());
     visCountC.setBinningStrategy(new FieldValueBinningStrategy("c"));
-    store.addStatistic(visCountC);
 
     final CountStatistic visCountAB = new CountStatistic();
     visCountAB.setTag("testAB");
     visCountAB.setTypeName(adapter.getTypeName());
     visCountAB.setBinningStrategy(new FieldValueBinningStrategy("a", "b"));
-    store.addStatistic(visCountAB);
+
+    // Specify visibility at the type level
+    store.addType(
+        adapter,
+        visibilityHandler,
+        Lists.newArrayList(geomCount, visCountC, visCountAB),
+        TestUtils.DEFAULT_SPATIAL_INDEX);
 
     try (Writer<SimpleFeature> writer = store.createWriter(adapter.getTypeName())) {
       for (int i = 0; i < totalFeatures; i++) {
@@ -616,24 +690,23 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
         bldr.set("b", B_FIELD_VALUES[i % 3]);
         bldr.set("c", C_FIELD_VALUES[i % 3]);
         bldr.set("geometry", new GeometryFactory().createPoint(new Coordinate(0, 0)));
-        writer.write(bldr.buildFeature(Integer.toString(i)), visibilityWriter);
+        writer.write(bldr.buildFeature(Integer.toString(i)));
       }
     }
-    final DataStore dataStore = dataStoreOptions.createDataStore();
 
     // Since each field is only visible if you provide that field ID as an authorization, each
     // statistic should only reveal those counts if the appropriate authorization is set. Because
     // these statistics are using a field value binning strategy, the actual bins of the statistic
     // may reveal information that is not authorized to the user and should be hidden.
     final CountValue countCNoAuth =
-        dataStore.aggregateStatistics(
+        store.aggregateStatistics(
             StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
                 adapter.getTypeName()).tag("testC").build());
     assertEquals(0, countCNoAuth.getValue().longValue());
 
     // When providing the "c" auth, all values should be present
     final CountValue countCAuth =
-        dataStore.aggregateStatistics(
+        store.aggregateStatistics(
             StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
                 adapter.getTypeName()).tag("testC").addAuthorization("c").build());
     assertEquals(totalFeatures, countCAuth.getValue().longValue());
@@ -641,25 +714,25 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
     // For the AB count statistic, the values should only be present if both "a" and "b"
     // authorizations are provided
     final CountValue countABNoAuth =
-        dataStore.aggregateStatistics(
+        store.aggregateStatistics(
             StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
                 adapter.getTypeName()).tag("testAB").build());
     assertEquals(0, countABNoAuth.getValue().longValue());
 
     final CountValue countABOnlyAAuth =
-        dataStore.aggregateStatistics(
+        store.aggregateStatistics(
             StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
                 adapter.getTypeName()).tag("testAB").addAuthorization("a").build());
     assertEquals(0, countABOnlyAAuth.getValue().longValue());
 
     final CountValue countABOnlyBAuth =
-        dataStore.aggregateStatistics(
+        store.aggregateStatistics(
             StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
                 adapter.getTypeName()).tag("testAB").addAuthorization("b").build());
     assertEquals(0, countABOnlyBAuth.getValue().longValue());
 
     final CountValue countABAuth =
-        dataStore.aggregateStatistics(
+        store.aggregateStatistics(
             StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
                 adapter.getTypeName()).tag("testAB").addAuthorization("a").addAuthorization(
                     "b").build());
@@ -667,7 +740,7 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
 
     // It should also work if additional authorizations are provided
     final CountValue countABCAuth =
-        dataStore.aggregateStatistics(
+        store.aggregateStatistics(
             StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
                 adapter.getTypeName()).tag("testAB").addAuthorization("a").addAuthorization(
                     "b").addAuthorization("c").build());
@@ -675,103 +748,85 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
 
     // Since the geometry field has no visibility, no authorizations should be required
     final CountValue countGeomNoAuth =
-        dataStore.aggregateStatistics(
+        store.aggregateStatistics(
             StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
                 adapter.getTypeName()).tag("testGeom").build());
     assertEquals(totalFeatures, countGeomNoAuth.getValue().longValue());
   }
 
-  private VisibilityWriter<SimpleFeature> getFeatureVisWriter() {
-    return new VisibilityWriter<SimpleFeature>() {
-      @Override
-      public FieldVisibilityHandler<SimpleFeature, Object> getFieldVisibilityHandler(
-          final String fieldId) {
-        return new FieldVisibilityHandler<SimpleFeature, Object>() {
-
-          @Override
-          public byte[] getVisibility(
-              final SimpleFeature rowValue,
-              final String fieldId,
-              final Object fieldValue) {
-
-            final boolean isGeom = fieldId.equals(SpatialField.DEFAULT_GEOMETRY_FIELD_NAME);
-            final int fieldValueInt;
-            if (isGeom) {
-              fieldValueInt = Integer.parseInt(rowValue.getID());
-            } else {
-              fieldValueInt = Integer.parseInt(fieldValue.toString());
-            }
-            // just make half of them varied and
-            // half of them the same
-            if ((fieldValueInt % 2) == 0) {
-              if (isGeom) {
-                return new byte[] {};
-              }
-              return fieldId.getBytes();
-            } else {
-              // of the ones that are the same,
-              // make some no bytes, some a, some
-              // b, and some c
-              final int switchValue = (fieldValueInt / 2) % 4;
-              switch (switchValue) {
-                case 0:
-                  return new ByteArray("a").getBytes();
-
-                case 1:
-                  return new ByteArray("b").getBytes();
-
-                case 2:
-                  return new ByteArray("c").getBytes();
-
-                case 3:
-                default:
-                  return new byte[] {};
-              }
-            }
-          }
-        };
-      }
-    };
+  private VisibilityHandler getFeatureVisWriter() {
+    return new TestFieldVisibilityHandler();
   }
 
-  private VisibilityWriter<GridCoverage> getRasterVisWriter(final String visExpression) {
-    return new VisibilityWriter<GridCoverage>() {
-      @Override
-      public FieldVisibilityHandler<GridCoverage, Object> getFieldVisibilityHandler(
-          final String fieldId) {
-        return new FieldVisibilityHandler<GridCoverage, Object>() {
-          @Override
-          public byte[] getVisibility(
-              final GridCoverage rowValue,
-              final String fieldId,
-              final Object fieldValue) {
-            return new ByteArray(visExpression).getBytes();
-          }
-        };
+  public static class TestFieldVisibilityHandler implements VisibilityHandler {
+
+    @Override
+    public byte[] toBinary() {
+      return new byte[0];
+    }
+
+    @Override
+    public void fromBinary(byte[] bytes) {}
+
+    @Override
+    public <T> String getVisibility(DataTypeAdapter<T> adapter, T entry, String fieldName) {
+      final boolean isGeom = fieldName.equals("geometry");
+      final int fieldValueInt;
+      if (isGeom) {
+        fieldValueInt = Integer.parseInt(((SimpleFeature) entry).getID());
+      } else {
+        fieldValueInt = Integer.parseInt(adapter.getFieldValue(entry, fieldName).toString());
       }
-    };
+      // just make half of them varied and
+      // half of them the same
+      if ((fieldValueInt % 2) == 0) {
+        if (isGeom) {
+          return "";
+        }
+        return fieldName;
+      } else {
+        // of the ones that are the same,
+        // make some no bytes, some a, some
+        // b, and some c
+        final int switchValue = (fieldValueInt / 2) % 4;
+        switch (switchValue) {
+          case 0:
+            return "a";
+
+          case 1:
+            return "b";
+
+          case 2:
+            return "c";
+
+          case 3:
+          default:
+            return "";
+        }
+      }
+    }
+
   }
 
-  private VisibilityWriter<SimpleFeature> getFieldIDFeatureVisWriter() {
-    return new VisibilityWriter<SimpleFeature>() {
-      @Override
-      public FieldVisibilityHandler<SimpleFeature, Object> getFieldVisibilityHandler(
-          final String fieldId) {
-        return new FieldVisibilityHandler<SimpleFeature, Object>() {
+  private VisibilityHandler getRasterVisWriter(final String visExpression) {
+    return new GlobalVisibilityHandler(visExpression);
+  }
 
-          @Override
-          public byte[] getVisibility(
-              final SimpleFeature rowValue,
-              final String fieldId,
-              final Object fieldValue) {
-            if (fieldId.equals(SpatialField.DEFAULT_GEOMETRY_FIELD_NAME)) {
-              return new byte[] {};
-            }
-            return fieldId.getBytes();
-          }
-        };
-      }
-    };
+  private VisibilityHandler getFieldIDFeatureVisWriter() {
+    final Map<String, String> fieldVisibilities = Maps.newHashMap();
+    fieldVisibilities.put("t", "t");
+    fieldVisibilities.put("a", "a");
+    fieldVisibilities.put("b", "b");
+    fieldVisibilities.put("c", "c");
+    fieldVisibilities.put("geometry", "");
+    return new FieldMappedVisibilityHandler(fieldVisibilities);
+  }
+
+  private VisibilityHandler getMixedIndexFieldFeatureVisWriter() {
+    final Map<String, String> fieldVisibilities = Maps.newHashMap();
+    fieldVisibilities.put("t", "t");
+    fieldVisibilities.put("geometry", "g");
+    return new FieldMappedVisibilityHandler(fieldVisibilities);
   }
 
 
@@ -909,6 +964,7 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
     final SimpleFeatureTypeBuilder bldr = new SimpleFeatureTypeBuilder();
     bldr.setName("testvis");
     final AttributeTypeBuilder attributeTypeBuilder = new AttributeTypeBuilder();
+    bldr.add(attributeTypeBuilder.binding(Date.class).buildDescriptor("t"));
     bldr.add(attributeTypeBuilder.binding(String.class).buildDescriptor("a"));
     bldr.add(attributeTypeBuilder.binding(String.class).buildDescriptor("b"));
     bldr.add(attributeTypeBuilder.binding(String.class).buildDescriptor("c"));

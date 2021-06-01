@@ -31,5 +31,14 @@ This command will ingest and convert OSM data from HDFS to GeoWave.
 *$$*$$ -t, --type*::
   Mapper type - one of node, way, or relation.
 
-*-v, --visibility*::
-  The visibility of the data ingested (optional; default is 'public').
+*-v, --visibility* _<visibility>_::
+  The global visibility of the data ingested (optional; if not specified, the data will be unrestricted)
+  
+*-fv, --fieldVisibility* _<visibility>_::
+  Specify the visibility of a specific field in the format `<fieldName>:<visibility>`.  This option can be specified multiple times for different fields.
+
+*-va, --visibilityAttribute* _<field>_::
+  Specify a field that contains visibility information for the whole row.  If specified, any field visibilities defined by `-fv` will be ignored.
+  
+*--jsonVisibilityAttribute*::
+  If specified, the value of the visibility field defined by `-va` will be treated as a JSON object with keys that represent fields and values that represent their visibility.

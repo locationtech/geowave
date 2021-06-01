@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="7.0.12" transformSequenceNumber="7">
-  <directoryPresets config="../../../extensions/datastores/filesystem/target" />
+  <directoryPresets config="../../../extensions/datastores/accumulo/target" />
   <application name="GeoWave" distributionSourceDir="" applicationId="5520-1479-3644-9667" mediaDir="../../target/install4j-output" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="geowave" publisher="" publisherWeb="" version="1.2.0" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" macVolumeId="54e94e574843f5f8" javaMinVersion="1.8" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
       <principalLanguage id="en" customLocalizationFile="" />
@@ -113,7 +113,7 @@
       <dirEntry mountPoint="164" file="../../../extensions/datastores/redis/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
         <exclude />
       </dirEntry>
-      <dirEntry mountPoint="165" file="../../../extensions/datastores/accumulo/target/munged/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+      <dirEntry mountPoint="165" file="../../../extensions/datastores/accumulo/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
         <exclude />
       </dirEntry>
       <dirEntry mountPoint="166" file="../../../extensions/datastores/bigtable/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">

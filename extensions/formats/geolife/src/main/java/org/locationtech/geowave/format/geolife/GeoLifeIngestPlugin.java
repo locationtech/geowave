@@ -137,8 +137,7 @@ public class GeoLifeIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroW
   @Override
   protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
       final AvroWholeFile hfile,
-      final String[] indexNames,
-      final String globalVisibility) {
+      final String[] indexNames) {
 
     final List<GeoWaveData<SimpleFeature>> featureData = new ArrayList<>();
 

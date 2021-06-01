@@ -27,13 +27,13 @@ import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 class IntermediaryWriteEntryInfo {
   public static class FieldInfo<T> {
     private final String fieldName;
-    private final byte[] visibility;
+    private final String visibility;
     private final byte[] writtenValue;
 
-    public FieldInfo(final String fieldName, final byte[] writtenValue, final byte[] visibility) {
+    public FieldInfo(final String fieldName, final byte[] writtenValue, final String visibility) {
       this.fieldName = fieldName;
       this.writtenValue = writtenValue;
-      this.visibility = visibility;
+      this.visibility = visibility == null ? "" : visibility;
     }
 
     public String getFieldId() {
@@ -44,7 +44,7 @@ class IntermediaryWriteEntryInfo {
       return writtenValue;
     }
 
-    public byte[] getVisibility() {
+    public String getVisibility() {
       return visibility;
     }
   }

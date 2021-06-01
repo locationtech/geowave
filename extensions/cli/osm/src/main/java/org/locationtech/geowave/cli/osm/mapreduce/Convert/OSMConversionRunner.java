@@ -95,10 +95,10 @@ public class OSMConversionRunner extends Configured implements Tool {
     job.getConfiguration().set("osm_mapping", ingestOptions.getMappingContents());
     job.getConfiguration().set("arguments", ingestOptions.serializeToString());
 
-    if (ingestOptions.getVisibilityOptions().getVisibility() != null) {
+    if (ingestOptions.getVisibilityOptions().getGlobalVisibility() != null) {
       job.getConfiguration().set(
           AbstractMapReduceIngest.GLOBAL_VISIBILITY_KEY,
-          ingestOptions.getVisibilityOptions().getVisibility());
+          ingestOptions.getVisibilityOptions().getGlobalVisibility());
     }
 
     // input format
@@ -114,7 +114,7 @@ public class OSMConversionRunner extends Configured implements Tool {
             accumuloOptions.getZookeeper()));
     AbstractInputFormat.setScanAuthorizations(
         job,
-        new Authorizations(ingestOptions.getVisibilityOptions().getVisibility()));
+        new Authorizations(ingestOptions.getVisibilityOptions().getGlobalVisibility()));
 
     final IteratorSetting is = new IteratorSetting(50, "WholeRow", WholeRowIterator.class);
     InputFormatBase.addIterator(job, is);

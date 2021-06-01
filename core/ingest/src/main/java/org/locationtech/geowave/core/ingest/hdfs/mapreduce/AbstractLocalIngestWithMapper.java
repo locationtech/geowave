@@ -48,10 +48,9 @@ public abstract class AbstractLocalIngestWithMapper<T> extends AbstractStageWhol
   @Override
   public CloseableIterator<GeoWaveData<T>> toGeoWaveData(
       final URL input,
-      final String[] indexNames,
-      final String globalVisibility) {
+      final String[] indexNames) {
     try (final InputStream inputStream = input.openStream()) {
-      return toGeoWaveDataInternal(inputStream, indexNames, globalVisibility);
+      return toGeoWaveDataInternal(inputStream, indexNames);
     } catch (final IOException e) {
       LOGGER.warn("Cannot open file, unable to ingest", e);
     }
@@ -60,8 +59,7 @@ public abstract class AbstractLocalIngestWithMapper<T> extends AbstractStageWhol
 
   protected abstract CloseableIterator<GeoWaveData<T>> toGeoWaveDataInternal(
       final InputStream file,
-      final String[] indexNames,
-      final String globalVisibility);
+      final String[] indexNames);
 
   @Override
   public IngestWithReducer<AvroWholeFile, ?, ?, T> ingestWithReducer() {
@@ -78,17 +76,16 @@ public abstract class AbstractLocalIngestWithMapper<T> extends AbstractStageWhol
     }
 
     @Override
-    public DataTypeAdapter<T>[] getDataAdapters(final String globalVisibility) {
-      return parentPlugin.getDataAdapters(globalVisibility);
+    public DataTypeAdapter<T>[] getDataAdapters() {
+      return parentPlugin.getDataAdapters();
     }
 
     @Override
     public CloseableIterator<GeoWaveData<T>> toGeoWaveData(
         final AvroWholeFile input,
-        final String[] indexNames,
-        final String globalVisibility) {
+        final String[] indexNames) {
       final InputStream inputStream = new ByteBufferBackedInputStream(input.getOriginalFile());
-      return parentPlugin.toGeoWaveDataInternal(inputStream, indexNames, globalVisibility);
+      return parentPlugin.toGeoWaveDataInternal(inputStream, indexNames);
     }
 
     @Override

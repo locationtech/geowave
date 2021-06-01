@@ -25,10 +25,9 @@ import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
-import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.data.visibility.UnconstrainedVisibilityHandler;
-import org.locationtech.geowave.core.store.data.visibility.UniformVisibilityWriter;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import org.locationtech.geowave.datastore.accumulo.util.AccumuloKeyValuePairGenerator;
 import org.locationtech.jts.geom.Coordinate;
@@ -47,10 +46,9 @@ public class SimpleFeatureToAccumuloKeyValueMapper extends Mapper<LongWritable, 
       new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
   private final AdapterToIndexMapping indexMapping =
       BaseDataStoreUtils.mapAdapterToIndex(internalAdapter, index);
-  private final VisibilityWriter<SimpleFeature> visibilityWriter =
-      new UniformVisibilityWriter<>(new UnconstrainedVisibilityHandler<SimpleFeature, Object>());
+  private final VisibilityHandler visibilityHandler = new UnconstrainedVisibilityHandler();
   private final AccumuloKeyValuePairGenerator<SimpleFeature> generator =
-      new AccumuloKeyValuePairGenerator<>(internalAdapter, index, indexMapping, visibilityWriter);
+      new AccumuloKeyValuePairGenerator<>(internalAdapter, index, indexMapping, visibilityHandler);
   private SimpleFeature simpleFeature;
   private List<KeyValue> keyValuePairs;
   private final SimpleFeatureBuilder builder =

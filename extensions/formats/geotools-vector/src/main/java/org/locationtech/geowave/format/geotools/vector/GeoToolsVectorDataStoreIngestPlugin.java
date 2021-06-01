@@ -132,14 +132,12 @@ public class GeoToolsVectorDataStoreIngestPlugin implements LocalFileIngestPlugi
   }
 
   @Override
-  public DataTypeAdapter<SimpleFeature>[] getDataAdapters(final String globalVisibility) {
+  public DataTypeAdapter<SimpleFeature>[] getDataAdapters() {
     return new FeatureDataAdapter[] {};
   }
 
   @Override
-  public DataTypeAdapter<SimpleFeature>[] getDataAdapters(
-      final URL url,
-      final String globalVisibility) {
+  public DataTypeAdapter<SimpleFeature>[] getDataAdapters(final URL url) {
     DataStore dataStore = null;
     try {
       dataStore = getDataStore(url);
@@ -170,8 +168,7 @@ public class GeoToolsVectorDataStoreIngestPlugin implements LocalFileIngestPlugi
   @Override
   public CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveData(
       final URL input,
-      final String[] indexNames,
-      final String visibility) {
+      final String[] indexNames) {
     DataStore dataStore = null;
     try {
       dataStore = getDataStore(input);
@@ -187,7 +184,6 @@ public class GeoToolsVectorDataStoreIngestPlugin implements LocalFileIngestPlugi
       return new SimpleFeatureGeoWaveWrapper(
           featureCollections,
           indexNames,
-          visibility,
           dataStore,
           retypingPlugin,
           filter);

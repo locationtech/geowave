@@ -48,6 +48,12 @@ public interface DataTypeAdapter<T> extends DataReader<Object>, DataWriter<Objec
     return new InternalDataAdapterImpl<>(this, internalAdapterId);
   }
 
+  default InternalDataAdapter<T> asInternalAdapter(
+      final short internalAdapterId,
+      final VisibilityHandler visibilityHandler) {
+    return new InternalDataAdapterImpl<>(this, internalAdapterId, visibilityHandler);
+  }
+
   @SuppressWarnings("unchecked")
   @Override
   default FieldWriter<Object> getWriter(final String fieldName) {

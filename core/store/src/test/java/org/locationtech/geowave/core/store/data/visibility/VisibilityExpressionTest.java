@@ -6,7 +6,7 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.core.store.util;
+package org.locationtech.geowave.core.store.data.visibility;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -153,5 +153,53 @@ public class VisibilityExpressionTest {
       assertTrue(e.getCause() instanceof ParseException);
       assertEquals("Operator found with no right operand.", e.getCause().getMessage());
     }
+  }
+
+  @Test
+  public void testVisibiltyComposer() {
+    VisibilityComposer composer = new VisibilityComposer();
+    composer.addVisibility("a&b");
+    assertEquals("a&b", composer.composeVisibility());
+
+    // Adding "a" or "b" to the visibility shouldn't change it
+    composer.addVisibility("a");
+    assertEquals("a&b", composer.composeVisibility());
+
+    composer.addVisibility("b");
+    assertEquals("a&b", composer.composeVisibility());
+
+    composer.addVisibility("a&b");
+    assertEquals("a&b", composer.composeVisibility());
+
+    // Adding "c" should update it
+    composer.addVisibility("c");
+    assertEquals("a&b&c", composer.composeVisibility());
+
+    // Adding a complex visibility should duplicate any
+    composer.addVisibility("(a&b)&(c&d)");
+    assertEquals("a&b&c&d", composer.composeVisibility());
+
+    // Any expression with an OR operator should be isolated
+    composer.addVisibility("a&(e|(f&b))");
+    assertEquals("(e|(f&b))&a&b&c&d", composer.composeVisibility());
+
+    composer = new VisibilityComposer();
+
+    // Adding a complex visibility that only uses AND operators should simplify the expression
+    composer.addVisibility("a&((b&e)&(c&d))");
+    assertEquals("a&b&c&d&e", composer.composeVisibility());
+
+    composer = new VisibilityComposer();
+    composer.addVisibility("a&b");
+    assertEquals("a&b", composer.composeVisibility());
+
+    final VisibilityComposer copy = new VisibilityComposer(composer);
+    assertEquals("a&b", copy.composeVisibility());
+
+    // Adding to the copy does not affect the original
+    copy.addVisibility("c&d");
+    assertEquals("a&b&c&d", copy.composeVisibility());
+    assertEquals("a&b", composer.composeVisibility());
+
   }
 }

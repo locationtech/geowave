@@ -31,7 +31,7 @@ These structures are described by two interfaces: {core-store}/core/store/entiti
 ==== GeoWave Value
 
 * _Field Mask_: This mask represents the set of fields from the data type that are visible in this row.
-* _Visibility_: The visibility expression used by this row of data.  It is possible for a single data entry to have different visibility expressions on different attributes.  In this case, the entry will be split into multiple rows, with each row having a different _Visibility_ and a _Field Mask_ that indicates which fields are represented by that visibility expression.
+* _Visibility_: The visibility expression used by this row of data.  It is possible for a single data entry to have different visibility expressions on different attributes.  In this case, the entry will be split into multiple rows, with each row having a different _Visibility_ and a _Field Mask_ that indicates which fields are represented by that visibility expression.  The visibility of an entry is determined by passing the entry to a {core-store}/core/store/api/VisibilityHandler.java[`VisibilityHandler`].  The handler that is used is generally set when a type is created, but can be overridden by passing a different handler when creating the writer.
 * _Value_: The extended data of the entry.
 
 === Data Stores

@@ -65,7 +65,7 @@ public class AdapterStoreImpl extends AbstractGeoWavePersistence<InternalDataAda
 
   @Override
   protected byte[] getValue(final InternalDataAdapter<?> object) {
-    return PersistenceUtils.toBinary(object.getAdapter());
+    return PersistenceUtils.toBinary(object);
   }
 
   @Override

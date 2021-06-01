@@ -47,7 +47,7 @@ public class GDELTIngestTest {
 
     assertTrue(GDELTUtils.validate(toIngest));
     final CloseableIterator<GeoWaveData<SimpleFeature>> features =
-        ingester.toGeoWaveData(toIngest, new String[] {"123"}, "");
+        ingester.toGeoWaveData(toIngest, new String[] {"123"});
 
     assertTrue((features != null) && features.hasNext());
 
@@ -62,7 +62,7 @@ public class GDELTIngestTest {
     features.close();
 
     final CloseableIterator<GeoWaveData<SimpleFeature>> featuresExt =
-        ingesterExt.toGeoWaveData(toIngest, new String[] {"123"}, "");
+        ingesterExt.toGeoWaveData(toIngest, new String[] {"123"});
 
     assertTrue((featuresExt != null) && featuresExt.hasNext());
 

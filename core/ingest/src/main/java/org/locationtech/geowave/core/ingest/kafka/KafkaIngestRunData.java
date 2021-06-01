@@ -17,9 +17,11 @@ import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.memory.MemoryAdapterStore;
+import com.clearspring.analytics.util.Lists;
 
 /**
  * A class to hold intermediate run data that must be used throughout the life of an ingest process.
@@ -40,11 +42,12 @@ public class KafkaIngestRunData implements Closeable {
 
   public synchronized Writer getIndexWriter(
       final DataTypeAdapter<?> adapter,
+      final VisibilityHandler visibilityHandler,
       final Index... requiredIndices) {
     Writer indexWriter = adapterIdToWriterCache.get(adapter.getTypeName());
     if (indexWriter == null) {
-      dataStore.addType(adapter, requiredIndices);
-      indexWriter = dataStore.createWriter(adapter.getTypeName());
+      dataStore.addType(adapter, visibilityHandler, Lists.newArrayList(), requiredIndices);
+      indexWriter = dataStore.createWriter(adapter.getTypeName(), visibilityHandler);
       adapterIdToWriterCache.put(adapter.getTypeName(), indexWriter);
     }
     return indexWriter;

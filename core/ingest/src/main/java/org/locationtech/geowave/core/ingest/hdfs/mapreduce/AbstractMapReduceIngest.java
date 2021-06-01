@@ -24,16 +24,19 @@ import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.cli.VisibilityOptions;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.ingest.DataAdapterProvider;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputFormat;
+import com.clearspring.analytics.util.Lists;
 
 /**
  * This class can be sub-classed to run map-reduce jobs within the ingest framework using plugins
@@ -52,7 +55,7 @@ public abstract class AbstractMapReduceIngest<T extends Persistable & DataAdapte
   private static String JOB_NAME = "%s ingest from %s to namespace %s (%s)";
   protected final DataStorePluginOptions dataStoreOptions;
   protected final List<Index> indices;
-  protected final VisibilityOptions ingestOptions;
+  protected final VisibilityOptions visibilityOptions;
   protected final Path inputFile;
   protected final String formatPluginName;
   protected final IngestFromHdfsPlugin<?, ?> parentPlugin;
@@ -61,14 +64,14 @@ public abstract class AbstractMapReduceIngest<T extends Persistable & DataAdapte
   public AbstractMapReduceIngest(
       final DataStorePluginOptions dataStoreOptions,
       final List<Index> indices,
-      final VisibilityOptions ingestOptions,
+      final VisibilityOptions visibilityOptions,
       final Path inputFile,
       final String formatPluginName,
       final IngestFromHdfsPlugin<?, ?> parentPlugin,
       final T ingestPlugin) {
     this.dataStoreOptions = dataStoreOptions;
     this.indices = indices;
-    this.ingestOptions = ingestOptions;
+    this.visibilityOptions = visibilityOptions;
     this.inputFile = inputFile;
     this.formatPluginName = formatPluginName;
     this.parentPlugin = parentPlugin;
@@ -100,8 +103,11 @@ public abstract class AbstractMapReduceIngest<T extends Persistable & DataAdapte
     conf.set(
         INGEST_PLUGIN_KEY,
         ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(ingestPlugin)));
-    if (ingestOptions.getVisibility() != null) {
-      conf.set(GLOBAL_VISIBILITY_KEY, ingestOptions.getVisibility());
+    final VisibilityHandler visibilityHandler = visibilityOptions.getConfiguredVisibilityHandler();
+    if (visibilityHandler != null) {
+      conf.set(
+          GLOBAL_VISIBILITY_KEY,
+          ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(visibilityHandler)));
     }
     final Job job = new Job(conf, getJobName());
     final StringBuilder indexNames = new StringBuilder();
@@ -133,8 +139,9 @@ public abstract class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 
     GeoWaveOutputFormat.setStoreOptions(job.getConfiguration(), dataStoreOptions);
     final DataStore store = dataStoreOptions.createDataStore();
-    final DataTypeAdapter<?>[] dataAdapters =
-        ingestPlugin.getDataAdapters(ingestOptions.getVisibility());
+    final PersistentAdapterStore adapterStore = dataStoreOptions.createAdapterStore();
+    final InternalAdapterStore internalAdapterStore = dataStoreOptions.createInternalAdapterStore();
+    final DataTypeAdapter<?>[] dataAdapters = ingestPlugin.getDataAdapters();
     final Index[] indices = indexes.toArray(new Index[indexes.size()]);
     if ((dataAdapters != null) && (dataAdapters.length > 0)) {
       for (final DataTypeAdapter<?> dataAdapter : dataAdapters) {
@@ -143,9 +150,14 @@ public abstract class AbstractMapReduceIngest<T extends Persistable & DataAdapte
         // however, after ingest we should cleanup any pre-created
         // metadata for which there is no data
         try {
-          store.addType(dataAdapter, indices);
-
-          GeoWaveOutputFormat.addDataAdapter(job.getConfiguration(), dataAdapter);
+          store.addType(
+              dataAdapter,
+              visibilityOptions.getConfiguredVisibilityHandler(),
+              Lists.newArrayList(),
+              indices);
+          final short adapterId = internalAdapterStore.getAdapterId(dataAdapter.getTypeName());
+          final InternalDataAdapter<?> internalAdapter = adapterStore.getAdapter(adapterId);
+          GeoWaveOutputFormat.addDataAdapter(job.getConfiguration(), internalAdapter);
         } catch (IllegalArgumentException e) {
           // Skip any adapters that can't be mapped to the input indices
         }
@@ -185,17 +197,13 @@ public abstract class AbstractMapReduceIngest<T extends Persistable & DataAdapte
     // that were created from this driver but didn't actually have data
     // ingests
     if ((dataAdapters != null) && (dataAdapters.length > 0)) {
-      PersistentAdapterStore adapterStore = null;
       AdapterIndexMappingStore adapterIndexMappingStore = null;
-      InternalAdapterStore internalAdapterStore = null;
       for (final DataTypeAdapter<?> dataAdapter : dataAdapters) {
         final String typeName = dataAdapter.getTypeName();
         try (CloseableIterator<?> it =
             store.query(QueryBuilder.newBuilder().addTypeName(typeName).limit(1).build())) {
           if (!it.hasNext()) {
-            if (adapterStore == null) {
-              adapterStore = dataStoreOptions.createAdapterStore();
-              internalAdapterStore = dataStoreOptions.createInternalAdapterStore();
+            if (adapterIndexMappingStore == null) {
               adapterIndexMappingStore = dataStoreOptions.createAdapterIndexMappingStore();
             }
             final Short adapterId = internalAdapterStore.getAdapterId(typeName);

@@ -29,10 +29,9 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.api.Writer;
-import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
-import org.locationtech.geowave.core.store.data.visibility.UniformVisibilityWriter;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
 import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
@@ -206,15 +205,14 @@ public class GeoWaveDataStoreComponents {
       final Iterator<SimpleFeature> featureIt,
       final Set<String> fidList,
       final GeoWaveTransaction transaction) throws IOException {
-    final VisibilityWriter<SimpleFeature> visibilityWriter =
-        new UniformVisibilityWriter<>(
-            new GlobalVisibilityHandler<>(transaction.composeVisibility()));
+    final VisibilityHandler visibilityHandler =
+        new GlobalVisibilityHandler(transaction.composeVisibility());
     dataStore.addType(adapter, adapterIndices);
     try (Writer<SimpleFeature> indexWriter = dataStore.createWriter(adapter.getTypeName())) {
       while (featureIt.hasNext()) {
         final SimpleFeature feature = featureIt.next();
         fidList.add(feature.getID());
-        indexWriter.write(feature, visibilityWriter);
+        indexWriter.write(feature, visibilityHandler);
       }
     }
   }
@@ -222,12 +220,11 @@ public class GeoWaveDataStoreComponents {
   public void writeCommit(final SimpleFeature feature, final GeoWaveTransaction transaction)
       throws IOException {
 
-    final VisibilityWriter<SimpleFeature> visibilityWriter =
-        new UniformVisibilityWriter<>(
-            new GlobalVisibilityHandler<>(transaction.composeVisibility()));
+    final VisibilityHandler visibilityHandler =
+        new GlobalVisibilityHandler(transaction.composeVisibility());
     dataStore.addType(adapter, adapterIndices);
     try (Writer<SimpleFeature> indexWriter = dataStore.createWriter(adapter.getTypeName())) {
-      indexWriter.write(feature, visibilityWriter);
+      indexWriter.write(feature, visibilityHandler);
     }
   }
 

@@ -15,15 +15,14 @@ import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.api.WriteResults;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.callback.IngestCallback;
-import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.RowWriter;
-import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -37,11 +36,13 @@ class BaseDataIndexWriter<T> implements Writer<T> {
 
   protected final InternalDataAdapter<T> adapter;
   protected final AdapterToIndexMapping indexMapping;
+  protected final VisibilityHandler visibilityHandler;
   final Closeable closable;
 
   protected BaseDataIndexWriter(
       final InternalDataAdapter<T> adapter,
       final AdapterToIndexMapping indexMapping,
+      final VisibilityHandler visibilityHandler,
       final DataStoreOperations operations,
       final DataStoreOptions options,
       final IngestCallback<T> callback,
@@ -52,6 +53,7 @@ class BaseDataIndexWriter<T> implements Writer<T> {
     this.adapter = adapter;
     this.closable = closable;
     this.indexMapping = indexMapping;
+    this.visibilityHandler = visibilityHandler;
   }
 
   @Override
@@ -61,11 +63,11 @@ class BaseDataIndexWriter<T> implements Writer<T> {
 
   @Override
   public WriteResults write(final T entry) {
-    return write(entry, DataStoreUtils.UNCONSTRAINED_VISIBILITY);
+    return write(entry, visibilityHandler);
   }
 
   @Override
-  public WriteResults write(final T entry, final VisibilityWriter<T> fieldVisibilityWriter) {
+  public WriteResults write(final T entry, final VisibilityHandler visibilityHandler) {
     IntermediaryWriteEntryInfo entryInfo;
     ensureOpen();
 
@@ -79,7 +81,7 @@ class BaseDataIndexWriter<T> implements Writer<T> {
             adapter,
             indexMapping,
             DataIndexUtils.DATA_ID_INDEX,
-            fieldVisibilityWriter,
+            visibilityHandler,
             options.isSecondaryIndexing(),
             true,
             options.isVisibilityEnabled());

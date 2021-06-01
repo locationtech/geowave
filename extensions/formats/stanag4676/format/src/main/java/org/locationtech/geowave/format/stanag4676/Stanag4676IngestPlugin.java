@@ -106,17 +106,13 @@ public class Stanag4676IngestPlugin extends AbstractStageWholeFileToAvro<Object>
   @Override
   public CloseableIterator<GeoWaveData<Object>> toGeoWaveData(
       final URL file,
-      final String[] indexNames,
-      final String globalVisibility) {
-    return ingestWithMapper().toGeoWaveData(
-        toAvroObjects(file).next(),
-        indexNames,
-        globalVisibility);
+      final String[] indexNames) {
+    return ingestWithMapper().toGeoWaveData(toAvroObjects(file).next(), indexNames);
   }
 
   @Override
-  public DataTypeAdapter<Object>[] getDataAdapters(final String globalVisibility) {
-    return new IngestWithReducerImpl().getDataAdapters(globalVisibility);
+  public DataTypeAdapter<Object>[] getDataAdapters() {
+    return new IngestWithReducerImpl().getDataAdapters();
   }
 
   public static class IngestWithReducerImpl implements
@@ -170,7 +166,7 @@ public class Stanag4676IngestPlugin extends AbstractStageWholeFileToAvro<Object>
     }
 
     @Override
-    public DataTypeAdapter<Object>[] getDataAdapters(final String globalVisibility) {
+    public DataTypeAdapter<Object>[] getDataAdapters() {
 
       return new DataTypeAdapter[] {
           new FeatureDataAdapter(pointType),
@@ -205,7 +201,6 @@ public class Stanag4676IngestPlugin extends AbstractStageWholeFileToAvro<Object>
     public CloseableIterator<GeoWaveData<Object>> toGeoWaveData(
         final Text key,
         final String[] indexNames,
-        final String globalVisibility,
         final Iterable<Stanag4676EventWritable> values) {
       final List<GeoWaveData<Object>> geowaveData = new ArrayList<>();
       // sort events
@@ -564,8 +559,7 @@ public class Stanag4676IngestPlugin extends AbstractStageWholeFileToAvro<Object>
     @Override
     public CloseableIterator<GeoWaveData<Object>> toGeoWaveData(
         final AvroWholeFile input,
-        final String[] indexNames,
-        final String globalVisibility) {
+        final String[] indexNames) {
       try (CloseableIterator<KeyValueData<Text, Stanag4676EventWritable>> intermediateData =
           toIntermediateMapReduceData(input)) {
         // this is much better done in the reducer of a map reduce job,
@@ -582,8 +576,7 @@ public class Stanag4676IngestPlugin extends AbstractStageWholeFileToAvro<Object>
         }
         final List<CloseableIterator<GeoWaveData<Object>>> iterators = new ArrayList<>();
         for (final Entry<Text, List<Stanag4676EventWritable>> entry : trackUuidMap.entrySet()) {
-          iterators.add(
-              toGeoWaveData(entry.getKey(), indexNames, globalVisibility, entry.getValue()));
+          iterators.add(toGeoWaveData(entry.getKey(), indexNames, entry.getValue()));
         }
         return new CloseableIterator.Wrapper<>(Iterators.concat(iterators.iterator()));
       }

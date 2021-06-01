@@ -31,11 +31,10 @@ import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.api.Statistic;
 import org.locationtech.geowave.core.store.api.StatisticValue;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
-import org.locationtech.geowave.core.store.data.VisibilityWriter;
-import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.IndexImpl;
@@ -64,24 +63,18 @@ public class MemoryDataStoreTest {
         storeFamily.getDataStatisticsStoreFactory().createStore(reqOptions);
     final DataTypeAdapter<Integer> adapter = new MockComponents.MockAbstractDataAdapter();
 
-    final VisibilityWriter<Integer> visWriter = new VisibilityWriter<Integer>() {
-      @Override
-      public FieldVisibilityHandler<Integer, Object> getFieldVisibilityHandler(
-          final String fieldId) {
-        return new GlobalVisibilityHandler("aaa&bbb");
-      }
-    };
+    final VisibilityHandler visHandler = new GlobalVisibilityHandler("aaa&bbb");
     final List<Statistic<?>> statistics = Lists.newArrayList();
     statistics.add(new CountStatistic(adapter.getTypeName()));
     statistics.add(
         new NumericRangeStatistic(adapter.getTypeName(), MockAbstractDataAdapter.INTEGER));
     dataStore.addType(adapter, statistics, index);
-    try (final Writer indexWriter = dataStore.createWriter(adapter.getTypeName())) {
+    try (final Writer<Integer> indexWriter = dataStore.createWriter(adapter.getTypeName())) {
 
-      indexWriter.write(new Integer(25), visWriter);
+      indexWriter.write(new Integer(25), visHandler);
       indexWriter.flush();
 
-      indexWriter.write(new Integer(35), visWriter);
+      indexWriter.write(new Integer(35), visHandler);
       indexWriter.flush();
     }
 
@@ -178,25 +171,19 @@ public class MemoryDataStoreTest {
         storeFamily.getDataStatisticsStoreFactory().createStore(opts);
     final DataTypeAdapter<Integer> adapter = new MockComponents.MockAbstractDataAdapter();
 
-    final VisibilityWriter<Integer> visWriter = new VisibilityWriter<Integer>() {
-      @Override
-      public FieldVisibilityHandler<Integer, Object> getFieldVisibilityHandler(
-          final String fieldId) {
-        return new GlobalVisibilityHandler("aaa&bbb");
-      }
-    };
+    final VisibilityHandler visHandler = new GlobalVisibilityHandler("aaa&bbb");
 
     final List<Statistic<?>> statistics = Lists.newArrayList();
     statistics.add(
         new NumericRangeStatistic(adapter.getTypeName(), MockAbstractDataAdapter.INTEGER));
 
     dataStore.addType(adapter, statistics, index1, index2);
-    try (final Writer indexWriter = dataStore.createWriter(adapter.getTypeName())) {
+    try (final Writer<Integer> indexWriter = dataStore.createWriter(adapter.getTypeName())) {
 
-      indexWriter.write(new Integer(25), visWriter);
+      indexWriter.write(new Integer(25), visHandler);
       indexWriter.flush();
 
-      indexWriter.write(new Integer(35), visWriter);
+      indexWriter.write(new Integer(35), visHandler);
       indexWriter.flush();
     }
 

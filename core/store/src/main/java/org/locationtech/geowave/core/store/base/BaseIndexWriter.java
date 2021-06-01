@@ -16,10 +16,10 @@ import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.api.WriteResults;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.callback.IngestCallback;
-import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
@@ -39,12 +39,14 @@ class BaseIndexWriter<T> implements Writer<T> {
 
   protected final InternalDataAdapter<T> adapter;
   protected final AdapterToIndexMapping indexMapping;
+  protected final VisibilityHandler visibilityHandler;
   final Closeable closable;
 
   public BaseIndexWriter(
       final InternalDataAdapter<T> adapter,
       final AdapterToIndexMapping indexMapping,
       final Index index,
+      final VisibilityHandler visibilityHandler,
       final DataStoreOperations operations,
       final DataStoreOptions options,
       final IngestCallback<T> callback,
@@ -56,6 +58,7 @@ class BaseIndexWriter<T> implements Writer<T> {
     this.adapter = adapter;
     this.closable = closable;
     this.indexMapping = indexMapping;
+    this.visibilityHandler = visibilityHandler;
   }
 
   @Override
@@ -65,11 +68,11 @@ class BaseIndexWriter<T> implements Writer<T> {
 
   @Override
   public WriteResults write(final T entry) {
-    return write(entry, DataStoreUtils.UNCONSTRAINED_VISIBILITY);
+    return write(entry, visibilityHandler);
   }
 
   @Override
-  public WriteResults write(final T entry, final VisibilityWriter<T> fieldVisibilityWriter) {
+  public WriteResults write(final T entry, final VisibilityHandler visibilityHandler) {
     IntermediaryWriteEntryInfo entryInfo;
     ensureOpen();
 
@@ -83,11 +86,11 @@ class BaseIndexWriter<T> implements Writer<T> {
             adapter,
             indexMapping,
             index,
-            fieldVisibilityWriter,
+            visibilityHandler,
             options.isSecondaryIndexing(),
             false,
             options.isVisibilityEnabled());
-    verifyVisibility(fieldVisibilityWriter, entryInfo);
+    verifyVisibility(visibilityHandler, entryInfo);
     final GeoWaveRow[] rows = entryInfo.getRows();
 
     writer.write(rows);
@@ -122,9 +125,9 @@ class BaseIndexWriter<T> implements Writer<T> {
   }
 
   private void verifyVisibility(
-      final VisibilityWriter customFieldVisibilityWriter,
+      final VisibilityHandler visibilityHandler,
       final IntermediaryWriteEntryInfo ingestInfo) {
-    if (customFieldVisibilityWriter != DataStoreUtils.UNCONSTRAINED_VISIBILITY) {
+    if (visibilityHandler != DataStoreUtils.UNCONSTRAINED_VISIBILITY) {
       for (final GeoWaveValue value : ingestInfo.getValues()) {
         if ((value.getVisibility() != null) && (value.getVisibility().length > 0)) {
           if (!operations.ensureAuthorizations(

@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.geotime.store;
 
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterImpl;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -25,6 +26,13 @@ public class InternalGeotoolsDataAdapterWrapper<T extends SimpleFeature> extends
       final GeotoolsFeatureDataAdapter<T> adapter,
       final short adapterId) {
     super(adapter, adapterId);
+  }
+
+  public InternalGeotoolsDataAdapterWrapper(
+      final GeotoolsFeatureDataAdapter<T> adapter,
+      final short adapterId,
+      final VisibilityHandler visibilityHandler) {
+    super(adapter, adapterId, visibilityHandler);
   }
 
   @Override

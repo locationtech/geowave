@@ -17,9 +17,9 @@ import java.util.function.Function;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.api.WriteResults;
 import org.locationtech.geowave.core.store.api.Writer;
-import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import com.google.common.collect.Maps;
 
 public class IndexCompositeWriter<T> implements Writer<T> {
@@ -43,8 +43,8 @@ public class IndexCompositeWriter<T> implements Writer<T> {
   }
 
   @Override
-  public WriteResults write(final T entry, final VisibilityWriter<T> fieldVisibilityWriter) {
-    return internalWrite(entry, (w -> w.write(entry, fieldVisibilityWriter)));
+  public WriteResults write(final T entry, final VisibilityHandler visibilityHandler) {
+    return internalWrite(entry, (w -> w.write(entry, visibilityHandler)));
   }
 
   protected WriteResults internalWrite(

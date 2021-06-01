@@ -15,11 +15,10 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.data.VisibilityWriter;
-import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
@@ -160,43 +159,45 @@ public class VisibilitySecondaryIndexIT {
         expectedResultCount * 4);
   }
 
-  private VisibilityWriter<SimpleFeature> getFeatureVisWriter() {
-    return new VisibilityWriter<SimpleFeature>() {
-      @Override
-      public FieldVisibilityHandler<SimpleFeature, Object> getFieldVisibilityHandler(
-          final String fieldId) {
-        return new FieldVisibilityHandler<SimpleFeature, Object>() {
+  private VisibilityHandler getFeatureVisWriter() {
+    return new TestSecondaryIndexFieldVisibilityHandler();
+  }
 
-          @Override
-          public byte[] getVisibility(
-              final SimpleFeature rowValue,
-              final String fieldId,
-              final Object fieldValue) {
-            final int fieldValueInt = Integer.parseInt(rowValue.getID());
-            // make them all the same because secondary indexing does not support mixed
-            // visibilities
+  public static class TestSecondaryIndexFieldVisibilityHandler implements VisibilityHandler {
 
-            // make some no bytes, some a, some
-            // b, and some c
-            final int switchValue = fieldValueInt % 4;
-            switch (switchValue) {
-              case 0:
-                return new ByteArray("a").getBytes();
+    @Override
+    public byte[] toBinary() {
+      return new byte[0];
+    }
 
-              case 1:
-                return new ByteArray("b").getBytes();
+    @Override
+    public void fromBinary(byte[] bytes) {}
 
-              case 2:
-                return new ByteArray("c").getBytes();
+    @Override
+    public <T> String getVisibility(DataTypeAdapter<T> adapter, T entry, String fieldName) {
+      final int fieldValueInt = Integer.parseInt(((SimpleFeature) entry).getID());
+      // make them all the same because secondary indexing does not support mixed
+      // visibilities
 
-              case 3:
-              default:
-                return new byte[] {};
-            }
-          }
-        };
+      // make some no bytes, some a, some
+      // b, and some c
+      final int switchValue = fieldValueInt % 4;
+      switch (switchValue) {
+        case 0:
+          return "a";
+
+        case 1:
+          return "b";
+
+        case 2:
+          return "c";
+
+        case 3:
+        default:
+          return "";
       }
-    };
+    }
+
   }
 
 }

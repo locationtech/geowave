@@ -27,6 +27,7 @@ import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Statistic;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.store.StoreLoader;
@@ -39,6 +40,7 @@ import org.locationtech.geowave.core.store.operations.MetadataDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.statistics.DefaultStatisticsProvider;
+import org.locationtech.geowave.migration.legacy.adapter.LegacyInternalDataAdapterWrapper;
 import org.locationtech.geowave.migration.legacy.adapter.vector.LegacyFeatureDataAdapter;
 import org.locationtech.geowave.migration.legacy.core.geotime.LegacySpatialField;
 import org.locationtech.geowave.migration.legacy.core.store.LegacyAdapterIndexMappingStore;
@@ -126,12 +128,21 @@ public class MigrationCommand extends DefaultOperation implements Command {
       while (adapters.hasNext()) {
         final InternalDataAdapter<?> adapter = adapters.next();
         adapterIDs.add(adapter.getAdapterId());
-        if (adapter.getAdapter() instanceof LegacyFeatureDataAdapter) {
+        if (adapter instanceof LegacyInternalDataAdapterWrapper) {
+          adapterStore.removeAdapter(adapter.getAdapterId());
+          // Write updated adapter
+          adapterStore.addAdapter(
+              ((LegacyInternalDataAdapterWrapper<?>) adapter).getUpdatedAdapter());
+          migratedAdapters++;
+        } else if (adapter.getAdapter() instanceof LegacyFeatureDataAdapter) {
           final FeatureDataAdapter updatedAdapter =
               ((LegacyFeatureDataAdapter) adapter.getAdapter()).getUpdatedAdapter();
+          final VisibilityHandler visibilityHandler =
+              ((LegacyFeatureDataAdapter) adapter.getAdapter()).getVisibilityHandler();
           // Write updated adapter
           adapterStore.removeAdapter(adapter.getAdapterId());
-          adapterStore.addAdapter(updatedAdapter.asInternalAdapter(adapter.getAdapterId()));
+          adapterStore.addAdapter(
+              updatedAdapter.asInternalAdapter(adapter.getAdapterId(), visibilityHandler));
           migratedAdapters++;
         }
       }

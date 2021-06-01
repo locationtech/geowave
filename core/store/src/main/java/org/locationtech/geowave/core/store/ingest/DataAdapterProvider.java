@@ -18,13 +18,10 @@ import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 public interface DataAdapterProvider<T> {
   /**
    * Get all writable adapters used by this plugin
-   *
-   * @param globalVisibility If on the command-line the user specifies a global visibility to write
-   *        to the visibility column in GeoWave, it is passed along here. It is assumed that this is
-   *        the same visibility string that will be passed to IngestPluginBase.toGeoWaveData()
+   * 
    * @return An array of adapters that may be used by this plugin
    */
-  public DataTypeAdapter<T>[] getDataAdapters(String globalVisibility);
+  public DataTypeAdapter<T>[] getDataAdapters();
 
   /**
    * return a set of index types that can be indexed by this data adapter provider, used for

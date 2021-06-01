@@ -66,7 +66,6 @@ public class GPXConsumer implements CloseableIterator<GeoWaveData<SimpleFeature>
   final InputStream fileStream;
   final String[] indexNames;
   final String inputID;
-  final String globalVisibility;
   final Map<String, Map<String, String>> additionalData;
   final boolean uniqueWayPoints;
   final double maxLength;
@@ -101,7 +100,6 @@ public class GPXConsumer implements CloseableIterator<GeoWaveData<SimpleFeature>
       final Map<String, Map<String, String>> additionalData,
       final Long backTimestamp,
       final boolean uniqueWayPoints,
-      final String globalVisibility,
       final double maxLength) {
     super();
     this.fileStream = fileStream;
@@ -109,7 +107,6 @@ public class GPXConsumer implements CloseableIterator<GeoWaveData<SimpleFeature>
     this.inputID = inputID != null ? inputID : "";
     this.uniqueWayPoints = uniqueWayPoints;
     this.additionalData = additionalData;
-    this.globalVisibility = globalVisibility;
     this.maxLength = maxLength;
     backupTimestamp = backTimestamp;
     top = new GPXDataElement("gpx", this.maxLength);

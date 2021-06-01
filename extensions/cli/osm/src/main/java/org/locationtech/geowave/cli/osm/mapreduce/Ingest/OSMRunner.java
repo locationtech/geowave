@@ -101,7 +101,7 @@ public class OSMRunner extends Configured implements Tool {
 
     final Configuration conf = getConf();
     conf.set("tableName", ingestOptions.getQualifiedTableName());
-    conf.set("osmVisibility", ingestOptions.getVisibilityOptions().getVisibility());
+    conf.set("osmVisibility", ingestOptions.getVisibilityOptions().getGlobalVisibility());
 
     // job settings
     final Job job = Job.getInstance(conf, ingestOptions.getJobName());

@@ -17,6 +17,7 @@ import java.util.function.Predicate;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IngestOptions;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.api.IngestOptions.IngestCallback;
 import org.locationtech.geowave.core.store.api.WriteResults;
 import org.locationtech.geowave.core.store.api.Writer;
@@ -44,8 +45,8 @@ public class BaseDataStoreIngestDriver extends AbstractLocalFileIngestDriver {
   }
 
   @Override
-  protected String getGlobalVisibility() {
-    return ingestOptions.getGlobalVisibility();
+  protected VisibilityHandler getVisibilityHandler() {
+    return ingestOptions.getVisibilityHandler();
   }
 
   @Override

@@ -18,30 +18,33 @@ import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
 import org.locationtech.geowave.core.store.adapter.IndexDependentDataAdapter;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.api.WriteResults;
 import org.locationtech.geowave.core.store.api.Writer;
-import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import com.google.common.collect.Maps;
 
 public class IndependentAdapterIndexWriter<T> implements Writer<T> {
 
   final IndexDependentDataAdapter<T> adapter;
   final Index index;
+  final VisibilityHandler visibilityHandler;
   final Writer<T> writer;
 
   public IndependentAdapterIndexWriter(
       final IndexDependentDataAdapter<T> adapter,
       final Index index,
+      final VisibilityHandler visibilityHandler,
       final Writer<T> writer) {
     super();
     this.writer = writer;
     this.index = index;
+    this.visibilityHandler = visibilityHandler;
     this.adapter = adapter;
   }
 
   @Override
-  public WriteResults write(final T entry, final VisibilityWriter<T> fieldVisibilityWriter) {
-    return internalWrite(entry, (e -> writer.write(e, fieldVisibilityWriter)));
+  public WriteResults write(final T entry, final VisibilityHandler visibilityHandler) {
+    return internalWrite(entry, (e -> writer.write(e, visibilityHandler)));
   }
 
   private WriteResults internalWrite(
@@ -71,7 +74,7 @@ public class IndependentAdapterIndexWriter<T> implements Writer<T> {
 
   @Override
   public WriteResults write(final T entry) {
-    return internalWrite(entry, (e -> writer.write(e)));
+    return internalWrite(entry, (e -> writer.write(e, visibilityHandler)));
   }
 
   @Override

@@ -14,10 +14,12 @@ import org.locationtech.geowave.core.ingest.spi.IngestFormatPluginProviderSpi;
 import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
 import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.opengis.feature.simple.SimpleFeature;
+import com.beust.jcommander.ParametersDelegate;
 
 public abstract class AbstractSimpleFeatureIngestFormat<I> implements
     IngestFormatPluginProviderSpi<I, SimpleFeature> {
-  protected final SimpleFeatureIngestOptions myOptions = new SimpleFeatureIngestOptions();
+  protected final SerializableSimpleFeatureIngestOptions myOptions =
+      new SerializableSimpleFeatureIngestOptions();
 
   private AbstractSimpleFeatureIngestPlugin<I> getInstance(final IngestFormatOptions options) {
     final AbstractSimpleFeatureIngestPlugin<I> myInstance = newPluginInstance(options);

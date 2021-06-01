@@ -74,6 +74,7 @@ import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
+import org.locationtech.geowave.core.store.data.visibility.VisibilityExpression;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
@@ -755,16 +756,16 @@ public class AccumuloOperations implements
     final Set<String> unensuredAuths = new HashSet<>();
     Set<String> ensuredAuths = ensuredAuthorizationCache.get(user);
     if (ensuredAuths == null) {
-      unensuredAuths.addAll(Arrays.asList(authorizations));
       ensuredAuths = new HashSet<>();
       ensuredAuthorizationCache.put(user, ensuredAuths);
-    } else {
-      for (final String auth : authorizations) {
-        if (!ensuredAuths.contains(auth)) {
-          unensuredAuths.add(auth);
-        }
+    }
+    for (final String auth : authorizations) {
+      if (!ensuredAuths.contains(auth)) {
+        VisibilityExpression.addMinimalTokens(auth, unensuredAuths);
       }
     }
+    // In case one of the more complex expressions contained already ensured auths
+    unensuredAuths.removeAll(ensuredAuths);
     if (!unensuredAuths.isEmpty()) {
       try {
         Authorizations auths = getConnector().securityOperations().getUserAuthorizations(user);
