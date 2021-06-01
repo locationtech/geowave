@@ -15,7 +15,8 @@
 		<module>adapters/raster</module>
 		<module>adapters/vector</module>
 		<module>datastores/accumulo</module>
-		<module>datastores/hbase</module>
+		<module>datastores/hbase/core</module>
+		<module>datastores/hbase/coprocessors</module>
 		<module>datastores/bigtable</module>
 		<module>datastores/cassandra</module>
 		<module>datastores/dynamodb</module>

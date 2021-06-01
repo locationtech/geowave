@@ -17,9 +17,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeSet;
+import org.apache.accumulo.core.client.AccumuloException;
+import org.apache.accumulo.core.client.AccumuloSecurityException;
+import org.apache.accumulo.core.client.Connector;
+import org.apache.accumulo.core.client.TableNotFoundException;
+import org.apache.accumulo.core.client.admin.Locations;
 import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.TabletId;
-import org.apache.accumulo.core.data.impl.KeyExtent;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.io.Text;
@@ -35,7 +39,6 @@ import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.statistics.index.RowRangeHistogramStatistic.RowRangeHistogramValue;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
-import org.locationtech.geowave.datastore.accumulo.mapreduce.BackwardCompatibleTabletLocatorFactory.BackwardCompatibleTabletLocator;
 import org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations;
 import org.locationtech.geowave.datastore.accumulo.util.AccumuloUtils;
 import org.locationtech.geowave.mapreduce.splits.GeoWaveRowRange;
@@ -72,7 +75,7 @@ public class AccumuloSplitsProvider extends SplitsProvider {
       LOGGER.error("AccumuloSplitsProvider requires AccumuloOperations object.");
       return splits;
     }
-    int partitionKeyLength = index.getIndexStrategy().getPartitionKeyLength();
+    final int partitionKeyLength = index.getIndexStrategy().getPartitionKeyLength();
     Range fullrange;
     try {
       fullrange =
@@ -126,15 +129,19 @@ public class AccumuloSplitsProvider extends SplitsProvider {
     }
     // get the metadata information for these ranges
     final HashMap<String, String> hostNameCache = getHostNameCache();
-    final BackwardCompatibleTabletLocator locator =
-        BackwardCompatibleTabletLocatorFactory.createTabletLocator(
-            accumuloOperations,
-            tableName,
-            ranges);
 
-    for (final Entry<TabletId, List<Range>> tabletIdRanges : locator.getLocationsGroupedByTablet().entrySet()) {
+    final Connector conn = accumuloOperations.getConnector();
+
+    Locations locations;
+    try {
+      locations = conn.tableOperations().locate(tableName, ranges);
+    } catch (AccumuloException | AccumuloSecurityException | TableNotFoundException e) {
+      throw new IOException("Unable to get Tablet Locations", e);
+    }
+
+    for (final Entry<TabletId, List<Range>> tabletIdRanges : locations.groupByTablet().entrySet()) {
       final TabletId tabletId = tabletIdRanges.getKey();
-      final String tabletServer = locator.getTabletLocation(tabletId);
+      final String tabletServer = locations.getTabletLocation(tabletId);
       final String ipAddress = tabletServer.split(":", 2)[0];
 
       String location = hostNameCache.get(ipAddress);
@@ -147,7 +154,7 @@ public class AccumuloSplitsProvider extends SplitsProvider {
         hostNameCache.put(ipAddress, location);
       }
 
-      final Range tabletRange = locator.toRange(tabletId);
+      final Range tabletRange = tabletId.toRange();
       final Map<String, SplitInfo> splitInfo = new HashMap<>();
       final List<RangeLocationPair> rangeList = new ArrayList<>();
 
@@ -183,12 +190,6 @@ public class AccumuloSplitsProvider extends SplitsProvider {
     }
 
     return splits;
-  }
-
-  /** Returns data structure to be filled by binnedRanges Extracted out to facilitate testing */
-  public Map<String, Map<KeyExtent, List<Range>>> getBinnedRangesStructure() {
-    final Map<String, Map<KeyExtent, List<Range>>> tserverBinnedRanges = new HashMap<>();
-    return tserverBinnedRanges;
   }
 
   /** Returns host name cache data structure Extracted out to facilitate testing */

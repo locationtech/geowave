@@ -34,12 +34,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.accumulo</groupId>
-			<artifactId>accumulo-fate</artifactId>
-			<version>${accumulo.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.accumulo</groupId>
 			<artifactId>accumulo-start</artifactId>
 			<version>${accumulo.version}</version>
 			<scope>provided</scope>
@@ -86,6 +80,10 @@
 					<artifactId>htrace-core</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.accumulo</groupId>
+			<artifactId>accumulo-shell</artifactId>
 		</dependency>
 	</dependencies>
 	<profiles>

@@ -586,7 +586,7 @@
 			<dependencies>
 				<dependency>
 					<groupId>org.locationtech.geowave</groupId>
-					<artifactId>geowave-datastore-hbase</artifactId>
+					<artifactId>geowave-datastore-hbase-coprocessors</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 			</dependencies>

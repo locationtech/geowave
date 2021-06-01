@@ -40,6 +40,7 @@ public class SimpleFeatureGeoWaveWrapper implements CloseableIterator<GeoWaveDat
     private final Filter filter;
     private SimpleFeatureBuilder builder = null;
     private GeoWaveData<SimpleFeature> currentData = null;
+    private boolean closed = false;
 
     public InternalIterator(
         final SimpleFeatureCollection featureCollection,
@@ -102,7 +103,10 @@ public class SimpleFeatureGeoWaveWrapper implements CloseableIterator<GeoWaveDat
 
     @Override
     public void close() {
-      featureIterator.close();
+      if (!closed) {
+        featureIterator.close();
+        closed = true;
+      }
     }
   }
 
@@ -182,6 +186,7 @@ public class SimpleFeatureGeoWaveWrapper implements CloseableIterator<GeoWaveDat
   public void close() {
     if (currentIterator != null) {
       currentIterator.close();
+      currentIterator = null;
     }
     if (dataStore != null) {
       dataStore.dispose();

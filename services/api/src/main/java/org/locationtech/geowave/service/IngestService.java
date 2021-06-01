@@ -35,9 +35,9 @@ public interface IngestService {
       @QueryParam("kafkaPropertyFile") String kafkaPropertyFile,
       @QueryParam("visibility") String visibility,
       @QueryParam("groupId") String groupId,
-      @QueryParam("zookeeperConnect") String zookeeperConnect,
+      @QueryParam("bootstrapServers") String bootstrapServers,
       @QueryParam("autoOffsetReset") String autoOffsetReset,
-      @QueryParam("fetchMessageMaxBytes") String fetchMessageMaxBytes,
+      @QueryParam("maxPartitionFetchBytes") String maxPartitionFetchBytes,
       @QueryParam("consumerTimeoutMs") String consumerTimeoutMs,
       @QueryParam("reconnectOnTimeout") Boolean reconnectOnTimeout,
       @QueryParam("batchSize") Integer batchSize,
@@ -74,10 +74,7 @@ public interface IngestService {
   public Response localToKafka(
       @QueryParam("fileOrDirectory") String fileOrDirectory,
       @QueryParam("kafkaPropertyFile") String kafkaPropertyFile,
-      @QueryParam("metadataBrokerList") String metadataBrokerList,
-      @QueryParam("requestRequiredAcks") String requestRequiredAcks,
-      @QueryParam("producerType") String producerType,
-      @QueryParam("serializerClass") String serializerClass,
+      @QueryParam("bootstrapServers") String bootstrapServers,
       @QueryParam("retryBackoffMs") String retryBackoffMs,
       @QueryParam("extensions") String extensions, // Array of Strings
       @QueryParam("formats") String formats);

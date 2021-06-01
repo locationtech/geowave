@@ -12,31 +12,33 @@ import java.util.HashMap;
 import java.util.Map;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import com.datastax.driver.core.BatchStatement;
-import com.datastax.driver.core.BatchStatement.Type;
-import com.datastax.driver.core.Session;
-import com.datastax.driver.core.Statement;
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.cql.BatchStatementBuilder;
+import com.datastax.oss.driver.api.core.cql.BatchType;
+import com.datastax.oss.driver.api.core.cql.BatchableStatement;
 
 public class BatchHandler {
-  protected final Session session;
-  private final Type type = Type.UNLOGGED;
-  protected final Map<ByteArray, BatchStatement> batches = new HashMap<>();
+  protected final CqlSession session;
+  private final BatchType type = BatchType.UNLOGGED;
+  protected final Map<ByteArray, BatchStatementBuilder> batches = new HashMap<>();
 
-  public BatchHandler(final Session session) {
+  public BatchHandler(final CqlSession session) {
     this.session = session;
   }
 
-  protected BatchStatement addStatement(final GeoWaveRow row, final Statement statement) {
+  protected BatchStatementBuilder addStatement(
+      final GeoWaveRow row,
+      final BatchableStatement statement) {
     final ByteArray partition = new ByteArray(row.getPartitionKey());
-    BatchStatement tokenBatch = batches.get(partition);
+    BatchStatementBuilder tokenBatch = batches.get(partition);
 
     if (tokenBatch == null) {
-      tokenBatch = new BatchStatement(type);
+      tokenBatch = new BatchStatementBuilder(type);
 
       batches.put(partition, tokenBatch);
     }
     synchronized (tokenBatch) {
-      tokenBatch.add(statement);
+      tokenBatch.addStatement(statement);
     }
     return tokenBatch;
   }

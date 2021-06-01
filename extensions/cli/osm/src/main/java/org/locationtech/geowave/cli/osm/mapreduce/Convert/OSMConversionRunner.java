@@ -110,7 +110,7 @@ public class OSMConversionRunner extends Configured implements Tool {
     InputFormatBase.setInputTableName(job, ingestOptions.getQualifiedTableName());
     AbstractInputFormat.setZooKeeperInstance(
         job,
-        new ClientConfiguration().withInstance(accumuloOptions.getInstance()).withZkHosts(
+        ClientConfiguration.create().withInstance(accumuloOptions.getInstance()).withZkHosts(
             accumuloOptions.getZookeeper()));
     AbstractInputFormat.setScanAuthorizations(
         job,

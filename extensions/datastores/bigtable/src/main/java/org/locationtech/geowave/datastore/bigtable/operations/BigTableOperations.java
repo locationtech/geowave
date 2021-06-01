@@ -24,6 +24,7 @@ import com.google.cloud.bigtable.hbase.BigtableRegionLocator;
 import com.google.common.collect.Sets;
 
 public class BigTableOperations extends HBaseOperations {
+
   private final HashSet<String> tableCache = Sets.newHashSet();
 
   public BigTableOperations(final BigTableOptions options) throws IOException {
@@ -33,6 +34,13 @@ public class BigTableOperations extends HBaseOperations {
             options.getInstanceId()),
         options.getGeoWaveNamespace(),
         options.getHBaseOptions());
+  }
+
+  @Override
+  protected int getMaxVersions() {
+    // max versions on bigtable throws an NPE with a fix provided on April 14, 2021, not currently
+    // in a release though, but the best workaround is actually to just subtract 1
+    return super.getMaxVersions() - 1;
   }
 
   @Override

@@ -9,16 +9,13 @@
 package org.locationtech.geowave.datastore.cassandra.operations;
 
 import java.nio.ByteBuffer;
-import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.operations.MetadataDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
-import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
-import com.datastax.driver.core.querybuilder.Delete;
-import com.datastax.driver.core.querybuilder.Delete.Where;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
+import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
+import com.datastax.oss.driver.api.querybuilder.delete.Delete;
+import com.datastax.oss.driver.api.querybuilder.delete.DeleteSelection;
 
 public class CassandraMetadataDeleter implements MetadataDeleter {
   private final CassandraOperations operations;
@@ -44,19 +41,17 @@ public class CassandraMetadataDeleter implements MetadataDeleter {
     // primary ID(s) and then delete, but this is not a use case necessary
     // at the moment
     if (query.hasPrimaryId()) {
-      final Delete delete = operations.getDelete(operations.getMetadataTableName(metadataType));
-      final Where where =
-          delete.where(
-              QueryBuilder.eq(
-                  CassandraMetadataWriter.PRIMARY_ID_KEY,
-                  ByteBuffer.wrap(query.getPrimaryId())));
+      final DeleteSelection delete =
+          operations.getDelete(operations.getMetadataTableName(metadataType));
+      Delete where =
+          delete.whereColumn(CassandraMetadataWriter.PRIMARY_ID_KEY).isEqualTo(
+              QueryBuilder.literal(ByteBuffer.wrap(query.getPrimaryId())));
       if (query.hasSecondaryId()) {
-        where.and(
-            QueryBuilder.eq(
-                CassandraMetadataWriter.SECONDARY_ID_KEY,
-                ByteBuffer.wrap(query.getSecondaryId())));
+        where =
+            where.whereColumn(CassandraMetadataWriter.SECONDARY_ID_KEY).isEqualTo(
+                QueryBuilder.literal(ByteBuffer.wrap(query.getSecondaryId())));
       }
-      operations.getSession().execute(delete);
+      operations.getSession().execute(where.build());
     } else if (operations.getOptions().isVisibilityEnabled()) {
       // we need to respect visibilities although this may be much slower
       DataStoreUtils.safeMetadataDelete(this, operations, metadataType, query);

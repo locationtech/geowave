@@ -42,8 +42,8 @@ public class BigtableStoreTestEnvironment extends StoreTestEnvironment {
   private String emulatorHostPort = "127.0.0.1:8086";
 
   // Default download location
-  private String sdkDownloadUrl = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads";
-  private String sdkFile = "google-cloud-sdk-183.0.0-linux-x86_64.tar.gz";
+  private String sdkDownloadUrl = "https://storage.googleapis.com/cloud-sdk-release";
+  private String sdkFile = "google-cloud-sdk-341.0.0-linux-x86_64.tar.gz";
   private boolean environmentInitialized = false;
 
   private BigtableStoreTestEnvironment() {}

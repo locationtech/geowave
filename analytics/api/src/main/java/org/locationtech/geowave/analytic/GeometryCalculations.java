@@ -23,7 +23,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tec.uom.se.unit.Units;
+import tech.units.indriya.unit.Units;
 
 public class GeometryCalculations {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeometryCalculations.class);

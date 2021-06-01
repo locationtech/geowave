@@ -10,13 +10,13 @@ package org.locationtech.geowave.adapter.vector.plugin;
 
 import org.geotools.data.Query;
 import org.geotools.data.simple.SimpleFeatureCollection;
-import org.geotools.factory.Hints;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.process.ProcessException;
 import org.geotools.process.factory.DescribeParameter;
 import org.geotools.process.factory.DescribeProcess;
 import org.geotools.process.factory.DescribeResult;
-import org.geotools.process.gs.GSProcess;
+import org.geotools.process.vector.VectorProcess;
+import org.geotools.util.factory.Hints;
 import org.opengis.coverage.grid.GridGeometry;
 
 /**
@@ -30,7 +30,7 @@ import org.opengis.coverage.grid.GridGeometry;
 @DescribeProcess(
     title = "DecimateToPixelResolution",
     description = "This process will enable GeoWave to decimate WMS rendering down to pixel resolution to not oversample data.  This will efficiently render overlapping geometry that would otherwise be hidden but it assume an opaque style and does not take transparency into account.")
-public class DecimationProcess implements GSProcess {
+public class DecimationProcess implements VectorProcess {
   public static final Hints.Key PIXEL_SIZE = new Hints.Key(Double.class);
   public static final Hints.Key OUTPUT_BBOX = new Hints.Key(ReferencedEnvelope.class);
   public static final Hints.Key OUTPUT_WIDTH = new Hints.Key(Integer.class);

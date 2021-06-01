@@ -8,20 +8,18 @@
  */
 package org.locationtech.geowave.datastore.cassandra.operations;
 
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Semaphore;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.datastore.cassandra.util.CassandraUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.datastax.driver.core.BatchStatement;
-import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.ResultSetFuture;
-import com.datastax.driver.core.Session;
-import com.datastax.driver.core.Statement;
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.cql.AsyncResultSet;
+import com.datastax.oss.driver.api.core.cql.BatchStatementBuilder;
+import com.datastax.oss.driver.api.core.cql.BoundStatement;
+import com.datastax.oss.driver.api.core.cql.PreparedStatement;
+import com.datastax.oss.driver.api.core.cql.Statement;
 
 public class BatchedWrite extends BatchHandler implements AutoCloseable {
   private static final Logger LOGGER = LoggerFactory.getLogger(BatchedWrite.class);
@@ -42,7 +40,7 @@ public class BatchedWrite extends BatchHandler implements AutoCloseable {
   private final boolean visibilityEnabled;
 
   public BatchedWrite(
-      final Session session,
+      final CqlSession session,
       final PreparedStatement preparedInsert,
       final int batchSize,
       final boolean isDataIndex,
@@ -65,9 +63,9 @@ public class BatchedWrite extends BatchHandler implements AutoCloseable {
   private void insertStatement(final GeoWaveRow row, final BoundStatement statement) {
     if (ASYNC) {
       if (batchSize > 1) {
-        final BatchStatement currentBatch = addStatement(row, statement);
+        final BatchStatementBuilder currentBatch = addStatement(row, statement);
         synchronized (currentBatch) {
-          if (currentBatch.size() >= batchSize) {
+          if (currentBatch.getStatementsCount() >= batchSize) {
             writeBatch(currentBatch);
           }
         }
@@ -84,11 +82,11 @@ public class BatchedWrite extends BatchHandler implements AutoCloseable {
     }
   }
 
-  private void writeBatch(final BatchStatement batch) {
+  private void writeBatch(final BatchStatementBuilder batch) {
     try {
-      executeAsync(batch);
+      executeAsync(batch.build());
 
-      batch.clear();
+      batch.clearStatements();
     } catch (final InterruptedException e) {
       LOGGER.warn("async batch write semaphore interrupted", e);
       writeSemaphore.release();
@@ -97,16 +95,18 @@ public class BatchedWrite extends BatchHandler implements AutoCloseable {
 
   private void executeAsync(final Statement statement) throws InterruptedException {
     writeSemaphore.acquire();
-    final ResultSetFuture future = session.executeAsync(statement);
-    Futures.addCallback(
-        future,
-        new IngestCallback(writeSemaphore),
-        CassandraOperations.WRITE_RESPONSE_THREADS);
+    final CompletionStage<AsyncResultSet> future = session.executeAsync(statement);
+    future.whenCompleteAsync((result, t) -> {
+      writeSemaphore.release();
+      if (t != null) {
+        throw new RuntimeException(t);
+      }
+    });
   }
 
   @Override
   public void close() throws Exception {
-    for (final BatchStatement batch : batches.values()) {
+    for (final BatchStatementBuilder batch : batches.values()) {
       synchronized (batch) {
         writeBatch(batch);
       }
@@ -116,29 +116,5 @@ public class BatchedWrite extends BatchHandler implements AutoCloseable {
     // before exiting close() method
     writeSemaphore.acquire(MAX_CONCURRENT_WRITE);
     writeSemaphore.release(MAX_CONCURRENT_WRITE);
-  }
-
-  // callback class
-  protected static class IngestCallback implements FutureCallback<ResultSet> {
-
-    private final Semaphore semaphore;
-
-    public IngestCallback(final Semaphore semaphore) {
-      this.semaphore = semaphore;
-    }
-
-    @Override
-    public void onSuccess(final ResultSet result) {
-      semaphore.release();
-      // placeholder: put any logging or on success logic here.
-    }
-
-    @Override
-    public void onFailure(final Throwable t) {
-      semaphore.release();
-      // go ahead and wrap in a runtime exception for this case, but you
-      // can do logging or start counting errors.
-      throw new RuntimeException(t);
-    }
   }
 }

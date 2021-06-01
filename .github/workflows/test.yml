@@ -7,7 +7,7 @@ env:
     MAVEN_OPTS: "-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2g -XX:MaxMetaspaceSize=512m -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"    
 jobs:
     unit-tests:
-        runs-on: ubuntu-18.04
+        runs-on: ubuntu-20.04
         name: Unit Tests on Latest ASF Versions
         env:
             IT_ONLY: false
@@ -42,9 +42,9 @@ jobs:
               env:
                 cache-name: cache-resources
               with:
-                key: ${{ runner.os }}-other
+                key: ${{ runner.os }}-other-${{ secrets.CACHE_ID }}
                 restore-keys: |
-                      ${{ runner.os }}-other
+                      ${{ runner.os }}-other-${{ secrets.CACHE_ID }}
                 path: |  
                       ~/.downloads
                       test/landsat8
@@ -63,7 +63,7 @@ jobs:
                 github_token: ${{ secrets.GITHUB_TOKEN }} 
                      
     python-tests:
-        runs-on:  ubuntu-18.04
+        runs-on:  ubuntu-20.04
         name: Python Tests on Latest ASF Versions
         env:
             IT_ONLY: false
@@ -99,9 +99,9 @@ jobs:
               env:
                 cache-name: cache-resources
               with:
-                key: ${{ runner.os }}-other
+                key: ${{ runner.os }}-other-${{ secrets.CACHE_ID }}
                 restore-keys: |
-                      ${{ runner.os }}-other
+                      ${{ runner.os }}-other-${{ secrets.CACHE_ID }}
                 path: |  
                       ~/.downloads
                       test/landsat8
@@ -120,16 +120,21 @@ jobs:
                 github_token: ${{ secrets.GITHUB_TOKEN }}
 
     integration-tests:
-        runs-on: ubuntu-18.04
+        runs-on: ubuntu-20.04
         name: ${{ matrix.profile }} Integration Tests 
         strategy:
             fail-fast: false
             matrix:
-                profile: [redis-it, rocksdb-it, accumulo-it-client, accumulo-it-server, hbase-it-client, hbase-it-server, cassandra-it, dynamodb-it, bigtable-it, kudu-it, filesystem-it, accumulo-it-kerberos, 'filesystem-it,secondary-index-it', 'rocksdb-it,secondary-index-it', 'hbase-it-client,compatibility,ignore-kerberos-it', 'accumulo-it-server,compatibility,ignore-kerberos-it', 'hbase-it-server,cloudera,ignore-kerberos-it', 'accumulo-it-server,cloudera,ignore-kerberos-it']
-                include:
+                profile: [redis-it, rocksdb-it, accumulo-it-client, accumulo-it-server, hbase-it-client, hbase-it-server, cassandra-it, dynamodb-it, bigtable-it, kudu-it, filesystem-it, accumulo-it-kerberos, 'filesystem-it,secondary-index-it', 'rocksdb-it,secondary-index-it'
+                #, 'accumulo-it-kerberos,compatibility', 'accumulo-it-server,compatibility'
+                ]
+                ## for now kerberos test environment isn't quite working, skip the kerberos tests until the issue is resolved
+                #include:
                   # include a new variable of TEST_KERBEROS = true
-                  - profile: accumulo-it-kerberos
-                    test_kerberos: true
+                #  - profile: accumulo-it-kerberos
+                #    test_kerberos: true
+                #  - profile: 'accumulo-it-kerberos,compatibility'
+                #    test_kerberos: true
         env:
             IT_ONLY: true
             MAVEN_PROFILES: ${{ matrix.profile }}
@@ -166,9 +171,9 @@ jobs:
               env:
                 cache-name: cache-resources
               with:
-                key: ${{ runner.os }}-other
+                key: ${{ runner.os }}-other-${{ secrets.CACHE_ID }}
                 restore-keys: |
-                      ${{ runner.os }}-other
+                      ${{ runner.os }}-other-${{ secrets.CACHE_ID }}
                 path: |  
                       ~/.downloads
                       test/landsat8

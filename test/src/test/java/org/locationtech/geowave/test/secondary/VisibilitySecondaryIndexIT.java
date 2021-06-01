@@ -76,9 +76,13 @@ public class VisibilitySecondaryIndexIT {
             "No entries should have differing visibility",
             0,
             differingVisibilities.getValue().longValue()),
-        (store, statsStore, internalAdapterId, spatial) -> {
+        (storeAndStatsStore, internalAdapterIdAndSpatial) -> {
           try {
-            testQuery(store, statsStore, internalAdapterId, spatial);
+            testQuery(
+                storeAndStatsStore.getLeft(),
+                storeAndStatsStore.getRight(),
+                internalAdapterIdAndSpatial.getLeft(),
+                internalAdapterIdAndSpatial.getRight());
           } catch (final IOException e) {
             LOGGER.warn("Unable to test visibility query", e);
             Assert.fail(e.getMessage());

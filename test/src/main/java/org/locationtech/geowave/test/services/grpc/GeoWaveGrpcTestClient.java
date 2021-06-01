@@ -11,7 +11,6 @@ package org.locationtech.geowave.test.services.grpc;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -109,6 +108,7 @@ import org.locationtech.geowave.service.grpc.protobuf.VectorQueryParametersProto
 import org.locationtech.geowave.service.grpc.protobuf.VectorStoreParametersProtos;
 import org.locationtech.geowave.service.grpc.protobuf.VersionCommandParametersProtos;
 import org.locationtech.geowave.test.TestUtils;
+import org.locationtech.geowave.test.kafka.KafkaTestEnvironment;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.io.WKBWriter;
 import org.slf4j.Logger;
@@ -141,7 +141,7 @@ public class GeoWaveGrpcTestClient {
   public GeoWaveGrpcTestClient(final String host, final int port) {
     this(
         NettyChannelBuilder.forAddress(host, port).nameResolverFactory(
-            new DnsNameResolverProvider()).usePlaintext(true));
+            new DnsNameResolverProvider()).usePlaintext());
   }
 
   public GeoWaveGrpcTestClient(final NettyChannelBuilder channelBuilder) {
@@ -873,9 +873,9 @@ public class GeoWaveGrpcTestClient {
     final KafkaToGeoWaveCommandParametersProtos request =
         KafkaToGeoWaveCommandParametersProtos.newBuilder().addAllParameters(
             params).addAllExtensions(extensions).setFormats("gpx").setGroupId(
-                "testGroup").setZookeeperConnect(
-                    GeoWaveGrpcTestUtils.getZookeeperTestEnv().getZookeeper()).setAutoOffsetReset(
-                        "smallest").setFetchMessageMaxBytes("5000000").setConsumerTimeoutMs(
+                "testGroup").setBootstrapServers(
+                    KafkaTestEnvironment.getInstance().getBootstrapServers()).setAutoOffsetReset(
+                        "earliest").setMaxPartitionFetchBytes("5000000").setConsumerTimeoutMs(
                             "5000").setReconnectOnTimeout(false).setBatchSize(10000).build();
     coreIngestBlockingStub.kafkaToGeoWaveCommand(request);
     return true;
@@ -905,20 +905,11 @@ public class GeoWaveGrpcTestClient {
 
     final ArrayList<String> extensions = new ArrayList<>();
 
-    String localhost = "localhost";
-    try {
-      localhost = java.net.InetAddress.getLocalHost().getCanonicalHostName();
-    } catch (final UnknownHostException e) {
-      LOGGER.warn("unable to get canonical hostname for localhost", e);
-    }
-
     final LocalToKafkaCommandParametersProtos request =
         LocalToKafkaCommandParametersProtos.newBuilder().addAllParameters(params).addAllExtensions(
-            extensions).setFormats("gpx").setMetadataBrokerList(
-                localhost + ":9092").setRequestRequiredAcks("1").setProducerType(
-                    "sync").setSerializerClass(
-                        "org.locationtech.geowave.core.ingest.kafka.AvroKafkaEncoder").setRetryBackoffMs(
-                            "1000").build();
+            extensions).setFormats("gpx").setBootstrapServers(
+                KafkaTestEnvironment.getInstance().getBootstrapServers()).setRetryBackoffMs(
+                    "1000").build();
     coreIngestBlockingStub.localToKafkaCommand(request);
     return true;
   }

@@ -176,15 +176,15 @@ public class GeoWavePluginConfig {
 
   public GeoWavePluginConfig(
       final StoreFactoryFamilySpi storeFactoryFamily,
-      final Map<String, Serializable> params) throws GeoWavePluginException {
+      final Map<String, ?> params) throws GeoWavePluginException {
 
-    Serializable param = params.get(GEOWAVE_NAMESPACE_KEY);
+    Object param = params.get(GEOWAVE_NAMESPACE_KEY);
     name = storeFactoryFamily.getType() + (param == null ? "" : ("_" + param));
     final Map<String, String> paramStrs = new HashMap<>();
     // first converts serializable objects to String to avoid any issue if
     // there's a difference how geotools is converting objects to how
     // geowave intends to convert objects
-    for (final Entry<String, Serializable> e : params.entrySet()) {
+    for (final Entry<String, ?> e : params.entrySet()) {
       paramStrs.put(e.getKey(), e.getValue() == null ? null : e.getValue().toString());
     }
 
@@ -249,9 +249,9 @@ public class GeoWavePluginConfig {
     return name;
   }
 
-  public static AuthorizationFactorySPI getAuthorizationFactory(
-      final Map<String, Serializable> params) throws GeoWavePluginException {
-    final Serializable param = params.get(AUTH_MGT_KEY);
+  public static AuthorizationFactorySPI getAuthorizationFactory(final Map<String, ?> params)
+      throws GeoWavePluginException {
+    final Object param = params.get(AUTH_MGT_KEY);
     final Iterator<AuthorizationFactorySPI> authIt = getAuthorizationFactoryList();
     AuthorizationFactorySPI authFactory = new EmptyAuthorizationFactory();
     while (authIt.hasNext()) {
@@ -297,9 +297,9 @@ public class GeoWavePluginConfig {
     return dataStatisticsStore;
   }
 
-  public static IndexQueryStrategySPI getIndexQueryStrategy(final Map<String, Serializable> params)
+  public static IndexQueryStrategySPI getIndexQueryStrategy(final Map<String, ?> params)
       throws GeoWavePluginException {
-    final Serializable param = params.get(QUERY_INDEX_STRATEGY_KEY);
+    final Object param = params.get(QUERY_INDEX_STRATEGY_KEY);
     final String strategy =
         ((param == null) || param.toString().trim().isEmpty()) ? DEFAULT_QUERY_INDEX_STRATEGY
             : param.toString();
@@ -314,9 +314,8 @@ public class GeoWavePluginConfig {
     return null;
   }
 
-  public static URL getAuthorizationURL(final Map<String, Serializable> params)
-      throws GeoWavePluginException {
-    final Serializable param = params.get(AUTH_URL_KEY);
+  public static URL getAuthorizationURL(final Map<String, ?> params) throws GeoWavePluginException {
+    final Object param = params.get(AUTH_URL_KEY);
     if ((param == null) || param.toString().trim().isEmpty()) {
       return null;
     } else {

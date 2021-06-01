@@ -12,8 +12,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
-import org.apache.accumulo.minicluster.impl.MiniAccumuloClusterImpl;
-import org.apache.accumulo.minicluster.impl.MiniAccumuloConfigImpl;
+import org.apache.accumulo.minicluster.MiniAccumuloCluster;
+import org.apache.accumulo.minicluster.MiniAccumuloConfig;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.hadoop.util.VersionInfo;
@@ -32,8 +32,8 @@ public class MiniAccumuloClusterFactory {
     return VersionUtil.compareVersions(VersionInfo.getVersion(), "2.2.0") >= 0;
   }
 
-  public static MiniAccumuloClusterImpl newAccumuloCluster(
-      final MiniAccumuloConfigImpl config,
+  public static MiniAccumuloCluster newAccumuloCluster(
+      final MiniAccumuloConfig config,
       final Class context,
       final URL... additionalClasspathUrls) throws IOException {
 
@@ -44,10 +44,9 @@ public class MiniAccumuloClusterFactory {
       // Jar was not successfully created
       return null;
     }
+    MiniAccumuloUtils.setClasspathItems(config, jarPath);
 
-    config.setClasspathItems(jarPath);
-
-    final MiniAccumuloClusterImpl retVal = new GeoWaveMiniAccumuloClusterImpl(config);
+    final MiniAccumuloCluster retVal = new MiniAccumuloCluster(config);
     if (SystemUtils.IS_OS_WINDOWS && isYarn()) {
       // this must happen after instantiating Mini
       // Accumulo Cluster because it ensures the accumulo

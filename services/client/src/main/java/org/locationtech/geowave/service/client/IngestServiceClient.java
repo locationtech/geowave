@@ -59,9 +59,9 @@ public class IngestServiceClient {
       final String kafkaPropertyFile,
       final String visibility,
       final String groupId,
-      final String zookeeperConnect,
+      final String bootstrapServers,
       final String autoOffsetReset,
-      final String fetchMessageMaxBytes,
+      final String maxPartitionFetchBytes,
       final String consumerTimeoutMs,
       final Boolean reconnectOnTimeout,
       final Integer batchSize,
@@ -75,9 +75,9 @@ public class IngestServiceClient {
             kafkaPropertyFile,
             visibility,
             groupId,
-            zookeeperConnect,
+            bootstrapServers,
             autoOffsetReset,
-            fetchMessageMaxBytes,
+            maxPartitionFetchBytes,
             consumerTimeoutMs,
             reconnectOnTimeout,
             batchSize,
@@ -140,10 +140,7 @@ public class IngestServiceClient {
   public Response localToKafka(
       final String fileOrDirectory,
       final String kafkaPropertyFile,
-      final String metadataBrokerList,
-      final String requestRequiredAcks,
-      final String producerType,
-      final String serializerClass,
+      final String bootstrapServers,
       final String retryBackoffMs,
       final String extensions,
       final String formats) {
@@ -152,19 +149,16 @@ public class IngestServiceClient {
         ingestService.localToKafka(
             fileOrDirectory,
             kafkaPropertyFile,
-            metadataBrokerList,
-            requestRequiredAcks,
-            producerType,
-            serializerClass,
+            bootstrapServers,
             retryBackoffMs,
             extensions,
             formats);
     return resp;
   }
 
-  public Response localToKafka(final String fileOrDirectory) {
+  public Response localToKafka(final String fileOrDirectory, String bootstrapServers) {
 
-    return localToKafka(fileOrDirectory, null, null, null, null, null, null, null, null);
+    return localToKafka(fileOrDirectory, null, bootstrapServers, null, null, null);
   }
 
   public Response localToMrGW(

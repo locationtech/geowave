@@ -13,14 +13,15 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 import org.apache.avro.specific.SpecificRecordBase;
+import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.locationtech.geowave.core.ingest.avro.GenericAvroSerializer;
 import org.locationtech.geowave.core.ingest.avro.GeoWaveAvroFormatPlugin;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.ingest.AbstractLocalFileDriver;
 import org.locationtech.geowave.core.store.ingest.LocalInputCommandLineOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import kafka.javaapi.producer.Producer;
-import kafka.producer.KeyedMessage;
 
 /**
  * This class actually executes the staging of data to a Kafka topic based on the available type
@@ -50,12 +51,14 @@ public class StageToKafkaDriver<T extends SpecificRecordBase> extends
       final StageKafkaData<?> runData) {
 
     try {
-      final Producer<String, Object> producer =
-          (Producer<String, Object>) runData.getProducer(typeName, plugin);
+      final Producer<byte[], byte[]> producer = runData.getProducer(typeName, plugin);
       try (final CloseableIterator<?> avroRecords = plugin.toAvroObjects(file)) {
         while (avroRecords.hasNext()) {
           final Object avroRecord = avroRecords.next();
-          final KeyedMessage<String, Object> data = new KeyedMessage<>(typeName, avroRecord);
+          final ProducerRecord<byte[], byte[]> data =
+              new ProducerRecord<>(
+                  typeName,
+                  GenericAvroSerializer.serialize(avroRecord, plugin.getAvroSchema()));
           producer.send(data);
         }
       }

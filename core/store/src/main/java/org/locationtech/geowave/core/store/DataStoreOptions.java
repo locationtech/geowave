@@ -9,21 +9,25 @@
 package org.locationtech.geowave.core.store;
 
 public interface DataStoreOptions {
-  public boolean isPersistDataStatistics();
+  boolean isPersistDataStatistics();
 
-  public boolean isEnableBlockCache();
+  boolean isEnableBlockCache();
 
-  public boolean isServerSideLibraryEnabled();
+  boolean isServerSideLibraryEnabled();
 
-  public boolean isVisibilityEnabled();
+  default boolean requiresClientSideMerging() {
+    return !isServerSideLibraryEnabled();
+  }
 
-  public int getDataIndexBatchSize();
+  boolean isVisibilityEnabled();
 
-  public int getMaxRangeDecomposition();
+  int getDataIndexBatchSize();
 
-  public int getAggregationMaxRangeDecomposition();
+  int getMaxRangeDecomposition();
 
-  public boolean isSecondaryIndexing();
+  int getAggregationMaxRangeDecomposition();
 
-  public void setSecondaryIndexing(boolean se);
+  boolean isSecondaryIndexing();
+
+  void setSecondaryIndexing(boolean se);
 }

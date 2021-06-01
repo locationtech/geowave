@@ -25,11 +25,11 @@ import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.spark_project.guava.collect.Iterators;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
+import com.google.common.collect.Iterators;
 
 @GeowaveOperation(name = "query", parentOperation = VectorSection.class)
 @Parameters(commandDescription = "Query vector data using a GWQL")

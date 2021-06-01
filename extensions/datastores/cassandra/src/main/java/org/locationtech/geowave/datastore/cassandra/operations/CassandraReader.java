@@ -28,7 +28,7 @@ import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.datastore.cassandra.CassandraRow;
 import org.locationtech.geowave.mapreduce.splits.GeoWaveRowRange;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
-import com.datastax.driver.core.querybuilder.Select;
+import com.datastax.oss.driver.api.querybuilder.select.Select;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Streams;
@@ -102,7 +102,7 @@ public class CassandraReader<T> implements RowReader<T> {
     } else {
       // TODO figure out the query select by adapter IDs here
       final Select select = operations.getSelect(readerParams.getIndex().getName());
-      CloseableIterator<CassandraRow> results = operations.executeQuery(select);
+      CloseableIterator<CassandraRow> results = operations.executeQuery(select.build());
       if ((readerParams.getAdapterIds() != null) && (readerParams.getAdapterIds().length > 0)) {
         // TODO because we aren't filtering server-side by adapter ID,
         // we will need to filter here on the client

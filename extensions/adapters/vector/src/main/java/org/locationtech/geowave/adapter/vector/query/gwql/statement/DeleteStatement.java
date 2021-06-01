@@ -18,7 +18,7 @@ import org.locationtech.geowave.core.store.api.Query;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
-import org.spark_project.guava.collect.Lists;
+import com.google.common.collect.Lists;
 
 /**
  * Deletes data from a GeoWave store.

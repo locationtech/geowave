@@ -36,22 +36,22 @@ import org.geotools.coverage.grid.io.AbstractGridFormat;
 import org.geotools.coverage.grid.io.GridCoverage2DReader;
 import org.geotools.coverage.grid.io.OverviewPolicy;
 import org.geotools.data.DataSourceException;
-import org.geotools.factory.Hints;
 import org.geotools.geometry.GeneralEnvelope;
 import org.geotools.parameter.Parameter;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.operation.BufferedCoordinateOperationFactory;
 import org.geotools.util.Utilities;
+import org.geotools.util.factory.Hints;
 import org.locationtech.geowave.adapter.auth.AuthorizationSPI;
 import org.locationtech.geowave.adapter.raster.RasterUtils;
 import org.locationtech.geowave.adapter.raster.Resolution;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
+import org.locationtech.geowave.adapter.raster.stats.RasterBoundingBoxStatistic;
+import org.locationtech.geowave.adapter.raster.stats.RasterBoundingBoxStatistic.RasterBoundingBoxValue;
 import org.locationtech.geowave.adapter.raster.stats.RasterHistogramStatistic;
 import org.locationtech.geowave.adapter.raster.stats.RasterHistogramStatistic.RasterHistogramValue;
 import org.locationtech.geowave.adapter.raster.stats.RasterOverviewStatistic;
 import org.locationtech.geowave.adapter.raster.stats.RasterOverviewStatistic.RasterOverviewValue;
-import org.locationtech.geowave.adapter.raster.stats.RasterBoundingBoxStatistic;
-import org.locationtech.geowave.adapter.raster.stats.RasterBoundingBoxStatistic.RasterBoundingBoxValue;
 import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
@@ -66,8 +66,6 @@ import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
-import org.locationtech.geowave.core.store.api.Statistic;
-import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
@@ -326,7 +324,7 @@ public class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
 
   @Override
   public GeneralEnvelope getOriginalEnvelope(final String coverageName) {
-    RasterBoundingBoxValue rasterBbox =
+    final RasterBoundingBoxValue rasterBbox =
         InternalStatisticsHelper.getDataTypeStatistic(
             geowaveStatisticsStore,
             RasterBoundingBoxStatistic.STATS_TYPE,
@@ -377,7 +375,7 @@ public class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
   public GridEnvelope getOriginalGridRange(final String coverageName) {
     int width = 0;
     int height = 0;
-    RasterBoundingBoxValue bbox =
+    final RasterBoundingBoxValue bbox =
         InternalStatisticsHelper.getDataTypeStatistic(
             geowaveStatisticsStore,
             RasterBoundingBoxStatistic.STATS_TYPE,
@@ -385,7 +383,7 @@ public class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
             authorizationSPI.getAuthorizations());
 
     if (bbox != null) {
-      RasterOverviewValue overview =
+      final RasterOverviewValue overview =
           InternalStatisticsHelper.getDataTypeStatistic(
               geowaveStatisticsStore,
               RasterOverviewStatistic.STATS_TYPE,
@@ -871,23 +869,6 @@ public class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
   }
 
   @Override
-  public int getNumOverviews() {
-    throw new UnsupportedOperationException(
-        "A coverage name must be provided, there is no support for a default coverage");
-  }
-
-  @Override
-  public int getNumOverviews(final String coverageName) {
-    try {
-      final double[][] resolutionLevels = getResolutionLevels(coverageName);
-      return Math.max(0, resolutionLevels.length - 1);
-    } catch (final IOException e) {
-      LOGGER.warn("Unable to read resolution levels", e);
-    }
-    return 0;
-  }
-
-  @Override
   public ImageLayout getImageLayout() throws IOException {
     throw new UnsupportedOperationException(
         "A coverage name must be provided, there is no support for a default coverage");
@@ -918,7 +899,7 @@ public class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
 
   @Override
   public double[][] getResolutionLevels(final String coverageName) throws IOException {
-    RasterOverviewValue overview =
+    final RasterOverviewValue overview =
         InternalStatisticsHelper.getDataTypeStatistic(
             geowaveStatisticsStore,
             RasterOverviewStatistic.STATS_TYPE,
@@ -939,7 +920,7 @@ public class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
 
   private Histogram getHistogram(final String coverageName, final double resX, final double resY)
       throws IOException {
-    RasterHistogramValue histogram =
+    final RasterHistogramValue histogram =
         InternalStatisticsHelper.getDataTypeStatistic(
             geowaveStatisticsStore,
             RasterHistogramStatistic.STATS_TYPE,

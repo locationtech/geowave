@@ -46,7 +46,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import si.uom.SI;
-import tec.uom.se.unit.Units;
+import tech.units.indriya.unit.Units;
 
 /*
  * Calculates distance use orthodromic distance to calculate the bounding box around each point.

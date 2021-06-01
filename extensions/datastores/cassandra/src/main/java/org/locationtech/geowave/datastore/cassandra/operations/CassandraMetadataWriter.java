@@ -11,16 +11,16 @@ package org.locationtech.geowave.datastore.cassandra.operations;
 import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.operations.MetadataWriter;
-import com.datastax.driver.core.querybuilder.Insert;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
+import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
+import com.datastax.oss.driver.api.querybuilder.insert.RegularInsert;
 
 public class CassandraMetadataWriter implements MetadataWriter {
-  protected static final String PRIMARY_ID_KEY = "I";
-  protected static final String SECONDARY_ID_KEY = "S";
+  protected static final String PRIMARY_ID_KEY = "i";
+  protected static final String SECONDARY_ID_KEY = "s";
   // serves as unique ID for instances where primary+secondary are repeated
-  protected static final String TIMESTAMP_ID_KEY = "T";
-  protected static final String VISIBILITY_KEY = "A";
-  protected static final String VALUE_KEY = "V";
+  protected static final String TIMESTAMP_ID_KEY = "t";
+  protected static final String VISIBILITY_KEY = "a";
+  protected static final String VALUE_KEY = "v";
 
   private final CassandraOperations operations;
   private final String tableName;
@@ -35,18 +35,27 @@ public class CassandraMetadataWriter implements MetadataWriter {
 
   @Override
   public void write(final GeoWaveMetadata metadata) {
-    final Insert insert = operations.getInsert(tableName);
-    insert.value(PRIMARY_ID_KEY, ByteBuffer.wrap(metadata.getPrimaryId()));
+    RegularInsert insert =
+        operations.getInsert(tableName).value(
+            PRIMARY_ID_KEY,
+            QueryBuilder.literal(ByteBuffer.wrap(metadata.getPrimaryId())));
     if (metadata.getSecondaryId() != null) {
-      insert.value(SECONDARY_ID_KEY, ByteBuffer.wrap(metadata.getSecondaryId()));
-      insert.value(TIMESTAMP_ID_KEY, QueryBuilder.now());
+      insert =
+          insert.value(
+              SECONDARY_ID_KEY,
+              QueryBuilder.literal(ByteBuffer.wrap(metadata.getSecondaryId()))).value(
+                  TIMESTAMP_ID_KEY,
+                  QueryBuilder.now());
       if ((metadata.getVisibility() != null) && (metadata.getVisibility().length > 0)) {
-        insert.value(VISIBILITY_KEY, ByteBuffer.wrap(metadata.getVisibility()));
+        insert =
+            insert.value(
+                VISIBILITY_KEY,
+                QueryBuilder.literal(ByteBuffer.wrap(metadata.getVisibility())));
       }
     }
 
-    insert.value(VALUE_KEY, ByteBuffer.wrap(metadata.getValue()));
-    operations.getSession().execute(insert);
+    insert = insert.value(VALUE_KEY, QueryBuilder.literal(ByteBuffer.wrap(metadata.getValue())));
+    operations.getSession().execute(insert.build());
   }
 
   @Override

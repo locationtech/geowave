@@ -16,7 +16,7 @@
 	<dependencies>
 		<dependency> <!-- Spark dependency -->
 			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-core_2.11</artifactId>
+			<artifactId>spark-core_2.12</artifactId>
 			<version>${spark.version}</version>
 			<scope>compile</scope>
 			<exclusions>
@@ -28,7 +28,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-mllib_2.11</artifactId>
+			<artifactId>spark-mllib_2.12</artifactId>
 			<version>${spark.version}</version>
 			<scope>compile</scope>
 		</dependency>
@@ -45,8 +45,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scalatest</groupId>
-			<artifactId>scalatest_2.11</artifactId>
-			<version>3.0.1</version>
+			<artifactId>scalatest_2.12</artifactId>
+			<version>${spark.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

@@ -10,12 +10,12 @@ package org.locationtech.geowave.adapter.vector.plugin;
 
 import org.geotools.data.Query;
 import org.geotools.data.simple.SimpleFeatureCollection;
-import org.geotools.factory.Hints;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.process.ProcessException;
 import org.geotools.process.factory.DescribeParameter;
 import org.geotools.process.factory.DescribeProcess;
 import org.geotools.process.factory.DescribeResult;
+import org.geotools.util.factory.Hints;
 import org.opengis.coverage.grid.GridGeometry;
 
 /**

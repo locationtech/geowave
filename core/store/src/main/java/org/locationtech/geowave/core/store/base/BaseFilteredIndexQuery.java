@@ -167,7 +167,7 @@ abstract class BaseFilteredIndexQuery extends BaseQuery {
       final boolean decodePersistenceEncoding) {
     final @Nullable QueryFilter[] clientFilters = getClientFilters(options);
     final DataIndexRetrieval dataIndexRetrieval = getDataIndexRetrieval();
-    if ((options == null) || !options.isServerSideLibraryEnabled()) {
+    if ((options == null) || options.requiresClientSideMerging()) {
       final Map<Short, RowMergingDataAdapter> mergingAdapters = getMergingAdapters(adapterStore);
 
       if (!mergingAdapters.isEmpty()) {

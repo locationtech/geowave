@@ -10,7 +10,9 @@ package org.locationtech.geowave.test;
 
 import java.io.File;
 import java.io.IOException;
-import org.codehaus.plexus.util.FileUtils;
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.commons.io.FileUtils;
 import org.locationtech.geowave.core.store.GenericStoreFactory;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.api.DataStore;
@@ -21,6 +23,9 @@ import org.locationtech.geowave.datastore.cassandra.config.CassandraRequiredOpti
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.datastax.oss.driver.api.querybuilder.SchemaBuilder;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class CassandraStoreTestEnvironment extends StoreTestEnvironment {
   private static final Logger LOGGER = LoggerFactory.getLogger(CassandraStoreTestEnvironment.class);
@@ -30,11 +35,9 @@ public class CassandraStoreTestEnvironment extends StoreTestEnvironment {
   private static CassandraStoreTestEnvironment singletonInstance = null;
   protected static final File TEMP_DIR =
       new File(System.getProperty("user.dir") + File.separator + "target", "cassandra_temp");
+  protected static final File DATA_DIR =
+      new File(TEMP_DIR.getAbsolutePath() + File.separator + "cassandra", "data");
   protected static final String NODE_DIRECTORY_PREFIX = "cassandra";
-
-  // for testing purposes, easily toggle between running the cassandra server
-  // as multi-nodes or as standalone
-  private static final boolean CLUSTERED_MODE = false;
 
   public static synchronized CassandraStoreTestEnvironment getInstance() {
     if (singletonInstance == null) {
@@ -44,13 +47,31 @@ public class CassandraStoreTestEnvironment extends StoreTestEnvironment {
   }
 
   private boolean running = false;
+  CassandraServer s;
 
   private CassandraStoreTestEnvironment() {}
 
   @Override
   protected void initOptions(final StoreFactoryOptions options) {
     final CassandraRequiredOptions cassandraOpts = (CassandraRequiredOptions) options;
-    cassandraOpts.setContactPoint("127.0.0.1");
+    cassandraOpts.getAdditionalOptions().setReplicationFactor(1);
+    cassandraOpts.getAdditionalOptions().setDurableWrites(false);
+    cassandraOpts.getAdditionalOptions().setGcGraceSeconds(0);
+
+    try {
+      final Map<String, String> tableOptions = new HashMap<>();
+      tableOptions.put(
+          "compaction",
+          new ObjectMapper().writeValueAsString(
+              SchemaBuilder.sizeTieredCompactionStrategy().withMinSSTableSizeInBytes(
+                  500000L).withMinThreshold(2).withUncheckedTombstoneCompaction(
+                      true).getOptions()));
+      tableOptions.put("gc_grace_seconds", new ObjectMapper().writeValueAsString(0));
+      cassandraOpts.getAdditionalOptions().setTableOptions(tableOptions);
+    } catch (final JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
+    cassandraOpts.setContactPoints("127.0.0.1");
     ((CassandraOptions) cassandraOpts.getStoreOptions()).setBatchWriteSize(5);
   }
 
@@ -68,11 +89,9 @@ public class CassandraStoreTestEnvironment extends StoreTestEnvironment {
       if (!TEMP_DIR.mkdirs()) {
         LOGGER.warn("Unable to create temporary cassandra directory");
       }
-      if (CLUSTERED_MODE) {
-        new CassandraServer(4, 512, TEMP_DIR.getAbsolutePath()).start();
-      } else {
-        new CassandraServer(1, 512, TEMP_DIR.getAbsolutePath()).start();
-      }
+      // System.setProperty("cassandra.jmx.local.port", "7199");
+      s = new CassandraServer();
+      s.start();
       running = true;
     }
   }
@@ -80,11 +99,7 @@ public class CassandraStoreTestEnvironment extends StoreTestEnvironment {
   @Override
   public void tearDown() {
     if (running) {
-      if (CLUSTERED_MODE) {
-        new CassandraServer(4, 512, TEMP_DIR.getAbsolutePath()).stop();
-      } else {
-        new CassandraServer(1, 512, TEMP_DIR.getAbsolutePath()).stop();
-      }
+      s.stop();
       running = false;
     }
     try {
@@ -113,5 +128,10 @@ public class CassandraStoreTestEnvironment extends StoreTestEnvironment {
   @Override
   public TestEnvironment[] getDependentEnvironments() {
     return new TestEnvironment[] {};
+  }
+
+  @Override
+  public int getMaxCellSize() {
+    return 64 * 1024;
   }
 }

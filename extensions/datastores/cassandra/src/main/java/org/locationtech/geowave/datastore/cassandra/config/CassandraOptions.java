@@ -8,8 +8,20 @@
  */
 package org.locationtech.geowave.datastore.cassandra.config;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.locationtech.geowave.core.store.BaseDataStoreOptions;
+import com.beust.jcommander.DynamicParameter;
+import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
+import com.beust.jcommander.converters.IParameterSplitter;
+import com.datastax.oss.driver.api.querybuilder.SchemaBuilder;
+import com.datastax.oss.driver.api.querybuilder.schema.compaction.CompactionStrategy;
+import com.datastax.oss.driver.api.querybuilder.schema.compaction.LeveledCompactionStrategy;
+import com.datastax.oss.driver.api.querybuilder.schema.compaction.SizeTieredCompactionStrategy;
+import com.datastax.oss.driver.api.querybuilder.schema.compaction.TimeWindowCompactionStrategy;
 
 public class CassandraOptions extends BaseDataStoreOptions {
   @Parameter(names = "--batchWriteSize", description = "The number of inserts in a batch write.")
@@ -26,28 +38,29 @@ public class CassandraOptions extends BaseDataStoreOptions {
       description = "The number of replicas to use when creating a new keyspace.")
   private int replicationFactor = 3;
 
-  // TODO: it'd be nice to offer an option to organize the data where the
-  // space filling curve cluster column precedes the adapter ID so you can
-  // query across adapters efficiently (ie. get all the points regardless of
-  // feature type)
-  // within geoserver this is not a default use case, but this is analogous to
-  // the option of setting locality groups in accumulo
-  // TODO: this is technically a property of the table and should be persisted
-  // as table metadata
-  // @Parameter(names = "--comingleTypes", description = "Store different
-  // types together to quickly query across different types (this will have
-  // performance implications on querying for a single type when storing
-  // comingling multiple types in the same table).")
-  // private boolean comingleTypes = false;
+  @Parameter(
+      names = "--gcGraceSeconds",
+      description = "The gc_grace_seconds applied to each Cassandra table. Defaults to 10 days and major compaction should be triggered at least as often.")
+  private int gcGraceSeconds = 864000;
 
-  // public boolean isComingleTypes() {
-  // return comingleTypes;
-  // }
-  //
-  // public void setComingleTypes(
-  // boolean comingleTypes ) {
-  // this.comingleTypes = comingleTypes;
-  // }
+  @Parameter(
+      names = "--compactionStrategy",
+      description = "The compaction strategy applied to each Cassandra table. Available options are LeveledCompactionStrategy, SizeTieredCompactionStrategy, or TimeWindowCompactionStrategy.",
+      converter = CompactionStrategyConverter.class)
+  private CompactionStrategy<?> compactionStrategy = SchemaBuilder.sizeTieredCompactionStrategy();
+
+  @DynamicParameter(
+      names = "--tableOptions",
+      description = "Any general table options as 'key=value' applied to each Cassandra table.")
+  private Map<String, String> tableOptions = new HashMap<>();
+
+  public int getGcGraceSeconds() {
+    return gcGraceSeconds;
+  }
+
+  public void setGcGraceSeconds(final int gcGraceSeconds) {
+    this.gcGraceSeconds = gcGraceSeconds;
+  }
 
   public int getBatchWriteSize() {
     return batchWriteSize;
@@ -73,6 +86,41 @@ public class CassandraOptions extends BaseDataStoreOptions {
     this.replicationFactor = replicationFactor;
   }
 
+  public String getCompactionStrategyStr() {
+    if (compactionStrategy == null) {
+      return null;
+    } else {
+      if (compactionStrategy instanceof TimeWindowCompactionStrategy) {
+        return "TimeWindowCompactionStrategy";
+      } else if (compactionStrategy instanceof LeveledCompactionStrategy) {
+        return "LeveledCompactionStrategy";
+      } else if (compactionStrategy instanceof SizeTieredCompactionStrategy) {
+        return "SizeTieredCompactionStrategy";
+      }
+    }
+    return null;
+  }
+
+  public void setCompactionStrategyStr(final String compactionStrategyStr) {
+    compactionStrategy = convertCompactionStrategy(compactionStrategyStr);
+  }
+
+  public CompactionStrategy<?> getCompactionStrategy() {
+    return compactionStrategy;
+  }
+
+  public void setCompactionStrategy(final CompactionStrategy<?> compactionStrategy) {
+    this.compactionStrategy = compactionStrategy;
+  }
+
+  public Map<String, String> getTableOptions() {
+    return tableOptions;
+  }
+
+  public void setTableOptions(final Map<String, String> tableOptions) {
+    this.tableOptions = tableOptions;
+  }
+
   @Override
   public boolean isServerSideLibraryEnabled() {
     return false;
@@ -81,5 +129,54 @@ public class CassandraOptions extends BaseDataStoreOptions {
   @Override
   protected boolean defaultEnableVisibility() {
     return false;
+  }
+
+  public static class CompactionStrategyConverter implements
+      IStringConverter<CompactionStrategy<?>> {
+
+    @Override
+    public CompactionStrategy<?> convert(final String value) {
+      return convertCompactionStrategy(value);
+    }
+  }
+
+  private static CompactionStrategy<?> convertCompactionStrategy(final String value) {
+    if ((value != null) && !value.isEmpty()) {
+      final String str = value.trim().toLowerCase();
+      switch (str) {
+        case "leveledcompactionstrategy":
+        case "lcs":
+          return SchemaBuilder.leveledCompactionStrategy();
+        case "sizetieredcompactionstrategy":
+        case "stcs":
+          return SchemaBuilder.sizeTieredCompactionStrategy();
+        case "timewindowcompactionstrategy":
+        case "twcs":
+          return SchemaBuilder.timeWindowCompactionStrategy();
+      }
+      // backup to a more lenient "contains" check as a last resort (because class names contain
+      // these strings so in case a Java object gets serialized to a string this will still work
+      if (str.contains("leveledcompactionstrategy")) {
+        return SchemaBuilder.leveledCompactionStrategy();
+      } else if (str.contains("sizetieredcompactionstrategy")) {
+        return SchemaBuilder.sizeTieredCompactionStrategy();
+      } else if (str.contains("timewindowcompactionstrategy")) {
+        return SchemaBuilder.timeWindowCompactionStrategy();
+
+      }
+      throw new IllegalArgumentException(
+          "Unable to convert '"
+              + value
+              + "' to compaction strategy. Available options are LeveledCompactionStrategy, SizeTieredCompactionStrategy, or TimeWindowCompactionStrategy.");
+    }
+    return null;
+  }
+
+  public static class SemiColonSplitter implements IParameterSplitter {
+
+    @Override
+    public List<String> split(final String value) {
+      return Arrays.asList(value.split(";"));
+    }
   }
 }

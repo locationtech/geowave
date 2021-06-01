@@ -37,7 +37,6 @@ import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProv
 import org.locationtech.geowave.core.geotime.index.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.InternalGeotoolsFeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.SpatialIndexUtils;
@@ -170,7 +169,7 @@ public class GeoWaveGTDataStore extends ContentDataStore {
 
     final AdapterToIndexMapping[] adapterIndexMappings =
         adapterIndexMappingStore.getIndicesForAdapter(internalAdapterId);
-    if ((adapterIndexMappings != null) && adapterIndexMappings.length > 0) {
+    if ((adapterIndexMappings != null) && (adapterIndexMappings.length > 0)) {
       currentSelections =
           Arrays.stream(adapterIndexMappings).map(mapping -> mapping.getIndex(indexStore)).toArray(
               Index[]::new);
@@ -327,7 +326,7 @@ public class GeoWaveGTDataStore extends ContentDataStore {
       while (indices.hasNext()) {
         final Index index = indices.next();
         final CoordinateReferenceSystem indexCRS = GeometryUtils.getIndexCrs(index);
-        if (selectedCRS != null && !selectedCRS.equals(indexCRS)) {
+        if ((selectedCRS != null) && !selectedCRS.equals(indexCRS)) {
           continue;
         }
         if (!indexNames.isEmpty()) {

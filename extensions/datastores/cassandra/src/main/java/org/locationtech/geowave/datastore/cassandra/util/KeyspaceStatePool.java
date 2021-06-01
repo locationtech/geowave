@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import com.datastax.driver.core.PreparedStatement;
+import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 
 public class KeyspaceStatePool {
   private static KeyspaceStatePool singletonInstance;

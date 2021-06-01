@@ -491,15 +491,30 @@ def test_bigtable_options():
 
 def test_cassandra_options():
     options = CassandraOptions()
-    options.set_contact_point("test_contact_point")
-    assert options.get_contact_point() == "test_contact_point"
+    options.set_contact_points("test_contact_point")
+    assert options.get_contact_points() == "test_contact_point"
+    options.set_datacenter("test_datacenter")
+    assert options.get_datacenter() == "test_datacenter"
     options.set_batch_write_size(42)
     assert options.get_batch_write_size() == 42
     durable_writes = not options.is_durable_writes()
     options.set_durable_writes(durable_writes)
     assert options.is_durable_writes() == durable_writes
     options.set_replication_factor(43)
-    assert options.get_replication_factor() == 43
+    assert options.get_replication_factor() == 43    
+    options.set_gc_grace_seconds(44)
+    assert options.get_gc_grace_seconds() == 44
+    table_options = {
+        "test_key_1": "test_value_1",
+        "test_key_2": "test_value_2"
+    }
+    options.set_table_options(table_options)
+    returned_table_options = options.get_table_options()
+    assert len(returned_table_options) == len(table_options)
+    for key in returned_table_options:
+        assert (key in table_options and returned_table_options[key] == table_options[key])
+    options.set_compaction_strategy("TimeWindowCompactionStrategy")
+    assert options.get_compaction_strategy() == "TimeWindowCompactionStrategy"
     _test_base_options(options, False)
 
 

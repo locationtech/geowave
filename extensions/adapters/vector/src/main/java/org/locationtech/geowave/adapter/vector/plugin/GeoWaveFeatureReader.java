@@ -398,7 +398,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
                   fullTransform.inverse(),
                   new Rectangle(width, height),
                   pixelSize);
-          NumericDimensionDefinition[] dimensions =
+          final NumericDimensionDefinition[] dimensions =
               index.getIndexStrategy().getOrderedDimensionDefinitions();
           final double[] maxResolutionSubsampling = new double[dimensions.length];
           for (int i = 0; i < dimensions.length; i++) {
@@ -503,7 +503,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
       final Filter filter,
       final Integer limit) {
     if (filter instanceof FidFilterImpl) {
-      final Set<String> fids = ((FidFilterImpl) filter).getIDs();
+      final Set<String> fids = ((FidFilterImpl) filter).getFidsSet();
       final byte[][] ids = new byte[fids.size()][];
       int i = 0;
       for (final String fid : fids) {

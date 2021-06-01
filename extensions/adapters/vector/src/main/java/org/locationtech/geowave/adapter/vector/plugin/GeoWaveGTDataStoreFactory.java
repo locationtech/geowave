@@ -10,7 +10,6 @@ package org.locationtech.geowave.adapter.vector.plugin;
 
 import java.awt.RenderingHints.Key;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -21,8 +20,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFactorySpi;
-import org.geotools.factory.FactoryIteratorProvider;
-import org.geotools.factory.GeoTools;
+import org.geotools.util.factory.FactoryIteratorProvider;
+import org.geotools.util.factory.GeoTools;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
 import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
 import org.slf4j.Logger;
@@ -37,10 +36,10 @@ import com.google.common.collect.Iterators;
  */
 public class GeoWaveGTDataStoreFactory implements DataStoreFactorySpi {
   private static class DataStoreCacheEntry {
-    private final Map<String, Serializable> params;
+    private final Map<String, ?> params;
     private final DataStore dataStore;
 
-    public DataStoreCacheEntry(final Map<String, Serializable> params, final DataStore dataStore) {
+    public DataStoreCacheEntry(final Map<String, ?> params, final DataStore dataStore) {
       this.params = params;
       this.dataStore = dataStore;
     }
@@ -81,7 +80,7 @@ public class GeoWaveGTDataStoreFactory implements DataStoreFactorySpi {
   // correct but it keeps us from making several connections for the same data
   // store
   @Override
-  public DataStore createDataStore(final Map<String, Serializable> params) throws IOException {
+  public DataStore createDataStore(final Map<String, ?> params) throws IOException {
     // iterate in reverse over the cache so the most recently added is
     // accessed first
     for (int index = dataStoreCache.size() - 1; index >= 0; index--) {
@@ -93,12 +92,10 @@ public class GeoWaveGTDataStoreFactory implements DataStoreFactorySpi {
     return createNewDataStore(params);
   }
 
-  private boolean paramsEqual(
-      final Map<String, Serializable> params1,
-      final Map<String, Serializable> params2) {
+  private boolean paramsEqual(final Map<String, ?> params1, final Map<String, ?> params2) {
     if (params1.size() == params2.size()) {
-      for (final Entry<String, Serializable> entry : params1.entrySet()) {
-        final Serializable value = params2.get(entry.getKey());
+      for (final Entry<String, ?> entry : params1.entrySet()) {
+        final Object value = params2.get(entry.getKey());
         if (value == null) {
           if (entry.getValue() == null) {
             continue;
@@ -114,7 +111,7 @@ public class GeoWaveGTDataStoreFactory implements DataStoreFactorySpi {
   }
 
   @Override
-  public DataStore createNewDataStore(final Map<String, Serializable> params) throws IOException {
+  public DataStore createNewDataStore(final Map<String, ?> params) throws IOException {
     final GeoWaveGTDataStore dataStore;
     try {
       dataStore =
@@ -146,7 +143,7 @@ public class GeoWaveGTDataStoreFactory implements DataStoreFactorySpi {
   }
 
   @Override
-  public boolean canProcess(final Map<String, Serializable> params) {
+  public boolean canProcess(final Map<String, ?> params) {
     try {
       final Map<String, String> dataStoreParams =
           params.entrySet().stream().filter(

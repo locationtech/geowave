@@ -18,9 +18,10 @@ import com.beust.jcommander.ParametersDelegate;
 public class CassandraRequiredOptions extends StoreFactoryOptions {
   @Parameter(
       names = "--contactPoints",
-      required = true,
       description = "A single contact point or a comma delimited set of contact points to connect to the Cassandra cluster.")
-  private String contactPoints;
+  private String contactPoints = "";
+  @Parameter(names = "--datacenter", description = "The local datacenter.")
+  private String datacenter = null;
 
   @ParametersDelegate
   private CassandraOptions additionalOptions = new CassandraOptions();
@@ -41,12 +42,24 @@ public class CassandraRequiredOptions extends StoreFactoryOptions {
     return new CassandraStoreFactoryFamily();
   }
 
-  public String getContactPoint() {
+  public String getContactPoints() {
     return contactPoints;
   }
 
-  public void setContactPoint(final String contactPoints) {
+  public void setContactPoints(final String contactPoints) {
     this.contactPoints = contactPoints;
+  }
+
+  public String getDatacenter() {
+    return datacenter;
+  }
+
+  public void setDatacenter(String datacenter) {
+    this.datacenter = datacenter;
+  }
+
+  public CassandraOptions getAdditionalOptions() {
+    return additionalOptions;
   }
 
   @Override

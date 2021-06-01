@@ -17,7 +17,7 @@ import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
-import org.spark_project.guava.collect.Iterators;
+import com.google.common.collect.Iterators;
 
 /**
  * This Query Strategy chooses the index that satisfies the most dimensions of the underlying query

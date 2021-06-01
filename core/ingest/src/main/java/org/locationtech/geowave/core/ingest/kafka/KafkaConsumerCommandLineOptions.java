@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.core.ingest.kafka;
 
+import org.apache.kafka.clients.CommonClientConfigs;
 import com.beust.jcommander.Parameter;
 
 public class KafkaConsumerCommandLineOptions extends KafkaCommandLineOptions {
@@ -17,28 +18,28 @@ public class KafkaConsumerCommandLineOptions extends KafkaCommandLineOptions {
       description = "A string that uniquely identifies the group of consumer processes to which this consumer belongs. By setting the same group id multiple processes indicate that they are all part of the same consumer group.")
   private String groupId;
 
-  @PropertyReference("zookeeper.connect")
+  @PropertyReference(CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG)
   @Parameter(
-      names = "--zookeeperConnect",
-      description = "Specifies the ZooKeeper connection string in the form hostname:port where host and port are the host and port of a ZooKeeper server. To allow connecting through other ZooKeeper nodes when that ZooKeeper machine is down you can also specify multiple hosts in the form hostname1:port1,hostname2:port2,hostname3:port3.")
-  private String zookeeperConnect;
+      names = "--bootstrapServers",
+      description = "This is for bootstrapping and the consumer will only use it for getting metadata (topics, partitions and replicas). The socket connections for sending the actual data will be established based on the broker information returned in the metadata. The format is host1:port1,host2:port2, and the list can be a subset of brokers or a VIP pointing to a subset of brokers.")
+  private String bootstrapServers;
 
   @PropertyReference("auto.offset.reset")
   @Parameter(
       names = "--autoOffsetReset",
       description = "What to do when there is no initial offset in ZooKeeper or if an offset is out of range:\n"
-          + "\t* smallest : automatically reset the offset to the smallest offset\n"
-          + "\t* largest : automatically reset the offset to the largest offset\n"
+          + "\t* earliest: automatically reset the offset to the earliest offset\n"
+          + "\t* latest: automatically reset the offset to the latest offset\n"
+          + "\t* none: don't reset the offset\n"
           + "\t* anything else: throw exception to the consumer\n")
   private String autoOffsetReset;
 
-  @PropertyReference("fetch.message.max.bytes")
+  @PropertyReference("max.partition.fetch.bytes")
   @Parameter(
-      names = "--fetchMessageMaxBytes",
+      names = "--maxPartitionFetchBytes",
       description = "The number of bytes of messages to attempt to fetch for each topic-partition in each fetch request. These bytes will be read into memory for each partition, so this helps control the memory used by the consumer. The fetch request size must be at least as large as the maximum message size the server allows or else it is possible for the producer to send messages larger than the consumer can fetch.")
-  private String fetchMessageMaxBytes;
+  private String maxPartitionFetchBytes;
 
-  @PropertyReference("consumer.timeout.ms")
   @Parameter(
       names = "--consumerTimeoutMs",
       description = "By default, this value is -1 and a consumer blocks indefinitely if no new message is available for consumption. By setting the value to a positive integer, a timeout exception is thrown to the consumer if no message is available for consumption after the specified timeout value.")
@@ -62,20 +63,20 @@ public class KafkaConsumerCommandLineOptions extends KafkaCommandLineOptions {
     return batchSize;
   }
 
+  public String getBootstrapServers() {
+    return bootstrapServers;
+  }
+
+  public void setBootstrapServers(final String bootstrapServers) {
+    this.bootstrapServers = bootstrapServers;
+  }
+
   public String getGroupId() {
     return groupId;
   }
 
   public void setGroupId(final String groupId) {
     this.groupId = groupId;
-  }
-
-  public String getZookeeperConnect() {
-    return zookeeperConnect;
-  }
-
-  public void setZookeeperConnect(final String zookeeperConnect) {
-    this.zookeeperConnect = zookeeperConnect;
   }
 
   public String getAutoOffsetReset() {
@@ -86,12 +87,12 @@ public class KafkaConsumerCommandLineOptions extends KafkaCommandLineOptions {
     this.autoOffsetReset = autoOffsetReset;
   }
 
-  public String getFetchMessageMaxBytes() {
-    return fetchMessageMaxBytes;
+  public String getMaxPartitionFetchBytes() {
+    return maxPartitionFetchBytes;
   }
 
-  public void setFetchMessageMaxBytes(final String fetchMessageMaxBytes) {
-    this.fetchMessageMaxBytes = fetchMessageMaxBytes;
+  public void setMaxPartitionFetchBytes(final String maxPartitionFetchBytes) {
+    this.maxPartitionFetchBytes = maxPartitionFetchBytes;
   }
 
   public String getConsumerTimeoutMs() {

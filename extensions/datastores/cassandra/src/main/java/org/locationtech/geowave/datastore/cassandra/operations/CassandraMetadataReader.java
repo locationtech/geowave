@@ -19,11 +19,10 @@ import org.locationtech.geowave.core.store.metadata.MetadataIterators;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Row;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
-import com.datastax.driver.core.querybuilder.Select;
-import com.datastax.driver.core.querybuilder.Select.Where;
+import com.datastax.oss.driver.api.core.cql.ResultSet;
+import com.datastax.oss.driver.api.core.cql.Row;
+import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
+import com.datastax.oss.driver.api.querybuilder.select.Select;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
 
@@ -54,46 +53,42 @@ public class CassandraMetadataReader implements MetadataReader {
 
     final Iterator<Row> rows;
     if (!query.hasPrimaryIdRanges()) {
-      final Select select = operations.getSelect(tableName, selectedColumns);
+      Select select = operations.getSelect(tableName, selectedColumns);
       if (query.hasPrimaryId() && query.isExact()) {
-        final Where where =
-            select.where(
-                QueryBuilder.eq(
-                    CassandraMetadataWriter.PRIMARY_ID_KEY,
-                    ByteBuffer.wrap(query.getPrimaryId())));
+        select =
+            select.whereColumn(CassandraMetadataWriter.PRIMARY_ID_KEY).isEqualTo(
+                QueryBuilder.literal(ByteBuffer.wrap(query.getPrimaryId())));
         if (query.hasSecondaryId()) {
-          where.and(
-              QueryBuilder.eq(
-                  CassandraMetadataWriter.SECONDARY_ID_KEY,
-                  ByteBuffer.wrap(query.getSecondaryId())));
+          select =
+              select.whereColumn(CassandraMetadataWriter.SECONDARY_ID_KEY).isEqualTo(
+                  QueryBuilder.literal(ByteBuffer.wrap(query.getSecondaryId())));
         }
       } else if (query.hasSecondaryId()) {
-        select.allowFiltering().where(
-            QueryBuilder.eq(
-                CassandraMetadataWriter.SECONDARY_ID_KEY,
-                ByteBuffer.wrap(query.getSecondaryId())));
+        select =
+            select.allowFiltering().whereColumn(CassandraMetadataWriter.SECONDARY_ID_KEY).isEqualTo(
+                QueryBuilder.literal(ByteBuffer.wrap(query.getSecondaryId())));
       }
 
-      final ResultSet rs = operations.getSession().execute(select);
+      final ResultSet rs = operations.getSession().execute(select.build());
       rows = rs.iterator();
     } else {
       rows = Iterators.concat(Arrays.stream(query.getPrimaryIdRanges()).map((r) -> {
         // TODO this is not as efficient as prepared bound statements if there are many
         // ranges, but will work for now
-        final Select select = operations.getSelect(tableName, selectedColumns);
+        Select select = operations.getSelect(tableName, selectedColumns);
         if (r.getStart() != null) {
-          select.allowFiltering().where(
-              QueryBuilder.gte(
-                  CassandraMetadataWriter.PRIMARY_ID_KEY,
-                  ByteBuffer.wrap(r.getStart())));
+          select =
+              select.allowFiltering().whereColumn(
+                  CassandraMetadataWriter.PRIMARY_ID_KEY).isGreaterThanOrEqualTo(
+                      QueryBuilder.literal(ByteBuffer.wrap(r.getStart())));
         }
         if (r.getEnd() != null) {
-          select.allowFiltering().where(
-              QueryBuilder.lt(
-                  CassandraMetadataWriter.PRIMARY_ID_KEY,
-                  ByteBuffer.wrap(r.getEndAsNextPrefix())));
+          select =
+              select.allowFiltering().whereColumn(
+                  CassandraMetadataWriter.PRIMARY_ID_KEY).isLessThan(
+                      QueryBuilder.literal(ByteBuffer.wrap(r.getEndAsNextPrefix())));
         }
-        final ResultSet rs = operations.getSession().execute(select);
+        final ResultSet rs = operations.getSession().execute(select.build());
         return rs.iterator();
       }).iterator());
     }

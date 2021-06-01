@@ -70,7 +70,6 @@ import org.locationtech.geowave.core.ingest.spark.SparkCommandLineOptions;
 import org.locationtech.geowave.core.ingest.spark.SparkIngestDriver;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.api.Statistic;
 import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.cli.VisibilityOptions;
@@ -110,6 +109,7 @@ public class TestUtils {
         new Index[] {DEFAULT_SPATIAL_INDEX, DEFAULT_TEMPORAL_INDEX}),
     SPATIAL_AND_SPATIAL_TEMPORAL("spatial,spatial_temporal",
         new Index[] {DEFAULT_SPATIAL_INDEX, DEFAULT_SPATIAL_TEMPORAL_INDEX});
+
     private final String dimensionalityArg;
     private final Index[] indices;
 
@@ -216,7 +216,7 @@ public class TestUtils {
   }
 
   public static void deleteAll(final DataStorePluginOptions dataStore) {
-    dataStore.createDataStore().delete(QueryBuilder.newBuilder().build());
+    dataStore.createDataStore().deleteAll();
   }
 
   public static void testLocalIngest(
@@ -286,7 +286,7 @@ public class TestUtils {
 
 
     final IndexStore indexStore = dataStore.createIndexStore();
-    org.locationtech.geowave.core.store.api.DataStore geowaveDataStore =
+    final org.locationtech.geowave.core.store.api.DataStore geowaveDataStore =
         dataStore.createDataStore();
 
     // Add indices

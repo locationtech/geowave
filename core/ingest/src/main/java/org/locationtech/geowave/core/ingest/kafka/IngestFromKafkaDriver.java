@@ -9,8 +9,11 @@
 package org.locationtech.geowave.core.ingest.kafka;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +23,13 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import org.apache.kafka.clients.consumer.Consumer;
+import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.TopicPartition;
+import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 import org.locationtech.geowave.core.ingest.avro.GenericAvroSerializer;
 import org.locationtech.geowave.core.ingest.avro.GeoWaveAvroFormatPlugin;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -34,12 +44,6 @@ import org.locationtech.geowave.core.store.ingest.IndexProvider;
 import org.locationtech.geowave.core.store.ingest.IngestPluginBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import kafka.consumer.Consumer;
-import kafka.consumer.ConsumerConfig;
-import kafka.consumer.ConsumerIterator;
-import kafka.consumer.ConsumerTimeoutException;
-import kafka.consumer.KafkaStream;
-import kafka.javaapi.consumer.ConsumerConnector;
 
 /** This class executes the ingestion of intermediate data from a Kafka topic into GeoWave. */
 public class IngestFromKafkaDriver {
@@ -143,12 +147,15 @@ public class IngestFromKafkaDriver {
     }
   }
 
-  private ConsumerConnector buildKafkaConsumer() {
+  private Consumer<byte[], byte[]> buildKafkaConsumer() {
 
     final Properties kafkaProperties = kafkaOptions.getProperties();
 
-    final ConsumerConnector consumer =
-        Consumer.createJavaConsumerConnector(new ConsumerConfig(kafkaProperties));
+    final Consumer<byte[], byte[]> consumer =
+        new KafkaConsumer<>(
+            kafkaProperties,
+            new ByteArrayDeserializer(),
+            new ByteArrayDeserializer());
 
     return consumer;
   }
@@ -178,29 +185,31 @@ public class IngestFromKafkaDriver {
       final KafkaIngestRunData ingestRunData,
       final List<String> queue) {
 
-    final ConsumerConnector consumer = buildKafkaConsumer();
-    if (consumer == null) {
-      throw new RuntimeException(
-          "Kafka consumer connector is null, unable to create message streams");
-    }
-    try {
+    try (final Consumer<byte[], byte[]> consumer = buildKafkaConsumer()) {
+      if (consumer == null) {
+        throw new RuntimeException(
+            "Kafka consumer connector is null, unable to create message streams");
+      }
       LOGGER.debug(
           "Kafka consumer setup for format ["
               + formatPluginName
               + "] against topic ["
               + formatPluginName
               + "]");
-      final Map<String, Integer> topicCount = new HashMap<>();
-      topicCount.put(formatPluginName, 1);
-
-      final Map<String, List<KafkaStream<byte[], byte[]>>> consumerStreams =
-          consumer.createMessageStreams(topicCount);
-      final List<KafkaStream<byte[], byte[]>> streams = consumerStreams.get(formatPluginName);
 
       queue.remove(formatPluginName);
-      consumeMessages(formatPluginName, avroFormatPlugin, ingestRunData, streams.get(0));
-    } finally {
-      consumer.shutdown();
+      consumer.subscribe(Collections.singletonList(formatPluginName));
+      final String timeoutMs = kafkaOptions.getConsumerTimeoutMs();
+      long millis = -1;
+      if ((timeoutMs != null) && !timeoutMs.trim().isEmpty()) {
+        try {
+          millis = Long.parseLong(timeoutMs);
+        } catch (final Exception e) {
+          LOGGER.warn("Cannot parse consumer timeout", e);
+        }
+      }
+      final Duration timeout = millis > 0 ? Duration.ofMillis(millis) : Duration.ofDays(1000);
+      consumeMessages(formatPluginName, avroFormatPlugin, ingestRunData, consumer, timeout);
     }
   }
 
@@ -208,16 +217,16 @@ public class IngestFromKafkaDriver {
       final String formatPluginName,
       final GeoWaveAvroFormatPlugin<T, ?> avroFormatPlugin,
       final KafkaIngestRunData ingestRunData,
-      final KafkaStream<byte[], byte[]> stream) {
+      final Consumer<byte[], byte[]> consumer,
+      final Duration timeout) {
     int currentBatchId = 0;
     final int batchSize = kafkaOptions.getBatchSize();
     try {
-      final ConsumerIterator<byte[], byte[]> messageIterator = stream.iterator();
-      while (messageIterator.hasNext()) {
-        final byte[] msg = messageIterator.next().message();
+      final ConsumerRecords<byte[], byte[]> iterator = consumer.poll(timeout);
+      for (final ConsumerRecord<byte[], byte[]> msg : iterator) {
         LOGGER.info("[" + formatPluginName + "] message received");
         final T dataRecord =
-            GenericAvroSerializer.deserialize(msg, avroFormatPlugin.getAvroSchema());
+            GenericAvroSerializer.deserialize(msg.value(), avroFormatPlugin.getAvroSchema());
 
         if (dataRecord != null) {
           try {
@@ -234,7 +243,6 @@ public class IngestFromKafkaDriver {
           }
         }
       }
-    } catch (final ConsumerTimeoutException te) {
       // Flush any outstanding items
       if (currentBatchId > 0) {
         if (LOGGER.isDebugEnabled()) {
@@ -245,11 +253,10 @@ public class IngestFromKafkaDriver {
       }
       if (kafkaOptions.isFlushAndReconnect()) {
         LOGGER.info(
-            "Consumer timed out from Kafka topic [" + formatPluginName + "]... Reconnecting...",
-            te);
-        consumeMessages(formatPluginName, avroFormatPlugin, ingestRunData, stream);
+            "Consumer timed out from Kafka topic [" + formatPluginName + "]... Reconnecting...");
+        consumeMessages(formatPluginName, avroFormatPlugin, ingestRunData, consumer, timeout);
       } else {
-        LOGGER.info("Consumer timed out from Kafka topic [" + formatPluginName + "]... ", te);
+        LOGGER.info("Consumer timed out from Kafka topic [" + formatPluginName + "]... ");
       }
     } catch (final Exception e) {
       LOGGER.warn("Consuming from Kafka topic [" + formatPluginName + "] was interrupted... ", e);

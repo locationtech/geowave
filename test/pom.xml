@@ -193,6 +193,33 @@
 		</dependency>
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-datastore-hbase-coprocessors</artifactId>
+			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.hbase</groupId>
+					<artifactId>hbase-client</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hbase</groupId>
+					<artifactId>hbase-protocol</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jersey</groupId>
+					<artifactId>jersey-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jersey</groupId>
+					<artifactId>jersey-server</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-jaxrs</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-datastore-bigtable</artifactId>
 			<version>${project.version}</version>
 			<exclusions>
@@ -240,8 +267,8 @@
 		</dependency>
 		<dependency>
 			<groupId>io.findify</groupId>
-			<artifactId>s3mock_2.11</artifactId>
-			<version>0.2.5</version>
+			<artifactId>s3mock_2.12</artifactId>
+			<version>0.2.6</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -314,6 +341,11 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>failureaccess</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-cli-bigtable-embed</artifactId>
 			<version>${project.version}</version>
@@ -375,23 +407,39 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.directory.jdbm</groupId>
-			<artifactId>apacheds-jdbm1</artifactId>
-			<version>2.0.0-M3</version>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId>hadoop-minikdc</artifactId>
 			<version>${hadoop.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.directory.jdbm</groupId>
-					<artifactId>apacheds-jdbm1</artifactId>
-				</exclusion>
-			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>${kafka.artifact}</artifactId>
+			<version>${kafka.version}</version>
+			<classifier>test</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka-clients</artifactId>
+			<version>${kafka.version}</version>
+			<classifier>test</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka-streams</artifactId>
+			<version>${kafka.version}</version>
+			<classifier>test</classifier>
 		</dependency>
 	</dependencies>
-
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<!-- kafka tests requires zookeeper 3.5.9 -->
+				<groupId>org.apache.zookeeper</groupId>
+				<artifactId>zookeeper</artifactId>
+				<version>3.5.9</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<profiles>
 		<profile>
@@ -442,12 +490,12 @@
 										<artifactItem>
 											<artifactId>guava</artifactId>
 											<groupId>com.google.guava</groupId>
-											<version>12.0.1</version>
-										</artifactItem>
+											<version>${hbaseguava.version}</version>
+										</artifactItem>		
 										<artifactItem>
 											<artifactId>protobuf-java</artifactId>
 											<groupId>com.google.protobuf</groupId>
-											<version>2.5.0</version>
+											<version>${hbaseprotobuf.version}</version>
 										</artifactItem>
 										<artifactItem>
 											<artifactId>hbase-client</artifactId>
@@ -559,7 +607,7 @@
 						<version>1.2.1</version>
 						<executions>
 							<execution>
-								<id>install-gdal-IT</id>
+								<id>install-gdal-it</id>
 								<phase>pre-integration-test</phase>
 								<goals>
 									<goal>java</goal>
@@ -657,14 +705,11 @@
 
 											<structure name="GeoWave">
 												<classfiles>
-													<fileset dir="../"
-														includes="**/target/classes/**,**/target/munged/classes/**"
-														excludes="**/accumulo/target/classes/**" />
+													<fileset dir="../" includes="**/target/classes/**" />
 												</classfiles>
 												<sourcefiles>
 													<fileset dir="../"
-														includes="**/src/main/java/**,**/src/main/scala/**,**/target/munged/main/**"
-														excludes="**/accumulo/target/src/main/java/**" />
+														includes="**/src/main/java/**,**/src/main/scala/**" />
 												</sourcefiles>
 											</structure>
 
@@ -797,9 +842,8 @@
 				<testStoreType>BIGTABLE</testStoreType>
 				<bigtable.emulator.endpoint>127.0.0.1:8128</bigtable.emulator.endpoint>
 				<bigtable.emulator.internal>true</bigtable.emulator.internal>
-				<bigtable.sdk.url>https://dl.google.com/dl/cloudsdk/channels/rapid/downloads
-				</bigtable.sdk.url>
-				<bigtable.sdk.file>google-cloud-sdk-190.0.1-linux-x86_64.tar.gz</bigtable.sdk.file>
+				<bigtable.sdk.url>https://storage.googleapis.com/cloud-sdk-release</bigtable.sdk.url>
+				<bigtable.sdk.file>google-cloud-sdk-341.0.0-linux-x86_64.tar.gz</bigtable.sdk.file>
 			</properties>
 		</profile>
 	</profiles>

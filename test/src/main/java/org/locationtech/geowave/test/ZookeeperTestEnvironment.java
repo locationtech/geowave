@@ -8,6 +8,11 @@
  */
 package org.locationtech.geowave.test;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.security.provider.GssSaslAuthenticationProvider;
+import org.apache.hadoop.hbase.security.provider.GssSaslClientAuthenticationProvider;
+import org.apache.hadoop.hbase.security.provider.SaslClientAuthenticationProvider;
+import org.apache.hadoop.hbase.security.provider.SaslClientAuthenticationProviders;
 import org.locationtech.geowave.datastore.hbase.cli.ZookeeperMiniCluster;
 
 public class ZookeeperTestEnvironment implements TestEnvironment {
@@ -32,6 +37,7 @@ public class ZookeeperTestEnvironment implements TestEnvironment {
 
   @Override
   public void setup() throws Exception {
+    SaslClientAuthenticationProviders.getInstance(new Configuration());
     if (!TestUtils.isSet(zookeeper)) {
       zookeeper = System.getProperty(ZK_PROPERTY_NAME);
 

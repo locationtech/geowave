@@ -195,7 +195,7 @@ public class BoundingBoxStatistic extends FieldStatistic<BoundingBoxStatistic.Bo
 
   }
 
-  protected static class CRSConverter implements IStringConverter<CoordinateReferenceSystem> {
+  public static class CRSConverter implements IStringConverter<CoordinateReferenceSystem> {
     @Override
     public CoordinateReferenceSystem convert(final String value) {
       CoordinateReferenceSystem convertedValue;

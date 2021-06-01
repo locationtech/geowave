@@ -234,6 +234,11 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
     return new RocksDBRowDeleter(client, adapterStore, internalAdapterStore, indexName);
   }
 
+  /**
+   * This is not a typical resource, it references a static RocksDB resource used by all DataStore
+   * instances with common parameters. Closing this is only recommended when the JVM no longer needs
+   * any connection to this RocksDB store with common parameters.
+   */
   @Override
   public void close() {
     RocksDBClientCache.getInstance().close(
