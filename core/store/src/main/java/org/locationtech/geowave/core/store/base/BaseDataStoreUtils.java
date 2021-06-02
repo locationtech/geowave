@@ -815,7 +815,7 @@ public class BaseDataStoreUtils {
     final NumericDimensionField<?>[] dimensions = index.getIndexModel().getDimensions();
 
     // Map dimensions to index fields
-    final Map<String, List<NumericDimensionField<?>>> indexFields =
+    final Map<String, List<NumericDimensionField>> indexFields =
         Arrays.stream(dimensions).collect(
             Collectors.groupingBy(
                 dim -> dim.getFieldName(),
@@ -824,7 +824,7 @@ public class BaseDataStoreUtils {
     // Get adapter fields
     final FieldDescriptor<?>[] adapterFields = adapter.getFieldDescriptors();
 
-    for (final Entry<String, List<NumericDimensionField<?>>> indexField : indexFields.entrySet()) {
+    for (final Entry<String, List<NumericDimensionField>> indexField : indexFields.entrySet()) {
       // Get the hints used by all dimensions of the field
       final Set<IndexDimensionHint> dimensionHints = Sets.newHashSet();
       indexField.getValue().forEach(dim -> dimensionHints.addAll(dim.getDimensionHints()));

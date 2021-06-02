@@ -89,8 +89,7 @@ install_geowave() {
 	# more recent versions of EMR use an emr-puppet RPM installed to /opt/aws/puppet
 
 	# We need to make more recent versions of EMR's puppet act similar to the older version 
-	if ! command -v puppet &> /dev/null
-	then
+	if [ -d /opt/aws/puppet ]; then
 		# this is a more recent EMR
 
 		# first add puppet to /usr/bin
