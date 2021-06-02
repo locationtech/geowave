@@ -17,11 +17,12 @@ import org.locationtech.geowave.core.store.api.DataStore;
 public interface Statement {
   /**
    * Executes the statement on the provided data store.
-   * 
+   *
    * @param dataStore the data store to execute the statement on
+   * @param authorizations authorizations to use for the query
    * @return the results of the statement
    */
-  public ResultSet execute(final DataStore dataStore);
+  public ResultSet execute(final DataStore dataStore, final String... authorizations);
 
   /**
    * @return the store name that this statement should be executed on

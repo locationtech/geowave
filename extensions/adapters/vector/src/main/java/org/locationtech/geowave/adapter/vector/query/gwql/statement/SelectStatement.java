@@ -16,24 +16,21 @@ import org.geotools.data.DataUtilities;
 import org.locationtech.geowave.adapter.vector.query.aggregation.CompositeVectorAggregation;
 import org.locationtech.geowave.adapter.vector.query.gwql.AggregationSelector;
 import org.locationtech.geowave.adapter.vector.query.gwql.ColumnSelector;
-import org.locationtech.geowave.adapter.vector.query.gwql.Selector;
-import org.locationtech.geowave.adapter.vector.query.gwql.Selector.SelectorType;
-import org.locationtech.geowave.adapter.vector.query.gwql.function.QLVectorAggregationFunction;
-import org.locationtech.geowave.adapter.vector.query.gwql.function.QLFunction;
-import org.locationtech.geowave.adapter.vector.query.gwql.function.QLFunctionRegistry;
 import org.locationtech.geowave.adapter.vector.query.gwql.QualifiedTypeName;
 import org.locationtech.geowave.adapter.vector.query.gwql.ResultSet;
+import org.locationtech.geowave.adapter.vector.query.gwql.Selector;
+import org.locationtech.geowave.adapter.vector.query.gwql.Selector.SelectorType;
 import org.locationtech.geowave.adapter.vector.query.gwql.SimpleFeatureResultSet;
 import org.locationtech.geowave.adapter.vector.query.gwql.SingletonResultSet;
+import org.locationtech.geowave.adapter.vector.query.gwql.function.QLFunction;
+import org.locationtech.geowave.adapter.vector.query.gwql.function.QLFunctionRegistry;
+import org.locationtech.geowave.adapter.vector.query.gwql.function.QLVectorAggregationFunction;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorAggregationQueryBuilder;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.index.persist.PersistableList;
-import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
-import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
-import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 import com.google.common.collect.Lists;
@@ -67,7 +64,7 @@ public class SelectStatement implements Statement {
   }
 
   @Override
-  public ResultSet execute(final DataStore dataStore) {
+  public ResultSet execute(final DataStore dataStore, final String... authorizations) {
     final DataTypeAdapter<?> dataAdapter = dataStore.getType(typeName.typeName());
     if (!(dataAdapter instanceof GeotoolsFeatureDataAdapter)) {
       throw new RuntimeException("Statement can only be used on vector types.");
@@ -78,6 +75,7 @@ public class SelectStatement implements Statement {
     if (isAggregation()) {
       final VectorAggregationQueryBuilder<PersistableList, List<Object>> bldr =
           VectorAggregationQueryBuilder.newBuilder();
+      bldr.setAuthorizations(authorizations);
       if (filter != null) {
         bldr.constraints(bldr.constraintsFactory().filterConstraints(filter));
       }
@@ -90,7 +88,8 @@ public class SelectStatement implements Statement {
       final List<Class<?>> columnTypes = Lists.newArrayListWithCapacity(selectors.size());
       for (final Selector selector : selectors) {
         final AggregationSelector aggregation = (AggregationSelector) selector;
-        QLFunction function = QLFunctionRegistry.instance().getFunction(aggregation.functionName());
+        final QLFunction function =
+            QLFunctionRegistry.instance().getFunction(aggregation.functionName());
         if (function == null) {
           throw new RuntimeException(
               "No function called '" + aggregation.functionName() + "' was found.");
@@ -111,17 +110,18 @@ public class SelectStatement implements Statement {
     } else {
       final VectorQueryBuilder bldr =
           VectorQueryBuilder.newBuilder().addTypeName(typeName.typeName());
+      bldr.setAuthorizations(authorizations);
       if (filter != null) {
         bldr.constraints(bldr.constraintsFactory().filterConstraints(filter));
       }
 
       if ((selectors != null) && !selectors.isEmpty()) {
-        Set<String> usedAttributes = Sets.newHashSet();
+        final Set<String> usedAttributes = Sets.newHashSet();
         selectors.forEach(s -> usedAttributes.add(((ColumnSelector) s).columnName()));
         if (filter != null) {
           usedAttributes.addAll(Arrays.asList(DataUtilities.attributeNames(filter)));
         }
-        for (String attribute : usedAttributes) {
+        for (final String attribute : usedAttributes) {
           if (featureType.getDescriptor(attribute) == null) {
             throw new RuntimeException(
                 "No column named " + attribute + " was found in " + typeName.typeName());
