@@ -29,13 +29,13 @@ import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.memory.MemoryRequiredOptions;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic;
 import org.locationtech.geowave.core.store.statistics.field.NumericStatsStatistic;
+import org.locationtech.geowave.core.store.statistics.field.Stats;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import com.google.common.collect.ImmutableList;
-import com.google.common.math.Stats;
 
 public class SpatialBinningStatisticExample {
   public static void main(final String[] args) {

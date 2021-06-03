@@ -14,8 +14,6 @@ import org.locationtech.geowave.core.store.api.FieldStatistic;
 import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.statistics.StatisticsIngestCallback;
-import com.google.common.math.Stats;
-import com.google.common.math.StatsAccumulator;
 
 /**
  * Tracks the min, max, count, mean, sum, variance and standard deviation of a numeric attribute.
