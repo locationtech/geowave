@@ -38,7 +38,7 @@ public class KafkaToGeoWaveCommand extends ServiceEnabledCommand<Void> {
   private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate
-  private VisibilityOptions ingestOptions = new VisibilityOptions();
+  private VisibilityOptions visibilityOptions = new VisibilityOptions();
 
   @ParametersDelegate
   private KafkaConsumerCommandLineOptions kafkaOptions = new KafkaConsumerCommandLineOptions();
@@ -104,12 +104,12 @@ public class KafkaToGeoWaveCommand extends ServiceEnabledCommand<Void> {
     parameters.add(commaSeparatedIndexes);
   }
 
-  public VisibilityOptions getIngestOptions() {
-    return ingestOptions;
+  public VisibilityOptions getVisibilityOptions() {
+    return visibilityOptions;
   }
 
-  public void setIngestOptions(final VisibilityOptions ingestOptions) {
-    this.ingestOptions = ingestOptions;
+  public void setVisibilityOptions(final VisibilityOptions visibilityOptions) {
+    this.visibilityOptions = visibilityOptions;
   }
 
   public KafkaConsumerCommandLineOptions getKafkaOptions() {
@@ -166,7 +166,7 @@ public class KafkaToGeoWaveCommand extends ServiceEnabledCommand<Void> {
             inputIndices,
             ingestPlugins,
             kafkaOptions,
-            ingestOptions);
+            visibilityOptions.getConfiguredVisibilityHandler());
 
     // Execute
     if (!driver.runOperation()) {

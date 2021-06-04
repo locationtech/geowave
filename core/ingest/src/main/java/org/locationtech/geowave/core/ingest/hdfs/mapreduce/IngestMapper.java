@@ -21,7 +21,6 @@ import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
 /** This class is the map-reduce mapper for ingestion with the mapper only. */
 public class IngestMapper extends Mapper<AvroKey, NullWritable, GeoWaveOutputKey, Object> {
   private IngestWithMapper ingestWithMapper;
-  private String globalVisibility;
   private String[] indexNames;
 
   @Override
@@ -31,7 +30,7 @@ public class IngestMapper extends Mapper<AvroKey, NullWritable, GeoWaveOutputKey
       final org.apache.hadoop.mapreduce.Mapper.Context context)
       throws IOException, InterruptedException {
     try (CloseableIterator<GeoWaveData> data =
-        ingestWithMapper.toGeoWaveData(key.datum(), indexNames, globalVisibility)) {
+        ingestWithMapper.toGeoWaveData(key.datum(), indexNames)) {
       while (data.hasNext()) {
         final GeoWaveData d = data.next();
         context.write(new GeoWaveOutputKey<>(d), d.getValue());
@@ -48,8 +47,6 @@ public class IngestMapper extends Mapper<AvroKey, NullWritable, GeoWaveOutputKey
           context.getConfiguration().get(AbstractMapReduceIngest.INGEST_PLUGIN_KEY);
       final byte[] ingestWithMapperBytes = ByteArrayUtils.byteArrayFromString(ingestWithMapperStr);
       ingestWithMapper = (IngestWithMapper) PersistenceUtils.fromBinary(ingestWithMapperBytes);
-      globalVisibility =
-          context.getConfiguration().get(AbstractMapReduceIngest.GLOBAL_VISIBILITY_KEY);
       indexNames = AbstractMapReduceIngest.getIndexNames(context.getConfiguration());
     } catch (final Exception e) {
       throw new IllegalArgumentException(e);

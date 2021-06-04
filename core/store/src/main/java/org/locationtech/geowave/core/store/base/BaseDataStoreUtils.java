@@ -32,7 +32,6 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.CustomIndexStrategy;
 import org.locationtech.geowave.core.index.IndexDimensionHint;
 import org.locationtech.geowave.core.index.IndexUtils;
@@ -64,6 +63,7 @@ import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexFieldMapper;
 import org.locationtech.geowave.core.store.api.IndexFieldMapper.IndexFieldOptions;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.base.IntermediaryWriteEntryInfo.FieldInfo;
 import org.locationtech.geowave.core.store.base.dataidx.BatchDataIndexRetrieval;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexRetrieval;
@@ -71,9 +71,8 @@ import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.data.DataWriter;
-import org.locationtech.geowave.core.store.data.VisibilityWriter;
-import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
+import org.locationtech.geowave.core.store.data.visibility.VisibilityComposer;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
@@ -93,7 +92,6 @@ import org.locationtech.geowave.core.store.query.constraints.AdapterAndIndexBase
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.geowave.core.store.statistics.DefaultStatisticsProvider;
-import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.beust.jcommander.ParameterException;
@@ -108,6 +106,7 @@ public class BaseDataStoreUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(BaseDataStoreUtils.class);
 
   public static final String DATA_VERSION_PROPERTY = "DATA_VERSION";
+  public static final String GLOBAL_VISIBILITY_PROPERTY = "GLOBAL_VISIBILITY";
   public static final Integer DATA_VERSION = 1;
 
   public static void verifyCLIVersion(
@@ -161,13 +160,13 @@ public class BaseDataStoreUtils {
       final InternalDataAdapter<T> adapter,
       final AdapterToIndexMapping indexMapping,
       final Index index,
-      final VisibilityWriter<T> customFieldVisibilityWriter) {
+      final VisibilityHandler visibilityHandler) {
     return getWriteInfo(
         entry,
         adapter,
         indexMapping,
         index,
-        customFieldVisibilityWriter,
+        visibilityHandler,
         false,
         false,
         true).getRows();
@@ -419,12 +418,26 @@ public class BaseDataStoreUtils {
     return null;
   }
 
+  private static <T> void addIndexFieldVisibility(
+      final T entry,
+      final DataTypeAdapter<T> adapter,
+      final AdapterToIndexMapping indexMapping,
+      final VisibilityHandler visibilityHandler,
+      final String indexField,
+      final VisibilityComposer baseVisibility) {
+    final String[] adapterFields =
+        indexMapping.getMapperForIndexField(indexField).getAdapterFields();
+    for (final String adapterField : adapterFields) {
+      baseVisibility.addVisibility(visibilityHandler.getVisibility(adapter, entry, adapterField));
+    }
+  }
+
   protected static <T> IntermediaryWriteEntryInfo getWriteInfo(
       final T entry,
       final InternalDataAdapter<T> adapter,
       final AdapterToIndexMapping indexMapping,
       final Index index,
-      final VisibilityWriter<T> customFieldVisibilityWriter,
+      final VisibilityHandler visibilityHandler,
       final boolean secondaryIndex,
       final boolean dataIdIndex,
       final boolean visibilityEnabled) {
@@ -440,80 +453,19 @@ public class BaseDataStoreUtils {
     final short internalAdapterId = adapter.getAdapterId();
 
     final byte[] dataId = adapter.getDataId(entry);
-    if (dataIdIndex || !insertionIds.isEmpty()) {
-      if (secondaryIndex && DataIndexUtils.adapterSupportsDataIndex(adapter) && !dataIdIndex) {
-        byte[] indexModelVisibility = new byte[0];
-        if (visibilityEnabled) {
-          for (final Entry<String, Object> fieldValue : encodedData.getCommonData().getValues().entrySet()) {
-            indexModelVisibility =
-                DataStoreUtils.mergeVisibilities(
-                    indexModelVisibility,
-                    customFieldVisibilityWriter.getFieldVisibilityHandler(
-                        fieldValue.getKey()).getVisibility(
-                            entry,
-                            fieldValue.getKey(),
-                            fieldValue.getValue()));
-          }
-        }
-        if (indexModel.useInSecondaryIndex()) {
-          final List<FieldInfo<?>> fieldInfoList = new ArrayList<>();
-          addCommonFields(
-              entry,
-              index,
-              indexModel,
-              customFieldVisibilityWriter,
-              encodedData,
-              visibilityEnabled,
-              fieldInfoList);
-          BaseDataStoreUtils.composeFlattenedFields(
-              fieldInfoList,
-              indexModel,
-              adapter,
-              dataIdIndex);
-        }
-        return new IntermediaryWriteEntryInfo(
-            dataId,
-            internalAdapterId,
-            insertionIds,
-            new GeoWaveValue[] {
-                new GeoWaveValueImpl(new byte[0], indexModelVisibility, new byte[0])});
-      } else {
-        final List<FieldInfo<?>> fieldInfoList = new ArrayList<>();
-        addCommonFields(
-            entry,
-            index,
-            indexModel,
-            customFieldVisibilityWriter,
-            encodedData,
-            visibilityEnabled,
-            fieldInfoList);
-        for (final Entry<String, Object> fieldValue : encodedData.getAdapterExtendedData().getValues().entrySet()) {
-          if (fieldValue.getValue() != null) {
-            final FieldInfo<?> fieldInfo =
-                getFieldInfo(
-                    adapter,
-                    fieldValue.getKey(),
-                    fieldValue.getValue(),
-                    entry,
-                    customFieldVisibilityWriter,
-                    visibilityEnabled);
-            if (fieldInfo != null) {
-              fieldInfoList.add(fieldInfo);
-            }
-          }
-        }
 
-        return new IntermediaryWriteEntryInfo(
-            dataId,
-            internalAdapterId,
-            insertionIds,
-            BaseDataStoreUtils.composeFlattenedFields(
-                fieldInfoList,
-                indexModel,
-                adapter,
-                dataIdIndex));
-      }
-    } else {
+    if (dataIdIndex) {
+      return getWriteInfoDataIDIndex(
+          entry,
+          dataId,
+          encodedData,
+          adapter,
+          indexMapping,
+          index,
+          visibilityHandler,
+          visibilityEnabled);
+    }
+    if (insertionIds.isEmpty()) {
       // we can allow some entries to not be indexed within every index for flexibility, and
       // therefore this should just be info level
       LOGGER.info(
@@ -529,13 +481,130 @@ public class BaseDataStoreUtils {
           insertionIds,
           new GeoWaveValueImpl[0]);
     }
+
+    final VisibilityComposer commonIndexVisibility = new VisibilityComposer();
+    if (visibilityEnabled && (visibilityHandler != null)) {
+      for (final Entry<String, Object> fieldValue : encodedData.getCommonData().getValues().entrySet()) {
+        addIndexFieldVisibility(
+            entry,
+            adapter,
+            indexMapping,
+            visibilityHandler,
+            fieldValue.getKey(),
+            commonIndexVisibility);
+      }
+    }
+    if (secondaryIndex && DataIndexUtils.adapterSupportsDataIndex(adapter)) {
+      return new IntermediaryWriteEntryInfo(
+          dataId,
+          internalAdapterId,
+          insertionIds,
+          new GeoWaveValue[] {
+              new GeoWaveValueImpl(
+                  new byte[0],
+                  StringUtils.stringToBinary(commonIndexVisibility.composeVisibility()),
+                  new byte[0])});
+    }
+    final List<FieldInfo<?>> fieldInfoList = new ArrayList<>();
+    addCommonFields(
+        adapter,
+        indexMapping,
+        entry,
+        index,
+        indexModel,
+        visibilityHandler,
+        encodedData,
+        visibilityEnabled,
+        fieldInfoList);
+    for (final Entry<String, Object> fieldValue : encodedData.getAdapterExtendedData().getValues().entrySet()) {
+      if (fieldValue.getValue() != null) {
+        final FieldInfo<?> fieldInfo =
+            getFieldInfo(
+                adapter,
+                adapter,
+                indexMapping,
+                fieldValue.getKey(),
+                fieldValue.getValue(),
+                entry,
+                visibilityHandler,
+                visibilityEnabled,
+                false);
+        if (fieldInfo != null) {
+          fieldInfoList.add(fieldInfo);
+        }
+      }
+    }
+
+    return new IntermediaryWriteEntryInfo(
+        dataId,
+        internalAdapterId,
+        insertionIds,
+        BaseDataStoreUtils.composeFlattenedFields(
+            fieldInfoList,
+            indexModel,
+            adapter,
+            commonIndexVisibility,
+            dataIdIndex));
+  }
+
+  protected static <T> IntermediaryWriteEntryInfo getWriteInfoDataIDIndex(
+      final T entry,
+      final byte[] dataId,
+      final AdapterPersistenceEncoding encodedData,
+      final InternalDataAdapter<T> adapter,
+      final AdapterToIndexMapping indexMapping,
+      final Index index,
+      final VisibilityHandler visibilityHandler,
+      final boolean visibilityEnabled) {
+    final List<FieldInfo<?>> fieldInfoList = new ArrayList<>();
+    addCommonFields(
+        adapter,
+        indexMapping,
+        entry,
+        index,
+        index.getIndexModel(),
+        visibilityHandler,
+        encodedData,
+        visibilityEnabled,
+        fieldInfoList);
+    for (final Entry<String, Object> fieldValue : encodedData.getAdapterExtendedData().getValues().entrySet()) {
+      if (fieldValue.getValue() != null) {
+        final FieldInfo<?> fieldInfo =
+            getFieldInfo(
+                adapter,
+                adapter,
+                indexMapping,
+                fieldValue.getKey(),
+                fieldValue.getValue(),
+                entry,
+                visibilityHandler,
+                visibilityEnabled,
+                false);
+        if (fieldInfo != null) {
+          fieldInfoList.add(fieldInfo);
+        }
+      }
+    }
+
+    return new IntermediaryWriteEntryInfo(
+        dataId,
+        adapter.getAdapterId(),
+        null,
+        BaseDataStoreUtils.composeFlattenedFields(
+            fieldInfoList,
+            index.getIndexModel(),
+            adapter,
+            null,
+            true));
   }
 
   private static <T> void addCommonFields(
+      final DataTypeAdapter<T> adapter,
+      final AdapterToIndexMapping indexMapping,
       final T entry,
       final Index index,
       final CommonIndexModel indexModel,
-      final VisibilityWriter<T> customFieldVisibilityWriter,
+      final VisibilityHandler visibilityHandler,
       final AdapterPersistenceEncoding encodedData,
       final boolean visibilityEnabled,
       final List<FieldInfo<?>> fieldInfoList) {
@@ -544,11 +613,14 @@ public class BaseDataStoreUtils {
       final FieldInfo<?> fieldInfo =
           getFieldInfo(
               indexModel,
+              adapter,
+              indexMapping,
               fieldValue.getKey(),
               fieldValue.getValue(),
               entry,
-              customFieldVisibilityWriter,
-              visibilityEnabled);
+              visibilityHandler,
+              visibilityEnabled,
+              true);
       if (fieldInfo != null) {
         fieldInfoList.add(fieldInfo);
       }
@@ -565,11 +637,12 @@ public class BaseDataStoreUtils {
       final List<FieldInfo<?>> originalList,
       final CommonIndexModel model,
       final InternalDataAdapter<?> writableAdapter,
+      final VisibilityComposer commonIndexVisibility,
       final boolean dataIdIndex) {
     if (originalList.isEmpty()) {
       return new GeoWaveValue[0];
     }
-    final Map<ByteArray, List<Pair<Integer, FieldInfo<?>>>> vizToFieldMap = new LinkedHashMap<>();
+    final Map<String, List<Pair<Integer, FieldInfo<?>>>> vizToFieldMap = new LinkedHashMap<>();
     // organize FieldInfos by unique visibility
     if (dataIdIndex) {
       final List<Pair<Integer, FieldInfo<?>>> fieldsWithPositions =
@@ -578,12 +651,11 @@ public class BaseDataStoreUtils {
                 writableAdapter.getPositionOfOrderedField(model, fieldInfo.getFieldId());
             return (Pair) Pair.of(fieldPosition, fieldInfo);
           }).collect(Collectors.toList());
-      byte[] mergedVisibility = new byte[0];
+      final VisibilityComposer combinedVisibility = new VisibilityComposer();
       for (final FieldInfo<?> fieldValue : originalList) {
-        mergedVisibility =
-            DataStoreUtils.mergeVisibilities(mergedVisibility, fieldValue.getVisibility());
+        combinedVisibility.addVisibility(fieldValue.getVisibility());
       }
-      vizToFieldMap.put(new ByteArray(mergedVisibility), fieldsWithPositions);
+      vizToFieldMap.put(combinedVisibility.composeVisibility(), fieldsWithPositions);
     } else {
       boolean sharedVisibility = false;
       for (final FieldInfo<?> fieldInfo : originalList) {
@@ -593,7 +665,9 @@ public class BaseDataStoreUtils {
           // this is just a fallback for unexpected failures
           fieldPosition = writableAdapter.getPositionOfOrderedField(model, fieldInfo.getFieldId());
         }
-        final ByteArray currViz = new ByteArray(fieldInfo.getVisibility());
+        final VisibilityComposer currentComposer = new VisibilityComposer(commonIndexVisibility);
+        currentComposer.addVisibility(fieldInfo.getVisibility());
+        final String currViz = currentComposer.composeVisibility();
         if (vizToFieldMap.containsKey(currViz)) {
           sharedVisibility = true;
           final List<Pair<Integer, FieldInfo<?>>> listForViz = vizToFieldMap.get(currViz);
@@ -615,7 +689,7 @@ public class BaseDataStoreUtils {
           bitmaskedValues[i++] =
               new GeoWaveValueImpl(
                   BitmaskUtils.generateCompositeBitmask(fieldInfo.getLeft()),
-                  fieldInfo.getRight().getVisibility(),
+                  StringUtils.stringToBinary(fieldInfo.getRight().getVisibility()),
                   fieldInfo.getRight().getWrittenValue());
         }
         return bitmaskedValues;
@@ -625,7 +699,7 @@ public class BaseDataStoreUtils {
       return new GeoWaveValue[] {entryToValue(vizToFieldMap.entrySet().iterator().next())};
     } else {
       final List<GeoWaveValue> retVal = new ArrayList<>(vizToFieldMap.size());
-      for (final Entry<ByteArray, List<Pair<Integer, FieldInfo<?>>>> entry : vizToFieldMap.entrySet()) {
+      for (final Entry<String, List<Pair<Integer, FieldInfo<?>>>> entry : vizToFieldMap.entrySet()) {
         retVal.add(entryToValue(entry));
       }
       return retVal.toArray(new GeoWaveValue[0]);
@@ -633,7 +707,7 @@ public class BaseDataStoreUtils {
   }
 
   private static GeoWaveValue entryToValue(
-      final Entry<ByteArray, List<Pair<Integer, FieldInfo<?>>>> entry) {
+      final Entry<String, List<Pair<Integer, FieldInfo<?>>>> entry) {
     final SortedSet<Integer> fieldPositions = new TreeSet<>();
     final List<Pair<Integer, FieldInfo<?>>> fieldInfoList = entry.getValue();
     final byte[] combinedValue =
@@ -642,7 +716,10 @@ public class BaseDataStoreUtils {
                 : new byte[0];
     fieldInfoList.stream().forEach(p -> fieldPositions.add(p.getLeft()));
     final byte[] compositeBitmask = BitmaskUtils.generateCompositeBitmask(fieldPositions);
-    return new GeoWaveValueImpl(compositeBitmask, entry.getKey().getBytes(), combinedValue);
+    return new GeoWaveValueImpl(
+        compositeBitmask,
+        StringUtils.stringToBinary(entry.getKey()),
+        combinedValue);
   }
 
   private static byte[] combineValues(final List<Pair<Integer, FieldInfo<?>>> fieldInfoList) {
@@ -669,20 +746,35 @@ public class BaseDataStoreUtils {
 
   private static <T> FieldInfo<?> getFieldInfo(
       final DataWriter dataWriter,
+      final DataTypeAdapter<T> adapter,
+      final AdapterToIndexMapping indexMapping,
       final String fieldName,
       final Object fieldValue,
       final T entry,
-      final VisibilityWriter<T> customFieldVisibilityWriter,
-      final boolean visibilityEnabled) {
+      final VisibilityHandler visibilityHandler,
+      final boolean visibilityEnabled,
+      final boolean indexField) {
     final FieldWriter fieldWriter = dataWriter.getWriter(fieldName);
-    final FieldVisibilityHandler<T, Object> customVisibilityHandler =
-        customFieldVisibilityWriter.getFieldVisibilityHandler(fieldName);
     if (fieldWriter != null) {
+      final VisibilityComposer visibilityComposer = new VisibilityComposer();
+      if (visibilityEnabled && (visibilityHandler != null)) {
+        if (indexField) {
+          addIndexFieldVisibility(
+              entry,
+              adapter,
+              indexMapping,
+              visibilityHandler,
+              fieldName,
+              visibilityComposer);
+        } else {
+          visibilityComposer.addVisibility(
+              visibilityHandler.getVisibility(adapter, entry, fieldName));
+        }
+      }
       return new FieldInfo(
           fieldName,
           fieldWriter.writeField(fieldValue),
-          visibilityEnabled ? customVisibilityHandler.getVisibility(entry, fieldName, fieldValue)
-              : new byte[0]);
+          visibilityComposer.composeVisibility());
     } else if (fieldValue != null) {
       LOGGER.warn(
           "Data writer of class "

@@ -17,11 +17,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexFieldMapper;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentValue;
@@ -61,12 +63,26 @@ public class InternalDataAdapterImpl<T> implements InternalDataAdapter<T> {
   private transient volatile boolean positionMapsInitialized = false;
   protected DataTypeAdapter<T> adapter;
   protected short adapterId;
+  protected VisibilityHandler visibilityHandler = null;
 
   public InternalDataAdapterImpl() {}
 
   public InternalDataAdapterImpl(final DataTypeAdapter<T> adapter, final short adapterId) {
+    this(adapter, adapterId, null);
+  }
+
+  public InternalDataAdapterImpl(
+      final DataTypeAdapter<T> adapter,
+      final short adapterId,
+      final VisibilityHandler visibilityHandler) {
     this.adapter = adapter;
     this.adapterId = adapterId;
+    this.visibilityHandler = visibilityHandler;
+  }
+
+  @Override
+  public VisibilityHandler getVisibilityHandler() {
+    return visibilityHandler;
   }
 
   protected List<String> getDimensionFieldNames(final CommonIndexModel model) {
@@ -116,6 +132,13 @@ public class InternalDataAdapterImpl<T> implements InternalDataAdapter<T> {
   @Override
   public InternalDataAdapter<T> asInternalAdapter(final short internalAdapterId) {
     return adapter.asInternalAdapter(internalAdapterId);
+  }
+
+  @Override
+  public InternalDataAdapter<T> asInternalAdapter(
+      final short internalAdapterId,
+      final VisibilityHandler visibilityHandler) {
+    return adapter.asInternalAdapter(internalAdapterId, visibilityHandler);
   }
 
   @Override
@@ -169,9 +192,19 @@ public class InternalDataAdapterImpl<T> implements InternalDataAdapter<T> {
   @Override
   public byte[] toBinary() {
     final byte[] adapterBytes = PersistenceUtils.toBinary(adapter);
-    final ByteBuffer buffer = ByteBuffer.allocate(adapterBytes.length + 2);
+    final byte[] visibilityHanlderBytes = PersistenceUtils.toBinary(visibilityHandler);
+    final ByteBuffer buffer =
+        ByteBuffer.allocate(
+            Short.BYTES
+                + VarintUtils.unsignedIntByteLength(adapterBytes.length)
+                + adapterBytes.length
+                + VarintUtils.unsignedIntByteLength(visibilityHanlderBytes.length)
+                + visibilityHanlderBytes.length);
     buffer.putShort(adapterId);
+    VarintUtils.writeUnsignedInt(adapterBytes.length, buffer);
     buffer.put(adapterBytes);
+    VarintUtils.writeUnsignedInt(visibilityHanlderBytes.length, buffer);
+    buffer.put(visibilityHanlderBytes);
     return buffer.array();
   }
 
@@ -184,9 +217,12 @@ public class InternalDataAdapterImpl<T> implements InternalDataAdapter<T> {
     }
     final ByteBuffer buffer = ByteBuffer.wrap(bytes);
     adapterId = buffer.getShort();
-    final byte[] adapterBytes = new byte[buffer.remaining()];
+    final byte[] adapterBytes = new byte[VarintUtils.readUnsignedInt(buffer)];
     buffer.get(adapterBytes);
     adapter = (DataTypeAdapter<T>) PersistenceUtils.fromBinary(adapterBytes);
+    final byte[] visibilityHandlerBytes = new byte[VarintUtils.readUnsignedInt(buffer)];
+    buffer.get(visibilityHandlerBytes);
+    visibilityHandler = (VisibilityHandler) PersistenceUtils.fromBinary(visibilityHandlerBytes);
   }
 
   @Override

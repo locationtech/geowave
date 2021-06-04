@@ -118,8 +118,7 @@ public class GeoToolsRasterDataStoreIngestPlugin implements LocalFileIngestPlugi
   @Override
   public CloseableIterator<GeoWaveData<GridCoverage>> toGeoWaveData(
       final URL input,
-      final String[] indexNames,
-      final String globalVisibility) {
+      final String[] indexNames) {
     final AbstractGridFormat format = prioritizedFindFormat(input);
     if (format == null) {
       return new Wrapper<>(Collections.emptyIterator());
@@ -230,17 +229,14 @@ public class GeoToolsRasterDataStoreIngestPlugin implements LocalFileIngestPlugi
   }
 
   @Override
-  public DataTypeAdapter<GridCoverage>[] getDataAdapters(final String globalVisibility) {
+  public DataTypeAdapter<GridCoverage>[] getDataAdapters() {
     return new RasterDataAdapter[] {};
   }
 
   @Override
-  public DataTypeAdapter<GridCoverage>[] getDataAdapters(
-      final URL url,
-      final String globalVisibility) {
+  public DataTypeAdapter<GridCoverage>[] getDataAdapters(final URL url) {
     final Map<String, DataTypeAdapter<GridCoverage>> adapters = Maps.newHashMap();
-    try (CloseableIterator<GeoWaveData<GridCoverage>> dataIt =
-        toGeoWaveData(url, new String[0], globalVisibility)) {
+    try (CloseableIterator<GeoWaveData<GridCoverage>> dataIt = toGeoWaveData(url, new String[0])) {
       while (dataIt.hasNext()) {
         final DataTypeAdapter<GridCoverage> adapter = dataIt.next().getAdapter();
         adapters.put(adapter.getTypeName(), adapter);

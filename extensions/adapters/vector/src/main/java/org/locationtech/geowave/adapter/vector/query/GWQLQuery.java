@@ -45,6 +45,12 @@ public class GWQLQuery extends DefaultOperation implements Command {
       description = "Output format such as console, csv, shp, geojson, etc.")
   private String outputFormat = ConsoleQueryOutputFormat.FORMAT_NAME;
 
+  @Parameter(
+      names = {"-a", "--authorization"},
+      required = false,
+      description = "Authorization to use.  Can be specified multiple times.")
+  private List<String> authorizations = new ArrayList<>();
+
   @ParametersDelegate
   private QueryOutputFormatSpi output;
 
@@ -64,6 +70,10 @@ public class GWQLQuery extends DefaultOperation implements Command {
 
   public void setParameters(final List<String> parameters) {
     this.parameters = parameters;
+  }
+
+  public void setAuthorizations(final List<String> authorizations) {
+    this.authorizations = authorizations;
   }
 
   @Override
@@ -118,7 +128,10 @@ public class GWQLQuery extends DefaultOperation implements Command {
     }
     final StopWatch stopWatch = new StopWatch();
     stopWatch.start();
-    final ResultSet results = statement.execute(storeOptions.createDataStore());
+    final ResultSet results =
+        statement.execute(
+            storeOptions.createDataStore(),
+            authorizations.toArray(new String[authorizations.size()]));
     stopWatch.stop();
     output.output(results);
     results.close();

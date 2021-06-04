@@ -59,8 +59,7 @@ public class GPXIngestPluginTest {
     final CloseableIterator<GeoWaveData<SimpleFeature>> consumer =
         pluggin.toGeoWaveData(
             this.getClass().getClassLoader().getResource("12345.xml"),
-            new String[] {"123"},
-            "");
+            new String[] {"123"});
 
     int totalCount = 0;
     while (consumer.hasNext()) {

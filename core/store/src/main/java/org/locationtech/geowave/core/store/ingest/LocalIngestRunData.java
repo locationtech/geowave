@@ -20,8 +20,10 @@ import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.memory.MemoryAdapterStore;
+import com.clearspring.analytics.util.Lists;
 
 /**
  * This class maintains a pool of index writers keyed by the primary index. In addition, it contains
@@ -74,9 +76,14 @@ public class LocalIngestRunData implements Closeable {
 
   private final TransientAdapterStore adapterStore;
   private final DataStore dataStore;
+  private final VisibilityHandler visibilityHandler;
 
-  public LocalIngestRunData(final List<DataTypeAdapter<?>> adapters, final DataStore dataStore) {
+  public LocalIngestRunData(
+      final List<DataTypeAdapter<?>> adapters,
+      final DataStore dataStore,
+      final VisibilityHandler visibilityHandler) {
     this.dataStore = dataStore;
+    this.visibilityHandler = visibilityHandler;
     indexWriterPool = new GenericKeyedObjectPool<>(new IndexWriterFactory());
     adapterStore = new MemoryAdapterStore(adapters.toArray(new DataTypeAdapter[0]));
   }
@@ -131,8 +138,10 @@ public class LocalIngestRunData implements Closeable {
         throws Exception {
       dataStore.addType(
           adapterStore.getAdapter(adapterWithIndices.typeName),
+          visibilityHandler,
+          Lists.newArrayList(),
           adapterWithIndices.indices);
-      return dataStore.createWriter(adapterWithIndices.typeName);
+      return dataStore.createWriter(adapterWithIndices.typeName, visibilityHandler);
     }
 
     @Override

@@ -45,7 +45,7 @@ public class HBaseStoreTestEnvironment extends StoreTestEnvironment {
   public HBaseStoreTestEnvironment() {}
 
   // VisibilityTest valid authorizations
-  private static String[] auths = new String[] {"a", "b", "c", "z"};
+  private static String[] auths = new String[] {"a", "b", "c", "g", "t", "z"};
 
   protected User SUPERUSER;
 

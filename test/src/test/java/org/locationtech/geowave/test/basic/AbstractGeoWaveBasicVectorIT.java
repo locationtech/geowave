@@ -715,9 +715,9 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
               + inputFile.getPath()
               + "' - this may take several minutes...");
       try (final CloseableIterator<GeoWaveData<SimpleFeature>> dataIterator =
-          localFileIngest.toGeoWaveData(inputFile, indexNames, null)) {
+          localFileIngest.toGeoWaveData(inputFile, indexNames)) {
         final TransientAdapterStore adapterCache =
-            new MemoryAdapterStore(localFileIngest.getDataAdapters(null));
+            new MemoryAdapterStore(localFileIngest.getDataAdapters());
         while (dataIterator.hasNext()) {
           final GeoWaveData<SimpleFeature> data = dataIterator.next();
           final DataTypeAdapter<SimpleFeature> adapter = data.getAdapter(adapterCache);

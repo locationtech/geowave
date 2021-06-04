@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.cli.VisibilityOptions;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.ingest.AbstractLocalFileIngestDriver;
@@ -31,7 +32,7 @@ public class LocalFileIngestCLIDriver extends AbstractLocalFileIngestDriver {
   private static final Logger LOGGER = LoggerFactory.getLogger(LocalFileIngestCLIDriver.class);
   protected DataStorePluginOptions storeOptions;
   protected List<Index> indices;
-  protected VisibilityOptions ingestOptions;
+  protected VisibilityOptions visibilityOptions;
   protected Map<String, LocalFileIngestPlugin<?>> ingestPlugins;
   protected int threads;
 
@@ -39,13 +40,13 @@ public class LocalFileIngestCLIDriver extends AbstractLocalFileIngestDriver {
       final DataStorePluginOptions storeOptions,
       final List<Index> indices,
       final Map<String, LocalFileIngestPlugin<?>> ingestPlugins,
-      final VisibilityOptions ingestOptions,
+      final VisibilityOptions visibilityOptions,
       final LocalInputCommandLineOptions inputOptions,
       final int threads) {
     super(inputOptions);
     this.storeOptions = storeOptions;
     this.indices = indices;
-    this.ingestOptions = ingestOptions;
+    this.visibilityOptions = visibilityOptions;
     this.ingestPlugins = ingestPlugins;
     this.threads = threads;
   }
@@ -72,8 +73,8 @@ public class LocalFileIngestCLIDriver extends AbstractLocalFileIngestDriver {
   }
 
   @Override
-  protected String getGlobalVisibility() {
-    return ingestOptions.getVisibility();
+  protected VisibilityHandler getVisibilityHandler() {
+    return visibilityOptions.getConfiguredVisibilityHandler();
   }
 
   @Override

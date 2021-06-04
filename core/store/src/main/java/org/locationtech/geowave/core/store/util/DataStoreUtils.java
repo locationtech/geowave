@@ -49,11 +49,11 @@ import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter.RowTran
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.visibility.UnconstrainedVisibilityHandler;
-import org.locationtech.geowave.core.store.data.visibility.UniformVisibilityWriter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
@@ -109,9 +109,8 @@ public class DataStoreUtils {
   public static final int UNIQUE_ADDED_BYTES = 1 + 8 + 16;
   public static final byte UNIQUE_ID_DELIMITER = 0;
 
-  @SuppressWarnings({"rawtypes", "unchecked"})
-  public static final UniformVisibilityWriter UNCONSTRAINED_VISIBILITY =
-      new UniformVisibilityWriter(new UnconstrainedVisibilityHandler());
+  public static final VisibilityHandler UNCONSTRAINED_VISIBILITY =
+      new UnconstrainedVisibilityHandler();
 
   public static final byte[] EMTPY_VISIBILITY = new byte[] {};
 

@@ -219,7 +219,7 @@ public class SparkIngestDriver implements Serializable {
       final LocalInputCommandLineOptions localInput,
       final String inputStoreName,
       final String indexList,
-      final VisibilityOptions ingestOptions,
+      final VisibilityOptions visibilityOptions,
       final Properties configProperties,
       final Iterator<URI> inputFiles,
       final Console console) throws IOException {
@@ -254,8 +254,7 @@ public class SparkIngestDriver implements Serializable {
 
       localFileIngestPlugins.put(pluginEntry.getKey(), pluginEntry.getValue());
 
-      adapters.addAll(
-          Arrays.asList(pluginEntry.getValue().getDataAdapters(ingestOptions.getVisibility())));
+      adapters.addAll(Arrays.asList(pluginEntry.getValue().getDataAdapters()));
     }
 
     final LocalFileIngestCLIDriver localIngestDriver =
@@ -263,14 +262,18 @@ public class SparkIngestDriver implements Serializable {
             inputStoreOptions,
             indices,
             localFileIngestPlugins,
-            ingestOptions,
+            visibilityOptions,
             localInput,
             1);
 
     localIngestDriver.startExecutor();
 
     final DataStore dataStore = inputStoreOptions.createDataStore();
-    try (LocalIngestRunData runData = new LocalIngestRunData(adapters, dataStore)) {
+    try (LocalIngestRunData runData =
+        new LocalIngestRunData(
+            adapters,
+            dataStore,
+            visibilityOptions.getConfiguredVisibilityHandler())) {
 
       final List<PluginVisitor<LocalFileIngestPlugin<?>>> pluginVisitors =
           new ArrayList<>(localFileIngestPlugins.size());

@@ -107,6 +107,7 @@ import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Statistic;
 import org.locationtech.geowave.core.store.api.StatisticValue;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.statistics.DefaultStatisticsProvider;
@@ -834,6 +835,13 @@ public class RasterDataAdapter implements
   @Override
   public InternalDataAdapter<GridCoverage> asInternalAdapter(final short internalAdapterId) {
     return new InternalRasterDataAdapter(this, internalAdapterId);
+  }
+
+  @Override
+  public InternalDataAdapter<GridCoverage> asInternalAdapter(
+      final short internalAdapterId,
+      final VisibilityHandler visibilityHandler) {
+    return new InternalRasterDataAdapter(this, internalAdapterId, visibilityHandler);
   }
 
   public GridCoverage getCoverageFromRasterTile(

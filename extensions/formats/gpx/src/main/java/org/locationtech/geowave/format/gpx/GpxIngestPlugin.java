@@ -171,8 +171,7 @@ public class GpxIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroGpxTr
   @Override
   protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
       final AvroGpxTrack gpxTrack,
-      final String[] indexNames,
-      final String globalVisibility) {
+      final String[] indexNames) {
     final InputStream in = new ByteArrayInputStream(gpxTrack.getGpxfile().array());
     // LOGGER.debug("Processing track [" + gpxTrack.getTimestamp() + "]");
     try {
@@ -184,7 +183,6 @@ public class GpxIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroGpxTr
           gpxTrack.getTimestamp(),
           false, // waypoints, even dups, are unique, due to QGis
           // behavior
-          globalVisibility,
           extentOptProvider.getMaxExtent());
     } catch (final Exception e) {
       LOGGER.warn("Unable to convert GpxTrack to GeoWaveData", e);

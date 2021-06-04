@@ -46,7 +46,7 @@ public class GeoWaveAvroIngestTest {
 
     assertTrue(validate(toIngest));
     final CloseableIterator<GeoWaveData<SimpleFeature>> features =
-        ingester.toGeoWaveData(toIngest, new String[] {"123"}, "");
+        ingester.toGeoWaveData(toIngest, new String[] {"123"});
 
     assertTrue((features != null) && features.hasNext());
 

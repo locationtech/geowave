@@ -15,7 +15,6 @@ import org.locationtech.geowave.adapter.vector.query.gwql.SingletonResultSet;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Query;
-import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 import com.google.common.collect.Lists;
@@ -29,7 +28,7 @@ public class DeleteStatement implements Statement {
   private final Filter filter;
 
   /**
-   * 
+   *
    * @param typeName the type to delete data from
    * @param filter delete features that match this filter
    */
@@ -39,9 +38,10 @@ public class DeleteStatement implements Statement {
   }
 
   @Override
-  public ResultSet execute(final DataStore dataStore) {
+  public ResultSet execute(final DataStore dataStore, final String... authorizations) {
     final VectorQueryBuilder bldr =
         VectorQueryBuilder.newBuilder().addTypeName(typeName.typeName());
+    bldr.setAuthorizations(authorizations);
     if (filter != null) {
       bldr.constraints(bldr.constraintsFactory().filterConstraints(filter));
     }

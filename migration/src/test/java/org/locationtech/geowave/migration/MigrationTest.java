@@ -32,6 +32,8 @@ import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
+import org.locationtech.geowave.core.store.data.visibility.JsonFieldLevelVisibilityHandler;
 import org.locationtech.geowave.migration.legacy.adapter.vector.LegacyFeatureDataAdapter;
 import org.locationtech.geowave.migration.legacy.core.geotime.LegacyCustomCRSSpatialField;
 import org.locationtech.geowave.migration.legacy.core.geotime.LegacyLatitudeField;
@@ -39,6 +41,7 @@ import org.locationtech.geowave.migration.legacy.core.geotime.LegacyLongitudeFie
 import org.locationtech.jts.geom.Point;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -62,6 +65,12 @@ public class MigrationTest {
     builder.crs(GeometryUtils.getDefaultCRS());
 
     final SimpleFeatureType featureType = builder.buildFeatureType();
+    final AttributeDescriptor stringAttr = featureType.getDescriptor("strAttr");
+    // Configure legacy visiblity
+    stringAttr.getUserData().put("visibility", Boolean.TRUE);
+    featureType.getUserData().put(
+        "visibilityManagerClass",
+        "org.locationtech.geowave.adapter.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement");
     LegacyFeatureDataAdapter adapter = new LegacyFeatureDataAdapter(featureType, "EPSG:3257");
 
     final byte[] adapterBinary = PersistenceUtils.toBinary(adapter);
@@ -92,6 +101,12 @@ public class MigrationTest {
     assertEquals("testType", updatedAdapter.getTypeName());
     assertEquals(SimpleFeature.class, updatedAdapter.getDataClass());
     assertTrue(updatedAdapter.hasTemporalConstraints());
+    assertNotNull(adapter.getVisibilityHandler());
+    final VisibilityHandler visibilityHandler = adapter.getVisibilityHandler();
+    assertTrue(visibilityHandler instanceof JsonFieldLevelVisibilityHandler);
+    assertEquals(
+        "strAttr",
+        ((JsonFieldLevelVisibilityHandler) visibilityHandler).getVisibilityAttribute());
   }
 
   @Test

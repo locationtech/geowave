@@ -6,7 +6,7 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.core.store.util;
+package org.locationtech.geowave.core.store.data.visibility;
 
 import java.text.ParseException;
 import java.util.Set;
@@ -16,6 +16,8 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
 public class VisibilityExpression {
+  public static final String OR_TOKEN = "|";
+  public static final String AND_TOKEN = "&";
   // Split before and after the delimiter character so that it gets
   // included in the token list
   private static final String SPLIT_DELIMITER = "((?<=%1$s)|(?=%1$s))";
@@ -25,25 +27,15 @@ public class VisibilityExpression {
     final StringBuilder sb = new StringBuilder();
     sb.append(String.format(SPLIT_DELIMITER, "\\(")).append("|");
     sb.append(String.format(SPLIT_DELIMITER, "\\)")).append("|");
-    sb.append(String.format(SPLIT_DELIMITER, "\\&")).append("|");
-    sb.append(String.format(SPLIT_DELIMITER, "\\|"));
+    sb.append(String.format(SPLIT_DELIMITER, "\\" + AND_TOKEN)).append("|");
+    sb.append(String.format(SPLIT_DELIMITER, "\\" + OR_TOKEN));
     TOKEN_SPLIT = sb.toString();
   }
 
   private static LoadingCache<String, VisibilityNode> expressionCache =
       CacheBuilder.newBuilder().maximumSize(50).build(new VisibilityCacheLoader());
 
-  public static boolean evaluate(final String expression, final Set<String> auths) {
-    final String trimmed = expression.replaceAll("\\s+", "");
-    try {
-      return expressionCache.get(trimmed).evaluate(auths);
-    } catch (final ExecutionException e) {
-      throw new RuntimeException(e.getCause());
-    }
-  }
-
   private static class VisibilityCacheLoader extends CacheLoader<String, VisibilityNode> {
-
     @Override
     public VisibilityNode load(final String key) throws Exception {
       final String[] tokens = key.split(TOKEN_SPLIT);
@@ -51,6 +43,34 @@ public class VisibilityExpression {
         return new NoAuthNode();
       }
       return parseTokens(0, tokens.length - 1, tokens);
+    }
+  }
+
+  private static VisibilityNode getCached(final String expression) {
+    final String trimmed = expression.replaceAll("\\s+", "");
+    try {
+      return expressionCache.get(trimmed);
+    } catch (final ExecutionException e) {
+      throw new RuntimeException(e.getCause());
+    }
+  }
+
+  public static boolean evaluate(final String expression, final Set<String> auths) {
+    return getCached(expression).evaluate(auths);
+  }
+
+  public static void addMinimalTokens(final String expression, final Set<String> tokens) {
+    addMinimalTokens(getCached(expression), tokens);
+  }
+
+  private static void addMinimalTokens(final VisibilityNode parsed, final Set<String> tokens) {
+    if (parsed instanceof ValueNode) {
+      tokens.add(((ValueNode) parsed).toString());
+    } else if (parsed instanceof AndNode) {
+      addMinimalTokens(((AndNode) parsed).getLeft(), tokens);
+      addMinimalTokens(((AndNode) parsed).getRight(), tokens);
+    } else if (parsed instanceof OrNode) {
+      tokens.add("(" + parsed.toString() + ")");
     }
   }
 
@@ -71,7 +91,7 @@ public class VisibilityExpression {
         i = matchingParen;
       } else if (tokens[i].equals(")")) {
         throw new ParseException("Right parenthesis found with no matching left parenthesis.", i);
-      } else if ("&|".indexOf(tokens[i]) > -1) {
+      } else if (AND_TOKEN.equals(tokens[i]) || OR_TOKEN.equals(tokens[i])) {
         if (left == null) {
           throw new ParseException("Operator found with no left operand.", i);
         } else if (operator != null) {
@@ -87,7 +107,7 @@ public class VisibilityExpression {
           left = newNode;
         } else if (operator == null) {
           throw new ParseException("Multiple sequential operands with no operator.", i);
-        } else if (operator.equals("&")) {
+        } else if (operator.equals(AND_TOKEN)) {
           left = new AndNode(left, newNode);
           operator = null;
         } else {
@@ -121,19 +141,65 @@ public class VisibilityExpression {
     return match;
   }
 
-  private abstract static class VisibilityNode {
+  public abstract static class VisibilityNode {
     public abstract boolean evaluate(Set<String> auths);
   }
 
-  private static class NoAuthNode extends VisibilityNode {
+  public abstract static class OperatorNode extends VisibilityNode {
+    public abstract VisibilityNode getLeft();
+
+    public abstract VisibilityNode getRight();
+
+    @Override
+    public String toString() {
+      return getExpression();
+    }
+
+    protected abstract String getOperator();
+
+    public String getExpression() {
+      final StringBuilder sb = new StringBuilder();
+      return buildExpression(sb);
+    }
+
+    protected String buildExpression(final StringBuilder sb) {
+      return buildExpression(sb, getOperator());
+    }
+
+    protected String buildExpression(final StringBuilder sb, final String operator) {
+      if (getLeft() instanceof OperatorNode) {
+        sb.append("(");
+        ((OperatorNode) getLeft()).buildExpression(sb);
+        sb.append(")");
+      } else {
+        sb.append(getLeft().toString());
+      }
+      sb.append(operator);
+      if (getRight() instanceof OperatorNode) {
+        sb.append("(");
+        ((OperatorNode) getRight()).buildExpression(sb);
+        sb.append(")");
+      } else {
+        sb.append(getRight().toString());
+      }
+      return sb.toString();
+    }
+  }
+
+  public static class NoAuthNode extends VisibilityNode {
 
     @Override
     public boolean evaluate(final Set<String> auths) {
       return true;
     }
+
+    @Override
+    public String toString() {
+      return "";
+    }
   }
 
-  private static class ValueNode extends VisibilityNode {
+  public static class ValueNode extends VisibilityNode {
     private final String value;
 
     public ValueNode(final String value) {
@@ -144,9 +210,14 @@ public class VisibilityExpression {
     public boolean evaluate(final Set<String> auths) {
       return auths.contains(value);
     }
+
+    @Override
+    public String toString() {
+      return value;
+    }
   }
 
-  private static class AndNode extends VisibilityNode {
+  public static class AndNode extends OperatorNode {
     private final VisibilityNode left;
     private final VisibilityNode right;
 
@@ -159,9 +230,24 @@ public class VisibilityExpression {
     public boolean evaluate(final Set<String> auths) {
       return left.evaluate(auths) && right.evaluate(auths);
     }
+
+    @Override
+    public VisibilityNode getLeft() {
+      return left;
+    }
+
+    @Override
+    public VisibilityNode getRight() {
+      return right;
+    }
+
+    @Override
+    protected String getOperator() {
+      return AND_TOKEN;
+    }
   }
 
-  private static class OrNode extends VisibilityNode {
+  public static class OrNode extends OperatorNode {
     private final VisibilityNode left;
     private final VisibilityNode right;
 
@@ -173,6 +259,21 @@ public class VisibilityExpression {
     @Override
     public boolean evaluate(final Set<String> auths) {
       return left.evaluate(auths) || right.evaluate(auths);
+    }
+
+    @Override
+    public VisibilityNode getLeft() {
+      return left;
+    }
+
+    @Override
+    public VisibilityNode getRight() {
+      return right;
+    }
+
+    @Override
+    protected String getOperator() {
+      return OR_TOKEN;
     }
   }
 }

@@ -151,9 +151,7 @@ public class GeoWaveAvroIngestPlugin extends
   }
 
   @Override
-  public DataTypeAdapter<SimpleFeature>[] getDataAdapters(
-      final URL url,
-      final String globalVisibility) {
+  public DataTypeAdapter<SimpleFeature>[] getDataAdapters(final URL url) {
     final Map<String, FeatureDataAdapter> adapters = Maps.newHashMap();
     try (final CloseableIterator<AvroSimpleFeatureCollection> avroObjects = toAvroObjects(url)) {
       while (avroObjects.hasNext()) {
@@ -175,8 +173,7 @@ public class GeoWaveAvroIngestPlugin extends
   @Override
   protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
       final AvroSimpleFeatureCollection featureCollection,
-      final String[] indexNames,
-      final String globalVisibility) {
+      final String[] indexNames) {
     final AvroFeatureDefinition featureDefinition = featureCollection.getFeatureType();
     final List<GeoWaveData<SimpleFeature>> retVal = new ArrayList<>();
     SimpleFeatureType featureType;

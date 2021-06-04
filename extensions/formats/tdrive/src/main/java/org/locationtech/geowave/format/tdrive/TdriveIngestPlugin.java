@@ -164,8 +164,7 @@ public class TdriveIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroTd
   @Override
   protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
       final AvroTdrivePoint tdrivePoint,
-      final String[] indexNames,
-      final String globalVisibility) {
+      final String[] indexNames) {
 
     final List<GeoWaveData<SimpleFeature>> featureData = new ArrayList<>();
 

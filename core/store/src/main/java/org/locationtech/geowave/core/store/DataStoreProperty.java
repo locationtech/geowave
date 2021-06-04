@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
+import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
@@ -46,9 +47,14 @@ public class DataStoreProperty implements Persistable {
   public byte[] toBinary() {
     final byte[] keyBytes = StringUtils.stringToBinary(key);
     final byte[] classBytes = StringUtils.stringToBinary(value.getClass().getName());
-    final FieldWriter<Object> writer =
-        (FieldWriter<Object>) FieldUtils.getDefaultWriterForClass(value.getClass());
-    final byte[] valueBytes = writer.writeField(value);
+    final byte[] valueBytes;
+    if (value instanceof Persistable) {
+      valueBytes = PersistenceUtils.toBinary((Persistable) value);
+    } else {
+      final FieldWriter<Object> writer =
+          (FieldWriter<Object>) FieldUtils.getDefaultWriterForClass(value.getClass());
+      valueBytes = writer.writeField(value);
+    }
     final ByteBuffer buffer =
         ByteBuffer.allocate(
             VarintUtils.unsignedIntByteLength(keyBytes.length)
@@ -80,9 +86,13 @@ public class DataStoreProperty implements Persistable {
     final String className = StringUtils.stringFromBinary(classBytes);
     try {
       final Class<?> valueClass = Class.forName(className);
-      final FieldReader<Object> reader =
-          (FieldReader<Object>) FieldUtils.getDefaultReaderForClass(valueClass);
-      value = reader.readField(valueBytes);
+      if (Persistable.class.isAssignableFrom(valueClass)) {
+        value = PersistenceUtils.fromBinary(valueBytes);
+      } else {
+        final FieldReader<Object> reader =
+            (FieldReader<Object>) FieldUtils.getDefaultReaderForClass(valueClass);
+        value = reader.readField(valueBytes);
+      }
     } catch (final ClassNotFoundException e) {
       throw new RuntimeException("Unable to find class for property: " + className);
     }

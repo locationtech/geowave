@@ -12,6 +12,7 @@ import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 import org.locationtech.geowave.examples.adapter.CustomAdapterExample.POIBasicDataAdapter;
 import org.locationtech.geowave.examples.index.CustomIndexExample.UUIDConstraints;
 import org.locationtech.geowave.examples.index.CustomIndexExample.UUIDIndexStrategy;
+import org.locationtech.geowave.examples.ingest.plugin.CustomIngestPlugin;
 
 public class ExamplePersistableRegistry implements PersistableRegistrySpi {
 
@@ -20,6 +21,7 @@ public class ExamplePersistableRegistry implements PersistableRegistrySpi {
     return new PersistableIdAndConstructor[] {
         new PersistableIdAndConstructor((short) 20000, POIBasicDataAdapter::new),
         new PersistableIdAndConstructor((short) 20001, UUIDIndexStrategy::new),
-        new PersistableIdAndConstructor((short) 20002, UUIDConstraints::new)};
+        new PersistableIdAndConstructor((short) 20002, UUIDConstraints::new),
+        new PersistableIdAndConstructor((short) 20003, CustomIngestPlugin::new)};
   }
 }

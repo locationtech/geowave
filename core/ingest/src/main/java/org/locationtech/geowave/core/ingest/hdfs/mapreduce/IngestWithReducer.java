@@ -39,6 +39,5 @@ public interface IngestWithReducer<I, K extends WritableComparable<?>, V extends
   public CloseableIterator<GeoWaveData<O>> toGeoWaveData(
       K key,
       String[] indexNames,
-      String globalVisibility,
       Iterable<V> values);
 }

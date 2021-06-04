@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.store.metadata;
 
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.DataStoreProperty;
 import org.locationtech.geowave.core.store.PropertyStore;
@@ -24,7 +25,7 @@ public class PropertyStoreImpl extends AbstractGeoWavePersistence<DataStorePrope
   }
 
   private ByteArray keyToPrimaryId(final String key) {
-    return new ByteArray(ByteArrayUtils.byteArrayFromString(key));
+    return new ByteArray(StringUtils.stringToBinary(key));
   }
 
   @Override

@@ -42,10 +42,7 @@ public class SimpleFeatureGeoWaveWrapper implements CloseableIterator<GeoWaveDat
     private GeoWaveData<SimpleFeature> currentData = null;
     private boolean closed = false;
 
-    public InternalIterator(
-        final SimpleFeatureCollection featureCollection,
-        final String visibility,
-        final Filter filter) {
+    public InternalIterator(final SimpleFeatureCollection featureCollection, final Filter filter) {
       this.filter = filter;
       featureIterator = featureCollection.features();
       final SimpleFeatureType originalSchema = featureCollection.getSchema();
@@ -113,7 +110,6 @@ public class SimpleFeatureGeoWaveWrapper implements CloseableIterator<GeoWaveDat
   private final List<SimpleFeatureCollection> featureCollections;
   private final String[] indexNames;
   private InternalIterator currentIterator = null;
-  private final String visibility;
   private final DataStore dataStore;
   private final RetypingVectorDataPlugin retypingPlugin;
   private final Filter filter;
@@ -121,12 +117,10 @@ public class SimpleFeatureGeoWaveWrapper implements CloseableIterator<GeoWaveDat
   public SimpleFeatureGeoWaveWrapper(
       final List<SimpleFeatureCollection> featureCollections,
       final String[] indexNames,
-      final String visibility,
       final DataStore dataStore,
       final RetypingVectorDataPlugin retypingPlugin,
       final Filter filter) {
     this.featureCollections = featureCollections;
-    this.visibility = visibility;
     this.indexNames = indexNames;
     this.dataStore = dataStore;
     this.retypingPlugin = retypingPlugin;
@@ -150,7 +144,7 @@ public class SimpleFeatureGeoWaveWrapper implements CloseableIterator<GeoWaveDat
     final Iterator<SimpleFeatureCollection> it = featureCollections.iterator();
     while (it.hasNext()) {
       final SimpleFeatureCollection collection = it.next();
-      final InternalIterator featureIt = new InternalIterator(collection, visibility, filter);
+      final InternalIterator featureIt = new InternalIterator(collection, filter);
 
       it.remove();
       if (!featureIt.hasNext()) {

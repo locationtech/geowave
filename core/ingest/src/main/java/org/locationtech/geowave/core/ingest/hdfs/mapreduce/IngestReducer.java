@@ -22,7 +22,6 @@ import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
 public class IngestReducer extends
     Reducer<WritableComparable<?>, Writable, GeoWaveOutputKey, Object> {
   private IngestWithReducer ingestWithReducer;
-  private String globalVisibility;
   private String[] indexNames;
 
   @Override
@@ -31,7 +30,7 @@ public class IngestReducer extends
       final Iterable<Writable> values,
       final Context context) throws IOException, InterruptedException {
     try (CloseableIterator<GeoWaveData> data =
-        ingestWithReducer.toGeoWaveData(key, indexNames, globalVisibility, values)) {
+        ingestWithReducer.toGeoWaveData(key, indexNames, values)) {
       while (data.hasNext()) {
         final GeoWaveData d = data.next();
         context.write(new GeoWaveOutputKey<>(d), d.getValue());
@@ -48,8 +47,6 @@ public class IngestReducer extends
       final byte[] ingestWithReducerBytes =
           ByteArrayUtils.byteArrayFromString(ingestWithReducerStr);
       ingestWithReducer = (IngestWithReducer) PersistenceUtils.fromBinary(ingestWithReducerBytes);
-      globalVisibility =
-          context.getConfiguration().get(AbstractMapReduceIngest.GLOBAL_VISIBILITY_KEY);
       indexNames = AbstractMapReduceIngest.getIndexNames(context.getConfiguration());
     } catch (final Exception e) {
       throw new IllegalArgumentException(e);

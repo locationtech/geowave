@@ -16,8 +16,8 @@ import org.apache.hadoop.hbase.KeyValue;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
-import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
@@ -30,25 +30,25 @@ public class HBaseCellGenerator<T> {
   private final InternalDataAdapter<T> adapter;
   private final Index index;
   private final AdapterToIndexMapping indexMapping;
-  private final VisibilityWriter<T> visibilityWriter;
+  private final VisibilityHandler visibilityHandler;
 
   public HBaseCellGenerator(
       final InternalDataAdapter<T> adapter,
       final Index index,
       final AdapterToIndexMapping indexMapping,
-      final VisibilityWriter<T> visibilityWriter) {
+      final VisibilityHandler visibilityHandler) {
     super();
     this.adapter = adapter;
     this.index = index;
     this.indexMapping = indexMapping;
-    this.visibilityWriter = visibilityWriter;
+    this.visibilityHandler = visibilityHandler;
   }
 
   public List<Cell> constructKeyValuePairs(final byte[] adapterId, final T entry) {
 
     final List<Cell> keyValuePairs = new ArrayList<>();
     final GeoWaveRow[] rows =
-        BaseDataStoreUtils.getGeoWaveRows(entry, adapter, indexMapping, index, visibilityWriter);
+        BaseDataStoreUtils.getGeoWaveRows(entry, adapter, indexMapping, index, visibilityHandler);
 
     if ((rows != null) && (rows.length > 0)) {
       for (final GeoWaveRow row : rows) {

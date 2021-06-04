@@ -147,16 +147,16 @@ public class OSMIngestCommandArgs {
 
   public String serializeToString() {
     final StringBuilder sb = new StringBuilder();
-    sb.append(osmNamespace).append(separator).append(visibilityOptions.getVisibility()).append(
-        separator).append(hdfsBasePath).append(separator).append(jobName).append(separator).append(
-            mapperType);
+    sb.append(osmNamespace).append(separator).append(
+        visibilityOptions.getGlobalVisibility()).append(separator).append(hdfsBasePath).append(
+            separator).append(jobName).append(separator).append(mapperType);
     return sb.toString();
   }
 
   public void deserializeFromString(final String ser) {
     final String[] settings = ser.split(Pattern.quote(separator));
     osmNamespace = settings[0];
-    visibilityOptions.setVisibility(settings[1]);
+    visibilityOptions.setGlobalVisibility(settings[1]);
     hdfsBasePath = settings[2];
     jobName = settings[3];
     mapperType = settings[4];

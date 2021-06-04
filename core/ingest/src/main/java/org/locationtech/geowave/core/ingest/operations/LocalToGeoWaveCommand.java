@@ -39,7 +39,7 @@ public class LocalToGeoWaveCommand extends ServiceEnabledCommand<Void> {
   private List<String> parameters = new ArrayList<>();
 
   @ParametersDelegate
-  private VisibilityOptions ingestOptions = new VisibilityOptions();
+  private VisibilityOptions visibilityOptions = new VisibilityOptions();
 
   @ParametersDelegate
   private LocalInputCommandLineOptions localInputOptions = new LocalInputCommandLineOptions();
@@ -92,12 +92,12 @@ public class LocalToGeoWaveCommand extends ServiceEnabledCommand<Void> {
     parameters.add(commaDelimitedIndexes);
   }
 
-  public VisibilityOptions getIngestOptions() {
-    return ingestOptions;
+  public VisibilityOptions getVisibilityOptions() {
+    return visibilityOptions;
   }
 
-  public void setIngestOptions(final VisibilityOptions ingestOptions) {
-    this.ingestOptions = ingestOptions;
+  public void setVisibilityOptions(final VisibilityOptions visibilityOptions) {
+    this.visibilityOptions = visibilityOptions;
   }
 
   public LocalInputCommandLineOptions getLocalInputOptions() {
@@ -163,7 +163,7 @@ public class LocalToGeoWaveCommand extends ServiceEnabledCommand<Void> {
             inputStoreOptions,
             inputIndices,
             ingestPlugins,
-            ingestOptions,
+            visibilityOptions,
             localInputOptions,
             threads);
 

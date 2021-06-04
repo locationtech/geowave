@@ -1,0 +1,81 @@
+3373406	Yorkshire	Yorkshire		13.1	-59.5	P	PPL	BB		01				0		46	America/Barbados	1993-12-22
+3373407	Wotton	Wotton		13.06667	-59.53333	P	PPL	BB		01				0		48	America/Barbados	1993-12-22
+3373408	Worthing	Worthing		13.07496	-59.58358	P	PPL	BB		01				0		10	America/Barbados	2011-03-17
+3373409	Workhall	Workhall	Workhall	13.11667	-59.45	P	PPL	BB		10				0		22	America/Barbados	2012-01-18
+3373410	Woodbourne	Woodbourne	Woodbourne	13.08333	-59.48333	P	PPL	BB		10				0		60	America/Barbados	2012-01-18
+3373411	Woman’s Bay	Woman's Bay		13.03333	-59.5	H	BAY	BB		01				0		-9999	America/Barbados	1993-12-22
+3373412	Windy Ridge	Windy Ridge		13.16667	-59.46667	P	PPLL	BB		05				0		91	America/Barbados	1993-12-22
+3373413	Windy Hill	Windy Hill		13.23333	-59.55	P	PPL	BB		02				0		64	America/Barbados	1993-12-22
+3373414	Windsor Station	Windsor Station		13.11667	-59.51667	S	RSTN	BB		00				0		52	America/Barbados	1993-12-22
+3373415	Windsor	Windsor		13.11667	-59.51667	P	PPL	BB		00				0		52	America/Barbados	1993-12-22
+3373416	Wilson Hill	Wilson Hill		13.16667	-59.53333	P	PPL	BB		05				0		249	America/Barbados	1993-12-22
+3373417	Wildey	Wildey	Wildey	13.1	-59.56667	P	PPL	BB		08				0		108	America/Barbados	2012-01-18
+3373418	Wilcox	Wilcox		13.05	-59.5	P	PPL	BB		01				0		-9999	America/Barbados	1993-12-22
+3373419	White Hill	White Hill	White Hill	13.2	-59.56667	P	PPL	BB		02				0		296	America/Barbados	2012-01-18
+3373420	Whitehaven	Whitehaven		13.16667	-59.45	P	PPL	BB		10				0		36	America/Barbados	1993-12-22
+3373421	White Hall	White Hall		13.25	-59.61667	P	PPLL	BB		09				0		158	America/Barbados	1993-12-22
+3373422	Weymouth	Weymouth		13.08333	-59.6	P	PPLX	BB		08				0		23	America/Barbados	1993-12-22
+3373423	Weston	Weston		13.21667	-59.63333	P	PPL	BB		04				0		63	America/Barbados	1993-12-22
+3373424	Westmoreland	Westmoreland		13.21667	-59.61667	P	PPL	BB		04				0		167	America/Barbados	1993-12-22
+3373425	Well Road	Well Road		13.3	-59.58333	P	PPL	BB		07				0		63	America/Barbados	1993-12-22
+3373426	Wellhouse	Wellhouse		13.13333	-59.43333	P	PPL	BB		10				0		27	America/Barbados	1993-12-22
+3373427	Welchtown	Welchtown		13.26667	-59.58333	P	PPL	BB		09				0		139	America/Barbados	1993-12-22
+3373428	Welch Town	Welch Town		13.26667	-59.58333	P	PPL	BB		02				0		139	America/Barbados	1993-12-22
+3373429	Welch Town	Welch Town		13.16667	-59.48333	P	PPL	BB		05				0		193	America/Barbados	1993-12-22
+3373430	Welchman Hall	Welchman Hall		13.18333	-59.56667	P	PPLA	BB		11				0		267	America/Barbados	2012-01-16
+3373431	Welches	Welches		13.05	-59.55	P	PPL	BB		01				0		1	America/Barbados	1993-12-22
+3373432	Waverley Cot	Waverley Cot		13.13333	-59.53333	P	PPL	BB		03				0		138	America/Barbados	1993-12-22
+3373433	Watts Village	Watts Village		13.1	-59.53333	P	PPL	BB		03				0		105	America/Barbados	1993-12-22
+3373434	Waterford	Waterford		13.11667	-59.58333	P	PPL	BB		08				0		43	America/Barbados	1993-12-22
+3373435	Warrens	Warrens	Warrens	13.15	-59.6	P	PPL	BB		08				0		107	America/Barbados	2012-01-18
+3373436	Warners	Warners		13.06667	-59.56667	P	PPL	BB		01				0		8	America/Barbados	1993-12-22
+3373437	Warleigh	Warleigh		13.25	-59.63333	P	PPL	BB		09				0		50	America/Barbados	1993-12-22
+3373438	Wanstead	Wanstead		13.13333	-59.61667	P	PPL	BB		08				0		84	America/Barbados	1993-12-22
+3373439	Walronds	Walronds		13.08333	-59.48333	P	PPL	BB		01				0		60	America/Barbados	1993-12-22
+3373440	Walkes Spring	Walkes Spring	Walkes Spring,francia	13.16667	-59.56667	P	PPL	BB		11				0		193	America/Barbados	2012-01-18
+3373441	Walkers Terrace	Walkers Terrace		13.13333	-59.55	P	PPL	BB		03				0		117	America/Barbados	1993-12-22
+3373442	Walker’s Savannah	Walker's Savannah		13.25	-59.55	L	LCTY	BB		02				0		1	America/Barbados	1993-12-22
+3373443	Walkers Beach	Walkers Beach		13.25	-59.55	T	BCH	BB		02				0		1	America/Barbados	1993-12-22
+3373444	Wakefield Tenantry	Wakefield Tenantry		13.16667	-59.51667	P	PPL	BB		05				0		203	America/Barbados	1993-12-22
+3373445	Wakefield	Wakefield	Haynes Field,Wakefield	13.18333	-59.51667	P	PPL	BB	BB	05				0		233	America/Barbados	2012-01-18
+3373446	Vineyard	Vineyard		13.15	-59.45	P	PPL	BB		10				0		46	America/Barbados	1993-12-22
+3373447	Verdun	Verdun	Cheshire,Verdun	13.18333	-59.5	P	PPL	BB	BB	05				0		251	America/Barbados	2012-01-18
+3373448	Venture	Venture		13.18333	-59.51667	P	PPL	BB		05				0		233	America/Barbados	1993-12-22
+3373449	Vauxhall	Vauxhall		13.08333	-59.56667	P	PPL	BB		01				0		68	America/Barbados	1993-12-22
+3373450	Vaucluse Factory	Vaucluse Factory		13.16667	-59.58333	P	PPL	BB		11				0		159	America/Barbados	1993-12-22
+3373451	Valley	Valley		13.11667	-59.56667	P	PPL	BB		03				0		47	America/Barbados	1993-12-22
+3373452	Upper Salmonds	Upper Salmonds		13.3	-59.58333	P	PPL	BB		07				0		63	America/Barbados	1993-12-22
+3373453	Upper Parks	Upper Parks		13.2	-59.55	P	PPL	BB		06				0		215	America/Barbados	1993-12-22
+3373454	Upper Carlton	Upper Carlton		13.21667	-59.61667	P	PPL	BB		04				0		167	America/Barbados	1993-12-22
+3373455	Union Hall	Union Hall		13.11667	-59.45	P	PPL	BB		10				0		22	America/Barbados	1993-12-22
+3373456	Union	Union		13.13333	-59.53333	P	PPL	BB		03				0		138	America/Barbados	1993-12-22
+3373457	Two Mile Hill	Two Mile Hill	Two Mile Hill	13.08333	-59.58333	P	PPL	BB		08				0		38	America/Barbados	2012-01-18
+3373458	Turnpike	Turnpike		13.11667	-59.55	P	PPL	BB		03				0		53	America/Barbados	1993-12-22
+3373459	Turners Hall	Turners Hall		13.23333	-59.58333	P	PPL	BB		02				0		85	America/Barbados	1993-12-22
+3373460	Trents	Trents		13.3	-59.61667	P	PPL	BB		07				0		84	America/Barbados	1993-12-22
+3373461	Trents	Trents		13.2	-59.63333	P	PPL	BB		04				0		41	America/Barbados	1993-12-22
+3373462	Trader Bank	Trader Bank		13.05	-59.65	H	BNK	BB		00				0		-9999	America/Barbados	1993-12-22
+3373463	Touce’s Point	Touce's Point		13.31667	-59.61667	T	PT	BB		07				0		38	America/Barbados	1993-12-22
+3373464	Top Rock	Top Rock		13.06667	-59.56667	P	PPL	BB		01				0		8	America/Barbados	1993-12-22
+3373465	Todds	Todds		13.16667	-59.51667	P	PPL	BB		05				0		203	America/Barbados	1993-12-22
+3373466	Three Houses Station	Three Houses Station		13.15	-59.45	S	RSTN	BB		00				0		46	America/Barbados	1993-12-22
+3373467	Three Houses	Three Houses		13.15	-59.46667	S	EST	BB		10				0		88	America/Barbados	1993-12-22
+3373468	Three Boys’ Rock	Three Boys' Rock		13.2	-59.5	T	RK	BB		05				0		27	America/Barbados	1993-12-22
+3373469	Thornbury Hill	Thornbury Hill		13.05	-59.53333	P	PPL	BB		01				0		13	America/Barbados	1993-12-22
+3373470	Thicket	Thicket		13.15	-59.45	P	PPL	BB		10				0		46	America/Barbados	1993-12-22
+3373471	The Whim	The Whim		13.25	-59.63333	P	PPL	BB		09				0		50	America/Barbados	1993-12-22
+3373472	The Savannah	The Savannah		13.25	-59.56667	L	LCTY	BB		02				0		20	America/Barbados	1993-12-22
+3373473	The Risk	The Risk		13.28333	-59.56667	P	PPL	BB		09				0		1	America/Barbados	1993-12-22
+3373474	The Potteries	The Potteries		13.21667	-59.55	L	LCTY	BB		02				0		269	America/Barbados	1993-12-22
+3373475	The Glebe	The Glebe		13.11667	-59.55	P	PPL	BB		03				0		53	America/Barbados	1993-12-22
+3373476	The Garden	The Garden		13.2	-59.63333	P	PPL	BB		04				0		41	America/Barbados	1993-12-22
+3373477	Crane	Crane	The Crane	13.1	-59.45	P	PPLA	BB		10				935		-9999	America/Barbados	2013-06-26
+3373478	The Baltic	The Baltic		13.28333	-59.58333	P	PPL	BB		09				0		199	America/Barbados	1993-12-22
+3373479	Tent Bay	Tent Bay		13.2	-59.5	P	PPL	BB		06				0		27	America/Barbados	1993-12-22
+3373480	Pico Teneriffe	Pico Teneriffe		13.28333	-59.56667	T	HLL	BB		09				0		1	America/Barbados	1993-12-22
+3373481	Taylor Bay	Taylor Bay		13.31667	-59.63333	H	COVE	BB		07				0		41	America/Barbados	1993-12-22
+3373482	Sweet Bottom	Sweet Bottom	Sweet Bottom,Sweet Vale	13.16667	-59.55	P	PPL	BB	BB	03				0		216	America/Barbados	2012-01-18
+3373483	Swanns	Swanns		13.23333	-59.58333	P	PPL	BB		02				0		85	America/Barbados	1993-12-22
+3373484	Sutherland Road	Sutherland Road		13.26667	-59.63333	P	PPL	BB		07				0		51	America/Barbados	1993-12-22
+3373485	Surinam	Surinam		13.18333	-59.53333	P	PPL	BB		06				0		265	America/Barbados	1993-12-22
+3373486	Supers	Supers		13.15	-59.45	P	PPL	BB		10				0		46	America/Barbados	1993-12-22

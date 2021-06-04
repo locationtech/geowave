@@ -144,7 +144,6 @@ public class GPXConsumerTest {
               new HashMap<String, Map<String, String>>(),
               null,
               true,
-              "",
               Double.MAX_VALUE);
       int totalCount = 0;
 
@@ -207,7 +206,6 @@ public class GPXConsumerTest {
                 new HashMap<String, Map<String, String>>(),
                 null,
                 false,
-                "",
                 Double.MAX_VALUE)) {
           final Set<String> ids = new HashSet<>();
           while (consumer.hasNext()) {

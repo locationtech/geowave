@@ -158,26 +158,6 @@ public class FeatureDataAdapterTest {
   }
 
   @Test
-  public void testVisibility() {
-    schema.getDescriptor("pid").getUserData().clear();
-    schema.getDescriptor("pid").getUserData().put("visibility", Boolean.TRUE);
-
-    final FeatureDataAdapter dataAdapter = new FeatureDataAdapter(schema);
-    final Index spatialIndex =
-        new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
-    final byte[] binary = dataAdapter.toBinary();
-
-    final FeatureDataAdapter dataAdapterCopy = new FeatureDataAdapter();
-    dataAdapterCopy.fromBinary(binary);
-
-    assertEquals(dataAdapterCopy.getTypeName(), dataAdapter.getTypeName());
-    assertEquals(dataAdapterCopy.getFeatureType(), dataAdapter.getFeatureType());
-    assertEquals(
-        Boolean.TRUE,
-        dataAdapterCopy.getFeatureType().getDescriptor("pid").getUserData().get("visibility"));
-  }
-
-  @Test
   public void testInferredTime() {
 
     schema.getDescriptor("when").getUserData().clear();

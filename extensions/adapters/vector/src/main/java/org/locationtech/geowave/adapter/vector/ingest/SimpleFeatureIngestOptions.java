@@ -21,10 +21,6 @@ public class SimpleFeatureIngestOptions implements IngestFormatOptions {
   private TypeNameOptionProvider typeNameOptionProvider = new TypeNameOptionProvider();
 
   @ParametersDelegate
-  private FeatureSerializationOptionProvider serializationFormatOptionProvider =
-      new FeatureSerializationOptionProvider();
-
-  @ParametersDelegate
   private GeometrySimpOptionProvider simpOptionProvider = new GeometrySimpOptionProvider();
 
   @ParametersDelegate
@@ -54,15 +50,6 @@ public class SimpleFeatureIngestOptions implements IngestFormatOptions {
 
   public void setTypeNameOptionProvider(final TypeNameOptionProvider typeNameOptionProvider) {
     this.typeNameOptionProvider = typeNameOptionProvider;
-  }
-
-  public FeatureSerializationOptionProvider getSerializationFormatOptionProvider() {
-    return serializationFormatOptionProvider;
-  }
-
-  public void setSerializationFormatOptionProvider(
-      final FeatureSerializationOptionProvider serializationFormatOptionProvider) {
-    this.serializationFormatOptionProvider = serializationFormatOptionProvider;
   }
 
   public Object getPluginOptions() {

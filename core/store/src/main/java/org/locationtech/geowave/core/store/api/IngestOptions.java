@@ -45,12 +45,12 @@ public class IngestOptions<T> {
     Builder<T> threads(int threads);
 
     /**
-     * Set a visibility string that will be applied to all data ingested/
+     * Set a visibility handler that will be applied to all data ingested
      *
-     * @param globalVisibility the visibility to apply
+     * @param visibilityHandler the visibility handler to use
      * @return this builder
      */
-    Builder<T> visibility(String globalVisibility);
+    Builder<T> visibility(VisibilityHandler visibilityHandler);
 
     /**
      * Set an array of acceptable file extensions. If this is empty, all files will be accepted
@@ -119,7 +119,7 @@ public class IngestOptions<T> {
    * @return a new builder
    */
   public static <T> Builder<T> newBuilder() {
-    return new IngestOptionsBuilderImpl();
+    return new IngestOptionsBuilderImpl<T>();
   }
 
   /**
@@ -133,7 +133,7 @@ public class IngestOptions<T> {
 
   private final LocalFileIngestPlugin<T> format;
   private final int threads;
-  private final String globalVisibility;
+  private final VisibilityHandler visibilityHandler;
   private final String[] fileExtensions;
   private final Predicate<T> filter;
   private final Function<T, T> transform;
@@ -155,7 +155,7 @@ public class IngestOptions<T> {
   public IngestOptions(
       final LocalFileIngestPlugin<T> format,
       final int threads,
-      final String globalVisibility,
+      final VisibilityHandler visibilityHandler,
       final String[] fileExtensions,
       final Predicate<T> filter,
       final Function<T, T> transform,
@@ -164,7 +164,7 @@ public class IngestOptions<T> {
     super();
     this.format = format;
     this.threads = threads;
-    this.globalVisibility = globalVisibility;
+    this.visibilityHandler = visibilityHandler;
     this.fileExtensions = fileExtensions;
     this.filter = filter;
     this.transform = transform;
@@ -180,8 +180,8 @@ public class IngestOptions<T> {
     return threads;
   }
 
-  public String getGlobalVisibility() {
-    return globalVisibility;
+  public VisibilityHandler getVisibilityHandler() {
+    return visibilityHandler;
   }
 
   public String[] getFileExtensions() {

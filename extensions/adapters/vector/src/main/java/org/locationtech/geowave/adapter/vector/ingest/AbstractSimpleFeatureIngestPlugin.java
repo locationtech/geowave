@@ -114,7 +114,7 @@ public abstract class AbstractSimpleFeatureIngestPlugin<I> implements
   protected abstract SimpleFeatureType[] getTypes();
 
   @Override
-  public DataTypeAdapter<SimpleFeature>[] getDataAdapters(final String globalVisibility) {
+  public DataTypeAdapter<SimpleFeature>[] getDataAdapters() {
     final SimpleFeatureType[] types = getTypes();
     final DataTypeAdapter<SimpleFeature>[] retVal = new DataTypeAdapter[types.length];
     for (int i = 0; i < types.length; i++) {
@@ -126,8 +126,7 @@ public abstract class AbstractSimpleFeatureIngestPlugin<I> implements
   @Override
   public CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveData(
       final URL input,
-      final String[] indexNames,
-      final String globalVisibility) {
+      final String[] indexNames) {
     final CloseableIterator<I> hdfsObjects = toAvroObjects(input);
     return new CloseableIterator<GeoWaveData<SimpleFeature>>() {
 
@@ -148,8 +147,7 @@ public abstract class AbstractSimpleFeatureIngestPlugin<I> implements
           while (hdfsObjects.hasNext()) {
             final I hdfsObject = hdfsObjects.next();
             currentIterator =
-                wrapIteratorWithFilters(
-                    toGeoWaveDataInternal(hdfsObject, indexNames, globalVisibility));
+                wrapIteratorWithFilters(toGeoWaveDataInternal(hdfsObject, indexNames));
             if (currentIterator.hasNext()) {
               next = currentIterator.next();
               return;
@@ -238,8 +236,7 @@ public abstract class AbstractSimpleFeatureIngestPlugin<I> implements
 
   protected abstract CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
       final I hdfsObject,
-      final String[] indexNames,
-      final String globalVisibility);
+      final String[] indexNames);
 
   public abstract static class AbstractIngestSimpleFeatureWithMapper<I> implements
       IngestWithMapper<I, SimpleFeature> {
@@ -251,17 +248,16 @@ public abstract class AbstractSimpleFeatureIngestPlugin<I> implements
     }
 
     @Override
-    public DataTypeAdapter<SimpleFeature>[] getDataAdapters(final String globalVisibility) {
-      return parentPlugin.getDataAdapters(globalVisibility);
+    public DataTypeAdapter<SimpleFeature>[] getDataAdapters() {
+      return parentPlugin.getDataAdapters();
     }
 
     @Override
     public CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveData(
         final I input,
-        final String[] indexNames,
-        final String globalVisibility) {
+        final String[] indexNames) {
       return parentPlugin.wrapIteratorWithFilters(
-          parentPlugin.toGeoWaveDataInternal(input, indexNames, globalVisibility));
+          parentPlugin.toGeoWaveDataInternal(input, indexNames));
     }
 
     @Override

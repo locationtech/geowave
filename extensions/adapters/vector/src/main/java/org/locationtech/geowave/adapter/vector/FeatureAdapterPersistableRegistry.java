@@ -15,7 +15,6 @@ import org.locationtech.geowave.adapter.vector.ingest.DataSchemaOptionProvider;
 import org.locationtech.geowave.adapter.vector.ingest.FeatureSerializationOptionProvider;
 import org.locationtech.geowave.adapter.vector.ingest.GeometrySimpOptionProvider;
 import org.locationtech.geowave.adapter.vector.ingest.TypeNameOptionProvider;
-import org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration;
 import org.locationtech.geowave.adapter.vector.query.aggregation.CompositeVectorAggregation;
 import org.locationtech.geowave.adapter.vector.query.aggregation.VectorCountAggregation;
 import org.locationtech.geowave.adapter.vector.query.aggregation.VectorMaxAggregation;
@@ -27,13 +26,6 @@ import org.locationtech.geowave.adapter.vector.render.DistributedRenderResult;
 import org.locationtech.geowave.adapter.vector.render.DistributedRenderResult.CompositeGroupResult;
 import org.locationtech.geowave.adapter.vector.render.PersistableComposite;
 import org.locationtech.geowave.adapter.vector.render.PersistableRenderedImage;
-import org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection;
-import org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection;
-import org.locationtech.geowave.adapter.vector.stats.legacy.FeatureCountMinSketchConfig;
-import org.locationtech.geowave.adapter.vector.stats.legacy.FeatureFixedBinConfig;
-import org.locationtech.geowave.adapter.vector.stats.legacy.FeatureHyperLogLogConfig;
-import org.locationtech.geowave.adapter.vector.stats.legacy.FeatureNumericHistogramConfig;
-import org.locationtech.geowave.adapter.vector.stats.legacy.FeatureNumericRangeConfig;
 import org.locationtech.geowave.adapter.vector.util.SimpleFeatureUserDataConfigurationSet;
 import org.locationtech.geowave.core.geotime.store.query.ExplicitCQLQuery;
 import org.locationtech.geowave.core.geotime.store.query.filter.CQLQueryFilter;
@@ -60,19 +52,12 @@ public class FeatureAdapterPersistableRegistry implements PersistableRegistrySpi
         new PersistableIdAndConstructor((short) 511, DistributedRenderResult::new),
         new PersistableIdAndConstructor((short) 512, PersistableComposite::new),
         new PersistableIdAndConstructor((short) 513, PersistableRenderedImage::new),
+        // 514-520 is available
         new PersistableIdAndConstructor((short) 521, DistributedRenderAggregation::new),
         new PersistableIdAndConstructor((short) 522, SimpleFeatureUserDataConfigurationSet::new),
         new PersistableIdAndConstructor((short) 523, TimeDescriptorConfiguration::new),
-        new PersistableIdAndConstructor((short) 524, VisibilityConfiguration::new),
-        new PersistableIdAndConstructor(
-            (short) 525,
-            SimpleFeatureStatsConfigurationCollection::new),
-        new PersistableIdAndConstructor((short) 526, StatsConfigurationCollection::new),
-        new PersistableIdAndConstructor((short) 527, FeatureCountMinSketchConfig::new),
-        new PersistableIdAndConstructor((short) 528, FeatureFixedBinConfig::new),
-        new PersistableIdAndConstructor((short) 529, FeatureHyperLogLogConfig::new),
-        new PersistableIdAndConstructor((short) 530, FeatureNumericHistogramConfig::new),
-        new PersistableIdAndConstructor((short) 531, FeatureNumericRangeConfig::new),
+        // 524-526 are legacy classes (pre 2.0)
+        // 527-532 are available
         // 532 is available
         new PersistableIdAndConstructor((short) 533, SimpleFeaturePrimaryIndexConfiguration::new),
         new PersistableIdAndConstructor((short) 534, CompositeVectorAggregation::new),

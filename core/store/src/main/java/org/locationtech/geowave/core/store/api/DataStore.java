@@ -427,6 +427,23 @@ public interface DataStore {
       Index... initialIndices);
 
   /**
+   * Add this type to the data store with the given statistics and visibility handler. This only
+   * needs to be called one time ever per type.
+   *
+   * @param dataTypeAdapter the data type adapter for this type that is used to read and write
+   *        GeoWave entries
+   * @param visibilityHandler the visibility handler for the adapter entries
+   * @param statistics the initial set of statistics that will be used with this adapter
+   * @param initialIndices the initial indexing for this type, in the future additional indices can
+   *        be added
+   */
+  <T> void addType(
+      DataTypeAdapter<T> dataTypeAdapter,
+      VisibilityHandler visibilityHandler,
+      List<Statistic<?>> statistics,
+      Index... initialIndices);
+
+  /**
    * Returns an index writer to perform batched write operations for the given data type name. It
    * assumes the type has already been used previously or added using addType and assumes one or
    * more indices have been provided for this type.
@@ -435,4 +452,15 @@ public interface DataStore {
    * @return a writer which can be used to write entries into this datastore of the given type
    */
   <T> Writer<T> createWriter(String typeName);
+
+  /**
+   * Returns an index writer to perform batched write operations for the given data type name. It
+   * assumes the type has already been used previously or added using addType and assumes one or
+   * more indices have been provided for this type.
+   *
+   * @param typeName the type
+   * @param visibilityHandler the visibility handler for newly written entries
+   * @return a writer which can be used to write entries into this datastore of the given type
+   */
+  <T> Writer<T> createWriter(String typeName, VisibilityHandler visibilityHandler);
 }

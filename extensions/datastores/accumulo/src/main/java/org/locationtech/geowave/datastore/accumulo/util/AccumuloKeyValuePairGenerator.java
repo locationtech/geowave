@@ -19,8 +19,8 @@ import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
-import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.datastore.accumulo.operations.AccumuloWriter;
 
@@ -39,24 +39,24 @@ public class AccumuloKeyValuePairGenerator<T> {
   private final InternalDataAdapter<T> adapter;
   private final Index index;
   private final AdapterToIndexMapping indexMapping;
-  private final VisibilityWriter<T> visibilityWriter;
+  private final VisibilityHandler visibilityHandler;
 
   public AccumuloKeyValuePairGenerator(
       final InternalDataAdapter<T> adapter,
       final Index index,
       final AdapterToIndexMapping indexMapping,
-      final VisibilityWriter<T> visibilityWriter) {
+      final VisibilityHandler visibilityHandler) {
     super();
     this.adapter = adapter;
     this.index = index;
     this.indexMapping = indexMapping;
-    this.visibilityWriter = visibilityWriter;
+    this.visibilityHandler = visibilityHandler;
   }
 
   public List<KeyValue> constructKeyValuePairs(final T entry) {
     final List<KeyValue> keyValuePairs = new ArrayList<>();
     final GeoWaveRow[] rows =
-        BaseDataStoreUtils.getGeoWaveRows(entry, adapter, indexMapping, index, visibilityWriter);
+        BaseDataStoreUtils.getGeoWaveRows(entry, adapter, indexMapping, index, visibilityHandler);
     if ((rows != null) && (rows.length > 0)) {
       for (final GeoWaveRow row : rows) {
         final Mutation m = AccumuloWriter.rowToMutation(row);

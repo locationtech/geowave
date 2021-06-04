@@ -26,7 +26,16 @@ This command is similar to `ingest localToGW`, but does not ingest any data.  It
   Explicitly set the formats by name (or multiple comma-delimited formats).  If not set, all available formats will be used.
 
 *-v, --visibility* _<visibility>_::
-  The default visibility for the data types.  Default is `public`.
+  The global visibility of the data ingested (optional; if not specified, the data will be unrestricted)
+  
+*-fv, --fieldVisibility* _<visibility>_::
+  Specify the visibility of a specific field in the format `<fieldName>:<visibility>`.  This option can be specified multiple times for different fields.
+
+*-va, --visibilityAttribute* _<field>_::
+  Specify a field that contains visibility information for the whole row.  If specified, any field visibilities defined by `-fv` will be ignored.
+  
+*--jsonVisibilityAttribute*::
+  If specified, the value of the visibility field defined by `-va` will be treated as a JSON object with keys that represent fields and values that represent their visibility.
 
 When the `avro` format is used, additional options are:
 
@@ -201,4 +210,8 @@ Add all types for GDELT data from an area around Germany from the `gdelt_data` d
 Add the type from a shapefile called `states.shp` to the `example` data store with the `spatial-idx` index:
 
   geowave type add -f geotools-vector states.shp example spatial-idx
+  
+  Add the type from a shapefile called `states.shp` to the `example` data store with the `spatial-idx` index, but make the `population` field require an authorization of "secret" to access:
+
+  geowave type add -f geotools-vector -fv population:secret states.shp example spatial-idx
 

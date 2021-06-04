@@ -121,8 +121,7 @@ public class TwitterIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroW
       justification = "Intentionally catching any possible exception as there may be unknown format issues in a file and we don't want to error partially through parsing")
   protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
       final AvroWholeFile hfile,
-      final String[] indexNames,
-      final String globalVisibility) {
+      final String[] indexNames) {
 
     final List<GeoWaveData<SimpleFeature>> featureData = new ArrayList<>();
 
@@ -282,6 +281,12 @@ public class TwitterIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroW
     return new Index[] {};
   }
 
+
+  @Override
+  public String[] getSupportedIndexTypes() {
+    return new String[] {SpatialField.DEFAULT_GEOMETRY_FIELD_NAME, TimeField.DEFAULT_FIELD_ID};
+  }
+
   @Override
   public IngestPluginBase<AvroWholeFile, SimpleFeature> getIngestWithAvroPlugin() {
     return new IngestTwitterFromHdfs(this);
@@ -298,8 +303,4 @@ public class TwitterIngestPlugin extends AbstractSimpleFeatureIngestPlugin<AvroW
     }
   }
 
-  @Override
-  public String[] getSupportedIndexTypes() {
-    return new String[] {SpatialField.DEFAULT_GEOMETRY_FIELD_NAME, TimeField.DEFAULT_FIELD_ID};
-  }
 }

@@ -13,6 +13,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import org.apache.commons.lang3.ArrayUtils;
 import org.locationtech.geowave.core.store.api.IngestOptions;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.api.IngestOptions.Builder;
 import org.locationtech.geowave.core.store.api.IngestOptions.IngestCallback;
 
@@ -20,7 +21,7 @@ public class IngestOptionsBuilderImpl<T> implements Builder<T> {
 
   private LocalFileIngestPlugin<T> format = null;
   private int threads = 1;
-  private String globalVisibility = null;
+  private VisibilityHandler visibilityHandler = null;
   private String[] fileExtensions = new String[0];
   private Predicate<T> filter = null;
   private Function<T, T> transform = null;
@@ -40,8 +41,8 @@ public class IngestOptionsBuilderImpl<T> implements Builder<T> {
   }
 
   @Override
-  public Builder<T> visibility(final String globalVisibility) {
-    this.globalVisibility = globalVisibility;
+  public Builder<T> visibility(final VisibilityHandler visibilityHandler) {
+    this.visibilityHandler = visibilityHandler;
     return this;
   }
 
@@ -86,7 +87,7 @@ public class IngestOptionsBuilderImpl<T> implements Builder<T> {
     return new IngestOptions<>(
         format,
         threads,
-        globalVisibility,
+        visibilityHandler,
         fileExtensions,
         filter,
         transform,

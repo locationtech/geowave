@@ -65,7 +65,7 @@ public class OsmProvider {
     bs =
         conn.createBatchScanner(
             args.getQualifiedTableName(),
-            new Authorizations(args.getVisibilityOptions().getVisibility()),
+            new Authorizations(args.getVisibilityOptions().getGlobalVisibility()),
             1);
   }
 

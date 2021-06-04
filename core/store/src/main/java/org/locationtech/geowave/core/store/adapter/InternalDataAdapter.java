@@ -11,12 +11,15 @@ package org.locationtech.geowave.core.store.adapter;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 
 public interface InternalDataAdapter<T> extends DataTypeAdapter<T> {
   short getAdapterId();
 
   DataTypeAdapter<T> getAdapter();
+
+  VisibilityHandler getVisibilityHandler();
 
   int getPositionOfOrderedField(CommonIndexModel model, String fieldName);
 

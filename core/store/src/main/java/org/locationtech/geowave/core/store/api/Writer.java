@@ -9,11 +9,10 @@
 package org.locationtech.geowave.core.store.api;
 
 import java.io.Closeable;
-import org.locationtech.geowave.core.store.data.VisibilityWriter;
 
 public interface Writer<T> extends Closeable {
   /**
-   * Write the entry using any basic visibilities set elsewhere
+   * Writes an entry using default visibilities set elsewhere.
    *
    * @param entry the entry to write
    * @return the Insertion IDs representing where this entry was written
@@ -21,29 +20,29 @@ public interface Writer<T> extends Closeable {
   WriteResults write(final T entry);
 
   /**
-   * write the entry using visibilities determined by the fieldVisibilityyWriter
+   * Writes an entry using the provided visibility handler.
    *
-   * @param entry the entry
-   * @param fieldVisibilityWriter method for determining visibility per field
+   * @param entry the entry to write
+   * @param visibilityHandler the handler for determining field visibility
    * @return the Insertion IDs representing where this entry was written
    */
-  WriteResults write(final T entry, final VisibilityWriter<T> fieldVisibilityWriter);
+  WriteResults write(final T entry, final VisibilityHandler visibilityHandler);
 
   /**
-   * get the indices that are being written to
+   * Get the indices that are being written to.
    *
    * @return the indices that are being written to
    */
   Index[] getIndices();
 
   /**
-   * flush the underlying row writer to ensure entries queued for write are fully written. This is
+   * Flush the underlying row writer to ensure entries queued for write are fully written. This is
    * particularly useful for streaming data as an intermittent mechanism to ensure periodic updates
    * are being stored.
    */
   void flush();
 
-  /** flush all entries enqueued and close all resources for this writer */
+  /** Flush all entries enqueued and close all resources for this writer. */
   @Override
   void close();
 }

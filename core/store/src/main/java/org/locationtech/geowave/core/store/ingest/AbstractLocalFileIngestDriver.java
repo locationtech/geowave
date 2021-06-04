@@ -27,8 +27,8 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.api.Writer;
-import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,11 +62,12 @@ abstract public class AbstractLocalFileIngestDriver extends
 
       localFileIngestPlugins.put(pluginEntry.getKey(), pluginEntry.getValue());
 
-      adapters.addAll(Arrays.asList(pluginEntry.getValue().getDataAdapters(getGlobalVisibility())));
+      adapters.addAll(Arrays.asList(pluginEntry.getValue().getDataAdapters()));
     }
 
     final DataStore dataStore = getDataStore();
-    try (LocalIngestRunData runData = new LocalIngestRunData(adapters, dataStore)) {
+    try (LocalIngestRunData runData =
+        new LocalIngestRunData(adapters, dataStore, getVisibilityHandler())) {
 
       startExecutor();
 
@@ -158,7 +159,7 @@ abstract public class AbstractLocalFileIngestDriver extends
           ingestRunData,
           specifiedPrimaryIndexes,
           requiredIndexMap,
-          getGlobalVisibility());
+          getVisibilityHandler());
     } else {
       processFileMultiThreaded(
           file,
@@ -166,7 +167,8 @@ abstract public class AbstractLocalFileIngestDriver extends
           plugin,
           ingestRunData,
           specifiedPrimaryIndexes,
-          requiredIndexMap);
+          requiredIndexMap,
+          getVisibilityHandler());
     }
 
     LOGGER.info(String.format("Finished ingest for file: [%s]", file.getFile()));
@@ -179,22 +181,19 @@ abstract public class AbstractLocalFileIngestDriver extends
       final LocalIngestRunData ingestRunData,
       final Map<String, Index> specifiedPrimaryIndexes,
       final Map<String, Index> requiredIndexMap,
-      final String globalVisibility) throws IOException {
+      final VisibilityHandler visibilityHandler) throws IOException {
 
     int count = 0;
     long dbWriteMs = 0L;
-    final Map<String, Writer> indexWriters = new HashMap<>();
+    final Map<String, Writer<?>> indexWriters = new HashMap<>();
     // Read files until EOF from the command line.
     try (CloseableIterator<?> geowaveDataIt =
-        plugin.toGeoWaveData(
-            file,
-            specifiedPrimaryIndexes.keySet().toArray(new String[0]),
-            globalVisibility)) {
+        plugin.toGeoWaveData(file, specifiedPrimaryIndexes.keySet().toArray(new String[0]))) {
 
       while (geowaveDataIt.hasNext()) {
         final GeoWaveData<?> geowaveData = (GeoWaveData<?>) geowaveDataIt.next();
         try {
-          final DataTypeAdapter adapter = ingestRunData.getDataAdapter(geowaveData);
+          final DataTypeAdapter<?> adapter = ingestRunData.getDataAdapter(geowaveData);
           if (adapter == null) {
             LOGGER.warn(
                 String.format(
@@ -212,7 +211,8 @@ abstract public class AbstractLocalFileIngestDriver extends
                   ingestRunData,
                   specifiedPrimaryIndexes,
                   requiredIndexMap,
-                  indexWriters);
+                  indexWriters,
+                  visibilityHandler);
 
           count++;
 
@@ -230,7 +230,7 @@ abstract public class AbstractLocalFileIngestDriver extends
 
     } finally {
       // Clean up index writers
-      for (final Entry<String, Writer> writerEntry : indexWriters.entrySet()) {
+      for (final Entry<String, Writer<?>> writerEntry : indexWriters.entrySet()) {
         try {
           ingestRunData.releaseIndexWriter(writerEntry.getKey(), writerEntry.getValue());
         } catch (final Exception e) {
@@ -244,16 +244,17 @@ abstract public class AbstractLocalFileIngestDriver extends
 
   private long ingestData(
       final GeoWaveData<?> geowaveData,
-      final DataTypeAdapter adapter,
+      final DataTypeAdapter<?> adapter,
       final LocalIngestRunData runData,
       final Map<String, Index> specifiedPrimaryIndexes,
       final Map<String, Index> requiredIndexMap,
-      final Map<String, Writer> indexWriters) throws Exception {
+      final Map<String, Writer<?>> indexWriters,
+      final VisibilityHandler visibilityHandler) throws Exception {
 
     try {
       final String adapterId = adapter.getTypeName();
       // Write the data to the data store.
-      Writer writer = indexWriters.get(adapterId);
+      Writer<?> writer = indexWriters.get(adapterId);
 
       if (writer == null) {
         final List<Index> indices = new ArrayList<>();
@@ -300,7 +301,8 @@ abstract public class AbstractLocalFileIngestDriver extends
       final LocalFileIngestPlugin<?> plugin,
       final LocalIngestRunData ingestRunData,
       final Map<String, Index> specifiedPrimaryIndexes,
-      final Map<String, Index> requiredIndexMap) throws IOException {
+      final Map<String, Index> requiredIndexMap,
+      final VisibilityHandler visibilityHandler) throws IOException {
 
     // Create our queue. We will post GeoWaveData items to these queue until
     // there are no more items, at which point we will tell the workers to
@@ -333,10 +335,7 @@ abstract public class AbstractLocalFileIngestDriver extends
 
       // Read files until EOF from the command line.
       try (CloseableIterator<?> geowaveDataIt =
-          plugin.toGeoWaveData(
-              file,
-              specifiedPrimaryIndexes.keySet().toArray(new String[0]),
-              getGlobalVisibility())) {
+          plugin.toGeoWaveData(file, specifiedPrimaryIndexes.keySet().toArray(new String[0]))) {
 
         while (geowaveDataIt.hasNext()) {
           final GeoWaveData<?> geowaveData = (GeoWaveData<?>) geowaveDataIt.next();
@@ -384,7 +383,7 @@ abstract public class AbstractLocalFileIngestDriver extends
 
   abstract protected int getNumThreads();
 
-  abstract protected String getGlobalVisibility();
+  abstract protected VisibilityHandler getVisibilityHandler();
 
   abstract protected Map<String, LocalFileIngestPlugin<?>> getIngestPlugins();
 

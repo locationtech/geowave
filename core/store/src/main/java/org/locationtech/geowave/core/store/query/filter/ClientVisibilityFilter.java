@@ -11,9 +11,9 @@ package org.locationtech.geowave.core.store.query.filter;
 import java.util.Set;
 import java.util.function.Predicate;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.store.data.visibility.VisibilityExpression;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
-import org.locationtech.geowave.core.store.util.VisibilityExpression;
 
 /**
  * Provides a visibility filter for UNMERGED rows. The filter only operates on the first

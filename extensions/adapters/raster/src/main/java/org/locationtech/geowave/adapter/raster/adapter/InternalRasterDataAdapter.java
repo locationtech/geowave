@@ -15,6 +15,7 @@ import org.locationtech.geowave.core.store.adapter.FitToIndexPersistenceEncoding
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterImpl;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.SingleFieldPersistentDataset;
@@ -31,6 +32,13 @@ public class InternalRasterDataAdapter extends InternalDataAdapterImpl<GridCover
 
   public InternalRasterDataAdapter(final RasterDataAdapter adapter, final short adapterId) {
     super(adapter, adapterId);
+  }
+
+  public InternalRasterDataAdapter(
+      final RasterDataAdapter adapter,
+      final short adapterId,
+      final VisibilityHandler visibilityHandler) {
+    super(adapter, adapterId, visibilityHandler);
   }
 
   @Override

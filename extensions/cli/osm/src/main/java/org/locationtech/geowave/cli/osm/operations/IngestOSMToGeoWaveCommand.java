@@ -131,8 +131,8 @@ public class IngestOSMToGeoWaveCommand extends DefaultOperation implements Comma
       inputStoreOptions.getFactoryOptions().setGeoWaveNamespace("osmnamespace");
     }
 
-    if (ingestOptions.getVisibilityOptions().getVisibility() == null) {
-      ingestOptions.getVisibilityOptions().setVisibility("public");
+    if (ingestOptions.getVisibilityOptions().getGlobalVisibility() == null) {
+      ingestOptions.getVisibilityOptions().setGlobalVisibility("public");
     }
 
     // This is needed by a method in OSMIngsetCommandArgs.
