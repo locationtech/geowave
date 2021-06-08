@@ -145,6 +145,14 @@ public class PersistenceUtils {
     final short classId = buf.getShort();
 
     final Persistable retVal = PersistableFactory.getInstance().newInstance(classId);
+    if (retVal == null) {
+      LOGGER.error(
+          "Unable to find persistable with class ID: "
+              + classId
+              + "\nFull Binary is: "
+              + ByteArrayUtils.getHexString(bytes));
+      return null;
+    }
     final byte[] persistableBinary = new byte[bytes.length - 2];
     buf.get(persistableBinary);
     retVal.fromBinary(persistableBinary);
