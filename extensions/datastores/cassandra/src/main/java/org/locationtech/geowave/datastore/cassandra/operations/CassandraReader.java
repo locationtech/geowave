@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
-import org.bouncycastle.util.Arrays;
+import org.apache.commons.lang3.ArrayUtils;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -111,7 +111,9 @@ public class CassandraReader<T> implements RowReader<T> {
                 results,
                 Iterators.filter(
                     results,
-                    input -> Arrays.contains(readerParams.getAdapterIds(), input.getAdapterId())));
+                    input -> ArrayUtils.contains(
+                        readerParams.getAdapterIds(),
+                        input.getAdapterId())));
       }
       iterator = wrapResults(results, readerParams);
     }

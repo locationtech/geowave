@@ -607,6 +607,7 @@
 										<excludes>
 											<exclude>org.slf4j:*</exclude>
 											<exclude>com.google.protobuf:*</exclude>
+											<exclude>org.apache.hadoop:*</exclude>
 										</excludes>
 									</artifactSet>
 									<filters>
