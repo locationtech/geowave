@@ -69,12 +69,12 @@ if [ -n "${SPARK_HOME}" ] && [ -d "${SPARK_HOME}" ]; then
   SPARK_CLASSPATH=""
   for i in $(ls ${SPARK_HOME}/jars/* )
   do
-     if [[ "$i" != *slf4j-log4j*.jar ]]; then
+     if [[ "$i" != *slf4j-log4j*.jar ] || [[ "$i" != *guava*.jar ]]]; then
        SPARK_CLASSPATH=${SPARK_CLASSPATH}:$i
      fi
   done  
 
-  CLASSPATH="$GEOWAVE_TOOLS_HOME/$GEOWAVE_TOOLS_JAR:$GEOWAVE_TOOLS_HOME/plugins/*:${SPARK_HOME}/conf:${SPARK_CLASSPATH}:${CLASSPATH}"
+  CLASSPATH="${SPARK_HOME}/conf:${SPARK_CLASSPATH}:$GEOWAVE_TOOLS_HOME/$GEOWAVE_TOOLS_JAR:$GEOWAVE_TOOLS_HOME/plugins/*:${CLASSPATH}"
 
 else
   CLASSPATH="$GEOWAVE_TOOLS_HOME/$GEOWAVE_TOOLS_JAR:$GEOWAVE_TOOLS_HOME/plugins/*:${CLASSPATH}"
