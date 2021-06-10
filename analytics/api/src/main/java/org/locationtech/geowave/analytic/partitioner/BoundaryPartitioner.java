@@ -65,7 +65,6 @@ public class BoundaryPartitioner extends OrthodromicDistancePartitioner<Object> 
   public List<PartitionData> getCubeIdentifiers(final Object entry) {
     final Geometry geom = extractor.getGeometry((SimpleFeature) entry);
     final Coordinate[] coords = (geom.getCoordinates());
-    System.out.println(geom.toString());
     if (coords.length < 2) {
       return super.getCubeIdentifiers(geom);
     } else {
@@ -82,7 +81,6 @@ public class BoundaryPartitioner extends OrthodromicDistancePartitioner<Object> 
   @Override
   public void partition(final Object entry, final PartitionDataCallback callback) throws Exception {
     final Geometry geom = extractor.getGeometry((SimpleFeature) entry);
-    System.out.println(geom.toString());
     final Coordinate[] coords = (geom.getCoordinates());
     if (coords.length < 2) {
       super.partition(geom, callback);

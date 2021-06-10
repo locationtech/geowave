@@ -108,7 +108,8 @@ public class ClusteringUtils {
    */
   protected static QueryRanges getGeoWaveRangesForQuery(final Polygon polygon) {
 
-    final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
+    final Index index =
+        SpatialDimensionalityTypeProvider.createIndexFromOptions(new SpatialOptions());
     final QueryRanges ranges =
         DataStoreUtils.constraintsToQueryRanges(
             new ExplicitSpatialQuery(polygon).getIndexConstraints(index),

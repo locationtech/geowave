@@ -148,7 +148,8 @@ public class GeometryDataSetGenerator {
 
   public void writeToGeoWave(final DataStore dataStore, final List<SimpleFeature> featureData)
       throws IOException {
-    final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
+    final Index index =
+        SpatialDimensionalityTypeProvider.createIndexFromOptions(new SpatialOptions());
     final FeatureDataAdapter adapter = new FeatureDataAdapter(featureData.get(0).getFeatureType());
     final SimpleFeatureBuilder featureBuilder =
         new SimpleFeatureBuilder(featureData.get(0).getFeatureType());

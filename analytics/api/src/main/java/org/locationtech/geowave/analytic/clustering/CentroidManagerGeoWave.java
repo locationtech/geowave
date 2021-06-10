@@ -169,7 +169,8 @@ public class CentroidManagerGeoWave<T> implements CentroidManager<T> {
     final String indexName =
         scopedJob.getString(
             CentroidParameters.Centroid.INDEX_NAME,
-            new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()).getName());
+            SpatialDimensionalityTypeProvider.createIndexFromOptions(
+                new SpatialOptions()).getName());
     final PersistableStore store =
         (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
             context,

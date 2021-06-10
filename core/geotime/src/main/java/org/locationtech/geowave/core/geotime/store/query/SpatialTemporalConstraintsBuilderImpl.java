@@ -13,8 +13,10 @@ import java.util.Date;
 import org.apache.commons.lang3.ArrayUtils;
 import org.locationtech.geowave.core.geotime.store.query.api.SpatialTemporalConstraintsBuilder;
 import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.query.constraints.EverythingQuery;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
+import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +36,16 @@ public class SpatialTemporalConstraintsBuilderImpl implements SpatialTemporalCon
     geometry = null;
     crsCode = null;
     spatialCompareOp = null;
+    return this;
+  }
+
+  @Override
+  public SpatialTemporalConstraintsBuilder bboxConstraints(
+      final double minX,
+      final double maxX,
+      final double minY,
+      final double maxY) {
+    this.geometry = GeometryUtils.GEOMETRY_FACTORY.toGeometry(new Envelope(minX, maxX, minY, maxY));
     return this;
   }
 

@@ -70,7 +70,7 @@ public class CQLQueryFilterTest {
     final Expression exp2 = factory.literal("a89dhd-123-abc");
     final Filter f = factory.equal(exp1, exp2, false);
     final Index spatialIndex =
-        new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
+        SpatialDimensionalityTypeProvider.createIndexFromOptions(new SpatialOptions());
 
     final FeatureDataAdapter adapter = new FeatureDataAdapter(type);
     final AdapterToIndexMapping indexMapping =

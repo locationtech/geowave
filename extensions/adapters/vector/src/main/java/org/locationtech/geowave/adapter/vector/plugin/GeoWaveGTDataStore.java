@@ -360,7 +360,7 @@ public class GeoWaveGTDataStore extends ContentDataStore {
 
     if (currentSelectionsList.isEmpty()) {
       currentSelectionsList.add(
-          new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()));
+          SpatialDimensionalityTypeProvider.createIndexFromOptions(new SpatialOptions()));
     }
 
     return currentSelectionsList.toArray(new Index[currentSelectionsList.size()]);

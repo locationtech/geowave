@@ -41,6 +41,7 @@ import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import org.locationtech.geowave.core.geotime.index.SpatialOptions;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
+import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.store.AddStoreCommand;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
@@ -164,8 +165,10 @@ public class CustomCRSKDERasterResizeIT {
     outputIndexOptions.setName(outputIndexName);
     ((SpatialOptions) outputIndexOptions.getDimensionalityOptions()).setCrs("EPSG:4240");
 
-    final Index outputIndex = outputIndexOptions.createIndex();
-    outputDataStorePluginOptions.createDataStore().addIndex(outputIndex);
+    final DataStore outputDataStore = outputDataStorePluginOptions.createDataStore();
+
+    final Index outputIndex = outputIndexOptions.createIndex(outputDataStore);
+    outputDataStore.addIndex(outputIndex);
 
     // use the min level to define the request boundary because it is the
     // most coarse grain

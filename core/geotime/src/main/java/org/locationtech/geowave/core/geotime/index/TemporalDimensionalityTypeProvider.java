@@ -19,6 +19,7 @@ import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.SFCFactory.SFCType;
 import org.locationtech.geowave.core.index.sfc.xz.XZHierarchicalIndexFactory;
+import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.BasicIndexModel;
@@ -56,7 +57,7 @@ public class TemporalDimensionalityTypeProvider implements
   }
 
   @Override
-  public Index createIndex(final TemporalOptions options) {
+  public Index createIndex(final DataStore dataStore, final TemporalOptions options) {
     return createIndexFromOptions(options);
   }
 

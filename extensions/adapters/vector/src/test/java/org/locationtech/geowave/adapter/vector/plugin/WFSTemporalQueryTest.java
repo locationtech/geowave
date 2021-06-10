@@ -45,7 +45,7 @@ public class WFSTemporalQueryTest extends BaseDataStoreTest {
   public void setup() throws SchemaException, CQLException, IOException, GeoWavePluginException {
     dataStore = createDataStore();
     ((GeoWaveGTDataStore) dataStore).getDataStore().addIndex(
-        new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()));
+        SpatialDimensionalityTypeProvider.createIndexFromOptions(new SpatialOptions()));
     type =
         DataUtilities.createType(
             "geostuff",

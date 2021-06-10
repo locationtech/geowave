@@ -95,7 +95,7 @@ public class ConvexHullJobRunner extends GeoWaveAnalyticJobRunner {
     checkIndex(
         runTimeProperties,
         HullParameters.Hull.INDEX_NAME,
-        new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()).getName());
+        SpatialDimensionalityTypeProvider.createIndexFromOptions(new SpatialOptions()).getName());
     // HP Fortify "Command Injection" false positive
     // What Fortify considers "externally-influenced input"
     // comes only from users with OS-level access anyway

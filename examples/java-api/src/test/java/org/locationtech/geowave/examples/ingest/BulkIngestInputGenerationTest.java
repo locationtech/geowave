@@ -9,6 +9,7 @@
 package org.locationtech.geowave.examples.ingest;
 
 import java.io.IOException;
+import java.util.Locale;
 import org.apache.accumulo.core.client.mapreduce.AccumuloFileOutputFormat;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
@@ -26,6 +27,7 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.locationtech.geowave.examples.ingest.bulk.GeonamesDataFileInputFormat;
@@ -70,6 +72,8 @@ public class BulkIngestInputGenerationTest {
 
   @Test
   public void testMapReduceJobSuccess() throws Exception {
+    // There is a linker error on windows when running this test
+    Assume.assumeFalse(isWindows());
 
     LOGGER.info("Running Bulk Ingest Input Generation MapReduce job...");
 
@@ -85,6 +89,11 @@ public class BulkIngestInputGenerationTest {
     verifyNumAccumuloKeyValuePairs();
 
     verifyJobOutput();
+  }
+
+  private static boolean isWindows() {
+    final String OS = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH);
+    return (OS.indexOf("win") > -1);
   }
 
   private void verifyNumInputRecords() {

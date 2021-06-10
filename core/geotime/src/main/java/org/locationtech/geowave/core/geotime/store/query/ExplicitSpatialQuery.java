@@ -295,10 +295,10 @@ public class ExplicitSpatialQuery extends BasicQueryByClass {
 
   private static String getCrs(final CommonIndexModel indexModel) {
     if (indexModel instanceof CustomCrsIndexModel) {
-      if (GeometryUtils.isDefaultCrs(((CustomCrsIndexModel) indexModel).getCrsCode())) {
+      if (GeometryUtils.isDefaultCrs(((CustomCrsIndexModel) indexModel).getCrs())) {
         return null;
       }
-      return ((CustomCrsIndexModel) indexModel).getCrsCode();
+      return GeometryUtils.getCrsCode(((CustomCrsIndexModel) indexModel).getCrs());
     }
     return null;
   }

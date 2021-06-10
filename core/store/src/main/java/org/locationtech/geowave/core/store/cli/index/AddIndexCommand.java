@@ -79,11 +79,12 @@ public class AddIndexCommand extends ServiceEnabledCommand<String> {
     final String storeName = parameters.get(0);
     final String indexName = parameters.get(1);
     pluginOptions.setName(indexName);
-    final Index newIndex = pluginOptions.createIndex();
 
     // Attempt to load store.
     final DataStorePluginOptions storeOptions =
         CLIUtils.loadStore(storeName, getGeoWaveConfigFile(params), params.getConsole());
+
+    final Index newIndex = pluginOptions.createIndex(storeOptions.createDataStore());
 
     final IndexStore indexStore = storeOptions.createIndexStore();
 

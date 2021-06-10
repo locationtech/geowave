@@ -10,8 +10,6 @@ package org.locationtech.geowave.adapter.vector;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -85,7 +83,7 @@ public class FeatureDataAdapterTest {
         DataUtilities.createType("sp.geostuff", "geometry:Geometry:srid=3005,pop:java.lang.Long");
     final FeatureDataAdapter dataAdapter = new FeatureDataAdapter(schema);
     final Index spatialIndex =
-        new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
+        SpatialDimensionalityTypeProvider.createIndexFromOptions(new SpatialOptions());
     final AdapterToIndexMapping indexMapping =
         BaseDataStoreUtils.mapAdapterToIndex(
             dataAdapter.asInternalAdapter((short) -1),
@@ -122,7 +120,8 @@ public class FeatureDataAdapterTest {
 
     final FeatureDataAdapter dataAdapter = new FeatureDataAdapter(schema);
     final Index spatialIndex =
-        new SpatialTemporalDimensionalityTypeProvider().createIndex(new SpatialTemporalOptions());
+        SpatialTemporalDimensionalityTypeProvider.createIndexFromOptions(
+            new SpatialTemporalOptions());
     final AdapterToIndexMapping indexMapping =
         BaseDataStoreUtils.mapAdapterToIndex(
             dataAdapter.asInternalAdapter((short) -1),
@@ -165,7 +164,8 @@ public class FeatureDataAdapterTest {
 
     final FeatureDataAdapter dataAdapter = new FeatureDataAdapter(schema);
     final Index spatialIndex =
-        new SpatialTemporalDimensionalityTypeProvider().createIndex(new SpatialTemporalOptions());
+        SpatialTemporalDimensionalityTypeProvider.createIndexFromOptions(
+            new SpatialTemporalOptions());
     final AdapterToIndexMapping indexMapping =
         BaseDataStoreUtils.mapAdapterToIndex(
             dataAdapter.asInternalAdapter((short) -1),
@@ -211,7 +211,8 @@ public class FeatureDataAdapterTest {
 
     final FeatureDataAdapter dataAdapter = new FeatureDataAdapter(schema);
     final Index spatialIndex =
-        new SpatialTemporalDimensionalityTypeProvider().createIndex(new SpatialTemporalOptions());
+        SpatialTemporalDimensionalityTypeProvider.createIndexFromOptions(
+            new SpatialTemporalOptions());
     final AdapterToIndexMapping indexMapping =
         BaseDataStoreUtils.mapAdapterToIndex(
             dataAdapter.asInternalAdapter((short) -1),
@@ -280,7 +281,8 @@ public class FeatureDataAdapterTest {
 
     final FeatureDataAdapter dataAdapter = new FeatureDataAdapter(schema);
     final Index spatialIndex =
-        new SpatialTemporalDimensionalityTypeProvider().createIndex(new SpatialTemporalOptions());
+        SpatialTemporalDimensionalityTypeProvider.createIndexFromOptions(
+            new SpatialTemporalOptions());
     final AdapterToIndexMapping indexMapping =
         BaseDataStoreUtils.mapAdapterToIndex(
             dataAdapter.asInternalAdapter((short) -1),
@@ -339,7 +341,7 @@ public class FeatureDataAdapterTest {
 
     final FeatureDataAdapter dataAdapter = new FeatureDataAdapter(builder.getFeatureType());
     final Index spatialIndex =
-        new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
+        SpatialDimensionalityTypeProvider.createIndexFromOptions(new SpatialOptions());
     final byte[] binary = dataAdapter.toBinary();
 
     final FeatureDataAdapter dataAdapterCopy = new FeatureDataAdapter();

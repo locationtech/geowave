@@ -116,11 +116,11 @@ public class GeoWaveGeometryPrecisionIT extends AbstractGeoWaveBasicVectorIT {
     dataStore = dataStorePluginOptions.createDataStore();
     final SpatialOptions spatialOptions = new SpatialOptions();
     spatialOptions.setGeometryPrecision(geometryPrecision);
-    spatialIndex = new SpatialDimensionalityTypeProvider().createIndex(spatialOptions);
+    spatialIndex = SpatialDimensionalityTypeProvider.createIndexFromOptions(spatialOptions);
     final SpatialTemporalOptions spatialTemporalOptions = new SpatialTemporalOptions();
     spatialTemporalOptions.setGeometryPrecision(geometryPrecision);
     spatialTemporalIndex =
-        new SpatialTemporalDimensionalityTypeProvider().createIndex(spatialTemporalOptions);
+        SpatialTemporalDimensionalityTypeProvider.createIndexFromOptions(spatialTemporalOptions);
     final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(featureType);
     final SimpleFeatureBuilder builder = new SimpleFeatureBuilder(featureType);
 

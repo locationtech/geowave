@@ -117,7 +117,8 @@ public class SpatialTemporalQueryTest {
                 df.parse("2005-05-17T22:34:56GMT-00:00"),
                 new Coordinate[] {new Coordinate(25, 33.5), new Coordinate(26, 34)})};
     final Index index =
-        new SpatialTemporalDimensionalityTypeProvider().createIndex(new SpatialTemporalOptions());
+        SpatialTemporalDimensionalityTypeProvider.createIndexFromOptions(
+            new SpatialTemporalOptions());
     int pos = 0;
     for (final CommonIndexedPersistenceEncoding dataItem : data) {
       for (final QueryFilter filter : queryCopy.createFilters(index)) {

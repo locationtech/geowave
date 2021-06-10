@@ -59,9 +59,10 @@ import com.google.common.primitives.Bytes;
 
 public class QueryIndexHelperTest {
   private static final Index SPATIAL_INDEX =
-      new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
+      SpatialDimensionalityTypeProvider.createIndexFromOptions(new SpatialOptions());
   private static final Index SPATIAL_TEMPORAL_INDEX =
-      new SpatialTemporalDimensionalityTypeProvider().createIndex(new SpatialTemporalOptions());
+      SpatialTemporalDimensionalityTypeProvider.createIndexFromOptions(
+          new SpatialTemporalOptions());
   final ByteArray dataAdapterId = new ByteArray("123");
 
   SimpleFeatureType rangeType;

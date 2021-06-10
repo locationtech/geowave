@@ -13,6 +13,7 @@ import org.locationtech.geowave.core.cli.api.PluginOptions;
 import org.locationtech.geowave.core.index.CompoundIndexStrategy;
 import org.locationtech.geowave.core.index.simple.HashKeyIndexStrategy;
 import org.locationtech.geowave.core.index.simple.RoundRobinKeyIndexStrategy;
+import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.operations.remote.options.BasicIndexOptions;
 import org.locationtech.geowave.core.store.spi.DimensionalityTypeOptions;
@@ -108,8 +109,8 @@ public class IndexPluginOptions extends DefaultPluginOptions implements PluginOp
     return indexPlugin;
   }
 
-  public Index createIndex() {
-    final Index index = indexPlugin.createIndex(indexOptions);
+  public Index createIndex(final DataStore dataStore) {
+    final Index index = indexPlugin.createIndex(dataStore, indexOptions);
     return wrapIndexWithOptions(index, this);
   }
 

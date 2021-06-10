@@ -73,7 +73,7 @@ public class GeoWaveInputLoadJobRunner extends GeoWaveAnalyticJobRunner implemen
             OutputParameters.Output.INDEX_ID,
             runTimeProperties.getPropertyAsString(
                 CentroidParameters.Centroid.INDEX_NAME,
-                new SpatialDimensionalityTypeProvider().createIndex(
+                SpatialDimensionalityTypeProvider.createIndexFromOptions(
                     new SpatialOptions()).getName()));
     OutputParameters.Output.INDEX_ID.getHelper().setValue(config, getScope(), indexId);
 

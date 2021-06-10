@@ -13,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite.SuiteClasses;
 import org.locationtech.geowave.mapreduce.splits.SplitsProviderIT;
+import org.locationtech.geowave.test.basic.GeoWaveAttributeIndexIT;
 import org.locationtech.geowave.test.basic.GeoWaveBasicCustomCRSRasterIT;
 import org.locationtech.geowave.test.basic.GeoWaveBasicRasterIT;
 import org.locationtech.geowave.test.basic.GeoWaveBasicSpatialTemporalVectorIT;
@@ -67,6 +68,7 @@ import org.locationtech.geowave.test.stability.GeoWaveStabilityIT;
     GeoWaveBasicSpatialTemporalVectorIT.class,
     GeoWaveTextIndexIT.class,
     GeoWaveEnumIndexIT.class,
+    GeoWaveAttributeIndexIT.class,
     GeoWaveSpatialBinningAggregationIT.class,
     GeoWaveSpatialBinningStatisticsIT.class,
     GeoWaveGeometryPrecisionIT.class,

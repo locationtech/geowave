@@ -121,7 +121,7 @@ public class KSamplerMapReduceTest {
 
     propManagement.store(
         CentroidParameters.Centroid.INDEX_NAME,
-        new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()).getName());
+        SpatialDimensionalityTypeProvider.createIndexFromOptions(new SpatialOptions()).getName());
     propManagement.store(CentroidParameters.Centroid.DATA_TYPE_ID, "altoids");
     propManagement.store(CentroidParameters.Centroid.DATA_NAMESPACE_URI, "http://geowave.test.net");
     propManagement.store(GlobalParameters.Global.BATCH_ID, "b1");
@@ -146,7 +146,7 @@ public class KSamplerMapReduceTest {
         store.getDataStoreOptions().createInternalAdapterStore();
     dataStore.addType(
         adapter,
-        new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()));
+        SpatialDimensionalityTypeProvider.createIndexFromOptions(new SpatialOptions()));
 
     mapDriver.getConfiguration().setClass(
         GeoWaveConfiguratorBase.enumToConfKey(

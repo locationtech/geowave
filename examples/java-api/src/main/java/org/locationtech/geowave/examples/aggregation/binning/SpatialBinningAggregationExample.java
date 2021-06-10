@@ -64,7 +64,8 @@ public class SpatialBinningAggregationExample {
             buildSimpleFeature(featureType, "Loc9", new Coordinate(-66.350677, 28.9641511), 1),
             buildSimpleFeature(featureType, "Loc10", new Coordinate(-67.3384112, 28.416091), 23));
 
-    final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
+    final Index index =
+        SpatialDimensionalityTypeProvider.createIndexFromOptions(new SpatialOptions());
     final DataStore dataStore = DataStoreFactory.createDataStore(new MemoryRequiredOptions());
     final FeatureDataAdapter adapter = new FeatureDataAdapter(featureType);
 

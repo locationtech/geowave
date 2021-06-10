@@ -228,7 +228,7 @@ public class ComparisonStatsJobRunner extends KDEJobRunner {
                 ComparisonAccumuloStatsReducer.MAXES_PER_BAND,
                 ComparisonAccumuloStatsReducer.NAME_PER_BAND,
                 null),
-            new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()));
+            SpatialDimensionalityTypeProvider.createIndexFromOptions(new SpatialOptions()));
         return ingester.waitForCompletion(true);
       }
       return false;

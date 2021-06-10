@@ -11,7 +11,6 @@ package org.locationtech.geowave.core.geotime.index;
 import java.util.Locale;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
-import org.geotools.referencing.CRS;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
@@ -31,24 +30,20 @@ import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.SFCFactory.SFCType;
 import org.locationtech.geowave.core.index.sfc.xz.XZHierarchicalIndexFactory;
+import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.BasicIndexModel;
 import org.locationtech.geowave.core.store.index.CustomNameIndex;
 import org.locationtech.geowave.core.store.spi.DimensionalityTypeProviderSpi;
-import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.cs.CoordinateSystem;
 import org.opengis.referencing.cs.CoordinateSystemAxis;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.ParameterException;
 
 public class SpatialTemporalDimensionalityTypeProvider implements
     DimensionalityTypeProviderSpi<SpatialTemporalOptions> {
-  private static final Logger LOGGER =
-      LoggerFactory.getLogger(SpatialTemporalDimensionalityTypeProvider.class);
   private static final String DEFAULT_SPATIAL_TEMPORAL_ID_STR = "ST_IDX";
   // this is chosen to place metric CRSs always in the same bin
   public static final double DEFAULT_UNBOUNDED_CRS_INTERVAL = 40075017;
@@ -88,7 +83,7 @@ public class SpatialTemporalDimensionalityTypeProvider implements
   }
 
   @Override
-  public Index createIndex(final SpatialTemporalOptions options) {
+  public Index createIndex(final DataStore dataStore, final SpatialTemporalOptions options) {
     return createIndexFromOptions(options);
   }
 
@@ -109,7 +104,7 @@ public class SpatialTemporalDimensionalityTypeProvider implements
       isDefaultCRS = true;
       crsCode = "EPSG:4326";
     } else {
-      crs = decodeCRS(options.crs);
+      crs = GeometryUtils.decodeCRS(options.crs);
       final CoordinateSystem cs = crs.getCoordinateSystem();
       isDefaultCRS = false;
       crsCode = options.crs;
@@ -207,19 +202,6 @@ public class SpatialTemporalDimensionalityTypeProvider implements
       return true;
     }
     return false;
-  }
-
-  public static CoordinateReferenceSystem decodeCRS(final String crsCode) {
-
-    CoordinateReferenceSystem crs = null;
-    try {
-      crs = CRS.decode(crsCode, true);
-    } catch (final FactoryException e) {
-      LOGGER.error("Unable to decode '" + crsCode + "' CRS", e);
-      throw new RuntimeException("Unable to decode '" + crsCode + "' CRS", e);
-    }
-
-    return crs;
   }
 
   public static enum Bias {

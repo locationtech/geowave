@@ -112,7 +112,7 @@ public class KSamplerJobRunner extends GeoWaveAnalyticJobRunner implements MapRe
 
     runTimeProperties.storeIfEmpty(
         SampleParameters.Sample.INDEX_NAME,
-        new SpatialTemporalDimensionalityTypeProvider().createIndex(
+        SpatialTemporalDimensionalityTypeProvider.createIndexFromOptions(
             new SpatialTemporalOptions()).getName());
     runTimeProperties.setConfig(
         new ParameterEnum[] {

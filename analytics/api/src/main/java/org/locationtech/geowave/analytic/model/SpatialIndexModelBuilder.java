@@ -22,7 +22,7 @@ public class SpatialIndexModelBuilder implements IndexModelBuilder {
 
   @Override
   public CommonIndexModel buildModel() {
-    return new SpatialDimensionalityTypeProvider().createIndex(
+    return SpatialDimensionalityTypeProvider.createIndexFromOptions(
         new SpatialOptions()).getIndexModel();
   }
 }

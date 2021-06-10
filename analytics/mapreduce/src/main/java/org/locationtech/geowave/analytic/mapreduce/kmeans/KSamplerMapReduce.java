@@ -264,7 +264,8 @@ public class KSamplerMapReduce {
       final String indexName =
           config.getString(
               SampleParameters.Sample.INDEX_NAME,
-              new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()).getName());
+              SpatialDimensionalityTypeProvider.createIndexFromOptions(
+                  new SpatialOptions()).getName());
       indexNames = new String[] {indexName};
       try {
         centroidExtractor =
