@@ -48,7 +48,7 @@ public class CustomSecondaryIndexIT {
       namespace = "BasicSecondaryIndexIT_dataIdxOnly")
   protected DataStorePluginOptions dataIdxOnlyDataStoreOptions;
 
-  private static class TestCustomIndexStrategy implements
+  public static class TestCustomIndexStrategy implements
       CustomIndexStrategy<Pair<byte[], byte[]>, TestCustomConstraints> {
 
     public TestCustomIndexStrategy() {}

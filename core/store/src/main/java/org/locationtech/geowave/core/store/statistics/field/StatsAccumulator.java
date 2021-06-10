@@ -1,31 +1,30 @@
-package org.locationtech.geowave.core.store.statistics.field;
-/*
+/**
+ * Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
+ *
  * Copyright (C) 2012 The Guava Authors
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License
- * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
- * or implied. See the License for the specific language governing permissions and limitations under
- * the License.
+ * <p> See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
+package org.locationtech.geowave.core.store.statistics.field;
 
+// This is a copy from Guava, because HBase is still dependent on Guava 12 as a server-side library
+// dependency and this was first introduced in Guava 20, this is basically a re-packaging of the
+// Guava class to eliminate the Guava version incompatiblities for libraries such as HBase
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.primitives.Doubles.isFinite;
 import static java.lang.Double.NaN;
 import static java.lang.Double.isNaN;
-
-import com.google.common.annotations.Beta;
-import com.google.common.annotations.GwtIncompatible;
 import java.util.Iterator;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
+import com.google.common.annotations.Beta;
+import com.google.common.annotations.GwtIncompatible;
 
 /**
  * A mutable object which accumulates double values and tracks some basic statistics over all the
@@ -48,7 +47,7 @@ public final class StatsAccumulator {
   private double max = NaN; // any value will do
 
   /** Adds the given value to the dataset. */
-  public void add(double value) {
+  public void add(final double value) {
     if (count == 0) {
       count = 1;
       mean = value;
@@ -61,7 +60,7 @@ public final class StatsAccumulator {
       count++;
       if (isFinite(value) && isFinite(mean)) {
         // Art of Computer Programming vol. 2, Knuth, 4.2.2, (15) and (16)
-        double delta = value - mean;
+        final double delta = value - mean;
         mean += delta / count;
         sumOfSquaresOfDeltas += delta * (value - mean);
       } else {
@@ -77,10 +76,10 @@ public final class StatsAccumulator {
    * Adds the given values to the dataset.
    *
    * @param values a series of values, which will be converted to {@code double} values (this may
-   *     cause loss of precision)
+   *        cause loss of precision)
    */
-  public void addAll(Iterable<? extends Number> values) {
-    for (Number value : values) {
+  public void addAll(final Iterable<? extends Number> values) {
+    for (final Number value : values) {
       add(value.doubleValue());
     }
   }
@@ -89,9 +88,9 @@ public final class StatsAccumulator {
    * Adds the given values to the dataset.
    *
    * @param values a series of values, which will be converted to {@code double} values (this may
-   *     cause loss of precision)
+   *        cause loss of precision)
    */
-  public void addAll(Iterator<? extends Number> values) {
+  public void addAll(final Iterator<? extends Number> values) {
     while (values.hasNext()) {
       add(values.next().doubleValue());
     }
@@ -102,8 +101,8 @@ public final class StatsAccumulator {
    *
    * @param values a series of values
    */
-  public void addAll(double... values) {
-    for (double value : values) {
+  public void addAll(final double... values) {
+    for (final double value : values) {
       add(value);
     }
   }
@@ -113,8 +112,8 @@ public final class StatsAccumulator {
    *
    * @param values a series of values
    */
-  public void addAll(int... values) {
-    for (int value : values) {
+  public void addAll(final int... values) {
+    for (final int value : values) {
       add(value);
     }
   }
@@ -123,10 +122,10 @@ public final class StatsAccumulator {
    * Adds the given values to the dataset.
    *
    * @param values a series of values, which will be converted to {@code double} values (this may
-   *     cause loss of precision for longs of magnitude over 2^53 (slightly over 9e15))
+   *        cause loss of precision for longs of magnitude over 2^53 (slightly over 9e15))
    */
-  public void addAll(long... values) {
-    for (long value : values) {
+  public void addAll(final long... values) {
+    for (final long value : values) {
       add(value);
     }
   }
@@ -137,7 +136,7 @@ public final class StatsAccumulator {
    * @param values a series of values
    * @since 28.2
    */
-  public void addAll(DoubleStream values) {
+  public void addAll(final DoubleStream values) {
     addAll(values.collect(StatsAccumulator::new, StatsAccumulator::add, StatsAccumulator::addAll));
   }
 
@@ -147,7 +146,7 @@ public final class StatsAccumulator {
    * @param values a series of values
    * @since 28.2
    */
-  public void addAll(IntStream values) {
+  public void addAll(final IntStream values) {
     addAll(values.collect(StatsAccumulator::new, StatsAccumulator::add, StatsAccumulator::addAll));
   }
 
@@ -155,10 +154,10 @@ public final class StatsAccumulator {
    * Adds the given values to the dataset. The stream will be completely consumed by this method.
    *
    * @param values a series of values, which will be converted to {@code double} values (this may
-   *     cause loss of precision for longs of magnitude over 2^53 (slightly over 9e15))
+   *        cause loss of precision for longs of magnitude over 2^53 (slightly over 9e15))
    * @since 28.2
    */
-  public void addAll(LongStream values) {
+  public void addAll(final LongStream values) {
     addAll(values.collect(StatsAccumulator::new, StatsAccumulator::add, StatsAccumulator::addAll));
   }
 
@@ -166,7 +165,7 @@ public final class StatsAccumulator {
    * Adds the given statistics to the dataset, as if the individual values used to compute the
    * statistics had been added directly.
    */
-  public void addAll(Stats values) {
+  public void addAll(final Stats values) {
     if (values.count() == 0) {
       return;
     }
@@ -179,7 +178,7 @@ public final class StatsAccumulator {
    *
    * @since 28.2
    */
-  public void addAll(StatsAccumulator values) {
+  public void addAll(final StatsAccumulator values) {
     if (values.count() == 0) {
       return;
     }
@@ -187,11 +186,11 @@ public final class StatsAccumulator {
   }
 
   private void merge(
-      long otherCount,
-      double otherMean,
-      double otherSumOfSquaresOfDeltas,
-      double otherMin,
-      double otherMax) {
+      final long otherCount,
+      final double otherMean,
+      final double otherSumOfSquaresOfDeltas,
+      final double otherMin,
+      final double otherMax) {
     if (count == 0) {
       count = otherCount;
       mean = otherMean;
@@ -202,9 +201,10 @@ public final class StatsAccumulator {
       count += otherCount;
       if (isFinite(mean) && isFinite(otherMean)) {
         // This is a generalized version of the calculation in add(double) above.
-        double delta = otherMean - mean;
-        mean += delta * otherCount / count;
-        sumOfSquaresOfDeltas += otherSumOfSquaresOfDeltas + delta * (otherMean - mean) * otherCount;
+        final double delta = otherMean - mean;
+        mean += (delta * otherCount) / count;
+        sumOfSquaresOfDeltas +=
+            otherSumOfSquaresOfDeltas + (delta * (otherMean - mean) * otherCount);
       } else {
         mean = calculateNewMeanNonFinite(mean, otherMean);
         sumOfSquaresOfDeltas = NaN;
@@ -237,8 +237,8 @@ public final class StatsAccumulator {
    * contains both {@link Double#POSITIVE_INFINITY} and {@link Double#NEGATIVE_INFINITY} then the
    * result is {@link Double#NaN}. If it contains {@link Double#POSITIVE_INFINITY} and finite values
    * only or {@link Double#POSITIVE_INFINITY} only, the result is {@link Double#POSITIVE_INFINITY}.
-   * If it contains {@link Double#NEGATIVE_INFINITY} and finite values only or {@link
-   * Double#NEGATIVE_INFINITY} only, the result is {@link Double#NEGATIVE_INFINITY}.
+   * If it contains {@link Double#NEGATIVE_INFINITY} and finite values only or
+   * {@link Double#NEGATIVE_INFINITY} only, the result is {@link Double#NEGATIVE_INFINITY}.
    *
    * @throws IllegalStateException if the dataset is empty
    */
@@ -256,8 +256,8 @@ public final class StatsAccumulator {
    * contains both {@link Double#POSITIVE_INFINITY} and {@link Double#NEGATIVE_INFINITY} then the
    * result is {@link Double#NaN}. If it contains {@link Double#POSITIVE_INFINITY} and finite values
    * only or {@link Double#POSITIVE_INFINITY} only, the result is {@link Double#POSITIVE_INFINITY}.
-   * If it contains {@link Double#NEGATIVE_INFINITY} and finite values only or {@link
-   * Double#NEGATIVE_INFINITY} only, the result is {@link Double#NEGATIVE_INFINITY}.
+   * If it contains {@link Double#NEGATIVE_INFINITY} and finite values only or
+   * {@link Double#NEGATIVE_INFINITY} only, the result is {@link Double#NEGATIVE_INFINITY}.
    */
   public final double sum() {
     return mean * count;
@@ -273,8 +273,8 @@ public final class StatsAccumulator {
    *
    * <h3>Non-finite values</h3>
    *
-   * <p>If the dataset contains any non-finite values ({@link Double#POSITIVE_INFINITY}, {@link
-   * Double#NEGATIVE_INFINITY}, or {@link Double#NaN}) then the result is {@link Double#NaN}.
+   * <p>If the dataset contains any non-finite values ({@link Double#POSITIVE_INFINITY},
+   * {@link Double#NEGATIVE_INFINITY}, or {@link Double#NaN}) then the result is {@link Double#NaN}.
    *
    * @throws IllegalStateException if the dataset is empty
    */
@@ -300,8 +300,8 @@ public final class StatsAccumulator {
    *
    * <h3>Non-finite values</h3>
    *
-   * <p>If the dataset contains any non-finite values ({@link Double#POSITIVE_INFINITY}, {@link
-   * Double#NEGATIVE_INFINITY}, or {@link Double#NaN}) then the result is {@link Double#NaN}.
+   * <p>If the dataset contains any non-finite values ({@link Double#POSITIVE_INFINITY},
+   * {@link Double#NEGATIVE_INFINITY}, or {@link Double#NaN}) then the result is {@link Double#NaN}.
    *
    * @throws IllegalStateException if the dataset is empty
    */
@@ -320,8 +320,8 @@ public final class StatsAccumulator {
    *
    * <h3>Non-finite values</h3>
    *
-   * <p>If the dataset contains any non-finite values ({@link Double#POSITIVE_INFINITY}, {@link
-   * Double#NEGATIVE_INFINITY}, or {@link Double#NaN}) then the result is {@link Double#NaN}.
+   * <p>If the dataset contains any non-finite values ({@link Double#POSITIVE_INFINITY},
+   * {@link Double#NEGATIVE_INFINITY}, or {@link Double#NaN}) then the result is {@link Double#NaN}.
    *
    * @throws IllegalStateException if the dataset is empty or contains a single value
    */
@@ -346,8 +346,8 @@ public final class StatsAccumulator {
    *
    * <h3>Non-finite values</h3>
    *
-   * <p>If the dataset contains any non-finite values ({@link Double#POSITIVE_INFINITY}, {@link
-   * Double#NEGATIVE_INFINITY}, or {@link Double#NaN}) then the result is {@link Double#NaN}.
+   * <p>If the dataset contains any non-finite values ({@link Double#POSITIVE_INFINITY},
+   * {@link Double#NEGATIVE_INFINITY}, or {@link Double#NaN}) then the result is {@link Double#NaN}.
    *
    * @throws IllegalStateException if the dataset is empty or contains a single value
    */
@@ -361,10 +361,10 @@ public final class StatsAccumulator {
    * <h3>Non-finite values</h3>
    *
    * <p>If the dataset contains {@link Double#NaN} then the result is {@link Double#NaN}. If it
-   * contains {@link Double#NEGATIVE_INFINITY} and not {@link Double#NaN} then the result is {@link
-   * Double#NEGATIVE_INFINITY}. If it contains {@link Double#POSITIVE_INFINITY} and finite values
-   * only then the result is the lowest finite value. If it contains {@link
-   * Double#POSITIVE_INFINITY} only then the result is {@link Double#POSITIVE_INFINITY}.
+   * contains {@link Double#NEGATIVE_INFINITY} and not {@link Double#NaN} then the result is
+   * {@link Double#NEGATIVE_INFINITY}. If it contains {@link Double#POSITIVE_INFINITY} and finite
+   * values only then the result is the lowest finite value. If it contains
+   * {@link Double#POSITIVE_INFINITY} only then the result is {@link Double#POSITIVE_INFINITY}.
    *
    * @throws IllegalStateException if the dataset is empty
    */
@@ -379,10 +379,10 @@ public final class StatsAccumulator {
    * <h3>Non-finite values</h3>
    *
    * <p>If the dataset contains {@link Double#NaN} then the result is {@link Double#NaN}. If it
-   * contains {@link Double#POSITIVE_INFINITY} and not {@link Double#NaN} then the result is {@link
-   * Double#POSITIVE_INFINITY}. If it contains {@link Double#NEGATIVE_INFINITY} and finite values
-   * only then the result is the highest finite value. If it contains {@link
-   * Double#NEGATIVE_INFINITY} only then the result is {@link Double#NEGATIVE_INFINITY}.
+   * contains {@link Double#POSITIVE_INFINITY} and not {@link Double#NaN} then the result is
+   * {@link Double#POSITIVE_INFINITY}. If it contains {@link Double#NEGATIVE_INFINITY} and finite
+   * values only then the result is the highest finite value. If it contains
+   * {@link Double#NEGATIVE_INFINITY} only then the result is {@link Double#NEGATIVE_INFINITY}.
    *
    * @throws IllegalStateException if the dataset is empty
    */
@@ -399,25 +399,23 @@ public final class StatsAccumulator {
    * Calculates the new value for the accumulated mean when a value is added, in the case where at
    * least one of the previous mean and the value is non-finite.
    */
-  static double calculateNewMeanNonFinite(double previousMean, double value) {
+  static double calculateNewMeanNonFinite(final double previousMean, final double value) {
     /*
      * Desired behaviour is to match the results of applying the naive mean formula. In particular,
      * the update formula can subtract infinities in cases where the naive formula would add them.
      *
-     * Consequently:
-     * 1. If the previous mean is finite and the new value is non-finite then the new mean is that
-     *    value (whether it is NaN or infinity).
-     * 2. If the new value is finite and the previous mean is non-finite then the mean is unchanged
-     *    (whether it is NaN or infinity).
-     * 3. If both the previous mean and the new value are non-finite and...
-     * 3a. ...either or both is NaN (so mean != value) then the new mean is NaN.
-     * 3b. ...they are both the same infinities (so mean == value) then the mean is unchanged.
-     * 3c. ...they are different infinities (so mean != value) then the new mean is NaN.
+     * Consequently: 1. If the previous mean is finite and the new value is non-finite then the new
+     * mean is that value (whether it is NaN or infinity). 2. If the new value is finite and the
+     * previous mean is non-finite then the mean is unchanged (whether it is NaN or infinity). 3. If
+     * both the previous mean and the new value are non-finite and... 3a. ...either or both is NaN
+     * (so mean != value) then the new mean is NaN. 3b. ...they are both the same infinities (so
+     * mean == value) then the mean is unchanged. 3c. ...they are different infinities (so mean !=
+     * value) then the new mean is NaN.
      */
     if (isFinite(previousMean)) {
       // This is case 1.
       return value;
-    } else if (isFinite(value) || previousMean == value) {
+    } else if (isFinite(value) || (previousMean == value)) {
       // This is case 2. or 3b.
       return previousMean;
     } else {
@@ -425,8 +423,9 @@ public final class StatsAccumulator {
       return NaN;
     }
   }
+
   /** Returns its argument if it is non-negative, zero if it is negative. */
-  static double ensureNonNegative(double value) {
+  static double ensureNonNegative(final double value) {
     checkArgument(!isNaN(value));
     return Math.max(value, 0.0);
   }

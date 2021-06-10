@@ -1,32 +1,27 @@
-package org.locationtech.geowave.core.store.statistics.field;
-
-/*
+/**
+ * Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
+ *
  * Copyright (C) 2012 The Guava Authors
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License
- * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
- * or implied. See the License for the specific language governing permissions and limitations under
- * the License.
+ * <p> See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
+package org.locationtech.geowave.core.store.statistics.field;
+
+// This is a copy from Guava, because HBase is still dependent on Guava 12 as a server-side library
+// dependency and this was first introduced in Guava 20, this is basically a re-packaging of the
+// Guava class to eliminate the Guava version incompatiblities for libraries such as HBase
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
-import static org.locationtech.geowave.core.store.statistics.field.StatsAccumulator.ensureNonNegative;
-import static org.locationtech.geowave.core.store.statistics.field.StatsAccumulator.calculateNewMeanNonFinite;
 import static com.google.common.primitives.Doubles.isFinite;
 import static java.lang.Double.NaN;
 import static java.lang.Double.doubleToLongBits;
 import static java.lang.Double.isNaN;
-
-import com.google.common.annotations.Beta;
-import com.google.common.annotations.GwtIncompatible;
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
+import static org.locationtech.geowave.core.store.statistics.field.StatsAccumulator.calculateNewMeanNonFinite;
+import static org.locationtech.geowave.core.store.statistics.field.StatsAccumulator.ensureNonNegative;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -36,6 +31,10 @@ import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import com.google.common.annotations.Beta;
+import com.google.common.annotations.GwtIncompatible;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 
 /**
  * A bundle of statistical summary values -- sum, count, mean/average, min and max, and several
@@ -43,13 +42,11 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  *
  * <p>There are two ways to obtain a {@code Stats} instance:
  *
- * <ul>
- *   <li>If all the values you want to summarize are already known, use the appropriate {@code
+ * <ul> <li>If all the values you want to summarize are already known, use the appropriate {@code
  *       Stats.of} factory method below. Primitive arrays, iterables and iterators of any kind of
- *       {@code Number}, and primitive varargs are supported.
- *   <li>Or, to avoid storing up all the data first, create a {@link StatsAccumulator} instance,
- *       feed values to it as you get them, then call {@link StatsAccumulator#snapshot}.
- * </ul>
+ * {@code Number}, and primitive varargs are supported. <li>Or, to avoid storing up all the data
+ * first, create a {@link StatsAccumulator} instance, feed values to it as you get them, then call
+ * {@link StatsAccumulator#snapshot}. </ul>
  *
  * <p>Static convenience methods called {@code meanOf} are also provided for users who wish to
  * calculate <i>only</i> the mean.
@@ -77,15 +74,17 @@ public final class Stats implements Serializable {
    * <p>To ensure that the created instance obeys its contract, the parameters should satisfy the
    * following constraints. This is the callers responsibility and is not enforced here.
    *
-   * <ul>
-   *   <li>If {@code count} is 0, {@code mean} may have any finite value (its only usage will be to
-   *       get multiplied by 0 to calculate the sum), and the other parameters may have any values
-   *       (they will not be used).
-   *   <li>If {@code count} is 1, {@code sumOfSquaresOfDeltas} must be exactly 0.0 or {@link
-   *       Double#NaN}.
-   * </ul>
+   * <ul> <li>If {@code count} is 0, {@code mean} may have any finite value (its only usage will be
+   * to get multiplied by 0 to calculate the sum), and the other parameters may have any values
+   * (they will not be used). <li>If {@code count} is 1, {@code sumOfSquaresOfDeltas} must be
+   * exactly 0.0 or {@link Double#NaN}. </ul>
    */
-  Stats(long count, double mean, double sumOfSquaresOfDeltas, double min, double max) {
+  Stats(
+      final long count,
+      final double mean,
+      final double sumOfSquaresOfDeltas,
+      final double min,
+      final double max) {
     this.count = count;
     this.mean = mean;
     this.sumOfSquaresOfDeltas = sumOfSquaresOfDeltas;
@@ -97,10 +96,10 @@ public final class Stats implements Serializable {
    * Returns statistics over a dataset containing the given values.
    *
    * @param values a series of values, which will be converted to {@code double} values (this may
-   *     cause loss of precision)
+   *        cause loss of precision)
    */
-  public static Stats of(Iterable<? extends Number> values) {
-    StatsAccumulator accumulator = new StatsAccumulator();
+  public static Stats of(final Iterable<? extends Number> values) {
+    final StatsAccumulator accumulator = new StatsAccumulator();
     accumulator.addAll(values);
     return accumulator.snapshot();
   }
@@ -110,10 +109,10 @@ public final class Stats implements Serializable {
    * consumed by this method.
    *
    * @param values a series of values, which will be converted to {@code double} values (this may
-   *     cause loss of precision)
+   *        cause loss of precision)
    */
-  public static Stats of(Iterator<? extends Number> values) {
-    StatsAccumulator accumulator = new StatsAccumulator();
+  public static Stats of(final Iterator<? extends Number> values) {
+    final StatsAccumulator accumulator = new StatsAccumulator();
     accumulator.addAll(values);
     return accumulator.snapshot();
   }
@@ -123,8 +122,8 @@ public final class Stats implements Serializable {
    *
    * @param values a series of values
    */
-  public static Stats of(double... values) {
-    StatsAccumulator acummulator = new StatsAccumulator();
+  public static Stats of(final double... values) {
+    final StatsAccumulator acummulator = new StatsAccumulator();
     acummulator.addAll(values);
     return acummulator.snapshot();
   }
@@ -134,8 +133,8 @@ public final class Stats implements Serializable {
    *
    * @param values a series of values
    */
-  public static Stats of(int... values) {
-    StatsAccumulator acummulator = new StatsAccumulator();
+  public static Stats of(final int... values) {
+    final StatsAccumulator acummulator = new StatsAccumulator();
     acummulator.addAll(values);
     return acummulator.snapshot();
   }
@@ -144,10 +143,10 @@ public final class Stats implements Serializable {
    * Returns statistics over a dataset containing the given values.
    *
    * @param values a series of values, which will be converted to {@code double} values (this may
-   *     cause loss of precision for longs of magnitude over 2^53 (slightly over 9e15))
+   *        cause loss of precision for longs of magnitude over 2^53 (slightly over 9e15))
    */
-  public static Stats of(long... values) {
-    StatsAccumulator acummulator = new StatsAccumulator();
+  public static Stats of(final long... values) {
+    final StatsAccumulator acummulator = new StatsAccumulator();
     acummulator.addAll(values);
     return acummulator.snapshot();
   }
@@ -162,10 +161,11 @@ public final class Stats implements Serializable {
    * @param values a series of values
    * @since 28.2
    */
-  public static Stats of(DoubleStream values) {
-    return values
-        .collect(StatsAccumulator::new, StatsAccumulator::add, StatsAccumulator::addAll)
-        .snapshot();
+  public static Stats of(final DoubleStream values) {
+    return values.collect(
+        StatsAccumulator::new,
+        StatsAccumulator::add,
+        StatsAccumulator::addAll).snapshot();
   }
 
   /**
@@ -178,10 +178,11 @@ public final class Stats implements Serializable {
    * @param values a series of values
    * @since 28.2
    */
-  public static Stats of(IntStream values) {
-    return values
-        .collect(StatsAccumulator::new, StatsAccumulator::add, StatsAccumulator::addAll)
-        .snapshot();
+  public static Stats of(final IntStream values) {
+    return values.collect(
+        StatsAccumulator::new,
+        StatsAccumulator::add,
+        StatsAccumulator::addAll).snapshot();
   }
 
   /**
@@ -192,13 +193,14 @@ public final class Stats implements Serializable {
    * values using {@link #toStats()} instead.
    *
    * @param values a series of values, which will be converted to {@code double} values (this may
-   *     cause loss of precision for longs of magnitude over 2^53 (slightly over 9e15))
+   *        cause loss of precision for longs of magnitude over 2^53 (slightly over 9e15))
    * @since 28.2
    */
-  public static Stats of(LongStream values) {
-    return values
-        .collect(StatsAccumulator::new, StatsAccumulator::add, StatsAccumulator::addAll)
-        .snapshot();
+  public static Stats of(final LongStream values) {
+    return values.collect(
+        StatsAccumulator::new,
+        StatsAccumulator::add,
+        StatsAccumulator::addAll).snapshot();
   }
 
   /**
@@ -213,15 +215,10 @@ public final class Stats implements Serializable {
    * @since 28.2
    */
   public static Collector<Number, StatsAccumulator, Stats> toStats() {
-    return Collector.of(
-        StatsAccumulator::new,
-        (a, x) -> a.add(x.doubleValue()),
-        (l, r) -> {
-          l.addAll(r);
-          return l;
-        },
-        StatsAccumulator::snapshot,
-        Collector.Characteristics.UNORDERED);
+    return Collector.of(StatsAccumulator::new, (a, x) -> a.add(x.doubleValue()), (l, r) -> {
+      l.addAll(r);
+      return l;
+    }, StatsAccumulator::snapshot, Collector.Characteristics.UNORDERED);
   }
 
   /** Returns the number of values. */
@@ -242,11 +239,11 @@ public final class Stats implements Serializable {
    * contains both {@link Double#POSITIVE_INFINITY} and {@link Double#NEGATIVE_INFINITY} then the
    * result is {@link Double#NaN}. If it contains {@link Double#POSITIVE_INFINITY} and finite values
    * only or {@link Double#POSITIVE_INFINITY} only, the result is {@link Double#POSITIVE_INFINITY}.
-   * If it contains {@link Double#NEGATIVE_INFINITY} and finite values only or {@link
-   * Double#NEGATIVE_INFINITY} only, the result is {@link Double#NEGATIVE_INFINITY}.
+   * If it contains {@link Double#NEGATIVE_INFINITY} and finite values only or
+   * {@link Double#NEGATIVE_INFINITY} only, the result is {@link Double#NEGATIVE_INFINITY}.
    *
-   * <p>If you only want to calculate the mean, use {@link #meanOf} instead of creating a {@link
-   * Stats} instance.
+   * <p>If you only want to calculate the mean, use {@link #meanOf} instead of creating a
+   * {@link Stats} instance.
    *
    * @throws IllegalStateException if the dataset is empty
    */
@@ -264,8 +261,8 @@ public final class Stats implements Serializable {
    * contains both {@link Double#POSITIVE_INFINITY} and {@link Double#NEGATIVE_INFINITY} then the
    * result is {@link Double#NaN}. If it contains {@link Double#POSITIVE_INFINITY} and finite values
    * only or {@link Double#POSITIVE_INFINITY} only, the result is {@link Double#POSITIVE_INFINITY}.
-   * If it contains {@link Double#NEGATIVE_INFINITY} and finite values only or {@link
-   * Double#NEGATIVE_INFINITY} only, the result is {@link Double#NEGATIVE_INFINITY}.
+   * If it contains {@link Double#NEGATIVE_INFINITY} and finite values only or
+   * {@link Double#NEGATIVE_INFINITY} only, the result is {@link Double#NEGATIVE_INFINITY}.
    */
   public double sum() {
     return mean * count;
@@ -281,8 +278,8 @@ public final class Stats implements Serializable {
    *
    * <h3>Non-finite values</h3>
    *
-   * <p>If the dataset contains any non-finite values ({@link Double#POSITIVE_INFINITY}, {@link
-   * Double#NEGATIVE_INFINITY}, or {@link Double#NaN}) then the result is {@link Double#NaN}.
+   * <p>If the dataset contains any non-finite values ({@link Double#POSITIVE_INFINITY},
+   * {@link Double#NEGATIVE_INFINITY}, or {@link Double#NaN}) then the result is {@link Double#NaN}.
    *
    * @throws IllegalStateException if the dataset is empty
    */
@@ -308,8 +305,8 @@ public final class Stats implements Serializable {
    *
    * <h3>Non-finite values</h3>
    *
-   * <p>If the dataset contains any non-finite values ({@link Double#POSITIVE_INFINITY}, {@link
-   * Double#NEGATIVE_INFINITY}, or {@link Double#NaN}) then the result is {@link Double#NaN}.
+   * <p>If the dataset contains any non-finite values ({@link Double#POSITIVE_INFINITY},
+   * {@link Double#NEGATIVE_INFINITY}, or {@link Double#NaN}) then the result is {@link Double#NaN}.
    *
    * @throws IllegalStateException if the dataset is empty
    */
@@ -328,8 +325,8 @@ public final class Stats implements Serializable {
    *
    * <h3>Non-finite values</h3>
    *
-   * <p>If the dataset contains any non-finite values ({@link Double#POSITIVE_INFINITY}, {@link
-   * Double#NEGATIVE_INFINITY}, or {@link Double#NaN}) then the result is {@link Double#NaN}.
+   * <p>If the dataset contains any non-finite values ({@link Double#POSITIVE_INFINITY},
+   * {@link Double#NEGATIVE_INFINITY}, or {@link Double#NaN}) then the result is {@link Double#NaN}.
    *
    * @throws IllegalStateException if the dataset is empty or contains a single value
    */
@@ -354,8 +351,8 @@ public final class Stats implements Serializable {
    *
    * <h3>Non-finite values</h3>
    *
-   * <p>If the dataset contains any non-finite values ({@link Double#POSITIVE_INFINITY}, {@link
-   * Double#NEGATIVE_INFINITY}, or {@link Double#NaN}) then the result is {@link Double#NaN}.
+   * <p>If the dataset contains any non-finite values ({@link Double#POSITIVE_INFINITY},
+   * {@link Double#NEGATIVE_INFINITY}, or {@link Double#NaN}) then the result is {@link Double#NaN}.
    *
    * @throws IllegalStateException if the dataset is empty or contains a single value
    */
@@ -369,10 +366,10 @@ public final class Stats implements Serializable {
    * <h3>Non-finite values</h3>
    *
    * <p>If the dataset contains {@link Double#NaN} then the result is {@link Double#NaN}. If it
-   * contains {@link Double#NEGATIVE_INFINITY} and not {@link Double#NaN} then the result is {@link
-   * Double#NEGATIVE_INFINITY}. If it contains {@link Double#POSITIVE_INFINITY} and finite values
-   * only then the result is the lowest finite value. If it contains {@link
-   * Double#POSITIVE_INFINITY} only then the result is {@link Double#POSITIVE_INFINITY}.
+   * contains {@link Double#NEGATIVE_INFINITY} and not {@link Double#NaN} then the result is
+   * {@link Double#NEGATIVE_INFINITY}. If it contains {@link Double#POSITIVE_INFINITY} and finite
+   * values only then the result is the lowest finite value. If it contains
+   * {@link Double#POSITIVE_INFINITY} only then the result is {@link Double#POSITIVE_INFINITY}.
    *
    * @throws IllegalStateException if the dataset is empty
    */
@@ -387,10 +384,10 @@ public final class Stats implements Serializable {
    * <h3>Non-finite values</h3>
    *
    * <p>If the dataset contains {@link Double#NaN} then the result is {@link Double#NaN}. If it
-   * contains {@link Double#POSITIVE_INFINITY} and not {@link Double#NaN} then the result is {@link
-   * Double#POSITIVE_INFINITY}. If it contains {@link Double#NEGATIVE_INFINITY} and finite values
-   * only then the result is the highest finite value. If it contains {@link
-   * Double#NEGATIVE_INFINITY} only then the result is {@link Double#NEGATIVE_INFINITY}.
+   * contains {@link Double#POSITIVE_INFINITY} and not {@link Double#NaN} then the result is
+   * {@link Double#POSITIVE_INFINITY}. If it contains {@link Double#NEGATIVE_INFINITY} and finite
+   * values only then the result is the highest finite value. If it contains
+   * {@link Double#NEGATIVE_INFINITY} only then the result is {@link Double#NEGATIVE_INFINITY}.
    *
    * @throws IllegalStateException if the dataset is empty
    */
@@ -415,19 +412,19 @@ public final class Stats implements Serializable {
    * {@code strictfp}-like semantics.)
    */
   @Override
-  public boolean equals(@Nullable Object obj) {
+  public boolean equals(@Nullable final Object obj) {
     if (obj == null) {
       return false;
     }
     if (getClass() != obj.getClass()) {
       return false;
     }
-    Stats other = (Stats) obj;
-    return count == other.count
-        && doubleToLongBits(mean) == doubleToLongBits(other.mean)
-        && doubleToLongBits(sumOfSquaresOfDeltas) == doubleToLongBits(other.sumOfSquaresOfDeltas)
-        && doubleToLongBits(min) == doubleToLongBits(other.min)
-        && doubleToLongBits(max) == doubleToLongBits(other.max);
+    final Stats other = (Stats) obj;
+    return (count == other.count)
+        && (doubleToLongBits(mean) == doubleToLongBits(other.mean))
+        && (doubleToLongBits(sumOfSquaresOfDeltas) == doubleToLongBits(other.sumOfSquaresOfDeltas))
+        && (doubleToLongBits(min) == doubleToLongBits(other.min))
+        && (doubleToLongBits(max) == doubleToLongBits(other.max));
   }
 
   /**
@@ -444,13 +441,9 @@ public final class Stats implements Serializable {
   @Override
   public String toString() {
     if (count() > 0) {
-      return MoreObjects.toStringHelper(this)
-          .add("count", count)
-          .add("mean", mean)
-          .add("populationStandardDeviation", populationStandardDeviation())
-          .add("min", min)
-          .add("max", max)
-          .toString();
+      return MoreObjects.toStringHelper(this).add("count", count).add("mean", mean).add(
+          "populationStandardDeviation",
+          populationStandardDeviation()).add("min", min).add("max", max).toString();
     } else {
       return MoreObjects.toStringHelper(this).add("count", count).toString();
     }
@@ -467,10 +460,10 @@ public final class Stats implements Serializable {
    * <p>The definition of the mean is the same as {@link Stats#mean}.
    *
    * @param values a series of values, which will be converted to {@code double} values (this may
-   *     cause loss of precision)
+   *        cause loss of precision)
    * @throws IllegalArgumentException if the dataset is empty
    */
-  public static double meanOf(Iterable<? extends Number> values) {
+  public static double meanOf(final Iterable<? extends Number> values) {
     return meanOf(values.iterator());
   }
 
@@ -481,15 +474,15 @@ public final class Stats implements Serializable {
    * <p>The definition of the mean is the same as {@link Stats#mean}.
    *
    * @param values a series of values, which will be converted to {@code double} values (this may
-   *     cause loss of precision)
+   *        cause loss of precision)
    * @throws IllegalArgumentException if the dataset is empty
    */
-  public static double meanOf(Iterator<? extends Number> values) {
+  public static double meanOf(final Iterator<? extends Number> values) {
     checkArgument(values.hasNext());
     long count = 1;
     double mean = values.next().doubleValue();
     while (values.hasNext()) {
-      double value = values.next().doubleValue();
+      final double value = values.next().doubleValue();
       count++;
       if (isFinite(value) && isFinite(mean)) {
         // Art of Computer Programming vol. 2, Knuth, 4.2.2, (15)
@@ -510,11 +503,11 @@ public final class Stats implements Serializable {
    * @param values a series of values
    * @throws IllegalArgumentException if the dataset is empty
    */
-  public static double meanOf(double... values) {
+  public static double meanOf(final double... values) {
     checkArgument(values.length > 0);
     double mean = values[0];
     for (int index = 1; index < values.length; index++) {
-      double value = values[index];
+      final double value = values[index];
       if (isFinite(value) && isFinite(mean)) {
         // Art of Computer Programming vol. 2, Knuth, 4.2.2, (15)
         mean += (value - mean) / (index + 1);
@@ -534,11 +527,11 @@ public final class Stats implements Serializable {
    * @param values a series of values
    * @throws IllegalArgumentException if the dataset is empty
    */
-  public static double meanOf(int... values) {
+  public static double meanOf(final int... values) {
     checkArgument(values.length > 0);
     double mean = values[0];
     for (int index = 1; index < values.length; index++) {
-      double value = values[index];
+      final double value = values[index];
       if (isFinite(value) && isFinite(mean)) {
         // Art of Computer Programming vol. 2, Knuth, 4.2.2, (15)
         mean += (value - mean) / (index + 1);
@@ -556,14 +549,14 @@ public final class Stats implements Serializable {
    * <p>The definition of the mean is the same as {@link Stats#mean}.
    *
    * @param values a series of values, which will be converted to {@code double} values (this may
-   *     cause loss of precision for longs of magnitude over 2^53 (slightly over 9e15))
+   *        cause loss of precision for longs of magnitude over 2^53 (slightly over 9e15))
    * @throws IllegalArgumentException if the dataset is empty
    */
-  public static double meanOf(long... values) {
+  public static double meanOf(final long... values) {
     checkArgument(values.length > 0);
     double mean = values[0];
     for (int index = 1; index < values.length; index++) {
-      double value = values[index];
+      final double value = values[index];
       if (isFinite(value) && isFinite(mean)) {
         // Art of Computer Programming vol. 2, Knuth, 4.2.2, (15)
         mean += (value - mean) / (index + 1);
@@ -577,7 +570,7 @@ public final class Stats implements Serializable {
   // Serialization helpers
 
   /** The size of byte array representation in bytes. */
-  static final int BYTES = (Long.SIZE + Double.SIZE * 4) / Byte.SIZE;
+  static final int BYTES = (Long.SIZE + (Double.SIZE * 4)) / Byte.SIZE;
 
   /**
    * Gets a byte array representation of this instance.
@@ -586,7 +579,7 @@ public final class Stats implements Serializable {
    * versions.
    */
   public byte[] toByteArray() {
-    ByteBuffer buff = ByteBuffer.allocate(BYTES).order(ByteOrder.LITTLE_ENDIAN);
+    final ByteBuffer buff = ByteBuffer.allocate(BYTES).order(ByteOrder.LITTLE_ENDIAN);
     writeTo(buff);
     return buff.array();
   }
@@ -598,32 +591,29 @@ public final class Stats implements Serializable {
    * versions.
    *
    * @param buffer A {@link ByteBuffer} with at least BYTES {@link ByteBuffer#remaining}, ordered as
-   *     {@link ByteOrder#LITTLE_ENDIAN}, to which a BYTES-long byte representation of this instance
-   *     is written. In the process increases the position of {@link ByteBuffer} by BYTES.
+   *        {@link ByteOrder#LITTLE_ENDIAN}, to which a BYTES-long byte representation of this
+   *        instance is written. In the process increases the position of {@link ByteBuffer} by
+   *        BYTES.
    */
-  void writeTo(ByteBuffer buffer) {
+  void writeTo(final ByteBuffer buffer) {
     checkNotNull(buffer);
     checkArgument(
         buffer.remaining() >= BYTES,
         "Expected at least Stats.BYTES = %s remaining , got %s",
         BYTES,
         buffer.remaining());
-    buffer
-        .putLong(count)
-        .putDouble(mean)
-        .putDouble(sumOfSquaresOfDeltas)
-        .putDouble(min)
-        .putDouble(max);
+    buffer.putLong(count).putDouble(mean).putDouble(sumOfSquaresOfDeltas).putDouble(min).putDouble(
+        max);
   }
 
   /**
-   * Creates a Stats instance from the given byte representation which was obtained by {@link
-   * #toByteArray}.
+   * Creates a Stats instance from the given byte representation which was obtained by
+   * {@link #toByteArray}.
    *
    * <p><b>Note:</b> No guarantees are made regarding stability of the representation between
    * versions.
    */
-  public static Stats fromByteArray(byte[] byteArray) {
+  public static Stats fromByteArray(final byte[] byteArray) {
     checkNotNull(byteArray);
     checkArgument(
         byteArray.length == BYTES,
@@ -640,10 +630,10 @@ public final class Stats implements Serializable {
    * versions.
    *
    * @param buffer A {@link ByteBuffer} with at least BYTES {@link ByteBuffer#remaining}, ordered as
-   *     {@link ByteOrder#LITTLE_ENDIAN}, from which a BYTES-long byte representation of this
-   *     instance is read. In the process increases the position of {@link ByteBuffer} by BYTES.
+   *        {@link ByteOrder#LITTLE_ENDIAN}, from which a BYTES-long byte representation of this
+   *        instance is read. In the process increases the position of {@link ByteBuffer} by BYTES.
    */
-  static Stats readFrom(ByteBuffer buffer) {
+  static Stats readFrom(final ByteBuffer buffer) {
     checkNotNull(buffer);
     checkArgument(
         buffer.remaining() >= BYTES,

@@ -60,19 +60,17 @@ install_accumulo() {
 configure_accumulo() {
 	sudo sed -i "s/localhost:2181/${ZK_IPADDR}:2181/" $INSTALL_DIR/accumulo/conf/accumulo.properties
 	sudo sed -i "s/localhost:2181/${ZK_IPADDR}:2181/" $INSTALL_DIR/accumulo/conf/accumulo-client.properties
-	sudo sed -i "s/instance.name=/instance.name=accumulo/" $INSTALL_DIR/accumulo/conf/accumulo-client.properties
+	sudo sed -i "s/instance.name=/instance.name=${ACCUMULO_INSTANCE}/" $INSTALL_DIR/accumulo/conf/accumulo-client.properties
 	sudo sed -i "s/localhost:8020/${ZK_IPADDR}:8020/" $INSTALL_DIR/accumulo/conf/accumulo.properties
 	sudo sed -i "s/\${LOG4J_JAR}/\${LOG4J_JAR}:\/usr\/lib\/hadoop\/lib\/*:\/usr\/lib\/hadoop\/client\/*/" $INSTALL_DIR/accumulo/bin/accumulo
 	# Crazy escaping to get this shell to fill in values but root to write out the file
 	export ENV_VARS="export HADOOP_USER_NAME=accumulo; export ACCUMULO_HOME=$INSTALL_DIR/accumulo; export HADOOP_HOME=/usr/lib/hadoop; export ACCUMULO_LOG_DIR=$INSTALL_DIR/accumulo/logs; export JAVA_HOME=/usr/lib/jvm/java; export ZOOKEEPER_HOME=/usr/lib/zookeeper; export HADOOP_PREFIX=/usr/lib/hadoop; export HADOOP_CONF_DIR=/etc/hadoop/conf"
-	#echo $ENV_FILE > /tmp/acc_env
-	#sudo sh -c "echo -e '$(cat /tmp/acc_env)\n$(cat $INSTALL_DIR/accumulo/conf/accumulo-env.sh)' > $INSTALL_DIR/accumulo/conf/accumulo-env.sh"
 	sudo sed -i "29 a ${ENV_VARS}" $INSTALL_DIR/accumulo/conf/accumulo-env.sh	
 	sudo chown -R $USER:$USER $INSTALL_DIR/accumulo
 
 	if is_master ; then
 		sudo sed -i "s/share\/hadoop\/client/client/" $INSTALL_DIR/accumulo/conf/accumulo-env.sh
-	    sudo -u $HDFS_USER hadoop fs -chmod 777 /user # This is more for Spark than Accumulo but put here for expediency
+		sudo -u $HDFS_USER hadoop fs -chmod 777 /user # This is more for Spark than Accumulo but put here for expediency
 		sudo -u $HDFS_USER hadoop fs -mkdir /accumulo
 		sudo -u $HDFS_USER hadoop fs -chown accumulo:accumulo /accumulo
 		sudo sh -c "hostname > $INSTALL_DIR/accumulo/conf/monitor"

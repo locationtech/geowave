@@ -18,6 +18,7 @@ import org.locationtech.geowave.core.store.adapter.BaseFieldDescriptor;
  * @param <T> the adapter field type
  */
 public class TemporalFieldDescriptor<T> extends BaseFieldDescriptor<T> {
+  public TemporalFieldDescriptor() {}
 
   public TemporalFieldDescriptor(
       final Class<T> bindingClass,
