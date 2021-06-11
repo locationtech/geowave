@@ -165,7 +165,13 @@ public class GeometryUtils {
       synchronized (MUTEX_DEFAULT_CRS) {
         // have to do this inside the sync to avoid double init
         if (defaultCrsSingleton == null) {
-          defaultCrsSingleton = DefaultGeographicCRS.WGS84;
+          try {
+            initClassLoader();
+            defaultCrsSingleton = CRS.decode(DEFAULT_CRS_STR, true);
+          } catch (final Exception e) {
+            LOGGER.error("Unable to decode " + DEFAULT_CRS_STR + " CRS", e);
+            defaultCrsSingleton = DefaultGeographicCRS.WGS84;
+          }
         }
       }
     }
@@ -510,7 +516,7 @@ public class GeometryUtils {
 
     CoordinateReferenceSystem indexCrs = null;
 
-    if ((index != null) && (index.getIndexModel() instanceof CustomCrsIndexModel)) {
+    if (index != null && index.getIndexModel() instanceof CustomCrsIndexModel) {
       indexCrs = ((CustomCrsIndexModel) index.getIndexModel()).getCrs();
     } else {
       indexCrs = getDefaultCRS();
