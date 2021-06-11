@@ -53,7 +53,8 @@ public class SpatialTemporalQueryExample {
   private DataStore dataStore;
 
   private static final Index index =
-      new SpatialTemporalDimensionalityTypeProvider().createIndex(new SpatialTemporalOptions());
+      SpatialTemporalDimensionalityTypeProvider.createIndexFromOptions(
+          new SpatialTemporalOptions());
   private static final FeatureDataAdapter adapter =
       new FeatureDataAdapter(getPointSimpleFeatureType());
 

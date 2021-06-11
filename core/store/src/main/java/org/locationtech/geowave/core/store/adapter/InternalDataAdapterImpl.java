@@ -106,9 +106,11 @@ public class InternalDataAdapterImpl<T> implements InternalDataAdapter<T> {
     if (indexMapping != null) {
       for (final IndexFieldMapper<?, ?> indexField : indexMapping.getIndexFieldMappers()) {
         if (dimensionFieldsUsed.add(indexField.indexFieldName())) {
-
           final Object value = InternalAdapterUtils.entryToIndexValue(indexField, adapter, entry);
-          // final CommonIndexValue value = fieldHandler.toIndexValue(entry);
+          if (value == null) {
+            // The field value cannot be mapped to the index (such as null field values)
+            return null;
+          }
           indexData.addValue(indexField.indexFieldName(), value);
           Collections.addAll(nativeFieldsInIndex, indexField.getAdapterFields());
         }

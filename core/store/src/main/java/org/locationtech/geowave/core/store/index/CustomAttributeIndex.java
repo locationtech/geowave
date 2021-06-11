@@ -11,15 +11,14 @@ package org.locationtech.geowave.core.store.index;
 import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.CustomIndexStrategy;
-import org.locationtech.geowave.core.index.InsertionIds;
-import org.locationtech.geowave.core.index.QueryRanges;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
-import org.locationtech.geowave.core.index.persist.PersistenceUtils;
+import org.locationtech.geowave.core.store.api.AttributeIndex;
 
 /**
- *
- * This is a basic wrapper around a custom index strategy
+ * An implementation of {@link CustomIndex} that supports attribute indices. This can be used to
+ * create attribute indices on non-numeric fields.
  *
  * @param <E> The entry type (such as SimpleFeature, GridCoverage, or whatever type the adapter
  *        uses)
@@ -27,41 +26,35 @@ import org.locationtech.geowave.core.index.persist.PersistenceUtils;
  *        so that it can work outside of just client code (such as server-side filtering,
  *        map-reduce, or spark)
  */
-public class CustomIndex<E, C extends Persistable> extends NullIndex implements
-    CustomIndexStrategy<E, C> {
-  private CustomIndexStrategy<E, C> indexStrategy;
+public class CustomAttributeIndex<E, C extends Persistable> extends CustomIndex<E, C> implements
+    AttributeIndex {
 
-  public CustomIndex() {
+  private String attributeName;
+
+  public CustomAttributeIndex() {
     super();
   }
 
-  public CustomIndex(final CustomIndexStrategy<E, C> indexStrategy, final String id) {
-    super(id);
-    this.indexStrategy = indexStrategy;
-  }
-
-  public CustomIndexStrategy<E, C> getCustomIndexStrategy() {
-    return indexStrategy;
-  }
-
-  @Override
-  public InsertionIds getInsertionIds(final E entry) {
-    return indexStrategy.getInsertionIds(entry);
+  public CustomAttributeIndex(
+      final CustomIndexStrategy<E, C> indexStrategy,
+      final String id,
+      final String attributeName) {
+    super(indexStrategy, id);
+    this.attributeName = attributeName;
   }
 
   @Override
-  public QueryRanges getQueryRanges(final C constraints) {
-    return indexStrategy.getQueryRanges(constraints);
-  }
-
-  @Override
-  public PersistableBiPredicate<E, C> getFilter(final C constraints) {
-    return indexStrategy.getFilter(constraints);
+  public String getAttributeName() {
+    return attributeName;
   }
 
   @Override
   public int hashCode() {
-    return getName().hashCode();
+    final int prime = 31;
+    int result = 1;
+    result = (prime * result) + super.hashCode();
+    result = (prime * result) + attributeName.hashCode();
+    return result;
   }
 
   @Override
@@ -75,37 +68,35 @@ public class CustomIndex<E, C extends Persistable> extends NullIndex implements
     if (getClass() != obj.getClass()) {
       return false;
     }
-    final IndexImpl other = (IndexImpl) obj;
-    return getName().equals(other.getName());
+    final CustomAttributeIndex<?, ?> other = (CustomAttributeIndex<?, ?>) obj;
+    return super.equals(obj) && attributeName.equals(other.attributeName);
   }
 
   @Override
   public byte[] toBinary() {
     final byte[] baseBinary = super.toBinary();
-    final byte[] additionalBinary = PersistenceUtils.toBinary(indexStrategy);
+    final byte[] attributeNameBytes = StringUtils.stringToBinary(attributeName);
     final ByteBuffer buf =
         ByteBuffer.allocate(
             VarintUtils.unsignedIntByteLength(baseBinary.length)
+                + VarintUtils.unsignedIntByteLength(attributeNameBytes.length)
                 + baseBinary.length
-                + additionalBinary.length);
+                + attributeNameBytes.length);
+    VarintUtils.writeUnsignedInt(attributeNameBytes.length, buf);
+    buf.put(attributeNameBytes);
     VarintUtils.writeUnsignedInt(baseBinary.length, buf);
     buf.put(baseBinary);
-    buf.put(additionalBinary);
     return buf.array();
   }
 
   @Override
   public void fromBinary(final byte[] bytes) {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
+    final byte[] attributeNameBytes =
+        ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
+    attributeName = StringUtils.stringFromBinary(attributeNameBytes);
     final byte[] baseBinary = ByteArrayUtils.safeRead(buf, VarintUtils.readUnsignedInt(buf));
     super.fromBinary(baseBinary);
-    final byte[] additionalBinary = ByteArrayUtils.safeRead(buf, buf.remaining());
-    indexStrategy = (CustomIndexStrategy<E, C>) PersistenceUtils.fromBinary(additionalBinary);
-  }
-
-  @Override
-  public Class<C> getConstraintsClass() {
-    return indexStrategy.getConstraintsClass();
   }
 
 }

@@ -71,6 +71,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.FilterFactory2;
 import org.opengis.filter.spatial.SpatialOperator;
 import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.cs.CoordinateSystem;
 import org.opengis.referencing.cs.CoordinateSystemAxis;
@@ -146,6 +147,18 @@ public class GeometryUtils {
     }
   }
 
+  public static CoordinateReferenceSystem decodeCRS(final String crsCode) {
+    if (crsCode == null) {
+      return getDefaultCRS();
+    }
+    try {
+      return CRS.decode(crsCode, true);
+    } catch (final FactoryException e) {
+      LOGGER.error("Unable to decode '" + crsCode + "' CRS", e);
+      throw new RuntimeException("Unable to decode CRS: '" + crsCode + "'", e);
+    }
+  }
+
   @edu.umd.cs.findbugs.annotations.SuppressFBWarnings()
   public static CoordinateReferenceSystem getDefaultCRS() {
     if (defaultCrsSingleton == null) { // avoid sync penalty if we can
@@ -178,6 +191,10 @@ public class GeometryUtils {
     return (crsCode == null)
         || crsCode.isEmpty()
         || crsCode.equalsIgnoreCase(GeometryUtils.DEFAULT_CRS_STR);
+  }
+
+  public static boolean isDefaultCrs(final CoordinateReferenceSystem crs) {
+    return (crs == null) || crs.equals(getDefaultCRS());
   }
 
   public static void initClassLoader() throws MalformedURLException {

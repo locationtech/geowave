@@ -22,11 +22,14 @@ import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandl
 import org.locationtech.geowave.core.store.data.visibility.JsonFieldLevelVisibilityHandler;
 import org.locationtech.geowave.core.store.data.visibility.UnconstrainedVisibilityHandler;
 import org.locationtech.geowave.core.store.dimension.BasicNumericDimensionField;
+import org.locationtech.geowave.core.store.index.AttributeIndexImpl;
 import org.locationtech.geowave.core.store.index.BasicIndexModel;
+import org.locationtech.geowave.core.store.index.CustomAttributeIndex;
 import org.locationtech.geowave.core.store.index.CustomIndex;
 import org.locationtech.geowave.core.store.index.CustomNameIndex;
 import org.locationtech.geowave.core.store.index.IndexImpl;
 import org.locationtech.geowave.core.store.index.NullIndex;
+import org.locationtech.geowave.core.store.index.TextAttributeIndexProvider.AdapterFieldTextIndexEntryConverter;
 import org.locationtech.geowave.core.store.query.aggregate.BinningAggregation;
 import org.locationtech.geowave.core.store.query.aggregate.BinningAggregationOptions;
 import org.locationtech.geowave.core.store.query.aggregate.CountAggregation;
@@ -88,7 +91,10 @@ public class StorePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 218, CustomNameIndex::new),
         new PersistableIdAndConstructor((short) 219, NullIndex::new),
         new PersistableIdAndConstructor((short) 220, DataIdRangeQuery::new),
-        // 221-227 Unused
+        new PersistableIdAndConstructor((short) 221, AttributeIndexImpl::new),
+        new PersistableIdAndConstructor((short) 222, CustomAttributeIndex::new),
+        new PersistableIdAndConstructor((short) 223, AdapterFieldTextIndexEntryConverter::new),
+        // 224-227 Unused
         new PersistableIdAndConstructor((short) 228, BasicQueryByClass::new),
         new PersistableIdAndConstructor((short) 229, CoordinateRangeQuery::new),
         new PersistableIdAndConstructor((short) 230, CoordinateRangeQueryFilter::new),

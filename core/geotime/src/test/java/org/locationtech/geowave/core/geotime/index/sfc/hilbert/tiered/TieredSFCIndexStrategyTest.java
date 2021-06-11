@@ -73,7 +73,7 @@ public class TieredSFCIndexStrategyTest {
 
     MultiDimensionalNumericData indexedData = new BasicNumericDataset(dataPerDimension1);
     final NumericIndexStrategy strategy =
-        new SpatialTemporalDimensionalityTypeProvider().createIndex(
+        SpatialTemporalDimensionalityTypeProvider.createIndexFromOptions(
             new SpatialTemporalOptions()).getIndexStrategy();
 
     final InsertionIds ids1 = strategy.getInsertionIds(indexedData);

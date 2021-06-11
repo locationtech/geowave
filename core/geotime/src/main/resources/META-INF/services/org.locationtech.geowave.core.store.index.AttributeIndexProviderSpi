@@ -1,0 +1,2 @@
+org.locationtech.geowave.core.geotime.index.SpatialAttributeIndexProvider
+org.locationtech.geowave.core.geotime.index.TemporalAttributeIndexProvider

@@ -79,7 +79,8 @@ public class CentroidManagerTest {
             1,
             0);
 
-    final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
+    final Index index =
+        SpatialDimensionalityTypeProvider.createIndexFromOptions(new SpatialOptions());
     final FeatureDataAdapter adapter = new FeatureDataAdapter(ftype);
     final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
     final StoreFactoryFamilySpi storeFamily = new MemoryStoreFactoryFamily();

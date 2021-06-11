@@ -47,6 +47,10 @@ public class TextIndexStrategy<E> implements CustomIndexStrategy<E, TextSearch> 
     this.converter = converter;
   }
 
+  public TextIndexEntryConverter<E> getEntryConverter() {
+    return converter;
+  }
+
   @Override
   public byte[] toBinary() {
     final int encodedType = encodeType(supportedSearchTypes);
@@ -71,6 +75,7 @@ public class TextIndexStrategy<E> implements CustomIndexStrategy<E, TextSearch> 
     fromBinary(ByteBuffer.wrap(bytes));
   }
 
+  @SuppressWarnings("unchecked")
   protected void fromBinary(final ByteBuffer buf) {
     supportedSearchTypes = decodeType(VarintUtils.readUnsignedInt(buf));
     supportedCaseSensitivity = decodeCaseSensitivity(VarintUtils.readUnsignedInt(buf));
@@ -102,7 +107,7 @@ public class TextIndexStrategy<E> implements CustomIndexStrategy<E, TextSearch> 
   @Override
   public PersistableBiPredicate<E, TextSearch> getFilter(final TextSearch constraints) {
     if (constraints.getType().requiresEvaluate()) {
-      return new TextSearchPredicate(converter);
+      return new TextSearchPredicate<>(converter);
     }
     return CustomIndexStrategy.super.getFilter(constraints);
   }

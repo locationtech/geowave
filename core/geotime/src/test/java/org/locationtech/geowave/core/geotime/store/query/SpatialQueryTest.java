@@ -104,7 +104,8 @@ public class SpatialQueryTest {
             createData(factory.createPolygon(dataPolygon))};
 
     int pos = 0;
-    final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
+    final Index index =
+        SpatialDimensionalityTypeProvider.createIndexFromOptions(new SpatialOptions());
     for (final IndexedPersistenceEncoding dataItem : data) {
       for (final QueryFilter filter : queryCopy.createFilters(index)) {
         assertEquals(

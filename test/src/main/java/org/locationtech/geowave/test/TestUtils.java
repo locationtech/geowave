@@ -164,7 +164,7 @@ public class TestUtils {
     final SpatialDimensionalityTypeProvider sdp = new SpatialDimensionalityTypeProvider();
     final SpatialOptions so = sdp.createOptions();
     so.setCrs(CUSTOM_CRSCODE);
-    final Index primaryIndex = sdp.createIndex(so);
+    final Index primaryIndex = SpatialDimensionalityTypeProvider.createIndexFromOptions(so);
     return primaryIndex;
   }
 
@@ -173,7 +173,7 @@ public class TestUtils {
         new SpatialTemporalDimensionalityTypeProvider();
     final SpatialTemporalOptions o = p.createOptions();
     o.setCrs(CUSTOM_CRSCODE);
-    final Index primaryIndex = p.createIndex(o);
+    final Index primaryIndex = SpatialTemporalDimensionalityTypeProvider.createIndexFromOptions(o);
     return primaryIndex;
   }
 
@@ -295,7 +295,7 @@ public class TestUtils {
       final String indexName = "test-index" + i;
       if (indexStore.getIndex(indexName) == null) {
         indexOptions.get(i).setName(indexName);
-        geowaveDataStore.addIndex(indexOptions.get(i).createIndex());
+        geowaveDataStore.addIndex(indexOptions.get(i).createIndex(geowaveDataStore));
       }
       indexParam.append(indexName + ",");
     }
@@ -351,7 +351,7 @@ public class TestUtils {
       final String indexName = "test-index" + i;
       if (indexStore.getIndex(indexName) == null) {
         indexOptions.get(i).setName(indexName);
-        geowaveDataStore.addIndex(indexOptions.get(i).createIndex());
+        geowaveDataStore.addIndex(indexOptions.get(i).createIndex(geowaveDataStore));
       }
       indexParam.append(indexName + ",");
     }
@@ -425,7 +425,7 @@ public class TestUtils {
         pluginOptions.selectPlugin(indexType);
         pluginOptions.setName(indexType);
         pluginOptions.save(props, IndexPluginOptions.getIndexNamespace(indexType));
-        geowaveDataStore.addIndex(pluginOptions.createIndex());
+        geowaveDataStore.addIndex(pluginOptions.createIndex(geowaveDataStore));
       }
 
     }

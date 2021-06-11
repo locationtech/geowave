@@ -21,14 +21,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
-import org.locationtech.geowave.core.geotime.index.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
-import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
@@ -62,8 +59,6 @@ public class QueryOptionsIT {
   private final QueryConstraints spatialQuery =
       new ExplicitSpatialQuery(
           GeometryUtils.GEOMETRY_FACTORY.toGeometry(new Envelope(GUADALAJARA, ATLANTA)));
-  private static Index index =
-      new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 
   @GeoWaveTestStore({
       GeoWaveStoreType.ACCUMULO,
@@ -96,9 +91,10 @@ public class QueryOptionsIT {
   public void testQuerySpecificAdapter() throws IOException {
     int numResults = 0;
     try (final CloseableIterator<SimpleFeature> results =
-        (CloseableIterator) dataStoreOptions.createDataStore().query(
-            QueryBuilder.newBuilder().addTypeName(dataAdapter1.getTypeName()).indexName(
-                TestUtils.DEFAULT_SPATIAL_INDEX.getName()).constraints(spatialQuery).build())) {
+        dataStoreOptions.createDataStore().query(
+            QueryBuilder.newBuilder(SimpleFeature.class).addTypeName(
+                dataAdapter1.getTypeName()).indexName(
+                    TestUtils.DEFAULT_SPATIAL_INDEX.getName()).constraints(spatialQuery).build())) {
       while (results.hasNext()) {
         numResults++;
         final SimpleFeature currFeat = results.next();
@@ -114,8 +110,8 @@ public class QueryOptionsIT {
   public void testQueryAcrossAdapters() throws IOException {
     int numResults = 0;
     try (final CloseableIterator<SimpleFeature> results =
-        (CloseableIterator) dataStoreOptions.createDataStore().query(
-            QueryBuilder.newBuilder().indexName(
+        dataStoreOptions.createDataStore().query(
+            QueryBuilder.newBuilder(SimpleFeature.class).indexName(
                 TestUtils.DEFAULT_SPATIAL_INDEX.getName()).constraints(spatialQuery).build())) {
       while (results.hasNext()) {
         numResults++;
@@ -132,8 +128,8 @@ public class QueryOptionsIT {
   public void testQueryEmptyOptions() throws IOException {
     int numResults = 0;
     try (final CloseableIterator<SimpleFeature> results =
-        (CloseableIterator) dataStoreOptions.createDataStore().query(
-            QueryBuilder.newBuilder().constraints(spatialQuery).build())) {
+        dataStoreOptions.createDataStore().query(
+            QueryBuilder.newBuilder(SimpleFeature.class).constraints(spatialQuery).build())) {
       while (results.hasNext()) {
         numResults++;
         final SimpleFeature currFeat = results.next();

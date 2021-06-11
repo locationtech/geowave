@@ -1,0 +1,2 @@
+org.locationtech.geowave.core.store.index.NumericAttributeIndexProvider
+org.locationtech.geowave.core.store.index.TextAttributeIndexProvider

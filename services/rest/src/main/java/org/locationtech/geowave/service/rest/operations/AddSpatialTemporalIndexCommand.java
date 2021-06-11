@@ -106,7 +106,6 @@ public class AddSpatialTemporalIndexCommand extends ServiceEnabledCommand<String
     final String storeName = getParameters().get(0);
     final String indexName = getParameters().get(1);
     pluginOptions.setName(indexName);
-    final Index newIndex = pluginOptions.createIndex();
 
     // Attempt to load store.
     final File configFile = getGeoWaveConfigFile(params);
@@ -116,6 +115,8 @@ public class AddSpatialTemporalIndexCommand extends ServiceEnabledCommand<String
       throw new ParameterException("Cannot find store name: " + inputStoreLoader.getStoreName());
     }
     DataStorePluginOptions storeOptions = inputStoreLoader.getDataStorePlugin();
+
+    final Index newIndex = pluginOptions.createIndex(storeOptions.createDataStore());
 
     IndexStore indexStore = storeOptions.createIndexStore();
 

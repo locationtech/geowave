@@ -43,7 +43,7 @@ public class SimpleFeatureToAccumuloKeyValueMapper extends Mapper<LongWritable, 
       adapter.asInternalAdapter(
           InternalAdapterStoreImpl.getLazyInitialAdapterId(adapter.getTypeName()));
   private final Index index =
-      new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
+      SpatialDimensionalityTypeProvider.createIndexFromOptions(new SpatialOptions());
   private final AdapterToIndexMapping indexMapping =
       BaseDataStoreUtils.mapAdapterToIndex(internalAdapter, index);
   private final VisibilityHandler visibilityHandler = new UnconstrainedVisibilityHandler();

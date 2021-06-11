@@ -44,7 +44,7 @@ public class CQLQueryExample {
   private static DataStore dataStore;
 
   private static final Index index =
-      new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
+      SpatialDimensionalityTypeProvider.createIndexFromOptions(new SpatialOptions());
 
   // Points (to be ingested into GeoWave Data Store)
   private static final Coordinate washingtonMonument = new Coordinate(-77.0352, 38.8895);

@@ -56,9 +56,8 @@ public class PersistenceEncodingTest {
           new TimeDefinition(Unit.YEAR),};
 
   private static final CommonIndexModel model =
-      new SpatialTemporalDimensionalityTypeProvider().createIndex(
+      SpatialTemporalDimensionalityTypeProvider.createIndexFromOptions(
           new SpatialTemporalOptions()).getIndexModel();
-
 
   private static final NumericIndexStrategy strategy =
       TieredSFCIndexFactory.createSingleTierStrategy(

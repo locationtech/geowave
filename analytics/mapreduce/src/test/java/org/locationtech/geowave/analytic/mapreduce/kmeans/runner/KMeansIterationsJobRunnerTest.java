@@ -61,7 +61,7 @@ public class KMeansIterationsJobRunnerTest {
     propertyMgt.store(CentroidParameters.Centroid.DATA_TYPE_ID, "centroid");
     propertyMgt.store(
         CentroidParameters.Centroid.INDEX_NAME,
-        new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()).getName());
+        SpatialDimensionalityTypeProvider.createIndexFromOptions(new SpatialOptions()).getName());
     propertyMgt.store(ClusteringParameters.Clustering.CONVERGANCE_TOLERANCE, new Double(0.0001));
     propertyMgt.store(
         CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
@@ -205,7 +205,7 @@ public class KMeansIterationsJobRunnerTest {
 
         @Override
         public String getIndexName() {
-          return new SpatialDimensionalityTypeProvider().createIndex(
+          return SpatialDimensionalityTypeProvider.createIndexFromOptions(
               new SpatialOptions()).getName();
         }
 

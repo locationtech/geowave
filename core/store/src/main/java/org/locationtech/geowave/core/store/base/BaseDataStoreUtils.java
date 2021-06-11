@@ -59,6 +59,7 @@ import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.AdapterException;
 import org.locationtech.geowave.core.store.api.Aggregation;
+import org.locationtech.geowave.core.store.api.AttributeIndex;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexFieldMapper;
@@ -428,7 +429,9 @@ public class BaseDataStoreUtils {
     final String[] adapterFields =
         indexMapping.getMapperForIndexField(indexField).getAdapterFields();
     for (final String adapterField : adapterFields) {
-      baseVisibility.addVisibility(visibilityHandler.getVisibility(adapter, entry, adapterField));
+      final String adapterFieldVisibility =
+          visibilityHandler.getVisibility(adapter, entry, adapterField);
+      baseVisibility.addVisibility(adapterFieldVisibility);
     }
   }
 
@@ -442,17 +445,31 @@ public class BaseDataStoreUtils {
       final boolean dataIdIndex,
       final boolean visibilityEnabled) {
     final CommonIndexModel indexModel = index.getIndexModel();
+    final short internalAdapterId = adapter.getAdapterId();
+    final byte[] dataId = adapter.getDataId(entry);
     final AdapterPersistenceEncoding encodedData = adapter.encode(entry, indexMapping, index);
+    if (encodedData == null) {
+      // The entry could not be encoded to the index, but this could be due to a null value in one
+      // of the index fields, which is possible in attribute indices
+      LOGGER.info(
+          "Indexing failed to produce insertion ids; entry ["
+              + StringUtils.stringFromBinary(adapter.getDataId(entry))
+              + "] not saved for index '"
+              + index.getName()
+              + "'.");
+
+      return new IntermediaryWriteEntryInfo(
+          dataId,
+          internalAdapterId,
+          new InsertionIds(),
+          new GeoWaveValueImpl[0]);
+    }
     final InsertionIds insertionIds;
     if (index instanceof CustomIndexStrategy) {
       insertionIds = ((CustomIndexStrategy) index).getInsertionIds(entry);
     } else {
       insertionIds = dataIdIndex ? null : encodedData.getInsertionIds(index);
     }
-
-    final short internalAdapterId = adapter.getAdapterId();
-
-    final byte[] dataId = adapter.getDataId(entry);
 
     if (dataIdIndex) {
       return getWriteInfoDataIDIndex(
@@ -842,11 +859,19 @@ public class BaseDataStoreUtils {
             "No index field mappers were found for the type: " + indexFieldClass.getName());
       }
 
-      // Get any adapter fields that have been hinted for this field
-      final List<FieldDescriptor<?>> hintedFields =
-          Arrays.stream(adapterFields).filter(
-              field -> dimensionHints.stream().anyMatch(field.indexHints()::contains)).collect(
-                  Collectors.toList());
+      final List<FieldDescriptor<?>> hintedFields;
+      if (index instanceof AttributeIndex) {
+        // Only check the field that is set for the attribute index
+        hintedFields =
+            Lists.newArrayList(
+                adapter.getFieldDescriptor(((AttributeIndex) index).getAttributeName()));
+      } else {
+        // Get any adapter fields that have been hinted for this field
+        hintedFields =
+            Arrays.stream(adapterFields).filter(
+                field -> dimensionHints.stream().anyMatch(field.indexHints()::contains)).collect(
+                    Collectors.toList());
+      }
 
       if (hintedFields.size() > 0) {
         final Class<?> hintedFieldClass = hintedFields.get(0).bindingClass();

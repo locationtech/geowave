@@ -143,7 +143,7 @@ public class OSMConversionRunner extends Configured implements Tool {
     }
 
     final Index primaryIndex =
-        new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
+        SpatialDimensionalityTypeProvider.createIndexFromOptions(new SpatialOptions());
     GeoWaveOutputFormat.addIndex(job.getConfiguration(), primaryIndex);
     job.getConfiguration().set(AbstractMapReduceIngest.INDEX_NAMES_KEY, primaryIndex.getName());
 

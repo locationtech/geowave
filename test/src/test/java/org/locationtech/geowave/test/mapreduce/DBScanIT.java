@@ -208,7 +208,8 @@ public class DBScanIT extends AbstractGeoWaveIT {
             new SimpleFeatureItemWrapperFactory(),
             "concave_hull",
             dataStorePluginOptions.createInternalAdapterStore().addTypeName("concave_hull"),
-            new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()).getName(),
+            SpatialDimensionalityTypeProvider.createIndexFromOptions(
+                new SpatialOptions()).getName(),
             "bx5",
             0);
 

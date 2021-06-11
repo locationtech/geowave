@@ -40,7 +40,7 @@ public class TextIndexUtils {
       final EnumSet<CaseSensitivity> supportedCaseSensitivities,
       final int nGramCharacters) {
     if ((entry == null) || entry.isEmpty()) {
-      LOGGER.warn("Cannot index null enum, skipping entry");
+      LOGGER.info("Cannot index null string, skipping entry");
       return new InsertionIds();
     }
     final Set<TextIndexType> indexTypes =

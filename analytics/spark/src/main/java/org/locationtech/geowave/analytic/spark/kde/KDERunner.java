@@ -178,7 +178,7 @@ public class KDERunner {
       final SpatialDimensionalityTypeProvider sdp = new SpatialDimensionalityTypeProvider();
       final SpatialOptions so = sdp.createOptions();
       so.setCrs(inputCrsCode);
-      outputPrimaryIndex = sdp.createIndex(so);
+      outputPrimaryIndex = SpatialDimensionalityTypeProvider.createIndexFromOptions(so);
       outputIndexCrs = inputIndexCrs;
       outputCrsCode = inputCrsCode;
     }

@@ -80,7 +80,8 @@ public class KMeansDistortionMapReduceTest {
 
   private static final List<Object> capturedObjects = new ArrayList<>();
 
-  final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
+  final Index index =
+      SpatialDimensionalityTypeProvider.createIndexFromOptions(new SpatialOptions());
   final GeometryFactory factory = new GeometryFactory();
   final String grp1 = "g1";
 
@@ -114,7 +115,7 @@ public class KMeansDistortionMapReduceTest {
     final PropertyManagement propManagement = new PropertyManagement();
     propManagement.store(
         CentroidParameters.Centroid.INDEX_NAME,
-        new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()).getName());
+        SpatialDimensionalityTypeProvider.createIndexFromOptions(new SpatialOptions()).getName());
     propManagement.store(CentroidParameters.Centroid.DATA_TYPE_ID, ftype.getTypeName());
 
     propManagement.store(

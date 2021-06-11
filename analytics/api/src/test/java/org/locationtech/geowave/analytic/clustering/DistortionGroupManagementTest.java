@@ -42,7 +42,8 @@ public class DistortionGroupManagementTest {
   public TestName name = new TestName();
   final GeometryFactory factory = new GeometryFactory();
   final SimpleFeatureType ftype;
-  final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
+  final Index index =
+      SpatialDimensionalityTypeProvider.createIndexFromOptions(new SpatialOptions());
 
   final FeatureDataAdapter adapter;
   final DataStorePluginOptions storePluginOptions;

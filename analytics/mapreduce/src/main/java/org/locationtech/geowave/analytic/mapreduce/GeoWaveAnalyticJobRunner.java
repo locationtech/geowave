@@ -316,7 +316,7 @@ public abstract class GeoWaveAnalyticJobRunner extends Configured implements
     Index index = indexStore.getIndex(indexName);
     if (index == null) {
       final Index defaultSpatialIndex =
-          new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
+          SpatialDimensionalityTypeProvider.createIndexFromOptions(new SpatialOptions());
       index =
           new CustomNameIndex(
               defaultSpatialIndex.getIndexStrategy(),

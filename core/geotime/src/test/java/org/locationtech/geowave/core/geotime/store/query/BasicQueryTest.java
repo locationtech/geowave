@@ -99,7 +99,8 @@ public class BasicQueryTest {
                 df.parse("2017-02-22T11:00:00GMT-00:00"),
                 df.parse("2017-02-22T14:00:00GMT-00:00"))};
     final Index index =
-        new SpatialTemporalDimensionalityTypeProvider().createIndex(new SpatialTemporalOptions());
+        SpatialTemporalDimensionalityTypeProvider.createIndexFromOptions(
+            new SpatialTemporalOptions());
     int pos = 0;
     for (final CommonIndexedPersistenceEncoding dataItem : data) {
       for (final QueryFilter filter : query.createFilters(index)) {

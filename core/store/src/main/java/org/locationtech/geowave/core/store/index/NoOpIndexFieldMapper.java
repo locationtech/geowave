@@ -14,7 +14,6 @@ import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
 import org.locationtech.geowave.core.store.api.IndexFieldMapper;
-import org.locationtech.geowave.core.store.api.IndexFieldMapper.IndexFieldOptions;
 import com.google.common.collect.Lists;
 
 /**

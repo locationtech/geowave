@@ -24,6 +24,21 @@ public interface SpatialTemporalConstraintsBuilder {
   SpatialTemporalConstraintsBuilder noSpatialConstraints();
 
   /**
+   * Set a bounding box as a spatial constraint
+   * 
+   * @param minX the minimum x value
+   * @param maxX the maximum x value
+   * @param minY the minimum y value
+   * @param maxY the maximum y value
+   * @return
+   */
+  SpatialTemporalConstraintsBuilder bboxConstraints(
+      double minX,
+      double maxX,
+      double minY,
+      double maxY);
+
+  /**
    * set a geometry as a spatial constraint
    *
    * @param geometry the geometry

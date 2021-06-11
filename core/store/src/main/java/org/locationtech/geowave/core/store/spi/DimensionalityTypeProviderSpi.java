@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.core.store.spi;
 
+import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 
 /**
@@ -38,7 +39,7 @@ public interface DimensionalityTypeProviderSpi<T extends DimensionalityTypeOptio
    *
    * @return the primary index
    */
-  Index createIndex(T options);
+  Index createIndex(DataStore dataStore, T options);
 
   /**
    * These are options specific to the type of index being exposed by this SPI plugin.

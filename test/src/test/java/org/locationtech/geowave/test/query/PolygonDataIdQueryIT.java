@@ -20,13 +20,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
-import org.locationtech.geowave.core.geotime.index.SpatialOptions;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataStore;
-import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
@@ -50,8 +47,6 @@ public class PolygonDataIdQueryIT extends AbstractGeoWaveIT {
   private static FeatureDataAdapter dataAdapter;
   private static final String GEOMETRY_ATTRIBUTE = "geometry";
   private static final String DATA_ID = "dataId";
-  private static Index index =
-      new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 
   @GeoWaveTestStore({
       GeoWaveStoreType.ACCUMULO,

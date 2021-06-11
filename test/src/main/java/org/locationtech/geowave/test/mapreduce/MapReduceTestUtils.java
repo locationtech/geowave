@@ -158,7 +158,7 @@ public class MapReduceTestUtils {
       String indexName = "testIndex" + i;
       if (indexStore.getIndex(indexName) == null) {
         indexOptions.get(i).setName(indexName);
-        geowaveDataStore.addIndex(indexOptions.get(i).createIndex());
+        geowaveDataStore.addIndex(indexOptions.get(i).createIndex(geowaveDataStore));
       }
       indexParam.append(indexName + ",");
     }
