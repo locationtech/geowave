@@ -108,7 +108,7 @@
 		<hbaseprotoc.version>2.5.0</hbaseprotoc.version>
 		<hbaseguava.version>12.0.1</hbaseguava.version>
 		<jackson.version>1.9.13</jackson.version>
-		<beanutils.version>1.9.3</beanutils.version>
+		<beanutils.version>1.9.4</beanutils.version>
 		<fasterxml.jackson.version>2.10.5</fasterxml.jackson.version>
 		<fasterxml.jackson.databind.version>2.10.5.1</fasterxml.jackson.databind.version>
 		<spring-security.version>5.1.13.RELEASE</spring-security.version>
