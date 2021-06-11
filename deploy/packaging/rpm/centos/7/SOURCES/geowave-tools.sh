@@ -69,7 +69,7 @@ if [ -n "${SPARK_HOME}" ] && [ -d "${SPARK_HOME}" ]; then
   SPARK_CLASSPATH=""
   for i in $(ls ${SPARK_HOME}/jars/* )
   do
-     if [[ "$i" != *slf4j-log4j*.jar || "$i" != *guava*.jar ]]; then
+     if [[ "$i" != *slf4j-log4j*.jar && "$i" != *guava*.jar ]]; then
        SPARK_CLASSPATH=${SPARK_CLASSPATH}:$i
      fi
   done  
