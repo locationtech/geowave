@@ -106,7 +106,7 @@ public class GeometryUtils {
   private static final Object MUTEX = new Object();
   private static final Object MUTEX_DEFAULT_CRS = new Object();
   public static final String DEFAULT_CRS_STR = "EPSG:4326";
-  private static CoordinateReferenceSystem defaultCrsSingleton = DefaultGeographicCRS.WGS84;
+  private static CoordinateReferenceSystem defaultCrsSingleton;
   private static Set<ClassLoader> initializedClassLoaders = new HashSet<>();
 
   public static final Integer MAX_GEOMETRY_PRECISION =
@@ -161,6 +161,14 @@ public class GeometryUtils {
 
   @edu.umd.cs.findbugs.annotations.SuppressFBWarnings()
   public static CoordinateReferenceSystem getDefaultCRS() {
+    if (defaultCrsSingleton == null) { // avoid sync penalty if we can
+      synchronized (MUTEX_DEFAULT_CRS) {
+        // have to do this inside the sync to avoid double init
+        if (defaultCrsSingleton == null) {
+          defaultCrsSingleton = DefaultGeographicCRS.WGS84;
+        }
+      }
+    }
     return defaultCrsSingleton;
   }
 
