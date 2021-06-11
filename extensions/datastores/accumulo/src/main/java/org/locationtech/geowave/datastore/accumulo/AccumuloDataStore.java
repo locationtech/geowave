@@ -126,6 +126,7 @@ public class AccumuloDataStore extends BaseMapReduceDataStore implements Closeab
   public void close() {
     ((AccumuloOperations) baseOperations).close();
   }
+
   @Override
   public List<InputSplit> getSplits(
       final CommonQueryOptions commonOptions,
@@ -155,7 +156,7 @@ public class AccumuloDataStore extends BaseMapReduceDataStore implements Closeab
         minSplits,
         maxSplits);
   }
-  
+
   @Override
   public void prepareRecordWriter(final Configuration conf) {
     // because datastax cassandra driver requires guava 19.0, this user
