@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import org.bouncycastle.util.Arrays;
+import org.apache.commons.lang3.ArrayUtils;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
@@ -223,7 +223,7 @@ public class DynamoDBReader<T> implements RowReader<T> {
         // filtering by adapter ID
         if ((readerParams.getAdapterIds() != null) && (readerParams.getAdapterIds().length > 0)) {
           adapterIdFilter =
-              input -> Arrays.contains(readerParams.getAdapterIds(), input.getAdapterId());
+              input -> ArrayUtils.contains(readerParams.getAdapterIds(), input.getAdapterId());
         }
       }
     }

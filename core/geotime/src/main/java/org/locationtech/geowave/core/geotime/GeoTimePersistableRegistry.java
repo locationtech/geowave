@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.geotime;
 
 import org.locationtech.geowave.core.geotime.adapter.SpatialFieldDescriptor;
+import org.locationtech.geowave.core.geotime.adapter.TemporalFieldDescriptor;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.SimpleTimeDefinition;
@@ -38,10 +39,10 @@ import org.locationtech.geowave.core.geotime.store.query.TemporalQuery;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.CommonIndexBoundingBoxAggregation;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.CommonIndexTimeRangeAggregation;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.FieldNameParam;
-import org.locationtech.geowave.core.geotime.store.query.aggregate.SpatialCommonIndexedBinningStrategy;
-import org.locationtech.geowave.core.geotime.store.query.aggregate.SpatialSimpleFeatureBinningStrategy;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.OptimalVectorBoundingBoxAggregation;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.OptimalVectorTimeRangeAggregation;
+import org.locationtech.geowave.core.geotime.store.query.aggregate.SpatialCommonIndexedBinningStrategy;
+import org.locationtech.geowave.core.geotime.store.query.aggregate.SpatialSimpleFeatureBinningStrategy;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.VectorBoundingBoxAggregation;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.VectorTimeRangeAggregation;
 import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter;
@@ -93,6 +94,7 @@ public class GeoTimePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 341, SpatialFieldDescriptor::new),
         new PersistableIdAndConstructor((short) 342, LatitudeField::new),
         new PersistableIdAndConstructor((short) 343, LongitudeField::new),
-        new PersistableIdAndConstructor((short) 344, CustomCRSSpatialField::new)};
+        new PersistableIdAndConstructor((short) 344, CustomCRSSpatialField::new),
+        new PersistableIdAndConstructor((short) 345, TemporalFieldDescriptor::new)};
   }
 }

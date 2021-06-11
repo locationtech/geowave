@@ -10,7 +10,7 @@ package org.locationtech.geowave.adapter.raster.operations;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.bouncycastle.util.Arrays;
+import org.apache.commons.lang3.ArrayUtils;
 import org.locationtech.geowave.adapter.raster.Resolution;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.raster.stats.RasterOverviewStatistic;
@@ -140,7 +140,7 @@ public class DeletePyramidLevelCommand extends DefaultOperation implements Comma
     final List<ByteArray> partitions = new ArrayList<>();
     if ((predefinedSplits != null) && (predefinedSplits.length > 0)) {
       for (final byte[] split : predefinedSplits) {
-        partitions.add(new ByteArray(Arrays.append(split, level.byteValue())));
+        partitions.add(new ByteArray(ArrayUtils.add(split, level.byteValue())));
       }
     } else {
       partitions.add(new ByteArray(new byte[] {level.byteValue()}));

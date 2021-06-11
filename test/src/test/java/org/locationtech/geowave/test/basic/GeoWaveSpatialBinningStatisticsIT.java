@@ -46,6 +46,8 @@ import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic;
 import org.locationtech.geowave.core.store.statistics.field.NumericStatsStatistic;
+import org.locationtech.geowave.core.store.statistics.field.Stats;
+import org.locationtech.geowave.core.store.statistics.field.StatsAccumulator;
 import org.locationtech.geowave.format.geotools.vector.AbstractFieldRetypingSource;
 import org.locationtech.geowave.format.geotools.vector.GeoToolsVectorDataOptions;
 import org.locationtech.geowave.format.geotools.vector.GeoToolsVectorDataStoreIngestPlugin;
@@ -65,8 +67,6 @@ import org.opengis.feature.type.Name;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.math.Stats;
-import com.google.common.math.StatsAccumulator;
 
 @RunWith(GeoWaveITRunner.class)
 public class GeoWaveSpatialBinningStatisticsIT extends AbstractGeoWaveBasicVectorIT {

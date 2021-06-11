@@ -9,10 +9,10 @@
 package org.locationtech.geowave.datastore.dynamodb;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import org.bouncycastle.util.Arrays;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
@@ -81,8 +81,7 @@ public class DynamoDBRow extends MergeableGeoWaveRow implements GeoWaveRow {
     return new GeoWaveKeyImpl(
         dataId,
         internalAdapterId,
-        Arrays.areEqual(DynamoDBUtils.EMPTY_PARTITION_KEY, partitionKey) ? new byte[0]
-            : partitionKey,
+        Arrays.equals(DynamoDBUtils.EMPTY_PARTITION_KEY, partitionKey) ? new byte[0] : partitionKey,
         DynamoDBUtils.decodeSortableBase64(sortKey),
         numberOfDuplicates);
   }

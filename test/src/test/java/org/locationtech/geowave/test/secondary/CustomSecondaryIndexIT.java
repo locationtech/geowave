@@ -8,9 +8,9 @@
  */
 package org.locationtech.geowave.test.secondary;
 
+import java.util.Arrays;
 import java.util.Collections;
 import org.apache.commons.lang3.tuple.Pair;
-import org.bouncycastle.util.Arrays;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,7 +48,7 @@ public class CustomSecondaryIndexIT {
       namespace = "BasicSecondaryIndexIT_dataIdxOnly")
   protected DataStorePluginOptions dataIdxOnlyDataStoreOptions;
 
-  private static class TestCustomIndexStrategy implements
+  public static class TestCustomIndexStrategy implements
       CustomIndexStrategy<Pair<byte[], byte[]>, TestCustomConstraints> {
 
     public TestCustomIndexStrategy() {}
@@ -138,7 +138,7 @@ public class CustomSecondaryIndexIT {
               QueryBuilder.newBuilder().constraints(
                   QueryBuilder.newBuilder().constraintsFactory().dataIds(id)).build())) {
         Assert.assertTrue(it.hasNext());
-        Assert.assertTrue(Arrays.areEqual(id, it.next().getRight()));
+        Assert.assertTrue(Arrays.equals(id, it.next().getRight()));
         Assert.assertFalse(it.hasNext());
       }
       try (CloseableIterator<Pair<byte[], byte[]>> it =
@@ -146,7 +146,7 @@ public class CustomSecondaryIndexIT {
               QueryBuilder.newBuilder().constraints(
                   QueryBuilder.newBuilder().constraintsFactory().dataIdsByRange(id, id)).build())) {
         Assert.assertTrue(it.hasNext());
-        Assert.assertTrue(Arrays.areEqual(id, it.next().getRight()));
+        Assert.assertTrue(Arrays.equals(id, it.next().getRight()));
         Assert.assertFalse(it.hasNext());
       }
       try (CloseableIterator<Pair<byte[], byte[]>> it =
@@ -155,7 +155,7 @@ public class CustomSecondaryIndexIT {
                   QueryBuilder.newBuilder().constraintsFactory().customConstraints(
                       new TestCustomConstraints(matchText))).build())) {
         Assert.assertTrue(it.hasNext());
-        Assert.assertTrue(Arrays.areEqual(id, it.next().getRight()));
+        Assert.assertTrue(Arrays.equals(id, it.next().getRight()));
         Assert.assertFalse(it.hasNext());
       }
     }

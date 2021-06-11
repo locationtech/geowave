@@ -119,6 +119,7 @@
 		<junit.version>4.13.2</junit.version>
 		<clearspring.version>2.9.6</clearspring.version>
 		<py4j.version>0.10.8.1</py4j.version>
+		<glassfish.el.version>3.0.1-b08</glassfish.el.version>
 		<gdal.dir>${project.build.directory}/temp/gdal</gdal.dir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -926,6 +927,11 @@
 				<groupId>io.netty</groupId>
 				<artifactId>netty-resolver</artifactId>
 				<version>${netty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.glassfish</groupId>
+				<artifactId>javax.el</artifactId>
+				<version>${glassfish.el.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

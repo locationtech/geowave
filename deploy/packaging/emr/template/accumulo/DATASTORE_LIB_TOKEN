@@ -15,8 +15,7 @@ USER=accumulo
 # EMR at any point after creation so the password set during the initial spin-up would have
 # to be persisted somewhere and provided to the newly created nodes at some later date.
 USERPW=secret # TODO: Can't change until trace.password in accumulo-site.xml is updated
-ACCUMULO_VERSION=1.9.2
-ACCUMULO_TSERVER_OPTS=3GB
+ACCUMULO_VERSION=2.0.1
 INSTALL_DIR=/opt
 ACCUMULO_DOWNLOAD_BASE_URL=https://archive.apache.org/dist/accumulo
 ACCUMULO_INSTANCE=accumulo
@@ -28,7 +27,14 @@ ZK_IPADDR=
 configure_zookeeper() {
 	if is_master ; then
 		sudo yum -y install zookeeper-server # EMR 4.3.0 includes Apache Bigtop.repo config
-		sudo initctl start zookeeper-server  # EMR uses Amazon Linux which uses Upstart
+		# EMR uses Amazon Linux which uses Upstart
+		# EMR 5.30 uses systemctl and earlier versions use initctl
+		if ! command -v initctl &> /dev/null
+		then
+			sudo systemctl start zookeeper-server  
+		else
+			sudo initctl start zookeeper-server
+		fi
 		# Zookeeper installed on this node, record internal ip from instance metadata
 		ZK_IPADDR=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)
 	else
@@ -59,35 +65,38 @@ install_accumulo() {
 }
 
 configure_accumulo() {
-	sudo cp $INSTALL_DIR/accumulo/conf/examples/${ACCUMULO_TSERVER_OPTS}/native-standalone/* $INSTALL_DIR/accumulo/conf/
-	sudo sed -i "s/<value>localhost:2181<\/value>/<value>${ZK_IPADDR}:2181<\/value>/" $INSTALL_DIR/accumulo/conf/accumulo-site.xml
-	sudo sed -i '/HDP 2.0 requirements/d' $INSTALL_DIR/accumulo/conf/accumulo-site.xml
+	sudo sed -i "s/localhost:2181/${ZK_IPADDR}:2181/" $INSTALL_DIR/accumulo/conf/accumulo.properties
+	sudo sed -i "s/localhost:2181/${ZK_IPADDR}:2181/" $INSTALL_DIR/accumulo/conf/accumulo-client.properties
+	sudo sed -i "s/instance.name=/instance.name=${ACCUMULO_INSTANCE}/" $INSTALL_DIR/accumulo/conf/accumulo-client.properties
+	sudo sed -i "s/localhost:8020/${ZK_IPADDR}:8020/" $INSTALL_DIR/accumulo/conf/accumulo.properties
 	sudo sed -i "s/\${LOG4J_JAR}/\${LOG4J_JAR}:\/usr\/lib\/hadoop\/lib\/*:\/usr\/lib\/hadoop\/client\/*/" $INSTALL_DIR/accumulo/bin/accumulo
-
 	# Crazy escaping to get this shell to fill in values but root to write out the file
-	ENV_FILE="export ACCUMULO_HOME=$INSTALL_DIR/accumulo; export HADOOP_HOME=/usr/lib/hadoop; export ACCUMULO_LOG_DIR=$INSTALL_DIR/accumulo/logs; export JAVA_HOME=/usr/lib/jvm/java; export ZOOKEEPER_HOME=/usr/lib/zookeeper; export HADOOP_PREFIX=/usr/lib/hadoop; export HADOOP_CONF_DIR=/etc/hadoop/conf"
-	echo $ENV_FILE > /tmp/acc_env
-	sudo sh -c "cat /tmp/acc_env > $INSTALL_DIR/accumulo/conf/accumulo-env.sh"
+	export ENV_VARS="export HADOOP_USER_NAME=accumulo; export ACCUMULO_HOME=$INSTALL_DIR/accumulo; export HADOOP_HOME=/usr/lib/hadoop; export ACCUMULO_LOG_DIR=$INSTALL_DIR/accumulo/logs; export JAVA_HOME=/usr/lib/jvm/java; export ZOOKEEPER_HOME=/usr/lib/zookeeper; export HADOOP_PREFIX=/usr/lib/hadoop; export HADOOP_CONF_DIR=/etc/hadoop/conf"
+	sudo sed -i "29 a ${ENV_VARS}" $INSTALL_DIR/accumulo/conf/accumulo-env.sh	
 	sudo chown -R $USER:$USER $INSTALL_DIR/accumulo
-	source $INSTALL_DIR/accumulo/conf/accumulo-env.sh
-	sudo -u $USER $INSTALL_DIR/accumulo/bin/build_native_library.sh
 
 	if is_master ; then
-	    sudo -u $HDFS_USER hadoop fs -chmod 777 /user # This is more for Spark than Accumulo but put here for expediency
+		sudo sed -i "s/share\/hadoop\/client/client/" $INSTALL_DIR/accumulo/conf/accumulo-env.sh
+		sudo -u $HDFS_USER hadoop fs -chmod 777 /user # This is more for Spark than Accumulo but put here for expediency
 		sudo -u $HDFS_USER hadoop fs -mkdir /accumulo
 		sudo -u $HDFS_USER hadoop fs -chown accumulo:accumulo /accumulo
 		sudo sh -c "hostname > $INSTALL_DIR/accumulo/conf/monitor"
 		sudo sh -c "hostname > $INSTALL_DIR/accumulo/conf/gc"
 		sudo sh -c "hostname > $INSTALL_DIR/accumulo/conf/tracers"
+		sudo sh -c "hostname > $INSTALL_DIR/accumulo/conf/managers"
+		## accumulo deprecated masters in place of manages in 2.0 but accumulo scripts seem inconsistent with using managers
 		sudo sh -c "hostname > $INSTALL_DIR/accumulo/conf/masters"
-		sudo sh -c "echo > $INSTALL_DIR/accumulo/conf/slaves"
+		sudo sh -c "echo > $INSTALL_DIR/accumulo/conf/tservers"
 		sudo -u $USER $INSTALL_DIR/accumulo/bin/accumulo init --clear-instance-name --instance-name $ACCUMULO_INSTANCE --password $USERPW
 	else
+		sudo sed -i "s/share\/hadoop\/client\/\*/*:\${HADOOP_HOME}\/*:\${HADOOP_HOME}\/lib\/*:\/usr\/lib\/hadoop-hdfs\/*/" $INSTALL_DIR/accumulo/conf/accumulo-env.sh	
 		sudo sh -c "echo $ZK_IPADDR > $INSTALL_DIR/accumulo/conf/monitor"
 		sudo sh -c "echo $ZK_IPADDR > $INSTALL_DIR/accumulo/conf/gc"
 		sudo sh -c "echo $ZK_IPADDR > $INSTALL_DIR/accumulo/conf/tracers"
-		sudo sh -c "echo $ZK_IPADDR > $INSTALL_DIR/accumulo/conf/masters"
-		sudo sh -c "hostname > $INSTALL_DIR/accumulo/conf/slaves"
+		sudo sh -c "echo $ZK_IPADDR > $INSTALL_DIR/accumulo/conf/managers"
+		## accumulo deprecated masters in place of manages in 2.0 but accumulo scripts seem inconsistent with using managers
+		sudo sh -c  "echo $ZK_IPADDR > $INSTALL_DIR/accumulo/conf/masters"
+		sudo sh -c "hostname > $INSTALL_DIR/accumulo/conf/tservers"
 	fi
 
 	# EMR starts worker instances first so there will be timing issues
@@ -98,7 +107,7 @@ configure_accumulo() {
 		with_backoff is_accumulo_available
 	fi
 
-	sudo -u $USER $INSTALL_DIR/accumulo/bin/start-here.sh
+	sudo -u $USER $INSTALL_DIR/accumulo/bin/accumulo-cluster start-here
 }
 
 configure_geowave_accumulo(){

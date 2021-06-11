@@ -71,6 +71,7 @@ import org.locationtech.geowave.core.store.statistics.field.NumericHistogramStat
 import org.locationtech.geowave.core.store.statistics.field.NumericRangeStatistic;
 import org.locationtech.geowave.core.store.statistics.field.NumericRangeStatistic.NumericRangeValue;
 import org.locationtech.geowave.core.store.statistics.field.NumericStatsStatistic;
+import org.locationtech.geowave.core.store.statistics.field.Stats;
 import org.locationtech.geowave.examples.ingest.SimpleIngest;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
@@ -85,7 +86,6 @@ import org.threeten.extra.Interval;
 import com.beust.jcommander.Parameter;
 import com.google.common.hash.BloomFilter;
 import com.google.common.math.DoubleMath;
-import com.google.common.math.Stats;
 import jersey.repackaged.com.google.common.collect.Iterators;
 
 @RunWith(GeoWaveITRunner.class)
