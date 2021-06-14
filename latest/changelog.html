@@ -29,11 +29,23 @@
 </ul>
 <p><strong>Closed issues:</strong></p>
 <ul>
+<li>Update major dependencies to current versions <a href="https://github.com/locationtech/geowave/issues/1812">#1812</a></li>
+<li>Issue with CompositeVectorAggregation when using a binning strategy <a href="https://github.com/locationtech/geowave/issues/1810">#1810</a></li>
+<li>Spatial Binning Strategies (H3, S2, GeoHash) for Statistics and Aggregations <a href="https://github.com/locationtech/geowave/issues/1804">#1804</a></li>
 <li>Add easier configuration for pygw Java gateway <a href="https://github.com/locationtech/geowave/issues/1791">#1791</a></li>
 <li>Unable to build Java API Examples on Linux <a href="https://github.com/locationtech/geowave/issues/1755">#1755</a></li>
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>minor updates based on dependabot alerts <a href="https://github.com/locationtech/geowave/pull/1823">#1823</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>Add support for attribute indices <a href="https://github.com/locationtech/geowave/pull/1820">#1820</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
+<li>Various fixes uncovered from running benchmarks <a href="https://github.com/locationtech/geowave/pull/1819">#1819</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>Refactor visibility handling and simplify ingest plugin development <a href="https://github.com/locationtech/geowave/pull/1815">#1815</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
+<li>GEOWAVE-1812: updated major dependencies to current versions <a href="https://github.com/locationtech/geowave/pull/1813">#1813</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>GEOWAVE-1810: fixed issues with CompositeVectorAggregation <a href="https://github.com/locationtech/geowave/pull/1811">#1811</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>Update statistic visibility handling to account for binning strategies <a href="https://github.com/locationtech/geowave/pull/1809">#1809</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
+<li>Add a migration command to migrate data from 1.x to 2.x <a href="https://github.com/locationtech/geowave/pull/1808">#1808</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
+<li>Refactor adapters and add explicit adapter to index mappings <a href="https://github.com/locationtech/geowave/pull/1807">#1807</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>GEOWAVE-1804: spatial binning strategies <a href="https://github.com/locationtech/geowave/pull/1805">#1805</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Update pygw to support statistics. <a href="https://github.com/locationtech/geowave/pull/1800">#1800</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>Update pygw to support aggregations and make it easier to supply custom gateways <a href="https://github.com/locationtech/geowave/pull/1798">#1798</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
@@ -409,7 +421,7 @@
 <li>fixed issue with multiple types in dynamodb data index <a href="https://github.com/locationtech/geowave/pull/1522">#1522</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Data index queries <a href="https://github.com/locationtech/geowave/pull/1521">#1521</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>add AccumuloDataIndexWriterTest and fix a bug in DataIndexUtils disco… <a href="https://github.com/locationtech/geowave/pull/1519">#1519</a> (<a href="https://github.com/cyzhan1118">cyzhan1118</a>)</li>
-<li>Create removal tests and necessary fixes. <a href="https://github.com/locationtech/geowave/pull/1518">#1518</a> (<a href="https://github.com/sirNikolai">sirNikolai</a>)</li>
+<li>Create removal tests and necessary fixes. <a href="https://github.com/locationtech/geowave/pull/1518">#1518</a> (<a href="https://github.com/nikgil">nikgil</a>)</li>
 <li>updated cassandra test <a href="https://github.com/locationtech/geowave/pull/1512">#1512</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>fixed versions in pyspark <a href="https://github.com/locationtech/geowave/pull/1504">#1504</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Fixed pyspark maven profile in build <a href="https://github.com/locationtech/geowave/pull/1499">#1499</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
@@ -1162,7 +1174,6 @@
 <li>Stanag-4676 time index configuration added to type definitions <a href="https://github.com/locationtech/geowave/pull/646">#646</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>GEOWAVE-644 <a href="https://github.com/locationtech/geowave/pull/645">#645</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>Geowave 632 <a href="https://github.com/locationtech/geowave/pull/643">#643</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
-<li>GEOWAVE-638 Index heuristics picking Null (non-spatial) indices <a href="https://github.com/locationtech/geowave/pull/642">#642</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>Fix to properly deduplicate results from DataIdQuery <a href="https://github.com/locationtech/geowave/pull/641">#641</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
 <li>Protect against NPE <a href="https://github.com/locationtech/geowave/pull/639">#639</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
 <li>Updated supported version #s of core libraries <a href="https://github.com/locationtech/geowave/pull/636">#636</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
@@ -1216,6 +1227,7 @@
 <li>Issue #650. Multiple bugs with storing adapter preferences. Adapter … <a href="https://github.com/locationtech/geowave/pull/651">#651</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>fixed a npe if common data is null <a href="https://github.com/locationtech/geowave/pull/649">#649</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Issue #647 WholeFeatureDataAdapter persists time configuration <a href="https://github.com/locationtech/geowave/pull/648">#648</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
+<li>GEOWAVE-638 Index heuristics picking Null (non-spatial) indices <a href="https://github.com/locationtech/geowave/pull/642">#642</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 </ul>
 <h2 id="v0.9.0-2016-01-29"><a href="https://github.com/locationtech/geowave/tree/v0.9.0">v0.9.0</a> (2016-01-29)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v0.8.9...v0.9.0">Full Changelog</a></p>

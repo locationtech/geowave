@@ -1,0 +1,24 @@
+//:= geowave-util-migrate(1)
+:doctype: manpage
+
+[[util-migrate-name]]
+==== NAME
+
+geowave-util-migrate - Migrate GeoWave data to a newer version
+
+[[util-migrate-synopsis]]
+==== SYNOPSIS
+
+  geowave util migrate <store name>
+
+[[util-migrate-description]]
+==== DESCRIPTION
+
+This command migrates data in a given data store to be compatible with the version being used by the CLI.
+
+[[util-migrate-examples]]
+==== EXAMPLES
+
+Migrate data in the `example` store:
+
+  geowave util migrate example

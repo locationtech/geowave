@@ -722,10 +722,10 @@ var doc_name = "Overview";
 <div class="sect2">
 <h3 id="adapters-data-types"><a class="anchor" href="#adapters-data-types"></a>Adapters/Data Types</h3>
 <div class="paragraph">
-<p>In order to handle a multitude of input data types, an adapter is needed to translate the input data type into a format that can be understood and efficiently used by the GeoWave core.  Among others, GeoWave provides a data adapter implementation that supports <a href="http://docs.geotools.org/latest/javadocs/org/opengis/feature/simple/SimpleFeature.html" target="_blank">SimpleFeatures</a> by default, which should cover most use cases for vector data.</p>
+<p>In order to handle a multitude of input data types, an adapter is needed to describe the input data type so that can be translated to a format that GeoWave understands.  Among others, GeoWave provides a data adapter implementation that supports <a href="http://docs.geotools.org/latest/javadocs/org/opengis/feature/simple/SimpleFeature.html" target="_blank">SimpleFeatures</a> by default, which should cover most use cases for vector data.</p>
 </div>
 <div class="paragraph">
-<p>An example of this would be if a user had a shapefile and wanted to ingest it into GeoWave.  An adapter would be used that could transform all of the <code>SimpleFeature</code> data from the shapefile into the GeoWave format during ingest.  When that data is read by the user in the future, the adapter would be used to transform the GeoWave data back into <code>SimpleFeature</code> data.</p>
+<p>An example of this would be if a user had a shapefile and wanted to ingest it into GeoWave.  During the ingest process, an adapter would be created to describe and translate all of the fields for each feature in the shapefile so that GeoWave could index and store the data in an optimized format.  When that data is read by the user in the future, the adapter would be used to transform the GeoWave data back into <code>SimpleFeature</code> data.</p>
 </div>
 <div class="paragraph">
 <p>Data that has been added to GeoWave with an adapter is often referred to as a <em>type</em>.  Each <em>type</em> has a name that can be used to interact with the data.  Throughout the documentation, this name is referred to as a <em>type name</em>.</p>
@@ -983,12 +983,12 @@ var doc_name = "Overview";
 <p><a href="commands.html" target="_blank"><strong>Command-Line Interface Documentation</strong></a></p>
 </div>
 <script>
-var geowave_version = '1.3.0-SNAPSHOT';
+var geowave_version = '2.0.0-SNAPSHOT';
 </script>
 
 <div class="geowave-footer col-md-12 docs-footer">
   <div class="py-4 d-flex justify-content-center align-items-center">
-    <small><p class="footer-text">This page was generated on Friday, April 30, 2021 at 04:14 PM UTC<br><a href="https://github.com/locationtech/geowave/tree/4e3ee9437f6f404a542fec260b5fd7894d2a4cc7">View the commit it was generated from on GitHub</a></p></small>
+    <small><p class="footer-text">This page was generated on Monday, June 14, 2021 at 11:49 AM UTC<br><a href="https://github.com/locationtech/geowave/tree/ba31833d9ccd51e7dd45095f86d59e40d82a241e">View the commit it was generated from on GitHub</a></p></small>
   </div>
 </div>
 </div>
@@ -996,7 +996,7 @@ var geowave_version = '1.3.0-SNAPSHOT';
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-04-30 16:14:14 +00:00
+Last updated 2021-06-14 11:49:29 +00:00
 </div>
 </div>
 </body>

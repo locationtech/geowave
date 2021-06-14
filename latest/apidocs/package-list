@@ -25,7 +25,6 @@ org.locationtech.geowave.adapter.vector.ingest
 org.locationtech.geowave.adapter.vector.plugin
 org.locationtech.geowave.adapter.vector.plugin.lock
 org.locationtech.geowave.adapter.vector.plugin.transaction
-org.locationtech.geowave.adapter.vector.plugin.visibility
 org.locationtech.geowave.adapter.vector.query
 org.locationtech.geowave.adapter.vector.query.aggregation
 org.locationtech.geowave.adapter.vector.query.gwql
@@ -33,8 +32,6 @@ org.locationtech.geowave.adapter.vector.query.gwql.function
 org.locationtech.geowave.adapter.vector.query.gwql.parse
 org.locationtech.geowave.adapter.vector.query.gwql.statement
 org.locationtech.geowave.adapter.vector.render
-org.locationtech.geowave.adapter.vector.stats
-org.locationtech.geowave.adapter.vector.stats.legacy
 org.locationtech.geowave.adapter.vector.util
 org.locationtech.geowave.analytic
 org.locationtech.geowave.analytic.clustering
@@ -115,6 +112,7 @@ org.locationtech.geowave.core.cli.prefix
 org.locationtech.geowave.core.cli.spi
 org.locationtech.geowave.core.cli.utils
 org.locationtech.geowave.core.geotime
+org.locationtech.geowave.core.geotime.adapter
 org.locationtech.geowave.core.geotime.binning
 org.locationtech.geowave.core.geotime.index
 org.locationtech.geowave.core.geotime.index.api
@@ -251,10 +249,13 @@ org.locationtech.geowave.datastore.rocksdb
 org.locationtech.geowave.datastore.rocksdb.config
 org.locationtech.geowave.datastore.rocksdb.operations
 org.locationtech.geowave.datastore.rocksdb.util
+org.locationtech.geowave.examples
+org.locationtech.geowave.examples.adapter
 org.locationtech.geowave.examples.aggregation.binning
 org.locationtech.geowave.examples.index
 org.locationtech.geowave.examples.ingest
 org.locationtech.geowave.examples.ingest.bulk
+org.locationtech.geowave.examples.ingest.plugin
 org.locationtech.geowave.examples.query
 org.locationtech.geowave.examples.spark
 org.locationtech.geowave.examples.stats
@@ -287,6 +288,12 @@ org.locationtech.geowave.mapreduce.operations
 org.locationtech.geowave.mapreduce.output
 org.locationtech.geowave.mapreduce.s3
 org.locationtech.geowave.mapreduce.splits
+org.locationtech.geowave.migration
+org.locationtech.geowave.migration.cli
+org.locationtech.geowave.migration.legacy.adapter
+org.locationtech.geowave.migration.legacy.adapter.vector
+org.locationtech.geowave.migration.legacy.core.geotime
+org.locationtech.geowave.migration.legacy.core.store
 org.locationtech.geowave.python
 org.locationtech.geowave.python.cli
 org.locationtech.geowave.service
@@ -304,7 +311,6 @@ org.locationtech.geowave.service.rest.security.oauth2
 org.locationtech.geowave.test
 org.locationtech.geowave.test.annotation
 org.locationtech.geowave.test.kafka
-org.locationtech.geowave.test.kerberos
 org.locationtech.geowave.test.mapreduce
 org.locationtech.geowave.test.services
 org.locationtech.geowave.test.services.grpc

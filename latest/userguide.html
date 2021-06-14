@@ -560,6 +560,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#appendices">Appendices</a>
 <ul class="sectlevel2">
+<li><a href="#migrating-data-to-newer-versions">Migrating Data to Newer Versions</a></li>
 <li><a href="#configuring-accumulo-for-geowave">Configuring Accumulo for GeoWave</a></li>
 </ul>
 </li>
@@ -1040,9 +1041,6 @@ $ geowave ingest localtogw ./ingest_data mystore myindex</code></pre>
 <p>Selecting which temporal attribute to use in temporal indices.</p>
 </li>
 <li>
-<p>Determining which attribute contains visibility information for other attributes.</p>
-</li>
-<li>
 <p>Setting the names of the indices to update in WFS-T transactions via the GeoServer plugin.</p>
 </li>
 </ol>
@@ -1054,7 +1052,7 @@ $ geowave ingest localtogw ./ingest_data mystore myindex</code></pre>
 <div class="sect3">
 <h4 id="temporal-configuration"><a class="anchor" href="#temporal-configuration"></a>Temporal Configuration</h4>
 <div class="paragraph">
-<p>Temporal configuration may be necessary if your vector feature type has more than one temporal attribute.  The class name for this configuration is <a href="https://github.com/locationtech/geowave/blob/4e3ee9437f6f404a542fec260b5fd7894d2a4cc7/core/geotime/src/main/java/org/locationtech/geowave/core/geotime/util/TimeDescriptors.java"><code>org.locationtech.geowave.core.geotime.util.TimeDescriptors$TimeDescriptorConfiguration</code></a>.</p>
+<p>Temporal configuration may be necessary if your vector feature type has more than one temporal attribute.  The class name for this configuration is <a href="https://github.com/locationtech/geowave/blob/ba31833d9ccd51e7dd45095f86d59e40d82a241e/core/geotime/src/main/java/org/locationtech/geowave/core/geotime/util/TimeDescriptors.java"><code>org.locationtech.geowave.core.geotime.util.TimeDescriptors$TimeDescriptorConfiguration</code></a>.</p>
 </div>
 <div class="paragraph">
 <p>There are three attributes for the temporal configuration:</p>
@@ -1096,35 +1094,9 @@ $ geowave ingest localtogw ./ingest_data mystore myindex</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="visibility-configuration"><a class="anchor" href="#visibility-configuration"></a>Visibility Configuration</h4>
-<div class="paragraph">
-<p>Visibility configuration consists of a visibility manager and an attribute which contains the visibility information.</p>
-</div>
-<div class="paragraph">
-<p>A visibility manager extends <a href="https://github.com/locationtech/geowave/blob/4e3ee9437f6f404a542fec260b5fd7894d2a4cc7/core/store/src/main/java/org/locationtech/geowave/core/store/data/visibility/VisibilityManagement.java"><code>org.locationtech.geowave.core.store.data.visibility.VisibilityManagement</code></a>. An instance of this class interprets the contents of a visibility attribute within a simple feature to determine the visibility constraints of the other attributes in that simple feature. The default visibility management class is <a href="https://github.com/locationtech/geowave/blob/4e3ee9437f6f404a542fec260b5fd7894d2a4cc7/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.java"><code>org.locationtech.geowave.adapter.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement</code></a>, which is used by the default visibility configuration class <a href="https://github.com/locationtech/geowave/blob/4e3ee9437f6f404a542fec260b5fd7894d2a4cc7/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/plugin/visibility/VisibilityConfiguration.java"><code>org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration</code></a>.</p>
-</div>
-<div class="paragraph">
-<p>For example, if you had an attribute called <code>vis</code> that contained the visibility constraints in a type called <code>myFeatureTypeName</code>, the configuration would look like the following:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{
-  "configurations": {
-    "myFeatureTypeName" : [
-      {
-        "@class" : "org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration",
-        "attributeName" : "vis"
-      }
-    ]
-  }
-}</pre>
-</div>
-</div>
-</div>
-<div class="sect3">
 <h4 id="primary-index-identifiers"><a class="anchor" href="#primary-index-identifiers"></a>Primary Index Identifiers</h4>
 <div class="paragraph">
-<p>The class <a href="https://github.com/locationtech/geowave/blob/4e3ee9437f6f404a542fec260b5fd7894d2a4cc7/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/index/SimpleFeaturePrimaryIndexConfiguration.java"><code>org.locationtech.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration</code></a> is used to maintain the configuration of primary indices used for adding or updating simple features via the GeoServer plugin.</p>
+<p>The class <a href="https://github.com/locationtech/geowave/blob/ba31833d9ccd51e7dd45095f86d59e40d82a241e/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/index/SimpleFeaturePrimaryIndexConfiguration.java"><code>org.locationtech.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration</code></a> is used to maintain the configuration of primary indices used for adding or updating simple features via the GeoServer plugin.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1144,10 +1116,6 @@ $ geowave ingest localtogw ./ingest_data mystore myindex</code></pre>
         "timeName":"captureTime"
       },
       {
-        "@class": "org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration",
-        "attributeName" : "vis"
-      },
-      {
         "@class": "org.locationtech.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration",
         "indexNames": ["SPATIAL_IDX"]
       }
@@ -1157,7 +1125,7 @@ $ geowave ingest localtogw ./ingest_data mystore myindex</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>See the <a href="#visibility-management">Visibility Management</a> section of the appendix for more information about visibility management.</p>
+<p>See the <a href="#visibility-management">Visibility Management</a> section of the appendix for information about visibility management.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -2245,7 +2213,7 @@ When all of the data of a given type is removed, that type is removed from the d
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Additional authorization management strategies can be registered through the Java Service Provider Interface (SPI) model by implementing the <a href="https://github.com/locationtech/geowave/blob/4e3ee9437f6f404a542fec260b5fd7894d2a4cc7/extensions/adapters/auth/src/main/java/org/locationtech/geowave/adapter/auth/AuthorizationFactorySPI.java"><code>AuthorizationFactorySPI</code></a> interface. For more information on using SPI, see the <a href="https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html" target="_blank">Oracle documentation</a>.
+Additional authorization management strategies can be registered through the Java Service Provider Interface (SPI) model by implementing the <a href="https://github.com/locationtech/geowave/blob/ba31833d9ccd51e7dd45095f86d59e40d82a241e/extensions/adapters/auth/src/main/java/org/locationtech/geowave/adapter/auth/AuthorizationFactorySPI.java"><code>AuthorizationFactorySPI</code></a> interface. For more information on using SPI, see the <a href="https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html" target="_blank">Oracle documentation</a>.
 </td>
 </tr>
 </table>
@@ -2259,6 +2227,16 @@ Additional authorization management strategies can be registered through the Jav
 <h2 id="appendices"><a class="anchor" href="#appendices"></a>Appendices</h2>
 <div class="sectionbody">
 <div style="page-break-after: always;"></div>
+<div class="sect2">
+<h3 id="migrating-data-to-newer-versions"><a class="anchor" href="#migrating-data-to-newer-versions"></a>Migrating Data to Newer Versions</h3>
+<div class="paragraph">
+<p>When a major change is made to the GeoWave codebase that alters the serialization of data in a data store, a migration will need to be performed to make the data store compatible with the latest version of the programmatic API and the command-line tools.  Beginning in GeoWave 2.0, attempting to access a data store with an incompatible version of the CLI will propmpt the user with an error.  If the data store version is later than that of the CLI, it will ask that the CLI version be updated to a compatible version.  If the data store version is older, it will prompt the user to run the migration command to perform any updates needed to make the data store compatible with the CLI version. Performing this migration allows you to avoid a potentially costly re-ingest of your data.</p>
+</div>
+<div class="paragraph">
+<p>For more information about the migration command, see the <a href="commands.html#util-migrate"><code>util migrate</code></a> documentation.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
 <div class="sect2">
 <h3 id="configuring-accumulo-for-geowave"><a class="anchor" href="#configuring-accumulo-for-geowave"></a>Configuring Accumulo for GeoWave</h3>
 <div class="sect3">
@@ -2363,10 +2341,10 @@ accumulo shell -u root -p ROOT_PWD -e "config -np" | grep -A 1 general.vfs.conte
 <div class="title">Compare version and timestamps of installed RPMs</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">[geowaveuser@c1-master ~]$ rpm -qa | grep geowave
-geowave-1.3.0-SNAPSHOT-apache-core-1.3.0-SNAPSHOT-201602012009.noarch
-geowave-1.3.0-SNAPSHOT-apache-jetty-1.3.0-SNAPSHOT-201602012009.noarch
-geowave-1.3.0-SNAPSHOT-apache-accumulo-1.3.0-SNAPSHOT-201602012009.noarch
-geowave-1.3.0-SNAPSHOT-apache-tools-1.3.0-SNAPSHOT-201602012009.noarch</code></pre>
+geowave-2.0.0-SNAPSHOT-apache-core-2.0.0-SNAPSHOT-201602012009.noarch
+geowave-2.0.0-SNAPSHOT-apache-jetty-2.0.0-SNAPSHOT-201602012009.noarch
+geowave-2.0.0-SNAPSHOT-apache-accumulo-2.0.0-SNAPSHOT-201602012009.noarch
+geowave-2.0.0-SNAPSHOT-apache-tools-2.0.0-SNAPSHOT-201602012009.noarch</code></pre>
 </div>
 </div>
 <div class="sect4">
@@ -2435,13 +2413,10 @@ this artifact.</p>
 <div class="sect2">
 <h3 id="visibility-overview"><a class="anchor" href="#visibility-overview"></a>Overview</h3>
 <div class="paragraph">
-<p>When data is written to GeoWave, it may contain visibility constraints. By default, the visibility expression attached to each attribute is empty, which means that the data is visible regardless of which authorizations are present. If a visibility expression is set for an attribute, only queries that supply the appropriate authorizations will be able to see it.</p>
+<p>When data is written to GeoWave, it may contain visibility constraints. By default, the visibility expression attached to each attribute is empty, which means that the data is visible regardless of which authorizations are present. If a visibility expression is set for an entry, only queries that supply the appropriate authorizations will be able to see it.</p>
 </div>
 <div class="paragraph">
-<p>The only provided visibility management strategy is <a href="https://github.com/locationtech/geowave/blob/4e3ee9437f6f404a542fec260b5fd7894d2a4cc7/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.java"><code>JsonDefinitionColumnVisibilityManagement</code></a>, which expects each feature to have an attribute that contains a JSON string describing the visibility for each attribute of the feature instance. This approach allows each feature to determine its own visibility criteria.</p>
-</div>
-<div class="paragraph">
-<p>Each name/value pair within the JSON structure defines the visibility for the associated attribute. In the following example, the <code>geometry</code> attribute is given a visibility <code>S</code> and the <code>eventName</code> attribute is given a visibility <code>TS</code>.  This means that a user with an authorization set of <code>["S","TS"]</code> would be able to see both attributes, while a user with only <code>["S"]</code> would only be able to see the <code>geometry</code> attribute.</p>
+<p>Visibility can be configured on a type by utilizing one or more of the visibility options during ingest or when adding a new type via the <code>type add</code> command.  These options allow the user to specify the visibility of each field individually, or specify a field in their type that defines visibility information.  One complex example of this would be having a type that contains a field with visibility information in JSON format.  Each name/value pair within the JSON structure defines the visibility for the associated attribute. In the following example, the <code>geometry</code> attribute is given a visibility <code>S</code> and the <code>eventName</code> attribute is given a visibility <code>TS</code>.  This means that a user with an authorization set of <code>["S","TS"]</code> would be able to see both attributes, while a user with only <code>["S"]</code> would only be able to see the <code>geometry</code> attribute.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2460,29 +2435,7 @@ this artifact.</p>
 <p>The order of the name/value pairs must be considered if one rule is more general than another, as shown in the example. The rule <code>.*</code> matches all properties. The more specific rule <code>geo.*</code> must be ordered first.</p>
 </div>
 <div class="paragraph">
-<p>By default, the system extracts the JSON visibility string from an attribute named <code>GEOWAVE_VISIBILITY</code>, however, selection of an alternate attribute can be achieved in two ways.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>It can be done programatically by setting the UserData property <code>visibility</code> to <code>TRUE</code> on the attribute that contains the visibility information in the SimpleFeatureType.</p>
-</li>
-<li>
-<p>It can be done through ingest configuration as described in the <a href="#visibility-configuration">Visibility Configuration</a> section of this document.</p>
-</li>
-</ul>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Additional visibility management strategies can be registered through the Java Service Provider Interface (SPI) model by implementing the <a href="https://github.com/locationtech/geowave/blob/4e3ee9437f6f404a542fec260b5fd7894d2a4cc7/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/plugin/visibility/ColumnVisibilityManagementSpi.java"><code>ColumnVisibilityManagement</code></a> interface. For more information on using SPI, see the <a href="https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html" target="_blank">Oracle documentation</a>.
-</td>
-</tr>
-</table>
+<p>For more information about other ways to configure visibility for a type, see the <a href="commands.html#type-add"><code>type add</code></a> CLI documentation.</p>
 </div>
 </div>
 <div class="sect2">
@@ -2704,7 +2657,7 @@ For configuring the password encryption enabled setting:</p>
 <dl>
 <dt class="hdlist1">geowave_version</dt>
 <dd>
-<p>The desired version of GeoWave to install, ex: '1.3.0-SNAPSHOT'. We support concurrent installs but only one will be active at a time.</p>
+<p>The desired version of GeoWave to install, ex: '2.0.0-SNAPSHOT'. We support concurrent installs but only one will be active at a time.</p>
 </dd>
 <dt class="hdlist1">hadoop_vendor_version</dt>
 <dd>
@@ -2756,7 +2709,7 @@ class { 'geowave::repo':
   repo_refresh_md =&gt; 0,
 } -&gt;
 class { 'geowave':
-  geowave_version       =&gt; '1.3.0-SNAPSHOT',
+  geowave_version       =&gt; '2.0.0-SNAPSHOT',
   hadoop_vendor_version =&gt; 'apache',
   install_accumulo      =&gt; true,
   install_app           =&gt; true,
@@ -2780,7 +2733,7 @@ node 'c1-master' {
     repo_enabled    =&gt; 1,
   } -&gt;
   class { 'geowave':
-    geowave_version       =&gt; '1.3.0-SNAPSHOT',
+    geowave_version       =&gt; '2.0.0-SNAPSHOT',
     hadoop_vendor_version =&gt; 'apache',
     install_accumulo      =&gt; true,
     install_app           =&gt; true,
@@ -2794,7 +2747,7 @@ node 'c1-app-01' {
     repo_enabled    =&gt; 1,
   } -&gt;
   class { 'geowave':
-    geowave_version       =&gt; '1.3.0-SNAPSHOT',
+    geowave_version       =&gt; '2.0.0-SNAPSHOT',
     hadoop_vendor_version =&gt; 'apache',
     install_app_server    =&gt; true,
     http_port             =&gt; '8888',
@@ -2826,12 +2779,12 @@ yum --enablerepo=geowave install geowave-puppet</code></pre>
 </div>
 </div>
 <script>
-var geowave_version = '1.3.0-SNAPSHOT';
+var geowave_version = '2.0.0-SNAPSHOT';
 </script>
 
 <div class="geowave-footer col-md-12 docs-footer">
   <div class="py-4 d-flex justify-content-center align-items-center">
-    <small><p class="footer-text">This page was generated on Friday, April 30, 2021 at 04:14 PM UTC<br><a href="https://github.com/locationtech/geowave/tree/4e3ee9437f6f404a542fec260b5fd7894d2a4cc7">View the commit it was generated from on GitHub</a></p></small>
+    <small><p class="footer-text">This page was generated on Monday, June 14, 2021 at 11:49 AM UTC<br><a href="https://github.com/locationtech/geowave/tree/ba31833d9ccd51e7dd45095f86d59e40d82a241e">View the commit it was generated from on GitHub</a></p></small>
   </div>
 </div>
 </div>
@@ -2842,7 +2795,7 @@ var geowave_version = '1.3.0-SNAPSHOT';
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-04-30 16:14:14 +00:00
+Last updated 2021-06-14 11:49:29 +00:00
 </div>
 </div>
 </body>

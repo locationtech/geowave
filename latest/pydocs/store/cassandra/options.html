@@ -32,8 +32,9 @@
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
 # ===============================================================================================
 
-from pygw.config import geowave_pkg
+from pygw.config import geowave_pkg, java_gateway
 from pygw.store import DataStoreOptions
+from py4j.java_collections import MapConverter
 
 
 class CassandraOptions(DataStoreOptions):
@@ -44,7 +45,7 @@ class CassandraOptions(DataStoreOptions):
     def __init__(self):
         super().__init__(geowave_pkg.datastore.cassandra.config.CassandraRequiredOptions())
 
-    def set_contact_point(self, contact_point):
+    def set_contact_points(self, contact_points):
         &#34;&#34;&#34;
         Sets a single contact point or a comma delimited set of contact points to
         connect to the Cassandra cluster.
@@ -52,14 +53,30 @@ class CassandraOptions(DataStoreOptions):
         Args:
             contact_point (str): The contact point(s) to connect to.
         &#34;&#34;&#34;
-        self._java_ref.setContactPoint(contact_point)
+        self._java_ref.setContactPoints(contact_points)
 
-    def get_contact_point(self):
+    def get_contact_points(self):
         &#34;&#34;&#34;
         Returns:
             The contact points of the Cassandra cluster.
         &#34;&#34;&#34;
-        return self._java_ref.getContactPoint()
+        return self._java_ref.getContactPoints()
+
+    def set_datacenter(self, datacenter):
+        &#34;&#34;&#34;
+        Sets the local datacenter.
+
+        Args:
+            datacenter (str): The datacenter to connect to.
+        &#34;&#34;&#34;
+        self._java_ref.setDatacenter(datacenter)
+
+    def get_datacenter(self):
+        &#34;&#34;&#34;
+        Returns:
+            The local datacenter of the Cassandra cluster.
+        &#34;&#34;&#34;
+        return self._java_ref.getDatacenter()
 
     def set_batch_write_size(self, batch_write_size):
         &#34;&#34;&#34;
@@ -109,7 +126,58 @@ class CassandraOptions(DataStoreOptions):
         Returns:
             The number of replicas to use when creating a new keyspace.
         &#34;&#34;&#34;
-        return self._base_options.getReplicationFactor()</code></pre>
+        return self._base_options.getReplicationFactor()
+
+    def set_gc_grace_seconds(self, gc_grace_seconds):
+        &#34;&#34;&#34;
+        Sets the gc_grace_seconds for each table created. Defaults to 10 days and major
+        compaction should be triggered at least as often.
+
+        Args:
+            gc_grace_seconds (int): The gc_grace_seconds to set on the table.
+        &#34;&#34;&#34;
+        self._base_options.setGcGraceSeconds(gc_grace_seconds)
+
+    def get_gc_grace_seconds(self):
+        &#34;&#34;&#34;
+        Returns:
+            The gc_grace_seconds applied to new tables.
+        &#34;&#34;&#34;
+        return self._base_options.getGcGraceSeconds()
+
+    def set_table_options(self, table_options):
+        &#34;&#34;&#34;
+        Sets additional table options for each new table created.
+
+        Args:
+            table_options (dictionary): The table options to apply to each new table.
+        &#34;&#34;&#34;
+        self._base_options.setTableOptions(MapConverter().convert(table_options, java_gateway._gateway_client))
+
+    def get_table_options(self):
+        &#34;&#34;&#34;
+        Returns:
+            The table options that are applied to each new table.
+        &#34;&#34;&#34;
+        return self._base_options.getTableOptions()
+
+    def set_compaction_strategy(self, compaction_strategy):
+        &#34;&#34;&#34;
+        Set the compaction strategy applied to each new Cassandra table. Available options
+        are LeveledCompactionStrategy, SizeTieredCompactionStrategy, or TimeWindowCompactionStrategy.
+
+        Args:
+            compaction_strategy (str): The compaction strategy to apply to each new table. Available
+            options are LeveledCompactionStrategy, SizeTieredCompactionStrategy, or TimeWindowCompactionStrategy.
+        &#34;&#34;&#34;
+        self._base_options.setCompactionStrategyStr(compaction_strategy)
+
+    def get_compaction_strategy(self):
+        &#34;&#34;&#34;
+        Returns:
+            The compaction strategy applied to each new Cassandra table.
+        &#34;&#34;&#34;
+        return self._base_options.getCompactionStrategyStr()</code></pre>
 </details>
 </section>
 <section>
@@ -136,7 +204,7 @@ class CassandraOptions(DataStoreOptions):
     def __init__(self):
         super().__init__(geowave_pkg.datastore.cassandra.config.CassandraRequiredOptions())
 
-    def set_contact_point(self, contact_point):
+    def set_contact_points(self, contact_points):
         &#34;&#34;&#34;
         Sets a single contact point or a comma delimited set of contact points to
         connect to the Cassandra cluster.
@@ -144,14 +212,30 @@ class CassandraOptions(DataStoreOptions):
         Args:
             contact_point (str): The contact point(s) to connect to.
         &#34;&#34;&#34;
-        self._java_ref.setContactPoint(contact_point)
+        self._java_ref.setContactPoints(contact_points)
 
-    def get_contact_point(self):
+    def get_contact_points(self):
         &#34;&#34;&#34;
         Returns:
             The contact points of the Cassandra cluster.
         &#34;&#34;&#34;
-        return self._java_ref.getContactPoint()
+        return self._java_ref.getContactPoints()
+
+    def set_datacenter(self, datacenter):
+        &#34;&#34;&#34;
+        Sets the local datacenter.
+
+        Args:
+            datacenter (str): The datacenter to connect to.
+        &#34;&#34;&#34;
+        self._java_ref.setDatacenter(datacenter)
+
+    def get_datacenter(self):
+        &#34;&#34;&#34;
+        Returns:
+            The local datacenter of the Cassandra cluster.
+        &#34;&#34;&#34;
+        return self._java_ref.getDatacenter()
 
     def set_batch_write_size(self, batch_write_size):
         &#34;&#34;&#34;
@@ -201,7 +285,58 @@ class CassandraOptions(DataStoreOptions):
         Returns:
             The number of replicas to use when creating a new keyspace.
         &#34;&#34;&#34;
-        return self._base_options.getReplicationFactor()</code></pre>
+        return self._base_options.getReplicationFactor()
+
+    def set_gc_grace_seconds(self, gc_grace_seconds):
+        &#34;&#34;&#34;
+        Sets the gc_grace_seconds for each table created. Defaults to 10 days and major
+        compaction should be triggered at least as often.
+
+        Args:
+            gc_grace_seconds (int): The gc_grace_seconds to set on the table.
+        &#34;&#34;&#34;
+        self._base_options.setGcGraceSeconds(gc_grace_seconds)
+
+    def get_gc_grace_seconds(self):
+        &#34;&#34;&#34;
+        Returns:
+            The gc_grace_seconds applied to new tables.
+        &#34;&#34;&#34;
+        return self._base_options.getGcGraceSeconds()
+
+    def set_table_options(self, table_options):
+        &#34;&#34;&#34;
+        Sets additional table options for each new table created.
+
+        Args:
+            table_options (dictionary): The table options to apply to each new table.
+        &#34;&#34;&#34;
+        self._base_options.setTableOptions(MapConverter().convert(table_options, java_gateway._gateway_client))
+
+    def get_table_options(self):
+        &#34;&#34;&#34;
+        Returns:
+            The table options that are applied to each new table.
+        &#34;&#34;&#34;
+        return self._base_options.getTableOptions()
+
+    def set_compaction_strategy(self, compaction_strategy):
+        &#34;&#34;&#34;
+        Set the compaction strategy applied to each new Cassandra table. Available options
+        are LeveledCompactionStrategy, SizeTieredCompactionStrategy, or TimeWindowCompactionStrategy.
+
+        Args:
+            compaction_strategy (str): The compaction strategy to apply to each new table. Available
+            options are LeveledCompactionStrategy, SizeTieredCompactionStrategy, or TimeWindowCompactionStrategy.
+        &#34;&#34;&#34;
+        self._base_options.setCompactionStrategyStr(compaction_strategy)
+
+    def get_compaction_strategy(self):
+        &#34;&#34;&#34;
+        Returns:
+            The compaction strategy applied to each new Cassandra table.
+        &#34;&#34;&#34;
+        return self._base_options.getCompactionStrategyStr()</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -226,20 +361,68 @@ class CassandraOptions(DataStoreOptions):
     return self._base_options.getBatchWriteSize()</code></pre>
 </details>
 </dd>
-<dt id="pygw.store.cassandra.options.CassandraOptions.get_contact_point"><code class="name flex">
-<span>def <span class="ident">get_contact_point</span></span>(<span>self)</span>
+<dt id="pygw.store.cassandra.options.CassandraOptions.get_compaction_strategy"><code class="name flex">
+<span>def <span class="ident">get_compaction_strategy</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><h2 id="returns">Returns</h2>
+<p>The compaction strategy applied to each new Cassandra table.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_compaction_strategy(self):
+    &#34;&#34;&#34;
+    Returns:
+        The compaction strategy applied to each new Cassandra table.
+    &#34;&#34;&#34;
+    return self._base_options.getCompactionStrategyStr()</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.cassandra.options.CassandraOptions.get_contact_points"><code class="name flex">
+<span>def <span class="ident">get_contact_points</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <section class="desc"><h2 id="returns">Returns</h2>
 <p>The contact points of the Cassandra cluster.</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def get_contact_point(self):
+<pre><code class="python">def get_contact_points(self):
     &#34;&#34;&#34;
     Returns:
         The contact points of the Cassandra cluster.
     &#34;&#34;&#34;
-    return self._java_ref.getContactPoint()</code></pre>
+    return self._java_ref.getContactPoints()</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.cassandra.options.CassandraOptions.get_datacenter"><code class="name flex">
+<span>def <span class="ident">get_datacenter</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><h2 id="returns">Returns</h2>
+<p>The local datacenter of the Cassandra cluster.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_datacenter(self):
+    &#34;&#34;&#34;
+    Returns:
+        The local datacenter of the Cassandra cluster.
+    &#34;&#34;&#34;
+    return self._java_ref.getDatacenter()</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.cassandra.options.CassandraOptions.get_gc_grace_seconds"><code class="name flex">
+<span>def <span class="ident">get_gc_grace_seconds</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><h2 id="returns">Returns</h2>
+<p>The gc_grace_seconds applied to new tables.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_gc_grace_seconds(self):
+    &#34;&#34;&#34;
+    Returns:
+        The gc_grace_seconds applied to new tables.
+    &#34;&#34;&#34;
+    return self._base_options.getGcGraceSeconds()</code></pre>
 </details>
 </dd>
 <dt id="pygw.store.cassandra.options.CassandraOptions.get_replication_factor"><code class="name flex">
@@ -256,6 +439,22 @@ class CassandraOptions(DataStoreOptions):
         The number of replicas to use when creating a new keyspace.
     &#34;&#34;&#34;
     return self._base_options.getReplicationFactor()</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.cassandra.options.CassandraOptions.get_table_options"><code class="name flex">
+<span>def <span class="ident">get_table_options</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><h2 id="returns">Returns</h2>
+<p>The table options that are applied to each new table.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_table_options(self):
+    &#34;&#34;&#34;
+    Returns:
+        The table options that are applied to each new table.
+    &#34;&#34;&#34;
+    return self._base_options.getTableOptions()</code></pre>
 </details>
 </dd>
 <dt id="pygw.store.cassandra.options.CassandraOptions.is_durable_writes"><code class="name flex">
@@ -298,8 +497,34 @@ operation on the data store.</p>
     self._base_options.setBatchWriteSize(batch_write_size)</code></pre>
 </details>
 </dd>
-<dt id="pygw.store.cassandra.options.CassandraOptions.set_contact_point"><code class="name flex">
-<span>def <span class="ident">set_contact_point</span></span>(<span>self, contact_point)</span>
+<dt id="pygw.store.cassandra.options.CassandraOptions.set_compaction_strategy"><code class="name flex">
+<span>def <span class="ident">set_compaction_strategy</span></span>(<span>self, compaction_strategy)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set the compaction strategy applied to each new Cassandra table. Available options
+are LeveledCompactionStrategy, SizeTieredCompactionStrategy, or TimeWindowCompactionStrategy.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>compaction_strategy</code></strong> :&ensp;<code>str</code></dt>
+<dd>The compaction strategy to apply to each new table. Available</dd>
+</dl>
+<p>options are LeveledCompactionStrategy, SizeTieredCompactionStrategy, or TimeWindowCompactionStrategy.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_compaction_strategy(self, compaction_strategy):
+    &#34;&#34;&#34;
+    Set the compaction strategy applied to each new Cassandra table. Available options
+    are LeveledCompactionStrategy, SizeTieredCompactionStrategy, or TimeWindowCompactionStrategy.
+
+    Args:
+        compaction_strategy (str): The compaction strategy to apply to each new table. Available
+        options are LeveledCompactionStrategy, SizeTieredCompactionStrategy, or TimeWindowCompactionStrategy.
+    &#34;&#34;&#34;
+    self._base_options.setCompactionStrategyStr(compaction_strategy)</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.cassandra.options.CassandraOptions.set_contact_points"><code class="name flex">
+<span>def <span class="ident">set_contact_points</span></span>(<span>self, contact_points)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Sets a single contact point or a comma delimited set of contact points to
@@ -311,7 +536,7 @@ connect to the Cassandra cluster.</p>
 </dl></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def set_contact_point(self, contact_point):
+<pre><code class="python">def set_contact_points(self, contact_points):
     &#34;&#34;&#34;
     Sets a single contact point or a comma delimited set of contact points to
     connect to the Cassandra cluster.
@@ -319,7 +544,29 @@ connect to the Cassandra cluster.</p>
     Args:
         contact_point (str): The contact point(s) to connect to.
     &#34;&#34;&#34;
-    self._java_ref.setContactPoint(contact_point)</code></pre>
+    self._java_ref.setContactPoints(contact_points)</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.cassandra.options.CassandraOptions.set_datacenter"><code class="name flex">
+<span>def <span class="ident">set_datacenter</span></span>(<span>self, datacenter)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets the local datacenter.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>datacenter</code></strong> :&ensp;<code>str</code></dt>
+<dd>The datacenter to connect to.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_datacenter(self, datacenter):
+    &#34;&#34;&#34;
+    Sets the local datacenter.
+
+    Args:
+        datacenter (str): The datacenter to connect to.
+    &#34;&#34;&#34;
+    self._java_ref.setDatacenter(datacenter)</code></pre>
 </details>
 </dd>
 <dt id="pygw.store.cassandra.options.CassandraOptions.set_durable_writes"><code class="name flex">
@@ -346,6 +593,30 @@ on creation of new keyspace.</p>
     self._base_options.setDurableWrites(durable_writes)</code></pre>
 </details>
 </dd>
+<dt id="pygw.store.cassandra.options.CassandraOptions.set_gc_grace_seconds"><code class="name flex">
+<span>def <span class="ident">set_gc_grace_seconds</span></span>(<span>self, gc_grace_seconds)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets the gc_grace_seconds for each table created. Defaults to 10 days and major
+compaction should be triggered at least as often.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>gc_grace_seconds</code></strong> :&ensp;<code>int</code></dt>
+<dd>The gc_grace_seconds to set on the table.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_gc_grace_seconds(self, gc_grace_seconds):
+    &#34;&#34;&#34;
+    Sets the gc_grace_seconds for each table created. Defaults to 10 days and major
+    compaction should be triggered at least as often.
+
+    Args:
+        gc_grace_seconds (int): The gc_grace_seconds to set on the table.
+    &#34;&#34;&#34;
+    self._base_options.setGcGraceSeconds(gc_grace_seconds)</code></pre>
+</details>
+</dd>
 <dt id="pygw.store.cassandra.options.CassandraOptions.set_replication_factor"><code class="name flex">
 <span>def <span class="ident">set_replication_factor</span></span>(<span>self, replication_factor)</span>
 </code></dt>
@@ -366,6 +637,28 @@ on creation of new keyspace.</p>
         replication_factor (int): The number of replicas.
     &#34;&#34;&#34;
     self._base_options.setReplicationFactor(replication_factor)</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.cassandra.options.CassandraOptions.set_table_options"><code class="name flex">
+<span>def <span class="ident">set_table_options</span></span>(<span>self, table_options)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets additional table options for each new table created.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>table_options</code></strong> :&ensp;<code>dictionary</code></dt>
+<dd>The table options to apply to each new table.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_table_options(self, table_options):
+    &#34;&#34;&#34;
+    Sets additional table options for each new table created.
+
+    Args:
+        table_options (dictionary): The table options to apply to each new table.
+    &#34;&#34;&#34;
+    self._base_options.setTableOptions(MapConverter().convert(table_options, java_gateway._gateway_client))</code></pre>
 </details>
 </dd>
 </dl>
@@ -414,13 +707,21 @@ on creation of new keyspace.</p>
 <h4><code><a title="pygw.store.cassandra.options.CassandraOptions" href="#pygw.store.cassandra.options.CassandraOptions">CassandraOptions</a></code></h4>
 <ul class="">
 <li><code><a title="pygw.store.cassandra.options.CassandraOptions.get_batch_write_size" href="#pygw.store.cassandra.options.CassandraOptions.get_batch_write_size">get_batch_write_size</a></code></li>
-<li><code><a title="pygw.store.cassandra.options.CassandraOptions.get_contact_point" href="#pygw.store.cassandra.options.CassandraOptions.get_contact_point">get_contact_point</a></code></li>
+<li><code><a title="pygw.store.cassandra.options.CassandraOptions.get_compaction_strategy" href="#pygw.store.cassandra.options.CassandraOptions.get_compaction_strategy">get_compaction_strategy</a></code></li>
+<li><code><a title="pygw.store.cassandra.options.CassandraOptions.get_contact_points" href="#pygw.store.cassandra.options.CassandraOptions.get_contact_points">get_contact_points</a></code></li>
+<li><code><a title="pygw.store.cassandra.options.CassandraOptions.get_datacenter" href="#pygw.store.cassandra.options.CassandraOptions.get_datacenter">get_datacenter</a></code></li>
+<li><code><a title="pygw.store.cassandra.options.CassandraOptions.get_gc_grace_seconds" href="#pygw.store.cassandra.options.CassandraOptions.get_gc_grace_seconds">get_gc_grace_seconds</a></code></li>
 <li><code><a title="pygw.store.cassandra.options.CassandraOptions.get_replication_factor" href="#pygw.store.cassandra.options.CassandraOptions.get_replication_factor">get_replication_factor</a></code></li>
+<li><code><a title="pygw.store.cassandra.options.CassandraOptions.get_table_options" href="#pygw.store.cassandra.options.CassandraOptions.get_table_options">get_table_options</a></code></li>
 <li><code><a title="pygw.store.cassandra.options.CassandraOptions.is_durable_writes" href="#pygw.store.cassandra.options.CassandraOptions.is_durable_writes">is_durable_writes</a></code></li>
 <li><code><a title="pygw.store.cassandra.options.CassandraOptions.set_batch_write_size" href="#pygw.store.cassandra.options.CassandraOptions.set_batch_write_size">set_batch_write_size</a></code></li>
-<li><code><a title="pygw.store.cassandra.options.CassandraOptions.set_contact_point" href="#pygw.store.cassandra.options.CassandraOptions.set_contact_point">set_contact_point</a></code></li>
+<li><code><a title="pygw.store.cassandra.options.CassandraOptions.set_compaction_strategy" href="#pygw.store.cassandra.options.CassandraOptions.set_compaction_strategy">set_compaction_strategy</a></code></li>
+<li><code><a title="pygw.store.cassandra.options.CassandraOptions.set_contact_points" href="#pygw.store.cassandra.options.CassandraOptions.set_contact_points">set_contact_points</a></code></li>
+<li><code><a title="pygw.store.cassandra.options.CassandraOptions.set_datacenter" href="#pygw.store.cassandra.options.CassandraOptions.set_datacenter">set_datacenter</a></code></li>
 <li><code><a title="pygw.store.cassandra.options.CassandraOptions.set_durable_writes" href="#pygw.store.cassandra.options.CassandraOptions.set_durable_writes">set_durable_writes</a></code></li>
+<li><code><a title="pygw.store.cassandra.options.CassandraOptions.set_gc_grace_seconds" href="#pygw.store.cassandra.options.CassandraOptions.set_gc_grace_seconds">set_gc_grace_seconds</a></code></li>
 <li><code><a title="pygw.store.cassandra.options.CassandraOptions.set_replication_factor" href="#pygw.store.cassandra.options.CassandraOptions.set_replication_factor">set_replication_factor</a></code></li>
+<li><code><a title="pygw.store.cassandra.options.CassandraOptions.set_table_options" href="#pygw.store.cassandra.options.CassandraOptions.set_table_options">set_table_options</a></code></li>
 </ul>
 </li>
 </ul>
