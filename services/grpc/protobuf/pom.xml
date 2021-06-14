@@ -54,6 +54,12 @@
 						<artifactId>geowave-grpc-protobuf-generator</artifactId>
 						<version>${project.version}</version>
 						<type>jar</type>
+						<exclusions>
+							<exclusion>
+								<groupId>org.glassfish</groupId>
+								<artifactId>javax.el</artifactId>
+							</exclusion>
+						</exclusions>
 					</dependency>
 				</dependencies>
 			</plugin>
