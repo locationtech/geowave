@@ -6,10 +6,11 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.datastore.rocksdb.util;
+package org.locationtech.geowave.datastore.rocksdb;
 
 import org.junit.Test;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
+import org.locationtech.geowave.datastore.rocksdb.util.RocksDBMetadataTable;
 import org.mockito.Mockito;
 import org.rocksdb.RocksDB;
 import org.rocksdb.RocksDBException;
