@@ -19,6 +19,8 @@ import java.lang.reflect.Modifier;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -42,7 +44,11 @@ import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatist
 import org.locationtech.geowave.core.geotime.store.statistics.TimeRangeStatistic;
 import org.locationtech.geowave.core.geotime.store.statistics.binning.TimeRangeFieldValueBinningStrategy;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy;
+import org.locationtech.geowave.core.index.sfc.xz.XZHierarchicalIndexStrategy;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
+import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.NumericHistogram;
 import org.locationtech.geowave.core.store.api.BinConstraints;
 import org.locationtech.geowave.core.store.api.DataStore;
@@ -61,6 +67,7 @@ import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.statistics.InternalStatisticsHelper;
 import org.locationtech.geowave.core.store.statistics.StatisticsRegistry;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic.CountValue;
@@ -72,6 +79,7 @@ import org.locationtech.geowave.core.store.statistics.field.NumericRangeStatisti
 import org.locationtech.geowave.core.store.statistics.field.NumericRangeStatistic.NumericRangeValue;
 import org.locationtech.geowave.core.store.statistics.field.NumericStatsStatistic;
 import org.locationtech.geowave.core.store.statistics.field.Stats;
+import org.locationtech.geowave.core.store.statistics.index.IndexMetaDataSetStatistic.IndexMetaDataSetValue;
 import org.locationtech.geowave.examples.ingest.SimpleIngest;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
@@ -243,6 +251,64 @@ public class GeoWaveStatisticsIT extends AbstractGeoWaveBasicVectorIT {
     assertEquals(-90.0, histogram.getMinValue(), 0.1);
     assertEquals(85.0, histogram.getMaxValue(), 0.1);
     assertEquals(0.0, histogram.quantile(0.5), 0.1);
+  }
+
+  @Test
+  public void testInternalStatistics() throws IllegalArgumentException, IllegalAccessException,
+      NoSuchFieldException, SecurityException {
+    final PersistentAdapterStore adapterStore = dataStore.createAdapterStore();
+    final DataStatisticsStore statsStore = dataStore.createDataStatisticsStore();
+    final InternalAdapterStore internalAdapterStore = dataStore.createInternalAdapterStore();
+
+    final Index index = SimpleIngest.createSpatialIndex();
+    final Collection<Short> adapterIds =
+        Collections.singletonList(internalAdapterStore.getAdapterId(SimpleIngest.FEATURE_NAME));
+    final IndexMetaDataSetValue ims =
+        InternalStatisticsHelper.getIndexMetadata(index, adapterIds, adapterStore, statsStore);
+    assertEquals(2, ims.getValue().size());
+    assertTrue(ims.getValue().get(0) instanceof TieredSFCIndexStrategy.TierIndexMetaData);
+    // the tiered strategy should be empty so it should look like the original empty metadata
+    assertEquals(
+        SimpleIngest.createSpatialIndex().getIndexStrategy().createMetaData().get(0).toString(),
+        ((TieredSFCIndexStrategy.TierIndexMetaData) ims.getValue().get(0)).toString());
+    // to avoid opening up accessors in code we just grab the field via reflection in this test
+    final Field pointCurveField =
+        XZHierarchicalIndexStrategy.XZHierarchicalIndexMetaData.class.getDeclaredField(
+            "pointCurveCount");
+    pointCurveField.setAccessible(true);
+    final Field xzCurveField =
+        XZHierarchicalIndexStrategy.XZHierarchicalIndexMetaData.class.getDeclaredField(
+            "xzCurveCount");
+    xzCurveField.setAccessible(true);
+    assertTrue(
+        ims.getValue().get(1) instanceof XZHierarchicalIndexStrategy.XZHierarchicalIndexMetaData);
+    assertEquals(20, pointCurveField.getInt(ims.getValue().get(1)));
+    assertEquals(0, xzCurveField.getInt(ims.getValue().get(1)));
+    // duplicate count should be empty
+    assertEquals(
+        0L,
+        InternalStatisticsHelper.getDuplicateCounts(
+            index,
+            adapterIds,
+            adapterStore,
+            statsStore).getValue().longValue());
+    // differing visibility count should be empty
+    assertEquals(
+        0L,
+        InternalStatisticsHelper.getDifferingVisibilityCounts(
+            index,
+            adapterIds,
+            adapterStore,
+            statsStore).getValue().longValue());
+    // visibility count should have 20 empty visibilities
+    final Map<ByteArray, Long> visMap =
+        InternalStatisticsHelper.getVisibilityCounts(
+            index,
+            adapterIds,
+            adapterStore,
+            statsStore).getValue();
+    assertEquals(1, visMap.size());
+    assertEquals(20L, visMap.get(new ByteArray("")).longValue());
   }
 
   @Test

@@ -8,8 +8,14 @@
  */
 package org.locationtech.geowave.datastore.rocksdb;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.IntStream;
 import org.junit.Assert;
 import org.junit.Test;
+import org.locationtech.geowave.core.index.CompoundIndexStrategy;
+import org.locationtech.geowave.core.index.NumericIndexStrategy;
+import org.locationtech.geowave.core.index.persist.PersistenceUtils;
+import org.locationtech.geowave.core.index.simple.RoundRobinKeyIndexStrategy;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.BasicDataTypeAdapter;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
@@ -21,6 +27,9 @@ import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.index.AttributeDimensionalityTypeProvider;
 import org.locationtech.geowave.core.store.index.AttributeIndexOptions;
+import org.locationtech.geowave.core.store.index.CommonIndexModel;
+import org.locationtech.geowave.core.store.index.CustomNameIndex;
+import org.locationtech.geowave.core.store.index.IndexPluginOptions.PartitionStrategy;
 import org.locationtech.geowave.datastore.rocksdb.config.RocksDBOptions;
 import org.rocksdb.RocksDBException;
 import com.google.common.collect.Iterators;
@@ -30,90 +39,137 @@ public class RocksDBLockfileTest {
   private static final String POI_TYPE_NAME = "POI";
 
   @Test
-  public void testSecondaryIndex() throws RocksDBException {
-    final RocksDBOptions options = new RocksDBOptions();
-    options.setDirectory(DEFAULT_DB_DIRECTORY);
-    options.getStoreOptions().setSecondaryIndexing(true);
-    final DataStore store =
-        new RocksDBStoreFactoryFamily().getDataStoreFactory().createStore(options);
-    store.deleteAll();
-    store.addType(new POIBasicDataAdapter(POI_TYPE_NAME));
-    final Index latAttributeIndex =
-        AttributeDimensionalityTypeProvider.createIndexFromOptions(
-            store,
-            new AttributeIndexOptions(POI_TYPE_NAME, POIBasicDataAdapter.LATITUDE_FIELD_NAME));
-    store.addIndex(POI_TYPE_NAME, latAttributeIndex);
-    try (Writer<POI> w = store.createWriter(POI_TYPE_NAME)) {
-      w.write(new POI("name1", 0.0, 0.0));
-    }
-    try (CloseableIterator<POI> poiIt = store.query((Query) QueryBuilder.newBuilder().build())) {
-      Assert.assertEquals(1, Iterators.size(poiIt));
-    }
-    try (Writer<POI> w = store.createWriter(POI_TYPE_NAME)) {
-      w.write(new POI("name2", 1.0, 1.0));
-    }
-    try (CloseableIterator<POI> poiIt = store.query((Query) QueryBuilder.newBuilder().build())) {
-      Assert.assertEquals(2, Iterators.size(poiIt));
-    }
-    try (Writer<POI> w = store.createWriter(POI_TYPE_NAME)) {
-      w.write(new POI("name3", 2.0, 2.0));
-      try (CloseableIterator<POI> poiIt = store.query((Query) QueryBuilder.newBuilder().build())) {
-        Assert.assertEquals(2, Iterators.size(poiIt));
-      }
-      w.flush();
-      try (CloseableIterator<POI> poiIt = store.query((Query) QueryBuilder.newBuilder().build())) {
-        Assert.assertEquals(3, Iterators.size(poiIt));
-      }
-    }
-    try (CloseableIterator<POI> poiIt = store.query((Query) QueryBuilder.newBuilder().build())) {
-      Assert.assertEquals(3, Iterators.size(poiIt));
-    }
-    store.deleteAll();
+  public void testIndex() throws RocksDBException {
+    testLockfile(1, false);
   }
 
   @Test
-  public void testMultiDatastoreAttributeIndex() throws RocksDBException {
+  public void testSecondaryIndex() throws RocksDBException {
+    testLockfile(1, true);
+  }
+
+
+  @Test
+  public void testIndexMultithreaded() throws RocksDBException {
+    testLockfile(8, false);
+  }
+
+  @Test
+  public void testSecondaryIndexMultithreaded() throws RocksDBException {
+    testLockfile(8, true);
+  }
+
+
+  private void testLockfile(final int numThreads, final boolean secondaryIndexing) {
     final RocksDBOptions options = new RocksDBOptions();
     options.setDirectory(DEFAULT_DB_DIRECTORY);
+    options.getStoreOptions().setSecondaryIndexing(secondaryIndexing);
     final DataStore store =
         new RocksDBStoreFactoryFamily().getDataStoreFactory().createStore(options);
     store.deleteAll();
     store.addType(new POIBasicDataAdapter(POI_TYPE_NAME));
-    final Index latAttributeIndex =
+    Index index =
         AttributeDimensionalityTypeProvider.createIndexFromOptions(
             store,
             new AttributeIndexOptions(POI_TYPE_NAME, POIBasicDataAdapter.LATITUDE_FIELD_NAME));
+    index =
+        new CustomNameIndex(
+            new CompoundIndexStrategy(new RoundRobinKeyIndexStrategy(32), index.getIndexStrategy()),
+            index.getIndexModel(),
+            index.getName() + "_" + PartitionStrategy.ROUND_ROBIN.name() + "_" + 32);
+    final Index latAttributeIndex = new IndexWrapper(index);
     store.addIndex(POI_TYPE_NAME, latAttributeIndex);
     final DataStore store2 =
         new RocksDBStoreFactoryFamily().getDataStoreFactory().createStore(options);
-    try (Writer<POI> w = store.createWriter(POI_TYPE_NAME)) {
-      w.write(new POI("name1", 0.0, 0.0));
-    }
-    try (CloseableIterator<POI> poiIt = store2.query((Query) QueryBuilder.newBuilder().build())) {
-      Assert.assertEquals(1, Iterators.size(poiIt));
-    }
-    try (Writer<POI> w = store2.createWriter(POI_TYPE_NAME)) {
-      w.write(new POI("name2", 1.0, 1.0));
-    }
-    try (CloseableIterator<POI> poiIt = store.query((Query) QueryBuilder.newBuilder().build())) {
-      Assert.assertEquals(2, Iterators.size(poiIt));
-    }
-    try (Writer<POI> w = store2.createWriter(POI_TYPE_NAME)) {
-      w.write(new POI("name3", 2.0, 2.0));
-      try (CloseableIterator<POI> poiIt = store.query((Query) QueryBuilder.newBuilder().build())) {
-        Assert.assertEquals(2, Iterators.size(poiIt));
+    IntStream.range(0, numThreads).mapToObj(i -> CompletableFuture.runAsync(() -> {
+      double offset = i * numThreads;
+      try (Writer<POI> w = store.createWriter(POI_TYPE_NAME)) {
+        w.write(new POI("name" + offset, offset, offset));
       }
-      w.flush();
-      try (CloseableIterator<POI> poiIt = store.query((Query) QueryBuilder.newBuilder().build())) {
-        Assert.assertEquals(3, Iterators.size(poiIt));
+      try (CloseableIterator<POI> poiIt = store2.query((Query) QueryBuilder.newBuilder().build())) {
+        if (numThreads == 1) {
+          Assert.assertEquals(1, Iterators.size(poiIt));
+        } else {
+          Assert.assertTrue(Iterators.size(poiIt) >= 1);
+        }
       }
-    }
-    try (CloseableIterator<POI> poiIt = store2.query((Query) QueryBuilder.newBuilder().build())) {
-      Assert.assertEquals(3, Iterators.size(poiIt));
-    }
+      offset++;
+      try (Writer<POI> w = store2.createWriter(POI_TYPE_NAME)) {
+        w.write(new POI("name" + offset, offset, offset));
+      }
+      try (CloseableIterator<POI> poiIt = store.query((Query) QueryBuilder.newBuilder().build())) {
+        if (numThreads == 1) {
+          Assert.assertEquals(2, Iterators.size(poiIt));
+        } else {
+          Assert.assertTrue(Iterators.size(poiIt) >= 2);
+        }
+      }
+      offset++;
+      try (Writer<POI> w = store2.createWriter(POI_TYPE_NAME)) {
+        w.write(new POI("name" + offset, offset, offset));
+        try (
+            CloseableIterator<POI> poiIt = store.query((Query) QueryBuilder.newBuilder().build())) {
+          if (numThreads == 1) {
+            Assert.assertEquals(2, Iterators.size(poiIt));
+          } else {
+            Assert.assertTrue(Iterators.size(poiIt) >= 2);
+          }
+        }
+        w.flush();
+        try (
+            CloseableIterator<POI> poiIt = store.query((Query) QueryBuilder.newBuilder().build())) {
+          if (numThreads == 1) {
+            Assert.assertEquals(3, Iterators.size(poiIt));
+          } else {
+            Assert.assertTrue(Iterators.size(poiIt) >= 3);
+          }
+        }
+      }
+      try (CloseableIterator<POI> poiIt = store2.query((Query) QueryBuilder.newBuilder().build())) {
+        if (numThreads == 1) {
+          Assert.assertEquals(3, Iterators.size(poiIt));
+        } else {
+          Assert.assertTrue(Iterators.size(poiIt) >= 3);
+        }
+      }
+    }));
     store.deleteAll();
   }
 
+  public static class IndexWrapper implements Index {
+    private Index index;
+
+    public IndexWrapper() {}
+
+    public IndexWrapper(final Index index) {
+      this.index = index;
+    }
+
+    @Override
+    public byte[] toBinary() {
+      return PersistenceUtils.toBinary(index);
+    }
+
+    @Override
+    public void fromBinary(final byte[] bytes) {
+      index = (Index) PersistenceUtils.fromBinary(bytes);
+    }
+
+    @Override
+    public String getName() {
+      return index.getName();
+    }
+
+    @Override
+    public NumericIndexStrategy getIndexStrategy() {
+      return index.getIndexStrategy();
+    }
+
+    @Override
+    public CommonIndexModel getIndexModel() {
+      return index.getIndexModel();
+    }
+  }
   private static class POI {
     private final String name;
     private final Double latitude;
