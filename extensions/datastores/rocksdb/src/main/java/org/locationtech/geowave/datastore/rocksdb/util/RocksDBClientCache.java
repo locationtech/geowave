@@ -58,7 +58,8 @@ public class RocksDBClientCache {
       final boolean visibilityEnabled,
       final boolean compactOnWrite,
       final int batchWriteSize,
-      final boolean walOnBatchWrite) {
+      final boolean walOnBatchWrite,
+      final boolean invalidateCache) {
     final ClientKey key =
         new ClientKey(
             directory,
@@ -68,7 +69,9 @@ public class RocksDBClientCache {
             walOnBatchWrite);
     final RocksDBClient client = clientCache.getIfPresent(key);
     if (client != null) {
-      clientCache.invalidate(key);
+      if (invalidateCache) {
+        clientCache.invalidate(key);
+      }
       client.close();
     }
     if (clientCache.estimatedSize() == 0) {

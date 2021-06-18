@@ -40,25 +40,42 @@ import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class RocksDBOperations implements MapReduceDataStoreOperations, Closeable {
   private static final Logger LOGGER = LoggerFactory.getLogger(RocksDBOperations.class);
+  private static final Object CLIENT_MUTEX = new Object();
   private static final boolean READER_ASYNC = true;
-  private final RocksDBClient client;
-  private final String directory;
+  private RocksDBClient client;
+  private String directory;
   private final boolean visibilityEnabled;
   private final boolean compactOnWrite;
   private final boolean walOnBatchWrite;
   private final int batchWriteSize;
 
   public RocksDBOperations(final RocksDBOptions options) {
-    directory =
-        options.getDirectory()
-            + File.separator
-            + ((options.getGeoWaveNamespace() == null)
-                || options.getGeoWaveNamespace().trim().isEmpty()
-                || "null".equalsIgnoreCase(options.getGeoWaveNamespace()) ? "default"
-                    : options.getGeoWaveNamespace());
+    // attempt to make the directory string as unique for a given file system as possible by using
+    // the canonical path
+    try {
+      directory =
+          new File(
+              options.getDirectory()
+                  + File.separator
+                  + ((options.getGeoWaveNamespace() == null)
+                      || options.getGeoWaveNamespace().trim().isEmpty()
+                      || "null".equalsIgnoreCase(options.getGeoWaveNamespace()) ? "default"
+                          : options.getGeoWaveNamespace())).getCanonicalPath();
+    } catch (final IOException e) {
+      LOGGER.warn("Unable to get canonical path", e);
+      directory =
+          new File(
+              options.getDirectory()
+                  + File.separator
+                  + ((options.getGeoWaveNamespace() == null)
+                      || options.getGeoWaveNamespace().trim().isEmpty()
+                      || "null".equalsIgnoreCase(options.getGeoWaveNamespace()) ? "default"
+                          : options.getGeoWaveNamespace())).getAbsolutePath();
+    }
 
     visibilityEnabled = options.getStoreOptions().isVisibilityEnabled();
     compactOnWrite = options.isCompactOnWrite();
@@ -93,11 +110,11 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
   }
 
   public void compactData() {
-    client.mergeData();
+    getClient().mergeData();
   }
 
   public void compactMetadata() {
-    client.mergeMetadata();
+    getClient().mergeMetadata();
   }
 
   @Override
@@ -109,17 +126,17 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
 
   @Override
   public boolean indexExists(final String indexName) throws IOException {
-    return client.indexTableExists(indexName);
+    return getClient().indexTableExists(indexName);
   }
 
   @Override
   public boolean metadataExists(final MetadataType type) throws IOException {
-    return client.metadataTableExists(type);
+    return getClient().metadataTableExists(type);
   }
 
   @Override
   public void deleteAll() throws Exception {
-    close();
+    close(false);
     FileUtils.deleteDirectory(new File(directory));
   }
 
@@ -130,7 +147,7 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
       final Short adapterId,
       final String... additionalAuthorizations) {
     final String prefix = RocksDBUtils.getTablePrefix(typeName, indexName);
-    client.close(indexName, typeName);
+    getClient().close(indexName, typeName);
     Arrays.stream(new File(directory).listFiles((dir, name) -> name.startsWith(prefix))).forEach(
         f -> {
           try {
@@ -150,7 +167,7 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
   @Override
   public RowWriter createWriter(final Index index, final InternalDataAdapter<?> adapter) {
     return new RocksDBWriter(
-        client,
+        getClient(),
         adapter.getAdapterId(),
         adapter.getTypeName(),
         index.getName(),
@@ -159,36 +176,36 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
 
   @Override
   public RowWriter createDataIndexWriter(final InternalDataAdapter<?> adapter) {
-    return new RockDBDataIndexWriter(client, adapter.getAdapterId(), adapter.getTypeName());
+    return new RockDBDataIndexWriter(getClient(), adapter.getAdapterId(), adapter.getTypeName());
   }
 
   @Override
   public MetadataWriter createMetadataWriter(final MetadataType metadataType) {
-    return new RocksDBMetadataWriter(RocksDBUtils.getMetadataTable(client, metadataType));
+    return new RocksDBMetadataWriter(RocksDBUtils.getMetadataTable(getClient(), metadataType));
   }
 
   @Override
   public MetadataReader createMetadataReader(final MetadataType metadataType) {
     return new RocksDBMetadataReader(
-        RocksDBUtils.getMetadataTable(client, metadataType),
+        RocksDBUtils.getMetadataTable(getClient(), metadataType),
         metadataType);
   }
 
   @Override
   public MetadataDeleter createMetadataDeleter(final MetadataType metadataType) {
     return new RocksDBMetadataDeleter(
-        RocksDBUtils.getMetadataTable(client, metadataType),
+        RocksDBUtils.getMetadataTable(getClient(), metadataType),
         metadataType);
   }
 
   @Override
   public <T> RowReader<T> createReader(final ReaderParams<T> readerParams) {
-    return new RocksDBReader<>(client, readerParams, READER_ASYNC);
+    return new RocksDBReader<>(getClient(), readerParams, READER_ASYNC);
   }
 
   @Override
   public RowReader<GeoWaveRow> createReader(final DataIndexReaderParams readerParams) {
-    return new RocksDBReader<>(client, readerParams);
+    return new RocksDBReader<>(getClient(), readerParams);
   }
 
   @Override
@@ -201,7 +218,7 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
             readerParams.getAdditionalAuthorizations()),
         // intentionally don't run this reader as async because it does
         // not work well while simultaneously deleting rows
-        new RocksDBReader<>(client, readerParams, false));
+        new RocksDBReader<>(getClient(), readerParams, false));
   }
 
   @Override
@@ -215,14 +232,15 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
       final byte[][] dataIds,
       final short adapterId,
       final String typeName) {
-    final RocksDBDataIndexTable table = RocksDBUtils.getDataIndexTable(client, typeName, adapterId);
+    final RocksDBDataIndexTable table =
+        RocksDBUtils.getDataIndexTable(getClient(), typeName, adapterId);
     Arrays.stream(dataIds).forEach(d -> table.delete(d));
     table.flush();
   }
 
   @Override
   public RowReader<GeoWaveRow> createReader(final RecordReaderParams readerParams) {
-    return new RocksDBReader<>(client, readerParams);
+    return new RocksDBReader<>(getClient(), readerParams);
   }
 
   @Override
@@ -231,7 +249,20 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
       final PersistentAdapterStore adapterStore,
       final InternalAdapterStore internalAdapterStore,
       final String... authorizations) {
-    return new RocksDBRowDeleter(client, adapterStore, internalAdapterStore, indexName);
+    return new RocksDBRowDeleter(getClient(), adapterStore, internalAdapterStore, indexName);
+  }
+
+  private void close(final boolean invalidateCache) {
+    RocksDBClientCache.getInstance().close(
+        directory,
+        visibilityEnabled,
+        compactOnWrite,
+        batchWriteSize,
+        walOnBatchWrite,
+        invalidateCache);
+    if (invalidateCache) {
+      client = null;
+    }
   }
 
   /**
@@ -241,15 +272,26 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
    */
   @Override
   public void close() {
-    RocksDBClientCache.getInstance().close(
-        directory,
-        visibilityEnabled,
-        compactOnWrite,
-        batchWriteSize,
-        walOnBatchWrite);
+    close(true);
   }
 
+  @SuppressFBWarnings(justification = "This is intentional to avoid unnecessary sync")
   public RocksDBClient getClient() {
-    return client;
+    if (client != null) {
+      return client;
+    } else {
+      synchronized (CLIENT_MUTEX) {
+        if (client == null) {
+          client =
+              RocksDBClientCache.getInstance().getClient(
+                  directory,
+                  visibilityEnabled,
+                  compactOnWrite,
+                  batchWriteSize,
+                  walOnBatchWrite);
+        }
+        return client;
+      }
+    }
   }
 }
