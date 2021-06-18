@@ -150,11 +150,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClientCache.html#close-java.lang.String-boolean-boolean-int-boolean-">close</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;directory,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/rocksdb/util/RocksDBClientCache.html#close-java.lang.String-boolean-boolean-int-boolean-boolean-">close</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;directory,
      boolean&nbsp;visibilityEnabled,
      boolean&nbsp;compactOnWrite,
      int&nbsp;batchWriteSize,
-     boolean&nbsp;walOnBatchWrite)</code>&nbsp;</td>
+     boolean&nbsp;walOnBatchWrite,
+     boolean&nbsp;invalidateCache)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -233,7 +234,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                boolean&nbsp;walOnBatchWrite)</pre>
 </li>
 </ul>
-<a name="close-java.lang.String-boolean-boolean-int-boolean-">
+<a name="close-java.lang.String-boolean-boolean-int-boolean-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -243,7 +244,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                   boolean&nbsp;visibilityEnabled,
                   boolean&nbsp;compactOnWrite,
                   int&nbsp;batchWriteSize,
-                  boolean&nbsp;walOnBatchWrite)</pre>
+                  boolean&nbsp;walOnBatchWrite,
+                  boolean&nbsp;invalidateCache)</pre>
 </li>
 </ul>
 <a name="closeAll--">
