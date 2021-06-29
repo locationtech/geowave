@@ -425,6 +425,7 @@
 												<exclude>org.apache.commons:commons-lang3</exclude> -->
 											<exclude>tomcat:*</exclude>
 											<exclude>javax.media:jai*:*</exclude>
+											<exclude>com.sun.jersey:*</exclude>
 											<exclude>*:servlet*:*</exclude>
 											<exclude>*:javax.servlet*:*</exclude>
 											<exclude>*:jsp*:*</exclude>
