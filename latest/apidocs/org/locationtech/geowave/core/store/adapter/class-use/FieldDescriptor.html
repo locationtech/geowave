@@ -291,13 +291,13 @@
                <a href="../../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.IndexFieldOptions.html" title="interface in org.locationtech.geowave.core.store.api">IndexFieldMapper.IndexFieldOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><span class="typeNameLabel">TemporalFieldMapper.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/adapter/TemporalFieldMapper.html#initFromOptions-java.util.List-org.locationtech.geowave.core.store.api.IndexFieldMapper.IndexFieldOptions-">initFromOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/geotime/adapter/TemporalFieldMapper.html" title="type parameter in TemporalFieldMapper">N</a>&gt;&gt;&nbsp;inputFieldDescriptors,
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">TimeRangeFieldMapper.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/adapter/TimeRangeFieldMapper.html#initFromOptions-java.util.List-org.locationtech.geowave.core.store.api.IndexFieldMapper.IndexFieldOptions-">initFromOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/geotime/adapter/TimeRangeFieldMapper.html" title="type parameter in TimeRangeFieldMapper">N</a>&gt;&gt;&nbsp;inputFieldDescriptors,
                <a href="../../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.IndexFieldOptions.html" title="interface in org.locationtech.geowave.core.store.api">IndexFieldMapper.IndexFieldOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">TimeRangeFieldMapper.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/adapter/TimeRangeFieldMapper.html#initFromOptions-java.util.List-org.locationtech.geowave.core.store.api.IndexFieldMapper.IndexFieldOptions-">initFromOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/geotime/adapter/TimeRangeFieldMapper.html" title="type parameter in TimeRangeFieldMapper">N</a>&gt;&gt;&nbsp;inputFieldDescriptors,
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><span class="typeNameLabel">TemporalFieldMapper.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/adapter/TemporalFieldMapper.html#initFromOptions-java.util.List-org.locationtech.geowave.core.store.api.IndexFieldMapper.IndexFieldOptions-">initFromOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/geotime/adapter/TemporalFieldMapper.html" title="type parameter in TemporalFieldMapper">N</a>&gt;&gt;&nbsp;inputFieldDescriptors,
                <a href="../../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.IndexFieldOptions.html" title="interface in org.locationtech.geowave.core.store.api">IndexFieldMapper.IndexFieldOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -406,7 +406,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;?&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">BasicDataTypeAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html#getFieldDescriptor-java.lang.String-">getFieldDescriptor</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">SimpleAbstractDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/SimpleAbstractDataAdapter.html#getFieldDescriptor-java.lang.String-">getFieldDescriptor</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;?&gt;</code></td>
@@ -418,11 +418,11 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;?&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">SimpleAbstractDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/SimpleAbstractDataAdapter.html#getFieldDescriptor-java.lang.String-">getFieldDescriptor</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">BasicDataTypeAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html#getFieldDescriptor-java.lang.String-">getFieldDescriptor</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;?&gt;[]</code></td>
-<td class="colLast"><span class="typeNameLabel">BasicDataTypeAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html#getFieldDescriptors--">getFieldDescriptors</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">SimpleAbstractDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/SimpleAbstractDataAdapter.html#getFieldDescriptors--">getFieldDescriptors</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;?&gt;[]</code></td>
@@ -434,7 +434,7 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;?&gt;[]</code></td>
-<td class="colLast"><span class="typeNameLabel">SimpleAbstractDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/SimpleAbstractDataAdapter.html#getFieldDescriptors--">getFieldDescriptors</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">BasicDataTypeAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html#getFieldDescriptors--">getFieldDescriptors</a></span>()</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -446,8 +446,8 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter.RowBuilder</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html" title="type parameter in BasicDataTypeAdapter">T</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">BasicDataTypeAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html#newRowBuilder-org.locationtech.geowave.core.store.adapter.FieldDescriptor:A-">newRowBuilder</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;?&gt;[]&nbsp;outputFieldDescriptors)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter.RowBuilder</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/SimpleAbstractDataAdapter.html" title="type parameter in SimpleAbstractDataAdapter">T</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">SimpleAbstractDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/SimpleAbstractDataAdapter.html#newRowBuilder-org.locationtech.geowave.core.store.adapter.FieldDescriptor:A-">newRowBuilder</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;?&gt;[]&nbsp;outputFieldDescriptors)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter.RowBuilder</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapterImpl.html" title="type parameter in InternalDataAdapterImpl">T</a>&gt;</code></td>
@@ -458,8 +458,8 @@
 <td class="colLast"><span class="typeNameLabel">BinaryDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/BinaryDataAdapter.html#newRowBuilder-org.locationtech.geowave.core.store.adapter.FieldDescriptor:A-">newRowBuilder</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;?&gt;[]&nbsp;outputFieldDescriptors)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter.RowBuilder</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/SimpleAbstractDataAdapter.html" title="type parameter in SimpleAbstractDataAdapter">T</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">SimpleAbstractDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/SimpleAbstractDataAdapter.html#newRowBuilder-org.locationtech.geowave.core.store.adapter.FieldDescriptor:A-">newRowBuilder</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;?&gt;[]&nbsp;outputFieldDescriptors)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter.RowBuilder</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html" title="type parameter in BasicDataTypeAdapter">T</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">BasicDataTypeAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html#newRowBuilder-org.locationtech.geowave.core.store.adapter.FieldDescriptor:A-">newRowBuilder</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;?&gt;[]&nbsp;outputFieldDescriptors)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

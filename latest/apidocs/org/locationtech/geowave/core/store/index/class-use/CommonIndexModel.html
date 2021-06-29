@@ -237,13 +237,13 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><span class="typeNameLabel">OrthodromicDistancePartitioner.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html#initIndex-org.locationtech.geowave.core.store.index.CommonIndexModel-double:A-">initIndex</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
-         double[]&nbsp;distancePerDimension)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">AbstractPartitioner.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/analytic/partitioner/AbstractPartitioner.html#initIndex-org.locationtech.geowave.core.store.index.CommonIndexModel-double:A-">initIndex</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+         double[]&nbsp;distancePerDimensionForIndex)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><span class="typeNameLabel">AbstractPartitioner.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/analytic/partitioner/AbstractPartitioner.html#initIndex-org.locationtech.geowave.core.store.index.CommonIndexModel-double:A-">initIndex</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
-         double[]&nbsp;distancePerDimensionForIndex)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">OrthodromicDistancePartitioner.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html#initIndex-org.locationtech.geowave.core.store.index.CommonIndexModel-double:A-">initIndex</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+         double[]&nbsp;distancePerDimension)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -330,16 +330,6 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">IndexedAdapterPersistenceEncoding.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html#convertUnknownValues-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.index.CommonIndexModel-">convertUnknownValues</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter,
-                    <a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">AdapterPersistenceEncoding.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/AdapterPersistenceEncoding.html#convertUnknownValues-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.index.CommonIndexModel-">convertUnknownValues</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter,
-                    <a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>abstract void</code></td>
 <td class="colLast"><span class="typeNameLabel">AbstractAdapterPersistenceEncoding.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/AbstractAdapterPersistenceEncoding.html#convertUnknownValues-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.index.CommonIndexModel-">convertUnknownValues</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter,
                     <a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model)</code>
@@ -347,27 +337,37 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">IndexedAdapterPersistenceEncoding.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html#convertUnknownValues-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.index.CommonIndexModel-">convertUnknownValues</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter,
+                    <a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">AdapterPersistenceEncoding.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/AdapterPersistenceEncoding.html#convertUnknownValues-org.locationtech.geowave.core.store.adapter.InternalDataAdapter-org.locationtech.geowave.core.store.index.CommonIndexModel-">convertUnknownValues</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;adapter,
+                    <a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">InternalDataAdapterImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapterImpl.html#getDimensionFieldNames-org.locationtech.geowave.core.store.index.CommonIndexModel-">getDimensionFieldNames</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><span class="typeNameLabel">InternalDataAdapterImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapterImpl.html#getFieldNameForPosition-org.locationtech.geowave.core.store.index.CommonIndexModel-int-">getFieldNameForPosition</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+<td class="colLast"><span class="typeNameLabel">InternalDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html#getFieldNameForPosition-org.locationtech.geowave.core.store.index.CommonIndexModel-int-">getFieldNameForPosition</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
                        int&nbsp;position)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><span class="typeNameLabel">InternalDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html#getFieldNameForPosition-org.locationtech.geowave.core.store.index.CommonIndexModel-int-">getFieldNameForPosition</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+<td class="colLast"><span class="typeNameLabel">InternalDataAdapterImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapterImpl.html#getFieldNameForPosition-org.locationtech.geowave.core.store.index.CommonIndexModel-int-">getFieldNameForPosition</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
                        int&nbsp;position)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><span class="typeNameLabel">InternalDataAdapterImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapterImpl.html#getPositionOfOrderedField-org.locationtech.geowave.core.store.index.CommonIndexModel-java.lang.String-">getPositionOfOrderedField</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+<td class="colLast"><span class="typeNameLabel">InternalDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html#getPositionOfOrderedField-org.locationtech.geowave.core.store.index.CommonIndexModel-java.lang.String-">getPositionOfOrderedField</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><span class="typeNameLabel">InternalDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapter.html#getPositionOfOrderedField-org.locationtech.geowave.core.store.index.CommonIndexModel-java.lang.String-">getPositionOfOrderedField</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+<td class="colLast"><span class="typeNameLabel">InternalDataAdapterImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapterImpl.html#getPositionOfOrderedField-org.locationtech.geowave.core.store.index.CommonIndexModel-java.lang.String-">getPositionOfOrderedField</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -522,11 +522,11 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a></code></td>
-<td class="colLast"><span class="typeNameLabel">AttributeIndexImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/AttributeIndexImpl.html#getIndexModel--">getIndexModel</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">IndexImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/IndexImpl.html#getIndexModel--">getIndexModel</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a></code></td>
-<td class="colLast"><span class="typeNameLabel">IndexImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/IndexImpl.html#getIndexModel--">getIndexModel</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">AttributeIndexImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/index/AttributeIndexImpl.html#getIndexModel--">getIndexModel</a></span>()</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -591,17 +591,7 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><span class="typeNameLabel">PrefixIdQueryFilter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/PrefixIdQueryFilter.html#accept-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding-">accept</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
-      <a href="../../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">IndexedPersistenceEncoding</a>&nbsp;persistenceEncoding)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><span class="typeNameLabel">AdapterIdQueryFilter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/AdapterIdQueryFilter.html#accept-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding-">accept</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
-      <a href="../../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">IndexedPersistenceEncoding</a>&nbsp;persistenceEncoding)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><span class="typeNameLabel">InsertionIdQueryFilter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/InsertionIdQueryFilter.html#accept-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding-">accept</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
       <a href="../../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">IndexedPersistenceEncoding</a>&nbsp;persistenceEncoding)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -611,22 +601,32 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">PrefixIdQueryFilter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/PrefixIdQueryFilter.html#accept-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding-">accept</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+      <a href="../../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">IndexedPersistenceEncoding</a>&nbsp;persistenceEncoding)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">InsertionIdQueryFilter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/InsertionIdQueryFilter.html#accept-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding-">accept</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+      <a href="../../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">IndexedPersistenceEncoding</a>&nbsp;persistenceEncoding)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">BasicQueryFilter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/BasicQueryFilter.html#accept-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding-">accept</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+      <a href="../../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">IndexedPersistenceEncoding</a>&lt;?&gt;&nbsp;persistenceEncoding)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><span class="typeNameLabel">FilterList.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/FilterList.html#accept-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding-">accept</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
       <a href="../../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">IndexedPersistenceEncoding</a>&lt;?&gt;&nbsp;entry)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><span class="typeNameLabel">QueryFilter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/QueryFilter.html#accept-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding-">accept</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
       <a href="../../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">IndexedPersistenceEncoding</a>&lt;?&gt;&nbsp;persistenceEncoding)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><span class="typeNameLabel">CoordinateRangeQueryFilter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/CoordinateRangeQueryFilter.html#accept-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding-">accept</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
-      <a href="../../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">IndexedPersistenceEncoding</a>&lt;?&gt;&nbsp;persistenceEncoding)</code>&nbsp;</td>
-</tr>
 <tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><span class="typeNameLabel">BasicQueryFilter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/BasicQueryFilter.html#accept-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding-">accept</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+<td class="colLast"><span class="typeNameLabel">CoordinateRangeQueryFilter.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/filter/CoordinateRangeQueryFilter.html#accept-org.locationtech.geowave.core.store.index.CommonIndexModel-org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding-">accept</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/index/CommonIndexModel.html" title="interface in org.locationtech.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
       <a href="../../../../../../../org/locationtech/geowave/core/store/data/IndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">IndexedPersistenceEncoding</a>&lt;?&gt;&nbsp;persistenceEncoding)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
