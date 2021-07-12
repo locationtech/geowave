@@ -9,8 +9,8 @@
 package org.locationtech.geowave.core.index.dimension.bin;
 
 import java.nio.ByteBuffer;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
+import org.locationtech.geowave.core.index.numeric.NumericData;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
 
 public class BasicBinningStrategy implements IndexBinningStrategy {
   private double interval;

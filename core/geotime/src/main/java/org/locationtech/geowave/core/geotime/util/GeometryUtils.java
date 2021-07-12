@@ -42,11 +42,11 @@ import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSUnboundedS
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import org.locationtech.geowave.core.index.GeoWaveSerializationException;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
-import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
-import org.locationtech.geowave.core.index.sfc.data.NumericValue;
+import org.locationtech.geowave.core.index.numeric.BasicNumericDataset;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.numeric.NumericData;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
+import org.locationtech.geowave.core.index.numeric.NumericValue;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass.ConstraintData;
@@ -63,6 +63,7 @@ import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.MultiPolygon;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKBReader;
 import org.locationtech.jts.io.WKBWriter;
@@ -102,6 +103,8 @@ public class GeometryUtils {
   }
 
   public static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory();
+  public static final PreparedGeometryFactory PREPARED_GEOMETRY_FACTORY =
+      new PreparedGeometryFactory();
   private static final Logger LOGGER = LoggerFactory.getLogger(GeometryUtils.class);
   private static final Object MUTEX = new Object();
   private static final Object MUTEX_DEFAULT_CRS = new Object();

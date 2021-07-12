@@ -6,7 +6,7 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.core.index.sfc.data;
+package org.locationtech.geowave.core.index.numeric;
 
 import java.nio.ByteBuffer;
 
@@ -18,6 +18,9 @@ public class NumericRange implements NumericData {
   private double min;
   private double max;
 
+  private boolean minInclusive;
+  private boolean maxInclusive;
+
   public NumericRange() {}
 
   /**
@@ -27,25 +30,45 @@ public class NumericRange implements NumericData {
    * @param max the maximum bounds of a unique index range
    */
   public NumericRange(final double min, final double max) {
+    this(min, max, true, true);
+  }
+
+  public NumericRange(
+      final double min,
+      final double max,
+      final boolean minInclusive,
+      final boolean maxInclusive) {
     this.min = min;
     this.max = max;
+    this.minInclusive = minInclusive;
+    this.maxInclusive = maxInclusive;
   }
 
   /** @return min the minimum bounds of a index range object */
   @Override
-  public double getMin() {
+  public Double getMin() {
     return min;
   }
 
   /** @return max the maximum bounds of a index range object */
   @Override
-  public double getMax() {
+  public Double getMax() {
     return max;
+  }
+
+  @Override
+  public boolean isMinInclusive() {
+    return minInclusive;
+  }
+
+  @Override
+  public boolean isMaxInclusive() {
+    return maxInclusive;
   }
 
   /** @return centroid the center of a unique index range object */
   @Override
-  public double getCentroid() {
+  public Double getCentroid() {
     return (min + max) / 2;
   }
 
@@ -69,6 +92,8 @@ public class NumericRange implements NumericData {
     result = (prime * result) + (int) (temp ^ (temp >>> 32));
     temp = Double.doubleToLongBits(min);
     result = (prime * result) + (int) (temp ^ (temp >>> 32));
+    result = (prime * result) + (minInclusive ? 1 : 0);
+    result = (prime * result) + (maxInclusive ? 1 : 0);
     return result;
   }
 
@@ -91,9 +116,11 @@ public class NumericRange implements NumericData {
 
   @Override
   public byte[] toBinary() {
-    final ByteBuffer buf = ByteBuffer.allocate(16);
+    final ByteBuffer buf = ByteBuffer.allocate(18);
     buf.putDouble(min);
     buf.putDouble(max);
+    buf.put(minInclusive ? (byte) 1 : (byte) 0);
+    buf.put(maxInclusive ? (byte) 1 : (byte) 0);
     return buf.array();
   }
 
@@ -102,5 +129,12 @@ public class NumericRange implements NumericData {
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     min = buf.getDouble();
     max = buf.getDouble();
+    if (buf.remaining() > 0) {
+      minInclusive = buf.get() > 0;
+      maxInclusive = buf.get() > 0;
+    } else {
+      minInclusive = true;
+      maxInclusive = true;
+    }
   }
 }

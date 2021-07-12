@@ -12,9 +12,9 @@ import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
+import org.locationtech.geowave.core.index.numeric.NumericData;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 
 /**
  * This class wraps a dimension definition with a cardinality (bits of precision) on a space filling

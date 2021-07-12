@@ -1262,7 +1262,6 @@ public class AccumuloOperations implements
     }
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public <T> RowReader<T> createReader(final ReaderParams<T> params) {
     final ScannerBase scanner = getScanner(params, false);
@@ -1271,6 +1270,7 @@ public class AccumuloOperations implements
 
     return new AccumuloReader<>(
         scanner,
+        getClientSideFilterRanges(params),
         params.getRowTransformer(),
         params.getIndex().getIndexStrategy().getPartitionKeyLength(),
         params.isMixedVisibility() && !params.isServersideAggregation(),
@@ -1339,13 +1339,13 @@ public class AccumuloOperations implements
     return scanner;
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public RowReader<GeoWaveRow> createReader(final RecordReaderParams readerParams) {
     final ScannerBase scanner = getScanner(readerParams);
     addConstraintsScanIteratorSettings(readerParams, scanner, options);
     return new AccumuloReader<>(
         scanner,
+        null,
         GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER,
         readerParams.getIndex().getIndexStrategy().getPartitionKeyLength(),
         readerParams.isMixedVisibility(),
@@ -1717,11 +1717,23 @@ public class AccumuloOperations implements
     scanner.removeScanIterator(BatchDeleter.class.getName().replaceAll("[.]", "_") + "_NOVALUE");
     return new AccumuloDeleter<>(
         (BatchDeleter) scanner,
+        getClientSideFilterRanges(readerParams),
         readerParams.getRowTransformer(),
         readerParams.getIndex().getIndexStrategy().getPartitionKeyLength(),
         readerParams.isMixedVisibility() && !readerParams.isServersideAggregation(),
         readerParams.isClientsideRowMerging(),
         true);
+  }
+
+  private List<ByteArrayRange> getClientSideFilterRanges(final ReaderParams<?> readerParams) {
+    if (!options.isServerSideLibraryEnabled() && readerParams.getQueryRanges() != null) {
+      final List<ByteArrayRange> compositeRanges =
+          readerParams.getQueryRanges().getCompositeQueryRanges();
+      if (compositeRanges != null && compositeRanges.size() > 1) {
+        return compositeRanges;
+      }
+    }
+    return null;
   }
 
   @Override

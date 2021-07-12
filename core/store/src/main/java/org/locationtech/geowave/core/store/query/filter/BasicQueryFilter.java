@@ -17,12 +17,12 @@ import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.FloatCompareUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
+import org.locationtech.geowave.core.index.numeric.BasicNumericDataset;
+import org.locationtech.geowave.core.index.numeric.BinnedNumericDataset;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.numeric.NumericData;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
-import org.locationtech.geowave.core.index.sfc.data.BinnedNumericDataset;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
@@ -186,8 +186,8 @@ public class BasicQueryFilter implements QueryFilter {
       final MultiDimensionalNumericData queryRange,
       final MultiDimensionalNumericData dataRange) {
     final NumericData[] queryRangePerDimension = queryRange.getDataPerDimension();
-    final double[] minPerDimension = dataRange.getMinValuesPerDimension();
-    final double[] maxPerDimension = dataRange.getMaxValuesPerDimension();
+    final Double[] minPerDimension = dataRange.getMinValuesPerDimension();
+    final Double[] maxPerDimension = dataRange.getMaxValuesPerDimension();
     boolean ok = true;
     for (int d = 0; (d < dimensionFields.length) && ok; d++) {
       ok &=

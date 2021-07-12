@@ -10,8 +10,8 @@ package org.locationtech.geowave.core.index.sfc.zorder;
 
 import java.util.Arrays;
 import java.util.BitSet;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
 import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 
 /**
  * Convenience methods used to decode/encode Z-Order space filling curve values (using a simple

@@ -11,6 +11,7 @@ package org.locationtech.geowave.core.store.query;
 import org.locationtech.geowave.core.store.api.QueryConstraintsFactory;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraintsFactoryImpl;
+import org.locationtech.geowave.core.store.query.filter.expression.Filter;
 import org.locationtech.geowave.core.store.query.options.CommonQueryOptions.HintKey;
 
 /**
@@ -99,6 +100,15 @@ public interface BaseQueryBuilder<T, Q extends BaseQuery<T, ?>, R extends BaseQu
    * @return this builder
    */
   R constraints(QueryConstraints constraints);
+
+  /**
+   * Constrain the query with a filter expression. This is an alternate way of providing constraints
+   * and will override any other constraints specified.
+   * 
+   * @param filter the filter expression
+   * @return this builder
+   */
+  R filter(Filter filter);
 
   /**
    * This is the easiest approach to defining a set of constraints and can be used to create the

@@ -110,7 +110,7 @@ public class ByteArrayUtils {
   }
 
   public static byte[] replace(final byte[] arr, final byte[] find, final byte[] replace) {
-    if (find == null || find.length == 0 || find.length > arr.length || replace == null) {
+    if ((find == null) || (find.length == 0) || (find.length > arr.length) || (replace == null)) {
       return arr;
     }
     int match = 0;
@@ -122,7 +122,7 @@ public class ByteArrayUtils {
           matchCount++;
           match = 0;
         }
-      } else if (match > 0 && arr[i] == find[0]) {
+      } else if ((match > 0) && (arr[i] == find[0])) {
         match = 1;
       } else {
         match = 0;
@@ -131,7 +131,8 @@ public class ByteArrayUtils {
     if (matchCount == 0) {
       return arr;
     }
-    byte[] newBytes = new byte[arr.length - find.length * matchCount + replace.length * matchCount];
+    final byte[] newBytes =
+        new byte[(arr.length - (find.length * matchCount)) + (replace.length * matchCount)];
     match = 0;
     int copyIdx = 0;
     for (int i = 0; i < arr.length; i++) {
@@ -214,6 +215,42 @@ public class ByteArrayUtils {
     bb.put(bytes);
     bb.flip();
     return bb.getLong();
+  }
+
+
+  public static byte[] longToBytes(long val) {
+    final int radix = 1 << 8;
+    final int mask = radix - 1;
+    // we want to eliminate trailing 0's (ie. truncate the byte array by
+    // trailing 0's)
+    int trailingZeros = 0;
+    while ((((int) val) & mask) == 0) {
+      val >>>= 8;
+      trailingZeros++;
+      if (trailingZeros == 8) {
+        return new byte[0];
+      }
+    }
+    final byte[] array = new byte[8 - trailingZeros];
+    int pos = array.length;
+    do {
+      array[--pos] = (byte) (((int) val) & mask);
+      val >>>= 8;
+
+    } while ((val != 0) && (pos > 0));
+
+    return array;
+  }
+
+  public static long bytesToLong(final byte[] bytes) {
+    long value = 0;
+    for (int i = 0; i < 8; i++) {
+      value = (value << 8);
+      if (i < bytes.length) {
+        value += (bytes[i] & 0xff);
+      }
+    }
+    return value;
   }
 
   /**
@@ -383,8 +420,37 @@ public class ByteArrayUtils {
     return array1.length - array2.length;
   }
 
+  public static int compareToPrefix(final byte[] array, final byte[] prefix) {
+    if (prefix == null) {
+      if (array == null) {
+        return 0;
+      }
+      return -1;
+    }
+    if (array == null) {
+      return 1;
+    }
+    for (int i = 0, j = 0; (i < array.length) && (j < prefix.length); i++, j++) {
+      final int a = (array[i] & 0xff);
+      final int b = (prefix[j] & 0xff);
+      if (a != b) {
+        return a - b;
+      }
+    }
+    if (prefix.length <= array.length) {
+      return 0;
+    }
+    for (int i = array.length; i < prefix.length; i++) {
+      final int a = (prefix[i] & 0xff);
+      if (a != 0) {
+        return -1;
+      }
+    }
+    return 0;
+  }
+
   public static boolean startsWith(final byte[] bytes, final byte[] prefix) {
-    if (bytes == null || prefix == null || prefix.length > bytes.length) {
+    if ((bytes == null) || (prefix == null) || (prefix.length > bytes.length)) {
       return false;
     }
     for (int i = 0; i < prefix.length; i++) {
@@ -396,17 +462,24 @@ public class ByteArrayUtils {
   }
 
   public static boolean endsWith(final byte[] bytes, final byte[] suffix) {
-    if (bytes == null || suffix == null || suffix.length > bytes.length) {
+    if ((bytes == null) || (suffix == null) || (suffix.length > bytes.length)) {
       return false;
     }
-    int suffixEnd = suffix.length - 1;
-    int bytesEnd = bytes.length - 1;
+    final int suffixEnd = suffix.length - 1;
+    final int bytesEnd = bytes.length - 1;
     for (int i = 0; i < suffix.length; i++) {
       if (bytes[bytesEnd - i] != suffix[suffixEnd - i]) {
         return false;
       }
     }
     return true;
+  }
+
+  public static boolean matchesPrefixRanges(final byte[] bytes, final List<ByteArrayRange> ranges) {
+    return ranges.stream().anyMatch(range -> {
+      return ByteArrayUtils.compareToPrefix(bytes, range.getStart()) >= 0
+          && ByteArrayUtils.compareToPrefix(bytes, range.getEnd()) <= 0;
+    });
   }
 
   public static String getHexString(final byte[] bytes) {

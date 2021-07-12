@@ -9,7 +9,7 @@
 package org.locationtech.geowave.core.store.query.constraints;
 
 import org.apache.commons.lang3.Range;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;

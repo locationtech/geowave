@@ -9,9 +9,9 @@
 package org.locationtech.geowave.core.store.data;
 
 import org.locationtech.geowave.core.index.InsertionIds;
-import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
+import org.locationtech.geowave.core.index.numeric.BasicNumericDataset;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.numeric.NumericData;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 

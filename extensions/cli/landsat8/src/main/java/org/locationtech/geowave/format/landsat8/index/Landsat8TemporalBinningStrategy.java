@@ -14,8 +14,8 @@ import java.util.List;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
 import org.locationtech.geowave.core.index.dimension.bin.BinValue;
 import org.locationtech.geowave.core.index.dimension.bin.IndexBinningStrategy;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
+import org.locationtech.geowave.core.index.numeric.NumericData;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
 
 /**
  * This class is useful for establishing a consistent binning strategy with the bin size being 256 *
@@ -91,7 +91,7 @@ public class Landsat8TemporalBinningStrategy implements IndexBinningStrategy {
   public BinRange[] getNormalizedRanges(final NumericData range) {
     // now make sure all bin definitions between the start and end bins
     // are covered
-    final long millisFromOrigin = (long) range.getMin() - ORIGIN_MILLIS;
+    final long millisFromOrigin = range.getMin().longValue() - ORIGIN_MILLIS;
     final int binId;
     if (millisFromOrigin < 0) {
       binId = (int) (millisFromOrigin / BIN_SIZE_MILLIS) - 1;
@@ -110,18 +110,18 @@ public class Landsat8TemporalBinningStrategy implements IndexBinningStrategy {
       final long maxOfBin = nextEpoch - 1;
       long startMillis, endMillis;
       boolean fullExtent;
-      if ((long) range.getMax() <= maxOfBin) {
+      if (range.getMax().longValue() <= maxOfBin) {
         lastBin = true;
-        endMillis = (long) range.getMax();
+        endMillis = range.getMax().longValue();
         // its questionable whether we use
-        fullExtent = ((long) range.getMax()) == maxOfBin;
+        fullExtent = (range.getMax().longValue()) == maxOfBin;
       } else {
         endMillis = maxOfBin;
         fullExtent = !firstBin;
       }
 
       if (firstBin) {
-        startMillis = (long) range.getMin();
+        startMillis = range.getMin().longValue();
         firstBin = false;
       } else {
         startMillis = epochIterator;

@@ -6,7 +6,7 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.core.index.sfc.data;
+package org.locationtech.geowave.core.index.numeric;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -40,9 +40,9 @@ public class BasicNumericDataset implements MultiDimensionalNumericData {
 
   /** @return all of the maximum values (for each dimension) */
   @Override
-  public double[] getMaxValuesPerDimension() {
+  public Double[] getMaxValuesPerDimension() {
     final NumericData[] ranges = getDataPerDimension();
-    final double[] maxPerDimension = new double[ranges.length];
+    final Double[] maxPerDimension = new Double[ranges.length];
     for (int d = 0; d < ranges.length; d++) {
       maxPerDimension[d] = ranges[d].getMax();
     }
@@ -51,9 +51,9 @@ public class BasicNumericDataset implements MultiDimensionalNumericData {
 
   /** @return all of the minimum values (for each dimension) */
   @Override
-  public double[] getMinValuesPerDimension() {
+  public Double[] getMinValuesPerDimension() {
     final NumericData[] ranges = getDataPerDimension();
-    final double[] minPerDimension = new double[ranges.length];
+    final Double[] minPerDimension = new Double[ranges.length];
     for (int d = 0; d < ranges.length; d++) {
       minPerDimension[d] = ranges[d].getMin();
     }
@@ -62,9 +62,9 @@ public class BasicNumericDataset implements MultiDimensionalNumericData {
 
   /** @return all of the centroid values (for each dimension) */
   @Override
-  public double[] getCentroidPerDimension() {
+  public Double[] getCentroidPerDimension() {
     final NumericData[] ranges = getDataPerDimension();
-    final double[] centroid = new double[ranges.length];
+    final Double[] centroid = new Double[ranges.length];
     for (int d = 0; d < ranges.length; d++) {
       centroid[d] = ranges[d].getCentroid();
     }

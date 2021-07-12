@@ -20,6 +20,8 @@ import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.log4j.Logger;
+import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
@@ -30,6 +32,7 @@ import org.locationtech.geowave.core.store.operations.SimpleParallelDecoder;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.datastore.accumulo.AccumuloRow;
 import com.google.common.base.Throwables;
+import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 
 public class AccumuloReader<T> implements RowReader<T> {
@@ -46,6 +49,7 @@ public class AccumuloReader<T> implements RowReader<T> {
 
   public AccumuloReader(
       final ScannerBase scanner,
+      final List<ByteArrayRange> clientFilterRanges,
       final GeoWaveRowIteratorTransformer<T> transformer,
       final int partitionKeyLength,
       final boolean wholeRowEncoding,
@@ -54,7 +58,15 @@ public class AccumuloReader<T> implements RowReader<T> {
     this.scanner = scanner;
     this.partitionKeyLength = partitionKeyLength;
     this.wholeRowEncoding = wholeRowEncoding;
-    this.baseIter = scanner.iterator();
+    if (clientFilterRanges != null) {
+      this.baseIter = Iterators.filter(scanner.iterator(), entry -> {
+        return ByteArrayUtils.matchesPrefixRanges(
+            entry.getKey().getRowData().toArray(),
+            clientFilterRanges);
+      });
+    } else {
+      this.baseIter = scanner.iterator();
+    }
 
     if (parallel) {
       this.parallelDecoder =

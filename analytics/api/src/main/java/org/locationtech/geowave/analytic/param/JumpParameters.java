@@ -8,7 +8,7 @@
  */
 package org.locationtech.geowave.analytic.param;
 
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
 
 public class JumpParameters {
   public enum Jump implements ParameterEnum {

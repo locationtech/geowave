@@ -14,14 +14,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
-import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
 import org.locationtech.geowave.core.index.dimension.bin.BinValue;
 import org.locationtech.geowave.core.index.dimension.bin.IndexBinningStrategy;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
+import org.locationtech.geowave.core.index.numeric.NumericData;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
 import org.threeten.extra.Interval;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -408,7 +407,7 @@ public class TemporalBinningStrategy implements IndexBinningStrategy {
     if ((range == null) || (range.getMax() < range.getMin())) {
       return new BinRange[] {};
     }
-    return getNormalizedRanges((long) range.getMin(), (long) range.getMax());
+    return getNormalizedRanges(range.getMin().longValue(), range.getMax().longValue());
   }
 
   @Override

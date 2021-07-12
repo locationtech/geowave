@@ -24,6 +24,7 @@ package org.locationtech.geowave.core.store.adapter.statistics.histogram;
  */
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import org.locationtech.geowave.core.index.lexicoder.Lexicoders;
 
 public class ByteUtils {
 
@@ -40,7 +41,7 @@ public class ByteUtils {
 
   public static byte[] toBytes(final double val) {
     final BigInteger tmp = new BigDecimal(val).toBigInteger();
-    byte[] arr = tmp.toByteArray();
+    byte[] arr = Lexicoders.LONG.toByteArray(tmp.longValue());
     if ((arr[0] == (byte) 0) && (arr.length > 1) && (arr[1] == (byte) 0xff)) {
       // to represent {0xff, 0xff}, big integer uses {0x00, 0xff, 0xff}
       // due to the one's compliment representation.
@@ -55,7 +56,7 @@ public class ByteUtils {
   }
 
   public static byte[] toBytes(final long val) {
-    byte[] arr = BigInteger.valueOf(val).toByteArray();
+    byte[] arr = Lexicoders.LONG.toByteArray(val);
     if ((arr[0] == (byte) 0) && (arr.length > 1) && (arr[1] == (byte) 0xff)) {
       // to represent {0xff, 0xff}, big integer uses {0x00, 0xff, 0xff}
       // due to the one's compliment representation.
@@ -70,11 +71,19 @@ public class ByteUtils {
   }
 
   public static long toLong(final byte[] data) {
-    return new BigInteger(toPaddedBytes(data)).longValue();
+    return Lexicoders.LONG.fromByteArray(toPaddedBytes(data));
   }
 
   public static double toDouble(final byte[] data) {
-    return new BigInteger(toPaddedBytes(data)).doubleValue();
+    return Lexicoders.LONG.fromByteArray(toPaddedBytes(data));
+  }
+
+  public static double toDoubleAsPreviousPrefix(final byte[] data) {
+    return Lexicoders.LONG.fromByteArray(toPreviousPrefixPaddedBytes(data));
+  }
+
+  public static double toDoubleAsNextPrefix(final byte[] data) {
+    return Lexicoders.LONG.fromByteArray(toNextPrefixPaddedBytes(data));
   }
 
   public static byte[] toPaddedBytes(final byte[] b) {
@@ -85,4 +94,45 @@ public class ByteUtils {
     System.arraycopy(b, 0, newD, 0, Math.min(b.length, 8));
     return newD;
   }
+
+  public static byte[] toPreviousPrefixPaddedBytes(final byte[] b) {
+    int offset = Math.min(8, b.length);
+    while (offset > 0) {
+      if (b[offset - 1] != (byte) 0x00) {
+        break;
+      }
+      offset--;
+    }
+
+    final byte[] newD = new byte[8];
+    if (offset == 0) {
+      return new byte[8];
+    }
+    System.arraycopy(b, 0, newD, 0, offset);
+    newD[offset - 1]--;
+    return newD;
+  }
+
+  public static byte[] toNextPrefixPaddedBytes(final byte[] b) {
+    final byte[] newD = new byte[8];
+    System.arraycopy(b, 0, newD, 0, Math.min(8, b.length));
+    int offset = Math.min(8, b.length);
+    while (offset > 0) {
+      if (b[offset - 1] != (byte) 0xFF) {
+        break;
+      }
+      offset--;
+    }
+
+
+    if (offset == 0 && b.length < 8) {
+      for (int i = b.length; i < 8; i++) {
+        newD[i] = (byte) 0xFF;
+      }
+    } else if (offset > 0) {
+      newD[offset - 1]++;
+    }
+    return newD;
+  }
+
 }

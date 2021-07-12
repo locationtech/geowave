@@ -9,8 +9,8 @@
 package org.locationtech.geowave.core.index.sfc;
 
 import java.math.BigInteger;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.persist.Persistable;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 
 /**
  * * Base class which defines common methods for any space filling curve. Hosts standard access
@@ -26,7 +26,7 @@ public interface SpaceFillingCurve extends Persistable {
    * @return value derived from the the SFC transform. The value is left padded based on the number
    *         if bits in the SFC dimension
    */
-  public byte[] getId(double[] values);
+  public byte[] getId(Double[] values);
 
   /**
    * * Gets n-dimensional ranges from a single dimension, i.e. 0033423 -> [12,33]

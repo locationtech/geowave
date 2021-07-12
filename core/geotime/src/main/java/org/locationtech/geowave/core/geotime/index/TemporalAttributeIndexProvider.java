@@ -33,8 +33,9 @@ public class TemporalAttributeIndexProvider implements AttributeIndexProviderSpi
       final String indexName,
       final DataTypeAdapter<?> adapter,
       final FieldDescriptor<?> fieldDescriptor) {
-    final Index index =
-        TemporalDimensionalityTypeProvider.createIndexFromOptions(new TemporalOptions());
+    final TemporalOptions options = new TemporalOptions();
+    options.setNoTimeRanges(true);
+    final Index index = TemporalDimensionalityTypeProvider.createIndexFromOptions(options);
     return new AttributeIndexImpl(
         index.getIndexStrategy(),
         index.getIndexModel(),

@@ -226,9 +226,7 @@ public class HBaseReader<T> implements RowReader<T> {
         if (iterable instanceof ResultScanner) {
           this.scanner = (ResultScanner) iterable;
         }
-        this.scanIt =
-            rowTransformer.apply(
-                Iterators.transform(iterable.iterator(), e -> new HBaseRow(e, partitionKeyLength)));
+        this.scanIt = getScanIterator(iterable.iterator());
       } catch (final Exception e) {
         LOGGER.error("Could not get the results from scanner", e);
         this.scanner = null;
@@ -236,6 +234,11 @@ public class HBaseReader<T> implements RowReader<T> {
         return;
       }
     }
+  }
+
+  protected Iterator<T> getScanIterator(final Iterator<Result> iterable) {
+    return rowTransformer.apply(
+        Iterators.transform(iterable, e -> new HBaseRow(e, partitionKeyLength)));
   }
 
   private void addSkipFilter(final RangeReaderParams<T> params, final FilterList filterList) {

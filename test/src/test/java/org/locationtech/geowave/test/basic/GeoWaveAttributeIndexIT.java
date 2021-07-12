@@ -9,11 +9,9 @@
 package org.locationtech.geowave.test.basic;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import java.util.Date;
-import org.apache.commons.lang3.Range;
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -25,13 +23,11 @@ import org.junit.runner.RunWith;
 import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.index.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialFieldValue;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.TemporalFieldValue;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.simple.SimpleIntegerIndexStrategy;
-import org.locationtech.geowave.core.index.text.CaseSensitivity;
 import org.locationtech.geowave.core.index.text.TextIndexStrategy;
-import org.locationtech.geowave.core.index.text.TextSearch;
-import org.locationtech.geowave.core.index.text.TextSearchType;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
@@ -48,8 +44,9 @@ import org.locationtech.geowave.core.store.index.AttributeDimensionalityTypeProv
 import org.locationtech.geowave.core.store.index.AttributeIndexOptions;
 import org.locationtech.geowave.core.store.index.CustomIndex;
 import org.locationtech.geowave.core.store.index.TextAttributeIndexProvider.AdapterFieldTextIndexEntryConverter;
-import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
-import org.locationtech.geowave.core.store.query.constraints.SimpleNumericQuery;
+import org.locationtech.geowave.core.store.query.filter.expression.Filter;
+import org.locationtech.geowave.core.store.query.filter.expression.numeric.NumericFieldValue;
+import org.locationtech.geowave.core.store.query.filter.expression.text.TextFieldValue;
 import org.locationtech.geowave.examples.ingest.SimpleIngest;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
@@ -62,7 +59,6 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.threeten.extra.Interval;
 import jersey.repackaged.com.google.common.collect.Iterators;
 
 @RunWith(GeoWaveITRunner.class)
@@ -226,29 +222,16 @@ public class GeoWaveAttributeIndexIT extends AbstractGeoWaveBasicVectorIT {
       assertEquals(TOTAL_FEATURES / 2, Iterators.size(iterator));
     }
 
-    final QueryConstraints bboxConstraint =
-        VectorQueryBuilder.newBuilder().constraintsFactory().spatialTemporalConstraints().bboxConstraints(
-            -50.5,
-            0.5,
-            0.5,
-            50.5).build();
+    final Filter bboxFilter =
+        SpatialFieldValue.of(ALTERNATE_GEOMETRY_FIELD).bbox(-50.5, 0.5, 0.5, 50.5);
     // Query data from attribute index with a spatial constraint
     try (CloseableIterator<SimpleFeature> iterator =
         ds.query(
             QueryBuilder.newBuilder(SimpleFeature.class).indexName(
-                geometryAttributeIndex.getName()).constraints(bboxConstraint).build())) {
+                geometryAttributeIndex.getName()).filter(bboxFilter).build())) {
       assertTrue(iterator.hasNext());
       assertEquals(TOTAL_FEATURES / 4, Iterators.size(iterator));
     }
-
-    // Using the same constraint on the default spatial index should yield no results
-    try (CloseableIterator<SimpleFeature> iterator =
-        ds.query(
-            QueryBuilder.newBuilder(SimpleFeature.class).indexName(
-                spatialIndex.getName()).constraints(bboxConstraint).build())) {
-      assertFalse(iterator.hasNext());
-    }
-
   }
 
   @Test
@@ -284,7 +267,7 @@ public class GeoWaveAttributeIndexIT extends AbstractGeoWaveBasicVectorIT {
     assertEquals(1, mapping.getIndexFieldMappers().size());
     final IndexFieldMapper<?, ?> fieldMapper = mapping.getIndexFieldMappers().get(0);
     assertEquals(Date.class, fieldMapper.adapterFieldType());
-    assertEquals(Interval.class, fieldMapper.indexFieldType());
+    assertEquals(Long.class, fieldMapper.indexFieldType());
     assertEquals(1, fieldMapper.getAdapterFields().length);
     assertEquals(TIMESTAMP_FIELD, fieldMapper.getAdapterFields()[0]);
 
@@ -301,15 +284,16 @@ public class GeoWaveAttributeIndexIT extends AbstractGeoWaveBasicVectorIT {
       assertEquals(TOTAL_FEATURES / 2, Iterators.size(iterator));
     }
 
-    final QueryConstraints timeConstraint =
-        VectorQueryBuilder.newBuilder().constraintsFactory().spatialTemporalConstraints().addTimeRange(
+    final Filter timeFilter =
+        TemporalFieldValue.of(TIMESTAMP_FIELD).isBetween(
             new Date((long) (ONE_DAY_MILLIS * 10.5)),
-            new Date((long) (ONE_DAY_MILLIS * 24.5))).build();
+            new Date((long) (ONE_DAY_MILLIS * 24.5)));
+
     // Query data from attribute index with a numeric range constraint
     try (CloseableIterator<SimpleFeature> iterator =
         ds.query(
             QueryBuilder.newBuilder(SimpleFeature.class).indexName(
-                temporalAttributeIndex.getName()).constraints(timeConstraint).build())) {
+                temporalAttributeIndex.getName()).filter(timeFilter).build())) {
       assertTrue(iterator.hasNext());
       assertEquals(7, Iterators.size(iterator));
     }
@@ -367,12 +351,12 @@ public class GeoWaveAttributeIndexIT extends AbstractGeoWaveBasicVectorIT {
       assertEquals(TOTAL_FEATURES / 4, Iterators.size(iterator));
     }
 
-    final QueryConstraints rangeConstraint = new SimpleNumericQuery(Range.between(1.0, 40.0));
+    final Filter rangeFilter = NumericFieldValue.of(INTEGER_FIELD).isBetween(1.0, 40.0);
     // Query data from attribute index with a numeric range constraint
     try (CloseableIterator<SimpleFeature> iterator =
         ds.query(
             QueryBuilder.newBuilder(SimpleFeature.class).indexName(
-                integerAttributeIndex.getName()).constraints(rangeConstraint).build())) {
+                integerAttributeIndex.getName()).filter(rangeFilter).build())) {
       assertTrue(iterator.hasNext());
       assertEquals(10, Iterators.size(iterator));
     }
@@ -441,14 +425,12 @@ public class GeoWaveAttributeIndexIT extends AbstractGeoWaveBasicVectorIT {
       assertEquals((int) (TOTAL_FEATURES * 0.75), Iterators.size(iterator));
     }
 
-    final QueryConstraints textConstraint =
-        QueryBuilder.newBuilder().constraintsFactory().customConstraints(
-            new TextSearch(TextSearchType.CONTAINS, CaseSensitivity.CASE_INSENSITIVE, "c"));
+    final Filter textFilter = TextFieldValue.of(COMMENT_FIELD).startsWith("c", true);
     // Query data from attribute index with a text constraint
     try (CloseableIterator<SimpleFeature> iterator =
         ds.query(
             QueryBuilder.newBuilder(SimpleFeature.class).indexName(
-                textAttributeIndex.getName()).constraints(textConstraint).build())) {
+                textAttributeIndex.getName()).filter(textFilter).build())) {
       assertTrue(iterator.hasNext());
       assertEquals(TOTAL_FEATURES / 4, Iterators.size(iterator));
     }

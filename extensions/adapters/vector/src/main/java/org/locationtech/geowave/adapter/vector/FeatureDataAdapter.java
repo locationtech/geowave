@@ -356,9 +356,24 @@ public class FeatureDataAdapter implements
         bbox.setInternal();
         statistics.add(bbox);
       }
-      if (Date.class.isAssignableFrom(ad.getType().getBinding())) {
+    }
+    final TimeDescriptors timeDescriptors = getTimeDescriptors();
+    if (timeDescriptors.hasTime()) {
+      if (timeDescriptors.getTime() != null) {
         final TimeRangeStatistic timeRange =
-            new TimeRangeStatistic(getTypeName(), ad.getLocalName());
+            new TimeRangeStatistic(getTypeName(), timeDescriptors.getTime().getLocalName());
+        timeRange.setInternal();
+        statistics.add(timeRange);
+      }
+      if (timeDescriptors.getStartRange() != null) {
+        final TimeRangeStatistic timeRange =
+            new TimeRangeStatistic(getTypeName(), timeDescriptors.getStartRange().getLocalName());
+        timeRange.setInternal();
+        statistics.add(timeRange);
+      }
+      if (timeDescriptors.getEndRange() != null) {
+        final TimeRangeStatistic timeRange =
+            new TimeRangeStatistic(getTypeName(), timeDescriptors.getEndRange().getLocalName());
         timeRange.setInternal();
         statistics.add(timeRange);
       }

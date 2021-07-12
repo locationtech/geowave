@@ -17,13 +17,13 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.locationtech.geowave.core.index.dimension.BasicDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
+import org.locationtech.geowave.core.index.numeric.BasicNumericDataset;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.numeric.NumericData;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.SFCFactory.SFCType;
-import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
 import org.locationtech.geowave.core.index.simple.HashKeyIndexStrategy;
 

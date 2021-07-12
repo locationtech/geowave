@@ -499,6 +499,7 @@ public class BaseDataStore implements DataStore {
                   tempAdapterStore,
                   indexMappingStore,
                   indexStore,
+                  statisticsStore,
                   sanitizedConstraints);
       Map<Short, List<Index>> additionalIndicesToDelete = null;
       if (DeletionMode.DELETE_WITH_DUPLICATES.equals(deleteMode)

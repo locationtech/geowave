@@ -8,10 +8,13 @@
  */
 package org.locationtech.geowave.datastore.accumulo.operations;
 
+import java.util.List;
 import org.apache.accumulo.core.client.BatchDeleter;
 import org.apache.accumulo.core.client.MutationsRejectedException;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.log4j.Logger;
+import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.operations.Deleter;
@@ -23,6 +26,7 @@ public class AccumuloDeleter<T> extends AccumuloReader<T> implements Deleter<T> 
 
   public AccumuloDeleter(
       final BatchDeleter scanner,
+      final List<ByteArrayRange> clientFilterRanges,
       final GeoWaveRowIteratorTransformer<T> transformer,
       final int partitionKeyLength,
       final boolean wholeRowEncoding,
@@ -30,6 +34,7 @@ public class AccumuloDeleter<T> extends AccumuloReader<T> implements Deleter<T> 
       final boolean parallel) {
     super(
         scanner,
+        clientFilterRanges,
         transformer,
         partitionKeyLength,
         wholeRowEncoding,

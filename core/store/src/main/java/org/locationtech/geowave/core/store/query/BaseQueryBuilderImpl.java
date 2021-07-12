@@ -12,7 +12,9 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang.ArrayUtils;
 import org.locationtech.geowave.core.store.query.constraints.EverythingQuery;
+import org.locationtech.geowave.core.store.query.constraints.OptimalExpressionQuery;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
+import org.locationtech.geowave.core.store.query.filter.expression.Filter;
 import org.locationtech.geowave.core.store.query.options.CommonQueryOptions;
 import org.locationtech.geowave.core.store.query.options.CommonQueryOptions.HintKey;
 import org.locationtech.geowave.core.store.query.options.IndexQueryOptions;
@@ -88,6 +90,12 @@ public abstract class BaseQueryBuilderImpl<T, Q extends BaseQuery<T, ?>, R exten
   @Override
   public R constraints(final QueryConstraints constraints) {
     this.constraints = constraints;
+    return (R) this;
+  }
+
+  @Override
+  public R filter(final Filter filter) {
+    this.constraints = new OptimalExpressionQuery(filter);
     return (R) this;
   }
 

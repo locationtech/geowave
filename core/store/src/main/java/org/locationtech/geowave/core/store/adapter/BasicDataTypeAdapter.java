@@ -111,7 +111,11 @@ public abstract class BasicDataTypeAdapter<T> implements DataTypeAdapter<T> {
 
   @Override
   public FieldDescriptor<?> getFieldDescriptor(String fieldName) {
-    return fieldDescriptors[fieldDescriptorIndices.get(fieldName)];
+    final Integer index = fieldDescriptorIndices.get(fieldName);
+    if (index == null) {
+      return null;
+    }
+    return fieldDescriptors[index];
   }
 
   @Override

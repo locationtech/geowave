@@ -27,7 +27,7 @@ import org.locationtech.geowave.analytic.param.ExtractParameters;
 import org.locationtech.geowave.analytic.param.GlobalParameters;
 import org.locationtech.geowave.analytic.param.PartitionParameters;
 import org.locationtech.geowave.analytic.partitioner.Partitioner.PartitionData;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.opengis.feature.simple.SimpleFeature;

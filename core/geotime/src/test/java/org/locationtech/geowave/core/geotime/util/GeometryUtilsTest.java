@@ -25,7 +25,7 @@ import org.locationtech.geowave.core.index.MultiDimensionalCoordinates;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.index.IndexImpl;
 import org.locationtech.geowave.core.store.query.constraints.Constraints;
 import org.locationtech.jts.geom.Coordinate;
@@ -118,10 +118,10 @@ public class GeometryUtilsTest {
     final List<MultiDimensionalNumericData> results =
         constraints.getIndexConstraints(new IndexImpl(new ExampleNumericIndexStrategy(), null));
     assertEquals(2, results.size());
-    assertTrue(Arrays.equals(new double[] {10, 30}, results.get(0).getMinValuesPerDimension()));
-    assertTrue(Arrays.equals(new double[] {20, 40}, results.get(0).getMaxValuesPerDimension()));
-    assertTrue(Arrays.equals(new double[] {-9, -2}, results.get(1).getMinValuesPerDimension()));
-    assertTrue(Arrays.equals(new double[] {-8, -1}, results.get(1).getMaxValuesPerDimension()));
+    assertTrue(Arrays.equals(new Double[] {10d, 30d}, results.get(0).getMinValuesPerDimension()));
+    assertTrue(Arrays.equals(new Double[] {20d, 40d}, results.get(0).getMaxValuesPerDimension()));
+    assertTrue(Arrays.equals(new Double[] {-9d, -2d}, results.get(1).getMinValuesPerDimension()));
+    assertTrue(Arrays.equals(new Double[] {-8d, -1d}, results.get(1).getMaxValuesPerDimension()));
   }
 
   GeometryFactory factory = new GeometryFactory();

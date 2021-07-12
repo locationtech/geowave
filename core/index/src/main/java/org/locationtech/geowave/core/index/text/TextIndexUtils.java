@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
@@ -98,6 +99,24 @@ public class TextIndexUtils {
     }
   }
 
+  public static QueryRanges getQueryRanges(final MultiDimensionalTextData textData) {
+    final TextData data = textData.getDataPerDimension()[0];
+    if (data.isReversed()) {
+      return getReverseQueryRanges(
+          data.getMin(),
+          data.getMax(),
+          data.isMinInclusive(),
+          data.isMaxInclusive(),
+          data.isCaseSensitive());
+    }
+    return getForwardQueryRanges(
+        data.getMin(),
+        data.getMax(),
+        data.isMinInclusive(),
+        data.isMaxInclusive(),
+        data.isCaseSensitive());
+  }
+
   private static SinglePartitionInsertionIds getForwardInsertionIds(
       final String entry,
       final boolean caseSensitive) {
@@ -173,6 +192,30 @@ public class TextIndexUtils {
     return new QueryRanges(retVal);
   }
 
+  public static QueryRanges getForwardQueryRanges(
+      final String startTerm,
+      final String endTerm,
+      final boolean startInclusive,
+      final boolean endInclusive,
+      final boolean caseSensitive) {
+    byte[] startBytes =
+        StringUtils.stringToBinary(caseSensitive ? startTerm : startTerm.toLowerCase());
+    if (!startInclusive) {
+      startBytes = ByteArrayUtils.getNextPrefix(startBytes);
+    }
+    byte[] endBytes = StringUtils.stringToBinary(caseSensitive ? endTerm : endTerm.toLowerCase());
+    if (!endInclusive) {
+      endBytes = ByteArrayUtils.getPreviousPrefix(endBytes);
+    }
+    final List<SinglePartitionQueryRanges> retVal = new ArrayList<>(1);
+    retVal.add(
+        new SinglePartitionQueryRanges(
+            caseSensitive ? FORWARD_INDEX_CASE_SENSITIVE_PARTITION_KEY
+                : FORWARD_INDEX_CASE_INSENSITIVE_PARTITION_KEY,
+            Collections.singletonList(new ByteArrayRange(startBytes, endBytes))));
+    return new QueryRanges(retVal);
+  }
+
   public static QueryRanges getReverseQueryRanges(final String term, final boolean caseSensitive) {
     final byte[] reverseTermBytes =
         StringUtils.stringToBinary(
@@ -183,6 +226,35 @@ public class TextIndexUtils {
             caseSensitive ? REVERSE_INDEX_CASE_SENSITIVE_PARTITION_KEY
                 : REVERSE_INDEX_CASE_INSENSITIVE_PARTITION_KEY,
             Collections.singletonList(new ByteArrayRange(reverseTermBytes, reverseTermBytes))));
+    return new QueryRanges(retVal);
+  }
+
+  public static QueryRanges getReverseQueryRanges(
+      final String startTerm,
+      final String endTerm,
+      final boolean startInclusive,
+      final boolean endInclusive,
+      final boolean caseSensitive) {
+    byte[] startBytes =
+        StringUtils.stringToBinary(
+            new StringBuilder(
+                caseSensitive ? startTerm : endTerm.toLowerCase()).reverse().toString());
+    if (!startInclusive) {
+      startBytes = ByteArrayUtils.getNextPrefix(startBytes);
+    }
+    final byte[] endBytes =
+        StringUtils.stringToBinary(
+            new StringBuilder(
+                caseSensitive ? endTerm : endTerm.toLowerCase()).reverse().toString());
+    if (!endInclusive) {
+      startBytes = ByteArrayUtils.getPreviousPrefix(startBytes);
+    }
+    final List<SinglePartitionQueryRanges> retVal = new ArrayList<>(1);
+    retVal.add(
+        new SinglePartitionQueryRanges(
+            caseSensitive ? REVERSE_INDEX_CASE_SENSITIVE_PARTITION_KEY
+                : REVERSE_INDEX_CASE_INSENSITIVE_PARTITION_KEY,
+            Collections.singletonList(new ByteArrayRange(startBytes, endBytes))));
     return new QueryRanges(retVal);
   }
 

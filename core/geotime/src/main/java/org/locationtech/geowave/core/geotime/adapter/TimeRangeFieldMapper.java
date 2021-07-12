@@ -23,7 +23,7 @@ import com.google.common.collect.Lists;
  *
  * @param <N> the adapter field type
  */
-public abstract class TimeRangeFieldMapper<N> extends TemporalFieldMapper<N> {
+public abstract class TimeRangeFieldMapper<N> extends TemporalIntervalFieldMapper<N> {
 
   private boolean startFirst = true;
 

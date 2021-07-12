@@ -6,19 +6,13 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.core.index.sfc.data;
+package org.locationtech.geowave.core.index.numeric;
 
-import org.locationtech.geowave.core.index.IndexConstraints;
-import org.locationtech.geowave.core.index.persist.Persistable;
+import org.locationtech.geowave.core.index.MultiDimensionalIndexData;
 
 /** Interface which defines the methods associated with a multi-dimensional numeric data range. */
-public interface MultiDimensionalNumericData extends IndexConstraints, Persistable {
+public interface MultiDimensionalNumericData extends MultiDimensionalIndexData<Double> {
   /** @return an array of object QueryRange */
+  @Override
   public NumericData[] getDataPerDimension();
-
-  public double[] getMaxValuesPerDimension();
-
-  public double[] getMinValuesPerDimension();
-
-  public double[] getCentroidPerDimension();
 }

@@ -325,12 +325,12 @@ public class DynamoDBReader<T> implements RowReader<T> {
                 DynamoDBUtils.encodeSortableBase64(sortRange.getStart()));
       }
       if (sortRange.getEnd() == null) {
-        end = new ByteArray(ByteArrayUtils.shortToByteArray(internalAdapterId)).getNextPrefix();
+        end = next(ByteArrayUtils.shortToByteArray(internalAdapterId));
       } else {
         end =
             ByteArrayUtils.combineArrays(
                 ByteArrayUtils.shortToByteArray(internalAdapterId),
-                DynamoDBUtils.encodeSortableBase64(sortRange.getEndAsNextPrefix()));
+                DynamoDBUtils.encodeSortableBase64(next(sortRange.getEnd())));
       }
     }
     // because this is using getEndAsNextPrefix and between is inclusive on the end, it seems this
@@ -342,6 +342,15 @@ public class DynamoDBReader<T> implements RowReader<T> {
             new AttributeValue().withB(ByteBuffer.wrap(start)),
             new AttributeValue().withB(ByteBuffer.wrap(end))));
     return query;
+  }
+
+  private byte[] next(final byte[] bytes) {
+    final byte[] newBytes = new byte[bytes.length + 16];
+    System.arraycopy(bytes, 0, newBytes, 0, bytes.length);
+    for (int i = bytes.length; i < newBytes.length; i++) {
+      newBytes[i] = (byte) 0xFF;
+    }
+    return newBytes;
   }
 
   private List<QueryRequest> addQueryRanges(

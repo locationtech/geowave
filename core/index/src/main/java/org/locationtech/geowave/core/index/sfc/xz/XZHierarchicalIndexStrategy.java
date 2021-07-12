@@ -27,14 +27,15 @@ import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
+import org.locationtech.geowave.core.index.dimension.bin.BinRange;
+import org.locationtech.geowave.core.index.numeric.BinnedNumericDataset;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.SFCFactory;
 import org.locationtech.geowave.core.index.sfc.SFCFactory.SFCType;
 import org.locationtech.geowave.core.index.sfc.SpaceFillingCurve;
 import org.locationtech.geowave.core.index.sfc.binned.BinnedSFCUtils;
-import org.locationtech.geowave.core.index.sfc.data.BinnedNumericDataset;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy;
 import org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy.TierIndexMetaData;
 import org.slf4j.Logger;
@@ -193,10 +194,10 @@ public class XZHierarchicalIndexStrategy implements HierarchicalNumericIndexStra
       if (pointCurveId != null) {
         partitionIds.add(pointCurveId);
       } else {
-        final double[] mins = range.getMinValuesPerDimension();
-        final double[] maxes = range.getMaxValuesPerDimension();
+        final Double[] mins = range.getMinValuesPerDimension();
+        final Double[] maxes = range.getMaxValuesPerDimension();
 
-        final double[] values = new double[mins.length + maxes.length];
+        final Double[] values = new Double[mins.length + maxes.length];
         for (int i = 0; i < (values.length - 1); i++) {
           values[i] = mins[i / 2];
           values[i + 1] = maxes[i / 2];
@@ -368,12 +369,37 @@ public class XZHierarchicalIndexStrategy implements HierarchicalNumericIndexStra
   public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
       final MultiDimensionalNumericData dataRange,
       final IndexMetaData... hints) {
-    final MultiDimensionalCoordinateRanges[] rasterRanges =
-        rasterStrategy.getCoordinateRangesPerDimension(dataRange, hints);
+    final List<MultiDimensionalCoordinateRanges> coordRanges = new ArrayList<>();
+    final BinRange[][] binRangesPerDimension =
+        BinnedNumericDataset.getBinnedRangesPerDimension(dataRange, baseDefinitions);
+    rasterStrategy.calculateCoordinateRanges(coordRanges, binRangesPerDimension, hints);
 
-    // just pass through raster strategy results since this is only used by
-    // raster data for now
-    return rasterRanges;
+    final XZHierarchicalIndexMetaData metaData =
+        ((hints.length > 1)
+            && (hints[1] != null)
+            && (hints[1] instanceof XZHierarchicalIndexMetaData))
+                ? (XZHierarchicalIndexMetaData) hints[1]
+                : null;
+    if (metaData != null) {
+      if (metaData.pointCurveCount > 0) {
+        coordRanges.add(
+            BinnedSFCUtils.getCoordinateRanges(
+                binRangesPerDimension,
+                pointCurve,
+                baseDefinitions.length,
+                pointCurveMultiDimensionalId));
+      }
+      if (metaData.xzCurveCount > 0) {
+        // XZ does not implement this and will return full ranges
+        coordRanges.add(
+            BinnedSFCUtils.getCoordinateRanges(
+                binRangesPerDimension,
+                xzCurve,
+                baseDefinitions.length,
+                xzCurveMultiDimensionalId));
+      }
+    }
+    return coordRanges.toArray(new MultiDimensionalCoordinateRanges[coordRanges.size()]);
   }
 
   @Override

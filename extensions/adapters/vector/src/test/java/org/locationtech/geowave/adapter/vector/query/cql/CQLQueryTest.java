@@ -24,7 +24,7 @@ import org.locationtech.geowave.core.geotime.index.SpatialTemporalOptions;
 import org.locationtech.geowave.core.geotime.store.InternalGeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.ExplicitCQLQuery;
 import org.locationtech.geowave.core.geotime.store.query.OptimalCQLQuery;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.api.Index;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -61,11 +61,11 @@ public class CQLQueryTest {
     assertTrue(
         Arrays.equals(
             constraints.get(0).getMinValuesPerDimension(),
-            new double[] {27.2, 41.2, 1.116534776001E12}));
+            new Double[] {27.2, 41.2, 1.116534776001E12}));
     assertTrue(
         Arrays.equals(
             constraints.get(0).getMaxValuesPerDimension(),
-            new double[] {27.3, 41.3, 1.116538375999E12}));
+            new Double[] {27.3, 41.3, 1.116538375999E12}));
   }
 
   @Test
@@ -78,9 +78,9 @@ public class CQLQueryTest {
             null);
     final List<MultiDimensionalNumericData> constraints = query.getIndexConstraints(SPATIAL_INDEX);
     assertTrue(
-        Arrays.equals(constraints.get(0).getMinValuesPerDimension(), new double[] {27.2, 41.2}));
+        Arrays.equals(constraints.get(0).getMinValuesPerDimension(), new Double[] {27.2, 41.2}));
     assertTrue(
-        Arrays.equals(constraints.get(0).getMaxValuesPerDimension(), new double[] {27.3, 41.3}));
+        Arrays.equals(constraints.get(0).getMaxValuesPerDimension(), new Double[] {27.3, 41.3}));
   }
 
   @Test
@@ -93,9 +93,9 @@ public class CQLQueryTest {
             null);
     final List<MultiDimensionalNumericData> constraints = query.getIndexConstraints(SPATIAL_INDEX);
     assertTrue(
-        Arrays.equals(constraints.get(0).getMinValuesPerDimension(), new double[] {27.2, 41.2}));
+        Arrays.equals(constraints.get(0).getMinValuesPerDimension(), new Double[] {27.2, 41.2}));
     assertTrue(
-        Arrays.equals(constraints.get(0).getMaxValuesPerDimension(), new double[] {27.3, 41.3}));
+        Arrays.equals(constraints.get(0).getMaxValuesPerDimension(), new Double[] {27.3, 41.3}));
   }
 
   @Test
@@ -143,11 +143,11 @@ public class CQLQueryTest {
     assertTrue(
         Arrays.equals(
             constraints.get(0).getMinValuesPerDimension(),
-            new double[] {27.2, 41.2, 1.116534776001E12}));
+            new Double[] {27.2, 41.2, 1.116534776001E12}));
     assertTrue(
         Arrays.equals(
             constraints.get(0).getMaxValuesPerDimension(),
-            new double[] {27.3, 41.3, 1.116538375999E12}));
+            new Double[] {27.3, 41.3, 1.116538375999E12}));
     final ExplicitCQLQuery query2 =
         (ExplicitCQLQuery) OptimalCQLQuery.createOptimalQuery(
             "BBOX(geometry,27.20,41.30,27.30,41.20) and end during 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z",
@@ -159,11 +159,11 @@ public class CQLQueryTest {
     assertTrue(
         Arrays.equals(
             constraints2.get(0).getMinValuesPerDimension(),
-            new double[] {27.2, 41.2, 1.116534776001E12}));
+            new Double[] {27.2, 41.2, 1.116534776001E12}));
     assertTrue(
         Arrays.equals(
             constraints2.get(0).getMaxValuesPerDimension(),
-            new double[] {27.3, 41.3, 1.116538375999E12}));
+            new Double[] {27.3, 41.3, 1.116538375999E12}));
 
     final ExplicitCQLQuery query3 =
         (ExplicitCQLQuery) OptimalCQLQuery.createOptimalQuery(
@@ -176,11 +176,11 @@ public class CQLQueryTest {
     assertTrue(
         Arrays.equals(
             constraints3.get(0).getMinValuesPerDimension(),
-            new double[] {27.2, 41.2, 1.116534776001E12}));
+            new Double[] {27.2, 41.2, 1.116534776001E12}));
     assertTrue(
         Arrays.equals(
             constraints3.get(0).getMaxValuesPerDimension(),
-            new double[] {27.3, 41.3, 1.116538375999E12}));
+            new Double[] {27.3, 41.3, 1.116538375999E12}));
 
     final ExplicitCQLQuery query4 =
         (ExplicitCQLQuery) OptimalCQLQuery.createOptimalQuery(
@@ -193,10 +193,10 @@ public class CQLQueryTest {
     assertTrue(
         Arrays.equals(
             constraints4.get(0).getMinValuesPerDimension(),
-            new double[] {27.2, 41.2, 1.116534776001E12}));
+            new Double[] {27.2, 41.2, 1.116534776001E12}));
     assertTrue(
         Arrays.equals(
             constraints4.get(0).getMaxValuesPerDimension(),
-            new double[] {27.3, 41.3, 9.223372036854775999E18}));
+            new Double[] {27.3, 41.3, 9.223372036854775999E18}));
   }
 }

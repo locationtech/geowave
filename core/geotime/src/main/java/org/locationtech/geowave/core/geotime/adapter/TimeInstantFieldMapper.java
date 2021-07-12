@@ -20,7 +20,7 @@ import com.google.common.collect.Lists;
  *
  * @param <N> the adapter field type
  */
-public abstract class TimeInstantFieldMapper<N> extends TemporalFieldMapper<N> {
+public abstract class TimeInstantFieldMapper<N> extends TemporalIntervalFieldMapper<N> {
 
   @Override
   public Interval toIndex(List<N> nativeFieldValues) {

@@ -9,7 +9,7 @@
 package org.locationtech.geowave.core.index;
 
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
 
 /** Interface which defines a numeric index strategy. */
 public interface NumericIndexStrategy extends

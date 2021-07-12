@@ -11,7 +11,7 @@ package org.locationtech.geowave.core.geotime.store.query;
 import java.nio.ByteBuffer;
 import java.util.Date;
 import org.locationtech.geowave.core.index.VarintUtils;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
+import org.locationtech.geowave.core.index.numeric.NumericData;
 
 public class TemporalRange {
   private Date startTime;

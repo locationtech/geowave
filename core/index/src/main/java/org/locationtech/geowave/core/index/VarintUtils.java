@@ -8,10 +8,10 @@
  */
 package org.locationtech.geowave.core.index;
 
-import com.google.common.annotations.VisibleForTesting;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import com.google.common.annotations.VisibleForTesting;
 
 /**
  * Based on {@link com.clearspring.analytics.util.Varint}. Provides additional functionality to

@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.store.statistics.index;
 
 import java.nio.ByteBuffer;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.ByteUtils;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.NumericHistogram;
@@ -60,10 +61,11 @@ public class RowRangeHistogramStatistic extends
     }
 
     public double cardinality(final byte[] start, final byte[] end) {
-      return (end == null ? histogram.getTotalCount()
-          : (histogram.sum(ByteUtils.toDouble(end), true)) // should be inclusive
-              - (start == null ? 0 : histogram.sum(ByteUtils.toDouble(start), false))); // should be
-      // exclusive
+      final double startSum = start == null ? 0 : histogram.sum(ByteUtils.toDouble(start), true);;
+      final double endSum =
+          end == null ? histogram.getTotalCount()
+              : histogram.sum(ByteUtils.toDoubleAsNextPrefix(end), true);
+      return endSum - startSum;
     }
 
     public double[] quantile(final int bins) {

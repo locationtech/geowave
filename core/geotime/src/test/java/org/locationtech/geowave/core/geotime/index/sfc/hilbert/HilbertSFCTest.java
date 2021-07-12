@@ -13,14 +13,14 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
+import org.locationtech.geowave.core.index.numeric.BasicNumericDataset;
+import org.locationtech.geowave.core.index.numeric.NumericData;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
 import org.locationtech.geowave.core.index.sfc.RangeDecomposition;
 import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.SFCFactory;
 import org.locationtech.geowave.core.index.sfc.SFCFactory.SFCType;
 import org.locationtech.geowave.core.index.sfc.SpaceFillingCurve;
-import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import com.google.common.primitives.SignedBytes;
 
 public class HilbertSFCTest {
@@ -31,7 +31,7 @@ public class HilbertSFCTest {
     final int LATITUDE_BITS = 31;
     final int LONGITUDE_BITS = 31;
 
-    final double[] testValues = new double[] {90, 180};
+    final Double[] testValues = new Double[] {90d, 180d};
     final long expectedID = 3074457345618258602L;
 
     final SFCDimensionDefinition[] SPATIAL_DIMENSIONS =
@@ -50,7 +50,7 @@ public class HilbertSFCTest {
     final int LATITUDE_BITS = 31;
     final int LONGITUDE_BITS = 31;
 
-    final double[] testValues = new double[] {-90, -180};
+    final Double[] testValues = new Double[] {-90d, -180d};
     final long expectedID = 0L;
 
     final SFCDimensionDefinition[] SPATIAL_DIMENSIONS =
@@ -70,7 +70,7 @@ public class HilbertSFCTest {
     final int LATITUDE_BITS = 31;
     final int LONGITUDE_BITS = 31;
 
-    final double[] testValues = new double[] {0, 0};
+    final Double[] testValues = new Double[] {0d, 0d};
     final long expectedID = 768614336404564650L;
 
     final SFCDimensionDefinition[] SPATIAL_DIMENSIONS =
@@ -89,8 +89,8 @@ public class HilbertSFCTest {
     final int LATITUDE_BITS = 31;
     final int LONGITUDE_BITS = 31;
 
-    final double[] minValue = new double[] {-90, -180};
-    final double[] maxValue = new double[] {90, 180};
+    final Double[] minValue = new Double[] {-90d, -180d};
+    final Double[] maxValue = new Double[] {90d, 180d};
 
     final SFCDimensionDefinition[] SPATIAL_DIMENSIONS =
         new SFCDimensionDefinition[] {
@@ -112,7 +112,7 @@ public class HilbertSFCTest {
     final int LATITUDE_BITS = 31;
     final int LONGITUDE_BITS = 31;
 
-    final double[] testValues = new double[] {-100, -180};
+    final Double[] testValues = new Double[] {-100d, -180d};
     final long expectedID = 0L;
 
     final SFCDimensionDefinition[] SPATIAL_DIMENSIONS =

@@ -16,7 +16,7 @@ import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 
-public class TextIndexStrategy<E> implements CustomIndexStrategy<E, TextSearch> {
+public class TextIndexStrategy<E> implements CustomIndexStrategy<E, TextConstraints> {
   private EnumSet<TextSearchType> supportedSearchTypes;
   private EnumSet<CaseSensitivity> supportedCaseSensitivity;
   private TextIndexEntryConverter<E> converter;
@@ -49,6 +49,14 @@ public class TextIndexStrategy<E> implements CustomIndexStrategy<E, TextSearch> 
 
   public TextIndexEntryConverter<E> getEntryConverter() {
     return converter;
+  }
+
+  public boolean isSupported(final TextSearchType searchType) {
+    return supportedSearchTypes.contains(searchType);
+  }
+
+  public boolean isSupported(final CaseSensitivity caseSensitivity) {
+    return supportedCaseSensitivity.contains(caseSensitivity);
   }
 
   @Override
@@ -95,19 +103,21 @@ public class TextIndexStrategy<E> implements CustomIndexStrategy<E, TextSearch> 
   }
 
   @Override
-  public QueryRanges getQueryRanges(final TextSearch constraints) {
-    return TextIndexUtils.getQueryRanges(
-        constraints.getSearchTerm(),
-        constraints.getType(),
-        constraints.getCaseSensitivity(),
-        supportedSearchTypes,
-        nCharacterGrams);
+  public QueryRanges getQueryRanges(final TextConstraints constraints) {
+    return constraints.getQueryRanges(supportedSearchTypes, nCharacterGrams);
   }
 
+  public QueryRanges getQueryRanges(final MultiDimensionalTextData textData) {
+    return TextIndexUtils.getQueryRanges(textData);
+  }
+
+  @SuppressWarnings({"rawtypes", "unchecked"})
   @Override
-  public PersistableBiPredicate<E, TextSearch> getFilter(final TextSearch constraints) {
-    if (constraints.getType().requiresEvaluate()) {
-      return new TextSearchPredicate<>(converter);
+  public PersistableBiPredicate<E, TextConstraints> getFilter(final TextConstraints constraints) {
+    if (constraints instanceof TextSearch) {
+      if (((TextSearch) constraints).getType().requiresEvaluate()) {
+        return (PersistableBiPredicate) new TextSearchPredicate<>(converter);
+      }
     }
     return CustomIndexStrategy.super.getFilter(constraints);
   }
@@ -159,7 +169,7 @@ public class TextIndexStrategy<E> implements CustomIndexStrategy<E, TextSearch> 
   }
 
   @Override
-  public Class<TextSearch> getConstraintsClass() {
-    return TextSearch.class;
+  public Class<TextConstraints> getConstraintsClass() {
+    return TextConstraints.class;
   }
 }

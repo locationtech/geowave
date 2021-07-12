@@ -16,7 +16,7 @@ import org.locationtech.geowave.core.geotime.index.api.TemporalIndexBuilder;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.util.IndexOptimizationUtils;
 import org.locationtech.geowave.core.geotime.util.TimeUtils;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.opengis.filter.Filter;
@@ -55,16 +55,16 @@ public class TemporalQuery extends AbstractVectorConstraints<ExplicitTemporalQue
       return constraintsToFilter(
           constraints,
           data -> TimeUtils.toDuringFilter(
-              (long) data.getMinValuesPerDimension()[0],
-              (long) data.getMaxValuesPerDimension()[0],
+              data.getMinValuesPerDimension()[0].longValue(),
+              data.getMaxValuesPerDimension()[0].longValue(),
               adapter.getTimeDescriptors().getTime().getLocalName()));
     } else if ((adapter.getTimeDescriptors().getStartRange() != null)
         && (adapter.getTimeDescriptors().getEndRange() != null)) {
       return constraintsToFilter(
           constraints,
           data -> TimeUtils.toFilter(
-              (long) data.getMinValuesPerDimension()[0],
-              (long) data.getMaxValuesPerDimension()[0],
+              data.getMinValuesPerDimension()[0].longValue(),
+              data.getMaxValuesPerDimension()[0].longValue(),
               adapter.getTimeDescriptors().getStartRange().getLocalName(),
               adapter.getTimeDescriptors().getEndRange().getLocalName()));
     }

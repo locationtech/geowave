@@ -68,4 +68,8 @@ public class BinRange {
   public boolean isFullExtent() {
     return fullExtent;
   }
+
+  public static BinRange unbound() {
+    return new BinRange(null, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, true);
+  }
 }

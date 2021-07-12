@@ -930,8 +930,6 @@ def test_row_range_histogram_statistic(test_ds):
     assert isinstance(histogram, NumericHistogram)
     assert histogram.get_min_value() == float('inf')
     assert histogram.get_max_value() == float('-inf')
-    assert histogram.quantile(0.0) > 0
-    assert histogram.quantile(1.0) > 0
     assert histogram.sum(histogram.quantile(1.0)) == 360
     assert histogram.get_total_count() == 360
 

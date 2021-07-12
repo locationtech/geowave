@@ -18,16 +18,15 @@ import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
-import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
+import org.locationtech.geowave.core.index.numeric.BasicNumericDataset;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.numeric.NumericData;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.query.filter.BasicQueryFilter;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
-import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 import com.google.common.collect.Interner;
 import com.google.common.collect.Interners;
 
@@ -37,7 +36,6 @@ import com.google.common.collect.Interners;
  */
 public class SpatialQueryFilter extends BasicQueryFilter {
   private static final Interner<GeometryImage> geometryImageInterner = Interners.newWeakInterner();
-  public static final PreparedGeometryFactory FACTORY = new PreparedGeometryFactory();
   private GeometryImage preparedGeometryImage;
 
   protected interface SpatialQueryCompareOp {
@@ -191,7 +189,8 @@ public class SpatialQueryFilter extends BasicQueryFilter {
         strippedGeometry.strippedQuery,
         strippedGeometry.strippedDimensionDefinitions,
         nonSpatialCompareOp);
-    preparedGeometryImage = new GeometryImage(FACTORY.create(queryGeometry));
+    preparedGeometryImage =
+        new GeometryImage(GeometryUtils.PREPARED_GEOMETRY_FACTORY.create(queryGeometry));
     geometryFieldNames = strippedGeometry.geometryFieldNames;
     if (compareOp != null) {
       compareOperation = compareOp;
@@ -379,7 +378,9 @@ public class SpatialQueryFilter extends BasicQueryFilter {
 
     public synchronized void init() {
       if (preparedGeometry == null) {
-        preparedGeometry = FACTORY.create(GeometryUtils.geometryFromBinary(geometryBinary, null));
+        preparedGeometry =
+            GeometryUtils.PREPARED_GEOMETRY_FACTORY.create(
+                GeometryUtils.geometryFromBinary(geometryBinary, null));
       }
     }
 

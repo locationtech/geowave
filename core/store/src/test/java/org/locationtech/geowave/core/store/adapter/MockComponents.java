@@ -27,10 +27,10 @@ import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
-import org.locationtech.geowave.core.index.sfc.data.NumericValue;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.numeric.NumericData;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
+import org.locationtech.geowave.core.index.numeric.NumericValue;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.IndexFieldMapper;
 import org.locationtech.geowave.core.store.api.Statistic;
@@ -437,8 +437,8 @@ public class MockComponents {
         coordinateRangesPerDimension[d] = new CoordinateRange[1];
         coordinateRangesPerDimension[d][0] =
             new CoordinateRange(
-                (long) dataRange.getMinValuesPerDimension()[0],
-                (long) dataRange.getMaxValuesPerDimension()[0],
+                dataRange.getMinValuesPerDimension()[0].longValue(),
+                dataRange.getMaxValuesPerDimension()[0].longValue(),
                 new byte[] {});
       }
       return new MultiDimensionalCoordinateRanges[] {

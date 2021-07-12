@@ -20,11 +20,14 @@ import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.FieldStatistic;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Statistic;
+import org.locationtech.geowave.core.store.api.StatisticBinningStrategy;
 import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.callback.DeleteCallback;
 import org.locationtech.geowave.core.store.callback.IngestCallback;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
+import org.locationtech.geowave.core.store.statistics.binning.CompositeBinningStrategy;
+import org.locationtech.geowave.core.store.statistics.binning.PartitionBinningStrategy;
 import org.locationtech.geowave.core.store.statistics.visibility.DefaultStatisticVisibility;
 import org.locationtech.geowave.core.store.statistics.visibility.FieldDependentStatisticVisibility;
 import org.slf4j.Logger;
@@ -49,6 +52,7 @@ public class StatisticUpdateHandler<T, V extends StatisticValue<R>, R> implement
   private final DeleteHandler<T, V, R> deleteHandler;
   private final boolean supportsIngestCallback;
   private final boolean supportsDeleteCallback;
+  private final boolean filterByPartition;
 
   private static final ByteArray NO_BIN = new ByteArray(new byte[0]);
 
@@ -65,12 +69,26 @@ public class StatisticUpdateHandler<T, V extends StatisticValue<R>, R> implement
     final V value = statistic.createEmpty();
     supportsIngestCallback = value instanceof StatisticsIngestCallback;
     supportsDeleteCallback = value instanceof StatisticsDeleteCallback;
+    final StatisticBinningStrategy binningStrategy = statistic.getBinningStrategy();
+    if (binningStrategy != null) {
+      filterByPartition =
+          binningStrategy instanceof PartitionBinningStrategy
+              || ((binningStrategy instanceof CompositeBinningStrategy)
+                  && ((CompositeBinningStrategy) binningStrategy).usesStrategy(
+                      PartitionBinningStrategy.class));
+    } else {
+      filterByPartition = false;
+    }
   }
 
   protected void handleEntry(
       final Handler<T, V, R> handler,
       final T entry,
       final GeoWaveRow... rows) {
+    if (rows.length == 0) {
+      // This can happen with attribute indices when the attribute value is null
+      return;
+    }
     final ByteArray visibility = new ByteArray(visibilityHandler.getVisibility(entry, rows));
     Map<ByteArray, V> binnedValues = statisticsMap.get(visibility);
     if (binnedValues == null) {
@@ -78,12 +96,26 @@ public class StatisticUpdateHandler<T, V extends StatisticValue<R>, R> implement
       statisticsMap.put(visibility, binnedValues);
     }
     if (statistic.getBinningStrategy() != null) {
-      final ByteArray[] bins = statistic.getBinningStrategy().getBins(adapter, entry, rows);
-      for (final ByteArray bin : bins) {
-        handleBin(handler, binnedValues, bin, entry, rows);
+      if (filterByPartition) {
+        for (final GeoWaveRow row : rows) {
+          handleBinnedRows(handler, binnedValues, entry, row);
+        }
+      } else {
+        handleBinnedRows(handler, binnedValues, entry, rows);
       }
     } else {
       handleBin(handler, binnedValues, NO_BIN, entry, rows);
+    }
+  }
+
+  protected void handleBinnedRows(
+      final Handler<T, V, R> handler,
+      final Map<ByteArray, V> binnedValues,
+      final T entry,
+      final GeoWaveRow... rows) {
+    final ByteArray[] bins = statistic.getBinningStrategy().getBins(adapter, entry, rows);
+    for (final ByteArray bin : bins) {
+      handleBin(handler, binnedValues, bin, entry, rows);
     }
   }
 

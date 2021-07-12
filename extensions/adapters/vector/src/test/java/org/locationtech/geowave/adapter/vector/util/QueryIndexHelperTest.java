@@ -37,7 +37,7 @@ import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors.TimeDescriptorConfiguration;
 import org.locationtech.geowave.core.index.ByteArray;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
@@ -293,8 +293,8 @@ public class QueryIndexHelperTest {
                 constraintsSet));
 
     final List<MultiDimensionalNumericData> nd = query.getIndexConstraints(SPATIAL_TEMPORAL_INDEX);
-    assertEquals(stime.getTime(), (long) nd.get(0).getDataPerDimension()[2].getMin());
-    assertEquals(etime.getTime(), (long) nd.get(0).getDataPerDimension()[2].getMax());
+    assertEquals(stime.getTime(), nd.get(0).getDataPerDimension()[2].getMin().longValue());
+    assertEquals(etime.getTime(), nd.get(0).getDataPerDimension()[2].getMax().longValue());
 
     final BasicQueryByClass query1 =
         new BasicQueryByClass(
@@ -308,8 +308,8 @@ public class QueryIndexHelperTest {
 
     final List<MultiDimensionalNumericData> nd1 =
         query1.getIndexConstraints(SPATIAL_TEMPORAL_INDEX);
-    assertEquals(statsStart1.getTime(), (long) nd1.get(0).getDataPerDimension()[2].getMin());
-    assertEquals(statsEnd2.getTime(), (long) nd1.get(0).getDataPerDimension()[2].getMax());
+    assertEquals(statsStart1.getTime(), nd1.get(0).getDataPerDimension()[2].getMin().longValue());
+    assertEquals(statsEnd2.getTime(), nd1.get(0).getDataPerDimension()[2].getMax().longValue());
   }
 
   @Test

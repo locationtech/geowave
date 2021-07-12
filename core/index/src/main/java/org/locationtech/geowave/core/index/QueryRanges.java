@@ -96,6 +96,10 @@ public class QueryRanges {
     partitionRanges = fromPartitionKeys(partitionKeys);
   }
 
+  public boolean isEmpty() {
+    return partitionRanges == null || partitionRanges.size() == 0;
+  }
+
   private static Collection<SinglePartitionQueryRanges> fromPartitionKeys(
       final byte[][] partitionKeys) {
     if (partitionKeys == null) {

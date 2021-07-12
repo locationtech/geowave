@@ -9,12 +9,15 @@
 package org.locationtech.geowave.core.store.index;
 
 import java.nio.ByteBuffer;
+import java.util.EnumSet;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
+import org.locationtech.geowave.core.index.text.CaseSensitivity;
 import org.locationtech.geowave.core.index.text.TextIndexEntryConverter;
 import org.locationtech.geowave.core.index.text.TextIndexStrategy;
+import org.locationtech.geowave.core.index.text.TextSearchType;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
 import org.locationtech.geowave.core.store.api.AttributeIndex;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
@@ -36,6 +39,11 @@ public class TextAttributeIndexProvider implements AttributeIndexProviderSpi {
       final FieldDescriptor<?> fieldDescriptor) {
     return new CustomAttributeIndex<>(
         new TextIndexStrategy<>(
+            EnumSet.of(
+                TextSearchType.BEGINS_WITH,
+                TextSearchType.ENDS_WITH,
+                TextSearchType.EXACT_MATCH),
+            EnumSet.of(CaseSensitivity.CASE_SENSITIVE, CaseSensitivity.CASE_INSENSITIVE),
             new AdapterFieldTextIndexEntryConverter<>(adapter, fieldDescriptor.fieldName())),
         indexName,
         fieldDescriptor.fieldName());

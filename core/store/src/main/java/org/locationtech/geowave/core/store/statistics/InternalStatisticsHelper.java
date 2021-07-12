@@ -95,6 +95,29 @@ public class InternalStatisticsHelper {
     return null;
   }
 
+  public static <V extends StatisticValue<R>, R> V getIndexStatistic(
+      final DataStatisticsStore statisticsStore,
+      final IndexStatisticType<V> statisticType,
+      final String indexName,
+      final String typeName,
+      final byte[] partitionKey,
+      final String... authorizations) {
+    final StatisticId<V> statisticId =
+        IndexStatistic.generateStatisticId(indexName, statisticType, Statistic.INTERNAL_TAG);
+    final Statistic<V> stat = statisticsStore.getStatisticById(statisticId);
+    if (stat != null) {
+      return statisticsStore.getStatisticValue(
+          stat,
+          partitionKey != null
+              ? CompositeBinningStrategy.getBin(
+                  DataTypeBinningStrategy.getBin(typeName),
+                  PartitionBinningStrategy.getBin(partitionKey))
+              : DataTypeBinningStrategy.getBin(typeName),
+          authorizations);
+    }
+    return null;
+  }
+
   /**
    * Get the duplicate counts for an index.
    *

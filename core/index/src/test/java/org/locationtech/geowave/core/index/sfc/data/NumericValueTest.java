@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.index.sfc.data;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.locationtech.geowave.core.index.numeric.NumericValue;
 
 public class NumericValueTest {
 

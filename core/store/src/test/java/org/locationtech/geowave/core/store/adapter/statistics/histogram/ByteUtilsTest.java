@@ -25,5 +25,29 @@ public class ByteUtilsTest {
     assertTrue(oneOneTwo < oneOneThree);
     assertTrue(
         Arrays.equals(ByteUtils.toPaddedBytes("113".getBytes()), ByteUtils.toBytes(oneOneThree)));
+
+    final double min = ByteUtils.toDouble(new byte[] {(byte) 0x00});
+    final double mid = ByteUtils.toDouble(new byte[] {(byte) 0x8F});
+    final double max = ByteUtils.toDouble(new byte[] {(byte) 0xFF});
+    assertTrue(min < mid);
+    assertTrue(mid < max);
+    Double last = null;
+    for (int i = 0; i < 256; i++) {
+      final double current =
+          ByteUtils.toDouble(
+              new byte[] {
+                  (byte) i,
+                  (byte) i,
+                  (byte) i,
+                  (byte) i,
+                  (byte) i,
+                  (byte) i,
+                  (byte) i,
+                  (byte) i});
+      if (last != null) {
+        assertTrue(current > last);
+      }
+      last = current;
+    }
   }
 }

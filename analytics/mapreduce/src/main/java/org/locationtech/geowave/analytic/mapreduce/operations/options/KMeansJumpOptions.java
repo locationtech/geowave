@@ -12,7 +12,7 @@ import org.locationtech.geowave.analytic.param.JumpParameters;
 import org.locationtech.geowave.analytic.param.SampleParameters;
 import org.locationtech.geowave.analytic.param.annotations.JumpParameter;
 import org.locationtech.geowave.analytic.param.annotations.SampleParameter;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;

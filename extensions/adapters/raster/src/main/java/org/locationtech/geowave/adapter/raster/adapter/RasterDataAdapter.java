@@ -94,11 +94,11 @@ import org.locationtech.geowave.core.index.IndexUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
+import org.locationtech.geowave.core.index.numeric.BasicNumericDataset;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptorBuilder;
 import org.locationtech.geowave.core.store.adapter.IndexDependentDataAdapter;
@@ -484,8 +484,8 @@ public class RasterDataAdapter implements
       final GridEnvelope gridEnvelope = gridCoverage.getGridGeometry().getGridRange();
       // only one set of constraints..hence reference '0' element
       final double[] tileRangePerDimension = new double[bounds.getDimensionCount()];
-      final double[] maxValuesPerDimension = bounds.getMaxValuesPerDimension();
-      final double[] minValuesPerDimension = bounds.getMinValuesPerDimension();
+      final Double[] maxValuesPerDimension = bounds.getMaxValuesPerDimension();
+      final Double[] minValuesPerDimension = bounds.getMinValuesPerDimension();
       for (int d = 0; d < tileRangePerDimension.length; d++) {
         tileRangePerDimension[d] =
             ((maxValuesPerDimension[d] - minValuesPerDimension[d]) * tileSize)
@@ -622,8 +622,8 @@ public class RasterDataAdapter implements
           }
 
           final Envelope originalEnvelope = new GeneralEnvelope(minDP, maxDP);
-          final double[] minsPerDimension = rangePerDimension.getMinValuesPerDimension();
-          final double[] maxesPerDimension = rangePerDimension.getMaxValuesPerDimension();
+          final Double[] minsPerDimension = rangePerDimension.getMinValuesPerDimension();
+          final Double[] maxesPerDimension = rangePerDimension.getMaxValuesPerDimension();
           final ReferencedEnvelope mapExtent =
               new ReferencedEnvelope(
                   minsPerDimension[longitudeIndex],
@@ -782,8 +782,8 @@ public class RasterDataAdapter implements
               // this is exclusive on the end, and the tier is set
               // so just get the id based on the lowest half of
               // the multidimensional data
-              final double[] centroids = rangePerDimension.getCentroidPerDimension();
-              final double[] mins = rangePerDimension.getMinValuesPerDimension();
+              final Double[] centroids = rangePerDimension.getCentroidPerDimension();
+              final Double[] mins = rangePerDimension.getMinValuesPerDimension();
               final NumericRange[] ranges = new NumericRange[centroids.length];
               for (int d = 0; d < centroids.length; d++) {
                 ranges[d] = new NumericRange(mins[d], centroids[d]);
@@ -854,8 +854,8 @@ public class RasterDataAdapter implements
     final NumericDimensionDefinition[] orderedDimensions =
         index.getIndexStrategy().getOrderedDimensionDefinitions();
 
-    final double[] minsPerDimension = indexRange.getMinValuesPerDimension();
-    final double[] maxesPerDimension = indexRange.getMaxValuesPerDimension();
+    final Double[] minsPerDimension = indexRange.getMinValuesPerDimension();
+    final Double[] maxesPerDimension = indexRange.getMaxValuesPerDimension();
     Double minX = null;
     Double maxX = null;
     Double minY = null;

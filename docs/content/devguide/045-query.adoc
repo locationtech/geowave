@@ -22,9 +22,27 @@ NOTE: Currently only HBase and Accumulo data stores support distributable filter
 
 Queries are created in GeoWave through the use of query builders. These builders are used to set all the things needed to create a query, such as the type names, indices, authorizations, and query constraints. While the base {core-store}/core/store/api/QueryBuilder.java[`QueryBuilder`] can be used as a general way to query data, GeoWave also provides an implementation of the query builder that is specific to vector queries with the {core-geotime}/core/geotime/store/query/api/VectorQueryBuilder.java[`VectorQueryBuilder`]. It also provides a query builder for vector aggregation queries with the {core-geotime}/core/geotime/store/query/api/VectorAggregationQueryBuilder.java[`VectorAggregationQueryBuilder`]. These vector query builders provide a constraints factory that has additional constraints that are specific to vector queries, such as CQL filters.  See the <<075-programmatic-api.adoc#querying-data, programmatic API examples>> for examples of these query builders in action.
 
+=== Filter Expressions
+
+Queries can also be filtered and constrained using a GeoWave filter expression.  The easiest way to do this is to create an appropriate {core-store}/core/store/query/filter/expression/FieldValue.java[`FieldValue`] expression based on the field you wish to constrain.  GeoWave provides commonly used expressions and predicates for spatial, temporal, numeric, and text field values.  Expressions can also be combined to create more complex query filters. Additionally, if no index name is provided to the query builder when using a filter expression, GeoWave will infer the best index based on the fields that are constrained by the filter.  The following is an example of a query that uses a GeoWave filter expression:
+
+[source, java]
+----
+Query<SimpleFeature> query =
+    QueryBuilder.newBuilder(SimpleFeature.class)
+                .addTypeName("myType")
+                .filter(SpatialFieldValue.of("geom")
+                          .bbox(0.5, 30.5, 0.5, 30.5)
+                          .and(TemporalFieldValue.of("timestamp")
+                                 .isBefore(new Date())))
+                .build();
+----
+
+NOTE: When queries are made to a GeoWave data store through GeoServer, GeoWave attempts to convert the provided CQL filter to a GeoWave filter expression for optimal index selection and performance.  If the expression cannot be converted exactly, it will fall back to a standard CQL query filter.
+
 === Contextual Query Language (CQL)
 
-One of the most common ways to filter vector data in a query is by using CQL, also known as Common Query Language. CQL makes query filters more human readable and understandable while still maintaining the complexity that is often necessary. The constraints factory that is provided by the {core-geotime}/core/geotime/store/query/api/VectorQueryBuilder.java[`VectorQueryBuilder`] contains a helper function for creating query constraints using a CQL expression. CQL query constraints are used through the programmatic API, the GeoServer plugin, and through the GeoWave Query Lanaguage. For an overview on using CQL, please refer to the link:http://docs.geoserver.org/latest/en/user/tutorials/cql/cql_tutorial.html[GeoServer tutorials, window="_blank"].
+Another common way of filtering vector data in a query is by using CQL, also known as Common Query Language. CQL makes query filters more human readable and understandable while still maintaining the complexity that is often necessary. The constraints factory that is provided by the {core-geotime}/core/geotime/store/query/api/VectorQueryBuilder.java[`VectorQueryBuilder`] contains a helper function for creating query constraints using a CQL expression. CQL query constraints are used through the programmatic API, the GeoServer plugin, and through the GeoWave Query Lanaguage.  CQL query filters are less efficient that GeoWave filter expressions, but can be useful if one of the needed capabilities are not yet implemented by the GeoWave filter expressions.  For an overview on using CQL, please refer to the link:http://docs.geoserver.org/latest/en/user/tutorials/cql/cql_tutorial.html[GeoServer tutorials, window="_blank"].
 
 === GeoWave Query Language
 

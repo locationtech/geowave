@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.Coordinate;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.InsertionIds;
@@ -26,10 +27,10 @@ import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.dimension.BasicDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.lexicoder.NumberLexicoder;
-import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericValue;
+import org.locationtech.geowave.core.index.numeric.BasicNumericDataset;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.numeric.NumericData;
+import org.locationtech.geowave.core.index.numeric.NumericValue;
 
 /**
  * A simple 1-dimensional NumericIndexStrategy that represents an index of signed integer values
@@ -100,13 +101,19 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements Nu
       final MultiDimensionalNumericData indexedRange,
       final int maxEstimatedRangeDecomposition,
       final IndexMetaData... hints) {
-    final T min = cast(indexedRange.getMinValuesPerDimension()[0]);
-    final byte[] start = lexicoder.toByteArray(min);
+    final T min = cast(indexedRange.getDataPerDimension()[0].getMin());
+    byte[] start = lexicoder.toByteArray(min);
     final T max =
         cast(
-            isInteger() ? Math.ceil(indexedRange.getMaxValuesPerDimension()[0])
+            isInteger() ? Math.ceil(indexedRange.getDataPerDimension()[0].getMax())
                 : indexedRange.getMaxValuesPerDimension()[0]);
-    final byte[] end = lexicoder.toByteArray(max);
+    byte[] end = lexicoder.toByteArray(max);
+    if (!indexedRange.getDataPerDimension()[0].isMinInclusive()) {
+      start = ByteArrayUtils.getNextPrefix(start);
+    }
+    if (!indexedRange.getDataPerDimension()[0].isMaxInclusive()) {
+      end = ByteArrayUtils.getPreviousPrefix(end);
+    }
     final ByteArrayRange range = new ByteArrayRange(start, end);
     final SinglePartitionQueryRanges partitionRange =
         new SinglePartitionQueryRanges(Collections.singletonList(range));
@@ -209,7 +216,7 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements Nu
     if (getClass() != obj.getClass()) {
       return false;
     }
-    final SimpleNumericIndexStrategy other = (SimpleNumericIndexStrategy) obj;
+    final SimpleNumericIndexStrategy<?> other = (SimpleNumericIndexStrategy<?>) obj;
     if (!Arrays.equals(definitions, other.definitions)) {
       return false;
     }
