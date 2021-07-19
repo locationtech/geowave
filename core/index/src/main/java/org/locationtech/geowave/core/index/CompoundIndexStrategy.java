@@ -14,8 +14,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import com.google.common.collect.Collections2;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
@@ -249,7 +249,7 @@ public class CompoundIndexStrategy implements NumericIndexStrategy {
               (byte) 0));
     }
     metaDataSplit = result.size();
-    for (final IndexMetaData metaData : (List<IndexMetaData>) subStrategy2.createMetaData()) {
+    for (final IndexMetaData metaData : subStrategy2.createMetaData()) {
       result.add(
           new CompoundIndexMetaDataWrapper(
               metaData,
@@ -307,7 +307,7 @@ public class CompoundIndexStrategy implements NumericIndexStrategy {
     @Override
     public byte[] toBinary() {
       final byte[] metaBytes = PersistenceUtils.toBinary(metaData);
-      int length =
+      final int length =
           metaBytes.length
               + VarintUtils.unsignedIntByteLength(metaBytes.length)
               + 1
@@ -323,7 +323,7 @@ public class CompoundIndexStrategy implements NumericIndexStrategy {
     @Override
     public void fromBinary(final byte[] bytes) {
       final ByteBuffer buf = ByteBuffer.wrap(bytes);
-      int metaBytesLength = VarintUtils.readUnsignedInt(buf);
+      final int metaBytesLength = VarintUtils.readUnsignedInt(buf);
       final byte[] metaBytes = new byte[metaBytesLength];
       buf.get(metaBytes);
       metaData = (IndexMetaData) PersistenceUtils.fromBinary(metaBytes);

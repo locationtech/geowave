@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.geotime;
 
 import org.locationtech.geowave.core.geotime.adapter.SpatialFieldDescriptor;
 import org.locationtech.geowave.core.geotime.adapter.TemporalFieldDescriptor;
+import org.locationtech.geowave.core.geotime.index.SpatialIndexFilter;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.SimpleTimeDefinition;
@@ -46,6 +47,31 @@ import org.locationtech.geowave.core.geotime.store.query.aggregate.SpatialSimple
 import org.locationtech.geowave.core.geotime.store.query.aggregate.VectorBoundingBoxAggregation;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.VectorTimeRangeAggregation;
 import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.BBox;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.Crosses;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.Disjoint;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.Intersects;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.Overlaps;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.PreparedFilterGeometry;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialContains;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialEqualTo;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialFieldValue;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialLiteral;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialNotEqualTo;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.Touches;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.UnpreparedFilterGeometry;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.Within;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.After;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.Before;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.BeforeOrDuring;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.During;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.DuringOrAfter;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.TemporalBetween;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.TemporalEqualTo;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.TemporalFieldValue;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.TemporalLiteral;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.TemporalNotEqualTo;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.TimeOverlaps;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 
 public class GeoTimePersistableRegistry implements PersistableRegistrySpi {
@@ -59,7 +85,8 @@ public class GeoTimePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 303, TimeDefinition::new),
         // 304 is a legacy class (pre 2.0)
         // 305 is a legacy class (pre 2.0)
-        // 306-309 are unused
+        // 306-307 are used by GeotimeRegisteredIndexFieldMappers
+        // 308-309 are unused
         new PersistableIdAndConstructor((short) 310, TimeField::new),
         new PersistableIdAndConstructor((short) 311, SpatialQueryFilter::new),
         new PersistableIdAndConstructor((short) 312, ExplicitSpatialQuery::new),
@@ -70,7 +97,7 @@ public class GeoTimePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 317, ExplicitSpatialTemporalQuery::new),
         new PersistableIdAndConstructor((short) 318, ExplicitTemporalQuery::new),
         new PersistableIdAndConstructor((short) 319, CustomCRSUnboundedSpatialDimension::new),
-        // 320 is unused
+        new PersistableIdAndConstructor((short) 320, SpatialIndexFilter::new),
         new PersistableIdAndConstructor((short) 321, CustomCRSUnboundedSpatialDimensionX::new),
         new PersistableIdAndConstructor((short) 322, CustomCRSUnboundedSpatialDimensionY::new),
         new PersistableIdAndConstructor((short) 323, VectorTimeRangeAggregation::new),
@@ -95,6 +122,32 @@ public class GeoTimePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 342, LatitudeField::new),
         new PersistableIdAndConstructor((short) 343, LongitudeField::new),
         new PersistableIdAndConstructor((short) 344, CustomCRSSpatialField::new),
-        new PersistableIdAndConstructor((short) 345, TemporalFieldDescriptor::new)};
+        new PersistableIdAndConstructor((short) 345, TemporalFieldDescriptor::new),
+        new PersistableIdAndConstructor((short) 346, Crosses::new),
+        new PersistableIdAndConstructor((short) 347, Disjoint::new),
+        new PersistableIdAndConstructor((short) 348, Intersects::new),
+        new PersistableIdAndConstructor((short) 349, Overlaps::new),
+        // 350-358 are used by GeotimeRegisteredIndexFieldMappers
+        new PersistableIdAndConstructor((short) 359, SpatialContains::new),
+        new PersistableIdAndConstructor((short) 360, SpatialEqualTo::new),
+        new PersistableIdAndConstructor((short) 361, SpatialNotEqualTo::new),
+        new PersistableIdAndConstructor((short) 362, Touches::new),
+        new PersistableIdAndConstructor((short) 363, Within::new),
+        new PersistableIdAndConstructor((short) 364, PreparedFilterGeometry::new),
+        new PersistableIdAndConstructor((short) 365, UnpreparedFilterGeometry::new),
+        new PersistableIdAndConstructor((short) 366, SpatialFieldValue::new),
+        new PersistableIdAndConstructor((short) 367, SpatialLiteral::new),
+        new PersistableIdAndConstructor((short) 368, After::new),
+        new PersistableIdAndConstructor((short) 369, Before::new),
+        new PersistableIdAndConstructor((short) 370, BeforeOrDuring::new),
+        new PersistableIdAndConstructor((short) 371, DuringOrAfter::new),
+        new PersistableIdAndConstructor((short) 372, During::new),
+        new PersistableIdAndConstructor((short) 373, TemporalBetween::new),
+        new PersistableIdAndConstructor((short) 374, TimeOverlaps::new),
+        new PersistableIdAndConstructor((short) 375, TemporalFieldValue::new),
+        new PersistableIdAndConstructor((short) 376, TemporalLiteral::new),
+        new PersistableIdAndConstructor((short) 377, BBox::new),
+        new PersistableIdAndConstructor((short) 378, TemporalEqualTo::new),
+        new PersistableIdAndConstructor((short) 379, TemporalNotEqualTo::new)};
   }
 }

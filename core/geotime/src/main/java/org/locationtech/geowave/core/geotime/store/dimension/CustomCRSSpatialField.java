@@ -12,7 +12,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.IndexDimensionHint;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
+import org.locationtech.geowave.core.index.numeric.NumericData;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import com.google.common.collect.Sets;

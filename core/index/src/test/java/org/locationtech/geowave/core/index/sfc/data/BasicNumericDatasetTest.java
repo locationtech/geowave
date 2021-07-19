@@ -10,6 +10,10 @@ package org.locationtech.geowave.core.index.sfc.data;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.locationtech.geowave.core.index.numeric.BasicNumericDataset;
+import org.locationtech.geowave.core.index.numeric.NumericData;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
+import org.locationtech.geowave.core.index.numeric.NumericValue;
 
 public class BasicNumericDatasetTest {
 
@@ -30,8 +34,8 @@ public class BasicNumericDatasetTest {
   public void testNumericRangesMinValues() {
 
     final int expectedCount = 3;
-    final double[] expectedMinValues = new double[] {10, 25, -50};
-    final double[] mins = basicNumericDatasetRanges.getMinValuesPerDimension();
+    final Double[] expectedMinValues = new Double[] {10d, 25d, -50d};
+    final Double[] mins = basicNumericDatasetRanges.getMinValuesPerDimension();
 
     Assert.assertEquals(expectedCount, basicNumericDatasetRanges.getDimensionCount());
 
@@ -44,8 +48,8 @@ public class BasicNumericDatasetTest {
   public void testNumericRangesMaxValues() {
 
     final int expectedCount = 3;
-    final double[] expectedMaxValues = new double[] {50, 95, 50};
-    final double[] max = basicNumericDatasetRanges.getMaxValuesPerDimension();
+    final Double[] expectedMaxValues = new Double[] {50d, 95d, 50d};
+    final Double[] max = basicNumericDatasetRanges.getMaxValuesPerDimension();
 
     Assert.assertEquals(expectedCount, basicNumericDatasetRanges.getDimensionCount());
 
@@ -58,8 +62,8 @@ public class BasicNumericDatasetTest {
   public void testNumericRangesCentroidValues() {
 
     final int expectedCount = 3;
-    final double[] expectedCentroidValues = new double[] {30, 60, 0};
-    final double[] centroid = basicNumericDatasetRanges.getCentroidPerDimension();
+    final Double[] expectedCentroidValues = new Double[] {30d, 60d, 0d};
+    final Double[] centroid = basicNumericDatasetRanges.getCentroidPerDimension();
 
     Assert.assertEquals(expectedCount, basicNumericDatasetRanges.getDimensionCount());
 
@@ -75,9 +79,9 @@ public class BasicNumericDatasetTest {
 
     final double[] expectedValues = new double[] {25, 60, 0};
 
-    final double[] mins = basicNumericDatasetValues.getMinValuesPerDimension();
-    final double[] max = basicNumericDatasetValues.getMaxValuesPerDimension();
-    final double[] centroid = basicNumericDatasetValues.getCentroidPerDimension();
+    final Double[] mins = basicNumericDatasetValues.getMinValuesPerDimension();
+    final Double[] max = basicNumericDatasetValues.getMaxValuesPerDimension();
+    final Double[] centroid = basicNumericDatasetValues.getCentroidPerDimension();
 
     Assert.assertEquals(expectedCount, basicNumericDatasetValues.getDimensionCount());
 

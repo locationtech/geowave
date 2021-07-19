@@ -6,7 +6,7 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.core.index.sfc.data;
+package org.locationtech.geowave.core.index.numeric;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -45,19 +45,19 @@ public class BinnedNumericDataset implements MultiDimensionalNumericData {
 
   /** @return an array of max values associated with each dimension */
   @Override
-  public double[] getMaxValuesPerDimension() {
+  public Double[] getMaxValuesPerDimension() {
     return indexRanges.getMaxValuesPerDimension();
   }
 
   /** @return an array of min values associated with each dimension */
   @Override
-  public double[] getMinValuesPerDimension() {
+  public Double[] getMinValuesPerDimension() {
     return indexRanges.getMinValuesPerDimension();
   }
 
   /** @return an array of centroid values associated with each dimension */
   @Override
-  public double[] getCentroidPerDimension() {
+  public Double[] getCentroidPerDimension() {
     return indexRanges.getCentroidPerDimension();
   }
 
@@ -88,7 +88,7 @@ public class BinnedNumericDataset implements MultiDimensionalNumericData {
       final MultiDimensionalNumericData numericData,
       final NumericDimensionDefinition[] dimensionDefinitions) {
     if (dimensionDefinitions.length == 0) {
-      return Collections.EMPTY_LIST;
+      return Collections.emptyList();
     }
 
     final BinRange[][] binRangesPerDimension =

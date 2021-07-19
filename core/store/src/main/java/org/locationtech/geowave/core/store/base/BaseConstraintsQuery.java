@@ -18,7 +18,7 @@ import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRanges;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.QueryRanges;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
@@ -274,7 +274,8 @@ public class BaseConstraintsQuery extends BaseFilteredIndexQuery {
         || ((distributableFilters.size() == 1)
             && (distributableFilters.get(0) instanceof DedupeFilter))) {
       final List<MultiDimensionalCoordinateRangesArray> coords = getCoordinateRanges();
-      if (!coords.isEmpty()) {
+      if (!coords.isEmpty()
+          && !(coords.size() == 1 && coords.get(0).getRangesArray().length == 0)) {
         clientFilters.add(
             0,
             new CoordinateRangeQueryFilter(

@@ -23,8 +23,8 @@ import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
  * @param <I> the index field type
  */
 public abstract class IndexFieldMapper<N, I> implements Persistable {
-  private String indexFieldName = null;
-  private String[] adapterFields = null;
+  protected String indexFieldName = null;
+  protected String[] adapterFields = null;
 
   public final void init(
       final String indexFieldName,
@@ -60,6 +60,14 @@ public abstract class IndexFieldMapper<N, I> implements Persistable {
    * @return the adapter field names used in the mapping
    */
   public String[] getAdapterFields() {
+    return adapterFields;
+  }
+
+  /**
+   * @return the adapter field names used in the mapping, ordered by the index dimensions they are
+   *         associated with
+   */
+  public String[] getIndexOrderedAdapterFields() {
     return adapterFields;
   }
 

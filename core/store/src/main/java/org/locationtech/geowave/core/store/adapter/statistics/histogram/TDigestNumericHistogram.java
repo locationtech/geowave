@@ -79,11 +79,7 @@ public class TDigestNumericHistogram implements NumericHistogram {
 
   @Override
   public double sum(final double val, final boolean inclusive) {
-    final double sum = tdigest.cdf(val) * tdigest.size();
-    if (inclusive && (sum < 1)) {
-      return 1.0;
-    }
-    return sum;
+    return tdigest.cdf(val) * tdigest.size();
   }
 
   @Override

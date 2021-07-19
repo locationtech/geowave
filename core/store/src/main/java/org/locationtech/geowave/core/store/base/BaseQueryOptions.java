@@ -30,12 +30,14 @@ import org.locationtech.geowave.core.store.api.Query;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.index.IndexStore;
+import org.locationtech.geowave.core.store.query.constraints.OptimalExpressionQuery;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.options.AggregateTypeQueryOptions;
 import org.locationtech.geowave.core.store.query.options.CommonQueryOptions;
 import org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions;
 import org.locationtech.geowave.core.store.query.options.FilterByTypeQueryOptions;
 import org.locationtech.geowave.core.store.query.options.IndexQueryOptions;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -269,6 +271,10 @@ public class BaseQueryOptions {
     return adapterIds;
   }
 
+  public String getIndexName() {
+    return indexName;
+  }
+
   private List<Pair<Index, InternalDataAdapter<?>>> compileIndicesForAdapters(
       final PersistentAdapterStore adapterStore,
       final AdapterIndexMappingStore adapterIndexMappingStore,
@@ -422,7 +428,16 @@ public class BaseQueryOptions {
       final PersistentAdapterStore adapterStore,
       final AdapterIndexMappingStore adapterIndexMappingStore,
       final IndexStore indexStore,
+      final DataStatisticsStore statisticsStore,
       final QueryConstraints query) {
+    if (query instanceof OptimalExpressionQuery) {
+      return ((OptimalExpressionQuery) query).determineBestIndices(
+          this,
+          getAdaptersArray(adapterStore),
+          adapterIndexMappingStore,
+          indexStore,
+          statisticsStore);
+    }
     return BaseDataStoreUtils.chooseBestIndex(
         BaseDataStoreUtils.combineByIndex(
             compileIndicesForAdapters(adapterStore, adapterIndexMappingStore, indexStore, true)),

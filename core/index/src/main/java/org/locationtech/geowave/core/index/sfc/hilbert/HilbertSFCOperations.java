@@ -9,10 +9,10 @@
 package org.locationtech.geowave.core.index.sfc.hilbert;
 
 import java.math.BigInteger;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.numeric.NumericData;
 import org.locationtech.geowave.core.index.sfc.RangeDecomposition;
 import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import com.google.uzaygezen.core.CompactHilbertCurve;
 
 /**
@@ -38,7 +38,7 @@ public interface HilbertSFCOperations {
    * @return the Hilbert SFC value
    */
   public byte[] convertToHilbert(
-      double[] values,
+      Double[] values,
       CompactHilbertCurve compactHilbertCurve,
       SFCDimensionDefinition[] dimensionDefinitions);
 

@@ -28,7 +28,7 @@ public class IntervalSerializationProvider implements FieldSerializationProvider
     return new IntervalWriter();
   }
 
-  protected static class IntervalReader implements FieldReader<Interval> {
+  public static class IntervalReader implements FieldReader<Interval> {
     @Override
     public Interval readField(final byte[] fieldData) {
       Interval retVal;
@@ -45,7 +45,7 @@ public class IntervalSerializationProvider implements FieldSerializationProvider
     }
   }
 
-  protected static class IntervalWriter implements FieldWriter<Interval> {
+  public static class IntervalWriter implements FieldWriter<Interval> {
     @Override
     public byte[] writeField(final Interval fieldData) {
       if (fieldData == null) {

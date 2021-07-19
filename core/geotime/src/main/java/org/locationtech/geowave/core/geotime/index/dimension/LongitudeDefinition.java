@@ -11,7 +11,7 @@ package org.locationtech.geowave.core.geotime.index.dimension;
 import org.locationtech.geowave.core.index.FloatCompareUtils;
 import org.locationtech.geowave.core.index.dimension.BasicDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
+import org.locationtech.geowave.core.index.numeric.NumericData;
 
 /**
  * The Longitude Definition class is a convenience class used to define a dimension which is

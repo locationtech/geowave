@@ -16,12 +16,12 @@ import java.util.List;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
+import org.locationtech.geowave.core.index.numeric.BasicNumericDataset;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.RangeDecomposition;
 import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.SpaceFillingCurve;
-import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 
 /** * Implementation of a ZOrder Space Filling Curve. Also called Morton, GeoHash, etc. */
 public class ZOrderSFC implements SpaceFillingCurve {
@@ -51,7 +51,7 @@ public class ZOrderSFC implements SpaceFillingCurve {
 
   /** * {@inheritDoc} */
   @Override
-  public byte[] getId(final double[] values) {
+  public byte[] getId(final Double[] values) {
     final double[] normalizedValues = new double[values.length];
     for (int d = 0; d < values.length; d++) {
       normalizedValues[d] = dimensionDefs[d].normalize(values[d]);
@@ -81,8 +81,8 @@ public class ZOrderSFC implements SpaceFillingCurve {
 
   @Override
   public BigInteger getEstimatedIdCount(final MultiDimensionalNumericData data) {
-    final double[] mins = data.getMinValuesPerDimension();
-    final double[] maxes = data.getMaxValuesPerDimension();
+    final Double[] mins = data.getMinValuesPerDimension();
+    final Double[] maxes = data.getMaxValuesPerDimension();
     BigInteger estimatedIdCount = BigInteger.valueOf(1);
     for (int d = 0; d < data.getDimensionCount(); d++) {
       final double binMin = dimensionDefs[d].normalize(mins[d]) * binsPerDimension;
@@ -103,8 +103,8 @@ public class ZOrderSFC implements SpaceFillingCurve {
     // outperform Z-Order
     // the optimization of full query decomposition is not implemented at
     // the moment for Z-Order
-    final double[] queryMins = query.getMinValuesPerDimension();
-    final double[] queryMaxes = query.getMaxValuesPerDimension();
+    final Double[] queryMins = query.getMinValuesPerDimension();
+    final Double[] queryMaxes = query.getMaxValuesPerDimension();
     final double[] normalizedMins = new double[query.getDimensionCount()];
     final double[] normalizedMaxes = new double[query.getDimensionCount()];
     for (int d = 0; d < query.getDimensionCount(); d++) {

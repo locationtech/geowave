@@ -51,6 +51,14 @@ public abstract class LatLonFieldMapper<N> extends SpatialFieldMapper<N> {
     super.initFromOptions(inputFieldDescriptors, options);
   }
 
+  @Override
+  public String[] getIndexOrderedAdapterFields() {
+    if (!xAxisFirst) {
+      return new String[] {adapterFields[1], adapterFields[0]};
+    }
+    return adapterFields;
+  }
+
 
   @Override
   public List<N> toAdapter(Geometry indexFieldValue) {

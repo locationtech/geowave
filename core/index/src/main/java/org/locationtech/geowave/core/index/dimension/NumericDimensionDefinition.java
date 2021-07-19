@@ -9,9 +9,9 @@
 package org.locationtech.geowave.core.index.dimension;
 
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
+import org.locationtech.geowave.core.index.numeric.NumericData;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
 import org.locationtech.geowave.core.index.persist.Persistable;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 
 /**
  * The Numeric Dimension Definition interface defines the attributes and methods of a class which

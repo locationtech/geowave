@@ -6,17 +6,10 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.core.index.sfc.data;
+package org.locationtech.geowave.core.store.query.filter.expression;
 
-import org.locationtech.geowave.core.index.persist.Persistable;
-
-/** Interface used to define numeric data associated with a space filling curve. */
-public interface NumericData extends java.io.Serializable, Persistable {
-  public double getMin();
-
-  public double getMax();
-
-  public double getCentroid();
-
-  public boolean isRange();
+/**
+ * A predicate is really just a filter, but predicate is a more appropriate name in many cases.
+ */
+public interface Predicate extends Filter {
 }

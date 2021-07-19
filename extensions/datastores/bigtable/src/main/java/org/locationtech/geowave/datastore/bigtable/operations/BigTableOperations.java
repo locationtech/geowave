@@ -17,6 +17,8 @@ import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.Scan;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import org.locationtech.geowave.core.store.operations.MetadataType;
+import org.locationtech.geowave.core.store.operations.ReaderParams;
+import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.datastore.bigtable.BigTableConnectionPool;
 import org.locationtech.geowave.datastore.bigtable.config.BigTableOptions;
 import org.locationtech.geowave.datastore.hbase.operations.HBaseOperations;
@@ -68,6 +70,11 @@ public class BigTableOperations extends HBaseOperations {
     // TODO: Rows that should be merged are ending up in different regions
     // which causes parallel decode to return incorrect results.
     return false;
+  }
+
+  @Override
+  public <T> RowReader<T> createReader(final ReaderParams<T> readerParams) {
+    return new BigtableReader<>(readerParams, this);
   }
 
   protected void forceRegionUpdate(final BigtableRegionLocator regionLocator) {}

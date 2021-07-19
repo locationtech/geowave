@@ -70,15 +70,19 @@ public class AttributeDimensionalityTypeProvider implements
               + options.getAttributeName()
               + "' could not be found in the type.");
     }
+    return createIndexForDescriptor(adapter, descriptor);
+  }
+
+  public static Index createIndexForDescriptor(
+      final DataTypeAdapter<?> adapter,
+      final FieldDescriptor<?> descriptor) {
     if (serviceLoader == null) {
       serviceLoader = ServiceLoader.load(AttributeIndexProviderSpi.class);
     }
     for (final AttributeIndexProviderSpi indexProvider : serviceLoader) {
       if (indexProvider.supportsDescriptor(descriptor)) {
         return indexProvider.buildIndex(
-            AttributeIndex.defaultAttributeIndexName(
-                options.getTypeName(),
-                options.getAttributeName()),
+            AttributeIndex.defaultAttributeIndexName(adapter.getTypeName(), descriptor.fieldName()),
             adapter,
             descriptor);
       }

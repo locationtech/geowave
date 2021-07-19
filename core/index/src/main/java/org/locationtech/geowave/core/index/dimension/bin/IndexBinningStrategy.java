@@ -8,9 +8,9 @@
  */
 package org.locationtech.geowave.core.index.dimension.bin;
 
+import org.locationtech.geowave.core.index.numeric.NumericData;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
 import org.locationtech.geowave.core.index.persist.Persistable;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 
 /**
  * This interface enables a dimension to define a methodology for applying bins to a full set of

@@ -18,7 +18,7 @@ import org.threeten.extra.Interval;
  *
  * @param <N> the adapter field type
  */
-public abstract class TemporalFieldMapper<N> extends IndexFieldMapper<N, Interval> {
+public abstract class TemporalIntervalFieldMapper<N> extends IndexFieldMapper<N, Interval> {
 
   @Override
   public Class<Interval> indexFieldType() {

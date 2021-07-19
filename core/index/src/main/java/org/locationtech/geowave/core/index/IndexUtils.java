@@ -13,11 +13,11 @@ import java.util.List;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
 import org.locationtech.geowave.core.index.lexicoder.NumberLexicoder;
-import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
-import org.locationtech.geowave.core.index.sfc.data.NumericValue;
+import org.locationtech.geowave.core.index.numeric.BasicNumericDataset;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.numeric.NumericData;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
+import org.locationtech.geowave.core.index.numeric.NumericValue;
 import org.locationtech.geowave.core.index.simple.SimpleNumericIndexStrategy;
 
 public class IndexUtils {
@@ -27,13 +27,13 @@ public class IndexUtils {
   }
 
   public static MultiDimensionalNumericData clampAtIndexBounds(
-      MultiDimensionalNumericData data,
+      final MultiDimensionalNumericData data,
       final NumericIndexStrategy indexStrategy) {
-    NumericDimensionDefinition[] dimensions = indexStrategy.getOrderedDimensionDefinitions();
-    NumericData[] dataPerDimension = data.getDataPerDimension();
+    final NumericDimensionDefinition[] dimensions = indexStrategy.getOrderedDimensionDefinitions();
+    final NumericData[] dataPerDimension = data.getDataPerDimension();
     boolean clamped = false;
     for (int d = 0; d < dimensions.length; d++) {
-      NumericRange dimensionBounds = dimensions[d].getBounds();
+      final NumericRange dimensionBounds = dimensions[d].getBounds();
 
       if (dataPerDimension[d].isRange()) {
         boolean dimensionClamped = false;
@@ -54,8 +54,8 @@ public class IndexUtils {
           dataPerDimension[d] = new NumericRange(min, max);
           clamped = true;
         }
-      } else if (dataPerDimension[d].getMin() < dimensionBounds.getMin()
-          || dataPerDimension[d].getMin() > dimensionBounds.getMax()) {
+      } else if ((dataPerDimension[d].getMin() < dimensionBounds.getMin())
+          || (dataPerDimension[d].getMin() > dimensionBounds.getMax())) {
         dataPerDimension[d] =
             new NumericValue(
                 Math.max(

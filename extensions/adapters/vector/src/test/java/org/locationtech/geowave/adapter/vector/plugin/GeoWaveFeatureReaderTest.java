@@ -38,6 +38,8 @@ import org.locationtech.geowave.adapter.vector.BaseDataStoreTest;
 import org.locationtech.geowave.adapter.vector.util.DateUtilities;
 import org.locationtech.geowave.core.geotime.index.api.SpatialIndexBuilder;
 import org.locationtech.geowave.core.geotime.index.api.SpatialTemporalIndexBuilder;
+import org.locationtech.geowave.core.store.index.AttributeDimensionalityTypeProvider;
+import org.locationtech.geowave.core.store.index.AttributeIndexOptions;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.PrecisionModel;
@@ -66,6 +68,11 @@ public class GeoWaveFeatureReaderTest extends BaseDataStoreTest {
     ((GeoWaveGTDataStore) dataStore).getDataStore().addIndex(
         new SpatialTemporalIndexBuilder().createIndex());
     dataStore.createSchema(type);
+    ((GeoWaveGTDataStore) dataStore).getDataStore().addIndex(
+        type.getTypeName(),
+        AttributeDimensionalityTypeProvider.createIndexFromOptions(
+            ((GeoWaveGTDataStore) dataStore).getDataStore(),
+            new AttributeIndexOptions(type.getTypeName(), "pop")));
 
     stime = DateUtilities.parseISO("2005-05-15T20:32:56Z");
     mtime = DateUtilities.parseISO("2005-05-20T20:32:56Z");
@@ -119,9 +126,44 @@ public class GeoWaveFeatureReaderTest extends BaseDataStoreTest {
   }
 
   @Test
+  public void testAttributeIndex() throws CQLException, IOException {
+    final Query ecqlQuery =
+        new Query(
+            "GeoWaveFeatureReaderTest",
+            ECQL.toFilter("pop > 100"),
+            new String[] {"geometry", "pid", "pop"});
+
+    FeatureReader<SimpleFeatureType, SimpleFeature> reader =
+        dataStore.getFeatureReader(ecqlQuery, Transaction.AUTO_COMMIT);
+    int count = 0;
+    while (reader.hasNext()) {
+      final SimpleFeature feature = reader.next();
+      assertEquals(fids.get(1), feature.getID());
+      count++;
+    }
+    reader.close();
+    assertEquals(1, count);
+
+    final Query cqlQuery =
+        new Query(
+            "GeoWaveFeatureReaderTest",
+            CQL.toFilter("pop >= 100"),
+            new String[] {"geometry", "pid", "pop"});
+
+    reader = dataStore.getFeatureReader(cqlQuery, Transaction.AUTO_COMMIT);
+    count = 0;
+    while (reader.hasNext()) {
+      final SimpleFeature feature = reader.next();
+      assertTrue(fids.contains(feature.getID()));
+      count++;
+    }
+    reader.close();
+    assertEquals(2, count);
+  }
+
+  @Test
   public void testTemporal()
       throws IllegalArgumentException, NoSuchElementException, IOException, CQLException {
-    final FilterFactoryImpl factory = new FilterFactoryImpl();
     // This tests performs both CQL and ECQL queries on a time-based attribute because different
     // geometry visitors are used to extract the geometry portion of the query. Under normal
     // circumstances this is fine except for when there is no geometry constraint specified. Using

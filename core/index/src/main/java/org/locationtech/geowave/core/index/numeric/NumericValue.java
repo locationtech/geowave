@@ -6,7 +6,7 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.core.index.sfc.data;
+package org.locationtech.geowave.core.index.numeric;
 
 import java.nio.ByteBuffer;
 
@@ -32,19 +32,29 @@ public class NumericValue implements NumericData {
 
   /** @return value the value of a numeric value object */
   @Override
-  public double getMin() {
+  public Double getMin() {
     return value;
   }
 
   /** @return value the value of a numeric value object */
   @Override
-  public double getMax() {
+  public Double getMax() {
     return value;
+  }
+
+  @Override
+  public boolean isMinInclusive() {
+    return true;
+  }
+
+  @Override
+  public boolean isMaxInclusive() {
+    return true;
   }
 
   /** @return value the value of a numeric value object */
   @Override
-  public double getCentroid() {
+  public Double getCentroid() {
     return value;
   }
 

@@ -11,8 +11,8 @@ package org.locationtech.geowave.core.geotime.index.dimension;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import org.locationtech.geowave.core.index.dimension.UnboundedDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.bin.IndexBinningStrategy;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
+import org.locationtech.geowave.core.index.numeric.NumericData;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
 
 /**
  * The Time Definition class is a convenience class used to define a dimension which is associated

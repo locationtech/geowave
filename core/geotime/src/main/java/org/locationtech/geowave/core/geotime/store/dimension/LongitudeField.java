@@ -14,7 +14,7 @@ import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.IndexDimensionHint;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
+import org.locationtech.geowave.core.index.numeric.NumericData;
 import org.locationtech.jts.geom.Geometry;
 import com.google.common.collect.Sets;
 

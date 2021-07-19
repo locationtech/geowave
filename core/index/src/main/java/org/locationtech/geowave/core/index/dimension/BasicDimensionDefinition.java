@@ -10,8 +10,8 @@ package org.locationtech.geowave.core.index.dimension;
 
 import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
+import org.locationtech.geowave.core.index.numeric.NumericData;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
 
 /**
  * The Basic Dimension Definition class defines a Space Filling Curve dimension as a minimum and

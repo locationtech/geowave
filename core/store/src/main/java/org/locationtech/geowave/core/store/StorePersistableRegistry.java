@@ -47,7 +47,10 @@ import org.locationtech.geowave.core.store.query.constraints.CustomQueryConstrai
 import org.locationtech.geowave.core.store.query.constraints.DataIdQuery;
 import org.locationtech.geowave.core.store.query.constraints.DataIdRangeQuery;
 import org.locationtech.geowave.core.store.query.constraints.EverythingQuery;
+import org.locationtech.geowave.core.store.query.constraints.ExplicitFilteredQuery;
+import org.locationtech.geowave.core.store.query.constraints.FilteredEverythingQuery;
 import org.locationtech.geowave.core.store.query.constraints.InsertionIdQuery;
+import org.locationtech.geowave.core.store.query.constraints.OptimalExpressionQuery;
 import org.locationtech.geowave.core.store.query.constraints.PrefixIdQuery;
 import org.locationtech.geowave.core.store.query.constraints.SimpleNumericQuery;
 import org.locationtech.geowave.core.store.query.filter.AdapterIdQueryFilter;
@@ -56,9 +59,40 @@ import org.locationtech.geowave.core.store.query.filter.CoordinateRangeQueryFilt
 import org.locationtech.geowave.core.store.query.filter.DataIdQueryFilter;
 import org.locationtech.geowave.core.store.query.filter.DataIdRangeQueryFilter;
 import org.locationtech.geowave.core.store.query.filter.DedupeFilter;
+import org.locationtech.geowave.core.store.query.filter.ExpressionQueryFilter;
 import org.locationtech.geowave.core.store.query.filter.FilterList;
 import org.locationtech.geowave.core.store.query.filter.InsertionIdQueryFilter;
 import org.locationtech.geowave.core.store.query.filter.PrefixIdQueryFilter;
+import org.locationtech.geowave.core.store.query.filter.expression.And;
+import org.locationtech.geowave.core.store.query.filter.expression.BooleanFieldValue;
+import org.locationtech.geowave.core.store.query.filter.expression.BooleanLiteral;
+import org.locationtech.geowave.core.store.query.filter.expression.Exclude;
+import org.locationtech.geowave.core.store.query.filter.expression.GenericEqualTo;
+import org.locationtech.geowave.core.store.query.filter.expression.GenericFieldValue;
+import org.locationtech.geowave.core.store.query.filter.expression.GenericLiteral;
+import org.locationtech.geowave.core.store.query.filter.expression.GenericNotEqualTo;
+import org.locationtech.geowave.core.store.query.filter.expression.Include;
+import org.locationtech.geowave.core.store.query.filter.expression.IsNotNull;
+import org.locationtech.geowave.core.store.query.filter.expression.IsNull;
+import org.locationtech.geowave.core.store.query.filter.expression.Not;
+import org.locationtech.geowave.core.store.query.filter.expression.Or;
+import org.locationtech.geowave.core.store.query.filter.expression.numeric.Abs;
+import org.locationtech.geowave.core.store.query.filter.expression.numeric.Add;
+import org.locationtech.geowave.core.store.query.filter.expression.numeric.Divide;
+import org.locationtech.geowave.core.store.query.filter.expression.numeric.Multiply;
+import org.locationtech.geowave.core.store.query.filter.expression.numeric.NumericBetween;
+import org.locationtech.geowave.core.store.query.filter.expression.numeric.NumericComparisonOperator;
+import org.locationtech.geowave.core.store.query.filter.expression.numeric.NumericFieldValue;
+import org.locationtech.geowave.core.store.query.filter.expression.numeric.NumericLiteral;
+import org.locationtech.geowave.core.store.query.filter.expression.numeric.Subtract;
+import org.locationtech.geowave.core.store.query.filter.expression.text.Concat;
+import org.locationtech.geowave.core.store.query.filter.expression.text.Contains;
+import org.locationtech.geowave.core.store.query.filter.expression.text.EndsWith;
+import org.locationtech.geowave.core.store.query.filter.expression.text.StartsWith;
+import org.locationtech.geowave.core.store.query.filter.expression.text.TextBetween;
+import org.locationtech.geowave.core.store.query.filter.expression.text.TextComparisonOperator;
+import org.locationtech.geowave.core.store.query.filter.expression.text.TextFieldValue;
+import org.locationtech.geowave.core.store.query.filter.expression.text.TextLiteral;
 import org.locationtech.geowave.core.store.query.options.AggregateTypeQueryOptions;
 import org.locationtech.geowave.core.store.query.options.CommonQueryOptions;
 import org.locationtech.geowave.core.store.query.options.CommonQueryOptions.HintKey;
@@ -95,25 +129,30 @@ public class StorePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 221, AttributeIndexImpl::new),
         new PersistableIdAndConstructor((short) 222, CustomAttributeIndex::new),
         new PersistableIdAndConstructor((short) 223, AdapterFieldTextIndexEntryConverter::new),
-        // 224-227 Unused
+        new PersistableIdAndConstructor((short) 224, BooleanFieldValue::new),
+        new PersistableIdAndConstructor((short) 225, BooleanLiteral::new),
+        new PersistableIdAndConstructor((short) 226, GenericFieldValue::new),
+        new PersistableIdAndConstructor((short) 227, GenericLiteral::new),
         new PersistableIdAndConstructor((short) 228, BasicQueryByClass::new),
         new PersistableIdAndConstructor((short) 229, CoordinateRangeQuery::new),
         new PersistableIdAndConstructor((short) 230, CoordinateRangeQueryFilter::new),
         new PersistableIdAndConstructor((short) 231, CommonQueryOptions::new),
         new PersistableIdAndConstructor((short) 232, DataIdRangeQueryFilter::new),
         new PersistableIdAndConstructor((short) 233, CountAggregation::new),
-        // 234 Unused
+        new PersistableIdAndConstructor((short) 234, Include::new),
         new PersistableIdAndConstructor((short) 235, InsertionIdQueryFilter::new),
-        // 236 Unused
+        new PersistableIdAndConstructor((short) 236, Exclude::new),
         new PersistableIdAndConstructor((short) 237, FilterByTypeQueryOptions::new),
         new PersistableIdAndConstructor((short) 238, QueryAllIndices::new),
-        // 239-240 Unused
+        new PersistableIdAndConstructor((short) 239, And::new),
+        new PersistableIdAndConstructor((short) 240, Or::new),
         new PersistableIdAndConstructor((short) 241, AggregateTypeQueryOptions::new),
         new PersistableIdAndConstructor((short) 242, AdapterMapping::new),
-        // 243 Unused
+        new PersistableIdAndConstructor((short) 243, Not::new),
         new PersistableIdAndConstructor((short) 244, Query::new),
         new PersistableIdAndConstructor((short) 245, AggregationQuery::new),
-        // 246-247 Unused
+        new PersistableIdAndConstructor((short) 246, NumericComparisonOperator::new),
+        new PersistableIdAndConstructor((short) 247, TextComparisonOperator::new),
         new PersistableIdAndConstructor((short) 248, QuerySingleIndex::new),
         new PersistableIdAndConstructor((short) 249, QueryAllTypes::new),
         new PersistableIdAndConstructor((short) 250, FilterList::new),
@@ -128,7 +167,7 @@ public class StorePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 259, BasicOrderedConstraintQuery::new),
         new PersistableIdAndConstructor((short) 260, BasicQuery::new),
         new PersistableIdAndConstructor((short) 261, BinaryDataAdapter::new),
-        // 262 is Unused
+        new PersistableIdAndConstructor((short) 262, IsNull::new),
         new PersistableIdAndConstructor((short) 263, CustomIndex::new),
         new PersistableIdAndConstructor((short) 264, CustomQueryConstraints::new),
         new PersistableIdAndConstructor((short) 265, InternalCustomConstraints::new),
@@ -140,6 +179,28 @@ public class StorePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 271, BasicNumericDimensionField::new),
         new PersistableIdAndConstructor((short) 272, DataStoreProperty::new),
         new PersistableIdAndConstructor((short) 273, AdapterToIndexMapping::new),
-        new PersistableIdAndConstructor((short) 274, HintKey::new)};
+        new PersistableIdAndConstructor((short) 274, HintKey::new),
+        new PersistableIdAndConstructor((short) 275, NumericBetween::new),
+        new PersistableIdAndConstructor((short) 276, Abs::new),
+        new PersistableIdAndConstructor((short) 277, Add::new),
+        new PersistableIdAndConstructor((short) 278, Subtract::new),
+        new PersistableIdAndConstructor((short) 279, Multiply::new),
+        new PersistableIdAndConstructor((short) 280, Divide::new),
+        new PersistableIdAndConstructor((short) 281, NumericFieldValue::new),
+        new PersistableIdAndConstructor((short) 282, NumericLiteral::new),
+        new PersistableIdAndConstructor((short) 283, Concat::new),
+        new PersistableIdAndConstructor((short) 284, Contains::new),
+        new PersistableIdAndConstructor((short) 285, EndsWith::new),
+        new PersistableIdAndConstructor((short) 286, StartsWith::new),
+        new PersistableIdAndConstructor((short) 287, TextFieldValue::new),
+        new PersistableIdAndConstructor((short) 288, TextLiteral::new),
+        new PersistableIdAndConstructor((short) 289, TextBetween::new),
+        new PersistableIdAndConstructor((short) 290, IsNotNull::new),
+        new PersistableIdAndConstructor((short) 291, OptimalExpressionQuery::new),
+        new PersistableIdAndConstructor((short) 292, GenericNotEqualTo::new),
+        new PersistableIdAndConstructor((short) 293, GenericEqualTo::new),
+        new PersistableIdAndConstructor((short) 294, ExplicitFilteredQuery::new),
+        new PersistableIdAndConstructor((short) 295, ExpressionQueryFilter::new),
+        new PersistableIdAndConstructor((short) 296, FilteredEverythingQuery::new)};
   }
 }

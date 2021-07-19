@@ -23,13 +23,13 @@ import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
 import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
+import org.locationtech.geowave.core.index.numeric.BasicNumericDataset;
+import org.locationtech.geowave.core.index.numeric.BinnedNumericDataset;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.numeric.NumericData;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
 import org.locationtech.geowave.core.index.sfc.RangeDecomposition;
 import org.locationtech.geowave.core.index.sfc.SpaceFillingCurve;
-import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
-import org.locationtech.geowave.core.index.sfc.data.BinnedNumericDataset;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 
 public class BinnedSFCUtils {
 
@@ -93,8 +93,8 @@ public class BinnedSFCUtils {
           multiDimensionalId != null
               ? ByteArrayUtils.combineArrays(new byte[] {multiDimensionalId}, index.getBinId())
               : index.getBinId();
-      final double[] minValues = index.getMinValuesPerDimension();
-      final double[] maxValues = index.getMaxValuesPerDimension();
+      final Double[] minValues = index.getMinValuesPerDimension();
+      final Double[] maxValues = index.getMaxValuesPerDimension();
       byte[] singleId = null;
       if (Arrays.equals(maxValues, minValues)) {
         singleId = sfc.getId(minValues);

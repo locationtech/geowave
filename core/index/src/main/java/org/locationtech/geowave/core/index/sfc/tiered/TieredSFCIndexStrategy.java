@@ -36,12 +36,12 @@ import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
+import org.locationtech.geowave.core.index.numeric.BinnedNumericDataset;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.RangeDecomposition;
 import org.locationtech.geowave.core.index.sfc.SpaceFillingCurve;
 import org.locationtech.geowave.core.index.sfc.binned.BinnedSFCUtils;
-import org.locationtech.geowave.core.index.sfc.data.BinnedNumericDataset;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableBiMap;
@@ -171,8 +171,8 @@ public class TieredSFCIndexStrategy implements HierarchicalNumericIndexStrategy 
   }
 
   private static int getRanges(final MultiDimensionalNumericData indexedData) {
-    final double[] mins = indexedData.getMinValuesPerDimension();
-    final double[] maxes = indexedData.getMaxValuesPerDimension();
+    final Double[] mins = indexedData.getMinValuesPerDimension();
+    final Double[] maxes = indexedData.getMaxValuesPerDimension();
     int ranges = 0;
     for (int d = 0; d < mins.length; d++) {
       if (!FloatCompareUtils.checkDoublesEqual(mins[d], maxes[d])) {
@@ -246,13 +246,10 @@ public class TieredSFCIndexStrategy implements HierarchicalNumericIndexStrategy 
     return null;
   }
 
-  @Override
-  public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
-      final MultiDimensionalNumericData dataRange,
+  public void calculateCoordinateRanges(
+      final List<MultiDimensionalCoordinateRanges> coordRanges,
+      final BinRange[][] binRangesPerDimension,
       final IndexMetaData... hints) {
-    final List<MultiDimensionalCoordinateRanges> coordRanges = new ArrayList<>();
-    final BinRange[][] binRangesPerDimension =
-        BinnedNumericDataset.getBinnedRangesPerDimension(dataRange, baseDefinitions);
     final TierIndexMetaData metaData =
         ((hints.length > 0) && (hints[0] != null) && (hints[0] instanceof TierIndexMetaData))
             ? (TierIndexMetaData) hints[0]
@@ -271,6 +268,16 @@ public class TieredSFCIndexStrategy implements HierarchicalNumericIndexStrategy 
               baseDefinitions.length,
               tier));
     }
+  }
+
+  @Override
+  public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
+      final MultiDimensionalNumericData dataRange,
+      final IndexMetaData... hints) {
+    final List<MultiDimensionalCoordinateRanges> coordRanges = new ArrayList<>();
+    final BinRange[][] binRangesPerDimension =
+        BinnedNumericDataset.getBinnedRangesPerDimension(dataRange, baseDefinitions);
+    calculateCoordinateRanges(coordRanges, binRangesPerDimension, hints);
     return coordRanges.toArray(new MultiDimensionalCoordinateRanges[] {});
   }
 

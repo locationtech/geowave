@@ -10,6 +10,8 @@ package org.locationtech.geowave.core.geotime.adapter;
 
 import org.locationtech.geowave.core.geotime.adapter.LatLonFieldMapper.DoubleLatLonFieldMapper;
 import org.locationtech.geowave.core.geotime.adapter.LatLonFieldMapper.FloatLatLonFieldMapper;
+import org.locationtech.geowave.core.geotime.adapter.TemporalLongFieldMapper.CalendarLongFieldMapper;
+import org.locationtech.geowave.core.geotime.adapter.TemporalLongFieldMapper.DateLongFieldMapper;
 import org.locationtech.geowave.core.geotime.adapter.TimeInstantFieldMapper.CalendarInstantFieldMapper;
 import org.locationtech.geowave.core.geotime.adapter.TimeInstantFieldMapper.DateInstantFieldMapper;
 import org.locationtech.geowave.core.geotime.adapter.TimeInstantFieldMapper.LongInstantFieldMapper;
@@ -26,6 +28,8 @@ public class GeotimeRegisteredIndexFieldMappers implements IndexFieldMapperRegis
   @Override
   public RegisteredFieldMapper[] getRegisteredFieldMappers() {
     return new RegisteredFieldMapper[] {
+        new RegisteredFieldMapper(DateLongFieldMapper::new, (short) 306),
+        new RegisteredFieldMapper(CalendarLongFieldMapper::new, (short) 307),
         new RegisteredFieldMapper(GeometryFieldMapper::new, (short) 350),
         new RegisteredFieldMapper(DoubleLatLonFieldMapper::new, (short) 351),
         new RegisteredFieldMapper(FloatLatLonFieldMapper::new, (short) 352),

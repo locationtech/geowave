@@ -9,12 +9,13 @@
 package org.locationtech.geowave.core.index.text;
 
 import java.nio.ByteBuffer;
+import java.util.EnumSet;
+import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
-import org.locationtech.geowave.core.index.persist.Persistable;
 import com.google.common.primitives.Bytes;
 
-public class TextSearch implements Persistable {
+public class TextSearch implements TextConstraints {
   private TextSearchType type;
   private CaseSensitivity caseSensitivity;
   private String searchTerm;
@@ -58,5 +59,17 @@ public class TextSearch implements Persistable {
     final byte[] searchTermBytes = new byte[buf.remaining()];
     buf.get(searchTermBytes);
     searchTerm = StringUtils.stringFromBinary(searchTermBytes);
+  }
+
+  @Override
+  public QueryRanges getQueryRanges(
+      final EnumSet<TextSearchType> supportedSearchTypes,
+      final int nCharacterGrams) {
+    return TextIndexUtils.getQueryRanges(
+        searchTerm,
+        type,
+        caseSensitivity,
+        supportedSearchTypes,
+        nCharacterGrams);
   }
 }

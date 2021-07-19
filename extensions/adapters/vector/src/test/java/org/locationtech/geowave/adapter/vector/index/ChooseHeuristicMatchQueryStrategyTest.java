@@ -22,8 +22,8 @@ import org.locationtech.geowave.core.geotime.index.api.SpatialTemporalIndexBuild
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.NullIndex;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;

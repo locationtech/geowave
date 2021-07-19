@@ -10,9 +10,9 @@ package org.locationtech.geowave.core.index.dimension;
 
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
 import org.locationtech.geowave.core.index.dimension.bin.IndexBinningStrategy;
+import org.locationtech.geowave.core.index.numeric.NumericData;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 
 /**
  * Because space filling curves require an extent (minimum & maximum), the unbounded implementation
@@ -35,6 +35,9 @@ public class UnboundedDimensionDefinition extends BasicDimensionDefinition {
   /** @param index a numeric value to be normalized */
   @Override
   public BinRange[] getNormalizedRanges(final NumericData index) {
+    if (index.getMin().isInfinite() && index.getMax().isInfinite()) {
+      return new BinRange[] {BinRange.unbound()};
+    }
     return binningStrategy.getNormalizedRanges(index);
   }
 

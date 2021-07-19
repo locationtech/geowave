@@ -174,18 +174,18 @@ public class RedisUtils {
   }
 
   public static double getScore(final byte[] byteArray) {
-    return bytesToLong(byteArray);
+    return ByteArrayUtils.bytesToLong(byteArray);
   }
 
   public static byte[] getSortKey(final double score) {
-    return longToBytes((long) score);
+    return ByteArrayUtils.longToBytes((long) score);
   }
 
   public static byte[] getFullSortKey(
       final double score,
       final byte[] sortKeyPrecisionBeyondScore) {
     if (sortKeyPrecisionBeyondScore.length > 0) {
-      return appendBytes(longToBytes((long) score), sortKeyPrecisionBeyondScore, 6);
+      return appendBytes(ByteArrayUtils.longToBytes((long) score), sortKeyPrecisionBeyondScore, 6);
     }
     return getSortKey(score);
   }
@@ -197,41 +197,6 @@ public class RedisUtils {
     System.arraycopy(b, 0, rv, length, b.length);
 
     return rv;
-  }
-
-  private static byte[] longToBytes(long val) {
-    final int radix = 1 << 8;
-    final int mask = radix - 1;
-    // we want to eliminate trailing 0's (ie. truncate the byte array by
-    // trailing 0's)
-    int trailingZeros = 0;
-    while ((((int) val) & mask) == 0) {
-      val >>>= 8;
-      trailingZeros++;
-      if (trailingZeros == 8) {
-        return new byte[0];
-      }
-    }
-    final byte[] array = new byte[8 - trailingZeros];
-    int pos = array.length;
-    do {
-      array[--pos] = (byte) (((int) val) & mask);
-      val >>>= 8;
-
-    } while ((val != 0) && (pos > 0));
-
-    return array;
-  }
-
-  private static long bytesToLong(final byte[] bytes) {
-    long value = 0;
-    for (int i = 0; i < 8; i++) {
-      value = (value << 8);
-      if (i < bytes.length) {
-        value += (bytes[i] & 0xff);
-      }
-    }
-    return value;
   }
 
   public static Set<ByteArray> getPartitions(

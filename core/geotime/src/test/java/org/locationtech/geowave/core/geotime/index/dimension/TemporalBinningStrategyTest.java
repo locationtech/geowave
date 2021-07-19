@@ -15,7 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
 
 public class TemporalBinningStrategyTest {
   @Before

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.locationtech.geowave.core.geotime.index.dimension.SimpleTimeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
 import org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass;
 import org.threeten.extra.Interval;
 

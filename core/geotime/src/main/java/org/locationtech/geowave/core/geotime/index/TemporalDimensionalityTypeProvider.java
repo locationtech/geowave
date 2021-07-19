@@ -21,6 +21,7 @@ import org.locationtech.geowave.core.index.sfc.SFCFactory.SFCType;
 import org.locationtech.geowave.core.index.sfc.xz.XZHierarchicalIndexFactory;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.dimension.BasicNumericDimensionField;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.BasicIndexModel;
 import org.locationtech.geowave.core.store.index.CustomNameIndex;
@@ -63,15 +64,15 @@ public class TemporalDimensionalityTypeProvider implements
 
   public static Index createIndexFromOptions(final TemporalOptions options) {
 
-    final NumericDimensionDefinition[] dimensions = TEMPORAL_DIMENSIONS;
-    final NumericDimensionField<?>[] fields = TEMPORAL_FIELDS;
-
-    dimensions[dimensions.length - 1] = new TimeDefinition(options.periodicity);
-    fields[dimensions.length - 1] = new TimeField(options.periodicity);
-
-    final BasicIndexModel indexModel = new BasicIndexModel(fields);
-
     if (!options.noTimeRanges) {
+      final NumericDimensionDefinition[] dimensions = TEMPORAL_DIMENSIONS;
+      final NumericDimensionField<?>[] fields = TEMPORAL_FIELDS;
+
+      dimensions[dimensions.length - 1] = new TimeDefinition(options.periodicity);
+      fields[dimensions.length - 1] = new TimeField(options.periodicity);
+
+      final BasicIndexModel indexModel = new BasicIndexModel(fields);
+
       final String combinedArrayID = DEFAULT_TEMPORAL_ID_STR + "_" + options.periodicity;
       return new CustomNameIndex(
           XZHierarchicalIndexFactory.createFullIncrementalTieredStrategy(
@@ -82,6 +83,11 @@ public class TemporalDimensionalityTypeProvider implements
           indexModel,
           combinedArrayID);
     }
+
+    final BasicIndexModel indexModel =
+        new BasicIndexModel(
+            new NumericDimensionField[] {
+                new BasicNumericDimensionField<>(TimeField.DEFAULT_FIELD_ID, Long.class)});
     return new CustomNameIndex(new SimpleTimeIndexStrategy(), indexModel, DEFAULT_TEMPORAL_ID_STR);
   }
 

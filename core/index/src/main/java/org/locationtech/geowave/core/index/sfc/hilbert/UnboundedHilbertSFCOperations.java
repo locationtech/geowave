@@ -14,12 +14,12 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.index.numeric.BasicNumericDataset;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.numeric.NumericData;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
 import org.locationtech.geowave.core.index.sfc.RangeDecomposition;
 import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
-import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableList;
 import com.google.uzaygezen.core.BacktrackingQueryBuilder;
@@ -64,7 +64,7 @@ public class UnboundedHilbertSFCOperations implements HilbertSFCOperations {
 
   @Override
   public byte[] convertToHilbert(
-      final double[] values,
+      final Double[] values,
       final CompactHilbertCurve compactHilbertCurve,
       final SFCDimensionDefinition[] dimensionDefinitions) {
 
@@ -402,8 +402,8 @@ public class UnboundedHilbertSFCOperations implements HilbertSFCOperations {
   public BigInteger getEstimatedIdCount(
       final MultiDimensionalNumericData data,
       final SFCDimensionDefinition[] dimensionDefinitions) {
-    final double[] mins = data.getMinValuesPerDimension();
-    final double[] maxes = data.getMaxValuesPerDimension();
+    final Double[] mins = data.getMinValuesPerDimension();
+    final Double[] maxes = data.getMaxValuesPerDimension();
     BigInteger estimatedIdCount = BigInteger.valueOf(1);
     for (int d = 0; d < data.getDimensionCount(); d++) {
       final BigInteger binMin =

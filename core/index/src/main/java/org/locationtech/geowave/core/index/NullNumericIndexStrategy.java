@@ -11,7 +11,7 @@ package org.locationtech.geowave.core.index;
 import java.util.Collections;
 import java.util.List;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
 
 /**
  * This is a completely empty numeric index strategy representing no dimensions, and always

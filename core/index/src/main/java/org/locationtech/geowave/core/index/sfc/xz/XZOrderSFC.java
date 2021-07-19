@@ -17,15 +17,15 @@ import java.util.BitSet;
 import java.util.List;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayRange.MergeOperation;
+import org.locationtech.geowave.core.index.numeric.BasicNumericDataset;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.numeric.NumericData;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.RangeDecomposition;
 import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.SpaceFillingCurve;
-import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,12 +69,12 @@ public class XZOrderSFC implements SpaceFillingCurve {
   }
 
   @Override
-  public byte[] getId(double[] values) {
+  public byte[] getId(Double[] values) {
 
     if (values.length == dimensionCount) {
       // We have a point, not a bounding box
       int boxCount = 0;
-      final double[] boxedValues = new double[dimensionCount * 2];
+      final Double[] boxedValues = new Double[dimensionCount * 2];
       for (int i = 0; i < dimensionCount; i++) {
         boxedValues[boxCount++] = values[i];
         boxedValues[boxCount++] = values[i];
@@ -131,7 +131,7 @@ public class XZOrderSFC implements SpaceFillingCurve {
   }
 
   /** Normalize user space values to [0,1] */
-  private void normalize(final double[] values) {
+  private void normalize(final Double[] values) {
     for (int i = 0; i < values.length; i++) {
       values[i] = dimensionDefs[i / 2].normalize(values[i]);
     }
@@ -229,7 +229,7 @@ public class XZOrderSFC implements SpaceFillingCurve {
       return extendedBounds[dimension];
     }
 
-    public boolean isContained(final double[] windowMins, final double[] windowMaxes) {
+    public boolean isContained(final Double[] windowMins, final Double[] windowMaxes) {
       for (int i = 0; i < dimensionCount; i++) {
         if ((windowMins[i] > minsPerDimension[i]) || (windowMaxes[i] < getExtendedBound(i))) {
           return false;
@@ -238,7 +238,7 @@ public class XZOrderSFC implements SpaceFillingCurve {
       return true;
     }
 
-    public boolean overlaps(final double[] windowMins, final double[] windowMaxes) {
+    public boolean overlaps(final Double[] windowMins, final Double[] windowMaxes) {
       for (int i = 0; i < dimensionCount; i++) {
         if ((windowMaxes[i] < minsPerDimension[i]) || (windowMins[i] > getExtendedBound(i))) {
           return false;
@@ -303,8 +303,8 @@ public class XZOrderSFC implements SpaceFillingCurve {
       final int maxRanges) {
 
     // normalize query values
-    final double[] queryMins = query.getMinValuesPerDimension();
-    final double[] queryMaxes = query.getMaxValuesPerDimension();
+    final Double[] queryMins = query.getMinValuesPerDimension();
+    final Double[] queryMaxes = query.getMaxValuesPerDimension();
     for (int i = 0; i < dimensionCount; i++) {
       queryMins[i] = dimensionDefs[i].normalize(queryMins[i]);
       queryMaxes[i] = dimensionDefs[i].normalize(queryMaxes[i]);
@@ -372,8 +372,8 @@ public class XZOrderSFC implements SpaceFillingCurve {
   private void checkValue(
       final XElement value,
       final Short level,
-      final double[] queryMins,
-      final double[] queryMaxes,
+      final Double[] queryMins,
+      final Double[] queryMaxes,
       final ArrayList<ByteArrayRange> ranges,
       final ArrayDeque<XElement> remaining) {
     if (value.isContained(queryMins, queryMaxes)) {
@@ -494,7 +494,7 @@ public class XZOrderSFC implements SpaceFillingCurve {
 
   @Override
   public long[] normalizeRange(final double minValue, final double maxValue, final int dimension) {
-    // TODO Auto-generated method stub
-    return null;
+    // TODO: This should actually be calculated
+    return new long[] {Long.MIN_VALUE, Long.MAX_VALUE};
   }
 }

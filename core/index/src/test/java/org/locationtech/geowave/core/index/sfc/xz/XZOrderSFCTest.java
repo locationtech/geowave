@@ -11,17 +11,17 @@ package org.locationtech.geowave.core.index.sfc.xz;
 import org.junit.Assert;
 import org.junit.Test;
 import org.locationtech.geowave.core.index.dimension.BasicDimensionDefinition;
+import org.locationtech.geowave.core.index.numeric.BasicNumericDataset;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.numeric.NumericData;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
 import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
-import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 
 public class XZOrderSFCTest {
 
   @Test
   public void testIndex() {
-    final double[] values = {42, 43, 57, 59};
+    final Double[] values = {42d, 43d, 57d, 59d};
     // TODO Meaningful examination of results?
     Assert.assertNotNull(createSFC().getId(values));
   }

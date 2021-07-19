@@ -16,7 +16,7 @@ import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.PartitionIndexStrategy;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
 
 /**
  * Used to create determined, uniform row id prefix as one possible approach to prevent hot

@@ -13,13 +13,13 @@ import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray
 import org.locationtech.geowave.core.index.dimension.BasicDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.UnboundedDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.bin.BasicBinningStrategy;
+import org.locationtech.geowave.core.index.numeric.BasicNumericDataset;
+import org.locationtech.geowave.core.index.numeric.BinnedNumericDataset;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
+import org.locationtech.geowave.core.index.numeric.NumericValue;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 import org.locationtech.geowave.core.index.sfc.BasicSFCIndexStrategy;
 import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
-import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
-import org.locationtech.geowave.core.index.sfc.data.BinnedNumericDataset;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
-import org.locationtech.geowave.core.index.sfc.data.NumericValue;
 import org.locationtech.geowave.core.index.sfc.hilbert.HilbertSFC;
 import org.locationtech.geowave.core.index.sfc.tiered.SingleTierSubStrategy;
 import org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy;
@@ -36,11 +36,15 @@ import org.locationtech.geowave.core.index.simple.SimpleFloatIndexStrategy;
 import org.locationtech.geowave.core.index.simple.SimpleIntegerIndexStrategy;
 import org.locationtech.geowave.core.index.simple.SimpleLongIndexStrategy;
 import org.locationtech.geowave.core.index.simple.SimpleShortIndexStrategy;
+import org.locationtech.geowave.core.index.text.BasicTextDataset;
 import org.locationtech.geowave.core.index.text.EnumIndexStrategy;
 import org.locationtech.geowave.core.index.text.EnumSearch;
+import org.locationtech.geowave.core.index.text.ExplicitTextSearch;
 import org.locationtech.geowave.core.index.text.TextIndexStrategy;
+import org.locationtech.geowave.core.index.text.TextRange;
 import org.locationtech.geowave.core.index.text.TextSearch;
 import org.locationtech.geowave.core.index.text.TextSearchPredicate;
+import org.locationtech.geowave.core.index.text.TextValue;
 
 public class IndexPersistableRegistry implements PersistableRegistrySpi {
 
@@ -87,6 +91,10 @@ public class IndexPersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 137, TextIndexStrategy::new),
         new PersistableIdAndConstructor((short) 138, EnumIndexStrategy::new),
         new PersistableIdAndConstructor((short) 139, EnumSearch::new),
-        new PersistableIdAndConstructor((short) 140, BasicBinningStrategy::new),};
+        new PersistableIdAndConstructor((short) 140, BasicBinningStrategy::new),
+        new PersistableIdAndConstructor((short) 141, BasicTextDataset::new),
+        new PersistableIdAndConstructor((short) 142, TextRange::new),
+        new PersistableIdAndConstructor((short) 143, TextValue::new),
+        new PersistableIdAndConstructor((short) 144, ExplicitTextSearch::new),};
   }
 }

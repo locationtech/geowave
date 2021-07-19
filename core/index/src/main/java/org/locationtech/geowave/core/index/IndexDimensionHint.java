@@ -21,7 +21,7 @@ public class IndexDimensionHint {
   }
 
   public String getHintString() {
-    return this.hint;
+    return hint;
   }
 
   @Override

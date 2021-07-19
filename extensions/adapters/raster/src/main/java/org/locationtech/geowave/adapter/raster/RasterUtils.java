@@ -70,7 +70,7 @@ import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.FloatCompareUtils;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -353,8 +353,8 @@ public class RasterUtils {
           Errors.format(ErrorKeys.ILLEGAL_ARGUMENT_$2, "gridType", gridType));
     }
     final Matrix matrix = MatrixFactory.create(dimension + 1);
-    final double[] minValuesPerDimension = fullBounds.getMinValuesPerDimension();
-    final double[] maxValuesPerDimension = fullBounds.getMaxValuesPerDimension();
+    final Double[] minValuesPerDimension = fullBounds.getMinValuesPerDimension();
+    final Double[] maxValuesPerDimension = fullBounds.getMaxValuesPerDimension();
     for (int i = 0; i < dimension; i++) {
       // NOTE: i is a dimension in the 'gridRange' space (source
       // coordinates).

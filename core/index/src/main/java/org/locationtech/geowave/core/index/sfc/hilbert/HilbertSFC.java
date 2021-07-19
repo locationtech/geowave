@@ -15,11 +15,11 @@ import java.util.Arrays;
 import java.util.List;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.RangeDecomposition;
 import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.SpaceFillingCurve;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.uzaygezen.core.CompactHilbertCurve;
@@ -29,15 +29,15 @@ import com.google.uzaygezen.core.MultiDimensionalSpec;
 public class HilbertSFC implements SpaceFillingCurve {
   private static class QueryCacheKey {
     private final HilbertSFC sfc;
-    private final double[] minsPerDimension;
-    private final double[] maxesPerDimension;
+    private final Double[] minsPerDimension;
+    private final Double[] maxesPerDimension;
     private final boolean overInclusiveOnEdge;
     private final int maxFilteredIndexedRanges;
 
     public QueryCacheKey(
         final HilbertSFC sfc,
-        final double[] minsPerDimension,
-        final double[] maxesPerDimension,
+        final Double[] minsPerDimension,
+        final Double[] maxesPerDimension,
         final boolean overInclusiveOnEdge,
         final int maxFilteredIndexedRanges) {
       this.sfc = sfc;
@@ -171,7 +171,7 @@ public class HilbertSFC implements SpaceFillingCurve {
 
   /** * {@inheritDoc} */
   @Override
-  public byte[] getId(final double[] values) {
+  public byte[] getId(final Double[] values) {
     return getIdOperations.convertToHilbert(values, compactHilbertCurve, dimensionDefinitions);
   }
 

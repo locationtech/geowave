@@ -11,8 +11,8 @@ package org.locationtech.geowave.core.index;
 import java.nio.ByteBuffer;
 import java.util.List;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
+import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 
 public class NumericIndexStrategyWrapper implements NumericIndexStrategy {
   private String id;

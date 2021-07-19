@@ -15,7 +15,10 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 
 public interface QueryIssuer {
-  CloseableIterator<SimpleFeature> query(Index index, BasicQueryByClass constraints);
+  CloseableIterator<SimpleFeature> query(
+      Index index,
+      BasicQueryByClass constraints,
+      boolean spatialOnly);
 
   Filter getFilter();
 

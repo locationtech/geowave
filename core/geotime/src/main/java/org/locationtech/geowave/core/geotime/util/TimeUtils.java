@@ -231,21 +231,34 @@ public class TimeUtils {
   }
 
   public static Instant getInstant(final Object timeObject) {
-    final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
     if (timeObject == null) {
       return null;
     }
-    if (timeObject instanceof Date) {
-      c.setTime((Date) timeObject);
-    } else if (timeObject instanceof Calendar) {
-      c.setTime(c.getTime());
-    } else if (timeObject instanceof Number) {
-      c.setTimeInMillis(((Number) timeObject).longValue());
+    if (timeObject instanceof Instant) {
+      return (Instant) timeObject;
     }
-    return Instant.ofEpochMilli(c.getTimeInMillis());
+    if (timeObject instanceof org.opengis.temporal.Instant) {
+      return ((org.opengis.temporal.Instant) timeObject).getPosition().getDate().toInstant();
+    }
+    if (timeObject instanceof Date) {
+      return Instant.ofEpochMilli(((Date) timeObject).getTime());
+    } else if (timeObject instanceof Calendar) {
+      return Instant.ofEpochMilli(((Calendar) timeObject).getTimeInMillis());
+    } else if (timeObject instanceof Number) {
+      return Instant.ofEpochMilli(((Number) timeObject).longValue());
+    }
+    return null;
   }
 
   public static Interval getInterval(final Object timeObject) {
+    if (timeObject instanceof Interval) {
+      return (Interval) timeObject;
+    }
+    if (timeObject instanceof Period) {
+      return Interval.of(
+          ((Period) timeObject).getBeginning().getPosition().getDate().toInstant(),
+          ((Period) timeObject).getEnding().getPosition().getDate().toInstant());
+    }
     final Instant time = getInstant(timeObject);
     if (time == null) {
       return null;
@@ -266,6 +279,13 @@ public class TimeUtils {
       return Interval.of(startTime, startTime);
     }
     return Interval.of(startTime, endTime);
+  }
+
+  public static Instant getIntervalEnd(final Interval interval) {
+    if (interval.isEmpty()) {
+      return Instant.ofEpochMilli(interval.getStart().toEpochMilli() + 1);
+    }
+    return interval.getEnd();
   }
 
   /**

@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.geotime.index.sfc.hilbert;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,10 +17,10 @@ import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.index.dimension.BasicDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
+import org.locationtech.geowave.core.index.numeric.NumericData;
+import org.locationtech.geowave.core.index.numeric.NumericRange;
 import org.locationtech.geowave.core.index.sfc.RangeDecomposition;
 import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
-import org.locationtech.geowave.core.index.sfc.data.NumericData;
-import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.index.sfc.hilbert.PrimitiveHilbertSFCOperations;
 import org.locationtech.geowave.core.index.sfc.hilbert.UnboundedHilbertSFCOperations;
 import com.google.uzaygezen.core.CompactHilbertCurve;
@@ -53,12 +54,12 @@ public class PrimitiveHilbertSFCTest {
         new UnboundedHilbertSFCOperations();
     testOperations.init(sfcDimensions);
     expectedResultOperations.init(sfcDimensions);
-    final double[] testValues1 = new double[] {45, 45};
+    final Double[] testValues1 = new Double[] {45d, 45d};
 
-    final double[] testValues2 = new double[] {0, 0};
-    final double[] testValues3 = new double[] {-1.235456, -67.9213546};
-    final double[] testValues4 =
-        new double[] {
+    final Double[] testValues2 = new Double[] {0d, 0d};
+    final Double[] testValues3 = new Double[] {-1.235456, -67.9213546};
+    final Double[] testValues4 =
+        new Double[] {
             -61.2354561024897435868943753568436598645436,
             42.921354693742875894356895549054690704378590896};
     Assert.assertArrayEquals(
@@ -202,35 +203,14 @@ public class PrimitiveHilbertSFCTest {
         new UnboundedHilbertSFCOperations();
     testOperations.init(sfcDimensions);
     expectedResultOperations.init(sfcDimensions);
-    final double[] testValues1 =
-        new double[] {
-            Double.MIN_VALUE,
-            Double.MIN_VALUE,
-            Double.MIN_VALUE,
-            Double.MIN_VALUE,
-            Double.MIN_VALUE,
-            Double.MIN_VALUE,
-            Double.MIN_VALUE,
-            Double.MIN_VALUE,
-            Double.MIN_VALUE,
-            Double.MIN_VALUE,
-            Double.MIN_VALUE,
-            Double.MIN_VALUE,
-            Double.MIN_VALUE,
-            Double.MIN_VALUE,
-            Double.MIN_VALUE,
-            Double.MIN_VALUE,
-            Double.MIN_VALUE,
-            Double.MIN_VALUE,
-            Double.MIN_VALUE,
-            Double.MIN_VALUE,};
-
-    final double[] testValues2 =
-        new double[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    final double[] testValues3 =
-        new double[] {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-    final double[] testValues4 =
-        new double[] {
+    final Double[] testValues1 = new Double[20];
+    Arrays.fill(testValues1, Double.MIN_VALUE);
+    final Double[] testValues2 = new Double[20];
+    Arrays.fill(testValues2, 0d);
+    final Double[] testValues3 = new Double[20];
+    Arrays.fill(testValues3, 1d);
+    final Double[] testValues4 =
+        new Double[] {
             0.2354561024897435868943753568436598645436,
             0.921354693742875894657658678436546547657867869789780790890789356895549054690704378590896,
             0.84754363905364783265784365843,
