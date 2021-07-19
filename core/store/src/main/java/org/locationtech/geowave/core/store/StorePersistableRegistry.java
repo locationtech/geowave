@@ -12,6 +12,7 @@ import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 import org.locationtech.geowave.core.store.adapter.BaseFieldDescriptor;
 import org.locationtech.geowave.core.store.adapter.BinaryDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterImpl;
+import org.locationtech.geowave.core.store.adapter.BasicDataTypeAdapter;
 import org.locationtech.geowave.core.store.adapter.SimpleRowTransform;
 import org.locationtech.geowave.core.store.api.AggregationQuery;
 import org.locationtech.geowave.core.store.api.Query;
@@ -201,6 +202,7 @@ public class StorePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 293, GenericEqualTo::new),
         new PersistableIdAndConstructor((short) 294, ExplicitFilteredQuery::new),
         new PersistableIdAndConstructor((short) 295, ExpressionQueryFilter::new),
-        new PersistableIdAndConstructor((short) 296, FilteredEverythingQuery::new)};
+        new PersistableIdAndConstructor((short) 296, FilteredEverythingQuery::new),
+        new PersistableIdAndConstructor((short) 297, BasicDataTypeAdapter::new)};
   }
 }

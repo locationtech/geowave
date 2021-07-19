@@ -46,8 +46,10 @@ public abstract class LatLonFieldMapper<N> extends SpatialFieldMapper<N> {
     }
     xAxisFirst =
         inputFieldDescriptors.get(0).indexHints().contains(SpatialField.LONGITUDE_DIMENSION_HINT)
-            || !inputFieldDescriptors.get(1).indexHints().contains(
-                SpatialField.LONGITUDE_DIMENSION_HINT);
+            || inputFieldDescriptors.get(1).indexHints().contains(
+                SpatialField.LATITUDE_DIMENSION_HINT)
+            || inputFieldDescriptors.get(0).fieldName().equalsIgnoreCase("longitude")
+            || inputFieldDescriptors.get(0).fieldName().equalsIgnoreCase("lon");
     super.initFromOptions(inputFieldDescriptors, options);
   }
 

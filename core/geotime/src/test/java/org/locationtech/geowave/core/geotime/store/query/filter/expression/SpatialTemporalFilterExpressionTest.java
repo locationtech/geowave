@@ -46,7 +46,7 @@ import org.locationtech.geowave.core.geotime.store.query.filter.expression.tempo
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.TimeOverlaps;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.locationtech.geowave.core.store.adapter.BasicDataTypeAdapter;
+import org.locationtech.geowave.core.store.adapter.AbstractDataTypeAdapter;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptorBuilder;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
@@ -680,7 +680,7 @@ public class SpatialTemporalFilterExpressionTest {
     }
   }
 
-  public static class TestTypeBasicDataAdapter extends BasicDataTypeAdapter<TestType> {
+  public static class TestTypeBasicDataAdapter extends AbstractDataTypeAdapter<TestType> {
 
     static final FieldDescriptor<?>[] fields =
         new FieldDescriptor<?>[] {
