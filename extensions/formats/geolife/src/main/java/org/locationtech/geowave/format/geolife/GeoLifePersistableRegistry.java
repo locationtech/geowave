@@ -8,10 +8,13 @@
  */
 package org.locationtech.geowave.format.geolife;
 
+import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 import org.locationtech.geowave.format.geolife.GeoLifeIngestPlugin.IngestGeoLifeFromHdfs;
 
-public class GeoLifePersistableRegistry implements PersistableRegistrySpi {
+public class GeoLifePersistableRegistry implements
+    PersistableRegistrySpi,
+    InternalPersistableRegistry {
 
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {

@@ -1,0 +1,14 @@
+[[extending-geowave]]
+<<<
+=== Extending GeoWave
+
+:linkattrs:
+
+==== SPI
+
+Third-party extensions to GeoWave are discovered using Service Provider Interfaces (SPI). Each extendable system contains one or more of these interfaces that allow GeoWave to find third-party classes that add enhanced functionality to those systems. For more information on using SPI, see the link:https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html[Oracle documentation, window="_blank"].
+
+==== Persistables
+
+In order to support dynamic construction of serializable objects, classes can implement the {core-index}/core/index/persist/Persistable.java[`Persistable`] interface.  This interface is at the root of many of the basic GeoWave metadata objects such as data type adapters, indices, and statistics.  When implementing a class that uses this interface, the class will need to be registered with the persistable registry by implementing the {core-index}/core/index/persist/PersistableRegistrySpi.java[`PersistableRegistrySpi`] interface and making sure the JAR containing both the registry and the persistable classes are on the classpath when running GeoWave.  Each persistable has an ID of type short that uniquely identifies the class. All third-party persistable IDs will be automatically converted to the negative ID space (i.e. a persistable ID of 30 will become -30). This allows third-party developers to use any persistable ID without having to worry about conflicting with current or future internal persistables. It is recommended that third-party persistables use positive IDs for simplicity, but keep in mind that they will be converted to the negative space internally.
+

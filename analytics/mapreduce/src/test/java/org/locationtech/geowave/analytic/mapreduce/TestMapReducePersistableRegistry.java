@@ -9,9 +9,12 @@
 package org.locationtech.geowave.analytic.mapreduce;
 
 import org.locationtech.geowave.analytic.mapreduce.kmeans.TestObjectDataAdapter;
+import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 
-public class TestMapReducePersistableRegistry implements PersistableRegistrySpi {
+public class TestMapReducePersistableRegistry implements
+    PersistableRegistrySpi,
+    InternalPersistableRegistry {
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {
     return new PersistableIdAndConstructor[] {

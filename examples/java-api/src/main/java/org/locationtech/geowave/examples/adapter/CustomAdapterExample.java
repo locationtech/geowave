@@ -148,6 +148,8 @@ public class CustomAdapterExample {
   /**
    * The simplest way to implement a data adapter for a custom data type is to extend the
    * {@link AbstractDataTypeAdapter} and implement the methods that read and write the custom type.
+   * It's important to note that any adapter that extends the `AbstractDataTypeAdapter` must be
+   * added to the persistable registry.
    */
   public static class POIBasicDataAdapter extends AbstractDataTypeAdapter<POI> {
     public static final String NAME_FIELD_NAME = "name";

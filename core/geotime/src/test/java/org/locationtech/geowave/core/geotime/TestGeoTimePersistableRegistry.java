@@ -10,9 +10,12 @@ package org.locationtech.geowave.core.geotime;
 
 import org.locationtech.geowave.core.geotime.store.data.PersistenceEncodingTest.GeoObjDataAdapter;
 import org.locationtech.geowave.core.geotime.util.GeometryUtilsTest.ExampleNumericIndexStrategy;
+import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 
-public class TestGeoTimePersistableRegistry implements PersistableRegistrySpi {
+public class TestGeoTimePersistableRegistry implements
+    PersistableRegistrySpi,
+    InternalPersistableRegistry {
 
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {

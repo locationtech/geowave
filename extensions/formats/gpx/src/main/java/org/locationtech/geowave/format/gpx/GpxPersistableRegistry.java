@@ -8,10 +8,11 @@
  */
 package org.locationtech.geowave.format.gpx;
 
+import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 import org.locationtech.geowave.format.gpx.GpxIngestPlugin.IngestGpxTrackFromHdfs;
 
-public class GpxPersistableRegistry implements PersistableRegistrySpi {
+public class GpxPersistableRegistry implements PersistableRegistrySpi, InternalPersistableRegistry {
 
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {

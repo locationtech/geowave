@@ -10,6 +10,15 @@ package org.locationtech.geowave.core.index.persist;
 
 import java.util.function.Supplier;
 
+/**
+ * Registers new persistables with GeoWave. Each persistable has an ID of type short that uniquely
+ * identifies the class. Internal GeoWave persistable registries also implement the
+ * {@link InternalPersistableRegistry} marker interface that alleviates potential ID conflicts with
+ * third-party plugins. Any third-party persistable that does not implement the internal marker
+ * interface will automatically be converted to the negative ID space (i.e. a persistable ID of 30
+ * will become -30). This allows third-party developers to use any persistable ID without having to
+ * worry about conflicting with current or future internal persistables.
+ */
 public interface PersistableRegistrySpi {
 
   public PersistableIdAndConstructor[] getSupportedPersistables();

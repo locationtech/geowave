@@ -8,10 +8,13 @@
  */
 package org.locationtech.geowave.format.avro;
 
+import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 import org.locationtech.geowave.format.avro.GeoWaveAvroIngestPlugin.IngestAvroFeaturesFromHdfs;
 
-public class GeoWaveAvroPersistableRegistry implements PersistableRegistrySpi {
+public class GeoWaveAvroPersistableRegistry implements
+    PersistableRegistrySpi,
+    InternalPersistableRegistry {
 
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {

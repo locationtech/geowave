@@ -8,10 +8,13 @@
  */
 package org.locationtech.geowave.core.ingest.hdfs.mapreduce;
 
+import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.AbstractLocalIngestWithMapper.InternalIngestWithMapper;
 
-public class IngestPersistableRegistry implements PersistableRegistrySpi {
+public class IngestPersistableRegistry implements
+    PersistableRegistrySpi,
+    InternalPersistableRegistry {
 
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {
