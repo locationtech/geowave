@@ -2140,6 +2140,20 @@
 </ul>
 </li>
 <li class="blockList">
+<h2 title="Package">Package&nbsp;org.locationtech.geowave.core.geotime.store.query.filter.expression</h2>
+<ul class="blockList">
+<li class="blockList"><a name="org.locationtech.geowave.core.geotime.store.query.filter.expression.CQLToGeoWaveConversionException">
+<!--   -->
+</a>
+<h3>Class <a href="org/locationtech/geowave/core/geotime/store/query/filter/expression/CQLToGeoWaveConversionException.html" title="class in org.locationtech.geowave.core.geotime.store.query.filter.expression">org.locationtech.geowave.core.geotime.store.query.filter.expression.CQLToGeoWaveConversionException</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/RuntimeException.html?is-external=true" title="class or interface in java.lang">RuntimeException</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>-9093452243825634064L</dd>
+</dl>
+</li>
+</ul>
+</li>
+<li class="blockList">
 <h2 title="Package">Package&nbsp;org.locationtech.geowave.core.geotime.util</h2>
 <ul class="blockList">
 <li class="blockList"><a name="org.locationtech.geowave.core.geotime.util.TimeDescriptors.TimeDescriptorConfiguration">
@@ -2207,12 +2221,12 @@
 </ul>
 </li>
 <li class="blockList">
-<h2 title="Package">Package&nbsp;org.locationtech.geowave.core.index.sfc.data</h2>
+<h2 title="Package">Package&nbsp;org.locationtech.geowave.core.index.numeric</h2>
 <ul class="blockList">
-<li class="blockList"><a name="org.locationtech.geowave.core.index.sfc.data.NumericRange">
+<li class="blockList"><a name="org.locationtech.geowave.core.index.numeric.NumericRange">
 <!--   -->
 </a>
-<h3>Class <a href="org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">org.locationtech.geowave.core.index.sfc.data.NumericRange</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<h3>Class <a href="org/locationtech/geowave/core/index/numeric/NumericRange.html" title="class in org.locationtech.geowave.core.index.numeric">org.locationtech.geowave.core.index.numeric.NumericRange</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -2225,18 +2239,26 @@
 <h4>min</h4>
 <pre>double min</pre>
 </li>
-<li class="blockListLast">
+<li class="blockList">
 <h4>max</h4>
 <pre>double max</pre>
 </li>
-</ul>
+<li class="blockList">
+<h4>minInclusive</h4>
+<pre>boolean minInclusive</pre>
+</li>
+<li class="blockListLast">
+<h4>maxInclusive</h4>
+<pre>boolean maxInclusive</pre>
 </li>
 </ul>
 </li>
-<li class="blockList"><a name="org.locationtech.geowave.core.index.sfc.data.NumericValue">
+</ul>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.core.index.numeric.NumericValue">
 <!--   -->
 </a>
-<h3>Class <a href="org/locationtech/geowave/core/index/sfc/data/NumericValue.html" title="class in org.locationtech.geowave.core.index.sfc.data">org.locationtech.geowave.core.index.sfc.data.NumericValue</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<h3>Class <a href="org/locationtech/geowave/core/index/numeric/NumericValue.html" title="class in org.locationtech.geowave.core.index.numeric">org.locationtech.geowave.core.index.numeric.NumericValue</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -2248,6 +2270,79 @@
 <li class="blockListLast">
 <h4>value</h4>
 <pre>double value</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList">
+<h2 title="Package">Package&nbsp;org.locationtech.geowave.core.index.text</h2>
+<ul class="blockList">
+<li class="blockList"><a name="org.locationtech.geowave.core.index.text.TextRange">
+<!--   -->
+</a>
+<h3>Class <a href="org/locationtech/geowave/core/index/text/TextRange.html" title="class in org.locationtech.geowave.core.index.text">org.locationtech.geowave.core.index.text.TextRange</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>min</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> min</pre>
+</li>
+<li class="blockList">
+<h4>max</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> max</pre>
+</li>
+<li class="blockList">
+<h4>minInclusive</h4>
+<pre>boolean minInclusive</pre>
+</li>
+<li class="blockList">
+<h4>maxInclusive</h4>
+<pre>boolean maxInclusive</pre>
+</li>
+<li class="blockList">
+<h4>caseSensitive</h4>
+<pre>boolean caseSensitive</pre>
+</li>
+<li class="blockListLast">
+<h4>reversed</h4>
+<pre>boolean reversed</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.core.index.text.TextValue">
+<!--   -->
+</a>
+<h3>Class <a href="org/locationtech/geowave/core/index/text/TextValue.html" title="class in org.locationtech.geowave.core.index.text">org.locationtech.geowave.core.index.text.TextValue</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>value</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> value</pre>
+</li>
+<li class="blockList">
+<h4>caseSensitive</h4>
+<pre>boolean caseSensitive</pre>
+</li>
+<li class="blockListLast">
+<h4>reversed</h4>
+<pre>boolean reversed</pre>
 </li>
 </ul>
 </li>
@@ -2455,6 +2550,20 @@
 </ul>
 </li>
 </ul>
+</li>
+</ul>
+</li>
+<li class="blockList">
+<h2 title="Package">Package&nbsp;org.locationtech.geowave.core.store.query.filter.expression</h2>
+<ul class="blockList">
+<li class="blockList"><a name="org.locationtech.geowave.core.store.query.filter.expression.InvalidFilterException">
+<!--   -->
+</a>
+<h3>Class <a href="org/locationtech/geowave/core/store/query/filter/expression/InvalidFilterException.html" title="class in org.locationtech.geowave.core.store.query.filter.expression">org.locationtech.geowave.core.store.query.filter.expression.InvalidFilterException</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/RuntimeException.html?is-external=true" title="class or interface in java.lang">RuntimeException</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>-2922956287189544264L</dd>
+</dl>
 </li>
 </ul>
 </li>

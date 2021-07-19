@@ -176,7 +176,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/dim
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/numeric/NumericRange.html" title="class in org.locationtech.geowave.core.index.numeric">NumericRange</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BasicBinningStrategy.html#getDenormalizedRanges-org.locationtech.geowave.core.index.dimension.bin.BinRange-">getDenormalizedRanges</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>&nbsp;binnedRange)</code>
 <div class="block">Given a set of normalized ranges (each of which are confined to the normalized min and max of
  this binning strategy) with a bin for each of the ranges, this will calculate the original
@@ -191,7 +191,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/dim
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BasicBinningStrategy.html#getNormalizedRanges-org.locationtech.geowave.core.index.sfc.data.NumericData-">getNormalizedRanges</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">NumericData</a>&nbsp;index)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BasicBinningStrategy.html#getNormalizedRanges-org.locationtech.geowave.core.index.numeric.NumericData-">getNormalizedRanges</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/numeric/NumericData.html" title="interface in org.locationtech.geowave.core.index.numeric">NumericData</a>&nbsp;index)</code>
 <div class="block">Return a set of normalized ranges (each of which are confined to the normalized min and max of
  this binning strategy) with a bin for each of the ranges.</div>
 </td>
@@ -332,21 +332,21 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/dim
 </dl>
 </li>
 </ul>
-<a name="getNormalizedRanges-org.locationtech.geowave.core.index.sfc.data.NumericData-">
+<a name="getNormalizedRanges-org.locationtech.geowave.core.index.numeric.NumericData-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getNormalizedRanges</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>[]&nbsp;getNormalizedRanges(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">NumericData</a>&nbsp;index)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/IndexBinningStrategy.html#getNormalizedRanges-org.locationtech.geowave.core.index.sfc.data.NumericData-">IndexBinningStrategy</a></code></span></div>
+<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>[]&nbsp;getNormalizedRanges(<a href="../../../../../../../org/locationtech/geowave/core/index/numeric/NumericData.html" title="interface in org.locationtech.geowave.core.index.numeric">NumericData</a>&nbsp;index)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/IndexBinningStrategy.html#getNormalizedRanges-org.locationtech.geowave.core.index.numeric.NumericData-">IndexBinningStrategy</a></code></span></div>
 <div class="block">Return a set of normalized ranges (each of which are confined to the normalized min and max of
  this binning strategy) with a bin for each of the ranges. If the passed in query range crosses
  multiple bins, a BinRange for each bin that it intersects will be returned, but if it is wholly
  contained within a single bin then a single BinRange will be returned</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/IndexBinningStrategy.html#getNormalizedRanges-org.locationtech.geowave.core.index.sfc.data.NumericData-">getNormalizedRanges</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/IndexBinningStrategy.html" title="interface in org.locationtech.geowave.core.index.dimension.bin">IndexBinningStrategy</a></code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/IndexBinningStrategy.html#getNormalizedRanges-org.locationtech.geowave.core.index.numeric.NumericData-">getNormalizedRanges</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/IndexBinningStrategy.html" title="interface in org.locationtech.geowave.core.index.dimension.bin">IndexBinningStrategy</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>index</code> - the data representing the query range that needs to be normalized and binned</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -360,7 +360,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/index/dim
 <ul class="blockList">
 <li class="blockList">
 <h4>getDenormalizedRanges</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a>&nbsp;getDenormalizedRanges(<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>&nbsp;binnedRange)</pre>
+<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/numeric/NumericRange.html" title="class in org.locationtech.geowave.core.index.numeric">NumericRange</a>&nbsp;getDenormalizedRanges(<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>&nbsp;binnedRange)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/IndexBinningStrategy.html#getDenormalizedRanges-org.locationtech.geowave.core.index.dimension.bin.BinRange-">IndexBinningStrategy</a></code></span></div>
 <div class="block">Given a set of normalized ranges (each of which are confined to the normalized min and max of
  this binning strategy) with a bin for each of the ranges, this will calculate the original

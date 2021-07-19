@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -187,15 +187,22 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/callba
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/statistics/StatisticUpdateHandler.html#handleBinnedRows-org.locationtech.geowave.core.store.statistics.StatisticUpdateHandler.Handler-java.util.Map-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">handleBinnedRows</a></span>(org.locationtech.geowave.core.store.statistics.StatisticUpdateHandler.Handler&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/StatisticUpdateHandler.html" title="type parameter in StatisticUpdateHandler">T</a>,<a href="../../../../../../org/locationtech/geowave/core/store/statistics/StatisticUpdateHandler.html" title="type parameter in StatisticUpdateHandler">V</a>,<a href="../../../../../../org/locationtech/geowave/core/store/statistics/StatisticUpdateHandler.html" title="type parameter in StatisticUpdateHandler">R</a>&gt;&nbsp;handler,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>,<a href="../../../../../../org/locationtech/geowave/core/store/statistics/StatisticUpdateHandler.html" title="type parameter in StatisticUpdateHandler">V</a>&gt;&nbsp;binnedValues,
+                <a href="../../../../../../org/locationtech/geowave/core/store/statistics/StatisticUpdateHandler.html" title="type parameter in StatisticUpdateHandler">T</a>&nbsp;entry,
+                <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/statistics/StatisticUpdateHandler.html#handleEntry-org.locationtech.geowave.core.store.statistics.StatisticUpdateHandler.Handler-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">handleEntry</a></span>(org.locationtech.geowave.core.store.statistics.StatisticUpdateHandler.Handler&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/StatisticUpdateHandler.html" title="type parameter in StatisticUpdateHandler">T</a>,<a href="../../../../../../org/locationtech/geowave/core/store/statistics/StatisticUpdateHandler.html" title="type parameter in StatisticUpdateHandler">V</a>,<a href="../../../../../../org/locationtech/geowave/core/store/statistics/StatisticUpdateHandler.html" title="type parameter in StatisticUpdateHandler">R</a>&gt;&nbsp;handler,
            <a href="../../../../../../org/locationtech/geowave/core/store/statistics/StatisticUpdateHandler.html" title="type parameter in StatisticUpdateHandler">T</a>&nbsp;entry,
            <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/statistics/StatisticUpdateHandler.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/statistics/StatisticUpdateHandler.html#writeStatistics-org.locationtech.geowave.core.store.statistics.DataStatisticsStore-boolean-">writeStatistics</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.statistics">DataStatisticsStore</a>&nbsp;statisticsStore,
                boolean&nbsp;overwrite)</code>&nbsp;</td>
@@ -253,6 +260,20 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/callba
 <pre>protected&nbsp;void&nbsp;handleEntry(org.locationtech.geowave.core.store.statistics.StatisticUpdateHandler.Handler&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/StatisticUpdateHandler.html" title="type parameter in StatisticUpdateHandler">T</a>,<a href="../../../../../../org/locationtech/geowave/core/store/statistics/StatisticUpdateHandler.html" title="type parameter in StatisticUpdateHandler">V</a>,<a href="../../../../../../org/locationtech/geowave/core/store/statistics/StatisticUpdateHandler.html" title="type parameter in StatisticUpdateHandler">R</a>&gt;&nbsp;handler,
                            <a href="../../../../../../org/locationtech/geowave/core/store/statistics/StatisticUpdateHandler.html" title="type parameter in StatisticUpdateHandler">T</a>&nbsp;entry,
                            <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</pre>
+</li>
+</ul>
+<a name="handleBinnedRows-org.locationtech.geowave.core.store.statistics.StatisticUpdateHandler.Handler-java.util.Map-java.lang.Object-org.locationtech.geowave.core.store.entities.GeoWaveRow:A-">
+<!--   -->
+</a><a name="handleBinnedRows-org.locationtech.geowave.core.store.statistics.StatisticUpdateHandler.Handler-java.util.Map-T-org.locationtech.geowave.core.store.entities.GeoWaveRow...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>handleBinnedRows</h4>
+<pre>protected&nbsp;void&nbsp;handleBinnedRows(org.locationtech.geowave.core.store.statistics.StatisticUpdateHandler.Handler&lt;<a href="../../../../../../org/locationtech/geowave/core/store/statistics/StatisticUpdateHandler.html" title="type parameter in StatisticUpdateHandler">T</a>,<a href="../../../../../../org/locationtech/geowave/core/store/statistics/StatisticUpdateHandler.html" title="type parameter in StatisticUpdateHandler">V</a>,<a href="../../../../../../org/locationtech/geowave/core/store/statistics/StatisticUpdateHandler.html" title="type parameter in StatisticUpdateHandler">R</a>&gt;&nbsp;handler,
+                                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArray.html" title="class in org.locationtech.geowave.core.index">ByteArray</a>,<a href="../../../../../../org/locationtech/geowave/core/store/statistics/StatisticUpdateHandler.html" title="type parameter in StatisticUpdateHandler">V</a>&gt;&nbsp;binnedValues,
+                                <a href="../../../../../../org/locationtech/geowave/core/store/statistics/StatisticUpdateHandler.html" title="type parameter in StatisticUpdateHandler">T</a>&nbsp;entry,
+                                <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;rows)</pre>
 </li>
 </ul>
 <a name="handleBin-org.locationtech.geowave.core.store.statistics.StatisticUpdateHandler.Handler-java.util.Map-org.locationtech.geowave.core.index.ByteArray-java.lang.Object-org.locationtech.geowave.core.store.entities.GeoWaveRow:A-">

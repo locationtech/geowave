@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":10,"i3":10,"i4":10,"i5":10,"i6":6,"i7":10,"i8":10,"i9":10,"i10":10,"i11":6,"i12":10,"i13":6,"i14":10,"i15":10};
+var methods = {"i0":6,"i1":6,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":6,"i8":10,"i9":10,"i10":10,"i11":10,"i12":6,"i13":10,"i14":6,"i15":10,"i16":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -75,13 +75,13 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -118,7 +118,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../../../org/locationtech/geowave/core/store/index/NoOpIndexFieldMapper.html" title="class in org.locationtech.geowave.core.store.index">NoOpIndexFieldMapper</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/SpatialFieldMapper.html" title="class in org.locationtech.geowave.core.geotime.adapter">SpatialFieldMapper</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TemporalFieldMapper.html" title="class in org.locationtech.geowave.core.geotime.adapter">TemporalFieldMapper</a></dd>
+<dd><a href="../../../../../../org/locationtech/geowave/core/store/index/NoOpIndexFieldMapper.html" title="class in org.locationtech.geowave.core.store.index">NoOpIndexFieldMapper</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/SpatialFieldMapper.html" title="class in org.locationtech.geowave.core.geotime.adapter">SpatialFieldMapper</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TemporalIntervalFieldMapper.html" title="class in org.locationtech.geowave.core.geotime.adapter">TemporalIntervalFieldMapper</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TemporalLongFieldMapper.html" title="class in org.locationtech.geowave.core.geotime.adapter">TemporalLongFieldMapper</a></dd>
 </dl>
 <hr>
 <br>
@@ -151,6 +151,29 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/persis
 <div class="block">Provides an open-ended interface so that custom index fields can provide any information to the
  mapper that may be needed.</div>
 </td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#adapterFields">adapterFields</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#indexFieldName">indexFieldName</a></span></code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -207,59 +230,63 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/persis
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#getAdapterFields--">getAdapterFields</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#getIndexOrderedAdapterFields--">getIndexOrderedAdapterFields</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#indexFieldName--">indexFieldName</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>abstract <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html" title="type parameter in IndexFieldMapper">I</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#indexFieldType--">indexFieldType</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#init-java.lang.String-java.util.List-org.locationtech.geowave.core.store.api.IndexFieldMapper.IndexFieldOptions-">init</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexFieldName,
     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html" title="type parameter in IndexFieldMapper">N</a>&gt;&gt;&nbsp;inputFieldDescriptors,
     <a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.IndexFieldOptions.html" title="interface in org.locationtech.geowave.core.store.api">IndexFieldMapper.IndexFieldOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#initFromOptions-java.util.List-org.locationtech.geowave.core.store.api.IndexFieldMapper.IndexFieldOptions-">initFromOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html" title="type parameter in IndexFieldMapper">N</a>&gt;&gt;&nbsp;inputFieldDescriptors,
                <a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.IndexFieldOptions.html" title="interface in org.locationtech.geowave.core.store.api">IndexFieldMapper.IndexFieldOptions</a>&nbsp;options)</code>
 <div class="block">Initialize the field mapper with the given field descriptors and index field options.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#isCompatibleWith-java.lang.Class-">isCompatibleWith</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;fieldClass)</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#readBytes-java.nio.ByteBuffer-">readBytes</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;buffer)</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>abstract <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html" title="type parameter in IndexFieldMapper">N</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#toAdapter-I-">toAdapter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html" title="type parameter in IndexFieldMapper">I</a>&nbsp;indexFieldValue)</code>
 <div class="block">Converts an index value back to the fields used by the adapter.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#toBinary--">toBinary</a></span>()</code>
 <div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>abstract <a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html" title="type parameter in IndexFieldMapper">I</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#toIndex-java.util.List-">toIndex</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html" title="type parameter in IndexFieldMapper">N</a>&gt;&nbsp;nativeFieldValues)</code>
 <div class="block">Converts native field values to the value expected by the index.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#transformFieldDescriptors-org.locationtech.geowave.core.store.adapter.FieldDescriptor:A-">transformFieldDescriptors</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;?&gt;[]&nbsp;fieldDescriptors)</code>
 <div class="block">As a performance measure, sometimes the queried data will vary from the data that was ingested.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#writeBytes-java.nio.ByteBuffer-">writeBytes</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;buffer)</code>&nbsp;</td>
 </tr>
@@ -279,6 +306,32 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/persis
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="indexFieldName">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>indexFieldName</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> indexFieldName</pre>
+</li>
+</ul>
+<a name="adapterFields">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>adapterFields</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[] adapterFields</pre>
+</li>
+</ul>
+</li>
+</ul>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.detail">
@@ -356,6 +409,20 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/persis
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the adapter field names used in the mapping</dd>
+</dl>
+</li>
+</ul>
+<a name="getIndexOrderedAdapterFields--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getIndexOrderedAdapterFields</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;getIndexOrderedAdapterFields()</pre>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the adapter field names used in the mapping, ordered by the index dimensions they are
+         associated with</dd>
 </dl>
 </li>
 </ul>
@@ -567,13 +634,13 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/persis
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>

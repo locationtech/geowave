@@ -172,7 +172,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloReader.html#AccumuloReader-org.apache.accumulo.core.client.ScannerBase-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-int-boolean-boolean-boolean-">AccumuloReader</a></span>(org.apache.accumulo.core.client.ScannerBase&nbsp;scanner,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloReader.html#AccumuloReader-org.apache.accumulo.core.client.ScannerBase-java.util.List-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-int-boolean-boolean-boolean-">AccumuloReader</a></span>(org.apache.accumulo.core.client.ScannerBase&nbsp;scanner,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>&gt;&nbsp;clientFilterRanges,
               <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloReader.html" title="type parameter in AccumuloReader">T</a>&gt;&nbsp;transformer,
               int&nbsp;partitionKeyLength,
               boolean&nbsp;wholeRowEncoding,
@@ -252,13 +253,14 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="AccumuloReader-org.apache.accumulo.core.client.ScannerBase-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-int-boolean-boolean-boolean-">
+<a name="AccumuloReader-org.apache.accumulo.core.client.ScannerBase-java.util.List-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-int-boolean-boolean-boolean-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>AccumuloReader</h4>
 <pre>public&nbsp;AccumuloReader(org.apache.accumulo.core.client.ScannerBase&nbsp;scanner,
+                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayRange.html" title="class in org.locationtech.geowave.core.index">ByteArrayRange</a>&gt;&nbsp;clientFilterRanges,
                       <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloReader.html" title="type parameter in AccumuloReader">T</a>&gt;&nbsp;transformer,
                       int&nbsp;partitionKeyLength,
                       boolean&nbsp;wholeRowEncoding,

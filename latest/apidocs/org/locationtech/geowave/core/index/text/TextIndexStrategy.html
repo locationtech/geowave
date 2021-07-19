@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -109,13 +109,13 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">CustomIndexStrategy</a>&lt;E,<a href="../../../../../../org/locationtech/geowave/core/index/text/TextSearch.html" title="class in org.locationtech.geowave.core.index.text">TextSearch</a>&gt;, <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></dd>
+<dd><a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">CustomIndexStrategy</a>&lt;E,<a href="../../../../../../org/locationtech/geowave/core/index/text/TextConstraints.html" title="interface in org.locationtech.geowave.core.index.text">TextConstraints</a>&gt;, <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">TextIndexStrategy&lt;E&gt;</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">CustomIndexStrategy</a>&lt;E,<a href="../../../../../../org/locationtech/geowave/core/index/text/TextSearch.html" title="class in org.locationtech.geowave.core.index.text">TextSearch</a>&gt;</pre>
+implements <a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">CustomIndexStrategy</a>&lt;E,<a href="../../../../../../org/locationtech/geowave/core/index/text/TextConstraints.html" title="interface in org.locationtech.geowave.core.index.text">TextConstraints</a>&gt;</pre>
 </li>
 </ul>
 </div>
@@ -195,7 +195,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/Custom
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexStrategy.html#fromBinary-java.nio.ByteBuffer-">fromBinary</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;buf)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/text/TextSearch.html" title="class in org.locationtech.geowave.core.index.text">TextSearch</a>&gt;</code></td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/text/TextConstraints.html" title="interface in org.locationtech.geowave.core.index.text">TextConstraints</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexStrategy.html#getConstraintsClass--">getConstraintsClass</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
@@ -203,8 +203,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/Custom
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexStrategy.html#getEntryConverter--">getEntryConverter</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.PersistableBiPredicate.html" title="interface in org.locationtech.geowave.core.index">CustomIndexStrategy.PersistableBiPredicate</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexStrategy.html" title="type parameter in TextIndexStrategy">E</a>,<a href="../../../../../../org/locationtech/geowave/core/index/text/TextSearch.html" title="class in org.locationtech.geowave.core.index.text">TextSearch</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexStrategy.html#getFilter-org.locationtech.geowave.core.index.text.TextSearch-">getFilter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/text/TextSearch.html" title="class in org.locationtech.geowave.core.index.text">TextSearch</a>&nbsp;constraints)</code>
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.PersistableBiPredicate.html" title="interface in org.locationtech.geowave.core.index">CustomIndexStrategy.PersistableBiPredicate</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexStrategy.html" title="type parameter in TextIndexStrategy">E</a>,<a href="../../../../../../org/locationtech/geowave/core/index/text/TextConstraints.html" title="interface in org.locationtech.geowave.core.index.text">TextConstraints</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexStrategy.html#getFilter-org.locationtech.geowave.core.index.text.TextConstraints-">getFilter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/text/TextConstraints.html" title="interface in org.locationtech.geowave.core.index.text">TextConstraints</a>&nbsp;constraints)</code>
 <div class="block">Optionally a custom index strategy can enable additional filtering beyond just the query ranges
  (termed "fine-grained" filtering in documentation).</div>
 </td>
@@ -220,11 +220,23 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/Custom
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexStrategy.html#getQueryRanges-org.locationtech.geowave.core.index.text.TextSearch-">getQueryRanges</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/text/TextSearch.html" title="class in org.locationtech.geowave.core.index.text">TextSearch</a>&nbsp;constraints)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexStrategy.html#getQueryRanges-org.locationtech.geowave.core.index.text.MultiDimensionalTextData-">getQueryRanges</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/text/MultiDimensionalTextData.html" title="interface in org.locationtech.geowave.core.index.text">MultiDimensionalTextData</a>&nbsp;textData)</code>&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexStrategy.html#getQueryRanges-org.locationtech.geowave.core.index.text.TextConstraints-">getQueryRanges</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/text/TextConstraints.html" title="interface in org.locationtech.geowave.core.index.text">TextConstraints</a>&nbsp;constraints)</code>
 <div class="block">This is the function that is called on query, when given a query with the constraints type.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexStrategy.html#isSupported-org.locationtech.geowave.core.index.text.CaseSensitivity-">isSupported</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/text/CaseSensitivity.html" title="enum in org.locationtech.geowave.core.index.text">CaseSensitivity</a>&nbsp;caseSensitivity)</code>&nbsp;</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexStrategy.html#isSupported-org.locationtech.geowave.core.index.text.TextSearchType-">isSupported</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/text/TextSearchType.html" title="enum in org.locationtech.geowave.core.index.text">TextSearchType</a>&nbsp;searchType)</code>&nbsp;</td>
+</tr>
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexStrategy.html#toBinary--">toBinary</a></span>()</code>
 <div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
@@ -310,6 +322,24 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/Custom
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexEntryConverter.html" title="interface in org.locationtech.geowave.core.index.text">TextIndexEntryConverter</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexStrategy.html" title="type parameter in TextIndexStrategy">E</a>&gt;&nbsp;getEntryConverter()</pre>
 </li>
 </ul>
+<a name="isSupported-org.locationtech.geowave.core.index.text.TextSearchType-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isSupported</h4>
+<pre>public&nbsp;boolean&nbsp;isSupported(<a href="../../../../../../org/locationtech/geowave/core/index/text/TextSearchType.html" title="enum in org.locationtech.geowave.core.index.text">TextSearchType</a>&nbsp;searchType)</pre>
+</li>
+</ul>
+<a name="isSupported-org.locationtech.geowave.core.index.text.CaseSensitivity-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isSupported</h4>
+<pre>public&nbsp;boolean&nbsp;isSupported(<a href="../../../../../../org/locationtech/geowave/core/index/text/CaseSensitivity.html" title="enum in org.locationtech.geowave.core.index.text">CaseSensitivity</a>&nbsp;caseSensitivity)</pre>
+</li>
+</ul>
 <a name="toBinary--">
 <!--   -->
 </a>
@@ -367,7 +397,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/Custom
  unique partition in the backend datastore)</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.html#getInsertionIds-E-">getInsertionIds</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">CustomIndexStrategy</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexStrategy.html" title="type parameter in TextIndexStrategy">E</a>,<a href="../../../../../../org/locationtech/geowave/core/index/text/TextSearch.html" title="class in org.locationtech.geowave.core.index.text">TextSearch</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.html#getInsertionIds-E-">getInsertionIds</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">CustomIndexStrategy</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexStrategy.html" title="type parameter in TextIndexStrategy">E</a>,<a href="../../../../../../org/locationtech/geowave/core/index/text/TextConstraints.html" title="interface in org.locationtech.geowave.core.index.text">TextConstraints</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>entry</code> - the entry to be indexed on ingest</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -375,13 +405,13 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/Custom
 </dl>
 </li>
 </ul>
-<a name="getQueryRanges-org.locationtech.geowave.core.index.text.TextSearch-">
+<a name="getQueryRanges-org.locationtech.geowave.core.index.text.TextConstraints-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getQueryRanges</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a>&nbsp;getQueryRanges(<a href="../../../../../../org/locationtech/geowave/core/index/text/TextSearch.html" title="class in org.locationtech.geowave.core.index.text">TextSearch</a>&nbsp;constraints)</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a>&nbsp;getQueryRanges(<a href="../../../../../../org/locationtech/geowave/core/index/text/TextConstraints.html" title="interface in org.locationtech.geowave.core.index.text">TextConstraints</a>&nbsp;constraints)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.html#getQueryRanges-C-">CustomIndexStrategy</a></code></span></div>
 <div class="block">This is the function that is called on query, when given a query with the constraints type. The
  constraints type can be any arbitrary type although should be persistable so that it can work
@@ -391,7 +421,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/Custom
  rows that may match the constraints.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.html#getQueryRanges-C-">getQueryRanges</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">CustomIndexStrategy</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexStrategy.html" title="type parameter in TextIndexStrategy">E</a>,<a href="../../../../../../org/locationtech/geowave/core/index/text/TextSearch.html" title="class in org.locationtech.geowave.core.index.text">TextSearch</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.html#getQueryRanges-C-">getQueryRanges</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">CustomIndexStrategy</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexStrategy.html" title="type parameter in TextIndexStrategy">E</a>,<a href="../../../../../../org/locationtech/geowave/core/index/text/TextConstraints.html" title="interface in org.locationtech.geowave.core.index.text">TextConstraints</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>constraints</code> - the query constraints</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -400,13 +430,22 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/Custom
 </dl>
 </li>
 </ul>
-<a name="getFilter-org.locationtech.geowave.core.index.text.TextSearch-">
+<a name="getQueryRanges-org.locationtech.geowave.core.index.text.MultiDimensionalTextData-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getQueryRanges</h4>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a>&nbsp;getQueryRanges(<a href="../../../../../../org/locationtech/geowave/core/index/text/MultiDimensionalTextData.html" title="interface in org.locationtech.geowave.core.index.text">MultiDimensionalTextData</a>&nbsp;textData)</pre>
+</li>
+</ul>
+<a name="getFilter-org.locationtech.geowave.core.index.text.TextConstraints-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getFilter</h4>
-<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.PersistableBiPredicate.html" title="interface in org.locationtech.geowave.core.index">CustomIndexStrategy.PersistableBiPredicate</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexStrategy.html" title="type parameter in TextIndexStrategy">E</a>,<a href="../../../../../../org/locationtech/geowave/core/index/text/TextSearch.html" title="class in org.locationtech.geowave.core.index.text">TextSearch</a>&gt;&nbsp;getFilter(<a href="../../../../../../org/locationtech/geowave/core/index/text/TextSearch.html" title="class in org.locationtech.geowave.core.index.text">TextSearch</a>&nbsp;constraints)</pre>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.PersistableBiPredicate.html" title="interface in org.locationtech.geowave.core.index">CustomIndexStrategy.PersistableBiPredicate</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexStrategy.html" title="type parameter in TextIndexStrategy">E</a>,<a href="../../../../../../org/locationtech/geowave/core/index/text/TextConstraints.html" title="interface in org.locationtech.geowave.core.index.text">TextConstraints</a>&gt;&nbsp;getFilter(<a href="../../../../../../org/locationtech/geowave/core/index/text/TextConstraints.html" title="interface in org.locationtech.geowave.core.index.text">TextConstraints</a>&nbsp;constraints)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.html#getFilter-C-">CustomIndexStrategy</a></code></span></div>
 <div class="block">Optionally a custom index strategy can enable additional filtering beyond just the query ranges
  (termed "fine-grained" filtering in documentation). This requires reading rows from disk and
@@ -414,7 +453,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/Custom
  enough to handle any additional evaluation criteria required.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.html#getFilter-C-">getFilter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">CustomIndexStrategy</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexStrategy.html" title="type parameter in TextIndexStrategy">E</a>,<a href="../../../../../../org/locationtech/geowave/core/index/text/TextSearch.html" title="class in org.locationtech.geowave.core.index.text">TextSearch</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.html#getFilter-C-">getFilter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">CustomIndexStrategy</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexStrategy.html" title="type parameter in TextIndexStrategy">E</a>,<a href="../../../../../../org/locationtech/geowave/core/index/text/TextConstraints.html" title="interface in org.locationtech.geowave.core.index.text">TextConstraints</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>A predicate that should be used for "fine-grained" filter evaluation</dd>
 </dl>
@@ -437,10 +476,10 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/Custom
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getConstraintsClass</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/text/TextSearch.html" title="class in org.locationtech.geowave.core.index.text">TextSearch</a>&gt;&nbsp;getConstraintsClass()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/text/TextConstraints.html" title="interface in org.locationtech.geowave.core.index.text">TextConstraints</a>&gt;&nbsp;getConstraintsClass()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.html#getConstraintsClass--">getConstraintsClass</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">CustomIndexStrategy</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexStrategy.html" title="type parameter in TextIndexStrategy">E</a>,<a href="../../../../../../org/locationtech/geowave/core/index/text/TextSearch.html" title="class in org.locationtech.geowave.core.index.text">TextSearch</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.html#getConstraintsClass--">getConstraintsClass</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/index/CustomIndexStrategy.html" title="interface in org.locationtech.geowave.core.index">CustomIndexStrategy</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexStrategy.html" title="type parameter in TextIndexStrategy">E</a>,<a href="../../../../../../org/locationtech/geowave/core/index/text/TextConstraints.html" title="interface in org.locationtech.geowave.core.index.text">TextConstraints</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>

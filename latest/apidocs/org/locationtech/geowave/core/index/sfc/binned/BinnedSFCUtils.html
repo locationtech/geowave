@@ -161,22 +161,22 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/SinglePartitionQueryRanges.html" title="class in org.locationtech.geowave.core.index">SinglePartitionQueryRanges</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/binned/BinnedSFCUtils.html#getQueryRanges-java.util.List-org.locationtech.geowave.core.index.sfc.SpaceFillingCurve-int-java.lang.Byte-">getQueryRanges</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/BinnedNumericDataset.html" title="class in org.locationtech.geowave.core.index.sfc.data">BinnedNumericDataset</a>&gt;&nbsp;binnedQueries,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/binned/BinnedSFCUtils.html#getQueryRanges-java.util.List-org.locationtech.geowave.core.index.sfc.SpaceFillingCurve-int-java.lang.Byte-">getQueryRanges</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/numeric/BinnedNumericDataset.html" title="class in org.locationtech.geowave.core.index.numeric">BinnedNumericDataset</a>&gt;&nbsp;binnedQueries,
               <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in org.locationtech.geowave.core.index.sfc">SpaceFillingCurve</a>&nbsp;sfc,
               int&nbsp;maxRanges,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Byte.html?is-external=true" title="class or interface in java.lang">Byte</a>&nbsp;tier)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>static <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
+<td class="colFirst"><code>static <a href="../../../../../../../org/locationtech/geowave/core/index/numeric/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.numeric">MultiDimensionalNumericData</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/binned/BinnedSFCUtils.html#getRangeForId-byte:A-org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition:A-org.locationtech.geowave.core.index.sfc.SpaceFillingCurve-">getRangeForId</a></span>(byte[]&nbsp;rowId,
              <a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>[]&nbsp;baseDefinitions,
              <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in org.locationtech.geowave.core.index.sfc">SpaceFillingCurve</a>&nbsp;sfc)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../../org/locationtech/geowave/core/index/SinglePartitionInsertionIds.html" title="class in org.locationtech.geowave.core.index">SinglePartitionInsertionIds</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/binned/BinnedSFCUtils.html#getSingleBinnedInsertionId-java.math.BigInteger-java.lang.Byte-org.locationtech.geowave.core.index.sfc.data.BinnedNumericDataset-org.locationtech.geowave.core.index.sfc.SpaceFillingCurve-">getSingleBinnedInsertionId</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a>&nbsp;rowCount,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/binned/BinnedSFCUtils.html#getSingleBinnedInsertionId-java.math.BigInteger-java.lang.Byte-org.locationtech.geowave.core.index.numeric.BinnedNumericDataset-org.locationtech.geowave.core.index.sfc.SpaceFillingCurve-">getSingleBinnedInsertionId</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a>&nbsp;rowCount,
                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Byte.html?is-external=true" title="class or interface in java.lang">Byte</a>&nbsp;multiDimensionalId,
-                          <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/BinnedNumericDataset.html" title="class in org.locationtech.geowave.core.index.sfc.data">BinnedNumericDataset</a>&nbsp;index,
+                          <a href="../../../../../../../org/locationtech/geowave/core/index/numeric/BinnedNumericDataset.html" title="class in org.locationtech.geowave.core.index.numeric">BinnedNumericDataset</a>&nbsp;index,
                           <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in org.locationtech.geowave.core.index.sfc">SpaceFillingCurve</a>&nbsp;sfc)</code>&nbsp;</td>
 </tr>
 </table>
@@ -224,7 +224,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getQueryRanges</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/SinglePartitionQueryRanges.html" title="class in org.locationtech.geowave.core.index">SinglePartitionQueryRanges</a>&gt;&nbsp;getQueryRanges(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/BinnedNumericDataset.html" title="class in org.locationtech.geowave.core.index.sfc.data">BinnedNumericDataset</a>&gt;&nbsp;binnedQueries,
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/SinglePartitionQueryRanges.html" title="class in org.locationtech.geowave.core.index">SinglePartitionQueryRanges</a>&gt;&nbsp;getQueryRanges(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../org/locationtech/geowave/core/index/numeric/BinnedNumericDataset.html" title="class in org.locationtech.geowave.core.index.numeric">BinnedNumericDataset</a>&gt;&nbsp;binnedQueries,
                                                               <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in org.locationtech.geowave.core.index.sfc">SpaceFillingCurve</a>&nbsp;sfc,
                                                               int&nbsp;maxRanges,
                                                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Byte.html?is-external=true" title="class or interface in java.lang">Byte</a>&nbsp;tier)</pre>
@@ -242,7 +242,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                                                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Byte.html?is-external=true" title="class or interface in java.lang">Byte</a>&nbsp;tier)</pre>
 </li>
 </ul>
-<a name="getSingleBinnedInsertionId-java.math.BigInteger-java.lang.Byte-org.locationtech.geowave.core.index.sfc.data.BinnedNumericDataset-org.locationtech.geowave.core.index.sfc.SpaceFillingCurve-">
+<a name="getSingleBinnedInsertionId-java.math.BigInteger-java.lang.Byte-org.locationtech.geowave.core.index.numeric.BinnedNumericDataset-org.locationtech.geowave.core.index.sfc.SpaceFillingCurve-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -250,7 +250,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>getSingleBinnedInsertionId</h4>
 <pre>public static&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/SinglePartitionInsertionIds.html" title="class in org.locationtech.geowave.core.index">SinglePartitionInsertionIds</a>&nbsp;getSingleBinnedInsertionId(<a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a>&nbsp;rowCount,
                                                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Byte.html?is-external=true" title="class or interface in java.lang">Byte</a>&nbsp;multiDimensionalId,
-                                                                     <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/BinnedNumericDataset.html" title="class in org.locationtech.geowave.core.index.sfc.data">BinnedNumericDataset</a>&nbsp;index,
+                                                                     <a href="../../../../../../../org/locationtech/geowave/core/index/numeric/BinnedNumericDataset.html" title="class in org.locationtech.geowave.core.index.numeric">BinnedNumericDataset</a>&nbsp;index,
                                                                      <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in org.locationtech.geowave.core.index.sfc">SpaceFillingCurve</a>&nbsp;sfc)</pre>
 </li>
 </ul>
@@ -271,7 +271,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getRangeForId</h4>
-<pre>public static&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;getRangeForId(byte[]&nbsp;rowId,
+<pre>public static&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/numeric/MultiDimensionalNumericData.html" title="interface in org.locationtech.geowave.core.index.numeric">MultiDimensionalNumericData</a>&nbsp;getRangeForId(byte[]&nbsp;rowId,
                                                         <a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a>[]&nbsp;baseDefinitions,
                                                         <a href="../../../../../../../org/locationtech/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in org.locationtech.geowave.core.index.sfc">SpaceFillingCurve</a>&nbsp;sfc)</pre>
 </li>

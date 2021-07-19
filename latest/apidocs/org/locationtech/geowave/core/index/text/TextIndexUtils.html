@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexType.html" title="enum in org.locationtech.geowave.core.index.text"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../org/locationtech/geowave/core/index/text/TextSearch.html" title="class in org.locationtech.geowave.core.index.text"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/core/index/text/TextRange.html" title="class in org.locationtech.geowave.core.index.text"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/locationtech/geowave/core/index/text/TextIndexUtils.html" target="_top">Frames</a></li>
@@ -171,20 +171,32 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                      boolean&nbsp;caseSensitive)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexUtils.html#getForwardQueryRanges-java.lang.String-java.lang.String-boolean-boolean-boolean-">getForwardQueryRanges</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;startTerm,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;endTerm,
+                     boolean&nbsp;startInclusive,
+                     boolean&nbsp;endInclusive,
+                     boolean&nbsp;caseSensitive)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/index/InsertionIds.html" title="class in org.locationtech.geowave.core.index">InsertionIds</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexUtils.html#getInsertionIds-java.lang.String-java.util.EnumSet-java.util.EnumSet-int-">getInsertionIds</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;entry,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/EnumSet.html?is-external=true" title="class or interface in java.util">EnumSet</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/text/TextSearchType.html" title="enum in org.locationtech.geowave.core.index.text">TextSearchType</a>&gt;&nbsp;supportedSearchTypes,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/EnumSet.html?is-external=true" title="class or interface in java.util">EnumSet</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/text/CaseSensitivity.html" title="enum in org.locationtech.geowave.core.index.text">CaseSensitivity</a>&gt;&nbsp;supportedCaseSensitivities,
                int&nbsp;nGramCharacters)</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexUtils.html#getNGramQueryRanges-java.lang.String-int-boolean-boolean-">getNGramQueryRanges</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;initialTerm,
                    int&nbsp;nGramCharacters,
                    boolean&nbsp;isForwardIndexed,
                    boolean&nbsp;caseSensitive)</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexUtils.html#getQueryRanges-org.locationtech.geowave.core.index.text.MultiDimensionalTextData-">getQueryRanges</a></span>(<a href="../../../../../../org/locationtech/geowave/core/index/text/MultiDimensionalTextData.html" title="interface in org.locationtech.geowave.core.index.text">MultiDimensionalTextData</a>&nbsp;textData)</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexUtils.html#getQueryRanges-java.lang.String-org.locationtech.geowave.core.index.text.TextSearchType-org.locationtech.geowave.core.index.text.CaseSensitivity-java.util.EnumSet-int-">getQueryRanges</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;term,
               <a href="../../../../../../org/locationtech/geowave/core/index/text/TextSearchType.html" title="enum in org.locationtech.geowave.core.index.text">TextSearchType</a>&nbsp;searchType,
@@ -192,9 +204,17 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
               <a href="http://docs.oracle.com/javase/7/docs/api/java/util/EnumSet.html?is-external=true" title="class or interface in java.util">EnumSet</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/text/TextSearchType.html" title="enum in org.locationtech.geowave.core.index.text">TextSearchType</a>&gt;&nbsp;supportedSearchTypes,
               int&nbsp;nGramCharacters)</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexUtils.html#getReverseQueryRanges-java.lang.String-boolean-">getReverseQueryRanges</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;term,
+                     boolean&nbsp;caseSensitive)</code>&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexUtils.html#getReverseQueryRanges-java.lang.String-java.lang.String-boolean-boolean-boolean-">getReverseQueryRanges</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;startTerm,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;endTerm,
+                     boolean&nbsp;startInclusive,
+                     boolean&nbsp;endInclusive,
                      boolean&nbsp;caseSensitive)</code>&nbsp;</td>
 </tr>
 </table>
@@ -278,6 +298,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                          int&nbsp;nGramCharacters)</pre>
 </li>
 </ul>
+<a name="getQueryRanges-org.locationtech.geowave.core.index.text.MultiDimensionalTextData-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getQueryRanges</h4>
+<pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a>&nbsp;getQueryRanges(<a href="../../../../../../org/locationtech/geowave/core/index/text/MultiDimensionalTextData.html" title="interface in org.locationtech.geowave.core.index.text">MultiDimensionalTextData</a>&nbsp;textData)</pre>
+</li>
+</ul>
 <a name="getForwardQueryRanges-java.lang.String-boolean-">
 <!--   -->
 </a>
@@ -288,6 +317,19 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                                 boolean&nbsp;caseSensitive)</pre>
 </li>
 </ul>
+<a name="getForwardQueryRanges-java.lang.String-java.lang.String-boolean-boolean-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getForwardQueryRanges</h4>
+<pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a>&nbsp;getForwardQueryRanges(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;startTerm,
+                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;endTerm,
+                                                boolean&nbsp;startInclusive,
+                                                boolean&nbsp;endInclusive,
+                                                boolean&nbsp;caseSensitive)</pre>
+</li>
+</ul>
 <a name="getReverseQueryRanges-java.lang.String-boolean-">
 <!--   -->
 </a>
@@ -295,6 +337,19 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getReverseQueryRanges</h4>
 <pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a>&nbsp;getReverseQueryRanges(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;term,
+                                                boolean&nbsp;caseSensitive)</pre>
+</li>
+</ul>
+<a name="getReverseQueryRanges-java.lang.String-java.lang.String-boolean-boolean-boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getReverseQueryRanges</h4>
+<pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/index/QueryRanges.html" title="class in org.locationtech.geowave.core.index">QueryRanges</a>&nbsp;getReverseQueryRanges(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;startTerm,
+                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;endTerm,
+                                                boolean&nbsp;startInclusive,
+                                                boolean&nbsp;endInclusive,
                                                 boolean&nbsp;caseSensitive)</pre>
 </li>
 </ul>
@@ -339,7 +394,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../org/locationtech/geowave/core/index/text/TextIndexType.html" title="enum in org.locationtech.geowave.core.index.text"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../org/locationtech/geowave/core/index/text/TextSearch.html" title="class in org.locationtech.geowave.core.index.text"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../org/locationtech/geowave/core/index/text/TextRange.html" title="class in org.locationtech.geowave.core.index.text"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/locationtech/geowave/core/index/text/TextIndexUtils.html" target="_top">Frames</a></li>

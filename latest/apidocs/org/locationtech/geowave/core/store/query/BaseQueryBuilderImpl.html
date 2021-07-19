@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -217,43 +217,49 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/query/
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html" title="type parameter in BaseQueryBuilderImpl">R</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html#filter-org.locationtech.geowave.core.store.query.filter.expression.Filter-">filter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Filter.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Filter</a>&nbsp;filter)</code>
+<div class="block">Constrain the query with a filter expression.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html" title="type parameter in BaseQueryBuilderImpl">R</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html#indexName-java.lang.String-">indexName</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</code>
 <div class="block">Query only using the specified index.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html" title="type parameter in BaseQueryBuilderImpl">R</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html#limit-int-">limit</a></span>(int&nbsp;limit)</code>
 <div class="block">Set the limit for the number of entries.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/query/options/CommonQueryOptions.html" title="class in org.locationtech.geowave.core.store.query.options">CommonQueryOptions</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html#newCommonQueryOptions--">newCommonQueryOptions</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/query/options/IndexQueryOptions.html" title="interface in org.locationtech.geowave.core.store.query.options">IndexQueryOptions</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html#newIndexQueryOptions--">newIndexQueryOptions</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html" title="type parameter in BaseQueryBuilderImpl">R</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html#noAuthorizations--">noAuthorizations</a></span>()</code>
 <div class="block">Set to no authorizations (default behavior).</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html" title="type parameter in BaseQueryBuilderImpl">R</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html#noHints--">noHints</a></span>()</code>
 <div class="block">Clear out any hints (default is no hints).</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html" title="type parameter in BaseQueryBuilderImpl">R</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html#noLimit--">noLimit</a></span>()</code>
 <div class="block">Set no limit for the number of entries (default behavior).</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html" title="type parameter in BaseQueryBuilderImpl">R</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html#setAuthorizations-java.lang.String:A-">setAuthorizations</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</code>
 <div class="block">Set the authorizations for this query (authorizations are intersected with row visibilities to
@@ -542,6 +548,26 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/query/
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html#constraints-org.locationtech.geowave.core.store.query.constraints.QueryConstraints-">constraints</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.query">BaseQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html" title="type parameter in BaseQueryBuilderImpl">T</a>,<a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html" title="type parameter in BaseQueryBuilderImpl">Q</a> extends <a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQuery.html" title="class in org.locationtech.geowave.core.store.query">BaseQuery</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html" title="type parameter in BaseQueryBuilderImpl">T</a>,?&gt;,<a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html" title="type parameter in BaseQueryBuilderImpl">R</a> extends <a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.query">BaseQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html" title="type parameter in BaseQueryBuilderImpl">T</a>,<a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html" title="type parameter in BaseQueryBuilderImpl">Q</a>,<a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html" title="type parameter in BaseQueryBuilderImpl">R</a>&gt;&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>constraints</code> - the constraints</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this builder</dd>
+</dl>
+</li>
+</ul>
+<a name="filter-org.locationtech.geowave.core.store.query.filter.expression.Filter-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>filter</h4>
+<pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html" title="type parameter in BaseQueryBuilderImpl">R</a>&nbsp;filter(<a href="../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Filter.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Filter</a>&nbsp;filter)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html#filter-org.locationtech.geowave.core.store.query.filter.expression.Filter-">BaseQueryBuilder</a></code></span></div>
+<div class="block">Constrain the query with a filter expression. This is an alternate way of providing constraints
+ and will override any other constraints specified.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html#filter-org.locationtech.geowave.core.store.query.filter.expression.Filter-">filter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.query">BaseQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html" title="type parameter in BaseQueryBuilderImpl">T</a>,<a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html" title="type parameter in BaseQueryBuilderImpl">Q</a> extends <a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQuery.html" title="class in org.locationtech.geowave.core.store.query">BaseQuery</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html" title="type parameter in BaseQueryBuilderImpl">T</a>,?&gt;,<a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html" title="type parameter in BaseQueryBuilderImpl">R</a> extends <a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilder.html" title="interface in org.locationtech.geowave.core.store.query">BaseQueryBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html" title="type parameter in BaseQueryBuilderImpl">T</a>,<a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html" title="type parameter in BaseQueryBuilderImpl">Q</a>,<a href="../../../../../../org/locationtech/geowave/core/store/query/BaseQueryBuilderImpl.html" title="type parameter in BaseQueryBuilderImpl">R</a>&gt;&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>filter</code> - the filter expression</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>this builder</dd>
 </dl>

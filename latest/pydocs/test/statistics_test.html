@@ -954,8 +954,6 @@ def test_row_range_histogram_statistic(test_ds):
     assert isinstance(histogram, NumericHistogram)
     assert histogram.get_min_value() == float(&#39;inf&#39;)
     assert histogram.get_max_value() == float(&#39;-inf&#39;)
-    assert histogram.quantile(0.0) &gt; 0
-    assert histogram.quantile(1.0) &gt; 0
     assert histogram.sum(histogram.quantile(1.0)) == 360
     assert histogram.get_total_count() == 360
 
@@ -2308,8 +2306,6 @@ def test_partition_binning_strategy(test_ds):
     assert isinstance(histogram, NumericHistogram)
     assert histogram.get_min_value() == float(&#39;inf&#39;)
     assert histogram.get_max_value() == float(&#39;-inf&#39;)
-    assert histogram.quantile(0.0) &gt; 0
-    assert histogram.quantile(1.0) &gt; 0
     assert histogram.sum(histogram.quantile(1.0)) == 360
     assert histogram.get_total_count() == 360
 

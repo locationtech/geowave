@@ -191,7 +191,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/index/dimens
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/index/dimension/LongitudeDefinition.html#getNormalizedRanges-org.locationtech.geowave.core.index.sfc.data.NumericData-">getNormalizedRanges</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">NumericData</a>&nbsp;range)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/index/dimension/LongitudeDefinition.html#getNormalizedRanges-org.locationtech.geowave.core.index.numeric.NumericData-">getNormalizedRanges</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/numeric/NumericData.html" title="interface in org.locationtech.geowave.core.index.numeric">NumericData</a>&nbsp;range)</code>
 <div class="block">Method is used to normalize the ranges on a Cartesian plane.</div>
 </td>
 </tr>
@@ -249,21 +249,21 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/index/dimens
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getNormalizedRanges-org.locationtech.geowave.core.index.sfc.data.NumericData-">
+<a name="getNormalizedRanges-org.locationtech.geowave.core.index.numeric.NumericData-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getNormalizedRanges</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>[]&nbsp;getNormalizedRanges(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">NumericData</a>&nbsp;range)</pre>
+<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>[]&nbsp;getNormalizedRanges(<a href="../../../../../../../org/locationtech/geowave/core/index/numeric/NumericData.html" title="interface in org.locationtech.geowave.core.index.numeric">NumericData</a>&nbsp;range)</pre>
 <div class="block">Method is used to normalize the ranges on a Cartesian plane. If the values are outside of the
  bounds [ -180, 180 ], two Bin ranges might be created to account for the possible date line
  crossing.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#getNormalizedRanges-org.locationtech.geowave.core.index.sfc.data.NumericData-">getNormalizedRanges</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a></code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#getNormalizedRanges-org.locationtech.geowave.core.index.numeric.NumericData-">getNormalizedRanges</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a></code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/BasicDimensionDefinition.html#getNormalizedRanges-org.locationtech.geowave.core.index.sfc.data.NumericData-">getNormalizedRanges</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/BasicDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.dimension">BasicDimensionDefinition</a></code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/BasicDimensionDefinition.html#getNormalizedRanges-org.locationtech.geowave.core.index.numeric.NumericData-">getNormalizedRanges</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/BasicDimensionDefinition.html" title="class in org.locationtech.geowave.core.index.dimension">BasicDimensionDefinition</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>range</code> - the numeric range of our data set</dd>
 <dt><span class="returnLabel">Returns:</span></dt>

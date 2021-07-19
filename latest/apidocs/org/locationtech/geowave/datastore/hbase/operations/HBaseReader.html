@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -113,7 +113,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseDeleter.html" title="class in org.locationtech.geowave.datastore.hbase.operations">HBaseDeleter</a></dd>
+<dd><a href="../../../../../../org/locationtech/geowave/datastore/bigtable/operations/BigtableReader.html" title="class in org.locationtech.geowave.datastore.bigtable.operations">BigtableReader</a>, <a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseDeleter.html" title="class in org.locationtech.geowave.datastore.hbase.operations">HBaseDeleter</a></dd>
 </dl>
 <hr>
 <br>
@@ -211,18 +211,22 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html#getMultiScanner-org.apache.hadoop.hbase.filter.FilterList-">getMultiScanner</a></span>(org.apache.hadoop.hbase.filter.FilterList&nbsp;filterList)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html" title="type parameter in HBaseReader">T</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html#getScanIterator-java.util.Iterator-">getScanIterator</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.apache.hadoop.hbase.client.Result&gt;&nbsp;iterable)</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html#hasNext--">hasNext</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html#initRecordScanner--">initRecordScanner</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html#initScanner--">initScanner</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html" title="type parameter in HBaseReader">T</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html#next--">next</a></span>()</code>&nbsp;</td>
 </tr>
@@ -377,6 +381,15 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 <li class="blockList">
 <h4>initScanner</h4>
 <pre>protected&nbsp;void&nbsp;initScanner()</pre>
+</li>
+</ul>
+<a name="getScanIterator-java.util.Iterator-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getScanIterator</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html" title="type parameter in HBaseReader">T</a>&gt;&nbsp;getScanIterator(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;org.apache.hadoop.hbase.client.Result&gt;&nbsp;iterable)</pre>
 </li>
 </ul>
 <a name="getMultiScanner-org.apache.hadoop.hbase.filter.FilterList-">

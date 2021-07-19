@@ -130,8 +130,9 @@ var activeTableTab = "activeTableTab";
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/QueryIssuer.html#query-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass-">query</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
-     <a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQueryByClass</a>&nbsp;constraints)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/QueryIssuer.html#query-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass-boolean-">query</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
+     <a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQueryByClass</a>&nbsp;constraints,
+     boolean&nbsp;spatialOnly)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -148,14 +149,15 @@ var activeTableTab = "activeTableTab";
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="query-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass-">
+<a name="query-org.locationtech.geowave.core.store.api.Index-org.locationtech.geowave.core.store.query.constraints.BasicQueryByClass-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>query</h4>
 <pre><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;query(<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index,
-                                                                  <a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQueryByClass</a>&nbsp;constraints)</pre>
+                                                                  <a href="../../../../../../org/locationtech/geowave/core/store/query/constraints/BasicQueryByClass.html" title="class in org.locationtech.geowave.core.store.query.constraints">BasicQueryByClass</a>&nbsp;constraints,
+                                                                  boolean&nbsp;spatialOnly)</pre>
 </li>
 </ul>
 <a name="getFilter--">

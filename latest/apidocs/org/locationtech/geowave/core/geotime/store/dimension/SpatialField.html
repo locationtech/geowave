@@ -247,7 +247,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dim
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/numeric/NumericRange.html" title="class in org.locationtech.geowave.core.index.numeric">NumericRange</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getBounds--">getBounds</a></span>()</code>
 <div class="block">Returns the native bounds of the dimension definition</div>
 </td>
@@ -257,7 +257,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dim
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getCRS--">getCRS</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/numeric/NumericRange.html" title="class in org.locationtech.geowave.core.index.numeric">NumericRange</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getDenormalizedRange-org.locationtech.geowave.core.index.dimension.bin.BinRange-">getDenormalizedRange</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>&nbsp;range)</code>
 <div class="block">Returns a range in the native bounds of the dimension definition, denormalized from a bin and
  separate range</div>
@@ -281,7 +281,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dim
 </td>
 </tr>
 <tr id="i10" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">NumericData</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/numeric/NumericData.html" title="interface in org.locationtech.geowave.core.index.numeric">NumericData</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getFullRange--">getFullRange</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i11" class="rowColor">
@@ -294,7 +294,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dim
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getNormalizedRanges-org.locationtech.geowave.core.index.sfc.data.NumericData-">getNormalizedRanges</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">NumericData</a>&nbsp;range)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/store/dimension/SpatialField.html#getNormalizedRanges-org.locationtech.geowave.core.index.numeric.NumericData-">getNormalizedRanges</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/index/numeric/NumericData.html" title="interface in org.locationtech.geowave.core.index.numeric">NumericData</a>&nbsp;range)</code>
 <div class="block">Returns the set of normalized ranges</div>
 </td>
 </tr>
@@ -509,7 +509,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dim
 <ul class="blockList">
 <li class="blockList">
 <h4>getFullRange</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">NumericData</a>&nbsp;getFullRange()</pre>
+<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/numeric/NumericData.html" title="interface in org.locationtech.geowave.core.index.numeric">NumericData</a>&nbsp;getFullRange()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#getFullRange--">getFullRange</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a></code></dd>
@@ -524,7 +524,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dim
 <ul class="blockList">
 <li class="blockList">
 <h4>getDenormalizedRange</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a>&nbsp;getDenormalizedRange(<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>&nbsp;range)</pre>
+<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/numeric/NumericRange.html" title="class in org.locationtech.geowave.core.index.numeric">NumericRange</a>&nbsp;getDenormalizedRange(<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>&nbsp;range)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#getDenormalizedRange-org.locationtech.geowave.core.index.dimension.bin.BinRange-">NumericDimensionDefinition</a></code></span></div>
 <div class="block">Returns a range in the native bounds of the dimension definition, denormalized from a bin and
  separate range</div>
@@ -574,7 +574,7 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dim
 <ul class="blockList">
 <li class="blockList">
 <h4>getBounds</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericRange.html" title="class in org.locationtech.geowave.core.index.sfc.data">NumericRange</a>&nbsp;getBounds()</pre>
+<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/numeric/NumericRange.html" title="class in org.locationtech.geowave.core.index.numeric">NumericRange</a>&nbsp;getBounds()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#getBounds--">NumericDimensionDefinition</a></code></span></div>
 <div class="block">Returns the native bounds of the dimension definition</div>
 <dl>
@@ -622,18 +622,18 @@ implements <a href="../../../../../../../org/locationtech/geowave/core/store/dim
 </dl>
 </li>
 </ul>
-<a name="getNormalizedRanges-org.locationtech.geowave.core.index.sfc.data.NumericData-">
+<a name="getNormalizedRanges-org.locationtech.geowave.core.index.numeric.NumericData-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getNormalizedRanges</h4>
-<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>[]&nbsp;getNormalizedRanges(<a href="../../../../../../../org/locationtech/geowave/core/index/sfc/data/NumericData.html" title="interface in org.locationtech.geowave.core.index.sfc.data">NumericData</a>&nbsp;range)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#getNormalizedRanges-org.locationtech.geowave.core.index.sfc.data.NumericData-">NumericDimensionDefinition</a></code></span></div>
+<pre>public&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/index/dimension/bin/BinRange.html" title="class in org.locationtech.geowave.core.index.dimension.bin">BinRange</a>[]&nbsp;getNormalizedRanges(<a href="../../../../../../../org/locationtech/geowave/core/index/numeric/NumericData.html" title="interface in org.locationtech.geowave.core.index.numeric">NumericData</a>&nbsp;range)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#getNormalizedRanges-org.locationtech.geowave.core.index.numeric.NumericData-">NumericDimensionDefinition</a></code></span></div>
 <div class="block">Returns the set of normalized ranges</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#getNormalizedRanges-org.locationtech.geowave.core.index.sfc.data.NumericData-">getNormalizedRanges</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a></code></dd>
+<dd><code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html#getNormalizedRanges-org.locationtech.geowave.core.index.numeric.NumericData-">getNormalizedRanges</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../org/locationtech/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in org.locationtech.geowave.core.index.dimension">NumericDimensionDefinition</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>range</code> - a numeric range of the data set</dd>
 <dt><span class="returnLabel">Returns:</span></dt>

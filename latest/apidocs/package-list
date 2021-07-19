@@ -124,6 +124,9 @@ org.locationtech.geowave.core.geotime.store.query
 org.locationtech.geowave.core.geotime.store.query.aggregate
 org.locationtech.geowave.core.geotime.store.query.api
 org.locationtech.geowave.core.geotime.store.query.filter
+org.locationtech.geowave.core.geotime.store.query.filter.expression
+org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial
+org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal
 org.locationtech.geowave.core.geotime.store.statistics
 org.locationtech.geowave.core.geotime.store.statistics.binning
 org.locationtech.geowave.core.geotime.util
@@ -131,10 +134,10 @@ org.locationtech.geowave.core.index
 org.locationtech.geowave.core.index.dimension
 org.locationtech.geowave.core.index.dimension.bin
 org.locationtech.geowave.core.index.lexicoder
+org.locationtech.geowave.core.index.numeric
 org.locationtech.geowave.core.index.persist
 org.locationtech.geowave.core.index.sfc
 org.locationtech.geowave.core.index.sfc.binned
-org.locationtech.geowave.core.index.sfc.data
 org.locationtech.geowave.core.index.sfc.hilbert
 org.locationtech.geowave.core.index.sfc.tiered
 org.locationtech.geowave.core.index.sfc.xz
@@ -184,6 +187,9 @@ org.locationtech.geowave.core.store.query
 org.locationtech.geowave.core.store.query.aggregate
 org.locationtech.geowave.core.store.query.constraints
 org.locationtech.geowave.core.store.query.filter
+org.locationtech.geowave.core.store.query.filter.expression
+org.locationtech.geowave.core.store.query.filter.expression.numeric
+org.locationtech.geowave.core.store.query.filter.expression.text
 org.locationtech.geowave.core.store.query.options
 org.locationtech.geowave.core.store.server
 org.locationtech.geowave.core.store.spi

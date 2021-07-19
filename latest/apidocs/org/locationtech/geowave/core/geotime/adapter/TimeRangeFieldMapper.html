@@ -75,7 +75,7 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.org.locationtech.geowave.core.store.api.IndexFieldMapper">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
@@ -103,7 +103,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html" title="class in org.locationtech.geowave.core.store.api">org.locationtech.geowave.core.store.api.IndexFieldMapper</a>&lt;N,org.threeten.extra.Interval&gt;</li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TemporalFieldMapper.html" title="class in org.locationtech.geowave.core.geotime.adapter">org.locationtech.geowave.core.geotime.adapter.TemporalFieldMapper</a>&lt;N&gt;</li>
+<li><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TemporalIntervalFieldMapper.html" title="class in org.locationtech.geowave.core.geotime.adapter">org.locationtech.geowave.core.geotime.adapter.TemporalIntervalFieldMapper</a>&lt;N&gt;</li>
 <li>
 <ul class="inheritance">
 <li>org.locationtech.geowave.core.geotime.adapter.TimeRangeFieldMapper&lt;N&gt;</li>
@@ -132,7 +132,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public abstract class <span class="typeNameLabel">TimeRangeFieldMapper&lt;N&gt;</span>
-extends <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TemporalFieldMapper.html" title="class in org.locationtech.geowave.core.geotime.adapter">TemporalFieldMapper</a>&lt;N&gt;</pre>
+extends <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TemporalIntervalFieldMapper.html" title="class in org.locationtech.geowave.core.geotime.adapter">TemporalIntervalFieldMapper</a>&lt;N&gt;</pre>
 <div class="block">Maps two adapter fields that represent a start and end time to an `Interval` index field.</div>
 </li>
 </ul>
@@ -177,6 +177,21 @@ extends <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter
 </a>
 <h3>Nested classes/interfaces inherited from class&nbsp;org.locationtech.geowave.core.store.api.<a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html" title="class in org.locationtech.geowave.core.store.api">IndexFieldMapper</a></h3>
 <code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.IndexFieldOptions.html" title="interface in org.locationtech.geowave.core.store.api">IndexFieldMapper.IndexFieldOptions</a></code></li>
+</ul>
+</li>
+</ul>
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="fields.inherited.from.class.org.locationtech.geowave.core.store.api.IndexFieldMapper">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;org.locationtech.geowave.core.store.api.<a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html" title="class in org.locationtech.geowave.core.store.api">IndexFieldMapper</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#adapterFields">adapterFields</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#indexFieldName">indexFieldName</a></code></li>
 </ul>
 </li>
 </ul>
@@ -246,18 +261,18 @@ extends <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.geotime.adapter.TemporalFieldMapper">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.geotime.adapter.TemporalIntervalFieldMapper">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.geotime.adapter.<a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TemporalFieldMapper.html" title="class in org.locationtech.geowave.core.geotime.adapter">TemporalFieldMapper</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TemporalFieldMapper.html#indexFieldType--">indexFieldType</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TemporalFieldMapper.html#transformFieldDescriptors-org.locationtech.geowave.core.store.adapter.FieldDescriptor:A-">transformFieldDescriptors</a></code></li>
+<h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.geotime.adapter.<a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TemporalIntervalFieldMapper.html" title="class in org.locationtech.geowave.core.geotime.adapter">TemporalIntervalFieldMapper</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TemporalIntervalFieldMapper.html#indexFieldType--">indexFieldType</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TemporalIntervalFieldMapper.html#transformFieldDescriptors-org.locationtech.geowave.core.store.adapter.FieldDescriptor:A-">transformFieldDescriptors</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.api.IndexFieldMapper">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.store.api.<a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html" title="class in org.locationtech.geowave.core.store.api">IndexFieldMapper</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#adapterFieldType--">adapterFieldType</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#fromBinary-byte:A-">fromBinary</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#getAdapterFields--">getAdapterFields</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#indexFieldName--">indexFieldName</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#init-java.lang.String-java.util.List-org.locationtech.geowave.core.store.api.IndexFieldMapper.IndexFieldOptions-">init</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#isCompatibleWith-java.lang.Class-">isCompatibleWith</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#toBinary--">toBinary</a></code></li>
+<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#adapterFieldType--">adapterFieldType</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#fromBinary-byte:A-">fromBinary</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#getAdapterFields--">getAdapterFields</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#getIndexOrderedAdapterFields--">getIndexOrderedAdapterFields</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#indexFieldName--">indexFieldName</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#init-java.lang.String-java.util.List-org.locationtech.geowave.core.store.api.IndexFieldMapper.IndexFieldOptions-">init</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#isCompatibleWith-java.lang.Class-">isCompatibleWith</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#toBinary--">toBinary</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -309,7 +324,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter
 <div class="block">Initialize the field mapper with the given field descriptors and index field options.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TemporalFieldMapper.html#initFromOptions-java.util.List-org.locationtech.geowave.core.store.api.IndexFieldMapper.IndexFieldOptions-">initFromOptions</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TemporalFieldMapper.html" title="class in org.locationtech.geowave.core.geotime.adapter">TemporalFieldMapper</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TimeRangeFieldMapper.html" title="type parameter in TimeRangeFieldMapper">N</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TemporalIntervalFieldMapper.html#initFromOptions-java.util.List-org.locationtech.geowave.core.store.api.IndexFieldMapper.IndexFieldOptions-">initFromOptions</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TemporalIntervalFieldMapper.html" title="class in org.locationtech.geowave.core.geotime.adapter">TemporalIntervalFieldMapper</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TimeRangeFieldMapper.html" title="type parameter in TimeRangeFieldMapper">N</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>inputFieldDescriptors</code> - the adapter field descriptors to use in the mapping</dd>
 <dd><code>options</code> - the index field options provided by the index</dd>
@@ -462,7 +477,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.org.locationtech.geowave.core.store.api.IndexFieldMapper">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
