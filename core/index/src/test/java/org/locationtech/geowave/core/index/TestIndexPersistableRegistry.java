@@ -9,9 +9,12 @@
 package org.locationtech.geowave.core.index;
 
 import org.locationtech.geowave.core.index.PersistenceUtilsTest.APersistable;
+import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 
-public class TestIndexPersistableRegistry implements PersistableRegistrySpi {
+public class TestIndexPersistableRegistry implements
+    PersistableRegistrySpi,
+    InternalPersistableRegistry {
 
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {

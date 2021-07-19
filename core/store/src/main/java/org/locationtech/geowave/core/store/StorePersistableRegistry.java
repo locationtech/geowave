@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.core.store;
 
+import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 import org.locationtech.geowave.core.store.adapter.BaseFieldDescriptor;
 import org.locationtech.geowave.core.store.adapter.BinaryDataAdapter;
@@ -102,7 +103,9 @@ import org.locationtech.geowave.core.store.query.options.QueryAllIndices;
 import org.locationtech.geowave.core.store.query.options.QueryAllTypes;
 import org.locationtech.geowave.core.store.query.options.QuerySingleIndex;
 
-public class StorePersistableRegistry implements PersistableRegistrySpi {
+public class StorePersistableRegistry implements
+    PersistableRegistrySpi,
+    InternalPersistableRegistry {
 
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {
@@ -168,7 +171,7 @@ public class StorePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 259, BasicOrderedConstraintQuery::new),
         new PersistableIdAndConstructor((short) 260, BasicQuery::new),
         new PersistableIdAndConstructor((short) 261, BinaryDataAdapter::new),
-        new PersistableIdAndConstructor((short) 262, IsNull::new),
+        // 262 is a legacy class (pre 2.0)
         new PersistableIdAndConstructor((short) 263, CustomIndex::new),
         new PersistableIdAndConstructor((short) 264, CustomQueryConstraints::new),
         new PersistableIdAndConstructor((short) 265, InternalCustomConstraints::new),
@@ -203,6 +206,7 @@ public class StorePersistableRegistry implements PersistableRegistrySpi {
         new PersistableIdAndConstructor((short) 294, ExplicitFilteredQuery::new),
         new PersistableIdAndConstructor((short) 295, ExpressionQueryFilter::new),
         new PersistableIdAndConstructor((short) 296, FilteredEverythingQuery::new),
-        new PersistableIdAndConstructor((short) 297, BasicDataTypeAdapter::new)};
+        new PersistableIdAndConstructor((short) 297, BasicDataTypeAdapter::new),
+        new PersistableIdAndConstructor((short) 298, IsNull::new)};
   }
 }

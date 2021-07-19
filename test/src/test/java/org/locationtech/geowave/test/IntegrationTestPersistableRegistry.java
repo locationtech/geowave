@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.test;
 
+import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 import org.locationtech.geowave.test.basic.AbstractGeoWaveBasicVectorIT.DuplicateCountAggregation;
 import org.locationtech.geowave.test.basic.GeoWaveBasicRasterIT.MergeCounter;
@@ -21,7 +22,9 @@ import org.locationtech.geowave.test.secondary.CustomSecondaryIndexIT.TestCustom
 import org.locationtech.geowave.test.secondary.DataIndexOnlyIT.LatLonTimeAdapter;
 import org.locationtech.geowave.test.secondary.VisibilitySecondaryIndexIT.TestSecondaryIndexFieldVisibilityHandler;
 
-public class IntegrationTestPersistableRegistry implements PersistableRegistrySpi {
+public class IntegrationTestPersistableRegistry implements
+    PersistableRegistrySpi,
+    InternalPersistableRegistry {
 
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {

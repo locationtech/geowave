@@ -17,6 +17,7 @@ import org.locationtech.geowave.core.index.numeric.BasicNumericDataset;
 import org.locationtech.geowave.core.index.numeric.BinnedNumericDataset;
 import org.locationtech.geowave.core.index.numeric.NumericRange;
 import org.locationtech.geowave.core.index.numeric.NumericValue;
+import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 import org.locationtech.geowave.core.index.sfc.BasicSFCIndexStrategy;
 import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
@@ -46,7 +47,9 @@ import org.locationtech.geowave.core.index.text.TextSearch;
 import org.locationtech.geowave.core.index.text.TextSearchPredicate;
 import org.locationtech.geowave.core.index.text.TextValue;
 
-public class IndexPersistableRegistry implements PersistableRegistrySpi {
+public class IndexPersistableRegistry implements
+    PersistableRegistrySpi,
+    InternalPersistableRegistry {
 
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {

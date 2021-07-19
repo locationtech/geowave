@@ -12,9 +12,12 @@ import org.locationtech.geowave.analytic.clustering.DistortionGroupManagement.Ba
 import org.locationtech.geowave.analytic.clustering.DistortionGroupManagement.BatchIdQuery;
 import org.locationtech.geowave.analytic.clustering.DistortionGroupManagement.DistortionDataAdapter;
 import org.locationtech.geowave.analytic.store.PersistableStore;
+import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 
-public class AnalyticPersistableRegistry implements PersistableRegistrySpi {
+public class AnalyticPersistableRegistry implements
+    PersistableRegistrySpi,
+    InternalPersistableRegistry {
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {
     return new PersistableIdAndConstructor[] {

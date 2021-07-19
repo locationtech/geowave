@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.core.store;
 
+import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 import org.locationtech.geowave.core.store.adapter.AbstractDataTypeAdapterTest.TestTypeBasicDataAdapter;
 import org.locationtech.geowave.core.store.adapter.MockComponents.MockAbstractDataAdapter;
@@ -17,7 +18,9 @@ import org.locationtech.geowave.core.store.adapter.MockComponents.TestIndexModel
 import org.locationtech.geowave.core.store.query.BasicQueryByClassTest.ExampleDimensionOne;
 import org.locationtech.geowave.core.store.query.BasicQueryByClassTest.ExampleNumericIndexStrategy;
 
-public class TestStorePersistableRegistry implements PersistableRegistrySpi {
+public class TestStorePersistableRegistry implements
+    PersistableRegistrySpi,
+    InternalPersistableRegistry {
 
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {

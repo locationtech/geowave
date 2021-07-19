@@ -20,10 +20,13 @@ import org.locationtech.geowave.adapter.raster.adapter.merge.nodata.NoDataByFilt
 import org.locationtech.geowave.adapter.raster.adapter.merge.nodata.NoDataBySampleIndex;
 import org.locationtech.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import org.locationtech.geowave.adapter.raster.stats.HistogramConfig;
+import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 import org.locationtech.geowave.core.store.util.CompoundHierarchicalIndexStrategyWrapper;
 
-public class RasterAdapterPersistableRegistry implements PersistableRegistrySpi {
+public class RasterAdapterPersistableRegistry implements
+    PersistableRegistrySpi,
+    InternalPersistableRegistry {
 
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {

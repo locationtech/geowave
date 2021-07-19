@@ -30,10 +30,13 @@ import org.locationtech.geowave.adapter.vector.util.SimpleFeatureUserDataConfigu
 import org.locationtech.geowave.core.geotime.store.query.ExplicitCQLQuery;
 import org.locationtech.geowave.core.geotime.store.query.filter.CQLQueryFilter;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors.TimeDescriptorConfiguration;
+import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableList;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 
-public class FeatureAdapterPersistableRegistry implements PersistableRegistrySpi {
+public class FeatureAdapterPersistableRegistry implements
+    PersistableRegistrySpi,
+    InternalPersistableRegistry {
 
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {
