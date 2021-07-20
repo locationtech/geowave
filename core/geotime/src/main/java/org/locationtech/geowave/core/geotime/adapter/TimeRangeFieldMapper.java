@@ -12,11 +12,14 @@ import java.nio.ByteBuffer;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
 import org.locationtech.geowave.core.geotime.util.TimeUtils;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
 import org.threeten.extra.Interval;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * Maps two adapter fields that represent a start and end time to an `Interval` index field.
@@ -24,6 +27,9 @@ import com.google.common.collect.Lists;
  * @param <N> the adapter field type
  */
 public abstract class TimeRangeFieldMapper<N> extends TemporalIntervalFieldMapper<N> {
+  private static Set<String> suggestedStartTimeFieldNames =
+      Sets.newHashSet("starttime", "start", "start_time");
+  private static Set<String> suggestedEndTimeNames = Sets.newHashSet("endtime", "end", "end_time");
 
   private boolean startFirst = true;
 
@@ -37,7 +43,9 @@ public abstract class TimeRangeFieldMapper<N> extends TemporalIntervalFieldMappe
     startFirst =
         inputFieldDescriptors.get(0).indexHints().contains(TimeField.START_TIME_DIMENSION_HINT)
             || !inputFieldDescriptors.get(1).indexHints().contains(
-                TimeField.START_TIME_DIMENSION_HINT);
+                TimeField.START_TIME_DIMENSION_HINT)
+            || suggestedStartTimeFieldNames.contains(
+                inputFieldDescriptors.get(0).fieldName().toLowerCase());
     super.initFromOptions(inputFieldDescriptors, options);
   }
 
@@ -75,6 +83,11 @@ public abstract class TimeRangeFieldMapper<N> extends TemporalIntervalFieldMappe
   @Override
   public short adapterFieldCount() {
     return 2;
+  }
+
+  @Override
+  public Set<String> getLowerCaseSuggestedFieldNames() {
+    return Sets.newHashSet(Iterables.concat(suggestedStartTimeFieldNames, suggestedEndTimeNames));
   }
 
   @Override

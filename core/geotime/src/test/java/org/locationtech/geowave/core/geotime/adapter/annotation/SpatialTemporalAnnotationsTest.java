@@ -17,10 +17,12 @@ import org.junit.Test;
 import org.locationtech.geowave.core.geotime.adapter.SpatialFieldDescriptor;
 import org.locationtech.geowave.core.geotime.store.dimension.SpatialField;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.adapter.BasicDataTypeAdapter;
 import org.locationtech.geowave.core.store.adapter.annotation.GeoWaveDataType;
 import org.locationtech.geowave.core.store.adapter.annotation.GeoWaveField;
+import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.NoSuchAuthorityCodeException;
@@ -72,35 +74,38 @@ public class SpatialTemporalAnnotationsTest {
     assertTrue(
         adapter.getFieldDescriptor("date").indexHints().contains(TimeField.TIME_DIMENSION_HINT));
 
-    // final TestType testEntry = new TestType("id1", 2.5, 8, true);
-    // assertEquals("id1", adapter.getFieldValue(testEntry, "name"));
-    // assertEquals(2.5, (double) adapter.getFieldValue(testEntry, "doubleField"), 0.001);
-    // assertEquals(8, adapter.getFieldValue(testEntry, "intField"));
-    // assertTrue((boolean) adapter.getFieldValue(testEntry, "boolField"));
-    //
-    // final Object[] fields = new Object[4];
-    // for (int i = 0; i < fields.length; i++) {
-    // switch(adapter.getFieldDescriptors()[i].fieldName()) {
-    // case "name":
-    // fields[i] = "id1";
-    // break;
-    // case "doubleField":
-    // fields[i] = 2.5;
-    // break;
-    // case "intField":
-    // fields[i] = 8;
-    // break;
-    // case "boolField":
-    // fields[i] = true;
-    // break;
-    // }
-    // }
-    //
-    // final TestType builtEntry = adapter.buildObject(fields);
-    // assertEquals("id1", adapter.getFieldValue(builtEntry, "name"));
-    // assertEquals(2.5, (double) adapter.getFieldValue(builtEntry, "doubleField"), 0.001);
-    // assertEquals(8, adapter.getFieldValue(builtEntry, "intField"));
-    // assertTrue((boolean) adapter.getFieldValue(builtEntry, "boolField"));
+    final TestType testEntry =
+        new TestType(
+            GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(5, 5)),
+            new Date(100),
+            "id1");
+    assertEquals("id1", adapter.getFieldValue(testEntry, "name"));
+    assertTrue(
+        GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(5, 5)).equalsExact(
+            (Geometry) adapter.getFieldValue(testEntry, "geometry")));
+    assertEquals(new Date(100), adapter.getFieldValue(testEntry, "date"));
+
+    final Object[] fields = new Object[3];
+    for (int i = 0; i < fields.length; i++) {
+      switch (adapter.getFieldDescriptors()[i].fieldName()) {
+        case "name":
+          fields[i] = "id1";
+          break;
+        case "geometry":
+          fields[i] = GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(10, 10));
+          break;
+        case "date":
+          fields[i] = new Date(500);
+          break;
+      }
+    }
+
+    final TestType builtEntry = adapter.buildObject(fields);
+    assertEquals("id1", adapter.getFieldValue(builtEntry, "name"));
+    assertTrue(
+        GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(10, 10)).equalsExact(
+            (Geometry) adapter.getFieldValue(builtEntry, "geometry")));
+    assertEquals(new Date(500), adapter.getFieldValue(builtEntry, "date"));
   }
 
   @GeoWaveDataType

@@ -11,12 +11,15 @@ package org.locationtech.geowave.core.geotime.adapter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
 import org.locationtech.geowave.core.store.api.IndexFieldMapper;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
- * Maps an adapter temporal field or fields to aa `Long` index field.
+ * Maps an adapter temporal field or fields to a `Long` index field.
  *
  * @param <N> the adapter field type
  */

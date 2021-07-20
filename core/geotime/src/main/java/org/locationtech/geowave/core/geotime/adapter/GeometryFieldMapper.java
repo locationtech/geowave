@@ -9,8 +9,10 @@
 package org.locationtech.geowave.core.geotime.adapter;
 
 import java.util.List;
+import java.util.Set;
 import org.locationtech.jts.geom.Geometry;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * Maps a `Geometry` adapter field to a `Geometry` index field.
@@ -37,4 +39,8 @@ public class GeometryFieldMapper extends SpatialFieldMapper<Geometry> {
     return Geometry.class;
   }
 
+  @Override
+  public Set<String> getLowerCaseSuggestedFieldNames() {
+    return Sets.newHashSet("geom", "geometry", "the_geom");
+  }
 }

@@ -11,9 +11,11 @@ package org.locationtech.geowave.core.geotime.adapter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import org.locationtech.geowave.core.geotime.util.TimeUtils;
 import org.threeten.extra.Interval;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * Maps a single adapter field that represents an instant in time to an `Interval` index field.
@@ -39,6 +41,11 @@ public abstract class TimeInstantFieldMapper<N> extends TemporalIntervalFieldMap
   @Override
   public short adapterFieldCount() {
     return 1;
+  }
+
+  @Override
+  public Set<String> getLowerCaseSuggestedFieldNames() {
+    return Sets.newHashSet("timestamp", "date", "time");
   }
 
   /**
