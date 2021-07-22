@@ -59,10 +59,18 @@ public class CompositeVectorAggregation implements
   @Override
   public void setParameters(final PersistableList parameters) {
     final List<Persistable> persistables = parameters.getPersistables();
-    aggregations = Lists.newArrayList();
+    final boolean aggregationsSet;
+    if (aggregations.size() == persistables.size() / 2) {
+      aggregationsSet = true;
+    } else {
+      aggregationsSet = false;
+      aggregations = Lists.newArrayListWithCapacity(persistables.size() / 2);
+    }
     for (int i = 0; i < persistables.size(); i += 2) {
-      aggregations.add((Aggregation) persistables.get(i));
-      aggregations.get(aggregations.size() - 1).setParameters(persistables.get(i + 1));
+      if (!aggregationsSet) {
+        aggregations.add((Aggregation) persistables.get(i));
+      }
+      aggregations.get(i / 2).setParameters(persistables.get(i + 1));
     }
   }
 
