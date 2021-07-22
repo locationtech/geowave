@@ -85,6 +85,7 @@ public class InternalDataAdapterImpl<T> implements InternalDataAdapter<T> {
     return visibilityHandler;
   }
 
+  @edu.umd.cs.findbugs.annotations.SuppressFBWarnings()
   protected List<String> getDimensionFieldNames(final CommonIndexModel model) {
     if (modelToDimensionsMap == null) {
       synchronized (MUTEX) {
