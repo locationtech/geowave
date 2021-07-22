@@ -31,7 +31,7 @@ public class GeoWaveRegistrator implements KryoRegistrator {
     final PersistableSerializer persistSerializer = new PersistableSerializer();
 
     PersistableFactory.getInstance().getClassIdMapping().entrySet().forEach(
-        e -> kryo.register(e.getKey(), persistSerializer, e.getValue()));
+        e -> kryo.register(e.getKey(), persistSerializer));
 
     kryo.register(GeoWaveRDD.class);
     kryo.register(GeoWaveIndexedRDD.class);
