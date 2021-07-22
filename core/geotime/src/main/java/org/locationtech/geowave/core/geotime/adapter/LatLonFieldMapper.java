@@ -10,13 +10,16 @@ package org.locationtech.geowave.core.geotime.adapter;
 
 import java.nio.ByteBuffer;
 import java.util.List;
+import java.util.Set;
 import org.locationtech.geowave.core.geotime.store.dimension.SpatialField;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
-import com.beust.jcommander.internal.Lists;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * Abstract field mapper for mapping latitude and longitude adapter fields to a singular `Geometry`
@@ -25,6 +28,9 @@ import com.beust.jcommander.internal.Lists;
  * @param <N> the adapter field type
  */
 public abstract class LatLonFieldMapper<N> extends SpatialFieldMapper<N> {
+  private static Set<String> suggestedLongitudeFieldNames =
+      Sets.newHashSet("longitude", "lon", "x");
+  private static Set<String> suggestedLatitudeFieldNames = Sets.newHashSet("latitude", "lat", "y");
   protected boolean xAxisFirst = true;
 
   @Override
@@ -46,8 +52,10 @@ public abstract class LatLonFieldMapper<N> extends SpatialFieldMapper<N> {
     }
     xAxisFirst =
         inputFieldDescriptors.get(0).indexHints().contains(SpatialField.LONGITUDE_DIMENSION_HINT)
-            || !inputFieldDescriptors.get(1).indexHints().contains(
-                SpatialField.LONGITUDE_DIMENSION_HINT);
+            || inputFieldDescriptors.get(1).indexHints().contains(
+                SpatialField.LATITUDE_DIMENSION_HINT)
+            || suggestedLongitudeFieldNames.contains(
+                inputFieldDescriptors.get(0).fieldName().toLowerCase());
     super.initFromOptions(inputFieldDescriptors, options);
   }
 
@@ -84,6 +92,12 @@ public abstract class LatLonFieldMapper<N> extends SpatialFieldMapper<N> {
   @Override
   public short adapterFieldCount() {
     return 2;
+  }
+
+  @Override
+  public Set<String> getLowerCaseSuggestedFieldNames() {
+    return Sets.newHashSet(
+        Iterables.concat(suggestedLongitudeFieldNames, suggestedLatitudeFieldNames));
   }
 
   @Override

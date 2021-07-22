@@ -18,11 +18,10 @@ import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.simple.RoundRobinKeyIndexStrategy;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.BasicDataTypeAdapter;
-import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
-import org.locationtech.geowave.core.store.adapter.FieldDescriptorBuilder;
+import org.locationtech.geowave.core.store.adapter.annotation.GeoWaveDataType;
+import org.locationtech.geowave.core.store.adapter.annotation.GeoWaveField;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.Query;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.index.AttributeDimensionalityTypeProvider;
@@ -67,11 +66,11 @@ public class RocksDBLockfileTest {
     final DataStore store =
         new RocksDBStoreFactoryFamily().getDataStoreFactory().createStore(options);
     store.deleteAll();
-    store.addType(new POIBasicDataAdapter(POI_TYPE_NAME));
+    store.addType(BasicDataTypeAdapter.newAdapter(POI_TYPE_NAME, POI.class, "name"));
     Index index =
         AttributeDimensionalityTypeProvider.createIndexFromOptions(
             store,
-            new AttributeIndexOptions(POI_TYPE_NAME, POIBasicDataAdapter.LATITUDE_FIELD_NAME));
+            new AttributeIndexOptions(POI_TYPE_NAME, "latitude"));
     index =
         new CustomNameIndex(
             new CompoundIndexStrategy(new RoundRobinKeyIndexStrategy(32), index.getIndexStrategy()),
@@ -86,7 +85,8 @@ public class RocksDBLockfileTest {
       try (Writer<POI> w = store.createWriter(POI_TYPE_NAME)) {
         w.write(new POI("name" + offset, offset, offset));
       }
-      try (CloseableIterator<POI> poiIt = store2.query((Query) QueryBuilder.newBuilder().build())) {
+      try (
+          CloseableIterator<POI> poiIt = store2.query(QueryBuilder.newBuilder(POI.class).build())) {
         if (numThreads == 1) {
           Assert.assertEquals(1, Iterators.size(poiIt));
         } else {
@@ -97,7 +97,7 @@ public class RocksDBLockfileTest {
       try (Writer<POI> w = store2.createWriter(POI_TYPE_NAME)) {
         w.write(new POI("name" + offset, offset, offset));
       }
-      try (CloseableIterator<POI> poiIt = store.query((Query) QueryBuilder.newBuilder().build())) {
+      try (CloseableIterator<POI> poiIt = store.query(QueryBuilder.newBuilder(POI.class).build())) {
         if (numThreads == 1) {
           Assert.assertEquals(2, Iterators.size(poiIt));
         } else {
@@ -107,8 +107,8 @@ public class RocksDBLockfileTest {
       offset++;
       try (Writer<POI> w = store2.createWriter(POI_TYPE_NAME)) {
         w.write(new POI("name" + offset, offset, offset));
-        try (
-            CloseableIterator<POI> poiIt = store.query((Query) QueryBuilder.newBuilder().build())) {
+        try (CloseableIterator<POI> poiIt =
+            store.query(QueryBuilder.newBuilder(POI.class).build())) {
           if (numThreads == 1) {
             Assert.assertEquals(2, Iterators.size(poiIt));
           } else {
@@ -116,8 +116,8 @@ public class RocksDBLockfileTest {
           }
         }
         w.flush();
-        try (
-            CloseableIterator<POI> poiIt = store.query((Query) QueryBuilder.newBuilder().build())) {
+        try (CloseableIterator<POI> poiIt =
+            store.query(QueryBuilder.newBuilder(POI.class).build())) {
           if (numThreads == 1) {
             Assert.assertEquals(3, Iterators.size(poiIt));
           } else {
@@ -125,7 +125,8 @@ public class RocksDBLockfileTest {
           }
         }
       }
-      try (CloseableIterator<POI> poiIt = store2.query((Query) QueryBuilder.newBuilder().build())) {
+      try (
+          CloseableIterator<POI> poiIt = store2.query(QueryBuilder.newBuilder(POI.class).build())) {
         if (numThreads == 1) {
           Assert.assertEquals(3, Iterators.size(poiIt));
         } else {
@@ -170,60 +171,27 @@ public class RocksDBLockfileTest {
       return index.getIndexModel();
     }
   }
+
+  @GeoWaveDataType
   private static class POI {
+    @GeoWaveField
     private final String name;
+    @GeoWaveField
     private final Double latitude;
+    @GeoWaveField
     private final Double longitude;
+
+    protected POI() {
+      this.name = null;
+      this.latitude = null;
+      this.longitude = null;
+    }
 
     public POI(final String name, final Double latitude, final Double longitude) {
       this.name = name;
       this.latitude = latitude;
       this.longitude = longitude;
     }
-  }
-
-  /**
-   * The simplest way to implement a data adapter for a custom data type is to extend the
-   * {@link BasicDataTypeAdapter} and implement the methods that read and write the custom type.
-   */
-  public static class POIBasicDataAdapter extends BasicDataTypeAdapter<POI> {
-    public static final String NAME_FIELD_NAME = "name";
-    public static final String LATITUDE_FIELD_NAME = "lat";
-    public static final String LONGITUDE_FIELD_NAME = "lon";
-
-    private static final FieldDescriptor<String> NAME_FIELD =
-        new FieldDescriptorBuilder<>(String.class).fieldName(NAME_FIELD_NAME).build();
-    private static final FieldDescriptor<Double> LATITUDE_FIELD =
-        new FieldDescriptorBuilder<>(Double.class).fieldName(LATITUDE_FIELD_NAME).build();
-    private static final FieldDescriptor<Double> LONGITUDE_FIELD =
-        new FieldDescriptorBuilder<>(Double.class).fieldName(LONGITUDE_FIELD_NAME).build();
-    private static final FieldDescriptor<?>[] FIELDS =
-        new FieldDescriptor[] {NAME_FIELD, LATITUDE_FIELD, LONGITUDE_FIELD};
-
-    public POIBasicDataAdapter() {}
-
-    public POIBasicDataAdapter(final String typeName) {
-      super(typeName, FIELDS, NAME_FIELD_NAME);
-    }
-
-    @Override
-    public Object getFieldValue(final POI entry, final String fieldName) {
-      switch (fieldName) {
-        case NAME_FIELD_NAME:
-          return entry.name;
-        case LATITUDE_FIELD_NAME:
-          return entry.latitude;
-        case LONGITUDE_FIELD_NAME:
-          return entry.longitude;
-      }
-      return null;
-    }
-
-    @Override
-    public POI buildObject(final Object[] fieldValues) {
-      return new POI((String) fieldValues[0], (Double) fieldValues[1], (Double) fieldValues[2]);
-    }
-
   }
 
 }

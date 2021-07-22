@@ -18,7 +18,7 @@ import org.locationtech.geowave.core.geotime.index.api.SpatialIndexBuilder;
 import org.locationtech.geowave.core.geotime.store.query.SpatialTemporalConstraintsBuilderImpl;
 import org.locationtech.geowave.core.geotime.store.query.api.SpatialTemporalConstraintsBuilder;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.BasicDataTypeAdapter;
+import org.locationtech.geowave.core.store.adapter.AbstractDataTypeAdapter;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptorBuilder;
 import org.locationtech.geowave.core.store.api.DataStore;
@@ -36,7 +36,10 @@ import org.locationtech.jts.io.WKTReader;
 /**
  * This class provides an example of how to create a {@link DataTypeAdapter} for a custom data type.
  * This allows a user to directly write, index, and query their own data types from a GeoWave data
- * store without having to translate to and from a `SimpleFeature`.
+ * store without having to translate to and from a `SimpleFeature`. A custom data adapter
+ * implementation may be useful for data types that are too complex for the
+ * {@link BasicDataTypeAdapter}, such as when annotations cannot be added or the fields cannot be
+ * properly inferred.
  */
 public class CustomAdapterExample {
 
@@ -60,7 +63,7 @@ public class CustomAdapterExample {
     // Create the spatial index
     spatialIndex = new SpatialIndexBuilder().createIndex();
 
-    // Add the type to the data store with the spatial and custom indices
+    // Add the type to the data store with the spatial index
     dataStore.addType(adapter, spatialIndex);
 
     // Ingest the data into a spatial index
@@ -144,9 +147,9 @@ public class CustomAdapterExample {
 
   /**
    * The simplest way to implement a data adapter for a custom data type is to extend the
-   * {@link BasicDataTypeAdapter} and implement the methods that read and write the custom type.
+   * {@link AbstractDataTypeAdapter} and implement the methods that read and write the custom type.
    */
-  public static class POIBasicDataAdapter extends BasicDataTypeAdapter<POI> {
+  public static class POIBasicDataAdapter extends AbstractDataTypeAdapter<POI> {
     public static final String NAME_FIELD_NAME = "name";
     public static final String LATITUDE_FIELD_NAME = "lat";
     public static final String LONGITUDE_FIELD_NAME = "lon";

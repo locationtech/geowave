@@ -63,6 +63,7 @@ import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Ordering;
+import com.google.common.collect.Sets;
 import com.google.common.primitives.UnsignedBytes;
 
 public class MemoryDataStoreOperations implements DataStoreOperations {
@@ -166,21 +167,28 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
           final SortedSet<MemoryStoreEntry> set;
           if (r.isSingleValue()) {
             set =
-                internalData.subSet(
-                    new MemoryStoreEntry(p.getPartitionKey(), r.getStart()),
-                    new MemoryStoreEntry(
-                        p.getPartitionKey(),
-                        ByteArrayUtils.getNextPrefix(r.getStart())));
+                Sets.newTreeSet(
+                    internalData.subSet(
+                        new MemoryStoreEntry(p.getPartitionKey(), r.getStart()),
+                        new MemoryStoreEntry(
+                            p.getPartitionKey(),
+                            ByteArrayUtils.getNextPrefix(r.getStart()))));
           } else {
             set =
-                internalData.tailSet(
-                    new MemoryStoreEntry(p.getPartitionKey(), r.getStart())).headSet(
-                        new MemoryStoreEntry(p.getPartitionKey(), r.getEndAsNextPrefix()));
+                Sets.newTreeSet(
+                    internalData.tailSet(
+                        new MemoryStoreEntry(p.getPartitionKey(), r.getStart())).headSet(
+                            new MemoryStoreEntry(p.getPartitionKey(), r.getEndAsNextPrefix())));
           }
           // remove unauthorized
           final Iterator<MemoryStoreEntry> it = set.iterator();
           while (it.hasNext()) {
-            if (!isAuthorized(it.next(), readerParams.getAdditionalAuthorizations())) {
+            final MemoryStoreEntry entry = it.next();
+            if (!isAuthorized(entry, readerParams.getAdditionalAuthorizations())) {
+              it.remove();
+            } else if (!ArrayUtils.contains(
+                readerParams.getAdapterIds(),
+                entry.row.getAdapterId())) {
               it.remove();
             }
           }

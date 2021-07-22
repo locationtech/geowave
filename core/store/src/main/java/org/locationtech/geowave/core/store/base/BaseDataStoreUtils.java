@@ -903,23 +903,45 @@ public class BaseDataStoreUtils {
       } else {
         // Attempt to infer the field to use
 
-        // See if a direct mapper is available
+        // See if there are any suggested fields
         boolean mapperFound = false;
-        for (final FieldDescriptor<?> fieldDescriptor : adapterFields) {
-          if (fieldDescriptor.bindingClass().equals(indexFieldClass)) {
-            final Optional<IndexFieldMapper<?, ?>> matchingMapper =
-                availableMappers.stream().filter(
-                    mapper -> mapper.isCompatibleWith(fieldDescriptor.bindingClass())
-                        && (mapper.adapterFieldCount() == 1)).findFirst();
-            if (matchingMapper.isPresent()) {
-              final IndexFieldMapper<?, ?> mapper = matchingMapper.get();
-              mapper.init(
-                  indexFieldName,
-                  (List) Lists.newArrayList(fieldDescriptor),
-                  indexFieldOptions);
-              mappers.put(indexFieldName, mapper);
-              mapperFound = true;
-              break;
+        for (final IndexFieldMapper<?, ?> mapper : availableMappers) {
+          final Set<String> suggestedFieldNames = mapper.getLowerCaseSuggestedFieldNames();
+          final List<FieldDescriptor<?>> matchingFields =
+              Arrays.stream(adapterFields).filter(
+                  field -> mapper.isCompatibleWith(field.bindingClass())
+                      && suggestedFieldNames.contains(field.fieldName().toLowerCase())).collect(
+                          Collectors.toList());
+          if (matchingFields.size() >= mapper.adapterFieldCount()) {
+            mapperFound = true;
+            mapper.init(
+                indexFieldName,
+                (List) matchingFields.stream().limit(mapper.adapterFieldCount()).collect(
+                    Collectors.toList()),
+                indexFieldOptions);
+            mappers.put(indexFieldName, mapper);
+            break;
+          }
+        }
+
+        // See if a direct mapper is available
+        if (!mapperFound) {
+          for (final FieldDescriptor<?> fieldDescriptor : adapterFields) {
+            if (fieldDescriptor.bindingClass().equals(indexFieldClass)) {
+              final Optional<IndexFieldMapper<?, ?>> matchingMapper =
+                  availableMappers.stream().filter(
+                      mapper -> mapper.isCompatibleWith(fieldDescriptor.bindingClass())
+                          && (mapper.adapterFieldCount() == 1)).findFirst();
+              if (matchingMapper.isPresent()) {
+                final IndexFieldMapper<?, ?> mapper = matchingMapper.get();
+                mapperFound = true;
+                mapper.init(
+                    indexFieldName,
+                    (List) Lists.newArrayList(fieldDescriptor),
+                    indexFieldOptions);
+                mappers.put(indexFieldName, mapper);
+                break;
+              }
             }
           }
         }
@@ -939,6 +961,7 @@ public class BaseDataStoreUtils {
                       Collectors.toList()),
                   indexFieldOptions);
               mappers.put(indexFieldName, mapper);
+              break;
             }
           }
         }

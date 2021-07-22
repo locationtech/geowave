@@ -10,10 +10,12 @@ package org.locationtech.geowave.core.store.api;
 
 import java.nio.ByteBuffer;
 import java.util.List;
+import java.util.Set;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
+import com.google.common.collect.Sets;
 
 /**
  * Abstract base class for mapping one or more adapter fields to a single index field. These field
@@ -103,6 +105,13 @@ public abstract class IndexFieldMapper<N, I> implements Persistable {
    * @return the adapter field type
    */
   public abstract Class<N> adapterFieldType();
+
+  /**
+   * @return a set of suggested adapter field names that might be associated with this field mapper
+   */
+  public Set<String> getLowerCaseSuggestedFieldNames() {
+    return Sets.newHashSet();
+  }
 
   public boolean isCompatibleWith(final Class<?> fieldClass) {
     // The logic here is that if the index field type is the same as the adapter field type, most

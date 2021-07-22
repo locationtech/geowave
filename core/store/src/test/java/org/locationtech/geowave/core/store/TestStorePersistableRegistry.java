@@ -9,7 +9,7 @@
 package org.locationtech.geowave.core.store;
 
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
-import org.locationtech.geowave.core.store.adapter.BasicDataTypeAdapterTest.TestTypeBasicDataAdapter;
+import org.locationtech.geowave.core.store.adapter.AbstractDataTypeAdapterTest.TestTypeBasicDataAdapter;
 import org.locationtech.geowave.core.store.adapter.MockComponents.MockAbstractDataAdapter;
 import org.locationtech.geowave.core.store.adapter.MockComponents.MockIndexStrategy;
 import org.locationtech.geowave.core.store.adapter.MockComponents.TestDimensionField;
