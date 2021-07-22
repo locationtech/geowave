@@ -1107,7 +1107,7 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/geotime/adapter/TemporalLongFieldMapper.html" title="class in org.locationtech.geowave.core.geotime.adapter">TemporalLongFieldMapper</a>&lt;N&gt;</span></code>
-<div class="block">Maps an adapter temporal field or fields to aa `Long` index field.</div>
+<div class="block">Maps an adapter temporal field or fields to a `Long` index field.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -2790,22 +2790,28 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html" title="class in org.locationtech.geowave.core.store.adapter">AbstractDataTypeAdapter</a>&lt;T&gt;</span></code>
+<div class="block">Provides an abstract implementation of the <a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api"><code>DataTypeAdapter</code></a> interface that handles field
+ descriptors, data ID, and type name.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/BaseFieldDescriptor.html" title="class in org.locationtech.geowave.core.store.adapter">BaseFieldDescriptor</a>&lt;T&gt;</span></code>
 <div class="block">Provides a base implementation for adapter field descriptors.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html" title="class in org.locationtech.geowave.core.store.adapter">BasicDataTypeAdapter</a>&lt;T&gt;</span></code>
-<div class="block">Wraps a <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html" title="class in org.locationtech.geowave.core.store.adapter"><code>BasicDataTypeAdapter</code></a>, making it compatible with the full <a href="../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api"><code>DataTypeAdapter</code></a>
- interface.</div>
+<div class="block">A data type adapter implementation with explicit mappings for accessors and mutators.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/BinaryDataAdapter.html" title="class in org.locationtech.geowave.core.store.adapter">BinaryDataAdapter</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapterImpl.html" title="class in org.locationtech.geowave.core.store.adapter">InternalDataAdapterImpl</a>&lt;T&gt;</span></code>
 <div class="block">This class generically supports most of the operations necessary to implement a Data Adapter and
@@ -2813,11 +2819,11 @@
  mapping IndexFieldHandler's based on either types or exact dimensions.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/SimpleAbstractDataAdapter.html" title="class in org.locationtech.geowave.core.store.adapter">SimpleAbstractDataAdapter</a>&lt;T extends <a href="../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/adapter/SimpleRowTransform.html" title="class in org.locationtech.geowave.core.store.adapter">SimpleRowTransform</a>&lt;M extends <a href="../../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>&gt;</span></code>&nbsp;</td>
 </tr>
@@ -4421,7 +4427,7 @@
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/examples/adapter/CustomAdapterExample.POIBasicDataAdapter.html" title="class in org.locationtech.geowave.examples.adapter">CustomAdapterExample.POIBasicDataAdapter</a></span></code>
 <div class="block">The simplest way to implement a data adapter for a custom data type is to extend the
- <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html" title="class in org.locationtech.geowave.core.store.adapter"><code>BasicDataTypeAdapter</code></a> and implement the methods that read and write the custom type.</div>
+ <a href="../../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html" title="class in org.locationtech.geowave.core.store.adapter"><code>AbstractDataTypeAdapter</code></a> and implement the methods that read and write the custom type.</div>
 </td>
 </tr>
 </tbody>

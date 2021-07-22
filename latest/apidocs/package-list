@@ -113,6 +113,7 @@ org.locationtech.geowave.core.cli.spi
 org.locationtech.geowave.core.cli.utils
 org.locationtech.geowave.core.geotime
 org.locationtech.geowave.core.geotime.adapter
+org.locationtech.geowave.core.geotime.adapter.annotation
 org.locationtech.geowave.core.geotime.binning
 org.locationtech.geowave.core.geotime.index
 org.locationtech.geowave.core.geotime.index.api
@@ -156,6 +157,7 @@ org.locationtech.geowave.core.ingest.spark
 org.locationtech.geowave.core.ingest.spi
 org.locationtech.geowave.core.store
 org.locationtech.geowave.core.store.adapter
+org.locationtech.geowave.core.store.adapter.annotation
 org.locationtech.geowave.core.store.adapter.exceptions
 org.locationtech.geowave.core.store.adapter.statistics.histogram
 org.locationtech.geowave.core.store.api

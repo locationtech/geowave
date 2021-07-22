@@ -44,7 +44,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../org/locationtech/geowave/core/store/package-summary.html">Prev&nbsp;Package</a></li>
-<li><a href="../../../../../../org/locationtech/geowave/core/store/adapter/exceptions/package-summary.html">Next&nbsp;Package</a></li>
+<li><a href="../../../../../../org/locationtech/geowave/core/store/adapter/annotation/package-summary.html">Next&nbsp;Package</a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/locationtech/geowave/core/store/adapter/package-summary.html" target="_top">Frames</a></li>
@@ -154,64 +154,70 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html" title="class in org.locationtech.geowave.core.store.adapter">AbstractDataTypeAdapter</a>&lt;T&gt;</td>
+<td class="colLast">
+<div class="block">Provides an abstract implementation of the <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api"><code>DataTypeAdapter</code></a> interface that handles field
+ descriptors, data ID, and type name.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">AdapterPersistenceEncoding</a></td>
 <td class="colLast">
 <div class="block">This is an implementation of persistence encoding that also contains all of the extended data
  values used to form the native type supported by this adapter.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AdapterStoreWrapper.html" title="class in org.locationtech.geowave.core.store.adapter">AdapterStoreWrapper</a></td>
 <td class="colLast">
 <div class="block">Given a transient store and a internal adapter store to use to map between internal IDs and
  external IDs, we can wrap an implementation as a persistent adapter store</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/BaseFieldDescriptor.html" title="class in org.locationtech.geowave.core.store.adapter">BaseFieldDescriptor</a>&lt;T&gt;</td>
 <td class="colLast">
 <div class="block">Provides a base implementation for adapter field descriptors.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html" title="class in org.locationtech.geowave.core.store.adapter">BasicDataTypeAdapter</a>&lt;T&gt;</td>
 <td class="colLast">
-<div class="block">Wraps a <a href="../../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html" title="class in org.locationtech.geowave.core.store.adapter"><code>BasicDataTypeAdapter</code></a>, making it compatible with the full <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api"><code>DataTypeAdapter</code></a>
- interface.</div>
+<div class="block">A data type adapter implementation with explicit mappings for accessors and mutators.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/BinaryDataAdapter.html" title="class in org.locationtech.geowave.core.store.adapter">BinaryDataAdapter</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/BinaryDataAdapter.BinaryDataRowBuilder.html" title="class in org.locationtech.geowave.core.store.adapter">BinaryDataAdapter.BinaryDataRowBuilder</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptorBuilder.html" title="class in org.locationtech.geowave.core.store.adapter">FieldDescriptorBuilder</a>&lt;T,F extends <a href="../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;T&gt;,B extends <a href="../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptorBuilder.html" title="class in org.locationtech.geowave.core.store.adapter">FieldDescriptorBuilder</a>&lt;T,F,B&gt;&gt;</td>
 <td class="colLast">
 <div class="block">A builder for adapter field descriptors.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/FitToIndexPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">FitToIndexPersistenceEncoding</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/FullAsyncPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">FullAsyncPersistenceEncoding</a></td>
 <td class="colLast">
 <div class="block">This is an implementation of persistence encoding that retrieves fields asynchronously</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a></td>
 <td class="colLast">
 <div class="block">This is an implements of persistence encoding that also contains all of the extended data values
  used to form the native type supported by this adapter.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/InternalDataAdapterImpl.html" title="class in org.locationtech.geowave.core.store.adapter">InternalDataAdapterImpl</a>&lt;T&gt;</td>
 <td class="colLast">
 <div class="block">This class generically supports most of the operations necessary to implement a Data Adapter and
@@ -219,29 +225,29 @@
  mapping IndexFieldHandler's based on either types or exact dimensions.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/LazyReadPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">LazyReadPersistenceEncoding</a></td>
 <td class="colLast">
 <div class="block">This is an implements of persistence encoding that also contains all of the extended data values
  used to form the native type supported by this adapter.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/PartialAsyncPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.adapter">PartialAsyncPersistenceEncoding</a></td>
 <td class="colLast">
 <div class="block">/** This is an implementation of persistence encoding that retrieves all of the extended data
  values asynchronously but is supplied the common index values</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/SimpleAbstractDataAdapter.html" title="class in org.locationtech.geowave.core.store.adapter">SimpleAbstractDataAdapter</a>&lt;T extends <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>&gt;</td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/SimpleRowTransform.html" title="class in org.locationtech.geowave.core.store.adapter">SimpleRowTransform</a>&lt;M extends <a href="../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>&gt;</td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/SingletonFieldRowBuilder.html" title="class in org.locationtech.geowave.core.store.adapter">SingletonFieldRowBuilder</a>&lt;T&gt;</td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -272,7 +278,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../org/locationtech/geowave/core/store/package-summary.html">Prev&nbsp;Package</a></li>
-<li><a href="../../../../../../org/locationtech/geowave/core/store/adapter/exceptions/package-summary.html">Next&nbsp;Package</a></li>
+<li><a href="../../../../../../org/locationtech/geowave/core/store/adapter/annotation/package-summary.html">Next&nbsp;Package</a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?org/locationtech/geowave/core/store/adapter/package-summary.html" target="_top">Frames</a></li>

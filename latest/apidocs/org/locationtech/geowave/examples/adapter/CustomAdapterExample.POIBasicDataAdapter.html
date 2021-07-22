@@ -100,7 +100,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html" title="class in org.locationtech.geowave.core.store.adapter">org.locationtech.geowave.core.store.adapter.BasicDataTypeAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/examples/adapter/CustomAdapterExample.POI.html" title="class in org.locationtech.geowave.examples.adapter">CustomAdapterExample.POI</a>&gt;</li>
+<li><a href="../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html" title="class in org.locationtech.geowave.core.store.adapter">org.locationtech.geowave.core.store.adapter.AbstractDataTypeAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/examples/adapter/CustomAdapterExample.POI.html" title="class in org.locationtech.geowave.examples.adapter">CustomAdapterExample.POI</a>&gt;</li>
 <li>
 <ul class="inheritance">
 <li>org.locationtech.geowave.examples.adapter.CustomAdapterExample.POIBasicDataAdapter</li>
@@ -123,9 +123,9 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public static class <span class="typeNameLabel">CustomAdapterExample.POIBasicDataAdapter</span>
-extends <a href="../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html" title="class in org.locationtech.geowave.core.store.adapter">BasicDataTypeAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/examples/adapter/CustomAdapterExample.POI.html" title="class in org.locationtech.geowave.examples.adapter">CustomAdapterExample.POI</a>&gt;</pre>
+extends <a href="../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html" title="class in org.locationtech.geowave.core.store.adapter">AbstractDataTypeAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/examples/adapter/CustomAdapterExample.POI.html" title="class in org.locationtech.geowave.examples.adapter">CustomAdapterExample.POI</a>&gt;</pre>
 <div class="block">The simplest way to implement a data adapter for a custom data type is to extend the
- <a href="../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html" title="class in org.locationtech.geowave.core.store.adapter"><code>BasicDataTypeAdapter</code></a> and implement the methods that read and write the custom type.</div>
+ <a href="../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html" title="class in org.locationtech.geowave.core.store.adapter"><code>AbstractDataTypeAdapter</code></a> and implement the methods that read and write the custom type.</div>
 </li>
 </ul>
 </div>
@@ -219,11 +219,11 @@ extends <a href="../../../../../org/locationtech/geowave/core/store/adapter/Basi
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.adapter.BasicDataTypeAdapter">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.adapter.AbstractDataTypeAdapter">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.store.adapter.<a href="../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html" title="class in org.locationtech.geowave.core.store.adapter">BasicDataTypeAdapter</a></h3>
-<code><a href="../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html#fromBinary-byte:A-">fromBinary</a>, <a href="../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html#getDataClass--">getDataClass</a>, <a href="../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html#getDataId-T-">getDataId</a>, <a href="../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html#getFieldDescriptor-java.lang.String-">getFieldDescriptor</a>, <a href="../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html#getFieldDescriptors--">getFieldDescriptors</a>, <a href="../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html#getTypeName--">getTypeName</a>, <a href="../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html#newRowBuilder-org.locationtech.geowave.core.store.adapter.FieldDescriptor:A-">newRowBuilder</a>, <a href="../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html#toBinary--">toBinary</a></code></li>
+<h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.store.adapter.<a href="../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html" title="class in org.locationtech.geowave.core.store.adapter">AbstractDataTypeAdapter</a></h3>
+<code><a href="../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html#fromBinary-byte:A-">fromBinary</a>, <a href="../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html#getDataClass--">getDataClass</a>, <a href="../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html#getDataId-T-">getDataId</a>, <a href="../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html#getFieldDescriptor-java.lang.String-">getFieldDescriptor</a>, <a href="../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html#getFieldDescriptors--">getFieldDescriptors</a>, <a href="../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html#getTypeName--">getTypeName</a>, <a href="../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html#newRowBuilder-org.locationtech.geowave.core.store.adapter.FieldDescriptor:A-">newRowBuilder</a>, <a href="../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html#toBinary--">toBinary</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -354,7 +354,7 @@ extends <a href="../../../../../org/locationtech/geowave/core/store/adapter/Basi
 <pre>public&nbsp;<a href="../../../../../org/locationtech/geowave/examples/adapter/CustomAdapterExample.POI.html" title="class in org.locationtech.geowave.examples.adapter">CustomAdapterExample.POI</a>&nbsp;buildObject(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;fieldValues)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html#buildObject-java.lang.Object:A-">buildObject</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/adapter/BasicDataTypeAdapter.html" title="class in org.locationtech.geowave.core.store.adapter">BasicDataTypeAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/examples/adapter/CustomAdapterExample.POI.html" title="class in org.locationtech.geowave.examples.adapter">CustomAdapterExample.POI</a>&gt;</code></dd>
+<dd><code><a href="../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html#buildObject-java.lang.Object:A-">buildObject</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html" title="class in org.locationtech.geowave.core.store.adapter">AbstractDataTypeAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/examples/adapter/CustomAdapterExample.POI.html" title="class in org.locationtech.geowave.examples.adapter">CustomAdapterExample.POI</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>

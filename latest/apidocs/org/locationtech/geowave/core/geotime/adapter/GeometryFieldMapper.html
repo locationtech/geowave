@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -200,12 +200,16 @@ extends <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/GeometryFieldMapper.html#adapterFieldType--">adapterFieldType</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/GeometryFieldMapper.html#getLowerCaseSuggestedFieldNames--">getLowerCaseSuggestedFieldNames</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>protected org.locationtech.jts.geom.Geometry</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/GeometryFieldMapper.html#getNativeGeometry-java.util.List-">getNativeGeometry</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.locationtech.jts.geom.Geometry&gt;&nbsp;nativeFieldValues)</code>
 <div class="block">Builds a `Geometry` from the native adapter field values.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.locationtech.jts.geom.Geometry&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/GeometryFieldMapper.html#toAdapter-org.locationtech.jts.geom.Geometry-">toAdapter</a></span>(org.locationtech.jts.geom.Geometry&nbsp;indexFieldValue)</code>
 <div class="block">Converts an index value back to the fields used by the adapter.</div>
@@ -320,7 +324,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter
 <a name="adapterFieldType--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>adapterFieldType</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;org.locationtech.jts.geom.Geometry&gt;&nbsp;adapterFieldType()</pre>
@@ -329,6 +333,21 @@ extends <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#adapterFieldType--">adapterFieldType</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html" title="class in org.locationtech.geowave.core.store.api">IndexFieldMapper</a>&lt;org.locationtech.jts.geom.Geometry,org.locationtech.jts.geom.Geometry&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the adapter field type</dd>
+</dl>
+</li>
+</ul>
+<a name="getLowerCaseSuggestedFieldNames--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getLowerCaseSuggestedFieldNames</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;getLowerCaseSuggestedFieldNames()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#getLowerCaseSuggestedFieldNames--">getLowerCaseSuggestedFieldNames</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html" title="class in org.locationtech.geowave.core.store.api">IndexFieldMapper</a>&lt;org.locationtech.jts.geom.Geometry,org.locationtech.jts.geom.Geometry&gt;</code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a set of suggested adapter field names that might be associated with this field mapper</dd>
 </dl>
 </li>
 </ul>
