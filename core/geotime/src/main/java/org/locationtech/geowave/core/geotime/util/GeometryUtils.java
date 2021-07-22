@@ -106,14 +106,14 @@ public class GeometryUtils {
       new PreparedGeometryFactory();
   private static final Logger LOGGER = LoggerFactory.getLogger(GeometryUtils.class);
   private static final Object MUTEX = new Object();
+  private static final Object MUTEX_DEFAULT_CRS = new Object();
   public static final String DEFAULT_CRS_STR = "EPSG:4326";
-  private static final CoordinateReferenceSystem defaultCrsSingleton;
+  private static CoordinateReferenceSystem defaultCrsSingleton;
   private static boolean classLoaderInitialized = false;
 
   // Make sure GeoTools is properly initialized before we do anything
   static {
     initClassLoader();
-    defaultCrsSingleton = DefaultGeographicCRS.WGS84;
   }
 
   public static final Integer MAX_GEOMETRY_PRECISION =
@@ -166,7 +166,21 @@ public class GeometryUtils {
     }
   }
 
+  @edu.umd.cs.findbugs.annotations.SuppressFBWarnings()
   public static CoordinateReferenceSystem getDefaultCRS() {
+    if (defaultCrsSingleton == null) { // avoid sync penalty if we can
+      synchronized (MUTEX_DEFAULT_CRS) {
+        // have to do this inside the sync to avoid double init
+        if (defaultCrsSingleton == null) {
+          try {
+            defaultCrsSingleton = CRS.decode(DEFAULT_CRS_STR, true);
+          } catch (final Exception e) {
+            LOGGER.error("Unable to decode " + DEFAULT_CRS_STR + " CRS", e);
+            defaultCrsSingleton = DefaultGeographicCRS.WGS84;
+          }
+        }
+      }
+    }
     return defaultCrsSingleton;
   }
 
