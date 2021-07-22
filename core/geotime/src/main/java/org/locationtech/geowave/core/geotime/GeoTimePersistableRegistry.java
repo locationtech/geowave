@@ -72,9 +72,15 @@ import org.locationtech.geowave.core.geotime.store.query.filter.expression.tempo
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.TemporalLiteral;
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.TemporalNotEqualTo;
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.TimeOverlaps;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 
 public class GeoTimePersistableRegistry implements PersistableRegistrySpi {
+
+  // Make sure GeoTools is properly initialized before we do anything
+  static {
+    GeometryUtils.initClassLoader();
+  }
 
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {

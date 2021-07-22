@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.geotime.store.query;
 
-import java.net.MalformedURLException;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
 import org.locationtech.geowave.core.geotime.store.query.api.SpatialTemporalConstraintsBuilder;
@@ -36,12 +35,7 @@ public class VectorQueryConstraintsFactoryImpl extends QueryConstraintsFactoryIm
   // CQLQuery.createOptimalQuery() which requires adapter and index
   @Override
   public QueryConstraints cqlConstraints(final String cqlExpression) {
-
-    try {
-      GeometryUtils.initClassLoader();
-    } catch (final MalformedURLException e) {
-      LOGGER.error("Unable to initialize GeoTools class loader", e);
-    }
+    GeometryUtils.initClassLoader();
     try {
       final Filter cqlFilter = ECQL.toFilter(cqlExpression);
       return new OptimalCQLQuery(cqlFilter);

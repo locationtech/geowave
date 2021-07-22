@@ -9,9 +9,10 @@
 package org.locationtech.geowave.adapter.vector.query.gwql.function;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Map;
-import java.util.ServiceLoader;
 import java.util.function.Supplier;
+import org.locationtech.geowave.core.index.SPIServiceRegistry;
 import com.google.common.collect.Maps;
 
 /**
@@ -25,9 +26,10 @@ public class QLFunctionRegistry {
   private Map<String, Supplier<QLFunction>> functions = Maps.newHashMap();
 
   private QLFunctionRegistry() {
-    final ServiceLoader<QLFunctionRegistrySpi> serviceLoader =
-        ServiceLoader.load(QLFunctionRegistrySpi.class);
-    for (final QLFunctionRegistrySpi functionSet : serviceLoader) {
+    final Iterator<QLFunctionRegistrySpi> spiIter =
+        new SPIServiceRegistry(QLFunctionRegistry.class).load(QLFunctionRegistrySpi.class);
+    while (spiIter.hasNext()) {
+      final QLFunctionRegistrySpi functionSet = spiIter.next();
       Arrays.stream(functionSet.getSupportedPersistables()).forEach(
           f -> functions.put(f.getFunctionName().toUpperCase(), f.getFunctionConstructor()));
     }

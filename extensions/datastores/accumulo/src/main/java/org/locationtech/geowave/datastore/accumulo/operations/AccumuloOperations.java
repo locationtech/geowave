@@ -1123,6 +1123,17 @@ public class AccumuloOperations implements
                 QueryFilterIterator.QUERY_ITERATOR_NAME,
                 AggregationIterator.class);
       }
+      if (params.getIndex() != null && params.getIndex().getIndexModel() != null) {
+        iteratorSettings.addOption(
+            QueryFilterIterator.MODEL,
+            ByteArrayUtils.byteArrayToString(
+                PersistenceUtils.toBinary(params.getIndex().getIndexModel())));
+      }
+      if (params.getIndex() != null && params.getIndex().getIndexStrategy() != null) {
+        iteratorSettings.addOption(
+            QueryFilterIterator.PARTITION_KEY_LENGTH,
+            Integer.toString(params.getIndex().getIndexStrategy().getPartitionKeyLength()));
+      }
       if (!(params.getAggregation().getRight() instanceof CommonIndexAggregation)
           && (params.getAggregation().getLeft() != null)) {
         iteratorSettings.addOption(

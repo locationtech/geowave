@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.migration.legacy.adapter.vector;
 
-import java.net.MalformedURLException;
 import java.nio.ByteBuffer;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
@@ -198,11 +197,7 @@ public class LegacyFeatureDataAdapter implements DataTypeAdapter<SimpleFeature> 
 
   @Override
   public void fromBinary(final byte[] bytes) {
-    try {
-      GeometryUtils.initClassLoader();
-    } catch (final MalformedURLException e) {
-      LOGGER.warn("Unable to initialize GeoTools classloader", e);
-    }
+    GeometryUtils.initClassLoader();
     // deserialize the feature type
     ByteBuffer buf = ByteBuffer.wrap(bytes);
     final int defaultTypeDataBinaryLength = VarintUtils.readUnsignedInt(buf);

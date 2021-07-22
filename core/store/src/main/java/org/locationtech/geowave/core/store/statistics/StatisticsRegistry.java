@@ -10,11 +10,12 @@ package org.locationtech.geowave.core.store.statistics;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.ServiceLoader;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import org.locationtech.geowave.core.index.SPIServiceRegistry;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi.PersistableIdAndConstructor;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
@@ -43,9 +44,10 @@ public class StatisticsRegistry {
   private final Map<String, RegisteredBinningStrategy> binningStrategies = Maps.newHashMap();
 
   private StatisticsRegistry() {
-    final ServiceLoader<StatisticsRegistrySPI> serviceLoader =
-        ServiceLoader.load(StatisticsRegistrySPI.class);
-    for (final StatisticsRegistrySPI providedStats : serviceLoader) {
+    final Iterator<StatisticsRegistrySPI> spiIter =
+        new SPIServiceRegistry(StatisticsRegistry.class).load(StatisticsRegistrySPI.class);
+    while (spiIter.hasNext()) {
+      final StatisticsRegistrySPI providedStats = spiIter.next();
       Arrays.stream(providedStats.getRegisteredStatistics()).forEach(this::putStat);
       Arrays.stream(providedStats.getRegisteredBinningStrategies()).forEach(
           this::putBinningStrategy);

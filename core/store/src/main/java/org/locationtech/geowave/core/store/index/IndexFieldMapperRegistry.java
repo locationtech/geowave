@@ -9,17 +9,15 @@
 package org.locationtech.geowave.core.store.index;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.ServiceLoader;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
+import org.locationtech.geowave.core.index.SPIServiceRegistry;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi.PersistableIdAndConstructor;
 import org.locationtech.geowave.core.store.api.IndexFieldMapper;
 import org.locationtech.geowave.core.store.index.IndexFieldMapperRegistrySPI.RegisteredFieldMapper;
-import org.locationtech.geowave.core.store.statistics.StatisticsRegistrySPI.RegisteredBinningStrategy;
-import org.locationtech.geowave.core.store.statistics.StatisticsRegistrySPI.RegisteredStatistic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
@@ -37,10 +35,12 @@ public class IndexFieldMapperRegistry {
   private final int totalFieldMappings;
 
   private IndexFieldMapperRegistry() {
-    final ServiceLoader<IndexFieldMapperRegistrySPI> serviceLoader =
-        ServiceLoader.load(IndexFieldMapperRegistrySPI.class);
+    final Iterator<IndexFieldMapperRegistrySPI> spiIter =
+        new SPIServiceRegistry(IndexFieldMapperRegistry.class).load(
+            IndexFieldMapperRegistrySPI.class);
     int mappingCount = 0;
-    for (final IndexFieldMapperRegistrySPI providedFieldMappers : serviceLoader) {
+    while (spiIter.hasNext()) {
+      final IndexFieldMapperRegistrySPI providedFieldMappers = spiIter.next();
       for (RegisteredFieldMapper registeredMapper : providedFieldMappers.getRegisteredFieldMappers()) {
         Class<?> indexFieldType = registeredMapper.getConstructor().get().indexFieldType();
         if (!indexFieldMappings.containsKey(indexFieldType)) {

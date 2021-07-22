@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.ServiceLoader;
 import java.util.TreeMap;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.processing.AbstractOperation;
@@ -36,6 +35,7 @@ import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions
 import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitor;
 import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitorResult;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.index.SPIServiceRegistry;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
@@ -480,12 +480,10 @@ public class RasterIngestRunner extends DownloadRunner {
   private synchronized Map<String, Sentinel2BandConverterSpi> getRegisteredConverters() {
     if (registeredBandConverters == null) {
       registeredBandConverters = new HashMap<>();
-
-      final ServiceLoader<Sentinel2BandConverterSpi> converters =
-          ServiceLoader.load(Sentinel2BandConverterSpi.class);
-      final Iterator<Sentinel2BandConverterSpi> it = converters.iterator();
-      while (it.hasNext()) {
-        final Sentinel2BandConverterSpi converter = it.next();
+      final Iterator<Sentinel2BandConverterSpi> spiIter =
+          new SPIServiceRegistry(RasterIngestRunner.class).load(Sentinel2BandConverterSpi.class);
+      while (spiIter.hasNext()) {
+        final Sentinel2BandConverterSpi converter = spiIter.next();
         registeredBandConverters.put(converter.getName(), converter);
       }
     }

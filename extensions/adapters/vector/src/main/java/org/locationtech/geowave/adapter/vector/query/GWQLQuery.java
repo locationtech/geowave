@@ -9,8 +9,8 @@
 package org.locationtech.geowave.adapter.vector.query;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.ServiceLoader;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.time.StopWatch;
 import org.locationtech.geowave.adapter.vector.cli.VectorSection;
@@ -21,6 +21,7 @@ import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
+import org.locationtech.geowave.core.index.SPIServiceRegistry;
 import org.locationtech.geowave.core.store.cli.CLIUtils;
 import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.slf4j.Logger;
@@ -79,10 +80,11 @@ public class GWQLQuery extends DefaultOperation implements Command {
   @Override
   public boolean prepare(final OperationParams params) {
     super.prepare(params);
-    final ServiceLoader<QueryOutputFormatSpi> serviceLoader =
-        ServiceLoader.load(QueryOutputFormatSpi.class);
+    final Iterator<QueryOutputFormatSpi> spiIter =
+        new SPIServiceRegistry(GWQLQuery.class).load(QueryOutputFormatSpi.class);
     boolean outputFound = false;
-    for (final QueryOutputFormatSpi format : serviceLoader) {
+    while (spiIter.hasNext()) {
+      final QueryOutputFormatSpi format = spiIter.next();
       if ((outputFormat != null) && outputFormat.equalsIgnoreCase(format.name())) {
         output = format;
         if (output instanceof ConsoleQueryOutputFormat) {
@@ -97,7 +99,7 @@ public class GWQLQuery extends DefaultOperation implements Command {
       throw new ParameterException(
           "Not a valid output format. "
               + "Available options are: "
-              + Iterators.toString(Iterators.transform(serviceLoader.iterator(), a -> a.name())));
+              + Iterators.toString(Iterators.transform(spiIter, a -> a.name())));
     }
     return true;
 
