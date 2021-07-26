@@ -8,10 +8,13 @@
  */
 package org.locationtech.geowave.format.twitter;
 
+import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 import org.locationtech.geowave.format.twitter.TwitterIngestPlugin.IngestTwitterFromHdfs;
 
-public class TwitterPersistableRegistry implements PersistableRegistrySpi {
+public class TwitterPersistableRegistry implements
+    PersistableRegistrySpi,
+    InternalPersistableRegistry {
 
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {

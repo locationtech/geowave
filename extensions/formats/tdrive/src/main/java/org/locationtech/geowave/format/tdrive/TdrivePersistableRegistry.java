@@ -8,10 +8,13 @@
  */
 package org.locationtech.geowave.format.tdrive;
 
+import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 import org.locationtech.geowave.format.tdrive.TdriveIngestPlugin.IngestTdrivePointFromHdfs;
 
-public class TdrivePersistableRegistry implements PersistableRegistrySpi {
+public class TdrivePersistableRegistry implements
+    PersistableRegistrySpi,
+    InternalPersistableRegistry {
 
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {

@@ -8,11 +8,14 @@
  */
 package org.locationtech.geowave.format.stanag4676;
 
+import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 import org.locationtech.geowave.format.stanag4676.Stanag4676IngestPlugin.IngestWithReducerImpl;
 import org.locationtech.geowave.format.stanag4676.image.ImageChipDataAdapter;
 
-public class Stanag4676PersistableRegistry implements PersistableRegistrySpi {
+public class Stanag4676PersistableRegistry implements
+    PersistableRegistrySpi,
+    InternalPersistableRegistry {
 
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {

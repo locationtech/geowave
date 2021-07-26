@@ -8,9 +8,12 @@
  */
 package org.locationtech.geowave.format.landsat8.index;
 
+import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 
-public class Landsat8PersistableRegistry implements PersistableRegistrySpi {
+public class Landsat8PersistableRegistry implements
+    PersistableRegistrySpi,
+    InternalPersistableRegistry {
 
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {

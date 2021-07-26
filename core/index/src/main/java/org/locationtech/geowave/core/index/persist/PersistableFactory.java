@@ -49,8 +49,11 @@ public class PersistableFactory {
 
   protected void addRegistry(final PersistableRegistrySpi registry) {
     final PersistableIdAndConstructor[] persistables = registry.getSupportedPersistables();
+    final boolean external = !(registry instanceof InternalPersistableRegistry);
     for (final PersistableIdAndConstructor p : persistables) {
-      addPersistableType(p.getPersistableId(), p.getPersistableConstructor());
+      addPersistableType(
+          external ? (short) (-Math.abs(p.getPersistableId())) : p.getPersistableId(),
+          p.getPersistableConstructor());
     }
   }
 

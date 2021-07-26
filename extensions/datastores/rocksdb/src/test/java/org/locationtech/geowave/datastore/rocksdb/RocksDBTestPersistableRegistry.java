@@ -8,10 +8,13 @@
  */
 package org.locationtech.geowave.datastore.rocksdb;
 
+import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 import org.locationtech.geowave.datastore.rocksdb.RocksDBLockfileTest.IndexWrapper;
 
-public class RocksDBTestPersistableRegistry implements PersistableRegistrySpi {
+public class RocksDBTestPersistableRegistry implements
+    PersistableRegistrySpi,
+    InternalPersistableRegistry {
 
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {

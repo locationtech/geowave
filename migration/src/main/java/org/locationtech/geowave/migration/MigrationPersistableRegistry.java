@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.migration;
 
+import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 import org.locationtech.geowave.migration.legacy.adapter.LegacyInternalDataAdapterWrapper;
 import org.locationtech.geowave.migration.legacy.adapter.vector.LegacyFeatureDataAdapter;
@@ -19,7 +20,9 @@ import org.locationtech.geowave.migration.legacy.core.geotime.LegacyLatitudeFiel
 import org.locationtech.geowave.migration.legacy.core.geotime.LegacyLongitudeField;
 import org.locationtech.geowave.migration.legacy.core.store.LegacyAdapterToIndexMapping;
 
-public class MigrationPersistableRegistry implements PersistableRegistrySpi {
+public class MigrationPersistableRegistry implements
+    PersistableRegistrySpi,
+    InternalPersistableRegistry {
 
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {

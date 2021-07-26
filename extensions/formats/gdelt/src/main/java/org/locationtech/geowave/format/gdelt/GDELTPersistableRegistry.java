@@ -8,10 +8,13 @@
  */
 package org.locationtech.geowave.format.gdelt;
 
+import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 import org.locationtech.geowave.format.gdelt.GDELTIngestPlugin.IngestGDELTFromHdfs;
 
-public class GDELTPersistableRegistry implements PersistableRegistrySpi {
+public class GDELTPersistableRegistry implements
+    PersistableRegistrySpi,
+    InternalPersistableRegistry {
 
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {

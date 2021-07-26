@@ -8,12 +8,15 @@
  */
 package org.locationtech.geowave.core.store.index;
 
+import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 
 /**
  * Registers index field mappers with the GeoWave persistable registry.
  */
-public class IndexFieldMapperPersistableRegistry implements PersistableRegistrySpi {
+public class IndexFieldMapperPersistableRegistry implements
+    PersistableRegistrySpi,
+    InternalPersistableRegistry {
 
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {

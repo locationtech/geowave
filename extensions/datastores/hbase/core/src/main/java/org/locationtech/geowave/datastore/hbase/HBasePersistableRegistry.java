@@ -8,13 +8,16 @@
  */
 package org.locationtech.geowave.datastore.hbase;
 
+import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 import org.locationtech.geowave.datastore.hbase.server.MergingServerOp;
 import org.locationtech.geowave.datastore.hbase.server.MergingVisibilityServerOp;
 import org.locationtech.geowave.datastore.hbase.server.RowMergingServerOp;
 import org.locationtech.geowave.datastore.hbase.server.RowMergingVisibilityServerOp;
 
-public class HBasePersistableRegistry implements PersistableRegistrySpi {
+public class HBasePersistableRegistry implements
+    PersistableRegistrySpi,
+    InternalPersistableRegistry {
 
   @Override
   public PersistableIdAndConstructor[] getSupportedPersistables() {
