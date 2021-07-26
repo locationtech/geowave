@@ -125,7 +125,9 @@ var activeTableTab = "activeTableTab";
 <pre>public static class <span class="typeNameLabel">CustomAdapterExample.POIBasicDataAdapter</span>
 extends <a href="../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html" title="class in org.locationtech.geowave.core.store.adapter">AbstractDataTypeAdapter</a>&lt;<a href="../../../../../org/locationtech/geowave/examples/adapter/CustomAdapterExample.POI.html" title="class in org.locationtech.geowave.examples.adapter">CustomAdapterExample.POI</a>&gt;</pre>
 <div class="block">The simplest way to implement a data adapter for a custom data type is to extend the
- <a href="../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html" title="class in org.locationtech.geowave.core.store.adapter"><code>AbstractDataTypeAdapter</code></a> and implement the methods that read and write the custom type.</div>
+ <a href="../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html" title="class in org.locationtech.geowave.core.store.adapter"><code>AbstractDataTypeAdapter</code></a> and implement the methods that read and write the custom type.
+ It's important to note that any adapter that extends the `AbstractDataTypeAdapter` must be
+ added to the persistable registry.</div>
 </li>
 </ul>
 </div>
