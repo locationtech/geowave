@@ -10,17 +10,14 @@ package org.locationtech.geowave.core.geotime.util;
 
 import java.awt.geom.Point2D;
 import java.lang.reflect.Field;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.annotation.Nullable;
 import javax.measure.Unit;
 import javax.measure.quantity.Length;
@@ -85,6 +82,8 @@ import si.uom.NonSI;
 import si.uom.SI;
 import systems.uom.common.USCustomary;
 import tech.units.indriya.AbstractUnit;
+import tech.units.indriya.function.Calculus;
+import tech.units.indriya.function.DefaultNumberSystem;
 import tech.units.indriya.unit.AlternateUnit;
 import tech.units.indriya.unit.BaseUnit;
 import tech.units.indriya.unit.Units;
@@ -110,7 +109,12 @@ public class GeometryUtils {
   private static final Object MUTEX_DEFAULT_CRS = new Object();
   public static final String DEFAULT_CRS_STR = "EPSG:4326";
   private static CoordinateReferenceSystem defaultCrsSingleton;
-  private static Set<ClassLoader> initializedClassLoaders = new HashSet<>();
+  private static boolean classLoaderInitialized = false;
+
+  // Make sure GeoTools is properly initialized before we do anything
+  static {
+    initClassLoader();
+  }
 
   public static final Integer MAX_GEOMETRY_PRECISION =
       Integer.valueOf(TWKBUtils.MAX_COORD_PRECISION);
@@ -169,7 +173,6 @@ public class GeometryUtils {
         // have to do this inside the sync to avoid double init
         if (defaultCrsSingleton == null) {
           try {
-            initClassLoader();
             defaultCrsSingleton = CRS.decode(DEFAULT_CRS_STR, true);
           } catch (final Exception e) {
             LOGGER.error("Unable to decode " + DEFAULT_CRS_STR + " CRS", e);
@@ -200,17 +203,26 @@ public class GeometryUtils {
     return (crs == null) || crs.equals(getDefaultCRS());
   }
 
-  public static void initClassLoader() throws MalformedURLException {
-    synchronized (MUTEX) {
-      final ClassLoader myCl = GeometryUtils.class.getClassLoader();
-      if (initializedClassLoaders.contains(myCl)) {
-        return;
+  @edu.umd.cs.findbugs.annotations.SuppressFBWarnings()
+  public static void initClassLoader() {
+    if (!classLoaderInitialized) {
+      synchronized (MUTEX) {
+        if (!classLoaderInitialized) {
+          // This fixes an issue with the use of SPI by the `tech.units.indriya` library. It only
+          // uses the default class loader for the thread, which does not contain the appropriate
+          // classes in the case of accumulo and hbase distributed processes. Manually setting the
+          // number system before that library is loaded prevents that SPI from ever being utilized
+          // by the library.
+          Calculus.setCurrentNumberSystem(new DefaultNumberSystem());
+
+          final ClassLoader myCl = GeometryUtils.class.getClassLoader();
+          final ClassLoader classLoader = ClasspathUtils.transformClassLoader(myCl);
+          if (classLoader != null) {
+            GeoTools.addClassLoader(classLoader);
+          }
+          classLoaderInitialized = true;
+        }
       }
-      final ClassLoader classLoader = ClasspathUtils.transformClassLoader(myCl);
-      if (classLoader != null) {
-        GeoTools.addClassLoader(classLoader);
-      }
-      initializedClassLoaders.add(myCl);
     }
   }
 

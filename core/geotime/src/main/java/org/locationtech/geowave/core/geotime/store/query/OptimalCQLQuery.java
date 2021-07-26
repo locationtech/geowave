@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.geotime.store.query;
 
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.geotools.filter.text.cql2.CQLException;
@@ -273,11 +272,7 @@ public class OptimalCQLQuery implements AdapterAndIndexBasedQueryConstraints, Qu
 
   @Override
   public void fromBinary(final byte[] bytes) {
-    try {
-      GeometryUtils.initClassLoader();
-    } catch (final MalformedURLException e) {
-      LOGGER.error("Unable to initialize GeoTools class loader", e);
-    }
+    GeometryUtils.initClassLoader();
     if (bytes.length > 0) {
       final String cql = StringUtils.stringFromBinary(bytes);
       try {

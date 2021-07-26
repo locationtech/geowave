@@ -24,6 +24,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.locationtech.geowave.adapter.vector.query.aggregation.VectorCountAggregation;
 import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.index.SpatialOptions;
 import org.locationtech.geowave.core.geotime.index.SpatialTemporalDimensionalityTypeProvider;
@@ -31,6 +32,8 @@ import org.locationtech.geowave.core.geotime.index.SpatialTemporalOptions;
 import org.locationtech.geowave.core.geotime.index.TemporalDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.index.TemporalOptions;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.query.aggregate.FieldNameParam;
+import org.locationtech.geowave.core.geotime.store.query.api.VectorAggregationQueryBuilder;
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.BBox;
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.Crosses;
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.Disjoint;
@@ -58,6 +61,7 @@ import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.api.AggregationQuery;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
@@ -69,6 +73,7 @@ import org.locationtech.geowave.core.store.cli.store.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.AttributeDimensionalityTypeProvider;
 import org.locationtech.geowave.core.store.index.AttributeIndexOptions;
 import org.locationtech.geowave.core.store.index.IndexStore;
+import org.locationtech.geowave.core.store.query.BaseQuery;
 import org.locationtech.geowave.core.store.query.constraints.CustomQueryConstraints;
 import org.locationtech.geowave.core.store.query.constraints.ExplicitFilteredQuery;
 import org.locationtech.geowave.core.store.query.constraints.FilteredEverythingQuery;
@@ -2682,10 +2687,81 @@ public class ExpressionQueryIT extends AbstractGeoWaveBasicVectorIT {
     }
   }
 
+  @Test
+  public void testAggregations() {
+    final DataStore ds = dataStore.createDataStore();
+
+    final DataTypeAdapter<SimpleFeature> adapter = createDataAdapter();
+
+    final Index spatialIndex =
+        SpatialDimensionalityTypeProvider.createIndexFromOptions(new SpatialOptions());
+    ds.addType(adapter, spatialIndex);
+
+    final Index latitudeIndex =
+        AttributeDimensionalityTypeProvider.createIndexFromOptions(
+            ds,
+            new AttributeIndexOptions(TYPE_NAME, LATITUDE_FIELD));
+
+    ds.addIndex(TYPE_NAME, latitudeIndex);
+
+    final PersistentAdapterStore adapterStore = dataStore.createAdapterStore();
+    final InternalAdapterStore internalAdapterStore = dataStore.createInternalAdapterStore();
+    final AdapterIndexMappingStore aimStore = dataStore.createAdapterIndexMappingStore();
+    final IndexStore indexStore = dataStore.createIndexStore();
+    final DataStatisticsStore statsStore = dataStore.createDataStatisticsStore();
+    final InternalDataAdapter<?> internalAdapter =
+        adapterStore.getAdapter(internalAdapterStore.getAdapterId(TYPE_NAME));
+
+    // Ingest data
+    ingestData(ds);
+
+    /////////////////////////////////////////////////////
+    // No Filter
+    /////////////////////////////////////////////////////
+    VectorAggregationQueryBuilder<FieldNameParam, Long> queryBuilder =
+        VectorAggregationQueryBuilder.newBuilder();
+    AggregationQuery<FieldNameParam, Long, SimpleFeature> query =
+        queryBuilder.aggregate(
+            TYPE_NAME,
+            new VectorCountAggregation(new FieldNameParam(ALTERNATE_GEOMETRY_FIELD))).build();
+
+    Long result = ds.aggregate(query);
+    assertEquals(TOTAL_FEATURES / 2, result.longValue());
+
+    /////////////////////////////////////////////////////
+    // Filter latitude
+    /////////////////////////////////////////////////////
+    queryBuilder = VectorAggregationQueryBuilder.newBuilder();
+    query =
+        queryBuilder.aggregate(
+            TYPE_NAME,
+            new VectorCountAggregation(new FieldNameParam(ALTERNATE_GEOMETRY_FIELD))).filter(
+                LATITUDE.isGreaterThan(0)).build();
+
+    final QueryConstraints queryConstraints =
+        assertBestIndex(
+            internalAdapter,
+            latitudeIndex,
+            query,
+            adapterStore,
+            internalAdapterStore,
+            aimStore,
+            indexStore,
+            statsStore);
+
+    assertTrue(queryConstraints instanceof ExplicitFilteredQuery);
+    final ExplicitFilteredQuery constraints = (ExplicitFilteredQuery) queryConstraints;
+    final List<QueryFilter> filters = constraints.createFilters(latitudeIndex);
+    assertEquals(0, filters.size());
+
+    result = ds.aggregate(query);
+    assertEquals(TOTAL_FEATURES / 4, result.longValue());
+  }
+
   private QueryConstraints assertBestIndex(
       final InternalDataAdapter<?> adapter,
       final Index bestIndex,
-      final Query<SimpleFeature> query,
+      final BaseQuery<?, ?> query,
       final PersistentAdapterStore adapterStore,
       final InternalAdapterStore internalAdapterStore,
       final AdapterIndexMappingStore aimStore,
@@ -2694,9 +2770,15 @@ public class ExpressionQueryIT extends AbstractGeoWaveBasicVectorIT {
     assertTrue(query.getQueryConstraints() instanceof OptimalExpressionQuery);
     final OptimalExpressionQuery queryConstraints =
         (OptimalExpressionQuery) query.getQueryConstraints();
+    @SuppressWarnings("rawtypes")
     List<Pair<Index, List<InternalDataAdapter<?>>>> optimalIndices =
         queryConstraints.determineBestIndices(
-            new BaseQueryOptions(query, adapterStore, internalAdapterStore),
+            query instanceof Query
+                ? new BaseQueryOptions((Query) query, adapterStore, internalAdapterStore)
+                : new BaseQueryOptions(
+                    (AggregationQuery) query,
+                    adapterStore,
+                    internalAdapterStore),
             new InternalDataAdapter<?>[] {adapter},
             aimStore,
             indexStore,

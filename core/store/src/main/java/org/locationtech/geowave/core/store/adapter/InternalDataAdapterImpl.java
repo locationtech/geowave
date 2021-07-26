@@ -56,11 +56,11 @@ public class InternalDataAdapterImpl<T> implements InternalDataAdapter<T> {
   private final Map<String, FieldReader<Object>> mapOfFieldNameToReaders = new HashMap<>();
   /** Map of Field Writers associated with a Field ID */
   private final Map<String, FieldWriter<Object>> mapOfFieldNameToWriters = new HashMap<>();
-  private final transient BiMap<String, Integer> fieldToPositionMap = HashBiMap.create();
+  private transient BiMap<String, Integer> fieldToPositionMap = null;
   private transient BiMap<Integer, String> positionToFieldMap = null;
-  private final transient Map<String, List<String>> modelToDimensionsMap =
-      new ConcurrentHashMap<>();
+  private transient Map<String, List<String>> modelToDimensionsMap = null;
   private transient volatile boolean positionMapsInitialized = false;
+  private Object MUTEX = new Object();
   protected DataTypeAdapter<T> adapter;
   protected short adapterId;
   protected VisibilityHandler visibilityHandler = null;
@@ -85,7 +85,15 @@ public class InternalDataAdapterImpl<T> implements InternalDataAdapter<T> {
     return visibilityHandler;
   }
 
+  @edu.umd.cs.findbugs.annotations.SuppressFBWarnings()
   protected List<String> getDimensionFieldNames(final CommonIndexModel model) {
+    if (modelToDimensionsMap == null) {
+      synchronized (MUTEX) {
+        if (modelToDimensionsMap == null) {
+          modelToDimensionsMap = new ConcurrentHashMap<>();
+        }
+      }
+    }
     final List<String> retVal = modelToDimensionsMap.get(model.getId());
     if (retVal != null) {
       return retVal;
@@ -280,9 +288,7 @@ public class InternalDataAdapterImpl<T> implements InternalDataAdapter<T> {
     return adapter.getDataClass();
   }
 
-
   private ThreadLocal<RowBuilder<T>> builder = null;
-
 
   public RowBuilder<T> getRowBuilder(final AdapterToIndexMapping indexMapping) {
     if (builder == null) {
@@ -341,7 +347,7 @@ public class InternalDataAdapterImpl<T> implements InternalDataAdapter<T> {
       numDimensions = 0;
     }
     if (!positionMapsInitialized) {
-      synchronized (this) {
+      synchronized (MUTEX) {
         initializePositionMaps();
       }
     }
@@ -360,7 +366,7 @@ public class InternalDataAdapterImpl<T> implements InternalDataAdapter<T> {
     if (position >= dimensionFieldNames.size()) {
       final int adjustedPosition = position - dimensionFieldNames.size();
       if (!positionMapsInitialized) {
-        synchronized (this) {
+        synchronized (MUTEX) {
           initializePositionMaps();
         }
       }
@@ -376,6 +382,7 @@ public class InternalDataAdapterImpl<T> implements InternalDataAdapter<T> {
       return;
     }
     try {
+      fieldToPositionMap = HashBiMap.create();
       final FieldDescriptor<?>[] fields = adapter.getFieldDescriptors();
       for (int i = 0; i < fields.length; i++) {
         final String currFieldName = fields[i].fieldName();

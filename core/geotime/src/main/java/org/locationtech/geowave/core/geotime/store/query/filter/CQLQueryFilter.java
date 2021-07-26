@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.geotime.store.query.filter;
 
-import java.net.MalformedURLException;
 import java.nio.ByteBuffer;
 import org.geotools.filter.text.ecql.ECQL;
 import org.locationtech.geowave.core.geotime.store.InternalGeotoolsFeatureDataAdapter;
@@ -154,11 +153,7 @@ public class CQLQueryFilter implements QueryFilter {
 
   @Override
   public void fromBinary(final byte[] bytes) {
-    try {
-      GeometryUtils.initClassLoader();
-    } catch (final MalformedURLException e) {
-      LOGGER.error("Unable to initialize GeoTools class loader", e);
-    }
+    GeometryUtils.initClassLoader();
     final ByteBuffer buf = ByteBuffer.wrap(bytes);
     final int filterBytesLength = VarintUtils.readUnsignedInt(buf);
     if (filterBytesLength > 0) {
