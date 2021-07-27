@@ -30,6 +30,10 @@
 					<groupId>org.apache.htrace</groupId>
 					<artifactId>htrace-core</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-client-api</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -37,6 +41,12 @@
 			<artifactId>accumulo-start</artifactId>
 			<version>${accumulo.version}</version>
 			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-client-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.thrift</groupId>
@@ -79,11 +89,21 @@
 					<groupId>org.apache.htrace</groupId>
 					<artifactId>htrace-core</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-client-api</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.accumulo</groupId>
 			<artifactId>accumulo-shell</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-client-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 	<profiles>
@@ -107,7 +127,13 @@
 			<dependencies>
 				<dependency>
 					<groupId>org.apache.accumulo</groupId>
-					<artifactId>accumulo-server</artifactId>
+					<artifactId>accumulo-server</artifactId>					
+					<exclusions>
+						<exclusion>
+							<groupId>org.apache.hadoop</groupId>
+							<artifactId>hadoop-client-api</artifactId>
+						</exclusion>
+					</exclusions>
 				</dependency>
 			</dependencies>
 		</profile>
@@ -121,7 +147,13 @@
 			<dependencies>
 				<dependency>
 					<groupId>org.apache.accumulo</groupId>
-					<artifactId>accumulo-monitor</artifactId>
+					<artifactId>accumulo-monitor</artifactId>					
+					<exclusions>
+						<exclusion>
+							<groupId>org.apache.hadoop</groupId>
+							<artifactId>hadoop-client-api</artifactId>
+						</exclusion>
+					</exclusions>
 				</dependency>
 			</dependencies>
 		</profile>
