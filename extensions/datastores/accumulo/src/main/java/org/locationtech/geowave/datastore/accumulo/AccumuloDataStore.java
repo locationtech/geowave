@@ -142,6 +142,7 @@ public class AccumuloDataStore extends BaseMapReduceDataStore implements Closeab
       final Integer minSplits,
       final Integer maxSplits) throws IOException, InterruptedException {
     context.getConfiguration().setBoolean(MRJobConfig.MAPREDUCE_JOB_USER_CLASSPATH_FIRST, true);
+    context.getConfiguration().setBoolean(MRJobConfig.MAPREDUCE_JOB_CLASSLOADER, true);
     return super.getSplits(
         commonOptions,
         typeOptions,
@@ -159,9 +160,10 @@ public class AccumuloDataStore extends BaseMapReduceDataStore implements Closeab
 
   @Override
   public void prepareRecordWriter(final Configuration conf) {
-    // because datastax cassandra driver requires guava 19.0, this user
+    // because accumulo requires a more recent version of guava 22.0, this user
     // classpath must override the default hadoop classpath which has an old
     // version of guava or there will be incompatibility issues
     conf.setBoolean(MRJobConfig.MAPREDUCE_JOB_USER_CLASSPATH_FIRST, true);
+    conf.setBoolean(MRJobConfig.MAPREDUCE_JOB_CLASSLOADER, true);
   }
 }
