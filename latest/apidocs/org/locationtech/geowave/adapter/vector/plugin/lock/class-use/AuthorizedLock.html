@@ -107,6 +107,11 @@
 <td class="colLast"><span class="typeNameLabel">AuthorizedLock.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html#isAuthorized-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-">isAuthorized</a></span>(<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html" title="class in org.locationtech.geowave.adapter.vector.plugin.lock">AuthorizedLock</a>&nbsp;lock)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">MemoryLockManager.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/MemoryLockManager.html#lock-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-java.lang.String-">lock</a></span>(<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html" title="class in org.locationtech.geowave.adapter.vector.plugin.lock">AuthorizedLock</a>&nbsp;lock,
+    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;featureID)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>abstract void</code></td>
 <td class="colLast"><span class="typeNameLabel">AbstractLockingManagement.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AbstractLockingManagement.html#lock-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-java.lang.String-">lock</a></span>(<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html" title="class in org.locationtech.geowave.adapter.vector.plugin.lock">AuthorizedLock</a>&nbsp;lock,
     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;featureID)</code>
@@ -114,44 +119,39 @@
  <a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html#isAuthorized-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-"><code>isAuthorized(org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock)</code></a>, then return.</div>
 </td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">MemoryLockManager.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/MemoryLockManager.html#lock-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-java.lang.String-">lock</a></span>(<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html" title="class in org.locationtech.geowave.adapter.vector.plugin.lock">AuthorizedLock</a>&nbsp;lock,
-    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;featureID)</code>&nbsp;</td>
-</tr>
 <tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">MemoryLockManager.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/MemoryLockManager.html#releaseAll-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-">releaseAll</a></span>(<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html" title="class in org.locationtech.geowave.adapter.vector.plugin.lock">AuthorizedLock</a>&nbsp;lock)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>abstract void</code></td>
 <td class="colLast"><span class="typeNameLabel">AbstractLockingManagement.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AbstractLockingManagement.html#releaseAll-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-">releaseAll</a></span>(<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html" title="class in org.locationtech.geowave.adapter.vector.plugin.lock">AuthorizedLock</a>&nbsp;lock)</code>
 <div class="block">Release all locks associated with a transaction or associated authorizations.</div>
 </td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">MemoryLockManager.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/MemoryLockManager.html#releaseAll-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-">releaseAll</a></span>(<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html" title="class in org.locationtech.geowave.adapter.vector.plugin.lock">AuthorizedLock</a>&nbsp;lock)</code>&nbsp;</td>
-</tr>
 <tr class="rowColor">
-<td class="colFirst"><code>abstract void</code></td>
-<td class="colLast"><span class="typeNameLabel">AbstractLockingManagement.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AbstractLockingManagement.html#resetAll-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-">resetAll</a></span>(<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html" title="class in org.locationtech.geowave.adapter.vector.plugin.lock">AuthorizedLock</a>&nbsp;lock)</code>
-<div class="block">Reset all locks associated with a transaction.</div>
-</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">MemoryLockManager.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/MemoryLockManager.html#resetAll-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-">resetAll</a></span>(<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html" title="class in org.locationtech.geowave.adapter.vector.plugin.lock">AuthorizedLock</a>&nbsp;lock)</code>
 <div class="block">Release all locks associated with a transaction.</div>
 </td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>abstract void</code></td>
+<td class="colLast"><span class="typeNameLabel">AbstractLockingManagement.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AbstractLockingManagement.html#resetAll-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-">resetAll</a></span>(<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html" title="class in org.locationtech.geowave.adapter.vector.plugin.lock">AuthorizedLock</a>&nbsp;lock)</code>
+<div class="block">Reset all locks associated with a transaction.</div>
+</td>
+</tr>
 <tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">MemoryLockManager.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/MemoryLockManager.html#unlock-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-java.lang.String-">unlock</a></span>(<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html" title="class in org.locationtech.geowave.adapter.vector.plugin.lock">AuthorizedLock</a>&nbsp;lock,
+      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;featureID)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>abstract void</code></td>
 <td class="colLast"><span class="typeNameLabel">AbstractLockingManagement.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AbstractLockingManagement.html#unlock-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-java.lang.String-">unlock</a></span>(<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html" title="class in org.locationtech.geowave.adapter.vector.plugin.lock">AuthorizedLock</a>&nbsp;lock,
       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;featureID)</code>
 <div class="block">If authorized <a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html#isAuthorized-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-"><code>isAuthorized(org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock)</code></a>, unlock the featureID</div>
 </td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">MemoryLockManager.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/MemoryLockManager.html#unlock-org.locationtech.geowave.adapter.vector.plugin.lock.AuthorizedLock-java.lang.String-">unlock</a></span>(<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/plugin/lock/AuthorizedLock.html" title="class in org.locationtech.geowave.adapter.vector.plugin.lock">AuthorizedLock</a>&nbsp;lock,
-      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;featureID)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
