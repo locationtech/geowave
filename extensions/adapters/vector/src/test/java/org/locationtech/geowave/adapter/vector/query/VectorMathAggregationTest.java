@@ -12,55 +12,54 @@ import static org.junit.Assert.assertEquals;
 import java.math.BigDecimal;
 import java.util.List;
 import org.junit.Test;
-import org.locationtech.geowave.adapter.vector.query.aggregation.VectorMaxAggregation;
-import org.locationtech.geowave.adapter.vector.query.aggregation.VectorMinAggregation;
-import org.locationtech.geowave.adapter.vector.query.aggregation.VectorSumAggregation;
+import org.locationtech.geowave.adapter.vector.query.aggregation.FieldMaxAggregation;
+import org.locationtech.geowave.adapter.vector.query.aggregation.FieldMinAggregation;
+import org.locationtech.geowave.adapter.vector.query.aggregation.FieldSumAggregation;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.AbstractVectorAggregationTest;
-import org.locationtech.geowave.core.geotime.store.query.aggregate.FieldNameParam;
-import org.opengis.feature.simple.SimpleFeature;
+import org.locationtech.geowave.core.store.query.aggregate.FieldNameParam;
 
 public class VectorMathAggregationTest extends AbstractVectorAggregationTest {
 
   @Test
   public void testVectorMaxAggregation() {
-    final List<SimpleFeature> features = generateFeatures();
-    VectorMaxAggregation aggregation =
-        new VectorMaxAggregation(new FieldNameParam(LATITUDE_COLUMN));
-    BigDecimal result = aggregateObjects(aggregation, features);
+    final List<SpatialTestType> features = generateFeatures();
+    FieldMaxAggregation<SpatialTestType> aggregation =
+        new FieldMaxAggregation<>(new FieldNameParam(LATITUDE_COLUMN));
+    BigDecimal result = aggregateObjects(adapter, aggregation, features);
     assertEquals(90L, result.longValue());
 
-    aggregation = new VectorMaxAggregation(new FieldNameParam(LONGITUDE_COLUMN));
-    result = aggregateObjects(aggregation, features);
+    aggregation = new FieldMaxAggregation<>(new FieldNameParam(LONGITUDE_COLUMN));
+    result = aggregateObjects(adapter, aggregation, features);
     assertEquals(180L, result.longValue());
   }
 
   @Test
   public void testVectorMinAggregation() {
-    final List<SimpleFeature> features = generateFeatures();
-    VectorMinAggregation aggregation =
-        new VectorMinAggregation(new FieldNameParam(LATITUDE_COLUMN));
-    BigDecimal result = aggregateObjects(aggregation, features);
+    final List<SpatialTestType> features = generateFeatures();
+    FieldMinAggregation<SpatialTestType> aggregation =
+        new FieldMinAggregation<>(new FieldNameParam(LATITUDE_COLUMN));
+    BigDecimal result = aggregateObjects(adapter, aggregation, features);
     assertEquals(-90L, result.longValue());
 
-    aggregation = new VectorMinAggregation(new FieldNameParam(LONGITUDE_COLUMN));
-    result = aggregateObjects(aggregation, features);
+    aggregation = new FieldMinAggregation<>(new FieldNameParam(LONGITUDE_COLUMN));
+    result = aggregateObjects(adapter, aggregation, features);
     assertEquals(-180L, result.longValue());
   }
 
   @Test
   public void testVectorSumAggregation() {
-    final List<SimpleFeature> features = generateFeatures();
-    VectorSumAggregation aggregation =
-        new VectorSumAggregation(new FieldNameParam(LATITUDE_COLUMN));
-    BigDecimal result = aggregateObjects(aggregation, features);
+    final List<SpatialTestType> features = generateFeatures();
+    FieldSumAggregation<SpatialTestType> aggregation =
+        new FieldSumAggregation<>(new FieldNameParam(LATITUDE_COLUMN));
+    BigDecimal result = aggregateObjects(adapter, aggregation, features);
     assertEquals(0, result.longValue());
 
-    aggregation = new VectorSumAggregation(new FieldNameParam(LONGITUDE_COLUMN));
-    result = aggregateObjects(aggregation, features);
+    aggregation = new FieldSumAggregation<>(new FieldNameParam(LONGITUDE_COLUMN));
+    result = aggregateObjects(adapter, aggregation, features);
     assertEquals(0, result.longValue());
 
-    aggregation = new VectorSumAggregation(new FieldNameParam(VALUE_COLUMN));
-    result = aggregateObjects(aggregation, features);
+    aggregation = new FieldSumAggregation<>(new FieldNameParam(VALUE_COLUMN));
+    result = aggregateObjects(adapter, aggregation, features);
     assertEquals(features.size() * (features.size() / 2), result.longValue());
   }
 

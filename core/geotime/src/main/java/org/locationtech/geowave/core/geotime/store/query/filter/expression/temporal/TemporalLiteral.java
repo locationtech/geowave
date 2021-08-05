@@ -9,14 +9,12 @@
 package org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal;
 
 import java.nio.ByteBuffer;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import org.locationtech.geowave.core.geotime.store.field.IntervalSerializationProvider.IntervalReader;
 import org.locationtech.geowave.core.geotime.store.field.IntervalSerializationProvider.IntervalWriter;
 import org.locationtech.geowave.core.geotime.util.TimeUtils;
+import org.locationtech.geowave.core.store.query.filter.expression.Expression;
+import org.locationtech.geowave.core.store.query.filter.expression.InvalidFilterException;
 import org.locationtech.geowave.core.store.query.filter.expression.Literal;
-import org.locationtech.geowave.core.store.query.filter.expression.text.TextLiteral;
 import org.threeten.extra.Interval;
 
 /**
@@ -30,35 +28,27 @@ public class TemporalLiteral extends Literal<Interval> implements TemporalExpres
     super(literal);
   }
 
-  public static SimpleDateFormat[] getSupportedDateFormats() {
-    return new SimpleDateFormat[] {
-        new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ"),
-        new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")};
-  }
-
   public static TemporalLiteral of(Object literal) {
     if (literal == null) {
       return new TemporalLiteral(null);
     }
-    if (literal instanceof TextLiteral || literal instanceof String) {
-      final String dateStr =
-          literal instanceof String ? (String) literal
-              : ((TextLiteral) literal).evaluateValue(null);
-      for (final SimpleDateFormat format : getSupportedDateFormats()) {
-        try {
-          final Date date = format.parse(dateStr);
-          literal = date;
-          break;
-        } catch (ParseException e) {
-          // Did not match date format
-        }
+    if (literal instanceof TemporalLiteral) {
+      return (TemporalLiteral) literal;
+    }
+    if (literal instanceof Expression && ((Expression<?>) literal).isLiteral()) {
+      literal = ((Expression<?>) literal).evaluateValue(null);
+    }
+    if (literal instanceof String) {
+      final Interval interval = TemporalExpression.stringToInterval((String) literal);
+      if (interval != null) {
+        literal = interval;
       }
     }
     final Interval time = TimeUtils.getInterval(literal);
     if (time != null) {
       return new TemporalLiteral(time);
     }
-    throw new RuntimeException("Unable to resolve temporal literal.");
+    throw new InvalidFilterException("Unable to resolve temporal literal.");
   }
 
   @Override

@@ -6,51 +6,49 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.adapter.vector.query.gwql.function;
+package org.locationtech.geowave.adapter.vector.query.gwql.function.aggregation;
 
 import java.math.BigDecimal;
-import org.locationtech.geowave.core.geotime.store.query.aggregate.FieldNameParam;
+import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
 import org.locationtech.geowave.core.store.api.Aggregation;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.feature.type.AttributeDescriptor;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.query.aggregate.FieldNameParam;
 
 /**
  * Base aggregation function for performing math aggregations on numeric columns.
  */
-public abstract class MathAggregationFunction implements QLVectorAggregationFunction {
+public abstract class MathAggregationFunction implements AggregationFunction<BigDecimal> {
+
   @Override
-  public Class<?> returnType() {
+  public Class<BigDecimal> getReturnType() {
     return BigDecimal.class;
   }
 
   @Override
-  public Aggregation<?, ?, SimpleFeature> getAggregation(
-      final SimpleFeatureType featureType,
+  public <T> Aggregation<?, BigDecimal, T> getAggregation(
+      final DataTypeAdapter<T> adapter,
       final String[] functionArgs) {
     if (functionArgs == null || functionArgs.length != 1) {
-      throw new RuntimeException(functionName() + " takes exactly 1 parameter");
+      throw new RuntimeException(getName() + " takes exactly 1 parameter");
     }
     if (functionArgs[0].equals("*")) {
-      throw new RuntimeException(functionName() + " expects a numeric column.");
+      throw new RuntimeException(getName() + " expects a numeric column.");
     }
     final FieldNameParam columnName = new FieldNameParam(functionArgs[0]);
-    AttributeDescriptor descriptor = featureType.getDescriptor(columnName.getFieldName());
+    FieldDescriptor<?> descriptor = adapter.getFieldDescriptor(columnName.getFieldName());
     if (descriptor == null) {
       throw new RuntimeException(
           "No attribute called '" + columnName.getFieldName() + "' was found in the given type.");
     }
-    if (!Number.class.isAssignableFrom(descriptor.getType().getBinding())) {
+    if (!Number.class.isAssignableFrom(descriptor.bindingClass())) {
       throw new RuntimeException(
-          functionName()
+          getName()
               + " aggregation only works on numeric fields, given field was of type "
-              + descriptor.getType().getBinding().getName()
+              + descriptor.bindingClass().getName()
               + ".");
     }
     return aggregation(columnName);
   }
 
-  protected abstract String functionName();
-
-  protected abstract Aggregation<?, ?, SimpleFeature> aggregation(final FieldNameParam columnName);
+  protected abstract <T> Aggregation<?, BigDecimal, T> aggregation(final FieldNameParam columnName);
 }

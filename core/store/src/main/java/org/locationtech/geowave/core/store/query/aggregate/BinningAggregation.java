@@ -77,7 +77,8 @@ public class BinningAggregation<P extends Persistable, R, T> implements
     this.options =
         new BinningAggregationOptions<>(
             PersistenceUtils.toBinary(baseAggregation),
-            baseAggregation == null ? null : baseAggregation.getParameters(),
+            baseAggregation == null ? null
+                : PersistenceUtils.toBinary(baseAggregation.getParameters()),
             binningStrategy,
             maxBins);
     this.result = Maps.newHashMapWithExpectedSize(maxBins == -1 ? 1024 : maxBins);
@@ -125,7 +126,8 @@ public class BinningAggregation<P extends Persistable, R, T> implements
   private Aggregation<P, R, T> instantiateBaseAggregation() {
     final Aggregation<P, R, T> agg =
         (Aggregation<P, R, T>) PersistenceUtils.fromBinary(this.options.baseBytes);
-    agg.setParameters(this.options.baseParams);
+    final P baseParams = (P) PersistenceUtils.fromBinary(this.options.baseParamBytes);
+    agg.setParameters(baseParams);
     return agg;
   }
 

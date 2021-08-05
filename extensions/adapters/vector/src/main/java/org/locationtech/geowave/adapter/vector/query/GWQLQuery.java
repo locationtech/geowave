@@ -37,7 +37,7 @@ import com.google.common.collect.Iterators;
 public class GWQLQuery extends DefaultOperation implements Command {
   private static Logger LOGGER = LoggerFactory.getLogger(GWQLQuery.class);
 
-  @Parameter(description = "<query>")
+  @Parameter(description = "<store name> <query>")
   private List<String> parameters = new ArrayList<>();
 
   @Parameter(
@@ -112,28 +112,24 @@ public class GWQLQuery extends DefaultOperation implements Command {
     }
 
     // Ensure we have all the required arguments
-    if (parameters.size() != 1) {
-      throw new ParameterException("Requires arguments: <query>");
+    if (parameters.size() != 2) {
+      throw new ParameterException("Requires arguments: <store name> <query>");
     }
 
-    final String query = parameters.get(0);
-    final Statement statement = GWQLParser.parseStatement(query);
-    DataStorePluginOptions storeOptions = null;
-    if (statement.getStoreName() != null) {
-      storeOptions =
-          CLIUtils.loadStore(
-              statement.getStoreName(),
-              getGeoWaveConfigFile(params),
-              params.getConsole());
-    } else {
-      throw new ParameterException("Query requires a store name prefix on the type.");
-    }
+
+    final String storeName = parameters.get(0);
+
+    // Attempt to load store.
+    final DataStorePluginOptions inputStoreOptions =
+        CLIUtils.loadStore(storeName, getGeoWaveConfigFile(params), params.getConsole());
+
+    final String query = parameters.get(1);
+    final Statement statement =
+        GWQLParser.parseStatement(inputStoreOptions.createDataStore(), query);
     final StopWatch stopWatch = new StopWatch();
     stopWatch.start();
     final ResultSet results =
-        statement.execute(
-            storeOptions.createDataStore(),
-            authorizations.toArray(new String[authorizations.size()]));
+        statement.execute(authorizations.toArray(new String[authorizations.size()]));
     stopWatch.stop();
     output.output(results);
     results.close();

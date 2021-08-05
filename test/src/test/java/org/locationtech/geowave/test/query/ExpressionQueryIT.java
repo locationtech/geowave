@@ -32,7 +32,6 @@ import org.locationtech.geowave.core.geotime.index.SpatialTemporalOptions;
 import org.locationtech.geowave.core.geotime.index.TemporalDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.index.TemporalOptions;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.store.query.aggregate.FieldNameParam;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorAggregationQueryBuilder;
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.BBox;
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.Crosses;
@@ -74,6 +73,7 @@ import org.locationtech.geowave.core.store.index.AttributeDimensionalityTypeProv
 import org.locationtech.geowave.core.store.index.AttributeIndexOptions;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.query.BaseQuery;
+import org.locationtech.geowave.core.store.query.aggregate.FieldNameParam;
 import org.locationtech.geowave.core.store.query.constraints.CustomQueryConstraints;
 import org.locationtech.geowave.core.store.query.constraints.ExplicitFilteredQuery;
 import org.locationtech.geowave.core.store.query.constraints.FilteredEverythingQuery;

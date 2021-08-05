@@ -6,12 +6,12 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.adapter.vector.query.gwql.function;
+package org.locationtech.geowave.adapter.vector.query.gwql.function.aggregation;
 
-import org.locationtech.geowave.adapter.vector.query.aggregation.VectorMaxAggregation;
-import org.locationtech.geowave.core.geotime.store.query.aggregate.FieldNameParam;
+import java.math.BigDecimal;
+import org.locationtech.geowave.adapter.vector.query.aggregation.FieldMaxAggregation;
 import org.locationtech.geowave.core.store.api.Aggregation;
-import org.opengis.feature.simple.SimpleFeature;
+import org.locationtech.geowave.core.store.query.aggregate.FieldNameParam;
 
 /**
  * Aggregation function that finds the maximum value of a given numeric column.
@@ -19,13 +19,13 @@ import org.opengis.feature.simple.SimpleFeature;
 public class MaxFunction extends MathAggregationFunction {
 
   @Override
-  protected String functionName() {
+  public String getName() {
     return "MAX";
   }
 
   @Override
-  protected Aggregation<?, ?, SimpleFeature> aggregation(FieldNameParam columnName) {
-    return new VectorMaxAggregation(columnName);
+  protected <T> Aggregation<?, BigDecimal, T> aggregation(FieldNameParam columnName) {
+    return new FieldMaxAggregation<>(columnName);
   }
 
 }

@@ -58,7 +58,8 @@ public class GeoJsonQueryOutputFormat extends QueryOutputFormatSpi {
 
     SimpleFeatureTypeBuilder ftb = new SimpleFeatureTypeBuilder();
     ftb.setName(typeName);
-    ftb.setCRS(results.getCRS());
+    // TODO: This CRS needs to ultimately come from the query...
+    // ftb.setCRS(results.getCRS());
     for (int i = 0; i < results.columnCount(); i++) {
       AttributeTypeBuilder atb = new AttributeTypeBuilder();
       atb.setBinding(results.columnType(i));

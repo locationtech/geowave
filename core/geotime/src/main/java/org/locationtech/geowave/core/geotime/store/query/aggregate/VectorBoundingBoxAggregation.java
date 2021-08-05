@@ -8,13 +8,15 @@
  */
 package org.locationtech.geowave.core.geotime.store.query.aggregate;
 
+import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.query.aggregate.FieldNameParam;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
-import org.opengis.feature.simple.SimpleFeature;
 
-public class VectorBoundingBoxAggregation extends
-    BoundingBoxAggregation<FieldNameParam, SimpleFeature> {
+public class VectorBoundingBoxAggregation<T> extends BoundingBoxAggregation<FieldNameParam, T> {
   private FieldNameParam fieldNameParam;
+  private String spatialField = null;
 
   public VectorBoundingBoxAggregation() {
     this(null);
@@ -36,16 +38,25 @@ public class VectorBoundingBoxAggregation extends
   }
 
   @Override
-  protected Envelope getEnvelope(final SimpleFeature entry) {
-    Object o;
+  protected Envelope getEnvelope(final DataTypeAdapter<T> adapter, final T entry) {
     if ((fieldNameParam != null) && !fieldNameParam.isEmpty()) {
-      o = entry.getAttribute(fieldNameParam.getFieldName());
+      final Object o = adapter.getFieldValue(entry, fieldNameParam.getFieldName());
+      if (o instanceof Geometry) {
+        final Geometry geometry = (Geometry) o;
+        return geometry.getEnvelopeInternal();
+      }
     } else {
-      o = entry.getDefaultGeometry();
-    }
-    if (o instanceof Geometry) {
-      final Geometry geometry = (Geometry) o;
-      return geometry.getEnvelopeInternal();
+      if (spatialField == null) {
+        for (final FieldDescriptor<?> descriptor : adapter.getFieldDescriptors()) {
+          if (Geometry.class.isAssignableFrom(descriptor.bindingClass())) {
+            spatialField = descriptor.fieldName();
+            break;
+          }
+        }
+      }
+      if (spatialField != null) {
+        return ((Geometry) adapter.getFieldValue(entry, spatialField)).getEnvelopeInternal();
+      }
     }
     return null;
   }

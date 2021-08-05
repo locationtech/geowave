@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.store.query.filter.expression.numeric;
 
-import org.locationtech.geowave.core.store.query.filter.expression.InvalidFilterException;
 import org.locationtech.geowave.core.store.query.filter.expression.ComparableExpression;
 import org.locationtech.geowave.core.store.query.filter.expression.ComparisonOperator.CompareOp;
 import org.locationtech.geowave.core.store.query.filter.expression.Predicate;
@@ -182,10 +181,7 @@ public interface NumericExpression extends ComparableExpression<Double> {
     if (obj instanceof NumericExpression) {
       return (NumericExpression) obj;
     }
-    if ((obj instanceof Number) || (obj == null)) {
-      return NumericLiteral.of((Number) obj);
-    }
-    throw new InvalidFilterException("Cannot convert object to numeric expresion.");
+    return NumericLiteral.of(obj);
   }
 
 }

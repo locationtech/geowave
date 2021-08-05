@@ -6,24 +6,21 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.adapter.vector.query.gwql.function;
+package org.locationtech.geowave.adapter.vector.query.gwql.function.aggregation;
 
+import org.locationtech.geowave.adapter.vector.query.gwql.QLFunction;
 import org.locationtech.geowave.core.store.api.Aggregation;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 
-/**
- * Interface for functions that perform aggregations on simple feature data.
- */
-public interface QLVectorAggregationFunction extends QLFunction {
+public interface AggregationFunction<R> extends QLFunction<R> {
   /**
    * Gets the {@link Aggregation} associated with this function.
    * 
-   * @param featureType the feature type of the features
+   * @param adapter the adapter to perform the aggregation on
    * @param functionArgs the function arguments
    * @return the raw aggregation for this function
    */
-  public Aggregation<?, ?, SimpleFeature> getAggregation(
-      final SimpleFeatureType featureType,
+  public <T> Aggregation<?, R, T> getAggregation(
+      final DataTypeAdapter<T> adapter,
       final String[] functionArgs);
 }

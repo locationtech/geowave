@@ -12,6 +12,7 @@ import java.util.List;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.api.Aggregation;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 
 public abstract class AbstractAggregationTest {
 
@@ -27,6 +28,7 @@ public abstract class AbstractAggregationTest {
    */
   @SuppressWarnings({"unchecked", "rawtypes"})
   protected <P extends Persistable, R, T> R aggregateObjects(
+      final DataTypeAdapter<T> adapter,
       final Aggregation<P, R, T> aggregation,
       final List<T> objectsToAggregate) {
     final byte[] aggregationBytes = PersistenceUtils.toBinary(aggregation);
@@ -37,9 +39,9 @@ public abstract class AbstractAggregationTest {
     agg2.setParameters((P) PersistenceUtils.fromBinary(aggregationParameters));
     for (int i = 0; i < objectsToAggregate.size(); i++) {
       if ((i % 2) == 0) {
-        agg1.aggregate(null, objectsToAggregate.get(i));
+        agg1.aggregate(adapter, objectsToAggregate.get(i));
       } else {
-        agg2.aggregate(null, objectsToAggregate.get(i));
+        agg2.aggregate(adapter, objectsToAggregate.get(i));
       }
     }
     final byte[] agg1ResultBinary = agg1.resultToBinary(agg1.getResult());

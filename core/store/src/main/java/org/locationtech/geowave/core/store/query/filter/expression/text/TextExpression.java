@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.store.query.filter.expression.text;
 
 import org.locationtech.geowave.core.store.query.filter.expression.ComparableExpression;
 import org.locationtech.geowave.core.store.query.filter.expression.ComparisonOperator.CompareOp;
+import org.locationtech.geowave.core.store.query.filter.expression.FieldValue;
 import org.locationtech.geowave.core.store.query.filter.expression.Predicate;
 
 /**
@@ -330,8 +331,10 @@ public interface TextExpression extends ComparableExpression<String> {
   default TextExpression toTextExpression(final Object obj) {
     if (obj instanceof TextExpression) {
       return (TextExpression) obj;
+    } else if (obj instanceof FieldValue) {
+      return TextFieldValue.of(((FieldValue<?>) obj).getFieldName());
     }
-    return TextLiteral.of(obj == null ? null : obj.toString());
+    return TextLiteral.of(obj);
   }
 
 }

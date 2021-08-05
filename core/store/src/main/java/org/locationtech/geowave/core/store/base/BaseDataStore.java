@@ -614,6 +614,9 @@ public class BaseDataStore implements DataStore {
         boolean queriedAllAdaptersByPrefix = false;
         // maintain a set of data IDs if deleting using secondary indexing
         for (final InternalDataAdapter adapter : indexAdapterPair.getRight()) {
+          final Index index = indexAdapterPair.getLeft();
+          final AdapterToIndexMapping indexMapping =
+              indexMappingStore.getMapping(adapter.getAdapterId(), index.getName());
           if (delete) {
             final DataStoreCallbackManager callbackCache =
                 new DataStoreCallbackManager(
@@ -631,9 +634,6 @@ public class BaseDataStore implements DataStore {
 
             deleteCallbacks.add(callbackCache);
 
-            final Index index = indexAdapterPair.getLeft();
-            final AdapterToIndexMapping indexMapping =
-                indexMappingStore.getMapping(adapter.getAdapterId(), index.getName());
             if (deleteMode == DeletionMode.DELETE_WITH_DUPLICATES) {
               final DeleteCallbackList<T, GeoWaveRow> delList =
                   (DeleteCallbackList<T, GeoWaveRow>) callbackCache.getDeleteCallback(
@@ -705,7 +705,8 @@ public class BaseDataStore implements DataStore {
             queryOptions.setAggregation(
                 ((AdapterAndIndexBasedAggregation) aggregation.getRight()).createAggregation(
                     adapter,
-                    indexAdapterPair.getLeft()),
+                    indexMapping,
+                    index),
                 aggregation.getLeft());
           }
           if (adapterIndexConstraints instanceof InsertionIdQuery) {
@@ -713,7 +714,7 @@ public class BaseDataStore implements DataStore {
             results.add(
                 queryInsertionId(
                     adapter,
-                    indexAdapterPair.getLeft(),
+                    index,
                     (InsertionIdQuery) adapterIndexConstraints,
                     dedupeFilter,
                     queryOptions,
@@ -725,7 +726,7 @@ public class BaseDataStore implements DataStore {
               final PrefixIdQuery prefixIdQuery = (PrefixIdQuery) adapterIndexConstraints;
               results.add(
                   queryRowPrefix(
-                      indexAdapterPair.getLeft(),
+                      index,
                       prefixIdQuery.getPartitionKey(),
                       prefixIdQuery.getSortKeyPrefix(),
                       queryOptions,
@@ -740,7 +741,7 @@ public class BaseDataStore implements DataStore {
             results.add(
                 queryConstraints(
                     Collections.singletonList(adapter.getAdapterId()),
-                    indexAdapterPair.getLeft(),
+                    index,
                     adapterIndexConstraints,
                     dedupeFilter,
                     queryOptions,

@@ -39,6 +39,13 @@ public class TemporalFieldValue extends FieldValue<Interval> implements Temporal
 
   @Override
   protected Interval evaluateValueInternal(final Object value) {
+    if (value instanceof String) {
+      final Interval interval = TemporalExpression.stringToInterval((String) value);
+      if (interval == null) {
+        throw new RuntimeException("'" + (String) value + "' is not in a supported date format.");
+      }
+      return interval;
+    }
     return TimeUtils.getInterval(value);
   }
 

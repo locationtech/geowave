@@ -93,8 +93,8 @@ public abstract class BoundingBoxAggregation<P extends Persistable, T> implement
   }
 
   @Override
-  public void aggregate(DataTypeAdapter<T> adapter, final T entry) {
-    final Envelope env = getEnvelope(entry);
+  public void aggregate(final DataTypeAdapter<T> adapter, final T entry) {
+    final Envelope env = getEnvelope(adapter, entry);
     aggregate(env);
   }
 
@@ -107,5 +107,5 @@ public abstract class BoundingBoxAggregation<P extends Persistable, T> implement
     }
   }
 
-  protected abstract Envelope getEnvelope(final T entry);
+  protected abstract Envelope getEnvelope(final DataTypeAdapter<T> adapter, final T entry);
 }

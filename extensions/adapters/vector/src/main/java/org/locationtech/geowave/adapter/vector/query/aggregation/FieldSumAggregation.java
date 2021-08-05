@@ -9,18 +9,18 @@
 package org.locationtech.geowave.adapter.vector.query.aggregation;
 
 import java.math.BigDecimal;
-import org.locationtech.geowave.core.geotime.store.query.aggregate.FieldNameParam;
+import org.locationtech.geowave.core.store.query.aggregate.FieldNameParam;
 
 /**
  * Calculates the sum of all value of a given numeric attribute. Ignores null attribute values.
  */
-public class VectorSumAggregation extends VectorMathAggregation {
+public class FieldSumAggregation<T> extends FieldMathAggregation<T> {
 
-  public VectorSumAggregation() {
+  public FieldSumAggregation() {
     this(null);
   }
 
-  public VectorSumAggregation(final FieldNameParam fieldNameParam) {
+  public FieldSumAggregation(final FieldNameParam fieldNameParam) {
     super(fieldNameParam);
   }
 

@@ -10,27 +10,25 @@ package org.locationtech.geowave.adapter.vector.query.aggregation;
 
 import java.math.BigDecimal;
 import java.nio.ByteBuffer;
-import org.locationtech.geowave.core.geotime.store.query.aggregate.FieldNameParam;
-import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
-import org.opengis.feature.simple.SimpleFeature;
+import org.locationtech.geowave.core.store.query.aggregate.FieldNameParam;
 
 /**
- * Base aggregation class for performing math operations on numeric simple feature attributes. It
- * uses BigDecimal due to it being the most precise numeric attribute possible.
+ * Base aggregation class for performing math operations on numeric attributes. It uses BigDecimal
+ * due to it being the most precise numeric attribute possible.
  */
-public abstract class VectorMathAggregation implements
-    Aggregation<FieldNameParam, BigDecimal, SimpleFeature> {
+public abstract class FieldMathAggregation<T> implements
+    Aggregation<FieldNameParam, BigDecimal, T> {
   private FieldNameParam fieldNameParam;
   private BigDecimal value = null;
 
-  public VectorMathAggregation() {
+  public FieldMathAggregation() {
     this(null);
   }
 
-  public VectorMathAggregation(final FieldNameParam fieldNameParam) {
+  public FieldMathAggregation(final FieldNameParam fieldNameParam) {
     super();
     this.fieldNameParam = fieldNameParam;
   }
@@ -71,10 +69,10 @@ public abstract class VectorMathAggregation implements
   }
 
   @Override
-  public void aggregate(final DataTypeAdapter<SimpleFeature> adapter, SimpleFeature entry) {
+  public void aggregate(final DataTypeAdapter<T> adapter, T entry) {
     Object o;
     if ((fieldNameParam != null) && !fieldNameParam.isEmpty()) {
-      o = entry.getAttribute(fieldNameParam.getFieldName());
+      o = adapter.getFieldValue(entry, fieldNameParam.getFieldName());
       if (o instanceof Number) {
         value = agg(value, new BigDecimal(o.toString()));
       }

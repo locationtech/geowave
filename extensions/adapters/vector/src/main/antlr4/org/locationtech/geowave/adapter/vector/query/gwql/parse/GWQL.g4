@@ -7,31 +7,41 @@ options {
 @header {
 import java.util.List;
 
-import org.geotools.filter.text.cql2.CQLException;
-import org.geotools.filter.text.ecql.ECQL;
-import org.opengis.filter.Filter;
 import com.google.common.collect.Lists;
 
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.adapter.vector.query.gwql.*;
 import org.locationtech.geowave.adapter.vector.query.gwql.statement.*;
+import org.locationtech.geowave.core.store.query.filter.expression.Filter;
+import org.locationtech.geowave.core.store.query.filter.expression.Predicate;
+import org.locationtech.geowave.core.store.query.filter.expression.Expression;
+import org.locationtech.geowave.core.store.query.filter.expression.Literal;
+import org.locationtech.geowave.core.store.query.filter.expression.FieldValue;
+import org.locationtech.geowave.core.store.query.filter.expression.BooleanLiteral;
+import org.locationtech.geowave.core.store.query.filter.expression.numeric.NumericLiteral;
+import org.locationtech.geowave.core.store.query.filter.expression.text.TextLiteral;
 }
 
 @parser::members {
-public static Statement parseStatement(final String statement) {
-	GWQLLexer lexer = new GWQLLexer(CharStreams.fromString(statement));
-	TokenStream tokenStream = new CommonTokenStream(lexer);
-	GWQLParser parser = new GWQLParser(tokenStream);
-	parser.removeErrorListeners();
-	parser.addErrorListener(new ErrorListener());
-	return parser.query().stmt;
-}
+	private DataStore dataStore = null;
+	private DataTypeAdapter<?> adapter = null;
+	public static Statement parseStatement(final DataStore dataStore, final String statement) {
+		final GWQLLexer lexer = new GWQLLexer(CharStreams.fromString(statement));
+		final TokenStream tokenStream = new CommonTokenStream(lexer);
+		final GWQLParser parser = new GWQLParser(tokenStream);
+		parser.dataStore = dataStore;
+		parser.removeErrorListeners();
+		parser.addErrorListener(new ErrorListener());
+		return parser.query().stmt;
+	}
 }
 
 query
 	returns [
 		Statement stmt
 	]
- 	: statement (';')* EOF
+ 	: statement (SEMICOLON)* EOF
  	{
  		$stmt = $statement.stmt;
  	}
@@ -45,68 +55,58 @@ statement
 	returns [
 		Statement stmt
 	]
- 	: select_statement
+ 	: selectStatement
  	{
- 		$stmt = $select_statement.stmt;
+ 		$stmt = $selectStatement.stmt;
  	}
- 	| delete_statement
+ 	| deleteStatement
  	{
- 		$stmt = $delete_statement.stmt;
+ 		$stmt = $deleteStatement.stmt;
  	}
 ;
 
-delete_statement
+deleteStatement
 	returns [
 		DeleteStatement stmt
 	]
 	locals [
-		Filter filter = null
+		Filter f = null
 	]
- 	: K_DELETE K_FROM qualified_type_name 
-	( K_WHERE cql_filter { $filter = $cql_filter.filter; })?
+ 	: K_DELETE K_FROM adapterName 
+	( K_WHERE filter { $f = $filter.value; })?
    	{
-   		$stmt = new DeleteStatement($qualified_type_name.qtn, $filter);
+   		$stmt = new DeleteStatement(dataStore, adapter, $f);
    	}
 ;
 
-select_statement
+selectStatement
 	returns [
 		SelectStatement stmt
 	]
 	locals [
-		Filter filter = null,
+		Filter f = null,
 		Integer limit = null,
 		List<Selector> selectorList = Lists.newArrayList()
 	]
  	: K_SELECT selectors[$selectorList]
-	  K_FROM qualified_type_name
-	( K_WHERE cql_filter { $filter = $cql_filter.filter; })?
+	  K_FROM adapterName
+	( K_WHERE filter { $f = $filter.value; })?
 	( K_LIMIT INTEGER { $limit = $INTEGER.int; })?
 	{
-		$stmt = new SelectStatement($qualified_type_name.qtn, $selectorList, $filter, $limit);
+		$stmt = new SelectStatement(dataStore, adapter, $selectorList, $f, $limit);
 	}
 ;
  
 error
 	: UNEXPECTED_CHAR
    	{ 
-    	throw new RuntimeException("UNEXPECTED_CHAR=" + $UNEXPECTED_CHAR.text); 
+    	throw new GWQLParseException("UNEXPECTED_CHAR=" + $UNEXPECTED_CHAR.text); 
    	}
-;
- 
-qualified_type_name
-	returns [
-		QualifiedTypeName qtn
-	]
- 	: store_name '.' table_name
- 	{
- 		$qtn = new QualifiedTypeName($store_name.text, $table_name.text);
- 	}
 ;
 
 selectors [List<Selector> selectorList]
-	: agg1=aggregate { $selectorList.add($agg1.sel); } (',' aggN=aggregate { $selectorList.add($aggN.sel); } )*
-	| sel1=selector { $selectorList.add($sel1.sel); } (',' selN=selector { $selectorList.add($selN.sel); } )*
+	: agg1=aggregate { $selectorList.add($agg1.sel); } (COMMA aggN=aggregate { $selectorList.add($aggN.sel); } )*
+	| sel1=selector { $selectorList.add($sel1.sel); } (COMMA selN=selector { $selectorList.add($selN.sel); } )*
 	| '*'
 ;
 
@@ -117,10 +117,10 @@ selector
 	locals [
 		String alias = null
 	]
-	: column_name 
-	( K_AS column_alias { $alias = $column_alias.text; } )?
+	: columnName 
+	( K_AS columnAlias { $alias = $columnAlias.text; } )?
 	{
-		$sel = new ColumnSelector($column_name.text, $alias);
+		$sel = new ColumnSelector($columnName.text, $alias);
 	}
 ;
 
@@ -132,78 +132,194 @@ aggregate
 	locals [
 		String alias = null
 	]
-	: function_name '(' function_arg ')'
-	( K_AS column_alias { $alias = $column_alias.text; } )?
+	: functionName '(' functionArg ')'
+	( K_AS columnAlias { $alias = $columnAlias.text; } )?
 	{
-		$sel = new AggregationSelector($function_name.text, new String[] { $function_arg.text }, $alias);
+		$sel = new AggregationSelector($functionName.text, new String[] { $functionArg.text }, $alias);
 	}
 ;
 
-function_arg
+functionArg
 	: '*'
-	| column_name
+	| columnName
+;
+
+adapterName
+	: tableName
+	{
+		adapter = dataStore.getType($tableName.text);
+		if (adapter == null) {
+			throw new GWQLParseException("No type named " + $tableName.text);
+		}
+	}
 ;
  
-column_name
+columnName
 	: IDENTIFIER
 ;
 
-column_alias
+columnAlias
 	: IDENTIFIER
 ;
  
-store_name
-	: IDENTIFIER
-;
- 
-table_name
+tableName
  	: IDENTIFIER
 ;
  
-function_name
+functionName
 	: IDENTIFIER
 ;
- 
-cql_filter
+
+filter
 	returns [
-		Filter filter
+		Filter value
+	]
+	: predicate { $value = $predicate.value; }                          #simplePredicateFilter
+	| f1=filter K_AND f2=filter { $value = $f1.value.and($f2.value); }  #andFilter
+	| f1=filter K_OR f2=filter { $value = $f1.value.or($f2.value); }    #orFilter
+	| K_NOT f=filter { $value = Filter.not($f.value); }                 #notFilter
+	| LPAREN f=filter RPAREN { $value = $f.value; }                     #parenFilter
+	| LSQUARE f=filter RSQUARE { $value = $f.value; }					#sqBracketFilter
+	| K_INCLUDE { $value = Filter.include(); }						    #includeFilter
+	| K_EXCLUDE { $value = Filter.exclude(); }							#excludeFilter
+;
+
+predicate
+	returns [
+		Predicate value
+	]
+	: f=predicateFunction { $value = $f.value; }
+	| e1=expression EQUALS e2=expression { $value = GWQLParseHelper.getEqualsPredicate($e1.value, $e2.value); }
+	| e1=expression NOT_EQUALS e2=expression { $value = GWQLParseHelper.getNotEqualsPredicate($e1.value, $e2.value); }
+	| e1=expression LESS_THAN e2=expression { $value = GWQLParseHelper.getLessThanPredicate($e1.value, $e2.value); }
+	| e1=expression LESS_THAN_OR_EQUAL e2=expression { $value = GWQLParseHelper.getLessThanOrEqualsPredicate($e1.value, $e2.value); }
+	| e1=expression GREATER_THAN e2=expression { $value = GWQLParseHelper.getGreaterThanPredicate($e1.value, $e2.value); }
+	| e1=expression GREATER_THAN_OR_EQUAL e2=expression { $value = GWQLParseHelper.getGreaterThanOrEqualsPredicate($e1.value, $e2.value); }
+	| v=expression K_BETWEEN l=expression K_AND u=expression { $value = GWQLParseHelper.getBetweenPredicate($v.value, $l.value, $u.value); }
+	| e=expression K_IS K_NULL { $value = $e.value.isNull(); }
+	| e=expression K_IS K_NOT K_NULL { $value = $e.value.isNotNull(); }
+	| e1=expression o=predicateOperator e2=expression { $value = GWQLParseHelper.getOperatorPredicate($o.text, $e1.value, $e2.value); }
+;
+
+expression
+	returns [
+		Expression<?> value
+	]
+	: e1=expression STAR e2=expression { $value = GWQLParseHelper.getMultiplyExpression($e1.value, $e2.value); }
+	| e1=expression DIVIDE e2=expression { $value = GWQLParseHelper.getDivideExpression($e1.value, $e2.value); }
+	| e1=expression PLUS e2=expression { $value = GWQLParseHelper.getAddExpression($e1.value, $e2.value); }
+	| e1=expression MINUS e2=expression { $value = GWQLParseHelper.getSubtractExpression($e1.value, $e2.value); }
+	| f=expressionFunction { $value = $f.value; }
+	| LPAREN e=expression RPAREN { $value = $e.value; }
+	| LSQURE e=expression RSQUARE { $value = $e.value; }
+	| e1=expression CAST IDENTIFIER { $value = GWQLParseHelper.castExpression($IDENTIFIER.text, $e1.value); }
+	| l=literal { $value = $l.value; }
+	| c=columnName { $value = GWQLParseHelper.getFieldValue(adapter, $c.text); }
+;
+
+predicateFunction
+	returns [
+		Predicate value
 	]
 	locals [
-		int openCount = 1
+		List<Expression<?>> expressions = Lists.newArrayList()
 	]
-	: K_CQL cql_paren
- 	{
- 	    try {
-      		$filter = ECQL.toFilter($cql_paren.text);
-	    } catch (CQLException e) {
-	    	throw new RuntimeException("Invalid CQL", e);
-	    }
- 	}
+	: functionName LPAREN expressionList[$expressions] RPAREN { $value = GWQLParseHelper.getPredicateFunction($functionName.text, $expressions); }
 ;
 
-cql_paren
-	: '(' ( ~('(' | ')') | cql_paren )* ')'
+expressionFunction
+	returns [
+		Expression<?> value
+	]
+	locals [
+		List<Expression<?>> expressions = Lists.newArrayList()
+	]
+	: functionName LPAREN expressionList[$expressions] RPAREN { $value = GWQLParseHelper.getExpressionFunction($functionName.text, $expressions); }
 ;
 
-keyword
-	: K_AND
-	| K_DELETE
-	| K_FROM
-	| K_LIMIT
-	| K_OR
-	| K_SELECT
-	| K_WHERE
+predicateOperator
+	: IDENTIFIER
 ;
+
+expressionList [List<Expression<?>> expressions]
+	: expr1=expression { $expressions.add($expr1.value); } (COMMA exprN=expression { $expressions.add($exprN.value); } )*
+;
+	
+literal
+	returns [
+		Literal value
+	]
+	: number { $value = NumericLiteral.of(Double.parseDouble($number.text)); }
+	| textLiteral { $value = $textLiteral.value; }
+	| BOOLEAN_LITERAL { $value = BooleanLiteral.of($BOOLEAN_LITERAL.text); }
+;
+
+number
+	: NUMERIC
+	| INTEGER
+;
+
+
+textLiteral
+    returns [
+    	TextLiteral value
+    ]
+	: SQUOTE_LITERAL { $value = GWQLParseHelper.evaluateTextLiteral($SQUOTE_LITERAL.text); }
+;
+
+SQUOTE_LITERAL: '\'' ('\\'. | '\'\'' | ~('\'' | '\\'))* '\'';
+
+ESCAPED_SQUOTE: BACKSLASH SQUOTE;
+NEWLINE: BACKSLASH 'n';
+RETURN: BACKSLASH 'r';
+TAB: BACKSLASH 't';
+BACKSPACE: BACKSLASH 'b';
+FORM_FEED: BACKSLASH 'f';
+ESCAPED_BACKSLASH: BACKSLASH BACKSLASH;
+
+NOT_EQUALS: '<>';
+LESS_THAN_OR_EQUAL: '<=';
+GREATER_THAN_OR_EQUAL: '>=';
+LESS_THAN: '<';
+GREATER_THAN: '>';
+EQUALS: '=';
+LPAREN: '(';
+RPAREN: ')';
+LCURL: '{';
+RCURL: '}';
+LSQUARE: '[';
+RSQUARE: ']';
+COMMA: ',';
+STAR: '*';
+DIVIDE: '/';
+PLUS: '+';
+MINUS: '-';
+CAST: '::';
+DOT: '.';
+SQUOTE: '\'';
+DQUOTE: '"';
+BACKSLASH: '\\';
+SEMICOLON: ';';
 
 K_AND : A N D;
 K_AS : A S;
-K_CQL : C Q L;
 K_DELETE : D E L E T E;
 K_FROM : F R O M;
 K_LIMIT : L I M I T;
 K_OR : O R;
 K_SELECT : S E L E C T;
 K_WHERE : W H E R E;
+K_NOT : N O T;
+K_IS : I S;
+K_NULL : N U L L;
+K_INCLUDE : I N C L U D E;
+K_EXCLUDE: E X C L U D E;
+K_BETWEEN: B E T W E E N;
+
+BOOLEAN_LITERAL
+	: T R U E
+	| F A L S E
+;
 
 IDENTIFIER
 	: ESCAPED_IDENTIFIER
@@ -213,7 +329,7 @@ IDENTIFIER
 		txt = txt.substring(1, txt.length() - 1); 
 		setText(txt);
     }
-    | [a-zA-Z_] [a-zA-Z_0-9]* // TODO check: needs more chars in set
+    | [a-zA-Z_] [a-zA-Z0-9_]* // TODO check: needs more chars in set
 ;
 
 ESCAPED_IDENTIFIER
@@ -221,14 +337,13 @@ ESCAPED_IDENTIFIER
 	| '`' (~'`' | '``')* '`'
 	| '[' ~']'* ']'
 ;
- 
+
 INTEGER
-	: DIGIT+
+	: MINUS? DIGIT+ (E DIGIT+)?
 ;
- 
-NUMERIC_LITERAL
- 	: DIGIT+ ( '.' DIGIT* )? ( E [-+]? DIGIT+ )?
- 	| '.' DIGIT+ ( E [-+]? DIGIT+ )?
+
+NUMERIC
+ 	: MINUS? DIGIT+ DOT DIGIT+ (E (MINUS)* DIGIT+)?
 ;
 
 WHITESPACE: [ \t\n\r\f] -> channel(HIDDEN);

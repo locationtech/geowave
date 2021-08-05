@@ -20,7 +20,7 @@ public class CountAggregationTest extends AbstractCommonIndexAggregationTest {
     final Long expectedCount = 42L;
     final List<CommonIndexedPersistenceEncoding> encodings =
         generateObjects(expectedCount.intValue());
-    final Long result = aggregateObjects(new CountAggregation(), encodings);
+    final Long result = aggregateObjects(null, new CountAggregation(), encodings);
     assertEquals(expectedCount, result);
   }
 

@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.store.query.filter.expression.text;
 
 import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.store.query.filter.expression.Expression;
 import org.locationtech.geowave.core.store.query.filter.expression.Literal;
 
 /**
@@ -23,13 +24,22 @@ public class TextLiteral extends Literal<String> implements TextExpression {
     super(literal);
   }
 
-  public static TextLiteral of(final String literal) {
-    return new TextLiteral(literal);
+  public static TextLiteral of(Object literal) {
+    if (literal == null) {
+      return new TextLiteral(null);
+    }
+    if (literal instanceof TextLiteral) {
+      return (TextLiteral) literal;
+    }
+    if (literal instanceof Expression && ((Expression<?>) literal).isLiteral()) {
+      literal = ((Expression<?>) literal).evaluateValue(null);
+    }
+    return new TextLiteral(literal.toString());
   }
 
   @Override
   public String toString() {
-    return "'" + literal + "'";
+    return literal == null ? "null" : "'" + literal + "'";
   }
 
   @Override

@@ -9,23 +9,16 @@
 package org.locationtech.geowave.adapter.vector.query.gwql.statement;
 
 import org.locationtech.geowave.adapter.vector.query.gwql.ResultSet;
-import org.locationtech.geowave.core.store.api.DataStore;
 
 /**
  * Interface for GeoWave query language statements.
  */
 public interface Statement {
   /**
-   * Executes the statement on the provided data store.
+   * Executes the statement with the provided authorizations.
    *
-   * @param dataStore the data store to execute the statement on
    * @param authorizations authorizations to use for the query
    * @return the results of the statement
    */
-  public ResultSet execute(final DataStore dataStore, final String... authorizations);
-
-  /**
-   * @return the store name that this statement should be executed on
-   */
-  public String getStoreName();
+  public ResultSet execute(final String... authorizations);
 }

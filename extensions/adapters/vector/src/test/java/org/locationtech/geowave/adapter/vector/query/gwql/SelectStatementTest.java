@@ -16,257 +16,258 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.text.ParseException;
 import org.junit.Test;
-import org.locationtech.geowave.adapter.vector.query.gwql.AggregationSelector;
-import org.locationtech.geowave.adapter.vector.query.gwql.ColumnSelector;
 import org.locationtech.geowave.adapter.vector.query.gwql.parse.GWQLParser;
 import org.locationtech.geowave.adapter.vector.query.gwql.statement.SelectStatement;
 import org.locationtech.geowave.adapter.vector.query.gwql.statement.Statement;
-import org.opengis.filter.And;
-import org.opengis.filter.Filter;
-import org.opengis.filter.spatial.BBOX;
-import org.opengis.filter.temporal.During;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.BBox;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.During;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.query.filter.expression.And;
+import org.locationtech.geowave.core.store.query.filter.expression.Filter;
 
-public class SelectStatementTest extends AbstractStatementTest {
-
+public class SelectStatementTest extends AbstractGWQLTest {
   @Test
   public void testInvalidStatements() {
+    final DataStore dataStore = createDataStore();
     // Missing from
-    assertInvalidStatement("SELECT *", "expecting FROM");
+    assertInvalidStatement(dataStore, "SELECT *", "expecting FROM");
     // Missing store and type name
-    assertInvalidStatement("SELECT * FROM", "expecting IDENTIFIER");
+    assertInvalidStatement(dataStore, "SELECT * FROM", "missing IDENTIFIER");
     // Missing everything
-    assertInvalidStatement("SELECT", "expecting {'*', IDENTIFIER}");
+    assertInvalidStatement(dataStore, "SELECT", "expecting {'*', IDENTIFIER}");
     // All columns and single selector
-    assertInvalidStatement("SELECT *, column FROM store.type", "expecting FROM");
+    assertInvalidStatement(dataStore, "SELECT *, pop FROM type", "expecting FROM");
     // All columns and aggregation selector
-    assertInvalidStatement("SELECT *, agg(column) FROM store.type", "expecting FROM");
-    // No type name
-    assertInvalidStatement("SELECT * FROM store", "expecting '.'");
+    assertInvalidStatement(dataStore, "SELECT *, agg(column) FROM type", "expecting FROM");
+    // Nonexistent type
+    assertInvalidStatement(dataStore, "SELECT * FROM nonexistent", "No type named nonexistent");
     // No selectors
-    assertInvalidStatement("SELECT FROM store.type", "expecting {'*', IDENTIFIER}");
+    assertInvalidStatement(dataStore, "SELECT FROM type", "expecting {'*', IDENTIFIER}");
     // Aggregation and non aggregation selectors
-    assertInvalidStatement("SELECT agg(*), column FROM store.type", "expecting '('");
-    // Non-CQL where filter
-    assertInvalidStatement("SELECT * FROM store.type WHERE a < 1", "expecting CQL");
+    assertInvalidStatement(dataStore, "SELECT agg(*), pop FROM type", "expecting '('");
     // No where filter
-    assertInvalidStatement("SELECT * FROM store.type WHERE", "expecting CQL");
+    assertInvalidStatement(dataStore, "SELECT * FROM type WHERE", "mismatched input '<EOF>'");
     // No limit count
-    assertInvalidStatement("SELECT * FROM store.type LIMIT", "missing INTEGER");
+    assertInvalidStatement(dataStore, "SELECT * FROM type LIMIT", "missing INTEGER");
     // Non-integer limit count
-    assertInvalidStatement("SELECT * FROM store.type LIMIT 1.5", "expecting INTEGER");
+    assertInvalidStatement(dataStore, "SELECT * FROM type LIMIT 1.5", "expecting INTEGER");
     // Missing column alias
-    assertInvalidStatement("SELECT a AS FROM store.type", "expecting IDENTIFIER");
+    assertInvalidStatement(dataStore, "SELECT pop AS FROM type", "expecting IDENTIFIER");
   }
 
   @Test
   public void testValidStatements() {
-    GWQLParser.parseStatement("SELECT * FROM store.type");
-    GWQLParser.parseStatement("SELECT * FROM store.type LIMIT 1");
-    GWQLParser.parseStatement("SELECT * FROM store.type WHERE CQL(a < 1)");
-    GWQLParser.parseStatement("SELECT * FROM store.type WHERE CQL(a > 1) LIMIT 1");
-    GWQLParser.parseStatement("SELECT a, b FROM store.type");
-    GWQLParser.parseStatement("SELECT a, b FROM store.type LIMIT 1");
-    GWQLParser.parseStatement("SELECT a, b FROM store.type WHERE CQL(a < 1)");
-    GWQLParser.parseStatement("SELECT a, b FROM store.type WHERE CQL(a > 1) LIMIT 2");
-    GWQLParser.parseStatement("SELECT a AS a_alt, b FROM store.type");
-    GWQLParser.parseStatement("SELECT a AS a_alt, b FROM store.type LIMIT 1");
-    GWQLParser.parseStatement("SELECT a AS a_alt, b FROM store.type WHERE CQL(a < 1)");
-    GWQLParser.parseStatement("SELECT a AS a_alt, b FROM store.type WHERE CQL(a > 1) LIMIT 2");
-    GWQLParser.parseStatement("SELECT SUM(a) FROM store.type");
-    GWQLParser.parseStatement("SELECT SUM(a) FROM store.type LIMIT 1");
-    GWQLParser.parseStatement("SELECT SUM(a) FROM store.type WHERE CQL(a < 1)");
-    GWQLParser.parseStatement("SELECT SUM(a) FROM store.type WHERE CQL(a > 1) LIMIT 3");
-    GWQLParser.parseStatement("SELECT SUM(a) AS sum FROM store.type");
-    GWQLParser.parseStatement("SELECT SUM(a) AS sum FROM store.type LIMIT 1");
-    GWQLParser.parseStatement("SELECT SUM(a) AS sum FROM store.type WHERE CQL(a < 1)");
-    GWQLParser.parseStatement("SELECT SUM(a) AS sum FROM store.type WHERE CQL(a > 1) LIMIT 3");
-    GWQLParser.parseStatement("SELECT COUNT(*) FROM store.type");
-    GWQLParser.parseStatement("SELECT COUNT(*) FROM store.type LIMIT 1");
-    GWQLParser.parseStatement("SELECT COUNT(*) FROM store.type WHERE CQL(a < 1)");
-    GWQLParser.parseStatement("SELECT COUNT(*) FROM store.type WHERE CQL(a > 1) LIMIT 4");
-    GWQLParser.parseStatement("SELECT SUM(a), COUNT(*) FROM store.type");
-    GWQLParser.parseStatement("SELECT SUM(a), COUNT(*) FROM store.type LIMIT 1");
-    GWQLParser.parseStatement("SELECT SUM(a), COUNT(*) FROM store.type WHERE CQL(a < 1)");
-    GWQLParser.parseStatement("SELECT SUM(a), COUNT(*) FROM store.type WHERE CQL(a > 1) LIMIT 4");
+    final DataStore dataStore = createDataStore();
+    GWQLParser.parseStatement(dataStore, "SELECT * FROM type");
+    GWQLParser.parseStatement(dataStore, "SELECT * FROM type LIMIT 1");
+    GWQLParser.parseStatement(dataStore, "SELECT * FROM type WHERE pop < 1");
+    GWQLParser.parseStatement(dataStore, "SELECT * FROM type WHERE pop > 1 LIMIT 1");
+    GWQLParser.parseStatement(dataStore, "SELECT a, b FROM type");
+    GWQLParser.parseStatement(dataStore, "SELECT a, b FROM type LIMIT 1");
+    GWQLParser.parseStatement(dataStore, "SELECT a, b FROM type WHERE pop < 1");
+    GWQLParser.parseStatement(dataStore, "SELECT a, b FROM type WHERE pop > 1 LIMIT 2");
+    GWQLParser.parseStatement(dataStore, "SELECT a AS a_alt, b FROM type");
+    GWQLParser.parseStatement(dataStore, "SELECT a AS a_alt, b FROM type LIMIT 1");
+    GWQLParser.parseStatement(dataStore, "SELECT a AS a_alt, b FROM type WHERE pop < 1");
+    GWQLParser.parseStatement(dataStore, "SELECT a AS a_alt, b FROM type WHERE pop > 1 LIMIT 2");
+    GWQLParser.parseStatement(dataStore, "SELECT SUM(a) FROM type");
+    GWQLParser.parseStatement(dataStore, "SELECT SUM(a) FROM type LIMIT 1");
+    GWQLParser.parseStatement(dataStore, "SELECT SUM(a) FROM type WHERE pop < 1");
+    GWQLParser.parseStatement(dataStore, "SELECT SUM(a) FROM type WHERE pop > 1 LIMIT 3");
+    GWQLParser.parseStatement(dataStore, "SELECT SUM(a) AS sum FROM type");
+    GWQLParser.parseStatement(dataStore, "SELECT SUM(a) AS sum FROM type LIMIT 1");
+    GWQLParser.parseStatement(dataStore, "SELECT SUM(a) AS sum FROM type WHERE pop < 1");
+    GWQLParser.parseStatement(dataStore, "SELECT SUM(a) AS sum FROM type WHERE pop > 1 LIMIT 3");
+    GWQLParser.parseStatement(dataStore, "SELECT COUNT(*) FROM type");
+    GWQLParser.parseStatement(dataStore, "SELECT COUNT(*) FROM type LIMIT 1");
+    GWQLParser.parseStatement(dataStore, "SELECT COUNT(*) FROM type WHERE pop < 1");
+    GWQLParser.parseStatement(dataStore, "SELECT COUNT(*) FROM type WHERE pop > 1 LIMIT 4");
+    GWQLParser.parseStatement(dataStore, "SELECT SUM(a), COUNT(*) FROM type");
+    GWQLParser.parseStatement(dataStore, "SELECT SUM(a), COUNT(*) FROM type LIMIT 1");
+    GWQLParser.parseStatement(dataStore, "SELECT SUM(a), COUNT(*) FROM type WHERE pop < 1");
+    GWQLParser.parseStatement(dataStore, "SELECT SUM(a), COUNT(*) FROM type WHERE pop > 1 LIMIT 4");
   }
 
 
   @Test
   public void testAllColumns() throws ParseException, IOException {
-    final String statement = "SELECT * FROM store.type";
-    final Statement gwStatement = GWQLParser.parseStatement(statement);
+    final DataStore dataStore = createDataStore();
+    final String statement = "SELECT * FROM type";
+    final Statement gwStatement = GWQLParser.parseStatement(dataStore, statement);
     assertTrue(gwStatement instanceof SelectStatement);
-    final SelectStatement selectStatement = (SelectStatement) gwStatement;
+    final SelectStatement<?> selectStatement = (SelectStatement<?>) gwStatement;
     assertFalse(selectStatement.isAggregation());
-    assertNotNull(selectStatement.typeName());
-    assertEquals("store", selectStatement.typeName().storeName());
-    assertEquals("type", selectStatement.typeName().typeName());
-    assertNull(selectStatement.filter());
+    assertNotNull(selectStatement.getAdapter());
+    assertEquals("type", selectStatement.getAdapter().getTypeName());
+    assertNull(selectStatement.getFilter());
   }
 
   @Test
   public void testAllColumnsWithFilter() throws ParseException, IOException {
+    final DataStore dataStore = createDataStore();
     final String statement =
-        "SELECT * FROM store.type WHERE CQL(BBOX(geometry,27.20,41.30,27.30,41.20) and start during 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z)";
-    final Statement gwStatement = GWQLParser.parseStatement(statement);
+        "SELECT * FROM type WHERE BBOX(geometry,27.20,41.30,27.30,41.20) and start during '2005-05-19T20:32:56Z/2005-05-19T21:32:56Z'";
+    final Statement gwStatement = GWQLParser.parseStatement(dataStore, statement);
     assertTrue(gwStatement instanceof SelectStatement);
-    final SelectStatement selectStatement = (SelectStatement) gwStatement;
+    final SelectStatement<?> selectStatement = (SelectStatement<?>) gwStatement;
     assertFalse(selectStatement.isAggregation());
-    assertNotNull(selectStatement.typeName());
-    assertEquals("store", selectStatement.typeName().storeName());
-    assertEquals("type", selectStatement.typeName().typeName());
-    assertNotNull(selectStatement.filter());
-    Filter filter = selectStatement.filter();
+    assertNotNull(selectStatement.getAdapter());
+    assertEquals("type", selectStatement.getAdapter().getTypeName());
+    assertNotNull(selectStatement.getFilter());
+    Filter filter = selectStatement.getFilter();
     assertTrue(filter instanceof And);
     And andFilter = (And) filter;
-    assertTrue(andFilter.getChildren().size() == 2);
-    assertTrue(andFilter.getChildren().get(0) instanceof BBOX);
-    assertTrue(andFilter.getChildren().get(1) instanceof During);
-    assertNull(selectStatement.limit());
+    assertTrue(andFilter.getChildren().length == 2);
+    assertTrue(andFilter.getChildren()[0] instanceof BBox);
+    assertTrue(andFilter.getChildren()[1] instanceof During);
+    assertNull(selectStatement.getLimit());
   }
 
   @Test
   public void testAllColumnsWithFilterAndLimit() throws ParseException, IOException {
+    final DataStore dataStore = createDataStore();
     final String statement =
-        "SELECT * FROM store.type WHERE CQL(BBOX(geometry,27.20,41.30,27.30,41.20) and start during 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z) LIMIT 1";
-    final Statement gwStatement = GWQLParser.parseStatement(statement);
+        "SELECT * FROM type WHERE BBOX(geometry,27.20,41.30,27.30,41.20) and start during '2005-05-19T20:32:56Z/2005-05-19T21:32:56Z' LIMIT 1";
+    final Statement gwStatement = GWQLParser.parseStatement(dataStore, statement);
     assertTrue(gwStatement instanceof SelectStatement);
-    final SelectStatement selectStatement = (SelectStatement) gwStatement;
+    final SelectStatement<?> selectStatement = (SelectStatement<?>) gwStatement;
     assertFalse(selectStatement.isAggregation());
-    assertNotNull(selectStatement.typeName());
-    assertEquals("store", selectStatement.typeName().storeName());
-    assertEquals("type", selectStatement.typeName().typeName());
-    assertNotNull(selectStatement.filter());
-    Filter filter = selectStatement.filter();
+    assertNotNull(selectStatement.getAdapter());
+    assertEquals("type", selectStatement.getAdapter().getTypeName());
+    assertNotNull(selectStatement.getFilter());
+    Filter filter = selectStatement.getFilter();
     assertTrue(filter instanceof And);
     And andFilter = (And) filter;
-    assertTrue(andFilter.getChildren().size() == 2);
-    assertTrue(andFilter.getChildren().get(0) instanceof BBOX);
-    assertTrue(andFilter.getChildren().get(1) instanceof During);
-    assertNotNull(selectStatement.limit());
-    assertEquals(1, selectStatement.limit().intValue());
+    assertTrue(andFilter.getChildren().length == 2);
+    assertTrue(andFilter.getChildren()[0] instanceof BBox);
+    assertTrue(andFilter.getChildren()[1] instanceof During);
+    assertNotNull(selectStatement.getLimit());
+    assertEquals(1, selectStatement.getLimit().intValue());
   }
 
   @Test
   public void testAggregation() {
-    final String statement = "SELECT sum(a) FROM store.type";
-    final Statement gwStatement = GWQLParser.parseStatement(statement);
+    final DataStore dataStore = createDataStore();
+    final String statement = "SELECT sum(pop) FROM type";
+    final Statement gwStatement = GWQLParser.parseStatement(dataStore, statement);
     assertTrue(gwStatement instanceof SelectStatement);
-    final SelectStatement selectStatement = (SelectStatement) gwStatement;
+    final SelectStatement<?> selectStatement = (SelectStatement<?>) gwStatement;
     assertTrue(selectStatement.isAggregation());
-    assertNotNull(selectStatement.typeName());
-    assertEquals("store", selectStatement.typeName().storeName());
-    assertEquals("type", selectStatement.typeName().typeName());
-    assertNotNull(selectStatement.selectors());
-    assertTrue(selectStatement.selectors().size() == 1);
-    assertTrue(selectStatement.selectors().get(0) instanceof AggregationSelector);
-    AggregationSelector selector = (AggregationSelector) selectStatement.selectors().get(0);
+    assertNotNull(selectStatement.getAdapter());
+    assertEquals("type", selectStatement.getAdapter().getTypeName());
+    assertNotNull(selectStatement.getSelectors());
+    assertTrue(selectStatement.getSelectors().size() == 1);
+    assertTrue(selectStatement.getSelectors().get(0) instanceof AggregationSelector);
+    AggregationSelector selector = (AggregationSelector) selectStatement.getSelectors().get(0);
     assertNull(selector.alias());
     assertEquals("sum", selector.functionName());
     assertEquals(1, selector.functionArgs().length);
-    assertEquals("a", selector.functionArgs()[0]);
-    assertNull(selectStatement.filter());
+    assertEquals("pop", selector.functionArgs()[0]);
+    assertNull(selectStatement.getFilter());
   }
 
   @Test
   public void testAggregationAlias() {
-    final String statement = "SELECT sum(a) AS total FROM store.type";
-    final Statement gwStatement = GWQLParser.parseStatement(statement);
+    final DataStore dataStore = createDataStore();
+    final String statement = "SELECT sum(pop) AS total FROM type";
+    final Statement gwStatement = GWQLParser.parseStatement(dataStore, statement);
     assertTrue(gwStatement instanceof SelectStatement);
-    final SelectStatement selectStatement = (SelectStatement) gwStatement;
+    final SelectStatement<?> selectStatement = (SelectStatement<?>) gwStatement;
     assertTrue(selectStatement.isAggregation());
-    assertNotNull(selectStatement.typeName());
-    assertEquals("store", selectStatement.typeName().storeName());
-    assertEquals("type", selectStatement.typeName().typeName());
-    assertNotNull(selectStatement.selectors());
-    assertTrue(selectStatement.selectors().size() == 1);
-    assertTrue(selectStatement.selectors().get(0) instanceof AggregationSelector);
-    AggregationSelector selector = (AggregationSelector) selectStatement.selectors().get(0);
+    assertNotNull(selectStatement.getAdapter());
+    assertEquals("type", selectStatement.getAdapter().getTypeName());
+    assertNotNull(selectStatement.getSelectors());
+    assertTrue(selectStatement.getSelectors().size() == 1);
+    assertTrue(selectStatement.getSelectors().get(0) instanceof AggregationSelector);
+    AggregationSelector selector = (AggregationSelector) selectStatement.getSelectors().get(0);
     assertEquals("total", selector.alias());
     assertEquals("sum", selector.functionName());
     assertEquals(1, selector.functionArgs().length);
-    assertEquals("a", selector.functionArgs()[0]);
-    assertNull(selectStatement.filter());
+    assertEquals("pop", selector.functionArgs()[0]);
+    assertNull(selectStatement.getFilter());
   }
 
   @Test
   public void testColumnSubset() {
-    final String statement = "SELECT a, b, c FROM store.type";
-    final Statement gwStatement = GWQLParser.parseStatement(statement);
+    final DataStore dataStore = createDataStore();
+    final String statement = "SELECT pop, start, end FROM type";
+    final Statement gwStatement = GWQLParser.parseStatement(dataStore, statement);
     assertTrue(gwStatement instanceof SelectStatement);
-    final SelectStatement selectStatement = (SelectStatement) gwStatement;
+    final SelectStatement<?> selectStatement = (SelectStatement<?>) gwStatement;
     assertFalse(selectStatement.isAggregation());
-    assertNotNull(selectStatement.typeName());
-    assertEquals("store", selectStatement.typeName().storeName());
-    assertEquals("type", selectStatement.typeName().typeName());
-    assertNotNull(selectStatement.selectors());
-    assertTrue(selectStatement.selectors().size() == 3);
-    assertTrue(selectStatement.selectors().get(0) instanceof ColumnSelector);
-    ColumnSelector selector = (ColumnSelector) selectStatement.selectors().get(0);
+    assertNotNull(selectStatement.getAdapter());
+    assertEquals("type", selectStatement.getAdapter().getTypeName());
+    assertNotNull(selectStatement.getSelectors());
+    assertTrue(selectStatement.getSelectors().size() == 3);
+    assertTrue(selectStatement.getSelectors().get(0) instanceof ColumnSelector);
+    ColumnSelector selector = (ColumnSelector) selectStatement.getSelectors().get(0);
     assertNull(selector.alias());
-    assertEquals("a", selector.columnName());
-    assertTrue(selectStatement.selectors().get(1) instanceof ColumnSelector);
-    selector = (ColumnSelector) selectStatement.selectors().get(1);
+    assertEquals("pop", selector.columnName());
+    assertTrue(selectStatement.getSelectors().get(1) instanceof ColumnSelector);
+    selector = (ColumnSelector) selectStatement.getSelectors().get(1);
     assertNull(selector.alias());
-    assertEquals("b", selector.columnName());
-    assertTrue(selectStatement.selectors().get(2) instanceof ColumnSelector);
-    selector = (ColumnSelector) selectStatement.selectors().get(2);
+    assertEquals("start", selector.columnName());
+    assertTrue(selectStatement.getSelectors().get(2) instanceof ColumnSelector);
+    selector = (ColumnSelector) selectStatement.getSelectors().get(2);
     assertNull(selector.alias());
-    assertEquals("c", selector.columnName());
-    assertNull(selectStatement.filter());
+    assertEquals("end", selector.columnName());
+    assertNull(selectStatement.getFilter());
   }
 
   @Test
   public void testColumnSubsetWithAliases() {
-    final String statement = "SELECT a AS a_alt, b, c AS c_alt FROM store.type";
-    final Statement gwStatement = GWQLParser.parseStatement(statement);
+    final DataStore dataStore = createDataStore();
+    final String statement = "SELECT pop AS pop_alt, start, end AS end_alt FROM type";
+    final Statement gwStatement = GWQLParser.parseStatement(dataStore, statement);
     assertTrue(gwStatement instanceof SelectStatement);
-    final SelectStatement selectStatement = (SelectStatement) gwStatement;
+    final SelectStatement<?> selectStatement = (SelectStatement<?>) gwStatement;
     assertFalse(selectStatement.isAggregation());
-    assertNotNull(selectStatement.typeName());
-    assertEquals("store", selectStatement.typeName().storeName());
-    assertEquals("type", selectStatement.typeName().typeName());
-    assertNotNull(selectStatement.selectors());
-    assertTrue(selectStatement.selectors().size() == 3);
-    assertTrue(selectStatement.selectors().get(0) instanceof ColumnSelector);
-    ColumnSelector selector = (ColumnSelector) selectStatement.selectors().get(0);
-    assertEquals("a_alt", selector.alias());
-    assertEquals("a", selector.columnName());
-    assertTrue(selectStatement.selectors().get(1) instanceof ColumnSelector);
-    selector = (ColumnSelector) selectStatement.selectors().get(1);
+    assertNotNull(selectStatement.getAdapter());
+    assertEquals("type", selectStatement.getAdapter().getTypeName());
+    assertNotNull(selectStatement.getSelectors());
+    assertTrue(selectStatement.getSelectors().size() == 3);
+    assertTrue(selectStatement.getSelectors().get(0) instanceof ColumnSelector);
+    ColumnSelector selector = (ColumnSelector) selectStatement.getSelectors().get(0);
+    assertEquals("pop_alt", selector.alias());
+    assertEquals("pop", selector.columnName());
+    assertTrue(selectStatement.getSelectors().get(1) instanceof ColumnSelector);
+    selector = (ColumnSelector) selectStatement.getSelectors().get(1);
     assertNull(selector.alias());
-    assertEquals("b", selector.columnName());
-    assertTrue(selectStatement.selectors().get(2) instanceof ColumnSelector);
-    selector = (ColumnSelector) selectStatement.selectors().get(2);
-    assertEquals("c_alt", selector.alias());
-    assertEquals("c", selector.columnName());
-    assertNull(selectStatement.filter());
+    assertEquals("start", selector.columnName());
+    assertTrue(selectStatement.getSelectors().get(2) instanceof ColumnSelector);
+    selector = (ColumnSelector) selectStatement.getSelectors().get(2);
+    assertEquals("end_alt", selector.alias());
+    assertEquals("end", selector.columnName());
+    assertNull(selectStatement.getFilter());
   }
 
   @Test
   public void testUnconventionalNaming() {
-    final String statement = "SELECT [a-1], `b-2`, \"c-3\" FROM store.[ty-p3]";
-    final Statement gwStatement = GWQLParser.parseStatement(statement);
+    final DataStore dataStore =
+        createDataStore(
+            "ty-p3",
+            "geometry:Geometry:srid=4326,a-1:java.lang.Long,b-2:Date,c-3:Date,pid:String");
+    final String statement = "SELECT [a-1], `b-2`, \"c-3\" FROM [ty-p3]";
+    final Statement gwStatement = GWQLParser.parseStatement(dataStore, statement);
     assertTrue(gwStatement instanceof SelectStatement);
-    final SelectStatement selectStatement = (SelectStatement) gwStatement;
+    final SelectStatement<?> selectStatement = (SelectStatement<?>) gwStatement;
     assertFalse(selectStatement.isAggregation());
-    assertNotNull(selectStatement.typeName());
-    assertEquals("store", selectStatement.typeName().storeName());
-    assertEquals("ty-p3", selectStatement.typeName().typeName());
-    assertNotNull(selectStatement.selectors());
-    assertTrue(selectStatement.selectors().size() == 3);
-    assertTrue(selectStatement.selectors().get(0) instanceof ColumnSelector);
-    ColumnSelector selector = (ColumnSelector) selectStatement.selectors().get(0);
+    assertNotNull(selectStatement.getAdapter());
+    assertEquals("ty-p3", selectStatement.getAdapter().getTypeName());
+    assertNotNull(selectStatement.getSelectors());
+    assertTrue(selectStatement.getSelectors().size() == 3);
+    assertTrue(selectStatement.getSelectors().get(0) instanceof ColumnSelector);
+    ColumnSelector selector = (ColumnSelector) selectStatement.getSelectors().get(0);
     assertNull(selector.alias());
     assertEquals("a-1", selector.columnName());
-    assertTrue(selectStatement.selectors().get(1) instanceof ColumnSelector);
-    selector = (ColumnSelector) selectStatement.selectors().get(1);
+    assertTrue(selectStatement.getSelectors().get(1) instanceof ColumnSelector);
+    selector = (ColumnSelector) selectStatement.getSelectors().get(1);
     assertNull(selector.alias());
     assertEquals("b-2", selector.columnName());
-    assertTrue(selectStatement.selectors().get(2) instanceof ColumnSelector);
-    selector = (ColumnSelector) selectStatement.selectors().get(2);
+    assertTrue(selectStatement.getSelectors().get(2) instanceof ColumnSelector);
+    selector = (ColumnSelector) selectStatement.getSelectors().get(2);
     assertNull(selector.alias());
     assertEquals("c-3", selector.columnName());
-    assertNull(selectStatement.filter());
+    assertNull(selectStatement.getFilter());
   }
 }

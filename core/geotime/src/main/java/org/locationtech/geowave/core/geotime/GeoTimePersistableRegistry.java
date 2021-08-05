@@ -39,11 +39,11 @@ import org.locationtech.geowave.core.geotime.store.query.SpatialTemporalQuery;
 import org.locationtech.geowave.core.geotime.store.query.TemporalQuery;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.CommonIndexBoundingBoxAggregation;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.CommonIndexTimeRangeAggregation;
-import org.locationtech.geowave.core.geotime.store.query.aggregate.FieldNameParam;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.OptimalVectorBoundingBoxAggregation;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.OptimalVectorTimeRangeAggregation;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.SpatialCommonIndexedBinningStrategy;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.SpatialSimpleFeatureBinningStrategy;
+import org.locationtech.geowave.core.geotime.store.query.aggregate.SpatialFieldBinningStrategy;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.VectorBoundingBoxAggregation;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.VectorTimeRangeAggregation;
 import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter;
@@ -61,6 +61,7 @@ import org.locationtech.geowave.core.geotime.store.query.filter.expression.spati
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.Touches;
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.UnpreparedFilterGeometry;
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.Within;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.TextToSpatialExpression;
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.After;
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.Before;
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.BeforeOrDuring;
@@ -111,7 +112,7 @@ public class GeoTimePersistableRegistry implements
         new PersistableIdAndConstructor((short) 322, CustomCRSUnboundedSpatialDimensionY::new),
         new PersistableIdAndConstructor((short) 323, VectorTimeRangeAggregation::new),
         new PersistableIdAndConstructor((short) 324, CommonIndexTimeRangeAggregation::new),
-        new PersistableIdAndConstructor((short) 325, FieldNameParam::new),
+        new PersistableIdAndConstructor((short) 325, SpatialFieldBinningStrategy::new),
         new PersistableIdAndConstructor((short) 326, OptimalVectorTimeRangeAggregation::new),
         new PersistableIdAndConstructor((short) 327, VectorBoundingBoxAggregation::new),
         new PersistableIdAndConstructor((short) 328, CommonIndexBoundingBoxAggregation::new),
@@ -157,6 +158,7 @@ public class GeoTimePersistableRegistry implements
         new PersistableIdAndConstructor((short) 376, TemporalLiteral::new),
         new PersistableIdAndConstructor((short) 377, BBox::new),
         new PersistableIdAndConstructor((short) 378, TemporalEqualTo::new),
-        new PersistableIdAndConstructor((short) 379, TemporalNotEqualTo::new)};
+        new PersistableIdAndConstructor((short) 379, TemporalNotEqualTo::new),
+        new PersistableIdAndConstructor((short) 380, TextToSpatialExpression::new)};
   }
 }
