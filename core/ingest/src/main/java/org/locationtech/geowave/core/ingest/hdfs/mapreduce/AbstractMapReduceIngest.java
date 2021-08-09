@@ -89,7 +89,7 @@ public abstract class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 
   protected abstract String getIngestDescription();
 
-  protected static String[] getIndexNames(final Configuration conf) {
+  public static String[] getIndexNames(final Configuration conf) {
     final String primaryIndexNamesStr = conf.get(AbstractMapReduceIngest.INDEX_NAMES_KEY);
     if ((primaryIndexNamesStr != null) && !primaryIndexNamesStr.isEmpty()) {
       return primaryIndexNamesStr.split(",");

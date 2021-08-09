@@ -164,7 +164,8 @@ public class InternalAdapterStoreImpl implements InternalAdapterStore {
     // try to fit it into 1 byte first
     short adapterId = (short) (Math.abs((typeName.hashCode() % 127)));
     for (int i = 0; i < 127; i++) {
-      if (!internalAdapterIdExists(adapterId)) {
+      final String adapterIdTypeName = internalGetTypeName(adapterId, false);
+      if ((adapterIdTypeName == null) || typeName.equals(adapterIdTypeName)) {
         return adapterId;
       }
       adapterId++;
@@ -176,7 +177,8 @@ public class InternalAdapterStoreImpl implements InternalAdapterStore {
     // adapters)
     adapterId = (short) (Math.abs((typeName.hashCode() % 16383)));
     for (int i = 0; i < 16256; i++) {
-      if (!internalAdapterIdExists(adapterId)) {
+      final String adapterIdTypeName = internalGetTypeName(adapterId, false);
+      if ((adapterIdTypeName == null) || typeName.equals(adapterIdTypeName)) {
         return adapterId;
       }
       adapterId++;
@@ -189,7 +191,8 @@ public class InternalAdapterStoreImpl implements InternalAdapterStore {
     final int negativeRange = 0 - Short.MIN_VALUE;
     adapterId = (short) (Math.abs((typeName.hashCode() % negativeRange)) - Short.MIN_VALUE);
     for (int i = 0; i < negativeRange; i++) {
-      if (!internalAdapterIdExists(adapterId)) {
+      final String adapterIdTypeName = internalGetTypeName(adapterId, false);
+      if ((adapterIdTypeName == null) || typeName.equals(adapterIdTypeName)) {
         return adapterId;
       }
       adapterId++;
@@ -198,10 +201,6 @@ public class InternalAdapterStoreImpl implements InternalAdapterStore {
       }
     }
     return adapterId;
-  }
-
-  private boolean internalAdapterIdExists(final short internalAdapterId) {
-    return internalGetTypeName(internalAdapterId, false) != null;
   }
 
   // ** this introduces a distributed race condition if multiple JVM processes

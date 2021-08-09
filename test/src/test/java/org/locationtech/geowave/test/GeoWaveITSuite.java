@@ -18,12 +18,13 @@ import org.locationtech.geowave.test.basic.GeoWaveBasicCustomCRSRasterIT;
 import org.locationtech.geowave.test.basic.GeoWaveBasicRasterIT;
 import org.locationtech.geowave.test.basic.GeoWaveBasicSpatialTemporalVectorIT;
 import org.locationtech.geowave.test.basic.GeoWaveBasicTemporalVectorIT;
-import org.locationtech.geowave.test.basic.GeoWaveSpatialBinningAggregationIT;
-import org.locationtech.geowave.test.basic.GeoWaveSpatialBinningStatisticsIT;
 import org.locationtech.geowave.test.basic.GeoWaveCustomCRSSpatialVectorIT;
 import org.locationtech.geowave.test.basic.GeoWaveCustomIndexIT;
 import org.locationtech.geowave.test.basic.GeoWaveEnumIndexIT;
 import org.locationtech.geowave.test.basic.GeoWaveGeometryPrecisionIT;
+import org.locationtech.geowave.test.basic.GeoWaveMultiProcessIngestIT;
+import org.locationtech.geowave.test.basic.GeoWaveSpatialBinningAggregationIT;
+import org.locationtech.geowave.test.basic.GeoWaveSpatialBinningStatisticsIT;
 import org.locationtech.geowave.test.basic.GeoWaveStatisticsIT;
 import org.locationtech.geowave.test.basic.GeoWaveTextIndexIT;
 import org.locationtech.geowave.test.basic.GeoWaveVectorSerializationIT;
@@ -73,6 +74,7 @@ import org.locationtech.geowave.test.stability.GeoWaveStabilityIT;
     GeoWaveSpatialBinningAggregationIT.class,
     GeoWaveSpatialBinningStatisticsIT.class,
     GeoWaveGeometryPrecisionIT.class,
+    GeoWaveMultiProcessIngestIT.class,
     GeoWaveCustomIndexIT.class,
     GeoWaveDocumentationExamplesIT.class,
     GeoWaveStatisticsIT.class,

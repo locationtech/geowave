@@ -90,11 +90,7 @@ public class GeoWaveOutputFormat extends OutputFormat<GeoWaveOutputKey<Object>, 
           GeoWaveConfiguratorBase.getJobContextAdapterStore(CLASS, context);
       final IndexStore jobContextIndexStore =
           new JobContextIndexStore(context, persistentIndexStore);
-      return new GeoWaveRecordWriter(
-          context,
-          dataStore,
-          jobContextIndexStore,
-          jobContextAdapterStore);
+      return new GeoWaveRecordWriter(dataStore, jobContextIndexStore, jobContextAdapterStore);
     } catch (final Exception e) {
       throw new IOException(e);
     }
@@ -192,7 +188,6 @@ public class GeoWaveOutputFormat extends OutputFormat<GeoWaveOutputKey<Object>, 
     private final DataStore dataStore;
 
     public GeoWaveRecordWriter(
-        final TaskAttemptContext context,
         final DataStore dataStore,
         final IndexStore indexStore,
         final TransientAdapterStore adapterStore) {

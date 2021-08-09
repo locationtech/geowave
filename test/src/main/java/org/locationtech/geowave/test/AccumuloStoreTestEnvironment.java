@@ -57,7 +57,9 @@ public class AccumuloStoreTestEnvironment extends StoreTestEnvironment {
   private static final int NUM_TABLET_SERVERS = 2;
 
   protected static final String DEFAULT_MINI_ACCUMULO_PASSWORD = "Ge0wave";
-  // breaks on windows if temp directory isn't on same drive as project
+  // breaks on windows if temp directory isn't on same drive as project,
+  // also windows HDFS URLs have issues with any directory names that begin with 't'
+  // it interprets '/t' as the esape sequence for a tab
   protected static final File TEMP_DIR = new File("./target/accumulo_temp");
   protected String zookeeper;
   protected String accumuloInstance;
