@@ -248,17 +248,10 @@ public class BaseQueryOptions {
     if (nullId) {
       return new InternalDataAdapter[] {};
     }
-    final List<InternalDataAdapter<?>> list = new ArrayList<>();
     if (adapterStore != null) {
-      final CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters();
-      if (it != null) {
-        while (it.hasNext()) {
-          list.add(it.next());
-        }
-        it.close();
-      }
+      return adapterStore.getAdapters();
     }
-    return list.toArray(new InternalDataAdapter[list.size()]);
+    return new InternalDataAdapter[0];
   }
 
   public void setAdapterId(final Short adapterId) {
@@ -291,12 +284,7 @@ public class BaseQueryOptions {
         }
       }
     } else if (!nullId && ((adapters == null) || adapters.isEmpty())) {
-      adapters = new ArrayList<>();
-      try (CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters()) {
-        while (it.hasNext()) {
-          adapters.add(it.next());
-        }
-      }
+      adapters = Lists.newArrayList(adapterStore.getAdapters());
     } else if (adapters == null) {
       adapters = Collections.emptyList();
     }

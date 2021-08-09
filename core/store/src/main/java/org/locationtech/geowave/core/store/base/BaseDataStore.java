@@ -819,29 +819,27 @@ public class BaseDataStore implements DataStore {
   private Short[] getAdaptersForIndex(final String indexName) {
     final ArrayList<Short> markedAdapters = new ArrayList<>();
     // remove the given index for all types
-    try (final CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters()) {
+    final InternalDataAdapter<?>[] adapters = adapterStore.getAdapters();
 
-      while (it.hasNext()) {
-
-        final InternalDataAdapter<?> dataAdapter = it.next();
-        final AdapterToIndexMapping[] adapterIndexMap =
-            indexMappingStore.getIndicesForAdapter(dataAdapter.getAdapterId());
-        for (int i = 0; i < adapterIndexMap.length; i++) {
-          if (adapterIndexMap[i].getIndexName().equals(indexName)) {
-            // check if it is the only index for the current adapter
-            if (adapterIndexMap.length == 1) {
-              throw new IllegalStateException(
-                  "Index removal failed. Adapters require at least one index.");
-            } else {
-              // mark the index for removal
-              markedAdapters.add(dataAdapter.getAdapterId());
-            }
+    for (final InternalDataAdapter<?> dataAdapter : adapters) {
+      final AdapterToIndexMapping[] adapterIndexMap =
+          indexMappingStore.getIndicesForAdapter(dataAdapter.getAdapterId());
+      for (int i = 0; i < adapterIndexMap.length; i++) {
+        if (adapterIndexMap[i].getIndexName().equals(indexName)) {
+          // check if it is the only index for the current adapter
+          if (adapterIndexMap.length == 1) {
+            throw new IllegalStateException(
+                "Index removal failed. Adapters require at least one index.");
+          } else {
+            // mark the index for removal
+            markedAdapters.add(dataAdapter.getAdapterId());
           }
         }
       }
     }
-    final Short[] adapters = new Short[markedAdapters.size()];
-    return markedAdapters.toArray(adapters);
+
+    final Short[] adapterIds = new Short[markedAdapters.size()];
+    return markedAdapters.toArray(adapterIds);
   }
 
   public <T> boolean delete(
@@ -1198,11 +1196,8 @@ public class BaseDataStore implements DataStore {
    */
   @Override
   public DataTypeAdapter<?>[] getTypes() {
-    try (CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters()) {
-      return Iterators.toArray(
-          Iterators.transform(it, a -> (DataTypeAdapter<?>) a.getAdapter()),
-          DataTypeAdapter.class);
-    }
+    final InternalDataAdapter<?>[] adapters = adapterStore.getAdapters();
+    return adapters;
   }
 
   @Override
@@ -1603,37 +1598,35 @@ public class BaseDataStore implements DataStore {
           LOGGER.error("Unable to write metadata on copy", e);
         }
       }
-      try (CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters()) {
-        while (it.hasNext()) {
-          final InternalDataAdapter<?> adapter = it.next();
-          final AdapterToIndexMapping[] mappings =
-              indexMappingStore.getIndicesForAdapter(adapter.getAdapterId());
-          for (final AdapterToIndexMapping mapping : mappings) {
-            final Index index = mapping.getIndex(indexStore);
-            final boolean rowMerging = BaseDataStoreUtils.isRowMerging(adapter);
-            final ReaderParamsBuilder<GeoWaveRow> bldr =
-                new ReaderParamsBuilder<>(
-                    index,
-                    adapterStore,
-                    indexMappingStore,
-                    internalAdapterStore,
-                    rowMerging
-                        ? new GeoWaveRowMergingTransform(
-                            BaseDataStoreUtils.getRowMergingAdapter(adapter),
-                            adapter.getAdapterId())
-                        : GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER);
-            bldr.adapterIds(new short[] {adapter.getAdapterId()});
-            bldr.isClientsideRowMerging(rowMerging);
-            try (RowReader<GeoWaveRow> reader = baseOperations.createReader(bldr.build())) {
-              try (RowWriter writer =
-                  ((BaseDataStore) other).baseOperations.createWriter(index, adapter)) {
-                while (reader.hasNext()) {
-                  writer.write(reader.next());
-                }
+      final InternalDataAdapter<?>[] adapters = adapterStore.getAdapters();
+      for (final InternalDataAdapter<?> adapter : adapters) {
+        final AdapterToIndexMapping[] mappings =
+            indexMappingStore.getIndicesForAdapter(adapter.getAdapterId());
+        for (final AdapterToIndexMapping mapping : mappings) {
+          final Index index = mapping.getIndex(indexStore);
+          final boolean rowMerging = BaseDataStoreUtils.isRowMerging(adapter);
+          final ReaderParamsBuilder<GeoWaveRow> bldr =
+              new ReaderParamsBuilder<>(
+                  index,
+                  adapterStore,
+                  indexMappingStore,
+                  internalAdapterStore,
+                  rowMerging
+                      ? new GeoWaveRowMergingTransform(
+                          BaseDataStoreUtils.getRowMergingAdapter(adapter),
+                          adapter.getAdapterId())
+                      : GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER);
+          bldr.adapterIds(new short[] {adapter.getAdapterId()});
+          bldr.isClientsideRowMerging(rowMerging);
+          try (RowReader<GeoWaveRow> reader = baseOperations.createReader(bldr.build())) {
+            try (RowWriter writer =
+                ((BaseDataStore) other).baseOperations.createWriter(index, adapter)) {
+              while (reader.hasNext()) {
+                writer.write(reader.next());
               }
-            } catch (final Exception e) {
-              LOGGER.error("Unable to write metadata on copy", e);
             }
+          } catch (final Exception e) {
+            LOGGER.error("Unable to write metadata on copy", e);
           }
         }
       }
@@ -1848,26 +1841,23 @@ public class BaseDataStore implements DataStore {
       return;
     }
     final ArrayList<Short> markedAdapters = new ArrayList<>();
-    try (CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters()) {
-      while (it.hasNext()) {
-
-        final InternalDataAdapter<?> dataAdapter = it.next();
-        final AdapterToIndexMapping[] indexMappings =
-            indexMappingStore.getIndicesForAdapter(dataAdapter.getAdapterId());
-        for (int i = 0; i < indexMappings.length; i++) {
-          if (indexMappings[i].getIndexName().equals(indexName)
-              && !baseOptions.isSecondaryIndexing()) {
-            // check if it is the only index for the current adapter
-            if (indexMappings.length == 1) {
-              throw new IllegalStateException(
-                  "Index removal failed. Adapters require at least one index.");
-            } else {
-              // mark the index for removal and continue looking
-              // for
-              // others
-              markedAdapters.add(dataAdapter.getAdapterId());
-              continue;
-            }
+    final InternalDataAdapter<?>[] adapters = adapterStore.getAdapters();
+    for (final InternalDataAdapter<?> dataAdapter : adapters) {
+      final AdapterToIndexMapping[] indexMappings =
+          indexMappingStore.getIndicesForAdapter(dataAdapter.getAdapterId());
+      for (int i = 0; i < indexMappings.length; i++) {
+        if (indexMappings[i].getIndexName().equals(indexName)
+            && !baseOptions.isSecondaryIndexing()) {
+          // check if it is the only index for the current adapter
+          if (indexMappings.length == 1) {
+            throw new IllegalStateException(
+                "Index removal failed. Adapters require at least one index.");
+          } else {
+            // mark the index for removal and continue looking
+            // for
+            // others
+            markedAdapters.add(dataAdapter.getAdapterId());
+            continue;
           }
         }
       }
@@ -2091,17 +2081,14 @@ public class BaseDataStore implements DataStore {
     for (final Entry<Index, List<IndexStatistic<?>>> indexStats : indexStatsToAdd.entrySet()) {
       final Index index = indexStats.getKey();
       final ArrayList<Short> indexAdapters = new ArrayList<>();
-      try (CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters()) {
-        while (it.hasNext()) {
-
-          final InternalDataAdapter<?> dataAdapter = it.next();
-          final AdapterToIndexMapping[] adapterIndexMap =
-              indexMappingStore.getIndicesForAdapter(dataAdapter.getAdapterId());
-          for (int i = 0; i < adapterIndexMap.length; i++) {
-            if (adapterIndexMap[i].getIndexName().equals(index.getName())) {
-              indexAdapters.add(adapterIndexMap[i].getAdapterId());
-              break;
-            }
+      final InternalDataAdapter<?>[] adapters = adapterStore.getAdapters();
+      for (final InternalDataAdapter<?> dataAdapter : adapters) {
+        final AdapterToIndexMapping[] adapterIndexMap =
+            indexMappingStore.getIndicesForAdapter(dataAdapter.getAdapterId());
+        for (int i = 0; i < adapterIndexMap.length; i++) {
+          if (adapterIndexMap[i].getIndexName().equals(index.getName())) {
+            indexAdapters.add(adapterIndexMap[i].getAdapterId());
+            break;
           }
         }
       }

@@ -16,8 +16,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
-import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic.BoundingBoxValue;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic;
+import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic.BoundingBoxValue;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
@@ -99,58 +99,52 @@ public class GeoWaveSparkIngestIT extends AbstractGeoWaveBasicVectorIT {
 
     final DataStatisticsStore statsStore = dataStore.createDataStatisticsStore();
     final PersistentAdapterStore adapterStore = dataStore.createAdapterStore();
-    try (CloseableIterator<InternalDataAdapter<?>> adapterIterator = adapterStore.getAdapters()) {
-      while (adapterIterator.hasNext()) {
-        final InternalDataAdapter<?> internalDataAdapter = adapterIterator.next();
-        final FeatureDataAdapter adapter = (FeatureDataAdapter) internalDataAdapter.getAdapter();
+    final InternalDataAdapter<?>[] adapters = adapterStore.getAdapters();
+    for (final InternalDataAdapter<?> internalDataAdapter : adapters) {
+      final FeatureDataAdapter adapter = (FeatureDataAdapter) internalDataAdapter.getAdapter();
 
-        // query by the full bounding box, make sure there is more than
-        // 0 count and make sure the count matches the number of results
-        BoundingBoxValue bboxValue =
-            InternalStatisticsHelper.getFieldStatistic(
-                statsStore,
-                BoundingBoxStatistic.STATS_TYPE,
-                adapter.getTypeName(),
-                adapter.getFeatureType().getGeometryDescriptor().getLocalName());
+      // query by the full bounding box, make sure there is more than
+      // 0 count and make sure the count matches the number of results
+      final BoundingBoxValue bboxValue =
+          InternalStatisticsHelper.getFieldStatistic(
+              statsStore,
+              BoundingBoxStatistic.STATS_TYPE,
+              adapter.getTypeName(),
+              adapter.getFeatureType().getGeometryDescriptor().getLocalName());
 
-        CountValue count =
-            InternalStatisticsHelper.getDataTypeStatistic(
-                statsStore,
-                CountStatistic.STATS_TYPE,
-                adapter.getTypeName());
+      final CountValue count =
+          InternalStatisticsHelper.getDataTypeStatistic(
+              statsStore,
+              CountStatistic.STATS_TYPE,
+              adapter.getTypeName());
 
-        // then query it
-        final GeometryFactory factory = new GeometryFactory();
-        final Envelope env =
-            new Envelope(
-                bboxValue.getMinX(),
-                bboxValue.getMaxX(),
-                bboxValue.getMinY(),
-                bboxValue.getMaxY());
-        final Geometry spatialFilter = factory.toGeometry(env);
-        final QueryConstraints query = new ExplicitSpatialQuery(spatialFilter);
-        final int resultCount = testQuery(adapter, query);
-        assertTrue(
-            "'"
-                + adapter.getTypeName()
-                + "' adapter must have at least one element in its statistic",
-            count.getValue() > 0);
-        assertEquals(
-            "'"
-                + adapter.getTypeName()
-                + "' adapter should have the same results from a spatial query of '"
-                + env
-                + "' as its total count statistic",
-            count.getValue().intValue(),
-            resultCount);
+      // then query it
+      final GeometryFactory factory = new GeometryFactory();
+      final Envelope env =
+          new Envelope(
+              bboxValue.getMinX(),
+              bboxValue.getMaxX(),
+              bboxValue.getMinY(),
+              bboxValue.getMaxY());
+      final Geometry spatialFilter = factory.toGeometry(env);
+      final QueryConstraints query = new ExplicitSpatialQuery(spatialFilter);
+      final int resultCount = testQuery(adapter, query);
+      assertTrue(
+          "'" + adapter.getTypeName() + "' adapter must have at least one element in its statistic",
+          count.getValue() > 0);
+      assertEquals(
+          "'"
+              + adapter.getTypeName()
+              + "' adapter should have the same results from a spatial query of '"
+              + env
+              + "' as its total count statistic",
+          count.getValue().intValue(),
+          resultCount);
 
-        assertEquals(
-            "'"
-                + adapter.getTypeName()
-                + "' adapter entries ingested does not match expected count",
-            new Integer(GDELT_COUNT),
-            new Integer(resultCount));
-      }
+      assertEquals(
+          "'" + adapter.getTypeName() + "' adapter entries ingested does not match expected count",
+          new Integer(GDELT_COUNT),
+          new Integer(resultCount));
     }
     // Clean up
     TestUtils.deleteAll(dataStore);

@@ -119,55 +119,49 @@ public class BasicKafkaIT extends AbstractGeoWaveIT {
     final PersistentAdapterStore adapterStore = dataStorePluginOptions.createAdapterStore();
     int adapterCount = 0;
 
-    try (CloseableIterator<InternalDataAdapter<?>> adapterIterator = adapterStore.getAdapters()) {
-      while (adapterIterator.hasNext()) {
-        final InternalDataAdapter<?> internalDataAdapter = adapterIterator.next();
-        final FeatureDataAdapter adapter = (FeatureDataAdapter) internalDataAdapter.getAdapter();
-        BoundingBoxValue bboxValue =
-            InternalStatisticsHelper.getFieldStatistic(
-                statsStore,
-                BoundingBoxStatistic.STATS_TYPE,
-                adapter.getTypeName(),
-                adapter.getFeatureType().getGeometryDescriptor().getLocalName());
+    final InternalDataAdapter<?>[] adapters = adapterStore.getAdapters();
+    for (final InternalDataAdapter<?> internalDataAdapter : adapters) {
+      final FeatureDataAdapter adapter = (FeatureDataAdapter) internalDataAdapter.getAdapter();
+      final BoundingBoxValue bboxValue =
+          InternalStatisticsHelper.getFieldStatistic(
+              statsStore,
+              BoundingBoxStatistic.STATS_TYPE,
+              adapter.getTypeName(),
+              adapter.getFeatureType().getGeometryDescriptor().getLocalName());
 
-        CountValue count =
-            InternalStatisticsHelper.getDataTypeStatistic(
-                statsStore,
-                CountStatistic.STATS_TYPE,
-                adapter.getTypeName());
+      final CountValue count =
+          InternalStatisticsHelper.getDataTypeStatistic(
+              statsStore,
+              CountStatistic.STATS_TYPE,
+              adapter.getTypeName());
 
-        // then query it
-        final GeometryFactory factory = new GeometryFactory();
-        final Envelope env =
-            new Envelope(
-                bboxValue.getMinX(),
-                bboxValue.getMaxX(),
-                bboxValue.getMinY(),
-                bboxValue.getMaxY());
-        final Geometry spatialFilter = factory.toGeometry(env);
-        final QueryConstraints query = new ExplicitSpatialQuery(spatialFilter);
-        final int resultCount = testQuery(adapter, query);
-        assertTrue(
-            "'"
-                + adapter.getTypeName()
-                + "' adapter must have at least one element in its statistic",
-            count.getValue() > 0);
-        assertEquals(
-            "'"
-                + adapter.getTypeName()
-                + "' adapter should have the same results from a spatial query of '"
-                + env
-                + "' as its total count statistic",
-            count.getValue().intValue(),
-            resultCount);
-        assertEquals(
-            "'"
-                + adapter.getTypeName()
-                + "' adapter entries ingested does not match expected count",
-            EXPECTED_COUNT_PER_ADAPTER_ID.get(adapter.getTypeName()),
-            new Integer(resultCount));
-        adapterCount++;
-      }
+      // then query it
+      final GeometryFactory factory = new GeometryFactory();
+      final Envelope env =
+          new Envelope(
+              bboxValue.getMinX(),
+              bboxValue.getMaxX(),
+              bboxValue.getMinY(),
+              bboxValue.getMaxY());
+      final Geometry spatialFilter = factory.toGeometry(env);
+      final QueryConstraints query = new ExplicitSpatialQuery(spatialFilter);
+      final int resultCount = testQuery(adapter, query);
+      assertTrue(
+          "'" + adapter.getTypeName() + "' adapter must have at least one element in its statistic",
+          count.getValue() > 0);
+      assertEquals(
+          "'"
+              + adapter.getTypeName()
+              + "' adapter should have the same results from a spatial query of '"
+              + env
+              + "' as its total count statistic",
+          count.getValue().intValue(),
+          resultCount);
+      assertEquals(
+          "'" + adapter.getTypeName() + "' adapter entries ingested does not match expected count",
+          EXPECTED_COUNT_PER_ADAPTER_ID.get(adapter.getTypeName()),
+          new Integer(resultCount));
+      adapterCount++;
     }
     assertTrue("There should be exactly two adapters", (adapterCount == 2));
   }

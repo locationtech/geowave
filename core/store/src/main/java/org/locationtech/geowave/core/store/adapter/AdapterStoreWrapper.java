@@ -8,10 +8,8 @@
  */
 package org.locationtech.geowave.core.store.adapter;
 
-import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
+import java.util.Arrays;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
-import com.google.common.collect.Iterators;
 
 /**
  * Given a transient store and a internal adapter store to use to map between internal IDs and
@@ -56,9 +54,9 @@ public class AdapterStoreWrapper implements PersistentAdapterStore {
   }
 
   @Override
-  public CloseableIterator<InternalDataAdapter<?>> getAdapters() {
-    final CloseableIterator<DataTypeAdapter<?>> it = adapterStore.getAdapters();
-    return new CloseableIteratorWrapper<>(it, Iterators.transform(it, adapter -> {
+  public InternalDataAdapter<?>[] getAdapters() {
+    final DataTypeAdapter<?>[] adapters = adapterStore.getAdapters();
+    return Arrays.stream(adapters).map(adapter -> {
       if (adapter instanceof InternalDataAdapter) {
         return (InternalDataAdapter<?>) adapter;
       }
@@ -67,7 +65,7 @@ public class AdapterStoreWrapper implements PersistentAdapterStore {
         return null;
       }
       return adapter.asInternalAdapter(adapterId);
-    }));
+    }).toArray(InternalDataAdapter[]::new);
   }
 
   @Override

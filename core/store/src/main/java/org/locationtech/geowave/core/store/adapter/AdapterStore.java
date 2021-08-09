@@ -44,7 +44,7 @@ public interface AdapterStore<K, V extends DataTypeAdapter<?>> {
    *
    * @return an iterator over all of the adapters in this store
    */
-  public CloseableIterator<V> getAdapters();
+  public V[] getAdapters();
 
   public void removeAll();
 

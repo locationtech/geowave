@@ -16,7 +16,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -64,7 +63,6 @@ import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
-import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
@@ -243,30 +241,28 @@ public class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
 
   @Override
   public String[] getGridCoverageNames() {
-    try (final CloseableIterator<InternalDataAdapter<?>> it = geowaveAdapterStore.getAdapters()) {
-      final List<String> coverageNames = new ArrayList<>();
-      while (it.hasNext()) {
-        final DataTypeAdapter<?> adapter = it.next().getAdapter();
-        if (adapter instanceof RasterDataAdapter) {
-          coverageNames.add(((RasterDataAdapter) adapter).getCoverageName());
-        }
+    final InternalDataAdapter<?>[] adapters = geowaveAdapterStore.getAdapters();
+    final List<String> coverageNames = new ArrayList<>();
+    for (final InternalDataAdapter<?> internalAdapter : adapters) {
+      final DataTypeAdapter<?> adapter = internalAdapter.getAdapter();
+      if (adapter instanceof RasterDataAdapter) {
+        coverageNames.add(((RasterDataAdapter) adapter).getCoverageName());
       }
-      return coverageNames.toArray(new String[coverageNames.size()]);
     }
+    return coverageNames.toArray(new String[coverageNames.size()]);
   }
 
   @Override
   public int getGridCoverageCount() {
-    try (final CloseableIterator<InternalDataAdapter<?>> it = geowaveAdapterStore.getAdapters()) {
-      int coverageCount = 0;
-      while (it.hasNext()) {
-        final DataTypeAdapter<?> adapter = it.next().getAdapter();
-        if (adapter instanceof RasterDataAdapter) {
-          coverageCount++;
-        }
+    final InternalDataAdapter<?>[] adapters = geowaveAdapterStore.getAdapters();
+    int coverageCount = 0;
+    for (final InternalDataAdapter<?> internalAdapter : adapters) {
+      final DataTypeAdapter<?> adapter = internalAdapter.getAdapter();
+      if (adapter instanceof RasterDataAdapter) {
+        coverageCount++;
       }
-      return coverageCount;
     }
+    return coverageCount;
   }
 
   @Override

@@ -8,7 +8,7 @@
  */
 package org.locationtech.geowave.core.store.metadata;
 
-import java.util.List;
+import java.util.Set;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
@@ -22,6 +22,7 @@ import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.beust.jcommander.internal.Sets;
 import com.google.common.collect.Lists;
 
 /**
@@ -62,7 +63,7 @@ public class AdapterIndexMappingStoreImpl extends AbstractGeoWavePersistence<Ada
 
   @Override
   public AdapterToIndexMapping[] getIndicesForAdapter(final short adapterId) {
-    List<Object> indexMappings = Lists.newLinkedList();
+    final Set<Object> indexMappings = Sets.newHashSet();
     try (CloseableIterator<AdapterToIndexMapping> iter =
         super.internalGetObjects(
             new MetadataQuery(ByteArrayUtils.shortToByteArray(adapterId), null, false))) {
@@ -87,7 +88,6 @@ public class AdapterIndexMappingStoreImpl extends AbstractGeoWavePersistence<Ada
   public void addAdapterIndexMapping(final AdapterToIndexMapping mapping) {
     final ByteArray primaryId = getPrimaryId(mapping);
     final ByteArray secondaryId = getSecondaryId(mapping);
-
     if (objectExists(primaryId, secondaryId)) {
       LOGGER.info("Adapter to index mapping already existed, skipping add.");
     } else {

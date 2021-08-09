@@ -220,31 +220,29 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
       final PersistentAdapterStore adapterStore = getDataStorePluginOptions().createAdapterStore();
       long statisticsResult = 0;
       int duplicates = 0;
-      try (CloseableIterator<InternalDataAdapter<?>> adapterIt = adapterStore.getAdapters()) {
-        while (adapterIt.hasNext()) {
-          AggregationQueryBuilder<?, Long, ?, ?> aggBldr = AggregationQueryBuilder.newBuilder();
-          if (index != null) {
-            aggBldr = aggBldr.indexName(index.getName());
-          }
-          aggBldr = aggBldr.constraints(constraints);
-          final InternalDataAdapter<?> internalDataAdapter = adapterIt.next();
-          if (countDuplicates) {
-            aggBldr.aggregate(
-                internalDataAdapter.getTypeName(),
-                (Aggregation) new DuplicateCountAggregation());
-            final DuplicateCount countResult =
-                (DuplicateCount) geowaveStore.aggregate((AggregationQuery) aggBldr.build());
-            if (countResult != null) {
-              duplicates += countResult.count;
-            }
-          }
-          aggBldr.count(internalDataAdapter.getTypeName());
-          final Long countResult = geowaveStore.aggregate(aggBldr.build());
-          // results should already be aggregated, there should be
-          // exactly one value in this iterator
-          Assert.assertNotNull(countResult);
-          statisticsResult += countResult;
+      final InternalDataAdapter<?>[] adapters = adapterStore.getAdapters();
+      for (final InternalDataAdapter<?> internalDataAdapter : adapters) {
+        AggregationQueryBuilder<?, Long, ?, ?> aggBldr = AggregationQueryBuilder.newBuilder();
+        if (index != null) {
+          aggBldr = aggBldr.indexName(index.getName());
         }
+        aggBldr = aggBldr.constraints(constraints);
+        if (countDuplicates) {
+          aggBldr.aggregate(
+              internalDataAdapter.getTypeName(),
+              (Aggregation) new DuplicateCountAggregation());
+          final DuplicateCount countResult =
+              (DuplicateCount) geowaveStore.aggregate((AggregationQuery) aggBldr.build());
+          if (countResult != null) {
+            duplicates += countResult.count;
+          }
+        }
+        aggBldr.count(internalDataAdapter.getTypeName());
+        final Long countResult = geowaveStore.aggregate(aggBldr.build());
+        // results should already be aggregated, there should be
+        // exactly one value in this iterator
+        Assert.assertNotNull(countResult);
+        statisticsResult += countResult;
       }
 
       Assert.assertEquals(expectedResults.count, statisticsResult - duplicates);
@@ -425,17 +423,17 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
     // Retrieve the feature adapter for the CQL query generator
     final PersistentAdapterStore adapterStore = getDataStorePluginOptions().createAdapterStore();
 
-    try (CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters()) {
-      while (it.hasNext()) {
-        final InternalGeotoolsFeatureDataAdapter<SimpleFeature> adapter =
-            (InternalGeotoolsFeatureDataAdapter<SimpleFeature>) it.next();
+    final InternalDataAdapter<?>[] adapters = adapterStore.getAdapters();
+    for (final InternalDataAdapter<?> adapter : adapters) {
+      // Create the CQL query
+      final QueryConstraints query =
+          OptimalCQLQuery.createOptimalQuery(
+              cqlStr,
+              (InternalGeotoolsFeatureDataAdapter<SimpleFeature>) adapter,
+              null,
+              null);
 
-        // Create the CQL query
-        final QueryConstraints query =
-            OptimalCQLQuery.createOptimalQuery(cqlStr, adapter, null, null);
-
-        deleteInternal(geowaveStore, index, query);
-      }
+      deleteInternal(geowaveStore, index, query);
     }
   }
 
@@ -640,57 +638,55 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
     addStore.setPluginOptions(dataStoreOptions);
     addStore.execute(params);
     options.setBatchSize(10000);
-    try (CloseableIterator<InternalDataAdapter<?>> adapterIt = adapterStore.getAdapters()) {
-      while (adapterIt.hasNext()) {
-        final InternalDataAdapter<?> adapter = adapterIt.next();
-        options.setTypeNames(Lists.newArrayList(adapter.getTypeName()));
-        if ((adapter.getAdapter() instanceof GeotoolsFeatureDataAdapter)
-            && (filterGeometry != null)
-            && (startDate != null)
-            && (endDate != null)) {
-          final GeotoolsFeatureDataAdapter gtAdapter =
-              (GeotoolsFeatureDataAdapter) adapter.getAdapter();
-          final TimeDescriptors timeDesc = gtAdapter.getTimeDescriptors();
+    final InternalDataAdapter<?>[] adapters = adapterStore.getAdapters();
+    for (final InternalDataAdapter<?> adapter : adapters) {
+      options.setTypeNames(Lists.newArrayList(adapter.getTypeName()));
+      if ((adapter.getAdapter() instanceof GeotoolsFeatureDataAdapter)
+          && (filterGeometry != null)
+          && (startDate != null)
+          && (endDate != null)) {
+        final GeotoolsFeatureDataAdapter gtAdapter =
+            (GeotoolsFeatureDataAdapter) adapter.getAdapter();
+        final TimeDescriptors timeDesc = gtAdapter.getTimeDescriptors();
 
-          String startTimeAttribute;
-          if (timeDesc.getStartRange() != null) {
-            startTimeAttribute = timeDesc.getStartRange().getLocalName();
-          } else {
-            startTimeAttribute = timeDesc.getTime().getLocalName();
-          }
-          final String endTimeAttribute;
-          if (timeDesc.getEndRange() != null) {
-            endTimeAttribute = timeDesc.getEndRange().getLocalName();
-          } else {
-            endTimeAttribute = timeDesc.getTime().getLocalName();
-          }
-          final String geometryAttribute =
-              gtAdapter.getFeatureType().getGeometryDescriptor().getLocalName();
-
-          final Envelope env = filterGeometry.getEnvelopeInternal();
-          final double east = env.getMaxX();
-          final double west = env.getMinX();
-          final double south = env.getMinY();
-          final double north = env.getMaxY();
-          final String cqlPredicate =
-              String.format(
-                  "BBOX(\"%s\",%f,%f,%f,%f) AND \"%s\" <= '%s' AND \"%s\" >= '%s'",
-                  geometryAttribute,
-                  west,
-                  south,
-                  east,
-                  north,
-                  startTimeAttribute,
-                  CQL_DATE_FORMAT.format(endDate),
-                  endTimeAttribute,
-                  CQL_DATE_FORMAT.format(startDate));
-          options.setCqlFilter(cqlPredicate);
+        String startTimeAttribute;
+        if (timeDesc.getStartRange() != null) {
+          startTimeAttribute = timeDesc.getStartRange().getLocalName();
+        } else {
+          startTimeAttribute = timeDesc.getTime().getLocalName();
         }
+        final String endTimeAttribute;
+        if (timeDesc.getEndRange() != null) {
+          endTimeAttribute = timeDesc.getEndRange().getLocalName();
+        } else {
+          endTimeAttribute = timeDesc.getTime().getLocalName();
+        }
+        final String geometryAttribute =
+            gtAdapter.getFeatureType().getGeometryDescriptor().getLocalName();
 
-        options.setOutputFile(
-            new File(exportDir, adapter.getTypeName() + TEST_BASE_EXPORT_FILE_NAME));
-        exportCommand.execute(params);
+        final Envelope env = filterGeometry.getEnvelopeInternal();
+        final double east = env.getMaxX();
+        final double west = env.getMinX();
+        final double south = env.getMinY();
+        final double north = env.getMaxY();
+        final String cqlPredicate =
+            String.format(
+                "BBOX(\"%s\",%f,%f,%f,%f) AND \"%s\" <= '%s' AND \"%s\" >= '%s'",
+                geometryAttribute,
+                west,
+                south,
+                east,
+                north,
+                startTimeAttribute,
+                CQL_DATE_FORMAT.format(endDate),
+                endTimeAttribute,
+                CQL_DATE_FORMAT.format(startDate));
+        options.setCqlFilter(cqlPredicate);
       }
+
+      options.setOutputFile(
+          new File(exportDir, adapter.getTypeName() + TEST_BASE_EXPORT_FILE_NAME));
+      exportCommand.execute(params);
     }
     TestUtils.deleteAll(dataStoreOptions);
     return exportDir;
@@ -735,85 +731,84 @@ public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
     }
     final DataStatisticsStore statsStore = getDataStorePluginOptions().createDataStatisticsStore();
     final PersistentAdapterStore adapterStore = getDataStorePluginOptions().createAdapterStore();
-    try (CloseableIterator<InternalDataAdapter<?>> adapterIterator = adapterStore.getAdapters()) {
-      while (adapterIterator.hasNext()) {
-        final InternalDataAdapter<?> internalDataAdapter = adapterIterator.next();
-        final FeatureDataAdapter adapter = (FeatureDataAdapter) internalDataAdapter.getAdapter();
-        final StatisticsCache cachedValue = statsCache.get(adapter.getTypeName());
-        Assert.assertNotNull(cachedValue);
-        final Set<Entry<Statistic<?>, Map<ByteArray, StatisticValue<?>>>> expectedStats =
-            cachedValue.statsCache.entrySet();
-        int statsCount = 0;
-        try (CloseableIterator<? extends Statistic<? extends StatisticValue<?>>> statsIterator =
-            statsStore.getDataTypeStatistics(adapter, null, null)) {
-          while (statsIterator.hasNext()) {
-            statsIterator.next();
-            statsCount++;
-          }
+    final InternalDataAdapter<?>[] adapters = adapterStore.getAdapters();
+    for (final InternalDataAdapter<?> internalDataAdapter : adapters) {
+      final FeatureDataAdapter adapter = (FeatureDataAdapter) internalDataAdapter.getAdapter();
+      final StatisticsCache cachedValue = statsCache.get(adapter.getTypeName());
+      Assert.assertNotNull(cachedValue);
+      final Set<Entry<Statistic<?>, Map<ByteArray, StatisticValue<?>>>> expectedStats =
+          cachedValue.statsCache.entrySet();
+      int statsCount = 0;
+      try (CloseableIterator<? extends Statistic<? extends StatisticValue<?>>> statsIterator =
+          statsStore.getDataTypeStatistics(adapter, null, null)) {
+        while (statsIterator.hasNext()) {
+          statsIterator.next();
+          statsCount++;
         }
-        try (CloseableIterator<? extends Statistic<? extends StatisticValue<?>>> statsIterator =
-            statsStore.getFieldStatistics(adapter, null, null, null)) {
-          while (statsIterator.hasNext()) {
-            statsIterator.next();
-            statsCount++;
-          }
-        }
-        Assert.assertEquals(
-            "The number of stats for data adapter '"
-                + adapter.getTypeName()
-                + "' do not match count expected",
-            expectedStats.size(),
-            statsCount);
-        for (final Entry<Statistic<?>, Map<ByteArray, StatisticValue<?>>> expectedStat : expectedStats) {
-          for (final Entry<ByteArray, StatisticValue<?>> expectedValues : expectedStat.getValue().entrySet()) {
-            StatisticValue<Object> actual;
-            if (expectedValues.getKey().equals(StatisticValue.NO_BIN)) {
-              actual =
-                  statsStore.getStatisticValue(
-                      (Statistic<StatisticValue<Object>>) expectedStat.getKey());
-            } else {
-              actual =
-                  statsStore.getStatisticValue(
-                      (Statistic<StatisticValue<Object>>) expectedStat.getKey(),
-                      expectedValues.getKey());
-            }
-            assertEquals(expectedValues.getValue().getValue(), actual.getValue());
-          }
-        }
-        // finally check the one stat that is more manually calculated -
-        // the bounding box
-        StatisticQuery<BoundingBoxValue, Envelope> query =
-            StatisticQueryBuilder.newBuilder(BoundingBoxStatistic.STATS_TYPE).fieldName(
-                adapter.getFeatureType().getGeometryDescriptor().getLocalName()).typeName(
-                    adapter.getTypeName()).build();
-        BoundingBoxValue bboxStat =
-            getDataStorePluginOptions().createDataStore().aggregateStatistics(query);
-        validateBBox(bboxStat.getValue(), cachedValue);
-
-        // now make sure it works without giving field name because there is only one geometry field
-        // anyways
-        query =
-            StatisticQueryBuilder.newBuilder(BoundingBoxStatistic.STATS_TYPE).typeName(
-                adapter.getTypeName()).build();
-        bboxStat = getDataStorePluginOptions().createDataStore().aggregateStatistics(query);
-        validateBBox(bboxStat.getValue(), cachedValue);
-
-        final StatisticId<BoundingBoxValue> bboxStatId =
-            FieldStatistic.generateStatisticId(
-                adapter.getTypeName(),
-                BoundingBoxStatistic.STATS_TYPE,
-                adapter.getFeatureType().getGeometryDescriptor().getLocalName(),
-                Statistic.INTERNAL_TAG);
-
-        Assert.assertTrue(
-            "Unable to remove individual stat",
-            statsStore.removeStatistic(statsStore.getStatisticById(bboxStatId)));
-
-        Assert.assertNull(
-            "Individual stat was not successfully removed",
-            statsStore.getStatisticById(bboxStatId));
       }
+      try (CloseableIterator<? extends Statistic<? extends StatisticValue<?>>> statsIterator =
+          statsStore.getFieldStatistics(adapter, null, null, null)) {
+        while (statsIterator.hasNext()) {
+          statsIterator.next();
+          statsCount++;
+        }
+      }
+      Assert.assertEquals(
+          "The number of stats for data adapter '"
+              + adapter.getTypeName()
+              + "' do not match count expected",
+          expectedStats.size(),
+          statsCount);
+      for (final Entry<Statistic<?>, Map<ByteArray, StatisticValue<?>>> expectedStat : expectedStats) {
+        for (final Entry<ByteArray, StatisticValue<?>> expectedValues : expectedStat.getValue().entrySet()) {
+          StatisticValue<Object> actual;
+          if (expectedValues.getKey().equals(StatisticValue.NO_BIN)) {
+            actual =
+                statsStore.getStatisticValue(
+                    (Statistic<StatisticValue<Object>>) expectedStat.getKey());
+          } else {
+            actual =
+                statsStore.getStatisticValue(
+                    (Statistic<StatisticValue<Object>>) expectedStat.getKey(),
+                    expectedValues.getKey());
+          }
+          assertEquals(expectedValues.getValue().getValue(), actual.getValue());
+        }
+      }
+      // finally check the one stat that is more manually calculated -
+      // the bounding box
+      StatisticQuery<BoundingBoxValue, Envelope> query =
+          StatisticQueryBuilder.newBuilder(BoundingBoxStatistic.STATS_TYPE).fieldName(
+              adapter.getFeatureType().getGeometryDescriptor().getLocalName()).typeName(
+                  adapter.getTypeName()).build();
+      BoundingBoxValue bboxStat =
+          getDataStorePluginOptions().createDataStore().aggregateStatistics(query);
+      validateBBox(bboxStat.getValue(), cachedValue);
+
+      // now make sure it works without giving field name because there is only one geometry field
+      // anyways
+      query =
+          StatisticQueryBuilder.newBuilder(BoundingBoxStatistic.STATS_TYPE).typeName(
+              adapter.getTypeName()).build();
+      bboxStat = getDataStorePluginOptions().createDataStore().aggregateStatistics(query);
+      validateBBox(bboxStat.getValue(), cachedValue);
+
+      final StatisticId<BoundingBoxValue> bboxStatId =
+          FieldStatistic.generateStatisticId(
+              adapter.getTypeName(),
+              BoundingBoxStatistic.STATS_TYPE,
+              adapter.getFeatureType().getGeometryDescriptor().getLocalName(),
+              Statistic.INTERNAL_TAG);
+
+      Assert.assertTrue(
+          "Unable to remove individual stat",
+          statsStore.removeStatistic(statsStore.getStatisticById(bboxStatId)));
+
+      Assert.assertNull(
+          "Individual stat was not successfully removed",
+          statsStore.getStatisticById(bboxStatId));
     }
+
   }
 
   private static void validateBBox(final Envelope bboxStat, final StatisticsCache cachedValue) {

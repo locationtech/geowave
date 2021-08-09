@@ -215,12 +215,10 @@ public class GeoWaveGTDataStore extends ContentDataStore {
   @Override
   protected List<Name> createTypeNames() throws IOException {
     final List<Name> names = new ArrayList<>();
-    try (final CloseableIterator<InternalDataAdapter<?>> adapters = adapterStore.getAdapters()) {
-      while (adapters.hasNext()) {
-        final InternalDataAdapter<?> adapter = adapters.next();
-        if (adapter.getAdapter() instanceof GeotoolsFeatureDataAdapter) {
-          names.add(((GeotoolsFeatureDataAdapter) adapter.getAdapter()).getFeatureType().getName());
-        }
+    final InternalDataAdapter<?>[] adapters = adapterStore.getAdapters();
+    for (final InternalDataAdapter<?> adapter : adapters) {
+      if (adapter.getAdapter() instanceof GeotoolsFeatureDataAdapter) {
+        names.add(((GeotoolsFeatureDataAdapter) adapter.getAdapter()).getFeatureType().getName());
       }
     }
     return names;

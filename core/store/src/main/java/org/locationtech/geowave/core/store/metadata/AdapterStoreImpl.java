@@ -8,6 +8,8 @@
  */
 package org.locationtech.geowave.core.store.metadata;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -83,8 +85,16 @@ public class AdapterStoreImpl extends AbstractGeoWavePersistence<InternalDataAda
   }
 
   @Override
-  public CloseableIterator<InternalDataAdapter<?>> getAdapters() {
-    return getObjects();
+  public InternalDataAdapter<?>[] getAdapters() {
+    // use a map with the adapter ID as key to ensure only one adapter per unique ID
+    final Map<Short, InternalDataAdapter<?>> adapters = new HashMap<>();
+    try (CloseableIterator<InternalDataAdapter<?>> iter = getObjects()) {
+      while (iter.hasNext()) {
+        final InternalDataAdapter<?> adapter = iter.next();
+        adapters.put(adapter.getAdapterId(), adapter);
+      }
+    }
+    return adapters.values().toArray(new InternalDataAdapter[adapters.size()]);
   }
 
   @Override

@@ -10,7 +10,6 @@ package org.locationtech.geowave.core.store;
 
 import java.nio.ByteBuffer;
 import java.util.List;
-import org.apache.commons.collections.CollectionUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
@@ -33,7 +32,7 @@ public class AdapterToIndexMapping implements Persistable {
       final List<IndexFieldMapper<?, ?>> fieldMappers) {
     super();
     this.adapterId = adapterId;
-    this.indexName = index.getName();
+    indexName = index.getName();
     this.fieldMappers = fieldMappers;
   }
 
@@ -99,10 +98,7 @@ public class AdapterToIndexMapping implements Persistable {
     if (!indexName.equals(other.indexName)) {
       return false;
     }
-    if (fieldMappers == null || other.fieldMappers == null) {
-      return fieldMappers == null && other.fieldMappers == null;
-    }
-    return CollectionUtils.isEqualCollection(fieldMappers, other.fieldMappers);
+    return true;
   }
 
   @Override

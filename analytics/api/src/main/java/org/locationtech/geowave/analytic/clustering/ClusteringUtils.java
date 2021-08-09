@@ -71,16 +71,7 @@ public class ClusteringUtils {
 
     final AdapterStore adapterStore = store.getDataStoreOptions().createAdapterStore();
 
-    final org.locationtech.geowave.core.store.CloseableIterator<DataTypeAdapter<?>> it =
-        adapterStore.getAdapters();
-    final List<DataTypeAdapter> adapters = new LinkedList<>();
-    while (it.hasNext()) {
-      adapters.add(it.next());
-    }
-    it.close();
-    final DataTypeAdapter[] result = new DataTypeAdapter[adapters.size()];
-    adapters.toArray(result);
-    return result;
+    return adapterStore.getAdapters();
   }
 
   public static Index[] getIndices(final PropertyManagement propertyManagement) {

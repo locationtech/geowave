@@ -10,7 +10,6 @@ package org.locationtech.geowave.analytic;
 
 import java.io.IOException;
 import java.io.Serializable;
-import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.slf4j.Logger;
@@ -60,7 +59,7 @@ public class SerializableAdapterStore implements TransientAdapterStore, Serializ
   }
 
   @Override
-  public CloseableIterator<DataTypeAdapter<?>> getAdapters() {
+  public DataTypeAdapter<?>[] getAdapters() {
     return getAdapterStore().getAdapters();
   }
 

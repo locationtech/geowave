@@ -125,8 +125,8 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                profile: [redis-it, rocksdb-it, accumulo-it-client, accumulo-it-server, hbase-it-client, hbase-it-server, cassandra-it, dynamodb-it, bigtable-it, kudu-it, filesystem-it, accumulo-it-kerberos, 'filesystem-it,secondary-index-it', 'rocksdb-it,secondary-index-it'
-                #, 'accumulo-it-kerberos,compatibility', 'accumulo-it-server,compatibility'
+                profile: [redis-it, rocksdb-it, accumulo-it-client, accumulo-it-server, hbase-it-client, hbase-it-server, cassandra-it, dynamodb-it, bigtable-it, kudu-it, filesystem-it, accumulo-it-kerberos, 'filesystem-it,secondary-index-it', 'rocksdb-it,secondary-index-it', 'accumulo-it-server,compatibility','hbase-it-server,secondary-index-it','hbase-it-server,secondary-index-it'
+                #, 'accumulo-it-kerberos,compatibility'
                 ]
                 ## for now kerberos test environment isn't quite working, skip the kerberos tests until the issue is resolved
                 #include:
