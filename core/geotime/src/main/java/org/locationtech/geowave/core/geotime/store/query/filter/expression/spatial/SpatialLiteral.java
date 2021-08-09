@@ -16,10 +16,13 @@ import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.query.filter.expression.Expression;
 import org.locationtech.geowave.core.store.query.filter.expression.InvalidFilterException;
 import org.locationtech.geowave.core.store.query.filter.expression.Literal;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKTReader;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
@@ -78,6 +81,12 @@ public class SpatialLiteral extends Literal<FilterGeometry> implements SpatialEx
       geometry = (Geometry) literal;
     } else if (literal instanceof Envelope) {
       geometry = GeometryUtils.GEOMETRY_FACTORY.toGeometry((Envelope) literal);
+    } else if (literal instanceof String) {
+      try {
+        geometry = new WKTReader().read((String) literal);
+      } catch (ParseException e) {
+        throw new InvalidFilterException("Unable to parse well-known text geometry", e);
+      }
     } else {
       throw new InvalidFilterException("Invalid spatial literal: " + literal.getClass().getName());
     }
@@ -94,7 +103,16 @@ public class SpatialLiteral extends Literal<FilterGeometry> implements SpatialEx
     return of(literal, crs);
   }
 
-  public static SpatialLiteral of(final Object literal, final CoordinateReferenceSystem crs) {
+  public static SpatialLiteral of(Object literal, final CoordinateReferenceSystem crs) {
+    if (literal == null) {
+      return new SpatialLiteral(null);
+    }
+    if (literal instanceof SpatialLiteral) {
+      return (SpatialLiteral) literal;
+    }
+    if (literal instanceof Expression && ((Expression<?>) literal).isLiteral()) {
+      literal = ((Expression<?>) literal).evaluateValue(null);
+    }
     return new SpatialLiteral(toGeometry(literal), crs);
   }
 

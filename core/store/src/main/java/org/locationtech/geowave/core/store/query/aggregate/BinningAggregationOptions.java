@@ -37,7 +37,7 @@ public class BinningAggregationOptions<P extends Persistable, T> implements Pers
    * The baseBytes should contain all the parameters needed to finish instantiating the base
    * aggregation that constitutes this meta-aggregation.
    */
-  P baseParams;
+  byte[] baseParamBytes;
 
   /**
    * The strategy that we use to bin entries with.
@@ -53,24 +53,23 @@ public class BinningAggregationOptions<P extends Persistable, T> implements Pers
 
   public BinningAggregationOptions(
       final byte[] baseBytes,
-      final P baseParams,
+      final byte[] baseParamBytes,
       final BinningStrategy binningStrategy,
       final int maxBins) {
     this.baseBytes = baseBytes;
-    this.baseParams = baseParams;
+    this.baseParamBytes = baseParamBytes;
     this.binningStrategy = binningStrategy;
     this.maxBins = maxBins;
   }
 
   @Override
   public byte[] toBinary() {
-    final byte[] paramsBytes = PersistenceUtils.toBinary(this.baseParams);
     final byte[] strategyBytes = PersistenceUtils.toBinary(this.binningStrategy);
+    final byte[] baseParams = baseParamBytes == null ? new byte[0] : baseParamBytes;
     return ByteBuffer.allocate(
-        16 + this.baseBytes.length + paramsBytes.length + strategyBytes.length).putInt(
-            this.baseBytes.length).put(this.baseBytes).putInt(paramsBytes.length).put(
-                paramsBytes).putInt(strategyBytes.length).put(strategyBytes).putInt(
-                    maxBins).array();
+        16 + this.baseBytes.length + baseParams.length + strategyBytes.length).putInt(
+            this.baseBytes.length).put(this.baseBytes).putInt(baseParams.length).put(
+                baseParams).putInt(strategyBytes.length).put(strategyBytes).putInt(maxBins).array();
   }
 
   @Override
@@ -84,8 +83,12 @@ public class BinningAggregationOptions<P extends Persistable, T> implements Pers
 
     final int paramsBytesLen = bb.getInt();
     final byte[] paramsBytes = new byte[paramsBytesLen];
-    bb.get(paramsBytes);
-    this.baseParams = (P) PersistenceUtils.fromBinary(paramsBytes);
+    if (paramsBytes.length > 0) {
+      bb.get(paramsBytes);
+      this.baseParamBytes = paramsBytes;
+    } else {
+      this.baseParamBytes = null;
+    }
 
     final int strategyBytesLen = bb.getInt();
     final byte[] strategyBytes = new byte[strategyBytesLen];

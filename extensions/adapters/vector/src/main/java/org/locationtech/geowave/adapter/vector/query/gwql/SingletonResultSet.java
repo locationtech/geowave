@@ -10,8 +10,6 @@ package org.locationtech.geowave.adapter.vector.query.gwql;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import org.geotools.referencing.crs.DefaultGeographicCRS;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * A result set that wraps a single result.
@@ -68,11 +66,6 @@ public class SingletonResultSet implements ResultSet {
   @Override
   public Class<?> columnType(int index) {
     return columnTypes.get(index);
-  }
-
-  @Override
-  public CoordinateReferenceSystem getCRS() {
-    return DefaultGeographicCRS.WGS84;
   }
 
 }

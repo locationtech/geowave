@@ -9,13 +9,17 @@
 package org.locationtech.geowave.core.store.query.aggregate;
 
 import org.locationtech.geowave.core.index.persist.Persistable;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 
 public interface AdapterAndIndexBasedAggregation<P extends Persistable, R, T> extends
     Aggregation<P, R, T> {
-  Aggregation<P, R, T> createAggregation(DataTypeAdapter<T> adapter, Index index);
+  Aggregation<P, R, ?> createAggregation(
+      DataTypeAdapter<T> adapter,
+      AdapterToIndexMapping indexMapping,
+      Index index);
 
   @Override
   default byte[] toBinary() {

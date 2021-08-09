@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.geotime.binning.SpatialBinningType;
 import org.locationtech.geowave.core.geotime.store.dimension.SpatialField;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.jts.geom.Geometry;
@@ -24,7 +25,7 @@ import org.locationtech.jts.geom.Geometry;
 public class SpatialCommonIndexedBinningStrategy extends
     SpatialBinningStrategy<CommonIndexedPersistenceEncoding> {
 
-  private String geometryFieldName;
+
 
   /**
    * Create a binning strategy using a small number of bins. Usage of this method is not
@@ -57,12 +58,13 @@ public class SpatialCommonIndexedBinningStrategy extends
       final int precision,
       final boolean useCentroidOnly,
       final String geometryFieldName) {
-    super(type, precision, useCentroidOnly);
-    this.geometryFieldName = geometryFieldName;
+    super(type, precision, useCentroidOnly, geometryFieldName);
   }
 
   @Override
-  public Geometry getGeometry(final CommonIndexedPersistenceEncoding entry) {
+  public Geometry getGeometry(
+      final DataTypeAdapter<CommonIndexedPersistenceEncoding> adapter,
+      final CommonIndexedPersistenceEncoding entry) {
     final PersistentDataset<Object> data = entry.getCommonData();
     final Object geometryValue = data.getValue(geometryFieldName);
     if (geometryValue instanceof Geometry) {

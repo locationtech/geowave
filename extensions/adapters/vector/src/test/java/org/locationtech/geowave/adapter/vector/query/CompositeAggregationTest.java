@@ -16,30 +16,30 @@ import java.util.Map;
 import java.util.Map.Entry;
 import org.junit.Test;
 import org.locationtech.geowave.adapter.vector.query.aggregation.CompositeVectorAggregation;
-import org.locationtech.geowave.adapter.vector.query.aggregation.VectorCountAggregation;
 import org.locationtech.geowave.core.geotime.binning.SpatialBinningType;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.AbstractVectorAggregationTest;
-import org.locationtech.geowave.core.geotime.store.query.aggregate.FieldNameParam;
-import org.locationtech.geowave.core.geotime.store.query.aggregate.SpatialSimpleFeatureBinningStrategy;
+import org.locationtech.geowave.core.geotime.store.query.aggregate.SpatialFieldBinningStrategy;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.persist.PersistableList;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.query.aggregate.BinningAggregation;
 import org.locationtech.geowave.core.store.query.aggregate.BinningAggregationOptions;
-import org.opengis.feature.simple.SimpleFeature;
+import org.locationtech.geowave.core.store.query.aggregate.FieldNameParam;
+import org.locationtech.geowave.core.store.query.aggregate.OptimalCountAggregation.FieldCountAggregation;
 
 public class CompositeAggregationTest extends AbstractVectorAggregationTest {
 
   @Test
   public void testCompositeAggregation() {
-    final List<SimpleFeature> features = generateFeatures();
-    final CompositeVectorAggregation aggregation = new CompositeVectorAggregation();
-    aggregation.add(new VectorCountAggregation(null));
-    aggregation.add(new VectorCountAggregation(new FieldNameParam(GEOMETRY_COLUMN)));
-    aggregation.add(new VectorCountAggregation(new FieldNameParam(ALL_NULL_COLUMN)));
-    aggregation.add(new VectorCountAggregation(new FieldNameParam(ODDS_NULL_COLUMN)));
+    final List<SpatialTestType> features = generateFeatures();
+    final CompositeVectorAggregation<SpatialTestType> aggregation =
+        new CompositeVectorAggregation<>();
+    aggregation.add(new FieldCountAggregation<>(null));
+    aggregation.add(new FieldCountAggregation<>(new FieldNameParam(GEOMETRY_COLUMN)));
+    aggregation.add(new FieldCountAggregation<>(new FieldNameParam(ALL_NULL_COLUMN)));
+    aggregation.add(new FieldCountAggregation<>(new FieldNameParam(ODDS_NULL_COLUMN)));
 
-    final List<Object> result = aggregateObjects(aggregation, features);
+    final List<Object> result = aggregateObjects(adapter, aggregation, features);
     assertEquals(4, result.size());
     assertTrue(result.get(0) instanceof Long);
     assertEquals(Long.valueOf(features.size()), result.get(0));
@@ -53,27 +53,28 @@ public class CompositeAggregationTest extends AbstractVectorAggregationTest {
 
   @Test
   public void testCompositeAggregationWithBinning() {
-    final List<SimpleFeature> features = generateFeatures();
-    final CompositeVectorAggregation compositeAggregation = new CompositeVectorAggregation();
-    compositeAggregation.add(new VectorCountAggregation(null));
-    compositeAggregation.add(new VectorCountAggregation(new FieldNameParam(GEOMETRY_COLUMN)));
-    compositeAggregation.add(new VectorCountAggregation(new FieldNameParam(ALL_NULL_COLUMN)));
-    compositeAggregation.add(new VectorCountAggregation(new FieldNameParam(ODDS_NULL_COLUMN)));
-    final Aggregation<BinningAggregationOptions<PersistableList, SimpleFeature>, Map<ByteArray, List<Object>>, SimpleFeature> compositeBinningAggregation =
+    final List<SpatialTestType> features = generateFeatures();
+    final CompositeVectorAggregation<SpatialTestType> compositeAggregation =
+        new CompositeVectorAggregation<>();
+    compositeAggregation.add(new FieldCountAggregation<>(null));
+    compositeAggregation.add(new FieldCountAggregation<>(new FieldNameParam(GEOMETRY_COLUMN)));
+    compositeAggregation.add(new FieldCountAggregation<>(new FieldNameParam(ALL_NULL_COLUMN)));
+    compositeAggregation.add(new FieldCountAggregation<>(new FieldNameParam(ODDS_NULL_COLUMN)));
+    final Aggregation<BinningAggregationOptions<PersistableList, SpatialTestType>, Map<ByteArray, List<Object>>, SpatialTestType> compositeBinningAggregation =
         new BinningAggregation<>(
             compositeAggregation,
-            new SpatialSimpleFeatureBinningStrategy(SpatialBinningType.S2, 4, true),
+            new SpatialFieldBinningStrategy<>(SpatialBinningType.S2, 4, true, GEOMETRY_COLUMN),
             -1);
-    final Aggregation<BinningAggregationOptions<FieldNameParam, SimpleFeature>, Map<ByteArray, Long>, SimpleFeature> simpleBinningAggregation =
+    final Aggregation<BinningAggregationOptions<FieldNameParam, SpatialTestType>, Map<ByteArray, Long>, SpatialTestType> simpleBinningAggregation =
         new BinningAggregation<>(
-            new VectorCountAggregation(new FieldNameParam(GEOMETRY_COLUMN)),
-            new SpatialSimpleFeatureBinningStrategy(SpatialBinningType.S2, 4, true),
+            new FieldCountAggregation<>(new FieldNameParam(GEOMETRY_COLUMN)),
+            new SpatialFieldBinningStrategy<>(SpatialBinningType.S2, 4, true, GEOMETRY_COLUMN),
             -1);
     final Map<ByteArray, List<Object>> compositeBinningResult =
-        aggregateObjects(compositeBinningAggregation, features);
+        aggregateObjects(adapter, compositeBinningAggregation, features);
     final Map<ByteArray, Long> simpleBinningResult =
-        aggregateObjects(simpleBinningAggregation, features);
-    final List<Object> compositeResult = aggregateObjects(compositeAggregation, features);
+        aggregateObjects(adapter, simpleBinningAggregation, features);
+    final List<Object> compositeResult = aggregateObjects(adapter, compositeAggregation, features);
 
     // first make sure each key for simple binning match the count of the corresponding composite
     // binning field

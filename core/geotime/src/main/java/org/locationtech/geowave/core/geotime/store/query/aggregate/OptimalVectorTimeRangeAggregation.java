@@ -13,6 +13,7 @@ import org.locationtech.geowave.core.geotime.util.IndexOptimizationUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.query.aggregate.FieldNameParam;
 import org.threeten.extra.Interval;
 
 public class OptimalVectorTimeRangeAggregation<P extends Persistable, T> extends

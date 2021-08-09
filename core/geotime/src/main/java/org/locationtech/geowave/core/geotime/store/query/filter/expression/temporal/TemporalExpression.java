@@ -8,14 +8,33 @@
  */
 package org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import org.locationtech.geowave.core.geotime.util.TimeUtils;
 import org.locationtech.geowave.core.store.query.filter.expression.ComparableExpression;
+import org.locationtech.geowave.core.store.query.filter.expression.FieldValue;
 import org.locationtech.geowave.core.store.query.filter.expression.Predicate;
+import org.locationtech.geowave.core.store.query.filter.expression.numeric.NumericFieldValue;
+import org.locationtech.geowave.core.store.query.filter.expression.text.TextFieldValue;
 import org.threeten.extra.Interval;
 
 /**
  * Interface for expressions that resolve to temporal objects.
  */
 public interface TemporalExpression extends ComparableExpression<Interval> {
+
+  // SimpleDateFormat is not thread safe
+  public static final ThreadLocal<SimpleDateFormat[]> SUPPORTED_DATE_FORMATS =
+      new ThreadLocal<SimpleDateFormat[]>() {
+        @Override
+        protected SimpleDateFormat[] initialValue() {
+          return new SimpleDateFormat[] {
+              new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ"),
+              new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'"),
+              new SimpleDateFormat("yyyy-MM-dd")};
+        }
+      };
 
   /**
    * Create a predicate that tests to see if this expression is equal to the provided object. The
@@ -207,6 +226,40 @@ public interface TemporalExpression extends ComparableExpression<Interval> {
     if (obj instanceof TemporalExpression) {
       return (TemporalExpression) obj;
     }
+    if (obj instanceof NumericFieldValue || obj instanceof TextFieldValue) {
+      // Numeric and text field values could be interpreted as time if needed
+      // e.g. dateField AFTER timestamp
+      return TemporalFieldValue.of(((FieldValue<?>) obj).getFieldName());
+    }
     return TemporalLiteral.of(obj);
+  }
+
+  public static Date stringToDate(final String dateStr) {
+    for (final SimpleDateFormat format : SUPPORTED_DATE_FORMATS.get()) {
+      try {
+        return format.parse(dateStr);
+      } catch (ParseException e) {
+        // Did not match date format
+      }
+    }
+    return null;
+  }
+
+  public static Interval stringToInterval(final String intervalStr) {
+    // 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z
+    if (intervalStr.contains("/")) {
+      final String[] split = intervalStr.split("/");
+      if (split.length == 2) {
+        final Date date1 = stringToDate(split[0]);
+        if (date1 != null) {
+          final Date date2 = stringToDate(split[1]);
+          if (date2 != null) {
+            return TimeUtils.getInterval(date1, date2);
+          }
+        }
+      }
+      return null;
+    }
+    return TimeUtils.getInterval(stringToDate(intervalStr));
   }
 }

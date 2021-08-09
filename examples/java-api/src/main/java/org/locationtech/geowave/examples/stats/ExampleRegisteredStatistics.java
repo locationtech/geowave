@@ -30,8 +30,8 @@ public class ExampleRegisteredStatistics implements StatisticsRegistrySPI {
             WordCountStatistic.STATS_TYPE,
             WordCountStatistic::new,
             WordCountValue::new,
-            (short) 3000,
-            (short) 3001),};
+            (short) 20100,
+            (short) 20101),};
   }
 
   @Override

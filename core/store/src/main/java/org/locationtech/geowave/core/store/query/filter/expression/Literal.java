@@ -57,7 +57,7 @@ public abstract class Literal<V> implements Expression<V> {
 
   @Override
   public String toString() {
-    return literal.toString();
+    return literal == null ? "null" : literal.toString();
   }
 
   @SuppressWarnings("unchecked")

@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.geotime.store.query.aggregate;
 
 import org.locationtech.geowave.core.geotime.binning.SpatialBinningType;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 
@@ -39,11 +40,13 @@ public class SpatialSimpleFeatureBinningStrategy extends SpatialBinningStrategy<
       final SpatialBinningType type,
       final int precision,
       final boolean useCentroidOnly) {
-    super(type, precision, useCentroidOnly);
+    super(type, precision, useCentroidOnly, null);
   }
 
   @Override
-  public Geometry getGeometry(final SimpleFeature entry) {
+  public Geometry getGeometry(
+      final DataTypeAdapter<SimpleFeature> adapter,
+      final SimpleFeature entry) {
     return (Geometry) entry.getDefaultGeometry();
   }
 }

@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import org.locationtech.geowave.core.geotime.binning.ComplexGeometryBinningOption;
 import org.locationtech.geowave.core.geotime.binning.SpatialBinningType;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.api.BinningStrategy;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
@@ -27,6 +28,8 @@ import org.locationtech.jts.geom.Point;
  *        geometry is used as the bin.
  */
 public abstract class SpatialBinningStrategy<T> implements BinningStrategy {
+
+  protected String geometryFieldName;
 
   /**
    * The precision/resolution/length used by the binning strategy (it usually is equivalent to
@@ -47,11 +50,13 @@ public abstract class SpatialBinningStrategy<T> implements BinningStrategy {
    * @param useCentroidOnly for complex geometry such as lines and polygons whether to just
    *        aggregate one hash value based on the centroid or to apply the aggregation to all
    *        overlapping centroids
+   * @param geometryFieldName the field name for the geometry to bin by
    */
   public SpatialBinningStrategy(
       final SpatialBinningType type,
       final int precision,
-      final boolean useCentroidOnly) {
+      final boolean useCentroidOnly,
+      final String geometryFieldName) {
     this.type = type;
     this.precision = precision;
     // for now scaling by weight isn't wired into aggregations so don't expose that option through
@@ -59,6 +64,7 @@ public abstract class SpatialBinningStrategy<T> implements BinningStrategy {
     this.complexGeometryBinning =
         useCentroidOnly ? ComplexGeometryBinningOption.USE_CENTROID_ONLY
             : ComplexGeometryBinningOption.USE_FULL_GEOMETRY;
+    this.geometryFieldName = geometryFieldName;
   }
 
   /**
@@ -67,7 +73,7 @@ public abstract class SpatialBinningStrategy<T> implements BinningStrategy {
    * @param entry The entry that will be binned using this strategy.
    * @return The geometry object in the entry, or null if no geometry is found.
    */
-  abstract Geometry getGeometry(T entry);
+  abstract Geometry getGeometry(final DataTypeAdapter<T> adapter, T entry);
 
   /**
    * @return The precision that is used when calculating bins for entries.
@@ -89,7 +95,7 @@ public abstract class SpatialBinningStrategy<T> implements BinningStrategy {
       final DataTypeAdapter<I> adapter,
       final I entry,
       final GeoWaveRow... rows) {
-    final Geometry geometry = this.getGeometry((T) entry);
+    final Geometry geometry = getGeometry((DataTypeAdapter<T>) adapter, (T) entry);
     if (geometry == null) {
       return null;
     }
@@ -102,14 +108,20 @@ public abstract class SpatialBinningStrategy<T> implements BinningStrategy {
 
   @Override
   public byte[] toBinary() {
+    final byte[] fieldNameBytes =
+        geometryFieldName == null ? new byte[0] : StringUtils.stringToBinary(geometryFieldName);
     final ByteBuffer buf =
         ByteBuffer.allocate(
-            VarintUtils.unsignedIntByteLength(type.ordinal())
+            fieldNameBytes.length
+                + +VarintUtils.unsignedIntByteLength(fieldNameBytes.length)
+                + VarintUtils.unsignedIntByteLength(type.ordinal())
                 + VarintUtils.unsignedIntByteLength(precision)
                 + VarintUtils.unsignedIntByteLength(complexGeometryBinning.ordinal()));
     VarintUtils.writeUnsignedInt(type.ordinal(), buf);
     VarintUtils.writeUnsignedInt(precision, buf);
     VarintUtils.writeUnsignedInt(complexGeometryBinning.ordinal(), buf);
+    VarintUtils.writeUnsignedInt(fieldNameBytes.length, buf);
+    buf.put(fieldNameBytes);
     return buf.array();
   }
 
@@ -120,5 +132,12 @@ public abstract class SpatialBinningStrategy<T> implements BinningStrategy {
     this.precision = VarintUtils.readUnsignedInt(buf);
     this.complexGeometryBinning =
         ComplexGeometryBinningOption.values()[VarintUtils.readUnsignedInt(buf)];
+    final byte[] fieldNameBytes = new byte[VarintUtils.readUnsignedInt(buf)];
+    if (fieldNameBytes.length > 0) {
+      buf.get(fieldNameBytes);
+      this.geometryFieldName = StringUtils.stringFromBinary(fieldNameBytes);
+    } else {
+      this.geometryFieldName = null;
+    }
   }
 }

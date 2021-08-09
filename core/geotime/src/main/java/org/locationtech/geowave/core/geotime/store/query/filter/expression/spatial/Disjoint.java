@@ -57,6 +57,10 @@ public class Disjoint extends BinarySpatialPredicate {
 
   @Override
   protected boolean isExact() {
+    return isLoose();
+  }
+
+  public boolean isLoose() {
     return loose;
   }
 

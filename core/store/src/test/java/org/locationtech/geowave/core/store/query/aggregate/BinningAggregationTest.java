@@ -8,8 +8,7 @@
  */
 package org.locationtech.geowave.core.store.query.aggregate;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertEquals;
 import java.util.Map;
 import java.util.UUID;
 import org.junit.Test;
@@ -50,17 +49,17 @@ public class BinningAggregationTest extends AbstractAggregationTest {
 
     agg.aggregate(null, null);
     Map<ByteArray, Long> result = agg.getResult();
-    assertThat(result.size(), is(1));
+    assertEquals(1, result.size());
 
     agg.aggregate(null, null);
     result = agg.getResult();
-    assertThat(result.size(), is(2));
+    assertEquals(2, result.size());
 
     agg.clearResult();
 
     agg.aggregate(null, null);
     result = agg.getResult();
-    assertThat(result.size(), is(1));
+    assertEquals(1, result.size());
   }
 
   @Test
@@ -77,10 +76,10 @@ public class BinningAggregationTest extends AbstractAggregationTest {
 
     // must iterate through both in case one is simply a subset of the other.
     for (final Map.Entry<ByteArray, Long> resEntry : result.entrySet()) {
-      assertThat(resEntry.getValue(), is(deserResult.get(resEntry.getKey())));
+      assertEquals(resEntry.getValue(), deserResult.get(resEntry.getKey()));
     }
     for (final Map.Entry<ByteArray, Long> deserEntry : result.entrySet()) {
-      assertThat(deserEntry.getValue(), is(result.get(deserEntry.getKey())));
+      assertEquals(deserEntry.getValue(), result.get(deserEntry.getKey()));
     }
   }
 
@@ -96,8 +95,8 @@ public class BinningAggregationTest extends AbstractAggregationTest {
 
     // relies on CountAggregation#merge, which adds the values.
     final Map<ByteArray, Long> merged = agg.merge(res1, res2);
-    assertThat(merged.get(new ByteArray("0")), is(5L));
-    assertThat(merged.get(new ByteArray("1")), is(5L));
+    assertEquals(5L, merged.get(new ByteArray("0")).longValue());
+    assertEquals(5L, merged.get(new ByteArray("1")).longValue());
   }
 
   @Test
@@ -120,13 +119,13 @@ public class BinningAggregationTest extends AbstractAggregationTest {
     final Map<ByteArray, Long> res2 =
         ImmutableMap.of(new ByteArray("0"), 2L, new ByteArray("1"), 3L);
     final Map<ByteArray, Long> merged = roundtrip.merge(res1, res2);
-    assertThat(merged.get(new ByteArray("0")), is(5L));
-    assertThat(merged.get(new ByteArray("1")), is(5L));
+    assertEquals(5L, merged.get(new ByteArray("0")).longValue());
+    assertEquals(5L, merged.get(new ByteArray("1")).longValue());
 
     roundtrip.aggregate(null, null);
     roundtrip.aggregate(null, null);
     roundtrip.aggregate(null, null);
-    assertThat(roundtrip.getResult().size(), is(3));
+    assertEquals(3, roundtrip.getResult().size());
   }
 
   @Test
@@ -136,13 +135,13 @@ public class BinningAggregationTest extends AbstractAggregationTest {
     for (int i = 0; i < 12336; i++) {
       agg.aggregate(null, null);
     }
-    assertThat(agg.getResult().size(), is(12336));
+    assertEquals(12336, agg.getResult().size());
 
     final BinningAggregation<Persistable, Long, CommonIndexedPersistenceEncoding> boundedAgg =
         new BinningAggregation<>(new CountAggregation(), randomBinStrategy, 12);
     for (int i = 0; i < 2000; i++) {
       boundedAgg.aggregate(null, null);
     }
-    assertThat(boundedAgg.getResult().size(), is(12));
+    assertEquals(12, boundedAgg.getResult().size());
   }
 }

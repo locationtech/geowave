@@ -9,22 +9,22 @@
 package org.locationtech.geowave.adapter.vector.query.gwql.statement;
 
 import javax.annotation.Nullable;
-import org.locationtech.geowave.adapter.vector.query.gwql.QualifiedTypeName;
 import org.locationtech.geowave.adapter.vector.query.gwql.ResultSet;
 import org.locationtech.geowave.adapter.vector.query.gwql.SingletonResultSet;
-import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Query;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.filter.Filter;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
+import org.locationtech.geowave.core.store.query.filter.expression.Filter;
 import com.google.common.collect.Lists;
 
 /**
  * Deletes data from a GeoWave store.
  */
-public class DeleteStatement implements Statement {
+public class DeleteStatement<T> implements Statement {
 
-  private final QualifiedTypeName typeName;
+  private final DataStore dataStore;
+  private final DataTypeAdapter<T> adapter;
   private final Filter filter;
 
   /**
@@ -32,20 +32,24 @@ public class DeleteStatement implements Statement {
    * @param typeName the type to delete data from
    * @param filter delete features that match this filter
    */
-  public DeleteStatement(final QualifiedTypeName typeName, final @Nullable Filter filter) {
-    this.typeName = typeName;
+  public DeleteStatement(
+      final DataStore dataStore,
+      final DataTypeAdapter<T> adapter,
+      final @Nullable Filter filter) {
+    this.dataStore = dataStore;
+    this.adapter = adapter;
     this.filter = filter;
   }
 
   @Override
-  public ResultSet execute(final DataStore dataStore, final String... authorizations) {
-    final VectorQueryBuilder bldr =
-        VectorQueryBuilder.newBuilder().addTypeName(typeName.typeName());
+  public ResultSet execute(final String... authorizations) {
+    final QueryBuilder<T, ?> bldr =
+        QueryBuilder.newBuilder(adapter.getDataClass()).addTypeName(adapter.getTypeName());
     bldr.setAuthorizations(authorizations);
     if (filter != null) {
-      bldr.constraints(bldr.constraintsFactory().filterConstraints(filter));
+      bldr.filter(filter);
     }
-    final Query<SimpleFeature> query = bldr.build();
+    final Query<T> query = bldr.build();
     final boolean success = dataStore.delete(query);
     return new SingletonResultSet(
         Lists.newArrayList("SUCCESS"),
@@ -56,20 +60,15 @@ public class DeleteStatement implements Statement {
   /**
    * @return the type that data will be deleted from
    */
-  public QualifiedTypeName typeName() {
-    return typeName;
+  public DataTypeAdapter<T> getAdapter() {
+    return adapter;
   }
 
   /**
    * @return the delete filter
    */
-  public Filter filter() {
+  public Filter getFilter() {
     return filter;
-  }
-
-  @Override
-  public String getStoreName() {
-    return typeName.storeName();
   }
 
 }

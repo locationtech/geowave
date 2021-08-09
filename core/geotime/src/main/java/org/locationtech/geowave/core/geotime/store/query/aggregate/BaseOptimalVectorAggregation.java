@@ -10,11 +10,13 @@ package org.locationtech.geowave.core.geotime.store.query.aggregate;
 
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.index.persist.Persistable;
+import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.query.aggregate.AdapterAndIndexBasedAggregation;
+import org.locationtech.geowave.core.store.query.aggregate.FieldNameParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +47,7 @@ public abstract class BaseOptimalVectorAggregation<P extends Persistable, R, T> 
   @Override
   public Aggregation<P, R, T> createAggregation(
       final DataTypeAdapter<T> adapter,
+      final AdapterToIndexMapping indexMapping,
       final Index index) {
     GeotoolsFeatureDataAdapter gtAdapter;
     if (adapter instanceof GeotoolsFeatureDataAdapter) {

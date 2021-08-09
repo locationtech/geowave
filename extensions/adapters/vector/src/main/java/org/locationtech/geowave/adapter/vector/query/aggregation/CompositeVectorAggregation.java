@@ -12,12 +12,8 @@ import java.nio.ByteBuffer;
 import java.util.List;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistableList;
-import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
-import org.opengis.feature.simple.SimpleFeature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
 
 
@@ -31,9 +27,8 @@ import com.google.common.collect.Lists;
  * run on the decoded data.
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class CompositeVectorAggregation implements
-    Aggregation<PersistableList, List<Object>, SimpleFeature> {
-  private static final Logger LOGGER = LoggerFactory.getLogger(CompositeVectorAggregation.class);
+public class CompositeVectorAggregation<T> implements
+    Aggregation<PersistableList, List<Object>, T> {
 
   List<Aggregation> aggregations = Lists.newArrayList();
 
@@ -42,7 +37,7 @@ public class CompositeVectorAggregation implements
    *
    * @param aggregation the aggregation to add
    */
-  public void add(final Aggregation<?, ?, SimpleFeature> aggregation) {
+  public void add(final Aggregation<?, ?, T> aggregation) {
     aggregations.add(aggregation);
   }
 
@@ -59,17 +54,9 @@ public class CompositeVectorAggregation implements
   @Override
   public void setParameters(final PersistableList parameters) {
     final List<Persistable> persistables = parameters.getPersistables();
-    final boolean aggregationsSet;
-    if (aggregations.size() == persistables.size() / 2) {
-      aggregationsSet = true;
-    } else {
-      aggregationsSet = false;
-      aggregations = Lists.newArrayListWithCapacity(persistables.size() / 2);
-    }
+    aggregations = Lists.newArrayListWithCapacity(persistables.size() / 2);
     for (int i = 0; i < persistables.size(); i += 2) {
-      if (!aggregationsSet) {
-        aggregations.add((Aggregation) persistables.get(i));
-      }
+      aggregations.add((Aggregation) persistables.get(i));
       aggregations.get(i / 2).setParameters(persistables.get(i + 1));
     }
   }
@@ -125,17 +112,7 @@ public class CompositeVectorAggregation implements
   }
 
   @Override
-  public void aggregate(final DataTypeAdapter<SimpleFeature> adapter, final SimpleFeature entry) {
+  public void aggregate(final DataTypeAdapter<T> adapter, final T entry) {
     aggregations.forEach(a -> a.aggregate(adapter, entry));
-  }
-
-  @Override
-  public byte[] toBinary() {
-    return PersistenceUtils.toBinary(aggregations);
-  }
-
-  @Override
-  public void fromBinary(final byte[] bytes) {
-    aggregations = (List) PersistenceUtils.fromBinaryAsList(bytes);
   }
 }

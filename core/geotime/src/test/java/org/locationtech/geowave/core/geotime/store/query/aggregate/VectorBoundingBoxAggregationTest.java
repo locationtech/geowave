@@ -11,21 +11,22 @@ package org.locationtech.geowave.core.geotime.store.query.aggregate;
 import static org.junit.Assert.assertEquals;
 import java.util.List;
 import org.junit.Test;
+import org.locationtech.geowave.core.store.query.aggregate.FieldNameParam;
 import org.locationtech.jts.geom.Envelope;
-import org.opengis.feature.simple.SimpleFeature;
 
 public class VectorBoundingBoxAggregationTest extends AbstractVectorAggregationTest {
 
   @Test
   public void testVectorCountAggregation() {
-    final List<SimpleFeature> features = generateFeatures();
-    VectorBoundingBoxAggregation aggregation = new VectorBoundingBoxAggregation(null);
+    final List<SpatialTestType> features = generateFeatures();
+    VectorBoundingBoxAggregation<SpatialTestType> aggregation =
+        new VectorBoundingBoxAggregation<>(null);
     final Envelope expected = new Envelope(-180, 180, -90, 90);
-    Envelope result = aggregateObjects(aggregation, features);
+    Envelope result = aggregateObjects(adapter, aggregation, features);
     assertEquals(expected, result);
 
-    aggregation = new VectorBoundingBoxAggregation(new FieldNameParam(GEOMETRY_COLUMN));
-    result = aggregateObjects(aggregation, features);
+    aggregation = new VectorBoundingBoxAggregation<>(new FieldNameParam(GEOMETRY_COLUMN));
+    result = aggregateObjects(adapter, aggregation, features);
     assertEquals(expected, result);
   }
 

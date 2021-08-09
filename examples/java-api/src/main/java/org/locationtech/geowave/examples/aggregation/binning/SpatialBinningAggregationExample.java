@@ -17,11 +17,10 @@ import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.adapter.vector.query.aggregation.VectorSumAggregation;
+import org.locationtech.geowave.adapter.vector.query.aggregation.FieldSumAggregation;
 import org.locationtech.geowave.core.geotime.binning.SpatialBinningType;
 import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.index.SpatialOptions;
-import org.locationtech.geowave.core.geotime.store.query.aggregate.FieldNameParam;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.SpatialSimpleFeatureBinningStrategy;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArray;
@@ -32,6 +31,7 @@ import org.locationtech.geowave.core.store.api.DataStoreFactory;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.memory.MemoryRequiredOptions;
+import org.locationtech.geowave.core.store.query.aggregate.FieldNameParam;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
@@ -144,7 +144,7 @@ public class SpatialBinningAggregationExample {
     // Use `.count` instead of `aggregate` if you simply want to count the amount of rows
     // queryBuilder.count("geometry");
     // aggregate uses a provided aggregation to form data.
-    queryBuilder.aggregate(typeName, new VectorSumAggregation(new FieldNameParam("population")));
+    queryBuilder.aggregate(typeName, new FieldSumAggregation(new FieldNameParam("population")));
     // `.bin` uses the current aggregation (the VectorSumAggregation in this case),
     // but adds a binning strategy on top of it.
     // each bin uses a fresh aggregation, so there is no contamination between aggregations.

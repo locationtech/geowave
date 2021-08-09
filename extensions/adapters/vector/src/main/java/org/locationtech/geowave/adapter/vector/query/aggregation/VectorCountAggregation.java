@@ -9,10 +9,10 @@
 package org.locationtech.geowave.adapter.vector.query.aggregation;
 
 import java.nio.ByteBuffer;
-import org.locationtech.geowave.core.geotime.store.query.aggregate.FieldNameParam;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.query.aggregate.FieldNameParam;
 import org.opengis.feature.simple.SimpleFeature;
 
 /**

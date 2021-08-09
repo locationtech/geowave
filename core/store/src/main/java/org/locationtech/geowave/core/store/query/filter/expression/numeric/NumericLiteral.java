@@ -9,6 +9,8 @@
 package org.locationtech.geowave.core.store.query.filter.expression.numeric;
 
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.query.filter.expression.Expression;
+import org.locationtech.geowave.core.store.query.filter.expression.InvalidFilterException;
 import org.locationtech.geowave.core.store.query.filter.expression.Literal;
 
 /**
@@ -31,8 +33,25 @@ public class NumericLiteral extends Literal<Double> implements NumericExpression
     return value.doubleValue();
   }
 
-  public static NumericLiteral of(final Number literal) {
-    return new NumericLiteral(literal);
+  public static NumericLiteral of(Object literal) {
+    if (literal == null) {
+      return new NumericLiteral(null);
+    }
+    if (literal instanceof NumericLiteral) {
+      return (NumericLiteral) literal;
+    }
+    if (literal instanceof Expression && ((Expression<?>) literal).isLiteral()) {
+      literal = ((Expression<?>) literal).evaluateValue(null);
+    }
+    final Number number;
+    if (literal instanceof Number) {
+      number = (Number) literal;
+    } else if (literal instanceof String) {
+      number = Double.parseDouble((String) literal);
+    } else {
+      throw new InvalidFilterException("Unable to resolve numeric literal.");
+    }
+    return new NumericLiteral(number);
   }
 
 }

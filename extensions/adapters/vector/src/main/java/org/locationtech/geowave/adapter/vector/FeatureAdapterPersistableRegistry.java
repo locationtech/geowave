@@ -17,9 +17,9 @@ import org.locationtech.geowave.adapter.vector.ingest.GeometrySimpOptionProvider
 import org.locationtech.geowave.adapter.vector.ingest.TypeNameOptionProvider;
 import org.locationtech.geowave.adapter.vector.query.aggregation.CompositeVectorAggregation;
 import org.locationtech.geowave.adapter.vector.query.aggregation.VectorCountAggregation;
-import org.locationtech.geowave.adapter.vector.query.aggregation.VectorMaxAggregation;
-import org.locationtech.geowave.adapter.vector.query.aggregation.VectorMinAggregation;
-import org.locationtech.geowave.adapter.vector.query.aggregation.VectorSumAggregation;
+import org.locationtech.geowave.adapter.vector.query.aggregation.FieldMaxAggregation;
+import org.locationtech.geowave.adapter.vector.query.aggregation.FieldMinAggregation;
+import org.locationtech.geowave.adapter.vector.query.aggregation.FieldSumAggregation;
 import org.locationtech.geowave.adapter.vector.render.DistributedRenderAggregation;
 import org.locationtech.geowave.adapter.vector.render.DistributedRenderOptions;
 import org.locationtech.geowave.adapter.vector.render.DistributedRenderResult;
@@ -66,9 +66,9 @@ public class FeatureAdapterPersistableRegistry implements
         new PersistableIdAndConstructor((short) 534, CompositeVectorAggregation::new),
         new PersistableIdAndConstructor((short) 535, VectorCountAggregation::new),
         new PersistableIdAndConstructor((short) 536, GeometrySimpOptionProvider::new),
-        new PersistableIdAndConstructor((short) 537, VectorMinAggregation::new),
-        new PersistableIdAndConstructor((short) 538, VectorMaxAggregation::new),
-        new PersistableIdAndConstructor((short) 539, VectorSumAggregation::new),
+        new PersistableIdAndConstructor((short) 537, FieldMinAggregation::new),
+        new PersistableIdAndConstructor((short) 538, FieldMaxAggregation::new),
+        new PersistableIdAndConstructor((short) 539, FieldSumAggregation::new),
         new PersistableIdAndConstructor((short) 540, VectorTextIndexEntryConverter::new),
         new PersistableIdAndConstructor((short) 541, FeatureDataAdapter::new)};
   }

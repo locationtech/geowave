@@ -16,6 +16,14 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
 public class GWQLParseException extends ParseCancellationException {
   private static final long serialVersionUID = 1L;
 
+  public GWQLParseException(final String message) {
+    super(message);
+  }
+
+  public GWQLParseException(final String message, final Throwable cause) {
+    super(message, cause);
+  }
+
   public GWQLParseException(int line, int position, String message) {
     super("Invalid Syntax: " + message + " at [" + line + ":" + position + "]");
   }

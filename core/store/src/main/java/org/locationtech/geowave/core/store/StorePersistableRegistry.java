@@ -11,9 +11,9 @@ package org.locationtech.geowave.core.store;
 import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 import org.locationtech.geowave.core.store.adapter.BaseFieldDescriptor;
+import org.locationtech.geowave.core.store.adapter.BasicDataTypeAdapter;
 import org.locationtech.geowave.core.store.adapter.BinaryDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterImpl;
-import org.locationtech.geowave.core.store.adapter.BasicDataTypeAdapter;
 import org.locationtech.geowave.core.store.adapter.SimpleRowTransform;
 import org.locationtech.geowave.core.store.api.AggregationQuery;
 import org.locationtech.geowave.core.store.api.Query;
@@ -35,7 +35,11 @@ import org.locationtech.geowave.core.store.index.TextAttributeIndexProvider.Adap
 import org.locationtech.geowave.core.store.query.aggregate.BinningAggregation;
 import org.locationtech.geowave.core.store.query.aggregate.BinningAggregationOptions;
 import org.locationtech.geowave.core.store.query.aggregate.CountAggregation;
+import org.locationtech.geowave.core.store.query.aggregate.FieldNameParam;
 import org.locationtech.geowave.core.store.query.aggregate.MergingAggregation;
+import org.locationtech.geowave.core.store.query.aggregate.OptimalCountAggregation;
+import org.locationtech.geowave.core.store.query.aggregate.OptimalCountAggregation.CommonIndexCountAggregation;
+import org.locationtech.geowave.core.store.query.aggregate.OptimalCountAggregation.FieldCountAggregation;
 import org.locationtech.geowave.core.store.query.constraints.BasicOrderedConstraintQuery;
 import org.locationtech.geowave.core.store.query.constraints.BasicOrderedConstraintQuery.OrderedConstraints;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
@@ -207,6 +211,11 @@ public class StorePersistableRegistry implements
         new PersistableIdAndConstructor((short) 295, ExpressionQueryFilter::new),
         new PersistableIdAndConstructor((short) 296, FilteredEverythingQuery::new),
         new PersistableIdAndConstructor((short) 297, BasicDataTypeAdapter::new),
-        new PersistableIdAndConstructor((short) 298, IsNull::new)};
+        new PersistableIdAndConstructor((short) 298, IsNull::new),
+        new PersistableIdAndConstructor((short) 299, FieldNameParam::new),
+        // use 3000+ range
+        new PersistableIdAndConstructor((short) 3000, OptimalCountAggregation::new),
+        new PersistableIdAndConstructor((short) 3001, CommonIndexCountAggregation::new),
+        new PersistableIdAndConstructor((short) 3002, FieldCountAggregation::new)};
   }
 }

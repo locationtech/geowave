@@ -71,7 +71,8 @@ public class ShapefileQueryOutputFormat extends QueryOutputFormatSpi {
     }
 
     final SimpleFeatureTypeBuilder ftb = new SimpleFeatureTypeBuilder();
-    ftb.setCRS(results.getCRS());
+    // TODO: This CRS needs to ultimately come from the query...
+    // ftb.setCRS(results.getCRS());
     ftb.setName(typeName);
     for (int i = 0; i < results.columnCount(); i++) {
       final AttributeTypeBuilder atb = new AttributeTypeBuilder();

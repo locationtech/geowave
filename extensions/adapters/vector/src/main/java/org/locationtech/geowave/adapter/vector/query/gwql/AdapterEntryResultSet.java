@@ -10,51 +10,49 @@ package org.locationtech.geowave.adapter.vector.query.gwql;
 
 import java.util.List;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import com.google.common.collect.Lists;
 
 /**
- * A result set that wraps SimpleFeature results using a given set of column selectors.
+ * A result set that wraps adapter entries using a given set of column selectors.
  */
-public class SimpleFeatureResultSet implements ResultSet {
+public class AdapterEntryResultSet<T> implements ResultSet {
 
   private final List<Selector> selectors;
-  private final CloseableIterator<SimpleFeature> features;
-  private final SimpleFeatureType featureType;
+  private final DataTypeAdapter<T> adapter;
+  private final CloseableIterator<T> entries;
 
   /**
-   * @param selectors the columns to select from the features
-   * @param features the feature results
-   * @param featureType the feature type of the features
+   * @param selectors the columns to select from the entries
+   * @param adapter the data type adapter
+   * @param entries the query results
    */
-  public SimpleFeatureResultSet(
+  public AdapterEntryResultSet(
       final List<Selector> selectors,
-      final CloseableIterator<SimpleFeature> features,
-      final SimpleFeatureType featureType) {
+      final DataTypeAdapter<T> adapter,
+      final CloseableIterator<T> entries) {
     this.selectors = selectors;
-    this.features = features;
-    this.featureType = featureType;
+    this.adapter = adapter;
+    this.entries = entries;
   }
 
   @Override
   public void close() {
-    features.close();
+    entries.close();
   }
 
   @Override
   public boolean hasNext() {
-    return features.hasNext();
+    return entries.hasNext();
   }
 
   @Override
   public Result next() {
-    SimpleFeature feature = features.next();
+    T entry = entries.next();
     List<Object> values = Lists.newArrayListWithCapacity(selectors.size());
     for (Selector column : selectors) {
       if (column instanceof ColumnSelector) {
-        values.add(feature.getAttribute(((ColumnSelector) column).columnName()));
+        values.add(adapter.getFieldValue(entry, ((ColumnSelector) column).columnName()));
       }
     }
 
@@ -74,19 +72,14 @@ public class SimpleFeatureResultSet implements ResultSet {
   @Override
   public Class<?> columnType(final int index) {
     ColumnSelector column = (ColumnSelector) selectors.get(index);
-    return featureType.getDescriptor(column.columnName()).getType().getBinding();
+    return adapter.getFieldDescriptor(column.columnName()).bindingClass();
   }
 
   /**
-   * @return the feature type
+   * @return the adapter
    */
-  public SimpleFeatureType featureType() {
-    return featureType;
-  }
-
-  @Override
-  public CoordinateReferenceSystem getCRS() {
-    return featureType.getCoordinateReferenceSystem();
+  public DataTypeAdapter<T> getAdapter() {
+    return adapter;
   }
 
 }

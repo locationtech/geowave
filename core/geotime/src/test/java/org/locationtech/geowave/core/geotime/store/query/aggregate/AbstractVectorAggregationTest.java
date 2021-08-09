@@ -10,73 +10,107 @@ package org.locationtech.geowave.core.geotime.store.query.aggregate;
 
 import java.util.Date;
 import java.util.List;
-import org.geotools.feature.AttributeTypeBuilder;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
+import org.locationtech.geowave.core.geotime.adapter.annotation.GeoWaveSpatialField;
+import org.locationtech.geowave.core.geotime.adapter.annotation.GeoWaveTemporalField;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.store.adapter.BasicDataTypeAdapter;
+import org.locationtech.geowave.core.store.adapter.annotation.GeoWaveDataType;
+import org.locationtech.geowave.core.store.adapter.annotation.GeoWaveField;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.query.aggregate.AbstractAggregationTest;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Point;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
 import com.google.common.collect.Lists;
 
 public class AbstractVectorAggregationTest extends AbstractAggregationTest {
-
+  protected static final String ID_COLUMN = "id";
   protected static final String GEOMETRY_COLUMN = "geometry";
-  protected static final String TIMESTAMP_COLUMN = "TimeStamp";
-  protected static final String LATITUDE_COLUMN = "Latitude";
-  protected static final String LONGITUDE_COLUMN = "Longitude";
-  protected static final String VALUE_COLUMN = "Value";
-  protected static final String ODDS_NULL_COLUMN = "OddsNull";
-  protected static final String ALL_NULL_COLUMN = "AllNull";
+  protected static final String TIMESTAMP_COLUMN = "timestamp";
+  protected static final String LATITUDE_COLUMN = "latitude";
+  protected static final String LONGITUDE_COLUMN = "longitude";
+  protected static final String VALUE_COLUMN = "value";
+  protected static final String ODDS_NULL_COLUMN = "oddsNull";
+  protected static final String ALL_NULL_COLUMN = "allNull";
 
-  public static SimpleFeatureType getFeatureType() {
-    final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
-    final AttributeTypeBuilder ab = new AttributeTypeBuilder();
-    typeBuilder.setName("features");
-    typeBuilder.add(ab.binding(Point.class).nillable(false).buildDescriptor(GEOMETRY_COLUMN));
-    typeBuilder.add(ab.binding(Date.class).nillable(true).buildDescriptor(TIMESTAMP_COLUMN));
-    typeBuilder.add(ab.binding(Double.class).nillable(false).buildDescriptor(LATITUDE_COLUMN));
-    typeBuilder.add(ab.binding(Double.class).nillable(false).buildDescriptor(LONGITUDE_COLUMN));
-    typeBuilder.add(ab.binding(Long.class).nillable(false).buildDescriptor(VALUE_COLUMN));
-    typeBuilder.add(ab.binding(String.class).nillable(true).buildDescriptor(ODDS_NULL_COLUMN));
-    typeBuilder.add(ab.binding(String.class).nillable(true).buildDescriptor(ALL_NULL_COLUMN));
-    return typeBuilder.buildFeatureType();
-  }
+  protected DataTypeAdapter<SpatialTestType> adapter =
+      BasicDataTypeAdapter.newAdapter("testType", SpatialTestType.class, "id");
 
-  public static SimpleFeature createFeature(
-      final SimpleFeatureBuilder featureBuilder,
+  public static SpatialTestType createFeature(
       final int featureId,
       final int longitude,
       final int latitude) {
-    featureBuilder.set(
-        GEOMETRY_COLUMN,
-        GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(longitude, latitude)));
-    featureBuilder.set(TIMESTAMP_COLUMN, new Date());
-    featureBuilder.set(LATITUDE_COLUMN, latitude);
-    featureBuilder.set(LONGITUDE_COLUMN, longitude);
-    featureBuilder.set(VALUE_COLUMN, (long) featureId);
-    if ((featureId % 2) == 0) {
-      featureBuilder.set(ODDS_NULL_COLUMN, "NotNull");
-    }
-    return featureBuilder.buildFeature(String.valueOf(featureId));
+    return new SpatialTestType(
+        String.valueOf(featureId),
+        GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(longitude, latitude)),
+        new Date(),
+        latitude,
+        longitude,
+        featureId,
+        featureId % 2 == 0 ? "NotNull" : null,
+        null);
   }
 
-  public static List<SimpleFeature> generateFeatures() {
+  public static List<SpatialTestType> generateFeatures() {
 
-    final List<SimpleFeature> features = Lists.newArrayList();
-    final SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(getFeatureType());
+    final List<SpatialTestType> features = Lists.newArrayList();
 
     int featureId = 0;
     for (int longitude = -180; longitude <= 180; longitude += 1) {
       for (int latitude = -90; latitude <= 90; latitude += 1) {
 
-        features.add(createFeature(featureBuilder, featureId, longitude, latitude));
+        features.add(createFeature(featureId, longitude, latitude));
         featureId++;
       }
     }
     return features;
+  }
+
+  @GeoWaveDataType
+  protected static class SpatialTestType {
+    @GeoWaveField
+    private String id;
+
+    @GeoWaveSpatialField
+    private Point geometry;
+
+    @GeoWaveTemporalField
+    private Date timestamp;
+
+    @GeoWaveField
+    private double latitude;
+
+    @GeoWaveField
+    private double longitude;
+
+    @GeoWaveField
+    private long value;
+
+    @GeoWaveField
+    private String oddsNull;
+
+    @GeoWaveField
+    private String allNull;
+
+    public SpatialTestType() {}
+
+    public SpatialTestType(
+        final String id,
+        final Point geometry,
+        final Date timestamp,
+        final double latitude,
+        final double longitude,
+        final long value,
+        final String oddsNull,
+        final String allNull) {
+      this.id = id;
+      this.geometry = geometry;
+      this.timestamp = timestamp;
+      this.latitude = latitude;
+      this.longitude = longitude;
+      this.value = value;
+      this.oddsNull = oddsNull;
+      this.allNull = allNull;
+    }
   }
 
 }

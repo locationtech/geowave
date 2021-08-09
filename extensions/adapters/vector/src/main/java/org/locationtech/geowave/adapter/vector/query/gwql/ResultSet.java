@@ -9,7 +9,6 @@
 package org.locationtech.geowave.adapter.vector.query.gwql;
 
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * Interface for a set of results from a GeoWave query.
@@ -32,9 +31,4 @@ public interface ResultSet extends CloseableIterator<Result> {
    * @return the Class of the objects that can be found in the given column
    */
   public Class<?> columnType(final int index);
-
-  /**
-   * @return the coordinate reference system of the geometries in this result set
-   */
-  public CoordinateReferenceSystem getCRS();
 }

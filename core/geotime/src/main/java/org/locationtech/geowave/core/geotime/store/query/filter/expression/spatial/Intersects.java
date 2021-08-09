@@ -38,6 +38,10 @@ public class Intersects extends BinarySpatialPredicate {
 
   @Override
   protected boolean isExact() {
+    return isLoose();
+  }
+
+  public boolean isLoose() {
     return loose;
   }
 

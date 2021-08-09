@@ -6,11 +6,12 @@
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
  * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package org.locationtech.geowave.adapter.vector.query.gwql.function;
+package org.locationtech.geowave.adapter.vector.query.gwql;
 
-/**
- * Base interface for all functions in the query language.
- */
-public interface QLFunction {
-  public Class<?> returnType();
+import org.locationtech.geowave.core.store.query.filter.expression.Expression;
+
+public interface CastableType<T> {
+  String getName();
+
+  Expression<T> cast(final Object objectOrExpression);
 }
