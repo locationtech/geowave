@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6};
+var methods = {"i0":6,"i1":6,"i2":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -105,7 +105,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/SimpleFeatureResultSet.html" title="class in org.locationtech.geowave.adapter.vector.query.gwql">SimpleFeatureResultSet</a>, <a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/SingletonResultSet.html" title="class in org.locationtech.geowave.adapter.vector.query.gwql">SingletonResultSet</a></dd>
+<dd><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/AdapterEntryResultSet.html" title="class in org.locationtech.geowave.adapter.vector.query.gwql">AdapterEntryResultSet</a>, <a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/SingletonResultSet.html" title="class in org.locationtech.geowave.adapter.vector.query.gwql">SingletonResultSet</a></dd>
 </dl>
 <hr>
 <br>
@@ -156,10 +156,6 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/Closea
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/ResultSet.html#columnType-int-">columnType</a></span>(int&nbsp;index)</code>&nbsp;</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>org.opengis.referencing.crs.CoordinateReferenceSystem</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/ResultSet.html#getCRS--">getCRS</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -221,7 +217,7 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/Closea
 <a name="columnType-int-">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>columnType</h4>
 <pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;?&gt;&nbsp;columnType(int&nbsp;index)</pre>
@@ -230,19 +226,6 @@ extends <a href="../../../../../../../org/locationtech/geowave/core/store/Closea
 <dd><code>index</code> - the index of the column</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the Class of the objects that can be found in the given column</dd>
-</dl>
-</li>
-</ul>
-<a name="getCRS--">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>getCRS</h4>
-<pre>org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;getCRS()</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the coordinate reference system of the geometries in this result set</dd>
 </dl>
 </li>
 </ul>

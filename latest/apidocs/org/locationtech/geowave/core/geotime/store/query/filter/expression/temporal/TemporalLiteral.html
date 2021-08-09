@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":9,"i2":9,"i3":10,"i4":10};
+var methods = {"i0":10,"i1":9,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -141,6 +141,13 @@ implements <a href="../../../../../../../../../../org/locationtech/geowave/core/
 <h3>Fields inherited from class&nbsp;org.locationtech.geowave.core.store.query.filter.expression.<a href="../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Literal.html" title="class in org.locationtech.geowave.core.store.query.filter.expression">Literal</a></h3>
 <code><a href="../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Literal.html#literal">literal</a></code></li>
 </ul>
+<ul class="blockList">
+<li class="blockList"><a name="fields.inherited.from.class.org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.TemporalExpression">
+<!--   -->
+</a>
+<h3>Fields inherited from interface&nbsp;org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.<a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal">TemporalExpression</a></h3>
+<code><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#SUPPORTED_DATE_FORMATS">SUPPORTED_DATE_FORMATS</a></code></li>
+</ul>
 </li>
 </ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -182,20 +189,16 @@ implements <a href="../../../../../../../../../../org/locationtech/geowave/core/
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html?is-external=true" title="class or interface in java.text">SimpleDateFormat</a>[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalLiteral.html#getSupportedDateFormats--">getSupportedDateFormats</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalLiteral.html" title="class in org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal">TemporalLiteral</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalLiteral.html#of-java.lang.Object-">of</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;literal)</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalLiteral.html#toBinary--">toBinary</a></span>()</code>
 <div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalLiteral.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
@@ -219,7 +222,7 @@ implements <a href="../../../../../../../../../../org/locationtech/geowave/core/
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.<a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal">TemporalExpression</a></h3>
-<code><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#contains-java.lang.Object-">contains</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#isAfter-java.lang.Object-">isAfter</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#isBefore-java.lang.Object-">isBefore</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#isBeforeOrDuring-java.lang.Object-">isBeforeOrDuring</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#isBetween-java.lang.Object-java.lang.Object-">isBetween</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#isDuring-java.lang.Object-">isDuring</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#isDuringOrAfter-java.lang.Object-">isDuringOrAfter</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#isEqualTo-java.lang.Object-">isEqualTo</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#isGreaterThan-java.lang.Object-">isGreaterThan</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#isGreaterThanOrEqualTo-java.lang.Object-">isGreaterThanOrEqualTo</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#isLessThan-java.lang.Object-">isLessThan</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#isLessThanOrEqualTo-java.lang.Object-">isLessThanOrEqualTo</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#isNotEqualTo-java.lang.Object-">isNotEqualTo</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#overlaps-java.lang.Object-">overlaps</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#toTemporalExpression-java.lang.Object-">toTemporalExpression</a></code></li>
+<code><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#contains-java.lang.Object-">contains</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#isAfter-java.lang.Object-">isAfter</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#isBefore-java.lang.Object-">isBefore</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#isBeforeOrDuring-java.lang.Object-">isBeforeOrDuring</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#isBetween-java.lang.Object-java.lang.Object-">isBetween</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#isDuring-java.lang.Object-">isDuring</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#isDuringOrAfter-java.lang.Object-">isDuringOrAfter</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#isEqualTo-java.lang.Object-">isEqualTo</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#isGreaterThan-java.lang.Object-">isGreaterThan</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#isGreaterThanOrEqualTo-java.lang.Object-">isGreaterThanOrEqualTo</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#isLessThan-java.lang.Object-">isLessThan</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#isLessThanOrEqualTo-java.lang.Object-">isLessThanOrEqualTo</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#isNotEqualTo-java.lang.Object-">isNotEqualTo</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#overlaps-java.lang.Object-">overlaps</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#stringToDate-java.lang.String-">stringToDate</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#stringToInterval-java.lang.String-">stringToInterval</a>, <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#toTemporalExpression-java.lang.Object-">toTemporalExpression</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.store.query.filter.expression.Expression">
@@ -268,15 +271,6 @@ implements <a href="../../../../../../../../../../org/locationtech/geowave/core/
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getSupportedDateFormats--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getSupportedDateFormats</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html?is-external=true" title="class or interface in java.text">SimpleDateFormat</a>[]&nbsp;getSupportedDateFormats()</pre>
-</li>
-</ul>
 <a name="of-java.lang.Object-">
 <!--   -->
 </a>

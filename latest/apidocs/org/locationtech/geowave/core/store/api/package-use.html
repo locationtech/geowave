@@ -127,7 +127,15 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.query.gwql.function">org.locationtech.geowave.adapter.vector.query.gwql.function</a></td>
+<td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.query.gwql">org.locationtech.geowave.adapter.vector.query.gwql</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.query.gwql.function.aggregation">org.locationtech.geowave.adapter.vector.query.gwql.function.aggregation</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.query.gwql.parse">org.locationtech.geowave.adapter.vector.query.gwql.parse</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -840,18 +848,59 @@
 </tbody>
 </table>
 </li>
-<li class="blockList"><a name="org.locationtech.geowave.adapter.vector.query.gwql.function">
+<li class="blockList"><a name="org.locationtech.geowave.adapter.vector.query.gwql">
 <!--   -->
 </a>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
-<caption><span>Classes in <a href="../../../../../../org/locationtech/geowave/core/store/api/package-summary.html">org.locationtech.geowave.core.store.api</a> used by <a href="../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.function</a></span><span class="tabEnd">&nbsp;</span></caption>
+<caption><span>Classes in <a href="../../../../../../org/locationtech/geowave/core/store/api/package-summary.html">org.locationtech.geowave.core.store.api</a> used by <a href="../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colOne" scope="col">Class and Description</th>
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colOne"><a href="../../../../../../org/locationtech/geowave/core/store/api/class-use/Aggregation.html#org.locationtech.geowave.adapter.vector.query.gwql.function">Aggregation</a>
+<td class="colOne"><a href="../../../../../../org/locationtech/geowave/core/store/api/class-use/DataTypeAdapter.html#org.locationtech.geowave.adapter.vector.query.gwql">DataTypeAdapter</a>
+<div class="block">This interface should be implemented by any custom data type that must be stored in the GeoWave
+ index.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.adapter.vector.query.gwql.function.aggregation">
+<!--   -->
+</a>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../org/locationtech/geowave/core/store/api/package-summary.html">org.locationtech.geowave.core.store.api</a> used by <a href="../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/aggregation/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.function.aggregation</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../org/locationtech/geowave/core/store/api/class-use/Aggregation.html#org.locationtech.geowave.adapter.vector.query.gwql.function.aggregation">Aggregation</a>
 <div class="block">An Aggregation function that mathematically represents any commutative monoid (ie.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../../../../../org/locationtech/geowave/core/store/api/class-use/DataTypeAdapter.html#org.locationtech.geowave.adapter.vector.query.gwql.function.aggregation">DataTypeAdapter</a>
+<div class="block">This interface should be implemented by any custom data type that must be stored in the GeoWave
+ index.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.adapter.vector.query.gwql.parse">
+<!--   -->
+</a>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../org/locationtech/geowave/core/store/api/package-summary.html">org.locationtech.geowave.core.store.api</a> used by <a href="../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/parse/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.parse</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../org/locationtech/geowave/core/store/api/class-use/DataStore.html#org.locationtech.geowave.adapter.vector.query.gwql.parse">DataStore</a>
+<div class="block">A DataStore can both ingest and query data based on persisted indices and data type adapters.</div>
 </td>
 </tr>
 </tbody>
@@ -869,6 +918,12 @@
 <tr class="altColor">
 <td class="colOne"><a href="../../../../../../org/locationtech/geowave/core/store/api/class-use/DataStore.html#org.locationtech.geowave.adapter.vector.query.gwql.statement">DataStore</a>
 <div class="block">A DataStore can both ingest and query data based on persisted indices and data type adapters.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../../../../../org/locationtech/geowave/core/store/api/class-use/DataTypeAdapter.html#org.locationtech.geowave.adapter.vector.query.gwql.statement">DataTypeAdapter</a>
+<div class="block">This interface should be implemented by any custom data type that must be stored in the GeoWave
+ index.</div>
 </td>
 </tr>
 </tbody>

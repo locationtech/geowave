@@ -83,22 +83,42 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.query.gwql">org.locationtech.geowave.adapter.vector.query.gwql</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.query.gwql.function.expression">org.locationtech.geowave.adapter.vector.query.gwql.function.expression</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.query.gwql.function.operator">org.locationtech.geowave.adapter.vector.query.gwql.function.operator</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.query.gwql.function.predicate">org.locationtech.geowave.adapter.vector.query.gwql.function.predicate</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.query.gwql.parse">org.locationtech.geowave.adapter.vector.query.gwql.parse</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal">org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.store.query.filter.expression">org.locationtech.geowave.core.store.query.filter.expression</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.store.query.filter.expression.numeric">org.locationtech.geowave.core.store.query.filter.expression.numeric</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.store.query.filter.expression.text">org.locationtech.geowave.core.store.query.filter.expression.text</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -107,6 +127,493 @@
 </li>
 <li class="blockList">
 <ul class="blockList">
+<li class="blockList"><a name="org.locationtech.geowave.adapter.vector.query.gwql">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a> in <a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql</a> that return <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;<a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/CastableType.html" title="type parameter in CastableType">T</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">CastableType.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/CastableType.html#cast-java.lang.Object-">cast</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;objectOrExpression)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#castExpression-java.lang.String-org.locationtech.geowave.core.store.query.filter.expression.Expression-">castExpression</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;targetType,
+              <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression)</code>
+<div class="block">Casts the given expression to the target type.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getAddExpression-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getAddExpression</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets an expression representing the sum of two input expressions.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getDivideExpression-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getDivideExpression</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                   <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets an expression that represents one expression divided by another expression.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getExpressionFunction-java.lang.String-java.util.List-">getExpressionFunction</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;functionName,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&gt;&nbsp;arguments)</code>
+<div class="block">Gets an expression that matches the given function name and arguments.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getMultiplyExpression-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getMultiplyExpression</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                     <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets an expression that represents the one expression multiplied by another expression.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getSubtractExpression-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getSubtractExpression</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                     <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets an expression that represents one expression subtracted from another expression.</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql</a> with parameters of type <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#castExpression-java.lang.String-org.locationtech.geowave.core.store.query.filter.expression.Expression-">castExpression</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;targetType,
+              <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression)</code>
+<div class="block">Casts the given expression to the target type.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getAddExpression-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getAddExpression</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets an expression representing the sum of two input expressions.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getAddExpression-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getAddExpression</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets an expression representing the sum of two input expressions.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getBetweenPredicate-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getBetweenPredicate</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;value,
+                   <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;lowerBound,
+                   <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;upperBound)</code>
+<div class="block">Gets a between predicate for the given comparable expression.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getBetweenPredicate-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getBetweenPredicate</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;value,
+                   <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;lowerBound,
+                   <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;upperBound)</code>
+<div class="block">Gets a between predicate for the given comparable expression.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getBetweenPredicate-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getBetweenPredicate</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;value,
+                   <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;lowerBound,
+                   <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;upperBound)</code>
+<div class="block">Gets a between predicate for the given comparable expression.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getDivideExpression-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getDivideExpression</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                   <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets an expression that represents one expression divided by another expression.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getDivideExpression-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getDivideExpression</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                   <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets an expression that represents one expression divided by another expression.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getEqualsPredicate-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getEqualsPredicate</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                  <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets an equals predicate for the given expressions.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getEqualsPredicate-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getEqualsPredicate</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                  <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets an equals predicate for the given expressions.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getGreaterThanOrEqualsPredicate-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getGreaterThanOrEqualsPredicate</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                               <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets a greater than or equals predicate for the given expressions.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getGreaterThanOrEqualsPredicate-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getGreaterThanOrEqualsPredicate</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                               <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets a greater than or equals predicate for the given expressions.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getGreaterThanPredicate-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getGreaterThanPredicate</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                       <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets a greater than predicate for the given expressions.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getGreaterThanPredicate-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getGreaterThanPredicate</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                       <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets a greater than predicate for the given expressions.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getLessThanOrEqualsPredicate-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getLessThanOrEqualsPredicate</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                            <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets a less than or equals predicate for the given expressions.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getLessThanOrEqualsPredicate-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getLessThanOrEqualsPredicate</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                            <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets a less than or equals predicate for the given expressions.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getLessThanPredicate-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getLessThanPredicate</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                    <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets a less than predicate for the given expressions.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getLessThanPredicate-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getLessThanPredicate</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                    <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets a less than predicate for the given expressions.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getMultiplyExpression-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getMultiplyExpression</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                     <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets an expression that represents the one expression multiplied by another expression.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getMultiplyExpression-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getMultiplyExpression</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                     <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets an expression that represents the one expression multiplied by another expression.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getNotEqualsPredicate-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getNotEqualsPredicate</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                     <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets a not equals predicate for the given expressions.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getNotEqualsPredicate-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getNotEqualsPredicate</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                     <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets a not equals predicate for the given expressions.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getOperatorPredicate-java.lang.String-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getOperatorPredicate</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;operator,
+                    <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                    <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets the operator predicate that matches the given operator.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getOperatorPredicate-java.lang.String-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getOperatorPredicate</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;operator,
+                    <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                    <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets the operator predicate that matches the given operator.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getSubtractExpression-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getSubtractExpression</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                     <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets an expression that represents one expression subtracted from another expression.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getSubtractExpression-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">getSubtractExpression</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+                     <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>
+<div class="block">Gets an expression that represents one expression subtracted from another expression.</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Method parameters in <a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql</a> with type arguments of type <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getExpressionFunction-java.lang.String-java.util.List-">getExpressionFunction</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;functionName,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&gt;&nbsp;arguments)</code>
+<div class="block">Gets an expression that matches the given function name and arguments.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParseHelper.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html#getPredicateFunction-java.lang.String-java.util.List-">getPredicateFunction</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;functionName,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&gt;&nbsp;arguments)</code>
+<div class="block">Gets a predicate that matches the given function name and arguments.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.adapter.vector.query.gwql.function.expression">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a> in <a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/expression/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.function.expression</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/expression/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.function.expression</a> that return <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;<a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/expression/ExpressionFunction.html" title="type parameter in ExpressionFunction">R</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">ExpressionFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/expression/ExpressionFunction.html#create-java.util.List-">create</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&gt;&nbsp;arguments)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">ConcatFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/expression/ConcatFunction.html#create-java.util.List-">create</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&gt;&nbsp;arguments)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">AbsFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/expression/AbsFunction.html#create-java.util.List-">create</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&gt;&nbsp;arguments)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Method parameters in <a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/expression/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.function.expression</a> with type arguments of type <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;<a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/expression/ExpressionFunction.html" title="type parameter in ExpressionFunction">R</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">ExpressionFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/expression/ExpressionFunction.html#create-java.util.List-">create</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&gt;&nbsp;arguments)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">ConcatFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/expression/ConcatFunction.html#create-java.util.List-">create</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&gt;&nbsp;arguments)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">AbsFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/expression/AbsFunction.html#create-java.util.List-">create</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&gt;&nbsp;arguments)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.adapter.vector.query.gwql.function.operator">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a> in <a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/operator/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.function.operator</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/operator/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.function.operator</a> with parameters of type <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">TemporalOperators.BeforeOperator.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/operator/TemporalOperators.BeforeOperator.html#create-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">create</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+      <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">TemporalOperators.BeforeOperator.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/operator/TemporalOperators.BeforeOperator.html#create-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">create</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+      <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">TemporalOperators.BeforeOrDuringOperator.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/operator/TemporalOperators.BeforeOrDuringOperator.html#create-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">create</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+      <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">TemporalOperators.BeforeOrDuringOperator.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/operator/TemporalOperators.BeforeOrDuringOperator.html#create-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">create</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+      <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">TemporalOperators.DuringOperator.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/operator/TemporalOperators.DuringOperator.html#create-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">create</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+      <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">TemporalOperators.DuringOperator.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/operator/TemporalOperators.DuringOperator.html#create-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">create</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+      <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">TemporalOperators.DuringOrAfterOperator.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/operator/TemporalOperators.DuringOrAfterOperator.html#create-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">create</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+      <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">TemporalOperators.DuringOrAfterOperator.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/operator/TemporalOperators.DuringOrAfterOperator.html#create-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">create</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+      <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">TemporalOperators.AfterOperator.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/operator/TemporalOperators.AfterOperator.html#create-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">create</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+      <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">TemporalOperators.AfterOperator.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/operator/TemporalOperators.AfterOperator.html#create-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">create</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+      <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">OperatorFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/operator/OperatorFunction.html#create-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">create</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+      <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">OperatorFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/operator/OperatorFunction.html#create-org.locationtech.geowave.core.store.query.filter.expression.Expression-org.locationtech.geowave.core.store.query.filter.expression.Expression-">create</a></span>(<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression1,
+      <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&nbsp;expression2)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.adapter.vector.query.gwql.function.predicate">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a> in <a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/predicate/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.function.predicate</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Method parameters in <a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/predicate/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.function.predicate</a> with type arguments of type <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">PredicateFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/predicate/PredicateFunction.html#create-java.util.List-">create</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&gt;&nbsp;arguments)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.adapter.vector.query.gwql.parse">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a> in <a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/parse/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.parse</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/parse/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.parse</a> declared as <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParser.ExpressionContext.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/parse/GWQLParser.ExpressionContext.html#value">value</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParser.ExpressionFunctionContext.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/parse/GWQLParser.ExpressionFunctionContext.html#value">value</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/parse/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.parse</a> with type parameters of type <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParser.PredicateFunctionContext.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/parse/GWQLParser.PredicateFunctionContext.html#expressions">expressions</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParser.ExpressionFunctionContext.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/parse/GWQLParser.ExpressionFunctionContext.html#expressions">expressions</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParser.ExpressionListContext.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/parse/GWQLParser.ExpressionListContext.html#expressions">expressions</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Method parameters in <a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/parse/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.parse</a> with type arguments of type <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/parse/GWQLParser.ExpressionListContext.html" title="class in org.locationtech.geowave.adapter.vector.query.gwql.parse">GWQLParser.ExpressionListContext</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GWQLParser.</span><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/parse/GWQLParser.html#expressionList-java.util.List-">expressionList</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&gt;&nbsp;expressions)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructor parameters in <a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/parse/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.parse</a> with type arguments of type <a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/parse/GWQLParser.ExpressionListContext.html#ExpressionListContext-org.antlr.v4.runtime.ParserRuleContext-int-java.util.List-">ExpressionListContext</a></span>(org.antlr.v4.runtime.ParserRuleContext&nbsp;parent,
+                     int&nbsp;invokingState,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Expression.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Expression</a>&lt;?&gt;&gt;&nbsp;expressions)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">
 <!--   -->
 </a>
@@ -144,6 +651,10 @@
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialLiteral.html" title="class in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialLiteral</a></span></code>
 <div class="block">A spatial implementation of literal, representing spatial (geometric) literal objects.</div>
 </td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/TextToSpatialExpression.html" title="class in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">TextToSpatialExpression</a></span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6};
+var methods = {"i0":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -127,14 +127,9 @@ var activeTableTab = "activeTableTab";
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/ResultSet.html" title="interface in org.locationtech.geowave.adapter.vector.query.gwql">ResultSet</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/Statement.html#execute-org.locationtech.geowave.core.store.api.DataStore-java.lang.String...-">execute</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore,
-       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
-<div class="block">Executes the statement on the provided data store.</div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/Statement.html#execute-java.lang.String...-">execute</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
+<div class="block">Executes the statement with the provided authorizations.</div>
 </td>
-</tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/Statement.html#getStoreName--">getStoreName</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -151,34 +146,19 @@ var activeTableTab = "activeTableTab";
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="execute-org.locationtech.geowave.core.store.api.DataStore-java.lang.String...-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>execute</h4>
-<pre><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/ResultSet.html" title="interface in org.locationtech.geowave.adapter.vector.query.gwql">ResultSet</a>&nbsp;execute(<a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore,
-                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
-<div class="block">Executes the statement on the provided data store.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>dataStore</code> - the data store to execute the statement on</dd>
-<dd><code>authorizations</code> - authorizations to use for the query</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the results of the statement</dd>
-</dl>
-</li>
-</ul>
-<a name="getStoreName--">
+<a name="execute-java.lang.String...-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>getStoreName</h4>
-<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getStoreName()</pre>
+<h4>execute</h4>
+<pre><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/ResultSet.html" title="interface in org.locationtech.geowave.adapter.vector.query.gwql">ResultSet</a>&nbsp;execute(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
+<div class="block">Executes the statement with the provided authorizations.</div>
 <dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>authorizations</code> - authorizations to use for the query</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the store name that this statement should be executed on</dd>
+<dd>the results of the statement</dd>
 </dl>
 </li>
 </ul>

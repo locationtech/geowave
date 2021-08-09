@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
+var methods = {"i0":10,"i1":10,"i2":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -93,14 +93,14 @@ var activeTableTab = "activeTableTab";
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle">org.locationtech.geowave.adapter.vector.query.gwql.statement</div>
-<h2 title="Class DeleteStatement" class="title">Class DeleteStatement</h2>
+<h2 title="Class DeleteStatement" class="title">Class DeleteStatement&lt;T&gt;</h2>
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li>org.locationtech.geowave.adapter.vector.query.gwql.statement.DeleteStatement</li>
+<li>org.locationtech.geowave.adapter.vector.query.gwql.statement.DeleteStatement&lt;T&gt;</li>
 </ul>
 </li>
 </ul>
@@ -113,7 +113,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <span class="typeNameLabel">DeleteStatement</span>
+<pre>public class <span class="typeNameLabel">DeleteStatement&lt;T&gt;</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/Statement.html" title="interface in org.locationtech.geowave.adapter.vector.query.gwql.statement">Statement</a></pre>
 <div class="block">Deletes data from a GeoWave store.</div>
@@ -135,8 +135,9 @@ implements <a href="../../../../../../../../org/locationtech/geowave/adapter/vec
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/DeleteStatement.html#DeleteStatement-org.locationtech.geowave.adapter.vector.query.gwql.QualifiedTypeName-org.opengis.filter.Filter-">DeleteStatement</a></span>(<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/QualifiedTypeName.html" title="class in org.locationtech.geowave.adapter.vector.query.gwql">QualifiedTypeName</a>&nbsp;typeName,
-               org.opengis.filter.Filter&nbsp;filter)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/DeleteStatement.html#DeleteStatement-org.locationtech.geowave.core.store.api.DataStore-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.query.filter.expression.Filter-">DeleteStatement</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore,
+               <a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/DeleteStatement.html" title="type parameter in DeleteStatement">T</a>&gt;&nbsp;adapter,
+               <a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Filter.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Filter</a>&nbsp;filter)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -155,22 +156,17 @@ implements <a href="../../../../../../../../org/locationtech/geowave/adapter/vec
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/ResultSet.html" title="interface in org.locationtech.geowave.adapter.vector.query.gwql">ResultSet</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/DeleteStatement.html#execute-org.locationtech.geowave.core.store.api.DataStore-java.lang.String...-">execute</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore,
-       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
-<div class="block">Executes the statement on the provided data store.</div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/DeleteStatement.html#execute-java.lang.String...-">execute</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
+<div class="block">Executes the statement with the provided authorizations.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>org.opengis.filter.Filter</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/DeleteStatement.html#filter--">filter</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/DeleteStatement.html" title="type parameter in DeleteStatement">T</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/DeleteStatement.html#getAdapter--">getAdapter</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/DeleteStatement.html#getStoreName--">getStoreName</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/QualifiedTypeName.html" title="class in org.locationtech.geowave.adapter.vector.query.gwql">QualifiedTypeName</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/DeleteStatement.html#typeName--">typeName</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Filter.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Filter</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/DeleteStatement.html#getFilter--">getFilter</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -194,15 +190,16 @@ implements <a href="../../../../../../../../org/locationtech/geowave/adapter/vec
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="DeleteStatement-org.locationtech.geowave.adapter.vector.query.gwql.QualifiedTypeName-org.opengis.filter.Filter-">
+<a name="DeleteStatement-org.locationtech.geowave.core.store.api.DataStore-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.query.filter.expression.Filter-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>DeleteStatement</h4>
-<pre>public&nbsp;DeleteStatement(<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/QualifiedTypeName.html" title="class in org.locationtech.geowave.adapter.vector.query.gwql">QualifiedTypeName</a>&nbsp;typeName,
+<pre>public&nbsp;DeleteStatement(<a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore,
+                       <a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/DeleteStatement.html" title="type parameter in DeleteStatement">T</a>&gt;&nbsp;adapter,
                        <a href="http://docs.oracle.com/javase/7/docs/api/javax/annotation/Nullable.html?is-external=true" title="class or interface in javax.annotation">@Nullable</a>
-                       org.opengis.filter.Filter&nbsp;filter)</pre>
+                       <a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Filter.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Filter</a>&nbsp;filter)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>typeName</code> - the type to delete data from</dd>
@@ -218,65 +215,48 @@ implements <a href="../../../../../../../../org/locationtech/geowave/adapter/vec
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="execute-org.locationtech.geowave.core.store.api.DataStore-java.lang.String...-">
+<a name="execute-java.lang.String...-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>execute</h4>
-<pre>public&nbsp;<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/ResultSet.html" title="interface in org.locationtech.geowave.adapter.vector.query.gwql">ResultSet</a>&nbsp;execute(<a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore,
-                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/Statement.html#execute-org.locationtech.geowave.core.store.api.DataStore-java.lang.String...-">Statement</a></code></span></div>
-<div class="block">Executes the statement on the provided data store.</div>
+<pre>public&nbsp;<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/ResultSet.html" title="interface in org.locationtech.geowave.adapter.vector.query.gwql">ResultSet</a>&nbsp;execute(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/Statement.html#execute-java.lang.String...-">Statement</a></code></span></div>
+<div class="block">Executes the statement with the provided authorizations.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/Statement.html#execute-org.locationtech.geowave.core.store.api.DataStore-java.lang.String...-">execute</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/Statement.html" title="interface in org.locationtech.geowave.adapter.vector.query.gwql.statement">Statement</a></code></dd>
+<dd><code><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/Statement.html#execute-java.lang.String...-">execute</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/Statement.html" title="interface in org.locationtech.geowave.adapter.vector.query.gwql.statement">Statement</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>dataStore</code> - the data store to execute the statement on</dd>
 <dd><code>authorizations</code> - authorizations to use for the query</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the results of the statement</dd>
 </dl>
 </li>
 </ul>
-<a name="typeName--">
+<a name="getAdapter--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>typeName</h4>
-<pre>public&nbsp;<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/QualifiedTypeName.html" title="class in org.locationtech.geowave.adapter.vector.query.gwql">QualifiedTypeName</a>&nbsp;typeName()</pre>
+<h4>getAdapter</h4>
+<pre>public&nbsp;<a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/DeleteStatement.html" title="type parameter in DeleteStatement">T</a>&gt;&nbsp;getAdapter()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the type that data will be deleted from</dd>
 </dl>
 </li>
 </ul>
-<a name="filter--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>filter</h4>
-<pre>public&nbsp;org.opengis.filter.Filter&nbsp;filter()</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the delete filter</dd>
-</dl>
-</li>
-</ul>
-<a name="getStoreName--">
+<a name="getFilter--">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>getStoreName</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getStoreName()</pre>
+<h4>getFilter</h4>
+<pre>public&nbsp;<a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Filter.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Filter</a>&nbsp;getFilter()</pre>
 <dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/Statement.html#getStoreName--">getStoreName</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/Statement.html" title="interface in org.locationtech.geowave.adapter.vector.query.gwql.statement">Statement</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the store name that this statement should be executed on</dd>
+<dd>the delete filter</dd>
 </dl>
 </li>
 </ul>

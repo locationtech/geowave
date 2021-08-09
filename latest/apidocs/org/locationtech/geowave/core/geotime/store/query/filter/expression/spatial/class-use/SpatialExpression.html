@@ -83,6 +83,14 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.query.gwql.function.predicate">org.locationtech.geowave.adapter.vector.query.gwql.function.predicate</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.query.gwql.type">org.locationtech.geowave.adapter.vector.query.gwql.type</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -91,6 +99,105 @@
 </li>
 <li class="blockList">
 <ul class="blockList">
+<li class="blockList"><a name="org.locationtech.geowave.adapter.vector.query.gwql.function.predicate">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a> in <a href="../../../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/predicate/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.function.predicate</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/predicate/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.function.predicate</a> with parameters of type <a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SpatialPredicates.BboxFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/predicate/SpatialPredicates.BboxFunction.html#bbox-org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialExpression-double-double-double-double-org.opengis.referencing.crs.CoordinateReferenceSystem-">bbox</a></span>(<a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a>&nbsp;expression,
+    double&nbsp;minX,
+    double&nbsp;maxX,
+    double&nbsp;minY,
+    double&nbsp;maxY,
+    org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SpatialPredicates.BboxLooseFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/predicate/SpatialPredicates.BboxLooseFunction.html#bbox-org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialExpression-double-double-double-double-org.opengis.referencing.crs.CoordinateReferenceSystem-">bbox</a></span>(<a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a>&nbsp;expression,
+    double&nbsp;minX,
+    double&nbsp;maxX,
+    double&nbsp;minY,
+    double&nbsp;maxY,
+    org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SpatialPredicates.IntersectsFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/predicate/SpatialPredicates.IntersectsFunction.html#createInternal-org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialExpression-org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialExpression-">createInternal</a></span>(<a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a>&nbsp;expression1,
+              <a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a>&nbsp;expression2)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SpatialPredicates.IntersectsLooseFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/predicate/SpatialPredicates.IntersectsLooseFunction.html#createInternal-org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialExpression-org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialExpression-">createInternal</a></span>(<a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a>&nbsp;expression1,
+              <a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a>&nbsp;expression2)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SpatialPredicates.DisjointFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/predicate/SpatialPredicates.DisjointFunction.html#createInternal-org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialExpression-org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialExpression-">createInternal</a></span>(<a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a>&nbsp;expression1,
+              <a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a>&nbsp;expression2)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SpatialPredicates.DisjointLooseFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/predicate/SpatialPredicates.DisjointLooseFunction.html#createInternal-org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialExpression-org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialExpression-">createInternal</a></span>(<a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a>&nbsp;expression1,
+              <a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a>&nbsp;expression2)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SpatialPredicates.CrossesFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/predicate/SpatialPredicates.CrossesFunction.html#createInternal-org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialExpression-org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialExpression-">createInternal</a></span>(<a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a>&nbsp;expression1,
+              <a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a>&nbsp;expression2)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SpatialPredicates.OverlapsFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/predicate/SpatialPredicates.OverlapsFunction.html#createInternal-org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialExpression-org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialExpression-">createInternal</a></span>(<a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a>&nbsp;expression1,
+              <a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a>&nbsp;expression2)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SpatialPredicates.TouchesFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/predicate/SpatialPredicates.TouchesFunction.html#createInternal-org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialExpression-org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialExpression-">createInternal</a></span>(<a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a>&nbsp;expression1,
+              <a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a>&nbsp;expression2)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SpatialPredicates.WithinFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/predicate/SpatialPredicates.WithinFunction.html#createInternal-org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialExpression-org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialExpression-">createInternal</a></span>(<a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a>&nbsp;expression1,
+              <a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a>&nbsp;expression2)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SpatialPredicates.ContainsFunction.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/predicate/SpatialPredicates.ContainsFunction.html#createInternal-org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialExpression-org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialExpression-">createInternal</a></span>(<a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a>&nbsp;expression1,
+              <a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a>&nbsp;expression2)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.adapter.vector.query.gwql.type">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a> in <a href="../../../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/type/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.type</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/type/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.type</a> that return <a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GeometryCastableType.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/type/GeometryCastableType.html#cast-java.lang.Object-">cast</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;objectOrExpression)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialExpression</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GeometryCastableType.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/type/GeometryCastableType.html#toSpatialExpression-java.lang.Object-">toSpatialExpression</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;objectOrExpression)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">
 <!--   -->
 </a>
@@ -113,6 +220,10 @@
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialLiteral.html" title="class in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">SpatialLiteral</a></span></code>
 <div class="block">A spatial implementation of literal, representing spatial (geometric) literal objects.</div>
 </td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/TextToSpatialExpression.html" title="class in org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">TextToSpatialExpression</a></span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

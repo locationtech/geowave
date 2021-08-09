@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialBinningStrategy.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialSimpleFeatureBinningStrategy.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialFieldBinningStrategy.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../../index.html?org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialCommonIndexedBinningStrategy.html" target="_top">Frames</a></li>
@@ -142,7 +142,7 @@ extends <a href="../../../../../../../../org/locationtech/geowave/core/geotime/s
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;org.locationtech.geowave.core.geotime.store.query.aggregate.<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialBinningStrategy.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">SpatialBinningStrategy</a></h3>
-<code><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialBinningStrategy.html#complexGeometryBinning">complexGeometryBinning</a>, <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialBinningStrategy.html#precision">precision</a>, <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialBinningStrategy.html#type">type</a></code></li>
+<code><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialBinningStrategy.html#complexGeometryBinning">complexGeometryBinning</a>, <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialBinningStrategy.html#geometryFieldName">geometryFieldName</a>, <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialBinningStrategy.html#precision">precision</a>, <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialBinningStrategy.html#type">type</a></code></li>
 </ul>
 </li>
 </ul>
@@ -196,7 +196,8 @@ extends <a href="../../../../../../../../org/locationtech/geowave/core/geotime/s
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>org.locationtech.jts.geom.Geometry</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialCommonIndexedBinningStrategy.html#getGeometry-org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding-">getGeometry</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&nbsp;entry)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialCommonIndexedBinningStrategy.html#getGeometry-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding-">getGeometry</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;&nbsp;adapter,
+           <a href="../../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&nbsp;entry)</code>
 <div class="block">Extract the geometry from the entry.</div>
 </td>
 </tr>
@@ -296,17 +297,17 @@ extends <a href="../../../../../../../../org/locationtech/geowave/core/geotime/s
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getGeometry-org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding-">
+<a name="getGeometry-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getGeometry</h4>
-<pre>public&nbsp;org.locationtech.jts.geom.Geometry&nbsp;getGeometry(<a href="../../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&nbsp;entry)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialBinningStrategy.html#getGeometry-T-">SpatialBinningStrategy</a></code></span></div>
+<pre>public&nbsp;org.locationtech.jts.geom.Geometry&nbsp;getGeometry(<a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;&nbsp;adapter,
+                                                      <a href="../../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&nbsp;entry)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialBinningStrategy.html#getGeometry-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-">SpatialBinningStrategy</a></code></span></div>
 <div class="block">Extract the geometry from the entry.</div>
 <dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>entry</code> - The entry that will be binned using this strategy.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The geometry object in the entry, or null if no geometry is found.</dd>
@@ -378,7 +379,7 @@ extends <a href="../../../../../../../../org/locationtech/geowave/core/geotime/s
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialBinningStrategy.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialSimpleFeatureBinningStrategy.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialFieldBinningStrategy.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../../index.html?org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialCommonIndexedBinningStrategy.html" target="_top">Frames</a></li>

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":18,"i1":18,"i2":18,"i3":18,"i4":18,"i5":18,"i6":18,"i7":18,"i8":18,"i9":18,"i10":18,"i11":18,"i12":18,"i13":18,"i14":17};
+var methods = {"i0":18,"i1":18,"i2":18,"i3":18,"i4":18,"i5":18,"i6":18,"i7":18,"i8":18,"i9":18,"i10":18,"i11":18,"i12":18,"i13":18,"i14":17,"i15":17,"i16":17};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -75,13 +75,13 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -118,6 +118,25 @@ extends <a href="../../../../../../../../../../org/locationtech/geowave/core/sto
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ThreadLocal.html?is-external=true" title="class or interface in java.lang">ThreadLocal</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html?is-external=true" title="class or interface in java.text">SimpleDateFormat</a>[]&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#SUPPORTED_DATE_FORMATS">SUPPORTED_DATE_FORMATS</a></span></code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
 <!-- ========== METHOD SUMMARY =========== -->
 <ul class="blockList">
 <li class="blockList"><a name="method.summary">
@@ -223,6 +242,14 @@ extends <a href="../../../../../../../../../../org/locationtech/geowave/core/sto
 </td>
 </tr>
 <tr id="i14" class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#stringToDate-java.lang.String-">stringToDate</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;dateStr)</code>&nbsp;</td>
+</tr>
+<tr id="i15" class="rowColor">
+<td class="colFirst"><code>static org.threeten.extra.Interval</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#stringToInterval-java.lang.String-">stringToInterval</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;intervalStr)</code>&nbsp;</td>
+</tr>
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal">TemporalExpression</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html#toTemporalExpression-java.lang.Object-">toTemporalExpression</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;obj)</code>
 <div class="block">Convert the given object into a temporal expression, if it is not already one.</div>
@@ -251,6 +278,23 @@ extends <a href="../../../../../../../../../../org/locationtech/geowave/core/sto
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="SUPPORTED_DATE_FORMATS">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>SUPPORTED_DATE_FORMATS</h4>
+<pre>static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ThreadLocal.html?is-external=true" title="class or interface in java.lang">ThreadLocal</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html?is-external=true" title="class or interface in java.text">SimpleDateFormat</a>[]&gt; SUPPORTED_DATE_FORMATS</pre>
+</li>
+</ul>
+</li>
+</ul>
 <!-- ============ METHOD DETAIL ========== -->
 <ul class="blockList">
 <li class="blockList"><a name="method.detail">
@@ -528,7 +572,7 @@ extends <a href="../../../../../../../../../../org/locationtech/geowave/core/sto
 <a name="toTemporalExpression-java.lang.Object-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>toTemporalExpression</h4>
 <pre>static&nbsp;<a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalExpression.html" title="interface in org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal">TemporalExpression</a>&nbsp;toTemporalExpression(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;obj)</pre>
@@ -539,6 +583,24 @@ extends <a href="../../../../../../../../../../org/locationtech/geowave/core/sto
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the temporal expression</dd>
 </dl>
+</li>
+</ul>
+<a name="stringToDate-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>stringToDate</h4>
+<pre>static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;stringToDate(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;dateStr)</pre>
+</li>
+</ul>
+<a name="stringToInterval-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>stringToInterval</h4>
+<pre>static&nbsp;org.threeten.extra.Interval&nbsp;stringToInterval(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;intervalStr)</pre>
 </li>
 </ul>
 </li>
@@ -595,13 +657,13 @@ extends <a href="../../../../../../../../../../org/locationtech/geowave/core/sto
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>

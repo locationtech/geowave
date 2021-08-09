@@ -173,7 +173,8 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/store/
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>protected org.locationtech.jts.geom.Envelope</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/CommonIndexBoundingBoxAggregation.html#getEnvelope-org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding-">getEnvelope</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&nbsp;entry)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/CommonIndexBoundingBoxAggregation.html#getEnvelope-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding-">getEnvelope</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;&nbsp;adapter,
+           <a href="../../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&nbsp;entry)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -228,16 +229,17 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/store/
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getEnvelope-org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding-">
+<a name="getEnvelope-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getEnvelope</h4>
-<pre>protected&nbsp;org.locationtech.jts.geom.Envelope&nbsp;getEnvelope(<a href="../../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&nbsp;entry)</pre>
+<pre>protected&nbsp;org.locationtech.jts.geom.Envelope&nbsp;getEnvelope(<a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;&nbsp;adapter,
+                                                         <a href="../../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&nbsp;entry)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BoundingBoxAggregation.html#getEnvelope-T-">getEnvelope</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BoundingBoxAggregation.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">BoundingBoxAggregation</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/CommonIndexBoundingBoxAggregation.html" title="type parameter in CommonIndexBoundingBoxAggregation">P</a> extends <a href="../../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="../../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BoundingBoxAggregation.html#getEnvelope-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-">getEnvelope</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BoundingBoxAggregation.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">BoundingBoxAggregation</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/CommonIndexBoundingBoxAggregation.html" title="type parameter in CommonIndexBoundingBoxAggregation">P</a> extends <a href="../../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="../../../../../../../../org/locationtech/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in org.locationtech.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>

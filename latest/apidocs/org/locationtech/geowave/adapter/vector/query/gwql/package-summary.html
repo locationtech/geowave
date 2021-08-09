@@ -44,7 +44,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/aggregation/package-summary.html">Prev&nbsp;Package</a></li>
-<li><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/package-summary.html">Next&nbsp;Package</a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/aggregation/package-summary.html">Next&nbsp;Package</a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?org/locationtech/geowave/adapter/vector/query/gwql/package-summary.html" target="_top">Frames</a></li>
@@ -83,6 +83,22 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/CastableType.html" title="interface in org.locationtech.geowave.adapter.vector.query.gwql">CastableType</a>&lt;T&gt;</td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLExtensionRegistrySpi.html" title="interface in org.locationtech.geowave.adapter.vector.query.gwql">GWQLExtensionRegistrySpi</a></td>
+<td class="colLast">
+<div class="block">Class for adding functionality to the GeoWave query language.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/QLFunction.html" title="interface in org.locationtech.geowave.adapter.vector.query.gwql">QLFunction</a>&lt;R&gt;</td>
+<td class="colLast">
+<div class="block">Base interface for all functions in the query language.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/ResultSet.html" title="interface in org.locationtech.geowave.adapter.vector.query.gwql">ResultSet</a></td>
 <td class="colLast">
 <div class="block">Interface for a set of results from a GeoWave query.</div>
@@ -100,27 +116,49 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/AdapterEntryResultSet.html" title="class in org.locationtech.geowave.adapter.vector.query.gwql">AdapterEntryResultSet</a>&lt;T&gt;</td>
+<td class="colLast">
+<div class="block">A result set that wraps adapter entries using a given set of column selectors.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/AggregationSelector.html" title="class in org.locationtech.geowave.adapter.vector.query.gwql">AggregationSelector</a></td>
 <td class="colLast">
 <div class="block">Selector that applies an aggregation function to the query.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/ColumnSelector.html" title="class in org.locationtech.geowave.adapter.vector.query.gwql">ColumnSelector</a></td>
 <td class="colLast">
 <div class="block">Selector that pulls a value from a single column of the results set.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/ErrorListener.html" title="class in org.locationtech.geowave.adapter.vector.query.gwql">ErrorListener</a></td>
 <td class="colLast">
 <div class="block">Error listener that wraps ANTLR syntax errors in our own exception class.</div>
 </td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/QualifiedTypeName.html" title="class in org.locationtech.geowave.adapter.vector.query.gwql">QualifiedTypeName</a></td>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLCoreExtensions.html" title="class in org.locationtech.geowave.adapter.vector.query.gwql">GWQLCoreExtensions</a></td>
 <td class="colLast">
-<div class="block">A combination of store name and type name used by queries to identify the data set to query.</div>
+<div class="block">The built-in set of functions used by the GeoWave query language.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLExtensionRegistry.html" title="class in org.locationtech.geowave.adapter.vector.query.gwql">GWQLExtensionRegistry</a></td>
+<td class="colLast">
+<div class="block">Singleton registry for all GWQL extensions.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLExtensionRegistrySpi.FieldValueBuilder.html" title="class in org.locationtech.geowave.adapter.vector.query.gwql">GWQLExtensionRegistrySpi.FieldValueBuilder</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/GWQLParseHelper.html" title="class in org.locationtech.geowave.adapter.vector.query.gwql">GWQLParseHelper</a></td>
+<td class="colLast">
+<div class="block">Helper functions for transforming GWQL into GeoWave objects.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -136,12 +174,6 @@
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/SimpleFeatureResultSet.html" title="class in org.locationtech.geowave.adapter.vector.query.gwql">SimpleFeatureResultSet</a></td>
-<td class="colLast">
-<div class="block">A result set that wraps SimpleFeature results using a given set of column selectors.</div>
-</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/SingletonResultSet.html" title="class in org.locationtech.geowave.adapter.vector.query.gwql">SingletonResultSet</a></td>
 <td class="colLast">
 <div class="block">A result set that wraps a single result.</div>
@@ -206,7 +238,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/aggregation/package-summary.html">Prev&nbsp;Package</a></li>
-<li><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/package-summary.html">Next&nbsp;Package</a></li>
+<li><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/aggregation/package-summary.html">Next&nbsp;Package</a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?org/locationtech/geowave/adapter/vector/query/gwql/package-summary.html" target="_top">Frames</a></li>

@@ -118,7 +118,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialCommonIndexedBinningStrategy.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">SpatialCommonIndexedBinningStrategy</a>, <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialSimpleFeatureBinningStrategy.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">SpatialSimpleFeatureBinningStrategy</a></dd>
+<dd><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialCommonIndexedBinningStrategy.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">SpatialCommonIndexedBinningStrategy</a>, <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialFieldBinningStrategy.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">SpatialFieldBinningStrategy</a>, <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialSimpleFeatureBinningStrategy.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">SpatialSimpleFeatureBinningStrategy</a></dd>
 </dl>
 <hr>
 <br>
@@ -150,13 +150,17 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/store/
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialBinningStrategy.html#complexGeometryBinning">complexGeometryBinning</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialBinningStrategy.html#geometryFieldName">geometryFieldName</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialBinningStrategy.html#precision">precision</a></span></code>
 <div class="block">The precision/resolution/length used by the binning strategy (it usually is equivalent to
  character length).</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../../org/locationtech/geowave/core/geotime/binning/SpatialBinningType.html" title="enum in org.locationtech.geowave.core.geotime.binning">SpatialBinningType</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialBinningStrategy.html#type">type</a></span></code>&nbsp;</td>
 </tr>
@@ -178,9 +182,10 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/store/
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialBinningStrategy.html#SpatialBinningStrategy--">SpatialBinningStrategy</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialBinningStrategy.html#SpatialBinningStrategy-org.locationtech.geowave.core.geotime.binning.SpatialBinningType-int-boolean-">SpatialBinningStrategy</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/geotime/binning/SpatialBinningType.html" title="enum in org.locationtech.geowave.core.geotime.binning">SpatialBinningType</a>&nbsp;type,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/SpatialBinningStrategy.html#SpatialBinningStrategy-org.locationtech.geowave.core.geotime.binning.SpatialBinningType-int-boolean-java.lang.String-">SpatialBinningStrategy</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/geotime/binning/SpatialBinningType.html" title="enum in org.locationtech.geowave.core.geotime.binning">SpatialBinningType</a>&nbsp;type,
                       int&nbsp;precision,
-                      boolean&nbsp;useCentroidOnly)</code>
+                      boolean&nbsp;useCentroidOnly,
+                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geometryFieldName)</code>
 <div class="block">Use the given precision to bin objects</div>
 </td>
 </tr>
@@ -252,6 +257,15 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/store/
 <!--   -->
 </a>
 <h3>Field Detail</h3>
+<a name="geometryFieldName">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>geometryFieldName</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> geometryFieldName</pre>
+</li>
+</ul>
 <a name="precision">
 <!--   -->
 </a>
@@ -298,7 +312,7 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/store/
 <pre>public&nbsp;SpatialBinningStrategy()</pre>
 </li>
 </ul>
-<a name="SpatialBinningStrategy-org.locationtech.geowave.core.geotime.binning.SpatialBinningType-int-boolean-">
+<a name="SpatialBinningStrategy-org.locationtech.geowave.core.geotime.binning.SpatialBinningType-int-boolean-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -306,7 +320,8 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/store/
 <h4>SpatialBinningStrategy</h4>
 <pre>public&nbsp;SpatialBinningStrategy(<a href="../../../../../../../../org/locationtech/geowave/core/geotime/binning/SpatialBinningType.html" title="enum in org.locationtech.geowave.core.geotime.binning">SpatialBinningType</a>&nbsp;type,
                               int&nbsp;precision,
-                              boolean&nbsp;useCentroidOnly)</pre>
+                              boolean&nbsp;useCentroidOnly,
+                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geometryFieldName)</pre>
 <div class="block">Use the given precision to bin objects</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -315,6 +330,7 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/store/
 <dd><code>useCentroidOnly</code> - for complex geometry such as lines and polygons whether to just
         aggregate one hash value based on the centroid or to apply the aggregation to all
         overlapping centroids</dd>
+<dd><code>geometryFieldName</code> - the field name for the geometry to bin by</dd>
 </dl>
 </li>
 </ul>

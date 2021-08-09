@@ -87,6 +87,30 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.query.gwql">org.locationtech.geowave.adapter.vector.query.gwql</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.query.gwql.function.expression">org.locationtech.geowave.adapter.vector.query.gwql.function.expression</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.query.gwql.function.operator">org.locationtech.geowave.adapter.vector.query.gwql.function.operator</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.query.gwql.function.predicate">org.locationtech.geowave.adapter.vector.query.gwql.function.predicate</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.query.gwql.parse">org.locationtech.geowave.adapter.vector.query.gwql.parse</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#org.locationtech.geowave.adapter.vector.query.gwql.statement">org.locationtech.geowave.adapter.vector.query.gwql.statement</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial">org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -132,6 +156,144 @@
 <tbody>
 <tr class="altColor">
 <td class="colOne"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/class-use/Filter.html#org.locationtech.geowave.adapter.vector.plugin">Filter</a>
+<div class="block">Base interface for GeoWave filter objects.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.adapter.vector.query.gwql">
+<!--   -->
+</a>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/package-summary.html">org.locationtech.geowave.core.store.query.filter.expression</a> used by <a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/class-use/Expression.html#org.locationtech.geowave.adapter.vector.query.gwql">Expression</a>
+<div class="block">Base interface for any expression that evaluates to some value to be used by a predicate.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/class-use/FieldValue.html#org.locationtech.geowave.adapter.vector.query.gwql">FieldValue</a>
+<div class="block">An abstract expression implementation for turning fields values from an adapter entry into an
+ object to be used by the expression.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/class-use/Predicate.html#org.locationtech.geowave.adapter.vector.query.gwql">Predicate</a>
+<div class="block">A predicate is really just a filter, but predicate is a more appropriate name in many cases.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.adapter.vector.query.gwql.function.expression">
+<!--   -->
+</a>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/package-summary.html">org.locationtech.geowave.core.store.query.filter.expression</a> used by <a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/expression/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.function.expression</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/class-use/Expression.html#org.locationtech.geowave.adapter.vector.query.gwql.function.expression">Expression</a>
+<div class="block">Base interface for any expression that evaluates to some value to be used by a predicate.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.adapter.vector.query.gwql.function.operator">
+<!--   -->
+</a>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/package-summary.html">org.locationtech.geowave.core.store.query.filter.expression</a> used by <a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/operator/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.function.operator</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/class-use/Expression.html#org.locationtech.geowave.adapter.vector.query.gwql.function.operator">Expression</a>
+<div class="block">Base interface for any expression that evaluates to some value to be used by a predicate.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/class-use/Predicate.html#org.locationtech.geowave.adapter.vector.query.gwql.function.operator">Predicate</a>
+<div class="block">A predicate is really just a filter, but predicate is a more appropriate name in many cases.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.adapter.vector.query.gwql.function.predicate">
+<!--   -->
+</a>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/package-summary.html">org.locationtech.geowave.core.store.query.filter.expression</a> used by <a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/function/predicate/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.function.predicate</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/class-use/Expression.html#org.locationtech.geowave.adapter.vector.query.gwql.function.predicate">Expression</a>
+<div class="block">Base interface for any expression that evaluates to some value to be used by a predicate.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/class-use/Predicate.html#org.locationtech.geowave.adapter.vector.query.gwql.function.predicate">Predicate</a>
+<div class="block">A predicate is really just a filter, but predicate is a more appropriate name in many cases.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.adapter.vector.query.gwql.parse">
+<!--   -->
+</a>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/package-summary.html">org.locationtech.geowave.core.store.query.filter.expression</a> used by <a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/parse/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.parse</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/class-use/Expression.html#org.locationtech.geowave.adapter.vector.query.gwql.parse">Expression</a>
+<div class="block">Base interface for any expression that evaluates to some value to be used by a predicate.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/class-use/Filter.html#org.locationtech.geowave.adapter.vector.query.gwql.parse">Filter</a>
+<div class="block">Base interface for GeoWave filter objects.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/class-use/Literal.html#org.locationtech.geowave.adapter.vector.query.gwql.parse">Literal</a>
+<div class="block">An expression representing a raw value, not derived from an adapter entry.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/class-use/Predicate.html#org.locationtech.geowave.adapter.vector.query.gwql.parse">Predicate</a>
+<div class="block">A predicate is really just a filter, but predicate is a more appropriate name in many cases.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="org.locationtech.geowave.adapter.vector.query.gwql.statement">
+<!--   -->
+</a>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/package-summary.html">org.locationtech.geowave.core.store.query.filter.expression</a> used by <a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/package-summary.html">org.locationtech.geowave.adapter.vector.query.gwql.statement</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/class-use/Filter.html#org.locationtech.geowave.adapter.vector.query.gwql.statement">Filter</a>
 <div class="block">Base interface for GeoWave filter objects.</div>
 </td>
 </tr>

@@ -139,7 +139,7 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/store/
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/FieldNameParam.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">FieldNameParam</a></code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../../org/locationtech/geowave/core/store/query/aggregate/FieldNameParam.html" title="class in org.locationtech.geowave.core.store.query.aggregate">FieldNameParam</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BaseOptimalVectorAggregation.html#fieldNameParam">fieldNameParam</a></span></code>&nbsp;</td>
 </tr>
 </table>
@@ -160,7 +160,7 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/store/
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BaseOptimalVectorAggregation.html#BaseOptimalVectorAggregation--">BaseOptimalVectorAggregation</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BaseOptimalVectorAggregation.html#BaseOptimalVectorAggregation-org.locationtech.geowave.core.geotime.store.query.aggregate.FieldNameParam-">BaseOptimalVectorAggregation</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/FieldNameParam.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">FieldNameParam</a>&nbsp;fieldNameParam)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BaseOptimalVectorAggregation.html#BaseOptimalVectorAggregation-org.locationtech.geowave.core.store.query.aggregate.FieldNameParam-">BaseOptimalVectorAggregation</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/query/aggregate/FieldNameParam.html" title="class in org.locationtech.geowave.core.store.query.aggregate">FieldNameParam</a>&nbsp;fieldNameParam)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -183,7 +183,8 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/store/
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BaseOptimalVectorAggregation.html" title="type parameter in BaseOptimalVectorAggregation">P</a>,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BaseOptimalVectorAggregation.html" title="type parameter in BaseOptimalVectorAggregation">R</a>,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BaseOptimalVectorAggregation.html" title="type parameter in BaseOptimalVectorAggregation">T</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BaseOptimalVectorAggregation.html#createAggregation-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.api.Index-">createAggregation</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BaseOptimalVectorAggregation.html" title="type parameter in BaseOptimalVectorAggregation">T</a>&gt;&nbsp;adapter,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BaseOptimalVectorAggregation.html#createAggregation-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.AdapterToIndexMapping-org.locationtech.geowave.core.store.api.Index-">createAggregation</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BaseOptimalVectorAggregation.html" title="type parameter in BaseOptimalVectorAggregation">T</a>&gt;&nbsp;adapter,
+                 <a href="../../../../../../../../org/locationtech/geowave/core/store/AdapterToIndexMapping.html" title="class in org.locationtech.geowave.core.store">AdapterToIndexMapping</a>&nbsp;indexMapping,
                  <a href="../../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
@@ -243,7 +244,7 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/store/
 <ul class="blockListLast">
 <li class="blockList">
 <h4>fieldNameParam</h4>
-<pre>protected&nbsp;<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/FieldNameParam.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">FieldNameParam</a> fieldNameParam</pre>
+<pre>protected&nbsp;<a href="../../../../../../../../org/locationtech/geowave/core/store/query/aggregate/FieldNameParam.html" title="class in org.locationtech.geowave.core.store.query.aggregate">FieldNameParam</a> fieldNameParam</pre>
 </li>
 </ul>
 </li>
@@ -263,13 +264,13 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/store/
 <pre>public&nbsp;BaseOptimalVectorAggregation()</pre>
 </li>
 </ul>
-<a name="BaseOptimalVectorAggregation-org.locationtech.geowave.core.geotime.store.query.aggregate.FieldNameParam-">
+<a name="BaseOptimalVectorAggregation-org.locationtech.geowave.core.store.query.aggregate.FieldNameParam-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>BaseOptimalVectorAggregation</h4>
-<pre>public&nbsp;BaseOptimalVectorAggregation(<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/FieldNameParam.html" title="class in org.locationtech.geowave.core.geotime.store.query.aggregate">FieldNameParam</a>&nbsp;fieldNameParam)</pre>
+<pre>public&nbsp;BaseOptimalVectorAggregation(<a href="../../../../../../../../org/locationtech/geowave/core/store/query/aggregate/FieldNameParam.html" title="class in org.locationtech.geowave.core.store.query.aggregate">FieldNameParam</a>&nbsp;fieldNameParam)</pre>
 </li>
 </ul>
 </li>
@@ -322,17 +323,18 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/store/
 </dl>
 </li>
 </ul>
-<a name="createAggregation-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.api.Index-">
+<a name="createAggregation-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.AdapterToIndexMapping-org.locationtech.geowave.core.store.api.Index-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createAggregation</h4>
 <pre>public&nbsp;<a href="../../../../../../../../org/locationtech/geowave/core/store/api/Aggregation.html" title="interface in org.locationtech.geowave.core.store.api">Aggregation</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BaseOptimalVectorAggregation.html" title="type parameter in BaseOptimalVectorAggregation">P</a>,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BaseOptimalVectorAggregation.html" title="type parameter in BaseOptimalVectorAggregation">R</a>,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BaseOptimalVectorAggregation.html" title="type parameter in BaseOptimalVectorAggregation">T</a>&gt;&nbsp;createAggregation(<a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BaseOptimalVectorAggregation.html" title="type parameter in BaseOptimalVectorAggregation">T</a>&gt;&nbsp;adapter,
+                                            <a href="../../../../../../../../org/locationtech/geowave/core/store/AdapterToIndexMapping.html" title="class in org.locationtech.geowave.core.store">AdapterToIndexMapping</a>&nbsp;indexMapping,
                                             <a href="../../../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;index)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html#createAggregation-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.api.Index-">createAggregation</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">AdapterAndIndexBasedAggregation</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BaseOptimalVectorAggregation.html" title="type parameter in BaseOptimalVectorAggregation">P</a> extends <a href="../../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BaseOptimalVectorAggregation.html" title="type parameter in BaseOptimalVectorAggregation">R</a>,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BaseOptimalVectorAggregation.html" title="type parameter in BaseOptimalVectorAggregation">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html#createAggregation-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.AdapterToIndexMapping-org.locationtech.geowave.core.store.api.Index-">createAggregation</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/aggregate/AdapterAndIndexBasedAggregation.html" title="interface in org.locationtech.geowave.core.store.query.aggregate">AdapterAndIndexBasedAggregation</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BaseOptimalVectorAggregation.html" title="type parameter in BaseOptimalVectorAggregation">P</a> extends <a href="../../../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a>,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BaseOptimalVectorAggregation.html" title="type parameter in BaseOptimalVectorAggregation">R</a>,<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BaseOptimalVectorAggregation.html" title="type parameter in BaseOptimalVectorAggregation">T</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>

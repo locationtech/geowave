@@ -148,8 +148,8 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/SimpleFeatureResultSet.html" title="class in org.locationtech.geowave.adapter.vector.query.gwql">SimpleFeatureResultSet</a></span></code>
-<div class="block">A result set that wraps SimpleFeature results using a given set of column selectors.</div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/AdapterEntryResultSet.html" title="class in org.locationtech.geowave.adapter.vector.query.gwql">AdapterEntryResultSet</a>&lt;T&gt;</span></code>
+<div class="block">A result set that wraps adapter entries using a given set of column selectors.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -174,19 +174,16 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/ResultSet.html" title="interface in org.locationtech.geowave.adapter.vector.query.gwql">ResultSet</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SelectStatement.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/SelectStatement.html#execute-org.locationtech.geowave.core.store.api.DataStore-java.lang.String...-">execute</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore,
-       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">SelectStatement.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/SelectStatement.html#execute-java.lang.String...-">execute</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/ResultSet.html" title="interface in org.locationtech.geowave.adapter.vector.query.gwql">ResultSet</a></code></td>
-<td class="colLast"><span class="typeNameLabel">DeleteStatement.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/DeleteStatement.html#execute-org.locationtech.geowave.core.store.api.DataStore-java.lang.String...-">execute</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore,
-       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">DeleteStatement.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/DeleteStatement.html#execute-java.lang.String...-">execute</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/ResultSet.html" title="interface in org.locationtech.geowave.adapter.vector.query.gwql">ResultSet</a></code></td>
-<td class="colLast"><span class="typeNameLabel">Statement.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/Statement.html#execute-org.locationtech.geowave.core.store.api.DataStore-java.lang.String...-">execute</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataStore.html" title="interface in org.locationtech.geowave.core.store.api">DataStore</a>&nbsp;dataStore,
-       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
-<div class="block">Executes the statement on the provided data store.</div>
+<td class="colLast"><span class="typeNameLabel">Statement.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/gwql/statement/Statement.html#execute-java.lang.String...-">execute</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
+<div class="block">Executes the statement with the provided authorizations.</div>
 </td>
 </tr>
 </tbody>

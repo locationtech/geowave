@@ -205,7 +205,8 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/store/
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>protected abstract org.locationtech.jts.geom.Envelope</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BoundingBoxAggregation.html#getEnvelope-T-">getEnvelope</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BoundingBoxAggregation.html" title="type parameter in BoundingBoxAggregation">T</a>&nbsp;entry)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BoundingBoxAggregation.html#getEnvelope-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-">getEnvelope</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BoundingBoxAggregation.html" title="type parameter in BoundingBoxAggregation">T</a>&gt;&nbsp;adapter,
+           <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BoundingBoxAggregation.html" title="type parameter in BoundingBoxAggregation">T</a>&nbsp;entry)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BoundingBoxAggregation.html" title="type parameter in BoundingBoxAggregation">P</a></code></td>
@@ -509,15 +510,16 @@ implements <a href="../../../../../../../../org/locationtech/geowave/core/store/
 <pre>protected&nbsp;void&nbsp;aggregate(org.locationtech.jts.geom.Envelope&nbsp;env)</pre>
 </li>
 </ul>
-<a name="getEnvelope-java.lang.Object-">
+<a name="getEnvelope-org.locationtech.geowave.core.store.api.DataTypeAdapter-java.lang.Object-">
 <!--   -->
-</a><a name="getEnvelope-T-">
+</a><a name="getEnvelope-org.locationtech.geowave.core.store.api.DataTypeAdapter-T-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getEnvelope</h4>
-<pre>protected abstract&nbsp;org.locationtech.jts.geom.Envelope&nbsp;getEnvelope(<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BoundingBoxAggregation.html" title="type parameter in BoundingBoxAggregation">T</a>&nbsp;entry)</pre>
+<pre>protected abstract&nbsp;org.locationtech.jts.geom.Envelope&nbsp;getEnvelope(<a href="../../../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BoundingBoxAggregation.html" title="type parameter in BoundingBoxAggregation">T</a>&gt;&nbsp;adapter,
+                                                                  <a href="../../../../../../../../org/locationtech/geowave/core/geotime/store/query/aggregate/BoundingBoxAggregation.html" title="type parameter in BoundingBoxAggregation">T</a>&nbsp;entry)</pre>
 </li>
 </ul>
 </li>
