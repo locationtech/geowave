@@ -18,6 +18,7 @@ import org.locationtech.geowave.core.index.numeric.BinnedNumericDataset;
 import org.locationtech.geowave.core.index.numeric.NumericRange;
 import org.locationtech.geowave.core.index.numeric.NumericValue;
 import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
+import org.locationtech.geowave.core.index.persist.PersistableList;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 import org.locationtech.geowave.core.index.sfc.BasicSFCIndexStrategy;
 import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
@@ -98,6 +99,7 @@ public class IndexPersistableRegistry implements
         new PersistableIdAndConstructor((short) 141, BasicTextDataset::new),
         new PersistableIdAndConstructor((short) 142, TextRange::new),
         new PersistableIdAndConstructor((short) 143, TextValue::new),
-        new PersistableIdAndConstructor((short) 144, ExplicitTextSearch::new),};
+        new PersistableIdAndConstructor((short) 144, ExplicitTextSearch::new),
+        new PersistableIdAndConstructor((short) 145, PersistableList::new)};
   }
 }
