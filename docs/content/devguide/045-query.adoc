@@ -46,18 +46,23 @@ Another common way of filtering vector data in a query is by using CQL, also kno
 
 === GeoWave Query Language (GWQL)
 
-In order to simplify queries, GeoWave provides a simple query language that is roughly based on SQL. This is discussed in the link:userguide.html#vector-queries[User Guide, window="_blank"].  While the user guide discusses the language from the context of the CLI, it is also possible to execute these queries programmatically through the `DataStore` interface.  For example, the following statement would execute an everything query on the `countries` type in the `example` data store:
+In order to simplify queries, GeoWave provides a simple query language that is roughly based on SQL. This is discussed in the link:userguide.html#queries[User Guide, window="_blank"].  While the user guide discusses the language from the context of the CLI, it is also possible to execute these queries programmatically through the `DataStore` interface.  For example, the following statement would execute an everything query on the `countries` type in the `example` data store:
 
 [source, java]
 ----
-ResultSet results = dataStore.query("SELECT * FROM countries");
+try(final ResultSet results = dataStore.query("SELECT * FROM countries")) {
+	while (results.hasNext()) {
+		final Result result = results.next();
+		// Do something with the result
+	}
+}
 ----
 
 Querying GeoWave using the GeoWave Query Language will return results in the form of a {core-store}/core/store/query/gwql/ResultSet.java[`ResultSet`], which is less like the results that would be obtained from a standard GeoWave query (e.g. `SimpleFeatures`) and more like the results that you would expect from querying a relational database (Rows) in that only the fields and aggregations included in the `SELECT` statement will be returned.
 
 ==== Output Formats
 
-New output formats are discovered using Service Provider Interface (SPI)-based injection. In order to install a new output format, implement {core-store}/core/store/cli/query/QueryOutputFormatSpi.java[`QueryOutputFormatSpi`] and make sure your JAR is on the classpath when running GeoWave. For more information on using SPI, see the link:https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html[Oracle documentation, window="_blank"].
+New output formats for the CLI query command are discovered using Service Provider Interface (SPI)-based injection. In order to install a new output format, implement {core-store}/core/store/cli/query/QueryOutputFormatSpi.java[`QueryOutputFormatSpi`] and make sure your JAR is on the classpath when running GeoWave. For more information on using SPI, see the link:https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html[Oracle documentation, window="_blank"].
 
 ==== Extending GWQL
 
