@@ -90,6 +90,9 @@ import org.locationtech.geowave.core.store.query.constraints.PrefixIdQuery;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.constraints.TypeConstraintQuery;
 import org.locationtech.geowave.core.store.query.filter.DedupeFilter;
+import org.locationtech.geowave.core.store.query.gwql.ResultSet;
+import org.locationtech.geowave.core.store.query.gwql.parse.GWQLParser;
+import org.locationtech.geowave.core.store.query.gwql.statement.Statement;
 import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.statistics.DefaultStatisticsProvider;
 import org.locationtech.geowave.core.store.statistics.InternalStatisticsHelper;
@@ -293,6 +296,12 @@ public class BaseDataStore implements DataStore {
   @Override
   public <T> CloseableIterator<T> query(final Query<T> query) {
     return internalQuery(query, DeletionMode.DONT_DELETE);
+  }
+
+  @Override
+  public ResultSet query(final String queryStr, final String... authorizations) {
+    final Statement statement = GWQLParser.parseStatement(this, queryStr);
+    return statement.execute(authorizations);
   }
 
   protected <T> CloseableIterator<T> internalQuery(

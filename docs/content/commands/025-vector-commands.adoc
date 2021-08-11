@@ -4,11 +4,6 @@
 
 Commands that operate on vector data.
 
-[[vector-query]]
-=== Query
-
-include::manpages/vector/geowave-query.txt[]
-
 [[vector-cqldelete]]
 === CQL Delete
 
