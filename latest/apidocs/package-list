@@ -27,14 +27,6 @@ org.locationtech.geowave.adapter.vector.plugin.lock
 org.locationtech.geowave.adapter.vector.plugin.transaction
 org.locationtech.geowave.adapter.vector.query
 org.locationtech.geowave.adapter.vector.query.aggregation
-org.locationtech.geowave.adapter.vector.query.gwql
-org.locationtech.geowave.adapter.vector.query.gwql.function.aggregation
-org.locationtech.geowave.adapter.vector.query.gwql.function.expression
-org.locationtech.geowave.adapter.vector.query.gwql.function.operator
-org.locationtech.geowave.adapter.vector.query.gwql.function.predicate
-org.locationtech.geowave.adapter.vector.query.gwql.parse
-org.locationtech.geowave.adapter.vector.query.gwql.statement
-org.locationtech.geowave.adapter.vector.query.gwql.type
 org.locationtech.geowave.adapter.vector.render
 org.locationtech.geowave.adapter.vector.util
 org.locationtech.geowave.analytic
@@ -132,6 +124,7 @@ org.locationtech.geowave.core.geotime.store.query.filter
 org.locationtech.geowave.core.geotime.store.query.filter.expression
 org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial
 org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal
+org.locationtech.geowave.core.geotime.store.query.gwql
 org.locationtech.geowave.core.geotime.store.statistics
 org.locationtech.geowave.core.geotime.store.statistics.binning
 org.locationtech.geowave.core.geotime.util
@@ -170,6 +163,7 @@ org.locationtech.geowave.core.store.base.dataidx
 org.locationtech.geowave.core.store.callback
 org.locationtech.geowave.core.store.cli
 org.locationtech.geowave.core.store.cli.index
+org.locationtech.geowave.core.store.cli.query
 org.locationtech.geowave.core.store.cli.stats
 org.locationtech.geowave.core.store.cli.store
 org.locationtech.geowave.core.store.cli.type
@@ -196,6 +190,14 @@ org.locationtech.geowave.core.store.query.filter
 org.locationtech.geowave.core.store.query.filter.expression
 org.locationtech.geowave.core.store.query.filter.expression.numeric
 org.locationtech.geowave.core.store.query.filter.expression.text
+org.locationtech.geowave.core.store.query.gwql
+org.locationtech.geowave.core.store.query.gwql.function.aggregation
+org.locationtech.geowave.core.store.query.gwql.function.expression
+org.locationtech.geowave.core.store.query.gwql.function.operator
+org.locationtech.geowave.core.store.query.gwql.function.predicate
+org.locationtech.geowave.core.store.query.gwql.parse
+org.locationtech.geowave.core.store.query.gwql.statement
+org.locationtech.geowave.core.store.query.gwql.type
 org.locationtech.geowave.core.store.query.options
 org.locationtech.geowave.core.store.server
 org.locationtech.geowave.core.store.spi

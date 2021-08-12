@@ -575,6 +575,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#ingest-listplugins">List Ingest Plugins</a></li>
 </ul>
 </li>
+<li><a href="#query-commands">Query Commands</a>
+<ul class="sectlevel2">
+<li><a href="#query">Query</a></li>
+</ul>
+</li>
 <li><a href="#analytic-commands">Analytic Commands</a>
 <ul class="sectlevel2">
 <li><a href="#analytic-dbscan">Density-Based Scan</a></li>
@@ -590,7 +595,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#vector-commands">Vector Commands</a>
 <ul class="sectlevel2">
-<li><a href="#vector-query">Query</a></li>
 <li><a href="#vector-cqldelete">CQL Delete</a></li>
 <li><a href="#vector-localexport">Local Export</a></li>
 <li><a href="#vector-mrexport">MapReduce Export</a></li>
@@ -5024,6 +5028,144 @@ The truststore file is used to validate client certificates.</p>
 </div>
 </div>
 <div class="sect1">
+<h2 id="query-commands"><a class="anchor" href="#query-commands"></a>Query Commands</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Commands related to querying data.</p>
+</div>
+<div class="sect2">
+<h3 id="query"><a class="anchor" href="#query"></a>Query</h3>
+<div class="sect3">
+<h4 id="query-name"><a class="anchor" href="#query-name"></a>NAME</h4>
+<div class="paragraph">
+<p>geowave-query - Query data using GeoWave Query Language</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="query-synopsis"><a class="anchor" href="#query-synopsis"></a>SYNOPSIS</h4>
+<div class="literalblock">
+<div class="content">
+<pre>geowave query [options] &lt;store name&gt; &lt;query&gt;</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="query-description"><a class="anchor" href="#query-description"></a>DESCRIPTION</h4>
+<div class="paragraph">
+<p>This command queries data using an SQL-like syntax.  The query language currently only supports <code>SELECT</code> and <code>DELETE</code> statements.</p>
+</div>
+<div class="paragraph">
+<p>The syntax for <code>SELECT</code> statements is as follows:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>SELECT &lt;attributes&gt; FROM &lt;typeName&gt; [ WHERE &lt;filter&gt; ] [ LIMIT &lt;count&gt; ]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Where <code>&lt;attributes&gt;</code> is a comma-separated list of column selectors or aggregation functions, <code>&lt;typeName&gt;</code> is the type name, <code>&lt;filter&gt;</code> is the constraints to filter the results by, and <code>&lt;count&gt;</code> is the number of results to limit the query to.</p>
+</div>
+<div class="paragraph">
+<p>The syntax for <code>DELETE</code> statements is as follows:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>DELETE FROM &lt;typeName&gt; [ WHERE &lt;filter&gt; ]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Where <code>&lt;typeName&gt;</code> is the type name and <code>&lt;filter&gt;</code> is the constraints to delete results by.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="query-options"><a class="anchor" href="#query-options"></a>OPTIONS</h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><strong>--debug</strong></dt>
+<dd>
+<p>If specified, print out additional info for debug purposes.</p>
+</dd>
+<dt class="hdlist1"><strong>-f, --format</strong> <em>&lt;format&gt;</em></dt>
+<dd>
+<p>Output format for query results.  Possible values are <code>console</code>, <code>csv</code>, <code>shp</code>, and <code>geojson</code>.  Both <code>shp</code> and <code>geojson</code> formats require that the query results contain at least 1 geometry column.  Default is <code>console</code>.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>When the <code>csv</code> format is used, additional options are:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><strong>* -o, --outputFile</strong> <em>&lt;file&gt;</em></dt>
+<dd>
+<p>CSV file to output query results to.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>When the <code>shp</code> format is used, additional options are:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><strong>* -o, --outputFile</strong> <em>&lt;file&gt;</em></dt>
+<dd>
+<p>Shapefile to output query results to.</p>
+</dd>
+<dt class="hdlist1"><strong>-t, --typeName</strong> <em>&lt;name&gt;</em></dt>
+<dd>
+<p>Output feature type name.</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>When the <code>geojson</code> format is used, additional options are:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><strong>* -o, --outputFile</strong> <em>&lt;file&gt;</em></dt>
+<dd>
+<p>GeoJson file to output query results to.</p>
+</dd>
+<dt class="hdlist1"><strong>-t, --typeName</strong> <em>&lt;name&gt;</em></dt>
+<dd>
+<p>Output feature type name.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="query-examples"><a class="anchor" href="#query-examples"></a>EXAMPLES</h4>
+<div class="paragraph">
+<p>Calculate the total population of countries that intersect a bounding box that covers a region of Europe from the <code>example</code> data store:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>geowave query example "SELECT SUM(population) FROM countries WHERE BBOX(geom, 7, 46, 23, 51)"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Select only countries that have a population over 100 million from the <code>example</code> data store:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>geowave query example "SELECT * FROM countries WHERE population &gt; 100000000"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Output country names and populations to a CSV file from the <code>example</code> data store:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>geowave query -f csv -o myfile.csv example "SELECT name, population FROM example.countries"</pre>
+</div>
+</div>
+<hr>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="analytic-commands"><a class="anchor" href="#analytic-commands"></a>Analytic Commands</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -6240,134 +6382,6 @@ The truststore file is used to validate client certificates.</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Commands that operate on vector data.</p>
-</div>
-<div class="sect2">
-<h3 id="vector-query"><a class="anchor" href="#vector-query"></a>Query</h3>
-<div class="sect3">
-<h4 id="vector-query-name"><a class="anchor" href="#vector-query-name"></a>NAME</h4>
-<div class="paragraph">
-<p>geowave-vector-query - Query vector data using GeoWave Query Language</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="vector-query-synopsis"><a class="anchor" href="#vector-query-synopsis"></a>SYNOPSIS</h4>
-<div class="literalblock">
-<div class="content">
-<pre>geowave vector query [options] &lt;query&gt;</pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="vector-query-description"><a class="anchor" href="#vector-query-description"></a>DESCRIPTION</h4>
-<div class="paragraph">
-<p>This command queries vector data using an SQL-like syntax.  The query language currently only supports <code>SELECT</code> and <code>DELETE</code> statements.</p>
-</div>
-<div class="paragraph">
-<p>The syntax for <code>SELECT</code> statements is as follows:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>SELECT &lt;attributes&gt; FROM &lt;storeName&gt;.&lt;typeName&gt; [ WHERE CQL(&lt;cqlFilter&gt;) ]</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Where <code>&lt;attributes&gt;</code> is a comma-separated list of column selectors or aggregation functions, <code>&lt;storeName&gt;</code> is the data store name, <code>&lt;typeName&gt;</code> is the type name, and <code>&lt;cqlFilter&gt;</code> is a CQL filter to filter the results by.</p>
-</div>
-<div class="paragraph">
-<p>The syntax for <code>DELETE</code> statements is as follows:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>DELETE FROM &lt;storeName&gt;.&lt;typeName&gt; [ WHERE CQL(&lt;cqlFilter&gt;) ]</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Where <code>&lt;storeName&gt;</code> is the data store name, <code>&lt;typeName&gt;</code> is the type name, and <code>&lt;cqlFilter&gt;</code> is the filter to delete results by.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="vector-query-options"><a class="anchor" href="#vector-query-options"></a>OPTIONS</h4>
-<div class="dlist">
-<dl>
-<dt class="hdlist1"><strong>--debug</strong></dt>
-<dd>
-<p>If specified, print out additional info for debug purposes.</p>
-</dd>
-<dt class="hdlist1"><strong>-f, --format</strong> <em>&lt;format&gt;</em></dt>
-<dd>
-<p>Output format for query results.  Possible values are <code>console</code>, <code>csv</code>, <code>shp</code>, and <code>geojson</code>.  Both <code>shp</code> and <code>geojson</code> formats require that the query results contain at least 1 geometry column.  Default is <code>console</code>.</p>
-</dd>
-</dl>
-</div>
-<div class="paragraph">
-<p>When the <code>csv</code> format is used, additional options are:</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1"><strong>* -o, --outputFile</strong> <em>&lt;file&gt;</em></dt>
-<dd>
-<p>CSV file to output query results to.</p>
-</dd>
-</dl>
-</div>
-<div class="paragraph">
-<p>When the <code>shp</code> format is used, additional options are:</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1"><strong>* -o, --outputFile</strong> <em>&lt;file&gt;</em></dt>
-<dd>
-<p>Shapefile to output query results to.</p>
-</dd>
-<dt class="hdlist1"><strong>-t, --typeName</strong> <em>&lt;name&gt;</em></dt>
-<dd>
-<p>Output feature type name.</p>
-</dd>
-</dl>
-</div>
-<div class="paragraph">
-<p>When the <code>geojson</code> format is used, additional options are:</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1"><strong>* -o, --outputFile</strong> <em>&lt;file&gt;</em></dt>
-<dd>
-<p>GeoJson file to output query results to.</p>
-</dd>
-<dt class="hdlist1"><strong>-t, --typeName</strong> <em>&lt;name&gt;</em></dt>
-<dd>
-<p>Output feature type name.</p>
-</dd>
-</dl>
-</div>
-</div>
-<div class="sect3">
-<h4 id="vector-query-examples"><a class="anchor" href="#vector-query-examples"></a>EXAMPLES</h4>
-<div class="paragraph">
-<p>Calculate the total population of countries that intersect a bounding box that covers a region of Europe:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>geowave vector query "SELECT SUM(population) FROM example.countries WHERE CQL(BBOX(geom, 7, 46, 23, 51))"</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Select only countries that have a population over 100 million:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>geowave vector query "SELECT * FROM example.countries WHERE CQL(population&gt;100000000)"</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Output country names and populations to a CSV file:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>geowave vector query -f csv -o myfile.csv "SELECT name, population FROM example.countries"</pre>
-</div>
-</div>
-</div>
 </div>
 <div class="sect2">
 <h3 id="vector-cqldelete"><a class="anchor" href="#vector-cqldelete"></a>CQL Delete</h3>
@@ -9433,7 +9447,7 @@ var geowave_version = '2.0.0-SNAPSHOT';
 
 <div class="geowave-footer col-md-12 docs-footer">
   <div class="py-4 d-flex justify-content-center align-items-center">
-    <small><p class="footer-text">This page was generated on Monday, August 09, 2021 at 12:53 PM UTC<br><a href="https://github.com/locationtech/geowave/tree/36950006b9461f66786f32d1e3460d042637a460">View the commit it was generated from on GitHub</a></p></small>
+    <small><p class="footer-text">This page was generated on Thursday, August 12, 2021 at 05:48 PM UTC<br><a href="https://github.com/locationtech/geowave/tree/bcc2a5239d77f512106d7e0a19aebf2d58369b16">View the commit it was generated from on GitHub</a></p></small>
   </div>
 </div>
 </div>
@@ -9443,7 +9457,7 @@ var geowave_version = '2.0.0-SNAPSHOT';
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-08-09 12:53:11 +00:00
+Last updated 2021-08-12 17:48:07 +00:00
 </div>
 </div>
 </body>

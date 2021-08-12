@@ -786,37 +786,6 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/aggregation/CompositeVectorAggregation.html" title="class in org.locationtech.geowave.adapter.vector.query.aggregation">CompositeVectorAggregation</a>&lt;T&gt;</span></code>
-<div class="block">Aggregation class that allows multiple aggregations to be performed in a single aggregation
- query.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/aggregation/FieldMathAggregation.html" title="class in org.locationtech.geowave.adapter.vector.query.aggregation">FieldMathAggregation</a>&lt;T&gt;</span></code>
-<div class="block">Base aggregation class for performing math operations on numeric attributes.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/aggregation/FieldMaxAggregation.html" title="class in org.locationtech.geowave.adapter.vector.query.aggregation">FieldMaxAggregation</a>&lt;T&gt;</span></code>
-<div class="block">Aggregates to find the maximum value of a given numeric attribute.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/aggregation/FieldMinAggregation.html" title="class in org.locationtech.geowave.adapter.vector.query.aggregation">FieldMinAggregation</a>&lt;T&gt;</span></code>
-<div class="block">Aggregates to find the minimum value of a given numeric attribute.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/aggregation/FieldSumAggregation.html" title="class in org.locationtech.geowave.adapter.vector.query.aggregation">FieldSumAggregation</a>&lt;T&gt;</span></code>
-<div class="block">Calculates the sum of all value of a given numeric attribute.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/adapter/vector/query/aggregation/VectorCountAggregation.html" title="class in org.locationtech.geowave.adapter.vector.query.aggregation">VectorCountAggregation</a></span></code>
 <div class="block">Counts non-null values of a simple feature attribute.</div>
 </td>
@@ -3396,7 +3365,32 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CompositeAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">CompositeAggregation</a>&lt;T&gt;</span></code>
+<div class="block">Aggregation class that allows multiple aggregations to be performed in a single aggregation
+ query.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/CountAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">CountAggregation</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/FieldMathAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">FieldMathAggregation</a>&lt;T&gt;</span></code>
+<div class="block">Base aggregation class for performing math operations on numeric attributes.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/FieldMaxAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">FieldMaxAggregation</a>&lt;T&gt;</span></code>
+<div class="block">Aggregates to find the maximum value of a given numeric attribute.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/FieldMinAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">FieldMinAggregation</a>&lt;T&gt;</span></code>
+<div class="block">Aggregates to find the minimum value of a given numeric attribute.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
@@ -3404,21 +3398,27 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/MergingAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">MergingAggregation</a>&lt;T extends <a href="../../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>&gt;</span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/FieldSumAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">FieldSumAggregation</a>&lt;T&gt;</span></code>
+<div class="block">Calculates the sum of all value of a given numeric attribute.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/OptimalCountAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">OptimalCountAggregation</a>&lt;T&gt;</span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/MergingAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">MergingAggregation</a>&lt;T extends <a href="../../../../../../../org/locationtech/geowave/core/index/Mergeable.html" title="interface in org.locationtech.geowave.core.index">Mergeable</a>&gt;</span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/OptimalCountAggregation.CommonIndexCountAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">OptimalCountAggregation.CommonIndexCountAggregation</a></span></code>&nbsp;</td>
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/OptimalCountAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">OptimalCountAggregation</a>&lt;T&gt;</span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/OptimalCountAggregation.FieldCountAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">OptimalCountAggregation.FieldCountAggregation</a>&lt;T&gt;</span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/OptimalCountAggregation.CommonIndexCountAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">OptimalCountAggregation.CommonIndexCountAggregation</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/OptimalCountAggregation.FieldCountAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">OptimalCountAggregation.FieldCountAggregation</a>&lt;T&gt;</span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/core/store/query/aggregate/OptimalFieldAggregation.html" title="class in org.locationtech.geowave.core.store.query.aggregate">OptimalFieldAggregation</a>&lt;R,T&gt;</span></code>
 <div class="block">Abstract class for performing optimal aggregations on adapter fields.</div>
