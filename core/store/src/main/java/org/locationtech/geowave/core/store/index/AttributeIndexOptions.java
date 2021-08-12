@@ -23,7 +23,7 @@ public class AttributeIndexOptions implements DimensionalityTypeOptions {
   protected String typeName;
 
   @Parameter(
-      names = {"--attritubeName"},
+      names = {"--attributeName"},
       required = true,
       description = "The name of the attribute to index.")
   protected String attributeName;

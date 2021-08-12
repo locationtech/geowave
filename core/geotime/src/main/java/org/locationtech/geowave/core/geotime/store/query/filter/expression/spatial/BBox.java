@@ -52,7 +52,7 @@ public class BBox extends Intersects {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder(loose ? "LOOSE_BBOX(" : "BBOX(");
+    final StringBuilder sb = new StringBuilder(loose ? "BBOXLOOSE(" : "BBOX(");
     final Envelope envelope = expression2.evaluateValue(null).getGeometry().getEnvelopeInternal();
     sb.append(expression1.toString());
     sb.append(",");
