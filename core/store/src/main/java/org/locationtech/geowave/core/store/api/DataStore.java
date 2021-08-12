@@ -14,6 +14,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.query.gwql.ResultSet;
 import org.locationtech.geowave.core.store.statistics.StatisticType;
 
 /**
@@ -84,6 +85,15 @@ public interface DataStore {
    *         it is best practice to close the iterator after it is no longer needed.
    */
   <T> CloseableIterator<T> query(final Query<T> query);
+
+  /**
+   * Perform a query using the GeoWave Query Language (GWQL).
+   * 
+   * @param queryStr the GWQL query to perform
+   * @param authorizations the authorizations to use for the query
+   * @return the set of results that match the given query string
+   */
+  ResultSet query(final String queryStr, final String... authorizations);
 
   /**
    * Perform an aggregation on the data and just return the aggregated result. The query criteria is

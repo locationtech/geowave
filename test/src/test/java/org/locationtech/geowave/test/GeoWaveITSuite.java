@@ -36,6 +36,7 @@ import org.locationtech.geowave.test.mapreduce.BasicMapReduceIT;
 import org.locationtech.geowave.test.mapreduce.CustomCRSKDERasterResizeIT;
 import org.locationtech.geowave.test.query.AttributesSubsetQueryIT;
 import org.locationtech.geowave.test.query.ExpressionQueryIT;
+import org.locationtech.geowave.test.query.GeoWaveQueryLanguageIT;
 import org.locationtech.geowave.test.query.PolygonDataIdQueryIT;
 import org.locationtech.geowave.test.query.QueryOptionsIT;
 import org.locationtech.geowave.test.query.SpatialTemporalQueryIT;
@@ -79,6 +80,7 @@ import org.locationtech.geowave.test.stability.GeoWaveStabilityIT;
     // TODO need to mock up S3
     // GeowaveBasicURLIngestIT.class,
     GeoWaveVectorSerializationIT.class,
+    GeoWaveQueryLanguageIT.class,
     ExpressionQueryIT.class,
     BasicKafkaIT.class,
     BasicMapReduceIT.class,

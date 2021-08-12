@@ -1,4 +1,0 @@
-org.locationtech.geowave.adapter.vector.query.ConsoleQueryOutputFormat
-org.locationtech.geowave.adapter.vector.query.CSVQueryOutputFormat
-org.locationtech.geowave.adapter.vector.query.ShapefileQueryOutputFormat
-org.locationtech.geowave.adapter.vector.query.GeoJsonQueryOutputFormat

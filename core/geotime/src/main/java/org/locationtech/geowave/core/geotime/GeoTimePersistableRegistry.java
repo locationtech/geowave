@@ -29,6 +29,7 @@ import org.locationtech.geowave.core.geotime.store.dimension.CustomCrsIndexModel
 import org.locationtech.geowave.core.geotime.store.dimension.LatitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.LongitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitCQLQuery;
 import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialQuery;
 import org.locationtech.geowave.core.geotime.store.query.ExplicitSpatialTemporalQuery;
 import org.locationtech.geowave.core.geotime.store.query.ExplicitTemporalQuery;
@@ -42,10 +43,11 @@ import org.locationtech.geowave.core.geotime.store.query.aggregate.CommonIndexTi
 import org.locationtech.geowave.core.geotime.store.query.aggregate.OptimalVectorBoundingBoxAggregation;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.OptimalVectorTimeRangeAggregation;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.SpatialCommonIndexedBinningStrategy;
-import org.locationtech.geowave.core.geotime.store.query.aggregate.SpatialSimpleFeatureBinningStrategy;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.SpatialFieldBinningStrategy;
+import org.locationtech.geowave.core.geotime.store.query.aggregate.SpatialSimpleFeatureBinningStrategy;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.VectorBoundingBoxAggregation;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.VectorTimeRangeAggregation;
+import org.locationtech.geowave.core.geotime.store.query.filter.CQLQueryFilter;
 import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter;
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.BBox;
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.Crosses;
@@ -58,10 +60,10 @@ import org.locationtech.geowave.core.geotime.store.query.filter.expression.spati
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialFieldValue;
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialLiteral;
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.SpatialNotEqualTo;
+import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.TextToSpatialExpression;
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.Touches;
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.UnpreparedFilterGeometry;
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.Within;
-import org.locationtech.geowave.core.geotime.store.query.filter.expression.spatial.TextToSpatialExpression;
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.After;
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.Before;
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.BeforeOrDuring;
@@ -74,6 +76,7 @@ import org.locationtech.geowave.core.geotime.store.query.filter.expression.tempo
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.TemporalNotEqualTo;
 import org.locationtech.geowave.core.geotime.store.query.filter.expression.temporal.TimeOverlaps;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.TimeDescriptors.TimeDescriptorConfiguration;
 import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 
@@ -96,11 +99,14 @@ public class GeoTimePersistableRegistry implements
         // 304 is a legacy class (pre 2.0)
         // 305 is a legacy class (pre 2.0)
         // 306-307 are used by GeotimeRegisteredIndexFieldMappers
-        // 308-309 are unused
+        new PersistableIdAndConstructor((short) 308, ExplicitCQLQuery::new),
+        new PersistableIdAndConstructor((short) 309, CQLQueryFilter::new),
         new PersistableIdAndConstructor((short) 310, TimeField::new),
         new PersistableIdAndConstructor((short) 311, SpatialQueryFilter::new),
         new PersistableIdAndConstructor((short) 312, ExplicitSpatialQuery::new),
         // 313 is a legacy class (pre 2.0)
+        // 523 migrated from adapter-vector, ID is the same to preserve backwards compatibility
+        new PersistableIdAndConstructor((short) 523, TimeDescriptorConfiguration::new),
         new PersistableIdAndConstructor((short) 314, CustomCRSBoundedSpatialDimension::new),
         new PersistableIdAndConstructor((short) 315, CustomCrsIndexModel::new),
         new PersistableIdAndConstructor((short) 316, IndexOnlySpatialQuery::new),

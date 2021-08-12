@@ -35,6 +35,10 @@ import org.locationtech.geowave.core.store.index.TextAttributeIndexProvider.Adap
 import org.locationtech.geowave.core.store.query.aggregate.BinningAggregation;
 import org.locationtech.geowave.core.store.query.aggregate.BinningAggregationOptions;
 import org.locationtech.geowave.core.store.query.aggregate.CountAggregation;
+import org.locationtech.geowave.core.store.query.aggregate.FieldMinAggregation;
+import org.locationtech.geowave.core.store.query.aggregate.FieldMaxAggregation;
+import org.locationtech.geowave.core.store.query.aggregate.FieldSumAggregation;
+import org.locationtech.geowave.core.store.query.aggregate.CompositeAggregation;
 import org.locationtech.geowave.core.store.query.aggregate.FieldNameParam;
 import org.locationtech.geowave.core.store.query.aggregate.MergingAggregation;
 import org.locationtech.geowave.core.store.query.aggregate.OptimalCountAggregation;
@@ -216,6 +220,10 @@ public class StorePersistableRegistry implements
         // use 3000+ range
         new PersistableIdAndConstructor((short) 3000, OptimalCountAggregation::new),
         new PersistableIdAndConstructor((short) 3001, CommonIndexCountAggregation::new),
-        new PersistableIdAndConstructor((short) 3002, FieldCountAggregation::new)};
+        new PersistableIdAndConstructor((short) 3002, FieldCountAggregation::new),
+        new PersistableIdAndConstructor((short) 3003, FieldMaxAggregation::new),
+        new PersistableIdAndConstructor((short) 3004, FieldMinAggregation::new),
+        new PersistableIdAndConstructor((short) 3005, FieldSumAggregation::new),
+        new PersistableIdAndConstructor((short) 3006, CompositeAggregation::new)};
   }
 }

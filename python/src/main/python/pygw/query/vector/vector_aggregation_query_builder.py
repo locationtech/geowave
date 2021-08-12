@@ -108,7 +108,7 @@ class VectorAggregationQueryBuilder(AggregationQueryBuilder):
             This query builder.
         """
         j_field_parameter = geowave_pkg.core.store.query.aggregate.FieldNameParam(numeric_field_name)
-        j_min_agg = geowave_pkg.adapter.vector.query.aggregation.FieldMinAggregation(j_field_parameter)
+        j_min_agg = geowave_pkg.core.store.query.aggregate.FieldMinAggregation(j_field_parameter)
         return self.aggregate(type_name, j_min_agg)
 
     def max(self, type_name, numeric_field_name):
@@ -122,7 +122,7 @@ class VectorAggregationQueryBuilder(AggregationQueryBuilder):
             This query builder.
         """
         j_field_parameter = geowave_pkg.core.store.query.aggregate.FieldNameParam(numeric_field_name)
-        j_max_agg = geowave_pkg.adapter.vector.query.aggregation.FieldMaxAggregation(j_field_parameter)
+        j_max_agg = geowave_pkg.core.store.query.aggregate.FieldMaxAggregation(j_field_parameter)
         return self.aggregate(type_name, j_max_agg)
 
     def sum(self, type_name, numeric_field_name):
@@ -136,5 +136,5 @@ class VectorAggregationQueryBuilder(AggregationQueryBuilder):
             This query builder.
         """
         j_field_parameter = geowave_pkg.core.store.query.aggregate.FieldNameParam(numeric_field_name)
-        j_sum_agg = geowave_pkg.adapter.vector.query.aggregation.FieldSumAggregation(j_field_parameter)
+        j_sum_agg = geowave_pkg.core.store.query.aggregate.FieldSumAggregation(j_field_parameter)
         return self.aggregate(type_name, j_sum_agg)

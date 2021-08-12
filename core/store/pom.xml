@@ -30,6 +30,20 @@
 			<artifactId>commons-vfs2</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-text</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-csv</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.antlr</groupId>
+			<artifactId>antlr4-runtime</artifactId>
+			<version>4.7.2</version>
+		</dependency>
+		<dependency>
 			<groupId>org.hdrhistogram</groupId>
 			<artifactId>HdrHistogram</artifactId>
 			<version>2.1.7</version>
@@ -54,6 +68,19 @@
 					<execution>
 						<goals>
 							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.antlr</groupId>
+				<artifactId>antlr4-maven-plugin</artifactId>
+				<version>4.7.2</version>
+				<executions>
+					<execution>
+						<id>antlr</id>
+						<goals>
+							<goal>antlr4</goal>
 						</goals>
 					</execution>
 				</executions>

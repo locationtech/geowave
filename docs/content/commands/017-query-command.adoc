@@ -1,0 +1,13 @@
+<<<
+
+== Query Commands
+
+Commands related to querying data.
+
+[[query]]
+=== Query
+
+include::manpages/query/geowave-query.txt[]
+
+'''
+

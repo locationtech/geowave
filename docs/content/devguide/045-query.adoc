@@ -44,25 +44,27 @@ NOTE: When queries are made to a GeoWave data store through GeoServer, GeoWave a
 
 Another common way of filtering vector data in a query is by using CQL, also known as Common Query Language. CQL makes query filters more human readable and understandable while still maintaining the complexity that is often necessary. The constraints factory that is provided by the {core-geotime}/core/geotime/store/query/api/VectorQueryBuilder.java[`VectorQueryBuilder`] contains a helper function for creating query constraints using a CQL expression. CQL query constraints are used through the programmatic API, the GeoServer plugin, and through the GeoWave Query Lanaguage.  CQL query filters are less efficient that GeoWave filter expressions, but can be useful if one of the needed capabilities are not yet implemented by the GeoWave filter expressions.  For an overview on using CQL, please refer to the link:http://docs.geoserver.org/latest/en/user/tutorials/cql/cql_tutorial.html[GeoServer tutorials, window="_blank"].
 
-=== GeoWave Query Language
+=== GeoWave Query Language (GWQL)
 
-In order to simplify vector queries, GeoWave provides a simple query language for vector data that is roughly based on SQL. This is discussed in the link:userguide.html#vector-queries[User Guide, window="_blank"].  While the user guide discusses the language from the context of the CLI, it is also possible to execute these queries programmatically by using the `GWQLParser` class and then executing the statement that is returned.  For example, the following statement would execute an everything query on the `countries` type in the `example` data store:
+In order to simplify queries, GeoWave provides a simple query language that is roughly based on SQL. This is discussed in the link:userguide.html#queries[User Guide, window="_blank"].  While the user guide discusses the language from the context of the CLI, it is also possible to execute these queries programmatically through the `DataStore` interface.  For example, the following statement would execute an everything query on the `countries` type in the `example` data store:
 
 [source, java]
 ----
-Statement stmt = GWQLParser.parse("SELECT * FROM example.countries");
-ResultSet results = stmt.execute(dataStore);
+try(final ResultSet results = dataStore.query("SELECT * FROM countries")) {
+	while (results.hasNext()) {
+		final Result result = results.next();
+		// Do something with the result
+	}
+}
 ----
 
-As you can see in this example, the statement is executed on the provided data store. This means that when executing statements programmatically, the `<storeName>` part of the query is irrelevant and can be any value (though it is still expected by the syntax). If there are multiple data stores, the store name can be retrieved from the parsed statement with the `stmt.getStoreName()` function.
-
-Querying GeoWave using the GeoWave Query Language will return results in the form of a {adapter-vector}/adapter/vector/query/gwql/ResultSet.java[`ResultSet`], which is less like the results that would be obtained from a standard GeoWave query (`SimpleFeatures`) and more like the results that you would expect from querying a relational database (Rows).
+Querying GeoWave using the GeoWave Query Language will return results in the form of a {core-store}/core/store/query/gwql/ResultSet.java[`ResultSet`], which is less like the results that would be obtained from a standard GeoWave query (e.g. `SimpleFeatures`) and more like the results that you would expect from querying a relational database (Rows) in that only the fields and aggregations included in the `SELECT` statement will be returned.
 
 ==== Output Formats
 
-New output formats are discovered using Service Provider Interface (SPI)-based injection. In order to install a new output format, implement {adapter-vector}/adapter/vector/query/QueryOutputFormatSpi.java[`QueryOutputFormatSpi`] and make sure your JAR is on the classpath when running GeoWave. For more information on using SPI, see the link:https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html[Oracle documentation, window="_blank"].
+New output formats for the CLI query command are discovered using Service Provider Interface (SPI)-based injection. In order to install a new output format, implement {core-store}/core/store/cli/query/QueryOutputFormatSpi.java[`QueryOutputFormatSpi`] and make sure your JAR is on the classpath when running GeoWave. For more information on using SPI, see the link:https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html[Oracle documentation, window="_blank"].
 
-==== Aggregation Functions
+==== Extending GWQL
 
-New aggregation functions can also be added to the query language using SPI. Aggregation functions should implement the {adapter-vector}/adapter/vector/query/gwql/function/QLVectorAggregationFunction.java[`QLVectorAggregationFunction`] interface and register it by implementing the {adapter-vector}/adapter/vector/query/gwql/function/QLFunctionRegistrySpi.java[`QLFunctionRegistrySpi`] interface.  Once both of these are implemented, make sure your JAR is on the classpath when running GeoWave. For more information on using SPI, see the link:https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html[Oracle documentation, window="_blank"].
+New functionality can also be added to the query language using SPI. New aggregation functions, predicate functions, expression functions, and castable types can be added to the language by implementing the {core-store}/core/store/query/gwql/GWQLExtensionRegistrySpi.java[`GWQLExtensionRegistrySpi`] interface.  Once this interface has been implemented, make sure the JAR containing the implementation is on the classpath when running GeoWave and that the class is registered in `META-INF/services`. For more information on using SPI, see the link:https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html[Oracle documentation, window="_blank"].
 

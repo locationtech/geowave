@@ -1,0 +1,333 @@
+<<<
+
+:linkattrs:
+
+== Queries
+
+=== Overview
+
+In order to facilitate querying GeoWave data from the CLI, a basic query language is provided.  The idea behind the GeoWave Query Language (GWQL) is to provide a familiar way to easily query, filter, and aggregate data from a GeoWave data store.  The query language is similar to SQL, but currently only supports `SELECT` and `DELETE` statements.  These queries can be executed using the link:commands.html#query[`query`] command.
+
+....
+$ geowave query <store name> "<query>"
+....
+
+NOTE: The examples below use a hypothetical data store called `example` with a type called `countries`. This type contains all of the countries of the world with some additional attributes such as population and year established.
+
+=== SELECT Statement
+
+The `SELECT` statement can be used to fetch data from a GeoWave data store.  It supports column selection, aggregation, filtering, and limiting.
+
+==== Simple Queries
+
+A standard `SELECT` statement has the following syntax:
+
+[source,sql]
+----
+SELECT <attributes> FROM <typeName> [ WHERE <filter> ]
+----
+
+In this syntax, `attributes` can be a comma-delimited list of attributes to select from the type, or `*` to select all of the attributes.  Attributes can also be aliased by using the `AS` operator. If an attribute or type name has some nonstandard characters, such as `-`, it can be escaped by surrounding the name in double quotes (`"column-name"`), backticks (`{backtick}column-name{backtick}`), or square brackets (`[column-name]`).
+
+===== Examples
+
+.Selecting all attributes of each country:
+[source,sql]
+----
+SELECT * FROM countries
+----
+
+.Selecting the `geom`, `population`, and `established` attributes from each country, but renaming `geom` to `geometry` for the output:
+[source,sql]
+----
+SELECT geom AS geometry, population, established, FROM countries
+----
+
+==== Aggregation Queries
+
+Aggregations can also be done by using aggregation functions.  Aggregation functions usually take an attribute as an argument, however, some aggregation functions work on the whole row as well, in which case `*` is accepted.
+
+The following table shows the aggregation functions currently available through the query language.
+
+[frame="topbot", width="100%", cols="12%,25%,60%", grid="rows", options="header"]
+|=========================================================
+|Aggregation Function | Parameters| Description
+| COUNT               | Attribute Name or `*` | If an attribute name is supplied, counts the number of non-null values for that attribute.  If `*` is supplied, counts the number of features.
+| BBOX                | Geometry Attribute Name or `*` | If a geometry attribute name is supplied, calculates the bounding box of all non-null geometries under that attribute.  If `*` is supplied, calculates the bounding box of features using the default geometry.
+| SUM                 | Numeric Attribute Name | Calculates the sum of non-null values for the supplied attribute over the result set.
+| MIN                 | Numeric Attribute Name | Finds the minimum value of the supplied attribute over the result set.
+| MAX                 | Numeric Attribute Name | Finds the maximum value of the supplied attribute over the result set.
+|=========================================================
+
+It's important to note that aggregation queries cannot be mixed with non-aggregated columns. If one of the column selectors has an aggregation function, all of the column selectors need to have an aggregation function.
+
+===== Examples
+
+.Counting the number of countries:
+[source,sql]
+----
+SELECT COUNT(*) FROM countries
+----
+
+.Calculating the total population of all countries:
+[source,sql]
+----
+SELECT SUM(population) FROM countries
+----
+
+.Getting the bounding box, minimum population, and maximum population of all countries, using aliases to rename the results:
+[source,sql]
+----
+SELECT BBOX(*) AS bounds, MIN(population) AS minPop, MAX(population) AS maxPop FROM countries
+----
+
+==== Limit
+
+It is often the case where not all of the data that matches the query parameters is necessary, in this case we can add a `LIMIT` to the query to limit the number of results returned. This can be done using the following syntax:
+
+[source,sql]
+----
+SELECT <attributes> FROM <typeName> [ WHERE <filter> ] LIMIT <count>
+----
+
+NOTE: While `LIMIT` can be specified for aggregation queries, it doesn't often make sense and can produce different results based on the underlying data store implementation.
+
+===== Examples
+
+.Getting a single country from the dataset:
+[source,sql]
+----
+SELECT * FROM countries LIMIT 1
+----
+
+.Getting 5 countries that have a population over 100 million:
+[source,sql]
+----
+SELECT * FROM countries WHERE population > 100000000 LIMIT 5
+----
+
+=== DELETE Statement
+
+The `DELETE` statement can be used to delete data from a GeoWave data store.  It can either delete an entire type, or only data that matches a given filter.  It has the following syntax:
+
+[source,sql]
+----
+DELETE FROM <typeName> [ WHERE <filter> ]
+----
+
+IMPORTANT: When all of the data of a given type is removed, that type is removed from the data store completely.  Additionally, if that data represented the last data in an index, the index will also be removed.
+
+===== Examples
+
+.Removing all countries from the data store:
+[source,sql]
+----
+DELETE FROM countries
+----
+
+.Removing all countries that have a population less than 100 million:
+[source,sql]
+----
+DELETE FROM countries WHERE population < 100000000
+----
+
+=== Filtering
+
+All GWQL queries support filtering through the use of filter expressions.  GeoWave supports filtering on many different expression types, each of which have their own supported predicates and functions.  Multiple filter expressions can also be combined using `AND` and `OR` operators (e.g. `a > 10 AND b < 100`.  Filter expressions can also be inverted by prepending it with `NOT` (e.g. `NOT strContains(name, 'abc')`)
+
+NOTE: In GWQL, function casing is not important; `STRCONTAINS(name, 'abc')` is equivalent to `strContains(name, 'abc')`.
+
+==== Numeric Expressions
+
+Numeric expressions support all of the standard comparison operators: `<`, `>`, `<=`, `>=`, `=`, `<>` (not equal), `IS NULL`, `IS NOT NULL`, and `BETWEEN ... AND ...`.  Additionally the following mathematics operations are supported: `+`, `-`, `*`, `/`.  The operands for any of these operations can be a numeric literal, a numeric attribute, or another numeric expression.
+
+===== Functions
+
+Numeric expressions support the following functions:
+
+[frame="topbot", width="100%", cols="12%,25%,60%", grid="rows", options="header"]
+|=========================================================
+| Function | Parameters         | Description
+| ABS      | Numeric Expression | Transforms the numeric expression into one that represents the absolute value of the input expression.  For example, the literal -64 would become 64.
+|=========================================================
+
+===== Examples
+
+.Selecting only countries that have a population over 100 million:
+[source,sql]
+----
+SELECT * FROM countries WHERE population > 100000000
+----
+
+.Counting the number of countries in which the male population exceeds the female one (this assumes that each feature has an attribute for `malePop` and `femalePop`):
+[source,sql]
+----
+SELECT COUNT(*) FROM countries WHERE malePop > femalePop
+----
+
+.Selecting only countries that have a population between 10 and 20 million:
+[source,sql]
+----
+SELECT * FROM countries WHERE population BETWEEN 10000000 AND 20000000
+----
+
+.Selecting only countries where the difference between the male and female population exceeds 50000:
+[source,sql]
+----
+SELECT * FROM countries WHERE ABS(femalePop - malePop) > 50000
+----
+
+==== Text Expressions
+
+Text expressions support all of the standard comparison operators: `<`, `>`, `<=`, `>=`, `=`, `<>` (not equal), `IS NULL`, `IS NOT NULL`, and `BETWEEN ... AND ...`.  These operators will lexicographically compare the operands to determine if the filter is passed.
+
+===== Functions
+
+Text expressions support the following functions:
+
+[frame="topbot", width="100%", cols="12%,25%,60%", grid="rows", options="header"]
+|=========================================================
+| Function | Parameters         | Description
+| CONCAT      | Text Expression, Text Expression | Concatenates two text expressions into a single text expression.
+| STRSTARTSWITH | Text Expression, Text Expression [, Boolean] | A predicate function that returns true when the first text expression starts with the second text expression.  A third boolean parameter can also be supplied that will specify whether or not to ignore casing.  By default, casing will NOT be ignored.
+| STRENDSWITH | Text Expression, Text Expression [, Boolean] | A predicate function that returns true when the first text expression ends with the second text expression.  A third boolean parameter can also be supplied that will specify whether or not to ignore casing.  By default, casing will NOT be ignored.
+| STRCONTAINS | Text Expression, Text Expression [, Boolean] | A predicate function that returns true when the first text expression contains the second text expression.  A third boolean parameter can also be supplied that will specify whether or not to ignore casing.  By default, casing will NOT be ignored.
+|=========================================================
+
+===== Examples
+
+.Selecting only countries that start with 'm' or greater
+[source,sql]
+----
+SELECT * FROM countries WHERE name > 'm'
+----
+
+.Counting the number of countries that end with 'stan':
+[source,sql]
+----
+SELECT COUNT(*) FROM countries WHERE strEndsWith(name, 'stan')
+----
+
+.Selecting only countries that contain 'state', ignoring case:
+[source,sql]
+----
+SELECT * FROM countries WHERE strContains(name, 'state', true)
+----
+
+==== Temporal Expressions
+
+Temporal expressions support all of the standard comparison operators: `<`, `>`, `<=`, `>=`, `=`, `<>` (not equal), `IS NULL`, `IS NOT NULL`, and `BETWEEN ... AND ...`.  Temporal expressions can also be compared using temporal comparison operators: `BEFORE`, `BEFORE_OR_DURING`, `DURING`, `DURING_OR_AFTER`, and `AFTER`.
+
+Temporal expressions can represent either a time instant or a time range.  An instant in time can be specified as text literals using one of the following date formats: `yyyy-MM-dd HH:mm:ssZ`, `yyyy-MM-dd'T'HH:mm:ss'Z'`, `yyyy-MM-dd`, or as a numeric literal representing the epoch milliseconds since January 1, 1970 UTC.  A time range can be specified as a text literal by combining two dates separated by a `/`.  For example, a time range of January 8, 2020 at 11:56 AM to February 12, 2020 at 8:20 PM could be defined as `'2020-01-08T11:56:00Z/2020-02-12T20:20:00Z'`.  Time ranges are inclusive on the start date and exclusive on the end date.
+
+If the left operand of a temporal operator is a temporal field (such as Date), then the right operand can be inferred from a numeric or text literal.  If the left operand of a temporal expression is a numeric or text literal, it can be cast to a temporal expression using the `<expression>::date` syntax. 
+
+===== Functions
+
+Temporal expressions support the following functions:
+
+[frame="topbot", width="100%", cols="12%,25%,60%", grid="rows", options="header"]
+|=========================================================
+| Function | Parameters         | Description
+| TCONTAINS      | Temporal Expression, Temporal Expression | A predicate function that returns true if the first temporal expression fully contains the second.
+| TOVERLAPS |  Temporal Expression, Temporal Expression | A predicate function that returns true when the first temporal expression overlaps the second temporal expression at any point
+|=========================================================
+
+===== Examples
+
+.Selecting only countries that were established after 1750
+[source,sql]
+----
+SELECT * FROM countries WHERE established AFTER '1750-12-31'
+----
+
+.Counting the number of countries that were established in the 1700s:
+[source,sql]
+----
+SELECT COUNT(*) FROM countries WHERE established DURING '1700-01-01T00:00:00Z/1800-01-01T00:00:00Z'
+----
+
+.Counting the number of countries that are still active:
+[source,sql]
+----
+SELECT COUNT(*) FROM countries WHERE dissolution IS NULL
+----
+
+==== Spatial Expressions
+
+Spatial expressions are used to compare geometries.  The only comparison operators that are supported are `=`, `<>` (not equal), `IS NULL` and `IS NOT NULL`.  The equality operators will topologically compare the left spatial expression to the right spatial expression.  Most comparisons with spatial expressions will be done through one of the provided predicate functions.
+
+Literal spatial expressions can be defined by a well-known text (WKT) string such as `'POINT(1 1)'`.  If a text literal needs to be explicitly cast as a spatial expression, such as when it is the left operand of an equality check, it can be done using the `<expression>::geometry` syntax.
+
+===== Functions
+
+Spatial expressions support the following functions:
+
+[frame="topbot", width="100%", cols="12%,25%,60%", grid="rows", options="header"]
+|=========================================================
+| Function | Parameters         | Description
+| BBOX            | Spatial Expression, Min X, Max X, Min Y, Max Y, [, CRS code] | A predicate function that returns true if the spatial expression intersects the provided bounds.  An optional CRS code can be provided if the bounding dimensions are not in the default WGS84 projection.
+| BBOXLOOSE       | Spatial Expression, Min X, Max X, Min Y, Max Y, [, CRS code] | A predicate function that returns true if the spatial expression intersects the provided bounds.  An optional CRS code can be provided if the bounding dimensions are not in the default WGS84 projection.  This can provide a performance boost over the standard BBOX function at the cost of being overly inclusive with the results.
+| INTERSECTS      | Spatial Expression, Spatial Expression | A predicate function that returns true if the first spatial expression intersects the second spatial expression.
+| INTERSECTSLOOSE | Spatial Expression, Spatial Expression | A predicate function that returns true if the first spatial expression intersects the second spatial expression.  This can provide a performance boost over the standard INTERSECTS function at the cost of being overly inclusive with the results.
+| DISJOINT        | Spatial Expression, Spatial Expression | A predicate function that returns true if the first spatial expression is disjoint (does not intersect) to the second spatial expression.
+| DISJOINTLOOSE   | Spatial Expression, Spatial Expression | A predicate function that returns true if the first spatial expression is disjoint (does not intersect) to the second spatial expression.  This can provide a performance boost over the standard INTERSECTS function at the cost of being overly inclusive with the results.
+| CROSSES         | Spatial Expression, Spatial Expression | A predicate function that returns true if the first spatial expression crosses the second spatial expression.
+| CROSSES         | Spatial Expression, Spatial Expression | A predicate function that returns true if the first spatial expression crosses the second spatial expression.
+| OVERLAPS        | Spatial Expression, Spatial Expression | A predicate function that returns true if the first spatial expression overlaps the second spatial expression.
+| TOUCHES         | Spatial Expression, Spatial Expression | A predicate function that returns true if the first spatial expression touches the second spatial expression.
+| WITHIN          | Spatial Expression, Spatial Expression | A predicate function that returns true if the first spatial expression lies completely within the second spatial expression.
+| CONTAINS        | Spatial Expression, Spatial Expression | A predicate function that returns true if the first spatial expression completely contains the second spatial expression.
+|=========================================================
+
+===== Examples
+
+.Selecting only countries that intersect an arbitrary bounding box:
+[source,sql]
+----
+SELECT * FROM countries WHERE BBOX(geom, -10.8, 63.3, 35.4, 71.1)
+----
+
+.Counting the number of countries that intersect a given linestring:
+[source,sql]
+----
+SELECT COUNT(*) FROM countries WHERE INTERSECTS(geom, 'LINESTRING(-9.14 39.5, 3.5 47.9, 20.56 53.12, 52.9 56.36)')
+----
+
+=== Output Formats
+
+By default, the link:commands.html#query[`query`] command outputs all results to the console in a tabular format, however it is often desirable to feed the results of these queries into a format that is usable by other applications.  Because of this, the link:commands.html#query[`query`] command supports several output formats, each of which have their own options.  The output format can be changed by supplying the `-f` option on the query.
+
+The following table shows the currently available output formats.
+
+[frame="topbot", width="100%", cols="12%,25%,60%", grid="rows", options="header"]
+|=========================================================
+|Format   | Options | Description
+| console |         | Paged results are printed to the console.  This is the default output format.
+| csv     | `-o` or `--outputFile` | Outputs the results to a CSV file specified by the `-o` option.
+| shp     | `-o` or `--outputFile`, `-t` or `--typeName` | Outputs the results to a Shapefile specified by the `-o` option and, if specified, gives it a type name specified by the `-t` option.  If no type name is specified `results` will be used as the type name. *This format requires a geometry attribute to be selected*.
+| geojson | `-o` or `--outputFile`, `-t` or `--typeName` | Outputs the results to a GeoJSON file specified by the `-o` option and, if specified, gives it a type name specified by the `-t` option.  If no type name is specified `results` will be used as the type name. *This format requires a geometry attribute to be selected*.
+|=========================================================
+
+=== Examples
+
+.Output paged results to console:
+....
+$ geowave query example "SELECT * FROM countries"
+....
+
+.Output aggregation results to console:
+....
+$ geowave query example "SELECT BBOX(*) AS bounds, MIN(population) AS minPop, MAX(population) AS maxPop FROM countries"
+....
+
+.Output country names and populations to a CSV file:
+....
+$ geowave query -f csv -o myfile.csv example "SELECT name, population FROM countries"
+....
+
+.Output countries with a population greater than 100 million that were established after 1750 to a Shapefile:
+....
+$ geowave query -f shp -o results.shp example "SELECT * FROM countries WHERE population > 100000000 AND established AFTER '1750-01-01'"
+....
+

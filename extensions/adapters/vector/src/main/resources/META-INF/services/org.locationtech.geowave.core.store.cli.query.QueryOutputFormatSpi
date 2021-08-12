@@ -1,0 +1,2 @@
+org.locationtech.geowave.adapter.vector.query.ShapefileQueryOutputFormat
+org.locationtech.geowave.adapter.vector.query.GeoJsonQueryOutputFormat

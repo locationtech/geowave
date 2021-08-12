@@ -11,7 +11,6 @@ package org.locationtech.geowave.adapter.vector.cli;
 import org.locationtech.geowave.adapter.vector.delete.CQLDelete;
 import org.locationtech.geowave.adapter.vector.export.VectorLocalExportCommand;
 import org.locationtech.geowave.adapter.vector.export.VectorMRExportCommand;
-import org.locationtech.geowave.adapter.vector.query.GWQLQuery;
 import org.locationtech.geowave.core.cli.spi.CLIOperationProviderSpi;
 
 public class VectorCLIProvider implements CLIOperationProviderSpi {
@@ -20,8 +19,7 @@ public class VectorCLIProvider implements CLIOperationProviderSpi {
           VectorSection.class,
           VectorLocalExportCommand.class,
           VectorMRExportCommand.class,
-          CQLDelete.class,
-          GWQLQuery.class};
+          CQLDelete.class};
 
   @Override
   public Class<?>[] getOperations() {
