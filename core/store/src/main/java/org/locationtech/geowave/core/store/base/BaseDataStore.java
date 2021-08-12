@@ -1197,7 +1197,8 @@ public class BaseDataStore implements DataStore {
   @Override
   public DataTypeAdapter<?>[] getTypes() {
     final InternalDataAdapter<?>[] adapters = adapterStore.getAdapters();
-    return adapters;
+    return Arrays.stream(adapters).map(InternalDataAdapter::getAdapter).toArray(
+        DataTypeAdapter<?>[]::new);
   }
 
   @Override
