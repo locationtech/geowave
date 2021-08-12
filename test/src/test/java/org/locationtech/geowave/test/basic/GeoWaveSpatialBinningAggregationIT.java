@@ -22,7 +22,6 @@ import org.locationtech.geowave.adapter.vector.query.aggregation.VectorCountAggr
 import org.locationtech.geowave.core.geotime.binning.SpatialBinningType;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.SpatialSimpleFeatureBinningStrategy;
 import org.locationtech.geowave.core.index.ByteArray;
-import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.AggregationQuery;
@@ -125,25 +124,23 @@ public class GeoWaveSpatialBinningAggregationIT extends AbstractGeoWaveBasicVect
     final QueryConstraints constraints = TestUtils.resourceToQuery(savedFilterResource, null, true);
     final PersistentAdapterStore adapterStore = getDataStorePluginOptions().createAdapterStore();
 
-    try (final CloseableIterator<InternalDataAdapter<?>> adapterItr = adapterStore.getAdapters()) {
-      while (adapterItr.hasNext()) {
-        final InternalDataAdapter<?> internalDataAdapter = adapterItr.next();
-        final AggregationQueryBuilder<FieldNameParam, Long, SimpleFeature, ?> builder =
-            AggregationQueryBuilder.newBuilder();
-        // count the geometries in the data, and bin by geohashes.
-        builder.indexName(index.getName());
-        builder.constraints(constraints);
-        builder.aggregate(
-            internalDataAdapter.getTypeName(),
-            new VectorCountAggregation(new FieldNameParam("the_geom")));
+    final InternalDataAdapter<?>[] adapters = adapterStore.getAdapters();
+    for (final InternalDataAdapter<?> internalDataAdapter : adapters) {
+      final AggregationQueryBuilder<FieldNameParam, Long, SimpleFeature, ?> builder =
+          AggregationQueryBuilder.newBuilder();
+      // count the geometries in the data, and bin by geohashes.
+      builder.indexName(index.getName());
+      builder.constraints(constraints);
+      builder.aggregate(
+          internalDataAdapter.getTypeName(),
+          new VectorCountAggregation(new FieldNameParam("the_geom")));
 
-        final AggregationQuery<?, Map<ByteArray, Long>, SimpleFeature> query =
-            builder.buildWithBinningStrategy(
-                new SpatialSimpleFeatureBinningStrategy(type, precision, true),
-                -1);
-        final Map<ByteArray, Long> result = dataStore.aggregate(query);
-        Assert.assertThat(result.values().stream().reduce(0L, Long::sum), is(84L));
-      }
+      final AggregationQuery<?, Map<ByteArray, Long>, SimpleFeature> query =
+          builder.buildWithBinningStrategy(
+              new SpatialSimpleFeatureBinningStrategy(type, precision, true),
+              -1);
+      final Map<ByteArray, Long> result = dataStore.aggregate(query);
+      Assert.assertThat(result.values().stream().reduce(0L, Long::sum), is(84L));
     }
   }
 

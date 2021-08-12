@@ -167,35 +167,33 @@ public class GeoWaveStabilityIT extends AbstractGeoWaveBasicVectorIT {
         LOGGER.error("Unable to write metadata on copy", e);
       }
     }
-    try (CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters()) {
-      while (it.hasNext()) {
-        final InternalDataAdapter<?> adapter = it.next();
-        for (final AdapterToIndexMapping indexMapping : indexMappingStore.getIndicesForAdapter(
-            adapter.getAdapterId())) {
-          final boolean rowMerging = BaseDataStoreUtils.isRowMerging(adapter);
-          final Index index = indexMapping.getIndex(indexStore);
-          final ReaderParamsBuilder bldr =
-              new ReaderParamsBuilder(
-                  index,
-                  adapterStore,
-                  indexMappingStore,
-                  internalAdapterStore,
-                  GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER);
-          bldr.adapterIds(new short[] {adapter.getAdapterId()});
-          bldr.isClientsideRowMerging(rowMerging);
-          try (RowReader<GeoWaveRow> reader = storeOperations.createReader(bldr.build())) {
-            try (RowWriter writer = badStoreOperations.createWriter(index, adapter)) {
-              while (reader.hasNext()) {
-                if (!badMetadata) {
-                  writer.write(new BadGeoWaveRow(reader.next()));
-                } else {
-                  writer.write(reader.next());
-                }
+    final InternalDataAdapter<?>[] adapters = adapterStore.getAdapters();
+    for (final InternalDataAdapter<?> adapter : adapters) {
+      for (final AdapterToIndexMapping indexMapping : indexMappingStore.getIndicesForAdapter(
+          adapter.getAdapterId())) {
+        final boolean rowMerging = BaseDataStoreUtils.isRowMerging(adapter);
+        final Index index = indexMapping.getIndex(indexStore);
+        final ReaderParamsBuilder bldr =
+            new ReaderParamsBuilder(
+                index,
+                adapterStore,
+                indexMappingStore,
+                internalAdapterStore,
+                GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER);
+        bldr.adapterIds(new short[] {adapter.getAdapterId()});
+        bldr.isClientsideRowMerging(rowMerging);
+        try (RowReader<GeoWaveRow> reader = storeOperations.createReader(bldr.build())) {
+          try (RowWriter writer = badStoreOperations.createWriter(index, adapter)) {
+            while (reader.hasNext()) {
+              if (!badMetadata) {
+                writer.write(new BadGeoWaveRow(reader.next()));
+              } else {
+                writer.write(reader.next());
               }
             }
-          } catch (final Exception e) {
-            LOGGER.error("Unable to write metadata on copy", e);
           }
+        } catch (final Exception e) {
+          LOGGER.error("Unable to write metadata on copy", e);
         }
       }
     }
@@ -209,8 +207,9 @@ public class GeoWaveStabilityIT extends AbstractGeoWaveBasicVectorIT {
 
   private void queryBadData(final boolean badMetadata) throws Exception {
     final PersistentAdapterStore badAdapterStore = badDataStore.createAdapterStore();
-    try (CloseableIterator<InternalDataAdapter<?>> dataAdapters = badAdapterStore.getAdapters()) {
-      final InternalDataAdapter<?> adapter = dataAdapters.next();
+    try {
+      final InternalDataAdapter<?>[] dataAdapters = badAdapterStore.getAdapters();
+      final InternalDataAdapter<?> adapter = dataAdapters[0];
       Assert.assertTrue(adapter instanceof InternalGeotoolsFeatureDataAdapter);
       Assert.assertTrue(adapter.getAdapter() instanceof GeotoolsFeatureDataAdapter);
       final QueryConstraints constraints =

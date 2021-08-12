@@ -528,13 +528,11 @@ public class DataStoreUtils {
     try {
       final Map<Short, InternalDataAdapter> mergingAdapters = new HashMap<>();
 
-      try (CloseableIterator<InternalDataAdapter<?>> adapters = adapterStore.getAdapters()) {
-        while (adapters.hasNext()) {
-          final InternalDataAdapter<?> adapter = adapters.next();
-          if ((adapter.getAdapter() instanceof RowMergingDataAdapter)
-              && (((RowMergingDataAdapter) adapter.getAdapter()).getTransform() != null)) {
-            mergingAdapters.put(adapter.getAdapterId(), adapter);
-          }
+      final InternalDataAdapter<?>[] adapters = adapterStore.getAdapters();
+      for (final InternalDataAdapter<?> adapter : adapters) {
+        if ((adapter.getAdapter() instanceof RowMergingDataAdapter)
+            && (((RowMergingDataAdapter) adapter.getAdapter()).getTransform() != null)) {
+          mergingAdapters.put(adapter.getAdapterId(), adapter);
         }
       }
 
@@ -553,8 +551,8 @@ public class DataStoreUtils {
         adapterIds[0] = adapter.getKey();
         paramsBuilder.adapterIds(adapterIds);
 
-        try (RowWriter writer = operations.createWriter(index, adapter.getValue());
-            RowReader<GeoWaveRow> reader = operations.createReader(paramsBuilder.build())) {
+        try (final RowWriter writer = operations.createWriter(index, adapter.getValue());
+            final RowReader<GeoWaveRow> reader = operations.createReader(paramsBuilder.build())) {
           final RewritingMergingEntryIterator<?> iterator =
               new RewritingMergingEntryIterator(
                   adapterStore,

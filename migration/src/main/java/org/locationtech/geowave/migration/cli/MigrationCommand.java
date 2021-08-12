@@ -60,7 +60,7 @@ public class MigrationCommand extends DefaultOperation implements Command {
   private static final Logger LOGGER = LoggerFactory.getLogger(MigrationCommand.class);
 
   @Parameter(description = "<store name>", required = true)
-  private List<String> parameters = new ArrayList<>();
+  private final List<String> parameters = new ArrayList<>();
 
   /** Prep the driver & run the operation. */
   @Override
@@ -124,27 +124,25 @@ public class MigrationCommand extends DefaultOperation implements Command {
     final PersistentAdapterStore adapterStore = options.createAdapterStore();
     final List<Short> adapterIDs = Lists.newArrayList();
     int migratedAdapters = 0;
-    try (CloseableIterator<InternalDataAdapter<?>> adapters = adapterStore.getAdapters()) {
-      while (adapters.hasNext()) {
-        final InternalDataAdapter<?> adapter = adapters.next();
-        adapterIDs.add(adapter.getAdapterId());
-        if (adapter instanceof LegacyInternalDataAdapterWrapper) {
-          adapterStore.removeAdapter(adapter.getAdapterId());
-          // Write updated adapter
-          adapterStore.addAdapter(
-              ((LegacyInternalDataAdapterWrapper<?>) adapter).getUpdatedAdapter());
-          migratedAdapters++;
-        } else if (adapter.getAdapter() instanceof LegacyFeatureDataAdapter) {
-          final FeatureDataAdapter updatedAdapter =
-              ((LegacyFeatureDataAdapter) adapter.getAdapter()).getUpdatedAdapter();
-          final VisibilityHandler visibilityHandler =
-              ((LegacyFeatureDataAdapter) adapter.getAdapter()).getVisibilityHandler();
-          // Write updated adapter
-          adapterStore.removeAdapter(adapter.getAdapterId());
-          adapterStore.addAdapter(
-              updatedAdapter.asInternalAdapter(adapter.getAdapterId(), visibilityHandler));
-          migratedAdapters++;
-        }
+    final InternalDataAdapter<?>[] adapters = adapterStore.getAdapters();
+    for (final InternalDataAdapter<?> adapter : adapters) {
+      adapterIDs.add(adapter.getAdapterId());
+      if (adapter instanceof LegacyInternalDataAdapterWrapper) {
+        adapterStore.removeAdapter(adapter.getAdapterId());
+        // Write updated adapter
+        adapterStore.addAdapter(
+            ((LegacyInternalDataAdapterWrapper<?>) adapter).getUpdatedAdapter());
+        migratedAdapters++;
+      } else if (adapter.getAdapter() instanceof LegacyFeatureDataAdapter) {
+        final FeatureDataAdapter updatedAdapter =
+            ((LegacyFeatureDataAdapter) adapter.getAdapter()).getUpdatedAdapter();
+        final VisibilityHandler visibilityHandler =
+            ((LegacyFeatureDataAdapter) adapter.getAdapter()).getVisibilityHandler();
+        // Write updated adapter
+        adapterStore.removeAdapter(adapter.getAdapterId());
+        adapterStore.addAdapter(
+            updatedAdapter.asInternalAdapter(adapter.getAdapterId(), visibilityHandler));
+        migratedAdapters++;
       }
     }
     if (migratedAdapters > 0) {

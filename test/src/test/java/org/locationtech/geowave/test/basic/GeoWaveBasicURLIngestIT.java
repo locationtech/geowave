@@ -97,55 +97,50 @@ public class GeoWaveBasicURLIngestIT extends AbstractGeoWaveBasicVectorIT {
 
     final PersistentAdapterStore adapterStore = dataStore.createAdapterStore();
     final DataStore ds = dataStore.createDataStore();
-    try (CloseableIterator<InternalDataAdapter<?>> adapterIterator = adapterStore.getAdapters()) {
-      while (adapterIterator.hasNext()) {
-        final InternalDataAdapter<?> internalDataAdapter = adapterIterator.next();
-        final FeatureDataAdapter adapter = (FeatureDataAdapter) internalDataAdapter.getAdapter();
+    final InternalDataAdapter<?>[] adapters = adapterStore.getAdapters();
+    for (final InternalDataAdapter<?> internalDataAdapter : adapters) {
+      final FeatureDataAdapter adapter = (FeatureDataAdapter) internalDataAdapter.getAdapter();
 
-        // query by the full bounding box, make sure there is more than
-        // 0 count and make sure the count matches the number of results
-        BoundingBoxValue bbox =
-            ds.aggregateStatistics(
-                StatisticQueryBuilder.newBuilder(BoundingBoxStatistic.STATS_TYPE).typeName(
-                    internalDataAdapter.getTypeName()).fieldName(
-                        adapter.getFeatureType().getGeometryDescriptor().getLocalName()).build());
-        assertNotNull(bbox);
+      // query by the full bounding box, make sure there is more than
+      // 0 count and make sure the count matches the number of results
+      final BoundingBoxValue bbox =
+          ds.aggregateStatistics(
+              StatisticQueryBuilder.newBuilder(BoundingBoxStatistic.STATS_TYPE).typeName(
+                  internalDataAdapter.getTypeName()).fieldName(
+                      adapter.getFeatureType().getGeometryDescriptor().getLocalName()).build());
+      assertNotNull(bbox);
 
-        CountValue count =
-            ds.aggregateStatistics(
-                StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
-                    internalDataAdapter.getTypeName()).build());
-        assertNotNull(count);
+      final CountValue count =
+          ds.aggregateStatistics(
+              StatisticQueryBuilder.newBuilder(CountStatistic.STATS_TYPE).typeName(
+                  internalDataAdapter.getTypeName()).build());
+      assertNotNull(count);
 
-        // then query it
-        final GeometryFactory factory = new GeometryFactory();
-        final Envelope env =
-            new Envelope(bbox.getMinX(), bbox.getMaxX(), bbox.getMinY(), bbox.getMaxY());
-        final Geometry spatialFilter = factory.toGeometry(env);
-        final QueryConstraints query = new ExplicitSpatialQuery(spatialFilter);
-        final int resultCount = testQuery(adapter, query);
-        assertTrue(
-            "'"
-                + adapter.getTypeName()
-                + "' adapter must have at least one element in its statistic",
-            count.getValue() > 0);
-        assertEquals(
-            "'"
-                + adapter.getTypeName()
-                + "' adapter should have the same results from a spatial query of '"
-                + env
-                + "' as its total count statistic",
-            count.getValue().intValue(),
-            resultCount);
+      // then query it
+      final GeometryFactory factory = new GeometryFactory();
+      final Envelope env =
+          new Envelope(bbox.getMinX(), bbox.getMaxX(), bbox.getMinY(), bbox.getMaxY());
+      final Geometry spatialFilter = factory.toGeometry(env);
+      final QueryConstraints query = new ExplicitSpatialQuery(spatialFilter);
+      final int resultCount = testQuery(adapter, query);
+      assertTrue(
+          "'" + adapter.getTypeName() + "' adapter must have at least one element in its statistic",
+          count.getValue() > 0);
+      assertEquals(
+          "'"
+              + adapter.getTypeName()
+              + "' adapter should have the same results from a spatial query of '"
+              + env
+              + "' as its total count statistic",
+          count.getValue().intValue(),
+          resultCount);
 
-        assertEquals(
-            "'"
-                + adapter.getTypeName()
-                + "' adapter entries ingested does not match expected count",
-            new Integer(GDELT_URL_COUNT),
-            new Integer(resultCount));
-      }
+      assertEquals(
+          "'" + adapter.getTypeName() + "' adapter entries ingested does not match expected count",
+          new Integer(GDELT_URL_COUNT),
+          new Integer(resultCount));
     }
+
 
     // Clean up
     TestUtils.deleteAll(dataStore);

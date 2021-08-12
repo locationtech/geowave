@@ -22,7 +22,6 @@ import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
 import org.locationtech.geowave.core.geotime.util.TimeUtils;
-import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
@@ -214,35 +213,29 @@ public class FeatureDataUtils {
   }
 
   public static int getFeatureAdapterCount(final DataStorePluginOptions dataStore) {
-    try (final CloseableIterator<InternalDataAdapter<?>> adapterIt =
-        dataStore.createAdapterStore().getAdapters()) {
+    final InternalDataAdapter<?>[] adapters = dataStore.createAdapterStore().getAdapters();
 
-      int featureAdapters = 0;
+    int featureAdapters = 0;
 
-      while (adapterIt.hasNext()) {
-        final DataTypeAdapter<?> adapter = adapterIt.next().getAdapter();
-        if (adapter instanceof GeotoolsFeatureDataAdapter) {
-          featureAdapters++;
-        }
+    for (final DataTypeAdapter<?> adapter : adapters) {
+      if (adapter instanceof GeotoolsFeatureDataAdapter) {
+        featureAdapters++;
       }
-
-      return featureAdapters;
     }
+
+    return featureAdapters;
   }
 
   public static List<String> getFeatureTypeNames(final DataStorePluginOptions dataStore) {
     final ArrayList<String> featureTypeNames = new ArrayList<>();
-
-    try (final CloseableIterator<InternalDataAdapter<?>> adapterIt =
-        dataStore.createAdapterStore().getAdapters()) {
-      while (adapterIt.hasNext()) {
-        final DataTypeAdapter<?> adapter = adapterIt.next().getAdapter();
-        if (adapter instanceof GeotoolsFeatureDataAdapter) {
-          featureTypeNames.add(adapter.getTypeName());
-        }
+    final InternalDataAdapter<?>[] adapters = dataStore.createAdapterStore().getAdapters();
+    for (final InternalDataAdapter<?> internalAdapter : adapters) {
+      final DataTypeAdapter<?> adapter = internalAdapter.getAdapter();
+      if (adapter instanceof GeotoolsFeatureDataAdapter) {
+        featureTypeNames.add(adapter.getTypeName());
       }
-
-      return featureTypeNames;
     }
+
+    return featureTypeNames;
   }
 }

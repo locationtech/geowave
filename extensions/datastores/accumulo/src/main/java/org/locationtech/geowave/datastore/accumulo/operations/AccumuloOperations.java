@@ -358,16 +358,24 @@ public class AccumuloOperations implements
 
           config.setProperties(propMap);
         }
-
-        getConnector().tableOperations().create(qName, config);
-
-        // Versioning is on by default; only need to detach
-        if (!enableVersioning) {
-          enableVersioningIterator(tableName, false);
+        if (!getConnector().tableOperations().exists(qName)) {
+          getConnector().tableOperations().create(qName, config);
+          // Versioning is on by default; only need to detach
+          if (!enableVersioning) {
+            enableVersioningIterator(tableName, false);
+          }
         }
         return true;
       } catch (AccumuloException | AccumuloSecurityException | TableExistsException e) {
         LOGGER.warn("Unable to create table '" + qName + "'", e);
+        // Versioning is on by default; only need to detach
+        if (!enableVersioning) {
+          try {
+            enableVersioningIterator(tableName, false);
+          } catch (AccumuloSecurityException | AccumuloException | TableNotFoundException e1) {
+            LOGGER.warn("Error disabling version iterator on '" + qName + "'", e);
+          }
+        }
       } catch (final TableNotFoundException e) {
         LOGGER.error("Error disabling version iterator", e);
       }

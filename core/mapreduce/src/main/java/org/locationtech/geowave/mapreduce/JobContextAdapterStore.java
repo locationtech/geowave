@@ -9,6 +9,7 @@
 package org.locationtech.geowave.mapreduce;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,8 +17,6 @@ import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.collections.Transformer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
-import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
@@ -94,21 +93,11 @@ public class JobContextAdapterStore implements TransientAdapterStore {
   }
 
   @Override
-  public CloseableIterator<DataTypeAdapter<?>> getAdapters() {
-    final CloseableIterator<InternalDataAdapter<?>> it = persistentAdapterStore.getAdapters();
+  public DataTypeAdapter<?>[] getAdapters() {
+    final InternalDataAdapter<?>[] adapters = persistentAdapterStore.getAdapters();
     // cache any results
-    return new CloseableIteratorWrapper<DataTypeAdapter<?>>(
-        it,
-        IteratorUtils.transformedIterator(it, new Transformer() {
-
-          @Override
-          public Object transform(final Object obj) {
-            if (obj instanceof DataTypeAdapter) {
-              adapterCache.put(((DataTypeAdapter) obj).getTypeName(), (DataTypeAdapter) obj);
-            }
-            return obj;
-          }
-        }));
+    Arrays.stream(adapters).forEach(a -> adapterCache.put(a.getTypeName(), a));
+    return adapters;
   }
 
   public List<String> getTypeNames() {
@@ -116,16 +105,18 @@ public class JobContextAdapterStore implements TransientAdapterStore {
         GeoWaveConfiguratorBase.getDataAdapters(CLASS, context);
     if ((userAdapters == null) || (userAdapters.length <= 0)) {
       return IteratorUtils.toList(
-          IteratorUtils.transformedIterator(getAdapters(), new Transformer() {
+          IteratorUtils.transformedIterator(
+              Arrays.stream(getAdapters()).iterator(),
+              new Transformer() {
 
-            @Override
-            public Object transform(final Object input) {
-              if (input instanceof DataTypeAdapter) {
-                return ((DataTypeAdapter) input).getTypeName();
-              }
-              return input;
-            }
-          }));
+                @Override
+                public Object transform(final Object input) {
+                  if (input instanceof DataTypeAdapter) {
+                    return ((DataTypeAdapter) input).getTypeName();
+                  }
+                  return input;
+                }
+              }));
     } else {
       final List<String> retVal = new ArrayList<>(userAdapters.length);
       for (final DataTypeAdapter<?> adapter : userAdapters) {

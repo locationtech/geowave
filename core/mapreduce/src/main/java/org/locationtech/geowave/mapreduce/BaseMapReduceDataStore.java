@@ -64,7 +64,7 @@ public class BaseMapReduceDataStore extends BaseDataStore implements MapReduceDa
       final TaskAttemptContext context,
       final IndexStore jobContextIndexStore,
       final TransientAdapterStore jobContextAdapterStore) {
-    return new GeoWaveRecordWriter(context, this, jobContextIndexStore, jobContextAdapterStore);
+    return new GeoWaveRecordWriter(this, jobContextIndexStore, jobContextAdapterStore);
   }
 
   @Override

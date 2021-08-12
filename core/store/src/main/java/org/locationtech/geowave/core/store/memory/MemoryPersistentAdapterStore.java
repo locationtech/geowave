@@ -10,12 +10,10 @@ package org.locationtech.geowave.core.store.memory;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 
@@ -57,8 +55,8 @@ public class MemoryPersistentAdapterStore implements PersistentAdapterStore, Ser
   }
 
   @Override
-  public CloseableIterator<InternalDataAdapter<?>> getAdapters() {
-    return new CloseableIterator.Wrapper<>(new ArrayList<>(adapterMap.values()).iterator());
+  public InternalDataAdapter<?>[] getAdapters() {
+    return adapterMap.values().toArray(new InternalDataAdapter[adapterMap.size()]);
   }
 
   @Override

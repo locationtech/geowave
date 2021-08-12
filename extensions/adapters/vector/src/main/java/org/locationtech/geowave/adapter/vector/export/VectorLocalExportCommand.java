@@ -98,14 +98,12 @@ public class VectorLocalExportCommand extends DefaultOperation implements Comman
           featureAdapters.add((GeotoolsFeatureDataAdapter) internalDataAdapter.getAdapter());
         }
       } else {
-        final CloseableIterator<InternalDataAdapter<?>> adapters = adapterStore.getAdapters();
-        while (adapters.hasNext()) {
-          final InternalDataAdapter<?> adapter = adapters.next();
+        final InternalDataAdapter<?>[] adapters = adapterStore.getAdapters();
+        for (final InternalDataAdapter<?> adapter : adapters) {
           if (adapter.getAdapter() instanceof GeotoolsFeatureDataAdapter) {
             featureAdapters.add((GeotoolsFeatureDataAdapter) adapter.getAdapter());
           }
         }
-        adapters.close();
       }
       if (featureAdapters.isEmpty()) {
         params.getConsole().println("Unable to find any vector data types in store");
@@ -137,8 +135,8 @@ public class VectorLocalExportCommand extends DefaultOperation implements Comman
             final AvroSimpleFeatureCollection simpleFeatureCollection =
                 new AvroSimpleFeatureCollection();
 
-            SimpleFeature next = it.next();
-            SimpleFeatureType featureType = next.getFeatureType();
+            final SimpleFeature next = it.next();
+            final SimpleFeatureType featureType = next.getFeatureType();
             simpleFeatureCollection.setFeatureType(
                 GeoWaveAvroFeatureUtils.buildFeatureDefinition(null, featureType, null, ""));
             final List<AvroAttributeValues> avList = new ArrayList<>(options.getBatchSize());

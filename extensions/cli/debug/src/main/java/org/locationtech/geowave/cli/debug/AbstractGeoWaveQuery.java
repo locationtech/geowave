@@ -18,7 +18,6 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.converters.GeoWaveBaseConverter;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.index.ByteArray;
-import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.DataStore;
@@ -78,9 +77,8 @@ public abstract class AbstractGeoWaveQuery extends DefaultOperation implements C
           (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(
               storeOptions.createInternalAdapterStore().getAdapterId(typeName)).getAdapter();
     } else {
-      final CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters();
-      adapter = (GeotoolsFeatureDataAdapter) it.next().getAdapter();
-      it.close();
+      final InternalDataAdapter<?>[] adapters = adapterStore.getAdapters();
+      adapter = (GeotoolsFeatureDataAdapter) adapters[0].getAdapter();
     }
     if (debug && (adapter != null)) {
       System.out.println(adapter);

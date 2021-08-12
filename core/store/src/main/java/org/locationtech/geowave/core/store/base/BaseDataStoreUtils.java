@@ -1255,11 +1255,10 @@ public class BaseDataStoreUtils {
         }
       }
     } else {
-      try (CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters()) {
-        while (it.hasNext()) {
-          if (isRowMerging(it.next().getAdapter())) {
-            return true;
-          }
+      final InternalDataAdapter<?>[] adapters = adapterStore.getAdapters();
+      for (final InternalDataAdapter<?> adapter : adapters) {
+        if (isRowMerging(adapter.getAdapter())) {
+          return true;
         }
       }
     }

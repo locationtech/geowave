@@ -94,26 +94,20 @@ public class StoreCopyJobRunner extends Configured implements Tool {
 
     final AdapterIndexMappingStore adapterIndexMappingStore =
         inputStoreOptions.createAdapterIndexMappingStore();
-    try (CloseableIterator<InternalDataAdapter<?>> adapterIt =
-        inputStoreOptions.createAdapterStore().getAdapters()) {
-      while (adapterIt.hasNext()) {
-        final InternalDataAdapter<?> dataAdapter = adapterIt.next();
+    final InternalDataAdapter<?>[] adapters = inputStoreOptions.createAdapterStore().getAdapters();
+    for (final InternalDataAdapter<?> dataAdapter : adapters) {
+      LOGGER.debug("Adding adapter to output config: " + dataAdapter.getTypeName());
 
-        LOGGER.debug("Adding adapter to output config: " + dataAdapter.getTypeName());
+      GeoWaveOutputFormat.addDataAdapter(job.getConfiguration(), dataAdapter);
 
-        GeoWaveOutputFormat.addDataAdapter(job.getConfiguration(), dataAdapter);
+      final AdapterToIndexMapping[] mappings =
+          adapterIndexMappingStore.getIndicesForAdapter(dataAdapter.getAdapterId());
 
-        final AdapterToIndexMapping[] mappings =
-            adapterIndexMappingStore.getIndicesForAdapter(dataAdapter.getAdapterId());
-
-        JobContextAdapterIndexMappingStore.addAdapterToIndexMapping(
-            job.getConfiguration(),
-            mappings);
-        JobContextInternalAdapterStore.addTypeName(
-            job.getConfiguration(),
-            dataAdapter.getTypeName(),
-            dataAdapter.getAdapterId());
-      }
+      JobContextAdapterIndexMappingStore.addAdapterToIndexMapping(job.getConfiguration(), mappings);
+      JobContextInternalAdapterStore.addTypeName(
+          job.getConfiguration(),
+          dataAdapter.getTypeName(),
+          dataAdapter.getAdapterId());
     }
 
     try (CloseableIterator<Index> indexIt = inputStoreOptions.createIndexStore().getIndices()) {

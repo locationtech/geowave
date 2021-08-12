@@ -104,9 +104,8 @@ public class CQLDelete extends DefaultOperation implements Command {
           (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(
               internalAdapterStore.getAdapterId(typeName)).getAdapter();
     } else {
-      final CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters();
-      adapter = (GeotoolsFeatureDataAdapter) it.next().getAdapter();
-      it.close();
+      final InternalDataAdapter<?>[] adapters = adapterStore.getAdapters();
+      adapter = (GeotoolsFeatureDataAdapter) adapters[0].getAdapter();
     }
 
     if (debug && (adapter != null)) {

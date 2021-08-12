@@ -22,7 +22,6 @@ import org.junit.runner.RunWith;
 import org.locationtech.geowave.analytic.spark.GeoWaveRDD;
 import org.locationtech.geowave.analytic.spark.GeoWaveRDDLoader;
 import org.locationtech.geowave.analytic.spark.RDDOptions;
-import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
@@ -306,13 +305,11 @@ public class GeoWaveBasicSparkIT extends AbstractGeoWaveBasicVectorIT {
         1);
 
     // Retrieve the adapters
-    final CloseableIterator<InternalDataAdapter<?>> adapterIt =
-        dataStore.createAdapterStore().getAdapters();
+    final InternalDataAdapter<?>[] adapters = dataStore.createAdapterStore().getAdapters();
     DataTypeAdapter hailAdapter = null;
     DataTypeAdapter tornadoAdapter = null;
 
-    while (adapterIt.hasNext()) {
-      final DataTypeAdapter adapter = adapterIt.next().getAdapter();
+    for (final DataTypeAdapter adapter : adapters) {
       final String adapterName = adapter.getTypeName();
 
       if (adapterName.equals("hail")) {
