@@ -33,6 +33,7 @@ import org.locationtech.geowave.core.index.numeric.NumericRange;
 import org.locationtech.geowave.core.index.numeric.NumericValue;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.IndexFieldMapper;
+import org.locationtech.geowave.core.store.api.RowBuilder;
 import org.locationtech.geowave.core.store.api.Statistic;
 import org.locationtech.geowave.core.store.api.StatisticValue;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
@@ -200,12 +201,12 @@ public class MockComponents {
     }
 
     @Override
-    public FieldDescriptor[] getFieldDescriptors() {
+    public FieldDescriptor<?>[] getFieldDescriptors() {
       return FIELDS;
     }
 
     @Override
-    public FieldDescriptor getFieldDescriptor(final String fieldName) {
+    public FieldDescriptor<?> getFieldDescriptor(final String fieldName) {
       switch (fieldName) {
         case INTEGER:
           return FIELDS[0];
@@ -240,8 +241,8 @@ public class MockComponents {
     }
 
     @Override
-    public List<Integer> toAdapter(TestIndexFieldType indexFieldValue) {
-      return Lists.newArrayList(indexFieldValue.indexValue);
+    public void toAdapter(TestIndexFieldType indexFieldValue, RowBuilder<?> rowBuilder) {
+      rowBuilder.setField(adapterFields[0], indexFieldValue);
     }
 
     @Override

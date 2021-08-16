@@ -24,8 +24,8 @@ import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.operations.MetadataWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 
 /**
  * This abstract class does most of the work for storing persistable objects in Geowave datastores
@@ -64,8 +64,7 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable> {
   }
 
   protected void buildCache() {
-    final CacheBuilder<Object, Object> cacheBuilder =
-        CacheBuilder.newBuilder().maximumSize(MAX_ENTRIES);
+    final Caffeine<Object, Object> cacheBuilder = Caffeine.newBuilder().maximumSize(MAX_ENTRIES);
     this.cache = cacheBuilder.<ByteArray, T>build();
   }
 

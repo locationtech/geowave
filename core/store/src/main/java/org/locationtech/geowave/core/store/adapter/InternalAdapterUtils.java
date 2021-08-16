@@ -14,29 +14,8 @@ import java.util.stream.Collectors;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.IndexFieldMapper;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
-import org.locationtech.geowave.core.store.data.PersistentValue;
 
 class InternalAdapterUtils {
-  protected static <N, I> PersistentValue<?>[] indexValueToNativeValues(
-      final IndexFieldMapper<N, I> fieldMapper,
-      final DataTypeAdapter<?> adapter,
-      final I value) throws IllegalAccessException {
-    final List<?> adapterValues = fieldMapper.toAdapter(value);
-    final String[] adapterFields = fieldMapper.getAdapterFields();
-    if (adapterValues.size() != adapterFields.length) {
-      throw new IllegalAccessException(
-          String.format(
-              "Number of fields (%d) must match number of values (%d)",
-              adapterFields.length,
-              adapterValues.size()));
-    }
-    final PersistentValue<?>[] retVal = new PersistentValue[adapterValues.size()];
-    for (int i = 0; i < retVal.length; i++) {
-      retVal[i] = new PersistentValue<>(adapterFields[i], adapterValues.get(i));
-    }
-    return retVal;
-  }
-
   @SuppressWarnings("unchecked")
   protected static <T, N, I> Object entryToIndexValue(
       final IndexFieldMapper<N, I> fieldMapper,

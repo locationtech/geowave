@@ -11,12 +11,9 @@ package org.locationtech.geowave.core.geotime.adapter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
 import org.locationtech.geowave.core.store.api.IndexFieldMapper;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import org.locationtech.geowave.core.store.api.RowBuilder;
 
 /**
  * Maps an adapter temporal field or fields to a `Long` index field.
@@ -59,10 +56,10 @@ public abstract class TemporalLongFieldMapper<N> extends IndexFieldMapper<N, Lon
     }
 
     @Override
-    public List<Calendar> toAdapter(Long indexFieldValue) {
+    public void toAdapter(Long indexFieldValue, final RowBuilder<?> rowBuilder) {
       final Calendar calendar = Calendar.getInstance();
       calendar.setTimeInMillis(indexFieldValue);
-      return Lists.newArrayList(calendar);
+      rowBuilder.setField(adapterFields[0], calendar);
     }
 
   }
@@ -83,8 +80,8 @@ public abstract class TemporalLongFieldMapper<N> extends IndexFieldMapper<N, Lon
     }
 
     @Override
-    public List<Date> toAdapter(Long indexFieldValue) {
-      return Lists.newArrayList(new Date(indexFieldValue));
+    public void toAdapter(Long indexFieldValue, final RowBuilder<?> rowBuilder) {
+      rowBuilder.setField(adapterFields[0], new Date(indexFieldValue));
     }
 
   }

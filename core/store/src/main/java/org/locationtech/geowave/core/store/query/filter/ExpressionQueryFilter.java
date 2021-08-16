@@ -9,7 +9,6 @@
 package org.locationtech.geowave.core.store.query.filter;
 
 import java.nio.ByteBuffer;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
@@ -18,6 +17,7 @@ import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.adapter.AbstractAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
+import org.locationtech.geowave.core.store.adapter.MapRowBuilder;
 import org.locationtech.geowave.core.store.api.IndexFieldMapper;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
@@ -38,7 +38,8 @@ public class ExpressionQueryFilter<T> implements QueryFilter {
   private AdapterToIndexMapping indexMapping;
   private Filter filter;
   private Set<String> referencedFields = null;
-  private Map<String, String> fieldToIndexFieldMap = null;
+  private Map<String, IndexFieldMapper<?, ?>> fieldToIndexFieldMap = null;
+  private boolean referencedFieldsInitialized = false;
 
   public ExpressionQueryFilter() {
     super();
@@ -63,26 +64,28 @@ public class ExpressionQueryFilter<T> implements QueryFilter {
 
   private void initReferencedFields() {
     synchronized (indexMapping) {
-      if (referencedFields == null) {
+      if (!referencedFieldsInitialized) {
         this.referencedFields = Sets.newHashSet();
         this.fieldToIndexFieldMap = Maps.newHashMap();
         filter.addReferencedFields(referencedFields);
         for (final IndexFieldMapper<?, ?> mapper : indexMapping.getIndexFieldMappers()) {
           for (final String field : mapper.getAdapterFields()) {
-            fieldToIndexFieldMap.put(field, mapper.indexFieldName());
+            fieldToIndexFieldMap.put(field, mapper);
           }
         }
+        referencedFieldsInitialized = true;
       }
     }
   }
 
+  @SuppressWarnings({"unchecked", "rawtypes"})
   @Override
   public boolean accept(
       final CommonIndexModel indexModel,
       final IndexedPersistenceEncoding<?> persistenceEncoding) {
     if ((filter != null) && (indexModel != null) && (adapter != null) && (indexMapping != null)) {
       final Map<String, Object> fieldValues = Maps.newHashMap();
-      if (referencedFields == null) {
+      if (!referencedFieldsInitialized) {
         initReferencedFields();
       }
       final PersistentDataset<?> commonData = persistenceEncoding.getCommonData();
@@ -92,15 +95,9 @@ public class ExpressionQueryFilter<T> implements QueryFilter {
           continue;
         }
         if (fieldToIndexFieldMap.containsKey(field)) {
-          final String indexField = fieldToIndexFieldMap.get(field);
-          final Object indexValue = commonData.getValue(indexField);
-          final IndexFieldMapper<?, ?> mapper = indexMapping.getMapperForIndexField(indexField);
-          @SuppressWarnings({"unchecked", "rawtypes"})
-          final List<Object> adapterFieldValues = ((IndexFieldMapper) mapper).toAdapter(indexValue);
-          final String[] adapterFields = mapper.getAdapterFields();
-          for (int i = 0; i < adapterFields.length; i++) {
-            fieldValues.put(adapterFields[i], adapterFieldValues.get(i));
-          }
+          final IndexFieldMapper<?, ?> mapper = fieldToIndexFieldMap.get(field);
+          final Object indexValue = commonData.getValue(mapper.indexFieldName());
+          ((IndexFieldMapper) mapper).toAdapter(indexValue, new MapRowBuilder(fieldValues));
         } else {
           final Object value = commonData.getValue(field);
           if (value != null) {

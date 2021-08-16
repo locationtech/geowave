@@ -10,10 +10,9 @@ package org.locationtech.geowave.core.store.data.visibility;
 
 import java.text.ParseException;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
+import com.github.benmanes.caffeine.cache.CacheLoader;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 
 public class VisibilityExpression {
   public static final String OR_TOKEN = "|";
@@ -33,9 +32,9 @@ public class VisibilityExpression {
   }
 
   private static LoadingCache<String, VisibilityNode> expressionCache =
-      CacheBuilder.newBuilder().maximumSize(50).build(new VisibilityCacheLoader());
+      Caffeine.newBuilder().maximumSize(50).build(new VisibilityCacheLoader());
 
-  private static class VisibilityCacheLoader extends CacheLoader<String, VisibilityNode> {
+  private static class VisibilityCacheLoader implements CacheLoader<String, VisibilityNode> {
     @Override
     public VisibilityNode load(final String key) throws Exception {
       final String[] tokens = key.split(TOKEN_SPLIT);
@@ -48,14 +47,13 @@ public class VisibilityExpression {
 
   private static VisibilityNode getCached(final String expression) {
     final String trimmed = expression.replaceAll("\\s+", "");
-    try {
-      return expressionCache.get(trimmed);
-    } catch (final ExecutionException e) {
-      throw new RuntimeException(e.getCause());
-    }
+    return expressionCache.get(trimmed);
   }
 
   public static boolean evaluate(final String expression, final Set<String> auths) {
+    if (expression.isEmpty()) {
+      return true;
+    }
     return getCached(expression).evaluate(auths);
   }
 

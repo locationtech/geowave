@@ -23,18 +23,17 @@ import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexFieldMapper;
+import org.locationtech.geowave.core.store.api.RowBuilder;
 import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.data.MultiFieldPersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
-import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
+import com.google.common.collect.Maps;
 
 /**
  * This class generically supports most of the operations necessary to implement a Data Adapter and
@@ -56,8 +55,8 @@ public class InternalDataAdapterImpl<T> implements InternalDataAdapter<T> {
   private final Map<String, FieldReader<Object>> mapOfFieldNameToReaders = new HashMap<>();
   /** Map of Field Writers associated with a Field ID */
   private final Map<String, FieldWriter<Object>> mapOfFieldNameToWriters = new HashMap<>();
-  private transient BiMap<String, Integer> fieldToPositionMap = null;
-  private transient BiMap<Integer, String> positionToFieldMap = null;
+  private transient Map<String, Integer> fieldToPositionMap = null;
+  private transient Map<Integer, String> positionToFieldMap = null;
   private transient Map<String, List<String>> modelToDimensionsMap = null;
   private transient volatile boolean positionMapsInitialized = false;
   private Object MUTEX = new Object();
@@ -163,7 +162,7 @@ public class InternalDataAdapterImpl<T> implements InternalDataAdapter<T> {
     return false;
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "rawtypes"})
   @Override
   public T decode(
       final IndexedAdapterPersistenceEncoding data,
@@ -177,22 +176,7 @@ public class InternalDataAdapterImpl<T> implements InternalDataAdapter<T> {
         if (value == null) {
           continue;
         }
-        PersistentValue<Object>[] values;
-        try {
-          values =
-              InternalAdapterUtils.indexValueToNativeValues(
-                  (IndexFieldMapper) fieldMapper,
-                  adapter,
-                  value);
-        } catch (final IllegalAccessException e) {
-          LOGGER.warn("Unable to convert from index values to adapter native values", e);
-          continue;
-        }
-        if ((values != null) && (values.length > 0)) {
-          for (final PersistentValue<Object> v : values) {
-            builder.setField(v.getFieldName(), v.getValue());
-          }
-        }
+        ((IndexFieldMapper) fieldMapper).toAdapter(value, builder);
       }
     }
     builder.setFields(data.getAdapterExtendedData().getValues());
@@ -382,13 +366,14 @@ public class InternalDataAdapterImpl<T> implements InternalDataAdapter<T> {
       return;
     }
     try {
-      fieldToPositionMap = HashBiMap.create();
+      fieldToPositionMap = Maps.newHashMap();
+      positionToFieldMap = Maps.newHashMap();
       final FieldDescriptor<?>[] fields = adapter.getFieldDescriptors();
       for (int i = 0; i < fields.length; i++) {
         final String currFieldName = fields[i].fieldName();
-        fieldToPositionMap.forcePut(currFieldName, i);
+        fieldToPositionMap.put(currFieldName, i);
+        positionToFieldMap.put(i, currFieldName);
       }
-      positionToFieldMap = fieldToPositionMap.inverse();
       positionMapsInitialized = true;
     } catch (final Exception e) {
       LOGGER.error("Unable to initialize position map, continuing anyways", e);

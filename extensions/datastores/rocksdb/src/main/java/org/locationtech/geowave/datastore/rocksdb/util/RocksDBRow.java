@@ -15,9 +15,9 @@ import java.util.List;
 import org.apache.commons.lang3.ArrayUtils;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
+import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.entities.GeoWaveValueImpl;
 import org.locationtech.geowave.core.store.entities.MergeableGeoWaveRow;
-import com.google.common.collect.Lists;
 
 public class RocksDBRow extends MergeableGeoWaveRow implements GeoWaveRow {
   List<byte[]> mergedKeys;
@@ -69,7 +69,7 @@ public class RocksDBRow extends MergeableGeoWaveRow implements GeoWaveRow {
     final byte[] duplicatesBytes = new byte[2];
     buf.get(duplicatesBytes);
     duplicates = ByteArrayUtils.byteArrayToShort(duplicatesBytes);
-    attributeValues = Lists.newArrayList(new GeoWaveValueImpl(fieldMask, visibility, value));
+    attributeValues = new GeoWaveValue[] {new GeoWaveValueImpl(fieldMask, visibility, value)};
   }
 
   @Override

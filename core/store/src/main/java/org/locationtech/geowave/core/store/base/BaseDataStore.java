@@ -70,6 +70,7 @@ import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.index.writer.IndependentAdapterIndexWriter;
 import org.locationtech.geowave.core.store.index.writer.IndexCompositeWriter;
 import org.locationtech.geowave.core.store.ingest.BaseDataStoreIngestDriver;
+import org.locationtech.geowave.core.store.memory.MemoryAdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.memory.MemoryPersistentAdapterStore;
 import org.locationtech.geowave.core.store.operations.DataIndexReaderParamsBuilder;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
@@ -488,10 +489,9 @@ public class BaseDataStore implements DataStore {
       // client side filtering because the filter needs to be applied across
       // indices
       DedupeFilter dedupeFilter = new DedupeFilter();
-      MemoryPersistentAdapterStore tempAdapterStore;
-
-      tempAdapterStore =
+      MemoryPersistentAdapterStore tempAdapterStore =
           new MemoryPersistentAdapterStore(queryOptions.getAdaptersArray(adapterStore));
+      MemoryAdapterIndexMappingStore memoryMappingStore = new MemoryAdapterIndexMappingStore();
       // keep a list of adapters that have been queried, to only load an
       // adapter to be queried once
       final Set<Short> queriedAdapters = new HashSet<>();
@@ -626,6 +626,7 @@ public class BaseDataStore implements DataStore {
           final Index index = indexAdapterPair.getLeft();
           final AdapterToIndexMapping indexMapping =
               indexMappingStore.getMapping(adapter.getAdapterId(), index.getName());
+          memoryMappingStore.addAdapterIndexMapping(indexMapping);
           if (delete) {
             final DataStoreCallbackManager callbackCache =
                 new DataStoreCallbackManager(
@@ -701,9 +702,7 @@ public class BaseDataStore implements DataStore {
                 ((AdapterAndIndexBasedQueryConstraints) sanitizedConstraints).createQueryConstraints(
                     adapter,
                     indexAdapterPair.getLeft(),
-                    indexMappingStore.getMapping(
-                        adapter.getAdapterId(),
-                        indexAdapterPair.getLeft().getName()));
+                    indexMapping);
             if (adapterIndexConstraints == null) {
               continue;
             }
@@ -755,6 +754,7 @@ public class BaseDataStore implements DataStore {
                     dedupeFilter,
                     queryOptions,
                     tempAdapterStore,
+                    memoryMappingStore,
                     delete));
             continue;
           }
@@ -773,6 +773,7 @@ public class BaseDataStore implements DataStore {
                   dedupeFilter,
                   queryOptions,
                   tempAdapterStore,
+                  memoryMappingStore,
                   delete));
         }
         if (DeletionMode.DELETE_WITH_DUPLICATES.equals(deleteMode)) {
@@ -972,6 +973,7 @@ public class BaseDataStore implements DataStore {
       final DedupeFilter filter,
       final BaseQueryOptions sanitizedQueryOptions,
       final PersistentAdapterStore tempAdapterStore,
+      final AdapterIndexMappingStore mappingStore,
       final boolean delete) {
     final BaseConstraintsQuery constraintsQuery =
         new BaseConstraintsQuery(
@@ -1022,7 +1024,7 @@ public class BaseDataStore implements DataStore {
         baseOperations,
         baseOptions,
         tempAdapterStore,
-        indexMappingStore,
+        mappingStore,
         internalAdapterStore,
         sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
         sanitizedQueryOptions.getTargetResolutionPerDimensionForHierarchicalIndex(),

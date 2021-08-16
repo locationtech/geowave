@@ -16,7 +16,6 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.entities.MergeableGeoWaveRow;
 import org.locationtech.geowave.datastore.filesystem.FileSystemDataFormatter.FileSystemIndexKey;
-import com.google.common.collect.Lists;
 
 public class FileSystemRow extends MergeableGeoWaveRow implements GeoWaveRow {
   List<String> mergedFileNames;
@@ -40,7 +39,7 @@ public class FileSystemRow extends MergeableGeoWaveRow implements GeoWaveRow {
     sortKey = key.getSortKey();
     dataId = key.getDataId();
     duplicates = key.getNumDuplicates();
-    attributeValues = Lists.newArrayList(value);
+    attributeValues = new GeoWaveValue[] {value};
   }
 
   @Override

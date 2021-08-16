@@ -21,9 +21,9 @@ import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
+import com.github.benmanes.caffeine.cache.CacheLoader;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 
 /**
  * Utility methods when dealing with bitmasks in Accumulo
@@ -92,7 +92,7 @@ public class BitmaskUtils {
   }
 
   private static LoadingCache<ByteArray, List<Integer>> fieldPositionCache =
-      CacheBuilder.newBuilder().maximumSize(100).build(new CacheLoader<ByteArray, List<Integer>>() {
+      Caffeine.newBuilder().maximumSize(100).build(new CacheLoader<ByteArray, List<Integer>>() {
 
         @Override
         public List<Integer> load(final ByteArray key) throws Exception {
@@ -118,7 +118,7 @@ public class BitmaskUtils {
    * @return a list of field positions
    */
   public static List<Integer> getFieldPositions(final byte[] bitmask) {
-    return fieldPositionCache.getUnchecked(new ByteArray(bitmask));
+    return fieldPositionCache.get(new ByteArray(bitmask));
   }
 
   /**

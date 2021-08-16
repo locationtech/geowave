@@ -10,8 +10,8 @@ package org.locationtech.geowave.core.geotime.adapter;
 
 import java.util.List;
 import java.util.Set;
+import org.locationtech.geowave.core.store.api.RowBuilder;
 import org.locationtech.jts.geom.Geometry;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 /**
@@ -25,8 +25,8 @@ public class GeometryFieldMapper extends SpatialFieldMapper<Geometry> {
   }
 
   @Override
-  public List<Geometry> toAdapter(final Geometry indexFieldValue) {
-    return Lists.newArrayList(indexFieldValue);
+  public void toAdapter(final Geometry indexFieldValue, final RowBuilder<?> rowBuilder) {
+    rowBuilder.setField(adapterFields[0], indexFieldValue);
   }
 
   @Override

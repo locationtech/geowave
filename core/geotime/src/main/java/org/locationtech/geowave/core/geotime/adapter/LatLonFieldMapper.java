@@ -14,11 +14,11 @@ import java.util.Set;
 import org.locationtech.geowave.core.geotime.store.dimension.SpatialField;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
+import org.locationtech.geowave.core.store.api.RowBuilder;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 /**
@@ -69,15 +69,20 @@ public abstract class LatLonFieldMapper<N> extends SpatialFieldMapper<N> {
 
 
   @Override
-  public List<N> toAdapter(Geometry indexFieldValue) {
+  public void toAdapter(final Geometry indexFieldValue, final RowBuilder<?> rowBuilder) {
     final Point centroid = indexFieldValue.getCentroid();
     if (xAxisFirst) {
-      return toList(centroid.getX(), centroid.getY());
+      setField(adapterFields[0], centroid.getX(), rowBuilder);
+      setField(adapterFields[1], centroid.getY(), rowBuilder);
     }
-    return toList(centroid.getY(), centroid.getX());
+    setField(adapterFields[0], centroid.getY(), rowBuilder);
+    setField(adapterFields[1], centroid.getX(), rowBuilder);
   }
 
-  protected abstract List<N> toList(final Double xValue, final Double yValue);
+  protected abstract void setField(
+      final String fieldName,
+      final Double Value,
+      final RowBuilder<?> rowBuilder);
 
   @Override
   protected Geometry getNativeGeometry(List<N> nativeFieldValues) {
@@ -126,8 +131,11 @@ public abstract class LatLonFieldMapper<N> extends SpatialFieldMapper<N> {
     }
 
     @Override
-    protected List<Double> toList(Double xValue, Double yValue) {
-      return Lists.newArrayList(xValue, yValue);
+    protected void setField(
+        final String fieldName,
+        final Double value,
+        final RowBuilder<?> rowBuilder) {
+      rowBuilder.setField(fieldName, value);
     }
 
     @Override
@@ -148,8 +156,11 @@ public abstract class LatLonFieldMapper<N> extends SpatialFieldMapper<N> {
     }
 
     @Override
-    protected List<Float> toList(Double xValue, Double yValue) {
-      return Lists.newArrayList(xValue.floatValue(), yValue.floatValue());
+    protected void setField(
+        final String fieldName,
+        final Double value,
+        final RowBuilder<?> rowBuilder) {
+      rowBuilder.setField(fieldName, value.floatValue());
     }
 
     @Override

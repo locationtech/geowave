@@ -101,29 +101,4 @@ public interface DataTypeAdapter<T> extends DataReader<Object>, DataWriter<Objec
     return Maps.newHashMap();
   }
 
-  /**
-   * This is used internally by the AbstractDataAdapter to build a row from a set of field values
-   *
-   * @param <T>
-   * @param <FieldType>
-   */
-  static interface RowBuilder<T> {
-    /**
-     * Set a field name/value pair
-     *
-     * @param fieldValue the field ID/value pair
-     */
-    void setField(String fieldName, Object fieldValue);
-
-    void setFields(Map<String, Object> values);
-
-    /**
-     * Create a row with the previously set fields
-     *
-     * @param dataId the unique data ID for the row
-     * @return the row
-     */
-    T buildRow(byte[] dataId);
-  }
-
 }

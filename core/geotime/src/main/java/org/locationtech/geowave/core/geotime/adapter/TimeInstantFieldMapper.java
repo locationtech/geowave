@@ -13,8 +13,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import org.locationtech.geowave.core.geotime.util.TimeUtils;
+import org.locationtech.geowave.core.store.api.RowBuilder;
 import org.threeten.extra.Interval;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 /**
@@ -29,11 +29,11 @@ public abstract class TimeInstantFieldMapper<N> extends TemporalIntervalFieldMap
     return TimeUtils.getInterval(nativeFieldValues.get(0));
   }
 
-  @SuppressWarnings("unchecked")
   @Override
-  public List<N> toAdapter(Interval indexFieldValue) {
-    return Lists.newArrayList(
-        (N) TimeUtils.getTimeValue(
+  public void toAdapter(final Interval indexFieldValue, final RowBuilder<?> rowBuilder) {
+    rowBuilder.setField(
+        adapterFields[0],
+        TimeUtils.getTimeValue(
             this.adapterFieldType(),
             ((Interval) indexFieldValue).getStart().toEpochMilli()));
   }

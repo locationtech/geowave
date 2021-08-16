@@ -10,8 +10,8 @@ package org.locationtech.geowave.adapter.raster.adapter;
 
 import java.util.List;
 import org.locationtech.geowave.core.geotime.adapter.SpatialFieldMapper;
+import org.locationtech.geowave.core.store.api.RowBuilder;
 import org.locationtech.jts.geom.Geometry;
-import org.opengis.coverage.grid.GridCoverage;
 
 /**
  * An index field mapper for `RasterTiles`. This class does not actually do any mapping because the
@@ -27,9 +27,8 @@ public class RasterTileSpatialFieldMapper extends SpatialFieldMapper<RasterTile>
   }
 
   @Override
-  public List<RasterTile> toAdapter(Geometry indexFieldValue) {
+  public void toAdapter(final Geometry indexFieldValue, final RowBuilder<?> rowBuilder) {
     // Unused, since adapter handles the mapping manually
-    return null;
   }
 
   @Override

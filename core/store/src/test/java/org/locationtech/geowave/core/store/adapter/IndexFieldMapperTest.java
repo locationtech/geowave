@@ -9,7 +9,8 @@
 package org.locationtech.geowave.core.store.adapter;
 
 import static org.junit.Assert.assertEquals;
-import java.util.List;
+import java.util.Collections;
+import java.util.Map;
 import org.junit.Test;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.index.NoOpIndexFieldMapper;
@@ -31,12 +32,12 @@ public class IndexFieldMapperTest {
     assertEquals(Integer.class, mapper.adapterFieldType());
     assertEquals("testField", mapper.getAdapterFields()[0]);
     assertEquals(1, mapper.adapterFieldCount());
-    List<Integer> adapterValues = mapper.toAdapter(42);
-    assertEquals(1, adapterValues.size());
-    assertEquals((int) 42, (int) adapterValues.get(0));
-    adapterValues.clear();
-    adapterValues.add(43);
-    assertEquals((int) 43, (int) mapper.toIndex(adapterValues));
+    final MapRowBuilder rowBuilder = new MapRowBuilder();
+    mapper.toAdapter(42, rowBuilder);
+    Map<String, Object> row = rowBuilder.buildRow(null);
+    assertEquals(1, row.size());
+    assertEquals((int) 42, (int) row.get("testField"));
+    assertEquals((int) 43, (int) mapper.toIndex(Collections.singletonList(43)));
 
     final byte[] mapperBytes = PersistenceUtils.toBinary(mapper);
 
@@ -47,12 +48,11 @@ public class IndexFieldMapperTest {
     assertEquals(Integer.class, deserialized.adapterFieldType());
     assertEquals("testField", deserialized.getAdapterFields()[0]);
     assertEquals(1, deserialized.adapterFieldCount());
-    adapterValues = deserialized.toAdapter(42);
-    assertEquals(1, adapterValues.size());
-    assertEquals((int) 42, (int) adapterValues.get(0));
-    adapterValues.clear();
-    adapterValues.add(43);
-    assertEquals((int) 43, (int) deserialized.toIndex(adapterValues));
+    deserialized.toAdapter(42, rowBuilder);
+    row = rowBuilder.buildRow(null);
+    assertEquals(1, row.size());
+    assertEquals((int) 42, (int) row.get("testField"));
+    assertEquals((int) 43, (int) deserialized.toIndex(Collections.singletonList(43)));
   }
 
 }
