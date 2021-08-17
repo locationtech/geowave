@@ -10,6 +10,8 @@ package org.locationtech.geowave.datastore.redis.config;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
+import org.locationtech.geowave.core.cli.converters.OptionalPasswordConverter;
+import org.locationtech.geowave.core.cli.converters.PasswordConverter;
 import org.locationtech.geowave.core.store.BaseDataStoreOptions;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
@@ -26,6 +28,25 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParametersDelegate;
 
 public class RedisOptions extends StoreFactoryOptions {
+
+  public static final String USER_CONFIG_KEY = "username";
+  // HP Fortify "Hardcoded Password - Password Management: Hardcoded Password"
+  // false positive
+  // This is a password label, not a password
+  public static final String PASSWORD_CONFIG_KEY = "password";
+
+  @Parameter(
+      names = {"-u", "--" + USER_CONFIG_KEY},
+      description = "A Redis username to be used with Redis AUTH.")
+  private String username;
+
+  @Parameter(
+      names = {"-p", "--" + PASSWORD_CONFIG_KEY},
+      description = "The password for the user. " + PasswordConverter.DEFAULT_PASSWORD_DESCRIPTION,
+      descriptionKey = "redis.pass.label",
+      converter = OptionalPasswordConverter.class)
+  private String password;
+
   @Parameter(
       names = {"--address", "-a"},
       required = true,
@@ -92,6 +113,23 @@ public class RedisOptions extends StoreFactoryOptions {
     this.compression = compression;
   }
 
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(final String username) {
+    this.username = username;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(final String password) {
+    this.password = password;
+  }
+
   public String getAddress() {
     return address;
   }
@@ -110,6 +148,7 @@ public class RedisOptions extends StoreFactoryOptions {
 
   public static enum Compression {
     SNAPPY(c -> new SnappyCodec(c)), L4Z(c -> new LZ4Codec(c)), NONE(c -> c);
+
     private transient Function<Codec, Codec> compressionTransform;
 
     private Compression(final Function<Codec, Codec> compressionTransform) {
@@ -123,6 +162,7 @@ public class RedisOptions extends StoreFactoryOptions {
 
   public static enum Serialization {
     FST(FstCodec::new), JDK(SerializationCodec::new);
+
     private transient Supplier<Codec> codec;
 
     private Serialization(final Supplier<Codec> codec) {

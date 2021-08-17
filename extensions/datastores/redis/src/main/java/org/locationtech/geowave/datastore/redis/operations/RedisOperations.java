@@ -47,7 +47,11 @@ public class RedisOperations implements MapReduceDataStoreOperations {
       gwNamespace = options.getGeoWaveNamespace();
     }
     this.options = options;
-    client = RedissonClientCache.getInstance().getClient(options.getAddress());
+    client =
+        RedissonClientCache.getInstance().getClient(
+            options.getUsername(),
+            options.getPassword(),
+            options.getAddress());
   }
 
   @Override
