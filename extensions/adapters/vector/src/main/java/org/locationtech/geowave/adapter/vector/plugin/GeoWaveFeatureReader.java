@@ -101,11 +101,11 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
     this.query = query;
     this.filter = getFilter(query);
     Object gwfilter = null;
-    try {
+    /*try {
       gwfilter = this.filter.accept(new CQLToGeoWaveFilterVisitor(components.getAdapter()), null);
     } catch (CQLToGeoWaveConversionException | InvalidFilterException e) {
       // Incompatible with GeoWave filter expressions, fall back to regular optimal CQL query
-    }
+    }*/
     geoWaveFilter = gwfilter;
   }
 
