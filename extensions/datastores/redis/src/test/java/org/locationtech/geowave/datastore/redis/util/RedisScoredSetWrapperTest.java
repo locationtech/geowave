@@ -36,7 +36,7 @@ public class RedisScoredSetWrapperTest {
         RedisServer.builder().port(6379).setting("bind 127.0.0.1").setting(
             "maxmemory 512M").setting("timeout 30000").build();
     server.start();
-    client = RedissonClientCache.getInstance().getClient("redis://127.0.0.1:6379");;
+    client = RedissonClientCache.getInstance().getClient(null, null, "redis://127.0.0.1:6379");
     resetTestSets();
   }
 
