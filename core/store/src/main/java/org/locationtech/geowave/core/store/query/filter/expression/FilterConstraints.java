@@ -149,11 +149,19 @@ public class FilterConstraints<V extends Comparable<V>> {
       } else {
         // Right now all index strategies that aren't custom are numeric
         final CommonIndexModel indexModel = index.getIndexModel();
+        final int numStrategyDimensions =
+            index.getIndexStrategy().getOrderedDimensionDefinitions().length;
         final List<DimensionConstraints<Double>> dimensionConstraints =
-            Lists.newArrayListWithCapacity(indexModel.getDimensions().length);
+            Lists.newArrayListWithCapacity(numStrategyDimensions);
         final Map<String, Integer> indexFieldDimensions = Maps.newHashMap();
         final NumericDimensionField<?>[] dimensions = indexModel.getDimensions();
+        int dimensionIndex = 0;
         for (final NumericDimensionField<?> indexField : dimensions) {
+          if (dimensionIndex >= numStrategyDimensions) {
+            // Only build constraints for dimensions used by the index strategy.
+            break;
+          }
+          dimensionIndex++;
           final String indexFieldName = indexField.getFieldName();
           if (!indexFieldDimensions.containsKey(indexFieldName)) {
             indexFieldDimensions.put(indexFieldName, 0);

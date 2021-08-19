@@ -122,6 +122,24 @@ public class OptimalExpressionQuery implements
               indexedFields.add(adapterField);
             }
           }
+          // Remove any fields that are part of the common index model, but not used in the index
+          // strategy. They shouldn't be considered when trying to find a best match. In the future
+          // it may be useful to consider an index that has extra common index dimensions that
+          // contain filtered fields over one that only matches indexed dimensions. For example, if
+          // I have a spatial index, and a spatial index that stores time, it should pick the one
+          // that stores time if I supply a temporal constraint, even though it isn't part of the
+          // index strategy.
+          final int modelDimensions = bestIndex.getIndexModel().getDimensions().length;
+          final int strategyDimensions =
+              bestIndex.getIndexStrategy().getOrderedDimensionDefinitions().length;
+          for (int i = modelDimensions - 1; i >= strategyDimensions; i--) {
+            final IndexFieldMapper<?, ?> mapper =
+                mapping.getMapperForIndexField(
+                    bestIndex.getIndexModel().getDimensions()[i].getFieldName());
+            for (final String adapterField : mapper.getAdapterFields()) {
+              indexedFields.remove(adapterField);
+            }
+          }
           filterClass = Double.class;
         }
         if (referencedFields.containsAll(indexedFields)) {
