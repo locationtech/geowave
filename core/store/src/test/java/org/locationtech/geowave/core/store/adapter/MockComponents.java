@@ -242,7 +242,7 @@ public class MockComponents {
 
     @Override
     public void toAdapter(TestIndexFieldType indexFieldValue, RowBuilder<?> rowBuilder) {
-      rowBuilder.setField(adapterFields[0], indexFieldValue);
+      rowBuilder.setField(adapterFields[0], indexFieldValue.indexValue);
     }
 
     @Override

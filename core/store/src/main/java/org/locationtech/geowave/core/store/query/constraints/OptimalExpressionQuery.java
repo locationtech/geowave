@@ -129,13 +129,13 @@ public class OptimalExpressionQuery implements
           // I have a spatial index, and a spatial index that stores time, it should pick the one
           // that stores time if I supply a temporal constraint, even though it isn't part of the
           // index strategy.
-          final int modelDimensions = bestIndex.getIndexModel().getDimensions().length;
+          final int modelDimensions = index.getIndexModel().getDimensions().length;
           final int strategyDimensions =
-              bestIndex.getIndexStrategy().getOrderedDimensionDefinitions().length;
+              index.getIndexStrategy().getOrderedDimensionDefinitions().length;
           for (int i = modelDimensions - 1; i >= strategyDimensions; i--) {
             final IndexFieldMapper<?, ?> mapper =
                 mapping.getMapperForIndexField(
-                    bestIndex.getIndexModel().getDimensions()[i].getFieldName());
+                    index.getIndexModel().getDimensions()[i].getFieldName());
             for (final String adapterField : mapper.getAdapterFields()) {
               indexedFields.remove(adapterField);
             }
