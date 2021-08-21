@@ -426,8 +426,8 @@ public class CQLToGeoWaveFilterVisitor implements FilterVisitor, ExpressionVisit
     if (expression instanceof SpatialExpression) {
       return ((SpatialExpression) expression).bbox(
           filter.getBounds().getMinX(),
-          filter.getBounds().getMaxX(),
           filter.getBounds().getMinY(),
+          filter.getBounds().getMaxX(),
           filter.getBounds().getMaxY(),
           filter.getBounds().getCoordinateReferenceSystem());
     }

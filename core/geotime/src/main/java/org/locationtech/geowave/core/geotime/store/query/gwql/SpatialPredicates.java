@@ -31,26 +31,26 @@ public class SpatialPredicates {
       final SpatialExpression expression =
           GeometryCastableType.toSpatialExpression(arguments.get(0));
       final double minX = getNumber(arguments.get(1));
-      final double maxX = getNumber(arguments.get(2));
-      final double minY = getNumber(arguments.get(3));
+      final double minY = getNumber(arguments.get(2));
+      final double maxX = getNumber(arguments.get(3));
       final double maxY = getNumber(arguments.get(4));
       if (arguments.size() == 6) {
         if (arguments.get(5).isLiteral() && arguments.get(5) instanceof TextExpression) {
           final String crsStr = ((TextExpression) arguments.get(5)).evaluateValue(null);
-          return bbox(expression, minX, maxX, minY, maxY, GeometryUtils.decodeCRS(crsStr));
+          return bbox(expression, minX, minY, maxX, maxY, GeometryUtils.decodeCRS(crsStr));
         }
         throw new GWQLParseException(
             "Expected a text literal for the coordinate reference system.");
       } else {
-        return bbox(expression, minX, maxX, minY, maxY, null);
+        return bbox(expression, minX, minY, maxX, maxY, null);
       }
     }
 
     protected abstract Predicate bbox(
         final SpatialExpression expression,
         final double minX,
-        final double maxX,
         final double minY,
+        final double maxX,
         final double maxY,
         final CoordinateReferenceSystem crs);
 
@@ -73,14 +73,14 @@ public class SpatialPredicates {
     protected Predicate bbox(
         SpatialExpression expression,
         double minX,
-        double maxX,
         double minY,
+        double maxX,
         double maxY,
         CoordinateReferenceSystem crs) {
       if (crs == null) {
-        return expression.bbox(minX, maxX, minY, maxY);
+        return expression.bbox(minX, minY, maxX, maxY);
       }
-      return expression.bbox(minX, maxX, minY, maxY, crs);
+      return expression.bbox(minX, minY, maxX, maxY, crs);
     }
   }
 
@@ -94,14 +94,14 @@ public class SpatialPredicates {
     protected Predicate bbox(
         SpatialExpression expression,
         double minX,
-        double maxX,
         double minY,
+        double maxX,
         double maxY,
         CoordinateReferenceSystem crs) {
       if (crs == null) {
-        return expression.bboxLoose(minX, maxX, minY, maxY);
+        return expression.bboxLoose(minX, minY, maxX, maxY);
       }
-      return expression.bboxLoose(minX, maxX, minY, maxY, crs);
+      return expression.bboxLoose(minX, minY, maxX, maxY, crs);
     }
   }
 

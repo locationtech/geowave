@@ -31,17 +31,17 @@ public interface SpatialExpression extends Expression<FilterGeometry> {
    * Create a predicate that tests this expression against the provided bounding box.
    * 
    * @param minX the minimum X value
-   * @param maxX the maximum X value
    * @param minY the minimum Y value
+   * @param maxX the maximum X value
    * @param maxY the maximum Y value
    * @return the bounding box predicate
    */
   default Predicate bbox(
       final double minX,
-      final double maxX,
       final double minY,
+      final double maxX,
       final double maxY) {
-    return new BBox(this, minX, maxX, minY, maxY, false);
+    return new BBox(this, minX, minY, maxX, maxY, false);
   }
 
   /**
@@ -49,19 +49,19 @@ public interface SpatialExpression extends Expression<FilterGeometry> {
    * coordinate reference system.
    * 
    * @param minX the minimum X value
-   * @param maxX the maximum X value
    * @param minY the minimum Y value
+   * @param maxX the maximum X value
    * @param maxY the maximum Y value
    * @param crs the coordinate reference system of the bounding box
    * @return the bounding box predicate
    */
   default Predicate bbox(
       final double minX,
-      final double maxX,
       final double minY,
+      final double maxX,
       final double maxY,
       final CoordinateReferenceSystem crs) {
-    return new BBox(this, minX, maxX, minY, maxY, crs, false);
+    return new BBox(this, minX, minY, maxX, maxY, crs, false);
   }
 
   /**
@@ -69,17 +69,17 @@ public interface SpatialExpression extends Expression<FilterGeometry> {
    * is meant to be a faster implementation for situations where exact accuracy is not needed.
    * 
    * @param minX the minimum X value
-   * @param maxX the maximum X value
    * @param minY the minimum Y value
+   * @param maxX the maximum X value
    * @param maxY the maximum Y value
    * @return the bounding box predicate
    */
   default Predicate bboxLoose(
       final double minX,
-      final double maxX,
       final double minY,
+      final double maxX,
       final double maxY) {
-    return new BBox(this, minX, maxX, minY, maxY, true);
+    return new BBox(this, minX, minY, maxX, maxY, true);
   }
 
   /**
@@ -88,19 +88,19 @@ public interface SpatialExpression extends Expression<FilterGeometry> {
    * where exact accuracy is not needed.
    * 
    * @param minX the minimum X value
-   * @param maxX the maximum X value
    * @param minY the minimum Y value
+   * @param maxX the maximum X value
    * @param maxY the maximum Y value
    * @param crs the coordinate reference system of the bounding box
    * @return the bounding box predicate
    */
   default Predicate bboxLoose(
       final double minX,
-      final double maxX,
       final double minY,
+      final double maxX,
       final double maxY,
       final CoordinateReferenceSystem crs) {
-    return new BBox(this, minX, maxX, minY, maxY, crs, true);
+    return new BBox(this, minX, minY, maxX, maxY, crs, true);
   }
 
   /**

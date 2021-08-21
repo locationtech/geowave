@@ -138,8 +138,8 @@ public class SpatialTemporalFilterExpressionTest {
     }
 
     // Test functions
-    assertTrue(spatialField.bbox(19, 21, 19, 21).evaluate(adapter, entry));
-    assertFalse(spatialField.bbox(0, 5, 0, 5).evaluate(adapter, entry));
+    assertTrue(spatialField.bbox(19, 19, 21, 21).evaluate(adapter, entry));
+    assertFalse(spatialField.bbox(0, 0, 5, 5).evaluate(adapter, entry));
 
     assertTrue(bboxLit.touches(polygonLit).evaluate(adapter, entry));
     assertTrue(preparedBboxLit.touches(polygonLit).evaluate(adapter, entry));
@@ -226,14 +226,14 @@ public class SpatialTemporalFilterExpressionTest {
     assertFalse(
         spatialField.bbox(
             2115070,
-            2337709,
             2154935,
+            2337709,
             2391878,
             GeometryUtils.decodeCRS("EPSG:3857")).evaluate(adapter, entry));
 
     // This looks like it should be false, but the expression hasn't been prepared for the query.
     assertTrue(
-        spatialField.bbox(0, 556597, 0, 557305, GeometryUtils.decodeCRS("EPSG:3857")).evaluate(
+        spatialField.bbox(0, 0, 556597, 557305, GeometryUtils.decodeCRS("EPSG:3857")).evaluate(
             adapter,
             entry));
 
@@ -254,7 +254,7 @@ public class SpatialTemporalFilterExpressionTest {
     }
 
     // Test serialization
-    byte[] bytes = PersistenceUtils.toBinary(spatialField.bbox(-5, 5, -8, 8));
+    byte[] bytes = PersistenceUtils.toBinary(spatialField.bbox(-5, -8, 5, 8));
     final BBox bbox = (BBox) PersistenceUtils.fromBinary(bytes);
     assertTrue(bbox.getExpression1() instanceof SpatialFieldValue);
     assertEquals("geom", ((SpatialFieldValue) bbox.getExpression1()).getFieldName());

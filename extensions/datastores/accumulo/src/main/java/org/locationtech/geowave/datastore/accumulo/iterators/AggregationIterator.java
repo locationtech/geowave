@@ -52,7 +52,7 @@ public class AggregationIterator extends ExceptionHandlingFilter {
   private InternalDataAdapter adapter;
   private AdapterToIndexMapping indexMapping;
   private boolean aggregationReturned = false;
-  private Text startRowOfAggregation = null;
+  private Text endRowOfAggregation = null;
   private final Text currentRow = new Text();
   private SortedKeyValueIterator<Key, Value> parent = new SortedKeyValueIterator<Key, Value>() {
 
@@ -134,9 +134,7 @@ public class AggregationIterator extends ExceptionHandlingFilter {
       final CommonIndexedPersistenceEncoding persistenceEncoding) {
     if (adapter == null) {
       aggregationFunction.aggregate(null, persistenceEncoding);
-      if (startRowOfAggregation == null) {
-        startRowOfAggregation = currentRow;
-      }
+      endRowOfAggregation = currentRow;
     } else if (((Short) (persistenceEncoding.getInternalAdapterId())).equals(
         (adapter.getAdapterId()))) {
       final PersistentDataset<Object> adapterExtendedValues = new MultiFieldPersistentDataset<>();
@@ -171,9 +169,7 @@ public class AggregationIterator extends ExceptionHandlingFilter {
       if (row != null) {
         // for now ignore field info
         aggregationFunction.aggregate(adapter, row);
-        if (startRowOfAggregation == null) {
-          startRowOfAggregation = currentRow;
-        }
+        endRowOfAggregation = currentRow;
       }
     }
   }
@@ -269,7 +265,7 @@ public class AggregationIterator extends ExceptionHandlingFilter {
 
   protected Key getTopStatKey() {
     if (hasTopStat()) {
-      return new Key(startRowOfAggregation);
+      return new Key(endRowOfAggregation);
     }
     return null;
   }
@@ -286,7 +282,7 @@ public class AggregationIterator extends ExceptionHandlingFilter {
   }
 
   protected boolean hasTopStat() {
-    return !aggregationReturned && (startRowOfAggregation != null);
+    return !aggregationReturned && (endRowOfAggregation != null);
   }
 
   @Override
@@ -298,7 +294,7 @@ public class AggregationIterator extends ExceptionHandlingFilter {
 
   public void deepCopyIterator(final SortedKeyValueIterator<Key, Value> iterator) {
     if (iterator instanceof AggregationIterator) {
-      ((AggregationIterator) iterator).startRowOfAggregation = startRowOfAggregation;
+      ((AggregationIterator) iterator).endRowOfAggregation = endRowOfAggregation;
       ((AggregationIterator) iterator).adapter = adapter;
       ((AggregationIterator) iterator).queryFilterIterator = queryFilterIterator;
       ((AggregationIterator) iterator).parent = parent;
@@ -366,7 +362,7 @@ public class AggregationIterator extends ExceptionHandlingFilter {
       final boolean inclusive) throws IOException {
     aggregationReturned = false;
     aggregationFunction.clearResult();
-    startRowOfAggregation = null;
+    endRowOfAggregation = null;
     parent.seek(seekRange, columnFamilies, inclusive);
   }
 }
