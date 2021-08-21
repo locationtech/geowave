@@ -219,14 +219,15 @@ extends <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.FloatLatLonFieldMapper.html#adapterFieldType--">adapterFieldType</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.FloatLatLonFieldMapper.html#setField-java.lang.String-java.lang.Double-org.locationtech.geowave.core.store.api.RowBuilder-">setField</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;value,
+        <a href="../../../../../../org/locationtech/geowave/core/store/api/RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">RowBuilder</a>&lt;?&gt;&nbsp;rowBuilder)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>protected org.locationtech.jts.geom.Coordinate</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.FloatLatLonFieldMapper.html#toCoordinate-java.lang.Float-java.lang.Float-">toCoordinate</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Float.html?is-external=true" title="class or interface in java.lang">Float</a>&nbsp;xValue,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Float.html?is-external=true" title="class or interface in java.lang">Float</a>&nbsp;yValue)</code>&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Float.html?is-external=true" title="class or interface in java.lang">Float</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.FloatLatLonFieldMapper.html#toList-java.lang.Double-java.lang.Double-">toList</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;xValue,
-      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;yValue)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -234,7 +235,7 @@ extends <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.locationtech.geowave.core.geotime.adapter.<a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html" title="class in org.locationtech.geowave.core.geotime.adapter">LatLonFieldMapper</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#adapterFieldCount--">adapterFieldCount</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#byteLength--">byteLength</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#getIndexOrderedAdapterFields--">getIndexOrderedAdapterFields</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#getLowerCaseSuggestedFieldNames--">getLowerCaseSuggestedFieldNames</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#getNativeGeometry-java.util.List-">getNativeGeometry</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#initFromOptions-java.util.List-org.locationtech.geowave.core.store.api.IndexFieldMapper.IndexFieldOptions-">initFromOptions</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#readBytes-java.nio.ByteBuffer-">readBytes</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#toAdapter-org.locationtech.jts.geom.Geometry-">toAdapter</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#writeBytes-java.nio.ByteBuffer-">writeBytes</a></code></li>
+<code><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#adapterFieldCount--">adapterFieldCount</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#byteLength--">byteLength</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#getIndexOrderedAdapterFields--">getIndexOrderedAdapterFields</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#getLowerCaseSuggestedFieldNames--">getLowerCaseSuggestedFieldNames</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#getNativeGeometry-java.util.List-">getNativeGeometry</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#initFromOptions-java.util.List-org.locationtech.geowave.core.store.api.IndexFieldMapper.IndexFieldOptions-">initFromOptions</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#readBytes-java.nio.ByteBuffer-">readBytes</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#toAdapter-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.store.api.RowBuilder-">toAdapter</a>, <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#writeBytes-java.nio.ByteBuffer-">writeBytes</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.core.geotime.adapter.SpatialFieldMapper">
@@ -303,17 +304,18 @@ extends <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter
 </dl>
 </li>
 </ul>
-<a name="toList-java.lang.Double-java.lang.Double-">
+<a name="setField-java.lang.String-java.lang.Double-org.locationtech.geowave.core.store.api.RowBuilder-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>toList</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Float.html?is-external=true" title="class or interface in java.lang">Float</a>&gt;&nbsp;toList(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;xValue,
-                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;yValue)</pre>
+<h4>setField</h4>
+<pre>protected&nbsp;void&nbsp;setField(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
+                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;value,
+                        <a href="../../../../../../org/locationtech/geowave/core/store/api/RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">RowBuilder</a>&lt;?&gt;&nbsp;rowBuilder)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#toList-java.lang.Double-java.lang.Double-">toList</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html" title="class in org.locationtech.geowave.core.geotime.adapter">LatLonFieldMapper</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Float.html?is-external=true" title="class or interface in java.lang">Float</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#setField-java.lang.String-java.lang.Double-org.locationtech.geowave.core.store.api.RowBuilder-">setField</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html" title="class in org.locationtech.geowave.core.geotime.adapter">LatLonFieldMapper</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Float.html?is-external=true" title="class or interface in java.lang">Float</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>

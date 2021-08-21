@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":6,"i9":6,"i10":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":6,"i8":10,"i9":6,"i10":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -264,20 +264,22 @@ extends <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#readBytes-java.nio.ByteBuffer-">readBytes</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;buffer)</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html" title="type parameter in LatLonFieldMapper">N</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#toAdapter-org.locationtech.jts.geom.Geometry-">toAdapter</a></span>(org.locationtech.jts.geom.Geometry&nbsp;indexFieldValue)</code>
+<td class="colFirst"><code>protected abstract void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#setField-java.lang.String-java.lang.Double-org.locationtech.geowave.core.store.api.RowBuilder-">setField</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;Value,
+        <a href="../../../../../../org/locationtech/geowave/core/store/api/RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">RowBuilder</a>&lt;?&gt;&nbsp;rowBuilder)</code>&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#toAdapter-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.store.api.RowBuilder-">toAdapter</a></span>(org.locationtech.jts.geom.Geometry&nbsp;indexFieldValue,
+         <a href="../../../../../../org/locationtech/geowave/core/store/api/RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">RowBuilder</a>&lt;?&gt;&nbsp;rowBuilder)</code>
 <div class="block">Converts an index value back to the fields used by the adapter.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>protected abstract org.locationtech.jts.geom.Coordinate</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#toCoordinate-N-N-">toCoordinate</a></span>(<a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html" title="type parameter in LatLonFieldMapper">N</a>&nbsp;xValue,
             <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html" title="type parameter in LatLonFieldMapper">N</a>&nbsp;yValue)</code>&nbsp;</td>
-</tr>
-<tr id="i9" class="rowColor">
-<td class="colFirst"><code>protected abstract <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html" title="type parameter in LatLonFieldMapper">N</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html#toList-java.lang.Double-java.lang.Double-">toList</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;xValue,
-      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;yValue)</code>&nbsp;</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
@@ -388,33 +390,33 @@ extends <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter
 </dl>
 </li>
 </ul>
-<a name="toAdapter-org.locationtech.jts.geom.Geometry-">
+<a name="toAdapter-org.locationtech.jts.geom.Geometry-org.locationtech.geowave.core.store.api.RowBuilder-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>toAdapter</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html" title="type parameter in LatLonFieldMapper">N</a>&gt;&nbsp;toAdapter(org.locationtech.jts.geom.Geometry&nbsp;indexFieldValue)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#toAdapter-I-">IndexFieldMapper</a></code></span></div>
+<pre>public&nbsp;void&nbsp;toAdapter(org.locationtech.jts.geom.Geometry&nbsp;indexFieldValue,
+                      <a href="../../../../../../org/locationtech/geowave/core/store/api/RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">RowBuilder</a>&lt;?&gt;&nbsp;rowBuilder)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#toAdapter-I-org.locationtech.geowave.core.store.api.RowBuilder-">IndexFieldMapper</a></code></span></div>
 <div class="block">Converts an index value back to the fields used by the adapter.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#toAdapter-I-">toAdapter</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html" title="class in org.locationtech.geowave.core.store.api">IndexFieldMapper</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html" title="type parameter in LatLonFieldMapper">N</a>,org.locationtech.jts.geom.Geometry&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#toAdapter-I-org.locationtech.geowave.core.store.api.RowBuilder-">toAdapter</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html" title="class in org.locationtech.geowave.core.store.api">IndexFieldMapper</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html" title="type parameter in LatLonFieldMapper">N</a>,org.locationtech.jts.geom.Geometry&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>indexFieldValue</code> - the index value</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the adapter values</dd>
 </dl>
 </li>
 </ul>
-<a name="toList-java.lang.Double-java.lang.Double-">
+<a name="setField-java.lang.String-java.lang.Double-org.locationtech.geowave.core.store.api.RowBuilder-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>toList</h4>
-<pre>protected abstract&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/LatLonFieldMapper.html" title="type parameter in LatLonFieldMapper">N</a>&gt;&nbsp;toList(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;xValue,
-                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;yValue)</pre>
+<h4>setField</h4>
+<pre>protected abstract&nbsp;void&nbsp;setField(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
+                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;Value,
+                                 <a href="../../../../../../org/locationtech/geowave/core/store/api/RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">RowBuilder</a>&lt;?&gt;&nbsp;rowBuilder)</pre>
 </li>
 </ul>
 <a name="getNativeGeometry-java.util.List-">

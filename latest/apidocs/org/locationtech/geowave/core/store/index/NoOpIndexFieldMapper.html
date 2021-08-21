@@ -222,8 +222,9 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/api/Index
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/NoOpIndexFieldMapper.html#readBytes-java.nio.ByteBuffer-">readBytes</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;buffer)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/NoOpIndexFieldMapper.html" title="type parameter in NoOpIndexFieldMapper">I</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/NoOpIndexFieldMapper.html#toAdapter-I-">toAdapter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/NoOpIndexFieldMapper.html" title="type parameter in NoOpIndexFieldMapper">I</a>&nbsp;indexFieldValue)</code>
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/NoOpIndexFieldMapper.html#toAdapter-I-org.locationtech.geowave.core.store.api.RowBuilder-">toAdapter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/index/NoOpIndexFieldMapper.html" title="type parameter in NoOpIndexFieldMapper">I</a>&nbsp;indexFieldValue,
+         <a href="../../../../../../org/locationtech/geowave/core/store/api/RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">RowBuilder</a>&lt;?&gt;&nbsp;rowBuilder)</code>
 <div class="block">Converts an index value back to the fields used by the adapter.</div>
 </td>
 </tr>
@@ -330,24 +331,23 @@ extends <a href="../../../../../../org/locationtech/geowave/core/store/api/Index
 </dl>
 </li>
 </ul>
-<a name="toAdapter-java.lang.Object-">
+<a name="toAdapter-java.lang.Object-org.locationtech.geowave.core.store.api.RowBuilder-">
 <!--   -->
-</a><a name="toAdapter-I-">
+</a><a name="toAdapter-I-org.locationtech.geowave.core.store.api.RowBuilder-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>toAdapter</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/NoOpIndexFieldMapper.html" title="type parameter in NoOpIndexFieldMapper">I</a>&gt;&nbsp;toAdapter(<a href="../../../../../../org/locationtech/geowave/core/store/index/NoOpIndexFieldMapper.html" title="type parameter in NoOpIndexFieldMapper">I</a>&nbsp;indexFieldValue)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#toAdapter-I-">IndexFieldMapper</a></code></span></div>
+<pre>public&nbsp;void&nbsp;toAdapter(<a href="../../../../../../org/locationtech/geowave/core/store/index/NoOpIndexFieldMapper.html" title="type parameter in NoOpIndexFieldMapper">I</a>&nbsp;indexFieldValue,
+                      <a href="../../../../../../org/locationtech/geowave/core/store/api/RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">RowBuilder</a>&lt;?&gt;&nbsp;rowBuilder)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#toAdapter-I-org.locationtech.geowave.core.store.api.RowBuilder-">IndexFieldMapper</a></code></span></div>
 <div class="block">Converts an index value back to the fields used by the adapter.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#toAdapter-I-">toAdapter</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html" title="class in org.locationtech.geowave.core.store.api">IndexFieldMapper</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/NoOpIndexFieldMapper.html" title="type parameter in NoOpIndexFieldMapper">I</a>,<a href="../../../../../../org/locationtech/geowave/core/store/index/NoOpIndexFieldMapper.html" title="type parameter in NoOpIndexFieldMapper">I</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#toAdapter-I-org.locationtech.geowave.core.store.api.RowBuilder-">toAdapter</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html" title="class in org.locationtech.geowave.core.store.api">IndexFieldMapper</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/NoOpIndexFieldMapper.html" title="type parameter in NoOpIndexFieldMapper">I</a>,<a href="../../../../../../org/locationtech/geowave/core/store/index/NoOpIndexFieldMapper.html" title="type parameter in NoOpIndexFieldMapper">I</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>indexFieldValue</code> - the index value</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the adapter values</dd>
 </dl>
 </li>
 </ul>

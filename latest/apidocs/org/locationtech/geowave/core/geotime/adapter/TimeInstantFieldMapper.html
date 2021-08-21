@@ -233,8 +233,9 @@ extends <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TimeInstantFieldMapper.html#getLowerCaseSuggestedFieldNames--">getLowerCaseSuggestedFieldNames</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TimeInstantFieldMapper.html" title="type parameter in TimeInstantFieldMapper">N</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TimeInstantFieldMapper.html#toAdapter-org.threeten.extra.Interval-">toAdapter</a></span>(org.threeten.extra.Interval&nbsp;indexFieldValue)</code>
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TimeInstantFieldMapper.html#toAdapter-org.threeten.extra.Interval-org.locationtech.geowave.core.store.api.RowBuilder-">toAdapter</a></span>(org.threeten.extra.Interval&nbsp;indexFieldValue,
+         <a href="../../../../../../org/locationtech/geowave/core/store/api/RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">RowBuilder</a>&lt;?&gt;&nbsp;rowBuilder)</code>
 <div class="block">Converts an index value back to the fields used by the adapter.</div>
 </td>
 </tr>
@@ -316,22 +317,21 @@ extends <a href="../../../../../../org/locationtech/geowave/core/geotime/adapter
 </dl>
 </li>
 </ul>
-<a name="toAdapter-org.threeten.extra.Interval-">
+<a name="toAdapter-org.threeten.extra.Interval-org.locationtech.geowave.core.store.api.RowBuilder-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>toAdapter</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TimeInstantFieldMapper.html" title="type parameter in TimeInstantFieldMapper">N</a>&gt;&nbsp;toAdapter(org.threeten.extra.Interval&nbsp;indexFieldValue)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#toAdapter-I-">IndexFieldMapper</a></code></span></div>
+<pre>public&nbsp;void&nbsp;toAdapter(org.threeten.extra.Interval&nbsp;indexFieldValue,
+                      <a href="../../../../../../org/locationtech/geowave/core/store/api/RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">RowBuilder</a>&lt;?&gt;&nbsp;rowBuilder)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#toAdapter-I-org.locationtech.geowave.core.store.api.RowBuilder-">IndexFieldMapper</a></code></span></div>
 <div class="block">Converts an index value back to the fields used by the adapter.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#toAdapter-I-">toAdapter</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html" title="class in org.locationtech.geowave.core.store.api">IndexFieldMapper</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TimeInstantFieldMapper.html" title="type parameter in TimeInstantFieldMapper">N</a>,org.threeten.extra.Interval&gt;</code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#toAdapter-I-org.locationtech.geowave.core.store.api.RowBuilder-">toAdapter</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html" title="class in org.locationtech.geowave.core.store.api">IndexFieldMapper</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/geotime/adapter/TimeInstantFieldMapper.html" title="type parameter in TimeInstantFieldMapper">N</a>,org.threeten.extra.Interval&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>indexFieldValue</code> - the index value</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the adapter values</dd>
 </dl>
 </li>
 </ul>

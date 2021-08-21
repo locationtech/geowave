@@ -126,7 +126,7 @@ var activeTableTab = "activeTableTab";
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../../../../org/locationtech/geowave/core/index/persist/Persistable.html" title="interface in org.locationtech.geowave.core.index.persist">Persistable</a></pre>
 <div class="block">Abstract base class for mapping one or more adapter fields to a single index field. These field
- mappers are registered and discovered via SPI through the <code>IndexFieldMapperRegistry</code>.</div>
+ mappers are registered and discovered via SPI through the <a href="../../../../../../org/locationtech/geowave/core/store/index/IndexFieldMapperRegistry.html" title="class in org.locationtech.geowave.core.store.index"><code>IndexFieldMapperRegistry</code></a>.</div>
 </li>
 </ul>
 </div>
@@ -267,8 +267,9 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/persis
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#readBytes-java.nio.ByteBuffer-">readBytes</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;buffer)</code>&nbsp;</td>
 </tr>
 <tr id="i13" class="rowColor">
-<td class="colFirst"><code>abstract <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html" title="type parameter in IndexFieldMapper">N</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#toAdapter-I-">toAdapter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html" title="type parameter in IndexFieldMapper">I</a>&nbsp;indexFieldValue)</code>
+<td class="colFirst"><code>abstract void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html#toAdapter-I-org.locationtech.geowave.core.store.api.RowBuilder-">toAdapter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html" title="type parameter in IndexFieldMapper">I</a>&nbsp;indexFieldValue,
+         <a href="../../../../../../org/locationtech/geowave/core/store/api/RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">RowBuilder</a>&lt;?&gt;&nbsp;rowBuilder)</code>
 <div class="block">Converts an index value back to the fields used by the adapter.</div>
 </td>
 </tr>
@@ -459,21 +460,20 @@ implements <a href="../../../../../../org/locationtech/geowave/core/index/persis
 </dl>
 </li>
 </ul>
-<a name="toAdapter-java.lang.Object-">
+<a name="toAdapter-java.lang.Object-org.locationtech.geowave.core.store.api.RowBuilder-">
 <!--   -->
-</a><a name="toAdapter-I-">
+</a><a name="toAdapter-I-org.locationtech.geowave.core.store.api.RowBuilder-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>toAdapter</h4>
-<pre>public abstract&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html" title="type parameter in IndexFieldMapper">N</a>&gt;&nbsp;toAdapter(<a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html" title="type parameter in IndexFieldMapper">I</a>&nbsp;indexFieldValue)</pre>
+<pre>public abstract&nbsp;void&nbsp;toAdapter(<a href="../../../../../../org/locationtech/geowave/core/store/api/IndexFieldMapper.html" title="type parameter in IndexFieldMapper">I</a>&nbsp;indexFieldValue,
+                               <a href="../../../../../../org/locationtech/geowave/core/store/api/RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">RowBuilder</a>&lt;?&gt;&nbsp;rowBuilder)</pre>
 <div class="block">Converts an index value back to the fields used by the adapter.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>indexFieldValue</code> - the index value</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the adapter values</dd>
 </dl>
 </li>
 </ul>

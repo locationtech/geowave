@@ -1,3 +1,4 @@
+org.geotools.feature.simple
 org.geotools.process.function
 org.geotools.renderer.lite
 org.locationtech.geowave.adapter.auth

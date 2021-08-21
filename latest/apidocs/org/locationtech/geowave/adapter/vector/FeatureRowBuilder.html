@@ -109,13 +109,13 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter.RowBuilder</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</dd>
+<dd><a href="../../../../../org/locationtech/geowave/core/store/api/RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">RowBuilder</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">FeatureRowBuilder</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter.RowBuilder</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</pre>
+implements <a href="../../../../../org/locationtech/geowave/core/store/api/RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">RowBuilder</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</pre>
 <div class="block">A GeoWave RowBuilder, used internally by AbstractDataAdapter to construct rows from a set field
  values (in this case SimpleFeatures from a set of attribute values). This implementation simply
  wraps a geotools SimpleFeatureBuilder.</div>
@@ -138,7 +138,7 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/api/DataT
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected org.geotools.feature.simple.SimpleFeatureBuilder</code></td>
+<td class="colFirst"><code>protected <a href="../../../../../org/geotools/feature/simple/OptimizedSimpleFeatureBuilder.html" title="class in org.geotools.feature.simple">OptimizedSimpleFeatureBuilder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/vector/FeatureRowBuilder.html#builder">builder</a></span></code>&nbsp;</td>
 </tr>
 </table>
@@ -188,7 +188,9 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/api/DataT
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/vector/FeatureRowBuilder.html#setFields-java.util.Map-">setFields</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;values)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/adapter/vector/FeatureRowBuilder.html#setFields-java.util.Map-">setFields</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;values)</code>
+<div class="block">Sets a set of fields on the row builder</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -218,7 +220,7 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/api/DataT
 <ul class="blockListLast">
 <li class="blockList">
 <h4>builder</h4>
-<pre>protected final&nbsp;org.geotools.feature.simple.SimpleFeatureBuilder builder</pre>
+<pre>protected final&nbsp;<a href="../../../../../org/geotools/feature/simple/OptimizedSimpleFeatureBuilder.html" title="class in org.geotools.feature.simple">OptimizedSimpleFeatureBuilder</a> builder</pre>
 </li>
 </ul>
 </li>
@@ -253,11 +255,11 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/api/DataT
 <li class="blockList">
 <h4>buildRow</h4>
 <pre>public&nbsp;org.opengis.feature.simple.SimpleFeature&nbsp;buildRow(byte[]&nbsp;dataId)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.RowBuilder.html#buildRow-byte:A-">DataTypeAdapter.RowBuilder</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/api/RowBuilder.html#buildRow-byte:A-">RowBuilder</a></code></span></div>
 <div class="block">Create a row with the previously set fields</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.RowBuilder.html#buildRow-byte:A-">buildRow</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter.RowBuilder</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dd><code><a href="../../../../../org/locationtech/geowave/core/store/api/RowBuilder.html#buildRow-byte:A-">buildRow</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/api/RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">RowBuilder</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>dataId</code> - the unique data ID for the row</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -273,11 +275,11 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/api/DataT
 <h4>setField</h4>
 <pre>public&nbsp;void&nbsp;setField(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;fieldValue)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.RowBuilder.html#setField-java.lang.String-java.lang.Object-">DataTypeAdapter.RowBuilder</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/api/RowBuilder.html#setField-java.lang.String-java.lang.Object-">RowBuilder</a></code></span></div>
 <div class="block">Set a field name/value pair</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.RowBuilder.html#setField-java.lang.String-java.lang.Object-">setField</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter.RowBuilder</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dd><code><a href="../../../../../org/locationtech/geowave/core/store/api/RowBuilder.html#setField-java.lang.String-java.lang.Object-">setField</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/api/RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">RowBuilder</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
 <dd><code>fieldValue</code> - the field ID/value pair</dd>
 </dl>
 </li>
@@ -289,9 +291,13 @@ implements <a href="../../../../../org/locationtech/geowave/core/store/api/DataT
 <li class="blockList">
 <h4>setFields</h4>
 <pre>public&nbsp;void&nbsp;setFields(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;values)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/api/RowBuilder.html#setFields-java.util.Map-">RowBuilder</a></code></span></div>
+<div class="block">Sets a set of fields on the row builder</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.RowBuilder.html#setFields-java.util.Map-">setFields</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter.RowBuilder</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dd><code><a href="../../../../../org/locationtech/geowave/core/store/api/RowBuilder.html#setFields-java.util.Map-">setFields</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../org/locationtech/geowave/core/store/api/RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">RowBuilder</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>values</code> - the values to set</dd>
 </dl>
 </li>
 </ul>
