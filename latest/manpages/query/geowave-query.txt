@@ -63,7 +63,7 @@ When the `geojson` format is used, additional options are:
 
 Calculate the total population of countries that intersect a bounding box that covers a region of Europe from the `example` data store:
 
-  geowave query example "SELECT SUM(population) FROM countries WHERE BBOX(geom, 7, 46, 23, 51)"
+  geowave query example "SELECT SUM(population) FROM countries WHERE BBOX(geom, 7, 23, 46, 51)"
   
 Select only countries that have a population over 100 million from the `example` data store:
 

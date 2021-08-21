@@ -627,6 +627,7 @@
 <li>HDFS URL stream handler; storeloader config <a href="https://github.com/locationtech/geowave/pull/1265">#1265</a> (<a href="https://github.com/blastarr">blastarr</a>)</li>
 <li>Spark Distributed Ingest Command-line Tool <a href="https://github.com/locationtech/geowave/pull/1263">#1263</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Provided status endpoint for REST operations and return data in JSON format <a href="https://github.com/locationtech/geowave/pull/1260">#1260</a> (<a href="https://github.com/richard3d">richard3d</a>)</li>
+<li>removed existing references to javaspark <a href="https://github.com/locationtech/geowave/pull/1259">#1259</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Quick fixes to latest dependency consolidation <a href="https://github.com/locationtech/geowave/pull/1258">#1258</a> (<a href="https://github.com/JWileczek">JWileczek</a>)</li>
 <li>Zeppelin changes <a href="https://github.com/locationtech/geowave/pull/1257">#1257</a> (<a href="https://github.com/JWileczek">JWileczek</a>)</li>
 <li>Updating packages and asciidocs links in documentation <a href="https://github.com/locationtech/geowave/pull/1254">#1254</a> (<a href="https://github.com/mcarrier7">mcarrier7</a>)</li>
@@ -654,7 +655,6 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
-<li>removed existing references to javaspark <a href="https://github.com/locationtech/geowave/pull/1259">#1259</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>updates to remove old dependency <a href="https://github.com/locationtech/geowave/pull/1252">#1252</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Modified gwtomcat service script to be more robust <a href="https://github.com/locationtech/geowave/pull/1249">#1249</a> (<a href="https://github.com/ayk33">ayk33</a>)</li>
 <li>fixed bootstrap script to use exact token <a href="https://github.com/locationtech/geowave/pull/1248">#1248</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
@@ -937,7 +937,6 @@
 <li>Fixed version # in POM <a href="https://github.com/locationtech/geowave/pull/874">#874</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
 <li>added geoserver cli to jacoco source directories <a href="https://github.com/locationtech/geowave/pull/873">#873</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Commits from 0.9.2.1 <a href="https://github.com/locationtech/geowave/pull/872">#872</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
-<li>GEOWAVE-854: removed option for –whole on ingest <a href="https://github.com/locationtech/geowave/pull/856">#856</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 </ul>
 <h2 id="v0.9.2.1-2016-07-22"><a href="https://github.com/locationtech/geowave/tree/v0.9.2.1">v0.9.2.1</a> (2016-07-22)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v0.9.2.2...v0.9.2.1">Full Changelog</a></p>
@@ -992,6 +991,7 @@
 <li>added readme for landsat CLI <a href="https://github.com/locationtech/geowave/pull/866">#866</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>update travis matrix for latest current/previous versions of hadoop, hbase, accumulo <a href="https://github.com/locationtech/geowave/pull/864">#864</a> (<a href="https://github.com/blastarr">blastarr</a>)</li>
 <li>Geowave 833 <a href="https://github.com/locationtech/geowave/pull/863">#863</a> (<a href="https://github.com/mawhitby">mawhitby</a>)</li>
+<li>GEOWAVE-854: removed option for –whole on ingest <a href="https://github.com/locationtech/geowave/pull/856">#856</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>GEOWAVE-853: heuristic chooses highest dimensional index, pure locali… <a href="https://github.com/locationtech/geowave/pull/855">#855</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>This is the uber pull request with GEOWAVE-667, GEOWAVE-831, HBase <a href="https://github.com/locationtech/geowave/pull/850">#850</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>gs-cli-092: Corrected findbugs issues &amp; added geoserver cli to the extensions parent pom <a href="https://github.com/locationtech/geowave/pull/847">#847</a> (<a href="https://github.com/blastarr">blastarr</a>)</li>
@@ -1433,6 +1433,7 @@
 <li>Fix typo in property name <a href="https://github.com/locationtech/geowave/pull/433">#433</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Ingest framework support for Kafka streaming ingest as input #299 <a href="https://github.com/locationtech/geowave/pull/432">#432</a> (<a href="https://github.com/jprochaz">jprochaz</a>)</li>
 <li>Formatting Fixes <a href="https://github.com/locationtech/geowave/pull/431">#431</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
+<li>ContentDataStore <a href="https://github.com/locationtech/geowave/pull/430">#430</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
 <li>Issue #425 Optimize spatial queries to use prepared geometries. <a href="https://github.com/locationtech/geowave/pull/426">#426</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>Support CDH single user install <a href="https://github.com/locationtech/geowave/pull/424">#424</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Added hyper-loglog, min scetch and histogram analytics for simple features. <a href="https://github.com/locationtech/geowave/pull/421">#421</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
@@ -1470,7 +1471,6 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
-<li>ContentDataStore <a href="https://github.com/locationtech/geowave/pull/430">#430</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
 <li>Updates for 0.8.7 release <a href="https://github.com/locationtech/geowave/pull/412">#412</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Final tweaks to documentation before release <a href="https://github.com/locationtech/geowave/pull/409">#409</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Updated jace so that jace-core-runtime and AWT are no longer needed. <a href="https://github.com/locationtech/geowave/pull/408">#408</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</li>

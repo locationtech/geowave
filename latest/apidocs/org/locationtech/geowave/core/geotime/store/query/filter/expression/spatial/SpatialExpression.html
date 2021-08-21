@@ -133,8 +133,8 @@ extends <a href="../../../../../../../../../../org/locationtech/geowave/core/sto
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>default <a href="../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html#bbox-double-double-double-double-">bbox</a></span>(double&nbsp;minX,
-    double&nbsp;maxX,
     double&nbsp;minY,
+    double&nbsp;maxX,
     double&nbsp;maxY)</code>
 <div class="block">Create a predicate that tests this expression against the provided bounding box.</div>
 </td>
@@ -142,8 +142,8 @@ extends <a href="../../../../../../../../../../org/locationtech/geowave/core/sto
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>default <a href="../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html#bbox-double-double-double-double-org.opengis.referencing.crs.CoordinateReferenceSystem-">bbox</a></span>(double&nbsp;minX,
-    double&nbsp;maxX,
     double&nbsp;minY,
+    double&nbsp;maxX,
     double&nbsp;maxY,
     org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</code>
 <div class="block">Create a predicate that tests this expression against the provided bounding box in the given
@@ -153,8 +153,8 @@ extends <a href="../../../../../../../../../../org/locationtech/geowave/core/sto
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>default <a href="../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html#bboxLoose-double-double-double-double-">bboxLoose</a></span>(double&nbsp;minX,
-         double&nbsp;maxX,
          double&nbsp;minY,
+         double&nbsp;maxX,
          double&nbsp;maxY)</code>
 <div class="block">Create a predicate that loosely tests this expression against the provided bounding box.</div>
 </td>
@@ -162,8 +162,8 @@ extends <a href="../../../../../../../../../../org/locationtech/geowave/core/sto
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>default <a href="../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/spatial/SpatialExpression.html#bboxLoose-double-double-double-double-org.opengis.referencing.crs.CoordinateReferenceSystem-">bboxLoose</a></span>(double&nbsp;minX,
-         double&nbsp;maxX,
          double&nbsp;minY,
+         double&nbsp;maxX,
          double&nbsp;maxY,
          org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</code>
 <div class="block">Create a predicate that loosely tests this expression against the provided bounding box in the
@@ -305,15 +305,15 @@ extends <a href="../../../../../../../../../../org/locationtech/geowave/core/sto
 <li class="blockList">
 <h4>bbox</h4>
 <pre>default&nbsp;<a href="../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a>&nbsp;bbox(double&nbsp;minX,
-                       double&nbsp;maxX,
                        double&nbsp;minY,
+                       double&nbsp;maxX,
                        double&nbsp;maxY)</pre>
 <div class="block">Create a predicate that tests this expression against the provided bounding box.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>minX</code> - the minimum X value</dd>
-<dd><code>maxX</code> - the maximum X value</dd>
 <dd><code>minY</code> - the minimum Y value</dd>
+<dd><code>maxX</code> - the maximum X value</dd>
 <dd><code>maxY</code> - the maximum Y value</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the bounding box predicate</dd>
@@ -327,8 +327,8 @@ extends <a href="../../../../../../../../../../org/locationtech/geowave/core/sto
 <li class="blockList">
 <h4>bbox</h4>
 <pre>default&nbsp;<a href="../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a>&nbsp;bbox(double&nbsp;minX,
-                       double&nbsp;maxX,
                        double&nbsp;minY,
+                       double&nbsp;maxX,
                        double&nbsp;maxY,
                        org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</pre>
 <div class="block">Create a predicate that tests this expression against the provided bounding box in the given
@@ -336,8 +336,8 @@ extends <a href="../../../../../../../../../../org/locationtech/geowave/core/sto
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>minX</code> - the minimum X value</dd>
-<dd><code>maxX</code> - the maximum X value</dd>
 <dd><code>minY</code> - the minimum Y value</dd>
+<dd><code>maxX</code> - the maximum X value</dd>
 <dd><code>maxY</code> - the maximum Y value</dd>
 <dd><code>crs</code> - the coordinate reference system of the bounding box</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -352,16 +352,16 @@ extends <a href="../../../../../../../../../../org/locationtech/geowave/core/sto
 <li class="blockList">
 <h4>bboxLoose</h4>
 <pre>default&nbsp;<a href="../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a>&nbsp;bboxLoose(double&nbsp;minX,
-                            double&nbsp;maxX,
                             double&nbsp;minY,
+                            double&nbsp;maxX,
                             double&nbsp;maxY)</pre>
 <div class="block">Create a predicate that loosely tests this expression against the provided bounding box. This
  is meant to be a faster implementation for situations where exact accuracy is not needed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>minX</code> - the minimum X value</dd>
-<dd><code>maxX</code> - the maximum X value</dd>
 <dd><code>minY</code> - the minimum Y value</dd>
+<dd><code>maxX</code> - the maximum X value</dd>
 <dd><code>maxY</code> - the maximum Y value</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the bounding box predicate</dd>
@@ -375,8 +375,8 @@ extends <a href="../../../../../../../../../../org/locationtech/geowave/core/sto
 <li class="blockList">
 <h4>bboxLoose</h4>
 <pre>default&nbsp;<a href="../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/Predicate.html" title="interface in org.locationtech.geowave.core.store.query.filter.expression">Predicate</a>&nbsp;bboxLoose(double&nbsp;minX,
-                            double&nbsp;maxX,
                             double&nbsp;minY,
+                            double&nbsp;maxX,
                             double&nbsp;maxY,
                             org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</pre>
 <div class="block">Create a predicate that loosely tests this expression against the provided bounding box in the
@@ -385,8 +385,8 @@ extends <a href="../../../../../../../../../../org/locationtech/geowave/core/sto
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>minX</code> - the minimum X value</dd>
-<dd><code>maxX</code> - the maximum X value</dd>
 <dd><code>minY</code> - the minimum Y value</dd>
+<dd><code>maxX</code> - the maximum X value</dd>
 <dd><code>maxY</code> - the maximum Y value</dd>
 <dd><code>crs</code> - the coordinate reference system of the bounding box</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
