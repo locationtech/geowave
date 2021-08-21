@@ -215,7 +215,7 @@ public class GeoWaveQueryLanguageIT extends AbstractGeoWaveBasicVectorIT {
     try (final ResultSet results =
         ds.query(
             String.format(
-                "SELECT * FROM %s WHERE BBOX(%s, -64.5, 32.5, -32.5, 64.5) AND strStartsWith(%s, 'b', true)",
+                "SELECT * FROM %s WHERE BBOX(%s, -64.5, -32.5, 32.5, 64.5) AND strStartsWith(%s, 'b', true)",
                 TYPE_NAME,
                 ALT,
                 COMMENT))) {
@@ -265,7 +265,7 @@ public class GeoWaveQueryLanguageIT extends AbstractGeoWaveBasicVectorIT {
     try (final ResultSet results =
         ds.query(
             String.format(
-                "SELECT * FROM %s WHERE BBOX(%s, 0.5, 10.5, 0.5, 10.5)",
+                "SELECT * FROM %s WHERE BBOX(%s, 0.5, 0.5, 10.5, 10.5)",
                 TYPE_NAME,
                 GEOM))) {
       assertEquals(9, results.columnCount());
@@ -278,7 +278,7 @@ public class GeoWaveQueryLanguageIT extends AbstractGeoWaveBasicVectorIT {
     try (final ResultSet results =
         ds.query(
             String.format(
-                "SELECT * FROM %s WHERE BBOX(%s, 0.5, 30.5, 0.5, 30.5) AND %s BEFORE %d",
+                "SELECT * FROM %s WHERE BBOX(%s, 0.5, 0.5, 30.5, 30.5) AND %s BEFORE %d",
                 TYPE_NAME,
                 GEOM,
                 TIMESTAMP,
@@ -335,7 +335,7 @@ public class GeoWaveQueryLanguageIT extends AbstractGeoWaveBasicVectorIT {
     try (final ResultSet results =
         ds.query(
             String.format(
-                "SELECT * FROM %s WHERE BBOX(%s, -30.5, 30.5, -30.5, 30.5) AND BBOX(%s, -30.5, 30.5, -30.5, 30.5)",
+                "SELECT * FROM %s WHERE BBOX(%s, -30.5, -30.5, 30.5, 30.5) AND BBOX(%s, -30.5, -30.5, 30.5, 30.5)",
                 TYPE_NAME,
                 GEOM,
                 ALT))) {
@@ -830,7 +830,7 @@ public class GeoWaveQueryLanguageIT extends AbstractGeoWaveBasicVectorIT {
     try (final ResultSet results =
         ds.query(
             String.format(
-                "SELECT %s, %s, %s FROM %s WHERE BBOX(%s, 0.5, 64.5, 0.5, 64.5)",
+                "SELECT %s, %s, %s FROM %s WHERE BBOX(%s, 0.5, 0.5, 64.5, 64.5)",
                 GEOM,
                 POLY,
                 ALT,
@@ -846,7 +846,7 @@ public class GeoWaveQueryLanguageIT extends AbstractGeoWaveBasicVectorIT {
     try (final ResultSet results =
         ds.query(
             String.format(
-                "SELECT %s, %s, %s FROM %s WHERE BBOXLOOSE(%s, 0.5, 64.5, 0.5, 64.5)",
+                "SELECT %s, %s, %s FROM %s WHERE BBOXLOOSE(%s, 0.5, 0.5, 64.5, 64.5)",
                 GEOM,
                 POLY,
                 ALT,

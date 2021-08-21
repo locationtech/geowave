@@ -338,7 +338,7 @@ public class ExpressionQueryIT extends AbstractGeoWaveBasicVectorIT {
     /////////////////////////////////////////////////////
     query =
         QueryBuilder.newBuilder(SimpleFeature.class).filter(
-            ALT.bbox(-64.5, 32.5, -32.5, 64.5).and(COMMENT.startsWith("b", true))).build();
+            ALT.bbox(-64.5, -32.5, 32.5, 64.5).and(COMMENT.startsWith("b", true))).build();
 
     queryConstraints =
         assertBestIndex(
@@ -379,7 +379,7 @@ public class ExpressionQueryIT extends AbstractGeoWaveBasicVectorIT {
     /////////////////////////////////////////////////////
     query =
         QueryBuilder.newBuilder(SimpleFeature.class).filter(
-            ALT.bbox(-64.5, -32.5, 32.5, 64.5).and(COMMENT.startsWith("b", true))).build();
+            ALT.bbox(-64.5, 32.5, -32.5, 64.5).and(COMMENT.startsWith("b", true))).build();
 
     queryConstraints =
         assertBestIndex(
@@ -521,7 +521,7 @@ public class ExpressionQueryIT extends AbstractGeoWaveBasicVectorIT {
     /////////////////////////////////////////////////////
     query =
         QueryBuilder.newBuilder(SimpleFeature.class).filter(
-            GEOM.bbox(0.5, 10.5, 0.5, 10.5)).build();
+            GEOM.bbox(0.5, 0.5, 10.5, 10.5)).build();
 
     queryConstraints =
         assertBestIndex(
@@ -559,7 +559,7 @@ public class ExpressionQueryIT extends AbstractGeoWaveBasicVectorIT {
     /////////////////////////////////////////////////////
     query =
         QueryBuilder.newBuilder(SimpleFeature.class).filter(
-            GEOM.bbox(0.5, 30.5, 0.5, 30.5).and(
+            GEOM.bbox(0.5, 0.5, 30.5, 30.5).and(
                 TIMESTAMP.isBefore(new Date((long) (66 * ONE_DAY_MILLIS + 1))))).build();
 
     queryConstraints =
@@ -712,7 +712,7 @@ public class ExpressionQueryIT extends AbstractGeoWaveBasicVectorIT {
     /////////////////////////////////////////////////////
     query =
         QueryBuilder.newBuilder(SimpleFeature.class).filter(
-            GEOM.bbox(-30.5, 30.5, -30.5, 30.5).and(ALT.bbox(-30.5, 30.5, -30.5, 30.5))).build();
+            GEOM.bbox(-30.5, -30.5, 30.5, 30.5).and(ALT.bbox(-30.5, -30.5, 30.5, 30.5))).build();
 
     queryConstraints =
         assertBestIndex(
@@ -2237,7 +2237,7 @@ public class ExpressionQueryIT extends AbstractGeoWaveBasicVectorIT {
     /////////////////////////////////////////////////////
     Query<SimpleFeature> query =
         QueryBuilder.newBuilder(SimpleFeature.class).filter(
-            GEOM.bbox(0.5, 64.5, 0.5, 64.5)).build();
+            GEOM.bbox(0.5, 0.5, 64.5, 64.5)).build();
 
     QueryConstraints queryConstraints =
         assertBestIndex(
@@ -2269,7 +2269,7 @@ public class ExpressionQueryIT extends AbstractGeoWaveBasicVectorIT {
     /////////////////////////////////////////////////////
     query =
         QueryBuilder.newBuilder(SimpleFeature.class).filter(
-            GEOM.bboxLoose(0.5, 64.5, 0.5, 64.5)).build();
+            GEOM.bboxLoose(0.5, 0.5, 64.5, 64.5)).build();
 
     queryConstraints =
         assertBestIndex(

@@ -266,8 +266,8 @@ Spatial expressions support the following functions:
 [frame="topbot", width="100%", cols="12%,25%,60%", grid="rows", options="header"]
 |=========================================================
 | Function | Parameters         | Description
-| BBOX            | Spatial Expression, Min X, Max X, Min Y, Max Y, [, CRS code] | A predicate function that returns true if the spatial expression intersects the provided bounds.  An optional CRS code can be provided if the bounding dimensions are not in the default WGS84 projection.
-| BBOXLOOSE       | Spatial Expression, Min X, Max X, Min Y, Max Y, [, CRS code] | A predicate function that returns true if the spatial expression intersects the provided bounds.  An optional CRS code can be provided if the bounding dimensions are not in the default WGS84 projection.  This can provide a performance boost over the standard BBOX function at the cost of being overly inclusive with the results.
+| BBOX            | Spatial Expression, Min X, Min Y, Max X, Max Y, [, CRS code] | A predicate function that returns true if the spatial expression intersects the provided bounds.  An optional CRS code can be provided if the bounding dimensions are not in the default WGS84 projection.
+| BBOXLOOSE       | Spatial Expression, Min X, Min Y, Max X, Max Y, [, CRS code] | A predicate function that returns true if the spatial expression intersects the provided bounds.  An optional CRS code can be provided if the bounding dimensions are not in the default WGS84 projection.  This can provide a performance boost over the standard BBOX function at the cost of being overly inclusive with the results.
 | INTERSECTS      | Spatial Expression, Spatial Expression | A predicate function that returns true if the first spatial expression intersects the second spatial expression.
 | INTERSECTSLOOSE | Spatial Expression, Spatial Expression | A predicate function that returns true if the first spatial expression intersects the second spatial expression.  This can provide a performance boost over the standard INTERSECTS function at the cost of being overly inclusive with the results.
 | DISJOINT        | Spatial Expression, Spatial Expression | A predicate function that returns true if the first spatial expression is disjoint (does not intersect) to the second spatial expression.
@@ -285,7 +285,7 @@ Spatial expressions support the following functions:
 .Selecting only countries that intersect an arbitrary bounding box:
 [source,sql]
 ----
-SELECT * FROM countries WHERE BBOX(geom, -10.8, 63.3, 35.4, 71.1)
+SELECT * FROM countries WHERE BBOX(geom, -10.8, 35.4, 63.3, 71.1)
 ----
 
 .Counting the number of countries that intersect a given linestring:

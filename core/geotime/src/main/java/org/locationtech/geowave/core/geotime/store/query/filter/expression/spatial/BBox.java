@@ -23,18 +23,18 @@ public class BBox extends Intersects {
   public BBox(
       final SpatialExpression expression,
       final double minX,
-      final double maxX,
       final double minY,
+      final double maxX,
       final double maxY,
       final boolean loose) {
-    this(expression, minX, maxX, minY, maxY, null, loose);
+    this(expression, minX, minY, maxX, maxY, null, loose);
   }
 
   public BBox(
       final SpatialExpression expression,
       final double minX,
-      final double maxX,
       final double minY,
+      final double maxX,
       final double maxY,
       final CoordinateReferenceSystem crs,
       final boolean loose) {
@@ -58,9 +58,9 @@ public class BBox extends Intersects {
     sb.append(",");
     sb.append(envelope.getMinX());
     sb.append(",");
-    sb.append(envelope.getMaxX());
-    sb.append(",");
     sb.append(envelope.getMinY());
+    sb.append(",");
+    sb.append(envelope.getMaxX());
     sb.append(",");
     sb.append(envelope.getMaxY());
     sb.append(")");

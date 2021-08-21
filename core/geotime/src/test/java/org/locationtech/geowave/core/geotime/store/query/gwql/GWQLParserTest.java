@@ -231,7 +231,7 @@ public class GWQLParserTest extends AbstractGWQLTest {
         point.equalsExact(((SpatialLiteral) predicate.getExpression2()).getValue().getGeometry()));
     assertEquals(GeometryUtils.getDefaultCRS(), predicate.getExpression2().getCRS(null));
 
-    statement = "SELECT * FROM type WHERE bbox(geometry, 0, 1, 0, 1)";
+    statement = "SELECT * FROM type WHERE bbox(geometry, 0, 0, 1, 1)";
     gwStatement = GWQLParser.parseStatement(dataStore, statement);
     assertTrue(gwStatement instanceof SelectStatement);
     selectStatement = (SelectStatement<?>) gwStatement;
@@ -247,7 +247,7 @@ public class GWQLParserTest extends AbstractGWQLTest {
         bbox.equalsExact(((SpatialLiteral) predicate.getExpression2()).getValue().getGeometry()));
     assertEquals(GeometryUtils.getDefaultCRS(), predicate.getExpression2().getCRS(null));
 
-    statement = "SELECT * FROM type WHERE bboxLoose(geometry, 0, 1, 0, 1)";
+    statement = "SELECT * FROM type WHERE bboxLoose(geometry, 0, 0, 1, 1)";
     gwStatement = GWQLParser.parseStatement(dataStore, statement);
     assertTrue(gwStatement instanceof SelectStatement);
     selectStatement = (SelectStatement<?>) gwStatement;
@@ -263,7 +263,7 @@ public class GWQLParserTest extends AbstractGWQLTest {
         bbox.equalsExact(((SpatialLiteral) predicate.getExpression2()).getValue().getGeometry()));
     assertEquals(GeometryUtils.getDefaultCRS(), predicate.getExpression2().getCRS(null));
 
-    statement = "SELECT * FROM type WHERE bbox(geometry, 0, 1, 0, 1, 'EPSG:3857')";
+    statement = "SELECT * FROM type WHERE bbox(geometry, 0, 0, 1, 1, 'EPSG:3857')";
     gwStatement = GWQLParser.parseStatement(dataStore, statement);
     assertTrue(gwStatement instanceof SelectStatement);
     selectStatement = (SelectStatement<?>) gwStatement;
@@ -279,7 +279,7 @@ public class GWQLParserTest extends AbstractGWQLTest {
         bbox.equalsExact(((SpatialLiteral) predicate.getExpression2()).getValue().getGeometry()));
     assertEquals(altCRS, predicate.getExpression2().getCRS(null));
 
-    statement = "SELECT * FROM type WHERE bboxLoose(geometry, 0, 1, 0, 1, 'EPSG:3857')";
+    statement = "SELECT * FROM type WHERE bboxLoose(geometry, 0, 0, 1, 1, 'EPSG:3857')";
     gwStatement = GWQLParser.parseStatement(dataStore, statement);
     assertTrue(gwStatement instanceof SelectStatement);
     selectStatement = (SelectStatement<?>) gwStatement;
