@@ -15,6 +15,7 @@ import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
+import org.locationtech.geowave.core.store.index.IndexFieldMapperRegistry;
 import com.google.common.collect.Sets;
 
 /**
@@ -94,7 +95,7 @@ public abstract class IndexFieldMapper<N, I> implements Persistable {
    * @param indexFieldValue the index value
    * @return the adapter values
    */
-  public abstract List<N> toAdapter(I indexFieldValue);
+  public abstract void toAdapter(I indexFieldValue, RowBuilder<?> rowBuilder);
 
   /**
    * @return the index field type

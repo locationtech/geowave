@@ -13,8 +13,8 @@ import java.util.List;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
+import org.locationtech.geowave.core.store.api.RowBuilder;
 import org.locationtech.geowave.core.store.api.IndexFieldMapper;
-import com.google.common.collect.Lists;
 
 /**
  * A basic index field mapper that maps an adapter field to an index field of the same class. No
@@ -43,8 +43,8 @@ public class NoOpIndexFieldMapper<I> extends IndexFieldMapper<I, I> {
   }
 
   @Override
-  public List<I> toAdapter(I indexFieldValue) {
-    return Lists.newArrayList(indexFieldValue);
+  public void toAdapter(final I indexFieldValue, final RowBuilder<?> rowBuilder) {
+    rowBuilder.setField(adapterFields[0], indexFieldValue);
   }
 
   @Override

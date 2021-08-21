@@ -10,9 +10,10 @@ package org.locationtech.geowave.adapter.vector;
 
 import java.util.Map;
 import java.util.Map.Entry;
+import org.geotools.feature.simple.OptimizedSimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.RowBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -21,11 +22,11 @@ import org.opengis.feature.simple.SimpleFeatureType;
  * values (in this case SimpleFeatures from a set of attribute values). This implementation simply
  * wraps a geotools SimpleFeatureBuilder.
  */
-public class FeatureRowBuilder implements DataTypeAdapter.RowBuilder<SimpleFeature> {
-  protected final SimpleFeatureBuilder builder;
+public class FeatureRowBuilder implements RowBuilder<SimpleFeature> {
+  protected final OptimizedSimpleFeatureBuilder builder;
 
   public FeatureRowBuilder(final SimpleFeatureType type) {
-    builder = new SimpleFeatureBuilder(type);
+    builder = new OptimizedSimpleFeatureBuilder(type);
   }
 
   @Override

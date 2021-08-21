@@ -9,27 +9,28 @@
 package org.locationtech.geowave.core.store.entities;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import com.google.common.collect.Lists;
 
 public abstract class MergeableGeoWaveRow implements GeoWaveRow {
 
-  protected List<GeoWaveValue> attributeValues;
+  protected GeoWaveValue[] attributeValues;
 
   public MergeableGeoWaveRow() {}
 
   public MergeableGeoWaveRow(final GeoWaveValue[] attributeValues) {
-    this.attributeValues = Lists.newArrayList(attributeValues);
+    this.attributeValues = attributeValues;
   }
 
   @Override
   public final GeoWaveValue[] getFieldValues() {
-    return attributeValues.toArray(new GeoWaveValue[attributeValues.size()]);
+    return attributeValues;
   }
 
   public void mergeRow(final MergeableGeoWaveRow row) {
-    Collections.addAll(attributeValues, row.getFieldValues());
+    final GeoWaveValue[] rowFieldValues = row.getFieldValues();
+    final GeoWaveValue[] newValues =
+        Arrays.copyOf(attributeValues, attributeValues.length + rowFieldValues.length);
+    System.arraycopy(rowFieldValues, 0, newValues, attributeValues.length, rowFieldValues.length);
+    this.attributeValues = newValues;
     mergeRowInternal(row);
   }
 

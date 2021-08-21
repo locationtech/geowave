@@ -9,9 +9,9 @@
 package org.locationtech.geowave.core.store.adapter;
 
 import java.util.Map;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.RowBuilder;
 
-public class SingletonFieldRowBuilder<T> implements DataTypeAdapter.RowBuilder<T> {
+public class SingletonFieldRowBuilder<T> implements RowBuilder<T> {
   private T fieldValue;
 
   @SuppressWarnings("unchecked")

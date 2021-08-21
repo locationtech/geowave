@@ -12,6 +12,7 @@ import java.util.Map;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptorBuilder;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.RowBuilder;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;

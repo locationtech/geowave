@@ -95,6 +95,9 @@ public class CompositeBinningStrategy implements StatisticBinningStrategy {
 
   @Override
   public String binToString(final ByteArray bin) {
+    if (bin == null || bin.getBytes() == null || bin.getBytes().length == 0) {
+      return "None";
+    }
     final ByteBuffer buffer = ByteBuffer.wrap(bin.getBytes());
     buffer.position(buffer.limit() - 1);
     final int[] byteLengths =

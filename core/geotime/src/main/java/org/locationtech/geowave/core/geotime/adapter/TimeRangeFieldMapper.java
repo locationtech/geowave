@@ -16,9 +16,9 @@ import java.util.Set;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
 import org.locationtech.geowave.core.geotime.util.TimeUtils;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
+import org.locationtech.geowave.core.store.api.RowBuilder;
 import org.threeten.extra.Interval;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 /**
@@ -50,6 +50,14 @@ public abstract class TimeRangeFieldMapper<N> extends TemporalIntervalFieldMappe
   }
 
   @Override
+  public String[] getIndexOrderedAdapterFields() {
+    if (!startFirst) {
+      return new String[] {adapterFields[1], adapterFields[0]};
+    }
+    return adapterFields;
+  }
+
+  @Override
   public Interval toIndex(List<N> nativeFieldValues) {
     if (startFirst) {
       return TimeUtils.getInterval(nativeFieldValues.get(0), nativeFieldValues.get(1));
@@ -58,25 +66,30 @@ public abstract class TimeRangeFieldMapper<N> extends TemporalIntervalFieldMappe
     }
   }
 
-  @SuppressWarnings("unchecked")
   @Override
-  public List<N> toAdapter(Interval indexFieldValue) {
+  public void toAdapter(final Interval indexFieldValue, final RowBuilder<?> rowBuilder) {
     if (startFirst) {
-      return Lists.newArrayList(
-          (N) TimeUtils.getTimeValue(
+      rowBuilder.setField(
+          adapterFields[0],
+          TimeUtils.getTimeValue(
               this.adapterFieldType(),
-              ((Interval) indexFieldValue).getStart().toEpochMilli()),
-          (N) TimeUtils.getTimeValue(
+              ((Interval) indexFieldValue).getStart().toEpochMilli()));
+      rowBuilder.setField(
+          adapterFields[1],
+          TimeUtils.getTimeValue(
               this.adapterFieldType(),
               ((Interval) indexFieldValue).getEnd().toEpochMilli()));
     } else {
-      return Lists.newArrayList(
-          (N) TimeUtils.getTimeValue(
-              this.adapterFieldType(),
-              ((Interval) indexFieldValue).getEnd().toEpochMilli()),
-          (N) TimeUtils.getTimeValue(
+      rowBuilder.setField(
+          adapterFields[1],
+          TimeUtils.getTimeValue(
               this.adapterFieldType(),
               ((Interval) indexFieldValue).getStart().toEpochMilli()));
+      rowBuilder.setField(
+          adapterFields[0],
+          TimeUtils.getTimeValue(
+              this.adapterFieldType(),
+              ((Interval) indexFieldValue).getEnd().toEpochMilli()));
     }
   }
 

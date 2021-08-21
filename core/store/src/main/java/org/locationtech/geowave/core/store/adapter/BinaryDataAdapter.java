@@ -12,6 +12,7 @@ import java.util.Map;
 import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.RowBuilder;
 
 public class BinaryDataAdapter implements DataTypeAdapter<Pair<byte[], byte[]>> {
   protected static final String SINGLETON_FIELD_NAME = "FIELD";

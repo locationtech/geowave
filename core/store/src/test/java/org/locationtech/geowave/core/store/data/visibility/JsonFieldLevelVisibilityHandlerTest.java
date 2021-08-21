@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.RowBuilder;
 import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import com.beust.jcommander.internal.Maps;
 
