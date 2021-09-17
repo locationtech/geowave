@@ -570,6 +570,10 @@ def test_redis_options():
     assert options.get_address() == "test_address"
     options.set_compression("L4Z")
     assert options.get_compression() == "L4Z"
+    options.set_username("test_username")
+    assert options.get_username() == "test_username"
+    options.set_password("test_password")
+    assert options.get_password() == "test_password"
     _test_base_options(options, False)
 
 
