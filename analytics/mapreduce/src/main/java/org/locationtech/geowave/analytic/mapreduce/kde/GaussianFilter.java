@@ -9,17 +9,33 @@
 package org.locationtech.geowave.analytic.mapreduce.kde;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Map;
+import java.util.stream.IntStream;
 
 public class GaussianFilter {
-  private static final Logger LOGGER = LoggerFactory.getLogger(GaussianFilter.class);
   private static final double SQRT_2_PI = Math.sqrt(2 * Math.PI);
-
+//  private static double[] majorSmoothingGaussianKernel =
+//      new double[] {
+//          0.008812229292562285,
+//          0.02714357714347937,
+//          0.06511405659938267,
+//          0.12164907301380959,
+//          0.17699835683135567,
+//          0.20056541423882082,
+//          0.17699835683135567,
+//          0.12164907301380959,
+//          0.06511405659938267,
+//          0.02714357714347937,
+//          0.008812229292562285};
   /** This kernel was computed with sigma = 1 for x=(-3,-2,-1,0,1,2,3) */
-  private static double[] majorSmoothingGaussianKernel =
+  private static double[] intermediateSmoothingGaussianKernel =
       new double[] {0.006, 0.061, 0.242, 0.383, 0.242, 0.061, 0.006};
+
+  private static Map<Integer, List<int[]>> offsetsCache = new HashMap<>();
+  private static List<int[]> TYPICAL_2D_OFFSET;
+  private static double[] TYPICAL_2D_OFFSET_BLURS;
 
   // private static double[] minorSmoothingGaussianKernel = new double[] {
   // 0.2186801,
@@ -79,6 +95,33 @@ public class GaussianFilter {
   }
 
   public static void incrementPtFast(
+      final double[] binLocationPerDimension,
+      final int[] binsPerDimension,
+      final CellCounter results) {
+    final int numDimensions = 2;
+    final double[] gaussianKernel = getGaussianKernel(1, 3);
+    final int maxOffset = gaussianKernel.length / 2;
+    final List<int[]> offsets =
+        getOffsets(numDimensions, 0, new int[numDimensions], gaussianKernel, maxOffset);
+    for (int i = 0; i < offsets.size(); i++) {
+      final int[] offset = offsets.get(i);
+      final double blur = getBlurFromOffset(i, numDimensions, offset, gaussianKernel, maxOffset);
+      final List<BinPositionAndContribution> positionsAndContributions =
+          getPositionsAndContributionPt(
+              numDimensions,
+              0,
+              binLocationPerDimension,
+              blur,
+              new int[numDimensions],
+              binsPerDimension,
+              offset);
+      for (final BinPositionAndContribution positionAndContribution : positionsAndContributions) {
+        results.increment(positionAndContribution.position, positionAndContribution.contribution);
+      }
+    }
+  }
+
+  public static void incrementPtFast(
       final double lat,
       final double lon,
       final CellCounter results,
@@ -98,8 +141,9 @@ public class GaussianFilter {
     final int maxOffset = gaussianKernel.length / 2;
     final List<int[]> offsets =
         getOffsets(numDimensions, 0, new int[numDimensions], gaussianKernel, maxOffset);
-    for (final int[] offset : offsets) {
-      final double blur = getBlurFromOffset(offset, gaussianKernel, maxOffset);
+    for (int i = 0; i < offsets.size(); i++) {
+      final int[] offset = offsets.get(i);
+      final double blur = getBlurFromOffset(i, numDimensions, offset, gaussianKernel, maxOffset);
       final List<BinPositionAndContribution> positionsAndContributions =
           getPositionsAndContributionPt(
               numDimensions,
@@ -137,8 +181,9 @@ public class GaussianFilter {
     final int maxOffset = gaussianKernel.length / 2;
     final List<int[]> offsets =
         getOffsets(numDimensions, 0, new int[numDimensions], gaussianKernel, maxOffset);
-    for (final int[] offset : offsets) {
-      final double blur = getBlurFromOffset(offset, gaussianKernel, maxOffset);
+    for (int i = 0; i < offsets.size(); i++) {
+      final int[] offset = offsets.get(i);
+      final double blur = getBlurFromOffset(i, numDimensions, offset, gaussianKernel, maxOffset);
       final List<BinPositionAndContribution> positionsAndContributions =
           getPositionsAndContributionPt(
               numDimensions,
@@ -193,8 +238,9 @@ public class GaussianFilter {
     final int maxOffset = gaussianKernel.length / 2;
     final List<int[]> offsets =
         getOffsets(numDimensions, 0, new int[numDimensions], gaussianKernel, maxOffset);
-    for (final int[] offset : offsets) {
-      final double blur = getBlurFromOffset(offset, gaussianKernel, maxOffset);
+    for (int i = 0; i < offsets.size(); i++) {
+      final int[] offset = offsets.get(i);
+      final double blur = getBlurFromOffset(i, numDimensions, offset, gaussianKernel, maxOffset);
       final List<BinPositionAndContribution> positionsAndContributions =
           getPositionsAndContribution(
               numDimensions,
@@ -218,16 +264,17 @@ public class GaussianFilter {
   }
 
   protected static double[] getGaussianKernel(final double sigma, final int radius) {
-    return majorSmoothingGaussianKernel;
-    // final double[] kernel = new double[(radius * 2) + 1];
-    // int index = 0;
-    // for (int i = radius; i >= -radius; i--) {
-    // kernel[index++] = computePDF(
-    // 0,
-    // sigma,
-    // i);
-    // }
-    // return normalizeSumToOne(kernel);
+    return intermediateSmoothingGaussianKernel;
+  }
+
+  protected static double[] calculateGaussianKernel(final double sigma, final int radius) {
+    // return majorSmoothingGaussianKernel;
+    final double[] kernel = new double[(radius * 2) + 1];
+    int index = 0;
+    for (int i = radius; i >= -radius; i--) {
+      kernel[index++] = computePDF(0, sigma, i);
+    }
+    return normalizeSumToOne(kernel);
   }
 
   protected static double computePDF(final double mean, final double sigma, final double sample) {
@@ -253,6 +300,40 @@ public class GaussianFilter {
       final int[] currentOffsetsPerDimension,
       final double[] gaussianKernel,
       final int maxOffset) {
+    if ((numDimensions == 2) && (TYPICAL_2D_OFFSET != null)) {
+      return TYPICAL_2D_OFFSET;
+    }
+    List<int[]> offsets = offsetsCache.get(numDimensions);
+    if (offsets == null) {
+      synchronized (offsetsCache) {
+        offsets =
+            calculateOffsets(
+                numDimensions,
+                currentDimension,
+                currentOffsetsPerDimension,
+                gaussianKernel,
+                maxOffset);
+        offsetsCache.put(numDimensions, offsets);
+        if (numDimensions == 2) {
+          TYPICAL_2D_OFFSET = offsets;
+          TYPICAL_2D_OFFSET_BLURS =
+              IntStream.range(0, TYPICAL_2D_OFFSET.size()).mapToDouble(
+                  i -> calculateBlurFromOffset(
+                      TYPICAL_2D_OFFSET.get(i),
+                      gaussianKernel,
+                      maxOffset)).toArray();
+        }
+      }
+    }
+    return offsets;
+  }
+
+  private static List<int[]> calculateOffsets(
+      final int numDimensions,
+      final int currentDimension,
+      final int[] currentOffsetsPerDimension,
+      final double[] gaussianKernel,
+      final int maxOffset) {
     final List<int[]> offsets = new ArrayList<>();
     if (currentDimension == numDimensions) {
       offsets.add(currentOffsetsPerDimension.clone());
@@ -260,7 +341,7 @@ public class GaussianFilter {
       for (int i = -maxOffset; i < (gaussianKernel.length - maxOffset); i++) {
         currentOffsetsPerDimension[currentDimension] = i;
         offsets.addAll(
-            getOffsets(
+            calculateOffsets(
                 numDimensions,
                 currentDimension + 1,
                 currentOffsetsPerDimension,
@@ -272,6 +353,18 @@ public class GaussianFilter {
   }
 
   private static double getBlurFromOffset(
+      final int index,
+      final int numDimensions,
+      final int[] indexIntoGaussianPerDimension,
+      final double[] gaussianKernel,
+      final int maxOffset) {
+    if (numDimensions == 2) {
+      return TYPICAL_2D_OFFSET_BLURS[index];
+    }
+    return calculateBlurFromOffset(indexIntoGaussianPerDimension, gaussianKernel, maxOffset);
+  }
+
+  private static double calculateBlurFromOffset(
       final int[] indexIntoGaussianPerDimension,
       final double[] gaussianKernel,
       final int maxOffset) {
