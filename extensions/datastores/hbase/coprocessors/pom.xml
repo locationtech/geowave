@@ -16,7 +16,7 @@
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-datastore-hbase</artifactId>
-			<version>${project.version}</version>			
+			<version>${project.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.apache.hbase</groupId>
@@ -41,7 +41,11 @@
 			<build>
 				<plugins>
 					<plugin>
-						<artifactId>maven-assembly-plugin</artifactId>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<configuration>
+							<outputDirectory>${project.build.directory}/installer-plugin</outputDirectory>
+						</configuration>
 					</plugin>
 				</plugins>
 			</build>
