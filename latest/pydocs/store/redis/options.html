@@ -76,7 +76,39 @@ class RedisOptions(DataStoreOptions):
         Returns:
             The compression used by the data store.
         &#34;&#34;&#34;
-        return self._java_ref.getCompression().name()</code></pre>
+        return self._java_ref.getCompression().name()
+
+    def set_username(self, username):
+        &#34;&#34;&#34;
+        Sets the Redis username to be used with Redis AUTH.
+
+        Args:
+            username (str): The Redis username to be used with Redis AUTH.
+        &#34;&#34;&#34;
+        self._java_ref.setUsername(username)
+
+    def get_username(self):
+        &#34;&#34;&#34;
+        Returns:
+            The Redis username to be used with Redis AUTH.
+        &#34;&#34;&#34;
+        return self._java_ref.getUsername()
+
+    def set_password(self, password):
+        &#34;&#34;&#34;
+        Sets the password for the user to be used with Redis AUTH.
+
+        Args:
+            password (str): The password for the user to be used with Redis AUTH.
+        &#34;&#34;&#34;
+        self._java_ref.setPassword(password)
+
+    def get_password(self):
+        &#34;&#34;&#34;
+        Returns:
+            The password for the user to be used with Redis AUTH.
+        &#34;&#34;&#34;
+        return self._java_ref.getPassword()</code></pre>
 </details>
 </section>
 <section>
@@ -135,7 +167,39 @@ class RedisOptions(DataStoreOptions):
         Returns:
             The compression used by the data store.
         &#34;&#34;&#34;
-        return self._java_ref.getCompression().name()</code></pre>
+        return self._java_ref.getCompression().name()
+
+    def set_username(self, username):
+        &#34;&#34;&#34;
+        Sets the Redis username to be used with Redis AUTH.
+
+        Args:
+            username (str): The Redis username to be used with Redis AUTH.
+        &#34;&#34;&#34;
+        self._java_ref.setUsername(username)
+
+    def get_username(self):
+        &#34;&#34;&#34;
+        Returns:
+            The Redis username to be used with Redis AUTH.
+        &#34;&#34;&#34;
+        return self._java_ref.getUsername()
+
+    def set_password(self, password):
+        &#34;&#34;&#34;
+        Sets the password for the user to be used with Redis AUTH.
+
+        Args:
+            password (str): The password for the user to be used with Redis AUTH.
+        &#34;&#34;&#34;
+        self._java_ref.setPassword(password)
+
+    def get_password(self):
+        &#34;&#34;&#34;
+        Returns:
+            The password for the user to be used with Redis AUTH.
+        &#34;&#34;&#34;
+        return self._java_ref.getPassword()</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -174,6 +238,38 @@ class RedisOptions(DataStoreOptions):
         The compression used by the data store.
     &#34;&#34;&#34;
     return self._java_ref.getCompression().name()</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.redis.options.RedisOptions.get_password"><code class="name flex">
+<span>def <span class="ident">get_password</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><h2 id="returns">Returns</h2>
+<p>The password for the user to be used with Redis AUTH.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_password(self):
+    &#34;&#34;&#34;
+    Returns:
+        The password for the user to be used with Redis AUTH.
+    &#34;&#34;&#34;
+    return self._java_ref.getPassword()</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.redis.options.RedisOptions.get_username"><code class="name flex">
+<span>def <span class="ident">get_username</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><h2 id="returns">Returns</h2>
+<p>The Redis username to be used with Redis AUTH.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def get_username(self):
+    &#34;&#34;&#34;
+    Returns:
+        The Redis username to be used with Redis AUTH.
+    &#34;&#34;&#34;
+    return self._java_ref.getUsername()</code></pre>
 </details>
 </dd>
 <dt id="pygw.store.redis.options.RedisOptions.set_address"><code class="name flex">
@@ -223,6 +319,50 @@ class RedisOptions(DataStoreOptions):
     self._java_ref.setCompression(converter.convert(compression))</code></pre>
 </details>
 </dd>
+<dt id="pygw.store.redis.options.RedisOptions.set_password"><code class="name flex">
+<span>def <span class="ident">set_password</span></span>(<span>self, password)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets the password for the user to be used with Redis AUTH.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>password</code></strong> :&ensp;<code>str</code></dt>
+<dd>The password for the user to be used with Redis AUTH.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_password(self, password):
+    &#34;&#34;&#34;
+    Sets the password for the user to be used with Redis AUTH.
+
+    Args:
+        password (str): The password for the user to be used with Redis AUTH.
+    &#34;&#34;&#34;
+    self._java_ref.setPassword(password)</code></pre>
+</details>
+</dd>
+<dt id="pygw.store.redis.options.RedisOptions.set_username"><code class="name flex">
+<span>def <span class="ident">set_username</span></span>(<span>self, username)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets the Redis username to be used with Redis AUTH.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>username</code></strong> :&ensp;<code>str</code></dt>
+<dd>The Redis username to be used with Redis AUTH.</dd>
+</dl></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def set_username(self, username):
+    &#34;&#34;&#34;
+    Sets the Redis username to be used with Redis AUTH.
+
+    Args:
+        username (str): The Redis username to be used with Redis AUTH.
+    &#34;&#34;&#34;
+    self._java_ref.setUsername(username)</code></pre>
+</details>
+</dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
@@ -267,11 +407,15 @@ class RedisOptions(DataStoreOptions):
 <ul>
 <li>
 <h4><code><a title="pygw.store.redis.options.RedisOptions" href="#pygw.store.redis.options.RedisOptions">RedisOptions</a></code></h4>
-<ul class="">
+<ul class="two-column">
 <li><code><a title="pygw.store.redis.options.RedisOptions.get_address" href="#pygw.store.redis.options.RedisOptions.get_address">get_address</a></code></li>
 <li><code><a title="pygw.store.redis.options.RedisOptions.get_compression" href="#pygw.store.redis.options.RedisOptions.get_compression">get_compression</a></code></li>
+<li><code><a title="pygw.store.redis.options.RedisOptions.get_password" href="#pygw.store.redis.options.RedisOptions.get_password">get_password</a></code></li>
+<li><code><a title="pygw.store.redis.options.RedisOptions.get_username" href="#pygw.store.redis.options.RedisOptions.get_username">get_username</a></code></li>
 <li><code><a title="pygw.store.redis.options.RedisOptions.set_address" href="#pygw.store.redis.options.RedisOptions.set_address">set_address</a></code></li>
 <li><code><a title="pygw.store.redis.options.RedisOptions.set_compression" href="#pygw.store.redis.options.RedisOptions.set_compression">set_compression</a></code></li>
+<li><code><a title="pygw.store.redis.options.RedisOptions.set_password" href="#pygw.store.redis.options.RedisOptions.set_password">set_password</a></code></li>
+<li><code><a title="pygw.store.redis.options.RedisOptions.set_username" href="#pygw.store.redis.options.RedisOptions.set_username">set_username</a></code></li>
 </ul>
 </li>
 </ul>

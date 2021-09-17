@@ -594,6 +594,10 @@ def test_redis_options():
     assert options.get_address() == &#34;test_address&#34;
     options.set_compression(&#34;L4Z&#34;)
     assert options.get_compression() == &#34;L4Z&#34;
+    options.set_username(&#34;test_username&#34;)
+    assert options.get_username() == &#34;test_username&#34;
+    options.set_password(&#34;test_password&#34;)
+    assert options.get_password() == &#34;test_password&#34;
     _test_base_options(options, False)
 
 
@@ -1075,6 +1079,10 @@ def test_rocksdb_options():
     assert options.get_address() == &#34;test_address&#34;
     options.set_compression(&#34;L4Z&#34;)
     assert options.get_compression() == &#34;L4Z&#34;
+    options.set_username(&#34;test_username&#34;)
+    assert options.get_username() == &#34;test_username&#34;
+    options.set_password(&#34;test_password&#34;)
+    assert options.get_password() == &#34;test_password&#34;
     _test_base_options(options, False)</code></pre>
 </details>
 </dd>
