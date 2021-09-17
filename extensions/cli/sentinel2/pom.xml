@@ -52,5 +52,39 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<id>prepare-tests</id>
+			<activation>
+				<property>
+					<name>!skipTests</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>					
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							<execution>
+								<id>install-gdal-test</id>
+								<phase>generate-test-resources</phase>
+								<goals>
+									<goal>java</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<mainClass>
+								org.locationtech.geowave.adapter.raster.plugin.gdal.InstallGdal
+							</mainClass>
+							<arguments>
+								<argument>${gdal.dir}</argument>
+							</arguments>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 </project>
