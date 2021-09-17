@@ -53,3 +53,35 @@ class RedisOptions(DataStoreOptions):
             The compression used by the data store.
         """
         return self._java_ref.getCompression().name()
+
+    def set_username(self, username):
+        """
+        Sets the Redis username to be used with Redis AUTH.
+
+        Args:
+            username (str): The Redis username to be used with Redis AUTH.
+        """
+        self._java_ref.setUsername(username)
+
+    def get_username(self):
+        """
+        Returns:
+            The Redis username to be used with Redis AUTH.
+        """
+        return self._java_ref.getUsername()
+
+    def set_password(self, password):
+        """
+        Sets the password for the user to be used with Redis AUTH.
+
+        Args:
+            password (str): The password for the user to be used with Redis AUTH.
+        """
+        self._java_ref.setPassword(password)
+
+    def get_password(self):
+        """
+        Returns:
+            The password for the user to be used with Redis AUTH.
+        """
+        return self._java_ref.getPassword()
