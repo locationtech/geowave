@@ -16,19 +16,19 @@ import java.util.stream.IntStream;
 
 public class GaussianFilter {
   private static final double SQRT_2_PI = Math.sqrt(2 * Math.PI);
-//  private static double[] majorSmoothingGaussianKernel =
-//      new double[] {
-//          0.008812229292562285,
-//          0.02714357714347937,
-//          0.06511405659938267,
-//          0.12164907301380959,
-//          0.17699835683135567,
-//          0.20056541423882082,
-//          0.17699835683135567,
-//          0.12164907301380959,
-//          0.06511405659938267,
-//          0.02714357714347937,
-//          0.008812229292562285};
+  // private static double[] majorSmoothingGaussianKernel =
+  // new double[] {
+  // 0.008812229292562285,
+  // 0.02714357714347937,
+  // 0.06511405659938267,
+  // 0.12164907301380959,
+  // 0.17699835683135567,
+  // 0.20056541423882082,
+  // 0.17699835683135567,
+  // 0.12164907301380959,
+  // 0.06511405659938267,
+  // 0.02714357714347937,
+  // 0.008812229292562285};
   /** This kernel was computed with sigma = 1 for x=(-3,-2,-1,0,1,2,3) */
   private static double[] intermediateSmoothingGaussianKernel =
       new double[] {0.006, 0.061, 0.242, 0.383, 0.242, 0.061, 0.006};
