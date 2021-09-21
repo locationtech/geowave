@@ -44,6 +44,7 @@ import org.apache.hadoop.hbase.client.BufferedMutator;
 import org.apache.hadoop.hbase.client.BufferedMutatorParams;
 import org.apache.hadoop.hbase.client.ColumnFamilyDescriptor;
 import org.apache.hadoop.hbase.client.ColumnFamilyDescriptorBuilder;
+import org.apache.hadoop.hbase.client.CompactionState;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.CoprocessorDescriptorBuilder;
 import org.apache.hadoop.hbase.client.Delete;
@@ -70,6 +71,7 @@ import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIterator.Wrapper;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
@@ -104,6 +106,7 @@ import org.locationtech.geowave.core.store.server.RowMergingAdapterOptionProvide
 import org.locationtech.geowave.core.store.server.ServerOpConfig.ServerOpScope;
 import org.locationtech.geowave.core.store.server.ServerOpHelper;
 import org.locationtech.geowave.core.store.server.ServerSideOperations;
+import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.util.DataAdapterAndIndexCache;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.datastore.hbase.HBaseRow;
@@ -1562,6 +1565,52 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
         StringColumnFamilyFactory.getSingletonInstance(),
         options.isServerSideLibraryEnabled(),
         getTableName(index.getName()));
+    return true;
+  }
+
+  @Override
+  public boolean mergeData(
+      Index index,
+      PersistentAdapterStore adapterStore,
+      InternalAdapterStore internalAdapterStore,
+      AdapterIndexMappingStore adapterIndexMappingStore,
+      Integer maxRangeDecomposition) {
+    if (options.isServerSideLibraryEnabled()) {
+      final TableName tableName = getTableName(index.getName());
+      try (Admin admin = conn.getAdmin()) {
+        admin.compact(tableName);
+        // wait for table compaction to finish
+        while (!admin.getCompactionState(tableName).equals(CompactionState.NONE)) {
+          Thread.sleep(100);
+        }
+      } catch (final Exception e) {
+        LOGGER.error("Cannot compact table '" + index.getName() + "'", e);
+        return false;
+      }
+    } else {
+      return DataStoreUtils.mergeData(
+          this,
+          maxRangeDecomposition,
+          index,
+          adapterStore,
+          internalAdapterStore,
+          adapterIndexMappingStore);
+    }
+    return true;
+  }
+
+  @Override
+  public boolean mergeStats(DataStatisticsStore statsStore) {
+    if (options.isServerSideLibraryEnabled()) {
+      try (Admin admin = conn.getAdmin()) {
+        admin.compact(getTableName(AbstractGeoWavePersistence.METADATA_TABLE));
+      } catch (final IOException e) {
+        LOGGER.error("Cannot compact table '" + AbstractGeoWavePersistence.METADATA_TABLE + "'", e);
+        return false;
+      }
+    } else {
+      return MapReduceDataStoreOperations.super.mergeStats(statsStore);
+    }
     return true;
   }
 
