@@ -338,7 +338,9 @@
           </component>
           <component name="HBase" id="61" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
             <description />
-            <include all="false" />
+            <include all="false">
+              <entry location="lib/datastores/hbase" fileType="regular" />
+            </include>
             <dependencies>
               <component id="59" />
             </dependencies>

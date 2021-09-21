@@ -1397,7 +1397,13 @@
 	</reporting>
 	<profiles>
 		<profile>
-			<id>build-installer-plugin</id>
+			<id>build-installer-plugin</id>			
+			<properties>
+				<!-- standalone installer seems to work better at least on windows with 
+					hadoop2 (more compatible with local FS), hbase shaded client is packaged 
+					with 2.10.0, which is what the ITs end up finding first -->
+				<hadoop.version>2.10.0</hadoop.version>
+			</properties>
 			<build>
 				<pluginManagement>
 					<plugins>

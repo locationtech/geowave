@@ -79,8 +79,10 @@ public class HBaseMiniCluster {
         conf.setIfUnset("hbase.root.dir", hbaseDataDir);
         if (zookeeper != null && zookeeper.contains(":")) {
           conf.setIfUnset("zookeeper.host", zookeeper.split(":")[0]);
-          conf.setIfUnset("zookeeper.host", zookeeper.split(":")[1]);
+          conf.setIfUnset("zookeeper.port", zookeeper.split(":")[1]);
           conf.setIfUnset("zookeeper.connection.string", zookeeper);
+          conf.setIfUnset("hbase.zookeeper.quorum", "localhost");
+          conf.set("hbase.zookeeper.property.clientPort", zookeeper.split(":")[1]);
         }
         final boolean enableVisibility = (auths != null) && !auths.isEmpty();
         if (enableVisibility) {
@@ -89,7 +91,6 @@ public class HBaseMiniCluster {
           conf.setBoolean("hbase.security.authorization", true);
 
           conf.setBoolean("hbase.security.visibility.mutations.checkauths", true);
-
           // setup vis IT configuration
           conf.setClass(
               VisibilityUtils.VISIBILITY_LABEL_GENERATOR_CLASS,
@@ -110,7 +111,8 @@ public class HBaseMiniCluster {
         // minicluster class loader
         hbaseLocalCluster =
             Class.forName(
-                "org.apache.hadoop.hbase.HBaseTestingUtility",
+                // "org.apache.hadoop.hbase.HBaseTestingUtility",
+                "org.locationtech.geowave.datastore.hbase.cli.GeoWaveHBaseUtility",
                 true,
                 hbaseMiniClusterCl).getConstructor(Configuration.class).newInstance(conf);
 
@@ -119,6 +121,7 @@ public class HBaseMiniCluster {
             "startMiniHBaseCluster",
             Integer.TYPE,
             Integer.TYPE).invoke(hbaseLocalCluster, 1, numRegionServers);
+
 
         if (enableVisibility) {
           // Set valid visibilities for the vis IT
