@@ -430,17 +430,6 @@
 			<classifier>test</classifier>
 		</dependency>
 	</dependencies>
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<!-- kafka tests requires zookeeper 3.5.9 -->
-				<groupId>org.apache.zookeeper</groupId>
-				<artifactId>zookeeper</artifactId>
-				<version>3.5.9</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
 	<profiles>
 		<profile>
 			<id>prepare-tests</id>

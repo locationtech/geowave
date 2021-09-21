@@ -81,7 +81,7 @@ else
 fi
 
 # Define log4j properties file in jar call, to reduce log spam.
-LOG_PROPERTIES="-Djava.util.logging.config.file=jul-geowave-cli.properties"
+LOG_PROPERTIES="-Djava.util.logging.config.file=jul-geowave-cli.properties -Dgeowave.home=$GEOWAVE_TOOLS_HOME"
 
 # Using -cp and the classname instead of -jar because Java 7 and below fail to auto-launch jars with more than 65k files
 exec $JAVA $GEOWAVE_TOOL_JAVA_OPT $LOG_PROPERTIES -cp $CLASSPATH org.locationtech.geowave.core.cli.GeoWaveMain "$@"
