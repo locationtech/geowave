@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -166,22 +166,27 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>protected static double[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/GaussianFilter.html#calculateGaussianKernel-double-int-">calculateGaussianKernel</a></span>(double&nbsp;sigma,
+                       int&nbsp;radius)</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>protected static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/GaussianFilter.html#computePDF-double-double-double-">computePDF</a></span>(double&nbsp;mean,
           double&nbsp;sigma,
           double&nbsp;sample)</code>&nbsp;</td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>protected static double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/GaussianFilter.html#getGaussianKernel-double-int-">getGaussianKernel</a></span>(double&nbsp;sigma,
                  int&nbsp;radius)</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>protected static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/GaussianFilter.html#getSigma-int-int-">getSigma</a></span>(int&nbsp;radius,
         int&nbsp;order)</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/GaussianFilter.html#incrementBBox-double-double-double-double-org.locationtech.geowave.analytic.mapreduce.kde.CellCounter-int-int-double-org.locationtech.geowave.analytic.mapreduce.kde.GaussianFilter.ValueRange:A-">incrementBBox</a></span>(double&nbsp;minX,
              double&nbsp;maxX,
@@ -193,7 +198,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
              double&nbsp;contributionScaleFactor,
              <a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/GaussianFilter.ValueRange.html" title="class in org.locationtech.geowave.analytic.mapreduce.kde">GaussianFilter.ValueRange</a>[]&nbsp;valueRangePerDimension)</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/GaussianFilter.html#incrementPt-double-double-org.locationtech.geowave.analytic.mapreduce.kde.CellCounter-int-int-double-org.locationtech.geowave.analytic.mapreduce.kde.GaussianFilter.ValueRange:A-">incrementPt</a></span>(double&nbsp;lat,
            double&nbsp;lon,
@@ -203,7 +208,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
            double&nbsp;contributionScaleFactor,
            <a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/GaussianFilter.ValueRange.html" title="class in org.locationtech.geowave.analytic.mapreduce.kde">GaussianFilter.ValueRange</a>[]&nbsp;valueRangePerDimension)</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/GaussianFilter.html#incrementPt-double-double-org.locationtech.geowave.analytic.mapreduce.kde.CellCounter-int-int-org.locationtech.geowave.analytic.mapreduce.kde.GaussianFilter.ValueRange:A-">incrementPt</a></span>(double&nbsp;lat,
            double&nbsp;lon,
@@ -212,7 +217,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
            int&nbsp;numYPosts,
            <a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/GaussianFilter.ValueRange.html" title="class in org.locationtech.geowave.analytic.mapreduce.kde">GaussianFilter.ValueRange</a>[]&nbsp;valueRangePerDimension)</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/GaussianFilter.html#incrementPtFast-double:A-int:A-org.locationtech.geowave.analytic.mapreduce.kde.CellCounter-">incrementPtFast</a></span>(double[]&nbsp;binLocationPerDimension,
+               int[]&nbsp;binsPerDimension,
+               <a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/CellCounter.html" title="interface in org.locationtech.geowave.analytic.mapreduce.kde">CellCounter</a>&nbsp;results)</code>&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/GaussianFilter.html#incrementPtFast-double-double-org.locationtech.geowave.analytic.mapreduce.kde.CellCounter-int-int-">incrementPtFast</a></span>(double&nbsp;lat,
                double&nbsp;lon,
@@ -220,7 +231,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                int&nbsp;numXPosts,
                int&nbsp;numYPosts)</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/GaussianFilter.html#incrementPtFast-double-double-double-double-double-double-org.locationtech.geowave.analytic.mapreduce.kde.CellCounter-int-int-">incrementPtFast</a></span>(double&nbsp;x,
                double&nbsp;y,
@@ -232,7 +243,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                int&nbsp;numXPosts,
                int&nbsp;numYPosts)</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>protected static double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/GaussianFilter.html#normalizeSumToOne-double:A-">normalizeSumToOne</a></span>(double[]&nbsp;kernel)</code>&nbsp;</td>
 </tr>
@@ -304,6 +315,17 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                <a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/GaussianFilter.ValueRange.html" title="class in org.locationtech.geowave.analytic.mapreduce.kde">GaussianFilter.ValueRange</a>[]&nbsp;valueRangePerDimension)</pre>
 </li>
 </ul>
+<a name="incrementPtFast-double:A-int:A-org.locationtech.geowave.analytic.mapreduce.kde.CellCounter-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>incrementPtFast</h4>
+<pre>public static&nbsp;void&nbsp;incrementPtFast(double[]&nbsp;binLocationPerDimension,
+                                   int[]&nbsp;binsPerDimension,
+                                   <a href="../../../../../../org/locationtech/geowave/analytic/mapreduce/kde/CellCounter.html" title="interface in org.locationtech.geowave.analytic.mapreduce.kde">CellCounter</a>&nbsp;results)</pre>
+</li>
+</ul>
 <a name="incrementPtFast-double-double-org.locationtech.geowave.analytic.mapreduce.kde.CellCounter-int-int-">
 <!--   -->
 </a>
@@ -369,6 +391,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>getGaussianKernel</h4>
 <pre>protected static&nbsp;double[]&nbsp;getGaussianKernel(double&nbsp;sigma,
                                             int&nbsp;radius)</pre>
+</li>
+</ul>
+<a name="calculateGaussianKernel-double-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>calculateGaussianKernel</h4>
+<pre>protected static&nbsp;double[]&nbsp;calculateGaussianKernel(double&nbsp;sigma,
+                                                  int&nbsp;radius)</pre>
 </li>
 </ul>
 <a name="computePDF-double-double-double-">
