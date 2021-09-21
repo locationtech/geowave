@@ -38,6 +38,7 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>wired hbase into installer correctly <a href="https://github.com/locationtech/geowave/pull/1849">#1849</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>added redis username/password to docs and pygw <a href="https://github.com/locationtech/geowave/pull/1847">#1847</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>performance improvements to kde <a href="https://github.com/locationtech/geowave/pull/1846">#1846</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Update GWQL bbox function to match CQL. Also fix intermittent failure with accumulo aggregations. <a href="https://github.com/locationtech/geowave/pull/1841">#1841</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
@@ -776,7 +777,6 @@
 <li>updated default hdp to 2.6.0 <a href="https://github.com/locationtech/geowave/pull/1091">#1091</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>minor fixes to build <a href="https://github.com/locationtech/geowave/pull/1090">#1090</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>GeoServer SSL Configuration Properties Encryption Support <a href="https://github.com/locationtech/geowave/pull/1088">#1088</a> (<a href="https://github.com/mcarrier7">mcarrier7</a>)</li>
-<li>fixed issue in agg param in debug cli <a href="https://github.com/locationtech/geowave/pull/1087">#1087</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Migrating logging from log4j to slf4j. <a href="https://github.com/locationtech/geowave/pull/1079">#1079</a> (<a href="https://github.com/mcarrier7">mcarrier7</a>)</li>
 <li>Initial creation - map/reduce store copy command <a href="https://github.com/locationtech/geowave/pull/1073">#1073</a> (<a href="https://github.com/blastarr">blastarr</a>)</li>
 </ul>
@@ -821,6 +821,7 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>fixed issue in agg param in debug cli <a href="https://github.com/locationtech/geowave/pull/1087">#1087</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>minor fix to rpm <a href="https://github.com/locationtech/geowave/pull/1086">#1086</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>update rpm to use hbase 1.3.0 <a href="https://github.com/locationtech/geowave/pull/1085">#1085</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>added json translation for xzcurve metadata <a href="https://github.com/locationtech/geowave/pull/1084">#1084</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
@@ -1762,11 +1763,11 @@
 <li>added streaming polygon (convex hull) generation <a href="https://github.com/locationtech/geowave/pull/131">#131</a> (<a href="https://github.com/bptran">bptran</a>)</li>
 <li>issue 129: marking jai scope to geotools container; additional fixes to … <a href="https://github.com/locationtech/geowave/pull/130">#130</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Geowave 126 - Remove instances of geotools 2.2 filter generation <a href="https://github.com/locationtech/geowave/pull/127">#127</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</li>
+<li>Update to Apache Accumolo project url <a href="https://github.com/locationtech/geowave/pull/125">#125</a> (<a href="https://github.com/state-hiu">state-hiu</a>)</li>
 <li>added codecov.io support; fixes for dependencies in integration tests <a href="https://github.com/locationtech/geowave/pull/124">#124</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</li>
 <li>GEOWAVE-122 <a href="https://github.com/locationtech/geowave/pull/123">#123</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>added clustering to analytics <a href="https://github.com/locationtech/geowave/pull/118">#118</a> (<a href="https://github.com/bptran">bptran</a>)</li>
 <li>updated to version 0.8.2-SNAPSHOT <a href="https://github.com/locationtech/geowave/pull/114">#114</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
-<li>Capture build info within artifacts <a href="https://github.com/locationtech/geowave/pull/110">#110</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 </ul>
 <h2 id="v0.8.1-2014-11-19"><a href="https://github.com/locationtech/geowave/tree/v0.8.1">v0.8.1</a> (2014-11-19)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v0.8.0...v0.8.1">Full Changelog</a></p>
@@ -1798,8 +1799,8 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
-<li>Update to Apache Accumolo project url <a href="https://github.com/locationtech/geowave/pull/125">#125</a> (<a href="https://github.com/state-hiu">state-hiu</a>)</li>
 <li>Geowave 112 <a href="https://github.com/locationtech/geowave/pull/113">#113</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>Capture build info within artifacts <a href="https://github.com/locationtech/geowave/pull/110">#110</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Geowave 106 redux <a href="https://github.com/locationtech/geowave/pull/109">#109</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>GEOWAVE-106 <a href="https://github.com/locationtech/geowave/pull/108">#108</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
 <li>GPX GEOWAVE-89 with latest master <a href="https://github.com/locationtech/geowave/pull/105">#105</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
