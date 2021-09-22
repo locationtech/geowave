@@ -63,8 +63,11 @@ public class BatchDataIndexRetrievalIteratorHelper<V, O> {
             } catch (final InterruptedException e) {
               LOGGER.error("Unable to put value in blocking queue", e);
             }
+          } else if (exception != null) {
+            LOGGER.error("Error decoding row", exception);
+            scannedResultsExhausted.set(true);
+            dataIndexRetrieval.notifyIteratorExhausted();
           }
-
           if ((outstandingFutures.decrementAndGet() == 0) && scannedResultsExhausted.get()) {
             try {
               completedObjects.put(POISON);

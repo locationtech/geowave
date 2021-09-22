@@ -164,11 +164,13 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends AbstractGeoWaveBasicVec
     }
 
     try {
-      testSpatialTemporalLocalExportAndReingestWithCQL(
-          new File(TEST_BOX_TEMPORAL_FILTER_FILE).toURI().toURL(),
-          NUM_THREADS,
-          POINTS_ONLY,
-          DimensionalityType.SPATIAL_TEMPORAL);
+      for (int i = 0; i < 5; i++) {
+        testSpatialTemporalLocalExportAndReingestWithCQL(
+            new File(TEST_BOX_TEMPORAL_FILTER_FILE).toURI().toURL(),
+            NUM_THREADS,
+            POINTS_ONLY,
+            DimensionalityType.SPATIAL_TEMPORAL);
+      }
     } catch (final Exception e) {
       e.printStackTrace();
       TestUtils.deleteAll(dataStore);
