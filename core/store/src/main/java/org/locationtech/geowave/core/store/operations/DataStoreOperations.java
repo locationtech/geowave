@@ -45,13 +45,19 @@ public interface DataStoreOperations {
       Short adapterId,
       String... additionalAuthorizations);
 
-  boolean ensureAuthorizations(String clientUser, String... authorizations);
-
   RowWriter createWriter(Index index, InternalDataAdapter<?> adapter);
 
   default RowWriter createDataIndexWriter(final InternalDataAdapter<?> adapter) {
     return new DefaultDataIndexRowWriterWrapper(
         createWriter(DataIndexUtils.DATA_ID_INDEX, adapter));
+  }
+
+  default boolean ensureAuthorizations(final String clientUser, final String... authorizations) {
+    return true;
+  }
+
+  default boolean clearAuthorizations(final String clientUser) {
+    return true;
   }
 
   MetadataWriter createMetadataWriter(MetadataType metadataType);

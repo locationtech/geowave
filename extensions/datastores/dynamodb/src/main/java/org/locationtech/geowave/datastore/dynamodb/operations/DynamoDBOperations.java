@@ -152,11 +152,6 @@ public class DynamoDBOperations implements MapReduceDataStoreOperations {
   }
 
   @Override
-  public boolean ensureAuthorizations(final String clientUser, final String... authorizations) {
-    return true;
-  }
-
-  @Override
   public RowWriter createWriter(final Index index, final InternalDataAdapter<?> adapter) {
     final boolean isDataIndex = DataIndexUtils.isDataIndex(index.getName());
     String qName = getQualifiedTableName(index.getName());

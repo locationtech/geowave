@@ -808,6 +808,29 @@ public class AccumuloOperations implements
     return true;
   }
 
+  @Override
+  public boolean clearAuthorizations(final String clientUser) {
+    String user;
+    if (clientUser == null) {
+      user = getConnector().whoami();
+    } else {
+      user = clientUser;
+    }
+    ensuredAuthorizationCache.remove(user);
+    try {
+      final Authorizations auths = getConnector().securityOperations().getUserAuthorizations(user);
+      if (auths.isEmpty()) {
+        return true;
+      } else {
+        getConnector().securityOperations().changeUserAuthorizations(user, new Authorizations());
+        return true;
+      }
+    } catch (AccumuloException | AccumuloSecurityException e) {
+      LOGGER.error("Unable to clear authorizations", e);
+      return false;
+    }
+  }
+
   public BatchDeleter createBatchDeleter(
       final String tableName,
       final String... additionalAuthorizations) throws TableNotFoundException {
@@ -1131,13 +1154,13 @@ public class AccumuloOperations implements
                 QueryFilterIterator.QUERY_ITERATOR_NAME,
                 AggregationIterator.class);
       }
-      if (params.getIndex() != null && params.getIndex().getIndexModel() != null) {
+      if ((params.getIndex() != null) && (params.getIndex().getIndexModel() != null)) {
         iteratorSettings.addOption(
             QueryFilterIterator.MODEL,
             ByteArrayUtils.byteArrayToString(
                 PersistenceUtils.toBinary(params.getIndex().getIndexModel())));
       }
-      if (params.getIndex() != null && params.getIndex().getIndexStrategy() != null) {
+      if ((params.getIndex() != null) && (params.getIndex().getIndexStrategy() != null)) {
         iteratorSettings.addOption(
             QueryFilterIterator.PARTITION_KEY_LENGTH,
             Integer.toString(params.getIndex().getIndexStrategy().getPartitionKeyLength()));
@@ -1745,10 +1768,10 @@ public class AccumuloOperations implements
   }
 
   private List<ByteArrayRange> getClientSideFilterRanges(final ReaderParams<?> readerParams) {
-    if (!options.isServerSideLibraryEnabled() && readerParams.getQueryRanges() != null) {
+    if (!options.isServerSideLibraryEnabled() && (readerParams.getQueryRanges() != null)) {
       final List<ByteArrayRange> compositeRanges =
           readerParams.getQueryRanges().getCompositeQueryRanges();
-      if (compositeRanges != null && compositeRanges.size() > 1) {
+      if ((compositeRanges != null) && (compositeRanges.size() > 1)) {
         return compositeRanges;
       }
     }

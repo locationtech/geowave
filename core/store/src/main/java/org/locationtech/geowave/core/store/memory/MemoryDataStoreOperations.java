@@ -112,11 +112,6 @@ public class MemoryDataStoreOperations implements DataStoreOperations {
   }
 
   @Override
-  public boolean ensureAuthorizations(final String clientUser, final String... authorizations) {
-    return true;
-  }
-
-  @Override
   public RowWriter createWriter(final Index index, final InternalDataAdapter<?> adapter) {
     return new MyIndexWriter<>(index.getName());
   }

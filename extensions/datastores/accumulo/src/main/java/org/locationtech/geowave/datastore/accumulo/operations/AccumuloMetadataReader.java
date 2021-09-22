@@ -51,6 +51,9 @@ public class AccumuloMetadataReader implements MetadataReader {
   @Override
   public CloseableIterator<GeoWaveMetadata> query(final MetadataQuery query) {
     try {
+      if ((query.getAuthorizations() != null) && (query.getAuthorizations().length > 0)) {
+        operations.ensureAuthorizations(null, query.getAuthorizations());
+      }
       final BatchScanner scanner =
           operations.createBatchScanner(
               AbstractGeoWavePersistence.METADATA_TABLE,

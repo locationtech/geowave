@@ -795,11 +795,6 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
     }
   }
 
-  @Override
-  public boolean ensureAuthorizations(final String clientUser, final String... authorizations) {
-    return true;
-  }
-
   public void ensureServerSideOperationsObserverAttached(final String indexName) {
     // Use the server-side operations observer
     verifyCoprocessor(
@@ -1570,11 +1565,11 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
 
   @Override
   public boolean mergeData(
-      Index index,
-      PersistentAdapterStore adapterStore,
-      InternalAdapterStore internalAdapterStore,
-      AdapterIndexMappingStore adapterIndexMappingStore,
-      Integer maxRangeDecomposition) {
+      final Index index,
+      final PersistentAdapterStore adapterStore,
+      final InternalAdapterStore internalAdapterStore,
+      final AdapterIndexMappingStore adapterIndexMappingStore,
+      final Integer maxRangeDecomposition) {
     if (options.isServerSideLibraryEnabled()) {
       final TableName tableName = getTableName(index.getName());
       try (Admin admin = conn.getAdmin()) {
@@ -1600,7 +1595,7 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
   }
 
   @Override
-  public boolean mergeStats(DataStatisticsStore statsStore) {
+  public boolean mergeStats(final DataStatisticsStore statsStore) {
     if (options.isServerSideLibraryEnabled()) {
       try (Admin admin = conn.getAdmin()) {
         admin.compact(getTableName(AbstractGeoWavePersistence.METADATA_TABLE));
