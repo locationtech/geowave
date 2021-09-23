@@ -25,12 +25,12 @@ public class RunHBaseServer extends DefaultOperation implements Command {
   private static final Logger LOGGER = LoggerFactory.getLogger(RunHBaseServer.class);
 
   @ParametersDelegate
-  private RunHBaseServerOptions options = new RunHBaseServerOptions();
+  private final RunHBaseServerOptions options = new RunHBaseServerOptions();
 
   @Parameter(
       names = {"--interactive", "-i"},
       description = "Whether to prompt for user input to end the process")
-  private boolean interactive = false;
+  private final boolean interactive = false;
 
   /**
    * Prep the driver & run the operation.
@@ -45,8 +45,14 @@ public class RunHBaseServer extends DefaultOperation implements Command {
       zkCluster.setup();
       cluster = options.getMiniCluster();
       cluster.setup();
+      System.out.println(
+          "HBase is running. Zookeeper URL is '"
+              + zkCluster.getZookeeper()
+              + "' and data is located at '"
+              + options.getDataDir()
+              + "'");
       if (interactive) {
-        System.out.println("Press Enter to shutdown..");
+        System.out.println("Press Enter to shutdown...");
         System.in.read();
         System.out.println("Shutting down!");
         cluster.tearDown();

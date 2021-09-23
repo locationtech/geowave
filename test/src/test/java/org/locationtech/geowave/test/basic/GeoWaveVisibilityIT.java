@@ -122,6 +122,7 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
   @After
   public void deleteAll() {
     TestUtils.deleteAll(dataStoreOptions);
+    // dataStoreOptions.createDataStoreOperations().clearAuthorizations(null);
   }
 
   @Test
@@ -151,6 +152,16 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
 
   @Test
   public void testComplexVisibility() throws IOException {
+    internalTestComplexVisibility();
+    // because this has intermittently failed in the past, lets run it several times and make sure
+    // it passes regularly
+    for (int i = 1; i < 5; i++) {
+      deleteAll();
+      internalTestComplexVisibility();
+    }
+  }
+
+  public void internalTestComplexVisibility() throws IOException {
     final String coverageName = "testComplexVisibility";
     final int maxCellSize =
         TestUtils.getTestEnvironment(dataStoreOptions.getType()).getMaxCellSize();
@@ -523,6 +534,16 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
 
   @Test
   public void testIngestAndQueryMixedVisibilityFields() throws IOException {
+    internalTestIngestAndQueryMixedVisibilityFields();
+    // because this has intermittently failed in the past, lets run it several times and make sure
+    // it passes regularly
+    for (int i = 1; i < 5; i++) {
+      deleteAll();
+      internalTestIngestAndQueryMixedVisibilityFields();
+    }
+  }
+
+  public void internalTestIngestAndQueryMixedVisibilityFields() throws IOException {
     testIngestAndQueryVisibilityFields(
         dataStoreOptions,
         getFeatureVisWriter(),
@@ -766,10 +787,13 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
     }
 
     @Override
-    public void fromBinary(byte[] bytes) {}
+    public void fromBinary(final byte[] bytes) {}
 
     @Override
-    public <T> String getVisibility(DataTypeAdapter<T> adapter, T entry, String fieldName) {
+    public <T> String getVisibility(
+        final DataTypeAdapter<T> adapter,
+        final T entry,
+        final String fieldName) {
       final boolean isGeom = fieldName.equals("geometry");
       final int fieldValueInt;
       if (isGeom) {

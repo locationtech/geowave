@@ -146,11 +146,6 @@ public class KuduOperations implements MapReduceDataStoreOperations {
   }
 
   @Override
-  public boolean ensureAuthorizations(final String clientUser, final String... authorizations) {
-    return true;
-  }
-
-  @Override
   public RowWriter createWriter(final Index index, final InternalDataAdapter<?> adapter) {
     createIndexTable(index.getName(), index.getIndexStrategy().getPredefinedSplits().length);
     return new KuduWriter(index.getName(), this);

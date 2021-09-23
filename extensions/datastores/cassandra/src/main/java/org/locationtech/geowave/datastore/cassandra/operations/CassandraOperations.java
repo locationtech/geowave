@@ -397,11 +397,6 @@ public class CassandraOperations implements MapReduceDataStoreOperations {
   }
 
   @Override
-  public boolean ensureAuthorizations(final String clientUser, final String... authorizations) {
-    return true;
-  }
-
-  @Override
   public RowWriter createWriter(final Index index, final InternalDataAdapter<?> adapter) {
     createTable(index.getName());
     return new CassandraWriter(index.getName(), this);

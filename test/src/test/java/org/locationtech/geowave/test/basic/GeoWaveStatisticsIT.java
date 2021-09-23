@@ -795,7 +795,19 @@ public class GeoWaveStatisticsIT extends AbstractGeoWaveBasicVectorIT {
   }
 
   @Test
-  public void testMergeStats() {
+  public void testMergeStats() throws IOException {
+    internalTestMergeStats();
+    cleanupWorkspace();
+    // because this has intermittently failed in the past, lets run it several times and make sure
+    // it passes regularly
+    for (int i = 1; i < 10; i++) {
+      initialize();
+      internalTestMergeStats();
+      cleanupWorkspace();
+    }
+  }
+
+  private void internalTestMergeStats() {
     final DataStore ds = dataStore.createDataStore();
 
     // Create many statistic values by performing single writes
@@ -818,6 +830,9 @@ public class GeoWaveStatisticsIT extends AbstractGeoWaveBasicVectorIT {
 
     // Verify value exists
     Long count = ds.getStatisticValue(countStat);
+    if (count == 0) {
+      count = ds.getStatisticValue(countStat);
+    }
     assertEquals(new Long(70), count);
 
     // Merge stats

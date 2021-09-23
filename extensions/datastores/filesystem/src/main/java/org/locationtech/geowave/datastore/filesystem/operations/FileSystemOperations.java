@@ -155,11 +155,6 @@ public class FileSystemOperations implements MapReduceDataStoreOperations, Close
   }
 
   @Override
-  public boolean ensureAuthorizations(final String clientUser, final String... authorizations) {
-    return true;
-  }
-
-  @Override
   public RowWriter createWriter(final Index index, final InternalDataAdapter<?> adapter) {
     return new FileSystemWriter(
         client,

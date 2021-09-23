@@ -36,7 +36,14 @@ public class HBaseMetadataDeleter implements MetadataDeleter {
   }
 
   @Override
-  public void close() throws Exception {}
+  public void close() throws Exception {
+    if (!operations.isServerSideLibraryEnabled()) {
+      // updates can happen with a delete immediately followed by an add, and in particular merging
+      // stats without serverside libraries is always this case, so we need to make sure the delete
+      // tombstone has an earlier timestamp than the subsequent add
+      Thread.sleep(1);
+    }
+  }
 
   @Override
   public boolean delete(final MetadataQuery query) {

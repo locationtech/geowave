@@ -52,7 +52,7 @@ jobs:
                       test/target/temp/gdal
 
             - name: Run
-              run: ./.utility/retry ./.utility/run-tests.sh
+              run: ./.utility/run-tests.sh
 
             - name: Publish Unit Test Results
               uses: scacap/action-surefire-report@v1
@@ -109,7 +109,7 @@ jobs:
                       test/target/temp/gdal
 
             - name: Run
-              run: ./.utility/retry ./.utility/run-tests.sh
+              run: ./.utility/run-tests.sh
 
             - name: Python Test Results
               uses: scacap/action-surefire-report@v1
@@ -125,11 +125,11 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                profile: [redis-it, rocksdb-it, accumulo-it-client, accumulo-it-server, hbase-it-client, hbase-it-server, cassandra-it, dynamodb-it, bigtable-it, kudu-it, filesystem-it, accumulo-it-kerberos, 'filesystem-it,secondary-index-it', 'rocksdb-it,secondary-index-it', 'accumulo-it-server,compatibility','hbase-it-server,secondary-index-it','hbase-it-server,secondary-index-it'
-                #, 'accumulo-it-kerberos,compatibility'
-                ]
+                profile: [redis-it, rocksdb-it, accumulo-it-client, accumulo-it-server, hbase-it-client, hbase-it-server, dynamodb-it, bigtable-it, kudu-it, filesystem-it, accumulo-it-kerberos, 'filesystem-it,secondary-index-it', 'rocksdb-it,secondary-index-it', 'accumulo-it-server,compatibility','hbase-it-server,secondary-index-it','hbase-it-server,secondary-index-it']
+                include:
+                  - profile: cassandra-it
+                    retry_tests: true
                 ## for now kerberos test environment isn't quite working, skip the kerberos tests until the issue is resolved
-                #include:
                   # include a new variable of TEST_KERBEROS = true
                 #  - profile: accumulo-it-kerberos
                 #    test_kerberos: true
@@ -139,6 +139,7 @@ jobs:
             IT_ONLY: true
             MAVEN_PROFILES: ${{ matrix.profile }}
             TEST_KERBEROS: ${{ matrix.test_kerberos }}
+            RETRY_TESTS: ${{ matrix.retry_tests }}
         steps:
             - name: Checkout repository
               uses: actions/checkout@v2

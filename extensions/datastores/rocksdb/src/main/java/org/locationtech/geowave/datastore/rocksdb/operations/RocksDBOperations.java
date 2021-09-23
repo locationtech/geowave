@@ -160,11 +160,6 @@ public class RocksDBOperations implements MapReduceDataStoreOperations, Closeabl
   }
 
   @Override
-  public boolean ensureAuthorizations(final String clientUser, final String... authorizations) {
-    return true;
-  }
-
-  @Override
   public RowWriter createWriter(final Index index, final InternalDataAdapter<?> adapter) {
     return new RocksDBWriter(
         getClient(),
