@@ -47,7 +47,7 @@ public class RunHBaseServer extends DefaultOperation implements Command {
       cluster.setup();
       System.out.println(
           "HBase is running. Zookeeper URL is '"
-              + options.getZkDataDir()
+              + zkCluster.getZookeeper()
               + "' and data is located at '"
               + options.getDataDir()
               + "'");
