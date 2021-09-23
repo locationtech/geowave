@@ -29,6 +29,7 @@
 </ul>
 <p><strong>Closed issues:</strong></p>
 <ul>
+<li>specify required build versions <a href="https://github.com/locationtech/geowave/issues/1844">#1844</a></li>
 <li>geowave failed to compile, problem with maven-compiler-plugin? <a href="https://github.com/locationtech/geowave/issues/1843">#1843</a></li>
 <li>Update major dependencies to current versions <a href="https://github.com/locationtech/geowave/issues/1812">#1812</a></li>
 <li>Issue with CompositeVectorAggregation when using a binning strategy <a href="https://github.com/locationtech/geowave/issues/1810">#1810</a></li>
@@ -39,6 +40,7 @@
 <p><strong>Merged pull requests:</strong></p>
 <ul>
 <li>wired hbase into installer correctly <a href="https://github.com/locationtech/geowave/pull/1849">#1849</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>minimizing retries on tests <a href="https://github.com/locationtech/geowave/pull/1848">#1848</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>added redis username/password to docs and pygw <a href="https://github.com/locationtech/geowave/pull/1847">#1847</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>performance improvements to kde <a href="https://github.com/locationtech/geowave/pull/1846">#1846</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Update GWQL bbox function to match CQL. Also fix intermittent failure with accumulo aggregations. <a href="https://github.com/locationtech/geowave/pull/1841">#1841</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
@@ -853,7 +855,6 @@
 <li>fixing the gdelt extended format <a href="https://github.com/locationtech/geowave/pull/989">#989</a> (<a href="https://github.com/mawhitby">mawhitby</a>)</li>
 <li>cleanup from logging commit <a href="https://github.com/locationtech/geowave/pull/986">#986</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Passed most of the Bigtable integration tests. Made improvements to l… <a href="https://github.com/locationtech/geowave/pull/984">#984</a> (<a href="https://github.com/emacthecav">emacthecav</a>)</li>
-<li>adding accumulo to the path to ensure success <a href="https://github.com/locationtech/geowave/pull/983">#983</a> (<a href="https://github.com/mawhitby">mawhitby</a>)</li>
 <li>documentation and naming changes <a href="https://github.com/locationtech/geowave/pull/982">#982</a> (<a href="https://github.com/mawhitby">mawhitby</a>)</li>
 <li>updated emr scripts to reflect order of accumulo-geowave config <a href="https://github.com/locationtech/geowave/pull/981">#981</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>adding the GeoWave logo to docs <a href="https://github.com/locationtech/geowave/pull/980">#980</a> (<a href="https://github.com/mawhitby">mawhitby</a>)</li>
@@ -1539,7 +1540,6 @@
 <li>fixed coveralls to report both integration and unit tests (#263) <a href="https://github.com/locationtech/geowave/pull/329">#329</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Updated Jace/PDAL/Mapnik documentation <a href="https://github.com/locationtech/geowave/pull/328">#328</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</li>
 <li>0.8.6-SNAPSHOT <a href="https://github.com/locationtech/geowave/pull/327">#327</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</li>
-<li>Added accumulo exceptions to Jace Proxies <a href="https://github.com/locationtech/geowave/pull/325">#325</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</li>
 </ul>
 <h2 id="v0.8.5-2015-04-10"><a href="https://github.com/locationtech/geowave/tree/v0.8.5">v0.8.5</a> (2015-04-10)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v0.8.4...v0.8.5">Full Changelog</a></p>
@@ -1556,6 +1556,7 @@
 <p><strong>Merged pull requests:</strong></p>
 <ul>
 <li>release v0.8.5 <a href="https://github.com/locationtech/geowave/pull/326">#326</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</li>
+<li>Added accumulo exceptions to Jace Proxies <a href="https://github.com/locationtech/geowave/pull/325">#325</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</li>
 <li>Reduce vagrant geowave clone depth <a href="https://github.com/locationtech/geowave/pull/324">#324</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</li>
 <li>added common jace dependency generation <a href="https://github.com/locationtech/geowave/pull/322">#322</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</li>
 <li>Cleaned up README <a href="https://github.com/locationtech/geowave/pull/319">#319</a> (<a href="https://github.com/chrisbennight">chrisbennight</a>)</li>
