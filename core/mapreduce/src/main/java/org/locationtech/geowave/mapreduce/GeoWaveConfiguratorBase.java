@@ -10,6 +10,7 @@ package org.locationtech.geowave.mapreduce;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
+import org.apache.hadoop.mapreduce.MRJobConfig;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
@@ -424,6 +425,9 @@ public class GeoWaveConfiguratorBase {
       final String hdfsHostPort,
       final String jobTrackerOrResourceManagerHostPort,
       final Configuration conf) throws IOException {
+
+    conf.setBoolean(MRJobConfig.MAPREDUCE_JOB_USER_CLASSPATH_FIRST, true);
+    conf.setBoolean(MRJobConfig.MAPREDUCE_JOB_CLASSLOADER, true);
     String finalHdfsHostPort;
     // Ensures that the url starts with hdfs://
     if (!hdfsHostPort.contains("://")) {

@@ -73,6 +73,8 @@ unzip -p %{SOURCE2} build.properties > %{buildroot}%{geowave_hbase_home}/geowave
 
 # Stage geowave tools
 mkdir -p %{buildroot}%{geowave_tools_home}
+mkdir -p %{buildroot}%{geowave_tools_home}/logs
+chmod 777 %{buildroot}%{geowave_tools_home}/logs
 cp %{SOURCE11} %{buildroot}%{geowave_tools_home}
 cp %{buildroot}%{geowave_accumulo_home}/geowave-accumulo-build.properties %{buildroot}%{geowave_tools_home}/build.properties
 pushd %{buildroot}%{geowave_tools_home}

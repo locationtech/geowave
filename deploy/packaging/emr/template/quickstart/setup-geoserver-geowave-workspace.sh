@@ -14,9 +14,6 @@ source geowave-env.sh
 # Configue the local host
 geowave config geoserver "$HOSTNAME:8000"
 
-# Add the gdelt datastore 
-geowave gs ds add gdelt --datastore "gdelt" # Do we need this??
-
 # Add layers for the point and kde representations of the data
 geowave gs layer add gdelt
 geowave gs layer add gdelt-kde
