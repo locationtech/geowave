@@ -7,6 +7,16 @@
             <username>${env.SONATYPE_USERNAME}</username>
             <password>${env.SONATYPE_PASSWORD}</password>
         </server>
+        
+        <server>
+          <id>osgeo-release</id>
+          <httpConfiguration>
+            <all>
+              <connectionTimeout>120000</connectionTimeout>
+              <readTimeout>120000</readTimeout>
+            </all>
+          </httpConfiguration>
+        </server>
     </servers>
 
     <profiles>
