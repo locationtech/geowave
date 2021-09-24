@@ -446,6 +446,22 @@
 						<version>2.9</version>
 						<executions>
 							<execution>
+								<!-- In continuous integration this has a tendency to timeout, so 
+									try to get it twice -->
+								<id>resolve-geoserver</id>
+								<goals>
+									<goal>get</goal>
+								</goals>
+								<phase>pre-integration-test</phase>
+								<configuration>
+									<artifact>
+										org.geoserver.web:gs-web-app:${geoserver.version}:war
+									</artifact>
+									<remoteRepositories>osgeo-release::::https://repo.osgeo.org/repository/release/</remoteRepositories>
+									<transitive>false</transitive>
+								</configuration>
+							</execution>
+							<execution>
 								<id>unpack-wars</id>
 								<goals>
 									<goal>unpack</goal>
@@ -480,7 +496,7 @@
 											<artifactId>guava</artifactId>
 											<groupId>com.google.guava</groupId>
 											<version>${hbaseguava.version}</version>
-										</artifactItem>		
+										</artifactItem>
 										<artifactItem>
 											<artifactId>protobuf-java</artifactId>
 											<groupId>com.google.protobuf</groupId>
