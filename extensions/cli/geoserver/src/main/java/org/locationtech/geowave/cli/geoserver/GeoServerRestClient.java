@@ -48,7 +48,6 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
@@ -1387,13 +1386,9 @@ public class GeoServerRestClient {
       rootEl.appendChild(urlEl);
 
       // use a transformer to create the xml string for the rest call
-      final TransformerFactory xformerFactory = TransformerFactory.newInstance();
 
-      // HP Fortify "XML External Entity Injection" fix.
-      // These ines are the recommended fix for
-      // protecting a Java TransformerFactory from XXE.
-      xformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
-      xformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+      // HP Fortify "XML External Entity Injection" not relevant
+      final TransformerFactory xformerFactory = TransformerFactory.newInstance();
 
       final Transformer xformer = xformerFactory.newTransformer();
 

@@ -44,7 +44,6 @@ import org.apache.hadoop.hbase.client.BufferedMutator;
 import org.apache.hadoop.hbase.client.BufferedMutatorParams;
 import org.apache.hadoop.hbase.client.ColumnFamilyDescriptor;
 import org.apache.hadoop.hbase.client.ColumnFamilyDescriptorBuilder;
-import org.apache.hadoop.hbase.client.CompactionState;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.CoprocessorDescriptorBuilder;
 import org.apache.hadoop.hbase.client.Delete;
@@ -1570,43 +1569,46 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
       final InternalAdapterStore internalAdapterStore,
       final AdapterIndexMappingStore adapterIndexMappingStore,
       final Integer maxRangeDecomposition) {
-    if (options.isServerSideLibraryEnabled()) {
-      final TableName tableName = getTableName(index.getName());
-      try (Admin admin = conn.getAdmin()) {
-        admin.compact(tableName);
-        // wait for table compaction to finish
-        while (!admin.getCompactionState(tableName).equals(CompactionState.NONE)) {
-          Thread.sleep(100);
-        }
-      } catch (final Exception e) {
-        LOGGER.error("Cannot compact table '" + index.getName() + "'", e);
-        return false;
-      }
-    } else {
-      return DataStoreUtils.mergeData(
-          this,
-          maxRangeDecomposition,
-          index,
-          adapterStore,
-          internalAdapterStore,
-          adapterIndexMappingStore);
-    }
-    return true;
+
+    // TODO figure out why data doesn't merge with compaction as it's supposed to
+    // if (options.isServerSideLibraryEnabled()) {
+    // final TableName tableName = getTableName(index.getName());
+    // try (Admin admin = conn.getAdmin()) {
+    // admin.compact(tableName);
+    // // wait for table compaction to finish
+    // while (!admin.getCompactionState(tableName).equals(CompactionState.NONE)) {
+    // Thread.sleep(100);
+    // }
+    // } catch (final Exception e) {
+    // LOGGER.error("Cannot compact table '" + index.getName() + "'", e);
+    // return false;
+    // }
+    // } else {
+    return DataStoreUtils.mergeData(
+        this,
+        maxRangeDecomposition,
+        index,
+        adapterStore,
+        internalAdapterStore,
+        adapterIndexMappingStore);
+    // }
+    // return true;
   }
 
   @Override
   public boolean mergeStats(final DataStatisticsStore statsStore) {
-    if (options.isServerSideLibraryEnabled()) {
-      try (Admin admin = conn.getAdmin()) {
-        admin.compact(getTableName(AbstractGeoWavePersistence.METADATA_TABLE));
-      } catch (final IOException e) {
-        LOGGER.error("Cannot compact table '" + AbstractGeoWavePersistence.METADATA_TABLE + "'", e);
-        return false;
-      }
-    } else {
-      return MapReduceDataStoreOperations.super.mergeStats(statsStore);
-    }
-    return true;
+    // TODO figure out why stats don't merge with compaction as they are supposed to
+    // if (options.isServerSideLibraryEnabled()) {
+    // try (Admin admin = conn.getAdmin()) {
+    // admin.compact(getTableName(AbstractGeoWavePersistence.METADATA_TABLE));
+    // } catch (final IOException e) {
+    // LOGGER.error("Cannot compact table '" + AbstractGeoWavePersistence.METADATA_TABLE + "'", e);
+    // return false;
+    // }
+    // } else {
+    return MapReduceDataStoreOperations.super.mergeStats(statsStore);
+    // }
+    // return true;
   }
 
   @Override

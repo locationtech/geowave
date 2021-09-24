@@ -37,12 +37,15 @@ public class HBaseMetadataDeleter implements MetadataDeleter {
 
   @Override
   public void close() throws Exception {
-    if (!operations.isServerSideLibraryEnabled()) {
-      // updates can happen with a delete immediately followed by an add, and in particular merging
-      // stats without serverside libraries is always this case, so we need to make sure the delete
-      // tombstone has an earlier timestamp than the subsequent add
-      Thread.sleep(1);
-    }
+    // TODO when stats merging happens on compaction with serverside libraries we can only sleep
+    // when
+    // not using serverside libraries, but thats not the case currently so we sleep all the time
+    // if (!operations.isServerSideLibraryEnabled()) {
+    // updates can happen with a delete immediately followed by an add, and in particular merging
+    // stats without serverside libraries is always this case, so we need to make sure the delete
+    // tombstone has an earlier timestamp than the subsequent add
+    Thread.sleep(1);
+    // }
   }
 
   @Override

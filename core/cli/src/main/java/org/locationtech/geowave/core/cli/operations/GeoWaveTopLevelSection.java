@@ -8,8 +8,10 @@
  */
 package org.locationtech.geowave.core.cli.operations;
 
+import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
+import org.apache.log4j.PatternLayout;
 import org.locationtech.geowave.core.cli.VersionUtils;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
@@ -31,7 +33,7 @@ public class GeoWaveTopLevelSection extends DefaultOperation {
   // This contains methods and parameters for determining where the GeoWave
   // cached configuration file is.
   @ParametersDelegate
-  private ConfigOptions options = new ConfigOptions();
+  private final ConfigOptions options = new ConfigOptions();
 
   @Override
   public boolean prepare(final OperationParams inputParams) {
@@ -44,6 +46,8 @@ public class GeoWaveTopLevelSection extends DefaultOperation {
     // Up the log level
     if (Boolean.TRUE.equals(verboseFlag)) {
       LogManager.getRootLogger().setLevel(Level.DEBUG);
+      LogManager.getRootLogger().addAppender(
+          new ConsoleAppender(new PatternLayout("%d{dd MMM HH:mm:ss} %p [%c{2}] - %m%n")));
     }
 
     // Print out the version info if requested.

@@ -19,7 +19,6 @@ import org.locationtech.geowave.core.cli.spi.OperationEntry;
 import org.locationtech.geowave.core.cli.spi.OperationRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.beust.jcommander.JCommander;
 
 /**
  * This is the primary entry point for command line tools. When run it will expect an operation is
