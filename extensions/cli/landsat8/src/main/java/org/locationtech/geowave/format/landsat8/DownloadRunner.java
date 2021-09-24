@@ -13,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.opengis.feature.simple.SimpleFeature;
@@ -67,7 +68,10 @@ public class DownloadRunner extends AnalyzeRunner {
           // wait for a second
           Thread.sleep(1000L);
         }
-        in = new URL(downloadUrl).openStream();
+        final URLConnection connection = new URL(downloadUrl).openConnection();
+        connection.setConnectTimeout(360_000);
+        connection.setReadTimeout(360_000);
+        in = connection.getInputStream();
         success = true;
 
         final FileOutputStream outStream = new FileOutputStream(localTempPath);

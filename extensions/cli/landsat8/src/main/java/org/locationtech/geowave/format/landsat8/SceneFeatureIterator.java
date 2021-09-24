@@ -19,6 +19,7 @@ import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -147,7 +148,10 @@ public class SceneFeatureIterator implements SimpleFeatureIterator {
       // first download the gzipped file
       final FileOutputStream outStream = new FileOutputStream(compressedFile);
       try {
-        in = new URL(SCENES_GZ_URL).openStream();
+        final URLConnection connection = new URL(SCENES_GZ_URL).openConnection();
+        connection.setConnectTimeout(120_000);
+        connection.setReadTimeout(120_000);
+        in = connection.getInputStream();
         IOUtils.copyLarge(in, outStream);
       } catch (final IOException e) {
         LOGGER.warn("Unable to read scenes from public S3", e);
