@@ -816,7 +816,7 @@ public class BaseDataStoreUtils {
         if (o2.getKey() == null) {
           return -1;
         }
-        return o1.getKey().getName().compareTo(o1.getKey().getName());
+        return o1.getKey().getName().compareTo(o2.getKey().getName());
       }
     });
   }
