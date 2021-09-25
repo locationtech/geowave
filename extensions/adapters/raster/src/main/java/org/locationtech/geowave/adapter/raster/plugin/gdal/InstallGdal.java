@@ -13,6 +13,7 @@ import java.io.FileFilter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.util.Locale;
 import org.apache.commons.io.IOUtils;
@@ -20,6 +21,7 @@ import org.codehaus.plexus.archiver.tar.TarGZipUnArchiver;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.locationtech.geowave.adapter.raster.util.ZipUtils;
 import org.slf4j.LoggerFactory;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class InstallGdal {
   private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(InstallGdal.class);
@@ -65,6 +67,7 @@ public class InstallGdal {
     install(gdalDir);
   }
 
+  @SuppressFBWarnings(value = "REC_CATCH_EXCEPTION")
   private static void install(final File gdalDir) throws IOException {
     URL url;
     String file;
@@ -91,9 +94,23 @@ public class InstallGdal {
       }
     }
     if (!downloadFile.exists()) {
-      try (FileOutputStream fos = new FileOutputStream(downloadFile)) {
-        IOUtils.copyLarge(url.openStream(), fos);
-        fos.flush();
+      boolean success = false;
+      for (int i = 0; i < 3; i++) {
+        try (FileOutputStream fos = new FileOutputStream(downloadFile)) {
+          final URLConnection connection = url.openConnection();
+          connection.setConnectTimeout(360_000);
+          connection.setReadTimeout(360_000);
+          IOUtils.copyLarge(connection.getInputStream(), fos);
+          fos.flush();
+          success = true;
+          break;
+        } catch (final Exception e) {
+          LOGGER.warn("Unable to download url '" + url + "'. Retry attempt #" + i);
+        }
+      }
+      if (!success) {
+        LOGGER.error("Unable to download url '" + url + "' after 3 attempts.");
+        System.exit(-1);
       }
     }
     if (file.endsWith("zip")) {

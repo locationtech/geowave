@@ -145,6 +145,23 @@ public class CustomCRSLandsatIT extends AbstractGeoWaveIT {
 
   @Test
   public void testMosaic() throws Exception {
+    int i = 0;
+    boolean failed = false;
+    while (failed) {
+      failed = false;
+      try {
+        internalTestMosaic();
+      } catch (final Exception e) {
+        if (++i >= 5) {
+          throw e;
+        }
+        failed = true;
+        LOGGER.error("testMosaic failed, retry attempt #" + i, e);
+      }
+    }
+  }
+
+  public void internalTestMosaic() throws Exception {
 
     // Skip this test if we're on a Mac
     org.junit.Assume.assumeTrue(isNotMac());
