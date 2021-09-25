@@ -585,7 +585,7 @@
           <versionLine x="20" y="40" text="version ${compiler:sys.version}" fontSize="8" fontColor="0,0,0" bold="false" />
         </text>
       </splashScreen>
-      <java mainClass="org.locationtech.geowave.core.cli.GeoWaveMain" mainMode="1" vmParameters="-Djava.util.logging.config.file=jul-geowave-cli.properties -Dgeowave.home=${installer:sys.installationDir}" arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
+      <java mainClass="org.locationtech.geowave.core.cli.GeoWaveMain" mainMode="1" vmParameters="-Djava.util.logging.config.file=jul-geowave-cli.properties -Dgeowave.home=${installer:sys.installationDir} -Djava.library.path=${installer:sys.installationDir}/lib/utilities/gdal" arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
         <classPath>
           <scanDirectory location="lib/core" failOnError="false" />
           <scanDirectory location="lib/analytics/mapreduce" failOnError="false" />
