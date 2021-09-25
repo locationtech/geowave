@@ -60,6 +60,6 @@ fi
 if [ -d /opt/install4j7 ]; then
     # Build standalone installer
     echo '###### Building standalone installer'
-    mvn package -P build-installer-plugin $BUILD_ARGS "$@"
+    mvn -pl -test package -P build-installer-plugin $BUILD_ARGS "$@"
     mvn package -pl deploy -P build-installer-main -Dinstall4j.home=/opt/install4j7 $BUILD_ARGS "$@"
 fi

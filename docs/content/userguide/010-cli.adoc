@@ -153,7 +153,7 @@ The link:commands.html#analytic-commands[`analytic`] command contains commands f
 
 ==== Vector Commands
 
-The link:commands.html#vector-commands[`vector`] command contains commands that are specific to vector data, this includes the vector query language and various export options.
+The link:commands.html#vector-commands[`vector`] command contains commands that are specific to vector data, this includes various export options.
 
 ==== Raster Commands
 
