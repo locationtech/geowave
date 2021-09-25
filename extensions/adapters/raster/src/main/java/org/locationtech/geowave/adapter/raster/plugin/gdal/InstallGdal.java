@@ -21,6 +21,7 @@ import org.codehaus.plexus.archiver.tar.TarGZipUnArchiver;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.locationtech.geowave.adapter.raster.util.ZipUtils;
 import org.slf4j.LoggerFactory;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class InstallGdal {
   private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(InstallGdal.class);
@@ -66,6 +67,7 @@ public class InstallGdal {
     install(gdalDir);
   }
 
+  @SuppressFBWarnings(value = "REC_CATCH_EXCEPTION")
   private static void install(final File gdalDir) throws IOException {
     URL url;
     String file;
