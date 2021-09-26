@@ -850,7 +850,7 @@ test-store spatial-idx</pre>
 <div class="sect3">
 <h4 id="vector-commands"><a class="anchor" href="#vector-commands"></a>Vector Commands</h4>
 <div class="paragraph">
-<p>The <a href="commands.html#vector-commands"><code>vector</code></a> command contains commands that are specific to vector data, this includes the vector query language and various export options.</p>
+<p>The <a href="commands.html#vector-commands"><code>vector</code></a> command contains commands that are specific to vector data, this includes various export options.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1053,7 +1053,7 @@ $ geowave ingest localtogw ./ingest_data mystore myindex</code></pre>
 <div class="sect3">
 <h4 id="temporal-configuration"><a class="anchor" href="#temporal-configuration"></a>Temporal Configuration</h4>
 <div class="paragraph">
-<p>Temporal configuration may be necessary if your vector feature type has more than one temporal attribute.  The class name for this configuration is <a href="https://github.com/locationtech/geowave/blob/e2233cbc4de7e0d6115a5e5382e796790419d491/core/geotime/src/main/java/org/locationtech/geowave/core/geotime/util/TimeDescriptors.java"><code>org.locationtech.geowave.core.geotime.util.TimeDescriptors$TimeDescriptorConfiguration</code></a>.</p>
+<p>Temporal configuration may be necessary if your vector feature type has more than one temporal attribute.  The class name for this configuration is <a href="https://github.com/locationtech/geowave/blob/f15f56ac5fdcdf1c1c1bb67699a2c82db3e13a76/core/geotime/src/main/java/org/locationtech/geowave/core/geotime/util/TimeDescriptors.java"><code>org.locationtech.geowave.core.geotime.util.TimeDescriptors$TimeDescriptorConfiguration</code></a>.</p>
 </div>
 <div class="paragraph">
 <p>There are three attributes for the temporal configuration:</p>
@@ -1097,7 +1097,7 @@ $ geowave ingest localtogw ./ingest_data mystore myindex</code></pre>
 <div class="sect3">
 <h4 id="primary-index-identifiers"><a class="anchor" href="#primary-index-identifiers"></a>Primary Index Identifiers</h4>
 <div class="paragraph">
-<p>The class <a href="https://github.com/locationtech/geowave/blob/e2233cbc4de7e0d6115a5e5382e796790419d491/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/index/SimpleFeaturePrimaryIndexConfiguration.java"><code>org.locationtech.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration</code></a> is used to maintain the configuration of primary indices used for adding or updating simple features via the GeoServer plugin.</p>
+<p>The class <a href="https://github.com/locationtech/geowave/blob/f15f56ac5fdcdf1c1c1bb67699a2c82db3e13a76/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/index/SimpleFeaturePrimaryIndexConfiguration.java"><code>org.locationtech.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration</code></a> is used to maintain the configuration of primary indices used for adding or updating simple features via the GeoServer plugin.</p>
 </div>
 </div>
 <div class="sect3">
@@ -2497,7 +2497,7 @@ In GWQL, function casing is not important; <code>STRCONTAINS(name, 'abc')</code>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Additional authorization management strategies can be registered through the Java Service Provider Interface (SPI) model by implementing the <a href="https://github.com/locationtech/geowave/blob/e2233cbc4de7e0d6115a5e5382e796790419d491/extensions/adapters/auth/src/main/java/org/locationtech/geowave/adapter/auth/AuthorizationFactorySPI.java"><code>AuthorizationFactorySPI</code></a> interface. For more information on using SPI, see the <a href="https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html" target="_blank">Oracle documentation</a>.
+Additional authorization management strategies can be registered through the Java Service Provider Interface (SPI) model by implementing the <a href="https://github.com/locationtech/geowave/blob/f15f56ac5fdcdf1c1c1bb67699a2c82db3e13a76/extensions/adapters/auth/src/main/java/org/locationtech/geowave/adapter/auth/AuthorizationFactorySPI.java"><code>AuthorizationFactorySPI</code></a> interface. For more information on using SPI, see the <a href="https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html" target="_blank">Oracle documentation</a>.
 </td>
 </tr>
 </table>
@@ -3068,7 +3068,7 @@ var geowave_version = '2.0.0-SNAPSHOT';
 
 <div class="geowave-footer col-md-12 docs-footer">
   <div class="py-4 d-flex justify-content-center align-items-center">
-    <small><p class="footer-text">This page was generated on Sunday, September 26, 2021 at 02:36 PM UTC<br><a href="https://github.com/locationtech/geowave/tree/e2233cbc4de7e0d6115a5e5382e796790419d491">View the commit it was generated from on GitHub</a></p></small>
+    <small><p class="footer-text">This page was generated on Sunday, September 26, 2021 at 05:41 PM UTC<br><a href="https://github.com/locationtech/geowave/tree/f15f56ac5fdcdf1c1c1bb67699a2c82db3e13a76">View the commit it was generated from on GitHub</a></p></small>
   </div>
 </div>
 </div>
@@ -3079,7 +3079,7 @@ var geowave_version = '2.0.0-SNAPSHOT';
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-09-26 14:36:12 +00:00
+Last updated 2021-09-26 17:41:35 +00:00
 </div>
 </div>
 </body>
