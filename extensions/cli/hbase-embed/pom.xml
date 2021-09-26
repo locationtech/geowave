@@ -4,7 +4,7 @@
 		<artifactId>geowave-extension-parent</artifactId>
 		<groupId>org.locationtech.geowave</groupId>
 		<relativePath>../../</relativePath>
-		<version>2.0.0</version>
+		<version>2.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-cli-hbase-embed</artifactId>
 	<name>GeoWave Embedded HBase</name>
