@@ -585,7 +585,7 @@
           <versionLine x="20" y="40" text="version ${compiler:sys.version}" fontSize="8" fontColor="0,0,0" bold="false" />
         </text>
       </splashScreen>
-      <java mainClass="org.locationtech.geowave.core.cli.GeoWaveMain" mainMode="1" vmParameters="-Djava.util.logging.config.file=jul-geowave-cli.properties -Dgeowave.home=${installer:sys.installationDir} -Djava.library.path=${installer:sys.installationDir}/lib/utilities/gdal" arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
+      <java mainClass="org.locationtech.geowave.core.cli.GeoWaveMain" mainMode="1" vmParameters="-Djava.util.logging.config.file=jul-geowave-cli.properties -Dgeowave.home=${installer:sys.installationDir}" arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
         <classPath>
           <scanDirectory location="lib/core" failOnError="false" />
           <scanDirectory location="lib/analytics/mapreduce" failOnError="false" />
@@ -964,18 +964,18 @@ return console.askOkCancel(message, true);
                 </serializedBean>
                 <condition />
               </action>
-              <action name="" id="1118" customizedId="" beanClass="com.install4j.runtime.beans.actions.misc.ModifyEnvironmentVariableAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" rollbackBarrierExitCode="0" multiExec="false" failureStrategy="1" errorMessage="">
+              <action name="" id="1206" customizedId="" beanClass="com.install4j.runtime.beans.actions.misc.ModifyEnvironmentVariableAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" rollbackBarrierExitCode="0" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.misc.ModifyEnvironmentVariableAction">
                       <void property="type">
                         <object class="java.lang.Enum" method="valueOf">
                           <class>com.install4j.runtime.beans.actions.misc.ModifyStringType</class>
-                          <string>APPEND</string>
+                          <string>PREPEND</string>
                         </object>
                       </void>
                       <void property="value">
-                        <string>${installer:sys.installationDir}/lib/utlities/gdal</string>
+                        <string>${installer:sys.installationDir}\lib\utilities\gdal</string>
                       </void>
                       <void property="variableName">
                         <string>Path</string>
@@ -1736,7 +1736,7 @@ return console.askYesNo(message, true);
     </unixInstaller>
   </mediaSets>
   <buildIds buildAll="false">
-    <mediaSet refId="66" />
+    <mediaSet refId="1198" />
   </buildIds>
   <buildOptions verbose="false" faster="false" disableSigning="false" disableJreBundling="false" debug="false" />
 </install4j>
