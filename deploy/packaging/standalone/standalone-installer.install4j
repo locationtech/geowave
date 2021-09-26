@@ -964,6 +964,27 @@ return console.askOkCancel(message, true);
                 </serializedBean>
                 <condition />
               </action>
+              <action name="" id="1206" customizedId="" beanClass="com.install4j.runtime.beans.actions.misc.ModifyEnvironmentVariableAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" rollbackBarrierExitCode="0" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.misc.ModifyEnvironmentVariableAction">
+                      <void property="type">
+                        <object class="java.lang.Enum" method="valueOf">
+                          <class>com.install4j.runtime.beans.actions.misc.ModifyStringType</class>
+                          <string>PREPEND</string>
+                        </object>
+                      </void>
+                      <void property="value">
+                        <string>${installer:sys.installationDir}\lib\utilities\gdal</string>
+                      </void>
+                      <void property="variableName">
+                        <string>Path</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
             </actions>
             <formComponents>
               <formComponent name="" id="16" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.ProgressComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false" useExternalParametrization="false" externalParametrizationName="" externalParametrizationMode="all">
@@ -1715,7 +1736,7 @@ return console.askYesNo(message, true);
     </unixInstaller>
   </mediaSets>
   <buildIds buildAll="false">
-    <mediaSet refId="66" />
+    <mediaSet refId="1198" />
   </buildIds>
   <buildOptions verbose="false" faster="false" disableSigning="false" disableJreBundling="false" debug="false" />
 </install4j>

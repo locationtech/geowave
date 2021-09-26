@@ -48,7 +48,7 @@ Now that the data has been ingested, we can make queries against it.  The GeoWav
 
 [source, bash]
 ----
-$ geowave vector query "SELECT * FROM gdelt.gdeltevent LIMIT 10"
+$ geowave query gdelt "SELECT * FROM gdeltevent LIMIT 10"
 ----
 
 This command tells GeoWave to select all attributes from the `gdeltevent` type in the `gdelt` data store, but limits the output to 10 features.  After running this command, you should get a result that is similar to the following:
@@ -71,11 +71,11 @@ This command tells GeoWave to select all attributes from the `gdeltevent` type i
 +-------------------------+-----------+------------------------------+----------+-----------+----------------+----------------+-------------+-------------------------------------------------------------------------------------------------------+
 ----
 
-We can see right away that these results are tagged with the country code `EZ` which falls under Czech Republic.  Since our area of interest is around Germany, perhaps we want to only see events that are tagged with the `GM` country code.  We can do this by adding a CQL filter to the query.
+We can see right away that these results are tagged with the country code `EZ` which falls under Czech Republic.  Since our area of interest is around Germany, perhaps we want to only see events that are tagged with the `GM` country code.  We can do this by adding a WHERE clause to the query.
 
 [source, bash]
 ----
-$ geowave vector query "SELECT * FROM gdelt.gdeltevent WHERE CQL(countryCode='GM') LIMIT 10"
+$ geowave query gdelt "SELECT * FROM gdeltevent WHERE countryCode='GM' LIMIT 10"
 ----
 
 Now the results show only events that have the `GM` country code.
@@ -102,7 +102,7 @@ If we wanted to see how many events belong to to the `GM` country code, we can p
 
 [source, bash]
 ----
-$ geowave vector query "SELECT COUNT(*) FROM gdelt.gdeltevent WHERE CQL(countryCode='GM')"
+$ geowave query gdelt "SELECT COUNT(*) FROM gdeltevent WHERE countryCode='GM'"
 ----
 
 [literal%nowrap]
@@ -118,7 +118,7 @@ We can also perform multiple aggregations on the same data in a single query. Th
 
 [source, bash]
 ----
-$ geowave vector query "SELECT COUNT(actor1Name), COUNT(actor2Name) FROM gdelt.gdeltevent"
+$ geowave query gdelt "SELECT COUNT(actor1Name), COUNT(actor2Name) FROM gdeltevent"
 ----
 
 [literal%nowrap]
@@ -134,7 +134,7 @@ We can also do bounding box aggregations.  For example, if we wanted to see the 
 
 [source, bash]
 ----
-$ geowave vector query "SELECT BBOX(*), COUNT(*) AS total_events FROM gdelt.gdeltevent WHERE CQL(actor1Name='HUNGARY')"
+$ geowave query gdelt "SELECT BBOX(*), COUNT(*) AS total_events FROM gdeltevent WHERE actor1Name='HUNGARY'"
 ----
 
 [literal%nowrap]
@@ -151,7 +151,7 @@ $ geowave vector query "SELECT BBOX(*), COUNT(*) AS total_events FROM gdelt.gdel
 In these examples each query was output to console, but there are options on the command that allow the query results to be output to several formats, including geojson, shapefile, and CSV.
 ====
 
-For more information about vector queries, see the link:userguide.html#vector-queries[vector queries, window="_blank"] section of the User Guide.
+For more information about vector queries, see the link:userguide.html#queries[queries, window="_blank"] section of the User Guide.
 
 === Kernel Density Estimation (KDE)
 

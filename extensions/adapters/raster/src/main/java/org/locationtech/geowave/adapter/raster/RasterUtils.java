@@ -95,6 +95,9 @@ import com.sun.media.imageioimpl.common.BogusColorSpace;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class RasterUtils {
+  private static int MAX_FILL_SIZE = 4_194_304;
+  private static int MAX_FILL_SIZE_WIDTH = 2048;
+  private static int MAX_FILL_SIZE_HEIGHT = 2048;
   private static final RenderingHints DEFAULT_RENDERING_HINTS =
       new RenderingHints(
           new ImmutableMap.Builder().put(
@@ -399,19 +402,42 @@ public class RasterUtils {
       final WritableRaster raster,
       final double[][] noDataValues) {
     if ((noDataValues != null) && (noDataValues.length >= raster.getNumBands())) {
-      final double[] noDataFilledArray = new double[raster.getWidth() * raster.getHeight()];
+      final int fillSize = raster.getWidth() * raster.getHeight();
+      final double[] noDataFilledArray;
+      if (fillSize > MAX_FILL_SIZE) {
+        noDataFilledArray = new double[MAX_FILL_SIZE];
+      } else {
+        noDataFilledArray = new double[fillSize];
+      }
+
       for (int b = 0; b < raster.getNumBands(); b++) {
         if ((noDataValues[b] != null) && (noDataValues[b].length > 0)) {
           // just fill every sample in this band with the first no
           // data value for that band
           Arrays.fill(noDataFilledArray, noDataValues[b][0]);
-          raster.setSamples(
-              raster.getMinX(),
-              raster.getMinY(),
-              raster.getWidth(),
-              raster.getHeight(),
-              b,
-              noDataFilledArray);
+          if (fillSize > MAX_FILL_SIZE) {
+            final int maxX = (raster.getMinX() + raster.getWidth());
+            final int maxY = (raster.getMinY() + raster.getHeight());
+            for (int x = raster.getMinX(); x < maxX; x += MAX_FILL_SIZE_WIDTH) {
+              for (int y = raster.getMinY(); y < maxY; y += MAX_FILL_SIZE_HEIGHT) {
+                raster.setSamples(
+                    x,
+                    y,
+                    ((x + MAX_FILL_SIZE_WIDTH) > maxX) ? maxX - x : MAX_FILL_SIZE_WIDTH,
+                    ((y + MAX_FILL_SIZE_HEIGHT) > maxY) ? maxY - y : MAX_FILL_SIZE_HEIGHT,
+                    b,
+                    noDataFilledArray);
+              }
+            }
+          } else {
+            raster.setSamples(
+                raster.getMinX(),
+                raster.getMinY(),
+                raster.getWidth(),
+                raster.getHeight(),
+                b,
+                noDataFilledArray);
+          }
         }
       }
     }

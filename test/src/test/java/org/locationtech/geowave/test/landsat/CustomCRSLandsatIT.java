@@ -146,8 +146,8 @@ public class CustomCRSLandsatIT extends AbstractGeoWaveIT {
   @Test
   public void testMosaic() throws Exception {
     int i = 0;
-    boolean failed = false;
-    while (failed) {
+    boolean failed;
+    do {
       failed = false;
       try {
         internalTestMosaic();
@@ -158,7 +158,7 @@ public class CustomCRSLandsatIT extends AbstractGeoWaveIT {
         failed = true;
         LOGGER.error("testMosaic failed, retry attempt #" + i, e);
       }
-    }
+    } while (failed);
   }
 
   public void internalTestMosaic() throws Exception {

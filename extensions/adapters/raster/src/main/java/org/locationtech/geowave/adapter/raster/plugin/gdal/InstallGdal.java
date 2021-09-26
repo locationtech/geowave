@@ -51,6 +51,7 @@ public class InstallGdal {
     if (gdalDir.exists() && gdalDir.isDirectory()) {
       final File[] files = gdalDir.listFiles();
       if ((files != null) && (files.length > 1)) {
+        System.out.println("GDAL already exists");
         return;
       } else {
         LOGGER.error(
@@ -93,6 +94,7 @@ public class InstallGdal {
             "File '" + downloadFile.getAbsolutePath() + "' is corrupt and cannot be deleted");
       }
     }
+    System.out.println("Downloading GDAL native libraries...");
     if (!downloadFile.exists()) {
       boolean success = false;
       for (int i = 0; i < 3; i++) {
@@ -155,6 +157,7 @@ public class InstallGdal {
     if (!downloadFile.delete()) {
       LOGGER.warn("cannot delete " + downloadFile.getAbsolutePath());
     }
+    System.out.println("GDAL installed in directory " + gdalDir.getAbsolutePath());
   }
 
   private static boolean isWindows() {
