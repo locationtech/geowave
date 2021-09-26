@@ -1071,7 +1071,7 @@ $ geowave index add -t spatial -c EPSG:3857 landsatvector spatial-idx</code></pr
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave util landsat analyze --nbestperspatial --nbestscenes 1 --usecachedscenes --cql "BBOX(shape,13.0535,52.3303,13.7262,52.6675) AND band='B8' AND cloudCover&gt;0" -ws ./landsat</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave util landsat analyze --nbestperspatial true --nbestscenes 1 --usecachedscenes true --cql "BBOX(shape,13.0535,52.3303,13.7262,52.6675) AND band='B8' AND cloudCover&gt;0" -ws ./landsat</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1085,7 +1085,7 @@ $ geowave index add -t spatial -c EPSG:3857 landsatvector spatial-idx</code></pr
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave util landsat ingest --nbestperspatial --nbestscenes 1 --usecachedscenes --cql "BBOX(shape,13.0535,52.3303,13.7262,52.6675) AND band='B8' AND cloudCover&gt;0" --crop --retainimages -ws ./landsat --vectorstore landsatvector --pyramid --coverage berlin_mosaic landsatraster spatial-idx</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ geowave util landsat ingest --nbestperspatial true --nbestscenes 1 --usecachedscenes true --cql "BBOX(shape,13.0535,52.3303,13.7262,52.6675) AND band='B8' AND cloudCover&gt;0" --crop true --retainimages true -ws ./landsat --vectorstore landsatvector --pyramid true --coverage berlin_mosaic landsatraster spatial-idx</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1175,7 +1175,7 @@ var geowave_version = '2.0.0-SNAPSHOT';
 
 <div class="geowave-footer col-md-12 docs-footer">
   <div class="py-4 d-flex justify-content-center align-items-center">
-    <small><p class="footer-text">This page was generated on Sunday, September 26, 2021 at 05:41 PM UTC<br><a href="https://github.com/locationtech/geowave/tree/f15f56ac5fdcdf1c1c1bb67699a2c82db3e13a76">View the commit it was generated from on GitHub</a></p></small>
+    <small><p class="footer-text">This page was generated on Sunday, September 26, 2021 at 07:12 PM UTC<br><a href="https://github.com/locationtech/geowave/tree/1184215e7e386b34b5db43df68ef8b7afd55534f">View the commit it was generated from on GitHub</a></p></small>
   </div>
 </div>
 </div>
@@ -1183,7 +1183,7 @@ var geowave_version = '2.0.0-SNAPSHOT';
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-09-26 17:41:35 +00:00
+Last updated 2021-09-26 19:12:20 +00:00
 </div>
 </div>
 </body>

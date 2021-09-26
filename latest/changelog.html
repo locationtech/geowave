@@ -43,6 +43,7 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>fixed issue with landsat cli <a href="https://github.com/locationtech/geowave/pull/1857">#1857</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>minor fixes for standalone installer <a href="https://github.com/locationtech/geowave/pull/1855">#1855</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>updated cassandra version to 4.0.1 <a href="https://github.com/locationtech/geowave/pull/1854">#1854</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>retry landsat test 5 times <a href="https://github.com/locationtech/geowave/pull/1853">#1853</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
@@ -153,6 +154,7 @@
 <li>Fix issue with broken downloads links. <a href="https://github.com/locationtech/geowave/pull/1701">#1701</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>Update pygw to support remote gateways. <a href="https://github.com/locationtech/geowave/pull/1700">#1700</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>Fix issue with deleting when using secondary indexing. <a href="https://github.com/locationtech/geowave/pull/1699">#1699</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
+<li>Fix issue which prevented installers from being generated on release <a href="https://github.com/locationtech/geowave/pull/1698">#1698</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 </ul>
 <h2 id="v1.1.0-2020-03-05"><a href="https://github.com/locationtech/geowave/tree/v1.1.0">v1.1.0</a> (2020-03-05)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v1.0.0...v1.1.0">Full Changelog</a></p>
@@ -185,7 +187,6 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
-<li>Fix issue which prevented installers from being generated on release <a href="https://github.com/locationtech/geowave/pull/1698">#1698</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>1.1.0 Release <a href="https://github.com/locationtech/geowave/pull/1697">#1697</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>Revert Jackson version to avoid GeoServer conflicts <a href="https://github.com/locationtech/geowave/pull/1694">#1694</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>Move geotime index builders to an API package <a href="https://github.com/locationtech/geowave/pull/1693">#1693</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
@@ -494,7 +495,6 @@
 <li>Update “current” docs to 0.9.7 <a href="https://github.com/locationtech/geowave/pull/1427">#1427</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>removing outdated code <a href="https://github.com/locationtech/geowave/pull/1425">#1425</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>refactored mil.nga.giat to org.locationtech <a href="https://github.com/locationtech/geowave/pull/1420">#1420</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
-<li>catch exceptions in gt canprocess <a href="https://github.com/locationtech/geowave/pull/1418">#1418</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>remove xuggle repo <a href="https://github.com/locationtech/geowave/pull/1417">#1417</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>spatial join patch. <a href="https://github.com/locationtech/geowave/pull/1416">#1416</a> (<a href="https://github.com/JWileczek">JWileczek</a>)</li>
 </ul>
@@ -509,6 +509,7 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>catch exceptions in gt canprocess <a href="https://github.com/locationtech/geowave/pull/1418">#1418</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>update emr accumulo script to 1.9.2 <a href="https://github.com/locationtech/geowave/pull/1415">#1415</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>changed periodicity for unbounded crs <a href="https://github.com/locationtech/geowave/pull/1414">#1414</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Updated QuickStart Guide <a href="https://github.com/locationtech/geowave/pull/1413">#1413</a> (<a href="https://github.com/emacthecav">emacthecav</a>)</li>
@@ -704,7 +705,6 @@
 <li>Jupyter notebook updates + start at cluster creation <a href="https://github.com/locationtech/geowave/pull/1210">#1210</a> (<a href="https://github.com/JWileczek">JWileczek</a>)</li>
 <li>Modified geowave tools script <a href="https://github.com/locationtech/geowave/pull/1209">#1209</a> (<a href="https://github.com/srinivasreddyv2">srinivasreddyv2</a>)</li>
 <li>Added REST services that leverage the CLI <a href="https://github.com/locationtech/geowave/pull/1207">#1207</a> (<a href="https://github.com/emacthecav">emacthecav</a>)</li>
-<li>Added new REST services leveraging CLI <a href="https://github.com/locationtech/geowave/pull/1205">#1205</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Changing error <a href="https://github.com/locationtech/geowave/pull/1202">#1202</a> (<a href="https://github.com/ayk33">ayk33</a>)</li>
 <li>Addressed Threadfix issues <a href="https://github.com/locationtech/geowave/pull/1201">#1201</a> (<a href="https://github.com/mawhitby">mawhitby</a>)</li>
 <li>Treadfix issues <a href="https://github.com/locationtech/geowave/pull/1199">#1199</a> (<a href="https://github.com/mcarrier7">mcarrier7</a>)</li>
