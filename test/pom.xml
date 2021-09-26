@@ -1,12 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-parent</artifactId>
 		<groupId>org.locationtech.geowave</groupId>
 		<relativePath>../</relativePath>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>2.0.0</version>
 	</parent>
 	<properties>
 		<gdal.dir>${project.build.directory}/temp/gdal</gdal.dir>
@@ -716,13 +714,10 @@
 								<configuration>
 									<tasks xmlns:jacoco="antlib:org.jacoco.ant">
 										<mkdir dir="${project.reporting.outputDirectory}" />
-										<taskdef uri="antlib:org.jacoco.ant"
-											resource="org/jacoco/ant/antlib.xml"
-											classpathref="maven.plugin.classpath" />
+										<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml" classpathref="maven.plugin.classpath" />
 										<jacoco:report>
 											<executiondata>
-												<fileset dir="../"
-													includes="**/coverage-reports/*.exec" />
+												<fileset dir="../" includes="**/coverage-reports/*.exec" />
 											</executiondata>
 
 											<structure name="GeoWave">
@@ -730,13 +725,11 @@
 													<fileset dir="../" includes="**/target/classes/**" />
 												</classfiles>
 												<sourcefiles>
-													<fileset dir="../"
-														includes="**/src/main/java/**,**/src/main/scala/**" />
+													<fileset dir="../" includes="**/src/main/java/**,**/src/main/scala/**" />
 												</sourcefiles>
 											</structure>
 
-											<xml
-												destfile="${project.reporting.outputDirectory}/jacoco.xml" />
+											<xml destfile="${project.reporting.outputDirectory}/jacoco.xml" />
 										</jacoco:report>
 									</tasks>
 								</configuration>
