@@ -33,11 +33,13 @@ public class Landsat8BasicCommandLineOptions {
 
   @Parameter(
       names = "--sincelastrun",
+      arity = 1,
       description = "An option to check the scenes list from the workspace and if it exists, to only ingest data since the last scene.")
   private boolean onlyScenesSinceLastRun;
 
   @Parameter(
       names = "--usecachedscenes",
+      arity = 1,
       description = "An option to run against the existing scenes catalog in the workspace directory if it exists.")
   private boolean useCachedScenes;
 
@@ -55,6 +57,7 @@ public class Landsat8BasicCommandLineOptions {
 
   @Parameter(
       names = "--nbestperspatial",
+      arity = 1,
       description = "A boolean flag, when applied with --nbestscenes or --nbestbands will aggregate scenes and/or bands by path/row")
   private boolean nBestPerSpatial;
 

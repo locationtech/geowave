@@ -52,7 +52,7 @@ We can now see what Landsat 8 data is available for our area of interest.
 
 [source, bash]
 ----
-$ geowave util landsat analyze --nbestperspatial --nbestscenes 1 --usecachedscenes --cql "BBOX(shape,13.0535,52.3303,13.7262,52.6675) AND band='B8' AND cloudCover>0" -ws ./landsat
+$ geowave util landsat analyze --nbestperspatial true --nbestscenes 1 --usecachedscenes true --cql "BBOX(shape,13.0535,52.3303,13.7262,52.6675) AND band='B8' AND cloudCover>0" -ws ./landsat
 ----
 
 This command tells GeoWave to analyze the B8 band of Landsat raster data over a bounding box that roughly surrounds Berlin, Germany.  It prints out aggregate statistics for the area of interest, including the average cloud cover, date range, number of scenes, and the size of the data.  Data for this operation is written to the `landsat` directory (specified by the `-ws` option), which can be used by the ingest step.
@@ -63,7 +63,7 @@ Now that we have analyzed the available data, we are ready to ingest it into our
 
 [source, bash]
 ----
-$ geowave util landsat ingest --nbestperspatial --nbestscenes 1 --usecachedscenes --cql "BBOX(shape,13.0535,52.3303,13.7262,52.6675) AND band='B8' AND cloudCover>0" --crop --retainimages -ws ./landsat --vectorstore landsatvector --pyramid --coverage berlin_mosaic landsatraster spatial-idx
+$ geowave util landsat ingest --nbestperspatial true --nbestscenes 1 --usecachedscenes true --cql "BBOX(shape,13.0535,52.3303,13.7262,52.6675) AND band='B8' AND cloudCover>0" --crop true --retainimages true -ws ./landsat --vectorstore landsatvector --pyramid true --coverage berlin_mosaic landsatraster spatial-idx
 ----
 
 There is a lot to this command, but you'll see that it's quite similar to the analyze command, but with some additional options.  The `--crop` option causes the raster data to be cropped to our CQL bounding box. The `--vectorstore landsatvector` option specifies the data store to put the vector data (scene and band information). The `--pyramid` option tells GeoWave to create an image pyramid for the raster, this is used for more efficient rendering at different zoom levels. The `--coverage berlin_mosaic` option tells GeoWave to use `berlin_mosaic` as the type name for the raster data.  Finally, we specify the output data store for the raster, and the index to store it on.
