@@ -15,24 +15,27 @@ import com.beust.jcommander.converters.IntegerConverter;
 public class Landsat8RasterIngestCommandLineOptions {
   @Parameter(
       names = "--histogram",
+      arity = 1,
       description = "An option to store the histogram of the values of the coverage so that histogram equalization will be performed")
-  private boolean createHistogram = false;
+  protected boolean histogram = false;
 
   @Parameter(
       names = "--pyramid",
+      arity = 1,
       description = "An option to store an image pyramid for the coverage")
-  private boolean createPyramid = false;
+  protected boolean pyramid = false;
 
   @Parameter(
       names = "--retainimages",
+      arity = 1,
       description = "An option to keep the images that are ingested in the local workspace directory.  By default it will delete the local file after it is ingested successfully.")
-  private boolean retainImages = false;
+  protected boolean retainimages = false;
 
   @Parameter(
       names = "--tilesize",
       description = "The option to set the pixel size for each tile stored in GeoWave. The default is "
           + RasterDataAdapter.DEFAULT_TILE_SIZE)
-  private int tileSize = RasterDataAdapter.DEFAULT_TILE_SIZE;
+  protected int tilesize = RasterDataAdapter.DEFAULT_TILE_SIZE;
 
   @Parameter(
       names = "--coverage",
@@ -41,7 +44,7 @@ public class Landsat8RasterIngestCommandLineOptions {
           + "}_${"
           + BandFeatureIterator.BAND_ATTRIBUTE_NAME
           + "}'.  If ${band} is unused in the coverage name, all bands will be merged together into the same coverage.")
-  private String coverageName =
+  protected String coverage =
       "${"
           + SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME
           + "}_${"
@@ -51,40 +54,42 @@ public class Landsat8RasterIngestCommandLineOptions {
   @Parameter(
       names = "--converter",
       description = "Prior to ingesting an image, this converter will be used to massage the data. The default is not to convert the data.")
-  private String coverageConverter;
+  protected String coverageConverter;
 
   @Parameter(
       names = "--subsample",
       description = "Subsample the image prior to ingest by the scale factor provided.  The scale factor should be an integer value greater than 1.",
       converter = IntegerConverter.class)
-  private int scale = 1;
+  protected int scale = 1;
 
   @Parameter(
       names = "--crop",
+      arity = 1,
       description = "Use the spatial constraint provided in CQL to crop the image.  If no spatial constraint is provided, this will not have an effect.")
-  private boolean cropToSpatialConstraint;
+  protected boolean cropToSpatialConstraint;
 
   @Parameter(
       names = "--skipMerge",
+      arity = 1,
       description = "By default the ingest will automerge overlapping tiles as a post-processing optimization step for efficient retrieval, but this will skip the merge process")
-  private boolean skipMerge;
+  protected boolean skipMerge;
 
   public Landsat8RasterIngestCommandLineOptions() {}
 
   public boolean isCreateHistogram() {
-    return createHistogram;
+    return histogram;
   }
 
   public boolean isCreatePyramid() {
-    return createPyramid;
+    return pyramid;
   }
 
   public boolean isRetainImages() {
-    return retainImages;
+    return retainimages;
   }
 
   public String getCoverageName() {
-    return coverageName;
+    return coverage;
   }
 
   public String getCoverageConverter() {
@@ -95,13 +100,13 @@ public class Landsat8RasterIngestCommandLineOptions {
     // technically the coverage will be per band if it contains any of the
     // band attribute names, but realistically the band name should be the
     // only one used
-    return coverageName.contains("${" + BandFeatureIterator.BAND_ATTRIBUTE_NAME + "}")
-        || coverageName.contains("${" + BandFeatureIterator.BAND_DOWNLOAD_ATTRIBUTE_NAME + "}")
-        || coverageName.contains("${" + BandFeatureIterator.SIZE_ATTRIBUTE_NAME + "}");
+    return coverage.contains("${" + BandFeatureIterator.BAND_ATTRIBUTE_NAME + "}")
+        || coverage.contains("${" + BandFeatureIterator.BAND_DOWNLOAD_ATTRIBUTE_NAME + "}")
+        || coverage.contains("${" + BandFeatureIterator.SIZE_ATTRIBUTE_NAME + "}");
   }
 
   public int getTileSize() {
-    return tileSize;
+    return tilesize;
   }
 
   public boolean isSubsample() {
@@ -117,23 +122,23 @@ public class Landsat8RasterIngestCommandLineOptions {
   }
 
   public void setCreateHistogram(final boolean createHistogram) {
-    this.createHistogram = createHistogram;
+    this.histogram = createHistogram;
   }
 
   public void setCreatePyramid(final boolean createPyramid) {
-    this.createPyramid = createPyramid;
+    this.pyramid = createPyramid;
   }
 
   public void setRetainImages(final boolean retainImages) {
-    this.retainImages = retainImages;
+    this.retainimages = retainImages;
   }
 
   public void setTileSize(final int tileSize) {
-    this.tileSize = tileSize;
+    this.tilesize = tileSize;
   }
 
   public void setCoverageName(final String coverageName) {
-    this.coverageName = coverageName;
+    this.coverage = coverageName;
   }
 
   public void setCoverageConverter(final String coverageConverter) {

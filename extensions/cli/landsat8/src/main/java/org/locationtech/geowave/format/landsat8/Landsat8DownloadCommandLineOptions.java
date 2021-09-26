@@ -13,16 +13,17 @@ import com.beust.jcommander.Parameter;
 public class Landsat8DownloadCommandLineOptions {
   @Parameter(
       names = "--overwrite",
+      arity = 1,
       description = "An option to overwrite images that are ingested in the local workspace directory.  By default it will keep an existing image rather than downloading it again.")
-  private boolean overwriteIfExists;
+  protected boolean overwrite;
 
   public Landsat8DownloadCommandLineOptions() {}
 
   public boolean isOverwriteIfExists() {
-    return overwriteIfExists;
+    return overwrite;
   }
 
-  public void setOverwriteIfExists(final boolean overwriteIfExists) {
-    this.overwriteIfExists = overwriteIfExists;
+  public void setOverwriteIfExists(final boolean overwrite) {
+    this.overwrite = overwrite;
   }
 }
