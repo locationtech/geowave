@@ -71,7 +71,7 @@ This command tells GeoWave to select all attributes from the `gdeltevent` type i
 +-------------------------+-----------+------------------------------+----------+-----------+----------------+----------------+-------------+-------------------------------------------------------------------------------------------------------+
 ----
 
-We can see right away that these results are tagged with the country code `EZ` which falls under Czech Republic.  Since our area of interest is around Germany, perhaps we want to only see events that are tagged with the `GM` country code.  We can do this by adding a CQL filter to the query.
+We can see right away that these results are tagged with the country code `EZ` which falls under Czech Republic.  Since our area of interest is around Germany, perhaps we want to only see events that are tagged with the `GM` country code.  We can do this by adding a WHERE clause to the query.
 
 [source, bash]
 ----
