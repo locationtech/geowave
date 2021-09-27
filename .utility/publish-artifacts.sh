@@ -16,7 +16,7 @@ if ! curl --head --silent --fail  https://oss.sonatype.org/service/local/reposit
     popd
 fi
 echo -e "Deploying geowave artifacts..."
-mvn deploy --settings .utility/.maven.xml -DskipTests -Dspotbugs.skip -B -U -Prelease
+# mvn deploy --settings .utility/.maven.xml -DskipTests -Dspotbugs.skip -B -U -Prelease
 
 # Get the version from the build.properties file
 filePath=deploy/target/classes/build.properties
