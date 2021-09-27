@@ -19,8 +19,11 @@ This command ingests data from a Kafka topic into GeoWave.
 [[ingest-kafkaToGW-options]]
 ==== OPTIONS
 
+*--bootstrapServers* _<brokers>_::
+  This is for bootstrapping and the producer will only use it for getting metadata (topics, partitions and replicas). The socket connections for sending the actual data will be established based on the broker information returned in the metadata. The format is `host1:port1,host2:port2`, and the list can be a subset of brokers or a VIP pointing to a subset of brokers.
+
 *--autoOffsetReset* _<offset>_::
-  What to do when there is no initial offset in ZooKeeper or if an offset is out of range. If `smallest` is used, automatically reset the offset to the smallest offset.  If `largest` is used, automatically reset the offset to the largest offset.  Otherwise, throw an exception to the consumer.
+  What to do when there is no initial offset in ZooKeeper or if an offset is out of range. If `earliest` is used, automatically reset the offset to the smallest offset.  If `latest` is used, automatically reset the offset to the largest offset. If `none` is used, don't reset the offset. Otherwise, throw an exception to the consumer.
 
 *--batchSize* _<size>_::
   The data will automatically flush after this number of entries.  Default is 10,000.
@@ -28,7 +31,7 @@ This command ingests data from a Kafka topic into GeoWave.
 *--consumerTimeoutMs* _<timeout>_::
   By default, this value is -1 and a consumer blocks indefinitely if no new message is available for consumption. By setting the value to a positive integer, a timeout exception is thrown to the consumer if no message is available for consumption after the specified timeout value.
 
-*--fetchMessageMaxBytes* _<bytes>_::
+*--maxPartitionFetchBytes* _<bytes>_::
   The number of bytes of messages to attempt to fetch for each topic-partition in each fetch request. These bytes will be read into memory for each partition, so this helps control the memory used by the consumer. The fetch request size must be at least as large as the maximum message size the server allows or else it is possible for the producer to send messages larger than the consumer can fetch.
 
 *--groupId* _<id>_::
@@ -47,10 +50,16 @@ This command ingests data from a Kafka topic into GeoWave.
   Explicitly set the ingest formats by name (or multiple comma-delimited formats).  If not set, all available ingest formats will be used.
 
 *-v, --visibility* _<visibility>_::
-  The visibility of the data ingested.  Default is `public`.
+  The global visibility of the data ingested (optional; if not specified, the data will be unrestricted)
+  
+*-fv, --fieldVisibility* _<visibility>_::
+  Specify the visibility of a specific field in the format `<fieldName>:<visibility>`.  This option can be specified multiple times for different fields.
 
-*--zookeeperConnect* _<host>_::
-  Specifies the ZooKeeper connection string in the form `hostname:port` where host and port are the host and port of a ZooKeeper server. To allow connecting through other ZooKeeper nodes when that ZooKeeper machine is down you can also specify multiple hosts in the form `hostname1:port1,hostname2:port2,hostname3:port3`.
+*-va, --visibilityAttribute* _<field>_::
+  Specify a field that contains visibility information for the whole row.  If specified, any field visibilities defined by `-fv` will be ignored.
+  
+*--jsonVisibilityAttribute*::
+  If specified, the value of the visibility field defined by `-va` will be treated as a JSON object with keys that represent fields and values that represent their visibility.
 
 When the `avro` format is used, additional options are:
 

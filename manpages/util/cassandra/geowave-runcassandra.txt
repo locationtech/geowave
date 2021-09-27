@@ -14,26 +14,19 @@ geowave-util-cassandra-run - Runs a standalone Cassandra instance for test and d
 [[util-cassandra-run-description]]
 ==== DESCRIPTION
 
-This command runs a standalone Cassandra instance, which can be used locally for testing and debugging GeoWave, without needing to set up a full instance.
+This command runs a standalone Cassandra instance, which can be used locally for testing and debugging GeoWave, without needing to set up a full instance.  It will use the current working directory for its file store unless overridden by a yaml configuration.
 
 [[util-cassandra-run-options]]
 ==== OPTIONS
-
-*-c, --clusterSize* _<size>_::
-  The number of individual Cassandra processes to run.  Default is 1.
-
-*-d, --directory* _<path>_::
-  The directory to use for Cassandra.
+*-c, --config* _<path>_::
+  Optionally, a path to a valid cassandra YAML for configuration.
   
 *-i, --interactive* _<enabled>_::
   Whether to prompt for user input to end the process. Default is `true`.
-  
-*-m, --maxMemoryMB* _<size>_::
-  The maximum memory to use in MB.  Default is 512.
 
 [[util-cassandra-run-examples]]
 ==== EXAMPLES
 
 Run a standalone Cassandra instance:
 
-  geowave util cassandra run -d .
+  geowave util cassandra run

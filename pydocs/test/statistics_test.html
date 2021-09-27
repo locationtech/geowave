@@ -1,0 +1,2653 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>pygw.test.statistics_test API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>pygw.test.statistics_test</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">#
+# Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
+
+#
+# See the NOTICE file distributed with this work for additional information regarding copyright
+# ownership. All rights reserved. This program and the accompanying materials are made available
+# under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+# available at http://www.apache.org/licenses/LICENSE-2.0.txt
+# ===============================================================================================
+from datetime import datetime
+from functools import reduce
+
+from pygw.index import SpatialIndexBuilder
+
+from .conftest import POINT_TYPE_ADAPTER, POINT_TYPE_NAME, POINT_NUMBER_FIELD, POINT_GEOMETRY_FIELD, POINT_TIME_FIELD, \
+    POINT_SHAPE_FIELD, POINT_COLOR_FIELD, results_as_list
+from .conftest import write_test_data, write_test_data_offset
+from ..base import Interval, Envelope
+
+from shapely.geometry import Polygon
+from ..base.range import Range
+from ..query.statistics.statistic_query_builder import DataTypeStatisticQueryBuilder
+from ..query.statistics.statistic_query_builder import FieldStatisticQueryBuilder
+from ..query.statistics.statistic_query_builder import IndexStatisticQueryBuilder
+from ..query.statistics.statistic_query_builder import StatisticQueryBuilder
+from ..query.statistics.statistic_query import StatisticQuery
+from ..statistics import DataTypeStatisticType, FieldStatisticType, IndexStatisticType, BinConstraints, StatisticValue
+from ..statistics.binning_strategy import CompositeBinningStrategy, DataTypeBinningStrategy, \
+    FieldValueBinningStrategy, NumericRangeFieldValueBinningStrategy, TimeRangeFieldValueBinningStrategy, \
+    PartitionBinningStrategy, SpatialFieldValueBinningStrategy
+from ..statistics.data_type import CountStatistic
+from ..statistics.field import BloomFilterStatistic, BoundingBoxStatistic, CountMinSketchStatistic, \
+    FixedBinNumericHistogramStatistic, HyperLogLogStatistic, NumericHistogramStatistic, NumericMeanStatistic, \
+    NumericRangeStatistic, NumericStatsStatistic, TimeRangeStatistic
+from ..statistics.field.bloom_filter_statistic import BloomFilter
+from ..statistics.field.count_min_sketch_statistic import CountMinSketch
+from ..statistics.field.fixed_bin_numeric_histogram_statistic import FixedBinNumericHistogram
+from ..statistics.field.hyper_log_log_statistic import HyperLogLogPlus
+from ..statistics.field.numeric_histogram_statistic import NumericHistogram
+from ..statistics.field.numeric_stats_statistic import Stats
+from ..statistics.index import DifferingVisibilityCountStatistic, DuplicateEntryCountStatistic, \
+    FieldVisibilityCountStatistic, MaxDuplicatesStatistic, PartitionsStatistic, RowRangeHistogramStatistic, \
+    IndexMetaDataSetStatistic
+
+INTERNAL_TAG = &#39;internal&#39;
+TEST_TAG = &#39;test&#39;
+TEST_INDEX = &#39;spatial_index&#39;
+
+
+def test_statistic_query(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+    binning_strategy = FieldValueBinningStrategy([POINT_COLOR_FIELD, POINT_SHAPE_FIELD])
+    count_stat = CountStatistic()
+    count_stat.set_tag(TEST_TAG)
+    count_stat.set_type_name(POINT_TYPE_NAME)
+    count_stat.set_binning_strategy(binning_strategy)
+    test_ds.add_statistic(count_stat)
+    write_test_data(test_ds, index)
+
+    # when
+    stat_query_builder = StatisticQueryBuilder.new_builder(CountStatistic.STATS_TYPE)
+    stat_query_builder.type_name(POINT_TYPE_NAME)
+    stat_query_builder.tag(TEST_TAG)
+    stat_query_builder.bin_constraints(BinConstraints.of_prefix(b&#39;BLUE&#39;))
+    result = results_as_list(test_ds.query_statistics(stat_query_builder.build()))
+
+    # then
+    assert len(result) == 4
+    merged = None
+    for stat_value in result:
+        if merged is None:
+            merged = stat_value
+        else:
+            merged.merge(stat_value)
+        assert isinstance(stat_value, StatisticValue)
+        assert stat_value.get_value() == 30
+        assert isinstance(stat_value.get_statistic(), CountStatistic)
+    assert merged.get_value() == 120
+
+    # when
+    aggregated_result = test_ds.aggregate_statistics(stat_query_builder.build())
+
+    # then
+    assert isinstance(aggregated_result, StatisticValue)
+    assert aggregated_result.get_value() == 120
+
+
+def test_query_transform(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+    numeric_range_stat = NumericRangeStatistic()
+    numeric_range_stat.set_tag(TEST_TAG)
+    numeric_range_stat.set_type_name(POINT_TYPE_NAME)
+    numeric_range_stat.set_field_name(POINT_NUMBER_FIELD)
+    test_ds.add_statistic(numeric_range_stat)
+    write_test_data(test_ds, index)
+
+    # when
+    stat_query_builder = StatisticQueryBuilder.new_builder(NumericRangeStatistic.STATS_TYPE)
+    stat_query_builder.type_name(POINT_TYPE_NAME)
+    stat_query_builder.field_name(POINT_NUMBER_FIELD)
+    stat_query_builder.tag(TEST_TAG)
+    result = results_as_list(test_ds.query_statistics(stat_query_builder.build()))
+
+    # then
+    assert len(result) == 1
+    assert isinstance(result[0], StatisticValue)
+    value = result[0].get_value()
+    assert isinstance(value, Range)
+    assert value.get_minimum() == -180
+    assert value.get_maximum() == 179
+
+    # when
+    aggregated_result = test_ds.aggregate_statistics(stat_query_builder.build())
+
+    # then
+    assert isinstance(aggregated_result, StatisticValue)
+    value = aggregated_result.get_value()
+    assert isinstance(value, Range)
+    assert value.get_minimum() == -180
+    assert value.get_maximum() == 179
+
+
+def test_statistic_query_builders():
+    # exercise all methods to make sure their java connections are valid
+    index_query_builder = StatisticQueryBuilder.new_builder(DifferingVisibilityCountStatistic.STATS_TYPE)
+    assert isinstance(index_query_builder, IndexStatisticQueryBuilder)
+    index_query_builder.index_name(&#39;idx&#39;)
+    index_query_builder.tag(&#39;test&#39;)
+    index_query_builder.add_authorization(&#39;auth1&#39;)
+    index_query_builder.authorizations([&#39;auth1&#39;, &#39;auth2&#39;])
+    index_query_builder.internal()
+    query = index_query_builder.build()
+    assert isinstance(query, StatisticQuery)
+
+    data_type_query_builder = StatisticQueryBuilder.new_builder(CountStatistic.STATS_TYPE)
+    assert isinstance(data_type_query_builder, DataTypeStatisticQueryBuilder)
+    data_type_query_builder.type_name(POINT_TYPE_NAME)
+    query = data_type_query_builder.build()
+    assert isinstance(query, StatisticQuery)
+
+    field_query_builder = StatisticQueryBuilder.new_builder(BloomFilterStatistic.STATS_TYPE)
+    assert isinstance(field_query_builder, FieldStatisticQueryBuilder)
+    field_query_builder.type_name(POINT_TYPE_NAME)
+    field_query_builder.field_name(POINT_NUMBER_FIELD)
+    query = field_query_builder.build()
+    assert isinstance(query, StatisticQuery)
+
+    statistic_query_builder = StatisticQueryBuilder.count()
+    assert isinstance(statistic_query_builder, DataTypeStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.bloom_filter()
+    assert isinstance(statistic_query_builder, FieldStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.bbox()
+    assert isinstance(statistic_query_builder, FieldStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.count_min_sketch()
+    assert isinstance(statistic_query_builder, FieldStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.fixed_bin_numeric_histogram()
+    assert isinstance(statistic_query_builder, FieldStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.hyper_log_log()
+    assert isinstance(statistic_query_builder, FieldStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.numeric_histogram()
+    assert isinstance(statistic_query_builder, FieldStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.numeric_mean()
+    assert isinstance(statistic_query_builder, FieldStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.numeric_range()
+    assert isinstance(statistic_query_builder, FieldStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.differing_visibility_count()
+    assert isinstance(statistic_query_builder, IndexStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.duplicate_entry_count()
+    assert isinstance(statistic_query_builder, IndexStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.field_visibility_count()
+    assert isinstance(statistic_query_builder, IndexStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.index_meta_data_set()
+    assert isinstance(statistic_query_builder, IndexStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.max_duplicates()
+    assert isinstance(statistic_query_builder, IndexStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.partitions()
+    assert isinstance(statistic_query_builder, IndexStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.row_range_histogram()
+    assert isinstance(statistic_query_builder, IndexStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.numeric_stats()
+    assert isinstance(statistic_query_builder, FieldStatisticQueryBuilder)
+
+
+def test_count_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    count_stat = CountStatistic()
+    count_stat.set_tag(TEST_TAG)
+    count_stat.set_type_name(POINT_TYPE_NAME)
+    test_ds.add_statistic(count_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    count_stat = test_ds.get_data_type_statistic(CountStatistic.STATS_TYPE, POINT_TYPE_NAME, TEST_TAG)
+    assert isinstance(count_stat, CountStatistic)
+    assert count_stat.get_tag() == TEST_TAG
+    assert count_stat.get_type_name() == POINT_TYPE_NAME
+    assert count_stat.get_description() is not None
+    assert count_stat.get_binning_strategy() is None
+    assert isinstance(count_stat.get_statistic_type(), DataTypeStatisticType)
+    assert count_stat.get_statistic_type().get_string() == &#39;COUNT&#39;
+    assert test_ds.get_statistic_value(count_stat) == 360
+
+    # test alternate constructors
+    count_stat = CountStatistic(POINT_TYPE_NAME)
+    count_stat.set_internal()
+    assert count_stat.get_type_name() == POINT_TYPE_NAME
+    assert count_stat.get_tag() == INTERNAL_TAG
+
+
+def test_bloom_filter_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    bloom_filter_stat = BloomFilterStatistic()
+    bloom_filter_stat.set_tag(TEST_TAG)
+    bloom_filter_stat.set_type_name(POINT_TYPE_NAME)
+    bloom_filter_stat.set_field_name(POINT_NUMBER_FIELD)
+    test_ds.add_statistic(bloom_filter_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    bloom_filter_stat = test_ds.get_field_statistic(
+        BloomFilterStatistic.STATS_TYPE,
+        POINT_TYPE_NAME,
+        POINT_NUMBER_FIELD,
+        TEST_TAG)
+    assert isinstance(bloom_filter_stat, BloomFilterStatistic)
+    assert bloom_filter_stat.get_tag() == TEST_TAG
+    assert bloom_filter_stat.get_type_name() == POINT_TYPE_NAME
+    assert bloom_filter_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert bloom_filter_stat.get_description() is not None
+    assert bloom_filter_stat.get_binning_strategy() is None
+    assert isinstance(bloom_filter_stat.get_statistic_type(), FieldStatisticType)
+    assert bloom_filter_stat.get_statistic_type().get_string() == &#39;BLOOM_FILTER&#39;
+    bloom_filter = test_ds.get_statistic_value(bloom_filter_stat)
+    assert isinstance(bloom_filter, BloomFilter)
+    assert bloom_filter.might_contain(&#39;-180.0&#39;)
+    assert bloom_filter.might_contain(&#39;179.0&#39;)
+    assert not bloom_filter.might_contain(&#39;garbage&#39;)
+    assert bloom_filter.approximate_element_count() &gt; 300
+    assert bloom_filter.expected_fpp() is not None
+
+    # test alternate constructors
+    bloom_filter_stat = BloomFilterStatistic(POINT_TYPE_NAME, POINT_NUMBER_FIELD)
+    bloom_filter_stat.set_internal()
+    assert bloom_filter_stat.get_type_name() == POINT_TYPE_NAME
+    assert bloom_filter_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert bloom_filter_stat.get_tag() == INTERNAL_TAG
+
+
+def test_bounding_box_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    bounding_box_stat = BoundingBoxStatistic()
+    bounding_box_stat.set_tag(TEST_TAG)
+    bounding_box_stat.set_type_name(POINT_TYPE_NAME)
+    bounding_box_stat.set_field_name(POINT_GEOMETRY_FIELD)
+    test_ds.add_statistic(bounding_box_stat)
+    write_test_data_offset(test_ds, index)
+
+    # then
+    bounding_box_stat = test_ds.get_field_statistic(
+        BoundingBoxStatistic.STATS_TYPE,
+        POINT_TYPE_NAME,
+        POINT_GEOMETRY_FIELD,
+        TEST_TAG)
+    assert isinstance(bounding_box_stat, BoundingBoxStatistic)
+    assert bounding_box_stat.get_tag() == TEST_TAG
+    assert bounding_box_stat.get_type_name() == POINT_TYPE_NAME
+    assert bounding_box_stat.get_field_name() == POINT_GEOMETRY_FIELD
+    assert bounding_box_stat.get_description() is not None
+    assert bounding_box_stat.get_binning_strategy() is None
+    assert isinstance(bounding_box_stat.get_statistic_type(), FieldStatisticType)
+    assert bounding_box_stat.get_statistic_type().get_string() == &#39;BOUNDING_BOX&#39;
+    bounding_box = test_ds.get_statistic_value(bounding_box_stat)
+    assert isinstance(bounding_box, Envelope)
+    assert bounding_box.get_min_x() == -179.5
+    assert bounding_box.get_min_y() == -89.5
+    assert bounding_box.get_max_x() == 179.5
+    assert bounding_box.get_max_y() == 89.5
+
+    # test alternate constructors
+    bounding_box_stat = BoundingBoxStatistic(POINT_TYPE_NAME, POINT_GEOMETRY_FIELD)
+    bounding_box_stat.set_internal()
+    assert bounding_box_stat.get_type_name() == POINT_TYPE_NAME
+    assert bounding_box_stat.get_field_name() == POINT_GEOMETRY_FIELD
+    assert bounding_box_stat.get_tag() == INTERNAL_TAG
+
+
+def test_count_min_sketch_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    count_min_sketch_stat = CountMinSketchStatistic()
+    count_min_sketch_stat.set_tag(TEST_TAG)
+    count_min_sketch_stat.set_type_name(POINT_TYPE_NAME)
+    count_min_sketch_stat.set_field_name(POINT_NUMBER_FIELD)
+    count_min_sketch_stat.set_error_factor(0.002)
+    count_min_sketch_stat.set_probability_of_correctness(0.8)
+    test_ds.add_statistic(count_min_sketch_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    count_min_sketch_stat = test_ds.get_field_statistic(
+        CountMinSketchStatistic.STATS_TYPE,
+        POINT_TYPE_NAME,
+        POINT_NUMBER_FIELD,
+        TEST_TAG)
+    assert isinstance(count_min_sketch_stat, CountMinSketchStatistic)
+    assert count_min_sketch_stat.get_tag() == TEST_TAG
+    assert count_min_sketch_stat.get_type_name() == POINT_TYPE_NAME
+    assert count_min_sketch_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert count_min_sketch_stat.get_error_factor() == 0.002
+    assert count_min_sketch_stat.get_probability_of_correctness() == 0.8
+    assert count_min_sketch_stat.get_description() is not None
+    assert count_min_sketch_stat.get_binning_strategy() is None
+    assert isinstance(count_min_sketch_stat.get_statistic_type(), FieldStatisticType)
+    assert count_min_sketch_stat.get_statistic_type().get_string() == &#39;COUNT_MIN_SKETCH&#39;
+    count_min_sketch = test_ds.get_statistic_value(count_min_sketch_stat)
+    assert isinstance(count_min_sketch, CountMinSketch)
+    assert count_min_sketch.get_relative_error() == 0.002
+    assert count_min_sketch.get_confidence() &gt; 0.5
+    assert count_min_sketch.estimate_count(&#39;90.0&#39;) == 1
+
+    # test alternate constructors
+    count_min_sketch = CountMinSketchStatistic(POINT_TYPE_NAME, POINT_GEOMETRY_FIELD, 0.002, 0.8)
+    count_min_sketch.set_internal()
+    assert count_min_sketch.get_type_name() == POINT_TYPE_NAME
+    assert count_min_sketch.get_field_name() == POINT_GEOMETRY_FIELD
+    assert count_min_sketch.get_error_factor() == 0.002
+    assert count_min_sketch.get_probability_of_correctness() == 0.8
+    assert count_min_sketch.get_tag() == INTERNAL_TAG
+
+
+def test_fixed_bin_numeric_histogram(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    fixed_bin_stat = FixedBinNumericHistogramStatistic()
+    fixed_bin_stat.set_tag(TEST_TAG)
+    fixed_bin_stat.set_type_name(POINT_TYPE_NAME)
+    fixed_bin_stat.set_field_name(POINT_NUMBER_FIELD)
+    fixed_bin_stat.set_num_bins(128)
+    fixed_bin_stat.set_min_value(-180.0)
+    fixed_bin_stat.set_max_value(180.0)
+    test_ds.add_statistic(fixed_bin_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    fixed_bin_stat = test_ds.get_field_statistic(
+        FixedBinNumericHistogramStatistic.STATS_TYPE,
+        POINT_TYPE_NAME,
+        POINT_NUMBER_FIELD,
+        TEST_TAG)
+    assert isinstance(fixed_bin_stat, FixedBinNumericHistogramStatistic)
+    assert fixed_bin_stat.get_tag() == TEST_TAG
+    assert fixed_bin_stat.get_type_name() == POINT_TYPE_NAME
+    assert fixed_bin_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert fixed_bin_stat.get_num_bins() == 128
+    assert fixed_bin_stat.get_min_value() == -180
+    assert fixed_bin_stat.get_max_value() == 180
+    assert fixed_bin_stat.get_description() is not None
+    assert fixed_bin_stat.get_binning_strategy() is None
+    assert isinstance(fixed_bin_stat.get_statistic_type(), FieldStatisticType)
+    assert fixed_bin_stat.get_statistic_type().get_string() == &#39;FIXED_BIN_NUMERIC_HISTOGRAM&#39;
+    histogram = test_ds.get_statistic_value(fixed_bin_stat)
+    assert isinstance(histogram, FixedBinNumericHistogram)
+    assert histogram.get_num_bins() == 128
+    assert histogram.get_min_value() == -180
+    assert histogram.get_max_value() == 180
+    assert histogram.cdf(0) == 0.5
+    assert len(histogram.bin_quantiles(0)) == 0
+    assert histogram.quantile(0.0) == -180
+    assert 180 &lt; histogram.quantile(1.0) &lt; 185
+    assert histogram.sum(0) == 180
+    assert histogram.percent_population_over_range(-90, 0) == 0.25
+    assert histogram.total_sample_size() == 360
+    assert histogram.get_total_count() == 360
+    assert len(histogram.count(0)) == 0
+
+    # test alternate constructors
+    fixed_bin_stat = FixedBinNumericHistogramStatistic(POINT_TYPE_NAME, POINT_NUMBER_FIELD, 128, -180, 180)
+    fixed_bin_stat.set_internal()
+    assert fixed_bin_stat.get_type_name() == POINT_TYPE_NAME
+    assert fixed_bin_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert fixed_bin_stat.get_num_bins() == 128
+    assert fixed_bin_stat.get_min_value() == -180
+    assert fixed_bin_stat.get_max_value() == 180
+    assert fixed_bin_stat.get_tag() == INTERNAL_TAG
+
+
+def test_hyper_log_log_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    hyper_log_log_stat = HyperLogLogStatistic()
+    hyper_log_log_stat.set_tag(TEST_TAG)
+    hyper_log_log_stat.set_type_name(POINT_TYPE_NAME)
+    hyper_log_log_stat.set_field_name(POINT_NUMBER_FIELD)
+    hyper_log_log_stat.set_precision(24)
+    test_ds.add_statistic(hyper_log_log_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    hyper_log_log_stat = test_ds.get_field_statistic(
+        HyperLogLogStatistic.STATS_TYPE,
+        POINT_TYPE_NAME,
+        POINT_NUMBER_FIELD,
+        TEST_TAG)
+    assert isinstance(hyper_log_log_stat, HyperLogLogStatistic)
+    assert hyper_log_log_stat.get_tag() == TEST_TAG
+    assert hyper_log_log_stat.get_type_name() == POINT_TYPE_NAME
+    assert hyper_log_log_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert hyper_log_log_stat.get_precision() == 24
+    assert hyper_log_log_stat.get_description() is not None
+    assert hyper_log_log_stat.get_binning_strategy() is None
+    assert isinstance(hyper_log_log_stat.get_statistic_type(), FieldStatisticType)
+    assert hyper_log_log_stat.get_statistic_type().get_string() == &#39;HYPER_LOG_LOG&#39;
+    hyper_log_log = test_ds.get_statistic_value(hyper_log_log_stat)
+    assert isinstance(hyper_log_log, HyperLogLogPlus)
+    assert 350 &lt; hyper_log_log.cardinality() &lt; 370
+
+    # test alternate constructors
+    fixed_bin_stat = HyperLogLogStatistic(POINT_TYPE_NAME, POINT_NUMBER_FIELD, 31)
+    fixed_bin_stat.set_internal()
+    assert fixed_bin_stat.get_type_name() == POINT_TYPE_NAME
+    assert fixed_bin_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert fixed_bin_stat.get_precision() == 31
+    assert fixed_bin_stat.get_tag() == INTERNAL_TAG
+
+
+def test_numeric_histogram_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    numeric_histogram_stat = NumericHistogramStatistic()
+    numeric_histogram_stat.set_tag(TEST_TAG)
+    numeric_histogram_stat.set_type_name(POINT_TYPE_NAME)
+    numeric_histogram_stat.set_field_name(POINT_NUMBER_FIELD)
+    numeric_histogram_stat.set_compression(80)
+    test_ds.add_statistic(numeric_histogram_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    numeric_histogram_stat = test_ds.get_field_statistic(
+        NumericHistogramStatistic.STATS_TYPE,
+        POINT_TYPE_NAME,
+        POINT_NUMBER_FIELD,
+        TEST_TAG)
+    assert isinstance(numeric_histogram_stat, NumericHistogramStatistic)
+    assert numeric_histogram_stat.get_tag() == TEST_TAG
+    assert numeric_histogram_stat.get_type_name() == POINT_TYPE_NAME
+    assert numeric_histogram_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert numeric_histogram_stat.get_compression() == 80
+    assert numeric_histogram_stat.get_description() is not None
+    assert numeric_histogram_stat.get_binning_strategy() is None
+    assert isinstance(numeric_histogram_stat.get_statistic_type(), FieldStatisticType)
+    assert numeric_histogram_stat.get_statistic_type().get_string() == &#39;NUMERIC_HISTOGRAM&#39;
+    histogram = test_ds.get_statistic_value(numeric_histogram_stat)
+    assert isinstance(histogram, NumericHistogram)
+    assert -182 &lt; histogram.get_min_value() &lt; -178
+    assert 178 &lt; histogram.get_max_value() &lt; 182
+    assert 0.48 &lt; histogram.cdf(0) &lt; 0.52
+    assert -182 &lt; histogram.quantile(0.0) &lt; -178
+    assert 178 &lt; histogram.quantile(1.0) &lt; 182
+    assert 178 &lt; histogram.sum(0) &lt; 182
+    assert histogram.get_total_count() == 360
+
+    # test alternate constructors
+    numeric_histogram_stat = NumericHistogramStatistic(POINT_TYPE_NAME, POINT_NUMBER_FIELD, 80)
+    numeric_histogram_stat.set_internal()
+    assert numeric_histogram_stat.get_type_name() == POINT_TYPE_NAME
+    assert numeric_histogram_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert numeric_histogram_stat.get_compression() == 80
+    assert numeric_histogram_stat.get_tag() == INTERNAL_TAG
+
+
+def test_numeric_mean_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    numeric_mean_stat = NumericMeanStatistic()
+    numeric_mean_stat.set_tag(TEST_TAG)
+    numeric_mean_stat.set_type_name(POINT_TYPE_NAME)
+    numeric_mean_stat.set_field_name(POINT_NUMBER_FIELD)
+    test_ds.add_statistic(numeric_mean_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    numeric_mean_stat = test_ds.get_field_statistic(
+        NumericMeanStatistic.STATS_TYPE,
+        POINT_TYPE_NAME,
+        POINT_NUMBER_FIELD,
+        TEST_TAG)
+    assert isinstance(numeric_mean_stat, NumericMeanStatistic)
+    assert numeric_mean_stat.get_tag() == TEST_TAG
+    assert numeric_mean_stat.get_type_name() == POINT_TYPE_NAME
+    assert numeric_mean_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert numeric_mean_stat.get_description() is not None
+    assert numeric_mean_stat.get_binning_strategy() is None
+    assert isinstance(numeric_mean_stat.get_statistic_type(), FieldStatisticType)
+    assert numeric_mean_stat.get_statistic_type().get_string() == &#39;NUMERIC_MEAN&#39;
+    assert test_ds.get_statistic_value(numeric_mean_stat) == -0.5  # Mean of values -180 to 179
+
+    # test alternate constructors
+    numeric_mean_stat = NumericMeanStatistic(POINT_TYPE_NAME, POINT_NUMBER_FIELD)
+    numeric_mean_stat.set_internal()
+    assert numeric_mean_stat.get_type_name() == POINT_TYPE_NAME
+    assert numeric_mean_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert numeric_mean_stat.get_tag() == INTERNAL_TAG
+
+
+def test_numeric_range_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    numeric_range_stat = NumericRangeStatistic()
+    numeric_range_stat.set_tag(TEST_TAG)
+    numeric_range_stat.set_type_name(POINT_TYPE_NAME)
+    numeric_range_stat.set_field_name(POINT_NUMBER_FIELD)
+    test_ds.add_statistic(numeric_range_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    numeric_range_stat = test_ds.get_field_statistic(
+        NumericRangeStatistic.STATS_TYPE,
+        POINT_TYPE_NAME,
+        POINT_NUMBER_FIELD,
+        TEST_TAG)
+    assert isinstance(numeric_range_stat, NumericRangeStatistic)
+    assert numeric_range_stat.get_tag() == TEST_TAG
+    assert numeric_range_stat.get_type_name() == POINT_TYPE_NAME
+    assert numeric_range_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert numeric_range_stat.get_description() is not None
+    assert numeric_range_stat.get_binning_strategy() is None
+    assert isinstance(numeric_range_stat.get_statistic_type(), FieldStatisticType)
+    assert numeric_range_stat.get_statistic_type().get_string() == &#39;NUMERIC_RANGE&#39;
+    numeric_range = test_ds.get_statistic_value(numeric_range_stat)
+    assert isinstance(numeric_range, Range)
+    assert numeric_range.get_minimum() == -180
+    assert numeric_range.get_maximum() == 179
+
+    # test alternate constructors
+    numeric_range_stat = NumericRangeStatistic(POINT_TYPE_NAME, POINT_NUMBER_FIELD)
+    numeric_range_stat.set_internal()
+    assert numeric_range_stat.get_type_name() == POINT_TYPE_NAME
+    assert numeric_range_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert numeric_range_stat.get_tag() == INTERNAL_TAG
+
+
+def test_numeric_stats_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    numeric_stats_stat = NumericStatsStatistic()
+    numeric_stats_stat.set_tag(TEST_TAG)
+    numeric_stats_stat.set_type_name(POINT_TYPE_NAME)
+    numeric_stats_stat.set_field_name(POINT_NUMBER_FIELD)
+    test_ds.add_statistic(numeric_stats_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    numeric_stats_stat = test_ds.get_field_statistic(
+        NumericStatsStatistic.STATS_TYPE,
+        POINT_TYPE_NAME,
+        POINT_NUMBER_FIELD,
+        TEST_TAG)
+    assert isinstance(numeric_stats_stat, NumericStatsStatistic)
+    assert numeric_stats_stat.get_tag() == TEST_TAG
+    assert numeric_stats_stat.get_type_name() == POINT_TYPE_NAME
+    assert numeric_stats_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert numeric_stats_stat.get_description() is not None
+    assert numeric_stats_stat.get_binning_strategy() is None
+    assert isinstance(numeric_stats_stat.get_statistic_type(), FieldStatisticType)
+    assert numeric_stats_stat.get_statistic_type().get_string() == &#39;NUMERIC_STATS&#39;
+    stats = test_ds.get_statistic_value(numeric_stats_stat)
+    assert isinstance(stats, Stats)
+    assert stats.count() == 360
+    assert stats.mean() == -0.5
+    assert stats.sum() == -180
+    assert 10799 &lt; stats.population_variance() &lt; 10801
+    assert 103 &lt; stats.population_standard_deviation() &lt; 105
+    assert 10829 &lt; stats.sample_variance() &lt; 10831
+    assert 103 &lt; stats.sample_standard_deviation() &lt; 105
+    assert stats.min() == -180
+    assert stats.max() == 179
+
+    # test alternate constructors
+    numeric_stats_stat = NumericStatsStatistic(POINT_TYPE_NAME, POINT_NUMBER_FIELD)
+    numeric_stats_stat.set_internal()
+    assert numeric_stats_stat.get_type_name() == POINT_TYPE_NAME
+    assert numeric_stats_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert numeric_stats_stat.get_tag() == INTERNAL_TAG
+
+
+def test_time_range_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    time_range_stat = TimeRangeStatistic()
+    time_range_stat.set_tag(TEST_TAG)
+    time_range_stat.set_type_name(POINT_TYPE_NAME)
+    time_range_stat.set_field_name(POINT_TIME_FIELD)
+    test_ds.add_statistic(time_range_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    time_range_stat = test_ds.get_field_statistic(
+        TimeRangeStatistic.STATS_TYPE,
+        POINT_TYPE_NAME,
+        POINT_TIME_FIELD,
+        TEST_TAG)
+    assert isinstance(time_range_stat, TimeRangeStatistic)
+    assert time_range_stat.get_tag() == TEST_TAG
+    assert time_range_stat.get_type_name() == POINT_TYPE_NAME
+    assert time_range_stat.get_field_name() == POINT_TIME_FIELD
+    assert time_range_stat.get_description() is not None
+    assert time_range_stat.get_binning_strategy() is None
+    assert isinstance(time_range_stat.get_statistic_type(), FieldStatisticType)
+    assert time_range_stat.get_statistic_type().get_string() == &#39;TIME_RANGE&#39;
+    time_range = test_ds.get_statistic_value(time_range_stat)
+    assert isinstance(time_range, Interval)
+    assert time_range.get_start() == datetime.utcfromtimestamp(-180)
+    assert time_range.get_end() == datetime.utcfromtimestamp(179)
+
+    # test alternate constructors
+    time_range_stat = TimeRangeStatistic(POINT_TYPE_NAME, POINT_TIME_FIELD)
+    time_range_stat.set_internal()
+    assert time_range_stat.get_type_name() == POINT_TYPE_NAME
+    assert time_range_stat.get_field_name() == POINT_TIME_FIELD
+    assert time_range_stat.get_tag() == INTERNAL_TAG
+
+
+def test_differing_visibility_count_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    differing_visibility_stat = DifferingVisibilityCountStatistic()
+    differing_visibility_stat.set_tag(TEST_TAG)
+    differing_visibility_stat.set_index_name(TEST_INDEX)
+    test_ds.add_statistic(differing_visibility_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    differing_visibility_stat = test_ds.get_index_statistic(
+        DifferingVisibilityCountStatistic.STATS_TYPE,
+        TEST_INDEX,
+        TEST_TAG)
+    assert isinstance(differing_visibility_stat, DifferingVisibilityCountStatistic)
+    assert differing_visibility_stat.get_tag() == TEST_TAG
+    assert differing_visibility_stat.get_index_name() == TEST_INDEX
+    assert differing_visibility_stat.get_description() is not None
+    assert differing_visibility_stat.get_binning_strategy() is None
+    assert isinstance(differing_visibility_stat.get_statistic_type(), IndexStatisticType)
+    assert differing_visibility_stat.get_statistic_type().get_string() == &#39;DIFFERING_VISIBILITY_COUNT&#39;
+    assert test_ds.get_statistic_value(differing_visibility_stat) == 0
+
+    # test alternate constructors
+    differing_visibility_stat = DifferingVisibilityCountStatistic(TEST_INDEX)
+    differing_visibility_stat.set_internal()
+    assert differing_visibility_stat.get_index_name() == TEST_INDEX
+    assert differing_visibility_stat.get_tag() == INTERNAL_TAG
+
+
+def test_duplicate_entry_count_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    duplicate_entry_stat = DuplicateEntryCountStatistic()
+    duplicate_entry_stat.set_tag(TEST_TAG)
+    duplicate_entry_stat.set_index_name(TEST_INDEX)
+    test_ds.add_statistic(duplicate_entry_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    duplicate_entry_stat = test_ds.get_index_statistic(
+        DuplicateEntryCountStatistic.STATS_TYPE,
+        TEST_INDEX,
+        TEST_TAG)
+    assert isinstance(duplicate_entry_stat, DuplicateEntryCountStatistic)
+    assert duplicate_entry_stat.get_tag() == TEST_TAG
+    assert duplicate_entry_stat.get_index_name() == TEST_INDEX
+    assert duplicate_entry_stat.get_description() is not None
+    assert duplicate_entry_stat.get_binning_strategy() is None
+    assert isinstance(duplicate_entry_stat.get_statistic_type(), IndexStatisticType)
+    assert duplicate_entry_stat.get_statistic_type().get_string() == &#39;DUPLICATE_ENTRY_COUNT&#39;
+    assert test_ds.get_statistic_value(duplicate_entry_stat) == 0
+
+    # test alternate constructors
+    duplicate_entry_stat = DuplicateEntryCountStatistic(TEST_INDEX)
+    duplicate_entry_stat.set_internal()
+    assert duplicate_entry_stat.get_index_name() == TEST_INDEX
+    assert duplicate_entry_stat.get_tag() == INTERNAL_TAG
+
+
+def test_field_visibility_count_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    field_visibility_stat = FieldVisibilityCountStatistic()
+    field_visibility_stat.set_tag(TEST_TAG)
+    field_visibility_stat.set_index_name(TEST_INDEX)
+    test_ds.add_statistic(field_visibility_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    field_visibility_stat = test_ds.get_index_statistic(
+        FieldVisibilityCountStatistic.STATS_TYPE,
+        TEST_INDEX,
+        TEST_TAG)
+    assert isinstance(field_visibility_stat, FieldVisibilityCountStatistic)
+    assert field_visibility_stat.get_tag() == TEST_TAG
+    assert field_visibility_stat.get_index_name() == TEST_INDEX
+    assert field_visibility_stat.get_description() is not None
+    assert field_visibility_stat.get_binning_strategy() is None
+    assert isinstance(field_visibility_stat.get_statistic_type(), IndexStatisticType)
+    assert field_visibility_stat.get_statistic_type().get_string() == &#39;FIELD_VISIBILITY_COUNT&#39;
+    visibility_counts = test_ds.get_statistic_value(field_visibility_stat)
+    assert isinstance(visibility_counts, dict)
+    assert len(visibility_counts) == 1
+    assert b&#39;&#39; in visibility_counts
+    assert visibility_counts[b&#39;&#39;] == 360
+
+    # test alternate constructors
+    field_visibility_stat = FieldVisibilityCountStatistic(TEST_INDEX)
+    field_visibility_stat.set_internal()
+    assert field_visibility_stat.get_index_name() == TEST_INDEX
+    assert field_visibility_stat.get_tag() == INTERNAL_TAG
+
+
+def test_index_meta_data_set_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    index_meta_data_set_stat = IndexMetaDataSetStatistic()
+    index_meta_data_set_stat.set_tag(TEST_TAG)
+    index_meta_data_set_stat.set_index_name(TEST_INDEX)
+    test_ds.add_statistic(index_meta_data_set_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    index_meta_data_set_stat = test_ds.get_index_statistic(
+        IndexMetaDataSetStatistic.STATS_TYPE,
+        TEST_INDEX,
+        TEST_TAG)
+    assert isinstance(index_meta_data_set_stat, IndexMetaDataSetStatistic)
+    assert index_meta_data_set_stat.get_tag() == TEST_TAG
+    assert index_meta_data_set_stat.get_index_name() == TEST_INDEX
+    assert index_meta_data_set_stat.get_description() is not None
+    assert index_meta_data_set_stat.get_binning_strategy() is None
+    assert isinstance(index_meta_data_set_stat.get_statistic_type(), IndexStatisticType)
+    assert index_meta_data_set_stat.get_statistic_type().get_string() == &#39;INDEX_METADATA&#39;
+    assert len(test_ds.get_statistic_value(index_meta_data_set_stat)) == 0
+
+    # test alternate constructors
+    index_meta_data_set_stat = IndexMetaDataSetStatistic(TEST_INDEX)
+    index_meta_data_set_stat.set_internal()
+    assert index_meta_data_set_stat.get_index_name() == TEST_INDEX
+    assert index_meta_data_set_stat.get_tag() == INTERNAL_TAG
+
+
+def test_max_duplicates_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    max_duplicates_stat = MaxDuplicatesStatistic()
+    max_duplicates_stat.set_tag(TEST_TAG)
+    max_duplicates_stat.set_index_name(TEST_INDEX)
+    test_ds.add_statistic(max_duplicates_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    max_duplicates_stat = test_ds.get_index_statistic(
+        MaxDuplicatesStatistic.STATS_TYPE,
+        TEST_INDEX,
+        TEST_TAG)
+    assert isinstance(max_duplicates_stat, MaxDuplicatesStatistic)
+    assert max_duplicates_stat.get_tag() == TEST_TAG
+    assert max_duplicates_stat.get_index_name() == TEST_INDEX
+    assert max_duplicates_stat.get_description() is not None
+    assert max_duplicates_stat.get_binning_strategy() is None
+    assert isinstance(max_duplicates_stat.get_statistic_type(), IndexStatisticType)
+    assert max_duplicates_stat.get_statistic_type().get_string() == &#39;MAX_DUPLICATES&#39;
+    assert test_ds.get_statistic_value(max_duplicates_stat) == 0
+
+    # test alternate constructors
+    max_duplicates_stat = MaxDuplicatesStatistic(TEST_INDEX)
+    max_duplicates_stat.set_internal()
+    assert max_duplicates_stat.get_index_name() == TEST_INDEX
+    assert max_duplicates_stat.get_tag() == INTERNAL_TAG
+
+
+def test_partitions_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    partitions_stat = PartitionsStatistic()
+    partitions_stat.set_tag(TEST_TAG)
+    partitions_stat.set_index_name(TEST_INDEX)
+    test_ds.add_statistic(partitions_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    partitions_stat = test_ds.get_index_statistic(
+        PartitionsStatistic.STATS_TYPE,
+        TEST_INDEX,
+        TEST_TAG)
+    assert isinstance(partitions_stat, PartitionsStatistic)
+    assert partitions_stat.get_tag() == TEST_TAG
+    assert partitions_stat.get_index_name() == TEST_INDEX
+    assert partitions_stat.get_description() is not None
+    assert partitions_stat.get_binning_strategy() is None
+    assert isinstance(partitions_stat.get_statistic_type(), IndexStatisticType)
+    assert partitions_stat.get_statistic_type().get_string() == &#39;PARTITIONS&#39;
+    partitions = test_ds.get_statistic_value(partitions_stat)
+    assert isinstance(partitions, set)
+    assert len(partitions) &gt;= 1
+    for item in partitions:
+        assert isinstance(item, bytes)
+
+    # test alternate constructors
+    partitions_stat = PartitionsStatistic(TEST_INDEX)
+    partitions_stat.set_internal()
+    assert partitions_stat.get_index_name() == TEST_INDEX
+    assert partitions_stat.get_tag() == INTERNAL_TAG
+
+
+def test_row_range_histogram_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    row_range_histogram_stat = RowRangeHistogramStatistic()
+    row_range_histogram_stat.set_tag(TEST_TAG)
+    row_range_histogram_stat.set_index_name(TEST_INDEX)
+    test_ds.add_statistic(row_range_histogram_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    row_range_histogram_stat = test_ds.get_index_statistic(
+        RowRangeHistogramStatistic.STATS_TYPE,
+        TEST_INDEX,
+        TEST_TAG)
+    assert isinstance(row_range_histogram_stat, RowRangeHistogramStatistic)
+    assert row_range_histogram_stat.get_tag() == TEST_TAG
+    assert row_range_histogram_stat.get_index_name() == TEST_INDEX
+    assert row_range_histogram_stat.get_description() is not None
+    assert row_range_histogram_stat.get_binning_strategy() is None
+    assert isinstance(row_range_histogram_stat.get_statistic_type(), IndexStatisticType)
+    assert row_range_histogram_stat.get_statistic_type().get_string() == &#39;ROW_RANGE_HISTOGRAM&#39;
+    histogram = test_ds.get_statistic_value(row_range_histogram_stat)
+    assert isinstance(histogram, NumericHistogram)
+    assert histogram.get_min_value() == float(&#39;inf&#39;)
+    assert histogram.get_max_value() == float(&#39;-inf&#39;)
+    assert histogram.sum(histogram.quantile(1.0)) == 360
+    assert histogram.get_total_count() == 360
+
+    # test alternate constructors
+    row_range_histogram_stat = RowRangeHistogramStatistic(TEST_INDEX)
+    row_range_histogram_stat.set_internal()
+    assert row_range_histogram_stat.get_index_name() == TEST_INDEX
+    assert row_range_histogram_stat.get_tag() == INTERNAL_TAG
+
+
+def test_composite_binning_strategy(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    binning_strategy = CompositeBinningStrategy([
+        FieldValueBinningStrategy([POINT_COLOR_FIELD]),
+        FieldValueBinningStrategy([POINT_SHAPE_FIELD]),
+    ])
+    count_stat = CountStatistic()
+    count_stat.set_tag(TEST_TAG)
+    count_stat.set_type_name(POINT_TYPE_NAME)
+    count_stat.set_binning_strategy(binning_strategy)
+    test_ds.add_statistic(count_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    count_stat = test_ds.get_data_type_statistic(CountStatistic.STATS_TYPE, POINT_TYPE_NAME, TEST_TAG)
+    binning_strategy = count_stat.get_binning_strategy()
+    assert isinstance(binning_strategy, CompositeBinningStrategy)
+    assert binning_strategy.get_strategy_name() == &#39;COMPOSITE&#39;
+    assert binning_strategy.get_description() is not None
+    assert test_ds.get_statistic_value(count_stat) == 360
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat))
+    # There should be one bin for every color/shape combination
+    assert len(binned_values) == 12
+    for b, v in binned_values:
+        assert isinstance(b, bytes)
+        # colors and shapes are evenly distributed, so each bin should have 30
+        assert v == 30
+
+
+def test_data_type_binning_strategy(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    binning_strategy = DataTypeBinningStrategy()
+    count_stat = CountStatistic()
+    count_stat.set_tag(TEST_TAG)
+    count_stat.set_type_name(POINT_TYPE_NAME)
+    count_stat.set_binning_strategy(binning_strategy)
+    test_ds.add_statistic(count_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    count_stat = test_ds.get_data_type_statistic(CountStatistic.STATS_TYPE, POINT_TYPE_NAME, TEST_TAG)
+    binning_strategy = count_stat.get_binning_strategy()
+    assert isinstance(binning_strategy, DataTypeBinningStrategy)
+    assert binning_strategy.get_strategy_name() == &#39;DATA_TYPE&#39;
+    assert binning_strategy.get_description() is not None
+    assert test_ds.get_statistic_value(count_stat) == 360
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat))
+    # The only bin is for our point adapter
+    assert len(binned_values) == 1
+    assert binning_strategy.bin_to_string(binned_values[0][0]) == POINT_TYPE_NAME
+    assert binned_values[0][1] == 360
+
+    # test bin constraint
+    bin_constraint = BinConstraints.of(POINT_TYPE_NAME.encode())
+    assert isinstance(bin_constraint, BinConstraints)
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat, bin_constraint))
+    # There should be one bin for every 5 values
+    assert len(binned_values) == 1
+    assert binning_strategy.bin_to_string(binned_values[0][0]) == POINT_TYPE_NAME
+    assert binned_values[0][1] == 360
+
+
+def test_field_value_binning_strategy(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    binning_strategy = FieldValueBinningStrategy([POINT_COLOR_FIELD, POINT_SHAPE_FIELD])
+    count_stat = CountStatistic()
+    count_stat.set_tag(TEST_TAG)
+    count_stat.set_type_name(POINT_TYPE_NAME)
+    count_stat.set_binning_strategy(binning_strategy)
+    test_ds.add_statistic(count_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    count_stat = test_ds.get_data_type_statistic(CountStatistic.STATS_TYPE, POINT_TYPE_NAME, TEST_TAG)
+    binning_strategy = count_stat.get_binning_strategy()
+    assert isinstance(binning_strategy, FieldValueBinningStrategy)
+    assert binning_strategy.get_strategy_name() == &#39;FIELD_VALUE&#39;
+    assert binning_strategy.get_description() is not None
+    assert test_ds.get_statistic_value(count_stat) == 360
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat))
+    # There should be one bin for every color/shape combination
+    assert len(binned_values) == 12
+    for b, v in binned_values:
+        assert isinstance(b, bytes)
+        # colors and shapes are evenly distributed, so each bin should have 30
+        assert v == 30
+
+    # test bin prefix constraint
+    bin_constraint = BinConstraints.of_prefix(b&#39;BLUE&#39;)
+    assert isinstance(bin_constraint, BinConstraints)
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat, bin_constraint))
+    # There should be 4 bins, one for each shape
+    assert len(binned_values) == 4
+    for b, v in binned_values:
+        assert isinstance(b, bytes)
+        # each bin should have 30
+        assert v == 30
+
+
+def test_numeric_range_field_value_binning_strategy(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    binning_strategy = NumericRangeFieldValueBinningStrategy(fields=[POINT_NUMBER_FIELD], interval=5)
+    count_stat = CountStatistic()
+    count_stat.set_tag(TEST_TAG)
+    count_stat.set_type_name(POINT_TYPE_NAME)
+    count_stat.set_binning_strategy(binning_strategy)
+    test_ds.add_statistic(count_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    count_stat = test_ds.get_data_type_statistic(CountStatistic.STATS_TYPE, POINT_TYPE_NAME, TEST_TAG)
+    binning_strategy = count_stat.get_binning_strategy()
+    assert isinstance(binning_strategy, NumericRangeFieldValueBinningStrategy)
+    assert binning_strategy.get_strategy_name() == &#39;NUMERIC_RANGE&#39;
+    assert binning_strategy.get_description() is not None
+    assert test_ds.get_statistic_value(count_stat) == 360
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat))
+    # There should be one bin for every 5 values
+    assert len(binned_values) == 72
+    for b, v in binned_values:
+        assert isinstance(b, bytes)
+        assert v == 5
+
+    # test numeric range constraint
+    bin_constraint = BinConstraints.of_object(Range(0, 180))
+    assert isinstance(bin_constraint, BinConstraints)
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat, bin_constraint))
+    # There should be one bin for every 5 values
+    assert len(binned_values) == 36
+    for b, v in binned_values:
+        assert isinstance(b, bytes)
+        assert v == 5
+
+
+def test_time_range_field_value_binning_strategy(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    binning_strategy = TimeRangeFieldValueBinningStrategy(fields=[POINT_TIME_FIELD], periodicity=&#39;minute&#39;)
+    count_stat = CountStatistic()
+    count_stat.set_tag(TEST_TAG)
+    count_stat.set_type_name(POINT_TYPE_NAME)
+    count_stat.set_binning_strategy(binning_strategy)
+    test_ds.add_statistic(count_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    count_stat = test_ds.get_data_type_statistic(CountStatistic.STATS_TYPE, POINT_TYPE_NAME, TEST_TAG)
+    binning_strategy = count_stat.get_binning_strategy()
+    assert isinstance(binning_strategy, TimeRangeFieldValueBinningStrategy)
+    assert binning_strategy.get_strategy_name() == &#39;TIME_RANGE&#39;
+    assert binning_strategy.get_description() is not None
+    assert test_ds.get_statistic_value(count_stat) == 360
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat))
+    # Each value is 1 second apart, so there should be 6 bins with a periodicity of minute
+    assert len(binned_values) == 6
+    for b, v in binned_values:
+        assert isinstance(b, bytes)
+        assert v == 60
+
+    # test time range constraint
+    bin_constraint = BinConstraints.of_object(Interval(datetime.utcfromtimestamp(0), datetime.utcfromtimestamp(180)))
+    assert isinstance(bin_constraint, BinConstraints)
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat, bin_constraint))
+    # Each value is 1 second apart, so there should be 3 bins with a periodicity of minute
+    assert len(binned_values) == 3
+    for b, v in binned_values:
+        assert isinstance(b, bytes)
+        assert v == 60
+
+
+def test_spatial_field_value_binning_strategy(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    binning_strategy = SpatialFieldValueBinningStrategy(fields=[POINT_GEOMETRY_FIELD], type=&#39;GEOHASH&#39;, precision=1)
+    count_stat = CountStatistic()
+    count_stat.set_tag(TEST_TAG)
+    count_stat.set_type_name(POINT_TYPE_NAME)
+    count_stat.set_binning_strategy(binning_strategy)
+    test_ds.add_statistic(count_stat)
+    write_test_data_offset(test_ds, index)
+
+    # then
+    count_stat = test_ds.get_data_type_statistic(CountStatistic.STATS_TYPE, POINT_TYPE_NAME, TEST_TAG)
+    binning_strategy = count_stat.get_binning_strategy()
+    assert isinstance(binning_strategy, SpatialFieldValueBinningStrategy)
+    assert binning_strategy.get_strategy_name() == &#39;SPATIAL&#39;
+    assert binning_strategy.get_description() is not None
+    assert test_ds.get_statistic_value(count_stat) == 360
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat))
+    assert len(binned_values) == 8
+    for b, v in binned_values:
+        assert isinstance(b, bytes)
+        assert v == 45
+
+    # test polygon constraint
+    bin_constraint = BinConstraints.of_object(Polygon([[0.5, 0.5], [0.5, 45.5], [45.5, 45.5], [45.5, 0.5], [0.5, 0.5]]))
+    assert isinstance(bin_constraint, BinConstraints)
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat, bin_constraint))
+    # There is a bin every 45 degrees so there should be 2 bins
+    assert len(binned_values) == 2
+    for b, v in binned_values:
+        assert isinstance(b, bytes)
+        assert v == 45
+
+    bin_constraint = BinConstraints.of_object(Envelope(min_x=1, min_y=1, max_x=91, max_y=90))
+    assert isinstance(bin_constraint, BinConstraints)
+    assert test_ds.get_statistic_value(count_stat, bin_constraint) == 135
+
+
+
+def test_partition_binning_strategy(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    binning_strategy = PartitionBinningStrategy()
+    count_stat = CountStatistic()
+    count_stat.set_tag(TEST_TAG)
+    count_stat.set_type_name(POINT_TYPE_NAME)
+    count_stat.set_binning_strategy(binning_strategy)
+    test_ds.add_statistic(count_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    count_stat = test_ds.get_data_type_statistic(CountStatistic.STATS_TYPE, POINT_TYPE_NAME, TEST_TAG)
+    binning_strategy = count_stat.get_binning_strategy()
+    assert isinstance(binning_strategy, PartitionBinningStrategy)
+    assert binning_strategy.get_strategy_name() == &#39;PARTITION&#39;
+    assert binning_strategy.get_description() is not None
+    assert test_ds.get_statistic_value(count_stat) == 360
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat))
+    # No real assumptions can be made about how the data is partitioned, but there will be at least 1 and all values
+    # should sum to 360
+    assert len(binned_values) &gt;= 1
+    assert reduce(lambda a, b: a + b, map(lambda a: a[1], binned_values)) == 360</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="pygw.test.statistics_test.test_bloom_filter_statistic"><code class="name flex">
+<span>def <span class="ident">test_bloom_filter_statistic</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_bloom_filter_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    bloom_filter_stat = BloomFilterStatistic()
+    bloom_filter_stat.set_tag(TEST_TAG)
+    bloom_filter_stat.set_type_name(POINT_TYPE_NAME)
+    bloom_filter_stat.set_field_name(POINT_NUMBER_FIELD)
+    test_ds.add_statistic(bloom_filter_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    bloom_filter_stat = test_ds.get_field_statistic(
+        BloomFilterStatistic.STATS_TYPE,
+        POINT_TYPE_NAME,
+        POINT_NUMBER_FIELD,
+        TEST_TAG)
+    assert isinstance(bloom_filter_stat, BloomFilterStatistic)
+    assert bloom_filter_stat.get_tag() == TEST_TAG
+    assert bloom_filter_stat.get_type_name() == POINT_TYPE_NAME
+    assert bloom_filter_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert bloom_filter_stat.get_description() is not None
+    assert bloom_filter_stat.get_binning_strategy() is None
+    assert isinstance(bloom_filter_stat.get_statistic_type(), FieldStatisticType)
+    assert bloom_filter_stat.get_statistic_type().get_string() == &#39;BLOOM_FILTER&#39;
+    bloom_filter = test_ds.get_statistic_value(bloom_filter_stat)
+    assert isinstance(bloom_filter, BloomFilter)
+    assert bloom_filter.might_contain(&#39;-180.0&#39;)
+    assert bloom_filter.might_contain(&#39;179.0&#39;)
+    assert not bloom_filter.might_contain(&#39;garbage&#39;)
+    assert bloom_filter.approximate_element_count() &gt; 300
+    assert bloom_filter.expected_fpp() is not None
+
+    # test alternate constructors
+    bloom_filter_stat = BloomFilterStatistic(POINT_TYPE_NAME, POINT_NUMBER_FIELD)
+    bloom_filter_stat.set_internal()
+    assert bloom_filter_stat.get_type_name() == POINT_TYPE_NAME
+    assert bloom_filter_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert bloom_filter_stat.get_tag() == INTERNAL_TAG</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_bounding_box_statistic"><code class="name flex">
+<span>def <span class="ident">test_bounding_box_statistic</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_bounding_box_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    bounding_box_stat = BoundingBoxStatistic()
+    bounding_box_stat.set_tag(TEST_TAG)
+    bounding_box_stat.set_type_name(POINT_TYPE_NAME)
+    bounding_box_stat.set_field_name(POINT_GEOMETRY_FIELD)
+    test_ds.add_statistic(bounding_box_stat)
+    write_test_data_offset(test_ds, index)
+
+    # then
+    bounding_box_stat = test_ds.get_field_statistic(
+        BoundingBoxStatistic.STATS_TYPE,
+        POINT_TYPE_NAME,
+        POINT_GEOMETRY_FIELD,
+        TEST_TAG)
+    assert isinstance(bounding_box_stat, BoundingBoxStatistic)
+    assert bounding_box_stat.get_tag() == TEST_TAG
+    assert bounding_box_stat.get_type_name() == POINT_TYPE_NAME
+    assert bounding_box_stat.get_field_name() == POINT_GEOMETRY_FIELD
+    assert bounding_box_stat.get_description() is not None
+    assert bounding_box_stat.get_binning_strategy() is None
+    assert isinstance(bounding_box_stat.get_statistic_type(), FieldStatisticType)
+    assert bounding_box_stat.get_statistic_type().get_string() == &#39;BOUNDING_BOX&#39;
+    bounding_box = test_ds.get_statistic_value(bounding_box_stat)
+    assert isinstance(bounding_box, Envelope)
+    assert bounding_box.get_min_x() == -179.5
+    assert bounding_box.get_min_y() == -89.5
+    assert bounding_box.get_max_x() == 179.5
+    assert bounding_box.get_max_y() == 89.5
+
+    # test alternate constructors
+    bounding_box_stat = BoundingBoxStatistic(POINT_TYPE_NAME, POINT_GEOMETRY_FIELD)
+    bounding_box_stat.set_internal()
+    assert bounding_box_stat.get_type_name() == POINT_TYPE_NAME
+    assert bounding_box_stat.get_field_name() == POINT_GEOMETRY_FIELD
+    assert bounding_box_stat.get_tag() == INTERNAL_TAG</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_composite_binning_strategy"><code class="name flex">
+<span>def <span class="ident">test_composite_binning_strategy</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_composite_binning_strategy(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    binning_strategy = CompositeBinningStrategy([
+        FieldValueBinningStrategy([POINT_COLOR_FIELD]),
+        FieldValueBinningStrategy([POINT_SHAPE_FIELD]),
+    ])
+    count_stat = CountStatistic()
+    count_stat.set_tag(TEST_TAG)
+    count_stat.set_type_name(POINT_TYPE_NAME)
+    count_stat.set_binning_strategy(binning_strategy)
+    test_ds.add_statistic(count_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    count_stat = test_ds.get_data_type_statistic(CountStatistic.STATS_TYPE, POINT_TYPE_NAME, TEST_TAG)
+    binning_strategy = count_stat.get_binning_strategy()
+    assert isinstance(binning_strategy, CompositeBinningStrategy)
+    assert binning_strategy.get_strategy_name() == &#39;COMPOSITE&#39;
+    assert binning_strategy.get_description() is not None
+    assert test_ds.get_statistic_value(count_stat) == 360
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat))
+    # There should be one bin for every color/shape combination
+    assert len(binned_values) == 12
+    for b, v in binned_values:
+        assert isinstance(b, bytes)
+        # colors and shapes are evenly distributed, so each bin should have 30
+        assert v == 30</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_count_min_sketch_statistic"><code class="name flex">
+<span>def <span class="ident">test_count_min_sketch_statistic</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_count_min_sketch_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    count_min_sketch_stat = CountMinSketchStatistic()
+    count_min_sketch_stat.set_tag(TEST_TAG)
+    count_min_sketch_stat.set_type_name(POINT_TYPE_NAME)
+    count_min_sketch_stat.set_field_name(POINT_NUMBER_FIELD)
+    count_min_sketch_stat.set_error_factor(0.002)
+    count_min_sketch_stat.set_probability_of_correctness(0.8)
+    test_ds.add_statistic(count_min_sketch_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    count_min_sketch_stat = test_ds.get_field_statistic(
+        CountMinSketchStatistic.STATS_TYPE,
+        POINT_TYPE_NAME,
+        POINT_NUMBER_FIELD,
+        TEST_TAG)
+    assert isinstance(count_min_sketch_stat, CountMinSketchStatistic)
+    assert count_min_sketch_stat.get_tag() == TEST_TAG
+    assert count_min_sketch_stat.get_type_name() == POINT_TYPE_NAME
+    assert count_min_sketch_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert count_min_sketch_stat.get_error_factor() == 0.002
+    assert count_min_sketch_stat.get_probability_of_correctness() == 0.8
+    assert count_min_sketch_stat.get_description() is not None
+    assert count_min_sketch_stat.get_binning_strategy() is None
+    assert isinstance(count_min_sketch_stat.get_statistic_type(), FieldStatisticType)
+    assert count_min_sketch_stat.get_statistic_type().get_string() == &#39;COUNT_MIN_SKETCH&#39;
+    count_min_sketch = test_ds.get_statistic_value(count_min_sketch_stat)
+    assert isinstance(count_min_sketch, CountMinSketch)
+    assert count_min_sketch.get_relative_error() == 0.002
+    assert count_min_sketch.get_confidence() &gt; 0.5
+    assert count_min_sketch.estimate_count(&#39;90.0&#39;) == 1
+
+    # test alternate constructors
+    count_min_sketch = CountMinSketchStatistic(POINT_TYPE_NAME, POINT_GEOMETRY_FIELD, 0.002, 0.8)
+    count_min_sketch.set_internal()
+    assert count_min_sketch.get_type_name() == POINT_TYPE_NAME
+    assert count_min_sketch.get_field_name() == POINT_GEOMETRY_FIELD
+    assert count_min_sketch.get_error_factor() == 0.002
+    assert count_min_sketch.get_probability_of_correctness() == 0.8
+    assert count_min_sketch.get_tag() == INTERNAL_TAG</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_count_statistic"><code class="name flex">
+<span>def <span class="ident">test_count_statistic</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_count_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    count_stat = CountStatistic()
+    count_stat.set_tag(TEST_TAG)
+    count_stat.set_type_name(POINT_TYPE_NAME)
+    test_ds.add_statistic(count_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    count_stat = test_ds.get_data_type_statistic(CountStatistic.STATS_TYPE, POINT_TYPE_NAME, TEST_TAG)
+    assert isinstance(count_stat, CountStatistic)
+    assert count_stat.get_tag() == TEST_TAG
+    assert count_stat.get_type_name() == POINT_TYPE_NAME
+    assert count_stat.get_description() is not None
+    assert count_stat.get_binning_strategy() is None
+    assert isinstance(count_stat.get_statistic_type(), DataTypeStatisticType)
+    assert count_stat.get_statistic_type().get_string() == &#39;COUNT&#39;
+    assert test_ds.get_statistic_value(count_stat) == 360
+
+    # test alternate constructors
+    count_stat = CountStatistic(POINT_TYPE_NAME)
+    count_stat.set_internal()
+    assert count_stat.get_type_name() == POINT_TYPE_NAME
+    assert count_stat.get_tag() == INTERNAL_TAG</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_data_type_binning_strategy"><code class="name flex">
+<span>def <span class="ident">test_data_type_binning_strategy</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_data_type_binning_strategy(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    binning_strategy = DataTypeBinningStrategy()
+    count_stat = CountStatistic()
+    count_stat.set_tag(TEST_TAG)
+    count_stat.set_type_name(POINT_TYPE_NAME)
+    count_stat.set_binning_strategy(binning_strategy)
+    test_ds.add_statistic(count_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    count_stat = test_ds.get_data_type_statistic(CountStatistic.STATS_TYPE, POINT_TYPE_NAME, TEST_TAG)
+    binning_strategy = count_stat.get_binning_strategy()
+    assert isinstance(binning_strategy, DataTypeBinningStrategy)
+    assert binning_strategy.get_strategy_name() == &#39;DATA_TYPE&#39;
+    assert binning_strategy.get_description() is not None
+    assert test_ds.get_statistic_value(count_stat) == 360
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat))
+    # The only bin is for our point adapter
+    assert len(binned_values) == 1
+    assert binning_strategy.bin_to_string(binned_values[0][0]) == POINT_TYPE_NAME
+    assert binned_values[0][1] == 360
+
+    # test bin constraint
+    bin_constraint = BinConstraints.of(POINT_TYPE_NAME.encode())
+    assert isinstance(bin_constraint, BinConstraints)
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat, bin_constraint))
+    # There should be one bin for every 5 values
+    assert len(binned_values) == 1
+    assert binning_strategy.bin_to_string(binned_values[0][0]) == POINT_TYPE_NAME
+    assert binned_values[0][1] == 360</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_differing_visibility_count_statistic"><code class="name flex">
+<span>def <span class="ident">test_differing_visibility_count_statistic</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_differing_visibility_count_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    differing_visibility_stat = DifferingVisibilityCountStatistic()
+    differing_visibility_stat.set_tag(TEST_TAG)
+    differing_visibility_stat.set_index_name(TEST_INDEX)
+    test_ds.add_statistic(differing_visibility_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    differing_visibility_stat = test_ds.get_index_statistic(
+        DifferingVisibilityCountStatistic.STATS_TYPE,
+        TEST_INDEX,
+        TEST_TAG)
+    assert isinstance(differing_visibility_stat, DifferingVisibilityCountStatistic)
+    assert differing_visibility_stat.get_tag() == TEST_TAG
+    assert differing_visibility_stat.get_index_name() == TEST_INDEX
+    assert differing_visibility_stat.get_description() is not None
+    assert differing_visibility_stat.get_binning_strategy() is None
+    assert isinstance(differing_visibility_stat.get_statistic_type(), IndexStatisticType)
+    assert differing_visibility_stat.get_statistic_type().get_string() == &#39;DIFFERING_VISIBILITY_COUNT&#39;
+    assert test_ds.get_statistic_value(differing_visibility_stat) == 0
+
+    # test alternate constructors
+    differing_visibility_stat = DifferingVisibilityCountStatistic(TEST_INDEX)
+    differing_visibility_stat.set_internal()
+    assert differing_visibility_stat.get_index_name() == TEST_INDEX
+    assert differing_visibility_stat.get_tag() == INTERNAL_TAG</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_duplicate_entry_count_statistic"><code class="name flex">
+<span>def <span class="ident">test_duplicate_entry_count_statistic</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_duplicate_entry_count_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    duplicate_entry_stat = DuplicateEntryCountStatistic()
+    duplicate_entry_stat.set_tag(TEST_TAG)
+    duplicate_entry_stat.set_index_name(TEST_INDEX)
+    test_ds.add_statistic(duplicate_entry_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    duplicate_entry_stat = test_ds.get_index_statistic(
+        DuplicateEntryCountStatistic.STATS_TYPE,
+        TEST_INDEX,
+        TEST_TAG)
+    assert isinstance(duplicate_entry_stat, DuplicateEntryCountStatistic)
+    assert duplicate_entry_stat.get_tag() == TEST_TAG
+    assert duplicate_entry_stat.get_index_name() == TEST_INDEX
+    assert duplicate_entry_stat.get_description() is not None
+    assert duplicate_entry_stat.get_binning_strategy() is None
+    assert isinstance(duplicate_entry_stat.get_statistic_type(), IndexStatisticType)
+    assert duplicate_entry_stat.get_statistic_type().get_string() == &#39;DUPLICATE_ENTRY_COUNT&#39;
+    assert test_ds.get_statistic_value(duplicate_entry_stat) == 0
+
+    # test alternate constructors
+    duplicate_entry_stat = DuplicateEntryCountStatistic(TEST_INDEX)
+    duplicate_entry_stat.set_internal()
+    assert duplicate_entry_stat.get_index_name() == TEST_INDEX
+    assert duplicate_entry_stat.get_tag() == INTERNAL_TAG</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_field_value_binning_strategy"><code class="name flex">
+<span>def <span class="ident">test_field_value_binning_strategy</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_field_value_binning_strategy(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    binning_strategy = FieldValueBinningStrategy([POINT_COLOR_FIELD, POINT_SHAPE_FIELD])
+    count_stat = CountStatistic()
+    count_stat.set_tag(TEST_TAG)
+    count_stat.set_type_name(POINT_TYPE_NAME)
+    count_stat.set_binning_strategy(binning_strategy)
+    test_ds.add_statistic(count_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    count_stat = test_ds.get_data_type_statistic(CountStatistic.STATS_TYPE, POINT_TYPE_NAME, TEST_TAG)
+    binning_strategy = count_stat.get_binning_strategy()
+    assert isinstance(binning_strategy, FieldValueBinningStrategy)
+    assert binning_strategy.get_strategy_name() == &#39;FIELD_VALUE&#39;
+    assert binning_strategy.get_description() is not None
+    assert test_ds.get_statistic_value(count_stat) == 360
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat))
+    # There should be one bin for every color/shape combination
+    assert len(binned_values) == 12
+    for b, v in binned_values:
+        assert isinstance(b, bytes)
+        # colors and shapes are evenly distributed, so each bin should have 30
+        assert v == 30
+
+    # test bin prefix constraint
+    bin_constraint = BinConstraints.of_prefix(b&#39;BLUE&#39;)
+    assert isinstance(bin_constraint, BinConstraints)
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat, bin_constraint))
+    # There should be 4 bins, one for each shape
+    assert len(binned_values) == 4
+    for b, v in binned_values:
+        assert isinstance(b, bytes)
+        # each bin should have 30
+        assert v == 30</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_field_visibility_count_statistic"><code class="name flex">
+<span>def <span class="ident">test_field_visibility_count_statistic</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_field_visibility_count_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    field_visibility_stat = FieldVisibilityCountStatistic()
+    field_visibility_stat.set_tag(TEST_TAG)
+    field_visibility_stat.set_index_name(TEST_INDEX)
+    test_ds.add_statistic(field_visibility_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    field_visibility_stat = test_ds.get_index_statistic(
+        FieldVisibilityCountStatistic.STATS_TYPE,
+        TEST_INDEX,
+        TEST_TAG)
+    assert isinstance(field_visibility_stat, FieldVisibilityCountStatistic)
+    assert field_visibility_stat.get_tag() == TEST_TAG
+    assert field_visibility_stat.get_index_name() == TEST_INDEX
+    assert field_visibility_stat.get_description() is not None
+    assert field_visibility_stat.get_binning_strategy() is None
+    assert isinstance(field_visibility_stat.get_statistic_type(), IndexStatisticType)
+    assert field_visibility_stat.get_statistic_type().get_string() == &#39;FIELD_VISIBILITY_COUNT&#39;
+    visibility_counts = test_ds.get_statistic_value(field_visibility_stat)
+    assert isinstance(visibility_counts, dict)
+    assert len(visibility_counts) == 1
+    assert b&#39;&#39; in visibility_counts
+    assert visibility_counts[b&#39;&#39;] == 360
+
+    # test alternate constructors
+    field_visibility_stat = FieldVisibilityCountStatistic(TEST_INDEX)
+    field_visibility_stat.set_internal()
+    assert field_visibility_stat.get_index_name() == TEST_INDEX
+    assert field_visibility_stat.get_tag() == INTERNAL_TAG</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_fixed_bin_numeric_histogram"><code class="name flex">
+<span>def <span class="ident">test_fixed_bin_numeric_histogram</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_fixed_bin_numeric_histogram(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    fixed_bin_stat = FixedBinNumericHistogramStatistic()
+    fixed_bin_stat.set_tag(TEST_TAG)
+    fixed_bin_stat.set_type_name(POINT_TYPE_NAME)
+    fixed_bin_stat.set_field_name(POINT_NUMBER_FIELD)
+    fixed_bin_stat.set_num_bins(128)
+    fixed_bin_stat.set_min_value(-180.0)
+    fixed_bin_stat.set_max_value(180.0)
+    test_ds.add_statistic(fixed_bin_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    fixed_bin_stat = test_ds.get_field_statistic(
+        FixedBinNumericHistogramStatistic.STATS_TYPE,
+        POINT_TYPE_NAME,
+        POINT_NUMBER_FIELD,
+        TEST_TAG)
+    assert isinstance(fixed_bin_stat, FixedBinNumericHistogramStatistic)
+    assert fixed_bin_stat.get_tag() == TEST_TAG
+    assert fixed_bin_stat.get_type_name() == POINT_TYPE_NAME
+    assert fixed_bin_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert fixed_bin_stat.get_num_bins() == 128
+    assert fixed_bin_stat.get_min_value() == -180
+    assert fixed_bin_stat.get_max_value() == 180
+    assert fixed_bin_stat.get_description() is not None
+    assert fixed_bin_stat.get_binning_strategy() is None
+    assert isinstance(fixed_bin_stat.get_statistic_type(), FieldStatisticType)
+    assert fixed_bin_stat.get_statistic_type().get_string() == &#39;FIXED_BIN_NUMERIC_HISTOGRAM&#39;
+    histogram = test_ds.get_statistic_value(fixed_bin_stat)
+    assert isinstance(histogram, FixedBinNumericHistogram)
+    assert histogram.get_num_bins() == 128
+    assert histogram.get_min_value() == -180
+    assert histogram.get_max_value() == 180
+    assert histogram.cdf(0) == 0.5
+    assert len(histogram.bin_quantiles(0)) == 0
+    assert histogram.quantile(0.0) == -180
+    assert 180 &lt; histogram.quantile(1.0) &lt; 185
+    assert histogram.sum(0) == 180
+    assert histogram.percent_population_over_range(-90, 0) == 0.25
+    assert histogram.total_sample_size() == 360
+    assert histogram.get_total_count() == 360
+    assert len(histogram.count(0)) == 0
+
+    # test alternate constructors
+    fixed_bin_stat = FixedBinNumericHistogramStatistic(POINT_TYPE_NAME, POINT_NUMBER_FIELD, 128, -180, 180)
+    fixed_bin_stat.set_internal()
+    assert fixed_bin_stat.get_type_name() == POINT_TYPE_NAME
+    assert fixed_bin_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert fixed_bin_stat.get_num_bins() == 128
+    assert fixed_bin_stat.get_min_value() == -180
+    assert fixed_bin_stat.get_max_value() == 180
+    assert fixed_bin_stat.get_tag() == INTERNAL_TAG</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_hyper_log_log_statistic"><code class="name flex">
+<span>def <span class="ident">test_hyper_log_log_statistic</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_hyper_log_log_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    hyper_log_log_stat = HyperLogLogStatistic()
+    hyper_log_log_stat.set_tag(TEST_TAG)
+    hyper_log_log_stat.set_type_name(POINT_TYPE_NAME)
+    hyper_log_log_stat.set_field_name(POINT_NUMBER_FIELD)
+    hyper_log_log_stat.set_precision(24)
+    test_ds.add_statistic(hyper_log_log_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    hyper_log_log_stat = test_ds.get_field_statistic(
+        HyperLogLogStatistic.STATS_TYPE,
+        POINT_TYPE_NAME,
+        POINT_NUMBER_FIELD,
+        TEST_TAG)
+    assert isinstance(hyper_log_log_stat, HyperLogLogStatistic)
+    assert hyper_log_log_stat.get_tag() == TEST_TAG
+    assert hyper_log_log_stat.get_type_name() == POINT_TYPE_NAME
+    assert hyper_log_log_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert hyper_log_log_stat.get_precision() == 24
+    assert hyper_log_log_stat.get_description() is not None
+    assert hyper_log_log_stat.get_binning_strategy() is None
+    assert isinstance(hyper_log_log_stat.get_statistic_type(), FieldStatisticType)
+    assert hyper_log_log_stat.get_statistic_type().get_string() == &#39;HYPER_LOG_LOG&#39;
+    hyper_log_log = test_ds.get_statistic_value(hyper_log_log_stat)
+    assert isinstance(hyper_log_log, HyperLogLogPlus)
+    assert 350 &lt; hyper_log_log.cardinality() &lt; 370
+
+    # test alternate constructors
+    fixed_bin_stat = HyperLogLogStatistic(POINT_TYPE_NAME, POINT_NUMBER_FIELD, 31)
+    fixed_bin_stat.set_internal()
+    assert fixed_bin_stat.get_type_name() == POINT_TYPE_NAME
+    assert fixed_bin_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert fixed_bin_stat.get_precision() == 31
+    assert fixed_bin_stat.get_tag() == INTERNAL_TAG</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_index_meta_data_set_statistic"><code class="name flex">
+<span>def <span class="ident">test_index_meta_data_set_statistic</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_index_meta_data_set_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    index_meta_data_set_stat = IndexMetaDataSetStatistic()
+    index_meta_data_set_stat.set_tag(TEST_TAG)
+    index_meta_data_set_stat.set_index_name(TEST_INDEX)
+    test_ds.add_statistic(index_meta_data_set_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    index_meta_data_set_stat = test_ds.get_index_statistic(
+        IndexMetaDataSetStatistic.STATS_TYPE,
+        TEST_INDEX,
+        TEST_TAG)
+    assert isinstance(index_meta_data_set_stat, IndexMetaDataSetStatistic)
+    assert index_meta_data_set_stat.get_tag() == TEST_TAG
+    assert index_meta_data_set_stat.get_index_name() == TEST_INDEX
+    assert index_meta_data_set_stat.get_description() is not None
+    assert index_meta_data_set_stat.get_binning_strategy() is None
+    assert isinstance(index_meta_data_set_stat.get_statistic_type(), IndexStatisticType)
+    assert index_meta_data_set_stat.get_statistic_type().get_string() == &#39;INDEX_METADATA&#39;
+    assert len(test_ds.get_statistic_value(index_meta_data_set_stat)) == 0
+
+    # test alternate constructors
+    index_meta_data_set_stat = IndexMetaDataSetStatistic(TEST_INDEX)
+    index_meta_data_set_stat.set_internal()
+    assert index_meta_data_set_stat.get_index_name() == TEST_INDEX
+    assert index_meta_data_set_stat.get_tag() == INTERNAL_TAG</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_max_duplicates_statistic"><code class="name flex">
+<span>def <span class="ident">test_max_duplicates_statistic</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_max_duplicates_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    max_duplicates_stat = MaxDuplicatesStatistic()
+    max_duplicates_stat.set_tag(TEST_TAG)
+    max_duplicates_stat.set_index_name(TEST_INDEX)
+    test_ds.add_statistic(max_duplicates_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    max_duplicates_stat = test_ds.get_index_statistic(
+        MaxDuplicatesStatistic.STATS_TYPE,
+        TEST_INDEX,
+        TEST_TAG)
+    assert isinstance(max_duplicates_stat, MaxDuplicatesStatistic)
+    assert max_duplicates_stat.get_tag() == TEST_TAG
+    assert max_duplicates_stat.get_index_name() == TEST_INDEX
+    assert max_duplicates_stat.get_description() is not None
+    assert max_duplicates_stat.get_binning_strategy() is None
+    assert isinstance(max_duplicates_stat.get_statistic_type(), IndexStatisticType)
+    assert max_duplicates_stat.get_statistic_type().get_string() == &#39;MAX_DUPLICATES&#39;
+    assert test_ds.get_statistic_value(max_duplicates_stat) == 0
+
+    # test alternate constructors
+    max_duplicates_stat = MaxDuplicatesStatistic(TEST_INDEX)
+    max_duplicates_stat.set_internal()
+    assert max_duplicates_stat.get_index_name() == TEST_INDEX
+    assert max_duplicates_stat.get_tag() == INTERNAL_TAG</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_numeric_histogram_statistic"><code class="name flex">
+<span>def <span class="ident">test_numeric_histogram_statistic</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_numeric_histogram_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    numeric_histogram_stat = NumericHistogramStatistic()
+    numeric_histogram_stat.set_tag(TEST_TAG)
+    numeric_histogram_stat.set_type_name(POINT_TYPE_NAME)
+    numeric_histogram_stat.set_field_name(POINT_NUMBER_FIELD)
+    numeric_histogram_stat.set_compression(80)
+    test_ds.add_statistic(numeric_histogram_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    numeric_histogram_stat = test_ds.get_field_statistic(
+        NumericHistogramStatistic.STATS_TYPE,
+        POINT_TYPE_NAME,
+        POINT_NUMBER_FIELD,
+        TEST_TAG)
+    assert isinstance(numeric_histogram_stat, NumericHistogramStatistic)
+    assert numeric_histogram_stat.get_tag() == TEST_TAG
+    assert numeric_histogram_stat.get_type_name() == POINT_TYPE_NAME
+    assert numeric_histogram_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert numeric_histogram_stat.get_compression() == 80
+    assert numeric_histogram_stat.get_description() is not None
+    assert numeric_histogram_stat.get_binning_strategy() is None
+    assert isinstance(numeric_histogram_stat.get_statistic_type(), FieldStatisticType)
+    assert numeric_histogram_stat.get_statistic_type().get_string() == &#39;NUMERIC_HISTOGRAM&#39;
+    histogram = test_ds.get_statistic_value(numeric_histogram_stat)
+    assert isinstance(histogram, NumericHistogram)
+    assert -182 &lt; histogram.get_min_value() &lt; -178
+    assert 178 &lt; histogram.get_max_value() &lt; 182
+    assert 0.48 &lt; histogram.cdf(0) &lt; 0.52
+    assert -182 &lt; histogram.quantile(0.0) &lt; -178
+    assert 178 &lt; histogram.quantile(1.0) &lt; 182
+    assert 178 &lt; histogram.sum(0) &lt; 182
+    assert histogram.get_total_count() == 360
+
+    # test alternate constructors
+    numeric_histogram_stat = NumericHistogramStatistic(POINT_TYPE_NAME, POINT_NUMBER_FIELD, 80)
+    numeric_histogram_stat.set_internal()
+    assert numeric_histogram_stat.get_type_name() == POINT_TYPE_NAME
+    assert numeric_histogram_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert numeric_histogram_stat.get_compression() == 80
+    assert numeric_histogram_stat.get_tag() == INTERNAL_TAG</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_numeric_mean_statistic"><code class="name flex">
+<span>def <span class="ident">test_numeric_mean_statistic</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_numeric_mean_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    numeric_mean_stat = NumericMeanStatistic()
+    numeric_mean_stat.set_tag(TEST_TAG)
+    numeric_mean_stat.set_type_name(POINT_TYPE_NAME)
+    numeric_mean_stat.set_field_name(POINT_NUMBER_FIELD)
+    test_ds.add_statistic(numeric_mean_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    numeric_mean_stat = test_ds.get_field_statistic(
+        NumericMeanStatistic.STATS_TYPE,
+        POINT_TYPE_NAME,
+        POINT_NUMBER_FIELD,
+        TEST_TAG)
+    assert isinstance(numeric_mean_stat, NumericMeanStatistic)
+    assert numeric_mean_stat.get_tag() == TEST_TAG
+    assert numeric_mean_stat.get_type_name() == POINT_TYPE_NAME
+    assert numeric_mean_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert numeric_mean_stat.get_description() is not None
+    assert numeric_mean_stat.get_binning_strategy() is None
+    assert isinstance(numeric_mean_stat.get_statistic_type(), FieldStatisticType)
+    assert numeric_mean_stat.get_statistic_type().get_string() == &#39;NUMERIC_MEAN&#39;
+    assert test_ds.get_statistic_value(numeric_mean_stat) == -0.5  # Mean of values -180 to 179
+
+    # test alternate constructors
+    numeric_mean_stat = NumericMeanStatistic(POINT_TYPE_NAME, POINT_NUMBER_FIELD)
+    numeric_mean_stat.set_internal()
+    assert numeric_mean_stat.get_type_name() == POINT_TYPE_NAME
+    assert numeric_mean_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert numeric_mean_stat.get_tag() == INTERNAL_TAG</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_numeric_range_field_value_binning_strategy"><code class="name flex">
+<span>def <span class="ident">test_numeric_range_field_value_binning_strategy</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_numeric_range_field_value_binning_strategy(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    binning_strategy = NumericRangeFieldValueBinningStrategy(fields=[POINT_NUMBER_FIELD], interval=5)
+    count_stat = CountStatistic()
+    count_stat.set_tag(TEST_TAG)
+    count_stat.set_type_name(POINT_TYPE_NAME)
+    count_stat.set_binning_strategy(binning_strategy)
+    test_ds.add_statistic(count_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    count_stat = test_ds.get_data_type_statistic(CountStatistic.STATS_TYPE, POINT_TYPE_NAME, TEST_TAG)
+    binning_strategy = count_stat.get_binning_strategy()
+    assert isinstance(binning_strategy, NumericRangeFieldValueBinningStrategy)
+    assert binning_strategy.get_strategy_name() == &#39;NUMERIC_RANGE&#39;
+    assert binning_strategy.get_description() is not None
+    assert test_ds.get_statistic_value(count_stat) == 360
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat))
+    # There should be one bin for every 5 values
+    assert len(binned_values) == 72
+    for b, v in binned_values:
+        assert isinstance(b, bytes)
+        assert v == 5
+
+    # test numeric range constraint
+    bin_constraint = BinConstraints.of_object(Range(0, 180))
+    assert isinstance(bin_constraint, BinConstraints)
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat, bin_constraint))
+    # There should be one bin for every 5 values
+    assert len(binned_values) == 36
+    for b, v in binned_values:
+        assert isinstance(b, bytes)
+        assert v == 5</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_numeric_range_statistic"><code class="name flex">
+<span>def <span class="ident">test_numeric_range_statistic</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_numeric_range_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    numeric_range_stat = NumericRangeStatistic()
+    numeric_range_stat.set_tag(TEST_TAG)
+    numeric_range_stat.set_type_name(POINT_TYPE_NAME)
+    numeric_range_stat.set_field_name(POINT_NUMBER_FIELD)
+    test_ds.add_statistic(numeric_range_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    numeric_range_stat = test_ds.get_field_statistic(
+        NumericRangeStatistic.STATS_TYPE,
+        POINT_TYPE_NAME,
+        POINT_NUMBER_FIELD,
+        TEST_TAG)
+    assert isinstance(numeric_range_stat, NumericRangeStatistic)
+    assert numeric_range_stat.get_tag() == TEST_TAG
+    assert numeric_range_stat.get_type_name() == POINT_TYPE_NAME
+    assert numeric_range_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert numeric_range_stat.get_description() is not None
+    assert numeric_range_stat.get_binning_strategy() is None
+    assert isinstance(numeric_range_stat.get_statistic_type(), FieldStatisticType)
+    assert numeric_range_stat.get_statistic_type().get_string() == &#39;NUMERIC_RANGE&#39;
+    numeric_range = test_ds.get_statistic_value(numeric_range_stat)
+    assert isinstance(numeric_range, Range)
+    assert numeric_range.get_minimum() == -180
+    assert numeric_range.get_maximum() == 179
+
+    # test alternate constructors
+    numeric_range_stat = NumericRangeStatistic(POINT_TYPE_NAME, POINT_NUMBER_FIELD)
+    numeric_range_stat.set_internal()
+    assert numeric_range_stat.get_type_name() == POINT_TYPE_NAME
+    assert numeric_range_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert numeric_range_stat.get_tag() == INTERNAL_TAG</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_numeric_stats_statistic"><code class="name flex">
+<span>def <span class="ident">test_numeric_stats_statistic</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_numeric_stats_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    numeric_stats_stat = NumericStatsStatistic()
+    numeric_stats_stat.set_tag(TEST_TAG)
+    numeric_stats_stat.set_type_name(POINT_TYPE_NAME)
+    numeric_stats_stat.set_field_name(POINT_NUMBER_FIELD)
+    test_ds.add_statistic(numeric_stats_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    numeric_stats_stat = test_ds.get_field_statistic(
+        NumericStatsStatistic.STATS_TYPE,
+        POINT_TYPE_NAME,
+        POINT_NUMBER_FIELD,
+        TEST_TAG)
+    assert isinstance(numeric_stats_stat, NumericStatsStatistic)
+    assert numeric_stats_stat.get_tag() == TEST_TAG
+    assert numeric_stats_stat.get_type_name() == POINT_TYPE_NAME
+    assert numeric_stats_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert numeric_stats_stat.get_description() is not None
+    assert numeric_stats_stat.get_binning_strategy() is None
+    assert isinstance(numeric_stats_stat.get_statistic_type(), FieldStatisticType)
+    assert numeric_stats_stat.get_statistic_type().get_string() == &#39;NUMERIC_STATS&#39;
+    stats = test_ds.get_statistic_value(numeric_stats_stat)
+    assert isinstance(stats, Stats)
+    assert stats.count() == 360
+    assert stats.mean() == -0.5
+    assert stats.sum() == -180
+    assert 10799 &lt; stats.population_variance() &lt; 10801
+    assert 103 &lt; stats.population_standard_deviation() &lt; 105
+    assert 10829 &lt; stats.sample_variance() &lt; 10831
+    assert 103 &lt; stats.sample_standard_deviation() &lt; 105
+    assert stats.min() == -180
+    assert stats.max() == 179
+
+    # test alternate constructors
+    numeric_stats_stat = NumericStatsStatistic(POINT_TYPE_NAME, POINT_NUMBER_FIELD)
+    numeric_stats_stat.set_internal()
+    assert numeric_stats_stat.get_type_name() == POINT_TYPE_NAME
+    assert numeric_stats_stat.get_field_name() == POINT_NUMBER_FIELD
+    assert numeric_stats_stat.get_tag() == INTERNAL_TAG</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_partition_binning_strategy"><code class="name flex">
+<span>def <span class="ident">test_partition_binning_strategy</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_partition_binning_strategy(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    binning_strategy = PartitionBinningStrategy()
+    count_stat = CountStatistic()
+    count_stat.set_tag(TEST_TAG)
+    count_stat.set_type_name(POINT_TYPE_NAME)
+    count_stat.set_binning_strategy(binning_strategy)
+    test_ds.add_statistic(count_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    count_stat = test_ds.get_data_type_statistic(CountStatistic.STATS_TYPE, POINT_TYPE_NAME, TEST_TAG)
+    binning_strategy = count_stat.get_binning_strategy()
+    assert isinstance(binning_strategy, PartitionBinningStrategy)
+    assert binning_strategy.get_strategy_name() == &#39;PARTITION&#39;
+    assert binning_strategy.get_description() is not None
+    assert test_ds.get_statistic_value(count_stat) == 360
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat))
+    # No real assumptions can be made about how the data is partitioned, but there will be at least 1 and all values
+    # should sum to 360
+    assert len(binned_values) &gt;= 1
+    assert reduce(lambda a, b: a + b, map(lambda a: a[1], binned_values)) == 360</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_partitions_statistic"><code class="name flex">
+<span>def <span class="ident">test_partitions_statistic</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_partitions_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    partitions_stat = PartitionsStatistic()
+    partitions_stat.set_tag(TEST_TAG)
+    partitions_stat.set_index_name(TEST_INDEX)
+    test_ds.add_statistic(partitions_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    partitions_stat = test_ds.get_index_statistic(
+        PartitionsStatistic.STATS_TYPE,
+        TEST_INDEX,
+        TEST_TAG)
+    assert isinstance(partitions_stat, PartitionsStatistic)
+    assert partitions_stat.get_tag() == TEST_TAG
+    assert partitions_stat.get_index_name() == TEST_INDEX
+    assert partitions_stat.get_description() is not None
+    assert partitions_stat.get_binning_strategy() is None
+    assert isinstance(partitions_stat.get_statistic_type(), IndexStatisticType)
+    assert partitions_stat.get_statistic_type().get_string() == &#39;PARTITIONS&#39;
+    partitions = test_ds.get_statistic_value(partitions_stat)
+    assert isinstance(partitions, set)
+    assert len(partitions) &gt;= 1
+    for item in partitions:
+        assert isinstance(item, bytes)
+
+    # test alternate constructors
+    partitions_stat = PartitionsStatistic(TEST_INDEX)
+    partitions_stat.set_internal()
+    assert partitions_stat.get_index_name() == TEST_INDEX
+    assert partitions_stat.get_tag() == INTERNAL_TAG</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_query_transform"><code class="name flex">
+<span>def <span class="ident">test_query_transform</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_query_transform(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+    numeric_range_stat = NumericRangeStatistic()
+    numeric_range_stat.set_tag(TEST_TAG)
+    numeric_range_stat.set_type_name(POINT_TYPE_NAME)
+    numeric_range_stat.set_field_name(POINT_NUMBER_FIELD)
+    test_ds.add_statistic(numeric_range_stat)
+    write_test_data(test_ds, index)
+
+    # when
+    stat_query_builder = StatisticQueryBuilder.new_builder(NumericRangeStatistic.STATS_TYPE)
+    stat_query_builder.type_name(POINT_TYPE_NAME)
+    stat_query_builder.field_name(POINT_NUMBER_FIELD)
+    stat_query_builder.tag(TEST_TAG)
+    result = results_as_list(test_ds.query_statistics(stat_query_builder.build()))
+
+    # then
+    assert len(result) == 1
+    assert isinstance(result[0], StatisticValue)
+    value = result[0].get_value()
+    assert isinstance(value, Range)
+    assert value.get_minimum() == -180
+    assert value.get_maximum() == 179
+
+    # when
+    aggregated_result = test_ds.aggregate_statistics(stat_query_builder.build())
+
+    # then
+    assert isinstance(aggregated_result, StatisticValue)
+    value = aggregated_result.get_value()
+    assert isinstance(value, Range)
+    assert value.get_minimum() == -180
+    assert value.get_maximum() == 179</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_row_range_histogram_statistic"><code class="name flex">
+<span>def <span class="ident">test_row_range_histogram_statistic</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_row_range_histogram_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    row_range_histogram_stat = RowRangeHistogramStatistic()
+    row_range_histogram_stat.set_tag(TEST_TAG)
+    row_range_histogram_stat.set_index_name(TEST_INDEX)
+    test_ds.add_statistic(row_range_histogram_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    row_range_histogram_stat = test_ds.get_index_statistic(
+        RowRangeHistogramStatistic.STATS_TYPE,
+        TEST_INDEX,
+        TEST_TAG)
+    assert isinstance(row_range_histogram_stat, RowRangeHistogramStatistic)
+    assert row_range_histogram_stat.get_tag() == TEST_TAG
+    assert row_range_histogram_stat.get_index_name() == TEST_INDEX
+    assert row_range_histogram_stat.get_description() is not None
+    assert row_range_histogram_stat.get_binning_strategy() is None
+    assert isinstance(row_range_histogram_stat.get_statistic_type(), IndexStatisticType)
+    assert row_range_histogram_stat.get_statistic_type().get_string() == &#39;ROW_RANGE_HISTOGRAM&#39;
+    histogram = test_ds.get_statistic_value(row_range_histogram_stat)
+    assert isinstance(histogram, NumericHistogram)
+    assert histogram.get_min_value() == float(&#39;inf&#39;)
+    assert histogram.get_max_value() == float(&#39;-inf&#39;)
+    assert histogram.sum(histogram.quantile(1.0)) == 360
+    assert histogram.get_total_count() == 360
+
+    # test alternate constructors
+    row_range_histogram_stat = RowRangeHistogramStatistic(TEST_INDEX)
+    row_range_histogram_stat.set_internal()
+    assert row_range_histogram_stat.get_index_name() == TEST_INDEX
+    assert row_range_histogram_stat.get_tag() == INTERNAL_TAG</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_spatial_field_value_binning_strategy"><code class="name flex">
+<span>def <span class="ident">test_spatial_field_value_binning_strategy</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_spatial_field_value_binning_strategy(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    binning_strategy = SpatialFieldValueBinningStrategy(fields=[POINT_GEOMETRY_FIELD], type=&#39;GEOHASH&#39;, precision=1)
+    count_stat = CountStatistic()
+    count_stat.set_tag(TEST_TAG)
+    count_stat.set_type_name(POINT_TYPE_NAME)
+    count_stat.set_binning_strategy(binning_strategy)
+    test_ds.add_statistic(count_stat)
+    write_test_data_offset(test_ds, index)
+
+    # then
+    count_stat = test_ds.get_data_type_statistic(CountStatistic.STATS_TYPE, POINT_TYPE_NAME, TEST_TAG)
+    binning_strategy = count_stat.get_binning_strategy()
+    assert isinstance(binning_strategy, SpatialFieldValueBinningStrategy)
+    assert binning_strategy.get_strategy_name() == &#39;SPATIAL&#39;
+    assert binning_strategy.get_description() is not None
+    assert test_ds.get_statistic_value(count_stat) == 360
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat))
+    assert len(binned_values) == 8
+    for b, v in binned_values:
+        assert isinstance(b, bytes)
+        assert v == 45
+
+    # test polygon constraint
+    bin_constraint = BinConstraints.of_object(Polygon([[0.5, 0.5], [0.5, 45.5], [45.5, 45.5], [45.5, 0.5], [0.5, 0.5]]))
+    assert isinstance(bin_constraint, BinConstraints)
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat, bin_constraint))
+    # There is a bin every 45 degrees so there should be 2 bins
+    assert len(binned_values) == 2
+    for b, v in binned_values:
+        assert isinstance(b, bytes)
+        assert v == 45
+
+    bin_constraint = BinConstraints.of_object(Envelope(min_x=1, min_y=1, max_x=91, max_y=90))
+    assert isinstance(bin_constraint, BinConstraints)
+    assert test_ds.get_statistic_value(count_stat, bin_constraint) == 135</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_statistic_query"><code class="name flex">
+<span>def <span class="ident">test_statistic_query</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_statistic_query(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+    binning_strategy = FieldValueBinningStrategy([POINT_COLOR_FIELD, POINT_SHAPE_FIELD])
+    count_stat = CountStatistic()
+    count_stat.set_tag(TEST_TAG)
+    count_stat.set_type_name(POINT_TYPE_NAME)
+    count_stat.set_binning_strategy(binning_strategy)
+    test_ds.add_statistic(count_stat)
+    write_test_data(test_ds, index)
+
+    # when
+    stat_query_builder = StatisticQueryBuilder.new_builder(CountStatistic.STATS_TYPE)
+    stat_query_builder.type_name(POINT_TYPE_NAME)
+    stat_query_builder.tag(TEST_TAG)
+    stat_query_builder.bin_constraints(BinConstraints.of_prefix(b&#39;BLUE&#39;))
+    result = results_as_list(test_ds.query_statistics(stat_query_builder.build()))
+
+    # then
+    assert len(result) == 4
+    merged = None
+    for stat_value in result:
+        if merged is None:
+            merged = stat_value
+        else:
+            merged.merge(stat_value)
+        assert isinstance(stat_value, StatisticValue)
+        assert stat_value.get_value() == 30
+        assert isinstance(stat_value.get_statistic(), CountStatistic)
+    assert merged.get_value() == 120
+
+    # when
+    aggregated_result = test_ds.aggregate_statistics(stat_query_builder.build())
+
+    # then
+    assert isinstance(aggregated_result, StatisticValue)
+    assert aggregated_result.get_value() == 120</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_statistic_query_builders"><code class="name flex">
+<span>def <span class="ident">test_statistic_query_builders</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_statistic_query_builders():
+    # exercise all methods to make sure their java connections are valid
+    index_query_builder = StatisticQueryBuilder.new_builder(DifferingVisibilityCountStatistic.STATS_TYPE)
+    assert isinstance(index_query_builder, IndexStatisticQueryBuilder)
+    index_query_builder.index_name(&#39;idx&#39;)
+    index_query_builder.tag(&#39;test&#39;)
+    index_query_builder.add_authorization(&#39;auth1&#39;)
+    index_query_builder.authorizations([&#39;auth1&#39;, &#39;auth2&#39;])
+    index_query_builder.internal()
+    query = index_query_builder.build()
+    assert isinstance(query, StatisticQuery)
+
+    data_type_query_builder = StatisticQueryBuilder.new_builder(CountStatistic.STATS_TYPE)
+    assert isinstance(data_type_query_builder, DataTypeStatisticQueryBuilder)
+    data_type_query_builder.type_name(POINT_TYPE_NAME)
+    query = data_type_query_builder.build()
+    assert isinstance(query, StatisticQuery)
+
+    field_query_builder = StatisticQueryBuilder.new_builder(BloomFilterStatistic.STATS_TYPE)
+    assert isinstance(field_query_builder, FieldStatisticQueryBuilder)
+    field_query_builder.type_name(POINT_TYPE_NAME)
+    field_query_builder.field_name(POINT_NUMBER_FIELD)
+    query = field_query_builder.build()
+    assert isinstance(query, StatisticQuery)
+
+    statistic_query_builder = StatisticQueryBuilder.count()
+    assert isinstance(statistic_query_builder, DataTypeStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.bloom_filter()
+    assert isinstance(statistic_query_builder, FieldStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.bbox()
+    assert isinstance(statistic_query_builder, FieldStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.count_min_sketch()
+    assert isinstance(statistic_query_builder, FieldStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.fixed_bin_numeric_histogram()
+    assert isinstance(statistic_query_builder, FieldStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.hyper_log_log()
+    assert isinstance(statistic_query_builder, FieldStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.numeric_histogram()
+    assert isinstance(statistic_query_builder, FieldStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.numeric_mean()
+    assert isinstance(statistic_query_builder, FieldStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.numeric_range()
+    assert isinstance(statistic_query_builder, FieldStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.differing_visibility_count()
+    assert isinstance(statistic_query_builder, IndexStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.duplicate_entry_count()
+    assert isinstance(statistic_query_builder, IndexStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.field_visibility_count()
+    assert isinstance(statistic_query_builder, IndexStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.index_meta_data_set()
+    assert isinstance(statistic_query_builder, IndexStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.max_duplicates()
+    assert isinstance(statistic_query_builder, IndexStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.partitions()
+    assert isinstance(statistic_query_builder, IndexStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.row_range_histogram()
+    assert isinstance(statistic_query_builder, IndexStatisticQueryBuilder)
+
+    statistic_query_builder = StatisticQueryBuilder.numeric_stats()
+    assert isinstance(statistic_query_builder, FieldStatisticQueryBuilder)</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_time_range_field_value_binning_strategy"><code class="name flex">
+<span>def <span class="ident">test_time_range_field_value_binning_strategy</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_time_range_field_value_binning_strategy(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    binning_strategy = TimeRangeFieldValueBinningStrategy(fields=[POINT_TIME_FIELD], periodicity=&#39;minute&#39;)
+    count_stat = CountStatistic()
+    count_stat.set_tag(TEST_TAG)
+    count_stat.set_type_name(POINT_TYPE_NAME)
+    count_stat.set_binning_strategy(binning_strategy)
+    test_ds.add_statistic(count_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    count_stat = test_ds.get_data_type_statistic(CountStatistic.STATS_TYPE, POINT_TYPE_NAME, TEST_TAG)
+    binning_strategy = count_stat.get_binning_strategy()
+    assert isinstance(binning_strategy, TimeRangeFieldValueBinningStrategy)
+    assert binning_strategy.get_strategy_name() == &#39;TIME_RANGE&#39;
+    assert binning_strategy.get_description() is not None
+    assert test_ds.get_statistic_value(count_stat) == 360
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat))
+    # Each value is 1 second apart, so there should be 6 bins with a periodicity of minute
+    assert len(binned_values) == 6
+    for b, v in binned_values:
+        assert isinstance(b, bytes)
+        assert v == 60
+
+    # test time range constraint
+    bin_constraint = BinConstraints.of_object(Interval(datetime.utcfromtimestamp(0), datetime.utcfromtimestamp(180)))
+    assert isinstance(bin_constraint, BinConstraints)
+    binned_values = results_as_list(test_ds.get_binned_statistic_values(count_stat, bin_constraint))
+    # Each value is 1 second apart, so there should be 3 bins with a periodicity of minute
+    assert len(binned_values) == 3
+    for b, v in binned_values:
+        assert isinstance(b, bytes)
+        assert v == 60</code></pre>
+</details>
+</dd>
+<dt id="pygw.test.statistics_test.test_time_range_statistic"><code class="name flex">
+<span>def <span class="ident">test_time_range_statistic</span></span>(<span>test_ds)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def test_time_range_statistic(test_ds):
+    # given
+    index = SpatialIndexBuilder().set_name(TEST_INDEX).create_index()
+    adapter = POINT_TYPE_ADAPTER
+    test_ds.add_type(adapter, index)
+
+    # when
+    time_range_stat = TimeRangeStatistic()
+    time_range_stat.set_tag(TEST_TAG)
+    time_range_stat.set_type_name(POINT_TYPE_NAME)
+    time_range_stat.set_field_name(POINT_TIME_FIELD)
+    test_ds.add_statistic(time_range_stat)
+    write_test_data(test_ds, index)
+
+    # then
+    time_range_stat = test_ds.get_field_statistic(
+        TimeRangeStatistic.STATS_TYPE,
+        POINT_TYPE_NAME,
+        POINT_TIME_FIELD,
+        TEST_TAG)
+    assert isinstance(time_range_stat, TimeRangeStatistic)
+    assert time_range_stat.get_tag() == TEST_TAG
+    assert time_range_stat.get_type_name() == POINT_TYPE_NAME
+    assert time_range_stat.get_field_name() == POINT_TIME_FIELD
+    assert time_range_stat.get_description() is not None
+    assert time_range_stat.get_binning_strategy() is None
+    assert isinstance(time_range_stat.get_statistic_type(), FieldStatisticType)
+    assert time_range_stat.get_statistic_type().get_string() == &#39;TIME_RANGE&#39;
+    time_range = test_ds.get_statistic_value(time_range_stat)
+    assert isinstance(time_range, Interval)
+    assert time_range.get_start() == datetime.utcfromtimestamp(-180)
+    assert time_range.get_end() == datetime.utcfromtimestamp(179)
+
+    # test alternate constructors
+    time_range_stat = TimeRangeStatistic(POINT_TYPE_NAME, POINT_TIME_FIELD)
+    time_range_stat.set_internal()
+    assert time_range_stat.get_type_name() == POINT_TYPE_NAME
+    assert time_range_stat.get_field_name() == POINT_TIME_FIELD
+    assert time_range_stat.get_tag() == INTERNAL_TAG</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pygw.test" href="index.html">pygw.test</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="pygw.test.statistics_test.test_bloom_filter_statistic" href="#pygw.test.statistics_test.test_bloom_filter_statistic">test_bloom_filter_statistic</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_bounding_box_statistic" href="#pygw.test.statistics_test.test_bounding_box_statistic">test_bounding_box_statistic</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_composite_binning_strategy" href="#pygw.test.statistics_test.test_composite_binning_strategy">test_composite_binning_strategy</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_count_min_sketch_statistic" href="#pygw.test.statistics_test.test_count_min_sketch_statistic">test_count_min_sketch_statistic</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_count_statistic" href="#pygw.test.statistics_test.test_count_statistic">test_count_statistic</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_data_type_binning_strategy" href="#pygw.test.statistics_test.test_data_type_binning_strategy">test_data_type_binning_strategy</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_differing_visibility_count_statistic" href="#pygw.test.statistics_test.test_differing_visibility_count_statistic">test_differing_visibility_count_statistic</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_duplicate_entry_count_statistic" href="#pygw.test.statistics_test.test_duplicate_entry_count_statistic">test_duplicate_entry_count_statistic</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_field_value_binning_strategy" href="#pygw.test.statistics_test.test_field_value_binning_strategy">test_field_value_binning_strategy</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_field_visibility_count_statistic" href="#pygw.test.statistics_test.test_field_visibility_count_statistic">test_field_visibility_count_statistic</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_fixed_bin_numeric_histogram" href="#pygw.test.statistics_test.test_fixed_bin_numeric_histogram">test_fixed_bin_numeric_histogram</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_hyper_log_log_statistic" href="#pygw.test.statistics_test.test_hyper_log_log_statistic">test_hyper_log_log_statistic</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_index_meta_data_set_statistic" href="#pygw.test.statistics_test.test_index_meta_data_set_statistic">test_index_meta_data_set_statistic</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_max_duplicates_statistic" href="#pygw.test.statistics_test.test_max_duplicates_statistic">test_max_duplicates_statistic</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_numeric_histogram_statistic" href="#pygw.test.statistics_test.test_numeric_histogram_statistic">test_numeric_histogram_statistic</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_numeric_mean_statistic" href="#pygw.test.statistics_test.test_numeric_mean_statistic">test_numeric_mean_statistic</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_numeric_range_field_value_binning_strategy" href="#pygw.test.statistics_test.test_numeric_range_field_value_binning_strategy">test_numeric_range_field_value_binning_strategy</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_numeric_range_statistic" href="#pygw.test.statistics_test.test_numeric_range_statistic">test_numeric_range_statistic</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_numeric_stats_statistic" href="#pygw.test.statistics_test.test_numeric_stats_statistic">test_numeric_stats_statistic</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_partition_binning_strategy" href="#pygw.test.statistics_test.test_partition_binning_strategy">test_partition_binning_strategy</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_partitions_statistic" href="#pygw.test.statistics_test.test_partitions_statistic">test_partitions_statistic</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_query_transform" href="#pygw.test.statistics_test.test_query_transform">test_query_transform</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_row_range_histogram_statistic" href="#pygw.test.statistics_test.test_row_range_histogram_statistic">test_row_range_histogram_statistic</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_spatial_field_value_binning_strategy" href="#pygw.test.statistics_test.test_spatial_field_value_binning_strategy">test_spatial_field_value_binning_strategy</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_statistic_query" href="#pygw.test.statistics_test.test_statistic_query">test_statistic_query</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_statistic_query_builders" href="#pygw.test.statistics_test.test_statistic_query_builders">test_statistic_query_builders</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_time_range_field_value_binning_strategy" href="#pygw.test.statistics_test.test_time_range_field_value_binning_strategy">test_time_range_field_value_binning_strategy</a></code></li>
+<li><code><a title="pygw.test.statistics_test.test_time_range_statistic" href="#pygw.test.statistics_test.test_time_range_statistic">test_time_range_statistic</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

@@ -35,7 +35,7 @@ var documentationMenuItems = {
 var supportMenuItems = {
   'GitHub Issues': 'https://github.com/locationtech/geowave/issues',
   'Gitter': 'https://gitter.im/locationtech/geowave',
-  'Mailing List': 'mailto:geowave-dev@locationtech.org',
+  'Mailing List': 'mailto:geowave-dev@eclipse.org',
   'sep1': null,
   'Downloads': 'downloads.html'
 };

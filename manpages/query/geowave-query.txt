@@ -1,0 +1,74 @@
+//:= geowave-query(1)
+:doctype: manpage
+
+[[query-name]]
+==== NAME
+
+geowave-query - Query data using GeoWave Query Language
+
+[[query-synopsis]]
+==== SYNOPSIS
+
+  geowave query [options] <store name> <query>
+
+[[query-description]]
+==== DESCRIPTION
+
+This command queries data using an SQL-like syntax.  The query language currently only supports `SELECT` and `DELETE` statements.
+
+The syntax for `SELECT` statements is as follows:
+
+  SELECT <attributes> FROM <typeName> [ WHERE <filter> ] [ LIMIT <count> ]
+  
+Where `<attributes>` is a comma-separated list of column selectors or aggregation functions, `<typeName>` is the type name, `<filter>` is the constraints to filter the results by, and `<count>` is the number of results to limit the query to.
+
+The syntax for `DELETE` statements is as follows:
+
+  DELETE FROM <typeName> [ WHERE <filter> ]
+  
+Where `<typeName>` is the type name and `<filter>` is the constraints to delete results by.
+
+[[query-options]]
+==== OPTIONS
+
+*--debug*::
+  If specified, print out additional info for debug purposes.
+  
+*-f, --format* _<format>_::
+  Output format for query results.  Possible values are `console`, `csv`, `shp`, and `geojson`.  Both `shp` and `geojson` formats require that the query results contain at least 1 geometry column.  Default is `console`.
+  
+When the `csv` format is used, additional options are:
+
+*$$*$$ -o, --outputFile* _<file>_::
+  CSV file to output query results to.
+  
+When the `shp` format is used, additional options are:
+
+*$$*$$ -o, --outputFile* _<file>_::
+  Shapefile to output query results to.
+  
+*-t, --typeName* _<name>_::
+  Output feature type name.
+  
+When the `geojson` format is used, additional options are:
+
+*$$*$$ -o, --outputFile* _<file>_::
+  GeoJson file to output query results to.
+  
+*-t, --typeName* _<name>_::
+  Output feature type name.
+  
+[[query-examples]]
+==== EXAMPLES
+
+Calculate the total population of countries that intersect a bounding box that covers a region of Europe from the `example` data store:
+
+  geowave query example "SELECT SUM(population) FROM countries WHERE BBOX(geom, 7, 23, 46, 51)"
+  
+Select only countries that have a population over 100 million from the `example` data store:
+
+  geowave query example "SELECT * FROM countries WHERE population > 100000000"
+  
+Output country names and populations to a CSV file from the `example` data store:
+
+  geowave query -f csv -o myfile.csv example "SELECT name, population FROM example.countries"

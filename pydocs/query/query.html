@@ -30,20 +30,22 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 
 from pygw.base import GeoWaveObject
 
-from .query_result_transformer import QueryResultTransformer
+from ..base.java_transformer import JavaTransformer
+
 
 class Query(GeoWaveObject):
     &#34;&#34;&#34;
     Base Query class that wraps a GeoWave query.
     &#34;&#34;&#34;
 
-    def __init__(self, java_ref, result_transformer):
-        assert isinstance(result_transformer, QueryResultTransformer)
-        self.result_transformer = result_transformer
+    def __init__(self, java_ref, java_transformer):
+        if java_transformer is not None:
+            assert isinstance(java_transformer, JavaTransformer)
+        self.java_transformer = java_transformer
         super().__init__(java_ref)</code></pre>
 </details>
 </section>
@@ -58,7 +60,7 @@ class Query(GeoWaveObject):
 <dl>
 <dt id="pygw.query.query.Query"><code class="flex name class">
 <span>class <span class="ident">Query</span></span>
-<span>(</span><span>java_ref, result_transformer)</span>
+<span>(</span><span>java_ref, java_transformer)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Base Query class that wraps a GeoWave query.</p></section>
@@ -69,14 +71,20 @@ class Query(GeoWaveObject):
     Base Query class that wraps a GeoWave query.
     &#34;&#34;&#34;
 
-    def __init__(self, java_ref, result_transformer):
-        assert isinstance(result_transformer, QueryResultTransformer)
-        self.result_transformer = result_transformer
+    def __init__(self, java_ref, java_transformer):
+        if java_transformer is not None:
+            assert isinstance(java_transformer, JavaTransformer)
+        self.java_transformer = java_transformer
         super().__init__(java_ref)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="pygw.base.geowave_object.GeoWaveObject" href="../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject">GeoWaveObject</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="pygw.query.aggregation_query.AggregationQuery" href="aggregation_query.html#pygw.query.aggregation_query.AggregationQuery">AggregationQuery</a></li>
+<li><a title="pygw.query.statistics.statistic_query.StatisticQuery" href="statistics/statistic_query.html#pygw.query.statistics.statistic_query.StatisticQuery">StatisticQuery</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">

@@ -90,6 +90,12 @@ When the `redis` type option is used, additional options are:
 *--serialization* _<serialization>_::
   Can be \"fst\" or \"jdk\". Defaults to fst. This serialization codec is only used for the data index when secondary indexing.
 
+*--username* _<username>_::
+  A Redis username to be used with Redis AUTH.
+
+*--password* _<password>_::
+  The password for the user. Can be specified as `pass:<password>`, `file:<local file containing the password>`, `propfile:<local properties file containing the password>:<property file key>`, `env:<variable containing the pass>`, or `stdin`.
+
 When the `rocksdb` type option is used, additional options are:
 
 *--dir* _<path>_::
@@ -111,18 +117,30 @@ When the `filesystem` type option is used, additional options are:
 
 When the `cassandra` type option is used, additional options are:
 
-*$$*$$ --contactPoints* _<contact points>_::
+*--contactPoints* _<contact points>_::
   A single contact point or a comma delimited set of contact points to connect to the Cassandra cluster.
 
+*--datacenter* _<datacenter>_::
+  The local datacenter.
+  
 *--replicas* _<count>_::
   The number of replicas to use when creating a new keyspace.  Default is 3.
-
+  
 *--durableWrites* _<enabled>_::
   Whether to write to commit log for durability, configured only on creation of new keyspace.  Default is `true`.
 
 *--batchWriteSize* _<count>_::
   The number of inserts in a batch write.  Default is 50.
 
+*--gcGraceSeconds* _<count>_::
+  The gc_grace_seconds applied to each Cassandra table. Defaults to 10 days and major compaction should be triggered at least as often.
+
+*--compactionStrategy* _<compactionStrategy>_::
+  The compaction strategy applied to each Cassandra table. Available options are LeveledCompactionStrategy, SizeTieredCompactionStrategy, or TimeWindowCompactionStrategy.
+
+*--tableOptions* _<tableOptions>_::
+  Any general table options as 'key=value' applied to each Cassandra table.
+  
 When the `dynamodb` type option is used, additional options are:
 
 *$$*$$ --endpoint* _<endpoint>_::

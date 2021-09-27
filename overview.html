@@ -514,7 +514,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#data-stores">Data Stores</a></li>
 <li><a href="#indices">Indices</a></li>
-<li><a href="#adapters-types">Adapters/Types</a></li>
+<li><a href="#adapters-data-types">Adapters/Data Types</a></li>
 <li><a href="#statistics">Statistics</a></li>
 </ul>
 </li>
@@ -720,12 +720,12 @@ var doc_name = "Overview";
 </div>
 </div>
 <div class="sect2">
-<h3 id="adapters-types"><a class="anchor" href="#adapters-types"></a>Adapters/Types</h3>
+<h3 id="adapters-data-types"><a class="anchor" href="#adapters-data-types"></a>Adapters/Data Types</h3>
 <div class="paragraph">
-<p>In order to handle a multitude of input data types, an adapter is needed to translate the input data type into a format that can be understood and efficiently used by the GeoWave core.  Among others, GeoWave provides a data adapter implementation that supports <a href="http://docs.geotools.org/latest/javadocs/org/opengis/feature/simple/SimpleFeature.html" target="_blank">SimpleFeatures</a> by default, which should cover most use cases for vector data.</p>
+<p>In order to handle a multitude of input data types, an adapter is needed to describe the input data type so that can be translated to a format that GeoWave understands.  Among others, GeoWave provides a data adapter implementation that supports <a href="http://docs.geotools.org/latest/javadocs/org/opengis/feature/simple/SimpleFeature.html" target="_blank">SimpleFeatures</a> by default, which should cover most use cases for vector data.</p>
 </div>
 <div class="paragraph">
-<p>An example of this would be if a user had a shapefile and wanted to ingest it into GeoWave.  An adapter would be used that could transform all of the <code>SimpleFeature</code> data from the shapefile into the GeoWave format during ingest.  When that data is read by the user in the future, the adapter would be used to transform the GeoWave data back into <code>SimpleFeature</code> data.</p>
+<p>An example of this would be if a user had a shapefile and wanted to ingest it into GeoWave.  During the ingest process, an adapter would be created to describe and translate all of the fields for each feature in the shapefile so that GeoWave could index and store the data in an optimized format.  When that data is read by the user in the future, the adapter would be used to transform the GeoWave data back into <code>SimpleFeature</code> data.</p>
 </div>
 <div class="paragraph">
 <p>Data that has been added to GeoWave with an adapter is often referred to as a <em>type</em>.  Each <em>type</em> has a name that can be used to interact with the data.  Throughout the documentation, this name is referred to as a <em>type name</em>.</p>
@@ -737,7 +737,7 @@ var doc_name = "Overview";
 <div class="sect2">
 <h3 id="statistics"><a class="anchor" href="#statistics"></a>Statistics</h3>
 <div class="paragraph">
-<p>Because GeoWave often deals with large amounts of data, it can be costly to calculate statistics on a particular attribute in a dataset. Sometimes it is useful to have statistics information about an attribute readily available without the need to traverse the entire data set each time. To address this problem, GeoWave has a statistics store that can be configured to keep track of a number of different types of statistics for individual attributes on an adapter. The types of statistics available depend on the adapter type and attribute type.  The types of statistics available out of the box include:</p>
+<p>Because GeoWave often deals with large amounts of data, it can be costly to calculate statistics information about a data set.  To address this problem, GeoWave has a statistics store that can be configured to keep track of statistics on indices, data types, and fields that can be queried without having to traverse the entire data set.  GeoWave provides a number of statistics out of the box that should address a majority of use cases.  Some of these include:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -759,18 +759,12 @@ var doc_name = "Overview";
 </ul>
 </div>
 <div class="paragraph">
-<p>Statistics are generally updated during ingest and deletion. Range and bounding box statistics, however, are not updated during deletion due to their nature. GeoWave does provides tools to recalculate those statistics if needed.</p>
-</div>
-<div class="paragraph">
-<p>These are the circumstances where recalculation of statistics is recommended:</p>
+<p>Statistics are generally updated during ingest and deletion. However, due to their nature, range and bounding box statistics are not updated during deletion and may require recalculation. These are the circumstances where recalculation of statistics is recommended:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
 <p>As items are removed from an index, the range and envelope statistics may lose their accuracy if the removed item contains an attribute that represents the minimum or maximum value for the population.</p>
-</li>
-<li>
-<p>New statistics added to the statistics store after data is ingested are not automatically computed and would not reflect the existing data.</p>
 </li>
 <li>
 <p>When a statistic algorithm is changed, the existing statistic data may not accurately represent the updated algorithm.</p>
@@ -989,12 +983,12 @@ var doc_name = "Overview";
 <p><a href="commands.html" target="_blank"><strong>Command-Line Interface Documentation</strong></a></p>
 </div>
 <script>
-var geowave_version = '1.2.0';
+var geowave_version = '2.0.0';
 </script>
 
 <div class="geowave-footer col-md-12 docs-footer">
   <div class="py-4 d-flex justify-content-center align-items-center">
-    <small><p class="footer-text">This page was generated on Friday, December 11, 2020 at 04:12 AM UTC<br><a href="https://github.com/locationtech/geowave/tree/52a12f591b99ea921f34c3f8c04517e7f79bce4a">View the commit it was generated from on GitHub</a></p></small>
+    <small><p class="footer-text">This page was generated on Monday, September 27, 2021 at 11:18 AM UTC<br><a href="https://github.com/locationtech/geowave/tree/215458e8ee6ef6d7b3eb1bebca1f882428197b10">View the commit it was generated from on GitHub</a></p></small>
   </div>
 </div>
 </div>
@@ -1002,7 +996,7 @@ var geowave_version = '1.2.0';
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-12-11 04:12:25 +00:00
+Last updated 2021-09-27 11:18:09 +00:00
 </div>
 </div>
 </body>

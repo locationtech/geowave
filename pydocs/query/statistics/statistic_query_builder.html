@@ -1,0 +1,1752 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.3" />
+<title>pygw.query.statistics.statistic_query_builder API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>pygw.query.statistics.statistic_query_builder</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">#
+# Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
+
+#
+# See the NOTICE file distributed with this work for additional information regarding copyright
+# ownership. All rights reserved. This program and the accompanying materials are made available
+# under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+# available at http://www.apache.org/licenses/LICENSE-2.0.txt
+# ===============================================================================================
+from pygw.base import GeoWaveObject
+from pygw.base.type_conversions import StringArrayType
+from pygw.config import geowave_pkg
+from pygw.query.statistics.statistic_query import StatisticQuery
+from pygw.statistics.bin_constraints import BinConstraints
+from pygw.statistics.statistic_type import StatisticType, IndexStatisticType, DataTypeStatisticType
+
+
+class StatisticQueryBuilder(GeoWaveObject):
+    &#34;&#34;&#34;
+    A builder for creating statistics queries. This class should not be constructed directly, instead use one of the
+    static methods to create an appropriate builder.
+    &#34;&#34;&#34;
+
+    def __init__(self, java_ref, result_transformer):
+        self._result_transformer = result_transformer
+        super().__init__(java_ref)
+
+    def tag(self, tag):
+        &#34;&#34;&#34;
+        Sets the tag to query for.
+
+        Args:
+            tag (str): The tag to query for.
+        Returns:
+            This statistic query builder.
+        &#34;&#34;&#34;
+        self._java_ref.tag(tag)
+        return self
+
+    def internal(self):
+        &#34;&#34;&#34;
+        When set, only internal statistics will be queried.
+
+        Returns:
+            This statistic query builder.
+        &#34;&#34;&#34;
+        self._java_ref.internal()
+        return self
+
+    def add_authorization(self, authorization):
+        &#34;&#34;&#34;
+        Adds an authorization to the query.
+
+        Args:
+            authorization (str): The authorization to add.
+        Returns:
+            This statistic query builder.
+        &#34;&#34;&#34;
+        self._java_ref.addAuthorization(authorization)
+        return self
+
+    def authorizations(self, authorizations):
+        &#34;&#34;&#34;
+        Sets the set of authorizations to use for the query.
+
+        Args:
+            authorizations (array of str): The authorizations to use for the query.
+        Returns:
+            This statistic query builder.
+        &#34;&#34;&#34;
+        self._java_ref.authorizations(StringArrayType().to_java(authorizations))
+        return self
+
+    def bin_constraints(self, bin_constraints):
+        &#34;&#34;&#34;
+        Sets the constraints to use for the statistic query.  Only bins that match the given constraints will be
+        returned.
+
+        Args:
+            bin_constraints (BinConstraints): The constraints to constrain the query by.
+        Returns:
+            This statistic query builder.
+        &#34;&#34;&#34;
+        if not isinstance(bin_constraints, BinConstraints):
+            raise AttributeError(&#39;Must be a BinConstraints instance.&#39;)
+        self._java_ref.binConstraints(bin_constraints.java_ref())
+        return self
+
+    def build(self):
+        &#34;&#34;&#34;
+        Build the statistic query.
+
+        Returns:
+            This constructed statistic query.
+        &#34;&#34;&#34;
+        return StatisticQuery(self._java_ref.build(), self._result_transformer)
+
+    @staticmethod
+    def new_builder(statistic_type):
+        &#34;&#34;&#34;
+        Create a statistic query builder for the given statistic type.
+
+        Args:
+            statistic_type (StatisticType): The statistic type for the query builder.
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        if not isinstance(statistic_type, StatisticType):
+            raise AttributeError(&#39;Must be a StatisticType instance.&#39;)
+
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.newBuilder(statistic_type.java_ref())
+        if isinstance(statistic_type, IndexStatisticType):
+            return IndexStatisticQueryBuilder(statistic_type, j_builder)
+        if isinstance(statistic_type, DataTypeStatisticType):
+            return DataTypeStatisticQueryBuilder(statistic_type, j_builder)
+        return FieldStatisticQueryBuilder(statistic_type, j_builder)
+
+    @staticmethod
+    def differing_visibility_count():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a differing visibility count statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.differingVisibilityCount()
+        return IndexStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def duplicate_entry_count():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a duplicate entry count statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.duplicateEntryCount()
+        return IndexStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def field_visibility_count():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a field visibility count statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.fieldVisibilityCount()
+        return IndexStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def index_meta_data_set():
+        &#34;&#34;&#34;
+        Create a statistic query builder for an index meta data set statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.indexMetaDataSet()
+        return IndexStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def max_duplicates():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a max duplicates statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.maxDuplicates()
+        return IndexStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def partitions():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a partitions statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.partitions()
+        return IndexStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def row_range_histogram():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a row range histogram statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.rowRangeHistogram()
+        return IndexStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def count():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a count statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.count()
+        return DataTypeStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def bbox():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a bounding box statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.geotime.store.statistics.SpatialTemporalStatisticQueryBuilder.bbox()
+        return FieldStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def bloom_filter():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a bloom filter statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.bloomFilter()
+        return FieldStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def time_range():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a time range statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.geotime.store.statistics.SpatialTemporalStatisticQueryBuilder.timeRange()
+        return FieldStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def count_min_sketch():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a count min sketch statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.countMinSketch()
+        return FieldStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def fixed_bin_numeric_histogram():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a fixed bin numeric histogram statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.fixedBinNumericHistogram()
+        return FieldStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def hyper_log_log():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a hyper log log statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.hyperLogLog()
+        return FieldStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def numeric_histogram():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a numeric histogram statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.numericHistogram()
+        return FieldStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def numeric_mean():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a numeric mean statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.numericMean()
+        return FieldStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def numeric_range():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a numeric range statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.numericRange()
+        return FieldStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def numeric_stats():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a numeric stats statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.numericStats()
+        return FieldStatisticQueryBuilder(java_ref=j_builder)
+
+
+class IndexStatisticQueryBuilder(StatisticQueryBuilder):
+    &#34;&#34;&#34;
+    A builder for index statistic queries.
+    &#34;&#34;&#34;
+
+    def __init__(self, statistic_type=None, java_ref=None):
+        if java_ref is None:
+            j_qbuilder = geowave_pkg.core.statistics.query.IndexStatisticQueryBuilder(statistic_type.java_ref())
+        else:
+            j_qbuilder = java_ref
+        super().__init__(j_qbuilder, None)
+
+    def index_name(self, index_name):
+        &#34;&#34;&#34;
+        Set the index name to constrain the query by.
+
+        Args:
+            index_name (str): The index name to query.
+        Returns:
+            This statistic query builder.
+        &#34;&#34;&#34;
+        self._java_ref.indexName(index_name)
+        return self
+
+
+class DataTypeStatisticQueryBuilder(StatisticQueryBuilder):
+    &#34;&#34;&#34;
+    A builder for data type statistic queries.
+    &#34;&#34;&#34;
+
+    def __init__(self, statistic_type=None, java_ref=None):
+        if java_ref is None:
+            j_qbuilder = geowave_pkg.core.statistics.query.DataTypeStatisticQueryBuilder(statistic_type.java_ref())
+        else:
+            j_qbuilder = java_ref
+        super().__init__(j_qbuilder, None)
+
+    def type_name(self, type_name):
+        &#34;&#34;&#34;
+        Set the type name to constrain the query by.
+
+        Args:
+            type_name (str): The type name to query.
+        Returns:
+            This statistic query builder.
+        &#34;&#34;&#34;
+        self._java_ref.typeName(type_name)
+        return self
+
+
+class FieldStatisticQueryBuilder(StatisticQueryBuilder):
+    &#34;&#34;&#34;
+    A builder for field statistic queries.
+    &#34;&#34;&#34;
+
+    def __init__(self, statistic_type=None, java_ref=None):
+        if java_ref is None:
+            j_qbuilder = geowave_pkg.core.statistics.query.FieldStatisticQueryBuilder(statistic_type.java_ref())
+        else:
+            j_qbuilder = java_ref
+        super().__init__(j_qbuilder, None)
+
+    def type_name(self, type_name):
+        &#34;&#34;&#34;
+        Set the type name to constrain the query by.
+
+        Args:
+            type_name (str): The type name to query.
+        Returns:
+            This statistic query builder.
+        &#34;&#34;&#34;
+        self._java_ref.typeName(type_name)
+        return self
+
+    def field_name(self, field_name):
+        &#34;&#34;&#34;
+        Set the field name to constrain the query by.
+
+        Args:
+            field_name (str): The field name to query.
+        Returns:
+            This statistic query builder.
+        &#34;&#34;&#34;
+        self._java_ref.fieldName(field_name)
+        return self</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="pygw.query.statistics.statistic_query_builder.DataTypeStatisticQueryBuilder"><code class="flex name class">
+<span>class <span class="ident">DataTypeStatisticQueryBuilder</span></span>
+<span>(</span><span>statistic_type=None, java_ref=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A builder for data type statistic queries.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class DataTypeStatisticQueryBuilder(StatisticQueryBuilder):
+    &#34;&#34;&#34;
+    A builder for data type statistic queries.
+    &#34;&#34;&#34;
+
+    def __init__(self, statistic_type=None, java_ref=None):
+        if java_ref is None:
+            j_qbuilder = geowave_pkg.core.statistics.query.DataTypeStatisticQueryBuilder(statistic_type.java_ref())
+        else:
+            j_qbuilder = java_ref
+        super().__init__(j_qbuilder, None)
+
+    def type_name(self, type_name):
+        &#34;&#34;&#34;
+        Set the type name to constrain the query by.
+
+        Args:
+            type_name (str): The type name to query.
+        Returns:
+            This statistic query builder.
+        &#34;&#34;&#34;
+        self._java_ref.typeName(type_name)
+        return self</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder">StatisticQueryBuilder</a></li>
+<li><a title="pygw.base.geowave_object.GeoWaveObject" href="../../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject">GeoWaveObject</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="pygw.query.statistics.statistic_query_builder.DataTypeStatisticQueryBuilder.type_name"><code class="name flex">
+<span>def <span class="ident">type_name</span></span>(<span>self, type_name)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set the type name to constrain the query by.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The type name to query.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>This statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def type_name(self, type_name):
+    &#34;&#34;&#34;
+    Set the type name to constrain the query by.
+
+    Args:
+        type_name (str): The type name to query.
+    Returns:
+        This statistic query builder.
+    &#34;&#34;&#34;
+    self._java_ref.typeName(type_name)
+    return self</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder">StatisticQueryBuilder</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.add_authorization" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.add_authorization">add_authorization</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.authorizations" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.authorizations">authorizations</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bbox" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bbox">bbox</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bin_constraints" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bin_constraints">bin_constraints</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bloom_filter" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bloom_filter">bloom_filter</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.build" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.build">build</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.count" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.count">count</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.count_min_sketch" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.count_min_sketch">count_min_sketch</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.differing_visibility_count" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.differing_visibility_count">differing_visibility_count</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.duplicate_entry_count" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.duplicate_entry_count">duplicate_entry_count</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.field_visibility_count" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.field_visibility_count">field_visibility_count</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.fixed_bin_numeric_histogram" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.fixed_bin_numeric_histogram">fixed_bin_numeric_histogram</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.hyper_log_log" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.hyper_log_log">hyper_log_log</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.index_meta_data_set" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.index_meta_data_set">index_meta_data_set</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.internal" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.internal">internal</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.is_instance_of" href="../../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject.is_instance_of">is_instance_of</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.max_duplicates" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.max_duplicates">max_duplicates</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.new_builder" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.new_builder">new_builder</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_histogram" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_histogram">numeric_histogram</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_mean" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_mean">numeric_mean</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_range" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_range">numeric_range</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_stats" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_stats">numeric_stats</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.partitions" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.partitions">partitions</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.row_range_histogram" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.row_range_histogram">row_range_histogram</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.tag" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.tag">tag</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.time_range" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.time_range">time_range</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.FieldStatisticQueryBuilder"><code class="flex name class">
+<span>class <span class="ident">FieldStatisticQueryBuilder</span></span>
+<span>(</span><span>statistic_type=None, java_ref=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A builder for field statistic queries.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class FieldStatisticQueryBuilder(StatisticQueryBuilder):
+    &#34;&#34;&#34;
+    A builder for field statistic queries.
+    &#34;&#34;&#34;
+
+    def __init__(self, statistic_type=None, java_ref=None):
+        if java_ref is None:
+            j_qbuilder = geowave_pkg.core.statistics.query.FieldStatisticQueryBuilder(statistic_type.java_ref())
+        else:
+            j_qbuilder = java_ref
+        super().__init__(j_qbuilder, None)
+
+    def type_name(self, type_name):
+        &#34;&#34;&#34;
+        Set the type name to constrain the query by.
+
+        Args:
+            type_name (str): The type name to query.
+        Returns:
+            This statistic query builder.
+        &#34;&#34;&#34;
+        self._java_ref.typeName(type_name)
+        return self
+
+    def field_name(self, field_name):
+        &#34;&#34;&#34;
+        Set the field name to constrain the query by.
+
+        Args:
+            field_name (str): The field name to query.
+        Returns:
+            This statistic query builder.
+        &#34;&#34;&#34;
+        self._java_ref.fieldName(field_name)
+        return self</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder">StatisticQueryBuilder</a></li>
+<li><a title="pygw.base.geowave_object.GeoWaveObject" href="../../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject">GeoWaveObject</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="pygw.query.statistics.statistic_query_builder.FieldStatisticQueryBuilder.field_name"><code class="name flex">
+<span>def <span class="ident">field_name</span></span>(<span>self, field_name)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set the field name to constrain the query by.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>field_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The field name to query.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>This statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def field_name(self, field_name):
+    &#34;&#34;&#34;
+    Set the field name to constrain the query by.
+
+    Args:
+        field_name (str): The field name to query.
+    Returns:
+        This statistic query builder.
+    &#34;&#34;&#34;
+    self._java_ref.fieldName(field_name)
+    return self</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.FieldStatisticQueryBuilder.type_name"><code class="name flex">
+<span>def <span class="ident">type_name</span></span>(<span>self, type_name)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set the type name to constrain the query by.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>type_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The type name to query.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>This statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def type_name(self, type_name):
+    &#34;&#34;&#34;
+    Set the type name to constrain the query by.
+
+    Args:
+        type_name (str): The type name to query.
+    Returns:
+        This statistic query builder.
+    &#34;&#34;&#34;
+    self._java_ref.typeName(type_name)
+    return self</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder">StatisticQueryBuilder</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.add_authorization" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.add_authorization">add_authorization</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.authorizations" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.authorizations">authorizations</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bbox" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bbox">bbox</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bin_constraints" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bin_constraints">bin_constraints</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bloom_filter" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bloom_filter">bloom_filter</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.build" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.build">build</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.count" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.count">count</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.count_min_sketch" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.count_min_sketch">count_min_sketch</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.differing_visibility_count" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.differing_visibility_count">differing_visibility_count</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.duplicate_entry_count" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.duplicate_entry_count">duplicate_entry_count</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.field_visibility_count" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.field_visibility_count">field_visibility_count</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.fixed_bin_numeric_histogram" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.fixed_bin_numeric_histogram">fixed_bin_numeric_histogram</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.hyper_log_log" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.hyper_log_log">hyper_log_log</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.index_meta_data_set" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.index_meta_data_set">index_meta_data_set</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.internal" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.internal">internal</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.is_instance_of" href="../../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject.is_instance_of">is_instance_of</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.max_duplicates" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.max_duplicates">max_duplicates</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.new_builder" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.new_builder">new_builder</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_histogram" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_histogram">numeric_histogram</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_mean" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_mean">numeric_mean</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_range" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_range">numeric_range</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_stats" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_stats">numeric_stats</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.partitions" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.partitions">partitions</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.row_range_histogram" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.row_range_histogram">row_range_histogram</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.tag" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.tag">tag</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.time_range" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.time_range">time_range</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.IndexStatisticQueryBuilder"><code class="flex name class">
+<span>class <span class="ident">IndexStatisticQueryBuilder</span></span>
+<span>(</span><span>statistic_type=None, java_ref=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A builder for index statistic queries.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class IndexStatisticQueryBuilder(StatisticQueryBuilder):
+    &#34;&#34;&#34;
+    A builder for index statistic queries.
+    &#34;&#34;&#34;
+
+    def __init__(self, statistic_type=None, java_ref=None):
+        if java_ref is None:
+            j_qbuilder = geowave_pkg.core.statistics.query.IndexStatisticQueryBuilder(statistic_type.java_ref())
+        else:
+            j_qbuilder = java_ref
+        super().__init__(j_qbuilder, None)
+
+    def index_name(self, index_name):
+        &#34;&#34;&#34;
+        Set the index name to constrain the query by.
+
+        Args:
+            index_name (str): The index name to query.
+        Returns:
+            This statistic query builder.
+        &#34;&#34;&#34;
+        self._java_ref.indexName(index_name)
+        return self</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder">StatisticQueryBuilder</a></li>
+<li><a title="pygw.base.geowave_object.GeoWaveObject" href="../../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject">GeoWaveObject</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="pygw.query.statistics.statistic_query_builder.IndexStatisticQueryBuilder.index_name"><code class="name flex">
+<span>def <span class="ident">index_name</span></span>(<span>self, index_name)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set the index name to constrain the query by.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>index_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The index name to query.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>This statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def index_name(self, index_name):
+    &#34;&#34;&#34;
+    Set the index name to constrain the query by.
+
+    Args:
+        index_name (str): The index name to query.
+    Returns:
+        This statistic query builder.
+    &#34;&#34;&#34;
+    self._java_ref.indexName(index_name)
+    return self</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder">StatisticQueryBuilder</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.add_authorization" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.add_authorization">add_authorization</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.authorizations" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.authorizations">authorizations</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bbox" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bbox">bbox</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bin_constraints" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bin_constraints">bin_constraints</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bloom_filter" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bloom_filter">bloom_filter</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.build" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.build">build</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.count" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.count">count</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.count_min_sketch" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.count_min_sketch">count_min_sketch</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.differing_visibility_count" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.differing_visibility_count">differing_visibility_count</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.duplicate_entry_count" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.duplicate_entry_count">duplicate_entry_count</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.field_visibility_count" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.field_visibility_count">field_visibility_count</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.fixed_bin_numeric_histogram" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.fixed_bin_numeric_histogram">fixed_bin_numeric_histogram</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.hyper_log_log" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.hyper_log_log">hyper_log_log</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.index_meta_data_set" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.index_meta_data_set">index_meta_data_set</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.internal" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.internal">internal</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.is_instance_of" href="../../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject.is_instance_of">is_instance_of</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.max_duplicates" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.max_duplicates">max_duplicates</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.new_builder" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.new_builder">new_builder</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_histogram" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_histogram">numeric_histogram</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_mean" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_mean">numeric_mean</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_range" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_range">numeric_range</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_stats" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_stats">numeric_stats</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.partitions" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.partitions">partitions</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.row_range_histogram" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.row_range_histogram">row_range_histogram</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.tag" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.tag">tag</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.time_range" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.time_range">time_range</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder"><code class="flex name class">
+<span>class <span class="ident">StatisticQueryBuilder</span></span>
+<span>(</span><span>java_ref, result_transformer)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A builder for creating statistics queries. This class should not be constructed directly, instead use one of the
+static methods to create an appropriate builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class StatisticQueryBuilder(GeoWaveObject):
+    &#34;&#34;&#34;
+    A builder for creating statistics queries. This class should not be constructed directly, instead use one of the
+    static methods to create an appropriate builder.
+    &#34;&#34;&#34;
+
+    def __init__(self, java_ref, result_transformer):
+        self._result_transformer = result_transformer
+        super().__init__(java_ref)
+
+    def tag(self, tag):
+        &#34;&#34;&#34;
+        Sets the tag to query for.
+
+        Args:
+            tag (str): The tag to query for.
+        Returns:
+            This statistic query builder.
+        &#34;&#34;&#34;
+        self._java_ref.tag(tag)
+        return self
+
+    def internal(self):
+        &#34;&#34;&#34;
+        When set, only internal statistics will be queried.
+
+        Returns:
+            This statistic query builder.
+        &#34;&#34;&#34;
+        self._java_ref.internal()
+        return self
+
+    def add_authorization(self, authorization):
+        &#34;&#34;&#34;
+        Adds an authorization to the query.
+
+        Args:
+            authorization (str): The authorization to add.
+        Returns:
+            This statistic query builder.
+        &#34;&#34;&#34;
+        self._java_ref.addAuthorization(authorization)
+        return self
+
+    def authorizations(self, authorizations):
+        &#34;&#34;&#34;
+        Sets the set of authorizations to use for the query.
+
+        Args:
+            authorizations (array of str): The authorizations to use for the query.
+        Returns:
+            This statistic query builder.
+        &#34;&#34;&#34;
+        self._java_ref.authorizations(StringArrayType().to_java(authorizations))
+        return self
+
+    def bin_constraints(self, bin_constraints):
+        &#34;&#34;&#34;
+        Sets the constraints to use for the statistic query.  Only bins that match the given constraints will be
+        returned.
+
+        Args:
+            bin_constraints (BinConstraints): The constraints to constrain the query by.
+        Returns:
+            This statistic query builder.
+        &#34;&#34;&#34;
+        if not isinstance(bin_constraints, BinConstraints):
+            raise AttributeError(&#39;Must be a BinConstraints instance.&#39;)
+        self._java_ref.binConstraints(bin_constraints.java_ref())
+        return self
+
+    def build(self):
+        &#34;&#34;&#34;
+        Build the statistic query.
+
+        Returns:
+            This constructed statistic query.
+        &#34;&#34;&#34;
+        return StatisticQuery(self._java_ref.build(), self._result_transformer)
+
+    @staticmethod
+    def new_builder(statistic_type):
+        &#34;&#34;&#34;
+        Create a statistic query builder for the given statistic type.
+
+        Args:
+            statistic_type (StatisticType): The statistic type for the query builder.
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        if not isinstance(statistic_type, StatisticType):
+            raise AttributeError(&#39;Must be a StatisticType instance.&#39;)
+
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.newBuilder(statistic_type.java_ref())
+        if isinstance(statistic_type, IndexStatisticType):
+            return IndexStatisticQueryBuilder(statistic_type, j_builder)
+        if isinstance(statistic_type, DataTypeStatisticType):
+            return DataTypeStatisticQueryBuilder(statistic_type, j_builder)
+        return FieldStatisticQueryBuilder(statistic_type, j_builder)
+
+    @staticmethod
+    def differing_visibility_count():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a differing visibility count statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.differingVisibilityCount()
+        return IndexStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def duplicate_entry_count():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a duplicate entry count statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.duplicateEntryCount()
+        return IndexStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def field_visibility_count():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a field visibility count statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.fieldVisibilityCount()
+        return IndexStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def index_meta_data_set():
+        &#34;&#34;&#34;
+        Create a statistic query builder for an index meta data set statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.indexMetaDataSet()
+        return IndexStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def max_duplicates():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a max duplicates statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.maxDuplicates()
+        return IndexStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def partitions():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a partitions statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.partitions()
+        return IndexStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def row_range_histogram():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a row range histogram statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.rowRangeHistogram()
+        return IndexStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def count():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a count statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.count()
+        return DataTypeStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def bbox():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a bounding box statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.geotime.store.statistics.SpatialTemporalStatisticQueryBuilder.bbox()
+        return FieldStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def bloom_filter():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a bloom filter statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.bloomFilter()
+        return FieldStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def time_range():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a time range statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.geotime.store.statistics.SpatialTemporalStatisticQueryBuilder.timeRange()
+        return FieldStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def count_min_sketch():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a count min sketch statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.countMinSketch()
+        return FieldStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def fixed_bin_numeric_histogram():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a fixed bin numeric histogram statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.fixedBinNumericHistogram()
+        return FieldStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def hyper_log_log():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a hyper log log statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.hyperLogLog()
+        return FieldStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def numeric_histogram():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a numeric histogram statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.numericHistogram()
+        return FieldStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def numeric_mean():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a numeric mean statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.numericMean()
+        return FieldStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def numeric_range():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a numeric range statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.numericRange()
+        return FieldStatisticQueryBuilder(java_ref=j_builder)
+
+    @staticmethod
+    def numeric_stats():
+        &#34;&#34;&#34;
+        Create a statistic query builder for a numeric stats statistic.
+
+        Returns:
+            A statistic query builder.
+        &#34;&#34;&#34;
+        j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.numericStats()
+        return FieldStatisticQueryBuilder(java_ref=j_builder)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pygw.base.geowave_object.GeoWaveObject" href="../../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject">GeoWaveObject</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="pygw.query.statistics.statistic_query_builder.IndexStatisticQueryBuilder" href="#pygw.query.statistics.statistic_query_builder.IndexStatisticQueryBuilder">IndexStatisticQueryBuilder</a></li>
+<li><a title="pygw.query.statistics.statistic_query_builder.DataTypeStatisticQueryBuilder" href="#pygw.query.statistics.statistic_query_builder.DataTypeStatisticQueryBuilder">DataTypeStatisticQueryBuilder</a></li>
+<li><a title="pygw.query.statistics.statistic_query_builder.FieldStatisticQueryBuilder" href="#pygw.query.statistics.statistic_query_builder.FieldStatisticQueryBuilder">FieldStatisticQueryBuilder</a></li>
+</ul>
+<h3>Static methods</h3>
+<dl>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bbox"><code class="name flex">
+<span>def <span class="ident">bbox</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a statistic query builder for a bounding box statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>A statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@staticmethod
+def bbox():
+    &#34;&#34;&#34;
+    Create a statistic query builder for a bounding box statistic.
+
+    Returns:
+        A statistic query builder.
+    &#34;&#34;&#34;
+    j_builder = geowave_pkg.core.geotime.store.statistics.SpatialTemporalStatisticQueryBuilder.bbox()
+    return FieldStatisticQueryBuilder(java_ref=j_builder)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bloom_filter"><code class="name flex">
+<span>def <span class="ident">bloom_filter</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a statistic query builder for a bloom filter statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>A statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@staticmethod
+def bloom_filter():
+    &#34;&#34;&#34;
+    Create a statistic query builder for a bloom filter statistic.
+
+    Returns:
+        A statistic query builder.
+    &#34;&#34;&#34;
+    j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.bloomFilter()
+    return FieldStatisticQueryBuilder(java_ref=j_builder)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.count"><code class="name flex">
+<span>def <span class="ident">count</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a statistic query builder for a count statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>A statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@staticmethod
+def count():
+    &#34;&#34;&#34;
+    Create a statistic query builder for a count statistic.
+
+    Returns:
+        A statistic query builder.
+    &#34;&#34;&#34;
+    j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.count()
+    return DataTypeStatisticQueryBuilder(java_ref=j_builder)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.count_min_sketch"><code class="name flex">
+<span>def <span class="ident">count_min_sketch</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a statistic query builder for a count min sketch statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>A statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@staticmethod
+def count_min_sketch():
+    &#34;&#34;&#34;
+    Create a statistic query builder for a count min sketch statistic.
+
+    Returns:
+        A statistic query builder.
+    &#34;&#34;&#34;
+    j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.countMinSketch()
+    return FieldStatisticQueryBuilder(java_ref=j_builder)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.differing_visibility_count"><code class="name flex">
+<span>def <span class="ident">differing_visibility_count</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a statistic query builder for a differing visibility count statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>A statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@staticmethod
+def differing_visibility_count():
+    &#34;&#34;&#34;
+    Create a statistic query builder for a differing visibility count statistic.
+
+    Returns:
+        A statistic query builder.
+    &#34;&#34;&#34;
+    j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.differingVisibilityCount()
+    return IndexStatisticQueryBuilder(java_ref=j_builder)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.duplicate_entry_count"><code class="name flex">
+<span>def <span class="ident">duplicate_entry_count</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a statistic query builder for a duplicate entry count statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>A statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@staticmethod
+def duplicate_entry_count():
+    &#34;&#34;&#34;
+    Create a statistic query builder for a duplicate entry count statistic.
+
+    Returns:
+        A statistic query builder.
+    &#34;&#34;&#34;
+    j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.duplicateEntryCount()
+    return IndexStatisticQueryBuilder(java_ref=j_builder)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.field_visibility_count"><code class="name flex">
+<span>def <span class="ident">field_visibility_count</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a statistic query builder for a field visibility count statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>A statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@staticmethod
+def field_visibility_count():
+    &#34;&#34;&#34;
+    Create a statistic query builder for a field visibility count statistic.
+
+    Returns:
+        A statistic query builder.
+    &#34;&#34;&#34;
+    j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.fieldVisibilityCount()
+    return IndexStatisticQueryBuilder(java_ref=j_builder)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.fixed_bin_numeric_histogram"><code class="name flex">
+<span>def <span class="ident">fixed_bin_numeric_histogram</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a statistic query builder for a fixed bin numeric histogram statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>A statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@staticmethod
+def fixed_bin_numeric_histogram():
+    &#34;&#34;&#34;
+    Create a statistic query builder for a fixed bin numeric histogram statistic.
+
+    Returns:
+        A statistic query builder.
+    &#34;&#34;&#34;
+    j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.fixedBinNumericHistogram()
+    return FieldStatisticQueryBuilder(java_ref=j_builder)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.hyper_log_log"><code class="name flex">
+<span>def <span class="ident">hyper_log_log</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a statistic query builder for a hyper log log statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>A statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@staticmethod
+def hyper_log_log():
+    &#34;&#34;&#34;
+    Create a statistic query builder for a hyper log log statistic.
+
+    Returns:
+        A statistic query builder.
+    &#34;&#34;&#34;
+    j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.hyperLogLog()
+    return FieldStatisticQueryBuilder(java_ref=j_builder)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.index_meta_data_set"><code class="name flex">
+<span>def <span class="ident">index_meta_data_set</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a statistic query builder for an index meta data set statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>A statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@staticmethod
+def index_meta_data_set():
+    &#34;&#34;&#34;
+    Create a statistic query builder for an index meta data set statistic.
+
+    Returns:
+        A statistic query builder.
+    &#34;&#34;&#34;
+    j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.indexMetaDataSet()
+    return IndexStatisticQueryBuilder(java_ref=j_builder)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.max_duplicates"><code class="name flex">
+<span>def <span class="ident">max_duplicates</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a statistic query builder for a max duplicates statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>A statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@staticmethod
+def max_duplicates():
+    &#34;&#34;&#34;
+    Create a statistic query builder for a max duplicates statistic.
+
+    Returns:
+        A statistic query builder.
+    &#34;&#34;&#34;
+    j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.maxDuplicates()
+    return IndexStatisticQueryBuilder(java_ref=j_builder)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.new_builder"><code class="name flex">
+<span>def <span class="ident">new_builder</span></span>(<span>statistic_type)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a statistic query builder for the given statistic type.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>statistic_type</code></strong> :&ensp;<code>StatisticType</code></dt>
+<dd>The statistic type for the query builder.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@staticmethod
+def new_builder(statistic_type):
+    &#34;&#34;&#34;
+    Create a statistic query builder for the given statistic type.
+
+    Args:
+        statistic_type (StatisticType): The statistic type for the query builder.
+    Returns:
+        A statistic query builder.
+    &#34;&#34;&#34;
+    if not isinstance(statistic_type, StatisticType):
+        raise AttributeError(&#39;Must be a StatisticType instance.&#39;)
+
+    j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.newBuilder(statistic_type.java_ref())
+    if isinstance(statistic_type, IndexStatisticType):
+        return IndexStatisticQueryBuilder(statistic_type, j_builder)
+    if isinstance(statistic_type, DataTypeStatisticType):
+        return DataTypeStatisticQueryBuilder(statistic_type, j_builder)
+    return FieldStatisticQueryBuilder(statistic_type, j_builder)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_histogram"><code class="name flex">
+<span>def <span class="ident">numeric_histogram</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a statistic query builder for a numeric histogram statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>A statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@staticmethod
+def numeric_histogram():
+    &#34;&#34;&#34;
+    Create a statistic query builder for a numeric histogram statistic.
+
+    Returns:
+        A statistic query builder.
+    &#34;&#34;&#34;
+    j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.numericHistogram()
+    return FieldStatisticQueryBuilder(java_ref=j_builder)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_mean"><code class="name flex">
+<span>def <span class="ident">numeric_mean</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a statistic query builder for a numeric mean statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>A statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@staticmethod
+def numeric_mean():
+    &#34;&#34;&#34;
+    Create a statistic query builder for a numeric mean statistic.
+
+    Returns:
+        A statistic query builder.
+    &#34;&#34;&#34;
+    j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.numericMean()
+    return FieldStatisticQueryBuilder(java_ref=j_builder)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_range"><code class="name flex">
+<span>def <span class="ident">numeric_range</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a statistic query builder for a numeric range statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>A statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@staticmethod
+def numeric_range():
+    &#34;&#34;&#34;
+    Create a statistic query builder for a numeric range statistic.
+
+    Returns:
+        A statistic query builder.
+    &#34;&#34;&#34;
+    j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.numericRange()
+    return FieldStatisticQueryBuilder(java_ref=j_builder)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_stats"><code class="name flex">
+<span>def <span class="ident">numeric_stats</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a statistic query builder for a numeric stats statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>A statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@staticmethod
+def numeric_stats():
+    &#34;&#34;&#34;
+    Create a statistic query builder for a numeric stats statistic.
+
+    Returns:
+        A statistic query builder.
+    &#34;&#34;&#34;
+    j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.numericStats()
+    return FieldStatisticQueryBuilder(java_ref=j_builder)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.partitions"><code class="name flex">
+<span>def <span class="ident">partitions</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a statistic query builder for a partitions statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>A statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@staticmethod
+def partitions():
+    &#34;&#34;&#34;
+    Create a statistic query builder for a partitions statistic.
+
+    Returns:
+        A statistic query builder.
+    &#34;&#34;&#34;
+    j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.partitions()
+    return IndexStatisticQueryBuilder(java_ref=j_builder)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.row_range_histogram"><code class="name flex">
+<span>def <span class="ident">row_range_histogram</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a statistic query builder for a row range histogram statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>A statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@staticmethod
+def row_range_histogram():
+    &#34;&#34;&#34;
+    Create a statistic query builder for a row range histogram statistic.
+
+    Returns:
+        A statistic query builder.
+    &#34;&#34;&#34;
+    j_builder = geowave_pkg.core.store.api.StatisticQueryBuilder.rowRangeHistogram()
+    return IndexStatisticQueryBuilder(java_ref=j_builder)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.time_range"><code class="name flex">
+<span>def <span class="ident">time_range</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a statistic query builder for a time range statistic.</p>
+<h2 id="returns">Returns</h2>
+<p>A statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@staticmethod
+def time_range():
+    &#34;&#34;&#34;
+    Create a statistic query builder for a time range statistic.
+
+    Returns:
+        A statistic query builder.
+    &#34;&#34;&#34;
+    j_builder = geowave_pkg.core.geotime.store.statistics.SpatialTemporalStatisticQueryBuilder.timeRange()
+    return FieldStatisticQueryBuilder(java_ref=j_builder)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.add_authorization"><code class="name flex">
+<span>def <span class="ident">add_authorization</span></span>(<span>self, authorization)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Adds an authorization to the query.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>authorization</code></strong> :&ensp;<code>str</code></dt>
+<dd>The authorization to add.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>This statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_authorization(self, authorization):
+    &#34;&#34;&#34;
+    Adds an authorization to the query.
+
+    Args:
+        authorization (str): The authorization to add.
+    Returns:
+        This statistic query builder.
+    &#34;&#34;&#34;
+    self._java_ref.addAuthorization(authorization)
+    return self</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.authorizations"><code class="name flex">
+<span>def <span class="ident">authorizations</span></span>(<span>self, authorizations)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets the set of authorizations to use for the query.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>authorizations</code></strong> :&ensp;<code>array</code> of <code>str</code></dt>
+<dd>The authorizations to use for the query.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>This statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def authorizations(self, authorizations):
+    &#34;&#34;&#34;
+    Sets the set of authorizations to use for the query.
+
+    Args:
+        authorizations (array of str): The authorizations to use for the query.
+    Returns:
+        This statistic query builder.
+    &#34;&#34;&#34;
+    self._java_ref.authorizations(StringArrayType().to_java(authorizations))
+    return self</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bin_constraints"><code class="name flex">
+<span>def <span class="ident">bin_constraints</span></span>(<span>self, bin_constraints)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets the constraints to use for the statistic query.
+Only bins that match the given constraints will be
+returned.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>bin_constraints</code></strong> :&ensp;<code>BinConstraints</code></dt>
+<dd>The constraints to constrain the query by.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>This statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def bin_constraints(self, bin_constraints):
+    &#34;&#34;&#34;
+    Sets the constraints to use for the statistic query.  Only bins that match the given constraints will be
+    returned.
+
+    Args:
+        bin_constraints (BinConstraints): The constraints to constrain the query by.
+    Returns:
+        This statistic query builder.
+    &#34;&#34;&#34;
+    if not isinstance(bin_constraints, BinConstraints):
+        raise AttributeError(&#39;Must be a BinConstraints instance.&#39;)
+    self._java_ref.binConstraints(bin_constraints.java_ref())
+    return self</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.build"><code class="name flex">
+<span>def <span class="ident">build</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Build the statistic query.</p>
+<h2 id="returns">Returns</h2>
+<p>This constructed statistic query.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def build(self):
+    &#34;&#34;&#34;
+    Build the statistic query.
+
+    Returns:
+        This constructed statistic query.
+    &#34;&#34;&#34;
+    return StatisticQuery(self._java_ref.build(), self._result_transformer)</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.internal"><code class="name flex">
+<span>def <span class="ident">internal</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>When set, only internal statistics will be queried.</p>
+<h2 id="returns">Returns</h2>
+<p>This statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def internal(self):
+    &#34;&#34;&#34;
+    When set, only internal statistics will be queried.
+
+    Returns:
+        This statistic query builder.
+    &#34;&#34;&#34;
+    self._java_ref.internal()
+    return self</code></pre>
+</details>
+</dd>
+<dt id="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.tag"><code class="name flex">
+<span>def <span class="ident">tag</span></span>(<span>self, tag)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets the tag to query for.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>tag</code></strong> :&ensp;<code>str</code></dt>
+<dd>The tag to query for.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>This statistic query builder.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def tag(self, tag):
+    &#34;&#34;&#34;
+    Sets the tag to query for.
+
+    Args:
+        tag (str): The tag to query for.
+    Returns:
+        This statistic query builder.
+    &#34;&#34;&#34;
+    self._java_ref.tag(tag)
+    return self</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pygw.base.geowave_object.GeoWaveObject" href="../../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject">GeoWaveObject</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pygw.base.geowave_object.GeoWaveObject.is_instance_of" href="../../base/geowave_object.html#pygw.base.geowave_object.GeoWaveObject.is_instance_of">is_instance_of</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pygw.query.statistics" href="index.html">pygw.query.statistics</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pygw.query.statistics.statistic_query_builder.DataTypeStatisticQueryBuilder" href="#pygw.query.statistics.statistic_query_builder.DataTypeStatisticQueryBuilder">DataTypeStatisticQueryBuilder</a></code></h4>
+<ul class="">
+<li><code><a title="pygw.query.statistics.statistic_query_builder.DataTypeStatisticQueryBuilder.type_name" href="#pygw.query.statistics.statistic_query_builder.DataTypeStatisticQueryBuilder.type_name">type_name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pygw.query.statistics.statistic_query_builder.FieldStatisticQueryBuilder" href="#pygw.query.statistics.statistic_query_builder.FieldStatisticQueryBuilder">FieldStatisticQueryBuilder</a></code></h4>
+<ul class="">
+<li><code><a title="pygw.query.statistics.statistic_query_builder.FieldStatisticQueryBuilder.field_name" href="#pygw.query.statistics.statistic_query_builder.FieldStatisticQueryBuilder.field_name">field_name</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.FieldStatisticQueryBuilder.type_name" href="#pygw.query.statistics.statistic_query_builder.FieldStatisticQueryBuilder.type_name">type_name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pygw.query.statistics.statistic_query_builder.IndexStatisticQueryBuilder" href="#pygw.query.statistics.statistic_query_builder.IndexStatisticQueryBuilder">IndexStatisticQueryBuilder</a></code></h4>
+<ul class="">
+<li><code><a title="pygw.query.statistics.statistic_query_builder.IndexStatisticQueryBuilder.index_name" href="#pygw.query.statistics.statistic_query_builder.IndexStatisticQueryBuilder.index_name">index_name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder">StatisticQueryBuilder</a></code></h4>
+<ul class="">
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.add_authorization" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.add_authorization">add_authorization</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.authorizations" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.authorizations">authorizations</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bbox" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bbox">bbox</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bin_constraints" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bin_constraints">bin_constraints</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bloom_filter" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.bloom_filter">bloom_filter</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.build" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.build">build</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.count" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.count">count</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.count_min_sketch" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.count_min_sketch">count_min_sketch</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.differing_visibility_count" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.differing_visibility_count">differing_visibility_count</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.duplicate_entry_count" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.duplicate_entry_count">duplicate_entry_count</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.field_visibility_count" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.field_visibility_count">field_visibility_count</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.fixed_bin_numeric_histogram" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.fixed_bin_numeric_histogram">fixed_bin_numeric_histogram</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.hyper_log_log" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.hyper_log_log">hyper_log_log</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.index_meta_data_set" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.index_meta_data_set">index_meta_data_set</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.internal" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.internal">internal</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.max_duplicates" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.max_duplicates">max_duplicates</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.new_builder" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.new_builder">new_builder</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_histogram" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_histogram">numeric_histogram</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_mean" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_mean">numeric_mean</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_range" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_range">numeric_range</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_stats" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.numeric_stats">numeric_stats</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.partitions" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.partitions">partitions</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.row_range_histogram" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.row_range_histogram">row_range_histogram</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.tag" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.tag">tag</a></code></li>
+<li><code><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.time_range" href="#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder.time_range">time_range</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.3</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

@@ -30,11 +30,12 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 
 from pygw.config import geowave_pkg
 from pygw.config import java_pkg
 from pygw.store import DataStoreOptions
+
 
 class DynamoDBOptions(DataStoreOptions):
     &#34;&#34;&#34;
@@ -50,7 +51,7 @@ class DynamoDBOptions(DataStoreOptions):
         (specify either endpoint or region not both).
 
         Args:
-            region (str): The AWS region to use.
+            region (str, None): The AWS region to use.
         &#34;&#34;&#34;
         if region is None:
             j_region = None
@@ -137,7 +138,7 @@ class DynamoDBOptions(DataStoreOptions):
         Sets the protocol of the connection to use. Either &#39;http&#39; or &#39;https&#39;.
 
         Args:
-            protocol (str): The protocol to use.
+            protocol (str, None): The protocol to use.
         &#34;&#34;&#34;
         if protocol is None:
             j_protocol = None
@@ -202,7 +203,7 @@ class DynamoDBOptions(DataStoreOptions):
         (specify either endpoint or region not both).
 
         Args:
-            region (str): The AWS region to use.
+            region (str, None): The AWS region to use.
         &#34;&#34;&#34;
         if region is None:
             j_region = None
@@ -289,7 +290,7 @@ class DynamoDBOptions(DataStoreOptions):
         Sets the protocol of the connection to use. Either &#39;http&#39; or &#39;https&#39;.
 
         Args:
-            protocol (str): The protocol to use.
+            protocol (str, None): The protocol to use.
         &#34;&#34;&#34;
         if protocol is None:
             j_protocol = None
@@ -521,7 +522,7 @@ class DynamoDBOptions(DataStoreOptions):
 <section class="desc"><p>Sets the protocol of the connection to use. Either 'http' or 'https'.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>protocol</code></strong> :&ensp;<code>str</code></dt>
+<dt><strong><code>protocol</code></strong> :&ensp;<code>str</code>, <code>None</code></dt>
 <dd>The protocol to use.</dd>
 </dl></section>
 <details class="source">
@@ -531,7 +532,7 @@ class DynamoDBOptions(DataStoreOptions):
     Sets the protocol of the connection to use. Either &#39;http&#39; or &#39;https&#39;.
 
     Args:
-        protocol (str): The protocol to use.
+        protocol (str, None): The protocol to use.
     &#34;&#34;&#34;
     if protocol is None:
         j_protocol = None
@@ -570,7 +571,7 @@ class DynamoDBOptions(DataStoreOptions):
 (specify either endpoint or region not both).</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>region</code></strong> :&ensp;<code>str</code></dt>
+<dt><strong><code>region</code></strong> :&ensp;<code>str</code>, <code>None</code></dt>
 <dd>The AWS region to use.</dd>
 </dl></section>
 <details class="source">
@@ -581,7 +582,7 @@ class DynamoDBOptions(DataStoreOptions):
     (specify either endpoint or region not both).
 
     Args:
-        region (str): The AWS region to use.
+        region (str, None): The AWS region to use.
     &#34;&#34;&#34;
     if region is None:
         j_region = None

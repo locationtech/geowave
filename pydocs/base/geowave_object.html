@@ -30,9 +30,11 @@
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
+from py4j.java_gateway import is_instance_of
 
 from pygw.config import java_gateway
+
 
 class GeoWaveObject:
     &#34;&#34;&#34;
@@ -43,19 +45,40 @@ class GeoWaveObject:
         self._java_ref = java_ref
 
     def __repr__(self):
-        return &#34;pygw {} Object with JavaRef@{}&#34;.format(self.__class__, self._java_ref)
+        return &#34;pygw {} =&gt; {}&#34;.format(self.__class__, self._java_ref)
 
     def __eq__(self, other):
-        if not isinstance(other, PyGwJavaWrapper):
+        if not isinstance(other, GeoWaveObject):
             return False
         return self._java_ref == other._java_ref
+
+    def __str__(self):
+        return self.to_string()
 
     def is_instance_of(self, java_class):
         &#34;&#34;&#34;
         Returns:
             True if this object is of the type represented by the given java class.
         &#34;&#34;&#34;
-        return isinstance(java_gateway, self._java_ref, java_class)</code></pre>
+        return is_instance_of(java_gateway, self._java_ref, java_class)
+
+    def to_string(self):
+        return self._java_ref.toString()
+
+    def java_ref(self):
+        return self._java_ref
+
+    @staticmethod
+    def to_java_array(java_class, objects):
+        n = len(objects)
+        j_arr = java_gateway.new_array(java_class, n)
+        for idx, obj in enumerate(objects):
+            if not isinstance(obj, GeoWaveObject) or not obj.is_instance_of(java_class):
+                print(obj, objects, java_class)
+                raise AttributeError(&#34;Given object is not compatible with the given class.&#34;)
+            j_arr[idx] = obj.java_ref()
+
+        return j_arr</code></pre>
 </details>
 </section>
 <section>
@@ -84,19 +107,40 @@ class GeoWaveObject:
         self._java_ref = java_ref
 
     def __repr__(self):
-        return &#34;pygw {} Object with JavaRef@{}&#34;.format(self.__class__, self._java_ref)
+        return &#34;pygw {} =&gt; {}&#34;.format(self.__class__, self._java_ref)
 
     def __eq__(self, other):
-        if not isinstance(other, PyGwJavaWrapper):
+        if not isinstance(other, GeoWaveObject):
             return False
         return self._java_ref == other._java_ref
+
+    def __str__(self):
+        return self.to_string()
 
     def is_instance_of(self, java_class):
         &#34;&#34;&#34;
         Returns:
             True if this object is of the type represented by the given java class.
         &#34;&#34;&#34;
-        return isinstance(java_gateway, self._java_ref, java_class)</code></pre>
+        return is_instance_of(java_gateway, self._java_ref, java_class)
+
+    def to_string(self):
+        return self._java_ref.toString()
+
+    def java_ref(self):
+        return self._java_ref
+
+    @staticmethod
+    def to_java_array(java_class, objects):
+        n = len(objects)
+        j_arr = java_gateway.new_array(java_class, n)
+        for idx, obj in enumerate(objects):
+            if not isinstance(obj, GeoWaveObject) or not obj.is_instance_of(java_class):
+                print(obj, objects, java_class)
+                raise AttributeError(&#34;Given object is not compatible with the given class.&#34;)
+            j_arr[idx] = obj.java_ref()
+
+        return j_arr</code></pre>
 </details>
 <h3>Subclasses</h3>
 <ul class="hlist">
@@ -104,22 +148,60 @@ class GeoWaveObject:
 <li><a title="pygw.base.data_type_adapter.DataTypeAdapter" href="data_type_adapter.html#pygw.base.data_type_adapter.DataTypeAdapter">DataTypeAdapter</a></li>
 <li><a title="pygw.base.write_results.WriteResults" href="write_results.html#pygw.base.write_results.WriteResults">WriteResults</a></li>
 <li><a title="pygw.base.writer.Writer" href="writer.html#pygw.base.writer.Writer">Writer</a></li>
-<li><a title="pygw.index.index.Index" href="../index/index.m.html#pygw.index.index.Index">Index</a></li>
-<li><a title="pygw.index.index_builder.IndexBuilder" href="../index/index_builder.html#pygw.index.index_builder.IndexBuilder">IndexBuilder</a></li>
+<li><a title="pygw.base.envelope.Envelope" href="envelope.html#pygw.base.envelope.Envelope">Envelope</a></li>
+<li><a title="pygw.base.interval.Interval" href="interval.html#pygw.base.interval.Interval">Interval</a></li>
+<li><a title="pygw.base.range.Range" href="range.html#pygw.base.range.Range">Range</a></li>
+<li><a title="pygw.query.query.Query" href="../query/query.html#pygw.query.query.Query">Query</a></li>
+<li><a title="pygw.query.query_constraints.QueryConstraints" href="../query/query_constraints.html#pygw.query.query_constraints.QueryConstraints">QueryConstraints</a></li>
+<li><a title="pygw.query.query_constraints_factory.QueryConstraintsFactory" href="../query/query_constraints_factory.html#pygw.query.query_constraints_factory.QueryConstraintsFactory">QueryConstraintsFactory</a></li>
+<li><a title="pygw.query.vector.spatial_temporal_constraints_builder.SpatialTemporalConstraintsBuilder" href="../query/vector/spatial_temporal_constraints_builder.html#pygw.query.vector.spatial_temporal_constraints_builder.SpatialTemporalConstraintsBuilder">SpatialTemporalConstraintsBuilder</a></li>
+<li><a title="pygw.query.vector.filter_factory.FilterFactory" href="../query/vector/filter_factory.html#pygw.query.vector.filter_factory.FilterFactory">FilterFactory</a></li>
 <li><a title="pygw.geotools.simple_feature_type.SimpleFeatureType" href="../geotools/simple_feature_type.html#pygw.geotools.simple_feature_type.SimpleFeatureType">SimpleFeatureType</a></li>
 <li><a title="pygw.geotools.attribute_descriptor.AttributeDescriptor" href="../geotools/attribute_descriptor.html#pygw.geotools.attribute_descriptor.AttributeDescriptor">AttributeDescriptor</a></li>
 <li><a title="pygw.geotools.simple_feature_type_builder.SimpleFeatureTypeBuilder" href="../geotools/simple_feature_type_builder.html#pygw.geotools.simple_feature_type_builder.SimpleFeatureTypeBuilder">SimpleFeatureTypeBuilder</a></li>
 <li><a title="pygw.geotools.simple_feature.SimpleFeature" href="../geotools/simple_feature.html#pygw.geotools.simple_feature.SimpleFeature">SimpleFeature</a></li>
 <li><a title="pygw.geotools.simple_feature_builder.SimpleFeatureBuilder" href="../geotools/simple_feature_builder.html#pygw.geotools.simple_feature_builder.SimpleFeatureBuilder">SimpleFeatureBuilder</a></li>
-<li><a title="pygw.query.query.Query" href="../query/query.html#pygw.query.query.Query">Query</a></li>
-<li><a title="pygw.query.query_constraints.QueryConstraints" href="../query/query_constraints.html#pygw.query.query_constraints.QueryConstraints">QueryConstraints</a></li>
-<li><a title="pygw.query.vector.spatial_temporal_constraints_builder.SpatialTemporalConstraintsBuilder" href="../query/vector/spatial_temporal_constraints_builder.html#pygw.query.vector.spatial_temporal_constraints_builder.SpatialTemporalConstraintsBuilder">SpatialTemporalConstraintsBuilder</a></li>
-<li><a title="pygw.query.query_constraints_factory.QueryConstraintsFactory" href="../query/query_constraints_factory.html#pygw.query.query_constraints_factory.QueryConstraintsFactory">QueryConstraintsFactory</a></li>
-<li><a title="pygw.query.vector.filter_factory.FilterFactory" href="../query/vector/filter_factory.html#pygw.query.vector.filter_factory.FilterFactory">FilterFactory</a></li>
-<li><a title="pygw.query.query_builder.QueryBuilder" href="../query/query_builder.html#pygw.query.query_builder.QueryBuilder">QueryBuilder</a></li>
+<li><a title="pygw.query.base_query_builder.BaseQueryBuilder" href="../query/base_query_builder.html#pygw.query.base_query_builder.BaseQueryBuilder">BaseQueryBuilder</a></li>
+<li><a title="pygw.index.index.Index" href="../index/index.m.html#pygw.index.index.Index">Index</a></li>
+<li><a title="pygw.index.index_builder.IndexBuilder" href="../index/index_builder.html#pygw.index.index_builder.IndexBuilder">IndexBuilder</a></li>
+<li><a title="pygw.statistics.statistic_binning_strategy.StatisticBinningStrategy" href="../statistics/statistic_binning_strategy.html#pygw.statistics.statistic_binning_strategy.StatisticBinningStrategy">StatisticBinningStrategy</a></li>
+<li><a title="pygw.statistics.statistic_type.StatisticType" href="../statistics/statistic_type.html#pygw.statistics.statistic_type.StatisticType">StatisticType</a></li>
+<li><a title="pygw.statistics.statistic.Statistic" href="../statistics/statistic.html#pygw.statistics.statistic.Statistic">Statistic</a></li>
+<li><a title="pygw.statistics.field.bloom_filter_statistic.BloomFilter" href="../statistics/field/bloom_filter_statistic.html#pygw.statistics.field.bloom_filter_statistic.BloomFilter">BloomFilter</a></li>
+<li><a title="pygw.statistics.field.count_min_sketch_statistic.CountMinSketch" href="../statistics/field/count_min_sketch_statistic.html#pygw.statistics.field.count_min_sketch_statistic.CountMinSketch">CountMinSketch</a></li>
+<li><a title="pygw.statistics.field.fixed_bin_numeric_histogram_statistic.FixedBinNumericHistogram" href="../statistics/field/fixed_bin_numeric_histogram_statistic.html#pygw.statistics.field.fixed_bin_numeric_histogram_statistic.FixedBinNumericHistogram">FixedBinNumericHistogram</a></li>
+<li><a title="pygw.statistics.field.hyper_log_log_statistic.HyperLogLogPlus" href="../statistics/field/hyper_log_log_statistic.html#pygw.statistics.field.hyper_log_log_statistic.HyperLogLogPlus">HyperLogLogPlus</a></li>
+<li><a title="pygw.statistics.field.numeric_histogram_statistic.NumericHistogram" href="../statistics/field/numeric_histogram_statistic.html#pygw.statistics.field.numeric_histogram_statistic.NumericHistogram">NumericHistogram</a></li>
+<li><a title="pygw.statistics.field.numeric_stats_statistic.Stats" href="../statistics/field/numeric_stats_statistic.html#pygw.statistics.field.numeric_stats_statistic.Stats">Stats</a></li>
+<li><a title="pygw.statistics.statistic_value.StatisticValue" href="../statistics/statistic_value.html#pygw.statistics.statistic_value.StatisticValue">StatisticValue</a></li>
+<li><a title="pygw.statistics.bin_constraints.BinConstraints" href="../statistics/bin_constraints.html#pygw.statistics.bin_constraints.BinConstraints">BinConstraints</a></li>
+<li><a title="pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder" href="../query/statistics/statistic_query_builder.html#pygw.query.statistics.statistic_query_builder.StatisticQueryBuilder">StatisticQueryBuilder</a></li>
 <li><a title="pygw.store.data_store.DataStore" href="../store/data_store.html#pygw.store.data_store.DataStore">DataStore</a></li>
 <li><a title="pygw.store.data_store_options.DataStoreOptions" href="../store/data_store_options.html#pygw.store.data_store_options.DataStoreOptions">DataStoreOptions</a></li>
 </ul>
+<h3>Static methods</h3>
+<dl>
+<dt id="pygw.base.geowave_object.GeoWaveObject.to_java_array"><code class="name flex">
+<span>def <span class="ident">to_java_array</span></span>(<span>java_class, objects)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">@staticmethod
+def to_java_array(java_class, objects):
+    n = len(objects)
+    j_arr = java_gateway.new_array(java_class, n)
+    for idx, obj in enumerate(objects):
+        if not isinstance(obj, GeoWaveObject) or not obj.is_instance_of(java_class):
+            print(obj, objects, java_class)
+            raise AttributeError(&#34;Given object is not compatible with the given class.&#34;)
+        j_arr[idx] = obj.java_ref()
+
+    return j_arr</code></pre>
+</details>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
 <dt id="pygw.base.geowave_object.GeoWaveObject.is_instance_of"><code class="name flex">
@@ -135,7 +217,29 @@ class GeoWaveObject:
     Returns:
         True if this object is of the type represented by the given java class.
     &#34;&#34;&#34;
-    return isinstance(java_gateway, self._java_ref, java_class)</code></pre>
+    return is_instance_of(java_gateway, self._java_ref, java_class)</code></pre>
+</details>
+</dd>
+<dt id="pygw.base.geowave_object.GeoWaveObject.java_ref"><code class="name flex">
+<span>def <span class="ident">java_ref</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def java_ref(self):
+    return self._java_ref</code></pre>
+</details>
+</dd>
+<dt id="pygw.base.geowave_object.GeoWaveObject.to_string"><code class="name flex">
+<span>def <span class="ident">to_string</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def to_string(self):
+    return self._java_ref.toString()</code></pre>
 </details>
 </dd>
 </dl>
@@ -160,6 +264,9 @@ class GeoWaveObject:
 <h4><code><a title="pygw.base.geowave_object.GeoWaveObject" href="#pygw.base.geowave_object.GeoWaveObject">GeoWaveObject</a></code></h4>
 <ul class="">
 <li><code><a title="pygw.base.geowave_object.GeoWaveObject.is_instance_of" href="#pygw.base.geowave_object.GeoWaveObject.is_instance_of">is_instance_of</a></code></li>
+<li><code><a title="pygw.base.geowave_object.GeoWaveObject.java_ref" href="#pygw.base.geowave_object.GeoWaveObject.java_ref">java_ref</a></code></li>
+<li><code><a title="pygw.base.geowave_object.GeoWaveObject.to_java_array" href="#pygw.base.geowave_object.GeoWaveObject.to_java_array">to_java_array</a></code></li>
+<li><code><a title="pygw.base.geowave_object.GeoWaveObject.to_string" href="#pygw.base.geowave_object.GeoWaveObject.to_string">to_string</a></code></li>
 </ul>
 </li>
 </ul>

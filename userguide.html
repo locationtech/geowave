@@ -525,16 +525,24 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#ingest-overview">Overview</a></li>
 <li><a href="#ingest-plugins">Ingest Plugins</a></li>
-<li><a href="#statistics-and-time-configuration">Statistics and Time Configuration</a></li>
+<li><a href="#statistics">Statistics</a></li>
+<li><a href="#time-configuration">Time Configuration</a></li>
 </ul>
 </li>
-<li><a href="#vector-queries">Vector Queries</a>
+<li><a href="#queries">Queries</a>
 <ul class="sectlevel2">
 <li><a href="#overview">Overview</a></li>
 <li><a href="#select-statement">SELECT Statement</a></li>
 <li><a href="#delete-statement">DELETE Statement</a></li>
+<li><a href="#filtering">Filtering</a></li>
 <li><a href="#output-formats">Output Formats</a></li>
-<li><a href="#examples-6">Examples</a></li>
+<li><a href="#examples-9">Examples</a></li>
+</ul>
+</li>
+<li><a href="#statistics-2">Statistics</a>
+<ul class="sectlevel2">
+<li><a href="#overview-2">Overview</a></li>
+<li><a href="#examples-10">Examples</a></li>
 </ul>
 </li>
 <li><a href="#analytics">Analytics</a>
@@ -553,6 +561,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#appendices">Appendices</a>
 <ul class="sectlevel2">
+<li><a href="#migrating-data-to-newer-versions">Migrating Data to Newer Versions</a></li>
 <li><a href="#configuring-accumulo-for-geowave">Configuring Accumulo for GeoWave</a></li>
 </ul>
 </li>
@@ -841,7 +850,7 @@ test-store spatial-idx</pre>
 <div class="sect3">
 <h4 id="vector-commands"><a class="anchor" href="#vector-commands"></a>Vector Commands</h4>
 <div class="paragraph">
-<p>The <a href="commands.html#vector-commands"><code>vector</code></a> command contains commands that are specific to vector data, this includes the vector query language and various export options.</p>
+<p>The <a href="commands.html#vector-commands"><code>vector</code></a> command contains commands that are specific to vector data, this includes various export options.</p>
 </div>
 </div>
 <div class="sect3">
@@ -971,9 +980,31 @@ test-store spatial-idx</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="statistics-and-time-configuration"><a class="anchor" href="#statistics-and-time-configuration"></a>Statistics and Time Configuration</h3>
+<h3 id="statistics"><a class="anchor" href="#statistics"></a>Statistics</h3>
 <div class="paragraph">
-<p>Sometimes it is necessary to provide additional configuration information for a vector ingest.  For example, if you have multiple time fields and need to specify which one should be use for a temporal index, or if you wanted to add some statistics prior to the ingest process. In these cases, the system property <code>SIMPLE_FEATURE_CONFIG_FILE</code> may be assigned to the name of a locally accessible JSON file defining the configuration.</p>
+<p>When ingesting a large amount of data, it can be beneficial to configure the statistics on the data types to be ingested prior to actually ingesting any data in order to avoid having to run full table scans to calculate the initial value of those statistics.  This can be done by performing the following steps:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Add the data types for the data that will be ingested by using the <a href="commands.html#type-add"><code>type add</code></a> command, which is nearly identical to <a href="commands.html#ingest-localToGW"><code>ingest localToGW</code></a>, but does not ingest any data.  If the data that is going to be ingested is not local, this command can still be used as long as there is a local source that matches the schema of the data to be ingested, such as a file with a single feature exported from the full data set.</p>
+</li>
+<li>
+<p>Add any number of statistics to those data types by using the <a href="commands.html#stat-add"><code>stat add</code></a> command.</p>
+</li>
+<li>
+<p>Ingest the data using any of the ingest commands.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Using this method, the initial values of all added statistics will be calculated during the ingest process.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="time-configuration"><a class="anchor" href="#time-configuration"></a>Time Configuration</h3>
+<div class="paragraph">
+<p>Sometimes it is necessary to provide additional configuration information for a vector ingest.  For example, if you have multiple time fields and need to specify which one should be use for a temporal index. In these cases, the system property <code>SIMPLE_FEATURE_CONFIG_FILE</code> may be assigned to the name of a locally accessible JSON file defining the configuration.</p>
 </div>
 <div class="sect3">
 <h4 id="ingest-example"><a class="anchor" href="#ingest-example"></a>Example</h4>
@@ -1011,12 +1042,6 @@ $ geowave ingest localtogw ./ingest_data mystore myindex</code></pre>
 <p>Selecting which temporal attribute to use in temporal indices.</p>
 </li>
 <li>
-<p>Adding statistics to one or more attributes.</p>
-</li>
-<li>
-<p>Determining which attribute contains visibility information for other attributes.</p>
-</li>
-<li>
 <p>Setting the names of the indices to update in WFS-T transactions via the GeoServer plugin.</p>
 </li>
 </ol>
@@ -1028,7 +1053,7 @@ $ geowave ingest localtogw ./ingest_data mystore myindex</code></pre>
 <div class="sect3">
 <h4 id="temporal-configuration"><a class="anchor" href="#temporal-configuration"></a>Temporal Configuration</h4>
 <div class="paragraph">
-<p>Temporal configuration may be necessary if your vector feature type has more than one temporal attribute.  The class name for this configuration is <a href="https://github.com/locationtech/geowave/blob/52a12f591b99ea921f34c3f8c04517e7f79bce4a/core/geotime/src/main/java/org/locationtech/geowave/core/geotime/util/TimeDescriptors.java"><code>org.locationtech.geowave.core.geotime.util.TimeDescriptors$TimeDescriptorConfiguration</code></a>.</p>
+<p>Temporal configuration may be necessary if your vector feature type has more than one temporal attribute.  The class name for this configuration is <a href="https://github.com/locationtech/geowave/blob/215458e8ee6ef6d7b3eb1bebca1f882428197b10/core/geotime/src/main/java/org/locationtech/geowave/core/geotime/util/TimeDescriptors.java"><code>org.locationtech.geowave.core.geotime.util.TimeDescriptors$TimeDescriptorConfiguration</code></a>.</p>
 </div>
 <div class="paragraph">
 <p>There are three attributes for the temporal configuration:</p>
@@ -1070,131 +1095,9 @@ $ geowave ingest localtogw ./ingest_data mystore myindex</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="statistics-configuration"><a class="anchor" href="#statistics-configuration"></a>Statistics Configuration</h4>
-<div class="paragraph">
-<p>Statistics can be configured under a class named <a href="https://github.com/locationtech/geowave/blob/52a12f591b99ea921f34c3f8c04517e7f79bce4a/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/StatsConfigurationCollection.java"><code>org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection$SimpleFeatureStatsConfigurationCollection</code></a>. This configuration has a single attribute called <code>attConfig</code> which contains all of the attributes that are being configured with statistics.  Each attribute under <code>attConfig</code> also contains a single property called <code>configurationsForAttribute</code>, which is a list of all statistics configurations that should be assigned to that attribute. The following table shows the types of built-in statistics that can be assigned to an attribute.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Bounding box and range statistics are automatically captured for geometry and temporal attributes.
-</td>
-</tr>
-</table>
-</div>
-<table class="tableblock frame-topbot grid-rows spread">
-<colgroup>
-<col style="width: 12%;">
-<col style="width: 25%;">
-<col style="width: 20%;">
-<col style="width: 43%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Attribute Type</th>
-<th class="tableblock halign-left valign-top">Statistic Name</th>
-<th class="tableblock halign-left valign-top">Statistic Configuration Attributes (with default values)</th>
-<th class="tableblock halign-left valign-top">Statistic Class</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top" rowspan="3"><p class="tableblock">Numeric</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Fixed Bin Histogram</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">minValue=-&#8734;, maxValue=&#8734;, bins=32</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/locationtech/geowave/blob/52a12f591b99ea921f34c3f8c04517e7f79bce4a/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/FeatureFixedBinNumericStatistics.java"><code>org.locationtech.geowave.adapter.vector.stats.
-FeatureFixedBinNumericStatistics$FeatureFixedBinConfig</code></a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Dynamic Histogram</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/locationtech/geowave/blob/52a12f591b99ea921f34c3f8c04517e7f79bce4a/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/FeatureNumericHistogramStatistics.java"><code>org.locationtech.geowave.adapter.vector.stats.
-FeatureNumericHistogramStatistics$FeatureNumericHistogramConfig</code></a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric Range</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/locationtech/geowave/blob/52a12f591b99ea921f34c3f8c04517e7f79bce4a/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/FeatureNumericRangeStatistics.java"><code>org.locationtech.geowave.adapter.vector.stats.
-FeatureNumericRangeStatistics$FeatureNumericRangeConfig</code></a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Count Min Sketch</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">errorFactor=0.001, probabilityOfCorrectness=0.98</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/locationtech/geowave/blob/52a12f591b99ea921f34c3f8c04517e7f79bce4a/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/FeatureCountMinSketchStatistics.java"><code>org.locationtech.geowave.adapter.vector.stats.
-FeatureCountMinSketchStatistics$FeatureCountMinSketchConfig</code></a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Hyper Log Log</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">precision=16</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/locationtech/geowave/blob/52a12f591b99ea921f34c3f8c04517e7f79bce4a/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/stats/FeatureHyperLogLogStatistics.java"><code>org.locationtech.geowave.adapter.vector.stats.
-FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig</code></a></p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>For example, if you wanted to add a numeric range statistic on an attribute called <code>population</code> in a type called <code>myFeatureTypeName</code>, the configuration would look like the following:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre class="nowrap">{
-  "configurations": {
-    "myFeatureTypeName" : [
-      {
-        "@class" : "org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection$SimpleFeatureStatsConfigurationCollection",
-        "attConfig" : {
-          "population" : {
-            "configurationsForAttribute" :  [
-              {
-                "@class" : "org.locationtech.geowave.adapter.vector.stats.FeatureNumericRangeStatistics$FeatureNumericRangeConfig"
-              }
-            ]
-          }
-        }
-      }
-    ]
-  }
-}</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Note that the numeric range statistic does not require any additional configuration attributes.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="visibility-configuration"><a class="anchor" href="#visibility-configuration"></a>Visibility Configuration</h4>
-<div class="paragraph">
-<p>Visibility configuration consists of a visibility manager and an attribute which contains the visibility information.</p>
-</div>
-<div class="paragraph">
-<p>A visibility manager extends <a href="https://github.com/locationtech/geowave/blob/52a12f591b99ea921f34c3f8c04517e7f79bce4a/core/store/src/main/java/org/locationtech/geowave/core/store/data/visibility/VisibilityManagement.java"><code>org.locationtech.geowave.core.store.data.visibility.VisibilityManagement</code></a>. An instance of this class interprets the contents of a visibility attribute within a simple feature to determine the visibility constraints of the other attributes in that simple feature. The default visibility management class is <a href="https://github.com/locationtech/geowave/blob/52a12f591b99ea921f34c3f8c04517e7f79bce4a/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.java"><code>org.locationtech.geowave.adapter.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement</code></a>, which is used by the default visibility configuration class <a href="https://github.com/locationtech/geowave/blob/52a12f591b99ea921f34c3f8c04517e7f79bce4a/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/plugin/visibility/VisibilityConfiguration.java"><code>org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration</code></a>.</p>
-</div>
-<div class="paragraph">
-<p>For example, if you had an attribute called <code>vis</code> that contained the visibility constraints in a type called <code>myFeatureTypeName</code>, the configuration would look like the following:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>{
-  "configurations": {
-    "myFeatureTypeName" : [
-      {
-        "@class" : "org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration",
-        "attributeName" : "vis"
-      }
-    ]
-  }
-}</pre>
-</div>
-</div>
-</div>
-<div class="sect3">
 <h4 id="primary-index-identifiers"><a class="anchor" href="#primary-index-identifiers"></a>Primary Index Identifiers</h4>
 <div class="paragraph">
-<p>The class <a href="https://github.com/locationtech/geowave/blob/52a12f591b99ea921f34c3f8c04517e7f79bce4a/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/index/SimpleFeaturePrimaryIndexConfiguration.java"><code>org.locationtech.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration</code></a> is used to maintain the configuration of primary indices used for adding or updating simple features via the GeoServer plugin.</p>
+<p>The class <a href="https://github.com/locationtech/geowave/blob/215458e8ee6ef6d7b3eb1bebca1f882428197b10/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/index/SimpleFeaturePrimaryIndexConfiguration.java"><code>org.locationtech.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration</code></a> is used to maintain the configuration of primary indices used for adding or updating simple features via the GeoServer plugin.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1214,37 +1117,8 @@ FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig</code></a></p></td>
         "timeName":"captureTime"
       },
       {
-        "@class": "org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration",
-        "attributeName" : "vis"
-      },
-      {
         "@class": "org.locationtech.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration",
         "indexNames": ["SPATIAL_IDX"]
-      }
-      {
-        "@class" : "org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection$SimpleFeatureStatsConfigurationCollection",
-        "attConfig" : {
-          "population" : {
-            "configurationsForAttribute" :  [
-              {
-                "@class" : "org.locationtech.geowave.adapter.vector.stats.FeatureFixedBinNumericStatistics$FeatureFixedBinConfig",
-                "bins" : 24
-              }
-            ]
-          },
-          "country" : {
-            "configurationsForAttribute" :  [
-              {
-                "@class" : "org.locationtech.geowave.adapter.vector.stats.FeatureCountMinSketchStatistics$FeatureCountMinSketchConfig",
-                "probabilityOfCorrectness" : 0.98,
-                "errorFactor" :0.001
-              },
-              {
-                "@class" : "org.locationtech.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig"
-              }
-            ]
-          }
-        }
       }
     ]
   }
@@ -1252,7 +1126,7 @@ FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig</code></a></p></td>
 </div>
 </div>
 <div class="paragraph">
-<p>See the <a href="#visibility-management">Visibility Management</a> section of the appendix for more information about visibility management.</p>
+<p>See the <a href="#visibility-management">Visibility Management</a> section of the appendix for information about visibility management.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -1260,16 +1134,16 @@ FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig</code></a></p></td>
 </div>
 </div>
 <div class="sect1">
-<h2 id="vector-queries"><a class="anchor" href="#vector-queries"></a>Vector Queries</h2>
+<h2 id="queries"><a class="anchor" href="#queries"></a>Queries</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="overview"><a class="anchor" href="#overview"></a>Overview</h3>
 <div class="paragraph">
-<p>In order to facilitate querying GeoWave data from the CLI, a basic query language is available for vector data.  The idea behind the GeoWave Query Language is to provide a familiar way to easily query, filter, and aggregate vector data from a GeoWave data store.  The query language is similar to SQL, but currently only supports <code>SELECT</code> and <code>DELETE</code> statements.  These queries can be executed using the <a href="commands.html#vector-query"><code>vector query</code></a> command.</p>
+<p>In order to facilitate querying GeoWave data from the CLI, a basic query language is provided.  The idea behind the GeoWave Query Language (GWQL) is to provide a familiar way to easily query, filter, and aggregate data from a GeoWave data store.  The query language is similar to SQL, but currently only supports <code>SELECT</code> and <code>DELETE</code> statements.  These queries can be executed using the <a href="commands.html#query"><code>query</code></a> command.</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>$ geowave vector query "&lt;query&gt;"</pre>
+<pre>$ geowave query &lt;store name&gt; "&lt;query&gt;"</pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -1288,7 +1162,7 @@ The examples below use a hypothetical data store called <code>example</code> wit
 <div class="sect2">
 <h3 id="select-statement"><a class="anchor" href="#select-statement"></a>SELECT Statement</h3>
 <div class="paragraph">
-<p>The <code>SELECT</code> statement can be used to fetch data from a GeoWave data store.  It supports column selection, aggregation, CQL filtering, and limiting.</p>
+<p>The <code>SELECT</code> statement can be used to fetch data from a GeoWave data store.  It supports column selection, aggregation, filtering, and limiting.</p>
 </div>
 <div class="sect3">
 <h4 id="simple-queries"><a class="anchor" href="#simple-queries"></a>Simple Queries</h4>
@@ -1297,24 +1171,24 @@ The examples below use a hypothetical data store called <code>example</code> wit
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT &lt;attributes&gt; FROM &lt;storeName&gt;.&lt;typeName&gt;</code></pre>
+<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT &lt;attributes&gt; FROM &lt;typeName&gt; [ WHERE &lt;filter&gt; ]</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>In this syntax, <code>attributes</code> can be a comma-delimited list of attributes to select from the type, or <code>*</code> to select all of the attributes.  Attributes can also be aliased by using the <code>AS</code> operator.</p>
+<p>In this syntax, <code>attributes</code> can be a comma-delimited list of attributes to select from the type, or <code>*</code> to select all of the attributes.  Attributes can also be aliased by using the <code>AS</code> operator. If an attribute or type name has some nonstandard characters, such as <code>-</code>, it can be escaped by surrounding the name in double quotes (<code>"column-name"</code>), backticks (<code>`column-name`</code>), or square brackets (<code>[column-name]</code>).</p>
 </div>
 <div class="sect4">
 <h5 id="examples"><a class="anchor" href="#examples"></a>Examples</h5>
 <div class="listingblock">
 <div class="title">Selecting all attributes of each country:</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT * FROM example.countries</code></pre>
+<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT * FROM countries</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">Selecting the <code>geom</code>, <code>population</code>, and <code>est</code> attributes from each country, but renaming <code>geom</code> to <code>geometry</code> and <code>est</code> to <code>established</code> for the output:</div>
+<div class="title">Selecting the <code>geom</code>, <code>population</code>, and <code>established</code> attributes from each country, but renaming <code>geom</code> to <code>geometry</code> for the output:</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT geom AS geometry, population, est AS established FROM example.countries</code></pre>
+<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT geom AS geometry, population, established, FROM countries</code></pre>
 </div>
 </div>
 </div>
@@ -1376,54 +1250,19 @@ The examples below use a hypothetical data store called <code>example</code> wit
 <div class="listingblock">
 <div class="title">Counting the number of countries:</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT COUNT(*) FROM example.countries</code></pre>
+<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT COUNT(*) FROM countries</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Calculating the total population of all countries:</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT SUM(population) FROM example.countries</code></pre>
+<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT SUM(population) FROM countries</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Getting the bounding box, minimum population, and maximum population of all countries, using aliases to rename the results:</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT BBOX(*) AS bounds, MIN(population) AS minPop, MAX(population) AS maxPop FROM example.countries</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="cql-filtering"><a class="anchor" href="#cql-filtering"></a>CQL Filtering</h4>
-<div class="paragraph">
-<p>Both simple and aggregation queries support filtering using <a href="https://docs.geoserver.org/latest/en/user/tutorials/cql/cql_tutorial.html">CQL filters</a>.  This can be done using the following syntax:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT &lt;attributes&gt; FROM &lt;storeName&gt;.&lt;typeName&gt; WHERE CQL(&lt;cqlFilter&gt;)</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>When using a filter with aggregations, only the data that passes the filter will be aggregated.</p>
-</div>
-<div class="sect4">
-<h5 id="examples-3"><a class="anchor" href="#examples-3"></a>Examples</h5>
-<div class="listingblock">
-<div class="title">Selecting only countries that have a population over 100 million:</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT * FROM example.countries WHERE CQL(population&gt;100000000)</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Counting the number of countries in which the male population exceeds the female one (this assumes that each feature has an attribute for <code>malePop</code> and <code>femalePop</code>):</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT COUNT(*) FROM example.countries WHERE CQL(malePop&gt;femalePop)</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Calculating the total population of countries that intersect a bounding box that covers a region of Europe:</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT SUM(population) FROM example.countries WHERE CQL(BBOX(geom, 7, 46, 23, 51))</code></pre>
+<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT BBOX(*) AS bounds, MIN(population) AS minPop, MAX(population) AS maxPop FROM countries</code></pre>
 </div>
 </div>
 </div>
@@ -1435,7 +1274,7 @@ The examples below use a hypothetical data store called <code>example</code> wit
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT &lt;attributes&gt; FROM &lt;storeName&gt;.&lt;typeName&gt; [ WHERE CQL(&lt;cqlFilter&gt;) ] LIMIT &lt;count&gt;</code></pre>
+<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT &lt;attributes&gt; FROM &lt;typeName&gt; [ WHERE &lt;filter&gt; ] LIMIT &lt;count&gt;</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -1451,17 +1290,17 @@ While <code>LIMIT</code> can be specified for aggregation queries, it doesn&#821
 </table>
 </div>
 <div class="sect4">
-<h5 id="examples-4"><a class="anchor" href="#examples-4"></a>Examples</h5>
+<h5 id="examples-3"><a class="anchor" href="#examples-3"></a>Examples</h5>
 <div class="listingblock">
 <div class="title">Getting a single country from the dataset:</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT * FROM example.countries LIMIT 1</code></pre>
+<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT * FROM countries LIMIT 1</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Getting 5 countries that have a population over 100 million:</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT * FROM example.countries WHERE CQL(population&gt;100000000) LIMIT 5</code></pre>
+<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT * FROM countries WHERE population &gt; 100000000 LIMIT 5</code></pre>
 </div>
 </div>
 </div>
@@ -1470,11 +1309,11 @@ While <code>LIMIT</code> can be specified for aggregation queries, it doesn&#821
 <div class="sect2">
 <h3 id="delete-statement"><a class="anchor" href="#delete-statement"></a>DELETE Statement</h3>
 <div class="paragraph">
-<p>The <code>DELETE</code> statement can be used to delete vector data from a GeoWave data store.  It can either delete an entire type, or only data that matches a given CQL filter.  It has the following syntax:</p>
+<p>The <code>DELETE</code> statement can be used to delete data from a GeoWave data store.  It can either delete an entire type, or only data that matches a given filter.  It has the following syntax:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">DELETE FROM &lt;storeName&gt;.&lt;typeName&gt; [ WHERE CQL(&lt;cqlFilter&gt;) ]</code></pre>
+<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">DELETE FROM &lt;typeName&gt; [ WHERE &lt;filter&gt; ]</code></pre>
 </div>
 </div>
 <div class="admonitionblock important">
@@ -1490,17 +1329,335 @@ When all of the data of a given type is removed, that type is removed from the d
 </table>
 </div>
 <div class="sect4">
-<h5 id="examples-5"><a class="anchor" href="#examples-5"></a>Examples</h5>
+<h5 id="examples-4"><a class="anchor" href="#examples-4"></a>Examples</h5>
 <div class="listingblock">
 <div class="title">Removing all countries from the data store:</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">DELETE FROM example.countries</code></pre>
+<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">DELETE FROM countries</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Removing all countries that have a population less than 100 million:</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">DELETE FROM example.countries WHERE CQL(population&lt;100000000)</code></pre>
+<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">DELETE FROM countries WHERE population &lt; 100000000</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="filtering"><a class="anchor" href="#filtering"></a>Filtering</h3>
+<div class="paragraph">
+<p>All GWQL queries support filtering through the use of filter expressions.  GeoWave supports filtering on many different expression types, each of which have their own supported predicates and functions.  Multiple filter expressions can also be combined using <code>AND</code> and <code>OR</code> operators (e.g. <code>a &gt; 10 AND b &lt; 100</code>.  Filter expressions can also be inverted by prepending it with <code>NOT</code> (e.g. <code>NOT strContains(name, 'abc')</code>)</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+In GWQL, function casing is not important; <code>STRCONTAINS(name, 'abc')</code> is equivalent to <code>strContains(name, 'abc')</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="numeric-expressions"><a class="anchor" href="#numeric-expressions"></a>Numeric Expressions</h4>
+<div class="paragraph">
+<p>Numeric expressions support all of the standard comparison operators: <code>&lt;</code>, <code>&gt;</code>, <code>&#8656;</code>, <code>&gt;=</code>, <code>=</code>, <code>&lt;&gt;</code> (not equal), <code>IS NULL</code>, <code>IS NOT NULL</code>, and <code>BETWEEN &#8230;&#8203; AND &#8230;&#8203;</code>.  Additionally the following mathematics operations are supported: <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>.  The operands for any of these operations can be a numeric literal, a numeric attribute, or another numeric expression.</p>
+</div>
+<div class="sect4">
+<h5 id="functions"><a class="anchor" href="#functions"></a>Functions</h5>
+<div class="paragraph">
+<p>Numeric expressions support the following functions:</p>
+</div>
+<table class="tableblock frame-topbot grid-rows spread">
+<colgroup>
+<col style="width: 12%;">
+<col style="width: 25%;">
+<col style="width: 61%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Function</th>
+<th class="tableblock halign-left valign-top">Parameters</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ABS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric Expression</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Transforms the numeric expression into one that represents the absolute value of the input expression.  For example, the literal -64 would become 64.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="examples-5"><a class="anchor" href="#examples-5"></a>Examples</h5>
+<div class="listingblock">
+<div class="title">Selecting only countries that have a population over 100 million:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT * FROM countries WHERE population &gt; 100000000</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Counting the number of countries in which the male population exceeds the female one (this assumes that each feature has an attribute for <code>malePop</code> and <code>femalePop</code>):</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT COUNT(*) FROM countries WHERE malePop &gt; femalePop</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Selecting only countries that have a population between 10 and 20 million:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT * FROM countries WHERE population BETWEEN 10000000 AND 20000000</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Selecting only countries where the difference between the male and female population exceeds 50000:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT * FROM countries WHERE ABS(femalePop - malePop) &gt; 50000</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="text-expressions"><a class="anchor" href="#text-expressions"></a>Text Expressions</h4>
+<div class="paragraph">
+<p>Text expressions support all of the standard comparison operators: <code>&lt;</code>, <code>&gt;</code>, <code>&#8656;</code>, <code>&gt;=</code>, <code>=</code>, <code>&lt;&gt;</code> (not equal), <code>IS NULL</code>, <code>IS NOT NULL</code>, and <code>BETWEEN &#8230;&#8203; AND &#8230;&#8203;</code>.  These operators will lexicographically compare the operands to determine if the filter is passed.</p>
+</div>
+<div class="sect4">
+<h5 id="functions-2"><a class="anchor" href="#functions-2"></a>Functions</h5>
+<div class="paragraph">
+<p>Text expressions support the following functions:</p>
+</div>
+<table class="tableblock frame-topbot grid-rows spread">
+<colgroup>
+<col style="width: 12%;">
+<col style="width: 25%;">
+<col style="width: 61%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Function</th>
+<th class="tableblock halign-left valign-top">Parameters</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CONCAT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Text Expression, Text Expression</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Concatenates two text expressions into a single text expression.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">STRSTARTSWITH</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Text Expression, Text Expression [, Boolean]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A predicate function that returns true when the first text expression starts with the second text expression.  A third boolean parameter can also be supplied that will specify whether or not to ignore casing.  By default, casing will NOT be ignored.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">STRENDSWITH</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Text Expression, Text Expression [, Boolean]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A predicate function that returns true when the first text expression ends with the second text expression.  A third boolean parameter can also be supplied that will specify whether or not to ignore casing.  By default, casing will NOT be ignored.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">STRCONTAINS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Text Expression, Text Expression [, Boolean]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A predicate function that returns true when the first text expression contains the second text expression.  A third boolean parameter can also be supplied that will specify whether or not to ignore casing.  By default, casing will NOT be ignored.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="examples-6"><a class="anchor" href="#examples-6"></a>Examples</h5>
+<div class="listingblock">
+<div class="title">Selecting only countries that start with 'm' or greater</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT * FROM countries WHERE name &gt; 'm'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Counting the number of countries that end with 'stan':</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT COUNT(*) FROM countries WHERE strEndsWith(name, 'stan')</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Selecting only countries that contain 'state', ignoring case:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT * FROM countries WHERE strContains(name, 'state', true)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="temporal-expressions"><a class="anchor" href="#temporal-expressions"></a>Temporal Expressions</h4>
+<div class="paragraph">
+<p>Temporal expressions support all of the standard comparison operators: <code>&lt;</code>, <code>&gt;</code>, <code>&#8656;</code>, <code>&gt;=</code>, <code>=</code>, <code>&lt;&gt;</code> (not equal), <code>IS NULL</code>, <code>IS NOT NULL</code>, and <code>BETWEEN &#8230;&#8203; AND &#8230;&#8203;</code>.  Temporal expressions can also be compared using temporal comparison operators: <code>BEFORE</code>, <code>BEFORE_OR_DURING</code>, <code>DURING</code>, <code>DURING_OR_AFTER</code>, and <code>AFTER</code>.</p>
+</div>
+<div class="paragraph">
+<p>Temporal expressions can represent either a time instant or a time range.  An instant in time can be specified as text literals using one of the following date formats: <code>yyyy-MM-dd HH:mm:ssZ</code>, <code>yyyy-MM-dd&#8217;T&#8217;HH:mm:ss&#8217;Z'</code>, <code>yyyy-MM-dd</code>, or as a numeric literal representing the epoch milliseconds since January 1, 1970 UTC.  A time range can be specified as a text literal by combining two dates separated by a <code>/</code>.  For example, a time range of January 8, 2020 at 11:56 AM to February 12, 2020 at 8:20 PM could be defined as <code>'2020-01-08T11:56:00Z/2020-02-12T20:20:00Z'</code>.  Time ranges are inclusive on the start date and exclusive on the end date.</p>
+</div>
+<div class="paragraph">
+<p>If the left operand of a temporal operator is a temporal field (such as Date), then the right operand can be inferred from a numeric or text literal.  If the left operand of a temporal expression is a numeric or text literal, it can be cast to a temporal expression using the <code>&lt;expression&gt;::date</code> syntax.</p>
+</div>
+<div class="sect4">
+<h5 id="functions-3"><a class="anchor" href="#functions-3"></a>Functions</h5>
+<div class="paragraph">
+<p>Temporal expressions support the following functions:</p>
+</div>
+<table class="tableblock frame-topbot grid-rows spread">
+<colgroup>
+<col style="width: 12%;">
+<col style="width: 25%;">
+<col style="width: 61%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Function</th>
+<th class="tableblock halign-left valign-top">Parameters</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TCONTAINS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Temporal Expression, Temporal Expression</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A predicate function that returns true if the first temporal expression fully contains the second.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TOVERLAPS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Temporal Expression, Temporal Expression</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A predicate function that returns true when the first temporal expression overlaps the second temporal expression at any point</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="examples-7"><a class="anchor" href="#examples-7"></a>Examples</h5>
+<div class="listingblock">
+<div class="title">Selecting only countries that were established after 1750</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT * FROM countries WHERE established AFTER '1750-12-31'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Counting the number of countries that were established in the 1700s:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT COUNT(*) FROM countries WHERE established DURING '1700-01-01T00:00:00Z/1800-01-01T00:00:00Z'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Counting the number of countries that are still active:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT COUNT(*) FROM countries WHERE dissolution IS NULL</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="spatial-expressions"><a class="anchor" href="#spatial-expressions"></a>Spatial Expressions</h4>
+<div class="paragraph">
+<p>Spatial expressions are used to compare geometries.  The only comparison operators that are supported are <code>=</code>, <code>&lt;&gt;</code> (not equal), <code>IS NULL</code> and <code>IS NOT NULL</code>.  The equality operators will topologically compare the left spatial expression to the right spatial expression.  Most comparisons with spatial expressions will be done through one of the provided predicate functions.</p>
+</div>
+<div class="paragraph">
+<p>Literal spatial expressions can be defined by a well-known text (WKT) string such as <code>'POINT(1 1)'</code>.  If a text literal needs to be explicitly cast as a spatial expression, such as when it is the left operand of an equality check, it can be done using the <code>&lt;expression&gt;::geometry</code> syntax.</p>
+</div>
+<div class="sect4">
+<h5 id="functions-4"><a class="anchor" href="#functions-4"></a>Functions</h5>
+<div class="paragraph">
+<p>Spatial expressions support the following functions:</p>
+</div>
+<table class="tableblock frame-topbot grid-rows spread">
+<colgroup>
+<col style="width: 12%;">
+<col style="width: 25%;">
+<col style="width: 61%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Function</th>
+<th class="tableblock halign-left valign-top">Parameters</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BBOX</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spatial Expression, Min X, Min Y, Max X, Max Y, [, CRS code]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A predicate function that returns true if the spatial expression intersects the provided bounds.  An optional CRS code can be provided if the bounding dimensions are not in the default WGS84 projection.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BBOXLOOSE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spatial Expression, Min X, Min Y, Max X, Max Y, [, CRS code]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A predicate function that returns true if the spatial expression intersects the provided bounds.  An optional CRS code can be provided if the bounding dimensions are not in the default WGS84 projection.  This can provide a performance boost over the standard BBOX function at the cost of being overly inclusive with the results.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">INTERSECTS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spatial Expression, Spatial Expression</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A predicate function that returns true if the first spatial expression intersects the second spatial expression.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">INTERSECTSLOOSE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spatial Expression, Spatial Expression</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A predicate function that returns true if the first spatial expression intersects the second spatial expression.  This can provide a performance boost over the standard INTERSECTS function at the cost of being overly inclusive with the results.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DISJOINT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spatial Expression, Spatial Expression</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A predicate function that returns true if the first spatial expression is disjoint (does not intersect) to the second spatial expression.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DISJOINTLOOSE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spatial Expression, Spatial Expression</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A predicate function that returns true if the first spatial expression is disjoint (does not intersect) to the second spatial expression.  This can provide a performance boost over the standard INTERSECTS function at the cost of being overly inclusive with the results.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CROSSES</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spatial Expression, Spatial Expression</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A predicate function that returns true if the first spatial expression crosses the second spatial expression.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CROSSES</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spatial Expression, Spatial Expression</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A predicate function that returns true if the first spatial expression crosses the second spatial expression.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OVERLAPS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spatial Expression, Spatial Expression</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A predicate function that returns true if the first spatial expression overlaps the second spatial expression.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TOUCHES</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spatial Expression, Spatial Expression</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A predicate function that returns true if the first spatial expression touches the second spatial expression.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">WITHIN</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spatial Expression, Spatial Expression</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A predicate function that returns true if the first spatial expression lies completely within the second spatial expression.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CONTAINS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spatial Expression, Spatial Expression</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A predicate function that returns true if the first spatial expression completely contains the second spatial expression.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="examples-8"><a class="anchor" href="#examples-8"></a>Examples</h5>
+<div class="listingblock">
+<div class="title">Selecting only countries that intersect an arbitrary bounding box:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT * FROM countries WHERE BBOX(geom, -10.8, 35.4, 63.3, 71.1)</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Counting the number of countries that intersect a given linestring:</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql" data-lang="sql">SELECT COUNT(*) FROM countries WHERE INTERSECTS(geom, 'LINESTRING(-9.14 39.5, 3.5 47.9, 20.56 53.12, 52.9 56.36)')</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -1508,7 +1665,7 @@ When all of the data of a given type is removed, that type is removed from the d
 <div class="sect2">
 <h3 id="output-formats"><a class="anchor" href="#output-formats"></a>Output Formats</h3>
 <div class="paragraph">
-<p>By default, the <a href="commands.html#vector-query"><code>vector query</code></a> command outputs all results to the console in a tabular format, however it is often desirable to feed the results of these queries into a format that is usable by other applications.  Because of this, the <a href="commands.html#vector-query"><code>vector query</code></a> command supports several output formats, each of which have their own options.  The output format can be changed by supplying the <code>-f</code> option on the query.</p>
+<p>By default, the <a href="commands.html#query"><code>query</code></a> command outputs all results to the console in a tabular format, however it is often desirable to feed the results of these queries into a format that is usable by other applications.  Because of this, the <a href="commands.html#query"><code>query</code></a> command supports several output formats, each of which have their own options.  The output format can be changed by supplying the <code>-f</code> option on the query.</p>
 </div>
 <div class="paragraph">
 <p>The following table shows the currently available output formats.</p>
@@ -1551,29 +1708,102 @@ When all of the data of a given type is removed, that type is removed from the d
 </table>
 </div>
 <div class="sect2">
-<h3 id="examples-6"><a class="anchor" href="#examples-6"></a>Examples</h3>
+<h3 id="examples-9"><a class="anchor" href="#examples-9"></a>Examples</h3>
 <div class="literalblock">
 <div class="title">Output paged results to console:</div>
 <div class="content">
-<pre>$ geowave vector query "SELECT * FROM example.countries"</pre>
+<pre>$ geowave query example "SELECT * FROM countries"</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="title">Output aggregation results to console:</div>
 <div class="content">
-<pre>$ geowave vector query "SELECT BBOX(*) AS bounds, MIN(population) AS minPop, MAX(population) AS maxPop FROM example.countries"</pre>
+<pre>$ geowave query example "SELECT BBOX(*) AS bounds, MIN(population) AS minPop, MAX(population) AS maxPop FROM countries"</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="title">Output country names and populations to a CSV file:</div>
 <div class="content">
-<pre>$ geowave vector query -f csv -o myfile.csv "SELECT name, population FROM example.countries"</pre>
+<pre>$ geowave query -f csv -o myfile.csv example "SELECT name, population FROM countries"</pre>
 </div>
 </div>
 <div class="literalblock">
-<div class="title">Output countries with a population greater than 100 million to a Shapefile:</div>
+<div class="title">Output countries with a population greater than 100 million that were established after 1750 to a Shapefile:</div>
 <div class="content">
-<pre>$ geowave vector query -f shp -o results.shp "SELECT * FROM example.countries WHERE CQL(population&gt;100000000)"</pre>
+<pre>$ geowave query -f shp -o results.shp example "SELECT * FROM countries WHERE population &gt; 100000000 AND established AFTER '1750-01-01'"</pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="statistics-2"><a class="anchor" href="#statistics-2"></a>Statistics</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="overview-2"><a class="anchor" href="#overview-2"></a>Overview</h3>
+<div class="paragraph">
+<p>GeoWave statistics are a way to maintain aggregated information about data stored within a data store.  They can be useful to avoid having to run aggregation queries over many rows whenever basic information is needed.  The statistics system is designed to be as flexible as possible to support a large number of use cases.</p>
+</div>
+<div class="sect3">
+<h4 id="statistic-types"><a class="anchor" href="#statistic-types"></a>Statistic Types</h4>
+<div class="paragraph">
+<p>There are three types of statistics in GeoWave:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Index Statistics</strong> - These statistics are aggregated over every row within an index.  These are usually fairly broad as they do not make assumptions about the data types that are stored in the index.  Some examples of index statistics used by GeoWave are row range histograms, index metadata, and duplicate entry counts.</p>
+</li>
+<li>
+<p><strong>Data Type Statistics</strong> - These statistics are aggregated over every row within a data type.  The most common data type statistic is the count statistic, which simply counts the number of entries in a given data type.</p>
+</li>
+<li>
+<p><strong>Field Statistics</strong> - These statistics are aggregated over every row within a data type, but are usually calculated from the value of a single field within the data type.  Statistics are usually designed to work on specific field types.  For example, a numeric mean statistic will calculate the mean value of a field across all rows in the data set.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The list of available statistic types can be discovered by using the <a href="commands.html#stat-listtypes"><code>stat listtypes</code></a> command.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="binning-strategies"><a class="anchor" href="#binning-strategies"></a>Binning Strategies</h4>
+<div class="paragraph">
+<p>While the various suppported statistics provide some general capabilities, a lot of the flexibility of the statistics system comes from using statistics with different binning strategies.  Binning strategies are a way to split a statistic by some algorithm.  For example, a data set with a categorical field such as <code>Color</code> could have a count statistic that is binned by that field.  The result would be a statistic that maintains the count of each <code>Color</code> in the entire data set.  Any statistic can be combined with any binning strategy for a plethora of possibilities.  Multiple different binning strategies can also be combined to provide even more customization.</p>
+</div>
+<div class="paragraph">
+<p>The list of available binning strategies can be discovered by using the <a href="commands.html#stat-listtypes"><code>stat listtypes</code></a> command with the <code>-b</code> command line option.</p>
+</div>
+<div class="paragraph">
+<p>For a full list of GeoWave statistics commands, including examples of each, see the statistics section of the <a href="commands.html#stat-commands">GeoWave CLI Documentation</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="examples-10"><a class="anchor" href="#examples-10"></a>Examples</h3>
+<div class="literalblock">
+<div class="title">Add a <code>COUNT</code> statistic to the <code>counties</code> type binned by the <code>state_code</code> field in the <code>example</code> data store:</div>
+<div class="content">
+<pre>$ geowave stat add example -t COUNT --typeName counties -b FIELD_VALUE --binField state_code</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">As a more complex example, add a <code>NUMERIC_STATS</code> statistic on the field 'population' binned by the <code>geometry</code> field using Uber&#8217;s H3 hex grids at resolution 2 (this will maintain stats such as count, variance, sum, and mean of the populations of counties grouped together in approx. 87K km<sup>2</sup> hexagons):</div>
+<div class="content">
+<pre>$ geowave stat add example -t NUMERIC_STATS --typeName counties --fieldName population -b SPATIAL --binField geometry --type H3 --resolution 2</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">List all of the statistic values on the <code>counties</code> type in the <code>example</code> data store:</div>
+<div class="content">
+<pre>$ geowave stat list example --typeName counties</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">Recalculate all statistics in the <code>example</code> data store:</div>
+<div class="content">
+<pre>$ geowave stat recalc example --all</pre>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
@@ -2267,7 +2497,7 @@ When all of the data of a given type is removed, that type is removed from the d
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Additional authorization management strategies can be registered through the Java Service Provider Interface (SPI) model by implementing the <a href="https://github.com/locationtech/geowave/blob/52a12f591b99ea921f34c3f8c04517e7f79bce4a/extensions/adapters/auth/src/main/java/org/locationtech/geowave/adapter/auth/AuthorizationFactorySPI.java"><code>AuthorizationFactorySPI</code></a> interface. For more information on using SPI, see the <a href="https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html" target="_blank">Oracle documentation</a>.
+Additional authorization management strategies can be registered through the Java Service Provider Interface (SPI) model by implementing the <a href="https://github.com/locationtech/geowave/blob/215458e8ee6ef6d7b3eb1bebca1f882428197b10/extensions/adapters/auth/src/main/java/org/locationtech/geowave/adapter/auth/AuthorizationFactorySPI.java"><code>AuthorizationFactorySPI</code></a> interface. For more information on using SPI, see the <a href="https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html" target="_blank">Oracle documentation</a>.
 </td>
 </tr>
 </table>
@@ -2281,6 +2511,16 @@ Additional authorization management strategies can be registered through the Jav
 <h2 id="appendices"><a class="anchor" href="#appendices"></a>Appendices</h2>
 <div class="sectionbody">
 <div style="page-break-after: always;"></div>
+<div class="sect2">
+<h3 id="migrating-data-to-newer-versions"><a class="anchor" href="#migrating-data-to-newer-versions"></a>Migrating Data to Newer Versions</h3>
+<div class="paragraph">
+<p>When a major change is made to the GeoWave codebase that alters the serialization of data in a data store, a migration will need to be performed to make the data store compatible with the latest version of the programmatic API and the command-line tools.  Beginning in GeoWave 2.0, attempting to access a data store with an incompatible version of the CLI will propmpt the user with an error.  If the data store version is later than that of the CLI, it will ask that the CLI version be updated to a compatible version.  If the data store version is older, it will prompt the user to run the migration command to perform any updates needed to make the data store compatible with the CLI version. Performing this migration allows you to avoid a potentially costly re-ingest of your data.</p>
+</div>
+<div class="paragraph">
+<p>For more information about the migration command, see the <a href="commands.html#util-migrate"><code>util migrate</code></a> documentation.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
 <div class="sect2">
 <h3 id="configuring-accumulo-for-geowave"><a class="anchor" href="#configuring-accumulo-for-geowave"></a>Configuring Accumulo for GeoWave</h3>
 <div class="sect3">
@@ -2385,10 +2625,10 @@ accumulo shell -u root -p ROOT_PWD -e "config -np" | grep -A 1 general.vfs.conte
 <div class="title">Compare version and timestamps of installed RPMs</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">[geowaveuser@c1-master ~]$ rpm -qa | grep geowave
-geowave-1.2.0-apache-core-1.2.0-201602012009.noarch
-geowave-1.2.0-apache-jetty-1.2.0-201602012009.noarch
-geowave-1.2.0-apache-accumulo-1.2.0-201602012009.noarch
-geowave-1.2.0-apache-tools-1.2.0-201602012009.noarch</code></pre>
+geowave-2.0.0-apache-core-2.0.0-201602012009.noarch
+geowave-2.0.0-apache-jetty-2.0.0-201602012009.noarch
+geowave-2.0.0-apache-accumulo-2.0.0-201602012009.noarch
+geowave-2.0.0-apache-tools-2.0.0-201602012009.noarch</code></pre>
 </div>
 </div>
 <div class="sect4">
@@ -2457,13 +2697,10 @@ this artifact.</p>
 <div class="sect2">
 <h3 id="visibility-overview"><a class="anchor" href="#visibility-overview"></a>Overview</h3>
 <div class="paragraph">
-<p>When data is written to GeoWave, it may contain visibility constraints. By default, the visibility expression attached to each attribute is empty, which means that the data is visible regardless of which authorizations are present. If a visibility expression is set for an attribute, only queries that supply the appropriate authorizations will be able to see it.</p>
+<p>When data is written to GeoWave, it may contain visibility constraints. By default, the visibility expression attached to each attribute is empty, which means that the data is visible regardless of which authorizations are present. If a visibility expression is set for an entry, only queries that supply the appropriate authorizations will be able to see it.</p>
 </div>
 <div class="paragraph">
-<p>The only provided visibility management strategy is <a href="https://github.com/locationtech/geowave/blob/52a12f591b99ea921f34c3f8c04517e7f79bce4a/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/plugin/visibility/JsonDefinitionColumnVisibilityManagement.java"><code>JsonDefinitionColumnVisibilityManagement</code></a>, which expects each feature to have an attribute that contains a JSON string describing the visibility for each attribute of the feature instance. This approach allows each feature to determine its own visibility criteria.</p>
-</div>
-<div class="paragraph">
-<p>Each name/value pair within the JSON structure defines the visibility for the associated attribute. In the following example, the <code>geometry</code> attribute is given a visibility <code>S</code> and the <code>eventName</code> attribute is given a visibility <code>TS</code>.  This means that a user with an authorization set of <code>["S","TS"]</code> would be able to see both attributes, while a user with only <code>["S"]</code> would only be able to see the <code>geometry</code> attribute.</p>
+<p>Visibility can be configured on a type by utilizing one or more of the visibility options during ingest or when adding a new type via the <code>type add</code> command.  These options allow the user to specify the visibility of each field individually, or specify a field in their type that defines visibility information.  One complex example of this would be having a type that contains a field with visibility information in JSON format.  Each name/value pair within the JSON structure defines the visibility for the associated attribute. In the following example, the <code>geometry</code> attribute is given a visibility <code>S</code> and the <code>eventName</code> attribute is given a visibility <code>TS</code>.  This means that a user with an authorization set of <code>["S","TS"]</code> would be able to see both attributes, while a user with only <code>["S"]</code> would only be able to see the <code>geometry</code> attribute.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2482,29 +2719,7 @@ this artifact.</p>
 <p>The order of the name/value pairs must be considered if one rule is more general than another, as shown in the example. The rule <code>.*</code> matches all properties. The more specific rule <code>geo.*</code> must be ordered first.</p>
 </div>
 <div class="paragraph">
-<p>By default, the system extracts the JSON visibility string from an attribute named <code>GEOWAVE_VISIBILITY</code>, however, selection of an alternate attribute can be achieved in two ways.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>It can be done programatically by setting the UserData property <code>visibility</code> to <code>TRUE</code> on the attribute that contains the visibility information in the SimpleFeatureType.</p>
-</li>
-<li>
-<p>It can be done through ingest configuration as described in the <a href="#visibility-configuration">Visibility Configuration</a> section of this document.</p>
-</li>
-</ul>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Additional visibility management strategies can be registered through the Java Service Provider Interface (SPI) model by implementing the <a href="https://github.com/locationtech/geowave/blob/52a12f591b99ea921f34c3f8c04517e7f79bce4a/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/plugin/visibility/ColumnVisibilityManagementSpi.java"><code>ColumnVisibilityManagement</code></a> interface. For more information on using SPI, see the <a href="https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html" target="_blank">Oracle documentation</a>.
-</td>
-</tr>
-</table>
+<p>For more information about other ways to configure visibility for a type, see the <a href="commands.html#type-add"><code>type add</code></a> CLI documentation.</p>
 </div>
 </div>
 <div class="sect2">
@@ -2513,7 +2728,7 @@ Additional visibility management strategies can be registered through the Java S
 <p>It is sometimes necessary to provide more complex visibility constraints on a particular attribute, such as allowing two different authorizations to have view permissions.  GeoWave handles this by using visibility expressions.  These expressions support AND and OR operations through the symbols <code>&amp;</code> and <code>|</code>.  It also supports parentheses for situations where more complex expressions are required.</p>
 </div>
 <div class="sect3">
-<h4 id="examples-7"><a class="anchor" href="#examples-7"></a>Examples</h4>
+<h4 id="examples-11"><a class="anchor" href="#examples-11"></a>Examples</h4>
 <div class="literalblock">
 <div class="title">Visibility expression that allows both <code>A</code> and <code>B</code> authorizations to see the data:</div>
 <div class="content">
@@ -2726,7 +2941,7 @@ For configuring the password encryption enabled setting:</p>
 <dl>
 <dt class="hdlist1">geowave_version</dt>
 <dd>
-<p>The desired version of GeoWave to install, ex: '1.2.0'. We support concurrent installs but only one will be active at a time.</p>
+<p>The desired version of GeoWave to install, ex: '2.0.0'. We support concurrent installs but only one will be active at a time.</p>
 </dd>
 <dt class="hdlist1">hadoop_vendor_version</dt>
 <dd>
@@ -2778,7 +2993,7 @@ class { 'geowave::repo':
   repo_refresh_md =&gt; 0,
 } -&gt;
 class { 'geowave':
-  geowave_version       =&gt; '1.2.0',
+  geowave_version       =&gt; '2.0.0',
   hadoop_vendor_version =&gt; 'apache',
   install_accumulo      =&gt; true,
   install_app           =&gt; true,
@@ -2802,7 +3017,7 @@ node 'c1-master' {
     repo_enabled    =&gt; 1,
   } -&gt;
   class { 'geowave':
-    geowave_version       =&gt; '1.2.0',
+    geowave_version       =&gt; '2.0.0',
     hadoop_vendor_version =&gt; 'apache',
     install_accumulo      =&gt; true,
     install_app           =&gt; true,
@@ -2816,7 +3031,7 @@ node 'c1-app-01' {
     repo_enabled    =&gt; 1,
   } -&gt;
   class { 'geowave':
-    geowave_version       =&gt; '1.2.0',
+    geowave_version       =&gt; '2.0.0',
     hadoop_vendor_version =&gt; 'apache',
     install_app_server    =&gt; true,
     http_port             =&gt; '8888',
@@ -2848,12 +3063,12 @@ yum --enablerepo=geowave install geowave-puppet</code></pre>
 </div>
 </div>
 <script>
-var geowave_version = '1.2.0';
+var geowave_version = '2.0.0';
 </script>
 
 <div class="geowave-footer col-md-12 docs-footer">
   <div class="py-4 d-flex justify-content-center align-items-center">
-    <small><p class="footer-text">This page was generated on Friday, December 11, 2020 at 04:12 AM UTC<br><a href="https://github.com/locationtech/geowave/tree/52a12f591b99ea921f34c3f8c04517e7f79bce4a">View the commit it was generated from on GitHub</a></p></small>
+    <small><p class="footer-text">This page was generated on Monday, September 27, 2021 at 11:18 AM UTC<br><a href="https://github.com/locationtech/geowave/tree/215458e8ee6ef6d7b3eb1bebca1f882428197b10">View the commit it was generated from on GitHub</a></p></small>
   </div>
 </div>
 </div>
@@ -2864,7 +3079,7 @@ var geowave_version = '1.2.0';
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-12-11 04:12:25 +00:00
+Last updated 2021-09-27 11:18:10 +00:00
 </div>
 </div>
 </body>

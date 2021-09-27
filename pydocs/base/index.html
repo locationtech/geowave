@@ -6,7 +6,8 @@
 <meta name="generator" content="pdoc 0.6.3" />
 <title>pygw.base API documentation</title>
 <meta name="description" content="This module includes common classes that are used by other modules.
-This includes the base `GeoWaveObject` class that serves as a python wrapper for …" />
+This includes the base `GeoWaveObject` class that
+serves as a python wrapper for …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -22,13 +23,18 @@ This includes the base `GeoWaveObject` class that serves as a python wrapper for
 </header>
 <section id="section-intro">
 <p>This module includes common classes that are used by other modules.
-This includes the base <code>GeoWaveObject</code> class that serves as a python wrapper for a java reference.
-It also includes a <a title="pygw.base.type_conversions" href="type_conversions.html"><code>pygw.base.type_conversions</code></a> submodule that can be used to convert Python types to Java types that are commonly used in GeoWave.</p>
+This includes the base <code>GeoWaveObject</code> class that
+serves as a python wrapper for a java reference.
+It also includes a <a title="pygw.base.type_conversions" href="type_conversions.html"><code>pygw.base.type_conversions</code></a> submodule that can be used to
+convert Python types to Java types that are commonly used in GeoWave.</p>
 <p>It contains the following import shortcuts:</p>
 <pre><code class="language-python">from pygw.base import GeoWaveObject
 from pygw.base import CloseableIterator
 from pygw.base import DataTypeAdapter
 from pygw.base import Writer
+from pygw.base import Envelope
+from pygw.base import Interval
+from pygw.base import Range
 </code></pre>
 <details class="source">
 <summary>Source code</summary>
@@ -40,9 +46,11 @@ from pygw.base import Writer
 # ownership. All rights reserved. This program and the accompanying materials are made available
 # under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
 # available at http://www.apache.org/licenses/LICENSE-2.0.txt
-#===============================================================================================
+# ===============================================================================================
 &#34;&#34;&#34;
-This module includes common classes that are used by other modules.  This includes the base `GeoWaveObject` class that serves as a python wrapper for a java reference.  It also includes a `type_conversions` submodule that can be used to convert Python types to Java types that are commonly used in GeoWave.
+This module includes common classes that are used by other modules.  This includes the base `GeoWaveObject` class that
+serves as a python wrapper for a java reference.  It also includes a `type_conversions` submodule that can be used to
+convert Python types to Java types that are commonly used in GeoWave.
 
 It contains the following import shortcuts:
 ```python
@@ -50,13 +58,19 @@ from pygw.base import GeoWaveObject
 from pygw.base import CloseableIterator
 from pygw.base import DataTypeAdapter
 from pygw.base import Writer
+from pygw.base import Envelope
+from pygw.base import Interval
+from pygw.base import Range
 ```
 &#34;&#34;&#34;
 
 from .geowave_object import GeoWaveObject
 from .closeable_iterator import CloseableIterator
 from .data_type_adapter import DataTypeAdapter
-from .writer import Writer</code></pre>
+from .writer import Writer
+from .envelope import Envelope
+from .interval import Interval
+from .range import Range</code></pre>
 </details>
 </section>
 <section>
@@ -70,7 +84,23 @@ from .writer import Writer</code></pre>
 <dd>
 <section class="desc"></section>
 </dd>
+<dt><code class="name"><a title="pygw.base.envelope" href="envelope.html">pygw.base.envelope</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
 <dt><code class="name"><a title="pygw.base.geowave_object" href="geowave_object.html">pygw.base.geowave_object</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="pygw.base.interval" href="interval.html">pygw.base.interval</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="pygw.base.java_transformer" href="java_transformer.html">pygw.base.java_transformer</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="pygw.base.range" href="range.html">pygw.base.range</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
@@ -110,7 +140,11 @@ from .writer import Writer</code></pre>
 <ul>
 <li><code><a title="pygw.base.closeable_iterator" href="closeable_iterator.html">pygw.base.closeable_iterator</a></code></li>
 <li><code><a title="pygw.base.data_type_adapter" href="data_type_adapter.html">pygw.base.data_type_adapter</a></code></li>
+<li><code><a title="pygw.base.envelope" href="envelope.html">pygw.base.envelope</a></code></li>
 <li><code><a title="pygw.base.geowave_object" href="geowave_object.html">pygw.base.geowave_object</a></code></li>
+<li><code><a title="pygw.base.interval" href="interval.html">pygw.base.interval</a></code></li>
+<li><code><a title="pygw.base.java_transformer" href="java_transformer.html">pygw.base.java_transformer</a></code></li>
+<li><code><a title="pygw.base.range" href="range.html">pygw.base.range</a></code></li>
 <li><code><a title="pygw.base.type_conversions" href="type_conversions.html">pygw.base.type_conversions</a></code></li>
 <li><code><a title="pygw.base.write_results" href="write_results.html">pygw.base.write_results</a></code></li>
 <li><code><a title="pygw.base.writer" href="writer.html">pygw.base.writer</a></code></li>
