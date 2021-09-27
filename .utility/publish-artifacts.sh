@@ -31,7 +31,7 @@ if [[ ! "$GEOWAVE_VERSION" =~ "SNAPSHOT" ]] ; then
     pushd python/src/main/python
     python3 -m venv publish-venv
     source ./publish-venv/bin/activate
-  
+    python3 -m pip install --upgrade pip
     pip3 install --upgrade pip wheel setuptools twine
     python3 setup.py bdist_wheel --python-tag=py3 sdist
     twine upload --skip-existing -u __token__ -p $PYPI_CREDENTIALS dist/*
