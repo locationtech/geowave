@@ -16,26 +16,26 @@ if ! curl --head --silent --fail  https://oss.sonatype.org/service/local/reposit
     popd
 fi
 echo -e "Deploying geowave artifacts..."
-# mvn deploy --settings .utility/.maven.xml -DskipTests -Dspotbugs.skip -B -U -Prelease
+mvn deploy --settings .utility/.maven.xml -DskipTests -Dspotbugs.skip -B -U -Prelease
 
 # Get the version from the build.properties file
 filePath=deploy/target/classes/build.properties
 GEOWAVE_VERSION=$(grep project.version $filePath|  awk -F= '{print $2}')
 
 # Don't publish snapshots to PyPi
-if [[ ! "$GEOWAVE_VERSION" =~ "SNAPSHOT" ]] ; then
-  if [[ -z "${PYPI_CREDENTIALS}" ]]; then
-    echo -e "No PyPi credentials, skipping PyPi distribution..."
-  else
-    echo -e "Deploying pygw to PyPi..."
-    pushd python/src/main/python
-    python3 -m venv publish-venv
-    source ./publish-venv/bin/activate
-    python3 -m pip install --upgrade pip
-    pip3 install --upgrade pip wheel setuptools twine
-    python3 setup.py bdist_wheel --python-tag=py3 sdist
-    twine upload --skip-existing -u __token__ -p $PYPI_CREDENTIALS dist/*
-    deactivate
-    popd
-  fi
-fi 
+#if [[ ! "$GEOWAVE_VERSION" =~ "SNAPSHOT" ]] ; then
+#  if [[ -z "${PYPI_CREDENTIALS}" ]]; then
+#    echo -e "No PyPi credentials, skipping PyPi distribution..."
+#  else
+#    echo -e "Deploying pygw to PyPi..."
+#    pushd python/src/main/python
+#    python3 -m venv publish-venv
+#    source ./publish-venv/bin/activate
+#    python3 -m pip install --upgrade pip
+#    pip3 install --upgrade pip wheel setuptools twine
+#    python3 setup.py bdist_wheel --python-tag=py3 sdist
+#    twine upload --skip-existing -u __token__ -p $PYPI_CREDENTIALS dist/*
+#    deactivate
+#    popd
+#  fi
+#fi 
