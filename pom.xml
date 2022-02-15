@@ -112,7 +112,8 @@
 		<fasterxml.jackson.version>2.10.5</fasterxml.jackson.version>
 		<fasterxml.jackson.databind.version>2.10.5.1</fasterxml.jackson.databind.version>
 		<spring-security.version>5.1.13.RELEASE</spring-security.version>
-		<slf4j.version>1.7.30</slf4j.version>
+		<slf4j.version>1.7.36</slf4j.version>
+		<log4j.version>2.17.1</log4j.version>
 		<jna.version>5.7.0</jna.version>
 		<math.version>2.2</math.version>
 		<math3.version>3.6.1</math3.version>
@@ -302,11 +303,22 @@
 				<artifactId>slf4j-api</artifactId>
 				<version>${slf4j.version}</version>
 			</dependency>
-			<dependency>
+			<!-- dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-log4j12</artifactId>
 				<version>${slf4j.version}</version>
+			</dependency-->			
+			<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl -->
+			<dependency>
+			    <groupId>org.apache.logging.log4j</groupId>
+			    <artifactId>log4j-slf4j-impl</artifactId>
+			    <version>${log4j.version}</version>
 			</dependency>
+			<dependency>
+			    <groupId>org.apache.logging.log4j</groupId>
+			    <artifactId>log4j-core</artifactId>
+			    <version>${log4j.version}</version>
+			</dependency>	
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-pool2</artifactId>
@@ -973,9 +985,19 @@
 	</dependencyManagement>
 	<!-- Dependencies used across ALL projects -->
 	<dependencies>
-		<dependency>
+		<!-- dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
+		</dependency-->		
+		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl -->
+		<dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-slf4j-impl</artifactId>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+		<dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

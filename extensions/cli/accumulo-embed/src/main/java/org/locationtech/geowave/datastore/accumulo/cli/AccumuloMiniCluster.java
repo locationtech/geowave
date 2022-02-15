@@ -16,8 +16,13 @@ import org.apache.accumulo.minicluster.MiniAccumuloConfig;
 import org.apache.accumulo.monitor.Monitor;
 import org.apache.hadoop.util.VersionInfo;
 import org.apache.hadoop.util.VersionUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.spi.LoggerFactory;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.config.Configurator;
 /**
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
  *
@@ -36,7 +41,8 @@ public class AccumuloMiniCluster {
   }
 
   public static void main(final String[] args) throws Exception {
-    org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.WARN);
+   
+    Configurator.setLevel(LogManager.getRootLogger().getName(), Level.WARN);
 
     final boolean interactive =
         (System.getProperty("interactive") != null)

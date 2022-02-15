@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.time.StopWatch;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.config.Configurator;
 import org.locationtech.geowave.adapter.vector.cli.VectorSection;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
@@ -78,7 +81,7 @@ public class CQLDelete extends DefaultOperation implements Command {
   @Override
   public void execute(final OperationParams params) throws ParseException {
     if (debug) {
-      org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.DEBUG);
+      Configurator.setLevel(LogManager.getRootLogger().getName(), Level.DEBUG);
     }
 
     final StopWatch stopWatch = new StopWatch();

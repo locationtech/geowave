@@ -13,7 +13,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import org.apache.commons.lang3.NotImplementedException;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
@@ -25,7 +26,7 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 public class MergingEntryIterator<T> extends NativeEntryIteratorWrapper<T> {
-  private static final Logger LOGGER = Logger.getLogger(NativeEntryIteratorWrapper.class);
+  private static final Logger LOGGER = LogManager.getLogger(NativeEntryIteratorWrapper.class);
 
   private final Map<Short, RowMergingDataAdapter> mergingAdapters;
   private final Map<Short, RowTransform> transforms;

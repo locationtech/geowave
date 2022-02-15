@@ -8,13 +8,16 @@
  */
 package org.locationtech.geowave.test.services;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Logger;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configurator;
 import org.locationtech.geowave.test.basic.AbstractGeoWaveIT;
 
 public abstract class BaseServiceIT extends AbstractGeoWaveIT {
@@ -29,22 +32,24 @@ public abstract class BaseServiceIT extends AbstractGeoWaveIT {
   protected synchronized void muteLogging() {
     if (loggerMap.isEmpty()) {
       @SuppressWarnings("unchecked")
-      final List<Logger> currentLoggers = Collections.<Logger>list(LogManager.getCurrentLoggers());
-      currentLoggers.add(LogManager.getRootLogger());
+      LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+      final Collection<Logger> currentLoggers = ctx.getLoggers();
+      org.apache.logging.log4j.Logger rootLogger = LogManager.getRootLogger();
+      currentLoggers.add((Logger) rootLogger);
 
       currentLoggers.forEach(logger -> {
-        loggerMap.put(logger.getName(), logger.getEffectiveLevel());
-        logger.setLevel(Level.OFF);
+        loggerMap.put(logger.getName(), logger.getLevel());
+        Configurator.setLevel(logger.getName(), Level.OFF);
       });
     }
   }
 
   protected synchronized void unmuteLogging() {
     loggerMap.entrySet().forEach(entry -> {
-      LogManager.getLogger(entry.getKey()).setLevel(entry.getValue());
+      Configurator.setLevel(loggerMap);
     });
 
-    org.apache.log4j.Logger.getRootLogger().setLevel(Level.WARN);
+    Configurator.setRootLevel(Level.WARN);
     loggerMap.clear();
   }
 }

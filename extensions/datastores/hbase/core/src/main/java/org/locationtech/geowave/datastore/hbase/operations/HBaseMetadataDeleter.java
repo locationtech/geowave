@@ -14,7 +14,8 @@ import java.util.List;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.BufferedMutator;
 import org.apache.hadoop.hbase.client.Delete;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
@@ -24,7 +25,7 @@ import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 
 public class HBaseMetadataDeleter implements MetadataDeleter {
-  private static final Logger LOGGER = Logger.getLogger(HBaseMetadataDeleter.class);
+  private static final Logger LOGGER = LogManager.getLogger(HBaseMetadataDeleter.class);
 
   private final HBaseOperations operations;
   private final MetadataType metadataType;

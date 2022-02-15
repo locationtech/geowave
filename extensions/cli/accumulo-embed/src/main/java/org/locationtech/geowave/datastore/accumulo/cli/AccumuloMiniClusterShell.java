@@ -9,11 +9,14 @@
 package org.locationtech.geowave.datastore.accumulo.cli;
 
 import org.apache.accumulo.shell.Shell;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.config.Configurator;
 
 public class AccumuloMiniClusterShell {
 
-  public static void main(final String[] args) throws Exception {
-    org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.WARN);
+  public static void main(final String[] args) throws Exception {    
+    Configurator.setLevel(LogManager.getRootLogger().getName(), Level.WARN);
 
     final String instanceName =
         (System.getProperty("instanceName") != null) ? System.getProperty("instanceName")
