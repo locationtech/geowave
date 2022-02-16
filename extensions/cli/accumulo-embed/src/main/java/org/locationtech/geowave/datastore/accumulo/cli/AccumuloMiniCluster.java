@@ -16,12 +16,10 @@ import org.apache.accumulo.minicluster.MiniAccumuloConfig;
 import org.apache.accumulo.monitor.Monitor;
 import org.apache.hadoop.util.VersionInfo;
 import org.apache.hadoop.util.VersionUtil;
-import org.apache.log4j.spi.LoggerFactory;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.logging.log4j.core.config.Configurator;
 /**
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
