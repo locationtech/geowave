@@ -50,11 +50,12 @@ public class GeoWaveTopLevelSection extends DefaultOperation {
     // Up the log level
     if (Boolean.TRUE.equals(verboseFlag)) {
       Configurator.setRootLevel(Level.DEBUG);
-      PatternLayout patternLayout = PatternLayout.newBuilder().withPattern("%d{dd MMM HH:mm:ss} %p [%c{2}] - %m%n").build();
+      PatternLayout patternLayout =
+          PatternLayout.newBuilder().withPattern("%d{dd MMM HH:mm:ss} %p [%c{2}] - %m%n").build();
       PatternLayout.createDefaultLayout();
-      
+
       ConsoleAppender consoleApp = ConsoleAppender.createDefaultAppenderForLayout(patternLayout);
-      
+
       ((Logger) LogManager.getRootLogger()).addAppender(consoleApp);
     }
 

@@ -15,7 +15,7 @@ import org.apache.logging.log4j.core.config.Configurator;
 
 public class AccumuloMiniClusterShell {
 
-  public static void main(final String[] args) throws Exception {    
+  public static void main(final String[] args) throws Exception {
     Configurator.setLevel(LogManager.getRootLogger().getName(), Level.WARN);
 
     final String instanceName =

@@ -39,7 +39,7 @@ public class AccumuloMiniCluster {
   }
 
   public static void main(final String[] args) throws Exception {
-   
+
     Configurator.setLevel(LogManager.getRootLogger().getName(), Level.WARN);
 
     final boolean interactive =
