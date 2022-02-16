@@ -96,6 +96,11 @@ Activate the environment:
 $ source venv/bin/activate
 ----
 
+Install requirements in the activated python virtual environment:
+----
+$ pip install -r requirements.txt
+----
+
 Install necessary build tools:
 
 [source, bash]
