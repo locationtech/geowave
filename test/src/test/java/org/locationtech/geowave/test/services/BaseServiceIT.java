@@ -46,7 +46,9 @@ public abstract class BaseServiceIT extends AbstractGeoWaveIT {
 
   protected synchronized void unmuteLogging() {
     loggerMap.entrySet().forEach(entry -> {
-      Configurator.setLevel(loggerMap);
+      Map<String, Level> entryLoggerMap = new HashMap<>();
+      entryLoggerMap.put(entry.getKey(), entry.getValue());
+      Configurator.setLevel(entryLoggerMap);
     });
 
     Configurator.setRootLevel(Level.WARN);
