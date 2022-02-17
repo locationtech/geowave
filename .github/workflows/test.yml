@@ -125,7 +125,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                profile: [redis-it, rocksdb-it, accumulo-it-client, accumulo-it-server, hbase-it-client, hbase-it-server, dynamodb-it, bigtable-it, kudu-it, filesystem-it, 'filesystem-it,secondary-index-it', 'rocksdb-it,secondary-index-it', 'accumulo-it-server,compatibility','hbase-it-server,secondary-index-it','hbase-it-server,secondary-index-it']
+                profile: [redis-it, rocksdb-it, accumulo-it-client, accumulo-it-server, hbase-it-client, hbase-it-server, dynamodb-it, bigtable-it, kudu-it, filesystem-it, 'filesystem-it,secondary-index-it', 'rocksdb-it,secondary-index-it', 'accumulo-it-server,compatibility','hbase-it-server,secondary-index-it']
                 include:
                   - profile: cassandra-it
                     retry_tests: true
