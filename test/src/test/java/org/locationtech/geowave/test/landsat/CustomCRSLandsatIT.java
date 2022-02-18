@@ -164,7 +164,7 @@ public class CustomCRSLandsatIT extends AbstractGeoWaveIT {
   public void internalTestMosaic() throws Exception {
 
     // Skip this test if we're on a Mac
-    org.junit.Assume.assumeTrue(isNotMac());
+    org.junit.Assume.assumeTrue(isNotMac() && isGDALEnabled());
 
     JAIExt.initJAIEXT();
     MapProjection.SKIP_SANITY_CHECKS = true;
@@ -270,6 +270,14 @@ public class CustomCRSLandsatIT extends AbstractGeoWaveIT {
         // TODO investigate lowering this and being less lenient
         0.005);
     MapProjection.SKIP_SANITY_CHECKS = false;
+  }
+
+  private static boolean isGDALEnabled() {
+    String enabled = System.getenv("GDAL_DISABLED");
+    if (enabled != null && enabled.trim().equalsIgnoreCase("true")) {
+      return false;
+    }
+    return true;
   }
 
   private static boolean isNotMac() {

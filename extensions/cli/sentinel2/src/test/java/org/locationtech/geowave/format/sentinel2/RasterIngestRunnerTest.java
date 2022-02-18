@@ -35,7 +35,7 @@ public class RasterIngestRunnerTest {
   public static void setup() throws IOException {
 
     // Skip this test if we're on a Mac
-    org.junit.Assume.assumeTrue(isNotMac());
+    org.junit.Assume.assumeTrue(isNotMac() && isGDALEnabled());
 
     GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
         "memory",
@@ -43,6 +43,15 @@ public class RasterIngestRunnerTest {
 
     InstallGdal.main(new String[] {System.getenv("GDAL_DIR")});
   }
+
+  private static boolean isGDALEnabled() {
+    String enabled = System.getenv("GDAL_DISABLED");
+    if (enabled != null && enabled.trim().equalsIgnoreCase("true")) {
+      return false;
+    }
+    return true;
+  }
+
 
   private static boolean isNotMac() {
     return !SystemUtils.IS_OS_MAC;
