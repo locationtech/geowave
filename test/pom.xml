@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-parent</artifactId>
@@ -14,6 +16,11 @@
 	<name>GeoWave Integration Tests</name>
 	<description>A module for integration and functional tests of GeoWave</description>
 	<dependencies>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-1.2-api</artifactId>
+			<version>2.17.1</version>
+		</dependency>
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-deploy</artifactId>
@@ -41,6 +48,10 @@
 				<exclusion>
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -161,6 +172,10 @@
 				<exclusion>
 					<groupId>javax.servlet</groupId>
 					<artifactId>javax.servlet-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -329,6 +344,10 @@
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-log4j12</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -340,6 +359,12 @@
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-cli-accumulo-embed</artifactId>
 			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
@@ -355,6 +380,12 @@
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-cli-bigtable-embed</artifactId>
 			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
@@ -377,6 +408,10 @@
 				<exclusion>
 					<groupId>io.netty</groupId>
 					<artifactId>netty</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -409,6 +444,10 @@
 				<exclusion>
 					<artifactId>accumulo-native</artifactId>
 					<groupId>org.apache.accumulo</groupId>
+				</exclusion>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -680,9 +719,9 @@
 										<testStoreOptions>${testStoreOptions}</testStoreOptions>
 										<testServerEnabled>${testServerEnabled}</testServerEnabled>
 										<geoserver.version>${geoserver.version}</geoserver.version>
-										<log4j.configuration>
+										<log4j.configurationFile>
 											file:${project.build.testOutputDirectory}/log4j-test.properties
-										</log4j.configuration>
+										</log4j.configurationFile>
 										<java.util.logging.config.file>
 											${project.build.testOutputDirectory}/jul-test.properties
 										</java.util.logging.config.file>
@@ -728,10 +767,13 @@
 								<configuration>
 									<tasks xmlns:jacoco="antlib:org.jacoco.ant">
 										<mkdir dir="${project.reporting.outputDirectory}" />
-										<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml" classpathref="maven.plugin.classpath" />
+										<taskdef uri="antlib:org.jacoco.ant"
+											resource="org/jacoco/ant/antlib.xml"
+											classpathref="maven.plugin.classpath" />
 										<jacoco:report>
 											<executiondata>
-												<fileset dir="../" includes="**/coverage-reports/*.exec" />
+												<fileset dir="../"
+													includes="**/coverage-reports/*.exec" />
 											</executiondata>
 
 											<structure name="GeoWave">
@@ -739,11 +781,13 @@
 													<fileset dir="../" includes="**/target/classes/**" />
 												</classfiles>
 												<sourcefiles>
-													<fileset dir="../" includes="**/src/main/java/**,**/src/main/scala/**" />
+													<fileset dir="../"
+														includes="**/src/main/java/**,**/src/main/scala/**" />
 												</sourcefiles>
 											</structure>
 
-											<xml destfile="${project.reporting.outputDirectory}/jacoco.xml" />
+											<xml
+												destfile="${project.reporting.outputDirectory}/jacoco.xml" />
 										</jacoco:report>
 									</tasks>
 								</configuration>
