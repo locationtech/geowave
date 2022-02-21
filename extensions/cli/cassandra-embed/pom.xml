@@ -33,7 +33,7 @@
 					to avoid guava version conflicts) -->
 				<exclusion>
 					<groupId>org.slf4j</groupId>
-					<artifactId>log4j-slf4j-impl</artifactId>
+					<artifactId>slf4j-log4j12</artifactId>
 				</exclusion>
 				<exclusion>
 					<groupId>commons-logging</groupId>
