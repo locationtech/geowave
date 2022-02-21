@@ -103,7 +103,7 @@ image::EclipseWorkspace.png[scaledwidth="25%",width="25%", alt="EclipseWorkspace
 
 [NOTE]
 ====
-If Eclipse produces `Plugin execution not covered by lifecycle configuration:...` error messages in the `geowave-datastore-hbase` or `geowave-grpc-protobuf` project `pom.xml` files, they may be ignored. The error can be muted by hovering the mouse over the line of XML and selecting the `Mark goal as ignored in pom.xml` option. 
+If Eclipse produces `Plugin execution not covered by lifecycle configuration:...` error messages in the `geowave-datastore-hbase` or `geowave-grpc-protobuf` project `pom.xml` files, they may be ignored. The error can be muted by hovering the mouse over the line of XML and selecting the `Mark goal as ignored in eclipse preferences` option. 
 ====
 
 ==== Clean Up and Formatter Templates
