@@ -62,7 +62,6 @@
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-analytic-spark</artifactId>
-			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

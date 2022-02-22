@@ -12,8 +12,7 @@
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-analytic-spark</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+			</dependency>
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-analytic-mapreduce</artifactId>

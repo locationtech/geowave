@@ -17,7 +17,6 @@
 		<dependency> <!-- Spark dependency -->
 			<groupId>org.apache.spark</groupId>
 			<artifactId>spark-core_2.12</artifactId>
-			<version>${spark.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -41,8 +40,7 @@
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-analytic-api</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+			</dependency>
 		<dependency>
 			<groupId>org.scalatest</groupId>
 			<artifactId>scalatest_2.12</artifactId>

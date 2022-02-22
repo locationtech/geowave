@@ -114,7 +114,7 @@
 		<fasterxml.jackson.version>2.10.5</fasterxml.jackson.version>
 		<fasterxml.jackson.databind.version>2.10.5.1</fasterxml.jackson.databind.version>
 		<spring-security.version>5.1.13.RELEASE</spring-security.version>
-		<slf4j.version>1.7.36</slf4j.version>
+		<slf4j.version>1.7.30</slf4j.version>
 		<log4j.version>2.17.1</log4j.version>
 		<jna.version>5.7.0</jna.version>
 		<math.version>2.2</math.version>
@@ -234,6 +234,17 @@
 				<version>2.3.0</version>
 			</dependency>
 			<dependency>
+				<groupId>org.locationtech.geowave</groupId>
+				<artifactId>geowave-analytic-api</artifactId>
+				<version>${project.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
 				<groupId>org.apache.zookeeper</groupId>
 				<artifactId>zookeeper</artifactId>
 				<version>${zookeeper.version}</version>
@@ -260,6 +271,21 @@
 					<exclusion>
 						<groupId>org.slf4j</groupId>
 						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.locationtech.geowave</groupId>
+				<artifactId>geowave-analytic-spark</artifactId>
+				<version>${project.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>log4j</groupId>
+						<artifactId>log4j</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
@@ -449,6 +475,12 @@
 				<artifactId>accumulo-core</artifactId>
 				<version>${accumulo.version}</version>
 				<scope>${accumulo.scope}</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>log4j</groupId>
+						<artifactId>log4j</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.accumulo</groupId>
@@ -461,11 +493,23 @@
 				<artifactId>accumulo-monitor</artifactId>
 				<version>${accumulo.version}</version>
 				<scope>${accumulo.scope}</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>log4j</groupId>
+						<artifactId>log4j</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.accumulo</groupId>
 				<artifactId>accumulo-minicluster</artifactId>
 				<version>${accumulo.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>log4j</groupId>
+						<artifactId>log4j</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.accumulo</groupId>
@@ -486,6 +530,14 @@
 						<artifactId>jdk.tools</artifactId>
 						<groupId>jdk.tools</groupId>
 					</exclusion>
+					<exclusion>
+						<groupId>log4j</groupId>
+						<artifactId>log4j</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
 				</exclusions>
 				<scope>${hbase.scope}</scope>
 			</dependency>
@@ -499,12 +551,28 @@
 				<groupId>org.apache.hbase</groupId>
 				<artifactId>hbase-client</artifactId>
 				<version>${hbase.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.hbase</groupId>
 				<artifactId>hbase-server</artifactId>
 				<version>${hbase.version}</version>
 				<scope>${hbase.scope}</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>log4j</groupId>
+						<artifactId>log4j</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.hbase</groupId>
@@ -512,7 +580,17 @@
 				<version>${hbase.version}</version>
 				<type>test-jar</type>
 				<scope>${hbase.scope}</scope>
-			</dependency>
+				<exclusions>
+					<exclusion>
+						<groupId>log4j</groupId>
+						<artifactId>log4j</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>	
 			<dependency>
 				<groupId>org.apache.hbase</groupId>
 				<artifactId>hbase-common</artifactId>
@@ -580,6 +658,17 @@
 					<exclusion>
 						<groupId>log4j</groupId>
 						<artifactId>log4j</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.hadoop</groupId>
+				<artifactId>hadoop-minikdc</artifactId>
+				<version>${hadoop.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
@@ -737,6 +826,17 @@
 				<version>${geotools.version}</version>
 				<scope>${geotools.scope}</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.geotools</groupId>
+				<artifactId>gt-netcdf</artifactId>
+				<version>${geotools.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>				
 			<dependency>
 				<groupId>org.hsqldb</groupId>
 				<artifactId>hsqldb</artifactId>
@@ -1028,11 +1128,7 @@
 		</dependencies>
 	</dependencyManagement>
 	<!-- Dependencies used across ALL projects -->
-	<dependencies>
-		<!-- dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-		</dependency-->		
+	<dependencies>	
 		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl -->
 		<dependency>
 		    <groupId>org.apache.logging.log4j</groupId>
@@ -1042,6 +1138,10 @@
 		<dependency>
 		    <groupId>org.apache.logging.log4j</groupId>
 		    <artifactId>log4j-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-1.2-api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
