@@ -1053,7 +1053,7 @@ $ geowave ingest localtogw ./ingest_data mystore myindex</code></pre>
 <div class="sect3">
 <h4 id="temporal-configuration"><a class="anchor" href="#temporal-configuration"></a>Temporal Configuration</h4>
 <div class="paragraph">
-<p>Temporal configuration may be necessary if your vector feature type has more than one temporal attribute.  The class name for this configuration is <a href="https://github.com/locationtech/geowave/blob/215458e8ee6ef6d7b3eb1bebca1f882428197b10/core/geotime/src/main/java/org/locationtech/geowave/core/geotime/util/TimeDescriptors.java"><code>org.locationtech.geowave.core.geotime.util.TimeDescriptors$TimeDescriptorConfiguration</code></a>.</p>
+<p>Temporal configuration may be necessary if your vector feature type has more than one temporal attribute.  The class name for this configuration is <a href="https://github.com/locationtech/geowave/blob/6ebb11b846bbd16b11603ed49acba82cf504a9c2/core/geotime/src/main/java/org/locationtech/geowave/core/geotime/util/TimeDescriptors.java"><code>org.locationtech.geowave.core.geotime.util.TimeDescriptors$TimeDescriptorConfiguration</code></a>.</p>
 </div>
 <div class="paragraph">
 <p>There are three attributes for the temporal configuration:</p>
@@ -1097,7 +1097,7 @@ $ geowave ingest localtogw ./ingest_data mystore myindex</code></pre>
 <div class="sect3">
 <h4 id="primary-index-identifiers"><a class="anchor" href="#primary-index-identifiers"></a>Primary Index Identifiers</h4>
 <div class="paragraph">
-<p>The class <a href="https://github.com/locationtech/geowave/blob/215458e8ee6ef6d7b3eb1bebca1f882428197b10/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/index/SimpleFeaturePrimaryIndexConfiguration.java"><code>org.locationtech.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration</code></a> is used to maintain the configuration of primary indices used for adding or updating simple features via the GeoServer plugin.</p>
+<p>The class <a href="https://github.com/locationtech/geowave/blob/6ebb11b846bbd16b11603ed49acba82cf504a9c2/extensions/adapters/vector/src/main/java/org/locationtech/geowave/adapter/vector/index/SimpleFeaturePrimaryIndexConfiguration.java"><code>org.locationtech.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration</code></a> is used to maintain the configuration of primary indices used for adding or updating simple features via the GeoServer plugin.</p>
 </div>
 </div>
 <div class="sect3">
@@ -2497,7 +2497,7 @@ In GWQL, function casing is not important; <code>STRCONTAINS(name, 'abc')</code>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Additional authorization management strategies can be registered through the Java Service Provider Interface (SPI) model by implementing the <a href="https://github.com/locationtech/geowave/blob/215458e8ee6ef6d7b3eb1bebca1f882428197b10/extensions/adapters/auth/src/main/java/org/locationtech/geowave/adapter/auth/AuthorizationFactorySPI.java"><code>AuthorizationFactorySPI</code></a> interface. For more information on using SPI, see the <a href="https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html" target="_blank">Oracle documentation</a>.
+Additional authorization management strategies can be registered through the Java Service Provider Interface (SPI) model by implementing the <a href="https://github.com/locationtech/geowave/blob/6ebb11b846bbd16b11603ed49acba82cf504a9c2/extensions/adapters/auth/src/main/java/org/locationtech/geowave/adapter/auth/AuthorizationFactorySPI.java"><code>AuthorizationFactorySPI</code></a> interface. For more information on using SPI, see the <a href="https://docs.oracle.com/javase/tutorial/sound/SPI-intro.html" target="_blank">Oracle documentation</a>.
 </td>
 </tr>
 </table>
@@ -2625,10 +2625,10 @@ accumulo shell -u root -p ROOT_PWD -e "config -np" | grep -A 1 general.vfs.conte
 <div class="title">Compare version and timestamps of installed RPMs</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">[geowaveuser@c1-master ~]$ rpm -qa | grep geowave
-geowave-2.0.0-apache-core-2.0.0-201602012009.noarch
-geowave-2.0.0-apache-jetty-2.0.0-201602012009.noarch
-geowave-2.0.0-apache-accumulo-2.0.0-201602012009.noarch
-geowave-2.0.0-apache-tools-2.0.0-201602012009.noarch</code></pre>
+geowave-2.0.1-SNAPSHOT-apache-core-2.0.1-SNAPSHOT-201602012009.noarch
+geowave-2.0.1-SNAPSHOT-apache-jetty-2.0.1-SNAPSHOT-201602012009.noarch
+geowave-2.0.1-SNAPSHOT-apache-accumulo-2.0.1-SNAPSHOT-201602012009.noarch
+geowave-2.0.1-SNAPSHOT-apache-tools-2.0.1-SNAPSHOT-201602012009.noarch</code></pre>
 </div>
 </div>
 <div class="sect4">
@@ -2941,7 +2941,7 @@ For configuring the password encryption enabled setting:</p>
 <dl>
 <dt class="hdlist1">geowave_version</dt>
 <dd>
-<p>The desired version of GeoWave to install, ex: '2.0.0'. We support concurrent installs but only one will be active at a time.</p>
+<p>The desired version of GeoWave to install, ex: '2.0.1-SNAPSHOT'. We support concurrent installs but only one will be active at a time.</p>
 </dd>
 <dt class="hdlist1">hadoop_vendor_version</dt>
 <dd>
@@ -2993,7 +2993,7 @@ class { 'geowave::repo':
   repo_refresh_md =&gt; 0,
 } -&gt;
 class { 'geowave':
-  geowave_version       =&gt; '2.0.0',
+  geowave_version       =&gt; '2.0.1-SNAPSHOT',
   hadoop_vendor_version =&gt; 'apache',
   install_accumulo      =&gt; true,
   install_app           =&gt; true,
@@ -3017,7 +3017,7 @@ node 'c1-master' {
     repo_enabled    =&gt; 1,
   } -&gt;
   class { 'geowave':
-    geowave_version       =&gt; '2.0.0',
+    geowave_version       =&gt; '2.0.1-SNAPSHOT',
     hadoop_vendor_version =&gt; 'apache',
     install_accumulo      =&gt; true,
     install_app           =&gt; true,
@@ -3031,7 +3031,7 @@ node 'c1-app-01' {
     repo_enabled    =&gt; 1,
   } -&gt;
   class { 'geowave':
-    geowave_version       =&gt; '2.0.0',
+    geowave_version       =&gt; '2.0.1-SNAPSHOT',
     hadoop_vendor_version =&gt; 'apache',
     install_app_server    =&gt; true,
     http_port             =&gt; '8888',
@@ -3063,12 +3063,12 @@ yum --enablerepo=geowave install geowave-puppet</code></pre>
 </div>
 </div>
 <script>
-var geowave_version = '2.0.0';
+var geowave_version = '2.0.1-SNAPSHOT';
 </script>
 
 <div class="geowave-footer col-md-12 docs-footer">
   <div class="py-4 d-flex justify-content-center align-items-center">
-    <small><p class="footer-text">This page was generated on Monday, September 27, 2021 at 11:18 AM UTC<br><a href="https://github.com/locationtech/geowave/tree/215458e8ee6ef6d7b3eb1bebca1f882428197b10">View the commit it was generated from on GitHub</a></p></small>
+    <small><p class="footer-text">This page was generated on Tuesday, February 22, 2022 at 10:34 PM UTC<br><a href="https://github.com/locationtech/geowave/tree/6ebb11b846bbd16b11603ed49acba82cf504a9c2">View the commit it was generated from on GitHub</a></p></small>
   </div>
 </div>
 </div>
@@ -3079,7 +3079,7 @@ var geowave_version = '2.0.0';
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-09-27 11:18:10 +00:00
+Last updated 2022-02-22 22:34:08 +00:00
 </div>
 </div>
 </body>
