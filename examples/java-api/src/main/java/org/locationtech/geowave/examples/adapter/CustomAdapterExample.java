@@ -174,7 +174,7 @@ public class CustomAdapterExample {
     public POIBasicDataAdapter() {}
 
     public POIBasicDataAdapter(final String typeName) {
-      super(typeName, FIELDS, NAME_FIELD_NAME);
+      super(typeName, FIELDS, NAME_FIELD);
     }
 
     @Override
@@ -191,7 +191,7 @@ public class CustomAdapterExample {
     }
 
     @Override
-    public POI buildObject(final Object[] fieldValues) {
+    public POI buildObject(final Object dataId, final Object[] fieldValues) {
       return new POI((String) fieldValues[0], (Double) fieldValues[1], (Double) fieldValues[2]);
     }
 

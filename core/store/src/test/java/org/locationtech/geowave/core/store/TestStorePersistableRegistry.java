@@ -11,6 +11,7 @@ package org.locationtech.geowave.core.store;
 import org.locationtech.geowave.core.index.persist.InternalPersistableRegistry;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 import org.locationtech.geowave.core.store.adapter.AbstractDataTypeAdapterTest.TestTypeBasicDataAdapter;
+import org.locationtech.geowave.core.store.adapter.AbstractDataTypeAdapterTest.TestTypeBasicDataAdapterSeparateDataID;
 import org.locationtech.geowave.core.store.adapter.MockComponents.MockAbstractDataAdapter;
 import org.locationtech.geowave.core.store.adapter.MockComponents.MockIndexStrategy;
 import org.locationtech.geowave.core.store.adapter.MockComponents.TestDimensionField;
@@ -31,6 +32,9 @@ public class TestStorePersistableRegistry implements
         new PersistableIdAndConstructor((short) 10203, TestIndexModel::new),
         new PersistableIdAndConstructor((short) 10204, ExampleNumericIndexStrategy::new),
         new PersistableIdAndConstructor((short) 10205, ExampleDimensionOne::new),
-        new PersistableIdAndConstructor((short) 10206, TestTypeBasicDataAdapter::new)};
+        new PersistableIdAndConstructor((short) 10206, TestTypeBasicDataAdapter::new),
+        new PersistableIdAndConstructor(
+            (short) 10207,
+            TestTypeBasicDataAdapterSeparateDataID::new)};
   }
 }

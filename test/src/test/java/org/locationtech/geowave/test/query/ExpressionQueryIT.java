@@ -2700,7 +2700,7 @@ public class ExpressionQueryIT extends AbstractGeoWaveBasicVectorIT {
     final Index latitudeIndex =
         AttributeDimensionalityTypeProvider.createIndexFromOptions(
             ds,
-            new AttributeIndexOptions(TYPE_NAME, LATITUDE_FIELD));
+            new AttributeIndexOptions(TYPE_NAME, LATITUDE_FIELD, "latitudeIndex"));
 
     ds.addIndex(TYPE_NAME, latitudeIndex);
 

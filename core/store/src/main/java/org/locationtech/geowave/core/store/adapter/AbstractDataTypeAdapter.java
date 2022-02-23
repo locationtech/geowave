@@ -18,6 +18,9 @@ import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.RowBuilder;
+import org.locationtech.geowave.core.store.data.field.FieldReader;
+import org.locationtech.geowave.core.store.data.field.FieldUtils;
+import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.util.GenericTypeResolver;
 import com.google.common.collect.Maps;
 
@@ -31,25 +34,27 @@ public abstract class AbstractDataTypeAdapter<T> implements DataTypeAdapter<T> {
 
   private String typeName = null;
   private FieldDescriptor<?>[] fieldDescriptors = null;
-  private String dataIDField = null;
+  private FieldDescriptor<?> dataIDFieldDescriptor = null;
   private Map<String, Integer> fieldDescriptorIndices = Maps.newHashMap();
+  private FieldWriter<Object> dataIDWriter = null;
+  private FieldReader<Object> dataIDReader = null;
 
   public AbstractDataTypeAdapter() {}
 
   public AbstractDataTypeAdapter(
       final String typeName,
       final FieldDescriptor<?>[] fieldDescriptors,
-      final String dataIDField) {
+      final FieldDescriptor<?> dataIDFieldDescriptor) {
     this.typeName = typeName;
-    if (fieldDescriptors == null || fieldDescriptors.length == 0) {
-      throw new IllegalArgumentException("There must be at least one field in a data type.");
+    if (fieldDescriptors == null) {
+      throw new IllegalArgumentException("An array of field descriptors must be provided.");
+    }
+    if (dataIDFieldDescriptor == null) {
+      throw new IllegalArgumentException("A data ID field descriptor must be provided.");
     }
     this.fieldDescriptors = fieldDescriptors;
+    this.dataIDFieldDescriptor = dataIDFieldDescriptor;
     populateFieldDescriptorIndices();
-    if (!fieldDescriptorIndices.containsKey(dataIDField)) {
-      throw new IllegalArgumentException("Unable to find data ID field in field descriptor list.");
-    }
-    this.dataIDField = dataIDField;
   }
 
   private void populateFieldDescriptorIndices() {
@@ -63,9 +68,28 @@ public abstract class AbstractDataTypeAdapter<T> implements DataTypeAdapter<T> {
     return typeName;
   }
 
+  /**
+   * Returns the value of the field with the given name from the entry. If the data ID field name is
+   * passed, it is expected that this method will return the value of that field even if the data ID
+   * field is not included in the set of field descriptors.
+   *
+   * @param entry the entry
+   * @param fieldName the field name or data ID field name
+   * @return the value of the field on the entry
+   */
+  @Override
+  public abstract Object getFieldValue(T entry, String fieldName);
+
+
+  @SuppressWarnings("unchecked")
   @Override
   public byte[] getDataId(T entry) {
-    return StringUtils.stringToBinary(getFieldValue(entry, dataIDField).toString());
+    if (dataIDWriter == null) {
+      dataIDWriter =
+          (FieldWriter<Object>) FieldUtils.getDefaultWriterForClass(
+              dataIDFieldDescriptor.bindingClass());
+    }
+    return dataIDWriter.writeField(getFieldValue(entry, dataIDFieldDescriptor.fieldName()));
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
@@ -76,8 +100,14 @@ public abstract class AbstractDataTypeAdapter<T> implements DataTypeAdapter<T> {
         AbstractDataTypeAdapter.class);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public RowBuilder<T> newRowBuilder(FieldDescriptor<?>[] outputFieldDescriptors) {
+    if (dataIDReader == null) {
+      dataIDReader =
+          (FieldReader<Object>) FieldUtils.getDefaultReaderForClass(
+              dataIDFieldDescriptor.bindingClass());
+    }
     return new RowBuilder<T>() {
 
       private Object[] values = new Object[outputFieldDescriptors.length];
@@ -95,7 +125,8 @@ public abstract class AbstractDataTypeAdapter<T> implements DataTypeAdapter<T> {
 
       @Override
       public T buildRow(byte[] dataId) {
-        T obj = buildObject(values);
+        final Object dataIDObject = dataIDReader.readField(dataId);
+        T obj = buildObject(dataIDObject, values);
         Arrays.fill(values, null);
         return obj;
       }
@@ -103,7 +134,7 @@ public abstract class AbstractDataTypeAdapter<T> implements DataTypeAdapter<T> {
     };
   }
 
-  public abstract T buildObject(final Object[] fieldValues);
+  public abstract T buildObject(final Object dataId, final Object[] fieldValues);
 
   @Override
   public FieldDescriptor<?>[] getFieldDescriptors() {
@@ -119,25 +150,29 @@ public abstract class AbstractDataTypeAdapter<T> implements DataTypeAdapter<T> {
     return fieldDescriptors[index];
   }
 
+  protected FieldDescriptor<?> getDataIDFieldDescriptor() {
+    return dataIDFieldDescriptor;
+  }
+
   @Override
   public byte[] toBinary() {
     final byte[] typeNameBytes = StringUtils.stringToBinary(typeName);
     final byte[] fieldDescriptorBytes = PersistenceUtils.toBinary(fieldDescriptors);
-    final byte[] dataIDFieldBytes = StringUtils.stringToBinary(dataIDField);
+    final byte[] dataIDFieldDescriptorBytes = PersistenceUtils.toBinary(dataIDFieldDescriptor);
     final ByteBuffer buffer =
         ByteBuffer.allocate(
             VarintUtils.unsignedIntByteLength(typeNameBytes.length)
                 + VarintUtils.unsignedIntByteLength(fieldDescriptorBytes.length)
-                + VarintUtils.unsignedIntByteLength(dataIDFieldBytes.length)
+                + VarintUtils.unsignedIntByteLength(dataIDFieldDescriptorBytes.length)
                 + typeNameBytes.length
                 + fieldDescriptorBytes.length
-                + dataIDFieldBytes.length);
+                + dataIDFieldDescriptorBytes.length);
     VarintUtils.writeUnsignedInt(typeNameBytes.length, buffer);
     buffer.put(typeNameBytes);
     VarintUtils.writeUnsignedInt(fieldDescriptorBytes.length, buffer);
     buffer.put(fieldDescriptorBytes);
-    VarintUtils.writeUnsignedInt(dataIDFieldBytes.length, buffer);
-    buffer.put(dataIDFieldBytes);
+    VarintUtils.writeUnsignedInt(dataIDFieldDescriptorBytes.length, buffer);
+    buffer.put(dataIDFieldDescriptorBytes);
     return buffer.array();
   }
 
@@ -153,9 +188,10 @@ public abstract class AbstractDataTypeAdapter<T> implements DataTypeAdapter<T> {
         PersistenceUtils.fromBinaryAsList(fieldDescriptorBytes);
     this.fieldDescriptors =
         fieldDescriptorList.toArray(new FieldDescriptor<?>[fieldDescriptorList.size()]);
-    final byte[] dataIDFieldBytes = new byte[VarintUtils.readUnsignedInt(buffer)];
-    buffer.get(dataIDFieldBytes);
-    this.dataIDField = StringUtils.stringFromBinary(dataIDFieldBytes);
+    final byte[] dataIDFieldDescriptorBytes = new byte[VarintUtils.readUnsignedInt(buffer)];
+    buffer.get(dataIDFieldDescriptorBytes);
+    this.dataIDFieldDescriptor =
+        (FieldDescriptor<?>) PersistenceUtils.fromBinary(dataIDFieldDescriptorBytes);
     populateFieldDescriptorIndices();
   }
 

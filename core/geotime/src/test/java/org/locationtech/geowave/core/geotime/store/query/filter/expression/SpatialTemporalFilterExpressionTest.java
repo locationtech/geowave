@@ -699,7 +699,7 @@ public class SpatialTemporalFilterExpressionTest {
     public TestTypeBasicDataAdapter() {}
 
     public TestTypeBasicDataAdapter(final String typeName) {
-      super(typeName, fields, "name");
+      super(typeName, fields, fields[2]);
     }
 
     @Override
@@ -716,7 +716,7 @@ public class SpatialTemporalFilterExpressionTest {
     }
 
     @Override
-    public TestType buildObject(Object[] fieldValues) {
+    public TestType buildObject(final Object dataId, Object[] fieldValues) {
       return new TestType(
           (Geometry) fieldValues[0],
           (Date) fieldValues[1],

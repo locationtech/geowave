@@ -51,10 +51,10 @@ public class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
       final String typeName,
       final Class<T> dataClass,
       final FieldDescriptor<?>[] fieldDescriptors,
+      final FieldDescriptor<?> dataIDFieldDescriptor,
       final Map<String, Accessor<T>> accessors,
-      final Map<String, Mutator<T>> mutators,
-      final String dataIdField) {
-    super(typeName, fieldDescriptors, dataIdField);
+      final Map<String, Mutator<T>> mutators) {
+    super(typeName, fieldDescriptors, dataIDFieldDescriptor);
     this.dataClass = dataClass;
     try {
       objectConstructor = dataClass.getDeclaredConstructor();
@@ -76,13 +76,14 @@ public class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
   }
 
   @Override
-  public T buildObject(Object[] fieldValues) {
+  public T buildObject(final Object dataId, final Object[] fieldValues) {
     try {
       final T object = objectConstructor.newInstance();
       final FieldDescriptor<?>[] fields = getFieldDescriptors();
       for (int i = 0; i < fields.length; i++) {
         mutators.get(fields[i].fieldName()).set(object, fieldValues[i]);
       }
+      mutators.get(getDataIDFieldDescriptor().fieldName()).set(object, dataId);
       return object;
     } catch (InstantiationException | IllegalAccessException | SecurityException
         | IllegalArgumentException | InvocationTargetException e) {
@@ -104,6 +105,8 @@ public class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
       totalBytes += 1 + accessors.get(descriptor.fieldName()).byteCount();
       totalBytes += 1 + mutators.get(descriptor.fieldName()).byteCount();
     }
+    totalBytes += 1 + accessors.get(getDataIDFieldDescriptor().fieldName()).byteCount();
+    totalBytes += 1 + mutators.get(getDataIDFieldDescriptor().fieldName()).byteCount();
     final ByteBuffer buffer = ByteBuffer.allocate(totalBytes);
     VarintUtils.writeUnsignedInt(superBinary.length, buffer);
     buffer.put(superBinary);
@@ -117,6 +120,12 @@ public class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
       buffer.put(mutator instanceof FieldMutator ? (byte) 1 : (byte) 0);
       mutator.toBinary(buffer);
     }
+    final Accessor<T> accessor = accessors.get(getDataIDFieldDescriptor().fieldName());
+    final Mutator<T> mutator = mutators.get(getDataIDFieldDescriptor().fieldName());
+    buffer.put(accessor instanceof FieldAccessor ? (byte) 1 : (byte) 0);
+    accessor.toBinary(buffer);
+    buffer.put(mutator instanceof FieldMutator ? (byte) 1 : (byte) 0);
+    mutator.toBinary(buffer);
     return buffer.array();
   }
 
@@ -162,6 +171,22 @@ public class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
       mutator.fromBinary(dataClass, buffer);
       mutators.put(descriptor.fieldName(), mutator);
     }
+    final Accessor<T> accessor;
+    if (buffer.get() > 0) {
+      accessor = new FieldAccessor<>();
+    } else {
+      accessor = new MethodAccessor<>();
+    }
+    accessor.fromBinary(dataClass, buffer);
+    accessors.put(getDataIDFieldDescriptor().fieldName(), accessor);
+    final Mutator<T> mutator;
+    if (buffer.get() > 0) {
+      mutator = new FieldMutator<>();
+    } else {
+      mutator = new MethodMutator<>();
+    }
+    mutator.fromBinary(dataClass, buffer);
+    mutators.put(getDataIDFieldDescriptor().fieldName(), mutator);
   }
 
   @Override
@@ -172,7 +197,8 @@ public class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
   /**
    * Create a new data type adapter from the specified class. If the class is annotated with
    * `@GeoWaveDataType`, all fields will be inferred from GeoWave field annotations. Otherwise
-   * public fields and properties will be used.
+   * public fields and properties will be used. The data type field will also be encoded as a
+   * regular field.
    * 
    * @param <T> the data type
    * @param typeName the type name for this adapter
@@ -184,7 +210,29 @@ public class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
       final String typeName,
       final Class<T> dataClass,
       final String dataIdField) {
+    return newAdapter(typeName, dataClass, dataIdField, false);
+  }
+
+  /**
+   * Create a new data type adapter from the specified class. If the class is annotated with
+   * `@GeoWaveDataType`, all fields will be inferred from GeoWave field annotations. Otherwise
+   * public fields and properties will be used.
+   * 
+   * @param <T> the data type
+   * @param typeName the type name for this adapter
+   * @param dataClass the data type class
+   * @param dataIdField the field to use for unique data IDs
+   * @param separateDataIDField if {@code true} the data ID field will not be encoded as a regular
+   *        field and only used as the data ID
+   * @return the data adapter
+   */
+  public static <T> BasicDataTypeAdapter<T> newAdapter(
+      final String typeName,
+      final Class<T> dataClass,
+      final String dataIdField,
+      final boolean separateDataIDField) {
     final List<FieldDescriptor<?>> fieldDescriptors = Lists.newLinkedList();
+    FieldDescriptor<?> dataIdFieldDescriptor = null;
     final Set<String> addedFields = Sets.newHashSet();
     final Map<String, Accessor<T>> accessors = Maps.newHashMap();
     final Map<String, Mutator<T>> mutators = Maps.newHashMap();
@@ -207,8 +255,14 @@ public class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
                 f.setAccessible(true);
                 accessors.put(descriptor.fieldName(), new FieldAccessor<>(f));
                 mutators.put(descriptor.fieldName(), new FieldMutator<>(f));
-                fieldDescriptors.add(descriptor);
                 addedFields.add(descriptor.fieldName());
+                if (descriptor.fieldName().equals(dataIdField)) {
+                  dataIdFieldDescriptor = descriptor;
+                  if (separateDataIDField) {
+                    continue;
+                  }
+                }
+                fieldDescriptors.add(descriptor);
               } catch (InstantiationException | IllegalAccessException e) {
                 throw new RuntimeException(
                     "Unable to build field descriptor for field " + f.getName());
@@ -237,9 +291,16 @@ public class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
           checkWriterForClass(type);
           accessors.put(descriptor.getName(), new MethodAccessor<>(descriptor.getReadMethod()));
           mutators.put(descriptor.getName(), new MethodMutator<>(descriptor.getWriteMethod()));
-          fieldDescriptors.add(
-              new FieldDescriptorBuilder<>(type).fieldName(descriptor.getName()).build());
           addedFields.add(descriptor.getName());
+          final FieldDescriptor<?> fieldDescriptor =
+              new FieldDescriptorBuilder<>(type).fieldName(descriptor.getName()).build();
+          if (fieldDescriptor.fieldName().equals(dataIdField)) {
+            dataIdFieldDescriptor = fieldDescriptor;
+            if (separateDataIDField) {
+              continue;
+            }
+          }
+          fieldDescriptors.add(fieldDescriptor);
         }
       } catch (IntrospectionException e) {
         // Ignore
@@ -254,16 +315,24 @@ public class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
         checkWriterForClass(type);
         accessors.put(field.getName(), new FieldAccessor<>(field));
         mutators.put(field.getName(), new FieldMutator<>(field));
-        fieldDescriptors.add(new FieldDescriptorBuilder<>(type).fieldName(field.getName()).build());
+        final FieldDescriptor<?> fieldDescriptor =
+            new FieldDescriptorBuilder<>(type).fieldName(field.getName()).build();
+        if (fieldDescriptor.fieldName().equals(dataIdField)) {
+          dataIdFieldDescriptor = fieldDescriptor;
+          if (separateDataIDField) {
+            continue;
+          }
+        }
+        fieldDescriptors.add(fieldDescriptor);
       }
     }
     return new BasicDataTypeAdapter<>(
         typeName,
         dataClass,
         fieldDescriptors.toArray(new FieldDescriptor<?>[fieldDescriptors.size()]),
+        dataIdFieldDescriptor,
         accessors,
-        mutators,
-        dataIdField);
+        mutators);
   }
 
   private static void checkWriterForClass(final Class<?> type) {
@@ -411,7 +480,8 @@ public class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
       return nameBytes.length
           + parameterClassBytes.length
           + VarintUtils.unsignedIntByteLength(nameBytes.length)
-          + VarintUtils.unsignedIntByteLength(parameterClassBytes.length);
+          + VarintUtils.unsignedIntByteLength(parameterClassBytes.length)
+          + 1;
     }
 
     @Override
@@ -420,6 +490,11 @@ public class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
       buffer.put(nameBytes);
       VarintUtils.writeUnsignedInt(parameterClassBytes.length, buffer);
       buffer.put(parameterClassBytes);
+      if (mutator.getParameterTypes()[0].isPrimitive()) {
+        buffer.put((byte) 1);
+      } else {
+        buffer.put((byte) 0);
+      }
     }
 
 
@@ -431,9 +506,14 @@ public class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
       parameterClassBytes = new byte[VarintUtils.readUnsignedInt(buffer)];
       buffer.get(parameterClassBytes);
       final String parameterClassName = StringUtils.stringFromBinary(parameterClassBytes);
+      final boolean isPrimitive = buffer.hasRemaining() && buffer.get() == (byte) 1;
       Class<?> parameterClass;
       try {
-        parameterClass = Class.forName(parameterClassName);
+        if (isPrimitive) {
+          parameterClass = getPrimitiveClass(parameterClassName);
+        } else {
+          parameterClass = Class.forName(parameterClassName);
+        }
       } catch (ClassNotFoundException e1) {
         throw new RuntimeException(
             "Unable to find class for mutator parameter: " + parameterClassName);
@@ -531,6 +611,30 @@ public class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
       return Double.class;
     }
     return sourceClass;
+  }
+
+  public static Class<?> getPrimitiveClass(final String className) throws ClassNotFoundException {
+    switch (className) {
+      case "boolean":
+        return boolean.class;
+      case "char":
+        return char.class;
+      case "byte":
+        return byte.class;
+      case "short":
+        return short.class;
+      case "int":
+        return int.class;
+      case "long":
+        return long.class;
+      case "float":
+        return float.class;
+      case "double":
+        return double.class;
+      default:
+        break;
+    }
+    throw new ClassNotFoundException("Unknown primitive class " + className);
   }
 
 }

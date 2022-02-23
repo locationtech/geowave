@@ -9,6 +9,7 @@
 package org.locationtech.geowave.core.store.index;
 
 import java.util.ServiceLoader;
+import javax.annotation.Nullable;
 import org.locationtech.geowave.core.store.adapter.FieldDescriptor;
 import org.locationtech.geowave.core.store.api.AttributeIndex;
 import org.locationtech.geowave.core.store.api.DataStore;
@@ -70,19 +71,24 @@ public class AttributeDimensionalityTypeProvider implements
               + options.getAttributeName()
               + "' could not be found in the type.");
     }
-    return createIndexForDescriptor(adapter, descriptor);
+    return createIndexForDescriptor(adapter, descriptor, options.getIndexName());
   }
 
   public static Index createIndexForDescriptor(
       final DataTypeAdapter<?> adapter,
-      final FieldDescriptor<?> descriptor) {
+      final FieldDescriptor<?> descriptor,
+      final @Nullable String indexName) {
     if (serviceLoader == null) {
       serviceLoader = ServiceLoader.load(AttributeIndexProviderSpi.class);
     }
     for (final AttributeIndexProviderSpi indexProvider : serviceLoader) {
       if (indexProvider.supportsDescriptor(descriptor)) {
         return indexProvider.buildIndex(
-            AttributeIndex.defaultAttributeIndexName(adapter.getTypeName(), descriptor.fieldName()),
+            indexName == null
+                ? AttributeIndex.defaultAttributeIndexName(
+                    adapter.getTypeName(),
+                    descriptor.fieldName())
+                : indexName,
             adapter,
             descriptor);
       }
