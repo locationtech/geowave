@@ -29,7 +29,7 @@ public class StringSerializationProvider implements FieldSerializationProviderSp
 
     @Override
     public String readField(final byte[] fieldData) {
-      if ((fieldData == null) || (fieldData.length < 1)) {
+      if (fieldData == null) {
         return null;
       }
       return StringUtils.stringFromBinary(fieldData);
