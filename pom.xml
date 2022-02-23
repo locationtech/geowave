@@ -258,7 +258,7 @@
 						<artifactId>log4j</artifactId>
 					</exclusion>
 				</exclusions>				
-			</dependency>		
+			</dependency>
 			<dependency> <!-- Spark dependency -->
 				<groupId>org.apache.spark</groupId>
 				<artifactId>spark-core_2.12</artifactId>
@@ -497,6 +497,21 @@
 					<exclusion>
 						<groupId>log4j</groupId>
 						<artifactId>log4j</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.accumulo</groupId>
+				<artifactId>accumulo-test</artifactId>
+				<version>${accumulo.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>

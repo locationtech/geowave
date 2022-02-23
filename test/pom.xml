@@ -425,7 +425,6 @@
 		<dependency>
 			<groupId>org.apache.accumulo</groupId>
 			<artifactId>accumulo-test</artifactId>
-			<version>${accumulo.version}</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>accumulo-native</artifactId>
