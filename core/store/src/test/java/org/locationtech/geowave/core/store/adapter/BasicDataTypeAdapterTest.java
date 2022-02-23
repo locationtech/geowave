@@ -81,7 +81,7 @@ public class BasicDataTypeAdapterTest {
       }
     }
 
-    final TestType builtEntry = adapter.buildObject(fields);
+    final TestType builtEntry = adapter.buildObject("id1", fields);
     assertEquals("id1", adapter.getFieldValue(builtEntry, "name"));
     assertEquals(2.5, (double) adapter.getFieldValue(builtEntry, "doubleField"), 0.001);
     assertEquals(8, adapter.getFieldValue(builtEntry, "intField"));
@@ -160,7 +160,7 @@ public class BasicDataTypeAdapterTest {
       }
     }
 
-    final InheritedTestType builtEntry = adapter.buildObject(fields);
+    final InheritedTestType builtEntry = adapter.buildObject("id1", fields);
     assertEquals("id1", adapter.getFieldValue(builtEntry, "name"));
     assertEquals(2.5, (double) adapter.getFieldValue(builtEntry, "doubleField"), 0.001);
     assertEquals(8, adapter.getFieldValue(builtEntry, "intField"));
@@ -250,7 +250,7 @@ public class BasicDataTypeAdapterTest {
       }
     }
 
-    final AnnotatedTestType builtEntry = adapter.buildObject(fields);
+    final AnnotatedTestType builtEntry = adapter.buildObject("id1", fields);
     assertEquals("id1", adapter.getFieldValue(builtEntry, "alternateName"));
     assertEquals(2.5, (double) adapter.getFieldValue(builtEntry, "doubleField"), 0.001);
     assertEquals(8, adapter.getFieldValue(builtEntry, "intField"));
@@ -354,7 +354,7 @@ public class BasicDataTypeAdapterTest {
       }
     }
 
-    final InheritedAnnotatedTestType builtEntry = adapter.buildObject(fields);
+    final InheritedAnnotatedTestType builtEntry = adapter.buildObject("id1", fields);
     assertEquals("id1", adapter.getFieldValue(builtEntry, "alternateName"));
     assertEquals(2.5, (double) adapter.getFieldValue(builtEntry, "doubleField"), 0.001);
     assertEquals(8, adapter.getFieldValue(builtEntry, "intField"));
@@ -363,9 +363,371 @@ public class BasicDataTypeAdapterTest {
     assertNull(builtEntry.ignoredField);
   }
 
+  @Test
+  public void testObjectBasedDataAdapterSeparateDataID() {
+    BasicDataTypeAdapter<TestType> adapter =
+        BasicDataTypeAdapter.newAdapter("myType", TestType.class, "name", true);
+
+    assertEquals("myType", adapter.getTypeName());
+    assertEquals(TestType.class, adapter.getDataClass());
+    assertEquals(3, adapter.getFieldDescriptors().length);
+    assertNull(adapter.getFieldDescriptor("name"));
+    assertNotNull(adapter.getDataIDFieldDescriptor());
+    assertTrue(String.class.isAssignableFrom(adapter.getDataIDFieldDescriptor().bindingClass()));
+    assertNotNull(adapter.getFieldDescriptor("doubleField"));
+    assertTrue(
+        Double.class.isAssignableFrom(adapter.getFieldDescriptor("doubleField").bindingClass()));
+    assertNotNull(adapter.getFieldDescriptor("intField"));
+    assertTrue(
+        Integer.class.isAssignableFrom(adapter.getFieldDescriptor("intField").bindingClass()));
+    assertNotNull(adapter.getFieldDescriptor("boolField"));
+    assertTrue(
+        Boolean.class.isAssignableFrom(adapter.getFieldDescriptor("boolField").bindingClass()));
+
+    final byte[] adapterBytes = PersistenceUtils.toBinary(adapter);
+    adapter = (BasicDataTypeAdapter) PersistenceUtils.fromBinary(adapterBytes);
+
+    assertEquals("myType", adapter.getTypeName());
+    assertEquals(TestType.class, adapter.getDataClass());
+    assertEquals(3, adapter.getFieldDescriptors().length);
+    assertNull(adapter.getFieldDescriptor("name"));
+    assertNotNull(adapter.getDataIDFieldDescriptor());
+    assertTrue(String.class.isAssignableFrom(adapter.getDataIDFieldDescriptor().bindingClass()));
+    assertNotNull(adapter.getFieldDescriptor("doubleField"));
+    assertTrue(
+        Double.class.isAssignableFrom(adapter.getFieldDescriptor("doubleField").bindingClass()));
+    assertNotNull(adapter.getFieldDescriptor("intField"));
+    assertTrue(
+        Integer.class.isAssignableFrom(adapter.getFieldDescriptor("intField").bindingClass()));
+    assertNotNull(adapter.getFieldDescriptor("boolField"));
+    assertTrue(
+        Boolean.class.isAssignableFrom(adapter.getFieldDescriptor("boolField").bindingClass()));
+
+    final TestType testEntry = new TestType("id1", 2.5, 8, true);
+    assertEquals("id1", adapter.getFieldValue(testEntry, "name"));
+    assertEquals(2.5, (double) adapter.getFieldValue(testEntry, "doubleField"), 0.001);
+    assertEquals(8, adapter.getFieldValue(testEntry, "intField"));
+    assertTrue((boolean) adapter.getFieldValue(testEntry, "boolField"));
+
+    final Object[] fields = new Object[3];
+    for (int i = 0; i < fields.length; i++) {
+      switch (adapter.getFieldDescriptors()[i].fieldName()) {
+        case "doubleField":
+          fields[i] = 2.5;
+          break;
+        case "intField":
+          fields[i] = 8;
+          break;
+        case "boolField":
+          fields[i] = true;
+          break;
+      }
+    }
+
+    final TestType builtEntry = adapter.buildObject("id1", fields);
+    assertEquals("id1", adapter.getFieldValue(builtEntry, "name"));
+    assertEquals(2.5, (double) adapter.getFieldValue(builtEntry, "doubleField"), 0.001);
+    assertEquals(8, adapter.getFieldValue(builtEntry, "intField"));
+    assertTrue((boolean) adapter.getFieldValue(builtEntry, "boolField"));
+  }
+
+  @Test
+  public void testInheritedObjectBasedDataAdapterSeparateDataID() {
+    BasicDataTypeAdapter<InheritedTestType> adapter =
+        BasicDataTypeAdapter.newAdapter("myType", InheritedTestType.class, "name", true);
+
+    assertEquals("myType", adapter.getTypeName());
+    assertEquals(InheritedTestType.class, adapter.getDataClass());
+    assertEquals(4, adapter.getFieldDescriptors().length);
+    assertNull(adapter.getFieldDescriptor("name"));
+    assertNotNull(adapter.getDataIDFieldDescriptor());
+    assertTrue(String.class.isAssignableFrom(adapter.getDataIDFieldDescriptor().bindingClass()));
+    assertNotNull(adapter.getFieldDescriptor("doubleField"));
+    assertTrue(
+        Double.class.isAssignableFrom(adapter.getFieldDescriptor("doubleField").bindingClass()));
+    assertNotNull(adapter.getFieldDescriptor("intField"));
+    assertTrue(
+        Integer.class.isAssignableFrom(adapter.getFieldDescriptor("intField").bindingClass()));
+    assertNotNull(adapter.getFieldDescriptor("boolField"));
+    assertTrue(
+        Boolean.class.isAssignableFrom(adapter.getFieldDescriptor("boolField").bindingClass()));
+    assertNotNull(adapter.getFieldDescriptor("extraField"));
+    assertTrue(
+        String.class.isAssignableFrom(adapter.getFieldDescriptor("extraField").bindingClass()));
+
+    final byte[] adapterBytes = PersistenceUtils.toBinary(adapter);
+    adapter = (BasicDataTypeAdapter) PersistenceUtils.fromBinary(adapterBytes);
+
+    assertEquals("myType", adapter.getTypeName());
+    assertEquals(InheritedTestType.class, adapter.getDataClass());
+    assertEquals(4, adapter.getFieldDescriptors().length);
+    assertNull(adapter.getFieldDescriptor("name"));
+    assertNotNull(adapter.getDataIDFieldDescriptor());
+    assertTrue(String.class.isAssignableFrom(adapter.getDataIDFieldDescriptor().bindingClass()));
+    assertNotNull(adapter.getFieldDescriptor("doubleField"));
+    assertTrue(
+        Double.class.isAssignableFrom(adapter.getFieldDescriptor("doubleField").bindingClass()));
+    assertNotNull(adapter.getFieldDescriptor("intField"));
+    assertTrue(
+        Integer.class.isAssignableFrom(adapter.getFieldDescriptor("intField").bindingClass()));
+    assertNotNull(adapter.getFieldDescriptor("boolField"));
+    assertTrue(
+        Boolean.class.isAssignableFrom(adapter.getFieldDescriptor("boolField").bindingClass()));
+    assertNotNull(adapter.getFieldDescriptor("extraField"));
+    assertTrue(
+        String.class.isAssignableFrom(adapter.getFieldDescriptor("extraField").bindingClass()));
+
+    final InheritedTestType testEntry = new InheritedTestType("id1", 2.5, 8, true, "extra");
+    assertEquals("id1", adapter.getFieldValue(testEntry, "name"));
+    assertEquals(2.5, (double) adapter.getFieldValue(testEntry, "doubleField"), 0.001);
+    assertEquals(8, adapter.getFieldValue(testEntry, "intField"));
+    assertTrue((boolean) adapter.getFieldValue(testEntry, "boolField"));
+    assertEquals("extra", adapter.getFieldValue(testEntry, "extraField"));
+
+    final Object[] fields = new Object[4];
+    for (int i = 0; i < fields.length; i++) {
+      switch (adapter.getFieldDescriptors()[i].fieldName()) {
+        case "doubleField":
+          fields[i] = 2.5;
+          break;
+        case "intField":
+          fields[i] = 8;
+          break;
+        case "boolField":
+          fields[i] = true;
+          break;
+        case "extraField":
+          fields[i] = "extra";
+          break;
+      }
+    }
+
+    final InheritedTestType builtEntry = adapter.buildObject("id1", fields);
+    assertEquals("id1", adapter.getFieldValue(builtEntry, "name"));
+    assertEquals(2.5, (double) adapter.getFieldValue(builtEntry, "doubleField"), 0.001);
+    assertEquals(8, adapter.getFieldValue(builtEntry, "intField"));
+    assertTrue((boolean) adapter.getFieldValue(builtEntry, "boolField"));
+    assertEquals("extra", adapter.getFieldValue(builtEntry, "extraField"));
+  }
+
+  @Test
+  public void testAnnotatedObjectBasedDataAdapterSeparateDataID() {
+    BasicDataTypeAdapter<AnnotatedTestType> adapter =
+        BasicDataTypeAdapter.newAdapter("myType", AnnotatedTestType.class, "alternateName", true);
+
+    assertEquals("myType", adapter.getTypeName());
+    assertEquals(AnnotatedTestType.class, adapter.getDataClass());
+    assertEquals(3, adapter.getFieldDescriptors().length);
+    assertNull(adapter.getFieldDescriptor("alternateName"));
+    assertNotNull(adapter.getDataIDFieldDescriptor());
+    assertTrue(String.class.isAssignableFrom(adapter.getDataIDFieldDescriptor().bindingClass()));
+    assertTrue(
+        adapter.getDataIDFieldDescriptor().indexHints().contains(new IndexDimensionHint("a")));
+    assertNotNull(adapter.getFieldDescriptor("doubleField"));
+    assertTrue(
+        Double.class.isAssignableFrom(adapter.getFieldDescriptor("doubleField").bindingClass()));
+    assertNotNull(adapter.getFieldDescriptor("intField"));
+    assertTrue(
+        Integer.class.isAssignableFrom(adapter.getFieldDescriptor("intField").bindingClass()));
+    assertNotNull(adapter.getFieldDescriptor("boolField"));
+    assertTrue(
+        Boolean.class.isAssignableFrom(adapter.getFieldDescriptor("boolField").bindingClass()));
+    assertTrue(
+        adapter.getFieldDescriptor("boolField").indexHints().contains(new IndexDimensionHint("a")));
+    assertTrue(
+        adapter.getFieldDescriptor("boolField").indexHints().contains(new IndexDimensionHint("b")));
+    assertTrue(
+        adapter.getFieldDescriptor("boolField").indexHints().contains(new IndexDimensionHint("c")));
+
+    final byte[] adapterBytes = PersistenceUtils.toBinary(adapter);
+    adapter = (BasicDataTypeAdapter) PersistenceUtils.fromBinary(adapterBytes);
+
+    assertEquals("myType", adapter.getTypeName());
+    assertEquals(AnnotatedTestType.class, adapter.getDataClass());
+    assertEquals(3, adapter.getFieldDescriptors().length);
+    assertNull(adapter.getFieldDescriptor("alternateName"));
+    assertNotNull(adapter.getDataIDFieldDescriptor());
+    assertTrue(String.class.isAssignableFrom(adapter.getDataIDFieldDescriptor().bindingClass()));
+    assertTrue(
+        adapter.getDataIDFieldDescriptor().indexHints().contains(new IndexDimensionHint("a")));
+    assertNotNull(adapter.getFieldDescriptor("doubleField"));
+    assertTrue(
+        Double.class.isAssignableFrom(adapter.getFieldDescriptor("doubleField").bindingClass()));
+    assertNotNull(adapter.getFieldDescriptor("intField"));
+    assertTrue(
+        Integer.class.isAssignableFrom(adapter.getFieldDescriptor("intField").bindingClass()));
+    assertNotNull(adapter.getFieldDescriptor("boolField"));
+    assertTrue(
+        Boolean.class.isAssignableFrom(adapter.getFieldDescriptor("boolField").bindingClass()));
+    assertTrue(
+        adapter.getFieldDescriptor("boolField").indexHints().contains(new IndexDimensionHint("a")));
+    assertTrue(
+        adapter.getFieldDescriptor("boolField").indexHints().contains(new IndexDimensionHint("b")));
+    assertTrue(
+        adapter.getFieldDescriptor("boolField").indexHints().contains(new IndexDimensionHint("c")));
+
+    final AnnotatedTestType testEntry = new AnnotatedTestType("id1", 2.5, 8, true, "ignored");
+    assertEquals("id1", adapter.getFieldValue(testEntry, "alternateName"));
+    assertEquals(2.5, (double) adapter.getFieldValue(testEntry, "doubleField"), 0.001);
+    assertEquals(8, adapter.getFieldValue(testEntry, "intField"));
+    assertTrue((boolean) adapter.getFieldValue(testEntry, "boolField"));
+
+    final Object[] fields = new Object[3];
+    for (int i = 0; i < fields.length; i++) {
+      switch (adapter.getFieldDescriptors()[i].fieldName()) {
+        case "doubleField":
+          fields[i] = 2.5;
+          break;
+        case "intField":
+          fields[i] = 8;
+          break;
+        case "boolField":
+          fields[i] = true;
+          break;
+      }
+    }
+
+    final AnnotatedTestType builtEntry = adapter.buildObject("id1", fields);
+    assertEquals("id1", adapter.getFieldValue(builtEntry, "alternateName"));
+    assertEquals(2.5, (double) adapter.getFieldValue(builtEntry, "doubleField"), 0.001);
+    assertEquals(8, adapter.getFieldValue(builtEntry, "intField"));
+    assertTrue((boolean) adapter.getFieldValue(builtEntry, "boolField"));
+    assertNull(builtEntry.ignoredField);
+  }
+
+  @Test
+  public void testInheritedAnnotatedObjectBasedDataAdapterSeparateDataID() {
+    BasicDataTypeAdapter<InheritedAnnotatedTestType> adapter =
+        BasicDataTypeAdapter.newAdapter(
+            "myType",
+            InheritedAnnotatedTestType.class,
+            "alternateName",
+            true);
+
+    assertEquals("myType", adapter.getTypeName());
+    assertEquals(InheritedAnnotatedTestType.class, adapter.getDataClass());
+    assertEquals(4, adapter.getFieldDescriptors().length);
+    assertNull(adapter.getFieldDescriptor("alternateName"));
+    assertNotNull(adapter.getDataIDFieldDescriptor());
+    assertTrue(String.class.isAssignableFrom(adapter.getDataIDFieldDescriptor().bindingClass()));
+    assertTrue(
+        adapter.getDataIDFieldDescriptor().indexHints().contains(new IndexDimensionHint("a")));
+    assertNotNull(adapter.getFieldDescriptor("doubleField"));
+    assertTrue(
+        Double.class.isAssignableFrom(adapter.getFieldDescriptor("doubleField").bindingClass()));
+    assertNotNull(adapter.getFieldDescriptor("intField"));
+    assertTrue(
+        Integer.class.isAssignableFrom(adapter.getFieldDescriptor("intField").bindingClass()));
+    assertNotNull(adapter.getFieldDescriptor("boolField"));
+    assertTrue(
+        Boolean.class.isAssignableFrom(adapter.getFieldDescriptor("boolField").bindingClass()));
+    assertTrue(
+        adapter.getFieldDescriptor("boolField").indexHints().contains(new IndexDimensionHint("a")));
+    assertTrue(
+        adapter.getFieldDescriptor("boolField").indexHints().contains(new IndexDimensionHint("b")));
+    assertTrue(
+        adapter.getFieldDescriptor("boolField").indexHints().contains(new IndexDimensionHint("c")));
+    assertNotNull(adapter.getFieldDescriptor("extraField"));
+    assertTrue(
+        Double.class.isAssignableFrom(adapter.getFieldDescriptor("extraField").bindingClass()));
+
+    final byte[] adapterBytes = PersistenceUtils.toBinary(adapter);
+    adapter = (BasicDataTypeAdapter) PersistenceUtils.fromBinary(adapterBytes);
+
+    assertEquals("myType", adapter.getTypeName());
+    assertEquals(InheritedAnnotatedTestType.class, adapter.getDataClass());
+    assertEquals(4, adapter.getFieldDescriptors().length);
+    assertNull(adapter.getFieldDescriptor("alternateName"));
+    assertNotNull(adapter.getDataIDFieldDescriptor());
+    assertTrue(String.class.isAssignableFrom(adapter.getDataIDFieldDescriptor().bindingClass()));
+    assertTrue(
+        adapter.getDataIDFieldDescriptor().indexHints().contains(new IndexDimensionHint("a")));
+    assertNotNull(adapter.getFieldDescriptor("doubleField"));
+    assertTrue(
+        Double.class.isAssignableFrom(adapter.getFieldDescriptor("doubleField").bindingClass()));
+    assertNotNull(adapter.getFieldDescriptor("intField"));
+    assertTrue(
+        Integer.class.isAssignableFrom(adapter.getFieldDescriptor("intField").bindingClass()));
+    assertNotNull(adapter.getFieldDescriptor("boolField"));
+    assertTrue(
+        Boolean.class.isAssignableFrom(adapter.getFieldDescriptor("boolField").bindingClass()));
+    assertTrue(
+        adapter.getFieldDescriptor("boolField").indexHints().contains(new IndexDimensionHint("a")));
+    assertTrue(
+        adapter.getFieldDescriptor("boolField").indexHints().contains(new IndexDimensionHint("b")));
+    assertTrue(
+        adapter.getFieldDescriptor("boolField").indexHints().contains(new IndexDimensionHint("c")));
+    assertNotNull(adapter.getFieldDescriptor("extraField"));
+    assertTrue(
+        Double.class.isAssignableFrom(adapter.getFieldDescriptor("extraField").bindingClass()));
+
+    final InheritedAnnotatedTestType testEntry =
+        new InheritedAnnotatedTestType("id1", 2.5, 8, true, "ignored", 5.3);
+    assertEquals("id1", adapter.getFieldValue(testEntry, "alternateName"));
+    assertEquals(2.5, (double) adapter.getFieldValue(testEntry, "doubleField"), 0.001);
+    assertEquals(8, adapter.getFieldValue(testEntry, "intField"));
+    assertTrue((boolean) adapter.getFieldValue(testEntry, "boolField"));
+    assertEquals(5.3, (double) adapter.getFieldValue(testEntry, "extraField"), 0.001);
+
+    final Object[] fields = new Object[4];
+    for (int i = 0; i < fields.length; i++) {
+      switch (adapter.getFieldDescriptors()[i].fieldName()) {
+        case "doubleField":
+          fields[i] = 2.5;
+          break;
+        case "intField":
+          fields[i] = 8;
+          break;
+        case "boolField":
+          fields[i] = true;
+          break;
+        case "extraField":
+          fields[i] = 5.3;
+          break;
+      }
+    }
+
+    final InheritedAnnotatedTestType builtEntry = adapter.buildObject("id1", fields);
+    assertEquals("id1", adapter.getFieldValue(builtEntry, "alternateName"));
+    assertEquals(2.5, (double) adapter.getFieldValue(builtEntry, "doubleField"), 0.001);
+    assertEquals(8, adapter.getFieldValue(builtEntry, "intField"));
+    assertTrue((boolean) adapter.getFieldValue(builtEntry, "boolField"));
+    assertEquals(5.3, (double) adapter.getFieldValue(builtEntry, "extraField"), 0.001);
+    assertNull(builtEntry.ignoredField);
+  }
+  
+  @Test
+  public void testSingleFieldDataAdapterSeparateDataID() {
+    BasicDataTypeAdapter<SingleFieldTestType> adapter =
+        BasicDataTypeAdapter.newAdapter("myType", SingleFieldTestType.class, "name", true);
+
+    assertEquals("myType", adapter.getTypeName());
+    assertEquals(SingleFieldTestType.class, adapter.getDataClass());
+    assertEquals(0, adapter.getFieldDescriptors().length);
+    assertNull(adapter.getFieldDescriptor("name"));
+    assertNotNull(adapter.getDataIDFieldDescriptor());
+    assertTrue(String.class.isAssignableFrom(adapter.getDataIDFieldDescriptor().bindingClass()));
+
+    final byte[] adapterBytes = PersistenceUtils.toBinary(adapter);
+    adapter = (BasicDataTypeAdapter) PersistenceUtils.fromBinary(adapterBytes);
+
+    assertEquals("myType", adapter.getTypeName());
+    assertEquals(SingleFieldTestType.class, adapter.getDataClass());
+    assertEquals(0, adapter.getFieldDescriptors().length);
+    assertNull(adapter.getFieldDescriptor("name"));
+    assertNotNull(adapter.getDataIDFieldDescriptor());
+    assertTrue(String.class.isAssignableFrom(adapter.getDataIDFieldDescriptor().bindingClass()));
+    
+    final SingleFieldTestType testEntry = new SingleFieldTestType("id1");
+    assertEquals("id1", adapter.getFieldValue(testEntry, "name"));
+
+    final SingleFieldTestType builtEntry = adapter.buildObject("id1", new Object[0]);
+    assertEquals("id1", adapter.getFieldValue(builtEntry, "name"));
+  }
+
   public static class TestType {
     private String name;
-    public double doubleField;
+    private double doubleField;
     public int intField;
     public boolean boolField;
 
@@ -388,6 +750,14 @@ public class BasicDataTypeAdapterTest {
 
     public String getName() {
       return name;
+    }
+
+    public void setDoubleField(final double doubleField) {
+      this.doubleField = doubleField;
+    }
+
+    public double getDoubleField() {
+      return doubleField;
     }
   }
 
@@ -429,9 +799,9 @@ public class BasicDataTypeAdapterTest {
 
     public AnnotatedTestType(
         final String name,
-        final Double doubleField,
-        final Integer intField,
-        final Boolean boolField,
+        final double doubleField,
+        final int intField,
+        final boolean boolField,
         final String ignoredField) {
       this.name = name;
       this.doubleField = doubleField;
@@ -460,6 +830,24 @@ public class BasicDataTypeAdapterTest {
         final Double extraField) {
       super(name, doubleField, intField, boolField, ignoredField);
       this.extraField = extraField;
+    }
+  }
+  
+  public static class SingleFieldTestType {
+    private String name;
+    
+    protected SingleFieldTestType() {}
+    
+    public SingleFieldTestType(final String name) {
+      this.name = name;
+    }
+    
+    public void setName(final String name) {
+      this.name = name;
+    }
+    
+    public String getName() {
+      return name;
     }
   }
 }

@@ -100,7 +100,7 @@ public class SpatialTemporalAnnotationsTest {
       }
     }
 
-    final TestType builtEntry = adapter.buildObject(fields);
+    final TestType builtEntry = adapter.buildObject("id1", fields);
     assertEquals("id1", adapter.getFieldValue(builtEntry, "name"));
     assertTrue(
         GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(10, 10)).equalsExact(

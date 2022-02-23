@@ -28,11 +28,22 @@ public class AttributeIndexOptions implements DimensionalityTypeOptions {
       description = "The name of the attribute to index.")
   protected String attributeName;
 
+  @Parameter(names = {"--indexName"}, required = false, description = "The name of the index.")
+  protected String indexName;
+
   public AttributeIndexOptions() {}
 
   public AttributeIndexOptions(final String typeName, final String attributeName) {
+    this(typeName, attributeName, null);
+  }
+
+  public AttributeIndexOptions(
+      final String typeName,
+      final String attributeName,
+      final String indexName) {
     this.typeName = typeName;
     this.attributeName = attributeName;
+    this.indexName = indexName;
   }
 
   public void setTypeName(final String typeName) {
@@ -49,6 +60,14 @@ public class AttributeIndexOptions implements DimensionalityTypeOptions {
 
   public String getAttributeName() {
     return attributeName;
+  }
+
+  public void setIndexName(final String indexName) {
+    this.indexName = indexName;
+  }
+
+  public String getIndexName() {
+    return indexName;
   }
 
 }

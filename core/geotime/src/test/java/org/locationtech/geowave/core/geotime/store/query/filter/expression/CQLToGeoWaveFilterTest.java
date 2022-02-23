@@ -656,7 +656,8 @@ public class CQLToGeoWaveFilterTest {
     final Index aIndex =
         AttributeDimensionalityTypeProvider.createIndexForDescriptor(
             adapter,
-            adapter.getFieldDescriptor("A"));
+            adapter.getFieldDescriptor("A"),
+            "aIndex");
     mapping = BaseDataStoreUtils.mapAdapterToIndex(adapter.asInternalAdapter((short) 0), aIndex);
     constraints =
         f.getConstraints(Double.class, null, adapter, mapping, aIndex, Sets.newHashSet("A"));
@@ -680,7 +681,8 @@ public class CQLToGeoWaveFilterTest {
     final Index bIndex =
         AttributeDimensionalityTypeProvider.createIndexForDescriptor(
             adapter,
-            adapter.getFieldDescriptor("B"));
+            adapter.getFieldDescriptor("B"),
+            "bIndex");
     mapping = BaseDataStoreUtils.mapAdapterToIndex(adapter.asInternalAdapter((short) 0), bIndex);
     constraints =
         f.getConstraints(Double.class, null, adapter, mapping, bIndex, Sets.newHashSet("B"));
@@ -699,7 +701,8 @@ public class CQLToGeoWaveFilterTest {
     final Index nameIndex =
         AttributeDimensionalityTypeProvider.createIndexForDescriptor(
             adapter,
-            adapter.getFieldDescriptor("name"));
+            adapter.getFieldDescriptor("name"),
+            "nameIndex");
     mapping = BaseDataStoreUtils.mapAdapterToIndex(adapter.asInternalAdapter((short) 0), nameIndex);
     FilterConstraints<String> textConstraints =
         f.getConstraints(String.class, null, adapter, mapping, nameIndex, Sets.newHashSet("name"));

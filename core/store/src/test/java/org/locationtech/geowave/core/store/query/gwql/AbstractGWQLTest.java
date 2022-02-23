@@ -36,7 +36,7 @@ public abstract class AbstractGWQLTest {
     final DataStore dataStore = storeFamily.getDataStoreFactory().createStore(opts);
     final FieldDescriptor<?> descriptor = adapter.getFieldDescriptor(indexField);
     final Index index =
-        AttributeDimensionalityTypeProvider.createIndexForDescriptor(adapter, descriptor);
+        AttributeDimensionalityTypeProvider.createIndexForDescriptor(adapter, descriptor, null);
     dataStore.addType(adapter, index);
     return dataStore;
   }

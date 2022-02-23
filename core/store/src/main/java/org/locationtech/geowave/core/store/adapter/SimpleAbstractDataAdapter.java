@@ -21,17 +21,13 @@ abstract public class SimpleAbstractDataAdapter<T extends Persistable> implement
     DataTypeAdapter<T> {
   protected static final String SINGLETON_FIELD_NAME = "FIELD";
   protected FieldDescriptor<T> singletonFieldDescriptor;
-  private final FieldReader<Object> reader;
-  private final FieldWriter<Object> writer;
+  private FieldReader<Object> reader = null;
+  private FieldWriter<Object> writer = null;
 
   public SimpleAbstractDataAdapter() {
     super();
     singletonFieldDescriptor =
         new FieldDescriptorBuilder<>(getDataClass()).fieldName(SINGLETON_FIELD_NAME).build();
-    reader =
-        new PersistableReader(
-            PersistableFactory.getInstance().getClassIdMapping().get(getDataClass()));
-    writer = new PersistableWriter();
   }
 
   @Override
@@ -64,11 +60,19 @@ abstract public class SimpleAbstractDataAdapter<T extends Persistable> implement
 
   @Override
   public FieldWriter<Object> getWriter(final String fieldName) {
+    if (writer == null) {
+      writer = new PersistableWriter();
+    }
     return writer;
   }
 
   @Override
   public FieldReader<Object> getReader(final String fieldName) {
+    if (reader == null) {
+      reader =
+          new PersistableReader(
+              PersistableFactory.getInstance().getClassIdMapping().get(getDataClass()));
+    }
     return reader;
   }
 }
