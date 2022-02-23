@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.store.adapter;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.locationtech.geowave.core.index.StringUtils;
@@ -22,7 +23,6 @@ import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.util.GenericTypeResolver;
-import com.google.common.collect.Maps;
 
 /**
  * Provides an abstract implementation of the {@link DataTypeAdapter} interface that handles field
@@ -35,7 +35,7 @@ public abstract class AbstractDataTypeAdapter<T> implements DataTypeAdapter<T> {
   private String typeName = null;
   private FieldDescriptor<?>[] fieldDescriptors = null;
   private FieldDescriptor<?> dataIDFieldDescriptor = null;
-  private Map<String, Integer> fieldDescriptorIndices = Maps.newHashMap();
+  private Map<String, Integer> fieldDescriptorIndices = new HashMap<>();
   private FieldWriter<Object> dataIDWriter = null;
   private FieldReader<Object> dataIDReader = null;
 

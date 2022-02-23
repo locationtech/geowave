@@ -18,6 +18,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,9 +30,6 @@ import org.locationtech.geowave.core.store.adapter.annotation.GeoWaveDataType;
 import org.locationtech.geowave.core.store.adapter.annotation.GeoWaveFieldAnnotation;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 /**
  * A data type adapter implementation with explicit mappings for accessors and mutators. These
@@ -153,8 +153,8 @@ public class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
       throw new RuntimeException("Unable to find no-args constructor for class: " + className);
     }
     final FieldDescriptor<?>[] descriptors = getFieldDescriptors();
-    accessors = Maps.newLinkedHashMapWithExpectedSize(descriptors.length);
-    mutators = Maps.newLinkedHashMapWithExpectedSize(descriptors.length);
+    accessors = new HashMap<>(descriptors.length);
+    mutators = new HashMap<>(descriptors.length);;
     for (final FieldDescriptor<?> descriptor : descriptors) {
       final Accessor<T> accessor;
       if (buffer.get() > 0) {
@@ -236,11 +236,11 @@ public class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
       final Class<T> dataClass,
       final String dataIdField,
       final boolean removeDataIDFromFieldList) {
-    final List<FieldDescriptor<?>> fieldDescriptors = Lists.newLinkedList();
+    final List<FieldDescriptor<?>> fieldDescriptors = new LinkedList<>();
     FieldDescriptor<?> dataIdFieldDescriptor = null;
-    final Set<String> addedFields = Sets.newHashSet();
-    final Map<String, Accessor<T>> accessors = Maps.newHashMap();
-    final Map<String, Mutator<T>> mutators = Maps.newHashMap();
+    final Set<String> addedFields = new HashSet<>();
+    final Map<String, Accessor<T>> accessors = new HashMap<>();
+    final Map<String, Mutator<T>> mutators = new HashMap<>();
     if (dataClass.isAnnotationPresent(GeoWaveDataType.class)) {
       // infer fields from annotations
       Class<?> current = dataClass;
