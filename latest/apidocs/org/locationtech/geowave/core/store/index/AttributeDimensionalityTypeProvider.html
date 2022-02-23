@@ -161,8 +161,9 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/spi/Di
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/AttributeDimensionalityTypeProvider.html#createIndexForDescriptor-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.adapter.FieldDescriptor-">createIndexForDescriptor</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter,
-                        <a href="../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;?&gt;&nbsp;descriptor)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/index/AttributeDimensionalityTypeProvider.html#createIndexForDescriptor-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.adapter.FieldDescriptor-java.lang.String-">createIndexForDescriptor</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter,
+                        <a href="../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;?&gt;&nbsp;descriptor,
+                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a></code></td>
@@ -311,14 +312,16 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/spi/Di
                                            <a href="../../../../../../org/locationtech/geowave/core/store/index/AttributeIndexOptions.html" title="class in org.locationtech.geowave.core.store.index">AttributeIndexOptions</a>&nbsp;options)</pre>
 </li>
 </ul>
-<a name="createIndexForDescriptor-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.adapter.FieldDescriptor-">
+<a name="createIndexForDescriptor-org.locationtech.geowave.core.store.api.DataTypeAdapter-org.locationtech.geowave.core.store.adapter.FieldDescriptor-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>createIndexForDescriptor</h4>
 <pre>public static&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/api/Index.html" title="interface in org.locationtech.geowave.core.store.api">Index</a>&nbsp;createIndexForDescriptor(<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;?&gt;&nbsp;adapter,
-                                             <a href="../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;?&gt;&nbsp;descriptor)</pre>
+                                             <a href="../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;?&gt;&nbsp;descriptor,
+                                             <a href="http://docs.oracle.com/javase/7/docs/api/javax/annotation/Nullable.html?is-external=true" title="class or interface in javax.annotation">@Nullable</a>
+                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName)</pre>
 </li>
 </ul>
 </li>

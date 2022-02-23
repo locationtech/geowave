@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
+var methods = {"i0":6,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":6,"i8":10,"i9":10,"i10":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -147,9 +147,9 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html#AbstractDataTypeAdapter--">AbstractDataTypeAdapter</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html#AbstractDataTypeAdapter-java.lang.String-org.locationtech.geowave.core.store.adapter.FieldDescriptor:A-java.lang.String-">AbstractDataTypeAdapter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html#AbstractDataTypeAdapter-java.lang.String-org.locationtech.geowave.core.store.adapter.FieldDescriptor:A-org.locationtech.geowave.core.store.adapter.FieldDescriptor-">AbstractDataTypeAdapter</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
                        <a href="../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;?&gt;[]&nbsp;fieldDescriptors,
-                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;dataIDField)</code>&nbsp;</td>
+                       <a href="../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;?&gt;&nbsp;dataIDFieldDescriptor)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -168,7 +168,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>abstract <a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html" title="type parameter in AbstractDataTypeAdapter">T</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html#buildObject-java.lang.Object:A-">buildObject</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;fieldValues)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html#buildObject-java.lang.Object-java.lang.Object:A-">buildObject</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;dataId,
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;fieldValues)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -189,24 +190,35 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 </td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;?&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html#getDataIDFieldDescriptor--">getDataIDFieldDescriptor</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;?&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html#getFieldDescriptor-java.lang.String-">getFieldDescriptor</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;?&gt;[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html#getFieldDescriptors--">getFieldDescriptors</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>abstract <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html#getFieldValue-T-java.lang.String-">getFieldValue</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html" title="type parameter in AbstractDataTypeAdapter">T</a>&nbsp;entry,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</code>
+<div class="block">Returns the value of the field with the given name from the entry.</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html#getTypeName--">getTypeName</a></span>()</code>
 <div class="block">Return the data adapter's type name.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/api/RowBuilder.html" title="interface in org.locationtech.geowave.core.store.api">RowBuilder</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html" title="type parameter in AbstractDataTypeAdapter">T</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html#newRowBuilder-org.locationtech.geowave.core.store.adapter.FieldDescriptor:A-">newRowBuilder</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;?&gt;[]&nbsp;outputFieldDescriptors)</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html#toBinary--">toBinary</a></span>()</code>
 <div class="block">Convert fields and data within an object to binary form for transmission or storage.</div>
@@ -225,7 +237,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;org.locationtech.geowave.core.store.api.<a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a></h3>
-<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#asInternalAdapter-short-">asInternalAdapter</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#asInternalAdapter-short-org.locationtech.geowave.core.store.api.VisibilityHandler-">asInternalAdapter</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#describe--">describe</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getFieldValue-T-java.lang.String-">getFieldValue</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getReader-java.lang.String-">getReader</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getWriter-java.lang.String-">getWriter</a></code></li>
+<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#asInternalAdapter-short-">asInternalAdapter</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#asInternalAdapter-short-org.locationtech.geowave.core.store.api.VisibilityHandler-">asInternalAdapter</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#describe--">describe</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getReader-java.lang.String-">getReader</a>, <a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getWriter-java.lang.String-">getWriter</a></code></li>
 </ul>
 </li>
 </ul>
@@ -250,7 +262,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 <pre>public&nbsp;AbstractDataTypeAdapter()</pre>
 </li>
 </ul>
-<a name="AbstractDataTypeAdapter-java.lang.String-org.locationtech.geowave.core.store.adapter.FieldDescriptor:A-java.lang.String-">
+<a name="AbstractDataTypeAdapter-java.lang.String-org.locationtech.geowave.core.store.adapter.FieldDescriptor:A-org.locationtech.geowave.core.store.adapter.FieldDescriptor-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -258,7 +270,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 <h4>AbstractDataTypeAdapter</h4>
 <pre>public&nbsp;AbstractDataTypeAdapter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
                                <a href="../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;?&gt;[]&nbsp;fieldDescriptors,
-                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;dataIDField)</pre>
+                               <a href="../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;?&gt;&nbsp;dataIDFieldDescriptor)</pre>
 </li>
 </ul>
 </li>
@@ -283,6 +295,30 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getTypeName--">getTypeName</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html" title="type parameter in AbstractDataTypeAdapter">T</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the type name which serves as a unique identifier for this adapter</dd>
+</dl>
+</li>
+</ul>
+<a name="getFieldValue-java.lang.Object-java.lang.String-">
+<!--   -->
+</a><a name="getFieldValue-T-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFieldValue</h4>
+<pre>public abstract&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;getFieldValue(<a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html" title="type parameter in AbstractDataTypeAdapter">T</a>&nbsp;entry,
+                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldName)</pre>
+<div class="block">Returns the value of the field with the given name from the entry. If the data ID field name is
+ passed, it is expected that this method will return the value of that field even if the data ID
+ field is not included in the set of field descriptors.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getFieldValue-T-java.lang.String-">getFieldValue</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html" title="type parameter in AbstractDataTypeAdapter">T</a>&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>entry</code> - the entry</dd>
+<dd><code>fieldName</code> - the field name or data ID field name</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the value of the field on the entry</dd>
 </dl>
 </li>
 </ul>
@@ -337,13 +373,14 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 </dl>
 </li>
 </ul>
-<a name="buildObject-java.lang.Object:A-">
+<a name="buildObject-java.lang.Object-java.lang.Object:A-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>buildObject</h4>
-<pre>public abstract&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html" title="type parameter in AbstractDataTypeAdapter">T</a>&nbsp;buildObject(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;fieldValues)</pre>
+<pre>public abstract&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html" title="type parameter in AbstractDataTypeAdapter">T</a>&nbsp;buildObject(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;dataId,
+                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>[]&nbsp;fieldValues)</pre>
 </li>
 </ul>
 <a name="getFieldDescriptors--">
@@ -370,6 +407,15 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/api/Da
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html#getFieldDescriptor-java.lang.String-">getFieldDescriptor</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/api/DataTypeAdapter.html" title="interface in org.locationtech.geowave.core.store.api">DataTypeAdapter</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/AbstractDataTypeAdapter.html" title="type parameter in AbstractDataTypeAdapter">T</a>&gt;</code></dd>
 </dl>
+</li>
+</ul>
+<a name="getDataIDFieldDescriptor--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDataIDFieldDescriptor</h4>
+<pre>protected&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/FieldDescriptor.html" title="interface in org.locationtech.geowave.core.store.adapter">FieldDescriptor</a>&lt;?&gt;&nbsp;getDataIDFieldDescriptor()</pre>
 </li>
 </ul>
 <a name="toBinary--">
