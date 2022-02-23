@@ -695,7 +695,7 @@ public class BasicDataTypeAdapterTest {
     assertEquals(5.3, (double) adapter.getFieldValue(builtEntry, "extraField"), 0.001);
     assertNull(builtEntry.ignoredField);
   }
-  
+
   @Test
   public void testSingleFieldDataAdapterSeparateDataID() {
     BasicDataTypeAdapter<SingleFieldTestType> adapter =
@@ -717,7 +717,7 @@ public class BasicDataTypeAdapterTest {
     assertNull(adapter.getFieldDescriptor("name"));
     assertNotNull(adapter.getDataIDFieldDescriptor());
     assertTrue(String.class.isAssignableFrom(adapter.getDataIDFieldDescriptor().bindingClass()));
-    
+
     final SingleFieldTestType testEntry = new SingleFieldTestType("id1");
     assertEquals("id1", adapter.getFieldValue(testEntry, "name"));
 
@@ -832,20 +832,20 @@ public class BasicDataTypeAdapterTest {
       this.extraField = extraField;
     }
   }
-  
+
   public static class SingleFieldTestType {
     private String name;
-    
+
     protected SingleFieldTestType() {}
-    
+
     public SingleFieldTestType(final String name) {
       this.name = name;
     }
-    
+
     public void setName(final String name) {
       this.name = name;
     }
-    
+
     public String getName() {
       return name;
     }
