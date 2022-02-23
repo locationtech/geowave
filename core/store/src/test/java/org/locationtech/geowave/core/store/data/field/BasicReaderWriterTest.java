@@ -486,15 +486,6 @@ public class BasicReaderWriterTest {
         FieldUtils.getDefaultReaderForClass(BigInteger.class).readField(value);
     Assert.assertEquals("FAILED null test of BigInteger reader", null, bigIntegerActual);
 
-    // test String reader/writer
-    value = FieldUtils.getDefaultWriterForClass(String.class).writeField(null);
-    Assert.assertEquals(
-        "FAILED null test of String writer",
-        defaultNullExpected.length,
-        value.length);
-    final String stringActual = FieldUtils.getDefaultReaderForClass(String.class).readField(value);
-    Assert.assertEquals("FAILED null test of String reader/writer", null, stringActual);
-
     // test String Array reader/writer
     value = FieldUtils.getDefaultWriterForClass(String[].class).writeField(null);
     Assert.assertEquals(
