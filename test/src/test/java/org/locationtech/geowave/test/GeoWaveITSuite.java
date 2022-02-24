@@ -36,6 +36,7 @@ import org.locationtech.geowave.test.landsat.CustomCRSLandsatIT;
 import org.locationtech.geowave.test.mapreduce.BasicMapReduceIT;
 import org.locationtech.geowave.test.mapreduce.CustomCRSKDERasterResizeIT;
 import org.locationtech.geowave.test.query.AttributesSubsetQueryIT;
+import org.locationtech.geowave.test.query.BasicDataTypeAdapterQueryIT;
 import org.locationtech.geowave.test.query.ExpressionQueryIT;
 import org.locationtech.geowave.test.query.GeoWaveQueryLanguageIT;
 import org.locationtech.geowave.test.query.PolygonDataIdQueryIT;
@@ -83,6 +84,7 @@ import org.locationtech.geowave.test.stability.GeoWaveStabilityIT;
     // GeowaveBasicURLIngestIT.class,
     GeoWaveVectorSerializationIT.class,
     GeoWaveQueryLanguageIT.class,
+    BasicDataTypeAdapterQueryIT.class,
     ExpressionQueryIT.class,
     BasicKafkaIT.class,
     BasicMapReduceIT.class,

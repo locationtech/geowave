@@ -18,6 +18,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,9 +30,6 @@ import org.locationtech.geowave.core.store.adapter.annotation.GeoWaveDataType;
 import org.locationtech.geowave.core.store.adapter.annotation.GeoWaveFieldAnnotation;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 /**
  * A data type adapter implementation with explicit mappings for accessors and mutators. These
@@ -83,7 +83,9 @@ public class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
       for (int i = 0; i < fields.length; i++) {
         mutators.get(fields[i].fieldName()).set(object, fieldValues[i]);
       }
-      mutators.get(getDataIDFieldDescriptor().fieldName()).set(object, dataId);
+      if (!serializeDataIDAsString) {
+        mutators.get(getDataIDFieldDescriptor().fieldName()).set(object, dataId);
+      }
       return object;
     } catch (InstantiationException | IllegalAccessException | SecurityException
         | IllegalArgumentException | InvocationTargetException e) {
@@ -151,8 +153,8 @@ public class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
       throw new RuntimeException("Unable to find no-args constructor for class: " + className);
     }
     final FieldDescriptor<?>[] descriptors = getFieldDescriptors();
-    accessors = Maps.newLinkedHashMapWithExpectedSize(descriptors.length);
-    mutators = Maps.newLinkedHashMapWithExpectedSize(descriptors.length);
+    accessors = new HashMap<>(descriptors.length);
+    mutators = new HashMap<>(descriptors.length);;
     for (final FieldDescriptor<?> descriptor : descriptors) {
       final Accessor<T> accessor;
       if (buffer.get() > 0) {
@@ -171,22 +173,24 @@ public class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
       mutator.fromBinary(dataClass, buffer);
       mutators.put(descriptor.fieldName(), mutator);
     }
-    final Accessor<T> accessor;
-    if (buffer.get() > 0) {
-      accessor = new FieldAccessor<>();
-    } else {
-      accessor = new MethodAccessor<>();
+    if (buffer.hasRemaining()) {
+      final Accessor<T> accessor;
+      if (buffer.get() > 0) {
+        accessor = new FieldAccessor<>();
+      } else {
+        accessor = new MethodAccessor<>();
+      }
+      accessor.fromBinary(dataClass, buffer);
+      accessors.put(getDataIDFieldDescriptor().fieldName(), accessor);
+      final Mutator<T> mutator;
+      if (buffer.get() > 0) {
+        mutator = new FieldMutator<>();
+      } else {
+        mutator = new MethodMutator<>();
+      }
+      mutator.fromBinary(dataClass, buffer);
+      mutators.put(getDataIDFieldDescriptor().fieldName(), mutator);
     }
-    accessor.fromBinary(dataClass, buffer);
-    accessors.put(getDataIDFieldDescriptor().fieldName(), accessor);
-    final Mutator<T> mutator;
-    if (buffer.get() > 0) {
-      mutator = new FieldMutator<>();
-    } else {
-      mutator = new MethodMutator<>();
-    }
-    mutator.fromBinary(dataClass, buffer);
-    mutators.put(getDataIDFieldDescriptor().fieldName(), mutator);
   }
 
   @Override
@@ -222,20 +226,21 @@ public class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
    * @param typeName the type name for this adapter
    * @param dataClass the data type class
    * @param dataIdField the field to use for unique data IDs
-   * @param separateDataIDField if {@code true} the data ID field will not be encoded as a regular
-   *        field and only used as the data ID
+   * @param removeDataIDFromFieldList if {@code true} the data ID field will not be included in the
+   *        full list of fields, useful to prevent the data from being written twice at the cost of
+   *        some querying simplicity
    * @return the data adapter
    */
   public static <T> BasicDataTypeAdapter<T> newAdapter(
       final String typeName,
       final Class<T> dataClass,
       final String dataIdField,
-      final boolean separateDataIDField) {
-    final List<FieldDescriptor<?>> fieldDescriptors = Lists.newLinkedList();
+      final boolean removeDataIDFromFieldList) {
+    final List<FieldDescriptor<?>> fieldDescriptors = new LinkedList<>();
     FieldDescriptor<?> dataIdFieldDescriptor = null;
-    final Set<String> addedFields = Sets.newHashSet();
-    final Map<String, Accessor<T>> accessors = Maps.newHashMap();
-    final Map<String, Mutator<T>> mutators = Maps.newHashMap();
+    final Set<String> addedFields = new HashSet<>();
+    final Map<String, Accessor<T>> accessors = new HashMap<>();
+    final Map<String, Mutator<T>> mutators = new HashMap<>();
     if (dataClass.isAnnotationPresent(GeoWaveDataType.class)) {
       // infer fields from annotations
       Class<?> current = dataClass;
@@ -258,7 +263,7 @@ public class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
                 addedFields.add(descriptor.fieldName());
                 if (descriptor.fieldName().equals(dataIdField)) {
                   dataIdFieldDescriptor = descriptor;
-                  if (separateDataIDField) {
+                  if (removeDataIDFromFieldList) {
                     continue;
                   }
                 }
@@ -296,7 +301,7 @@ public class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
               new FieldDescriptorBuilder<>(type).fieldName(descriptor.getName()).build();
           if (fieldDescriptor.fieldName().equals(dataIdField)) {
             dataIdFieldDescriptor = fieldDescriptor;
-            if (separateDataIDField) {
+            if (removeDataIDFromFieldList) {
               continue;
             }
           }
@@ -319,7 +324,7 @@ public class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
             new FieldDescriptorBuilder<>(type).fieldName(field.getName()).build();
         if (fieldDescriptor.fieldName().equals(dataIdField)) {
           dataIdFieldDescriptor = fieldDescriptor;
-          if (separateDataIDField) {
+          if (removeDataIDFromFieldList) {
             continue;
           }
         }

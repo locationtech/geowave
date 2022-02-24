@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.store.adapter;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.locationtech.geowave.core.index.StringUtils;
@@ -22,7 +23,6 @@ import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.util.GenericTypeResolver;
-import com.google.common.collect.Maps;
 
 /**
  * Provides an abstract implementation of the {@link DataTypeAdapter} interface that handles field
@@ -35,9 +35,12 @@ public abstract class AbstractDataTypeAdapter<T> implements DataTypeAdapter<T> {
   private String typeName = null;
   private FieldDescriptor<?>[] fieldDescriptors = null;
   private FieldDescriptor<?> dataIDFieldDescriptor = null;
-  private Map<String, Integer> fieldDescriptorIndices = Maps.newHashMap();
+  private Map<String, Integer> fieldDescriptorIndices = new HashMap<>();
   private FieldWriter<Object> dataIDWriter = null;
   private FieldReader<Object> dataIDReader = null;
+
+  // Maintain backwards compatibility with 2.0.x
+  protected boolean serializeDataIDAsString = false;
 
   public AbstractDataTypeAdapter() {}
 
@@ -84,6 +87,10 @@ public abstract class AbstractDataTypeAdapter<T> implements DataTypeAdapter<T> {
   @SuppressWarnings("unchecked")
   @Override
   public byte[] getDataId(T entry) {
+    if (serializeDataIDAsString) {
+      return StringUtils.stringToBinary(
+          getFieldValue(entry, dataIDFieldDescriptor.fieldName()).toString());
+    }
     if (dataIDWriter == null) {
       dataIDWriter =
           (FieldWriter<Object>) FieldUtils.getDefaultWriterForClass(
@@ -103,7 +110,7 @@ public abstract class AbstractDataTypeAdapter<T> implements DataTypeAdapter<T> {
   @SuppressWarnings("unchecked")
   @Override
   public RowBuilder<T> newRowBuilder(FieldDescriptor<?>[] outputFieldDescriptors) {
-    if (dataIDReader == null) {
+    if (!serializeDataIDAsString && dataIDReader == null) {
       dataIDReader =
           (FieldReader<Object>) FieldUtils.getDefaultReaderForClass(
               dataIDFieldDescriptor.bindingClass());
@@ -125,7 +132,8 @@ public abstract class AbstractDataTypeAdapter<T> implements DataTypeAdapter<T> {
 
       @Override
       public T buildRow(byte[] dataId) {
-        final Object dataIDObject = dataIDReader.readField(dataId);
+        final Object dataIDObject =
+            serializeDataIDAsString ? dataId : dataIDReader.readField(dataId);
         T obj = buildObject(dataIDObject, values);
         Arrays.fill(values, null);
         return obj;
@@ -158,21 +166,34 @@ public abstract class AbstractDataTypeAdapter<T> implements DataTypeAdapter<T> {
   public byte[] toBinary() {
     final byte[] typeNameBytes = StringUtils.stringToBinary(typeName);
     final byte[] fieldDescriptorBytes = PersistenceUtils.toBinary(fieldDescriptors);
+    // Maintain backwards compatibility for 2.0.x
+    final byte[] dataIDFieldBytes =
+        serializeDataIDAsString ? StringUtils.stringToBinary(dataIDFieldDescriptor.fieldName())
+            : new byte[0];
     final byte[] dataIDFieldDescriptorBytes = PersistenceUtils.toBinary(dataIDFieldDescriptor);
-    final ByteBuffer buffer =
-        ByteBuffer.allocate(
-            VarintUtils.unsignedIntByteLength(typeNameBytes.length)
-                + VarintUtils.unsignedIntByteLength(fieldDescriptorBytes.length)
-                + VarintUtils.unsignedIntByteLength(dataIDFieldDescriptorBytes.length)
-                + typeNameBytes.length
-                + fieldDescriptorBytes.length
-                + dataIDFieldDescriptorBytes.length);
+    int bufferSize =
+        VarintUtils.unsignedIntByteLength(typeNameBytes.length)
+            + VarintUtils.unsignedIntByteLength(fieldDescriptorBytes.length)
+            + VarintUtils.unsignedIntByteLength(dataIDFieldBytes.length)
+            + typeNameBytes.length
+            + fieldDescriptorBytes.length
+            + dataIDFieldBytes.length;
+    if (!serializeDataIDAsString) {
+      bufferSize +=
+          VarintUtils.unsignedIntByteLength(dataIDFieldDescriptorBytes.length)
+              + dataIDFieldDescriptorBytes.length;
+    }
+    final ByteBuffer buffer = ByteBuffer.allocate(bufferSize);
     VarintUtils.writeUnsignedInt(typeNameBytes.length, buffer);
     buffer.put(typeNameBytes);
     VarintUtils.writeUnsignedInt(fieldDescriptorBytes.length, buffer);
     buffer.put(fieldDescriptorBytes);
-    VarintUtils.writeUnsignedInt(dataIDFieldDescriptorBytes.length, buffer);
-    buffer.put(dataIDFieldDescriptorBytes);
+    VarintUtils.writeUnsignedInt(dataIDFieldBytes.length, buffer);
+    buffer.put(dataIDFieldBytes);
+    if (!serializeDataIDAsString) {
+      VarintUtils.writeUnsignedInt(dataIDFieldDescriptorBytes.length, buffer);
+      buffer.put(dataIDFieldDescriptorBytes);
+    }
     return buffer.array();
   }
 
@@ -188,10 +209,22 @@ public abstract class AbstractDataTypeAdapter<T> implements DataTypeAdapter<T> {
         PersistenceUtils.fromBinaryAsList(fieldDescriptorBytes);
     this.fieldDescriptors =
         fieldDescriptorList.toArray(new FieldDescriptor<?>[fieldDescriptorList.size()]);
-    final byte[] dataIDFieldDescriptorBytes = new byte[VarintUtils.readUnsignedInt(buffer)];
-    buffer.get(dataIDFieldDescriptorBytes);
-    this.dataIDFieldDescriptor =
-        (FieldDescriptor<?>) PersistenceUtils.fromBinary(dataIDFieldDescriptorBytes);
+    final byte[] dataIDFieldBytes = new byte[VarintUtils.readUnsignedInt(buffer)];
+    buffer.get(dataIDFieldBytes);
+    final String dataIDField = StringUtils.stringFromBinary(dataIDFieldBytes);
+    if (buffer.hasRemaining()) {
+      final byte[] dataIDFieldDescriptorBytes = new byte[VarintUtils.readUnsignedInt(buffer)];
+      buffer.get(dataIDFieldDescriptorBytes);
+      this.dataIDFieldDescriptor =
+          (FieldDescriptor<?>) PersistenceUtils.fromBinary(dataIDFieldDescriptorBytes);
+    } else {
+      for (int i = 0; i < fieldDescriptors.length; i++) {
+        if (fieldDescriptors[i].fieldName().equals(dataIDField)) {
+          this.dataIDFieldDescriptor = fieldDescriptors[i];
+        }
+      }
+      this.serializeDataIDAsString = true;
+    }
     populateFieldDescriptorIndices();
   }
 
