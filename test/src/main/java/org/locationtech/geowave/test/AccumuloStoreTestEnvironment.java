@@ -59,7 +59,7 @@ public class AccumuloStoreTestEnvironment extends StoreTestEnvironment {
   protected static final String DEFAULT_MINI_ACCUMULO_PASSWORD = "Ge0wave";
   // breaks on windows if temp directory isn't on same drive as project,
   // also windows HDFS URLs have issues with any directory names that begin with 't'
-  // it interprets '/t' as the esape sequence for a tab
+  // it interprets '/t' as the escape sequence for a tab
   protected static final File TEMP_DIR = new File("./target/accumulo_temp");
   // comment the above line and uncomment below to run accumulo tests on windows
   // protected static File TEMP_DIR;
