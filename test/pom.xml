@@ -1,6 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-parent</artifactId>
@@ -710,13 +708,10 @@
 								<configuration>
 									<tasks xmlns:jacoco="antlib:org.jacoco.ant">
 										<mkdir dir="${project.reporting.outputDirectory}" />
-										<taskdef uri="antlib:org.jacoco.ant"
-											resource="org/jacoco/ant/antlib.xml"
-											classpathref="maven.plugin.classpath" />
+										<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml" classpathref="maven.plugin.classpath" />
 										<jacoco:report>
 											<executiondata>
-												<fileset dir="../"
-													includes="**/coverage-reports/*.exec" />
+												<fileset dir="../" includes="**/coverage-reports/*.exec" />
 											</executiondata>
 
 											<structure name="GeoWave">
@@ -724,13 +719,11 @@
 													<fileset dir="../" includes="**/target/classes/**" />
 												</classfiles>
 												<sourcefiles>
-													<fileset dir="../"
-														includes="**/src/main/java/**,**/src/main/scala/**" />
+													<fileset dir="../" includes="**/src/main/java/**,**/src/main/scala/**" />
 												</sourcefiles>
 											</structure>
 
-											<xml
-												destfile="${project.reporting.outputDirectory}/jacoco.xml" />
+											<xml destfile="${project.reporting.outputDirectory}/jacoco.xml" />
 										</jacoco:report>
 									</tasks>
 								</configuration>
@@ -850,6 +843,43 @@
 				<skipITs>false</skipITs>
 				<testStoreType>FILESYSTEM</testStoreType>
 			</properties>
+		</profile>
+		<profile>
+			<id>compatibility</id>
+			<activation>
+				<property>
+					<name>accumulo.legacy</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<version>2.9</version>
+						<executions>
+							<execution>
+								<id>setup-accumulo</id>
+								<goals>
+									<goal>copy</goal>
+								</goals>
+								<phase>pre-integration-test</phase>
+								<configuration>
+									<artifactItems>
+										<artifactItem>
+											<groupId>log4j</groupId>
+											<artifactId>log4j</artifactId>
+											<version>1.2.17</version>
+										</artifactItem>
+									</artifactItems>
+									<outputDirectory>${project.build.directory}/accumulo/lib
+									</outputDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 		<profile>
 			<id>bigtable-it</id>

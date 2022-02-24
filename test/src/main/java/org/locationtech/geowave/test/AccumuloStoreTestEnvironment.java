@@ -11,10 +11,14 @@ package org.locationtech.geowave.test;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Scanner;
 import org.apache.accumulo.cluster.ClusterUser;
 import org.apache.accumulo.core.conf.Property;
@@ -71,6 +75,8 @@ public class AccumuloStoreTestEnvironment extends StoreTestEnvironment {
   // e.printStackTrace();
   // }
   // }
+
+  protected static final File LIB_DIR = new File("./target/accumulo", "lib");
   protected String zookeeper;
   protected String accumuloInstance;
   protected String accumuloUser;
@@ -116,11 +122,27 @@ public class AccumuloStoreTestEnvironment extends StoreTestEnvironment {
               new MiniAccumuloConfig(TEMP_DIR, DEFAULT_MINI_ACCUMULO_PASSWORD);
           config.setZooKeeperPort(Integer.parseInt(zookeeper.split(":")[1]));
           config.setNumTservers(NUM_TABLET_SERVERS);
-
+          final URL[] extraLibraries;
+          if (LIB_DIR.exists() && LIB_DIR.isDirectory()) {
+            extraLibraries =
+                Arrays.stream(
+                    LIB_DIR.listFiles(
+                        (f) -> f.isFile() && f.getName().toLowerCase().endsWith(".jar"))).map(f -> {
+                          try {
+                            return f.toURI().toURL();
+                          } catch (final MalformedURLException e) {
+                            LOGGER.warn("Unable to add to accumulo classpath", e);
+                          }
+                          return null;
+                        }).filter(Objects::nonNull).toArray(URL[]::new);
+          } else {
+            extraLibraries = new URL[0];
+          }
           miniAccumulo =
               MiniAccumuloClusterFactory.newAccumuloCluster(
                   config,
-                  AccumuloStoreTestEnvironment.class);
+                  AccumuloStoreTestEnvironment.class,
+                  extraLibraries);
 
           startMiniAccumulo(config);
           accumuloInstance = miniAccumulo.getInstanceName();

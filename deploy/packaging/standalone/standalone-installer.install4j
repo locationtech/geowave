@@ -59,6 +59,7 @@
       <mountPoint id="194" root="" location="lib/services/third-party/embedded-geoserver" mode="755" />
       <mountPoint id="195" root="" location="lib/services/third-party/embedded-geoserver/geoserver" mode="755" />
       <mountPoint id="196" root="" location="lib/services/third-party/embedded-accumulo" mode="755" />
+      <mountPoint id="1284" root="" location="lib/services/third-party/embedded-accumulo/lib" mode="755" />
       <mountPoint id="621" root="" location="lib/services/third-party/embedded-bigtable" mode="755" />
       <mountPoint id="478" root="" location="lib/services/third-party/embedded-cassandra" mode="755" />
       <mountPoint id="622" root="" location="lib/services/third-party/embedded-dynamodb" mode="755" />
@@ -162,6 +163,9 @@
         <exclude />
       </dirEntry>
       <dirEntry mountPoint="196" file="../../../extensions/cli/accumulo-embed/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="1284" file="../../../extensions/cli/accumulo-embed/target/accumulo/lib" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="" excludeSuffixes="" dirMode="755" overrideDirMode="false">
         <exclude />
       </dirEntry>
       <dirEntry mountPoint="621" file="../../../extensions/cli/bigtable-embed/target/installer-plugin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="installer-plugin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
