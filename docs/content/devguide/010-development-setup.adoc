@@ -110,7 +110,7 @@ If Eclipse produces `Plugin execution not covered by lifecycle configuration:...
 
 The GeoWave repository includes clean up and formatter templates that can be used by Eclipse to clean and format code according to GeoWave standards when those operations are performed in the IDE.
 
-. Within Eclipse, open the Eclipse Preferences window. (Eclipse -> Preferences... on Mac, Window -> Preferences on Windows).
+. Within Eclipse, open the Eclipse Preferences window. (Eclipse -> Preferences... on Mac, Window -> Preferences on Windows and Linux).
 
 . Import clean up template:
 
@@ -144,7 +144,7 @@ One of the simplest ways to debug GeoWave source code and analyze system interac
 
 . Give the configuration a name, and ensure that `geowave-test` is set in the "Project" field.
 
-. Set the "Test Class" field to `org.locationtech.geowave.test.GeoWaveITSuite` (or any another test class that is preferred).
+. Set the "Test Class" field to `org.locationtech.geowave.test.GeoWaveITSuite` (or any other test class that is preferred).
 
 . Navigate to the arguments tab and set values for the "VM arguments" field. Example: `-ea -DtestStoreType=ROCKSDB -DenableServerSideLibrary=false` will run the test suite with RocksDB as the data store. Note: The `DenableServerSideLibrary` option technically only applies to Accumulo and HBase currently and is false by default.
 
