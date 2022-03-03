@@ -1692,11 +1692,6 @@
 		</profile>
 		<profile>
 			<id>compatibility</id>
-			<activation>
-				<property>
-					<name>accumulo.legacy</name>
-				</property>
-			</activation>
 			<properties>
 				<accumulo.version>1.9.2</accumulo.version>
 			</properties>

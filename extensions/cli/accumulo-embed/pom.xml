@@ -14,7 +14,6 @@
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-datastore-accumulo</artifactId>
-			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -103,16 +102,8 @@
 		</profile>
 		<profile>
 			<id>compatibility</id>
-			<activation>
-				<property>
-					<name>accumulo.legacy</name>
-				</property>
-			</activation>
 			<build>
 				<plugins>
-					<plugin>
-						<artifactId>maven-assembly-plugin</artifactId>
-					</plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-dependency-plugin</artifactId>
