@@ -13,7 +13,7 @@ import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Map;
-import org.apache.log4j.Level;
+import org.apache.logging.log4j.Level;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -42,6 +42,7 @@ import org.locationtech.geowave.test.kafka.BasicKafkaIT;
 import org.locationtech.geowave.test.spark.SparkTestEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.core.config.Configurator;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({Environment.MAP_REDUCE, Environment.KAFKA,})
@@ -135,7 +136,7 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
     Assert.assertEquals(
         GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfs(),
         map.get("hdfs.defaultFS.url"));
-    org.apache.log4j.Logger.getRootLogger().setLevel(Level.WARN);
+    Configurator.setRootLevel(Level.WARN);
 
     // Core Ingest Tests
     Assert.assertTrue(client.LocalToHdfsCommand());
@@ -447,7 +448,7 @@ public class GeoWaveGrpcIT extends AbstractGeoWaveBasicVectorIT {
   }
 
   protected void init() throws Exception {
-    org.apache.log4j.Logger.getRootLogger().setLevel(Level.WARN);
+    Configurator.setRootLevel(Level.WARN);
     ZipUtils.unZipFile(
         new File(
             BasicKafkaIT.class.getClassLoader().getResource(TEST_DATA_ZIP_RESOURCE_PATH).toURI()),

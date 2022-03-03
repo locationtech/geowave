@@ -17,8 +17,7 @@
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-analytic-api</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+			</dependency>
 		<dependency>
 			<groupId>javax.vecmath</groupId>
 			<artifactId>vecmath</artifactId>

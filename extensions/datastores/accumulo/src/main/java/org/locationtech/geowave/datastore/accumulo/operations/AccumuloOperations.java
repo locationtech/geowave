@@ -54,7 +54,8 @@ import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.hadoop.io.Text;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
@@ -141,7 +142,7 @@ public class AccumuloOperations implements
     ConnectorCloseListener,
     Closeable {
   private static Object CONNECTOR_MUTEX = new Object();
-  private static final Logger LOGGER = Logger.getLogger(AccumuloOperations.class);
+  private static final Logger LOGGER = LogManager.getLogger(AccumuloOperations.class);
   private static final int DEFAULT_NUM_THREADS = 16;
   private static final long DEFAULT_TIMEOUT_MILLIS = 1000L; // 1 second
   private static final long DEFAULT_BYTE_BUFFER_SIZE = 1048576L; // 1 MB

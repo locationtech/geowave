@@ -11,7 +11,6 @@ package org.locationtech.geowave.core.store.base;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.log4j.Logger;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
@@ -41,7 +40,6 @@ import org.locationtech.geowave.core.store.statistics.index.FieldVisibilityCount
  * defined by the set of parameters passed into the constructor.
  */
 abstract class BaseQuery {
-  private static final Logger LOGGER = Logger.getLogger(BaseQuery.class);
 
   protected short[] adapterIds;
   protected final Index index;

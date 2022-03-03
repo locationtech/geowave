@@ -9,6 +9,10 @@
 package org.locationtech.geowave.datastore.accumulo.cli;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import org.apache.accumulo.core.conf.Property;
 import org.apache.accumulo.minicluster.MiniAccumuloCluster;
@@ -16,6 +20,9 @@ import org.apache.accumulo.minicluster.MiniAccumuloConfig;
 import org.apache.accumulo.monitor.Monitor;
 import org.apache.hadoop.util.VersionInfo;
 import org.apache.hadoop.util.VersionUtil;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.config.Configurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 /**
@@ -30,13 +37,15 @@ import com.google.common.io.Files;
 
 public class AccumuloMiniCluster {
   private static final Logger LOGGER = LoggerFactory.getLogger(AccumuloMiniCluster.class);
+  private static final String DEFAULT_LIB_DIR = "lib/services/third-party/embedded-accumulo/lib";
 
   protected static boolean isYarn() {
     return VersionUtil.compareVersions(VersionInfo.getVersion(), "2.2.0") >= 0;
   }
 
   public static void main(final String[] args) throws Exception {
-    org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.WARN);
+
+    Configurator.setLevel(LogManager.getRootLogger().getName(), Level.WARN);
 
     final boolean interactive =
         (System.getProperty("interactive") != null)
@@ -56,10 +65,29 @@ public class AccumuloMiniCluster {
 
     MiniAccumuloUtils.setProperty(miniAccumuloConfig, Property.MONITOR_PORT, "9995");
 
+    final String geowaveHome = System.getProperty("geowave.home", ".");
+    final File libDir = new File(geowaveHome, DEFAULT_LIB_DIR);
+    final URL[] extraLibraries;
+    if (libDir.exists() && libDir.isDirectory()) {
+      extraLibraries =
+          Arrays.stream(
+              libDir.listFiles(
+                  (f) -> f.isFile() && f.getName().toLowerCase().endsWith(".jar"))).map(f -> {
+                    try {
+                      return f.toURI().toURL();
+                    } catch (final MalformedURLException e) {
+                      LOGGER.warn("Unable to add to accumulo classpath", e);
+                    }
+                    return null;
+                  }).filter(Objects::nonNull).toArray(URL[]::new);
+    } else {
+      extraLibraries = new URL[0];
+    }
     final MiniAccumuloCluster accumulo =
         MiniAccumuloClusterFactory.newAccumuloCluster(
             miniAccumuloConfig,
-            AccumuloMiniCluster.class);
+            AccumuloMiniCluster.class,
+            extraLibraries);
     accumulo.start();
 
     MiniAccumuloUtils.exec(accumulo, Monitor.class);

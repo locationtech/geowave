@@ -11,7 +11,6 @@ package org.locationtech.geowave.datastore.dynamodb.operations;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.log4j.Logger;
 import org.locationtech.geowave.core.store.operations.MetadataDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataType;
@@ -21,7 +20,6 @@ import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
 
 public class DynamoDBMetadataDeleter implements MetadataDeleter {
-  private static final Logger LOGGER = Logger.getLogger(DynamoDBMetadataDeleter.class);
 
   private final DynamoDBOperations operations;
   private final MetadataType metadataType;

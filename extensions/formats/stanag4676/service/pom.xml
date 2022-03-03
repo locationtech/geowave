@@ -152,7 +152,7 @@
 					<systemProperties>
 						<org.apache.commons.logging.Log>org.apache.commons.logging.impl.Log4JLogger</org.apache.commons.logging.Log>
 						<slf4j>false</slf4j>
-						<log4j.configuration>file:${basedir}/config/log4j.properties</log4j.configuration>
+						<log4j.configurationFile>file:${basedir}/config/log4j.properties</log4j.configurationFile>
 					</systemProperties>
 				</configuration>
 			</plugin>

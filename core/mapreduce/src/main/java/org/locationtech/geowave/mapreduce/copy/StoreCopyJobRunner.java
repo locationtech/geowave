@@ -15,7 +15,8 @@ import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.CommandLineOperationParams;
 import org.locationtech.geowave.core.cli.parser.OperationParser;
@@ -36,7 +37,7 @@ import org.locationtech.geowave.mapreduce.output.GeoWaveOutputFormat;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
 
 public class StoreCopyJobRunner extends Configured implements Tool {
-  private static final Logger LOGGER = Logger.getLogger(StoreCopyJobRunner.class);
+  private static final Logger LOGGER = LogManager.getLogger(StoreCopyJobRunner.class);
 
   private final DataStorePluginOptions inputStoreOptions;
   private final DataStorePluginOptions outputStoreOptions;

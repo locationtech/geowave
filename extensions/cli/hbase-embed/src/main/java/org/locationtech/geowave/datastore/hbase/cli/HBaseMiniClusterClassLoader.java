@@ -36,7 +36,7 @@ public class HBaseMiniClusterClassLoader extends URLClassLoader {
           "sunw.",
           // logging
           "org.apache.commons.logging",
-          "org.apache.log4j",
+          "org.apache.logging.log4j",
           "com.hadoop",
           // Hadoop/HBase/ZK:
           "org.apache.hadoop.security",

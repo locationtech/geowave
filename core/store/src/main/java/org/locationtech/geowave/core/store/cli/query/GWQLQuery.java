@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.commons.lang3.time.StopWatch;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.config.Configurator;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
@@ -105,7 +108,7 @@ public class GWQLQuery extends DefaultOperation implements Command {
   @Override
   public void execute(final OperationParams params) {
     if (debug) {
-      org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.DEBUG);
+      Configurator.setLevel(LogManager.getRootLogger().getName(), Level.DEBUG);
     }
 
     // Ensure we have all the required arguments

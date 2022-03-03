@@ -19,7 +19,8 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -86,7 +87,7 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
       options = {"enableVisibility=true", "enableSecondaryIndexing=false"})
   protected DataStorePluginOptions dataStoreOptions;
 
-  private static final Logger LOGGER = Logger.getLogger(AbstractGeoWaveIT.class);
+  private static final Logger LOGGER = LogManager.getLogger(AbstractGeoWaveIT.class);
   private static long startMillis;
 
   private static final int TOTAL_FEATURES = 800;

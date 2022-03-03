@@ -15,7 +15,8 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.DataStoreOptions;
@@ -41,7 +42,7 @@ import com.google.common.collect.Iterators;
 
 abstract class BaseFilteredIndexQuery extends BaseQuery {
   protected List<QueryFilter> clientFilters;
-  private static final Logger LOGGER = Logger.getLogger(BaseFilteredIndexQuery.class);
+  private static final Logger LOGGER = LogManager.getLogger(BaseFilteredIndexQuery.class);
 
   public BaseFilteredIndexQuery(
       final short[] adapterIds,

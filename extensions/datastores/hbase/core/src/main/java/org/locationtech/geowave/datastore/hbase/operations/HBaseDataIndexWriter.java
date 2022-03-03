@@ -14,7 +14,8 @@ import org.apache.hadoop.hbase.client.Mutation;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.RowMutations;
 import org.apache.hadoop.hbase.security.visibility.CellVisibility;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
@@ -23,7 +24,7 @@ import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.operations.RowWriter;
 
 public class HBaseDataIndexWriter implements RowWriter {
-  private static final Logger LOGGER = Logger.getLogger(HBaseWriter.class);
+  private static final Logger LOGGER = LogManager.getLogger(HBaseWriter.class);
 
   private final BufferedMutator mutator;
 

@@ -8,7 +8,6 @@
  */
 package org.locationtech.geowave.core.store.base;
 
-import org.apache.log4j.Logger;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
@@ -28,7 +27,6 @@ import org.locationtech.geowave.core.store.util.NativeEntryTransformer;
  * ID queries and row prefix queries.
  */
 abstract class AbstractBaseRowQuery<T> extends BaseQuery {
-  private static final Logger LOGGER = Logger.getLogger(AbstractBaseRowQuery.class);
 
   public AbstractBaseRowQuery(
       final Index index,

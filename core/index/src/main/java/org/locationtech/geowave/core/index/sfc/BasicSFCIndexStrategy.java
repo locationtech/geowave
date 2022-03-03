@@ -15,7 +15,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.IndexUtils;
@@ -36,7 +37,7 @@ import org.locationtech.geowave.core.index.sfc.binned.BinnedSFCUtils;
 import org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy;
 
 public class BasicSFCIndexStrategy implements NumericIndexStrategy {
-  private static final Logger LOGGER = Logger.getLogger(BasicSFCIndexStrategy.class);
+  private static final Logger LOGGER = LogManager.getLogger(BasicSFCIndexStrategy.class);
   private SpaceFillingCurve sfc;
   private NumericDimensionDefinition[] baseDefinitions;
 

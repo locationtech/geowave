@@ -172,7 +172,7 @@ public class GeoWaveInputFormat<T> extends InputFormat<GeoWaveInputKey, T> {
           // Also store for use the mapper and reducers
           final Short adapterId = internalAdapterStore.getAdapterId(typeName);
           if (adapterId == null) {
-            LOGGER.error("Cannot fine type '" + typeName + "'");
+            LOGGER.error("Cannot find type '" + typeName + "'");
             continue;
           }
           JobContextAdapterStore.addDataAdapter(config, adapterStore.getAdapter(adapterId));

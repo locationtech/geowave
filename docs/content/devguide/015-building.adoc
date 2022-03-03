@@ -12,9 +12,10 @@ To build the project source, navigate to the root directory of the GeoWave proje
 
 [source, bash]
 ----
-$ mvn clean install <1>
+$ mvn clean install <1> <2>
 ----
 <1> You can speed up the build by skipping unit tests and bug checks by adding `-Dfindbugs.skip -Dspotbugs.skip -DskipTests`
+<2> You can prevent GDAL-related tests from running by setting an environment variable called GDAL_DISABLED to true: `export GDAL_DISABLED=true`
 
 After executing the command, Maven will search for all of the projects that need to be built and begin the build process.  The initial output of the command should look something like the following:
 
@@ -94,6 +95,11 @@ Activate the environment:
 [source, bash]
 ----
 $ source venv/bin/activate
+----
+
+Install requirements in the activated python virtual environment:
+----
+$ pip install -r requirements.txt
 ----
 
 Install necessary build tools:

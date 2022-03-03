@@ -145,7 +145,7 @@ public class LandsatIT extends AbstractGeoWaveIT {
   public void testMosaic() throws Exception {
 
     // Skip this test if we're on a Mac
-    org.junit.Assume.assumeTrue(isNotMac());
+    org.junit.Assume.assumeTrue(isNotMac() && isGDALEnabled());
 
     JAIExt.initJAIEXT();
     MapProjection.SKIP_SANITY_CHECKS = true;
@@ -229,6 +229,14 @@ public class LandsatIT extends AbstractGeoWaveIT {
         0,
         0.005);
     MapProjection.SKIP_SANITY_CHECKS = false;
+  }
+
+  private static boolean isGDALEnabled() {
+    String enabled = System.getenv("GDAL_DISABLED");
+    if (enabled != null && enabled.trim().equalsIgnoreCase("true")) {
+      return false;
+    }
+    return true;
   }
 
   private static boolean isNotMac() {

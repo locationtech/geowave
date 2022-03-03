@@ -28,7 +28,6 @@
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-analytic-spark</artifactId>
-			<version>${project.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>javax.ws.rs</groupId>
@@ -148,7 +147,6 @@
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-datastore-accumulo</artifactId>
-			<version>${project.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.eclipse.jetty</groupId>
@@ -331,7 +329,6 @@
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-cli-accumulo-embed</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
@@ -346,7 +343,6 @@
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-cli-bigtable-embed</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
@@ -396,7 +392,6 @@
 		<dependency>
 			<groupId>org.apache.accumulo</groupId>
 			<artifactId>accumulo-test</artifactId>
-			<version>${accumulo.version}</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>accumulo-native</artifactId>
@@ -407,7 +402,6 @@
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId>hadoop-minikdc</artifactId>
-			<version>${hadoop.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
@@ -666,9 +660,9 @@
 										<testStoreOptions>${testStoreOptions}</testStoreOptions>
 										<testServerEnabled>${testServerEnabled}</testServerEnabled>
 										<geoserver.version>${geoserver.version}</geoserver.version>
-										<log4j.configuration>
+										<log4j.configurationFile>
 											file:${project.build.testOutputDirectory}/log4j-test.properties
-										</log4j.configuration>
+										</log4j.configurationFile>
 										<java.util.logging.config.file>
 											${project.build.testOutputDirectory}/jul-test.properties
 										</java.util.logging.config.file>
@@ -849,6 +843,38 @@
 				<skipITs>false</skipITs>
 				<testStoreType>FILESYSTEM</testStoreType>
 			</properties>
+		</profile>
+		<profile>
+			<id>compatibility</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<version>2.9</version>
+						<executions>
+							<execution>
+								<id>setup-accumulo</id>
+								<goals>
+									<goal>copy</goal>
+								</goals>
+								<phase>pre-integration-test</phase>
+								<configuration>
+									<artifactItems>
+										<artifactItem>
+											<groupId>log4j</groupId>
+											<artifactId>log4j</artifactId>
+											<version>1.2.17</version>
+										</artifactItem>
+									</artifactItems>
+									<outputDirectory>${project.build.directory}/accumulo/lib
+									</outputDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 		<profile>
 			<id>bigtable-it</id>
