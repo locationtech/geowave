@@ -121,7 +121,7 @@ We work to maintain a N and N-1 tested and supported version pace for the follow
 
 | GeoServer | GeoTools | Accumulo | HBase | Hadoop | Java |
 |:---------:|:--------:|:--------:|:-----:|:------:|:----:|
-| 2.14.x | 20.x | [1.7.x,1.9.x] | [1.1.x,1.4.x] | 2.x | Java8 |
+| 2.19.x | 25.x | [1.9.x,2.0.x] | 2.4.x | 3.1.x | Java8 |
 
 * [Apache Maven](http://maven.apache.org/) 3.x or greater is required for building
 
