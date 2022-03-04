@@ -27,7 +27,7 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 @GeowaveOperation(name = "copymr", parentOperation = StoreSection.class)
-@Parameters(commandDescription = "Copy all data from one data store to another using MapReduce")
+@Parameters(commandDescription = "Copy all data from one data store to another existing data store using MapReduce")
 public class CopyCommand extends DefaultOperation implements Command {
   @Parameter(description = "<input store name> <output store name>")
   private List<String> parameters = new ArrayList<>();

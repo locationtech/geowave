@@ -14,7 +14,7 @@ geowave-store-copy - Copy a data store
 [[store-copy-description]]
 ==== DESCRIPTION
 
-This command copies all of the data from one data store to another.
+This command copies all of the data from one data store to another existing data store.
 
 [[store-copy-examples]]
 ==== EXAMPLES
