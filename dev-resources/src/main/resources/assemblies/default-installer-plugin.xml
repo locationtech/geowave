@@ -59,6 +59,7 @@
 				<exclude>*:commons-digester</exclude>
 				<exclude>*:jcommander</exclude>
 				<exclude>*:log4j</exclude>
+				<exclude>*:log4j-slf4j*</exclude>
 				<exclude>*:zookeeper</exclude>
 				<exclude>*:metrics-core</exclude>
 				<exclude>joda-time:joda-time</exclude>
