@@ -108,7 +108,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/numeric/NumericFieldConstraints.html" title="class in org.locationtech.geowave.core.store.query.filter.expression.numeric">NumericFieldConstraints</a></code></td>
-<td class="colLast"><span class="typeNameLabel">TemporalNotEqualTo.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalNotEqualTo.html#getConstraints-org.threeten.extra.Interval-java.lang.Double-java.lang.Double-boolean-boolean-">getConstraints</a></span>(org.threeten.extra.Interval&nbsp;literal,
+<td class="colLast"><span class="typeNameLabel">After.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/After.html#getConstraints-org.threeten.extra.Interval-java.lang.Double-java.lang.Double-boolean-boolean-">getConstraints</a></span>(org.threeten.extra.Interval&nbsp;literal,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;minValue,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;maxValue,
               boolean&nbsp;reversed,
@@ -116,7 +116,7 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/numeric/NumericFieldConstraints.html" title="class in org.locationtech.geowave.core.store.query.filter.expression.numeric">NumericFieldConstraints</a></code></td>
-<td class="colLast"><span class="typeNameLabel">After.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/After.html#getConstraints-org.threeten.extra.Interval-java.lang.Double-java.lang.Double-boolean-boolean-">getConstraints</a></span>(org.threeten.extra.Interval&nbsp;literal,
+<td class="colLast"><span class="typeNameLabel">DuringOrAfter.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/DuringOrAfter.html#getConstraints-org.threeten.extra.Interval-java.lang.Double-java.lang.Double-boolean-boolean-">getConstraints</a></span>(org.threeten.extra.Interval&nbsp;literal,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;minValue,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;maxValue,
               boolean&nbsp;reversed,
@@ -139,26 +139,26 @@
               boolean&nbsp;exact)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/numeric/NumericFieldConstraints.html" title="class in org.locationtech.geowave.core.store.query.filter.expression.numeric">NumericFieldConstraints</a></code></td>
-<td class="colLast"><span class="typeNameLabel">TimeOverlaps.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TimeOverlaps.html#getConstraints-org.threeten.extra.Interval-java.lang.Double-java.lang.Double-boolean-boolean-">getConstraints</a></span>(org.threeten.extra.Interval&nbsp;literal,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;minValue,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;maxValue,
+<td class="colFirst"><code>protected abstract <a href="../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/numeric/NumericFieldConstraints.html" title="class in org.locationtech.geowave.core.store.query.filter.expression.numeric">NumericFieldConstraints</a></code></td>
+<td class="colLast"><span class="typeNameLabel">BinaryTemporalPredicate.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/BinaryTemporalPredicate.html#getConstraints-org.threeten.extra.Interval-java.lang.Double-java.lang.Double-boolean-boolean-">getConstraints</a></span>(org.threeten.extra.Interval&nbsp;literal,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;minRange,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;maxRange,
               boolean&nbsp;reversed,
               boolean&nbsp;exact)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/numeric/NumericFieldConstraints.html" title="class in org.locationtech.geowave.core.store.query.filter.expression.numeric">NumericFieldConstraints</a></code></td>
-<td class="colLast"><span class="typeNameLabel">BeforeOrDuring.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/BeforeOrDuring.html#getConstraints-org.threeten.extra.Interval-java.lang.Double-java.lang.Double-boolean-boolean-">getConstraints</a></span>(org.threeten.extra.Interval&nbsp;literal,
+<td class="colLast"><span class="typeNameLabel">TemporalNotEqualTo.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TemporalNotEqualTo.html#getConstraints-org.threeten.extra.Interval-java.lang.Double-java.lang.Double-boolean-boolean-">getConstraints</a></span>(org.threeten.extra.Interval&nbsp;literal,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;minValue,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;maxValue,
               boolean&nbsp;reversed,
               boolean&nbsp;exact)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected abstract <a href="../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/numeric/NumericFieldConstraints.html" title="class in org.locationtech.geowave.core.store.query.filter.expression.numeric">NumericFieldConstraints</a></code></td>
-<td class="colLast"><span class="typeNameLabel">BinaryTemporalPredicate.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/BinaryTemporalPredicate.html#getConstraints-org.threeten.extra.Interval-java.lang.Double-java.lang.Double-boolean-boolean-">getConstraints</a></span>(org.threeten.extra.Interval&nbsp;literal,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;minRange,
-              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;maxRange,
+<td class="colFirst"><code><a href="../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/numeric/NumericFieldConstraints.html" title="class in org.locationtech.geowave.core.store.query.filter.expression.numeric">NumericFieldConstraints</a></code></td>
+<td class="colLast"><span class="typeNameLabel">TimeOverlaps.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/TimeOverlaps.html#getConstraints-org.threeten.extra.Interval-java.lang.Double-java.lang.Double-boolean-boolean-">getConstraints</a></span>(org.threeten.extra.Interval&nbsp;literal,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;minValue,
+              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;maxValue,
               boolean&nbsp;reversed,
               boolean&nbsp;exact)</code>&nbsp;</td>
 </tr>
@@ -172,7 +172,7 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../../../org/locationtech/geowave/core/store/query/filter/expression/numeric/NumericFieldConstraints.html" title="class in org.locationtech.geowave.core.store.query.filter.expression.numeric">NumericFieldConstraints</a></code></td>
-<td class="colLast"><span class="typeNameLabel">DuringOrAfter.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/DuringOrAfter.html#getConstraints-org.threeten.extra.Interval-java.lang.Double-java.lang.Double-boolean-boolean-">getConstraints</a></span>(org.threeten.extra.Interval&nbsp;literal,
+<td class="colLast"><span class="typeNameLabel">BeforeOrDuring.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../org/locationtech/geowave/core/geotime/store/query/filter/expression/temporal/BeforeOrDuring.html#getConstraints-org.threeten.extra.Interval-java.lang.Double-java.lang.Double-boolean-boolean-">getConstraints</a></span>(org.threeten.extra.Interval&nbsp;literal,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;minValue,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&nbsp;maxValue,
               boolean&nbsp;reversed,
