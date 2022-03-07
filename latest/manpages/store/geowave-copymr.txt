@@ -14,7 +14,7 @@ geowave-store-copymr - Copy a data store using MapReduce
 [[store-copymr-description]]
 ==== DESCRIPTION
 
-This command copies all of the data from one data store to another using MapReduce.
+This command copies all of the data from one data store to another existing data store using MapReduce.
 
 [[store-copymr-options]]
 ==== OPTIONS
