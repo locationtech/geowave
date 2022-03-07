@@ -21,7 +21,7 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "copy", parentOperation = StoreSection.class)
-@Parameters(commandDescription = "Copy all data from one data store to another")
+@Parameters(commandDescription = "Copy all data from one data store to another existing data store")
 public class CopyStoreCommand extends DefaultOperation implements Command {
   @Parameter(description = "<input store name> <output store name>")
   private List<String> parameters = new ArrayList<>();
