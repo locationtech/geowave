@@ -101,7 +101,7 @@ public class CustomCRSLandsatIT extends AbstractGeoWaveIT {
   protected DataStorePluginOptions dataStoreOptions;
 
   private static final String CUSTOM_REFERENCE_LANDSAT_IMAGE_PATH =
-      TestUtils.isOracleJDK() ? "src/test/resources/landsat/expected_custom_oraclejdk.png"
+      TestUtils.isOracleJDK() ? "src/test/resources/landsat/expected_custom_oraclejre.png"
           : "src/test/resources/landsat/expected_custom.png";
   private static final int MIN_PATH = 198;
   private static final int MAX_PATH = 199;
@@ -183,7 +183,7 @@ public class CustomCRSLandsatIT extends AbstractGeoWaveIT {
             BandFeatureIterator.BAND_ATTRIBUTE_NAME,
             BandFeatureIterator.BAND_ATTRIBUTE_NAME,
             SceneFeatureIterator.ACQUISITION_DATE_ATTRIBUTE_NAME,
-            "2016-06-01T00:00:00Z",
+            "2022-03-10T00:00:00Z",
             MIN_PATH,
             MAX_PATH,
             MIN_ROW,
@@ -273,8 +273,8 @@ public class CustomCRSLandsatIT extends AbstractGeoWaveIT {
   }
 
   private static boolean isGDALEnabled() {
-    String enabled = System.getenv("GDAL_DISABLED");
-    if (enabled != null && enabled.trim().equalsIgnoreCase("true")) {
+    final String enabled = System.getenv("GDAL_DISABLED");
+    if ((enabled != null) && enabled.trim().equalsIgnoreCase("true")) {
       return false;
     }
     return true;
