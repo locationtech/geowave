@@ -208,20 +208,20 @@ implements org.geotools.data.simple.SimpleFeatureIterator</pre>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/landsat8/BandFeatureIterator.html#getDownloadImage-java.lang.String-int-int-java.lang.String-">getDownloadImage</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;entityId,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/landsat8/BandFeatureIterator.html#getDownloadImage-java.lang.String-int-int-java.lang.String-">getDownloadImage</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;productId,
                 int&nbsp;path,
                 int&nbsp;row,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;bandId)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/landsat8/BandFeatureIterator.html#getDownloadIndexHtml-java.lang.String-int-int-">getDownloadIndexHtml</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;entityId,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/landsat8/BandFeatureIterator.html#getDownloadIndexHtml-java.lang.String-int-int-">getDownloadIndexHtml</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;productId,
                     int&nbsp;path,
                     int&nbsp;row)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/landsat8/BandFeatureIterator.html#getDownloadPath-java.lang.String-int-int-">getDownloadPath</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;entityId,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../org/locationtech/geowave/format/landsat8/BandFeatureIterator.html#getDownloadPath-java.lang.String-int-int-">getDownloadPath</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;productId,
                int&nbsp;path,
                int&nbsp;row)</code>&nbsp;</td>
 </tr>
@@ -427,7 +427,7 @@ implements org.geotools.data.simple.SimpleFeatureIterator</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getDownloadPath</h4>
-<pre>protected static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getDownloadPath(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;entityId,
+<pre>protected static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getDownloadPath(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;productId,
                                         int&nbsp;path,
                                         int&nbsp;row)</pre>
 </li>
@@ -438,7 +438,7 @@ implements org.geotools.data.simple.SimpleFeatureIterator</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getDownloadIndexHtml</h4>
-<pre>protected static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getDownloadIndexHtml(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;entityId,
+<pre>protected static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getDownloadIndexHtml(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;productId,
                                              int&nbsp;path,
                                              int&nbsp;row)</pre>
 </li>
@@ -449,7 +449,7 @@ implements org.geotools.data.simple.SimpleFeatureIterator</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getDownloadImage</h4>
-<pre>protected static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getDownloadImage(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;entityId,
+<pre>protected static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getDownloadImage(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;productId,
                                          int&nbsp;path,
                                          int&nbsp;row,
                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;bandId)</pre>
