@@ -27,7 +27,7 @@ public class Landsat8BasicCommandLineOptions {
       names = "--cql",
       description = "An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: shape (Geometry) in "
           + GeometryUtils.DEFAULT_CRS_STR
-          + ", acquisitionDate (Date), cloudCover (double), processingLevel (String), path (int), row (int) and the feature ID is entityId for the scene.  Additionally attributes of the individuals band can be used such as band (String), sizeMB (double), and bandDownloadUrl (String)",
+          + ", acquisitionDate (Date), cloudCover (double), processingLevel (String), path (int), row (int) and the feature ID is productId for the scene.  Additionally attributes of the individuals band can be used such as band (String), sizeMB (double), and bandDownloadUrl (String)",
       converter = ConvertCQLStrToFilterConverter.class)
   private FilterParameter cqlFilter = new FilterParameter(null, null);
 

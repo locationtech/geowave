@@ -110,7 +110,7 @@ public class VectorIngestRunner extends AnalyzeRunner {
       final Object attrValue = firstBandOfScene.getAttribute(attrName);
       if (attrValue != null) {
         bldr.set(i, attrValue);
-        if (attrName.equals(SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME)) {
+        if (attrName.equals(SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME)) {
           fid = attrValue.toString();
         }
       }

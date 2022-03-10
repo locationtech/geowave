@@ -40,13 +40,13 @@ public class Landsat8RasterIngestCommandLineOptions {
   @Parameter(
       names = "--coverage",
       description = "The name to give to each unique coverage. Freemarker templating can be used for variable substition based on the same attributes used for filtering.  The default coverage name is '${"
-          + SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME
+          + SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME
           + "}_${"
           + BandFeatureIterator.BAND_ATTRIBUTE_NAME
           + "}'.  If ${band} is unused in the coverage name, all bands will be merged together into the same coverage.")
   protected String coverage =
       "${"
-          + SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME
+          + SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME
           + "}_${"
           + BandFeatureIterator.BAND_ATTRIBUTE_NAME
           + "}";
@@ -122,23 +122,23 @@ public class Landsat8RasterIngestCommandLineOptions {
   }
 
   public void setCreateHistogram(final boolean createHistogram) {
-    this.histogram = createHistogram;
+    histogram = createHistogram;
   }
 
   public void setCreatePyramid(final boolean createPyramid) {
-    this.pyramid = createPyramid;
+    pyramid = createPyramid;
   }
 
   public void setRetainImages(final boolean retainImages) {
-    this.retainimages = retainImages;
+    retainimages = retainImages;
   }
 
   public void setTileSize(final int tileSize) {
-    this.tilesize = tileSize;
+    tilesize = tileSize;
   }
 
   public void setCoverageName(final String coverageName) {
-    this.coverage = coverageName;
+    coverage = coverageName;
   }
 
   public void setCoverageConverter(final String coverageConverter) {

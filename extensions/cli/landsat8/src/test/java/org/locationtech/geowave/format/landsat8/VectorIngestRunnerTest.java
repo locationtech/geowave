@@ -72,7 +72,7 @@ public class VectorIngestRunnerTest {
     runner.runInternal(params);
     try (CloseableIterator<Object> results =
         getStorePluginOptions(params).createDataStore().query(QueryBuilder.newBuilder().build())) {
-      assertTrue("Store is not empty", results.hasNext());
+      assertTrue("Store is empty", results.hasNext());
     }
 
     // Not sure what assertions can be made about the index.
