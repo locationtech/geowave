@@ -70,7 +70,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
   private static final String WMS_VERSION = "1.3";
   private static final String WMS_URL_PREFIX = "/geoserver/wms";
   private static final String REFERENCE_WMS_IMAGE_PATH =
-      TestUtils.isOracleJDK() ? "src/test/resources/wms/wms-grid-oraclejdk.gif"
+      TestUtils.isOracleJRE() ? "src/test/resources/wms/wms-grid-oraclejdk.gif"
           : "src/test/resources/wms/wms-grid.gif";
 
   private static final String testName = "GeoServerIngestIT";

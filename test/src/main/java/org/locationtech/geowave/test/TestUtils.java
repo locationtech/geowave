@@ -184,7 +184,7 @@ public class TestUtils {
     return VersionUtil.compareVersions(VersionInfo.getVersion(), "2.2.0") >= 0;
   }
 
-  public static boolean isOracleJDK() {
+  public static boolean isOracleJRE() {
     return (System.getProperty("java.vm.name") != null)
         && System.getProperty("java.vm.name").contains("HotSpot");
   }
