@@ -413,7 +413,7 @@ public class RasterIngestRunner extends DownloadRunner {
                   + Arrays.toString(bandsIngested)
                   + "').  To merge bands all scenes must use the same bands.  Skipping scene'"
                   + lastSceneBands.get(0).getAttribute(
-                      SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME)
+                      SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME)
                   + "'.");
           lastSceneBands.clear();
           return;
@@ -425,7 +425,7 @@ public class RasterIngestRunner extends DownloadRunner {
                     + coverageName
                     + "'.  Skipping scene'"
                     + lastSceneBands.get(0).getAttribute(
-                        SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME)
+                        SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME)
                     + "'.");
             lastSceneBands.clear();
             return;

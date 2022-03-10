@@ -45,13 +45,13 @@ public class AnalyzeRunner {
               landsatOptions.getCqlFilter(),
               landsatOptions.getWorkspaceDir())) {
         final AnalysisInfo info = new AnalysisInfo();
-        String prevEntityId = null;
+        String prevProductId = null;
         while (bands.hasNext()) {
           final SimpleFeature band = bands.next();
-          final String entityId =
-              (String) band.getAttribute(SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME);
-          if ((prevEntityId == null) || !prevEntityId.equals(entityId)) {
-            prevEntityId = entityId;
+          final String productId =
+              (String) band.getAttribute(SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME);
+          if ((prevProductId == null) || !prevProductId.equals(productId)) {
+            prevProductId = productId;
             nextScene(band, info);
           }
           nextBand(band, info);
@@ -78,7 +78,7 @@ public class AnalyzeRunner {
 
   protected static class AnalysisInfo {
     private final TreeMap<String, Float> bandIdToMbMap = new TreeMap<>();
-    private final TreeMap<String, SimpleFeature> entityBandIdToSimpleFeatureMap = new TreeMap<>();
+    private final TreeMap<String, SimpleFeature> productBandIdToSimpleFeatureMap = new TreeMap<>();
     private int sceneCount = 0;
     private final Set<WRS2Key> wrs2Keys = new HashSet<>();
     private int minRow = Integer.MAX_VALUE;
@@ -99,7 +99,7 @@ public class AnalyzeRunner {
     private void nextScene(final SimpleFeature currentBand) {
       printSceneInfo();
       sceneCount++;
-      entityBandIdToSimpleFeatureMap.clear();
+      productBandIdToSimpleFeatureMap.clear();
       final int path = (int) currentBand.getAttribute(SceneFeatureIterator.PATH_ATTRIBUTE_NAME);
       final int row = (int) currentBand.getAttribute(SceneFeatureIterator.ROW_ATTRIBUTE_NAME);
       final float cloudCover =
@@ -138,7 +138,7 @@ public class AnalyzeRunner {
         final SimpleDateFormat sdf =
             new SimpleDateFormat(SceneFeatureIterator.AQUISITION_DATE_FORMAT);
         boolean first = true;
-        for (final Entry<String, SimpleFeature> entry : entityBandIdToSimpleFeatureMap.entrySet()) {
+        for (final Entry<String, SimpleFeature> entry : productBandIdToSimpleFeatureMap.entrySet()) {
           final String bandId = entry.getKey();
           final SimpleFeature feature = entry.getValue();
           if (first) {
@@ -148,7 +148,7 @@ public class AnalyzeRunner {
             // print scene info
             System.out.println(
                 "\n<--   "
-                    + feature.getAttribute(SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME)
+                    + feature.getAttribute(SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME)
                     + "   -->");
             System.out.println(
                 "Acquisition Date: "
@@ -179,7 +179,7 @@ public class AnalyzeRunner {
     }
 
     private void addBandInfo(final SimpleFeature band) {
-      entityBandIdToSimpleFeatureMap.put(
+      productBandIdToSimpleFeatureMap.put(
           (String) band.getAttribute(BandFeatureIterator.BAND_ATTRIBUTE_NAME),
           band);
     }

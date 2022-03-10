@@ -20,7 +20,7 @@ This command downloads Landsat 8 imagery to a local directory.
 ==== OPTIONS
 
 *--cql* _<filter>_::
-  An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: `shape` (Geometry), `acquisitionDate` (Date), `cloudCover` (double), `processingLevel` (String), `path` (int), `row` (int) and the feature ID is `entityId` for the scene.  Additionally attributes of the individuals band can be used such as `band` (String), `sizeMB` (double), and `bandDownloadUrl` (String).
+  An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: `shape` (Geometry), `acquisitionDate` (Date), `cloudCover` (double), `processingLevel` (String), `path` (int), `row` (int) and the feature ID is `productId` for the scene.  Additionally attributes of the individuals band can be used such as `band` (String), `sizeMB` (double), and `bandDownloadUrl` (String).
 
 *--nbestbands* _<count>_::
   An option to identify and only use a set number of bands with the best cloud cover.

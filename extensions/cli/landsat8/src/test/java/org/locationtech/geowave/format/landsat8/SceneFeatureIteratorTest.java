@@ -34,7 +34,7 @@ public class SceneFeatureIteratorTest {
       public boolean matches(final Object item) {
         final SimpleFeature feature = (SimpleFeature) item;
 
-        return (feature.getProperty("entityId") != null)
+        return (feature.getProperty("productId") != null)
             && (feature.getProperty("acquisitionDate") != null)
             && (feature.getProperty("cloudCover") != null)
             && (feature.getProperty("processingLevel") != null)
@@ -46,7 +46,7 @@ public class SceneFeatureIteratorTest {
       @Override
       public void describeTo(final Description description) {
         description.appendText(
-            "feature should have properties {entityId, acquisitionDate, cloudCover, processingLevel, path, row, sceneDownloadUrl}");
+            "feature should have properties {productId, acquisitionDate, cloudCover, processingLevel, path, row, sceneDownloadUrl}");
       }
     };
   }
