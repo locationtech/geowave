@@ -25,6 +25,7 @@
 <p><strong>Merged pull requests:</strong></p>
 <ul>
 <li>updates to landsat CLI tool to match AWS updates <a href="https://github.com/locationtech/geowave/pull/1876">#1876</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
+<li>updates to support geoserver cli logging <a href="https://github.com/locationtech/geowave/pull/1875">#1875</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Various Updates <a href="https://github.com/locationtech/geowave/pull/1874">#1874</a> (<a href="https://github.com/mzagorskirs">mzagorskirs</a>)</li>
 <li>Support backwards compatibility for basic data type adapters <a href="https://github.com/locationtech/geowave/pull/1869">#1869</a> (<a href="https://github.com/jdgarrett">jdgarrett</a>)</li>
 <li>maintained empty strings in serialization <a href="https://github.com/locationtech/geowave/pull/1868">#1868</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
@@ -660,7 +661,6 @@
 <li>Quick fixes to latest dependency consolidation <a href="https://github.com/locationtech/geowave/pull/1258">#1258</a> (<a href="https://github.com/JWileczek">JWileczek</a>)</li>
 <li>Zeppelin changes <a href="https://github.com/locationtech/geowave/pull/1257">#1257</a> (<a href="https://github.com/JWileczek">JWileczek</a>)</li>
 <li>Updating packages and asciidocs links in documentation <a href="https://github.com/locationtech/geowave/pull/1254">#1254</a> (<a href="https://github.com/mcarrier7">mcarrier7</a>)</li>
-<li>Updating documentation to add 0.9.6 to the releases tab <a href="https://github.com/locationtech/geowave/pull/1253">#1253</a> (<a href="https://github.com/mcarrier7">mcarrier7</a>)</li>
 <li>Removing scala spark project and consolidating dependencies <a href="https://github.com/locationtech/geowave/pull/1228">#1228</a> (<a href="https://github.com/JWileczek">JWileczek</a>)</li>
 </ul>
 <h2 id="v0.9.6-2017-11-21"><a href="https://github.com/locationtech/geowave/tree/v0.9.6">v0.9.6</a> (2017-11-21)</h2>
@@ -684,6 +684,7 @@
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
+<li>Updating documentation to add 0.9.6 to the releases tab <a href="https://github.com/locationtech/geowave/pull/1253">#1253</a> (<a href="https://github.com/mcarrier7">mcarrier7</a>)</li>
 <li>updates to remove old dependency <a href="https://github.com/locationtech/geowave/pull/1252">#1252</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
 <li>Modified gwtomcat service script to be more robust <a href="https://github.com/locationtech/geowave/pull/1249">#1249</a> (<a href="https://github.com/ayk33">ayk33</a>)</li>
 <li>fixed bootstrap script to use exact token <a href="https://github.com/locationtech/geowave/pull/1248">#1248</a> (<a href="https://github.com/rfecher">rfecher</a>)</li>
@@ -1469,6 +1470,7 @@
 <li>Corrected one command and added a tip on inspecting configs <a href="https://github.com/locationtech/geowave/pull/418">#418</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Roll to 0.8.8-SNAPSHOT <a href="https://github.com/locationtech/geowave/pull/413">#413</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Geolife Ingest handling of bad coordinates <a href="https://github.com/locationtech/geowave/pull/411">#411</a> (<a href="https://github.com/dcy2003">dcy2003</a>)</li>
+<li>Stop adding timestamp to javadocs html <a href="https://github.com/locationtech/geowave/pull/407">#407</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 </ul>
 <h2 id="v0.8.7-2015-05-28"><a href="https://github.com/locationtech/geowave/tree/v0.8.7">v0.8.7</a> (2015-05-28)</h2>
 <p><a href="https://github.com/locationtech/geowave/compare/v0.8.6...v0.8.7">Full Changelog</a></p>
@@ -1503,7 +1505,6 @@
 <li>Updates for 0.8.7 release <a href="https://github.com/locationtech/geowave/pull/412">#412</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Final tweaks to documentation before release <a href="https://github.com/locationtech/geowave/pull/409">#409</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Updated jace so that jace-core-runtime and AWT are no longer needed. <a href="https://github.com/locationtech/geowave/pull/408">#408</a> (<a href="https://github.com/jwomeara">jwomeara</a>)</li>
-<li>Stop adding timestamp to javadocs html <a href="https://github.com/locationtech/geowave/pull/407">#407</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Documentation updates and fix for rpm dependencies <a href="https://github.com/locationtech/geowave/pull/405">#405</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>Build dependencies updated for geoserver 2.7.1 <a href="https://github.com/locationtech/geowave/pull/404">#404</a> (<a href="https://github.com/spohnan">spohnan</a>)</li>
 <li>GEOWAVE-398 &amp; GEOWAVE-401. DWITHIN corrected to handle the unit conv… <a href="https://github.com/locationtech/geowave/pull/403">#403</a> (<a href="https://github.com/rwgdrummer">rwgdrummer</a>)</li>
@@ -1821,6 +1822,7 @@
 <p><strong>Closed issues:</strong></p>
 <ul>
 <li>Coverity High Priority Defects <a href="https://github.com/locationtech/geowave/issues/99">#99</a></li>
+<li>GeoTools data store utilizing existing spatial-temporal index <a href="https://github.com/locationtech/geowave/issues/67">#67</a></li>
 </ul>
 <p><strong>Merged pull requests:</strong></p>
 <ul>
