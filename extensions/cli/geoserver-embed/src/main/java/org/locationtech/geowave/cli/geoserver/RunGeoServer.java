@@ -37,7 +37,6 @@ public class RunGeoServer extends DefaultOperation implements Command {
    */
   @Override
   public void execute(final OperationParams params) {
-
     Server jettyServer = null;
     try {
       jettyServer = options.getServer();
@@ -79,5 +78,9 @@ public class RunGeoServer extends DefaultOperation implements Command {
         }
       }
     }
+  }
+
+  public void setInteractive(final boolean interactive) {
+    this.interactive = interactive;
   }
 }

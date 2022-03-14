@@ -58,7 +58,7 @@
 											<type>war</type>
 											<overWrite>true</overWrite>
 											<outputDirectory>${project.build.directory}/geoserver</outputDirectory>
-											<excludes>**/commons-dbcp-1.4.jar,**/*-SNAPSHOT.jar,**/*20140915*.jar,**/slf4j*.jar,**/guava*.jar</excludes>
+											<excludes>**/commons-dbcp-1.4.jar,**/*-SNAPSHOT.jar,**/*20140915*.jar,**/guava*.jar</excludes>
 										</artifactItem>
 									</artifactItems>
 								</configuration>
