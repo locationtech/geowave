@@ -21,6 +21,7 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.webapp.WebAppClassLoader;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.beust.jcommander.Parameter;
@@ -81,7 +82,9 @@ public class RunGeoServerOptions {
     gsWebapp.setContextPath(GEOSERVER_CONTEXT_PATH);
     if (directory == null) {
       directory =
-          Paths.get(System.getProperty("geowave.home", "."), DEFAULT_GEOSERVER_DIR).toString();
+          Paths.get(
+              System.getProperty("geowave.home", DataStoreUtils.DEFAULT_GEOWAVE_DIRECTORY),
+              DEFAULT_GEOSERVER_DIR).toString();
     }
     try {
       // make sure geoserver uses a log4j 1.x properties file (log4j 2 is backwards compatible), but
