@@ -14,10 +14,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import it.geosolutions.jaiext.JAIExt;
 
+@Ignore
 public class AnalyzeRunnerTest {
   private PrintStream outBak = null;
   private final ByteArrayOutputStream output = new ByteArrayOutputStream();
