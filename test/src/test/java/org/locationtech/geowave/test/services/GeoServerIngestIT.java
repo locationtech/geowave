@@ -297,6 +297,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
             360,
             null,
             false);
+
     Assert.assertNotNull(ref);
     // being a little lenient because of differences in O/S rendering
     TestUtils.testTileAgainstReference(biSubsamplingWithoutError, ref, 0, 0.07);

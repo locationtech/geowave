@@ -8,6 +8,7 @@
  */
 package org.locationtech.geowave.core.store.util;
 
+import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -99,6 +100,8 @@ import com.google.common.collect.Maps;
  */
 public class DataStoreUtils {
   private static final Logger LOGGER = LoggerFactory.getLogger(DataStoreUtils.class);
+  public static String DEFAULT_GEOWAVE_DIRECTORY =
+      System.getProperty("user.home") + File.separator + "geowave";
 
   public static HintKey<double[]> MAX_RESOLUTION_SUBSAMPLING_PER_DIMENSION =
       new HintKey<>(double[].class);
@@ -244,13 +247,9 @@ public class DataStoreUtils {
   }
 
   public static boolean rowIdsMatch(final GeoWaveKey rowId1, final GeoWaveKey rowId2) {
-    if (!Arrays.equals(rowId1.getPartitionKey(), rowId2.getPartitionKey())) {
-      return false;
-    }
-    if (!Arrays.equals(rowId1.getSortKey(), rowId2.getSortKey())) {
-      return false;
-    }
-    if (rowId1.getAdapterId() != rowId2.getAdapterId()) {
+    if (!Arrays.equals(rowId1.getPartitionKey(), rowId2.getPartitionKey())
+        || !Arrays.equals(rowId1.getSortKey(), rowId2.getSortKey())
+        || (rowId1.getAdapterId() != rowId2.getAdapterId())) {
       return false;
     }
 
