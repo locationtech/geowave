@@ -124,11 +124,11 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">GeoJsonQueryOutputFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/GeoJsonQueryOutputFormat.html#output-org.locationtech.geowave.core.store.query.gwql.ResultSet-">output</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/query/gwql/ResultSet.html" title="interface in org.locationtech.geowave.core.store.query.gwql">ResultSet</a>&nbsp;results)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">ShapefileQueryOutputFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/ShapefileQueryOutputFormat.html#output-org.locationtech.geowave.core.store.query.gwql.ResultSet-">output</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/query/gwql/ResultSet.html" title="interface in org.locationtech.geowave.core.store.query.gwql">ResultSet</a>&nbsp;results)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">ShapefileQueryOutputFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/ShapefileQueryOutputFormat.html#output-org.locationtech.geowave.core.store.query.gwql.ResultSet-">output</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/query/gwql/ResultSet.html" title="interface in org.locationtech.geowave.core.store.query.gwql">ResultSet</a>&nbsp;results)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">GeoJsonQueryOutputFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/adapter/vector/query/GeoJsonQueryOutputFormat.html#output-org.locationtech.geowave.core.store.query.gwql.ResultSet-">output</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/query/gwql/ResultSet.html" title="interface in org.locationtech.geowave.core.store.query.gwql">ResultSet</a>&nbsp;results)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -189,14 +189,14 @@
 <td class="colLast"><span class="typeNameLabel">CSVQueryOutputFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/query/CSVQueryOutputFormat.html#output-org.locationtech.geowave.core.store.query.gwql.ResultSet-">output</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/query/gwql/ResultSet.html" title="interface in org.locationtech.geowave.core.store.query.gwql">ResultSet</a>&nbsp;results)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">ConsoleQueryOutputFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/query/ConsoleQueryOutputFormat.html#output-org.locationtech.geowave.core.store.query.gwql.ResultSet-">output</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/query/gwql/ResultSet.html" title="interface in org.locationtech.geowave.core.store.query.gwql">ResultSet</a>&nbsp;results)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>abstract void</code></td>
 <td class="colLast"><span class="typeNameLabel">QueryOutputFormatSpi.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/query/QueryOutputFormatSpi.html#output-org.locationtech.geowave.core.store.query.gwql.ResultSet-">output</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/query/gwql/ResultSet.html" title="interface in org.locationtech.geowave.core.store.query.gwql">ResultSet</a>&nbsp;results)</code>
 <div class="block">Output the results.</div>
 </td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">ConsoleQueryOutputFormat.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/cli/query/ConsoleQueryOutputFormat.html#output-org.locationtech.geowave.core.store.query.gwql.ResultSet-">output</a></span>(<a href="../../../../../../../../org/locationtech/geowave/core/store/query/gwql/ResultSet.html" title="interface in org.locationtech.geowave.core.store.query.gwql">ResultSet</a>&nbsp;results)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -240,17 +240,17 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/gwql/ResultSet.html" title="interface in org.locationtech.geowave.core.store.query.gwql">ResultSet</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SelectStatement.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/gwql/statement/SelectStatement.html#execute-java.lang.String...-">execute</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/gwql/ResultSet.html" title="interface in org.locationtech.geowave.core.store.query.gwql">ResultSet</a></code></td>
-<td class="colLast"><span class="typeNameLabel">DeleteStatement.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/gwql/statement/DeleteStatement.html#execute-java.lang.String...-">execute</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/gwql/ResultSet.html" title="interface in org.locationtech.geowave.core.store.query.gwql">ResultSet</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Statement.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/gwql/statement/Statement.html#execute-java.lang.String...-">execute</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>
 <div class="block">Executes the statement with the provided authorizations.</div>
 </td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/gwql/ResultSet.html" title="interface in org.locationtech.geowave.core.store.query.gwql">ResultSet</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SelectStatement.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/gwql/statement/SelectStatement.html#execute-java.lang.String...-">execute</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../org/locationtech/geowave/core/store/query/gwql/ResultSet.html" title="interface in org.locationtech.geowave.core.store.query.gwql">ResultSet</a></code></td>
+<td class="colLast"><span class="typeNameLabel">DeleteStatement.</span><code><span class="memberNameLink"><a href="../../../../../../../../org/locationtech/geowave/core/store/query/gwql/statement/DeleteStatement.html#execute-java.lang.String...-">execute</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
