@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.locationtech.geowave.adapter.raster.plugin.gdal.InstallGdal;
 import org.locationtech.geowave.core.cli.api.OperationParams;
@@ -29,6 +30,7 @@ import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import com.beust.jcommander.JCommander;
 import it.geosolutions.jaiext.JAIExt;
 
+@Ignore
 public class VectorIngestRunnerTest {
 
   @BeforeClass
@@ -85,7 +87,7 @@ public class VectorIngestRunnerTest {
   }
 
   private void createIndices(final OperationParams params) {
-    DataStore dataStore = getStorePluginOptions(params).createDataStore();
+    final DataStore dataStore = getStorePluginOptions(params).createDataStore();
 
     // Create the spatial index
     final SpatialIndexBuilder builder = new SpatialIndexBuilder();

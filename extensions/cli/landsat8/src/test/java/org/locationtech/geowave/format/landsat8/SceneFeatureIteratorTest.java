@@ -22,11 +22,13 @@ import org.geotools.geometry.Envelope2D;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 import org.opengis.geometry.BoundingBox;
 
+@Ignore
 public class SceneFeatureIteratorTest {
   private Matcher<SimpleFeature> hasProperties() {
     return new BaseMatcher<SimpleFeature>() {

@@ -15,6 +15,8 @@ import org.junit.Test;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import it.geosolutions.jaiext.JAIExt;
 
+
+@Ignore
 public class DownloadRunnerTest {
   @Test
   @Ignore
