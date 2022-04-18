@@ -124,9 +124,10 @@ public class HeatMapUtils {
 
 
   /**
-   * Get an appropriate Geohash precision based on the approximate area of a grid cell.
+   * Get an appropriate Geohash precision based on the approximate area (square kilometers) of a
+   * grid cell.
    * 
-   * @param cellArea {double} The area of the grid cell (from the GeoServer mapping extent).
+   * @param cellArea {double} The area (square kilometers) of the grid cell (from the GeoServer mapping extent).
    * @return Returns an integer for the Geohash precision (1-12).
    */
   public static int getGeohashPrecision(double cellArea) {
