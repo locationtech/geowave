@@ -170,9 +170,11 @@ public class ExplainCommand extends DefaultOperation implements Command {
       }
 
       final boolean assigned = mainParameter.isAssigned();
+      System.out.println("ASSIGNED: " + assigned);
       builder.append("Specified: ");
       final List<String> mP =
           (List<String>) mainParameter.getParameterized().get(mainParameter.getObject());
+      System.out.println("MP: " + mP);
       if (!assigned || (mP.size() == 0)) {
         builder.append("<none specified>");
       } else {
