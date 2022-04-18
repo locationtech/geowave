@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
+ * Copyright (c) 2013-2022 Contributors to the Eclipse Foundation
  *
  * <p> See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
@@ -11,6 +11,7 @@ package org.locationtech.geowave.datastore.hbase.cli;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import com.beust.jcommander.Parameter;
 
 public class RunHBaseServerOptions {
@@ -54,7 +55,8 @@ public class RunHBaseServerOptions {
 
   public String getLibDir() {
     if (libDir == null) {
-      String geowaveHome = System.getProperty("geowave.home", ".");
+      final String geowaveHome =
+          System.getProperty("geowave.home", DataStoreUtils.DEFAULT_GEOWAVE_DIRECTORY);
       return Paths.get(geowaveHome, DEFAULT_LIB_DIR).toString();
     }
     return libDir;
@@ -66,7 +68,8 @@ public class RunHBaseServerOptions {
 
   public String getZkDataDir() {
     if (zkDataDir == null) {
-      String geowaveHome = System.getProperty("geowave.home", ".");
+      final String geowaveHome =
+          System.getProperty("geowave.home", DataStoreUtils.DEFAULT_GEOWAVE_DIRECTORY);
       return Paths.get(geowaveHome, DEFAULT_ZOOKEEPER_DATA_DIR).toString();
     }
     return zkDataDir;
@@ -78,7 +81,8 @@ public class RunHBaseServerOptions {
 
   public String getDataDir() {
     if (dataDir == null) {
-      String geowaveHome = System.getProperty("geowave.home", ".");
+      final String geowaveHome =
+          System.getProperty("geowave.home", DataStoreUtils.DEFAULT_GEOWAVE_DIRECTORY);
       return Paths.get(geowaveHome, DEFAULT_DATA_DIR).toString();
     }
     return dataDir;

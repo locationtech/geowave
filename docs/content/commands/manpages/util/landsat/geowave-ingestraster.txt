@@ -23,10 +23,10 @@ This command downloads Landsat 8 imagery and then ingests it as raster data into
   Prior to ingesting an image, this converter will be used to massage the data. The default is not to convert the data.
 
 *--coverage* _<name>_::
-  The name to give to each unique coverage. Freemarker templating can be used for variable substition based on the same attributes used for filtering. The default coverage name is `${entityId}_${band}`.  If `${band}` is unused in the coverage name, all bands will be merged together into the same coverage.
+  The name to give to each unique coverage. Freemarker templating can be used for variable substitution based on the same attributes used for filtering. The default coverage name is `${productId}_${band}`.  If `${band}` is unused in the coverage name, all bands will be merged together into the same coverage.
 
 *--cql* _<filter>_::
-  An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: `shape` (Geometry), `acquisitionDate` (Date), `cloudCover` (double), `processingLevel` (String), `path` (int), `row` (int) and the feature ID is `entityId` for the scene. Additionally attributes of the individuals band can be used such as `band` (String), `sizeMB` (double), and `bandDownloadUrl` (String).
+  An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: `shape` (Geometry), `acquisitionDate` (Date), `cloudCover` (double), `processingLevel` (String), `path` (int), `row` (int) and the feature ID is `productId` for the scene. Additionally attributes of the individuals band can be used such as `band` (String), `sizeMB` (double), and `bandDownloadUrl` (String).
 
 *--crop*::
   If specified, use the spatial constraint provided in CQL to crop the image.  If no spatial constraint is provided, this will not have an effect.

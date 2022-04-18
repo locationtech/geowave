@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
+ * Copyright (c) 2013-2022 Contributors to the Eclipse Foundation
  *
  * <p> See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
@@ -55,10 +55,7 @@ public class WRS2GeometryStore {
       if (this == obj) {
         return true;
       }
-      if (obj == null) {
-        return false;
-      }
-      if (getClass() != obj.getClass()) {
+      if ((obj == null) || (getClass() != obj.getClass())) {
         return false;
       }
       final WRS2Key other = (WRS2Key) obj;

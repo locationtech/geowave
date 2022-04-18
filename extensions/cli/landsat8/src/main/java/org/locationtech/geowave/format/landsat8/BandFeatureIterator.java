@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
+ * Copyright (c) 2013-2022 Contributors to the Eclipse Foundation
  *
  * <p> See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
@@ -43,7 +43,8 @@ public class BandFeatureIterator implements SimpleFeatureIterator {
     PATH_ROW_FORMATTER.setMinimumIntegerDigits(3);
   }
 
-  private static final String DOWNLOAD_PREFIX = "http://landsat-pds.s3.amazonaws.com/L8";
+  private static final String DOWNLOAD_PREFIX =
+      "https://s3-us-west-2.amazonaws.com/landsat-pds/c1/L8";
   protected static final String BANDS_TYPE_NAME = "band";
   public static final String BAND_ATTRIBUTE_NAME = "band";
   public static final String SIZE_ATTRIBUTE_NAME = "sizeMB";
@@ -155,11 +156,11 @@ public class BandFeatureIterator implements SimpleFeatureIterator {
       if (scene == null) {
         return Collections.emptyIterator();
       }
-      final String entityId = scene.getID();
+      final String productId = scene.getID();
       final int path = (int) scene.getAttribute(SceneFeatureIterator.PATH_ATTRIBUTE_NAME);
       final int row = (int) scene.getAttribute(SceneFeatureIterator.ROW_ATTRIBUTE_NAME);
       final List<SimpleFeature> bands = new ArrayList<>();
-      final String indexHtml = getDownloadIndexHtml(entityId, path, row);
+      final String indexHtml = getDownloadIndexHtml(productId, path, row);
       List<String> htmlLines;
       int retry = 0;
       boolean success = false;
@@ -173,11 +174,13 @@ public class BandFeatureIterator implements SimpleFeatureIterator {
           success = true;
           for (final String line : htmlLines) {
             // read everything before the tif
-            int endIndex = line.indexOf(".TIF\"");
+            int endIndex = line.lastIndexOf(".TIF");
             if (endIndex > 0) {
               // read everything after the underscore
-              int beginIndex = line.indexOf("_") + 1;
-              final String bandId = line.substring(beginIndex, endIndex);
+              String productIdSubstring = productId + "_";
+              int beginIndex = line.lastIndexOf(productIdSubstring);
+              final String bandId =
+                  line.substring(beginIndex + productIdSubstring.length(), endIndex);
               endIndex = line.indexOf("MB)");
               double divisor = 1;
               if (endIndex < 0) {
@@ -203,8 +206,8 @@ public class BandFeatureIterator implements SimpleFeatureIterator {
               featureBuilder.set(BAND_ATTRIBUTE_NAME, bandId);
               featureBuilder.set(
                   BAND_DOWNLOAD_ATTRIBUTE_NAME,
-                  getDownloadImage(entityId, path, row, bandId));
-              bands.add(featureBuilder.buildFeature(entityId + "_" + bandId));
+                  getDownloadImage(productId, path, row, bandId));
+              bands.add(featureBuilder.buildFeature(productId + "_" + bandId));
             }
           }
         } catch (final IOException | InterruptedException e) {
@@ -215,29 +218,29 @@ public class BandFeatureIterator implements SimpleFeatureIterator {
     }
   }
 
-  protected static String getDownloadPath(final String entityId, final int path, final int row) {
+  protected static String getDownloadPath(final String productId, final int path, final int row) {
     return DOWNLOAD_PREFIX
         + "/"
         + PATH_ROW_FORMATTER.format(path)
         + "/"
         + PATH_ROW_FORMATTER.format(row)
         + "/"
-        + entityId;
+        + productId;
   }
 
   protected static String getDownloadIndexHtml(
-      final String entityId,
+      final String productId,
       final int path,
       final int row) {
-    return getDownloadPath(entityId, path, row) + "/index.html";
+    return getDownloadPath(productId, path, row) + "/index.html";
   }
 
   protected static String getDownloadImage(
-      final String entityId,
+      final String productId,
       final int path,
       final int row,
       final String bandId) {
-    return getDownloadPath(entityId, path, row) + "/" + entityId + "_" + bandId + ".TIF";
+    return getDownloadPath(productId, path, row) + "/" + productId + "_" + bandId + ".TIF";
   }
 
   private static class CqlFilterPredicate implements Predicate<SimpleFeature> {
@@ -249,7 +252,6 @@ public class BandFeatureIterator implements SimpleFeatureIterator {
 
     @Override
     public boolean apply(final SimpleFeature input) {
-
       return cqlFilter.evaluate(input);
     }
   }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
+ * Copyright (c) 2013-2022 Contributors to the Eclipse Foundation
  *
  * <p> See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
@@ -32,7 +32,6 @@ import org.locationtech.geowave.test.basic.GeoWaveVisibilityIT;
 import org.locationtech.geowave.test.config.ConfigCacheIT;
 import org.locationtech.geowave.test.docs.GeoWaveDocumentationExamplesIT;
 import org.locationtech.geowave.test.kafka.BasicKafkaIT;
-import org.locationtech.geowave.test.landsat.CustomCRSLandsatIT;
 import org.locationtech.geowave.test.mapreduce.BasicMapReduceIT;
 import org.locationtech.geowave.test.mapreduce.CustomCRSKDERasterResizeIT;
 import org.locationtech.geowave.test.query.AttributesSubsetQueryIT;
@@ -101,7 +100,8 @@ import org.locationtech.geowave.test.stability.GeoWaveStabilityIT;
     // these also help shave off some time
     // DBScanIT.class,
     // GeoWaveNNIT.class,
-    CustomCRSLandsatIT.class,
+    // TODO AWS seems to have taken down LandSat 8 data, tests won't work
+    // CustomCRSLandsatIT.class,
     GeoWaveBasicRasterIT.class,
     GeoWaveBasicCustomCRSRasterIT.class,
     AttributesSubsetQueryIT.class,

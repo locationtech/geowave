@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
+ * Copyright (c) 2013-2022 Contributors to the Eclipse Foundation
  *
  * <p> See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
@@ -37,7 +37,6 @@ public class RunGeoServer extends DefaultOperation implements Command {
    */
   @Override
   public void execute(final OperationParams params) {
-
     Server jettyServer = null;
     try {
       jettyServer = options.getServer();
@@ -79,5 +78,9 @@ public class RunGeoServer extends DefaultOperation implements Command {
         }
       }
     }
+  }
+
+  public void setInteractive(final boolean interactive) {
+    this.interactive = interactive;
   }
 }

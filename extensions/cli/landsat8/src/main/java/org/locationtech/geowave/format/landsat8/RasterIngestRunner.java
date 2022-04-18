@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
+ * Copyright (c) 2013-2022 Contributors to the Eclipse Foundation
  *
  * <p> See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
@@ -413,7 +413,7 @@ public class RasterIngestRunner extends DownloadRunner {
                   + Arrays.toString(bandsIngested)
                   + "').  To merge bands all scenes must use the same bands.  Skipping scene'"
                   + lastSceneBands.get(0).getAttribute(
-                      SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME)
+                      SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME)
                   + "'.");
           lastSceneBands.clear();
           return;
@@ -425,7 +425,7 @@ public class RasterIngestRunner extends DownloadRunner {
                     + coverageName
                     + "'.  Skipping scene'"
                     + lastSceneBands.get(0).getAttribute(
-                        SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME)
+                        SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME)
                     + "'.");
             lastSceneBands.clear();
             return;

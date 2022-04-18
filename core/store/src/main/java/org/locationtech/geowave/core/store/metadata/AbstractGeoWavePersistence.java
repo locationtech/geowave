@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
+ * Copyright (c) 2013-2022 Contributors to the Eclipse Foundation
  *
  * <p> See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
@@ -356,7 +356,9 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable> {
           retVal = true;
           final GeoWaveMetadata entry = it.next();
           if (cacheDeleter != null) {
-            cacheDeleter.deleteObjectFromCache(new ByteArray(entry.getPrimaryId()), secondaryId);
+            cacheDeleter.deleteObjectFromCache(
+                new ByteArray(entry.getPrimaryId()),
+                new ByteArray(entry.getSecondaryId()));
           }
           deleter.delete(
               new MetadataQuery(entry.getPrimaryId(), entry.getSecondaryId(), authorizations));

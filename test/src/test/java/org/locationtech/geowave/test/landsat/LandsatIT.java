@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
+ * Copyright (c) 2013-2022 Contributors to the Eclipse Foundation
  *
  * <p> See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
@@ -162,7 +162,7 @@ public class LandsatIT extends AbstractGeoWaveIT {
             NORTH,
             BandFeatureIterator.BAND_ATTRIBUTE_NAME,
             SceneFeatureIterator.ACQUISITION_DATE_ATTRIBUTE_NAME,
-            "2016-06-01T00:00:00Z",
+            "2022-03-10T00:00:00Z",
             MIN_PATH,
             MAX_PATH,
             MIN_ROW,
@@ -232,8 +232,8 @@ public class LandsatIT extends AbstractGeoWaveIT {
   }
 
   private static boolean isGDALEnabled() {
-    String enabled = System.getenv("GDAL_DISABLED");
-    if (enabled != null && enabled.trim().equalsIgnoreCase("true")) {
+    final String enabled = System.getenv("GDAL_DISABLED");
+    if ((enabled != null) && enabled.trim().equalsIgnoreCase("true")) {
       return false;
     }
     return true;

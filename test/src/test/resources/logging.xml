@@ -1,5 +1,6 @@
+<!--This is used by ServicesTestEnvironnment for GeoServer ITs logging config-->
 <logging>
-  <level>log4j-test.properties</level>
-  <location>logs/geoserver.log</location>
-  <stdOutLogging>false</stdOutLogging>
+	<level>log4j-test.properties</level>
+	<location>logs/geoserver.log</location>
+	<stdOutLogging>false</stdOutLogging>
 </logging>

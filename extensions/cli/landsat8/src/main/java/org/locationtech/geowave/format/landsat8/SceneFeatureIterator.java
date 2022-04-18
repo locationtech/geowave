@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
+ * Copyright (c) 2013-2022 Contributors to the Eclipse Foundation
  *
  * <p> See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
@@ -69,7 +69,8 @@ public class SceneFeatureIterator implements SimpleFeatureIterator {
   }
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SceneFeatureIterator.class);
-  private static final String SCENES_GZ_URL = "http://landsat-pds.s3.amazonaws.com/scene_list.gz";
+  private static final String SCENES_GZ_URL =
+      "https://landsat-pds.s3.amazonaws.com/c1/L8/scene_list.gz";
   protected static final String SCENES_TYPE_NAME = "scene";
   public static final String SHAPE_ATTRIBUTE_NAME = "shape";
   public static final String ACQUISITION_DATE_ATTRIBUTE_NAME = "acquisitionDate";
@@ -78,7 +79,7 @@ public class SceneFeatureIterator implements SimpleFeatureIterator {
   public static final String PATH_ATTRIBUTE_NAME = "path";
   public static final String ROW_ATTRIBUTE_NAME = "row";
   public static final String SCENE_DOWNLOAD_ATTRIBUTE_NAME = "sceneDownloadUrl";
-  public static final String ENTITY_ID_ATTRIBUTE_NAME = "entityId";
+  public static final String PRODUCT_ID_ATTRIBUTE_NAME = "productId";
 
   protected static final String[] SCENE_ATTRIBUTES =
       new String[] {
@@ -88,7 +89,7 @@ public class SceneFeatureIterator implements SimpleFeatureIterator {
           PROCESSING_LEVEL_ATTRIBUTE_NAME,
           PATH_ATTRIBUTE_NAME,
           ROW_ATTRIBUTE_NAME,
-          ENTITY_ID_ATTRIBUTE_NAME,
+          PRODUCT_ID_ATTRIBUTE_NAME,
           SCENE_DOWNLOAD_ATTRIBUTE_NAME};
   protected static String AQUISITION_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
   private final String SCENES_DIR = "scenes";
@@ -243,7 +244,7 @@ public class SceneFeatureIterator implements SimpleFeatureIterator {
     typeBuilder.setName(SCENES_TYPE_NAME);
     typeBuilder.setCRS(GeometryUtils.getDefaultCRS());
     typeBuilder.add(SHAPE_ATTRIBUTE_NAME, MultiPolygon.class);
-    typeBuilder.add(ENTITY_ID_ATTRIBUTE_NAME, String.class);
+    typeBuilder.add(PRODUCT_ID_ATTRIBUTE_NAME, String.class);
     typeBuilder.add(ACQUISITION_DATE_ATTRIBUTE_NAME, Date.class);
     typeBuilder.add(CLOUD_COVER_ATTRIBUTE_NAME, Float.class);
     typeBuilder.add(PROCESSING_LEVEL_ATTRIBUTE_NAME, String.class);
@@ -290,17 +291,11 @@ public class SceneFeatureIterator implements SimpleFeatureIterator {
       if (this == obj) {
         return true;
       }
-      if (obj == null) {
-        return false;
-      }
-      if (getClass() != obj.getClass()) {
+      if ((obj == null) || (getClass() != obj.getClass())) {
         return false;
       }
       final PathRowPair other = (PathRowPair) obj;
-      if (path != other.path) {
-        return false;
-      }
-      if (row != other.row) {
+      if ((path != other.path) || (row != other.row)) {
         return false;
       }
       return true;
@@ -335,7 +330,7 @@ public class SceneFeatureIterator implements SimpleFeatureIterator {
 
     final MinMaxPriorityQueue<SimpleFeature> bestScenes =
         MinMaxPriorityQueue.orderedBy(new BestCloudCoverComparator()).maximumSize(n).create();
-    // iterate once through the scenes, saving the best entity IDs
+    // iterate once through the scenes, saving the best product IDs
     // based on cloud cover
 
     while (iterator.hasNext()) {
@@ -416,7 +411,7 @@ public class SceneFeatureIterator implements SimpleFeatureIterator {
   }
 
   private static class CSVToFeatureTransform implements Function<CSVRecord, SimpleFeature> {
-    // shape (Geometry), entityId (String), acquisitionDate (Date),
+    // shape (Geometry), productId (String), acquisitionDate (Date),
     // cloudCover (double), processingLevel (String), path (int), row (int)
     private final WRS2GeometryStore wrs2Geometry;
     private final SimpleFeatureBuilder featureBuilder;
@@ -429,13 +424,13 @@ public class SceneFeatureIterator implements SimpleFeatureIterator {
       featureBuilder = new SimpleFeatureBuilder(type);
     }
 
-    // entityId,acquisitionDate,cloudCover,processingLevel,path,row,min_lat,min_lon,max_lat,max_lon,download_url
+    // productId,acquisitionDate,cloudCover,processingLevel,path,row,min_lat,min_lon,max_lat,max_lon,download_url
     @Override
     public SimpleFeature apply(final CSVRecord input) {
       if (input == null) {
         return null;
       }
-      final String entityId = input.get("entityId");
+      final String productId = input.get("productId");
       final double cloudCover = Double.parseDouble(input.get("cloudCover"));
       final String processingLevel = input.get("processingLevel");
       final int path = Integer.parseInt(input.get("path"));
@@ -443,8 +438,12 @@ public class SceneFeatureIterator implements SimpleFeatureIterator {
       final String downloadUrl = input.get("download_url");
 
       final MultiPolygon shape = wrs2Geometry.getGeometry(path, row);
+      // shape can be null in which case this is an ascending pass and not a descending pass and is
+      // therefore nighttime and not desirable. At one point we wanted to only consider descending
+      // passes because daytime collects are much more desirable, but may want to consider allowing
+      // for either, while still preferencing daytime.
       featureBuilder.add(shape);
-      featureBuilder.add(entityId);
+      featureBuilder.add(productId);
       Date aquisitionDate;
       final SimpleDateFormat sdf = new SimpleDateFormat(AQUISITION_DATE_FORMAT);
       try {
@@ -461,7 +460,7 @@ public class SceneFeatureIterator implements SimpleFeatureIterator {
       featureBuilder.add(path);
       featureBuilder.add(row);
       featureBuilder.add(downloadUrl);
-      return featureBuilder.buildFeature(entityId);
+      return featureBuilder.buildFeature(productId);
     }
   }
 

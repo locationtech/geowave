@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
+ * Copyright (c) 2013-2022 Contributors to the Eclipse Foundation
  *
  * <p> See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
@@ -14,10 +14,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import it.geosolutions.jaiext.JAIExt;
 
+@Ignore
 public class AnalyzeRunnerTest {
   private PrintStream outBak = null;
   private final ByteArrayOutputStream output = new ByteArrayOutputStream();

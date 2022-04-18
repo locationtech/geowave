@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
+ * Copyright (c) 2013-2022 Contributors to the Eclipse Foundation
  *
  * <p> See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
@@ -8,17 +8,20 @@
  */
 package org.locationtech.geowave.cli.geoserver;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.concurrent.TimeUnit;
+import org.apache.commons.io.FileUtils;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.webapp.WebAppClassLoader;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.beust.jcommander.Parameter;
@@ -29,7 +32,15 @@ public class RunGeoServerOptions {
       "lib/services/third-party/embedded-geoserver/geoserver";
 
   private static final String[] PARENT_CLASSLOADER_LIBRARIES =
-      new String[] {"hbase", "hadoop", "protobuf", "guava", "restlet", "spring"};
+      new String[] {
+          "hbase",
+          "hadoop",
+          "protobuf",
+          "guava",
+          "restlet",
+          "spring",
+          "slf4j",
+          "log4j-1.2-api"};
   @Parameter(
       names = {"--port", "-p"},
       description = "Select the port for GeoServer to listen on (default is port 8080)")
@@ -46,11 +57,16 @@ public class RunGeoServerOptions {
   protected static final int MAX_FORM_CONTENT_SIZE = 1024 * 1024 * 2;
   protected static final String GEOSERVER_CONTEXT_PATH = "/geoserver";
 
+  public void setPort(final int port) {
+    this.port = port;
+  }
+
   public Server getServer() throws Exception {
 
     Server jettyServer;
     // Prevent "Unauthorized class found" error
     System.setProperty("GEOSERVER_XSTREAM_WHITELIST", "org.geoserver.wfs.**;org.geoserver.wms.**");
+
 
     // delete old workspace configuration if it's still there
     jettyServer = new Server();
@@ -66,7 +82,27 @@ public class RunGeoServerOptions {
     gsWebapp.setContextPath(GEOSERVER_CONTEXT_PATH);
     if (directory == null) {
       directory =
-          Paths.get(System.getProperty("geowave.home", "."), DEFAULT_GEOSERVER_DIR).toString();
+          Paths.get(
+              System.getProperty("geowave.home", DataStoreUtils.DEFAULT_GEOWAVE_DIRECTORY),
+              DEFAULT_GEOSERVER_DIR).toString();
+    }
+    try {
+      // make sure geoserver uses a log4j 1.x properties file (log4j 2 is backwards compatible), but
+      // currently geoserver requires log4j 1.2, and geoserver requires it to be in the ./data/logs
+      // directory
+      FileUtils.copyToFile(
+          RunGeoServerOptions.class.getClassLoader().getResourceAsStream(
+              "log4j-geoserver.properties"),
+          new File(
+              directory
+                  + File.separator
+                  + "data"
+                  + File.separator
+                  + "logs"
+                  + File.separator
+                  + "DEFAULT_LOGGING.properties"));
+    } catch (final Exception e) {
+      LOGGER.info("Unable to copy log file to geoserver", e);
     }
     gsWebapp.setResourceBase(directory);
 

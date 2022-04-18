@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
+ * Copyright (c) 2013-2022 Contributors to the Eclipse Foundation
  *
  * <p> See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
@@ -100,7 +100,8 @@ public class DownloadRunner extends AnalyzeRunner {
   protected static File getDownloadFile(final SimpleFeature band, final String workspaceDirectory) {
     final int path = (int) band.getAttribute(SceneFeatureIterator.PATH_ATTRIBUTE_NAME);
     final int row = (int) band.getAttribute(SceneFeatureIterator.ROW_ATTRIBUTE_NAME);
-    final String entity = (String) band.getAttribute(SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME);
+    final String product =
+        (String) band.getAttribute(SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME);
     return new File(
         workspaceDirectory
             + File.separator
@@ -110,7 +111,7 @@ public class DownloadRunner extends AnalyzeRunner {
             + File.separator
             + row
             + File.separator
-            + entity
+            + product
             + File.separator
             + band.getID()
             + ".TIF");

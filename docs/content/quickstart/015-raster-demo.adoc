@@ -2,8 +2,8 @@
 
 :linkattrs:
 
-== Raster Demo
-
+== Raster Demo _(deprecated)_
+_DISCLAIMER: It appears in March 2022 AWS completely removed LandSat8 Open Data Imagery, effectively deprecating this raster demo_
 In this demo, we will be looking at Band 8 of Landsat raster data around Berlin, Germany. See link:https://www.usgs.gov/land-resources/nli/landsat/landsat-8[USGS.gov^, window="blank"] for more information about Landsat 8.
 
 === Install GDAL

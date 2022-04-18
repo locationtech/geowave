@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
+ * Copyright (c) 2013-2022 Contributors to the Eclipse Foundation
  *
  * <p> See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
@@ -70,7 +70,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
   private static final String WMS_VERSION = "1.3";
   private static final String WMS_URL_PREFIX = "/geoserver/wms";
   private static final String REFERENCE_WMS_IMAGE_PATH =
-      TestUtils.isOracleJDK() ? "src/test/resources/wms/wms-grid-oraclejdk.gif"
+      TestUtils.isOracleJRE() ? "src/test/resources/wms/wms-grid-oraclejdk.gif"
           : "src/test/resources/wms/wms-grid.gif";
 
   private static final String testName = "GeoServerIngestIT";
@@ -297,6 +297,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
             360,
             null,
             false);
+
     Assert.assertNotNull(ref);
     // being a little lenient because of differences in O/S rendering
     TestUtils.testTileAgainstReference(biSubsamplingWithoutError, ref, 0, 0.07);

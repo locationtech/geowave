@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
+ * Copyright (c) 2013-2022 Contributors to the Eclipse Foundation
  *
  * <p> See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import org.apache.commons.lang.SystemUtils;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.locationtech.geowave.adapter.raster.plugin.gdal.InstallGdal;
 import org.locationtech.geowave.core.cli.api.OperationParams;
@@ -30,6 +31,7 @@ import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import com.beust.jcommander.JCommander;
 import it.geosolutions.jaiext.JAIExt;
 
+@Ignore
 public class RasterIngestRunnerTest {
 
   @BeforeClass
@@ -94,7 +96,7 @@ public class RasterIngestRunnerTest {
     runner.runInternal(params);
     try (CloseableIterator<Object> results =
         getStorePluginOptions(params).createDataStore().query(QueryBuilder.newBuilder().build())) {
-      assertTrue("Store is not empty", results.hasNext());
+      assertTrue("Store is empty", results.hasNext());
     }
 
     // Not sure what assertions can be made about the index.

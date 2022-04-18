@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
+ * Copyright (c) 2013-2022 Contributors to the Eclipse Foundation
  *
  * <p> See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import org.apache.commons.lang.SystemUtils;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.locationtech.geowave.adapter.raster.plugin.gdal.InstallGdal;
 import org.locationtech.geowave.core.cli.api.OperationParams;
@@ -33,6 +34,7 @@ import org.locationtech.geowave.core.store.index.IndexPluginOptions.PartitionStr
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import it.geosolutions.jaiext.JAIExt;
 
+@Ignore
 public class IngestRunnerTest {
 
   @BeforeClass
@@ -49,8 +51,8 @@ public class IngestRunnerTest {
   }
 
   private static boolean isGDALEnabled() {
-    String enabled = System.getenv("GDAL_DISABLED");
-    if (enabled != null && enabled.trim().equalsIgnoreCase("true")) {
+    final String enabled = System.getenv("GDAL_DISABLED");
+    if ((enabled != null) && enabled.trim().equalsIgnoreCase("true")) {
       return false;
     }
     return true;
@@ -106,7 +108,7 @@ public class IngestRunnerTest {
     try (CloseableIterator<Object> results =
         getStorePluginOptions(params, "memorystore").createDataStore().query(
             QueryBuilder.newBuilder().build())) {
-      assertTrue("Store is not empty", results.hasNext());
+      assertTrue("Store is empty", results.hasNext());
     }
 
     // Not sure what assertions can be made about the index.
@@ -121,7 +123,7 @@ public class IngestRunnerTest {
   }
 
   private void createIndices(final OperationParams params, final String storeName) {
-    DataStore dataStore = getStorePluginOptions(params, storeName).createDataStore();
+    final DataStore dataStore = getStorePluginOptions(params, storeName).createDataStore();
 
     // Create the spatial index
     final SpatialIndexBuilder builder = new SpatialIndexBuilder();

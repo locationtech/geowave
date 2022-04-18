@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
+ * Copyright (c) 2013-2022 Contributors to the Eclipse Foundation
  *
  * <p> See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
@@ -184,7 +184,7 @@ public class TestUtils {
     return VersionUtil.compareVersions(VersionInfo.getVersion(), "2.2.0") >= 0;
   }
 
-  public static boolean isOracleJDK() {
+  public static boolean isOracleJRE() {
     return (System.getProperty("java.vm.name") != null)
         && System.getProperty("java.vm.name").contains("HotSpot");
   }
