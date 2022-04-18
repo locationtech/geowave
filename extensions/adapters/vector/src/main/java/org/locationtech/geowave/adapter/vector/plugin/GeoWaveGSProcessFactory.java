@@ -23,6 +23,10 @@ public class GeoWaveGSProcessFactory extends AnnotatedBeanProcessFactory {
         Text.text("GeoWave Process Factory"),
         "geowave",
         SubsampleProcess.class,
-        DistributedRenderProcess.class);
+        DistributedRenderProcess.class,
+        MyPlugin.class,
+        GeoWaveHeatMapFinal.class);  //THIS IS THE FINAL HEATMAP THAT WILL BE FOR AGGREGATION AND STATISTICS SPATIAL BINNING
+//        GeoWaveHeatMap.class,  //THIS IS A STRAIGHT PORT OF GEOTOOLS HEATMAP PROCESS - ACTS AS A BASELINE
+//        HeatMapProcess.class);  //SUBSAMPLE PROCESS-like process (don't use this one)
   }
 }

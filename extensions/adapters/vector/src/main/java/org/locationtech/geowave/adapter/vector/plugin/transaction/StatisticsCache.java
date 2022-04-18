@@ -59,9 +59,11 @@ public class StatisticsCache {
         statisticsStore.getFieldStatistics(adapter, statisticType, fieldName, null)) {
       if (statsIter.hasNext()) {
         Statistic<V> stat = (Statistic<V>) statsIter.next();
-        V value = statisticsStore.getStatisticValue(stat, authorizations);
-        if (value != null) {
-          retVal = value;
+        if (stat.getBinningStrategy() == null) {
+          V value = statisticsStore.getStatisticValue(stat, authorizations);
+          if (value != null) {
+            retVal = value;
+          }          
         }
       }
     }
@@ -81,9 +83,11 @@ public class StatisticsCache {
         statisticsStore.getDataTypeStatistics(adapter, statisticType, null)) {
       if (statsIter.hasNext()) {
         Statistic<V> stat = (Statistic<V>) statsIter.next();
-        V value = statisticsStore.getStatisticValue(stat, authorizations);
-        if (value != null) {
-          retVal = value;
+        if (stat.getBinningStrategy() == null) {
+          V value = statisticsStore.getStatisticValue(stat, authorizations);
+          if (value != null) {
+            retVal = value;
+          }          
         }
       }
     }
