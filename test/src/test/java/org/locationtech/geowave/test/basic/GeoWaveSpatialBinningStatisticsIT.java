@@ -242,7 +242,7 @@ public class GeoWaveSpatialBinningStatisticsIT extends AbstractGeoWaveBasicVecto
 
     final Map<BinningStrategyKey, Map<ByteArray, Long>> perBinResults = new HashMap<>();
     stats.stream().forEach(s -> {
-      final Map<ByteArray, Long> results = new HashMap<>();;
+      final Map<ByteArray, Long> results = new HashMap<>();
       perBinResults.put(
           new BinningStrategyKey((SpatialFieldValueBinningStrategy) s.getBinningStrategy()),
           results);
