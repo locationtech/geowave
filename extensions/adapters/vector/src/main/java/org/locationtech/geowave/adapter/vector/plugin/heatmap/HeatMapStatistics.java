@@ -40,7 +40,7 @@ import org.opengis.feature.simple.SimpleFeature;
 /**
  * Methods for HeatMap statistics queries.
  * 
- * @author M. Zagorski <br> 
+ * @author M. Zagorski <br>
  * @apiNote Date: 3-25-2022 <br>
  *
  * @apiNote Changelog: <br>
@@ -124,12 +124,16 @@ public class HeatMapStatistics {
       if (statTag.contains(GEOHASH_STR)) {
         Integer statGeohashPrec = Integer.valueOf(statTag.split("-")[3]);
         System.out.println("\tSTAT GEOHASH PREC FROM TAG: " + statGeohashPrec);
-        System.out.println("\tSTAT GEOHASH TAG MATCHES PREC: " + (statGeohashPrec == geohashPrec));
+
+        // Find out if the statistic precision matches the geohash precision
+        // Boolean matchPrec = (statGeohashPrec == geohashPrec);
+        Boolean matchPrec = statGeohashPrec.equals(geohashPrec);
+        System.out.println("\tSTAT GEOHASH TAG MATCHES PREC: " + matchPrec);
 
         // Continue if a count statistic and an instance of spatial field value binning strategy
         if (stat.getStatisticType() == CountStatistic.STATS_TYPE
             && stat.getBinningStrategy() instanceof SpatialFieldValueBinningStrategy
-            && statGeohashPrec == geohashPrec) {
+            && matchPrec) {
 
           // Get the spatial binning strategy
           SpatialFieldValueBinningStrategy spatialBinningStrategy =
@@ -203,11 +207,7 @@ public class HeatMapStatistics {
       }
 
       // In the meantime, default to the count aggregation query for rendered results
-      newFeatures =
-          HeatMapAggregations.buildCountAggrQuery(
-              components,
-              geohashPrec,
-              weightAttr);
+      newFeatures = HeatMapAggregations.buildCountAggrQuery(components, geohashPrec, weightAttr);
     }
 
     System.out.println("\tNEW SIMPLE FEATURE CNT: " + newSimpleFeatures.size());
@@ -240,11 +240,10 @@ public class HeatMapStatistics {
     // geohashCount.setTag("Geohash-binning-count-stat");
     System.out.println("\tgeohashCount2: " + geohashCount.getDescription());
 
-    // Set up spatial binning strategy   
+    // Set up spatial binning strategy
     final SpatialFieldValueBinningStrategy geohashSpatialBinning =
-        new SpatialFieldValueBinningStrategy(
-            HeatMapUtils.getGeometryFieldName(components));
-    
+        new SpatialFieldValueBinningStrategy(HeatMapUtils.getGeometryFieldName(components));
+
     System.out.println(
         "\tGEOM LOCAL NAME: " + components.getFeatureType().getGeometryDescriptor().getLocalName());
     System.out.println("\tgeohashSpatialBinning1: " + geohashSpatialBinning.getDescription());
@@ -306,12 +305,16 @@ public class HeatMapStatistics {
       if (statTag.contains(GEOHASH_STR)) {
         Integer statGeohashPrec = Integer.valueOf(statTag.split("-")[3]);
         System.out.println("\tSTAT GEOHASH PREC FROM TAG: " + statGeohashPrec);
-        System.out.println("\tSTAT GEOHASH TAG MATCHES PREC: " + (statGeohashPrec == geohashPrec));
+
+        // Find out if the statistic precision matches the geohash precision
+        // Boolean matchPrec = (statGeohashPrec == geohashPrec);
+        Boolean matchPrec = statGeohashPrec.equals(geohashPrec);
+        System.out.println("\tSTAT GEOHASH TAG MATCHES PREC: " + matchPrec);
 
         // Continue if a field sum statistic and an instance of spatial field value binning strategy
         if (stat.getStatisticType() == NumericStatsStatistic.STATS_TYPE
             && stat.getBinningStrategy() instanceof SpatialFieldValueBinningStrategy
-            && statGeohashPrec == geohashPrec) {
+            && matchPrec) {
 
           System.out.println("\tNUMERIC STATS EXISTS IN DATASTORE!");
 
@@ -390,11 +393,7 @@ public class HeatMapStatistics {
       }
 
       // In the meantime, default to the count aggregation query for rendered results
-      newFeatures =
-          HeatMapAggregations.buildFieldSumAggrQuery(
-              components,
-              geohashPrec,
-              weightAttr);
+      newFeatures = HeatMapAggregations.buildFieldSumAggrQuery(components, geohashPrec, weightAttr);
     }
 
     System.out.println("\tNEW SIMPLE FEATURE CNT: " + newSimpleFeatures.size());

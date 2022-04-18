@@ -18,6 +18,7 @@ import org.geotools.data.simple.SimpleFeatureCollection;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents;
 import org.locationtech.geowave.core.geotime.binning.SpatialBinningType;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.SpatialSimpleFeatureBinningStrategy;
+import org.locationtech.geowave.core.geotime.store.query.api.VectorAggregationQueryBuilder;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.api.AggregationQuery;
 import org.locationtech.geowave.core.store.api.AggregationQueryBuilder;
@@ -98,11 +99,11 @@ public class HeatMapAggregations {
               geohashPrec,
               weightAttr,
               SUM_AGGR);
-      
-      //TODO: turn the following into logger output?
-//      Object ghID = simpFeature.getAttribute("geoHashId");
-//      Object val = simpFeature.getAttribute(weightAttr);
-//      System.out.println("\t\tGH ID: " + ghID + " VAL: " + val);
+
+      // TODO: turn the following into logger output?
+      // Object ghID = simpFeature.getAttribute("geoHashId");
+      // Object val = simpFeature.getAttribute(weightAttr);
+      // System.out.println("\t\tGH ID: " + ghID + " VAL: " + val);
 
       newSimpleFeatures.add(simpFeature);
     }
@@ -113,7 +114,7 @@ public class HeatMapAggregations {
     return newFeatures;
   }
 
-  
+
   /**
    * Builds the count aggregation query and returns a SimpleFeatureCollection.
    * 
@@ -135,6 +136,12 @@ public class HeatMapAggregations {
     // Initialize new query builder
     final AggregationQueryBuilder<FieldNameParam, Long, SimpleFeature, ?> queryBuilder =
         AggregationQueryBuilder.newBuilder();
+
+    // Add spatial constraint to optimize the datastore query
+    // queryBuilder.constraints(VectorAggregationQueryBuilder.newBuilder().constraintsFactory().spatialTemporalConstraints().bboxConstraints(0,
+    // 0, 0, 0).build()); //TODO: add bbox here
+    // queryBuilder.constraints(VectorAggregationQueryBuilder.newBuilder().constraintsFactory().spatialTemporalConstraints().spatialConstraints(JTS
+    // GEOMETRY GOES HERE).build());
 
     // Set up the aggregation based on the name of the geometry field
     queryBuilder.aggregate(
@@ -171,10 +178,10 @@ public class HeatMapAggregations {
               weightAttr,
               CNT_AGGR);
 
-      //TODO: turn the following into logger output?
-//      Object ghID = simpFeature.getAttribute("geohashId");
-//      Object cntAggr = simpFeature.getAttribute(weightAttr);
-//      System.out.println("\tGEOHASH ID: " + ghID + " COUNT AGGR: " + cntAggr);
+      // TODO: turn the following into logger output?
+      // Object ghID = simpFeature.getAttribute("geohashId");
+      // Object cntAggr = simpFeature.getAttribute(weightAttr);
+      // System.out.println("\tGEOHASH ID: " + ghID + " COUNT AGGR: " + cntAggr);
 
       newSimpleFeatures.add(simpFeature);
     }
