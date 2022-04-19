@@ -483,7 +483,7 @@ public class GeoWaveHeatMapFinal implements VectorProcess {
     System.out.println("\tattrExpr: " + attrExpr);
 
     int counter = 0;
-    Boolean writeGeoJson = true; // NEW - I added this
+    Boolean writeGeoJson = false; // NEW - for testing purposes only
 
     // FileWriter writer;
     // try {
