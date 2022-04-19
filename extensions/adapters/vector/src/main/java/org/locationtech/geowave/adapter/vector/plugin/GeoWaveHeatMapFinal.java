@@ -1,12 +1,10 @@
 /**
  * Copyright (c) 2013-2022 Contributors to the Eclipse Foundation
  * 
- * @author Milla Zagorski
- *
- *         <p> See the NOTICE file distributed with this work for additional information regarding
- *         copyright ownership. All rights reserved. This program and the accompanying materials are
- *         made available under the terms of the Apache License, Version 2.0 which accompanies this
- *         distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ * <p> See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
 package org.locationtech.geowave.adapter.vector.plugin;
 
@@ -118,8 +116,8 @@ import org.opengis.util.ProgressListener;
  *
  * <p>
  * 
- * @author Milla Zagorski (customizations for GeoWave Heatmap rendering using aggregation and
- *         statistic spatial binning queries).<br>
+ * @author M. Zagorski (customizations for GeoWave Heatmap rendering using aggregation and statistic
+ *         spatial binning queries).<br>
  * @apiNode Note: based on the GeoTools version of HeatmapProcess by Martin Davis - OpenGeo.
  * @apiNote Date: 3-25-2022 <br>
  *
@@ -132,6 +130,9 @@ import org.opengis.util.ProgressListener;
     title = "GeoWaveHeatMapFinal",
     description = "Computes a heatmap surface over a set of data points and outputs as a single-band raster.")
 public class GeoWaveHeatMapFinal implements VectorProcess {
+
+  // For testing and verification of accuracy only (keep set to false in production)
+  Boolean writeGeoJson = false;
 
   // Query types
   public static final String CNT_AGGR = "CNT_AGGR";
@@ -149,9 +150,9 @@ public class GeoWaveHeatMapFinal implements VectorProcess {
   public static final Hints.Key AGGR_QUERY = new Hints.Key(Boolean.class);
   public static final Hints.Key STATS_QUERY = new Hints.Key(Boolean.class);
   public static final Hints.Key QUERY_TYPE = new Hints.Key(String.class);
-  public static final Hints.Key WEIGHT_ATTR = new Hints.Key(String.class); // THE VALUE OF THIS
-                                                                           // FIELD MUST BE NUMERIC
-                                                                           // (NOT A GEOMETRY, ETC.)
+
+  // The value of the weight attribute must be numeric (e.g. cannot be a geometry, etc.)
+  public static final Hints.Key WEIGHT_ATTR = new Hints.Key(String.class);
   public static final Hints.Key PIXELS_PER_CELL = new Hints.Key(Integer.class);
   public static final Hints.Key CREATE_STATS = new Hints.Key(Boolean.class);
 
@@ -191,12 +192,11 @@ public class GeoWaveHeatMapFinal implements VectorProcess {
           name = "outputHeight",
           description = "Height of output raster in pixels") Integer argOutputHeight,
 
-      // Custom GeoWave parameters
+      // CUSTOM GEOWAVE PARAMETERS
+      // Options for queryType include: CNT_AGGR, SUM_AGGR, CNT_STATS, SUM_STATS
       @DescribeParameter(
           name = "queryType",
-          description = "Height of the output raster") String queryType, // can be: CNT_AGGR,
-                                                                         // SUM_AGGR, CNT_STATS,
-                                                                         // SUM_STATS.
+          description = "Height of the output raster") String queryType,
       @DescribeParameter(
           name = "createStats",
           description = "Option to run statistics if they do not exist in datastore - must have queryType set to CNT_STATS or SUM_STATS.") Boolean createStats,
@@ -483,7 +483,7 @@ public class GeoWaveHeatMapFinal implements VectorProcess {
     System.out.println("\tattrExpr: " + attrExpr);
 
     int counter = 0;
-    Boolean writeGeoJson = false; // NEW - for testing purposes only
+    // Boolean writeGeoJson = false; // NEW - for testing purposes only
 
     // FileWriter writer;
     // try {

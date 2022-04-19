@@ -1,15 +1,12 @@
 /**
  * Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
  * 
- * @author Milla Zagorski
- *
- *         <p> See the NOTICE file distributed with this work for additional information regarding
- *         copyright ownership. All rights reserved. This program and the accompanying materials are
- *         made available under the terms of the Apache License, Version 2.0 which accompanies this
- *         distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ * <p> See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
 package org.locationtech.geowave.test.services;
-
 
 import static org.junit.Assert.assertTrue;
 import java.awt.geom.Point2D;
@@ -41,7 +38,7 @@ public class GeoWaveHeatMapFinalIT {
    * <p>Test includes data which lies outside the heatmap buffer area, to check that it is filtered
    * correctly (i.e. does not cause out-of-range errors, and does not affect generated surface).
    * 
-   * @author Milla Zagorski
+   * @author M. Zagorski
    * @apiNode Note: based on the GeoTools version of HeatmapProcess integration test by Martin Davis
    *          - OpenGeo.
    * @apiNote Date: 3-25-2022 <br>
@@ -52,7 +49,6 @@ public class GeoWaveHeatMapFinalIT {
    */
   @Test
   public void testSimpleSurface() {
-    System.out.println("STARTING SIMPLE SURFACE TEST - GeoWaveHeatMapFinalIT.java");
 
     ReferencedEnvelope bounds = new ReferencedEnvelope(0, 10, 0, 10, DefaultGeographicCRS.WGS84);
     Coordinate[] data =
@@ -103,7 +99,6 @@ public class GeoWaveHeatMapFinalIT {
   }
 
   private float coverageValue(GridCoverage2D cov, double x, double y) {
-    System.out.println("STARTING COVERAGE VALUE");
 
     float[] covVal = new float[1];
     Point2D worldPos = new Point2D.Double(x, y);
@@ -112,7 +107,6 @@ public class GeoWaveHeatMapFinalIT {
   }
 
   private SimpleFeatureCollection createPoints(Coordinate[] pts, ReferencedEnvelope bounds) {
-    System.out.println("STARTING CREATE POINTS");
 
     SimpleFeatureTypeBuilder tb = new SimpleFeatureTypeBuilder();
     tb.setName("data");

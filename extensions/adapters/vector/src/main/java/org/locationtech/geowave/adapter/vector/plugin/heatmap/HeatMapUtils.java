@@ -19,6 +19,7 @@ import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.VarintUtils;
+import org.locationtech.geowave.core.store.adapter.statistics.histogram.TDigestNumericHistogram;
 import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.query.aggregate.FieldNameParam;
@@ -68,6 +69,7 @@ public class HeatMapUtils {
    *         information.
    */
   public static SimpleFeature buildSimpleFeature(
+      // final TDigestNumericHistogram histogram,
       final SimpleFeatureType featureType,
       final ByteArray geohashId,
       final Double value,
@@ -81,6 +83,9 @@ public class HeatMapUtils {
 
     // Convert the value to a double
     double valDbl = value.doubleValue();
+
+    // Get the histogram-weighted value
+    // valDbl = histogram.cdf(valDbl);
 
     // Convert GeoHash ID to string
     String geoHashIdStr = geohashId.getString();
@@ -127,7 +132,8 @@ public class HeatMapUtils {
    * Get an appropriate Geohash precision based on the approximate area (square kilometers) of a
    * grid cell.
    * 
-   * @param cellArea {double} The area (square kilometers) of the grid cell (from the GeoServer mapping extent).
+   * @param cellArea {double} The area (square kilometers) of the grid cell (from the GeoServer
+   *        mapping extent).
    * @return Returns an integer for the Geohash precision (1-12).
    */
   public static int getGeohashPrecision(double cellArea) {
