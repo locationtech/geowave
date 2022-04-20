@@ -435,69 +435,70 @@ public class GeoWaveHeatMapFinal implements VectorProcess {
       while (obsIt.hasNext()) {
         SimpleFeature feature = obsIt.next();
 
-        try {
-          // get the weight value, if any
-          double val = 1;
-          if (attrExpr != null) {
-            val = getPointValue(feature, attrExpr);
-          }
+        // try {
+        // get the weight value, if any
+        double val = 1;
+        if (attrExpr != null) {
+          val = getPointValue(feature, attrExpr);
+        }
 
-          // Get the information (testing and verification purposes only)
-          if (writeGeoJson) {
-            Expression geohashIdExpr = ECQL.toExpression("geohashId");
-            String geohashId = geohashIdExpr.evaluate(feature, String.class);
+        // Get the information (testing and verification purposes only)
+        if (writeGeoJson) {
+          Expression geohashIdExpr = ECQL.toExpression("geohashId");
+          String geohashId = geohashIdExpr.evaluate(feature, String.class);
 
-            Expression sourceExpr = ECQL.toExpression("source");
-            String source = sourceExpr.evaluate(feature, String.class);
+          Expression sourceExpr = ECQL.toExpression("source");
+          String source = sourceExpr.evaluate(feature, String.class);
 
-            Expression geohashPrecExpr = ECQL.toExpression("geohashPrec");
-            Integer geohashPrec = geohashPrecExpr.evaluate(feature, Integer.class);
+          Expression geohashPrecExpr = ECQL.toExpression("geohashPrec");
+          Integer geohashPrec = geohashPrecExpr.evaluate(feature, Integer.class);
 
-            Expression fieldNameExpr = ECQL.toExpression("field_name");
-            String fieldName = fieldNameExpr.evaluate(feature, String.class);
+          Expression fieldNameExpr = ECQL.toExpression("field_name");
+          String fieldName = fieldNameExpr.evaluate(feature, String.class);
 
-            // Create geojson file (for testing and verification purposes only)
-            counter++;
-            if (counter <= 30) {
-              FeatureJSON fjson = new FeatureJSON();
-              String name =
-                  "/home/milla/Desktop/BACKUP_WORKING/GEOWAVE_BACKUP/geowave/JOSM_Verification/output_data/"
-                      + fieldName
-                      + "_GEOHASH_"
-                      + geohashPrec
-                      + "_"
-                      + geohashId
-                      + "_"
-                      + source
-                      + "_val_"
-                      + val
-                      + ".geojson";
-              try {
-                fjson.writeFeature(feature, name);
-              } catch (IOException e) {
-                e.printStackTrace();
-              }
+          // Create geojson file (for testing and verification purposes only)
+          counter++;
+          if (counter <= 30) {
+            FeatureJSON fjson = new FeatureJSON();
+            String name =
+                "/home/milla/Desktop/BACKUP_WORKING/GEOWAVE_BACKUP/geowave/JOSM_Verification/output_data/"
+                    + fieldName
+                    + "_GEOHASH_"
+                    + geohashPrec
+                    + "_"
+                    + geohashId
+                    + "_"
+                    + source
+                    + "_val_"
+                    + val
+                    + ".geojson";
+            try {
+              fjson.writeFeature(feature, name);
+            } catch (IOException e) {
+              e.printStackTrace();
             }
           }
+        }
 
-          // get the point location from the geometry
-          Geometry geom = (Geometry) feature.getDefaultGeometry();
-          Coordinate p = getPoint(geom);
-          srcPt[0] = p.x;
-          srcPt[1] = p.y;
+        // get the point location from the geometry
+        Geometry geom = (Geometry) feature.getDefaultGeometry();
+        Coordinate p = getPoint(geom);
+        srcPt[0] = p.x;
+        srcPt[1] = p.y;
+
+        try {
           trans.transform(srcPt, 0, dstPt, 0, 1);
+
           Coordinate pobs = new Coordinate(dstPt[0], dstPt[1], val);
 
           heatMap.addPoint(pobs.x, pobs.y, val);
-        } catch (RuntimeException e) {
-          throw new RuntimeException("Runtime Exception: ", e);
         } catch (Exception e) {
-          LOGGER.info(
-              "Expression {} failed to evaluate to a numeric value {} ",
+          LOGGER.warn(
+              "Expression {} failed to evaluate to a numeric value {} due to: {}",
               attrExpr,
-              e.getMessage());
-
-          throw new RuntimeException("Expression failed: ", e);
+              val,
+              e);
+          e.printStackTrace();
         }
       }
     }
