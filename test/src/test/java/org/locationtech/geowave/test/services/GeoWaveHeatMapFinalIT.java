@@ -16,10 +16,8 @@ import org.geotools.feature.DefaultFeatureCollection;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.geotools.process.vector.HeatmapProcess;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.junit.Test;
-import org.locationtech.geowave.adapter.vector.plugin.GeoWaveHeatMap;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWaveHeatMapFinal;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
@@ -70,7 +68,7 @@ public class GeoWaveHeatMapFinalIT {
         process.execute(
             fc, // data
             20, // radius
-            "count", // weightAttr
+            null, // weightAttr
             1, // pixelsPerCell
             bounds, // outputEnv
             100, // outputWidth

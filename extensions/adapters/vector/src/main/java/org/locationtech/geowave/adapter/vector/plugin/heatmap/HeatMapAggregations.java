@@ -24,15 +24,11 @@ import org.locationtech.geowave.core.store.adapter.statistics.histogram.TDigestN
 import org.locationtech.geowave.core.store.api.AggregationQuery;
 import org.locationtech.geowave.core.store.api.AggregationQueryBuilder;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.query.BaseQuery;
 import org.locationtech.geowave.core.store.query.aggregate.FieldNameParam;
 import org.locationtech.geowave.core.store.query.aggregate.FieldSumAggregation;
 import org.locationtech.geowave.core.store.query.aggregate.OptimalCountAggregation;
-import org.locationtech.geowave.core.store.query.options.AggregateTypeQueryOptions;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Methods for HeatMap aggregation queries.
@@ -44,8 +40,6 @@ import org.slf4j.LoggerFactory;
  * 
  */
 public class HeatMapAggregations {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(HeatMapAggregations.class);
 
   public static String SUM_AGGR = "sum_aggr";
   public static String CNT_AGGR = "cnt_aggr";
@@ -68,8 +62,6 @@ public class HeatMapAggregations {
       Geometry jtsBounds,
       Integer geohashPrec,
       String weightAttr) {
-
-    LOGGER.info("SUM_AGGR - STARTING buildFieldSumAggrQuery");
 
     // Initialize empty SimpleFeature list
     List<SimpleFeature> newSimpleFeatures = new ArrayList<>();
@@ -124,8 +116,6 @@ public class HeatMapAggregations {
     // Add the new simple features to the SimpleFeatureCollection
     SimpleFeatureCollection newFeatures = DataUtilities.collection(newSimpleFeatures);
 
-    LOGGER.info("SUM_AGGR - DONE processing {0} centroid points", newSimpleFeatures.size());
-
     return newFeatures;
   }
 
@@ -146,8 +136,6 @@ public class HeatMapAggregations {
       Geometry jtsBounds,
       Integer geohashPrec,
       String weightAttr) {
-
-    LOGGER.info("CNT_AGGR - STARTING buildCountAggrQuery");
 
     // Initialize empty SimpleFeature list
     List<SimpleFeature> newSimpleFeatures = new ArrayList<>();
