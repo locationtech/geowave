@@ -13,7 +13,6 @@ import java.util.Iterator;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureReader;
 import org.geotools.data.Query;
-import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.store.DataFeatureCollection;
 import org.geotools.feature.FeatureIterator;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -23,7 +22,6 @@ import org.locationtech.geowave.adapter.vector.render.DistributedRenderResult;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxStatistic.BoundingBoxValue;
-// import org.locationtech.geowave.core.geotime.util.CellCounter;
 import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitor;
 import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitorResult;
 import org.locationtech.geowave.core.geotime.util.ExtractTimeFilterVisitor;
@@ -249,29 +247,26 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
               constraints.referencedEnvelope,
               constraints.limit);
 
-      // ----------------------HEATMAP-------------------------------------------------
     } else if (query.getHints().containsKey(GeoWaveHeatMapFinal.OUTPUT_WIDTH)
         && query.getHints().containsKey(GeoWaveHeatMapFinal.OUTPUT_HEIGHT)
         && query.getHints().containsKey(GeoWaveHeatMapFinal.OUTPUT_BBOX)) {
 
+      // KEEP THIS HERE FOR NOW
       // ORIGINAL NON-AGGREGATION METHOD: This gets all the data points - Default for testing
       // purposes only (WORKS!)
       // featureCursor =
       // reader.getData(constraints.jtsBounds, constraints.timeBounds, constraints.limit);
 
-      // NEW HEAT MAP AGGREGATION
+      // GeoWave Heatmap Process
       featureCursor =
           new CloseableIterator.Wrapper<SimpleFeature>(
               DataUtilities.iterator(
                   reader.getDataHeatMap(
                       constraints.jtsBounds,
-                      constraints.timeBounds,
                       (ReferencedEnvelope) query.getHints().get(GeoWaveHeatMapFinal.OUTPUT_BBOX),
                       (Integer) query.getHints().get(GeoWaveHeatMapFinal.OUTPUT_WIDTH),
                       (Integer) query.getHints().get(GeoWaveHeatMapFinal.OUTPUT_HEIGHT),
-                      constraints.limit)));
-
-      // ------------------------------------------------------------------------------
+                      constraints.limit))); // TODO: is limit needed?
 
     } else {
       featureCursor =
@@ -288,15 +283,15 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
           reader.getFeatureType().getCoordinateReferenceSystem(),
           true);
     }
-    // -------------------------------HEATMAP-------------------------------------------------------------
 
+    // Return the heatmap referenced envelope
     if (query.getHints().containsKey(GeoWaveHeatMapFinal.OUTPUT_BBOX)) {
 
       return ((ReferencedEnvelope) query.getHints().get(GeoWaveHeatMapFinal.OUTPUT_BBOX)).transform(
           reader.getFeatureType().getCoordinateReferenceSystem(),
           true);
     }
-    // ----------------------------------------------------------------------------------------------------
+
     return null;
   }
 

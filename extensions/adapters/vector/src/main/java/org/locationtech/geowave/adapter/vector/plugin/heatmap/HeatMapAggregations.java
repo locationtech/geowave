@@ -124,6 +124,8 @@ public class HeatMapAggregations {
    * Builds the count aggregation query and returns a SimpleFeatureCollection.
    * 
    * @param components {GeoWaveDataStoreComponents} The base components of the dataset.
+   * @param jtsBounds {Geometry} The geometry representing the bounds of the GeoServer map viewer
+   *        extent.
    * @param geohashPrec {Integer} The Geohash precision to use for binning.
    * @param weightAttr {String} The name of the field in the dataset to which the query is applied.
    * @return {SimpleFeatureCollection} Returns a SimpleFeatureCollection of spatial bin centroids
