@@ -70,7 +70,7 @@ public class GeoWaveHeatMapFinalIT {
         process.execute(
             fc, // data
             20, // radius
-            null, // weightAttr
+            "count", // weightAttr
             1, // pixelsPerCell
             bounds, // outputEnv
             100, // outputWidth
