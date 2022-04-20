@@ -8,21 +8,13 @@
  */
 package org.locationtech.geowave.adapter.vector.plugin;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.Map;
-import org.geoserver.wms.GetMapRequest;
-import org.geoserver.wms.WMSMapContent;
 import org.geotools.coverage.CoverageFactoryFinder;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.GridCoverageFactory;
 import org.geotools.data.Query;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
-import org.geotools.feature.DefaultFeatureCollection;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
 import org.geotools.geojson.feature.FeatureJSON;
@@ -38,10 +30,6 @@ import org.geotools.process.vector.VectorProcess;
 import org.geotools.referencing.CRS;
 import org.geotools.util.factory.GeoTools;
 import org.geotools.util.factory.Hints;
-import org.geotools.util.factory.Hints.Key;
-import org.json.simple.JSONObject;
-import org.locationtech.geowave.adapter.vector.plugin.GeoWaveFeatureReader.CellCounter;
-// import org.locationtech.geowave.core.geotime.util.CellCounter;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.util.Stopwatch;
@@ -54,6 +42,8 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.util.ProgressListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A Process that uses a {@link HeatmapSurface} to compute a heatmap surface over a set of irregular
@@ -126,10 +116,13 @@ import org.opengis.util.ProgressListener;
  *
  * 
  */
+@SuppressWarnings("deprecation")
 @DescribeProcess(
     title = "GeoWaveHeatMapFinal",
     description = "Computes a heatmap surface over a set of data points and outputs as a single-band raster.")
 public class GeoWaveHeatMapFinal implements VectorProcess {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveHeatMapFinal.class);
 
   // For testing and verification of accuracy only (keep set to false in production)
   Boolean writeGeoJson = false;
@@ -203,27 +196,6 @@ public class GeoWaveHeatMapFinal implements VectorProcess {
 
       ProgressListener monitor) throws ProcessException {
 
-    System.out.println("HEATMAP 2. STARTING GEOWAVEHEATMAP PROCESS FINAL!");
-
-    // System.out.println("\tENABLED? " + HEATMAP_ENABLED);
-    System.out.println("\tHEATMAP - sample size: " + obsFeatures.size()); // should be 13,742
-                                                                          // features
-    System.out.println("\tHEATMAP - Main OutputHeight: " + argOutputHeight);
-    System.out.println("\tHEATMAP - SCHEMA: " + obsFeatures.getSchema());
-    System.out.println("\tHEATMAP - MAIN - QUERY TYPE: " + queryType);
-
-    // WILL BE A CELLCOUNTER
-    // GET X,Y COORDINATES:
-    // from the cellId in the CellCounter you can get X and Y coordinates of the grid using logic
-    // like this:
-    // final int xCoordinate = (int) (cellId / heightInPixels);
-    // final int yCoordinate = (int) (cellId % heightInPixels);
-
-    // ULTIMATELY, want to:
-    // quantile distribution / histogram would be run on the data along with the cellCounter and put
-    // that in the image
-    // cumulative distribution function (CDF).
-
     /** -------- Extract required information from process arguments ------------- */
     int pixelsPerCell = 1;
     if (argPixelsPerCell != null && argPixelsPerCell > 1) {
@@ -240,9 +212,7 @@ public class GeoWaveHeatMapFinal implements VectorProcess {
 
     /** Compute transform to convert input coords into output CRS */
     CoordinateReferenceSystem srcCRS = obsFeatures.getSchema().getCoordinateReferenceSystem();
-    System.out.println("\tHEATMAP - COORD REF SYSTEM: " + srcCRS);
     CoordinateReferenceSystem dstCRS = argOutputEnv.getCoordinateReferenceSystem();
-    System.out.println("\tHEATMAP - DEST COORD REF SYSTEM: " + dstCRS);
     MathTransform trans = null;
     try {
       trans = CRS.findMathTransform(srcCRS, dstCRS);
@@ -263,30 +233,20 @@ public class GeoWaveHeatMapFinal implements VectorProcess {
       radiusCells /= pixelsPerCell;
     }
 
-    System.out.println("\tradiusCells: " + radiusCells);
-    System.out.println("\targOutputEnv: " + argOutputEnv);
-    System.out.println("\tgridWidth: " + gridWidth);
-    System.out.println("\tgridHeight: " + gridHeight);
-    System.out.println("\tvalueAttr: " + valueAttr);
-    System.out.println("\ttrans: " + trans);
-
-
-
     /**
      * -------------- Extract the input observation points and add them to the heatmap -----------
      */
     HeatmapSurface heatMap = new HeatmapSurface(radiusCells, argOutputEnv, gridWidth, gridHeight);
     try {
-      extractPoints(obsFeatures, valueAttr, trans, heatMap); // Note: heatMap get updated in this
-                                                             // method
+      extractPoints(obsFeatures, valueAttr, trans, heatMap);
     } catch (CQLException e) {
       throw new ProcessException(e);
     }
 
-
-
     /** --------------- Do the processing on the heatmap------------------------------ */
-    Stopwatch sw = new Stopwatch();
+    // KEEP the stopwatch for testing and verification purposes only
+    // Stopwatch sw = new Stopwatch();
+
     // compute the heatmap at the specified resolution
     float[][] heatMapGrid = heatMap.computeSurface();
 
@@ -303,7 +263,8 @@ public class GeoWaveHeatMapFinal implements VectorProcess {
         CoverageFactoryFinder.getGridCoverageFactory(GeoTools.getDefaultHints());
     GridCoverage2D gridCov = gcf.create("Process Results", outGrid, argOutputEnv);
 
-    System.out.println("**************  Heatmap FINAL computed in " + sw.getTimeString());
+    // KEEP THIS System.out for testing and verification purposes only
+    // System.out.println("************** Heatmap FINAL computed in " + sw.getTimeString());
 
     return gridCov;
   }
@@ -380,20 +341,15 @@ public class GeoWaveHeatMapFinal implements VectorProcess {
       @DescribeParameter(
           name = "outputHeight",
           description = "Height of the output raster") Integer argOutputHeight,
+      // Can be: CNT_AGGR, SUM_AGGR, CNT_STATS, SUM_STATS
       @DescribeParameter(
           name = "queryType",
-          description = "Height of the output raster") String queryType, // can be: CNT_AGGR,
-                                                                         // SUM_AGGR, CNT_STATS,
-                                                                         // SUM_STATS.
+          description = "Height of the output raster") String queryType,
       @DescribeParameter(
           name = "createStats",
           description = "Option to run statistics if they do not exist in datastore - must have queryType set to CNT_STATS or SUM_STATS.") Boolean createStats,
       Query targetQuery,
       GridGeometry targetGridGeometry) throws ProcessException {
-
-    System.out.println("HEATMAP 1. STARTING invertQuery");
-    System.out.println("\tinvertQuery OutputHeight: " + argOutputHeight);
-
 
     // Get hints for this process
     Hints hints = targetQuery.getHints();
@@ -407,19 +363,12 @@ public class GeoWaveHeatMapFinal implements VectorProcess {
     hints.put(GEOHASH_PREC, 4);
     hints.put(AGGR_QUERY, true);
     hints.put(STATS_QUERY, false);
-    hints.put(QUERY_TYPE, queryType); // Add one of these values in the SLD: CNT_AGGR, SUM_AGGR,
-                                      // CNT_STATS, SUM_STATS.
-    hints.put(WEIGHT_ATTR, valueAttr); // TODO: change this to SUM_ATTR (not used by count aggr or
-                                       // stats).
+
+    // Add one of these values in the SLD: CNT_AGGR, SUM_AGGR, CNT_STATS, SUM_STATS.
+    hints.put(QUERY_TYPE, queryType);
+
+    hints.put(WEIGHT_ATTR, valueAttr);
     hints.put(CREATE_STATS, createStats);
-
-    System.out.println("PLUGIN - INVERT Q - QUERY TYPE: " + queryType);
-
-    // if (pixelSize != null) {
-    // hints.put(PIXEL_SIZE, pixelSize);
-    // }
-
-    // TODO: handle different CRSes in input and output
 
     int radiusPixels = argRadiusPixels > 0 ? argRadiusPixels : 0;
     // input parameters are required, so should be non-null
@@ -465,36 +414,22 @@ public class GeoWaveHeatMapFinal implements VectorProcess {
    * @param heatMap heatmap to add points to
    * @throws CQLException if attrName can't be parsed
    */
-  @SuppressWarnings("deprecation")
   protected void extractPoints(
       SimpleFeatureCollection obsPoints,
       String attrName,
       MathTransform trans,
       HeatmapSurface heatMap) throws CQLException {
-    System.out.println("HEATMAP 2. STARTING extractPoints");
 
     Expression attrExpr = null;
     if (attrName != null) {
       attrExpr = ECQL.toExpression(attrName);
     }
 
-    // -----------NEW------
-    System.out.println("\tattrName: " + attrName);
-    System.out.println("\tattrExpr: " + attrExpr);
-
     int counter = 0;
-    // Boolean writeGeoJson = false; // NEW - for testing purposes only
-
-    // FileWriter writer;
-    // try {
-    // writer = new
-    // FileWriter("/home/milla/Desktop/BACKUP_WORKING/GEOWAVE_BACKUP/geowave/JOSM_Verification/COUNT_OUTPUT_GEOHASH_4.geojson");
-    // -------------------------
 
     try (SimpleFeatureIterator obsIt = obsPoints.features()) {
       double[] srcPt = new double[2];
       double[] dstPt = new double[2];
-
 
       // Iterate over the results
       while (obsIt.hasNext()) {
@@ -505,27 +440,23 @@ public class GeoWaveHeatMapFinal implements VectorProcess {
           double val = 1;
           if (attrExpr != null) {
             val = getPointValue(feature, attrExpr);
-            System.out.println("\tHEATMAP - val: " + val);
           }
 
-          // -----------GET THE GEOHASH ID-----NEW----------------------
+          // Get the information (testing and verification purposes only)
           if (writeGeoJson) {
             Expression geohashIdExpr = ECQL.toExpression("geohashId");
             String geohashId = geohashIdExpr.evaluate(feature, String.class);
 
             Expression sourceExpr = ECQL.toExpression("source");
             String source = sourceExpr.evaluate(feature, String.class);
-            System.out.println("\tGEOHASH ID: " + geohashId + " source: " + source);
 
             Expression geohashPrecExpr = ECQL.toExpression("geohashPrec");
             Integer geohashPrec = geohashPrecExpr.evaluate(feature, Integer.class);
-            System.out.println("\tGEOHASH PREC: " + geohashPrec);
 
             Expression fieldNameExpr = ECQL.toExpression("field_name");
             String fieldName = fieldNameExpr.evaluate(feature, String.class);
-            System.out.println("\tWEIGTHT ATTR NAME: " + fieldName);
 
-            // ----------WRITE TO JSON-----NEW-----------------------------
+            // Create geojson file (for testing and verification purposes only)
             counter++;
             if (counter <= 30) {
               FeatureJSON fjson = new FeatureJSON();
@@ -536,8 +467,6 @@ public class GeoWaveHeatMapFinal implements VectorProcess {
                       + geohashPrec
                       + "_"
                       + geohashId
-                      // + "_"
-                      // + counter
                       + "_"
                       + source
                       + "_val_"
@@ -545,15 +474,11 @@ public class GeoWaveHeatMapFinal implements VectorProcess {
                       + ".geojson";
               try {
                 fjson.writeFeature(feature, name);
-                // fjson.writeFeature(feature, writer);
-                System.out.println("\tHEATMAP - GEOJSON WRITTEN AND CREATED");
               } catch (IOException e) {
                 e.printStackTrace();
               }
             }
           }
-          // --------------------------------------------------------------
-
 
           // get the point location from the geometry
           Geometry geom = (Geometry) feature.getDefaultGeometry();
@@ -563,24 +488,19 @@ public class GeoWaveHeatMapFinal implements VectorProcess {
           trans.transform(srcPt, 0, dstPt, 0, 1);
           Coordinate pobs = new Coordinate(dstPt[0], dstPt[1], val);
 
-          System.out.println("\tHEATMAP - COORD: " + p);
-
           heatMap.addPoint(pobs.x, pobs.y, val);
+        } catch (RuntimeException e) {
+          throw new RuntimeException("Runtime Exception: ", e);
         } catch (Exception e) {
-          // just carry on for now (debugging)
-          // throw new ProcessException("Expression " + attrExpr +
-          // " failed to evaluate to a numeric value", e);
+          LOGGER.info(
+              "Expression {} failed to evaluate to a numeric value {} ",
+              attrExpr,
+              e.getMessage());
+
+          throw new RuntimeException("Expression failed: ", e);
         }
       }
     }
-
-    // ----------NEW------
-    // writer.close();
-    // } catch (IOException e1) {
-    // // TODO Auto-generated catch block
-    // e1.printStackTrace();
-    // }
-
   }
 
   /**
@@ -611,35 +531,4 @@ public class GeoWaveHeatMapFinal implements VectorProcess {
     }
     return 1;
   }
-
-
-  // private static void createGeoJsonFile(JSONObject jsonObject) {
-  // System.out.println("HEATMAP - STARTING createGeoJsonFile");
-  // try {
-  // FileWriter file = new
-  // FileWriter("/home/milla/Desktop/BACKUP_WORKING/GEOWAVE_BACKUP/geowave/JOSM_Verification/count_GH4.geojson");
-  // file.write(jsonObject.toJSONString());
-  // file.close();
-  // } catch (IOException e) {
-  // // TODO Auto-generated catch block
-  // e.printStackTrace();
-  // }
-  // System.out.println("JSON file created: "+jsonObject);
-  // }
-
-  // /**
-  // * HeatmapCellCounter initializes an empty CellCounter.
-  // * Returns a HashMap containing the cell ID and the cell weight.
-  // */
-  // public static class HeatmapCellCounter implements CellCounter{
-  // Map<Long, Double> cells = new HashMap<>();
-  // @Override
-  // public void increment(long cellId, double weight) {
-  // Double existingWeight = cells.get(cellId);
-  // if (existingWeight == null) {
-  // existingWeight = 0.0;
-  // }
-  // cells.put(cellId, existingWeight + weight);
-  // }
-  // }
 }
