@@ -8,39 +8,27 @@
  */
 package org.locationtech.geowave.adapter.vector.plugin.heatmap;
 
-import java.math.BigDecimal;
-import java.nio.ByteBuffer;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.geometry.jts.JTS;
-import org.geotools.measure.Measure;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArray;
-import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.TDigestNumericHistogram;
-import org.locationtech.geowave.core.store.api.Aggregation;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
-import org.locationtech.geowave.core.store.query.aggregate.FieldNameParam;
 import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
 import com.github.davidmoten.geo.GeoHash;
 import com.github.davidmoten.geo.LatLong;
-import si.uom.SI;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents;
-import org.locationtech.geowave.adapter.vector.plugin.heatmap.HeatMapAggregations;
-import org.geotools.measure.Measure;
 
 /**
  * Utility methods to support HeatMap queries.
@@ -51,7 +39,6 @@ import org.geotools.measure.Measure;
  * @apiNote Changelog: <br>
  * 
  */
-// public class HeatMapUtils implements Aggregation<FieldNameParam, Long, SimpleFeature> {
 public class HeatMapUtils {
 
   public static int SQ_KM_CONV = 1000 * 1000;

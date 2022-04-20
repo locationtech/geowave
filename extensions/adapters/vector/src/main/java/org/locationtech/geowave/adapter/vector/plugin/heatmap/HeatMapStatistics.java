@@ -28,8 +28,6 @@ import org.locationtech.geowave.core.store.statistics.field.NumericStatsStatisti
 import org.locationtech.geowave.core.store.statistics.field.Stats;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Methods for HeatMap statistics queries. <br>
@@ -45,8 +43,6 @@ public class HeatMapStatistics {
   public static String SUM_STATS = "sum_stats";
   public static String CNT_STATS = "cnt_stats";
   public static String GEOHASH_STR = "geohash";
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(HeatMapStatistics.class);
 
 
   /**
@@ -198,7 +194,6 @@ public class HeatMapStatistics {
 
     // Add statistics to datastore
     components.getDataStore().addStatistic(geohashCount);
-    LOGGER.info("CNT_STATS - DONE adding count statistics to datastore");
   }
 
 
@@ -223,7 +218,6 @@ public class HeatMapStatistics {
       Integer geohashPrec,
       String weightAttr,
       Boolean createStats) {
-    LOGGER.info("SUM_STATS - STARTING buildFieldStatsQuery");
 
     // Initialize empty SimpleFeature list
     List<SimpleFeature> newSimpleFeatures = new ArrayList<>();
@@ -320,8 +314,6 @@ public class HeatMapStatistics {
               weightAttr);
     }
 
-    LOGGER.info("SUM_STATS - DONE processing {0} centroid points", newSimpleFeatures.size());
-
     return newFeatures;
   }
 
@@ -341,8 +333,6 @@ public class HeatMapStatistics {
       String typeName,
       Integer geohashPrec,
       String weightAttr) {
-
-    LOGGER.info("SUM_STATS - STARTING addGeoHashFieldStatisticsToDataStore");
 
     // Set up the field statistic
     final NumericStatsStatistic geohashFieldStat = new NumericStatsStatistic(typeName, weightAttr);
@@ -367,8 +357,6 @@ public class HeatMapStatistics {
 
     // Add statistics to datastore
     components.getDataStore().addStatistic(geohashFieldStat);
-
-    LOGGER.info("SUM_STATS - DONE adding field statistics to datastore");
   }
 
 }
