@@ -18,7 +18,7 @@ import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.junit.Test;
-import org.locationtech.geowave.adapter.vector.plugin.GeoWaveHeatMapFinal;
+import org.locationtech.geowave.adapter.vector.plugin.GeoWaveHeatMapProcess;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -27,7 +27,7 @@ import org.locationtech.jts.geom.impl.PackedCoordinateSequenceFactory;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.util.ProgressListener;
 
-public class GeoWaveHeatMapFinalIT {
+public class GeoWaveHeatMapProcessIT {
 
   /**
    * A test of a simple surface, validating that the process can be invoked and return a reasonable
@@ -62,7 +62,7 @@ public class GeoWaveHeatMapFinalIT {
 
     // HeatmapProcess process = new HeatmapProcess(); // changed this to the GeoWaveHeatMap
     // GeoWaveHeatMap process = new GeoWaveHeatMap(); //Baseline tests pass
-    GeoWaveHeatMapFinal process = new GeoWaveHeatMapFinal(); // Baseline tests pass
+    GeoWaveHeatMapProcess process = new GeoWaveHeatMapProcess(); // Baseline tests pass
 
     GridCoverage2D cov =
         process.execute(

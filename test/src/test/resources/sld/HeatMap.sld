@@ -12,7 +12,7 @@
       <Abstract>A heatmap surface showing a specified density</Abstract>
       <FeatureTypeStyle>
         <Transformation>
-          <ogc:Function name="geowave:GeoWaveHeatMapFinal">
+          <ogc:Function name="geowave:GeoWaveHeatMap">
             <ogc:Function name="parameter">
               <ogc:Literal>data</ogc:Literal>
             </ogc:Function>

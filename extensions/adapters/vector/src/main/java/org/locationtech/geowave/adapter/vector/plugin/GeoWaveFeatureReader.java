@@ -240,19 +240,19 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
       final QueryIssuerHeatMap issuer) {
 
     // Set defaults (to be overridden by user preferences)
-    String queryType = GeoWaveHeatMapFinal.CNT_AGGR;
+    String queryType = GeoWaveHeatMapProcess.CNT_AGGR;
     String weightAttr = "count"; // TODO: what should this be set to?
     int pixelsPerCell = 1;
     Boolean createStats = false;
 
-    if (this.query.getHints().containsKey(GeoWaveHeatMapFinal.HEATMAP_ENABLED)
-        && (Boolean) this.query.getHints().get(GeoWaveHeatMapFinal.HEATMAP_ENABLED)) {
+    if (this.query.getHints().containsKey(GeoWaveHeatMapProcess.HEATMAP_ENABLED)
+        && (Boolean) this.query.getHints().get(GeoWaveHeatMapProcess.HEATMAP_ENABLED)) {
 
       // Get user specified parameters
-      queryType = (String) this.query.getHints().get(GeoWaveHeatMapFinal.QUERY_TYPE);
-      weightAttr = (String) this.query.getHints().get(GeoWaveHeatMapFinal.WEIGHT_ATTR);
-      pixelsPerCell = (Integer) this.query.getHints().get(GeoWaveHeatMapFinal.PIXELS_PER_CELL);
-      createStats = (Boolean) this.query.getHints().get(GeoWaveHeatMapFinal.CREATE_STATS);
+      queryType = (String) this.query.getHints().get(GeoWaveHeatMapProcess.QUERY_TYPE);
+      weightAttr = (String) this.query.getHints().get(GeoWaveHeatMapProcess.WEIGHT_ATTR);
+      pixelsPerCell = (Integer) this.query.getHints().get(GeoWaveHeatMapProcess.PIXELS_PER_CELL);
+      createStats = (Boolean) this.query.getHints().get(GeoWaveHeatMapProcess.CREATE_STATS);
     }
 
     return issuer.query(queryType, weightAttr, pixelsPerCell, createStats);
@@ -271,8 +271,8 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
     }
 
     // If heatmap process is enabled, set spatialOnly to true
-    if (this.query.getHints().containsKey(GeoWaveHeatMapFinal.HEATMAP_ENABLED)
-        && (Boolean) this.query.getHints().get(GeoWaveHeatMapFinal.HEATMAP_ENABLED)) {
+    if (this.query.getHints().containsKey(GeoWaveHeatMapProcess.HEATMAP_ENABLED)
+        && (Boolean) this.query.getHints().get(GeoWaveHeatMapProcess.HEATMAP_ENABLED)) {
       spatialOnly = true;
     }
 
@@ -585,7 +585,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
       // Create a method that utilizes histogram.add(cell values);
 
       // Build the count aggregation query and get the resulting SimpleFeatureCollection
-      if (queryType.equals(GeoWaveHeatMapFinal.CNT_AGGR)) {
+      if (queryType.equals(GeoWaveHeatMapProcess.CNT_AGGR)) {
         newFeatures =
             HeatMapAggregations.buildCountAggrQuery(
                 // histogram,
@@ -596,7 +596,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
       }
 
       // Build the sum aggregation query and get the resulting SimpleFeatureCollection
-      if (queryType.equals(GeoWaveHeatMapFinal.SUM_AGGR)) {
+      if (queryType.equals(GeoWaveHeatMapProcess.SUM_AGGR)) {
         newFeatures =
             HeatMapAggregations.buildFieldSumAggrQuery(
                 components,
@@ -606,7 +606,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
       }
 
       // Build the count statistics query and get the resulting SimpleFeatureCollection
-      if (queryType.equals(GeoWaveHeatMapFinal.CNT_STATS)) {
+      if (queryType.equals(GeoWaveHeatMapProcess.CNT_STATS)) {
         newFeatures =
             HeatMapStatistics.buildCountStatsQuery(
                 components,
@@ -617,7 +617,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
       }
 
       // Build the sum statistics query and get the resulting SimpleFeatureCollection
-      if (queryType.equals(GeoWaveHeatMapFinal.SUM_STATS)) {
+      if (queryType.equals(GeoWaveHeatMapProcess.SUM_STATS)) {
         newFeatures =
             HeatMapStatistics.buildFieldStatsQuery(
                 components,

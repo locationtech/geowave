@@ -118,11 +118,11 @@ import org.slf4j.LoggerFactory;
  */
 @SuppressWarnings("deprecation")
 @DescribeProcess(
-    title = "GeoWaveHeatMapFinal",
+    title = "GeoWaveHeatMapProcess",
     description = "Computes a heatmap surface over a set of data points and outputs as a single-band raster.")
-public class GeoWaveHeatMapFinal implements VectorProcess {
+public class GeoWaveHeatMapProcess implements VectorProcess {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveHeatMapFinal.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveHeatMapProcess.class);
 
   // For testing and verification of accuracy only (keep set to false in production)
   Boolean writeGeoJson = false;

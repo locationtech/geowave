@@ -24,6 +24,6 @@ public class GeoWaveGSProcessFactory extends AnnotatedBeanProcessFactory {
         "geowave",
         SubsampleProcess.class,
         DistributedRenderProcess.class,
-        GeoWaveHeatMapFinal.class);
+        GeoWaveHeatMapProcess.class);
   }
 }
