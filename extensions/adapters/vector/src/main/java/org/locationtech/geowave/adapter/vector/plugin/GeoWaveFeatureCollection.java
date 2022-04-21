@@ -181,7 +181,7 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
     final TemporalConstraintsSet timeBounds;
     if (reader.getGeoWaveFilter() == null
         || query.getHints().containsKey(SubsampleProcess.SUBSAMPLE_ENABLED)
-        || query.getHints().containsKey(GeoWaveHeatMapFinal.HEATMAP_ENABLED)) {
+        || query.getHints().containsKey(GeoWaveHeatMapProcess.HEATMAP_ENABLED)) {
       jtsBounds = getBBox(query, referencedEnvelope);
       timeBounds = getBoundedTime(query);
     } else {
@@ -247,13 +247,11 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
               constraints.referencedEnvelope,
               constraints.limit);
 
-    } else if (query.getHints().containsKey(GeoWaveHeatMapFinal.OUTPUT_WIDTH)
-        && query.getHints().containsKey(GeoWaveHeatMapFinal.OUTPUT_HEIGHT)
-        && query.getHints().containsKey(GeoWaveHeatMapFinal.OUTPUT_BBOX)) {
+    } else if (query.getHints().containsKey(GeoWaveHeatMapProcess.OUTPUT_WIDTH)
+        && query.getHints().containsKey(GeoWaveHeatMapProcess.OUTPUT_HEIGHT)
+        && query.getHints().containsKey(GeoWaveHeatMapProcess.OUTPUT_BBOX)) {
 
-      // KEEP THIS HERE FOR NOW
-      // ORIGINAL NON-AGGREGATION METHOD: This gets all the data points - Default for testing
-      // purposes only (WORKS!)
+      // KEEP THIS FOR TESTING GEOSERVER INGEST
       // featureCursor =
       // reader.getData(constraints.jtsBounds, constraints.timeBounds, constraints.limit);
 
@@ -263,9 +261,9 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
               DataUtilities.iterator(
                   reader.getDataHeatMap(
                       constraints.jtsBounds,
-                      (ReferencedEnvelope) query.getHints().get(GeoWaveHeatMapFinal.OUTPUT_BBOX),
-                      (Integer) query.getHints().get(GeoWaveHeatMapFinal.OUTPUT_WIDTH),
-                      (Integer) query.getHints().get(GeoWaveHeatMapFinal.OUTPUT_HEIGHT),
+                      (ReferencedEnvelope) query.getHints().get(GeoWaveHeatMapProcess.OUTPUT_BBOX),
+                      (Integer) query.getHints().get(GeoWaveHeatMapProcess.OUTPUT_WIDTH),
+                      (Integer) query.getHints().get(GeoWaveHeatMapProcess.OUTPUT_HEIGHT),
                       constraints.limit))); // TODO: is limit needed?
 
     } else {
@@ -285,11 +283,12 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
     }
 
     // Return the heatmap referenced envelope
-    if (query.getHints().containsKey(GeoWaveHeatMapFinal.OUTPUT_BBOX)) {
+    if (query.getHints().containsKey(GeoWaveHeatMapProcess.OUTPUT_BBOX)) {
 
-      return ((ReferencedEnvelope) query.getHints().get(GeoWaveHeatMapFinal.OUTPUT_BBOX)).transform(
-          reader.getFeatureType().getCoordinateReferenceSystem(),
-          true);
+      return ((ReferencedEnvelope) query.getHints().get(
+          GeoWaveHeatMapProcess.OUTPUT_BBOX)).transform(
+              reader.getFeatureType().getCoordinateReferenceSystem(),
+              true);
     }
 
     return null;
