@@ -249,11 +249,9 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
 
     } else if (query.getHints().containsKey(GeoWaveHeatMapProcess.OUTPUT_WIDTH)
         && query.getHints().containsKey(GeoWaveHeatMapProcess.OUTPUT_HEIGHT)
-        && query.getHints().containsKey(GeoWaveHeatMapProcess.OUTPUT_BBOX)) {
-
-      // KEEP THIS FOR TESTING GEOSERVER INGEST
-      // featureCursor =
-      // reader.getData(constraints.jtsBounds, constraints.timeBounds, constraints.limit);
+        && query.getHints().containsKey(GeoWaveHeatMapProcess.OUTPUT_BBOX)
+        && query.getHints().containsKey(GeoWaveHeatMapProcess.USE_BINNING)
+        && (Boolean) query.getHints().get(GeoWaveHeatMapProcess.USE_BINNING) == true) {
 
       // GeoWave Heatmap Process
       featureCursor =

@@ -57,6 +57,10 @@
               <ogc:Literal>createStats</ogc:Literal>
               <ogc:Literal>true</ogc:Literal>
             </ogc:Function>
+            <ogc:Function name="parameter">
+              <ogc:Literal>useSpatialBinning</ogc:Literal>
+              <ogc:Literal>true</ogc:Literal>
+            </ogc:Function>
           </ogc:Function>
         </Transformation>
         <Rule>

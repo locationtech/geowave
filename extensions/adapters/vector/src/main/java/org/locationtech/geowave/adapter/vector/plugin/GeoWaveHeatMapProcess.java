@@ -125,7 +125,7 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveHeatMapProcess.class);
 
   // For testing and verification of accuracy only (keep set to false in production)
-  Boolean writeGeoJson = false;
+  Boolean writeGeoJson = true;
 
   // Query types
   public static final String CNT_AGGR = "CNT_AGGR";
@@ -148,6 +148,7 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
   public static final Hints.Key WEIGHT_ATTR = new Hints.Key(String.class);
   public static final Hints.Key PIXELS_PER_CELL = new Hints.Key(Integer.class);
   public static final Hints.Key CREATE_STATS = new Hints.Key(Boolean.class);
+  public static final Hints.Key USE_BINNING = new Hints.Key(Boolean.class);
 
 
   @DescribeResult(name = "result", description = "Output raster")
@@ -193,6 +194,10 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
       @DescribeParameter(
           name = "createStats",
           description = "Option to run statistics if they do not exist in datastore - must have queryType set to CNT_STATS or SUM_STATS.") Boolean createStats,
+      @DescribeParameter(
+          name = "useSpatialBinning",
+          description = "Option to use spatial binning.") Boolean useSpatialBinning,
+
 
       ProgressListener monitor) throws ProcessException {
 
@@ -245,7 +250,7 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
 
     /** --------------- Do the processing on the heatmap------------------------------ */
     // KEEP the stopwatch for testing and verification purposes only
-    // Stopwatch sw = new Stopwatch();
+    Stopwatch sw = new Stopwatch();
 
     // compute the heatmap at the specified resolution
     float[][] heatMapGrid = heatMap.computeSurface();
@@ -264,7 +269,7 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
     GridCoverage2D gridCov = gcf.create("Process Results", outGrid, argOutputEnv);
 
     // KEEP THIS System.out for testing and verification purposes only
-    // System.out.println("************** Heatmap FINAL computed in " + sw.getTimeString());
+    System.out.println("************** Heatmap FINAL computed in " + sw.getTimeString());
 
     return gridCov;
   }
@@ -348,6 +353,9 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
       @DescribeParameter(
           name = "createStats",
           description = "Option to run statistics if they do not exist in datastore - must have queryType set to CNT_STATS or SUM_STATS.") Boolean createStats,
+      @DescribeParameter(
+          name = "useSpatialBinning",
+          description = "Option to use spatial binning.") Boolean useSpatialBinning,
       Query targetQuery,
       GridGeometry targetGridGeometry) throws ProcessException {
 
@@ -360,15 +368,16 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
     hints.put(OUTPUT_WIDTH, argOutputWidth);
     hints.put(OUTPUT_HEIGHT, argOutputHeight);
     hints.put(OUTPUT_BBOX, argOutputEnv);
-    hints.put(GEOHASH_PREC, 4);
-    hints.put(AGGR_QUERY, true);
-    hints.put(STATS_QUERY, false);
+    // hints.put(GEOHASH_PREC, 4);
+    // hints.put(AGGR_QUERY, true);
+    // hints.put(STATS_QUERY, false);
 
     // Add one of these values in the SLD: CNT_AGGR, SUM_AGGR, CNT_STATS, SUM_STATS.
     hints.put(QUERY_TYPE, queryType);
 
     hints.put(WEIGHT_ATTR, valueAttr);
     hints.put(CREATE_STATS, createStats);
+    hints.put(USE_BINNING, useSpatialBinning);
 
     int radiusPixels = argRadiusPixels > 0 ? argRadiusPixels : 0;
     // input parameters are required, so should be non-null
