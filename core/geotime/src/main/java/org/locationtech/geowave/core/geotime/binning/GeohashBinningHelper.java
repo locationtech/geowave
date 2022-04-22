@@ -16,7 +16,6 @@ import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils.GeometryHandler;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
-import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.api.BinConstraints.ByteArrayConstraints;
 import org.locationtech.geowave.core.store.statistics.query.BinConstraintsImpl.ExplicitConstraints;
@@ -45,8 +44,7 @@ class GeohashBinningHelper implements SpatialBinningHelper {
     if (removePrefixes(geometryHandler.hashes)) {
       return new ExplicitConstraints(
           geometryHandler.hashes.stream().map(str -> StringUtils.stringToBinary(str)).map(
-              bytes -> new ByteArrayRange(bytes, ByteArrayUtils.getNextPrefix(bytes))).toArray(
-                  ByteArrayRange[]::new));
+              bytes -> new ByteArrayRange(bytes, bytes)).toArray(ByteArrayRange[]::new));
     }
     return new ExplicitConstraints(
         geometryHandler.hashes.stream().map(ByteArray::new).toArray(ByteArray[]::new));
