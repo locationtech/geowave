@@ -75,6 +75,7 @@ public class GeoWaveHeatMapProcessIT {
             100, // outputHeight
             "CNT_AGGR", // queryType
             false, // createStats
+            true, // useSpatialBinning
             monitor // monitor)
         );
 
