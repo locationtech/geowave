@@ -125,7 +125,7 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveHeatMapProcess.class);
 
   // For testing and verification of accuracy only (keep set to false in production)
-  Boolean writeGeoJson = true;
+  Boolean writeGeoJson = false;
 
   // Query types
   public static final String CNT_AGGR = "CNT_AGGR";
