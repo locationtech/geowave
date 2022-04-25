@@ -135,7 +135,6 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
 
 
   public static final Hints.Key HEATMAP_ENABLED = new Hints.Key(Boolean.class);
-  // public static final Hints.Key PIXEL_SIZE = new Hints.Key(Double.class);
   public static final Hints.Key OUTPUT_BBOX = new Hints.Key(ReferencedEnvelope.class);
   public static final Hints.Key OUTPUT_WIDTH = new Hints.Key(Integer.class);
   public static final Hints.Key OUTPUT_HEIGHT = new Hints.Key(Integer.class);
@@ -250,7 +249,7 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
 
     /** --------------- Do the processing on the heatmap------------------------------ */
     // KEEP the stopwatch for testing and verification purposes only
-    Stopwatch sw = new Stopwatch();
+    // Stopwatch sw = new Stopwatch();
 
     // compute the heatmap at the specified resolution
     float[][] heatMapGrid = heatMap.computeSurface();
@@ -269,7 +268,7 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
     GridCoverage2D gridCov = gcf.create("Process Results", outGrid, argOutputEnv);
 
     // KEEP THIS System.out for testing and verification purposes only
-    System.out.println("************** Heatmap FINAL computed in " + sw.getTimeString());
+    // System.out.println("************** Heatmap FINAL computed in " + sw.getTimeString());
 
     return gridCov;
   }

@@ -108,8 +108,9 @@ public class HeatMapStatistics {
 
             // Create new SimpleFeatures from the GeoHash centroid, add the statistic as attribute
             try (CloseableIterator<Pair<ByteArray, Long>> it =
-                components.getDataStore().getBinnedStatisticValues(geohashCount)) {
-              // TODO: , BinConstraints.ofObject(jtsBounds)
+                components.getDataStore().getBinnedStatisticValues(
+                    geohashCount,
+                    BinConstraints.ofObject(jtsBounds))) {
 
               // Iterate over all bins and build the SimpleFeature list
               while (it.hasNext()) {
@@ -258,8 +259,9 @@ public class HeatMapStatistics {
 
             // Create new SimpleFeatures from the GeoHash centroid and add the statistic and other
             try (CloseableIterator<Pair<ByteArray, Stats>> it =
-                components.getDataStore().getBinnedStatisticValues(geohashNumeric)) {
-              // TODO: , BinConstraints.ofObject(jtsBounds)
+                components.getDataStore().getBinnedStatisticValues(
+                    geohashNumeric,
+                    BinConstraints.ofObject(jtsBounds))) {
 
               // Iterate over all bins and build the SimpleFeature list
               while (it.hasNext()) {
