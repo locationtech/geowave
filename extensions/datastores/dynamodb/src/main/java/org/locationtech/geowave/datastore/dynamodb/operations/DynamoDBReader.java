@@ -304,7 +304,7 @@ public class DynamoDBReader<T> implements RowReader<T> {
                 new AttributeValue().withB(ByteBuffer.wrap(partitionId))));
     if (sortRange == null) {
       start = ByteArrayUtils.shortToByteArray(internalAdapterId);
-      end = new ByteArray(start).getNextPrefix();
+      end = ByteArrayUtils.getNextInclusive(start);
     } else if (sortRange.isSingleValue()) {
       start =
           ByteArrayUtils.combineArrays(
@@ -314,7 +314,7 @@ public class DynamoDBReader<T> implements RowReader<T> {
           ByteArrayUtils.combineArrays(
               ByteArrayUtils.shortToByteArray(internalAdapterId),
               DynamoDBUtils.encodeSortableBase64(
-                  ByteArrayUtils.getNextPrefix(sortRange.getStart())));
+                  ByteArrayUtils.getNextInclusive(sortRange.getStart())));
     } else {
       if (sortRange.getStart() == null) {
         start = ByteArrayUtils.shortToByteArray(internalAdapterId);
@@ -333,9 +333,8 @@ public class DynamoDBReader<T> implements RowReader<T> {
                 DynamoDBUtils.encodeSortableBase64(next(sortRange.getEnd())));
       }
     }
-    // because this is using getEndAsNextPrefix and between is inclusive on the end, it seems this
-    // could include an additional result on a very unlikely corner case that the end prefix exactly
-    // matches a key (perhaps its better to use GE and LT to force strictly less than?)
+    // because this DYNAMODB BETWEEN is inclusive on the end, we are using an inclusive getEnd which
+    // appends 0xFF instead of the typical getEndAsNextPrefix which assumes an exclusive end
     query.addKeyConditionsEntry(
         DynamoDBRow.GW_RANGE_KEY,
         new Condition().withComparisonOperator(ComparisonOperator.BETWEEN).withAttributeValueList(

@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
+import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
@@ -48,7 +49,7 @@ public class DynamoDBMetadataReader implements MetadataReader {
 
     final boolean needsVisibility =
         metadataType.isStatValues()
-            && this.operations.getOptions().getBaseOptions().isVisibilityEnabled();
+            && operations.getOptions().getBaseOptions().isVisibilityEnabled();
     final Iterator<Map<String, AttributeValue>> iterator;
     if (!query.hasPrimaryIdRanges()) {
       if (query.hasPrimaryId() && query.isExact()) {
@@ -109,8 +110,10 @@ public class DynamoDBMetadataReader implements MetadataReader {
                 DynamoDBOperations.METADATA_PRIMARY_ID_KEY,
                 new Condition().withAttributeValueList(
                     new AttributeValue().withB(ByteBuffer.wrap(r.getStart())),
-                    new AttributeValue().withB(ByteBuffer.wrap(r.getEnd()))).withComparisonOperator(
-                        ComparisonOperator.BETWEEN));
+                    new AttributeValue().withB(
+                        ByteBuffer.wrap(
+                            ByteArrayUtils.getNextInclusive(r.getEnd())))).withComparisonOperator(
+                                ComparisonOperator.BETWEEN));
 
           } else {
             scan.addScanFilterEntry(
