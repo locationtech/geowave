@@ -29,6 +29,8 @@ import org.opengis.referencing.operation.TransformException;
 import com.github.davidmoten.geo.GeoHash;
 import com.github.davidmoten.geo.LatLong;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utility methods to support HeatMap queries.
@@ -42,6 +44,8 @@ import org.locationtech.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents
 public class HeatMapUtils {
 
   public static int SQ_KM_CONV = 1000 * 1000;
+
+  static final Logger LOGGER = LoggerFactory.getLogger(HeatMapUtils.class);
 
   /**
    * Builds a simple feature.
@@ -151,6 +155,50 @@ public class HeatMapUtils {
     return 4;
   }
 
+  /**
+   * Calculate the approximate area of a geometry based on it's envelope. To be used for geometries
+   * projected in a metric based projection.
+   * 
+   * @param geom {Geometry}
+   * @param sourceCRS {CoordinateReferenceSystem}
+   * @return {Double} Returns the area in square kilometers.
+   */
+  public static double getAreaMetricProjections(
+      Geometry geom,
+      CoordinateReferenceSystem sourceCRS) {
+    return geom.getArea() / SQ_KM_CONV;
+  }
+
+  /**
+   * Calculate the approximate area of a geometry based on it's envelope. To be used for geometries
+   * projected in a non-metric based projection.
+   * 
+   * @param geom {Geometry}
+   * @param sourceCRS {CoordinateReferenceSystem}
+   * @return {Double} Returns the area in square kilometers.
+   */
+  public static double getAreaNonMetricProjections(
+      Geometry geom,
+      CoordinateReferenceSystem sourceCRS) {
+
+    // Convert geometry to WGS84
+    geom = convertToWGS84(geom, sourceCRS);
+
+    // Get the area and length from the geometry envelope
+    double area = geom.getEnvelope().getArea();
+    double length = geom.getEnvelope().getLength();
+
+    // Calculate the width of the envelope based on its area and length
+    double width = area / length;
+
+    // Calculate the length, width in meters and the area is square kilometers
+    double lengthMeters = length * (Math.PI / 180) * 6378137;
+    double widthMeters = width * (Math.PI / 180) * 6378137;
+    double geomArea = (lengthMeters * widthMeters) / SQ_KM_CONV;
+
+    return geomArea;
+  }
+
 
   /**
    * Calculate the area of a geometry in square kilometers.
@@ -158,40 +206,65 @@ public class HeatMapUtils {
    * @param geom {Geometry} The input geometry to be processed.
    * @return {double} Returns a double representing the area of the input geometry.
    */
-  public static double calcAreaSqKm(Geometry geom) {
+  public static double calcAreaSqKm(Geometry geom, CoordinateReferenceSystem sourceCRS) {
 
     double geomArea = 0;
 
     // Get centroid of geometry
     Point centroid = geom.getCentroid();
 
-    // Get the location
-    String code = "AUTO:42001," + centroid.getX() + "," + centroid.getY();
-    CoordinateReferenceSystem crs;
+    // Find out if the CRS is WGS84
+    Boolean isWGS84 = sourceCRS.getName().getCode().equals("WGS 84");
 
-    try {
-      // Decode the location to get the CRS
-      crs = CRS.decode(code);
+    // Get area of non-WGS84 CRSs
+    if (!isWGS84) {
 
-      // Get the transform
-      MathTransform transform = CRS.findMathTransform(DefaultGeographicCRS.WGS84, crs);
+      // Get the units of the projection
+      String projectionUnits = sourceCRS.getCoordinateSystem().getAxis(0).getUnit().toString();
 
-      // Project the geometry using the transform
-      Geometry geomProj = JTS.transform(geom, transform);
+      // Determine if projection is metric based
+      Boolean isUnitMeters = projectionUnits.equals("m");
 
-      // Calculate the area (square kilometers) based on the projected geometry
-      geomArea = geomProj.getArea() / SQ_KM_CONV;
-
-    } catch (FactoryException e) {
-      e.printStackTrace();
-    } catch (MismatchedDimensionException e) {
-      e.printStackTrace();
-    } catch (TransformException e) {
-      e.printStackTrace();
+      // Calculate the area
+      if (isUnitMeters) {
+        geomArea = getAreaNonMetricProjections(geom, sourceCRS);
+      } else {
+        geomArea = getAreaNonMetricProjections(geom, sourceCRS);
+      }
     }
+
+    // Project the geometry in order to get an accurate area
+    if (isWGS84) {
+      // Get the location
+      String code = "AUTO:42001," + centroid.getX() + "," + centroid.getY();
+
+      // Initialize empty CRS
+      CoordinateReferenceSystem crs;
+
+      try {
+        // Decode the location to get the CRS
+        crs = CRS.decode(code);
+
+        // Get the transform and use leniency
+        MathTransform transform = CRS.findMathTransform(DefaultGeographicCRS.WGS84, crs, true);
+
+        // Project the geometry using the transform
+        Geometry geomProj = JTS.transform(geom, transform);
+
+        // Calculate the area (square kilometers) based on the projected geometry
+        geomArea = geomProj.getArea() / SQ_KM_CONV;
+
+      } catch (FactoryException e) {
+        e.printStackTrace();
+      } catch (MismatchedDimensionException e) {
+        e.printStackTrace();
+      } catch (TransformException e) {
+        e.printStackTrace();
+      }
+    }
+
     return geomArea;
   }
-
 
   /**
    * Returns the cell count of the GeoServer map viewer extent.
@@ -242,13 +315,14 @@ public class HeatMapUtils {
       int height,
       int width,
       int pixelsPerCell,
-      Geometry jtsBounds) {
+      Geometry jtsBounds,
+      CoordinateReferenceSystem sourceCRS) {
 
     // Get total count of cells in GeoServer map viewer extent
     int totCellsTarget = HeatMapUtils.getExtentCellCount(width, height, pixelsPerCell);
 
     // Get the area of the GeoServer map viewer extent in square kilometers
-    double extentAreaSqKm = HeatMapUtils.calcAreaSqKm(jtsBounds);
+    double extentAreaSqKm = HeatMapUtils.calcAreaSqKm(jtsBounds, sourceCRS);
 
     // Get approximate area of a single cell in square kilometers
     double cellArea = HeatMapUtils.getCellArea(extentAreaSqKm, totCellsTarget);
@@ -269,6 +343,39 @@ public class HeatMapUtils {
    */
   public static String getGeometryFieldName(GeoWaveDataStoreComponents components) {
     return components.getFeatureType().getGeometryDescriptor().getLocalName();
+  }
+
+  /**
+   * Convert a geometry to WGS84 CRS.
+   * 
+   * @param geometry {Geometry}
+   * @param sourceCRS {CoordinateReferenceSystem}
+   * @return {Geometry} Returns the geometry in WGS84 CRS.
+   */
+  public static Geometry convertToWGS84(Geometry geometry, CoordinateReferenceSystem sourceCRS) {
+
+    MathTransform transform;
+    Geometry targetGeometry = null;
+    try {
+      // Decode WGS84
+      CoordinateReferenceSystem targetCRS = CRS.decode("EPSG:4326");
+
+      // Find the math transform from the source CRS to WGS84
+      transform = CRS.findMathTransform(sourceCRS, targetCRS, true);
+      try {
+        // Transform the geometry
+        targetGeometry = JTS.transform(geometry, transform);
+
+        // Set SRID - this is not necessary
+        targetGeometry.setSRID(4326);
+      } catch (MismatchedDimensionException | TransformException e) {
+        e.printStackTrace();
+      }
+    } catch (FactoryException e) {
+      e.printStackTrace();
+    }
+
+    return targetGeometry;
   }
 
 }

@@ -72,6 +72,7 @@ import org.opengis.filter.Filter;
 import org.opengis.filter.expression.Expression;
 import org.opengis.filter.expression.PropertyName;
 import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform2D;
 import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
@@ -549,7 +550,6 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
    */
   private class HeatMapQueryIssuer extends BaseIssuer implements QueryIssuerHeatMap {
     final Geometry jtsBounds;
-    @SuppressWarnings("unused")
     final ReferencedEnvelope outputBbox;
     final int width;
     final int height;
@@ -565,7 +565,6 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
       this.outputBbox = outputBbox;
       this.width = width;
       this.height = height;
-
     }
 
     public FeatureIterator<SimpleFeature> query(
@@ -576,9 +575,17 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
 
       SimpleFeatureCollection newFeatures = null;
 
+      // Get CRS if it exists
+      CoordinateReferenceSystem sourceCRS = outputBbox.getCoordinateReferenceSystem();
+
       // Get an appropriate Geohash precision for the GeoServer extent
       int geohashPrec =
-          HeatMapUtils.autoSelectGeohashPrecision(height, width, pixelsPerCell, jtsBounds);
+          HeatMapUtils.autoSelectGeohashPrecision(
+              height,
+              width,
+              pixelsPerCell,
+              jtsBounds,
+              sourceCRS);
 
       // Temporary histogram builder
       // TDigestNumericHistogram histogram = new TDigestNumericHistogram();

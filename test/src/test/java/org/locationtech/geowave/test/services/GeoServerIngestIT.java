@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import javax.imageio.ImageIO;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.HttpResponse;
@@ -57,6 +58,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tech.units.indriya.AbstractSystemOfUnits;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({Environment.SERVICES})
@@ -72,6 +74,11 @@ public class GeoServerIngestIT extends BaseServiceIT {
   private static final String REFERENCE_WMS_IMAGE_PATH =
       TestUtils.isOracleJRE() ? "src/test/resources/wms/wms-grid-oraclejdk.gif"
           : "src/test/resources/wms/wms-grid.gif";
+
+  // TODO: create a heatmap .gif using non-Oracle JRE.
+  private static final String REFERENCE_WMS_HEATMAP =
+      TestUtils.isOracleJRE() ? "src/test/resources/wms/wms-heatmap-cnt-aggr-oraclejdk.gif"
+          : "src/test/resources/wms/wms-heatmap-cnt-aggr-oraclejdk.gif";
 
   private static final String testName = "GeoServerIngestIT";
 
@@ -112,6 +119,13 @@ public class GeoServerIngestIT extends BaseServiceIT {
     TestUtils.printEndOfTest(LOGGER, testName, startMillis);
   }
 
+  /**
+   * Create a grid of points that are temporal.
+   * 
+   * @param pointBuilder {SimpleFeatureBuilder} The simple feature builder.
+   * @param firstFeatureId {Integer} The first feature ID.
+   * @return List<SimpleFeature> A list of simple features.
+   */
   private static List<SimpleFeature> getGriddedTemporalFeatures(
       final SimpleFeatureBuilder pointBuilder,
       final int firstFeatureId) {
@@ -127,7 +141,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
     dates[2] = cal.getTime();
     // put 3 points on each grid location with different temporal attributes
     final List<SimpleFeature> feats = new ArrayList<>();
-    // extremes are close to -180,180,-90,and 90 wiuthout exactly matching
+    // extremes are close to -180,180,-90,and 90 without exactly matching
     // because coordinate transforms are illegal on the boundary
     for (int longitude = -36; longitude <= 36; longitude++) {
       for (int latitude = -18; latitude <= 18; latitude++) {
@@ -138,9 +152,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
           pointBuilder.set("TimeStamp", dates[date]);
           pointBuilder.set("Latitude", latitude);
           pointBuilder.set("Longitude", longitude);
-          // Note since trajectoryID and comment are marked as
-          // nillable we
-          // don't need to set them (they default ot null).
 
           final SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
           feats.add(sft);
@@ -151,28 +162,57 @@ public class GeoServerIngestIT extends BaseServiceIT {
     return feats;
   }
 
+  @SuppressWarnings("unchecked")
   @Test
   public void testExamplesIngest() throws Exception {
     final DataStore ds = dataStorePluginOptions.createDataStore();
     final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
+
+    // Use Spherical Mercator projection coordinate system to test a projected coordinate system
     final Index spatialIdx = TestUtils.createWebMercatorSpatialIndex();
+
+    // Set the spatial temporal index
     final Index spatialTemporalIdx = TestUtils.createWebMercatorSpatialTemporalIndex();
+
+    @SuppressWarnings("rawtypes")
+    // Create data adapter
     final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
+
+    // Create grid of temporal points
     final List<SimpleFeature> features =
         getGriddedTemporalFeatures(new SimpleFeatureBuilder(sft), 8675309);
     LOGGER.info(
         String.format("Beginning to ingest a uniform grid of %d features", features.size()));
+
+    // Initialize ingested features counter
     int ingestedFeatures = 0;
+
+    // Get a subset count
     final int featuresPer5Percent = features.size() / 20;
+
+    // Add the type to the datastore
     ds.addType(fda, spatialIdx, spatialTemporalIdx);
+
+    // Initialize a bounding box statistic
     final BoundingBoxStatistic mercatorBounds =
         new BoundingBoxStatistic(fda.getTypeName(), sft.getGeometryDescriptor().getLocalName());
+
+    // Set the source CRS
     mercatorBounds.setSourceCrs(
         fda.getFeatureType().getGeometryDescriptor().getCoordinateReferenceSystem());
+
+    // Set the destination CRS
     mercatorBounds.setDestinationCrs(TestUtils.CUSTOM_CRS);
+
+    // Set the tag
     mercatorBounds.setTag("MERCATOR_BOUNDS");
+
+    // Add the statistic to the datastore
     ds.addStatistic(mercatorBounds);
-    try (Writer writer = ds.createWriter(fda.getTypeName())) {
+
+    // Write a subset of features to the datastore
+    try (@SuppressWarnings("rawtypes")
+    Writer writer = ds.createWriter(fda.getTypeName())) {
       for (final SimpleFeature feat : features) {
         writer.write(feat);
         ingestedFeatures++;
@@ -184,11 +224,15 @@ public class GeoServerIngestIT extends BaseServiceIT {
         }
       }
     }
+
+    // Get the bounding box envelope
     final BoundingBoxValue env =
         ds.aggregateStatistics(
             StatisticQueryBuilder.newBuilder(BoundingBoxStatistic.STATS_TYPE).typeName(
                 fda.getTypeName()).fieldName(sft.getGeometryDescriptor().getLocalName()).tag(
                     "MERCATOR_BOUNDS").build());
+
+    // Check the status codes of various processes
     TestUtils.assertStatusCode(
         "Should Create 'testomatic' Workspace",
         201,
@@ -206,12 +250,14 @@ public class GeoServerIngestIT extends BaseServiceIT {
             dataStorePluginOptions.getGeoWaveNamespace(),
             "testomatic",
             dataStorePluginOptions.getGeoWaveNamespace()));
+
     TestUtils.assertStatusCode(
         "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE + "' Style",
         201,
         geoServerServiceClient.addStyle(
             ServicesTestEnvironment.TEST_SLD_NO_DIFFERENCE_FILE,
             ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE));
+
     muteLogging();
     TestUtils.assertStatusCode(
         "Should return 400, that layer was already added",
@@ -227,18 +273,30 @@ public class GeoServerIngestIT extends BaseServiceIT {
         geoServerServiceClient.addStyle(
             ServicesTestEnvironment.TEST_SLD_MINOR_SUBSAMPLE_FILE,
             ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE));
+
     TestUtils.assertStatusCode(
         "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE + "' Style",
         201,
         geoServerServiceClient.addStyle(
             ServicesTestEnvironment.TEST_SLD_MAJOR_SUBSAMPLE_FILE,
             ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE));
+
     TestUtils.assertStatusCode(
         "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER + "' Style",
         201,
         geoServerServiceClient.addStyle(
             ServicesTestEnvironment.TEST_SLD_DISTRIBUTED_RENDER_FILE,
             ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER));
+
+    // ---------------------------------HEATMAP SLD STYLE---------------------------------------
+    TestUtils.assertStatusCode(
+        "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP + "' Style",
+        201,
+        geoServerServiceClient.addStyle(
+            ServicesTestEnvironment.TEST_SLD_HEATMAP_FILE,
+            ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP));
+    // -----------------------------------------------------------------------------------------
+
     TestUtils.assertStatusCode(
         "Should Publish '" + SimpleIngest.FEATURE_NAME + "' Layer",
         201,
@@ -248,6 +306,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
             null,
             null,
             "point"));
+
     if (!(ds instanceof Closeable)) {
       // this is kinda hacky, but its only for the integration test - the
       // problem is that GeoServer and this thread have different class
@@ -267,6 +326,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
               "point"));
       unmuteLogging();
     }
+
     final BufferedImage biDirectRender =
         getWMSSingleTile(
             env.getMinX(),
@@ -278,7 +338,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
             920,
             360,
             null,
-            true);
+            true,
+            false);
 
     final BufferedImage ref = ImageIO.read(new File(REFERENCE_WMS_IMAGE_PATH));
 
@@ -296,6 +357,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
             920,
             360,
             null,
+            false,
             false);
 
     Assert.assertNotNull(ref);
@@ -313,6 +375,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
             920,
             360,
             null,
+            false,
             false);
     TestUtils.testTileAgainstReference(biSubsamplingWithExpectedError, ref, 0.01, 0.15);
 
@@ -327,6 +390,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
             920,
             360,
             null,
+            false,
             false);
     TestUtils.testTileAgainstReference(biSubsamplingWithLotsOfError, ref, 0.3, 0.4);
 
@@ -341,8 +405,36 @@ public class GeoServerIngestIT extends BaseServiceIT {
             920,
             360,
             null,
-            true);
+            true,
+            false);
     TestUtils.testTileAgainstReference(biDistributedRendering, ref, 0, 0.07);
+
+    // ------------------------------HEATMAP RENDERING----------------------
+    final BufferedImage refHeatMapCntAggr = ImageIO.read(new File(REFERENCE_WMS_HEATMAP));
+
+    final BufferedImage heatMapRendering =
+        getWMSSingleTile(
+            env.getMinX(),
+            env.getMaxX(),
+            env.getMinY(),
+            env.getMaxY(),
+            SimpleIngest.FEATURE_NAME,
+            ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP,
+            920,
+            360,
+            null,
+            false,
+            true);
+
+    // Write output to a gif -- KEEP THIS HERE
+    // ImageIO.write(
+    // heatMapRendering,
+    // "gif",
+    // new File("/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/data/heatmap.gif"));
+
+    TestUtils.testTileAgainstReference(heatMapRendering, refHeatMapCntAggr, 0, 0.07);
+
+    // //----------------------------------------------------------------------
 
     // Test subsampling with only the spatial-temporal index
     ds.removeIndex(spatialIdx.getName());
@@ -359,7 +451,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
             920,
             360,
             null,
-            true);
+            true,
+            false);
     Assert.assertNotNull(ref);
     // being a little lenient because of differences in O/S rendering
     TestUtils.testTileAgainstReference(biSubsamplingWithoutError, ref, 0, 0.071);
@@ -375,7 +468,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
             920,
             360,
             null,
-            true);
+            true,
+            false);
     TestUtils.testTileAgainstReference(biSubsamplingWithExpectedError, ref, 0.01, 0.151);
 
     biSubsamplingWithLotsOfError =
@@ -389,10 +483,29 @@ public class GeoServerIngestIT extends BaseServiceIT {
             920,
             360,
             null,
-            true);
+            true,
+            false);
     TestUtils.testTileAgainstReference(biSubsamplingWithLotsOfError, ref, 0.3, 0.41);
   }
 
+  /**
+   * Creates a buffered image using a specified process.
+   * 
+   * @param minX {double}
+   * @param maxX {double}
+   * @param minY {double}
+   * @param maxY {double}
+   * @param layer {String} The input grid.
+   * @param style {String} The SLD to use.
+   * @param width {Integer}
+   * @param height {Integer}
+   * @param outputFormat {String}
+   * @param temporalFilter {Boolean}
+   * @param spatialBinning {Boolean}
+   * @return {BufferedImage} A buffered image.
+   * @throws IOException
+   * @throws URISyntaxException
+   */
   private static BufferedImage getWMSSingleTile(
       final double minX,
       final double maxX,
@@ -403,8 +516,13 @@ public class GeoServerIngestIT extends BaseServiceIT {
       final int width,
       final int height,
       final String outputFormat,
-      final boolean temporalFilter) throws IOException, URISyntaxException {
+      final boolean temporalFilter,
+      final boolean spatialBinning) throws IOException, URISyntaxException {
+
+    // Initiate an empty Uniform Resource Identifier (URI) builder
     final URIBuilder builder = new URIBuilder();
+
+    // Build the URI
     builder.setScheme("http").setHost("localhost").setPort(
         ServicesTestEnvironment.JETTY_PORT).setPath(WMS_URL_PREFIX).setParameter(
             "service",
@@ -426,18 +544,28 @@ public class GeoServerIngestIT extends BaseServiceIT {
                                     String.valueOf(width)).setParameter(
                                         "height",
                                         String.valueOf(height));
+
+    // set a parameter if a temporal filter
     if (temporalFilter) {
       builder.setParameter(
           "cql_filter",
           "TimeStamp DURING 1997-01-01T00:00:00.000Z/1998-01-01T00:00:00.000Z");
     }
 
+    // Build the http get command
     final HttpGet command = new HttpGet(builder.build());
 
+    // Create the client and context
     final Pair<CloseableHttpClient, HttpClientContext> clientAndContext =
         GeoServerIT.createClientAndContext();
+
+    // Get the client
     final CloseableHttpClient httpClient = clientAndContext.getLeft();
+
+    // Get the context
     final HttpClientContext context = clientAndContext.getRight();
+
+    // Execute the http command and process the response
     try {
       final HttpResponse resp = httpClient.execute(command, context);
       try (InputStream is = resp.getEntity().getContent()) {
@@ -450,6 +578,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
         return image;
       }
     } finally {
+      // Close the http connection
       httpClient.close();
     }
   }
@@ -467,6 +596,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
     geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE);
     geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE);
     geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER);
+    geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP); // ---HEATMAP
     geoServerServiceClient.removeWorkspace(WORKSPACE);
   }
 
