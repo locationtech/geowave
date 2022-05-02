@@ -203,6 +203,9 @@ public class SimpleIngest {
     builder.add(ab.binding(String.class).nillable(true).buildDescriptor("TrajectoryID"));
     builder.add(ab.binding(String.class).nillable(true).buildDescriptor("Comment"));
 
+    // Create a SIZE field for sum aggregation and statistics tests
+    builder.add(ab.binding(Double.class).nillable(true).buildDescriptor("SIZE"));
+
     return builder.buildFeatureType();
   }
 }

@@ -36,6 +36,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 import org.opengis.geometry.BoundingBox;
 import org.opengis.referencing.FactoryException;
+// import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -274,6 +275,8 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
   private ReferencedEnvelope getEnvelope(final Query query)
       throws TransformException, FactoryException {
 
+    // System.out.println("COLLECTION - START getEnvelope");
+
     if (query.getHints().containsKey(SubsampleProcess.OUTPUT_BBOX)) {
       return ((ReferencedEnvelope) query.getHints().get(SubsampleProcess.OUTPUT_BBOX)).transform(
           reader.getFeatureType().getCoordinateReferenceSystem(),
@@ -283,10 +286,31 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
     // Return the heatmap referenced envelope
     if (query.getHints().containsKey(GeoWaveHeatMapProcess.OUTPUT_BBOX)) {
 
+      // System.out.println("COLLECTION - contains heatmap output bbox");
+
+      // ReferencedEnvelope bbox =
+      // (ReferencedEnvelope) query.getHints().get(GeoWaveHeatMapProcess.OUTPUT_BBOX);
+      // CoordinateReferenceSystem bboxCRS = bbox.getCoordinateReferenceSystem();
+      // System.out.println("COLLECTION - BBOX CRS: " + bboxCRS.getName());
+      //
+      // CoordinateReferenceSystem featureCRS =
+      // reader.getFeatureType().getCoordinateReferenceSystem();
+      // System.out.println("COLLECTION - FEATURE CRS: " + featureCRS.getName());
+      //
+      // // Find out if the CRS is WGS84
+      // Boolean isWGS84 = featureCRS.getName().getCode().equals("WGS 84");
+      // System.out.println("COLLECTION - isWGS84? " + isWGS84);
+
       return ((ReferencedEnvelope) query.getHints().get(
           GeoWaveHeatMapProcess.OUTPUT_BBOX)).transform(
               reader.getFeatureType().getCoordinateReferenceSystem(),
               true);
+
+      // TODO: Does jtsBounds need to have the same CRS as the output bbox?
+      // return ((ReferencedEnvelope) query.getHints().get(
+      // GeoWaveHeatMapProcess.OUTPUT_BBOX)).transform(
+      // bbox.getCoordinateReferenceSystem(),
+      // true);
     }
 
     return null;

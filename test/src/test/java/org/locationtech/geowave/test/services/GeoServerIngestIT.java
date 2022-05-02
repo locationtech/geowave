@@ -76,9 +76,17 @@ public class GeoServerIngestIT extends BaseServiceIT {
           : "src/test/resources/wms/wms-grid.gif";
 
   // TODO: create a heatmap .gif using non-Oracle JRE.
-  private static final String REFERENCE_WMS_HEATMAP =
+  // private static final String REFERENCE_WMS_HEATMAP_NO_SB =
+  // TestUtils.isOracleJRE() ? "src/test/resources/wms/wms-heatmap-no-spatial-binning.gif"
+  // : "src/test/resources/wms/wms-heatmap-no-spatial-binning.gif";
+
+  private static final String REFERENCE_WMS_HEATMAP_CNT_AGGR =
       TestUtils.isOracleJRE() ? "src/test/resources/wms/wms-heatmap-cnt-aggr-oraclejdk.gif"
           : "src/test/resources/wms/wms-heatmap-cnt-aggr-oraclejdk.gif";
+
+  private static final String REFERENCE_WMS_HEATMAP_SUM_AGGR =
+      TestUtils.isOracleJRE() ? "src/test/resources/wms/wms-heatmap-sum-aggr-oraclejdk.gif"
+          : "src/test/resources/wms/wms-heatmap-sum-aggr-oraclejdk.gif";
 
   private static final String testName = "GeoServerIngestIT";
 
@@ -152,6 +160,13 @@ public class GeoServerIngestIT extends BaseServiceIT {
           pointBuilder.set("TimeStamp", dates[date]);
           pointBuilder.set("Latitude", latitude);
           pointBuilder.set("Longitude", longitude);
+
+          // Create a random number for the SIZE field for sum aggregation and statistics testing
+          Random rand = new Random();
+          double min = 1.0;
+          Double randomNum = rand.nextDouble() + min;
+          randomNum = Math.round(randomNum * 100.0) / 100.0;
+          pointBuilder.set("SIZE", randomNum);
 
           final SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
           feats.add(sft);
@@ -289,12 +304,45 @@ public class GeoServerIngestIT extends BaseServiceIT {
             ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER));
 
     // ---------------------------------HEATMAP SLD STYLE---------------------------------------
+    // Test reponse code for heatmap - no spatial binning
     TestUtils.assertStatusCode(
         "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP + "' Style",
         201,
         geoServerServiceClient.addStyle(
             ServicesTestEnvironment.TEST_SLD_HEATMAP_FILE,
             ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP));
+
+    // Test reponse code for heatmap CNT_AGGR
+    TestUtils.assertStatusCode(
+        "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_AGGR + "' Style",
+        201,
+        geoServerServiceClient.addStyle(
+            ServicesTestEnvironment.TEST_SLD_HEATMAP_FILE_CNT_AGGR,
+            ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_AGGR));
+
+    // Test response code for heatmap SUM_AGGR
+    TestUtils.assertStatusCode(
+        "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_AGGR + "' Style",
+        201,
+        geoServerServiceClient.addStyle(
+            ServicesTestEnvironment.TEST_SLD_HEATMAP_FILE_SUM_AGGR,
+            ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_AGGR));
+
+    // Test reponse code for heatmap CNT_STATS
+    TestUtils.assertStatusCode(
+        "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_STATS + "' Style",
+        201,
+        geoServerServiceClient.addStyle(
+            ServicesTestEnvironment.TEST_SLD_HEATMAP_FILE_CNT_STATS,
+            ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_STATS));
+
+    // Test reponse code for heatmap SUM_STATS
+    TestUtils.assertStatusCode(
+        "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_STATS + "' Style",
+        201,
+        geoServerServiceClient.addStyle(
+            ServicesTestEnvironment.TEST_SLD_HEATMAP_FILE_SUM_STATS,
+            ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_STATS));
     // -----------------------------------------------------------------------------------------
 
     TestUtils.assertStatusCode(
@@ -410,16 +458,53 @@ public class GeoServerIngestIT extends BaseServiceIT {
     TestUtils.testTileAgainstReference(biDistributedRendering, ref, 0, 0.07);
 
     // ------------------------------HEATMAP RENDERING----------------------
-    final BufferedImage refHeatMapCntAggr = ImageIO.read(new File(REFERENCE_WMS_HEATMAP));
 
-    final BufferedImage heatMapRendering =
+    // System.out.println("TEST - STARTING HEATMAP NO SPATIAL BINNING");
+
+    // Test the count aggregation heatmap rendering (NO SPATIAL BINNING)
+    // final BufferedImage refHeatMapNoSpatialBinning =
+    // ImageIO.read(new File(REFERENCE_WMS_HEATMAP_NO_SB));
+    //
+    // final BufferedImage heatMapRenderingNoSpatBin =
+    // getWMSSingleTile(
+    // env.getMinX(),
+    // env.getMaxX(),
+    // env.getMinY(),
+    // env.getMaxY(),
+    // SimpleIngest.FEATURE_NAME,
+    // ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP,
+    // 920,
+    // 360,
+    // null,
+    // false,
+    // true);
+
+    // Write output to a gif -- KEEP THIS HERE
+    // ImageIO.write(
+    // heatMapRenderingNoSpatialBinning,
+    // "gif",
+    // new
+    // File("/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/data/heatmap-no-spatial-binning.gif"));
+
+    // System.out.println("TEST - STARTING no spatial binning render test");
+    // TestUtils.testTileAgainstReference(
+    // heatMapRenderingNoSpatBin,
+    // refHeatMapNoSpatialBinning,
+    // 0,
+    // 0.07);
+
+
+    // Test the count aggregation heatmap rendering (CNT_AGGR)
+    final BufferedImage refHeatMapCntAggr = ImageIO.read(new File(REFERENCE_WMS_HEATMAP_CNT_AGGR));
+
+    final BufferedImage heatMapRenderingCntAggr =
         getWMSSingleTile(
             env.getMinX(),
             env.getMaxX(),
             env.getMinY(),
             env.getMaxY(),
             SimpleIngest.FEATURE_NAME,
-            ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP,
+            ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_AGGR,
             920,
             360,
             null,
@@ -428,11 +513,91 @@ public class GeoServerIngestIT extends BaseServiceIT {
 
     // Write output to a gif -- KEEP THIS HERE
     // ImageIO.write(
-    // heatMapRendering,
+    // heatMapRenderingCntAggr,
     // "gif",
-    // new File("/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/data/heatmap.gif"));
+    // new File("/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/data/heatmap_cntAggr.gif"));
+    TestUtils.testTileAgainstReference(heatMapRenderingCntAggr, refHeatMapCntAggr, 0, 0.07);
 
-    TestUtils.testTileAgainstReference(heatMapRendering, refHeatMapCntAggr, 0, 0.07);
+
+    // Test the field sum aggregation heatmap rendering (SUM_AGGR)
+    final BufferedImage refHeatMapSumAggr = ImageIO.read(new File(REFERENCE_WMS_HEATMAP_SUM_AGGR));
+
+    final BufferedImage heatMapRenderingSumAggr =
+        getWMSSingleTile(
+            env.getMinX(),
+            env.getMaxX(),
+            env.getMinY(),
+            env.getMaxY(),
+            SimpleIngest.FEATURE_NAME,
+            ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_AGGR,
+            920,
+            360,
+            null,
+            false,
+            true);
+
+    // Write output to a gif -- KEEP THIS HERE
+    // ImageIO.write(
+    // heatMapRenderingSumAggr,
+    // "gif",
+    // new File("/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/data/heatmap_sumAggr.gif"));
+    TestUtils.testTileAgainstReference(heatMapRenderingSumAggr, refHeatMapSumAggr, 0, 0.07);
+
+
+    // Test the count statistics heatmap rendering (CNT_STATS)
+    // final BufferedImage refHeatMapCntStats = ImageIO.read(new
+    // File(REFERENCE_WMS_HEATMAP_CNT_STATS));
+
+    // final BufferedImage heatMapRenderingCntStats =
+    // getWMSSingleTile(
+    // env.getMinX(),
+    // env.getMaxX(),
+    // env.getMinY(),
+    // env.getMaxY(),
+    // SimpleIngest.FEATURE_NAME,
+    // ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_STATS,
+    // 920,
+    // 360,
+    // null,
+    // false,
+    // true);
+
+    // Write output to a gif -- KEEP THIS HERE
+    // ImageIO.write(
+    // heatMapRenderingCntStats,
+    // "gif",
+    // new File("/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/data/heatmap_cntStats.gif"));
+    // The heatmap defaults to count aggregations since the count statistics did not yet exist in
+    // the datastore
+    // TestUtils.testTileAgainstReference(heatMapRenderingCntStats, refHeatMapCntAggr, 0, 0.07);
+
+
+    // Test the field sum statistics heatmap rendering (SUM_STATS)
+    // final BufferedImage refHeatMapSumStats = ImageIO.read(new
+    // File(REFERENCE_WMS_HEATMAP_SUM_STATS));
+
+    // final BufferedImage heatMapRenderingSumStats =
+    // getWMSSingleTile(
+    // env.getMinX(),
+    // env.getMaxX(),
+    // env.getMinY(),
+    // env.getMaxY(),
+    // SimpleIngest.FEATURE_NAME,
+    // ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_STATS,
+    // 920,
+    // 360,
+    // null,
+    // false,
+    // true);
+
+    // Write output to a gif -- KEEP THIS HERE
+    // ImageIO.write(
+    // heatMapRenderingSumStats,
+    // "gif",
+    // new File("/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/data/heatmap_sumStats.gif"));
+    // The heatmap defaults to field sum aggregations since the field sum statistics did not yet
+    // exist in the datastore
+    // TestUtils.testTileAgainstReference(heatMapRenderingSumStats, refHeatMapSumAggr, 0, 0.07);
 
     // //----------------------------------------------------------------------
 
@@ -440,6 +605,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
     ds.removeIndex(spatialIdx.getName());
     ServicesTestEnvironment.getInstance().restartServices();
 
+    // Test subsample rendering without error
     biSubsamplingWithoutError =
         getWMSSingleTile(
             env.getMinX(),
@@ -457,6 +623,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
     // being a little lenient because of differences in O/S rendering
     TestUtils.testTileAgainstReference(biSubsamplingWithoutError, ref, 0, 0.071);
 
+    // Test subsample rendering with expected error
     biSubsamplingWithExpectedError =
         getWMSSingleTile(
             env.getMinX(),
@@ -472,6 +639,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
             false);
     TestUtils.testTileAgainstReference(biSubsamplingWithExpectedError, ref, 0.01, 0.151);
 
+    // Test subsample rendering with lots of error
     biSubsamplingWithLotsOfError =
         getWMSSingleTile(
             env.getMinX(),
@@ -517,7 +685,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
       final int height,
       final String outputFormat,
       final boolean temporalFilter,
-      final boolean spatialBinning) throws IOException, URISyntaxException {
+      final boolean spatialBinning) throws IOException, URISyntaxException { // TODO: might not need
+                                                                             // spatialBinning here
 
     // Initiate an empty Uniform Resource Identifier (URI) builder
     final URIBuilder builder = new URIBuilder();
@@ -596,7 +765,15 @@ public class GeoServerIngestIT extends BaseServiceIT {
     geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE);
     geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE);
     geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER);
-    geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP); // ---HEATMAP
+    geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP); // ---default
+    geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_AGGR); // ---HEATMAP
+                                                                                                  // CNT_AGGR
+    geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_AGGR); // ---HEATMAP
+                                                                                                  // SUM_AGGR
+    geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_STATS); // ---HEATMAP
+                                                                                                   // CNT_STATS
+    geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_STATS); // ---HEATMAP
+                                                                                                   // SUM_STATS
     geoServerServiceClient.removeWorkspace(WORKSPACE);
   }
 

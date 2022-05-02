@@ -217,6 +217,10 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
     /** Compute transform to convert input coords into output CRS */
     CoordinateReferenceSystem srcCRS = obsFeatures.getSchema().getCoordinateReferenceSystem();
     CoordinateReferenceSystem dstCRS = argOutputEnv.getCoordinateReferenceSystem();
+
+    // System.out.println("HEATMAP - srcCRS: " + srcCRS);
+    // System.out.println("HEATMAP - dstCRS: " + dstCRS);
+
     MathTransform trans = null;
     try {
       trans = CRS.findMathTransform(srcCRS, dstCRS);

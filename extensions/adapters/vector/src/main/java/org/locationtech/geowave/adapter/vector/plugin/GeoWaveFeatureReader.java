@@ -14,8 +14,11 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import org.geotools.data.FeatureReader;
@@ -37,6 +40,7 @@ import org.locationtech.geowave.adapter.vector.render.DistributedRenderAggregati
 import org.locationtech.geowave.adapter.vector.render.DistributedRenderOptions;
 import org.locationtech.geowave.adapter.vector.render.DistributedRenderResult;
 import org.locationtech.geowave.adapter.vector.util.QueryIndexHelper;
+import org.locationtech.geowave.core.geotime.binning.SpatialBinningType;
 import org.locationtech.geowave.core.geotime.index.SpatialIndexFilter;
 import org.locationtech.geowave.core.geotime.index.dimension.SimpleTimeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
@@ -575,8 +579,42 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
 
       SimpleFeatureCollection newFeatures = null;
 
+      // System.out.println("READER - OUTPUT BBOX: " + outputBbox);
+      // System.out.println("READER - JTS BOUNDS: " + jtsBounds);
+
       // Get CRS if it exists
       CoordinateReferenceSystem sourceCRS = outputBbox.getCoordinateReferenceSystem();
+      // double bboxArea = outputBbox.getArea();
+      // System.out.println("READER - BBOX AREA: " + bboxArea);
+      // System.out.println("SOURCE CRS: " + sourceCRS);
+      // System.out.println("READER - JTS BOUNDS: " + jtsBounds);
+
+      // ----------------------------------------------------
+
+
+      // // Get total cell counts for each GeoHash precision
+      // int holdAbsDiff = 0;
+      // int geohashPrec = 1;
+      // int totCellsTarget = width / pixelsPerCell;
+      // for (int i = 1; i <= 12; i++) {
+      // System.out.println("\tGEOHASH PREC: " + i);
+      // int cntCellsAtPrec = (SpatialBinningType.GEOHASH.getSpatialBins(jtsBounds, i)).length;
+      // int absDiff = Math.abs(cntCellsAtPrec - totCellsTarget);
+      // System.out.println("\tABS DIFF: " + absDiff);
+      //
+      // if (absDiff > holdAbsDiff && holdAbsDiff != 0) {
+      // System.out.println("****breaking!");
+      // break;
+      // }
+      //
+      // holdAbsDiff = absDiff;
+      // geohashPrec = i;
+      // }
+      //
+      // System.out.println("\tHOLD GH PREC: " + geohashPrec);
+
+      // ------------------------------------------------------
+
 
       // Get an appropriate Geohash precision for the GeoServer extent
       int geohashPrec =
@@ -593,6 +631,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
 
       // Build the count aggregation query and get the resulting SimpleFeatureCollection
       if (queryType.equals(GeoWaveHeatMapProcess.CNT_AGGR)) {
+        // System.out.println("READER - START CNT_AGGR");
         newFeatures =
             HeatMapAggregations.buildCountAggrQuery(
                 // histogram,
@@ -604,6 +643,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
 
       // Build the sum aggregation query and get the resulting SimpleFeatureCollection
       if (queryType.equals(GeoWaveHeatMapProcess.SUM_AGGR)) {
+        // System.out.println("READER - START SUM_AGGR");
         newFeatures =
             HeatMapAggregations.buildFieldSumAggrQuery(
                 components,
@@ -614,6 +654,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
 
       // Build the count statistics query and get the resulting SimpleFeatureCollection
       if (queryType.equals(GeoWaveHeatMapProcess.CNT_STATS)) {
+        // System.out.println("READER - START CNT_STATS");
         newFeatures =
             HeatMapStatistics.buildCountStatsQuery(
                 components,
@@ -625,6 +666,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
 
       // Build the sum statistics query and get the resulting SimpleFeatureCollection
       if (queryType.equals(GeoWaveHeatMapProcess.SUM_STATS)) {
+        // System.out.println("READER - START SUM_STATS");
         newFeatures =
             HeatMapStatistics.buildFieldStatsQuery(
                 components,
