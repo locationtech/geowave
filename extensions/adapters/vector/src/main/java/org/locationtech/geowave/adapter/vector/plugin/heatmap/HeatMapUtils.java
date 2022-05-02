@@ -227,7 +227,7 @@ public class HeatMapUtils {
 
       // Calculate the area
       if (isUnitMeters) {
-        geomArea = getAreaNonMetricProjections(geom, sourceCRS);
+        geomArea = getAreaMetricProjections(geom, sourceCRS);
       } else {
         geomArea = getAreaNonMetricProjections(geom, sourceCRS);
       }
