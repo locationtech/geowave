@@ -156,11 +156,11 @@ public class HeatMapUtils {
   }
 
   /**
-   * Calculate the approximate area of a geometry based on it's envelope. To be used for geometries
-   * projected in a metric based projection.
+   * Calculate the approximate area of a geometry based. To be used for geometries projected in a
+   * metric based projection.
    * 
-   * @param geom {Geometry}
-   * @param sourceCRS {CoordinateReferenceSystem}
+   * @param geom {Geometry} The input geometry to be processed.
+   * @param sourceCRS {CoordinateReferenceSystem} The source CRS.
    * @return {Double} Returns the area in square kilometers.
    */
   public static double getAreaMetricProjections(
@@ -170,11 +170,11 @@ public class HeatMapUtils {
   }
 
   /**
-   * Calculate the approximate area of a geometry based on it's envelope. To be used for geometries
+   * Calculate the approximate area of a geometry based on its envelope. To be used for geometries
    * projected in a non-metric based projection.
    * 
-   * @param geom {Geometry}
-   * @param sourceCRS {CoordinateReferenceSystem}
+   * @param geom {Geometry} The input geometry to be processed.
+   * @param sourceCRS {CoordinateReferenceSystem} The source CRS.
    * @return {Double} Returns the area in square kilometers.
    */
   public static double getAreaNonMetricProjections(
