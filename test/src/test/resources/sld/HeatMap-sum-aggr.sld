@@ -6,9 +6,9 @@
                        xmlns:xlink="http://www.w3.org/1999/xlink"
                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <NamedLayer>
-    <Name>Heatmap-sum-aggr</Name>
+    <Name>HeatMap-sum-aggr</Name>
     <UserStyle>
-      <Title>Heatmap-sum-aggr</Title>
+      <Title>HeatMap-sum-aggr</Title>
       <Abstract>A heatmap surface showing a specified density for field sum aggregations using spatial binning.</Abstract>
       <FeatureTypeStyle>
         <Transformation>

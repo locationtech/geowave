@@ -6,9 +6,9 @@
                        xmlns:xlink="http://www.w3.org/1999/xlink"
                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <NamedLayer>
-    <Name>Heatmap-cnt-aggr</Name>
+    <Name>HeatMap-cnt-aggr</Name>
     <UserStyle>
-      <Title>Heatmap-cnt-aggr</Title>
+      <Title>HeatMap-cnt-aggr</Title>
       <Abstract>A heatmap surface showing a specified density for count aggregations using spatial binning.</Abstract>
       <FeatureTypeStyle>
         <Transformation>

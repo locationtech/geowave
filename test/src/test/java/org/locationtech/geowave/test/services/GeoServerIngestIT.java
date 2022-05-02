@@ -765,15 +765,11 @@ public class GeoServerIngestIT extends BaseServiceIT {
     geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE);
     geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE);
     geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER);
-    geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP); // ---default
-    geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_AGGR); // ---HEATMAP
-                                                                                                  // CNT_AGGR
-    geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_AGGR); // ---HEATMAP
-                                                                                                  // SUM_AGGR
-    geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_STATS); // ---HEATMAP
-                                                                                                   // CNT_STATS
-    geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_STATS); // ---HEATMAP
-                                                                                                   // SUM_STATS
+    geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP);
+    geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_AGGR);
+    geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_AGGR);
+    geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_STATS);
+    geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_STATS);
     geoServerServiceClient.removeWorkspace(WORKSPACE);
   }
 
