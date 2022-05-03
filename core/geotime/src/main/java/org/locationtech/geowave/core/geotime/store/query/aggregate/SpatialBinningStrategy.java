@@ -101,6 +101,7 @@ public abstract class SpatialBinningStrategy<T> implements BinningStrategy {
     }
     if (ComplexGeometryBinningOption.USE_CENTROID_ONLY.equals(complexGeometryBinning)) {
       final Point centroid = geometry.getCentroid();
+      centroid.setUserData(geometry.getUserData());
       return type.getSpatialBins(centroid, precision);
     }
     return type.getSpatialBins(geometry, precision);

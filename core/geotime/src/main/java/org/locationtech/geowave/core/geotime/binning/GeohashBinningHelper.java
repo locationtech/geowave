@@ -9,12 +9,16 @@
 package org.locationtech.geowave.core.geotime.binning;
 
 import java.util.HashSet;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils.GeometryHandler;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.store.api.BinConstraints.ByteArrayConstraints;
+import org.locationtech.geowave.core.store.statistics.query.BinConstraintsImpl.ExplicitConstraints;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.LineString;
@@ -23,10 +27,49 @@ import org.locationtech.jts.geom.Polygon;
 import com.github.davidmoten.geo.Coverage;
 import com.github.davidmoten.geo.GeoHash;
 import com.github.davidmoten.geo.LatLong;
+import com.google.common.collect.HashMultimap;
 
 class GeohashBinningHelper implements SpatialBinningHelper {
   public GeohashBinningHelper() {
     super();
+  }
+
+  @Override
+  public ByteArrayConstraints getGeometryConstraints(final Geometry geometry, final int precision) {
+    final GeohashGeometryHandler geometryHandler = new GeohashGeometryHandler(precision);
+    GeometryUtils.visitGeometry(geometry, geometryHandler);
+    // we try to replace all common prefixes with a prefix scan instead of using every individual
+    // hash on the query
+    // this can really help with query performance
+    if (removePrefixes(geometryHandler.hashes)) {
+      return new ExplicitConstraints(
+          geometryHandler.hashes.stream().map(str -> StringUtils.stringToBinary(str)).map(
+              bytes -> new ByteArrayRange(bytes, bytes)).toArray(ByteArrayRange[]::new));
+    }
+    return new ExplicitConstraints(
+        geometryHandler.hashes.stream().map(ByteArray::new).toArray(ByteArray[]::new));
+  }
+
+  private static boolean removePrefixes(final Set<String> allHashes) {
+    if (allHashes.isEmpty() || allHashes.iterator().next().isEmpty()) {
+      return false;
+    }
+    final HashMultimap<String, String> prefixMap = HashMultimap.create();
+    allHashes.forEach(s -> prefixMap.put(s.substring(0, s.length() - 1), s));
+    // if there are 32 entries of the same substring that means its prefix is fully covered and we
+    // can remove the 32 and replace with the prefix
+
+    // need to make sure the set is mutable because we will also try to find prefixes in this set
+    final Set<String> retVal =
+        prefixMap.asMap().entrySet().stream().filter(e -> e.getValue().size() == 32).map(
+            Entry::getKey).collect(Collectors.toCollection(HashSet::new));
+    if (retVal.isEmpty()) {
+      return false;
+    }
+    retVal.forEach(k -> prefixMap.get(k).forEach(v -> allHashes.remove(v)));
+    removePrefixes(retVal);
+    allHashes.addAll(retVal);
+    return true;
   }
 
   @Override

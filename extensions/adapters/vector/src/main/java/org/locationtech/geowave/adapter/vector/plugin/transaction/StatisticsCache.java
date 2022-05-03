@@ -63,7 +63,7 @@ public class StatisticsCache {
           V value = statisticsStore.getStatisticValue(stat, authorizations);
           if (value != null) {
             retVal = value;
-          }          
+          }
         }
       }
     }
@@ -87,7 +87,7 @@ public class StatisticsCache {
           V value = statisticsStore.getStatisticValue(stat, authorizations);
           if (value != null) {
             retVal = value;
-          }          
+          }
         }
       }
     }

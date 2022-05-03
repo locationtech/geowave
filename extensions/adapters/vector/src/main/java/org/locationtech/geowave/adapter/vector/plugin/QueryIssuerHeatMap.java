@@ -18,7 +18,7 @@ import org.opengis.filter.Filter;
 /**
  * Special class for the heatmap query.
  * 
- * @author M. Zagorski <br> 
+ * @author M. Zagorski <br>
  * @apiNote Date: 3-25-2022 <br>
  *
  * @apiNote Changelog: <br>
@@ -30,8 +30,7 @@ public interface QueryIssuerHeatMap {
       String queryType,
       String weightAttr,
       Integer pixelsPerCell,
-      Boolean createStats
-      );
+      Boolean createStats);
 
   Filter getFilter();
 

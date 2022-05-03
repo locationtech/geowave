@@ -357,28 +357,26 @@ public class ByteArrayUtils {
     }
 
     if (offset == 0) {
-      // TODO: is this correct? an empty byte array sorts before a single
-      // byte {0xFF}
-      // return new byte[0];
-
-      // it doesn't seem right, so instead, let's append several 0xFF
-      // bytes
-      return ByteArrayUtils.combineArrays(
-          rowKeyPrefix,
-          new byte[] {
-              (byte) 0xFF,
-              (byte) 0xFF,
-              (byte) 0xFF,
-              (byte) 0xFF,
-              (byte) 0xFF,
-              (byte) 0xFF,
-              (byte) 0xFF});
+      return getNextInclusive(rowKeyPrefix);
     }
 
     final byte[] newStopRow = Arrays.copyOfRange(rowKeyPrefix, 0, offset);
     // And increment the last one
     newStopRow[newStopRow.length - 1]++;
     return newStopRow;
+  }
+
+  public static byte[] getNextInclusive(final byte[] rowKeyPrefix) {
+    return ByteArrayUtils.combineArrays(
+        rowKeyPrefix,
+        new byte[] {
+            (byte) 0xFF,
+            (byte) 0xFF,
+            (byte) 0xFF,
+            (byte) 0xFF,
+            (byte) 0xFF,
+            (byte) 0xFF,
+            (byte) 0xFF});
   }
 
   public static byte[] getPreviousPrefix(final byte[] rowKeyPrefix) {
@@ -477,8 +475,8 @@ public class ByteArrayUtils {
 
   public static boolean matchesPrefixRanges(final byte[] bytes, final List<ByteArrayRange> ranges) {
     return ranges.stream().anyMatch(range -> {
-      return ByteArrayUtils.compareToPrefix(bytes, range.getStart()) >= 0
-          && ByteArrayUtils.compareToPrefix(bytes, range.getEnd()) <= 0;
+      return (ByteArrayUtils.compareToPrefix(bytes, range.getStart()) >= 0)
+          && (ByteArrayUtils.compareToPrefix(bytes, range.getEnd()) <= 0);
     });
   }
 

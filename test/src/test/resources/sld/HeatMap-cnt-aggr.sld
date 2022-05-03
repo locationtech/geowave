@@ -6,13 +6,13 @@
                        xmlns:xlink="http://www.w3.org/1999/xlink"
                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <NamedLayer>
-    <Name>Heatmap</Name>
+    <Name>HeatMap-cnt-aggr</Name>
     <UserStyle>
-      <Title>Heatmap</Title>
-      <Abstract>A heatmap surface showing a specified density</Abstract>
+      <Title>HeatMap-cnt-aggr</Title>
+      <Abstract>A heatmap surface showing a specified density for count aggregations using spatial binning.</Abstract>
       <FeatureTypeStyle>
         <Transformation>
-          <ogc:Function name="geowave:GeoWaveHeatMapFinal">
+          <ogc:Function name="geowave:GeoWaveHeatMap">
             <ogc:Function name="parameter">
               <ogc:Literal>data</ogc:Literal>
             </ogc:Function>
@@ -55,6 +55,10 @@
             </ogc:Function>
             <ogc:Function name="parameter">
               <ogc:Literal>createStats</ogc:Literal>
+              <ogc:Literal>false</ogc:Literal>
+            </ogc:Function>
+            <ogc:Function name="parameter">
+              <ogc:Literal>useSpatialBinning</ogc:Literal>
               <ogc:Literal>true</ogc:Literal>
             </ogc:Function>
           </ogc:Function>

@@ -18,13 +18,16 @@ import org.geotools.data.simple.SimpleFeatureCollection;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents;
 import org.locationtech.geowave.core.geotime.binning.SpatialBinningType;
 import org.locationtech.geowave.core.geotime.store.query.aggregate.SpatialSimpleFeatureBinningStrategy;
+import org.locationtech.geowave.core.geotime.store.query.api.VectorAggregationQueryBuilder;
 import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.store.adapter.statistics.histogram.TDigestNumericHistogram;
 import org.locationtech.geowave.core.store.api.AggregationQuery;
 import org.locationtech.geowave.core.store.api.AggregationQueryBuilder;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.query.aggregate.FieldNameParam;
 import org.locationtech.geowave.core.store.query.aggregate.FieldSumAggregation;
 import org.locationtech.geowave.core.store.query.aggregate.OptimalCountAggregation;
+import org.locationtech.jts.geom.Geometry;
 import org.opengis.feature.simple.SimpleFeature;
 
 /**
@@ -46,6 +49,8 @@ public class HeatMapAggregations {
    * Builds the field sum aggregation query and returns a SimpleFeatureCollection.
    * 
    * @param components {GeoWaveDataStoreComponents} The base components of the dataset.
+   * @param jtsBounds {Geometry} The geometry representing the bounds of the GeoServer map viewer
+   *        extent.
    * @param geohashPrec {Integer} The Geohash precision to use for binning.
    * @param weightAttr {String} The name of the field in the dataset to which the query is applied.
    * @return {SimpleFeatureCollection} Returns a SimpleFeatureCollection of spatial bin centroids
@@ -54,6 +59,7 @@ public class HeatMapAggregations {
   @SuppressWarnings({"unchecked", "rawtypes"})
   public static SimpleFeatureCollection buildFieldSumAggrQuery(
       GeoWaveDataStoreComponents components,
+      Geometry jtsBounds,
       Integer geohashPrec,
       String weightAttr) {
 
@@ -63,6 +69,11 @@ public class HeatMapAggregations {
     // Initialize new query builder
     final AggregationQueryBuilder<FieldNameParam, BigDecimal, SimpleFeature, ?> queryBuilder =
         AggregationQueryBuilder.newBuilder();
+
+    // Add spatial constraint to optimize the datastore query
+    queryBuilder.constraints(
+        VectorAggregationQueryBuilder.newBuilder().constraintsFactory().spatialTemporalConstraints().spatialConstraints(
+            jtsBounds).build());
 
     // Set up the aggregate
     queryBuilder.aggregate(
@@ -98,11 +109,6 @@ public class HeatMapAggregations {
               geohashPrec,
               weightAttr,
               SUM_AGGR);
-      
-      //TODO: turn the following into logger output?
-//      Object ghID = simpFeature.getAttribute("geoHashId");
-//      Object val = simpFeature.getAttribute(weightAttr);
-//      System.out.println("\t\tGH ID: " + ghID + " VAL: " + val);
 
       newSimpleFeatures.add(simpFeature);
     }
@@ -113,11 +119,13 @@ public class HeatMapAggregations {
     return newFeatures;
   }
 
-  
+
   /**
    * Builds the count aggregation query and returns a SimpleFeatureCollection.
    * 
    * @param components {GeoWaveDataStoreComponents} The base components of the dataset.
+   * @param jtsBounds {Geometry} The geometry representing the bounds of the GeoServer map viewer
+   *        extent.
    * @param geohashPrec {Integer} The Geohash precision to use for binning.
    * @param weightAttr {String} The name of the field in the dataset to which the query is applied.
    * @return {SimpleFeatureCollection} Returns a SimpleFeatureCollection of spatial bin centroids
@@ -125,7 +133,9 @@ public class HeatMapAggregations {
    */
   @SuppressWarnings({"unchecked", "rawtypes"})
   public static SimpleFeatureCollection buildCountAggrQuery(
+      // TDigestNumericHistogram histogram,
       GeoWaveDataStoreComponents components,
+      Geometry jtsBounds,
       Integer geohashPrec,
       String weightAttr) {
 
@@ -135,6 +145,11 @@ public class HeatMapAggregations {
     // Initialize new query builder
     final AggregationQueryBuilder<FieldNameParam, Long, SimpleFeature, ?> queryBuilder =
         AggregationQueryBuilder.newBuilder();
+
+    // Add spatial constraint to optimize the datastore query
+    queryBuilder.constraints(
+        VectorAggregationQueryBuilder.newBuilder().constraintsFactory().spatialTemporalConstraints().spatialConstraints(
+            jtsBounds).build());
 
     // Set up the aggregation based on the name of the geometry field
     queryBuilder.aggregate(
@@ -164,17 +179,13 @@ public class HeatMapAggregations {
 
       SimpleFeature simpFeature =
           HeatMapUtils.buildSimpleFeature(
+              // histogram,
               components.getAdapter().getFeatureType(),
               geoHashId,
               weightVal,
               geohashPrec,
               weightAttr,
               CNT_AGGR);
-
-      //TODO: turn the following into logger output?
-//      Object ghID = simpFeature.getAttribute("geohashId");
-//      Object cntAggr = simpFeature.getAttribute(weightAttr);
-//      System.out.println("\tGEOHASH ID: " + ghID + " COUNT AGGR: " + cntAggr);
 
       newSimpleFeatures.add(simpFeature);
     }

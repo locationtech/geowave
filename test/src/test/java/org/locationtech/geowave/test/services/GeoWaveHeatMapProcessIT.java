@@ -1,18 +1,14 @@
 /**
  * Copyright (c) 2013-2020 Contributors to the Eclipse Foundation
  * 
- * @author Milla Zagorski
- *
- *         <p> See the NOTICE file distributed with this work for additional information regarding
- *         copyright ownership. All rights reserved. This program and the accompanying materials are
- *         made available under the terms of the Apache License, Version 2.0 which accompanies this
- *         distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.txt
+ * <p> See the NOTICE file distributed with this work for additional information regarding copyright
+ * ownership. All rights reserved. This program and the accompanying materials are made available
+ * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
+ * available at http://www.apache.org/licenses/LICENSE-2.0.txt
  */
 package org.locationtech.geowave.test.services;
 
-
 import static org.junit.Assert.assertTrue;
-
 import java.awt.geom.Point2D;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.data.simple.SimpleFeatureCollection;
@@ -20,11 +16,9 @@ import org.geotools.feature.DefaultFeatureCollection;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.geotools.process.vector.HeatmapProcess;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.junit.Test;
-import org.locationtech.geowave.adapter.vector.plugin.GeoWaveHeatMap;
-import org.locationtech.geowave.adapter.vector.plugin.GeoWaveHeatMapFinal;
+import org.locationtech.geowave.adapter.vector.plugin.GeoWaveHeatMapProcess;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -33,7 +27,7 @@ import org.locationtech.jts.geom.impl.PackedCoordinateSequenceFactory;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.util.ProgressListener;
 
-public class GeoWaveHeatMapFinalIT {
+public class GeoWaveHeatMapProcessIT {
 
   /**
    * A test of a simple surface, validating that the process can be invoked and return a reasonable
@@ -42,8 +36,9 @@ public class GeoWaveHeatMapFinalIT {
    * <p>Test includes data which lies outside the heatmap buffer area, to check that it is filtered
    * correctly (i.e. does not cause out-of-range errors, and does not affect generated surface).
    * 
-   * @author Milla Zagorski
-   * @apiNode Note: based on the GeoTools version of HeatmapProcess integration test by Martin Davis - OpenGeo.
+   * @author M. Zagorski
+   * @apiNode Note: based on the GeoTools version of HeatmapProcess integration test by Martin Davis
+   *          - OpenGeo.
    * @apiNote Date: 3-25-2022 <br>
    *
    * @apiNote Changelog: <br>
@@ -52,7 +47,6 @@ public class GeoWaveHeatMapFinalIT {
    */
   @Test
   public void testSimpleSurface() {
-    System.out.println("STARTING SIMPLE SURFACE TEST - GeoWaveHeatMapFinalIT.java");
 
     ReferencedEnvelope bounds = new ReferencedEnvelope(0, 10, 0, 10, DefaultGeographicCRS.WGS84);
     Coordinate[] data =
@@ -66,10 +60,10 @@ public class GeoWaveHeatMapFinalIT {
 
     ProgressListener monitor = null;
 
-//    HeatmapProcess process = new HeatmapProcess(); // changed this to the GeoWaveHeatMap
-//    GeoWaveHeatMap process = new GeoWaveHeatMap(); //Baseline tests pass
-    GeoWaveHeatMapFinal process = new GeoWaveHeatMapFinal(); //Baseline tests pass
-    
+    // HeatmapProcess process = new HeatmapProcess(); // changed this to the GeoWaveHeatMap
+    // GeoWaveHeatMap process = new GeoWaveHeatMap(); //Baseline tests pass
+    GeoWaveHeatMapProcess process = new GeoWaveHeatMapProcess(); // Baseline tests pass
+
     GridCoverage2D cov =
         process.execute(
             fc, // data
@@ -81,6 +75,7 @@ public class GeoWaveHeatMapFinalIT {
             100, // outputHeight
             "CNT_AGGR", // queryType
             false, // createStats
+            true, // useSpatialBinning
             monitor // monitor)
         );
 
@@ -102,17 +97,15 @@ public class GeoWaveHeatMapFinalIT {
     assertTrue(far < center1 / 1000);
   }
 
-  private float coverageValue(GridCoverage2D cov, double x, double y) {    
-    System.out.println("STARTING COVERAGE VALUE");
-    
+  private float coverageValue(GridCoverage2D cov, double x, double y) {
+
     float[] covVal = new float[1];
     Point2D worldPos = new Point2D.Double(x, y);
     cov.evaluate(worldPos, covVal);
     return covVal[0];
   }
 
-  private SimpleFeatureCollection createPoints(Coordinate[] pts, ReferencedEnvelope bounds) {    
-    System.out.println("STARTING CREATE POINTS");
+  private SimpleFeatureCollection createPoints(Coordinate[] pts, ReferencedEnvelope bounds) {
 
     SimpleFeatureTypeBuilder tb = new SimpleFeatureTypeBuilder();
     tb.setName("data");
