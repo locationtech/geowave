@@ -36,6 +36,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 import org.opengis.geometry.BoundingBox;
 import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 // import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
@@ -288,18 +289,17 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
 
       // System.out.println("COLLECTION - contains heatmap output bbox");
 
-      // ReferencedEnvelope bbox =
-      // (ReferencedEnvelope) query.getHints().get(GeoWaveHeatMapProcess.OUTPUT_BBOX);
-      // CoordinateReferenceSystem bboxCRS = bbox.getCoordinateReferenceSystem();
-      // System.out.println("COLLECTION - BBOX CRS: " + bboxCRS.getName());
-      //
-      // CoordinateReferenceSystem featureCRS =
-      // reader.getFeatureType().getCoordinateReferenceSystem();
-      // System.out.println("COLLECTION - FEATURE CRS: " + featureCRS.getName());
-      //
-      // // Find out if the CRS is WGS84
-      // Boolean isWGS84 = featureCRS.getName().getCode().equals("WGS 84");
-      // System.out.println("COLLECTION - isWGS84? " + isWGS84);
+      ReferencedEnvelope bbox =
+          (ReferencedEnvelope) query.getHints().get(GeoWaveHeatMapProcess.OUTPUT_BBOX);
+      CoordinateReferenceSystem bboxCRS = bbox.getCoordinateReferenceSystem();
+      System.out.println("COLLECTION - BBOX CRS: " + bboxCRS.getName());
+
+      CoordinateReferenceSystem featureCRS = reader.getFeatureType().getCoordinateReferenceSystem();
+      System.out.println("COLLECTION - FEATURE CRS: " + featureCRS.getName());
+
+      // Find out if the CRS is WGS84
+      Boolean isWGS84 = featureCRS.getName().getCode().equals("WGS 84");
+      System.out.println("COLLECTION - isWGS84? " + isWGS84);
 
       return ((ReferencedEnvelope) query.getHints().get(
           GeoWaveHeatMapProcess.OUTPUT_BBOX)).transform(

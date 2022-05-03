@@ -13,6 +13,7 @@ import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
+import org.locationtech.geowave.core.geotime.binning.SpatialBinningType;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.TDigestNumericHistogram;
@@ -262,7 +263,7 @@ public class HeatMapUtils {
         e.printStackTrace();
       }
     }
-
+    // System.out.println("UTILS - EXTENT AREA: " + geomArea);
     return geomArea;
   }
 
@@ -376,6 +377,43 @@ public class HeatMapUtils {
     }
 
     return targetGeometry;
+  }
+
+  /**
+   * Get the approximate Geohash precision based on a comparative method. Note: this method runs a
+   * bit slower than autoSelectGeohashPrecision.
+   * 
+   * @param width {Integer} The width (in pixels) of the map viewer.
+   * @param jtsBounds {Geometry} The geometry representing the extent of the map viewer.
+   * @param pixelsPerCell {Integer} The number of pixels per cell.
+   * @return
+   */
+  public static Integer getGeohashPrecisionComp(
+      Integer width,
+      Geometry jtsBounds,
+      Integer pixelsPerCell) {
+
+    int holdAbsDiff = 0;
+    int geohashPrec = 1;
+
+    // Get total cell counts for each GeoHash precision
+    int totCellsTarget = width / pixelsPerCell;
+
+    // Iterate over Geohash precisions 1 through 12 and find the one that matches the totCellsTarget
+    // best
+    for (int i = 1; i <= 12; i++) {
+      int cntCellsAtPrec = (SpatialBinningType.GEOHASH.getSpatialBins(jtsBounds, i)).length;
+      int absDiff = Math.abs(cntCellsAtPrec - totCellsTarget);
+
+      if (absDiff > holdAbsDiff && holdAbsDiff != 0) {
+        break;
+      }
+
+      holdAbsDiff = absDiff;
+      geohashPrec = i;
+    }
+
+    return geohashPrec;
   }
 
 }

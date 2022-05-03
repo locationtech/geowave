@@ -89,6 +89,23 @@ public class GeoServerIngestIT extends BaseServiceIT {
       TestUtils.isOracleJRE() ? "src/test/resources/wms/wms-heatmap-sum-aggr-oraclejdk.gif"
           : "src/test/resources/wms/wms-heatmap-sum-aggr.gif";
 
+  // private static final String REFERENCE_WMS_HEATMAP_CNT_STATS_DEFAULT =
+  // TestUtils.isOracleJRE() ? "src/test/resources/wms/wms-heatmap-cnt-stats-default-oraclejdk.gif"
+  // : "src/test/resources/wms/wms-heatmap-cnt-stats-default-oraclejdk.gif";
+
+  private static final String REFERENCE_WMS_HEATMAP_CNT_STATS =
+      TestUtils.isOracleJRE() ? "src/test/resources/wms/wms-heatmap-cnt-stats-oraclejdk.gif"
+          : "src/test/resources/wms/wms-heatmap-cnt-stats-oraclejdk.gif";
+
+  // private static final String REFERENCE_WMS_HEATMAP_SUM_STATS_DEFAULT =
+  // TestUtils.isOracleJRE() ? "src/test/resources/wms/wms-heatmap-sum-stats-default-oraclejdk.gif"
+  // : "src/test/resources/wms/wms-heatmap-cnt-stats-default-oraclejdk.gif";
+
+  private static final String REFERENCE_WMS_HEATMAP_SUM_STATS =
+      TestUtils.isOracleJRE() ? "src/test/resources/wms/wms-heatmap-sum-stats-oraclejdk.gif"
+          : "src/test/resources/wms/wms-heatmap-cnt-stats-oraclejdk.gif";
+
+
   private static final String testName = "GeoServerIngestIT";
 
   @GeoWaveTestStore(
@@ -308,9 +325,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
             ServicesTestEnvironment.TEST_SLD_DISTRIBUTED_RENDER_FILE,
             ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER));
 
-    // ---------------------------------HEATMAP SLD
-    // STYLE---------------------------------------
-    // Test reponse code for heatmap - no spatial binning
+    // ----------------HEATMAP RESPONSE TESTS------------------------------------
+    // Test response code for heatmap - no spatial binning
     TestUtils.assertStatusCode(
         "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP + "' Style",
         201,
@@ -318,7 +334,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
             ServicesTestEnvironment.TEST_SLD_HEATMAP_FILE,
             ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP));
 
-    // Test reponse code for heatmap CNT_AGGR
+    // Test response code for heatmap CNT_AGGR
     TestUtils.assertStatusCode(
         "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_AGGR + "' Style",
         201,
@@ -334,7 +350,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
             ServicesTestEnvironment.TEST_SLD_HEATMAP_FILE_SUM_AGGR,
             ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_AGGR));
 
-    // Test reponse code for heatmap CNT_STATS
+    // Test response code for heatmap CNT_STATS
     TestUtils.assertStatusCode(
         "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_STATS + "' Style",
         201,
@@ -342,7 +358,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
             ServicesTestEnvironment.TEST_SLD_HEATMAP_FILE_CNT_STATS,
             ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_STATS));
 
-    // Test reponse code for heatmap SUM_STATS
+    // Test response code for heatmap SUM_STATS
     TestUtils.assertStatusCode(
         "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_STATS + "' Style",
         201,
@@ -464,8 +480,10 @@ public class GeoServerIngestIT extends BaseServiceIT {
     TestUtils.testTileAgainstReference(biDistributedRendering, ref, 0, 0.07);
 
     // ------------------------------HEATMAP RENDERING----------------------
-
-    // System.out.println("TEST - STARTING HEATMAP NO SPATIAL BINNING");
+    Boolean runCntAggr = true;
+    Boolean runSumAggr = true;
+    Boolean runCntStats = true;
+    Boolean runSumStats = true;
 
     // Test the count aggregation heatmap rendering (NO SPATIAL BINNING)
     // final BufferedImage refHeatMapNoSpatialBinning =
@@ -492,118 +510,171 @@ public class GeoServerIngestIT extends BaseServiceIT {
     // new
     // File("/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/data/heatmap-no-spatial-binning.gif"));
 
-    // System.out.println("TEST - STARTING no spatial binning render test");
     // TestUtils.testTileAgainstReference(
     // heatMapRenderingNoSpatBin,
     // refHeatMapNoSpatialBinning,
     // 0,
     // 0.07);
 
-    // Test the count aggregation heatmap rendering (CNT_AGGR)
     final BufferedImage refHeatMapCntAggr = ImageIO.read(new File(REFERENCE_WMS_HEATMAP_CNT_AGGR));
 
-    final BufferedImage heatMapRenderingCntAggr =
-        getWMSSingleTile(
-            env.getMinX(),
-            env.getMaxX(),
-            env.getMinY(),
-            env.getMaxY(),
-            SimpleIngest.FEATURE_NAME,
-            ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_AGGR,
-            920,
-            360,
-            null,
-            false,
-            true);
+    if (runCntAggr) {
+      // Test the count aggregation heatmap rendering (CNT_AGGR)
+      final BufferedImage heatMapRenderingCntAggr =
+          getWMSSingleTile(
+              env.getMinX(),
+              env.getMaxX(),
+              env.getMinY(),
+              env.getMaxY(),
+              SimpleIngest.FEATURE_NAME,
+              ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_AGGR,
+              920,
+              360,
+              null,
+              false,
+              true);
 
-    // Write output to a gif -- KEEP THIS HERE
-    // ImageIO.write(heatMapRenderingCntAggr, "gif",
-    // new File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/heatmap_cntAggr.gif"));
-    TestUtils.testTileAgainstReference(heatMapRenderingCntAggr, refHeatMapCntAggr, 0, 0.07);
+      // Write output to a gif -- KEEP THIS HERE
+      // ImageIO.write(heatMapRenderingCntAggr, "gif",
+      // new
+      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/heatmap_cntAggr.gif"));
+      TestUtils.testTileAgainstReference(heatMapRenderingCntAggr, refHeatMapCntAggr, 0, 0.07);
+    }
 
-    // Test the field sum aggregation heatmap rendering (SUM_AGGR)
     final BufferedImage refHeatMapSumAggr = ImageIO.read(new File(REFERENCE_WMS_HEATMAP_SUM_AGGR));
+    if (runSumAggr) {
+      // Test the field sum aggregation heatmap rendering (SUM_AGGR)
+      final BufferedImage heatMapRenderingSumAggr =
+          getWMSSingleTile(
+              env.getMinX(),
+              env.getMaxX(),
+              env.getMinY(),
+              env.getMaxY(),
+              SimpleIngest.FEATURE_NAME,
+              ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_AGGR,
+              920,
+              360,
+              null,
+              false,
+              true);
 
-    final BufferedImage heatMapRenderingSumAggr =
-        getWMSSingleTile(
-            env.getMinX(),
-            env.getMaxX(),
-            env.getMinY(),
-            env.getMaxY(),
-            SimpleIngest.FEATURE_NAME,
-            ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_AGGR,
-            920,
-            360,
-            null,
-            false,
-            true);
+      // Write output to a gif -- KEEP THIS HERE
+      // ImageIO.write(heatMapRenderingSumAggr, "gif",
+      // new
+      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/heatmap_sumAggr.gif"));
+      TestUtils.testTileAgainstReference(heatMapRenderingSumAggr, refHeatMapSumAggr, 0, 0.07);
+    }
 
-    // Write output to a gif -- KEEP THIS HERE
-    // ImageIO.write(heatMapRenderingSumAggr, "gif",
-    // new File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/heatmap_sumAggr.gif"));
-    TestUtils.testTileAgainstReference(heatMapRenderingSumAggr, refHeatMapSumAggr, 0, 0.07);
+    if (runCntStats) {
+      // Test the count statistics heatmap rendering initial run
+      final BufferedImage heatMapRenderingCntStats1 =
+          getWMSSingleTile(
+              env.getMinX(),
+              env.getMaxX(),
+              env.getMinY(),
+              env.getMaxY(),
+              SimpleIngest.FEATURE_NAME,
+              ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_STATS,
+              920,
+              360,
+              null,
+              false,
+              true);
 
-    // Test the count statistics heatmap rendering (CNT_STATS)
-    // final BufferedImage refHeatMapCntStats = ImageIO.read(new
-    // File(REFERENCE_WMS_HEATMAP_CNT_STATS));
+      // Write output to a gif -- KEEP THIS HERE
+      // ImageIO.write(
+      // heatMapRenderingCntStats1,
+      // "gif",
+      // new
+      // File("/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/heatmap_cntStats_1.gif"));
 
-    // final BufferedImage heatMapRenderingCntStats =
-    // getWMSSingleTile(
-    // env.getMinX(),
-    // env.getMaxX(),
-    // env.getMinY(),
-    // env.getMaxY(),
-    // SimpleIngest.FEATURE_NAME,
-    // ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_STATS,
-    // 920,
-    // 360,
-    // null,
-    // false,
-    // true);
+      // Defaults to CNT_AGGR on initial run
+      TestUtils.testTileAgainstReference(heatMapRenderingCntStats1, refHeatMapCntAggr, 0, 0.07);
 
-    // Write output to a gif -- KEEP THIS HERE
-    // ImageIO.write(
-    // heatMapRenderingCntStats,
-    // "gif",
-    // new
-    // File("/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/data/heatmap_cntStats.gif"));
-    // The heatmap defaults to count aggregations since the count statistics did not
-    // yet exist in
-    // the datastore
-    // TestUtils.testTileAgainstReference(heatMapRenderingCntStats,
-    // refHeatMapCntAggr, 0, 0.07);
+      // Test the count statistics heatmap rendering subsequent run
+      final BufferedImage refHeatMapCntStats =
+          ImageIO.read(new File(REFERENCE_WMS_HEATMAP_CNT_STATS));
 
-    // Test the field sum statistics heatmap rendering (SUM_STATS)
-    // final BufferedImage refHeatMapSumStats = ImageIO.read(new
-    // File(REFERENCE_WMS_HEATMAP_SUM_STATS));
+      final BufferedImage heatMapRenderingCntStats2 =
+          getWMSSingleTile(
+              env.getMinX(),
+              env.getMaxX(),
+              env.getMinY(),
+              env.getMaxY(),
+              SimpleIngest.FEATURE_NAME,
+              ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_STATS,
+              920,
+              360,
+              null,
+              false,
+              true);
 
-    // final BufferedImage heatMapRenderingSumStats =
-    // getWMSSingleTile(
-    // env.getMinX(),
-    // env.getMaxX(),
-    // env.getMinY(),
-    // env.getMaxY(),
-    // SimpleIngest.FEATURE_NAME,
-    // ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_STATS,
-    // 920,
-    // 360,
-    // null,
-    // false,
-    // true);
+      // Write output to a gif -- KEEP THIS HERE
+      // ImageIO.write(
+      // heatMapRenderingCntStats2,
+      // "gif",
+      // new File(
+      // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/heatmap_cntStats_2.gif"));
 
-    // Write output to a gif -- KEEP THIS HERE
-    // ImageIO.write(
-    // heatMapRenderingSumStats,
-    // "gif",
-    // new
-    // File("/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/data/heatmap_sumStats.gif"));
-    // The heatmap defaults to field sum aggregations since the field sum statistics
-    // did not yet
-    // exist in the datastore
-    // TestUtils.testTileAgainstReference(heatMapRenderingSumStats,
-    // refHeatMapSumAggr, 0, 0.07);
+      TestUtils.testTileAgainstReference(heatMapRenderingCntStats2, refHeatMapCntStats, 0, 0.07);
+    }
 
-    // //----------------------------------------------------------------------
+
+    if (runSumStats) {
+      // Test the sum statistics heatmap rendering initial run
+      final BufferedImage heatMapRenderingSumStats1 =
+          getWMSSingleTile(
+              env.getMinX(),
+              env.getMaxX(),
+              env.getMinY(),
+              env.getMaxY(),
+              SimpleIngest.FEATURE_NAME,
+              ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_STATS,
+              920,
+              360,
+              null,
+              false,
+              true);
+
+      // Write output to a gif -- KEEP THIS HERE
+      // ImageIO.write(
+      // heatMapRenderingSumStats1,
+      // "gif",
+      // new
+      // File("/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/heatmap_sumStats_default.gif"));
+
+      // Defaults to field SUM_AGGR on initial run
+      TestUtils.testTileAgainstReference(heatMapRenderingSumStats1, refHeatMapSumAggr, 0, 0.07);
+
+      // Test subsequent run of field sum statistics heatmap rendering (SUM_STATS)
+      final BufferedImage refHeatMapSumStats =
+          ImageIO.read(new File(REFERENCE_WMS_HEATMAP_SUM_STATS));
+
+      final BufferedImage heatMapRenderingSumStats2 =
+          getWMSSingleTile(
+              env.getMinX(),
+              env.getMaxX(),
+              env.getMinY(),
+              env.getMaxY(),
+              SimpleIngest.FEATURE_NAME,
+              ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_STATS,
+              920,
+              360,
+              null,
+              false,
+              true);
+
+      // Write output to a gif -- KEEP THIS HERE
+      // ImageIO.write(
+      // heatMapRenderingSumStats2,
+      // "gif",
+      // new File(
+      // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/heatmap_sumStats.gif"));
+
+      TestUtils.testTileAgainstReference(heatMapRenderingSumStats2, refHeatMapSumStats, 0, 0.07);
+    }
+
+    // ----------------------------------------------------------------------
 
     // Test subsampling with only the spatial-temporal index
     ds.removeIndex(spatialIdx.getName());
@@ -689,8 +760,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
       final int height,
       final String outputFormat,
       final boolean temporalFilter,
-      final boolean spatialBinning) throws IOException, URISyntaxException { // TODO: might not need
-                                                                             // spatialBinning here
+      final boolean spatialBinning) throws IOException, URISyntaxException { // TODO: remove spatial
+                                                                             // binning if not used
 
     // Initiate an empty Uniform Resource Identifier (URI) builder
     final URIBuilder builder = new URIBuilder();

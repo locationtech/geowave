@@ -15,6 +15,7 @@ import org.locationtech.geowave.core.store.api.BinConstraints.ByteArrayConstrain
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
@@ -26,6 +27,7 @@ public enum SpatialBinningType implements SpatialBinningHelper {
 
   public static int WGS84_SRID = 4326;
   public static String WGS84_SRID_EPSG = "EPSG:4326";
+  public static String WEB_MERCATOR = "EPSG:3857";
 
   private SpatialBinningType(final SpatialBinningHelper helperDelegate) {
     this.helperDelegate = helperDelegate;
@@ -41,6 +43,17 @@ public enum SpatialBinningType implements SpatialBinningHelper {
 
     // Get the source CRS from the user data that is set in OptimizedSimpleFeatureBuilder.java
     CoordinateReferenceSystem sourceCRS = (CoordinateReferenceSystem) geometry.getUserData();
+    // System.out.println("SBT - SOURCE CRS is null? " + (sourceCRS == null));
+
+    // if (sourceCRS == null) {
+    // try {
+    // sourceCRS = CRS.decode(WEB_MERCATOR);
+    // } catch (NoSuchAuthorityCodeException e) {
+    // e.printStackTrace();
+    // } catch (FactoryException e) {
+    // e.printStackTrace();
+    // }
+    // }
 
     MathTransform transform;
     Geometry targetGeometry = null;
@@ -99,7 +112,6 @@ public enum SpatialBinningType implements SpatialBinningHelper {
    */
   @Override
   public ByteArrayConstraints getGeometryConstraints(final Geometry geom, final int precision) {
-
     Geometry targetGeometry = convertToWGS84(geom);
 
     return helperDelegate.getGeometryConstraints(targetGeometry, precision);

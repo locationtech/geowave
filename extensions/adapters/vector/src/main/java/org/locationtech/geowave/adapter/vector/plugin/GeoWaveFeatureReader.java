@@ -579,42 +579,18 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
 
       SimpleFeatureCollection newFeatures = null;
 
-      // System.out.println("READER - OUTPUT BBOX: " + outputBbox);
-      // System.out.println("READER - JTS BOUNDS: " + jtsBounds);
+      // double bboxArea = outputBbox.getArea();
+      // double jtsBoundsArea = jtsBounds.getArea();
 
       // Get CRS if it exists
       CoordinateReferenceSystem sourceCRS = outputBbox.getCoordinateReferenceSystem();
-      // double bboxArea = outputBbox.getArea();
-      // System.out.println("READER - BBOX AREA: " + bboxArea);
-      // System.out.println("SOURCE CRS: " + sourceCRS);
-      // System.out.println("READER - JTS BOUNDS: " + jtsBounds);
 
-      // ----------------------------------------------------
+      jtsBounds.setUserData(sourceCRS);
 
-
-      // // Get total cell counts for each GeoHash precision
-      // int holdAbsDiff = 0;
-      // int geohashPrec = 1;
-      // int totCellsTarget = width / pixelsPerCell;
-      // for (int i = 1; i <= 12; i++) {
-      // System.out.println("\tGEOHASH PREC: " + i);
-      // int cntCellsAtPrec = (SpatialBinningType.GEOHASH.getSpatialBins(jtsBounds, i)).length;
-      // int absDiff = Math.abs(cntCellsAtPrec - totCellsTarget);
-      // System.out.println("\tABS DIFF: " + absDiff);
-      //
-      // if (absDiff > holdAbsDiff && holdAbsDiff != 0) {
-      // System.out.println("****breaking!");
-      // break;
-      // }
-      //
-      // holdAbsDiff = absDiff;
-      // geohashPrec = i;
-      // }
-      //
-      // System.out.println("\tHOLD GH PREC: " + geohashPrec);
-
-      // ------------------------------------------------------
-
+      // Test the Geohash precision determined by the comparative method
+      // int geohashPrecComp = HeatMapUtils.getGeohashPrecisionComp(width, jtsBounds,
+      // pixelsPerCell);
+      // System.out.println("READER - GEOHASH via comp method: " + geohashPrecComp);
 
       // Get an appropriate Geohash precision for the GeoServer extent
       int geohashPrec =
@@ -624,6 +600,8 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
               pixelsPerCell,
               jtsBounds,
               sourceCRS);
+
+      // System.out.println("READER - GEOHASH via threshold method: " + geohashPrec);
 
       // Temporary histogram builder
       // TDigestNumericHistogram histogram = new TDigestNumericHistogram();

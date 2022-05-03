@@ -12,12 +12,18 @@ import org.apache.spark.serializer.KryoRegistrator;
 import org.geotools.feature.simple.SimpleFeatureImpl;
 import org.locationtech.geowave.adapter.raster.adapter.GridCoverageWritable;
 import org.locationtech.geowave.analytic.kryo.FeatureSerializer;
+import org.locationtech.geowave.analytic.kryo.GeometrySerializer;
 import org.locationtech.geowave.analytic.kryo.GridCoverageWritableSerializer;
 import org.locationtech.geowave.analytic.kryo.PersistableSerializer;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.persist.PersistableFactory;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.MultiLineString;
+import org.locationtech.jts.geom.MultiPoint;
+import org.locationtech.jts.geom.MultiPolygon;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
 import com.esotericsoftware.kryo.Kryo;
 
@@ -29,13 +35,19 @@ public class GeoWaveRegistrator implements KryoRegistrator {
     final FeatureSerializer simpleFeatureSerializer = new FeatureSerializer();
     final GridCoverageWritableSerializer gcwSerializer = new GridCoverageWritableSerializer();
     final PersistableSerializer persistSerializer = new PersistableSerializer();
+    final GeometrySerializer geometrySerializer = new GeometrySerializer();
 
     PersistableFactory.getInstance().getClassIdMapping().entrySet().forEach(
         e -> kryo.register(e.getKey(), persistSerializer));
 
     kryo.register(GeoWaveRDD.class);
     kryo.register(GeoWaveIndexedRDD.class);
-    kryo.register(Geometry.class);
+    kryo.register(Geometry.class, geometrySerializer);
+    kryo.register(Point.class, geometrySerializer);
+    kryo.register(MultiLineString.class, geometrySerializer);
+    kryo.register(Polygon.class, geometrySerializer);
+    kryo.register(MultiPolygon.class, geometrySerializer);
+    kryo.register(MultiPoint.class, geometrySerializer);
     kryo.register(PreparedGeometry.class);
     kryo.register(ByteArray.class);
     kryo.register(GeoWaveInputKey.class);
