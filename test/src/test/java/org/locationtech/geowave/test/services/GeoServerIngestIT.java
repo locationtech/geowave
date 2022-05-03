@@ -77,16 +77,17 @@ public class GeoServerIngestIT extends BaseServiceIT {
 
   // TODO: create a heatmap .gif using non-Oracle JRE.
   // private static final String REFERENCE_WMS_HEATMAP_NO_SB =
-  // TestUtils.isOracleJRE() ? "src/test/resources/wms/wms-heatmap-no-spatial-binning.gif"
+  // TestUtils.isOracleJRE() ?
+  // "src/test/resources/wms/wms-heatmap-no-spatial-binning.gif"
   // : "src/test/resources/wms/wms-heatmap-no-spatial-binning.gif";
 
   private static final String REFERENCE_WMS_HEATMAP_CNT_AGGR =
       TestUtils.isOracleJRE() ? "src/test/resources/wms/wms-heatmap-cnt-aggr-oraclejdk.gif"
-          : "src/test/resources/wms/wms-heatmap-cnt-aggr-oraclejdk.gif";
+          : "src/test/resources/wms/wms-heatmap-cnt-aggr.gif";
 
   private static final String REFERENCE_WMS_HEATMAP_SUM_AGGR =
       TestUtils.isOracleJRE() ? "src/test/resources/wms/wms-heatmap-sum-aggr-oraclejdk.gif"
-          : "src/test/resources/wms/wms-heatmap-sum-aggr-oraclejdk.gif";
+          : "src/test/resources/wms/wms-heatmap-sum-aggr.gif";
 
   private static final String testName = "GeoServerIngestIT";
 
@@ -102,9 +103,11 @@ public class GeoServerIngestIT extends BaseServiceIT {
           // GeoServer and this thread have different class
           // loaders so the RocksDB "singleton" instances are not shared in
           // this JVM and GeoServer, for file-based geoserver data sources, using the REST
-          // "importer" will be more handy than adding a layer by referencing the local file system
+          // "importer" will be more handy than adding a layer by referencing the local
+          // file system
           GeoWaveStoreType.ROCKSDB,
-          // filesystem sporadically fails with a null response on spatial-temporal subsampling
+          // filesystem sporadically fails with a null response on spatial-temporal
+          // subsampling
           // (after the spatial index is removed and the services restarted)
           GeoWaveStoreType.FILESYSTEM},
       namespace = testName)
@@ -161,7 +164,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
           pointBuilder.set("Latitude", latitude);
           pointBuilder.set("Longitude", longitude);
 
-          // Create a random number for the SIZE field for sum aggregation and statistics testing
+          // Create a random number for the SIZE field for sum aggregation and statistics
+          // testing
           Random rand = new Random();
           double min = 1.0;
           Double randomNum = rand.nextDouble() + min;
@@ -183,7 +187,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
     final DataStore ds = dataStorePluginOptions.createDataStore();
     final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
 
-    // Use Spherical Mercator projection coordinate system to test a projected coordinate system
+    // Use Spherical Mercator projection coordinate system to test a projected
+    // coordinate system
     final Index spatialIdx = TestUtils.createWebMercatorSpatialIndex();
 
     // Set the spatial temporal index
@@ -303,7 +308,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
             ServicesTestEnvironment.TEST_SLD_DISTRIBUTED_RENDER_FILE,
             ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER));
 
-    // ---------------------------------HEATMAP SLD STYLE---------------------------------------
+    // ---------------------------------HEATMAP SLD
+    // STYLE---------------------------------------
     // Test reponse code for heatmap - no spatial binning
     TestUtils.assertStatusCode(
         "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP + "' Style",
@@ -493,7 +499,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
     // 0,
     // 0.07);
 
-
     // Test the count aggregation heatmap rendering (CNT_AGGR)
     final BufferedImage refHeatMapCntAggr = ImageIO.read(new File(REFERENCE_WMS_HEATMAP_CNT_AGGR));
 
@@ -512,12 +517,9 @@ public class GeoServerIngestIT extends BaseServiceIT {
             true);
 
     // Write output to a gif -- KEEP THIS HERE
-    // ImageIO.write(
-    // heatMapRenderingCntAggr,
-    // "gif",
-    // new File("/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/data/heatmap_cntAggr.gif"));
+    // ImageIO.write(heatMapRenderingCntAggr, "gif",
+    // new File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/heatmap_cntAggr.gif"));
     TestUtils.testTileAgainstReference(heatMapRenderingCntAggr, refHeatMapCntAggr, 0, 0.07);
-
 
     // Test the field sum aggregation heatmap rendering (SUM_AGGR)
     final BufferedImage refHeatMapSumAggr = ImageIO.read(new File(REFERENCE_WMS_HEATMAP_SUM_AGGR));
@@ -537,12 +539,9 @@ public class GeoServerIngestIT extends BaseServiceIT {
             true);
 
     // Write output to a gif -- KEEP THIS HERE
-    // ImageIO.write(
-    // heatMapRenderingSumAggr,
-    // "gif",
-    // new File("/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/data/heatmap_sumAggr.gif"));
+    // ImageIO.write(heatMapRenderingSumAggr, "gif",
+    // new File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/heatmap_sumAggr.gif"));
     TestUtils.testTileAgainstReference(heatMapRenderingSumAggr, refHeatMapSumAggr, 0, 0.07);
-
 
     // Test the count statistics heatmap rendering (CNT_STATS)
     // final BufferedImage refHeatMapCntStats = ImageIO.read(new
@@ -566,11 +565,13 @@ public class GeoServerIngestIT extends BaseServiceIT {
     // ImageIO.write(
     // heatMapRenderingCntStats,
     // "gif",
-    // new File("/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/data/heatmap_cntStats.gif"));
-    // The heatmap defaults to count aggregations since the count statistics did not yet exist in
+    // new
+    // File("/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/data/heatmap_cntStats.gif"));
+    // The heatmap defaults to count aggregations since the count statistics did not
+    // yet exist in
     // the datastore
-    // TestUtils.testTileAgainstReference(heatMapRenderingCntStats, refHeatMapCntAggr, 0, 0.07);
-
+    // TestUtils.testTileAgainstReference(heatMapRenderingCntStats,
+    // refHeatMapCntAggr, 0, 0.07);
 
     // Test the field sum statistics heatmap rendering (SUM_STATS)
     // final BufferedImage refHeatMapSumStats = ImageIO.read(new
@@ -594,10 +595,13 @@ public class GeoServerIngestIT extends BaseServiceIT {
     // ImageIO.write(
     // heatMapRenderingSumStats,
     // "gif",
-    // new File("/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/data/heatmap_sumStats.gif"));
-    // The heatmap defaults to field sum aggregations since the field sum statistics did not yet
+    // new
+    // File("/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/data/heatmap_sumStats.gif"));
+    // The heatmap defaults to field sum aggregations since the field sum statistics
+    // did not yet
     // exist in the datastore
-    // TestUtils.testTileAgainstReference(heatMapRenderingSumStats, refHeatMapSumAggr, 0, 0.07);
+    // TestUtils.testTileAgainstReference(heatMapRenderingSumStats,
+    // refHeatMapSumAggr, 0, 0.07);
 
     // //----------------------------------------------------------------------
 
