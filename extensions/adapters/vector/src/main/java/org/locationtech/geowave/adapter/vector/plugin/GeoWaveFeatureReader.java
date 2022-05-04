@@ -579,17 +579,25 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
 
       SimpleFeatureCollection newFeatures = null;
 
+      System.out.println("READER - BBOX: " + outputBbox);
+      System.out.println("READER - JTS BOUNDS: " + jtsBounds);
+      System.out.println("READER - HEIGHT: " + height);
+      System.out.println("READER - WIDTH: " + width);
+      System.out.println("READER - PIX PER CELL: " + pixelsPerCell);
+
       // double bboxArea = outputBbox.getArea();
       // double jtsBoundsArea = jtsBounds.getArea();
 
       // Get CRS if it exists
       CoordinateReferenceSystem sourceCRS = outputBbox.getCoordinateReferenceSystem();
+      System.out.println("READER - SOURCE CRS: " + sourceCRS.getName());
 
+      // Add the source CRS to the user data for the jtsBounds
       jtsBounds.setUserData(sourceCRS);
 
-      // Test the Geohash precision determined by the comparative method
-      // int geohashPrecComp = HeatMapUtils.getGeohashPrecisionComp(width, jtsBounds,
-      // pixelsPerCell);
+      // Test the Geohash precision determined by the comparative method TODO: does something weird
+      // with binning values
+      // int geohashPrec = HeatMapUtils.getGeohashPrecisionComp(width, jtsBounds, pixelsPerCell);
       // System.out.println("READER - GEOHASH via comp method: " + geohashPrecComp);
 
       // Get an appropriate Geohash precision for the GeoServer extent
@@ -601,7 +609,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
               jtsBounds,
               sourceCRS);
 
-      // System.out.println("READER - GEOHASH via threshold method: " + geohashPrec);
+      System.out.println("READER - GEOHASH via threshold method: " + geohashPrec);
 
       // Temporary histogram builder
       // TDigestNumericHistogram histogram = new TDigestNumericHistogram();
@@ -609,7 +617,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
 
       // Build the count aggregation query and get the resulting SimpleFeatureCollection
       if (queryType.equals(GeoWaveHeatMapProcess.CNT_AGGR)) {
-        // System.out.println("READER - START CNT_AGGR");
+        System.out.println("READER - START CNT_AGGR");
         newFeatures =
             HeatMapAggregations.buildCountAggrQuery(
                 // histogram,
@@ -621,7 +629,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
 
       // Build the sum aggregation query and get the resulting SimpleFeatureCollection
       if (queryType.equals(GeoWaveHeatMapProcess.SUM_AGGR)) {
-        // System.out.println("READER - START SUM_AGGR");
+        System.out.println("READER - START SUM_AGGR");
         newFeatures =
             HeatMapAggregations.buildFieldSumAggrQuery(
                 components,
@@ -632,7 +640,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
 
       // Build the count statistics query and get the resulting SimpleFeatureCollection
       if (queryType.equals(GeoWaveHeatMapProcess.CNT_STATS)) {
-        // System.out.println("READER - START CNT_STATS");
+        System.out.println("READER - START CNT_STATS");
         newFeatures =
             HeatMapStatistics.buildCountStatsQuery(
                 components,
@@ -644,7 +652,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
 
       // Build the sum statistics query and get the resulting SimpleFeatureCollection
       if (queryType.equals(GeoWaveHeatMapProcess.SUM_STATS)) {
-        // System.out.println("READER - START SUM_STATS");
+        System.out.println("READER - START SUM_STATS");
         newFeatures =
             HeatMapStatistics.buildFieldStatsQuery(
                 components,

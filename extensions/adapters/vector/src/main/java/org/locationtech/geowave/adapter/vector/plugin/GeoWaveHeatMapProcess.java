@@ -39,6 +39,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 import org.opengis.filter.expression.Expression;
 import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.util.ProgressListener;
@@ -217,6 +218,25 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
     /** Compute transform to convert input coords into output CRS */
     CoordinateReferenceSystem srcCRS = obsFeatures.getSchema().getCoordinateReferenceSystem();
     CoordinateReferenceSystem dstCRS = argOutputEnv.getCoordinateReferenceSystem();
+
+    System.out.println("HEATMAP - SOURCE CRS: " + srcCRS.getName());
+    System.out.println("HEATMAP - DEST CRS: " + dstCRS.getName());
+
+    // Boolean isWGS84 = srcCRS.getName().getCode().equals("WGS 84");
+    // if (!isWGS84) {
+    // // Decode the target CRS of "EPSG:4326"
+    // try {
+    // srcCRS = CRS.decode("EPSG:4326");
+    // } catch (NoSuchAuthorityCodeException e) {
+    // // TODO Auto-generated catch block
+    // e.printStackTrace();
+    // } catch (FactoryException e) {
+    // // TODO Auto-generated catch block
+    // e.printStackTrace();
+    // }
+    // }
+
+    System.out.println("HEATMAP - SOURCE CRS FINAL: " + srcCRS.getName());
 
     MathTransform trans = null;
     try {

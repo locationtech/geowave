@@ -75,6 +75,9 @@ public class GeoServerIngestIT extends BaseServiceIT {
       TestUtils.isOracleJRE() ? "src/test/resources/wms/wms-grid-oraclejdk.gif"
           : "src/test/resources/wms/wms-grid.gif";
 
+  private static Boolean runProjected = true;
+  private static Boolean runUnprojected = false;
+
   // TODO: create a heatmap .gif using non-Oracle JRE.
   // private static final String REFERENCE_WMS_HEATMAP_NO_SB =
   // TestUtils.isOracleJRE() ?
@@ -96,6 +99,17 @@ public class GeoServerIngestIT extends BaseServiceIT {
   private static final String REFERENCE_WMS_HEATMAP_SUM_STATS =
       TestUtils.isOracleJRE() ? "src/test/resources/wms/wms-heatmap-sum-stats-oraclejdk.gif"
           : "src/test/resources/wms/wms-heatmap-sum-stats.gif";
+
+  private static final String REFERENCE_WMS_HEATMAP_CNT_AGGR_ZOOM =
+      TestUtils.isOracleJRE() ? "src/test/resources/wms/wms-heatmap-cnt-aggr-zoom-oraclejdk.gif"
+          : "src/test/resources/wms/wms-heatmap-cnt-aggr-zoom-oraclejdk.gif";
+
+  private static final String REFERENCE_WMS_HEATMAP_CNT_AGGR_ZOOM_WGS84 =
+      TestUtils.isOracleJRE()
+          ? "src/test/resources/wms/wms-heatmap-cnt-aggr-wgs84-zoom-oraclejdk.gif"
+          : "src/test/resources/wms/wms-heatmap-cnt-aggr-wgs84-zoom-oraclejdk.gif";
+
+
 
   private static final String testName = "GeoServerIngestIT";
 
@@ -191,528 +205,787 @@ public class GeoServerIngestIT extends BaseServiceIT {
 
   @SuppressWarnings("unchecked")
   @Test
-  public void testExamplesIngest() throws Exception {
-    final DataStore ds = dataStorePluginOptions.createDataStore();
-    final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
+  public void testExamplesIngestProjected() throws Exception {
+    if (runProjected) {
+      final DataStore ds = dataStorePluginOptions.createDataStore();
+      final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
 
-    // Use Spherical Mercator projection coordinate system to test a projected
-    // coordinate system
-    final Index spatialIdx = TestUtils.createWebMercatorSpatialIndex();
 
-    // Set the spatial temporal index
-    final Index spatialTemporalIdx = TestUtils.createWebMercatorSpatialTemporalIndex();
+      // Use Web Mercator projection
+      final Index spatialIdx = TestUtils.createWebMercatorSpatialIndex();
 
-    @SuppressWarnings("rawtypes")
-    // Create data adapter
-    final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
+      // Set the spatial temporal index
+      final Index spatialTemporalIdx = TestUtils.createWebMercatorSpatialTemporalIndex();
 
-    // Create grid of temporal points
-    final List<SimpleFeature> features =
-        getGriddedTemporalFeatures(new SimpleFeatureBuilder(sft), 8675309);
-    LOGGER.info(
-        String.format("Beginning to ingest a uniform grid of %d features", features.size()));
+      @SuppressWarnings("rawtypes")
+      // Create data adapter
+      final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
 
-    // Initialize ingested features counter
-    int ingestedFeatures = 0;
+      // Create grid of temporal points
+      final List<SimpleFeature> features =
+          getGriddedTemporalFeatures(new SimpleFeatureBuilder(sft), 8675309);
+      LOGGER.info(
+          String.format("Beginning to ingest a uniform grid of %d features", features.size()));
 
-    // Get a subset count
-    final int featuresPer5Percent = features.size() / 20;
+      // Get a subset count
+      final int featuresPer5Percent = features.size() / 20;
 
-    // Add the type to the datastore
-    ds.addType(fda, spatialIdx, spatialTemporalIdx);
+      // Add the type to the datastore
+      ds.addType(fda, spatialIdx, spatialTemporalIdx);
 
-    // Initialize a bounding box statistic
-    final BoundingBoxStatistic mercatorBounds =
-        new BoundingBoxStatistic(fda.getTypeName(), sft.getGeometryDescriptor().getLocalName());
+      // Initialize a bounding box statistic
+      final BoundingBoxStatistic mercatorBounds =
+          new BoundingBoxStatistic(fda.getTypeName(), sft.getGeometryDescriptor().getLocalName());
 
-    // Set the source CRS
-    mercatorBounds.setSourceCrs(
-        fda.getFeatureType().getGeometryDescriptor().getCoordinateReferenceSystem());
+      // Set the source CRS
+      mercatorBounds.setSourceCrs(
+          fda.getFeatureType().getGeometryDescriptor().getCoordinateReferenceSystem());
 
-    // Set the destination CRS
-    mercatorBounds.setDestinationCrs(TestUtils.CUSTOM_CRS);
+      // Set the destination CRS
+      mercatorBounds.setDestinationCrs(TestUtils.CUSTOM_CRS);
 
-    // Set the tag
-    mercatorBounds.setTag("MERCATOR_BOUNDS");
+      // Set the tag
+      mercatorBounds.setTag("MERCATOR_BOUNDS");
 
-    // Add the statistic to the datastore
-    ds.addStatistic(mercatorBounds);
+      // Add the statistic to the datastore
+      ds.addStatistic(mercatorBounds);
 
-    // Write a subset of features to the datastore
-    try (@SuppressWarnings("rawtypes")
-    Writer writer = ds.createWriter(fda.getTypeName())) {
-      for (final SimpleFeature feat : features) {
-        writer.write(feat);
-        ingestedFeatures++;
-        if ((ingestedFeatures % featuresPer5Percent) == 0) {
-          LOGGER.info(
-              String.format(
-                  "Ingested %d percent of features",
-                  (ingestedFeatures / featuresPer5Percent) * 5));
+      // Write a subset of features to the datastore
+      int ingestedFeatures = 0;
+      try (@SuppressWarnings("rawtypes")
+      Writer writer = ds.createWriter(fda.getTypeName())) {
+        for (final SimpleFeature feat : features) {
+          writer.write(feat);
+          ingestedFeatures++;
+          if ((ingestedFeatures % featuresPer5Percent) == 0) {
+            LOGGER.info(
+                String.format(
+                    "Ingested %d percent of features",
+                    (ingestedFeatures / featuresPer5Percent) * 5));
+          }
         }
       }
-    }
 
-    // Get the bounding box envelope
-    final BoundingBoxValue env =
-        ds.aggregateStatistics(
-            StatisticQueryBuilder.newBuilder(BoundingBoxStatistic.STATS_TYPE).typeName(
-                fda.getTypeName()).fieldName(sft.getGeometryDescriptor().getLocalName()).tag(
-                    "MERCATOR_BOUNDS").build());
+      // Get the bounding box envelope
+      final BoundingBoxValue env =
+          ds.aggregateStatistics(
+              StatisticQueryBuilder.newBuilder(BoundingBoxStatistic.STATS_TYPE).typeName(
+                  fda.getTypeName()).fieldName(sft.getGeometryDescriptor().getLocalName()).tag(
+                      "MERCATOR_BOUNDS").build());
 
-    // Check the status codes of various processes
-    TestUtils.assertStatusCode(
-        "Should Create 'testomatic' Workspace",
-        201,
-        geoServerServiceClient.addWorkspace("testomatic"));
-    storeServiceClient.addStoreReRoute(
-        dataStorePluginOptions.getGeoWaveNamespace(),
-        dataStorePluginOptions.getType(),
-        dataStorePluginOptions.getGeoWaveNamespace(),
-        dataStorePluginOptions.getOptionsAsMap());
+      // Check the status codes of various processes
+      TestUtils.assertStatusCode(
+          "Should Create 'testomatic' Workspace",
+          201,
+          geoServerServiceClient.addWorkspace("testomatic"));
+      storeServiceClient.addStoreReRoute(
+          dataStorePluginOptions.getGeoWaveNamespace(),
+          dataStorePluginOptions.getType(),
+          dataStorePluginOptions.getGeoWaveNamespace(),
+          dataStorePluginOptions.getOptionsAsMap());
 
-    TestUtils.assertStatusCode(
-        "Should Add " + dataStorePluginOptions.getGeoWaveNamespace() + " Datastore",
-        201,
-        geoServerServiceClient.addDataStore(
-            dataStorePluginOptions.getGeoWaveNamespace(),
-            "testomatic",
-            dataStorePluginOptions.getGeoWaveNamespace()));
+      TestUtils.assertStatusCode(
+          "Should Add " + dataStorePluginOptions.getGeoWaveNamespace() + " Datastore",
+          201,
+          geoServerServiceClient.addDataStore(
+              dataStorePluginOptions.getGeoWaveNamespace(),
+              "testomatic",
+              dataStorePluginOptions.getGeoWaveNamespace()));
 
-    TestUtils.assertStatusCode(
-        "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE + "' Style",
-        201,
-        geoServerServiceClient.addStyle(
-            ServicesTestEnvironment.TEST_SLD_NO_DIFFERENCE_FILE,
-            ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE));
+      TestUtils.assertStatusCode(
+          "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE + "' Style",
+          201,
+          geoServerServiceClient.addStyle(
+              ServicesTestEnvironment.TEST_SLD_NO_DIFFERENCE_FILE,
+              ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE));
 
-    muteLogging();
-    TestUtils.assertStatusCode(
-        "Should return 400, that layer was already added",
-        400,
-        geoServerServiceClient.addStyle(
-            ServicesTestEnvironment.TEST_SLD_NO_DIFFERENCE_FILE,
-            ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE));
-    unmuteLogging();
-
-    TestUtils.assertStatusCode(
-        "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE + "' Style",
-        201,
-        geoServerServiceClient.addStyle(
-            ServicesTestEnvironment.TEST_SLD_MINOR_SUBSAMPLE_FILE,
-            ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE));
-
-    TestUtils.assertStatusCode(
-        "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE + "' Style",
-        201,
-        geoServerServiceClient.addStyle(
-            ServicesTestEnvironment.TEST_SLD_MAJOR_SUBSAMPLE_FILE,
-            ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE));
-
-    TestUtils.assertStatusCode(
-        "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER + "' Style",
-        201,
-        geoServerServiceClient.addStyle(
-            ServicesTestEnvironment.TEST_SLD_DISTRIBUTED_RENDER_FILE,
-            ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER));
-
-    // ----------------HEATMAP RESPONSE TESTS------------------------------------
-    // Test response code for heatmap - no spatial binning
-    TestUtils.assertStatusCode(
-        "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP + "' Style",
-        201,
-        geoServerServiceClient.addStyle(
-            ServicesTestEnvironment.TEST_SLD_HEATMAP_FILE,
-            ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP));
-
-    // Test response code for heatmap CNT_AGGR
-    TestUtils.assertStatusCode(
-        "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_AGGR + "' Style",
-        201,
-        geoServerServiceClient.addStyle(
-            ServicesTestEnvironment.TEST_SLD_HEATMAP_FILE_CNT_AGGR,
-            ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_AGGR));
-
-    // Test response code for heatmap SUM_AGGR
-    TestUtils.assertStatusCode(
-        "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_AGGR + "' Style",
-        201,
-        geoServerServiceClient.addStyle(
-            ServicesTestEnvironment.TEST_SLD_HEATMAP_FILE_SUM_AGGR,
-            ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_AGGR));
-
-    // Test response code for heatmap CNT_STATS
-    TestUtils.assertStatusCode(
-        "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_STATS + "' Style",
-        201,
-        geoServerServiceClient.addStyle(
-            ServicesTestEnvironment.TEST_SLD_HEATMAP_FILE_CNT_STATS,
-            ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_STATS));
-
-    // Test response code for heatmap SUM_STATS
-    TestUtils.assertStatusCode(
-        "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_STATS + "' Style",
-        201,
-        geoServerServiceClient.addStyle(
-            ServicesTestEnvironment.TEST_SLD_HEATMAP_FILE_SUM_STATS,
-            ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_STATS));
-    // -----------------------------------------------------------------------------------------
-
-    TestUtils.assertStatusCode(
-        "Should Publish '" + SimpleIngest.FEATURE_NAME + "' Layer",
-        201,
-        geoServerServiceClient.addLayer(
-            dataStorePluginOptions.getGeoWaveNamespace(),
-            WORKSPACE,
-            null,
-            null,
-            "point"));
-
-    if (!(ds instanceof Closeable)) {
-      // this is kinda hacky, but its only for the integration test - the
-      // problem is that GeoServer and this thread have different class
-      // loaders so the RocksDB "singleton" instances are not shared in
-      // this JVM and GeoServer currently has a lock on the datastore
-      // after the previous addlayer - add layer tries to lookup adapters
-      // while it does not have the lock and therefore fails
       muteLogging();
       TestUtils.assertStatusCode(
           "Should return 400, that layer was already added",
           400,
+          geoServerServiceClient.addStyle(
+              ServicesTestEnvironment.TEST_SLD_NO_DIFFERENCE_FILE,
+              ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE));
+      unmuteLogging();
+
+      TestUtils.assertStatusCode(
+          "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE + "' Style",
+          201,
+          geoServerServiceClient.addStyle(
+              ServicesTestEnvironment.TEST_SLD_MINOR_SUBSAMPLE_FILE,
+              ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE));
+
+      TestUtils.assertStatusCode(
+          "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE + "' Style",
+          201,
+          geoServerServiceClient.addStyle(
+              ServicesTestEnvironment.TEST_SLD_MAJOR_SUBSAMPLE_FILE,
+              ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE));
+
+      TestUtils.assertStatusCode(
+          "Should Publish '"
+              + ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER
+              + "' Style",
+          201,
+          geoServerServiceClient.addStyle(
+              ServicesTestEnvironment.TEST_SLD_DISTRIBUTED_RENDER_FILE,
+              ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER));
+
+      // ----------------HEATMAP RESPONSE TESTS------------------------------------
+      // Test response code for heatmap - no spatial binning
+      TestUtils.assertStatusCode(
+          "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP + "' Style",
+          201,
+          geoServerServiceClient.addStyle(
+              ServicesTestEnvironment.TEST_SLD_HEATMAP_FILE,
+              ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP));
+
+      // Test response code for heatmap CNT_AGGR
+      TestUtils.assertStatusCode(
+          "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_AGGR + "' Style",
+          201,
+          geoServerServiceClient.addStyle(
+              ServicesTestEnvironment.TEST_SLD_HEATMAP_FILE_CNT_AGGR,
+              ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_AGGR));
+
+      // Test response code for heatmap SUM_AGGR
+      TestUtils.assertStatusCode(
+          "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_AGGR + "' Style",
+          201,
+          geoServerServiceClient.addStyle(
+              ServicesTestEnvironment.TEST_SLD_HEATMAP_FILE_SUM_AGGR,
+              ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_AGGR));
+
+      // Test response code for heatmap CNT_STATS
+      TestUtils.assertStatusCode(
+          "Should Publish '"
+              + ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_STATS
+              + "' Style",
+          201,
+          geoServerServiceClient.addStyle(
+              ServicesTestEnvironment.TEST_SLD_HEATMAP_FILE_CNT_STATS,
+              ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_STATS));
+
+      // Test response code for heatmap SUM_STATS
+      TestUtils.assertStatusCode(
+          "Should Publish '"
+              + ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_STATS
+              + "' Style",
+          201,
+          geoServerServiceClient.addStyle(
+              ServicesTestEnvironment.TEST_SLD_HEATMAP_FILE_SUM_STATS,
+              ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_STATS));
+      // -----------------------------------------------------------------------------------------
+
+      TestUtils.assertStatusCode(
+          "Should Publish '" + SimpleIngest.FEATURE_NAME + "' Layer",
+          201,
           geoServerServiceClient.addLayer(
               dataStorePluginOptions.getGeoWaveNamespace(),
               WORKSPACE,
               null,
               null,
               "point"));
-      unmuteLogging();
+
+      if (!(ds instanceof Closeable)) {
+        // this is kinda hacky, but its only for the integration test - the
+        // problem is that GeoServer and this thread have different class
+        // loaders so the RocksDB "singleton" instances are not shared in
+        // this JVM and GeoServer currently has a lock on the datastore
+        // after the previous addlayer - add layer tries to lookup adapters
+        // while it does not have the lock and therefore fails
+        muteLogging();
+        TestUtils.assertStatusCode(
+            "Should return 400, that layer was already added",
+            400,
+            geoServerServiceClient.addLayer(
+                dataStorePluginOptions.getGeoWaveNamespace(),
+                WORKSPACE,
+                null,
+                null,
+                "point"));
+        unmuteLogging();
+      }
+
+      final BufferedImage biDirectRender =
+          getWMSSingleTile(
+              env.getMinX(),
+              env.getMaxX(),
+              env.getMinY(),
+              env.getMaxY(),
+              SimpleIngest.FEATURE_NAME,
+              "point",
+              920,
+              360,
+              null,
+              true,
+              true);
+
+      final BufferedImage ref = ImageIO.read(new File(REFERENCE_WMS_IMAGE_PATH));
+
+      // being a little lenient because of differences in O/S rendering
+      TestUtils.testTileAgainstReference(biDirectRender, ref, 0, 0.07);
+
+      BufferedImage biSubsamplingWithoutError =
+          getWMSSingleTile(
+              env.getMinX(),
+              env.getMaxX(),
+              env.getMinY(),
+              env.getMaxY(),
+              SimpleIngest.FEATURE_NAME,
+              ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE,
+              920,
+              360,
+              null,
+              false,
+              true);
+
+      Assert.assertNotNull(ref);
+      // being a little lenient because of differences in O/S rendering
+      TestUtils.testTileAgainstReference(biSubsamplingWithoutError, ref, 0, 0.07);
+
+      BufferedImage biSubsamplingWithExpectedError =
+          getWMSSingleTile(
+              env.getMinX(),
+              env.getMaxX(),
+              env.getMinY(),
+              env.getMaxY(),
+              SimpleIngest.FEATURE_NAME,
+              ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE,
+              920,
+              360,
+              null,
+              false,
+              true);
+      TestUtils.testTileAgainstReference(biSubsamplingWithExpectedError, ref, 0.01, 0.15);
+
+      BufferedImage biSubsamplingWithLotsOfError =
+          getWMSSingleTile(
+              env.getMinX(),
+              env.getMaxX(),
+              env.getMinY(),
+              env.getMaxY(),
+              SimpleIngest.FEATURE_NAME,
+              ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE,
+              920,
+              360,
+              null,
+              false,
+              true);
+      TestUtils.testTileAgainstReference(biSubsamplingWithLotsOfError, ref, 0.3, 0.4);
+
+      final BufferedImage biDistributedRendering =
+          getWMSSingleTile(
+              env.getMinX(),
+              env.getMaxX(),
+              env.getMinY(),
+              env.getMaxY(),
+              SimpleIngest.FEATURE_NAME,
+              ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER,
+              920,
+              360,
+              null,
+              true,
+              true);
+      TestUtils.testTileAgainstReference(biDistributedRendering, ref, 0, 0.07);
+
+      // ------------------------------HEATMAP RENDERING----------------------
+      runHeatMapRenderingProjectedTests(env);
+      // -------------------------------------------------------------------------
+
+      // Test subsampling with only the spatial-temporal index
+      ds.removeIndex(spatialIdx.getName());
+      ServicesTestEnvironment.getInstance().restartServices();
+
+      // Test subsample rendering without error
+      biSubsamplingWithoutError =
+          getWMSSingleTile(
+              env.getMinX(),
+              env.getMaxX(),
+              env.getMinY(),
+              env.getMaxY(),
+              SimpleIngest.FEATURE_NAME,
+              ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE,
+              920,
+              360,
+              null,
+              true,
+              true);
+      Assert.assertNotNull(ref);
+      // being a little lenient because of differences in O/S rendering
+      TestUtils.testTileAgainstReference(biSubsamplingWithoutError, ref, 0, 0.071);
+
+      // Test subsample rendering with expected error
+      biSubsamplingWithExpectedError =
+          getWMSSingleTile(
+              env.getMinX(),
+              env.getMaxX(),
+              env.getMinY(),
+              env.getMaxY(),
+              SimpleIngest.FEATURE_NAME,
+              ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE,
+              920,
+              360,
+              null,
+              true,
+              true);
+      TestUtils.testTileAgainstReference(biSubsamplingWithExpectedError, ref, 0.01, 0.151);
+
+      // Test subsample rendering with lots of error
+      biSubsamplingWithLotsOfError =
+          getWMSSingleTile(
+              env.getMinX(),
+              env.getMaxX(),
+              env.getMinY(),
+              env.getMaxY(),
+              SimpleIngest.FEATURE_NAME,
+              ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE,
+              920,
+              360,
+              null,
+              true,
+              true);
+      TestUtils.testTileAgainstReference(biSubsamplingWithLotsOfError, ref, 0.3, 0.41);
     }
+  }
 
-    final BufferedImage biDirectRender =
-        getWMSSingleTile(
-            env.getMinX(),
-            env.getMaxX(),
-            env.getMinY(),
-            env.getMaxY(),
-            SimpleIngest.FEATURE_NAME,
-            "point",
-            920,
-            360,
-            null,
-            true,
-            false);
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testExamplesIngestNotProjected() throws Exception {
+    if (runUnprojected) {
+      final DataStore ds = dataStorePluginOptions.createDataStore();
+      final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
 
-    final BufferedImage ref = ImageIO.read(new File(REFERENCE_WMS_IMAGE_PATH));
+      // Use WGS84 coordinate system
+      final Index spatialIdx = TestUtils.createWGS84SpatialIndex();
 
-    // being a little lenient because of differences in O/S rendering
-    TestUtils.testTileAgainstReference(biDirectRender, ref, 0, 0.07);
+      // Set the spatial temporal index
+      final Index spatialTemporalIdx = TestUtils.createWGS84SpatialTemporalIndex();
 
-    BufferedImage biSubsamplingWithoutError =
-        getWMSSingleTile(
-            env.getMinX(),
-            env.getMaxX(),
-            env.getMinY(),
-            env.getMaxY(),
-            SimpleIngest.FEATURE_NAME,
-            ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE,
-            920,
-            360,
-            null,
-            false,
-            false);
+      @SuppressWarnings("rawtypes")
+      // Create data adapter
+      final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
 
-    Assert.assertNotNull(ref);
-    // being a little lenient because of differences in O/S rendering
-    TestUtils.testTileAgainstReference(biSubsamplingWithoutError, ref, 0, 0.07);
+      // Create grid of temporal points
+      final List<SimpleFeature> features =
+          getGriddedTemporalFeatures(new SimpleFeatureBuilder(sft), 8675309);
+      LOGGER.info(
+          String.format("Beginning to ingest a uniform grid of %d features", features.size()));
 
-    BufferedImage biSubsamplingWithExpectedError =
-        getWMSSingleTile(
-            env.getMinX(),
-            env.getMaxX(),
-            env.getMinY(),
-            env.getMaxY(),
-            SimpleIngest.FEATURE_NAME,
-            ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE,
-            920,
-            360,
-            null,
-            false,
-            false);
-    TestUtils.testTileAgainstReference(biSubsamplingWithExpectedError, ref, 0.01, 0.15);
+      // Initialize ingested features counter
+      int ingestedFeatures = 0;
 
-    BufferedImage biSubsamplingWithLotsOfError =
-        getWMSSingleTile(
-            env.getMinX(),
-            env.getMaxX(),
-            env.getMinY(),
-            env.getMaxY(),
-            SimpleIngest.FEATURE_NAME,
-            ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE,
-            920,
-            360,
-            null,
-            false,
-            false);
-    TestUtils.testTileAgainstReference(biSubsamplingWithLotsOfError, ref, 0.3, 0.4);
+      // Get a subset count
+      final int featuresPer5Percent = features.size() / 20;
 
-    final BufferedImage biDistributedRendering =
-        getWMSSingleTile(
-            env.getMinX(),
-            env.getMaxX(),
-            env.getMinY(),
-            env.getMaxY(),
-            SimpleIngest.FEATURE_NAME,
-            ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER,
-            920,
-            360,
-            null,
-            true,
-            false);
-    TestUtils.testTileAgainstReference(biDistributedRendering, ref, 0, 0.07);
+      // Add the type to the datastore
+      ds.addType(fda, spatialIdx, spatialTemporalIdx);
 
+      // Initialize a bounding box statistic
+      final BoundingBoxStatistic wgs84Bounds =
+          new BoundingBoxStatistic(fda.getTypeName(), sft.getGeometryDescriptor().getLocalName());
+
+      // Set the source CRS
+      wgs84Bounds.setSourceCrs(
+          fda.getFeatureType().getGeometryDescriptor().getCoordinateReferenceSystem());
+
+      // Set the destination CRS
+      wgs84Bounds.setDestinationCrs(TestUtils.CUSTOM_CRS_WGS84);
+
+      // Set the tag
+      wgs84Bounds.setTag("WGS84_BOUNDS");
+
+      // Add the statistic to the datastore
+      ds.addStatistic(wgs84Bounds);
+
+      // Write a subset of features to the datastore
+      try (@SuppressWarnings("rawtypes")
+      Writer writer = ds.createWriter(fda.getTypeName())) {
+        for (final SimpleFeature feat : features) {
+          writer.write(feat);
+          ingestedFeatures++;
+          if ((ingestedFeatures % featuresPer5Percent) == 0) {
+            LOGGER.info(
+                String.format(
+                    "Ingested %d percent of features",
+                    (ingestedFeatures / featuresPer5Percent) * 5));
+          }
+        }
+      }
+
+      // Get the bounding box envelope
+      final BoundingBoxValue env =
+          ds.aggregateStatistics(
+              StatisticQueryBuilder.newBuilder(BoundingBoxStatistic.STATS_TYPE).typeName(
+                  fda.getTypeName()).fieldName(sft.getGeometryDescriptor().getLocalName()).tag(
+                      "WGS84_BOUNDS").build());
+
+      // Check the status codes of various processes
+      TestUtils.assertStatusCode(
+          "Should Create 'testomatic' Workspace",
+          201,
+          geoServerServiceClient.addWorkspace("testomatic"));
+      storeServiceClient.addStoreReRoute(
+          dataStorePluginOptions.getGeoWaveNamespace(),
+          dataStorePluginOptions.getType(),
+          dataStorePluginOptions.getGeoWaveNamespace(),
+          dataStorePluginOptions.getOptionsAsMap());
+
+      TestUtils.assertStatusCode(
+          "Should Add " + dataStorePluginOptions.getGeoWaveNamespace() + " Datastore",
+          201,
+          geoServerServiceClient.addDataStore(
+              dataStorePluginOptions.getGeoWaveNamespace(),
+              "testomatic",
+              dataStorePluginOptions.getGeoWaveNamespace()));
+
+
+      // ----------------HEATMAP RESPONSE TESTS------------------------------------
+
+      // Test response code for heatmap CNT_AGGR
+      TestUtils.assertStatusCode(
+          "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_AGGR + "' Style",
+          201,
+          geoServerServiceClient.addStyle(
+              ServicesTestEnvironment.TEST_SLD_HEATMAP_FILE_CNT_AGGR,
+              ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_AGGR));
+
+      // -----------------------------------------------------------------------------------------
+
+      TestUtils.assertStatusCode(
+          "Should Publish '" + SimpleIngest.FEATURE_NAME + "' Layer",
+          201,
+          geoServerServiceClient.addLayer(
+              dataStorePluginOptions.getGeoWaveNamespace(),
+              WORKSPACE,
+              null,
+              null,
+              "point"));
+
+      // ------------------------------HEATMAP WGS84 RENDERING----------------------
+
+      // TODO: if this is run, centroid at 0, 0 cannot be projected at full extent.
+      Boolean runCntAggr = false;
+      Boolean runZoomed = true;
+
+      Boolean writeGif = false;
+
+      // Test the count aggregation heatmap rendering WGS84 (CNT_AGGR)
+      if (runCntAggr) {
+        final BufferedImage heatMapRenderingCntAggr =
+            getWMSSingleTile(
+                env.getMinX(),
+                env.getMaxX(),
+                env.getMinY(),
+                env.getMaxY(),
+                SimpleIngest.FEATURE_NAME,
+                ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_AGGR,
+                920,
+                360,
+                null,
+                false,
+                false);
+
+        if (writeGif) {
+          ImageIO.write(
+              heatMapRenderingCntAggr,
+              "gif",
+              new File(
+                  "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/t_heatmap_cntAggr_WGS84.gif"));
+        }
+      }
+
+      // Test the count aggregation heatmap rendering WGS84 (CNT_AGGR zoomed-in)
+      if (runZoomed) {
+        final BufferedImage refHeatMapCntAggrWGS84Zoom =
+            ImageIO.read(new File(REFERENCE_WMS_HEATMAP_CNT_AGGR_ZOOM_WGS84));
+
+        final BufferedImage heatMapRenderingCntAggrWGS84Zoomed =
+            getWMSSingleTile(
+                env.getMinX() / 4,
+                env.getMaxX() / 4,
+                env.getMinY() / 4,
+                env.getMaxY() / 4,
+                SimpleIngest.FEATURE_NAME,
+                ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_AGGR,
+                920,
+                360,
+                null,
+                false,
+                false);
+
+        if (writeGif) {
+          ImageIO.write(
+              heatMapRenderingCntAggrWGS84Zoomed,
+              "gif",
+              new File(
+                  "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/t_heatmap_cntAggr_WGS84_zoomed.gif"));
+        }
+        TestUtils.testTileAgainstReference(
+            heatMapRenderingCntAggrWGS84Zoomed,
+            refHeatMapCntAggrWGS84Zoom,
+            0.0,
+            0.07);
+
+      }
+      ds.removeIndex(spatialIdx.getName());
+      ServicesTestEnvironment.getInstance().restartServices();
+    }
+    // ----------------------------------------------------------------------
+  }
+
+  private static void runHeatMapRenderingProjectedTests(BoundingBoxValue env) {
     // ------------------------------HEATMAP RENDERING----------------------
+    // Keep these Booleans for local testing purposes
+    Boolean runNoSpatialBinning = false;
     Boolean runCntAggr = true;
+    Boolean runCntAggrZoom = true;
     Boolean runSumAggr = true;
     Boolean runCntStats = true;
     Boolean runSumStats = true;
 
-    // Test the count aggregation heatmap rendering (NO SPATIAL BINNING)
-    // final BufferedImage refHeatMapNoSpatialBinning =
-    // ImageIO.read(new File(REFERENCE_WMS_HEATMAP_NO_SB));
-    //
-    // final BufferedImage heatMapRenderingNoSpatBin =
-    // getWMSSingleTile(
-    // env.getMinX(),
-    // env.getMaxX(),
-    // env.getMinY(),
-    // env.getMaxY(),
-    // SimpleIngest.FEATURE_NAME,
-    // ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP,
-    // 920,
-    // 360,
-    // null,
-    // false,
-    // true);
+    Boolean writeGif = false;
+    Boolean writeGifZoom = false;
 
-    // Write output to a gif -- KEEP THIS HERE
-    // ImageIO.write(
-    // heatMapRenderingNoSpatialBinning,
-    // "gif",
-    // new
-    // File("/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/data/heatmap-no-spatial-binning.gif"));
+    try {
+      // Test the count aggregation heatmap rendering (NO SPATIAL BINNING)
+      if (runNoSpatialBinning) {
+        // final BufferedImage refHeatMapNoSpatialBinning =
+        // ImageIO.read(new File(REFERENCE_WMS_HEATMAP_NO_SB));
 
-    // TestUtils.testTileAgainstReference(
-    // heatMapRenderingNoSpatBin,
-    // refHeatMapNoSpatialBinning,
-    // 0,
-    // 0.07);
+        BufferedImage heatMapRenderingNoSpatBin;
 
-    final BufferedImage refHeatMapCntAggr = ImageIO.read(new File(REFERENCE_WMS_HEATMAP_CNT_AGGR));
+        heatMapRenderingNoSpatBin =
+            getWMSSingleTile(
+                env.getMinX(),
+                env.getMaxX(),
+                env.getMinY(),
+                env.getMaxY(),
+                SimpleIngest.FEATURE_NAME,
+                ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP,
+                920,
+                360,
+                null,
+                false,
+                true);
 
-    if (runCntAggr) {
+
+        // Write output to a gif -- KEEP THIS HERE
+        if (writeGif) {
+          ImageIO.write(
+              heatMapRenderingNoSpatBin,
+              "gif",
+              new File(
+                  "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/c-wms-heatmap-no-spat-bin-oraclejdk.gif"));
+        }
+
+        // TestUtils.testTileAgainstReference(
+        // heatMapRenderingNoSpatBin,
+        // refHeatMapNoSpatialBinning,
+        // 0,
+        // 0.07);
+      }
+
+      // Get the count aggregation heatmap gif
+      final BufferedImage refHeatMapCntAggr =
+          ImageIO.read(new File(REFERENCE_WMS_HEATMAP_CNT_AGGR));
+
       // Test the count aggregation heatmap rendering (CNT_AGGR)
-      final BufferedImage heatMapRenderingCntAggr =
-          getWMSSingleTile(
-              env.getMinX(),
-              env.getMaxX(),
-              env.getMinY(),
-              env.getMaxY(),
-              SimpleIngest.FEATURE_NAME,
-              ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_AGGR,
-              920,
-              360,
-              null,
-              false,
-              true);
+      if (runCntAggr) {
+        final BufferedImage heatMapRenderingCntAggr =
+            getWMSSingleTile(
+                env.getMinX(),
+                env.getMaxX(),
+                env.getMinY(),
+                env.getMaxY(),
+                SimpleIngest.FEATURE_NAME,
+                ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_AGGR,
+                920,
+                360,
+                null,
+                false,
+                true);
 
-      // Write output to a gif -- KEEP THIS HERE
-      // ImageIO.write(heatMapRenderingCntAggr, "gif",
-      // new
-      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/heatmap_cntAggr.gif"));
-      TestUtils.testTileAgainstReference(heatMapRenderingCntAggr, refHeatMapCntAggr, 0, 0.07);
-    }
+        if (writeGif) {
+          ImageIO.write(
+              heatMapRenderingCntAggr,
+              "gif",
+              new File(
+                  "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/c-wms-heatmap-cnt-aggr-oraclejdk.gif"));
+        }
 
-    final BufferedImage refHeatMapSumAggr = ImageIO.read(new File(REFERENCE_WMS_HEATMAP_SUM_AGGR));
-    if (runSumAggr) {
+        TestUtils.testTileAgainstReference(heatMapRenderingCntAggr, refHeatMapCntAggr, 0, 0.07);
+      }
+
+      if (runCntAggrZoom) {
+        System.out.println("TEST - STARTING ZOOMED-IN VERSION");
+
+        // Get the count aggregation zoom heatmap gif
+        final BufferedImage refHeatMapCntAggrZoom =
+            ImageIO.read(new File(REFERENCE_WMS_HEATMAP_CNT_AGGR_ZOOM));
+
+        // Test zoomed-in version of heatmap count aggregation
+        final BufferedImage heatMapRenderingCntAggrZoom =
+            getWMSSingleTile(
+                env.getMinX() / 100000,
+                env.getMaxX() / 100000,
+                env.getMinY() / 100000,
+                env.getMaxY() / 100000,
+                SimpleIngest.FEATURE_NAME,
+                ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_STATS,
+                920,
+                360,
+                null,
+                false,
+                true);
+
+        if (writeGifZoom) {
+          ImageIO.write(
+              heatMapRenderingCntAggrZoom,
+              "gif",
+              new File(
+                  "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/wms-heatmap-cnt-aggr-zoom-oraclejdk.gif"));
+        }
+
+        TestUtils.testTileAgainstReference(
+            heatMapRenderingCntAggrZoom,
+            refHeatMapCntAggrZoom,
+            0,
+            0.07);
+      }
+
+      // Get the sum aggregation heatmap gif
+      final BufferedImage refHeatMapSumAggr =
+          ImageIO.read(new File(REFERENCE_WMS_HEATMAP_SUM_AGGR));
+
       // Test the field sum aggregation heatmap rendering (SUM_AGGR)
-      final BufferedImage heatMapRenderingSumAggr =
-          getWMSSingleTile(
-              env.getMinX(),
-              env.getMaxX(),
-              env.getMinY(),
-              env.getMaxY(),
-              SimpleIngest.FEATURE_NAME,
-              ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_AGGR,
-              920,
-              360,
-              null,
-              false,
-              true);
+      if (runSumAggr) {
+        final BufferedImage heatMapRenderingSumAggr =
+            getWMSSingleTile(
+                env.getMinX(),
+                env.getMaxX(),
+                env.getMinY(),
+                env.getMaxY(),
+                SimpleIngest.FEATURE_NAME,
+                ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_AGGR,
+                920,
+                360,
+                null,
+                false,
+                true);
 
-      // Write output to a gif -- KEEP THIS HERE
-      // ImageIO.write(heatMapRenderingSumAggr, "gif",
-      // new
-      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/heatmap_sumAggr.gif"));
-      TestUtils.testTileAgainstReference(heatMapRenderingSumAggr, refHeatMapSumAggr, 0, 0.07);
-    }
+        if (writeGif) {
+          ImageIO.write(
+              heatMapRenderingSumAggr,
+              "gif",
+              new File(
+                  "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/c-wms-heatmap-sum-aggr-oraclejdk.gif"));
+        }
 
-    if (runCntStats) {
+        TestUtils.testTileAgainstReference(heatMapRenderingSumAggr, refHeatMapSumAggr, 0, 0.07);
+      }
+
       // Test the count statistics heatmap rendering initial run
-      final BufferedImage heatMapRenderingCntStats1 =
-          getWMSSingleTile(
-              env.getMinX(),
-              env.getMaxX(),
-              env.getMinY(),
-              env.getMaxY(),
-              SimpleIngest.FEATURE_NAME,
-              ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_STATS,
-              920,
-              360,
-              null,
-              false,
-              true);
+      if (runCntStats) {
+        final BufferedImage heatMapRenderingCntStats1 =
+            getWMSSingleTile(
+                env.getMinX(),
+                env.getMaxX(),
+                env.getMinY(),
+                env.getMaxY(),
+                SimpleIngest.FEATURE_NAME,
+                ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_STATS,
+                920,
+                360,
+                null,
+                false,
+                true);
 
-      // Write output to a gif -- KEEP THIS HERE
-      // ImageIO.write(
-      // heatMapRenderingCntStats1,
-      // "gif",
-      // new
-      // File("/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/heatmap_cntStats_1.gif"));
+        // Defaults to CNT_AGGR on initial run
+        TestUtils.testTileAgainstReference(heatMapRenderingCntStats1, refHeatMapCntAggr, 0, 0.07);
 
-      // Defaults to CNT_AGGR on initial run
-      TestUtils.testTileAgainstReference(heatMapRenderingCntStats1, refHeatMapCntAggr, 0, 0.07);
+        // Test the count statistics heatmap rendering subsequent run
+        final BufferedImage refHeatMapCntStats =
+            ImageIO.read(new File(REFERENCE_WMS_HEATMAP_CNT_STATS));
 
-      // Test the count statistics heatmap rendering subsequent run
-      final BufferedImage refHeatMapCntStats =
-          ImageIO.read(new File(REFERENCE_WMS_HEATMAP_CNT_STATS));
+        final BufferedImage heatMapRenderingCntStats2 =
+            getWMSSingleTile(
+                env.getMinX(),
+                env.getMaxX(),
+                env.getMinY(),
+                env.getMaxY(),
+                SimpleIngest.FEATURE_NAME,
+                ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_STATS,
+                920,
+                360,
+                null,
+                false,
+                true);
 
-      final BufferedImage heatMapRenderingCntStats2 =
-          getWMSSingleTile(
-              env.getMinX(),
-              env.getMaxX(),
-              env.getMinY(),
-              env.getMaxY(),
-              SimpleIngest.FEATURE_NAME,
-              ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_STATS,
-              920,
-              360,
-              null,
-              false,
-              true);
+        if (writeGif) {
+          ImageIO.write(
+              heatMapRenderingCntStats2,
+              "gif",
+              new File(
+                  "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/c-wms-heatmap-cnt-stats-oraclejdk.gif"));
+        }
 
-      // Write output to a gif -- KEEP THIS HERE
-      // ImageIO.write(heatMapRenderingCntStats2, "gif", new File(
-      // "/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/wms-heatmap-cnt-stats.gif"));
+        TestUtils.testTileAgainstReference(heatMapRenderingCntStats2, refHeatMapCntStats, 0, 0.07);
+      }
 
-      TestUtils.testTileAgainstReference(heatMapRenderingCntStats2, refHeatMapCntStats, 0, 0.07);
-    }
-
-    if (runSumStats) {
       // Test the sum statistics heatmap rendering initial run
-      final BufferedImage heatMapRenderingSumStats1 =
-          getWMSSingleTile(
-              env.getMinX(),
-              env.getMaxX(),
-              env.getMinY(),
-              env.getMaxY(),
-              SimpleIngest.FEATURE_NAME,
-              ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_STATS,
-              920,
-              360,
-              null,
-              false,
-              true);
+      if (runSumStats) {
+        final BufferedImage heatMapRenderingSumStats1 =
+            getWMSSingleTile(
+                env.getMinX(),
+                env.getMaxX(),
+                env.getMinY(),
+                env.getMaxY(),
+                SimpleIngest.FEATURE_NAME,
+                ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_STATS,
+                920,
+                360,
+                null,
+                false,
+                true);
 
-      // Write output to a gif -- KEEP THIS HERE
-      // ImageIO.write(
-      // heatMapRenderingSumStats1,
-      // "gif",
-      // new
-      // File("/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/heatmap_sumStats_default.gif"));
+        // Defaults to field SUM_AGGR on initial run
+        TestUtils.testTileAgainstReference(heatMapRenderingSumStats1, refHeatMapSumAggr, 0, 0.07);
 
-      // Defaults to field SUM_AGGR on initial run
-      TestUtils.testTileAgainstReference(heatMapRenderingSumStats1, refHeatMapSumAggr, 0, 0.07);
+        // Test subsequent run of field sum statistics heatmap rendering (SUM_STATS)
+        final BufferedImage refHeatMapSumStats =
+            ImageIO.read(new File(REFERENCE_WMS_HEATMAP_SUM_STATS));
 
-      // Test subsequent run of field sum statistics heatmap rendering (SUM_STATS)
-      final BufferedImage refHeatMapSumStats =
-          ImageIO.read(new File(REFERENCE_WMS_HEATMAP_SUM_STATS));
+        final BufferedImage heatMapRenderingSumStats2 =
+            getWMSSingleTile(
+                env.getMinX(),
+                env.getMaxX(),
+                env.getMinY(),
+                env.getMaxY(),
+                SimpleIngest.FEATURE_NAME,
+                ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_STATS,
+                920,
+                360,
+                null,
+                false,
+                true);
 
-      final BufferedImage heatMapRenderingSumStats2 =
-          getWMSSingleTile(
-              env.getMinX(),
-              env.getMaxX(),
-              env.getMinY(),
-              env.getMaxY(),
-              SimpleIngest.FEATURE_NAME,
-              ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_STATS,
-              920,
-              360,
-              null,
-              false,
-              true);
+        if (writeGif) {
+          ImageIO.write(
+              heatMapRenderingSumStats2,
+              "gif",
+              new File(
+                  "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/c-wms-heatmap-sum-stats-oraclejdk.gif"));
+        }
 
-      // Write output to a gif -- KEEP THIS HERE
-      // ImageIO.write(heatMapRenderingSumStats2, "gif", new File(
-      // "/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/wms-heatmap-sum-stats.gif"));
-
-      TestUtils.testTileAgainstReference(heatMapRenderingSumStats2, refHeatMapSumStats, 0, 0.07);
+        TestUtils.testTileAgainstReference(heatMapRenderingSumStats2, refHeatMapSumStats, 0, 0.07);
+      }
+      // ----------------------------------------------------------------------
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (URISyntaxException e) {
+      e.printStackTrace();
     }
-
-    // ----------------------------------------------------------------------
-
-    // Test subsampling with only the spatial-temporal index
-    ds.removeIndex(spatialIdx.getName());
-    ServicesTestEnvironment.getInstance().restartServices();
-
-    // Test subsample rendering without error
-    biSubsamplingWithoutError =
-        getWMSSingleTile(
-            env.getMinX(),
-            env.getMaxX(),
-            env.getMinY(),
-            env.getMaxY(),
-            SimpleIngest.FEATURE_NAME,
-            ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE,
-            920,
-            360,
-            null,
-            true,
-            false);
-    Assert.assertNotNull(ref);
-    // being a little lenient because of differences in O/S rendering
-    TestUtils.testTileAgainstReference(biSubsamplingWithoutError, ref, 0, 0.071);
-
-    // Test subsample rendering with expected error
-    biSubsamplingWithExpectedError =
-        getWMSSingleTile(
-            env.getMinX(),
-            env.getMaxX(),
-            env.getMinY(),
-            env.getMaxY(),
-            SimpleIngest.FEATURE_NAME,
-            ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE,
-            920,
-            360,
-            null,
-            true,
-            false);
-    TestUtils.testTileAgainstReference(biSubsamplingWithExpectedError, ref, 0.01, 0.151);
-
-    // Test subsample rendering with lots of error
-    biSubsamplingWithLotsOfError =
-        getWMSSingleTile(
-            env.getMinX(),
-            env.getMaxX(),
-            env.getMinY(),
-            env.getMaxY(),
-            SimpleIngest.FEATURE_NAME,
-            ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE,
-            920,
-            360,
-            null,
-            true,
-            false);
-    TestUtils.testTileAgainstReference(biSubsamplingWithLotsOfError, ref, 0.3, 0.41);
   }
 
   /**
@@ -744,8 +1017,18 @@ public class GeoServerIngestIT extends BaseServiceIT {
       final int height,
       final String outputFormat,
       final boolean temporalFilter,
-      final boolean spatialBinning) throws IOException, URISyntaxException { // TODO: remove spatial
-                                                                             // binning if not used
+      final boolean projected) throws IOException, URISyntaxException {
+
+    // String crsToUse = projected ? "EPSG:3857" : "EPSG:4326";
+    String crsToUse = projected ? TestUtils.CUSTOM_CRSCODE : TestUtils.CUSTOM_CRSCODE_WGS84;
+
+
+    System.out.println("TEST - PROJECTED? " + projected);
+    System.out.println("TEST - CRS TO USE: " + crsToUse);
+    System.out.println("TEST - minX: " + minX);
+    System.out.println("TEST - maxX: " + maxX);
+    System.out.println("TEST - minY: " + minY);
+    System.out.println("TEST - maxY: " + maxY);
 
     // Initiate an empty Uniform Resource Identifier (URI) builder
     final URIBuilder builder = new URIBuilder();
@@ -758,7 +1041,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
                 "request",
                 "GetMap").setParameter("layers", layer).setParameter(
                     "styles",
-                    style == null ? "" : style).setParameter("crs", "EPSG:3857").setParameter(
+                    style == null ? "" : style).setParameter("crs", crsToUse).setParameter(
                         "bbox",
                         String.format(
                             "%.2f, %.2f, %.2f, %.2f",
@@ -818,6 +1101,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
 
   @After
   public void cleanup() {
+    System.out.println("TEST - CLEANING UP!");
     geoServerServiceClient.removeFeatureLayer(SimpleIngest.FEATURE_NAME);
     geoServerServiceClient.removeDataStore(dataStorePluginOptions.getGeoWaveNamespace(), WORKSPACE);
     geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE);

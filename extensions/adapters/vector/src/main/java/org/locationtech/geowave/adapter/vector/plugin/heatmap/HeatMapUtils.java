@@ -236,8 +236,22 @@ public class HeatMapUtils {
 
     // Project the geometry in order to get an accurate area
     if (isWGS84) {
+
+      // Get longitude coordinate of centroid
+      double longitude = centroid.getX();
+
+      // Get latitude coordinate of centroid
+      double latitude = centroid.getY();
+
+      // if (longitude == -0.0) {
+      // longitude = -0.000000000000001;
+      // }
+      // if (latitude == -0.0) {
+      // latitude = 0.000000000000001;
+      // }
+
       // Get the location
-      String code = "AUTO:42001," + centroid.getX() + "," + centroid.getY();
+      String code = "AUTO:42001," + longitude + "," + latitude;
 
       // Initialize empty CRS
       CoordinateReferenceSystem crs;
@@ -324,6 +338,7 @@ public class HeatMapUtils {
 
     // Get the area of the GeoServer map viewer extent in square kilometers
     double extentAreaSqKm = HeatMapUtils.calcAreaSqKm(jtsBounds, sourceCRS);
+    System.out.println("UTILS - EXTENT AREA: " + extentAreaSqKm);
 
     // Get approximate area of a single cell in square kilometers
     double cellArea = HeatMapUtils.getCellArea(extentAreaSqKm, totCellsTarget);
@@ -410,7 +425,7 @@ public class HeatMapUtils {
       }
 
       holdAbsDiff = absDiff;
-      geohashPrec = i;
+      geohashPrec = i + 1;
     }
 
     return geohashPrec;
