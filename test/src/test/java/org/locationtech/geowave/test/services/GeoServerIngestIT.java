@@ -89,22 +89,13 @@ public class GeoServerIngestIT extends BaseServiceIT {
       TestUtils.isOracleJRE() ? "src/test/resources/wms/wms-heatmap-sum-aggr-oraclejdk.gif"
           : "src/test/resources/wms/wms-heatmap-sum-aggr.gif";
 
-  // private static final String REFERENCE_WMS_HEATMAP_CNT_STATS_DEFAULT =
-  // TestUtils.isOracleJRE() ? "src/test/resources/wms/wms-heatmap-cnt-stats-default-oraclejdk.gif"
-  // : "src/test/resources/wms/wms-heatmap-cnt-stats-default-oraclejdk.gif";
-
   private static final String REFERENCE_WMS_HEATMAP_CNT_STATS =
       TestUtils.isOracleJRE() ? "src/test/resources/wms/wms-heatmap-cnt-stats-oraclejdk.gif"
-          : "src/test/resources/wms/wms-heatmap-cnt-stats-oraclejdk.gif";
-
-  // private static final String REFERENCE_WMS_HEATMAP_SUM_STATS_DEFAULT =
-  // TestUtils.isOracleJRE() ? "src/test/resources/wms/wms-heatmap-sum-stats-default-oraclejdk.gif"
-  // : "src/test/resources/wms/wms-heatmap-cnt-stats-default-oraclejdk.gif";
+          : "src/test/resources/wms/wms-heatmap-cnt-stats.gif";
 
   private static final String REFERENCE_WMS_HEATMAP_SUM_STATS =
       TestUtils.isOracleJRE() ? "src/test/resources/wms/wms-heatmap-sum-stats-oraclejdk.gif"
-          : "src/test/resources/wms/wms-heatmap-cnt-stats-oraclejdk.gif";
-
+          : "src/test/resources/wms/wms-heatmap-sum-stats.gif";
 
   private static final String testName = "GeoServerIngestIT";
 
@@ -610,15 +601,11 @@ public class GeoServerIngestIT extends BaseServiceIT {
               true);
 
       // Write output to a gif -- KEEP THIS HERE
-      // ImageIO.write(
-      // heatMapRenderingCntStats2,
-      // "gif",
-      // new File(
-      // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/heatmap_cntStats_2.gif"));
+      // ImageIO.write(heatMapRenderingCntStats2, "gif", new File(
+      // "/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/wms-heatmap-cnt-stats.gif"));
 
       TestUtils.testTileAgainstReference(heatMapRenderingCntStats2, refHeatMapCntStats, 0, 0.07);
     }
-
 
     if (runSumStats) {
       // Test the sum statistics heatmap rendering initial run
@@ -665,11 +652,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
               true);
 
       // Write output to a gif -- KEEP THIS HERE
-      // ImageIO.write(
-      // heatMapRenderingSumStats2,
-      // "gif",
-      // new File(
-      // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/heatmap_sumStats.gif"));
+      // ImageIO.write(heatMapRenderingSumStats2, "gif", new File(
+      // "/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/wms-heatmap-sum-stats.gif"));
 
       TestUtils.testTileAgainstReference(heatMapRenderingSumStats2, refHeatMapSumStats, 0, 0.07);
     }
