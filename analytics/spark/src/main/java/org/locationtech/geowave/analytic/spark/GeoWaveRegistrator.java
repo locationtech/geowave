@@ -19,6 +19,7 @@ import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.persist.PersistableFactory;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryCollection;
 import org.locationtech.jts.geom.MultiLineString;
 import org.locationtech.jts.geom.MultiPoint;
 import org.locationtech.jts.geom.MultiPolygon;
@@ -48,6 +49,7 @@ public class GeoWaveRegistrator implements KryoRegistrator {
     kryo.register(Polygon.class, geometrySerializer);
     kryo.register(MultiPolygon.class, geometrySerializer);
     kryo.register(MultiPoint.class, geometrySerializer);
+    kryo.register(GeometryCollection.class, geometrySerializer);
     kryo.register(PreparedGeometry.class);
     kryo.register(ByteArray.class);
     kryo.register(GeoWaveInputKey.class);
