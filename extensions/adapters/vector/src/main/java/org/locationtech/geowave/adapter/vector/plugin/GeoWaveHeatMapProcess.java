@@ -222,11 +222,11 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
     System.out.println("HEATMAP - SOURCE CRS: " + srcCRS.getName());
     System.out.println("HEATMAP - DEST CRS: " + dstCRS.getName());
 
-    // Boolean isWGS84 = srcCRS.getName().getCode().equals("WGS 84");
+    // Boolean isWGS84 = dstCRS.getName().getCode().equals("WGS 84");
     // if (!isWGS84) {
     // // Decode the target CRS of "EPSG:4326"
     // try {
-    // srcCRS = CRS.decode("EPSG:4326");
+    // dstCRS = CRS.decode("EPSG:4326");
     // } catch (NoSuchAuthorityCodeException e) {
     // // TODO Auto-generated catch block
     // e.printStackTrace();
@@ -519,6 +519,7 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
           trans.transform(srcPt, 0, dstPt, 0, 1);
 
           Coordinate pobs = new Coordinate(dstPt[0], dstPt[1], val);
+          System.out.println("HEATMAP pobs: " + pobs);
 
           heatMap.addPoint(pobs.x, pobs.y, val);
         } catch (Exception e) {

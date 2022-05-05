@@ -59,7 +59,6 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tech.units.indriya.AbstractSystemOfUnits;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({Environment.SERVICES})
@@ -223,17 +222,13 @@ public class GeoServerIngestIT extends BaseServiceIT {
     final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
 
     // Keep these Booleans for local testing purposes
-    Boolean runNoSpatialBinning = false; // keep this at false for now
-    Boolean runCntAggr = true;
-    Boolean runCntAggrZoom = true;
-    Boolean runSumAggr = true;
-    Boolean runSumAggrZoom = true;
+    Boolean runNoSpatialBinning = false;
+    Boolean runCntAggr = false;
+    Boolean runCntAggrZoom = false;
+    Boolean runSumAggr = false;
+    Boolean runSumAggrZoom = false;
     Boolean runCntStats = true;
     Boolean runSumStats = true;
-
-    Boolean writeGif = false;
-    Boolean writeGifCntAggrZoom = false;
-    Boolean writeGifSumAggrZoom = false;
 
     // Use Web Mercator projection
     final Index spatialIdx = TestUtils.createWebMercatorSpatialIndex();
@@ -507,7 +502,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
             true);
     TestUtils.testTileAgainstReference(biDistributedRendering, ref, 0, 0.07);
 
-    // ------------------------------HEATMAP RENDERING----------------------
+    // ------------------------------HEATMAP PROJECTED RENDERING----------------------
 
     // Test the count aggregation heatmap rendering (NO SPATIAL BINNING)
     if (runNoSpatialBinning) {
@@ -527,31 +522,26 @@ public class GeoServerIngestIT extends BaseServiceIT {
               false,
               true);
 
-
       // Write output to a gif -- KEEP THIS HERE
-      if (writeGif) {
-        ImageIO.write(
-            heatMapRenderingNoSpatBin,
-            "gif",
-            new File(
-                "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/c-wms-heatmap-no-spat-bin-oraclejdk.gif"));
-      } else {
-        // final BufferedImage refHeatMapNoSpatialBinning =
-        // ImageIO.read(new File(REFERENCE_WMS_HEATMAP_NO_SB));
-        // TestUtils.testTileAgainstReference(
-        // heatMapRenderingNoSpatBin,
-        // refHeatMapNoSpatialBinning,
-        // 0,
-        // 0.07);
-      }
-
-
+      ImageIO.write(
+          heatMapRenderingNoSpatBin,
+          "gif",
+          new File(
+              "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-no-spat-bin-oraclejdk.gif"));
+      // final BufferedImage refHeatMapNoSpatialBinning =
+      // ImageIO.read(new File(REFERENCE_WMS_HEATMAP_NO_SB));
+      // TestUtils.testTileAgainstReference(
+      // heatMapRenderingNoSpatBin,
+      // refHeatMapNoSpatialBinning,
+      // 0,
+      // 0.07);
     }
 
     // Get the count aggregation heatmap gif
     final BufferedImage refHeatMapCntAggr = ImageIO.read(new File(REFERENCE_WMS_HEATMAP_CNT_AGGR));
 
     // Test the count aggregation heatmap rendering (CNT_AGGR)
+    System.out.println("TEST - STARTING CNT AGGR ZOOM - PROJECTED");
     if (runCntAggr) {
       final BufferedImage heatMapRenderingCntAggr =
           getWMSSingleTile(
@@ -567,28 +557,31 @@ public class GeoServerIngestIT extends BaseServiceIT {
               false,
               true);
 
-      if (writeGif) {
-        ImageIO.write(
-            heatMapRenderingCntAggr,
-            "gif",
-            new File(
-                "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/c-wms-heatmap-cnt-aggr-oraclejdk.gif"));
-      } else {
-        TestUtils.testTileAgainstReference(heatMapRenderingCntAggr, refHeatMapCntAggr, 0, 0.07);
-      }
+      ImageIO.write(
+          heatMapRenderingCntAggr,
+          "gif",
+          new File(
+              "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-cnt-aggr-oraclejdk.gif"));
+
+      // TestUtils.testTileAgainstReference(heatMapRenderingCntAggr, refHeatMapCntAggr, 0, 0.07);
 
     }
 
     if (runCntAggrZoom) {
       System.out.println("TEST - STARTING ZOOMED-IN VERSION");
 
+      double widthX = env.getWidth() / 64;
+      double heightY = env.getHeight() / 64;
+      double centerX = (env.getMinX() + env.getMaxX()) / 2;
+      double centerY = (env.getMinY() + env.getMaxY()) / 2;
+
       // Test zoomed-in version of heatmap count aggregation
       final BufferedImage heatMapRenderingCntAggrZoom =
           getWMSSingleTile(
-              env.getMinX() / 100000,
-              env.getMaxX() / 100000,
-              env.getMinY() / 100000,
-              env.getMaxY() / 100000,
+              centerX - widthX,
+              centerX + widthX,
+              centerY - heightY,
+              centerY + heightY,
               SimpleIngest.FEATURE_NAME,
               ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_AGGR,
               920,
@@ -597,23 +590,22 @@ public class GeoServerIngestIT extends BaseServiceIT {
               false,
               true);
 
-      if (writeGifCntAggrZoom) {
-        ImageIO.write(
-            heatMapRenderingCntAggrZoom,
-            "gif",
-            new File(
-                "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/wms-heatmap-cnt-aggr-zoom-oraclejdk.gif"));
-      } else {
-        System.out.println("TEST - checking rendered cnt aggr zoom");
-        // Get the count aggregation zoom heatmap gif
-        final BufferedImage refHeatMapCntAggrZoom =
-            ImageIO.read(new File(REFERENCE_WMS_HEATMAP_CNT_AGGR_ZOOM));
-        TestUtils.testTileAgainstReference(
-            heatMapRenderingCntAggrZoom,
-            refHeatMapCntAggrZoom,
-            0,
-            0.07);
-      }
+      ImageIO.write(
+          heatMapRenderingCntAggrZoom,
+          "gif",
+          new File(
+              "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-cnt-aggr-zoom-oraclejdk.gif"));
+
+      // System.out.println("TEST - checking rendered cnt aggr zoom");
+      // // Get the count aggregation zoom heatmap gif
+      // final BufferedImage refHeatMapCntAggrZoom =
+      // ImageIO.read(new File(REFERENCE_WMS_HEATMAP_CNT_AGGR_ZOOM));
+      // TestUtils.testTileAgainstReference(
+      // heatMapRenderingCntAggrZoom,
+      // refHeatMapCntAggrZoom,
+      // 0,
+      // 0.07);
+
     }
 
     // Get the sum aggregation heatmap gif
@@ -635,27 +627,31 @@ public class GeoServerIngestIT extends BaseServiceIT {
               false,
               true);
 
-      if (writeGif) {
-        ImageIO.write(
-            heatMapRenderingSumAggr,
-            "gif",
-            new File(
-                "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/c-wms-heatmap-sum-aggr-oraclejdk.gif"));
-      } else {
-        TestUtils.testTileAgainstReference(heatMapRenderingSumAggr, refHeatMapSumAggr, 0, 0.07);
-      }
+      ImageIO.write(
+          heatMapRenderingSumAggr,
+          "gif",
+          new File(
+              "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-sum-aggr-oraclejdk.gif"));
+
+      // TestUtils.testTileAgainstReference(heatMapRenderingSumAggr, refHeatMapSumAggr, 0, 0.07);
+
     }
 
     if (runSumAggrZoom) {
       System.out.println("TEST - STARTING ZOOMED-IN VERSION SUM_AGGR");
 
+      double widthX = env.getWidth() / 2;
+      double heightY = env.getHeight() / 2;
+      double centerX = (env.getMinX() + env.getMaxX()) / 2;
+      double centerY = (env.getMinY() + env.getMaxY()) / 2;
+
       // Test zoomed-in version of heatmap sum aggregation
       final BufferedImage heatMapRenderingSumAggrZoom =
           getWMSSingleTile(
-              env.getMinX() / 100000,
-              env.getMaxX() / 100000,
-              env.getMinY() / 100000,
-              env.getMaxY() / 100000,
+              centerX - widthX,
+              centerX + widthX,
+              centerY - heightY,
+              centerY + heightY,
               SimpleIngest.FEATURE_NAME,
               ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_AGGR,
               920,
@@ -664,28 +660,28 @@ public class GeoServerIngestIT extends BaseServiceIT {
               false,
               true);
 
-      if (writeGifSumAggrZoom) {
-        ImageIO.write(
-            heatMapRenderingSumAggrZoom,
-            "gif",
-            new File(
-                "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/wms-heatmap-sum-aggr-zoom-oraclejdk.gif"));
-      } else {
-        System.out.println("TEST - checking rendered sum aggr zoom");
-        // Get the sum aggregation zoom heatmap gif
-        final BufferedImage refHeatMapSumAggrZoom =
-            ImageIO.read(new File(REFERENCE_WMS_HEATMAP_SUM_AGGR_ZOOM));
-        TestUtils.testTileAgainstReference(
-            heatMapRenderingSumAggrZoom,
-            refHeatMapSumAggrZoom,
-            0.0,
-            0.8); // TODO: upper bound is too high (0.705 worked prev)
-      }
+      ImageIO.write(
+          heatMapRenderingSumAggrZoom,
+          "gif",
+          new File(
+              "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-sum-aggr-zoom-oraclejdk.gif"));
+
+      // System.out.println("TEST - checking rendered sum aggr zoom");
+      // // Get the sum aggregation zoom heatmap gif
+      // final BufferedImage refHeatMapSumAggrZoom =
+      // ImageIO.read(new File(REFERENCE_WMS_HEATMAP_SUM_AGGR_ZOOM));
+      // TestUtils.testTileAgainstReference(
+      // heatMapRenderingSumAggrZoom,
+      // refHeatMapSumAggrZoom,
+      // 0.0,
+      // 0.8); // TODO: upper bound is too high (0.705 worked prev)
+
     }
 
-    // Test the count statistics heatmap rendering initial run
+    // Test the count statistics heatmap rendering
     if (runCntStats) {
-      final BufferedImage heatMapRenderingCntStats1 =
+
+      final BufferedImage heatMapRenderingCntStats =
           getWMSSingleTile(
               env.getMinX(),
               env.getMaxX(),
@@ -699,42 +695,22 @@ public class GeoServerIngestIT extends BaseServiceIT {
               false,
               true);
 
-      // Defaults to CNT_AGGR on initial run
-      TestUtils.testTileAgainstReference(heatMapRenderingCntStats1, refHeatMapCntAggr, 0, 0.07);
-
-      // Test the count statistics heatmap rendering subsequent run
-
-      // final BufferedImage heatMapRenderingCntStats2 =
-      // getWMSSingleTile(
-      // env.getMinX(),
-      // env.getMaxX(),
-      // env.getMinY(),
-      // env.getMaxY(),
-      // SimpleIngest.FEATURE_NAME,
-      // ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_STATS,
-      // 920,
-      // 360,
-      // null,
-      // false,
-      // true);
-
-      // if (writeGif) {
       // ImageIO.write(
-      // heatMapRenderingCntStats2,
+      // heatMapRenderingCntStats,
       // "gif",
       // new File(
-      // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/c-wms-heatmap-cnt-stats-oraclejdk.gif"));
-      // } else {
-      // final BufferedImage refHeatMapCntStats =
-      // ImageIO.read(new File(REFERENCE_WMS_HEATMAP_CNT_STATS));
-      // TestUtils.testTileAgainstReference(heatMapRenderingCntStats2, refHeatMapCntStats, 0,
-      // 0.07);
-      // }
+      // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-cnt-stats-oraclejdk.gif"));
+
+      final BufferedImage refHeatMapCntStats =
+          ImageIO.read(new File(REFERENCE_WMS_HEATMAP_CNT_STATS));
+
+      TestUtils.testTileAgainstReference(heatMapRenderingCntStats, refHeatMapCntStats, 0, 0.07);
+
     }
 
-    // Test the sum statistics heatmap rendering initial run
+    // Test the sum statistics heatmap rendering
     if (runSumStats) {
-      final BufferedImage heatMapRenderingSumStats1 =
+      final BufferedImage heatMapRenderingSumStats =
           getWMSSingleTile(
               env.getMinX(),
               env.getMaxX(),
@@ -748,36 +724,17 @@ public class GeoServerIngestIT extends BaseServiceIT {
               false,
               true);
 
-      // Defaults to field SUM_AGGR on initial run
-      TestUtils.testTileAgainstReference(heatMapRenderingSumStats1, refHeatMapSumAggr, 0, 0.07);
-
-      // final BufferedImage heatMapRenderingSumStats2 =
-      // getWMSSingleTile(
-      // env.getMinX(),
-      // env.getMaxX(),
-      // env.getMinY(),
-      // env.getMaxY(),
-      // SimpleIngest.FEATURE_NAME,
-      // ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_STATS,
-      // 920,
-      // 360,
-      // null,
-      // false,
-      // true);
-
-      // if (writeGif) {
       // ImageIO.write(
-      // heatMapRenderingSumStats2,
+      // heatMapRenderingSumStats,
       // "gif",
       // new File(
-      // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/c-wms-heatmap-sum-stats-oraclejdk.gif"));
-      // } else {
-      // Test subsequent run of field sum statistics heatmap rendering (SUM_STATS)
-      // final BufferedImage refHeatMapSumStats =
-      // ImageIO.read(new File(REFERENCE_WMS_HEATMAP_SUM_STATS));
-      // TestUtils.testTileAgainstReference(heatMapRenderingSumStats2, refHeatMapSumStats, 0,
-      // 0.07);
-      // }
+      // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-sum-stats-oraclejdk.gif"));
+
+      final BufferedImage refHeatMapSumStats =
+          ImageIO.read(new File(REFERENCE_WMS_HEATMAP_SUM_STATS));
+
+      TestUtils.testTileAgainstReference(heatMapRenderingSumStats, refHeatMapSumStats, 0, 0.07);
+
     }
     // -------------------------------------------------------------------------
 
@@ -848,6 +805,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
     final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
 
     // Set booleans
+    Boolean runNoSpatialBinning = false;
     Boolean runCntAggr = false;
     Boolean runCntAggrZoomed = true;
     Boolean runSumAggrZoomed = false; // render values not matching up
@@ -942,6 +900,14 @@ public class GeoServerIngestIT extends BaseServiceIT {
 
     // ----------------HEATMAP SLD RESPONSE TESTS------------------------------------
 
+    // Test response code for heatmap NO SPATIAL BINNING
+    TestUtils.assertStatusCode(
+        "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP + "' Style",
+        201,
+        geoServerServiceClient.addStyle(
+            ServicesTestEnvironment.TEST_SLD_HEATMAP_FILE,
+            ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP));
+
     // Test response code for heatmap CNT_AGGR
     TestUtils.assertStatusCode(
         "Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_AGGR + "' Style",
@@ -992,6 +958,42 @@ public class GeoServerIngestIT extends BaseServiceIT {
 
     // ------------------------------HEATMAP WGS84 RENDERING----------------------
 
+    // Test the count aggregation heatmap rendering (NO SPATIAL BINNING)
+    if (runNoSpatialBinning) {
+      BufferedImage heatMapRenderingNoSpatBin;
+
+      heatMapRenderingNoSpatBin =
+          getWMSSingleTile(
+              env.getMinX(),
+              env.getMaxX(),
+              env.getMinY(),
+              env.getMaxY(),
+              SimpleIngest.FEATURE_NAME,
+              ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP,
+              920,
+              360,
+              null,
+              false,
+              true);
+
+      // Write output to a gif -- KEEP THIS HERE
+      if (true) {
+        ImageIO.write(
+            heatMapRenderingNoSpatBin,
+            "gif",
+            new File(
+                "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-no-spat-bin-oraclejdk.gif"));
+      } else {
+        // final BufferedImage refHeatMapNoSpatialBinning =
+        // ImageIO.read(new File(REFERENCE_WMS_HEATMAP_NO_SB));
+        // TestUtils.testTileAgainstReference(
+        // heatMapRenderingNoSpatBin,
+        // refHeatMapNoSpatialBinning,
+        // 0,
+        // 0.07);
+      }
+    }
+
     // Test the count aggregation heatmap rendering WGS84 (CNT_AGGR)
     if (runCntAggr) {
       // TODO: if this is run, centroid at 0, 0 cannot be projected at full extent.
@@ -1019,6 +1021,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
     }
 
     // Test the count aggregation heatmap rendering WGS84 (CNT_AGGR zoomed-in)
+    System.out.println("TEST - STARTING heatmap render CNT_AGGR ZOOM WGS84");
     if (runCntAggrZoomed) {
       final BufferedImage heatMapRenderingCntAggrWGS84Zoomed =
           getWMSSingleTile(

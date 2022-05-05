@@ -44,36 +44,26 @@ public class HeatMapStatistics {
   public static String CNT_STATS = "cnt_stats";
   public static String GEOHASH_STR = "geohash";
 
-
   /**
-   * Builds the count statistics query and returns a SimpleFeatureCollection.
+   * Get the SimpleFeatures with count statistics.
    * 
-   * @param components {GeoWaveDataStoreComponents} The base components of the dataset.
-   * @param jtsBounds {Geometry} The geometry representing the bounds of the GeoServer map viewer
-   *        extent.
-   * @param geohashPrec {Integer} The Geohash precision to use for binning.
-   * @param weightAttr {String} The name of the field in the dataset to which the query is applied.
-   * @param createStats {Boolean} User-specified preference to build and calculate the statistics if
-   *        they do not exist in the datastore (otherwise, the query will default to the equivalent
-   *        aggregation query).
-   * @return {SimpleFeatureCollection} Returns a SimpleFeatureCollection of spatial bin centroids
-   *         attributed with the aggregation value of their bin.
+   * @param components {GeoWaveDataStoreComponents} The GeoWave datastore components.
+   * @param typeName {String} The type name of the feature type from components.
+   * @param weightAttr {String} The data field name being processed in the statistics.
+   * @param geohashPrec {Integer} The Geohash precision for binning purposes.
+   * @param jtsBounds {Geometry} The JTS geometry representing the bounds of the data.
+   * @return {List<SimpleFeature>} Returns an array list of Simple Features.
    */
   @SuppressWarnings({"rawtypes", "unchecked"})
-  public static SimpleFeatureCollection buildCountStatsQuery(
+  private static List<SimpleFeature> getSimpleFeaturesWithCountStatistics(
       GeoWaveDataStoreComponents components,
-      Geometry jtsBounds,
-      Integer geohashPrec,
+      String typeName,
       String weightAttr,
-      Boolean createStats) {
+      Integer geohashPrec,
+      Geometry jtsBounds) {
 
     // Initialize empty SimpleFeature list
     List<SimpleFeature> newSimpleFeatures = new ArrayList<>();
-
-    // Get type name
-    String typeName = components.getFeatureType().getTypeName();
-    // Note - Another way to get the typeName: String typeName =
-    // components.getAdapter().getTypeName();
 
     // Get all data type statistics from the datastore
     DataTypeStatistic<?>[] stats = components.getDataStore().getDataTypeStatistics(typeName);
@@ -130,8 +120,6 @@ public class HeatMapStatistics {
 
                 newSimpleFeatures.add(simpFeature);
               }
-              // Close the iterator
-              it.close();
             }
             break;
           }
@@ -139,21 +127,70 @@ public class HeatMapStatistics {
       }
     }
 
+    return newSimpleFeatures;
+  }
+
+
+  /**
+   * Builds the count statistics query and returns a SimpleFeatureCollection.
+   * 
+   * @param components {GeoWaveDataStoreComponents} The base components of the dataset.
+   * @param jtsBounds {Geometry} The geometry representing the bounds of the GeoServer map viewer
+   *        extent.
+   * @param geohashPrec {Integer} The Geohash precision to use for binning.
+   * @param weightAttr {String} The name of the field in the dataset to which the query is applied.
+   * @param createStats {Boolean} User-specified preference to build and calculate the statistics if
+   *        they do not exist in the datastore (otherwise, the query will default to the equivalent
+   *        aggregation query).
+   * @return {SimpleFeatureCollection} Returns a SimpleFeatureCollection of spatial bin centroids
+   *         attributed with the aggregation value of their bin.
+   */
+  public static SimpleFeatureCollection buildCountStatsQuery(
+      GeoWaveDataStoreComponents components,
+      Geometry jtsBounds,
+      Integer geohashPrec,
+      String weightAttr,
+      Boolean createStats) {
+
+    // Get type name
+    String typeName = components.getFeatureType().getTypeName();
+    // Note - Another way to get the typeName: String typeName =
+    // components.getAdapter().getTypeName();
+
+    // Get the simple features with count statistics
+    List<SimpleFeature> newSimpleFeatures =
+        getSimpleFeaturesWithCountStatistics(
+            components,
+            typeName,
+            weightAttr,
+            geohashPrec,
+            jtsBounds);
+
     // Add the new simple features to SimpleFeatureCollection (ok if empty at this point in time)
     SimpleFeatureCollection newFeatures = DataUtilities.collection(newSimpleFeatures);
 
-    // Only proceed if newFeatures is empty
+    // Only proceed if newFeatures is empty (requested statistics do not exist in datastore)
     if (newFeatures.size() == 0) {
 
-      // Add the GeoHash count statistic to the datastore so that next time it is available
+      // Add GeoHash field count statistic to datastore and render it when createStats is true
       if (createStats) {
         addGeoHashCountStatisticToDataStore(components, typeName, geohashPrec);
+
+        newSimpleFeatures =
+            getSimpleFeaturesWithCountStatistics(
+                components,
+                typeName,
+                weightAttr,
+                geohashPrec,
+                jtsBounds);
+
+        newFeatures = DataUtilities.collection(newSimpleFeatures);
+      } else {
+
+        // Default to the count aggregation query for rendered results
+        newFeatures =
+            HeatMapAggregations.buildCountAggrQuery(components, jtsBounds, geohashPrec, weightAttr);
       }
-
-      // In the meantime, default to the count aggregation query for rendered results
-      newFeatures =
-          HeatMapAggregations.buildCountAggrQuery(components, jtsBounds, geohashPrec, weightAttr);
-
     }
 
     return newFeatures;
@@ -197,34 +234,26 @@ public class HeatMapStatistics {
     components.getDataStore().addStatistic(geohashCount);
   }
 
-
   /**
-   * Builds the field statistics query and returns a SimpleFeatureCollection.
+   * Get the SimpleFeatures with field statistics.
    * 
-   * @param components {GeoWaveDataStoreComponents} The base components of the dataset.
-   * @param jtsBounds {Geometry} The geometry representing the bounds of the GeoServer map viewer
-   *        extent.
-   * @param geohashPrec {Integer} The Geohash precision to use for binning.
-   * @param weightAttr {String} The name of the field in the dataset to which the query is applied.
-   * @param createStats {Boolean} User-specified preference to build and calculate the statistics if
-   *        they do not exist in the datastore (otherwise, the query will default to the equivalent
-   *        aggregation query).
-   * @return {SimpleFeatureCollection} Returns a SimpleFeatureCollection of spatial bin centroids
-   *         attributed with the aggregation value of their bin.
+   * @param components {GeoWaveDataStoreComponents} The GeoWave datastore components.
+   * @param typeName {String} The type name of the feature type from components.
+   * @param weightAttr {String} The data field name being processed in the statistics.
+   * @param geohashPrec {Integer} The Geohash precision for binning purposes.
+   * @param jtsBounds {Geometry} The JTS geometry representing the bounds of the data.
+   * @return {List<SimpleFeature>} Returns an array list of Simple Features.
    */
   @SuppressWarnings({"rawtypes", "unchecked"})
-  public static SimpleFeatureCollection buildFieldStatsQuery(
+  private static List<SimpleFeature> getSimpleFeaturesWithFieldStatistics(
       GeoWaveDataStoreComponents components,
-      Geometry jtsBounds,
-      Integer geohashPrec,
+      String typeName,
       String weightAttr,
-      Boolean createStats) {
+      Integer geohashPrec,
+      Geometry jtsBounds) {
 
     // Initialize empty SimpleFeature list
     List<SimpleFeature> newSimpleFeatures = new ArrayList<>();
-
-    // Get type name
-    String typeName = components.getFeatureType().getTypeName();
 
     // Get all data type statistics from the datastore
     FieldStatistic<?>[] stats = components.getDataStore().getFieldStatistics(typeName, weightAttr);
@@ -286,34 +315,78 @@ public class HeatMapStatistics {
 
                 newSimpleFeatures.add(simpFeature);
               }
-              // Close the iterator
-              it.close();
             }
             break;
           }
         }
       }
     }
+    return newSimpleFeatures;
+  }
+
+
+  /**
+   * Builds the field statistics query and returns a SimpleFeatureCollection.
+   * 
+   * @param components {GeoWaveDataStoreComponents} The base components of the dataset.
+   * @param jtsBounds {Geometry} The geometry representing the bounds of the GeoServer map viewer
+   *        extent.
+   * @param geohashPrec {Integer} The Geohash precision to use for binning.
+   * @param weightAttr {String} The name of the field in the dataset to which the query is applied.
+   * @param createStats {Boolean} User-specified preference to build and calculate the statistics if
+   *        they do not exist in the datastore (otherwise, the query will default to the equivalent
+   *        aggregation query).
+   * @return {SimpleFeatureCollection} Returns a SimpleFeatureCollection of spatial bin centroids
+   *         attributed with the aggregation value of their bin.
+   */
+  public static SimpleFeatureCollection buildFieldStatsQuery(
+      GeoWaveDataStoreComponents components,
+      Geometry jtsBounds,
+      Integer geohashPrec,
+      String weightAttr,
+      Boolean createStats) {
+
+    // Get type name
+    String typeName = components.getFeatureType().getTypeName();
+
+    // Get the simple features if the statistics already exist in the datastore
+    List<SimpleFeature> newSimpleFeatures =
+        getSimpleFeaturesWithFieldStatistics(
+            components,
+            typeName,
+            weightAttr,
+            geohashPrec,
+            jtsBounds);
 
     // Add the new simple features to SimpleFeatureCollection (ok if empty at this point in time)
     SimpleFeatureCollection newFeatures = DataUtilities.collection(newSimpleFeatures);
 
-    // Only proceed if the newFeatures is empty
+    // Only proceed if newFeatures is empty (requested statistics do not exist in datastore)
     if (newFeatures.size() == 0) {
 
-      // Add the GeoHash count statistic to the datastore so that next time it is available and
-      // proceed if createStats is true
+      // Add GeoHash field statistic to datastore and render it when createStats is true
       if (createStats) {
         addGeoHashFieldStatisticsToDataStore(components, typeName, geohashPrec, weightAttr);
-      }
 
-      // In the meantime, default to the count aggregation query for rendered results
-      newFeatures =
-          HeatMapAggregations.buildFieldSumAggrQuery(
-              components,
-              jtsBounds,
-              geohashPrec,
-              weightAttr);
+        newSimpleFeatures =
+            getSimpleFeaturesWithFieldStatistics(
+                components,
+                typeName,
+                weightAttr,
+                geohashPrec,
+                jtsBounds);
+
+        newFeatures = DataUtilities.collection(newSimpleFeatures);
+
+      } else {
+        // Default to the count aggregation query for rendered results
+        newFeatures =
+            HeatMapAggregations.buildFieldSumAggrQuery(
+                components,
+                jtsBounds,
+                geohashPrec,
+                weightAttr);
+      }
     }
 
     return newFeatures;
