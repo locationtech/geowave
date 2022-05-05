@@ -414,9 +414,9 @@ public class HeatMapUtils {
     // Get total cell counts for each GeoHash precision
     int totCellsTarget = width / pixelsPerCell;
 
-    // Iterate over Geohash precisions 1 through 12 and find the one that matches the totCellsTarget
+    // Iterate over Geohash precisions 3 through 12 and find closest match to totCellsTarget
     // best
-    for (int i = 1; i <= 12; i++) {
+    for (int i = 3; i <= 12; i++) {
       int cntCellsAtPrec = (SpatialBinningType.GEOHASH.getSpatialBins(jtsBounds, i)).length;
       int absDiff = Math.abs(cntCellsAtPrec - totCellsTarget);
 
