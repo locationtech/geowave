@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013-2022 Contributors to the Eclipse Foundation
- * 
+ *
  * <p> See the NOTICE file distributed with this work for additional information regarding copyright
  * ownership. All rights reserved. This program and the accompanying materials are made available
  * under the terms of the Apache License, Version 2.0 which accompanies this distribution and is
@@ -30,6 +30,7 @@ import org.geotools.process.vector.VectorProcess;
 import org.geotools.referencing.CRS;
 import org.geotools.util.factory.GeoTools;
 import org.geotools.util.factory.Hints;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.util.Stopwatch;
@@ -106,7 +107,7 @@ import org.slf4j.LoggerFactory;
  * zooming.
  *
  * <p>
- * 
+ *
  * @author M. Zagorski (customizations for GeoWave Heatmap rendering using aggregation and statistic
  *         spatial binning queries).<br>
  * @apiNode Note: based on the GeoTools version of HeatmapProcess by Martin Davis - OpenGeo.
@@ -115,7 +116,7 @@ import org.slf4j.LoggerFactory;
  * @apiNote Changelog: <br>
  *
  *
- * 
+ *
  */
 @SuppressWarnings("deprecation")
 @DescribeProcess(
@@ -157,57 +158,57 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
       // process data
       @DescribeParameter(
           name = "data",
-          description = "Input features") SimpleFeatureCollection obsFeatures,
+          description = "Input features") final SimpleFeatureCollection obsFeatures,
 
       // process parameters
       @DescribeParameter(
           name = "radiusPixels",
-          description = "Radius of the density kernel in pixels") Integer argRadiusPixels,
+          description = "Radius of the density kernel in pixels") final Integer argRadiusPixels,
       @DescribeParameter(
           name = "weightAttr",
           description = "Name of the attribute to use for data point weight",
           min = 0,
-          max = 1) String valueAttr,
+          max = 1) final String valueAttr,
       @DescribeParameter(
           name = "pixelsPerCell",
           description = "Resolution at which to compute the heatmap (in pixels). Default = 1",
           defaultValue = "1",
           min = 0,
-          max = 1) Integer argPixelsPerCell,
+          max = 1) final Integer argPixelsPerCell,
 
       // output image parameters
       @DescribeParameter(
           name = "outputBBOX",
-          description = "Bounding box of the output") ReferencedEnvelope argOutputEnv,
+          description = "Bounding box of the output") final ReferencedEnvelope argOutputEnv,
       @DescribeParameter(
           name = "outputWidth",
-          description = "Width of output raster in pixels") Integer argOutputWidth,
+          description = "Width of output raster in pixels") final Integer argOutputWidth,
       @DescribeParameter(
           name = "outputHeight",
-          description = "Height of output raster in pixels") Integer argOutputHeight,
+          description = "Height of output raster in pixels") final Integer argOutputHeight,
 
       // CUSTOM GEOWAVE PARAMETERS
       // Options for queryType include: CNT_AGGR, SUM_AGGR, CNT_STATS, SUM_STATS
       @DescribeParameter(
           name = "queryType",
-          description = "Height of the output raster") String queryType,
+          description = "Height of the output raster") final String queryType,
       @DescribeParameter(
           name = "createStats",
-          description = "Option to run statistics if they do not exist in datastore - must have queryType set to CNT_STATS or SUM_STATS.") Boolean createStats,
+          description = "Option to run statistics if they do not exist in datastore - must have queryType set to CNT_STATS or SUM_STATS.") final Boolean createStats,
       @DescribeParameter(
           name = "useSpatialBinning",
-          description = "Option to use spatial binning.") Boolean useSpatialBinning,
+          description = "Option to use spatial binning.") final Boolean useSpatialBinning,
 
 
-      ProgressListener monitor) throws ProcessException {
+      final ProgressListener monitor) throws ProcessException {
 
     /** -------- Extract required information from process arguments ------------- */
     int pixelsPerCell = 1;
-    if (argPixelsPerCell != null && argPixelsPerCell > 1) {
+    if ((argPixelsPerCell != null) && (argPixelsPerCell > 1)) {
       pixelsPerCell = argPixelsPerCell;
     }
-    int outputWidth = argOutputWidth;
-    int outputHeight = argOutputHeight;
+    final int outputWidth = argOutputWidth;
+    final int outputHeight = argOutputHeight;
     int gridWidth = outputWidth;
     int gridHeight = outputHeight;
     if (pixelsPerCell > 1) {
@@ -216,8 +217,10 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
     }
 
     /** Compute transform to convert input coords into output CRS */
-    CoordinateReferenceSystem srcCRS = obsFeatures.getSchema().getCoordinateReferenceSystem();
-    CoordinateReferenceSystem dstCRS = argOutputEnv.getCoordinateReferenceSystem();
+    final CoordinateReferenceSystem srcCRS =
+        useSpatialBinning ? GeometryUtils.getDefaultCRS()
+            : obsFeatures.getSchema().getCoordinateReferenceSystem();
+    final CoordinateReferenceSystem dstCRS = argOutputEnv.getCoordinateReferenceSystem();
 
     System.out.println("HEATMAP - SOURCE CRS: " + srcCRS.getName());
     System.out.println("HEATMAP - DEST CRS: " + dstCRS.getName());
@@ -241,7 +244,7 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
     MathTransform trans = null;
     try {
       trans = CRS.findMathTransform(srcCRS, dstCRS);
-    } catch (FactoryException e) {
+    } catch (final FactoryException e) {
       throw new ProcessException(e);
     }
 
@@ -252,8 +255,9 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
      * distanceConversionFactor;
      */
     int radiusCells = 100;
-    if (argRadiusPixels != null)
+    if (argRadiusPixels != null) {
       radiusCells = argRadiusPixels;
+    }
     if (pixelsPerCell > 1) {
       radiusCells /= pixelsPerCell;
     }
@@ -261,10 +265,11 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
     /**
      * -------------- Extract the input observation points and add them to the heatmap -----------
      */
-    HeatmapSurface heatMap = new HeatmapSurface(radiusCells, argOutputEnv, gridWidth, gridHeight);
+    final HeatmapSurface heatMap =
+        new HeatmapSurface(radiusCells, argOutputEnv, gridWidth, gridHeight);
     try {
-      extractPoints(obsFeatures, valueAttr, trans, heatMap);
-    } catch (CQLException e) {
+      extractPoints(obsFeatures, useSpatialBinning ? "weight" : valueAttr, trans, heatMap);
+    } catch (final CQLException e) {
       throw new ProcessException(e);
     }
 
@@ -280,13 +285,14 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
 
     // upsample to output resolution if necessary
     float[][] outGrid = heatMapGrid;
-    if (pixelsPerCell > 1)
+    if (pixelsPerCell > 1) {
       outGrid = upsample(heatMapGrid, -999, outputWidth, outputHeight);
+    }
 
     // convert to the GridCoverage2D required for output
-    GridCoverageFactory gcf =
+    final GridCoverageFactory gcf =
         CoverageFactoryFinder.getGridCoverageFactory(GeoTools.getDefaultHints());
-    GridCoverage2D gridCov = gcf.create("Process Results", outGrid, argOutputEnv);
+    final GridCoverage2D gridCov = gcf.create("Process Results", outGrid, argOutputEnv);
 
     // KEEP THIS System.out for testing and verification purposes only
     // System.out.println("************** Heatmap FINAL computed in " + sw.getTimeString());
@@ -303,23 +309,27 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
    * @param grid the grid to flip
    * @return the flipped grid
    */
-  private float[][] flipXY(float[][] grid) {
-    int xsize = grid.length;
-    int ysize = grid[0].length;
+  private float[][] flipXY(final float[][] grid) {
+    final int xsize = grid.length;
+    final int ysize = grid[0].length;
 
-    float[][] grid2 = new float[ysize][xsize];
+    final float[][] grid2 = new float[ysize][xsize];
     for (int ix = 0; ix < xsize; ix++) {
       for (int iy = 0; iy < ysize; iy++) {
-        int iy2 = ysize - iy - 1;
+        final int iy2 = ysize - iy - 1;
         grid2[iy2][ix] = grid[ix][iy];
       }
     }
     return grid2;
   }
 
-  private float[][] upsample(float[][] grid, float noDataValue, int width, int height) {
-    BilinearInterpolator bi = new BilinearInterpolator(grid, noDataValue);
-    float[][] outGrid = bi.interpolate(width, height, false);
+  private float[][] upsample(
+      final float[][] grid,
+      final float noDataValue,
+      final int width,
+      final int height) {
+    final BilinearInterpolator bi = new BilinearInterpolator(grid, noDataValue);
+    final float[][] outGrid = bi.interpolate(width, height, false);
     return outGrid;
   }
 
@@ -344,43 +354,43 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
           name = "radiusPixels",
           description = "Radius to use for the kernel",
           min = 0,
-          max = 1) Integer argRadiusPixels,
+          max = 1) final Integer argRadiusPixels,
       @DescribeParameter(
           name = "pixelsPerCell",
           description = "Resolution at which to compute the heatmap (in pixels). Default = 1",
           defaultValue = "1",
           min = 0,
-          max = 1) Integer argPixelsPerCell,
+          max = 1) final Integer argPixelsPerCell,
       @DescribeParameter(
           name = "weightAttr",
           description = "Name of the attribute to use for data point weight",
           min = 0,
-          max = 1) String valueAttr,
+          max = 1) final String valueAttr,
       // output image parameters
       @DescribeParameter(
           name = "outputBBOX",
-          description = "Georeferenced bounding box of the output") ReferencedEnvelope argOutputEnv,
+          description = "Georeferenced bounding box of the output") final ReferencedEnvelope argOutputEnv,
       @DescribeParameter(
           name = "outputWidth",
-          description = "Width of the output raster") Integer argOutputWidth,
+          description = "Width of the output raster") final Integer argOutputWidth,
       @DescribeParameter(
           name = "outputHeight",
-          description = "Height of the output raster") Integer argOutputHeight,
+          description = "Height of the output raster") final Integer argOutputHeight,
       // Can be: CNT_AGGR, SUM_AGGR, CNT_STATS, SUM_STATS
       @DescribeParameter(
           name = "queryType",
-          description = "Height of the output raster") String queryType,
+          description = "Height of the output raster") final String queryType,
       @DescribeParameter(
           name = "createStats",
-          description = "Option to run statistics if they do not exist in datastore - must have queryType set to CNT_STATS or SUM_STATS.") Boolean createStats,
+          description = "Option to run statistics if they do not exist in datastore - must have queryType set to CNT_STATS or SUM_STATS.") final Boolean createStats,
       @DescribeParameter(
           name = "useSpatialBinning",
-          description = "Option to use spatial binning.") Boolean useSpatialBinning,
-      Query targetQuery,
-      GridGeometry targetGridGeometry) throws ProcessException {
+          description = "Option to use spatial binning.") final Boolean useSpatialBinning,
+      final Query targetQuery,
+      final GridGeometry targetGridGeometry) throws ProcessException {
 
     // Get hints for this process
-    Hints hints = targetQuery.getHints();
+    final Hints hints = targetQuery.getHints();
 
     // State that the hints for this process are enabled (for GeoWaveFeatureCollection.java)
     hints.put(HEATMAP_ENABLED, true);
@@ -399,9 +409,10 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
     hints.put(CREATE_STATS, createStats);
     hints.put(USE_BINNING, useSpatialBinning);
 
-    int radiusPixels = argRadiusPixels > 0 ? argRadiusPixels : 0;
+    final int radiusPixels = argRadiusPixels > 0 ? argRadiusPixels : 0;
     // input parameters are required, so should be non-null
-    double queryBuffer = radiusPixels / pixelSize(argOutputEnv, argOutputWidth, argOutputHeight);
+    final double queryBuffer =
+        radiusPixels / pixelSize(argOutputEnv, argOutputWidth, argOutputHeight);
     /*
      * if (argQueryBuffer != null) { queryBuffer = argQueryBuffer; }
      */
@@ -420,15 +431,19 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
     return targetQuery;
   }
 
-  private double pixelSize(ReferencedEnvelope outputEnv, int outputWidth, int outputHeight) {
+  private double pixelSize(
+      final ReferencedEnvelope outputEnv,
+      final int outputWidth,
+      final int outputHeight) {
     // error-proofing
-    if (outputEnv.getWidth() <= 0)
+    if (outputEnv.getWidth() <= 0) {
       return 0;
+    }
     // assume view is isotropic
     return outputWidth / outputEnv.getWidth();
   }
 
-  protected Filter expandBBox(Filter filter, double distance) {
+  protected Filter expandBBox(final Filter filter, final double distance) {
     return (Filter) filter.accept(
         new BBOXExpandingFilterVisitor(distance, distance, distance, distance),
         null);
@@ -444,10 +459,10 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
    * @throws CQLException if attrName can't be parsed
    */
   protected void extractPoints(
-      SimpleFeatureCollection obsPoints,
-      String attrName,
-      MathTransform trans,
-      HeatmapSurface heatMap) throws CQLException {
+      final SimpleFeatureCollection obsPoints,
+      final String attrName,
+      final MathTransform trans,
+      final HeatmapSurface heatMap) throws CQLException {
 
     Expression attrExpr = null;
     if (attrName != null) {
@@ -457,12 +472,12 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
     int counter = 0;
 
     try (SimpleFeatureIterator obsIt = obsPoints.features()) {
-      double[] srcPt = new double[2];
-      double[] dstPt = new double[2];
+      final double[] srcPt = new double[2];
+      final double[] dstPt = new double[2];
 
       // Iterate over the results
       while (obsIt.hasNext()) {
-        SimpleFeature feature = obsIt.next();
+        final SimpleFeature feature = obsIt.next();
 
         // try {
         // get the weight value, if any
@@ -473,23 +488,23 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
 
         // Get the information (testing and verification purposes only)
         if (writeGeoJson) {
-          Expression geohashIdExpr = ECQL.toExpression("geohashId");
-          String geohashId = geohashIdExpr.evaluate(feature, String.class);
+          final Expression geohashIdExpr = ECQL.toExpression("geohashId");
+          final String geohashId = geohashIdExpr.evaluate(feature, String.class);
 
-          Expression sourceExpr = ECQL.toExpression("source");
-          String source = sourceExpr.evaluate(feature, String.class);
+          final Expression sourceExpr = ECQL.toExpression("source");
+          final String source = sourceExpr.evaluate(feature, String.class);
 
-          Expression geohashPrecExpr = ECQL.toExpression("geohashPrec");
-          Integer geohashPrec = geohashPrecExpr.evaluate(feature, Integer.class);
+          final Expression geohashPrecExpr = ECQL.toExpression("geohashPrec");
+          final Integer geohashPrec = geohashPrecExpr.evaluate(feature, Integer.class);
 
-          Expression fieldNameExpr = ECQL.toExpression("field_name");
-          String fieldName = fieldNameExpr.evaluate(feature, String.class);
+          final Expression fieldNameExpr = ECQL.toExpression("field_name");
+          final String fieldName = fieldNameExpr.evaluate(feature, String.class);
 
           // Create geojson file (for testing and verification purposes only)
           counter++;
           if (counter <= 30) {
-            FeatureJSON fjson = new FeatureJSON();
-            String name =
+            final FeatureJSON fjson = new FeatureJSON();
+            final String name =
                 "/home/milla/Desktop/BACKUP_WORKING/GEOWAVE_BACKUP/geowave/JOSM_Verification/output_data/"
                     + fieldName
                     + "_GEOHASH_"
@@ -503,26 +518,25 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
                     + ".geojson";
             try {
               fjson.writeFeature(feature, name);
-            } catch (IOException e) {
+            } catch (final IOException e) {
               e.printStackTrace();
             }
           }
         }
 
         // get the point location from the geometry
-        Geometry geom = (Geometry) feature.getDefaultGeometry();
-        Coordinate p = getPoint(geom);
+        final Geometry geom = (Geometry) feature.getDefaultGeometry();
+        final Coordinate p = getPoint(geom);
         srcPt[0] = p.x;
         srcPt[1] = p.y;
 
         try {
           trans.transform(srcPt, 0, dstPt, 0, 1);
 
-          Coordinate pobs = new Coordinate(dstPt[0], dstPt[1], val);
-          System.out.println("HEATMAP pobs: " + pobs);
+          final Coordinate pobs = new Coordinate(dstPt[0], dstPt[1], val);
 
           heatMap.addPoint(pobs.x, pobs.y, val);
-        } catch (Exception e) {
+        } catch (final Exception e) {
           LOGGER.warn(
               "Expression {} failed to evaluate to a numeric value {} due to: {}",
               attrExpr,
@@ -541,9 +555,10 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
    * @param g the geometry to find a point for
    * @return a point representing the Geometry
    */
-  private static Coordinate getPoint(Geometry g) {
-    if (g.getNumPoints() == 1)
+  private static Coordinate getPoint(final Geometry g) {
+    if (g.getNumPoints() == 1) {
       return g.getCoordinate();
+    }
     return g.getCentroid().getCoordinate();
   }
 
@@ -555,8 +570,8 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
    * @param attrExpr the expression specifying the attribute to read
    * @return the value for the point
    */
-  private static double getPointValue(SimpleFeature feature, Expression attrExpr) {
-    Double valObj = attrExpr.evaluate(feature, Double.class);
+  private static double getPointValue(final SimpleFeature feature, final Expression attrExpr) {
+    final Double valObj = attrExpr.evaluate(feature, Double.class);
     if (valObj != null) {
       return valObj;
     }

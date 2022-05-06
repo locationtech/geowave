@@ -54,6 +54,7 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
   private CloseableIterator<SimpleFeature> featureCursor;
   private final Query query;
   private static SimpleFeatureType distributedRenderFeatureType;
+  private static SimpleFeatureType heatmapFeatureType;
 
   public GeoWaveFeatureCollection(final GeoWaveFeatureReader reader, final Query query) {
     this.reader = reader;
@@ -135,28 +136,86 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
 
   @Override
   public SimpleFeatureType getSchema() {
-
     if (isDistributedRenderQuery()) {
       return getDistributedRenderFeatureType();
+    } else if (isHeatmapQuery()) {
+      return getHeatmapFeatureType();
     }
     return reader.getFeatureType();
   }
 
-  public static synchronized SimpleFeatureType getDistributedRenderFeatureType() {
+  public static SimpleFeatureType getSchema(
+      final Query query,
+      final SimpleFeatureType defaultType) {
+    if (isDistributedRenderQuery(query)) {
+      return getDistributedRenderFeatureType();
+    } else if (isHeatmapQuery(query)) {
+      return getHeatmapFeatureType();
+    }
+    return defaultType;
+  }
 
+  public static synchronized SimpleFeatureType getDistributedRenderFeatureType() {
     if (distributedRenderFeatureType == null) {
       distributedRenderFeatureType = createDistributedRenderFeatureType();
     }
     return distributedRenderFeatureType;
   }
 
-  private static SimpleFeatureType createDistributedRenderFeatureType() {
+  public static synchronized SimpleFeatureType getHeatmapFeatureType() {
+    if (heatmapFeatureType == null) {
+      heatmapFeatureType = createHeatmapFeatureType();
+    }
+    return heatmapFeatureType;
+  }
 
+  private static SimpleFeatureType createDistributedRenderFeatureType() {
     final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
     typeBuilder.setName("distributed_render");
     typeBuilder.add("result", DistributedRenderResult.class);
     typeBuilder.add("options", DistributedRenderOptions.class);
     return typeBuilder.buildFeatureType();
+  }
+
+  /**
+   * Creates the heatmap feature type
+   * 
+   * @return {SimpleFeatureType} Returns the SimpleFeatureType
+   */
+  private static SimpleFeatureType createHeatmapFeatureType() {
+    // Initialize new SimpleFeatureTypeBuilder
+    final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
+
+    // Set Name and CRS
+    typeBuilder.setName("heatmap_bins");
+    typeBuilder.setCRS(GeometryUtils.getDefaultCRS());
+
+    // Add keys to the typeBuilder
+    typeBuilder.add("the_geom", Geometry.class);
+    typeBuilder.add("field_name", String.class);
+    typeBuilder.add("weight", Double.class);
+    typeBuilder.add("geohashId", String.class);
+    typeBuilder.add("source", String.class);
+    typeBuilder.add("geohashPrec", Integer.class);
+
+    // Build the new type
+    return typeBuilder.buildFeatureType();
+  }
+
+  protected boolean isHeatmapQuery() {
+    return GeoWaveFeatureCollection.isDistributedRenderQuery(query);
+  }
+
+  protected static final boolean isHeatmapQuery(final Query query) {
+    final Object heatmapEnabled = query.getHints().get(GeoWaveHeatMapProcess.HEATMAP_ENABLED);
+    final Object useBinning = query.getHints().get(GeoWaveHeatMapProcess.USE_BINNING);
+    if ((heatmapEnabled instanceof Boolean)
+        && (Boolean) heatmapEnabled
+        && (useBinning instanceof Boolean)
+        && (Boolean) useBinning) {
+      return true;
+    }
+    return false;
   }
 
   protected boolean isDistributedRenderQuery() {
@@ -181,7 +240,7 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
     final ReferencedEnvelope referencedEnvelope = getEnvelope(query);
     final Geometry jtsBounds;
     final TemporalConstraintsSet timeBounds;
-    if (reader.getGeoWaveFilter() == null
+    if ((reader.getGeoWaveFilter() == null)
         || query.getHints().containsKey(SubsampleProcess.SUBSAMPLE_ENABLED)
         || query.getHints().containsKey(GeoWaveHeatMapProcess.HEATMAP_ENABLED)) {
       jtsBounds = getBBox(query, referencedEnvelope);
@@ -218,7 +277,7 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
 
   private Iterator<SimpleFeature> openIterator(final QueryConstraints constraints) {
 
-    if (reader.getGeoWaveFilter() == null
+    if ((reader.getGeoWaveFilter() == null)
         && (((constraints.jtsBounds != null) && constraints.jtsBounds.isEmpty())
             || ((constraints.timeBounds != null) && constraints.timeBounds.isEmpty()))) {
       // return nothing if either constraint is empty
@@ -253,14 +312,14 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
         && query.getHints().containsKey(GeoWaveHeatMapProcess.OUTPUT_HEIGHT)
         && query.getHints().containsKey(GeoWaveHeatMapProcess.OUTPUT_BBOX)
         && query.getHints().containsKey(GeoWaveHeatMapProcess.USE_BINNING)
-        && (Boolean) query.getHints().get(GeoWaveHeatMapProcess.USE_BINNING) == true) {
-
+        && ((Boolean) query.getHints().get(GeoWaveHeatMapProcess.USE_BINNING) == true)) {
       // GeoWave Heatmap Process
       featureCursor =
-          new CloseableIterator.Wrapper<SimpleFeature>(
+          new CloseableIterator.Wrapper<>(
               DataUtilities.iterator(
                   reader.getDataHeatMap(
                       constraints.jtsBounds,
+                      constraints.timeBounds,
                       (ReferencedEnvelope) query.getHints().get(GeoWaveHeatMapProcess.OUTPUT_BBOX),
                       (Integer) query.getHints().get(GeoWaveHeatMapProcess.OUTPUT_WIDTH),
                       (Integer) query.getHints().get(GeoWaveHeatMapProcess.OUTPUT_HEIGHT),
@@ -289,16 +348,17 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
 
       // System.out.println("COLLECTION - contains heatmap output bbox");
 
-      ReferencedEnvelope bbox =
+      final ReferencedEnvelope bbox =
           (ReferencedEnvelope) query.getHints().get(GeoWaveHeatMapProcess.OUTPUT_BBOX);
-      CoordinateReferenceSystem bboxCRS = bbox.getCoordinateReferenceSystem();
+      final CoordinateReferenceSystem bboxCRS = bbox.getCoordinateReferenceSystem();
       System.out.println("COLLECTION - BBOX CRS: " + bboxCRS.getName());
 
-      CoordinateReferenceSystem featureCRS = reader.getFeatureType().getCoordinateReferenceSystem();
+      final CoordinateReferenceSystem featureCRS =
+          reader.getFeatureType().getCoordinateReferenceSystem();
       System.out.println("COLLECTION - FEATURE CRS: " + featureCRS.getName());
 
       // Find out if the CRS is WGS84
-      Boolean isWGS84 = featureCRS.getName().getCode().equals("WGS 84");
+      final Boolean isWGS84 = featureCRS.getName().getCode().equals("WGS 84");
       System.out.println("COLLECTION - isWGS84? " + isWGS84);
 
       return ((ReferencedEnvelope) query.getHints().get(

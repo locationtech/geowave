@@ -14,11 +14,8 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import org.geotools.data.FeatureReader;
@@ -34,13 +31,15 @@ import org.geotools.geometry.jts.Decimator;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.operation.transform.ProjectiveTransform;
 import org.geotools.renderer.lite.RendererUtilities;
+import org.locationtech.geowave.adapter.vector.plugin.heatmap.HeatMapAggregations;
+import org.locationtech.geowave.adapter.vector.plugin.heatmap.HeatMapStatistics;
+import org.locationtech.geowave.adapter.vector.plugin.heatmap.HeatMapUtils;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.StatisticsCache;
 import org.locationtech.geowave.adapter.vector.render.DistributedRenderAggregation;
 import org.locationtech.geowave.adapter.vector.render.DistributedRenderOptions;
 import org.locationtech.geowave.adapter.vector.render.DistributedRenderResult;
 import org.locationtech.geowave.adapter.vector.util.QueryIndexHelper;
-import org.locationtech.geowave.core.geotime.binning.SpatialBinningType;
 import org.locationtech.geowave.core.geotime.index.SpatialIndexFilter;
 import org.locationtech.geowave.core.geotime.index.dimension.SimpleTimeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
@@ -83,9 +82,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Sets;
-import org.locationtech.geowave.adapter.vector.plugin.heatmap.HeatMapAggregations;
-import org.locationtech.geowave.adapter.vector.plugin.heatmap.HeatMapStatistics;
-import org.locationtech.geowave.adapter.vector.plugin.heatmap.HeatMapUtils;
 
 /**
  * This class wraps a geotools data store as well as one for statistics (e.g. to display Heatmaps)
@@ -110,10 +106,10 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
     this.transaction = transaction;
     featureCollection = new GeoWaveFeatureCollection(this, query);
     this.query = query;
-    this.filter = getFilter(query);
+    filter = getFilter(query);
     Object gwfilter = null;
     try {
-      gwfilter = this.filter.accept(new CQLToGeoWaveFilterVisitor(components.getAdapter()), null);
+      gwfilter = filter.accept(new CQLToGeoWaveFilterVisitor(components.getAdapter()), null);
     } catch (CQLToGeoWaveConversionException | InvalidFilterException e) {
       // Incompatible with GeoWave filter expressions, fall back to regular optimal CQL query
     }
@@ -234,7 +230,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
 
   /**
    * Issues the heatmap query.
-   * 
+   *
    * @param jtsBounds {Geometry} The geometry representing the bounds of the GeoServer map viewer
    *        extent.
    * @param issuer {QueryIssuerHeatMap} The issuer that issues the query.
@@ -250,14 +246,14 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
     int pixelsPerCell = 1;
     Boolean createStats = false;
 
-    if (this.query.getHints().containsKey(GeoWaveHeatMapProcess.HEATMAP_ENABLED)
-        && (Boolean) this.query.getHints().get(GeoWaveHeatMapProcess.HEATMAP_ENABLED)) {
+    if (query.getHints().containsKey(GeoWaveHeatMapProcess.HEATMAP_ENABLED)
+        && (Boolean) query.getHints().get(GeoWaveHeatMapProcess.HEATMAP_ENABLED)) {
 
       // Get user specified parameters
-      queryType = (String) this.query.getHints().get(GeoWaveHeatMapProcess.QUERY_TYPE);
-      weightAttr = (String) this.query.getHints().get(GeoWaveHeatMapProcess.WEIGHT_ATTR);
-      pixelsPerCell = (Integer) this.query.getHints().get(GeoWaveHeatMapProcess.PIXELS_PER_CELL);
-      createStats = (Boolean) this.query.getHints().get(GeoWaveHeatMapProcess.CREATE_STATS);
+      queryType = (String) query.getHints().get(GeoWaveHeatMapProcess.QUERY_TYPE);
+      weightAttr = (String) query.getHints().get(GeoWaveHeatMapProcess.WEIGHT_ATTR);
+      pixelsPerCell = (Integer) query.getHints().get(GeoWaveHeatMapProcess.PIXELS_PER_CELL);
+      createStats = (Boolean) query.getHints().get(GeoWaveHeatMapProcess.CREATE_STATS);
     }
 
     return issuer.query(queryType, weightAttr, pixelsPerCell, createStats);
@@ -270,18 +266,18 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
       final QueryIssuer issuer) {
     final List<CloseableIterator<SimpleFeature>> results = new ArrayList<>();
     boolean spatialOnly = false;
-    if (this.query.getHints().containsKey(SubsampleProcess.SUBSAMPLE_ENABLED)
-        && (Boolean) this.query.getHints().get(SubsampleProcess.SUBSAMPLE_ENABLED)) {
+    if (query.getHints().containsKey(SubsampleProcess.SUBSAMPLE_ENABLED)
+        && (Boolean) query.getHints().get(SubsampleProcess.SUBSAMPLE_ENABLED)) {
       spatialOnly = true;
     }
 
     // If heatmap process is enabled, set spatialOnly to true
-    if (this.query.getHints().containsKey(GeoWaveHeatMapProcess.HEATMAP_ENABLED)
-        && (Boolean) this.query.getHints().get(GeoWaveHeatMapProcess.HEATMAP_ENABLED)) {
+    if (query.getHints().containsKey(GeoWaveHeatMapProcess.HEATMAP_ENABLED)
+        && (Boolean) query.getHints().get(GeoWaveHeatMapProcess.HEATMAP_ENABLED)) {
       spatialOnly = true;
     }
 
-    if (!spatialOnly && getGeoWaveFilter() != null) {
+    if (!spatialOnly && (getGeoWaveFilter() != null)) {
       results.add(issuer.query(null, null, spatialOnly));
     } else {
       final BasicQueryByClass query = getQuery(jtsBounds, timeBounds);
@@ -548,29 +544,33 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
 
   /**
    * Private class that starts the heatmap query issuer.
-   * 
+   *
    * @author M. Zagorski
-   * 
+   *
    */
   private class HeatMapQueryIssuer extends BaseIssuer implements QueryIssuerHeatMap {
+    private QueryConstraints queryConstraints;
     final Geometry jtsBounds;
     final ReferencedEnvelope outputBbox;
     final int width;
     final int height;
 
     public HeatMapQueryIssuer(
+        final QueryConstraints queryConstraints,
         final Geometry jtsBounds,
         final ReferencedEnvelope outputBbox,
         final int width,
         final int height,
         final Integer limit) {
       super(limit);
+      this.queryConstraints = queryConstraints;
       this.jtsBounds = jtsBounds;
       this.outputBbox = outputBbox;
       this.width = width;
       this.height = height;
     }
 
+    @Override
     public FeatureIterator<SimpleFeature> query(
         final String queryType,
         final String weightAttr,
@@ -589,7 +589,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
       // double jtsBoundsArea = jtsBounds.getArea();
 
       // Get CRS if it exists
-      CoordinateReferenceSystem sourceCRS = outputBbox.getCoordinateReferenceSystem();
+      final CoordinateReferenceSystem sourceCRS = outputBbox.getCoordinateReferenceSystem();
       System.out.println("READER - SOURCE CRS: " + sourceCRS.getName());
 
       // Add the source CRS to the user data for the jtsBounds
@@ -601,7 +601,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
       // System.out.println("READER - GEOHASH via comp method: " + geohashPrecComp);
 
       // Get an appropriate Geohash precision for the GeoServer extent
-      int geohashPrec =
+      final int geohashPrec =
           HeatMapUtils.autoSelectGeohashPrecision(
               height,
               width,
@@ -622,6 +622,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
             HeatMapAggregations.buildCountAggrQuery(
                 // histogram,
                 components,
+                queryConstraints,
                 jtsBounds,
                 geohashPrec,
                 weightAttr);
@@ -633,6 +634,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
         newFeatures =
             HeatMapAggregations.buildFieldSumAggrQuery(
                 components,
+                queryConstraints,
                 jtsBounds,
                 geohashPrec,
                 weightAttr);
@@ -644,6 +646,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
         newFeatures =
             HeatMapStatistics.buildCountStatsQuery(
                 components,
+                queryConstraints,
                 jtsBounds,
                 geohashPrec,
                 weightAttr,
@@ -656,6 +659,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
         newFeatures =
             HeatMapStatistics.buildFieldStatsQuery(
                 components,
+                queryConstraints,
                 jtsBounds,
                 geohashPrec,
                 weightAttr,
@@ -668,7 +672,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
         return null;
       }
 
-      SimpleFeatureIterator simpFeatIter = newFeatures.features();
+      final SimpleFeatureIterator simpFeatIter = newFeatures.features();
       return simpFeatIter;
 
     }
@@ -740,7 +744,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
 
   /**
    * Get data for heatmap query issuers.
-   * 
+   *
    * @param jtsBounds {Geometry} The geometry representing the bounds of the GeoServer map viewer
    *        extent.
    * @param outputBbox {ReferencedEnvelope} The bounding box of the dataset.
@@ -751,6 +755,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
    */
   public FeatureIterator<SimpleFeature> getDataHeatMap(
       final Geometry jtsBounds,
+      final TemporalConstraintsSet timeBounds,
       final ReferencedEnvelope outputBbox,
       final int width,
       final int height,
@@ -758,7 +763,13 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
 
     return issueQueryHeatmap(
         jtsBounds,
-        new HeatMapQueryIssuer(jtsBounds, outputBbox, width, height, limit));
+        new HeatMapQueryIssuer(
+            getQuery(jtsBounds, timeBounds),
+            jtsBounds,
+            outputBbox,
+            width,
+            height,
+            limit));
   }
 
   public CloseableIterator<SimpleFeature> getData(

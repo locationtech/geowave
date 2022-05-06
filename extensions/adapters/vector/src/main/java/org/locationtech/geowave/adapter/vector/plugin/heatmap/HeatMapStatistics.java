@@ -14,6 +14,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents;
+import org.locationtech.geowave.adapter.vector.plugin.GeoWaveFeatureCollection;
 import org.locationtech.geowave.core.geotime.binning.SpatialBinningType;
 import org.locationtech.geowave.core.geotime.store.statistics.binning.SpatialFieldValueBinningStrategy;
 import org.locationtech.geowave.core.index.ByteArray;
@@ -21,6 +22,7 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.BinConstraints;
 import org.locationtech.geowave.core.store.api.DataTypeStatistic;
 import org.locationtech.geowave.core.store.api.FieldStatistic;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic;
 import org.locationtech.geowave.core.store.statistics.adapter.CountStatistic.CountValue;
 import org.locationtech.geowave.core.store.statistics.field.NumericStatsStatistic;
@@ -31,18 +33,19 @@ import org.opengis.feature.simple.SimpleFeature;
 
 /**
  * Methods for HeatMap statistics queries. <br>
- * 
+ *
  * @author M. Zagorski <br>
  * @apiNote Date: 3-25-2022 <br>
  *
  * @apiNote Changelog: <br>
- * 
+ *
  */
 public class HeatMapStatistics {
 
   public static String SUM_STATS = "sum_stats";
   public static String CNT_STATS = "cnt_stats";
   public static String GEOHASH_STR = "geohash";
+
 
   /**
    * Get the SimpleFeatures with count statistics.
@@ -83,8 +86,8 @@ public class HeatMapStatistics {
         Boolean matchPrec = statGeohashPrec.equals(geohashPrec);
 
         // Continue if a count statistic and an instance of spatial field value binning strategy
-        if (stat.getStatisticType() == CountStatistic.STATS_TYPE
-            && stat.getBinningStrategy() instanceof SpatialFieldValueBinningStrategy
+        if ((stat.getStatisticType() == CountStatistic.STATS_TYPE)
+            && (stat.getBinningStrategy() instanceof SpatialFieldValueBinningStrategy)
             && matchPrec) {
 
           // Get the spatial binning strategy
@@ -111,7 +114,7 @@ public class HeatMapStatistics {
 
                 SimpleFeature simpFeature =
                     HeatMapUtils.buildSimpleFeature(
-                        components.getAdapter().getFeatureType(),
+                        GeoWaveFeatureCollection.getHeatmapFeatureType(),
                         geohashId,
                         weightVal,
                         geohashPrec,
@@ -146,14 +149,15 @@ public class HeatMapStatistics {
    *         attributed with the aggregation value of their bin.
    */
   public static SimpleFeatureCollection buildCountStatsQuery(
-      GeoWaveDataStoreComponents components,
-      Geometry jtsBounds,
-      Integer geohashPrec,
-      String weightAttr,
-      Boolean createStats) {
+      final GeoWaveDataStoreComponents components,
+      final QueryConstraints queryConstraints,
+      final Geometry jtsBounds,
+      final Integer geohashPrec,
+      final String weightAttr,
+      final Boolean createStats) {
 
     // Get type name
-    String typeName = components.getFeatureType().getTypeName();
+    final String typeName = components.getFeatureType().getTypeName();
     // Note - Another way to get the typeName: String typeName =
     // components.getAdapter().getTypeName();
 
@@ -189,7 +193,12 @@ public class HeatMapStatistics {
 
         // Default to the count aggregation query for rendered results
         newFeatures =
-            HeatMapAggregations.buildCountAggrQuery(components, jtsBounds, geohashPrec, weightAttr);
+            HeatMapAggregations.buildCountAggrQuery(
+                components,
+                queryConstraints,
+                jtsBounds,
+                geohashPrec,
+                weightAttr);
       }
     }
 
@@ -234,6 +243,7 @@ public class HeatMapStatistics {
     components.getDataStore().addStatistic(geohashCount);
   }
 
+
   /**
    * Get the SimpleFeatures with field statistics.
    * 
@@ -261,30 +271,30 @@ public class HeatMapStatistics {
     for (FieldStatistic stat : stats) {
 
       // Get the tag for the statistic
-      String statTag = stat.getTag();
+      final String statTag = stat.getTag();
 
       // Only proceed if the tag contains "geohash"
       if (statTag.contains(GEOHASH_STR)) {
 
         // Get the stored Geohash precision from the tag
-        Integer statGeohashPrec = Integer.valueOf(statTag.split("-")[3]);
+        final Integer statGeohashPrec = Integer.valueOf(statTag.split("-")[3]);
 
         // Find out if the statistic precision matches the geohash precision
-        Boolean matchPrec = statGeohashPrec.equals(geohashPrec);
+        final Boolean matchPrec = statGeohashPrec.equals(geohashPrec);
 
         // Continue if a field sum statistic and an instance of spatial field value binning strategy
-        if (stat.getStatisticType() == NumericStatsStatistic.STATS_TYPE
-            && stat.getBinningStrategy() instanceof SpatialFieldValueBinningStrategy
+        if ((stat.getStatisticType() == NumericStatsStatistic.STATS_TYPE)
+            && (stat.getBinningStrategy() instanceof SpatialFieldValueBinningStrategy)
             && matchPrec) {
 
           // Get the spatial binning strategy
-          SpatialFieldValueBinningStrategy spatialBinningStrategy =
+          final SpatialFieldValueBinningStrategy spatialBinningStrategy =
               (SpatialFieldValueBinningStrategy) stat.getBinningStrategy();
 
           // Continue only if spatial binning strategy type is GEOHASH
           if (spatialBinningStrategy.getType() == SpatialBinningType.GEOHASH) {
 
-            FieldStatistic<NumericStatsValue> geohashNumeric = stat;
+            final FieldStatistic<NumericStatsValue> geohashNumeric = stat;
 
             // Create new SimpleFeatures from the GeoHash centroid and add the statistic and other
             try (CloseableIterator<Pair<ByteArray, Stats>> it =
@@ -295,8 +305,8 @@ public class HeatMapStatistics {
               // Iterate over all bins and build the SimpleFeature list
               while (it.hasNext()) {
                 final Pair<ByteArray, Stats> pair = it.next();
-                ByteArray geoHashId = pair.getLeft();
-                Double fieldSum = pair.getRight().sum();
+                final ByteArray geoHashId = pair.getLeft();
+                final Double fieldSum = pair.getRight().sum();
 
                 // KEEP THIS - Other types of field statistics:
                 // Long fieldCount = pair.getRight().count();
@@ -304,9 +314,9 @@ public class HeatMapStatistics {
                 // Double fieldMax = pair.getRight().max();
                 // Double fieldMin = pair.getRight().min();
 
-                SimpleFeature simpFeature =
+                final SimpleFeature simpFeature =
                     HeatMapUtils.buildSimpleFeature(
-                        components.getAdapter().getFeatureType(),
+                        GeoWaveFeatureCollection.getHeatmapFeatureType(),
                         geoHashId,
                         fieldSum, // TODO: this could be made dynamic
                         geohashPrec,
@@ -340,14 +350,15 @@ public class HeatMapStatistics {
    *         attributed with the aggregation value of their bin.
    */
   public static SimpleFeatureCollection buildFieldStatsQuery(
-      GeoWaveDataStoreComponents components,
-      Geometry jtsBounds,
-      Integer geohashPrec,
-      String weightAttr,
-      Boolean createStats) {
+      final GeoWaveDataStoreComponents components,
+      final QueryConstraints queryConstraints,
+      final Geometry jtsBounds,
+      final Integer geohashPrec,
+      final String weightAttr,
+      final Boolean createStats) {
 
     // Get type name
-    String typeName = components.getFeatureType().getTypeName();
+    final String typeName = components.getFeatureType().getTypeName();
 
     // Get the simple features if the statistics already exist in the datastore
     List<SimpleFeature> newSimpleFeatures =
@@ -383,6 +394,7 @@ public class HeatMapStatistics {
         newFeatures =
             HeatMapAggregations.buildFieldSumAggrQuery(
                 components,
+                queryConstraints,
                 jtsBounds,
                 geohashPrec,
                 weightAttr);
@@ -397,17 +409,17 @@ public class HeatMapStatistics {
    * Programmatically add a GeoHash field statistic to the DataStore. This should only be done once
    * as needed. The default statistic is sum, but could be count, mean, max, or min of the selected
    * numeric field.
-   * 
+   *
    * @param components {GeoWaveDataStoreComponents} The base components of the dataset.
    * @param typeName {String} The name of the data layer or dataset.
    * @param geohashPrec {Integer} The Geohash precision to use for binning.
    * @param weightAttr {String} The name of the field in the dataset to which the query is applied.
    */
   private static void addGeoHashFieldStatisticsToDataStore(
-      GeoWaveDataStoreComponents components,
-      String typeName,
-      Integer geohashPrec,
-      String weightAttr) {
+      final GeoWaveDataStoreComponents components,
+      final String typeName,
+      final Integer geohashPrec,
+      final String weightAttr) {
 
     // Set up the field statistic
     final NumericStatsStatistic geohashFieldStat = new NumericStatsStatistic(typeName, weightAttr);

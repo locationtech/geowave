@@ -69,9 +69,9 @@ public class HeatMapUtils {
       final String weightAttr,
       final String source) {
 
-    // Get the coordinate reference system
-    CoordinateReferenceSystem oldCRS = featureType.getCoordinateReferenceSystem();
-    String oldName = featureType.getTypeName();
+    // // Get the coordinate reference system
+    // CoordinateReferenceSystem oldCRS = featureType.getCoordinateReferenceSystem();
+    // String oldName = featureType.getTypeName();
 
     // Convert the value to a double
     double valDbl = value.doubleValue();
@@ -87,31 +87,31 @@ public class HeatMapUtils {
     Geometry centroid =
         GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(ll.getLon(), ll.getLat()));
 
-    // Initialize new SimpleFeatureTypeBuilder
-    final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
+    // // Initialize new SimpleFeatureTypeBuilder
+    // final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
 
-    // Set Name and CRS
-    typeBuilder.setName(oldName);
-    typeBuilder.setCRS(oldCRS);
+    // // Set Name and CRS
+    // typeBuilder.setName(oldName);
+    // typeBuilder.setCRS(oldCRS);
 
-    // Add keys to the typeBuilder
-    typeBuilder.add("the_geom", Geometry.class);
-    typeBuilder.add("field_name", String.class);
-    typeBuilder.add(weightAttr, Double.class);
-    typeBuilder.add("geohashId", String.class);
-    typeBuilder.add("source", String.class);
-    typeBuilder.add("geohashPrec", Integer.class);
+    // // Add keys to the typeBuilder
+    // typeBuilder.add("the_geom", Geometry.class);
+    // typeBuilder.add("field_name", String.class);
+    // typeBuilder.add(weightAttr, Double.class);
+    // typeBuilder.add("geohashId", String.class);
+    // typeBuilder.add("source", String.class);
+    // typeBuilder.add("geohashPrec", Integer.class);
 
-    // Build the new type
-    SimpleFeatureType newType = typeBuilder.buildFeatureType();
+    // // Build the new type
+    // SimpleFeatureType newType = typeBuilder.buildFeatureType();
 
     // Initialize the new SimpleFeatureBuilder using the new type
-    final SimpleFeatureBuilder builder = new SimpleFeatureBuilder(newType);
+    final SimpleFeatureBuilder builder = new SimpleFeatureBuilder(featureType);
 
     // Set values
     builder.set("the_geom", centroid);
     builder.set("field_name", weightAttr);
-    builder.set(weightAttr, valDbl);
+    builder.set("weight", valDbl);
     builder.set("geohashId", geoHashIdStr);
     builder.set("source", source);
     builder.set("geohashPrec", precision);

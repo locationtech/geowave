@@ -81,7 +81,7 @@ public class GeoWaveFeatureSource extends ContentFeatureStore {
       maxx = bboxStats.getMaxX();
       miny = bboxStats.getMinY();
       maxy = bboxStats.getMaxY();
-      BoundingBoxStatistic statistic = (BoundingBoxStatistic) bboxStats.getStatistic();
+      final BoundingBoxStatistic statistic = (BoundingBoxStatistic) bboxStats.getStatistic();
       if (statistic.getDestinationCrs() != null) {
         bboxCRS = statistic.getDestinationCrs();
       } else {
@@ -134,7 +134,7 @@ public class GeoWaveFeatureSource extends ContentFeatureStore {
   }
 
   public SimpleFeatureType getFeatureType() {
-    return components.getFeatureType();
+    return GeoWaveFeatureCollection.getSchema(query, components.getFeatureType());
   }
 
   @Override
