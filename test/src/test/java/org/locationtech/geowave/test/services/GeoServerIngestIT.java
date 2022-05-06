@@ -1195,7 +1195,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
       try (InputStream is = resp.getEntity().getContent()) {
 
         final BufferedImage image = ImageIO.read(is);
-        System.out.println("TEST - IMAGE: " + image.getHeight());
 
         Assert.assertNotNull(image);
         Assert.assertTrue(image.getWidth() == width);
