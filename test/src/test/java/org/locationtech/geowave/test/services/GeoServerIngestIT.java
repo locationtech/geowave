@@ -543,10 +543,10 @@ public class GeoServerIngestIT extends BaseServiceIT {
     Double minYzoom = zoomCoords.get(2);
     Double maxYzoom = zoomCoords.get(3);
 
-//    System.out.println("TEST - MINX: " + minXzoom);
-//    System.out.println("TEST - MAXX: " + maxXzoom);
-//    System.out.println("TEST - MINY: " + minYzoom);
-//    System.out.println("TEST - MAXY: " + maxYzoom);
+    // System.out.println("TEST - MINX: " + minXzoom);
+    // System.out.println("TEST - MAXX: " + maxXzoom);
+    // System.out.println("TEST - MINY: " + minYzoom);
+    // System.out.println("TEST - MAXY: " + maxYzoom);
 
     // Test the count aggregation heatmap rendering (NO SPATIAL BINNING)
     if (runNoSpatialBinning) {
@@ -1007,10 +1007,10 @@ public class GeoServerIngestIT extends BaseServiceIT {
     Double minYzoom = zoomCoords.get(2);
     Double maxYzoom = zoomCoords.get(3);
 
-//    System.out.println("TEST - MINX: " + minXzoom);
-//    System.out.println("TEST - MAXX: " + maxXzoom);
-//    System.out.println("TEST - MINY: " + minYzoom);
-//    System.out.println("TEST - MAXY: " + maxYzoom);
+    // System.out.println("TEST - MINX: " + minXzoom);
+    // System.out.println("TEST - MAXX: " + maxXzoom);
+    // System.out.println("TEST - MINY: " + minYzoom);
+    // System.out.println("TEST - MAXY: " + maxYzoom);
 
     // Test the count aggregation heatmap rendering (NO SPATIAL BINNING)
     System.out.println("TEST - START NO SPATIAL BINNING WGS84");
@@ -1195,16 +1195,16 @@ public class GeoServerIngestIT extends BaseServiceIT {
 
     System.out.println("TEST - PROJECTED? " + projected);
     System.out.println("TEST - CRS TO USE: " + crsToUse);
-//    System.out.println("TEST - minX: " + minX);
-//    System.out.println("TEST - maxX: " + maxX);
-//    System.out.println("TEST - minY: " + minY);
-//    System.out.println("TEST - maxY: " + maxY);
-//    System.out.println("TEST - layer: " + layer);
-//    System.out.println("TEST - style: " + style);
-//    System.out.println("TEST - width: " + width);
-//    System.out.println("TEST - height: " + height);
-//    System.out.println("TEST - outputFormat: " + outputFormat);
-//    System.out.println("TEST - temporalFilter: " + temporalFilter);
+    // System.out.println("TEST - minX: " + minX);
+    // System.out.println("TEST - maxX: " + maxX);
+    // System.out.println("TEST - minY: " + minY);
+    // System.out.println("TEST - maxY: " + maxY);
+    // System.out.println("TEST - layer: " + layer);
+    // System.out.println("TEST - style: " + style);
+    // System.out.println("TEST - width: " + width);
+    // System.out.println("TEST - height: " + height);
+    // System.out.println("TEST - outputFormat: " + outputFormat);
+    // System.out.println("TEST - temporalFilter: " + temporalFilter);
 
 
     // Initiate an empty Uniform Resource Identifier (URI) builder
