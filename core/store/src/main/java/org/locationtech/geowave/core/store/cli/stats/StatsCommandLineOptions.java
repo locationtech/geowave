@@ -141,7 +141,7 @@ public class StatsCommandLineOptions {
         }
         final DataTypeAdapter<?> adapter = dataStore.getType(typeName);
         if (adapter == null) {
-          throw new ParameterException("Unable to find an type named: " + typeName);
+          throw new ParameterException("Unable to find a type named: " + typeName);
         }
         try (CloseableIterator<? extends Statistic<? extends StatisticValue<?>>> stats =
             statsStore.getDataTypeStatistics(adapter, statisticType, tag)) {
@@ -154,7 +154,7 @@ public class StatsCommandLineOptions {
         }
         final DataTypeAdapter<?> adapter = dataStore.getType(typeName);
         if (adapter == null) {
-          throw new ParameterException("Unable to find an type named: " + typeName);
+          throw new ParameterException("Unable to find a type named: " + typeName);
         }
         if (fieldName == null) {
           throw new ParameterException(

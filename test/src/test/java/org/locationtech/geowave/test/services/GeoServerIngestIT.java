@@ -17,6 +17,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import javax.imageio.ImageIO;
@@ -79,51 +80,51 @@ public class GeoServerIngestIT extends BaseServiceIT {
   // TODO: create a heatmap .gif using non-Oracle JRE.
   private static final String REFERENCE_WMS_HEATMAP_NO_SB =
       TestUtils.isOracleJRE() ? "src/test/resources/wms/X-wms-heatmap-no-spat-bin-oraclejdk.gif"
-          : "src/test/resources/wms/X-wms-heatmap-no-spat-bin-oraclejdk.gif";
+          : "src/test/resources/wms/X-wms-heatmap-no-spat-bin.gif";
 
   private static final String REFERENCE_WMS_HEATMAP_CNT_AGGR =
       TestUtils.isOracleJRE() ? "src/test/resources/wms/X-wms-heatmap-cnt-aggr-oraclejdk.gif"
-          : "src/test/resources/wms/X-wms-heatmap-cnt-aggr-oraclejdk.gif";
+          : "src/test/resources/wms/X-wms-heatmap-cnt-aggr.gif";
 
   private static final String REFERENCE_WMS_HEATMAP_SUM_AGGR =
       TestUtils.isOracleJRE() ? "src/test/resources/wms/X-wms-heatmap-sum-aggr-oraclejdk.gif"
-          : "src/test/resources/wms/X-wms-heatmap-sum-aggr-oraclejdk.gif";
+          : "src/test/resources/wms/X-wms-heatmap-sum-aggr.gif";
 
   private static final String REFERENCE_WMS_HEATMAP_CNT_STATS =
       TestUtils.isOracleJRE() ? "src/test/resources/wms/X-wms-heatmap-cnt-stats-oraclejdk.gif"
-          : "src/test/resources/wms/X-wms-heatmap-cnt-stats-oraclejdk.gif";
+          : "src/test/resources/wms/X-wms-heatmap-cnt-stats.gif";
 
   private static final String REFERENCE_WMS_HEATMAP_SUM_STATS =
       TestUtils.isOracleJRE() ? "src/test/resources/wms/X-wms-heatmap-sum-stats-oraclejdk.gif"
-          : "src/test/resources/wms/X-wms-heatmap-sum-stats-oraclejdk.gif";
+          : "src/test/resources/wms/X-wms-heatmap-sum-stats.gif";
 
   private static final String REFERENCE_WMS_HEATMAP_CNT_AGGR_ZOOM =
       TestUtils.isOracleJRE() ? "src/test/resources/wms/X-wms-heatmap-cnt-aggr-zoom-oraclejdk.gif"
-          : "src/test/resources/wms/X-wms-heatmap-cnt-aggr-zoom-oraclejdk.gif";
+          : "src/test/resources/wms/X-wms-heatmap-cnt-aggr-zoom.gif";
 
   private static final String REFERENCE_WMS_HEATMAP_SUM_AGGR_ZOOM =
       TestUtils.isOracleJRE() ? "src/test/resources/wms/X-wms-heatmap-sum-aggr-zoom-oraclejdk.gif"
-          : "src/test/resources/wms/X-wms-heatmap-sum-aggr-zoom-oraclejdk.gif";
+          : "src/test/resources/wms/X-wms-heatmap-sum-aggr-zoom.gif";
 
 
   private static final String REFERENCE_WMS_HEATMAP_NO_SB_WGS84 =
       TestUtils.isOracleJRE()
           ? "src/test/resources/wms/W-wms-heatmap-no-spat-bin-wgs84-oraclejdk.gif"
-          : "src/test/resources/wms/W-wms-heatmap-no-spat-bin-wgs84-oraclejdk.gif";
+          : "src/test/resources/wms/W-wms-heatmap-no-spat-bin-wgs84.gif";
 
   private static final String REFERENCE_WMS_HEATMAP_CNT_AGGR_WGS84 =
       TestUtils.isOracleJRE() ? "src/test/resources/wms/W-wms-heatmap-cnt-aggr-wgs84-oraclejdk.gif"
-          : "src/test/resources/wms/W-wms-heatmap-cnt-aggr-wgs84-oraclejdk.gif";
+          : "src/test/resources/wms/W-wms-heatmap-cnt-aggr-wgs84.gif";
 
   private static final String REFERENCE_WMS_HEATMAP_CNT_AGGR_ZOOM_WGS84 =
       TestUtils.isOracleJRE()
           ? "src/test/resources/wms/wms-heatmap-cnt-aggr-wgs84-zoom-oraclejdk.gif"
-          : "src/test/resources/wms/wms-heatmap-cnt-aggr-wgs84-zoom-oraclejdk.gif";
+          : "src/test/resources/wms/wms-heatmap-cnt-aggr-wgs84-zoom.gif";
 
   private static final String REFERENCE_WMS_HEATMAP_SUM_AGGR_ZOOM_WGS84 =
       TestUtils.isOracleJRE()
           ? "src/test/resources/wms/W-wms-heatmap-sum-aggr-wgs84-zoom-oraclejdk.gif"
-          : "src/test/resources/wms/W-wms-heatmap-sum-aggr-wgs84-zoom-oraclejdk.gif";
+          : "src/test/resources/wms/W-wms-heatmap-sum-aggr-wgs84-zoom.gif";
 
 
   private static final String testName = "GeoServerIngestIT";
@@ -211,6 +212,30 @@ public class GeoServerIngestIT extends BaseServiceIT {
       }
     }
     return feats;
+  }
+
+
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  private ArrayList<Double> getZoomedCoordinates(BoundingBoxValue env) {
+
+    ArrayList<Double> coordSet = new ArrayList();
+
+    double widthX = env.getWidth() / 64;
+    double heightY = env.getHeight() / 64;
+    double centerX = (env.getMinX() + env.getMaxX()) / 2;
+    double centerY = (env.getMinY() + env.getMaxY()) / 2;
+
+    Double minX = centerX - widthX;
+    Double maxX = centerX + widthX;
+    Double minY = centerY - heightY;
+    Double maxY = centerY + heightY;
+
+    coordSet.add(minX);
+    coordSet.add(maxX);
+    coordSet.add(minY);
+    coordSet.add(maxY);
+
+    return coordSet;
   }
 
   /**
@@ -509,6 +534,20 @@ public class GeoServerIngestIT extends BaseServiceIT {
 
     // ------------------------------HEATMAP PROJECTED RENDERING----------------------
 
+    // Get coordinates for zoomed-in tests
+    ArrayList<Double> zoomCoords = getZoomedCoordinates(env);
+    System.out.println("TEST - ZOOM COORDS: " + zoomCoords);
+
+    Double minXzoom = zoomCoords.get(0);
+    Double maxXzoom = zoomCoords.get(1);
+    Double minYzoom = zoomCoords.get(2);
+    Double maxYzoom = zoomCoords.get(3);
+
+    System.out.println("TEST - MINX: " + minXzoom);
+    System.out.println("TEST - MAXX: " + maxXzoom);
+    System.out.println("TEST - MINY: " + minYzoom);
+    System.out.println("TEST - MAXY: " + maxYzoom);
+
     // Test the count aggregation heatmap rendering (NO SPATIAL BINNING)
     if (runNoSpatialBinning) {
       BufferedImage heatMapRenderingNoSpatBin;
@@ -532,7 +571,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
       // ImageIO.write(
       // heatMapRenderingNoSpatBin,
       // "gif",
-      // new File(
+      // new
+      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-no-spat-bin.gif"));
       // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-no-spat-bin-oraclejdk.gif"));
 
       final BufferedImage refHeatMapNoSpatialBinning =
@@ -565,7 +605,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
       // ImageIO.write(
       // heatMapRenderingCntAggr,
       // "gif",
-      // new File(
+      // new
+      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-cnt-aggr.gif"));
       // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-cnt-aggr-oraclejdk.gif"));
 
       final BufferedImage refHeatMapCntAggr =
@@ -578,18 +619,13 @@ public class GeoServerIngestIT extends BaseServiceIT {
     if (runCntAggrZoom) {
       System.out.println("TEST - STARTING ZOOMED-IN VERSION");
 
-      double widthX = env.getWidth() / 64;
-      double heightY = env.getHeight() / 64;
-      double centerX = (env.getMinX() + env.getMaxX()) / 2;
-      double centerY = (env.getMinY() + env.getMaxY()) / 2;
-
       // Test zoomed-in version of heatmap count aggregation
       final BufferedImage heatMapRenderingCntAggrZoom =
           getWMSSingleTile(
-              centerX - widthX,
-              centerX + widthX,
-              centerY - heightY,
-              centerY + heightY,
+              minXzoom,
+              maxXzoom,
+              minYzoom,
+              maxYzoom,
               SimpleIngest.FEATURE_NAME,
               ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_AGGR,
               920,
@@ -601,7 +637,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
       // ImageIO.write(
       // heatMapRenderingCntAggrZoom,
       // "gif",
-      // new File(
+      // new
+      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-cnt-aggr-zoom.gif"));
       // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-cnt-aggr-zoom-oraclejdk.gif"));
 
       final BufferedImage refHeatMapCntAggrZoom =
@@ -634,7 +671,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
       // ImageIO.write(
       // heatMapRenderingSumAggr,
       // "gif",
-      // new File(
+      // new
+      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-sum-aggr.gif"));
       // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-sum-aggr-oraclejdk.gif"));
 
       final BufferedImage refHeatMapSumAggr =
@@ -647,18 +685,13 @@ public class GeoServerIngestIT extends BaseServiceIT {
     if (runSumAggrZoom) {
       System.out.println("TEST - STARTING ZOOMED-IN VERSION SUM_AGGR");
 
-      double widthX = env.getWidth() / 64;
-      double heightY = env.getHeight() / 64;
-      double centerX = (env.getMinX() + env.getMaxX()) / 2;
-      double centerY = (env.getMinY() + env.getMaxY()) / 2;
-
       // Test zoomed-in version of heatmap sum aggregation
       final BufferedImage heatMapRenderingSumAggrZoom =
           getWMSSingleTile(
-              centerX - widthX,
-              centerX + widthX,
-              centerY - heightY,
-              centerY + heightY,
+              minXzoom,
+              maxXzoom,
+              minYzoom,
+              maxYzoom,
               SimpleIngest.FEATURE_NAME,
               ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_AGGR,
               920,
@@ -670,7 +703,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
       // ImageIO.write(
       // heatMapRenderingSumAggrZoom,
       // "gif",
-      // new File(
+      // new
+      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-sum-aggr-zoom.gif"));
       // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-sum-aggr-zoom-oraclejdk.gif"));
 
       final BufferedImage refHeatMapSumAggrZoom =
@@ -704,7 +738,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
       // ImageIO.write(
       // heatMapRenderingCntStats,
       // "gif",
-      // new File(
+      // new
+      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-cnt-stats.gif"));
       // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-cnt-stats-oraclejdk.gif"));
 
       final BufferedImage refHeatMapCntStats =
@@ -733,7 +768,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
       // ImageIO.write(
       // heatMapRenderingSumStats,
       // "gif",
-      // new File(
+      // new
+      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-sum-stats.gif"));
       // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-sum-stats-oraclejdk.gif"));
 
       final BufferedImage refHeatMapSumStats =
@@ -809,6 +845,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
   public void testExamplesIngestUnProjected() throws Exception {
     final DataStore ds = dataStorePluginOptions.createDataStore();
     final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
+
+    System.out.println("TEST - STARTING UNPROJECTED TESTS!");
 
     // Set booleans for WGS84 tests
     Boolean runNoSpatialBinningWGS84 = true;
@@ -960,6 +998,20 @@ public class GeoServerIngestIT extends BaseServiceIT {
 
     // ------------------------------HEATMAP WGS84 RENDERING----------------------
 
+    // Get coordinates for zoomed-in tests
+    ArrayList<Double> zoomCoords = getZoomedCoordinates(env);
+    System.out.println("TEST - ZOOM COORDS: " + zoomCoords);
+
+    Double minXzoom = zoomCoords.get(0);
+    Double maxXzoom = zoomCoords.get(1);
+    Double minYzoom = zoomCoords.get(2);
+    Double maxYzoom = zoomCoords.get(3);
+
+    System.out.println("TEST - MINX: " + minXzoom);
+    System.out.println("TEST - MAXX: " + maxXzoom);
+    System.out.println("TEST - MINY: " + minYzoom);
+    System.out.println("TEST - MAXY: " + maxYzoom);
+
     // Test the count aggregation heatmap rendering (NO SPATIAL BINNING)
     System.out.println("TEST - START NO SPATIAL BINNING WGS84");
     if (runNoSpatialBinningWGS84) {
@@ -982,7 +1034,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
       // ImageIO.write(
       // heatMapRenderingNoSpatBinWGS84,
       // "gif",
-      // new File(
+      // new
+      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/W-wms-heatmap-no-spat-bin-wgs84.gif"));
       // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/W-wms-heatmap-no-spat-bin-wgs84-oraclejdk.gif"));
 
       final BufferedImage refHeatMapNoSpatialBinningWGS84 =
@@ -1016,14 +1069,15 @@ public class GeoServerIngestIT extends BaseServiceIT {
       // ImageIO.write(
       // heatMapRenderingCntAggrWGS84,
       // "gif",
-      // new File(
+      // new
+      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/W-wms-heatmap-cnt-aggr-wgs84.gif"));
       // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/W-wms-heatmap-cnt-aggr-wgs84-oraclejdk.gif"));
 
-      final BufferedImage refHeatMapCntAggrWGS84Zoom =
+      final BufferedImage refHeatMapCntAggrWGS84 =
           ImageIO.read(new File(REFERENCE_WMS_HEATMAP_CNT_AGGR_WGS84));
       TestUtils.testTileAgainstReference(
           heatMapRenderingCntAggrWGS84,
-          refHeatMapCntAggrWGS84Zoom,
+          refHeatMapCntAggrWGS84,
           0.0,
           0.07);
 
@@ -1034,10 +1088,10 @@ public class GeoServerIngestIT extends BaseServiceIT {
     if (runCntAggrZoomedWGS84) {
       final BufferedImage heatMapRenderingCntAggrWGS84Zoomed =
           getWMSSingleTile(
-              env.getMinX() / 4,
-              env.getMaxX() / 4,
-              env.getMinY() / 4,
-              env.getMaxY() / 4,
+              minXzoom,
+              maxXzoom,
+              minYzoom,
+              maxYzoom,
               SimpleIngest.FEATURE_NAME,
               ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_CNT_AGGR,
               920,
@@ -1050,7 +1104,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
       // ImageIO.write(
       // heatMapRenderingCntAggrWGS84Zoomed,
       // "gif",
-      // new File(
+      // new
+      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/wms-heatmap-cnt-aggr-wgs84-zoom.gif"));
       // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/wms-heatmap-cnt-aggr-wgs84-zoom-oraclejdk.gif"));
 
       final BufferedImage refHeatMapCntAggrWGS84Zoom =
@@ -1068,10 +1123,10 @@ public class GeoServerIngestIT extends BaseServiceIT {
     if (runSumAggrZoomedWGS84) {
       final BufferedImage heatMapRenderingSumAggrWGS84Zoomed =
           getWMSSingleTile(
-              env.getMinX() / 4,
-              env.getMaxX() / 4,
-              env.getMinY() / 4,
-              env.getMaxY() / 4,
+              minXzoom,
+              maxXzoom,
+              minYzoom,
+              maxYzoom,
               SimpleIngest.FEATURE_NAME,
               ServicesTestEnvironment.TEST_STYLE_NAME_HEATMAP_SUM_AGGR,
               920,
@@ -1083,7 +1138,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
       // ImageIO.write(
       // heatMapRenderingSumAggrWGS84Zoomed,
       // "gif",
-      // new File(
+      // new
+      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/W-wms-heatmap-sum-aggr-wgs84-zoom.gif"));
       // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/W-wms-heatmap-sum-aggr-wgs84-zoom-oraclejdk.gif"));
 
       final BufferedImage refHeatMapSumAggrWGS84Zoom =
