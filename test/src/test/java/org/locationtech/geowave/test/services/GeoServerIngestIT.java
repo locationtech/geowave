@@ -201,13 +201,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
           pointBuilder.set("Latitude", latitude);
           pointBuilder.set("Longitude", longitude);
 
-          // Create a random number for the SIZE field for sum aggregation and statistics
-          // testing
-          // final Random rand = new Random();
-          // final double min = 1.0;
-          // Double randomNum = rand.nextDouble() + min;
-          // randomNum = Math.round(randomNum * 100.0) / 100.0;
-          // pointBuilder.set("SIZE", randomNum);
+          // Add value of 2 to the SIZE field for sum aggregation and statistics
           pointBuilder.set("SIZE", 2);
 
           final SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
@@ -967,6 +961,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
     // ------------------------------HEATMAP WGS84 RENDERING----------------------
 
     // Test the count aggregation heatmap rendering (NO SPATIAL BINNING)
+    System.out.println("TEST - START NO SPATIAL BINNING WGS84");
     if (runNoSpatialBinningWGS84) {
       BufferedImage heatMapRenderingNoSpatBinWGS84;
 
