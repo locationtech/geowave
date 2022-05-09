@@ -48,6 +48,32 @@ public class HeatMapUtils {
 
   static final Logger LOGGER = LoggerFactory.getLogger(HeatMapUtils.class);
 
+  // /**
+  // * Creates the heatmap feature type
+  // *
+  // * @return {SimpleFeatureType} Returns the SimpleFeatureType
+  // */
+  // private static SimpleFeatureType createHeatmapFeatureType() {
+  //
+  // // Initialize new SimpleFeatureTypeBuilder
+  // final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
+  //
+  // // Set Name and CRS
+  // typeBuilder.setName("heatmap_bins");
+  // typeBuilder.setCRS(GeometryUtils.getDefaultCRS());
+  //
+  // // Add keys to the typeBuilder
+  // typeBuilder.add("the_geom", Geometry.class);
+  // typeBuilder.add("field_name", String.class);
+  // typeBuilder.add("weight", Double.class);
+  // typeBuilder.add("geohashId", String.class);
+  // typeBuilder.add("source", String.class);
+  // typeBuilder.add("geohashPrec", Integer.class);
+  //
+  // // Build the new type
+  // return typeBuilder.buildFeatureType();
+  // }
+
   /**
    * Builds a simple feature.
    * 
@@ -105,8 +131,12 @@ public class HeatMapUtils {
     // // Build the new type
     // SimpleFeatureType newType = typeBuilder.buildFeatureType();
 
+    // Create heatmap feature type
+    // SimpleFeatureType heatmapType = createHeatmapFeatureType();
+
     // Initialize the new SimpleFeatureBuilder using the new type
     final SimpleFeatureBuilder builder = new SimpleFeatureBuilder(featureType);
+    // final SimpleFeatureBuilder builder = new SimpleFeatureBuilder(heatmapType);
 
     // Set values
     builder.set("the_geom", centroid);
@@ -277,7 +307,6 @@ public class HeatMapUtils {
         e.printStackTrace();
       }
     }
-    // System.out.println("UTILS - EXTENT AREA: " + geomArea);
     return geomArea;
   }
 
@@ -338,7 +367,6 @@ public class HeatMapUtils {
 
     // Get the area of the GeoServer map viewer extent in square kilometers
     double extentAreaSqKm = HeatMapUtils.calcAreaSqKm(jtsBounds, sourceCRS);
-    System.out.println("UTILS - EXTENT AREA: " + extentAreaSqKm);
 
     // Get approximate area of a single cell in square kilometers
     double cellArea = HeatMapUtils.getCellArea(extentAreaSqKm, totCellsTarget);

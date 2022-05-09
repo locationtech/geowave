@@ -183,6 +183,7 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
    * @return {SimpleFeatureType} Returns the SimpleFeatureType
    */
   private static SimpleFeatureType createHeatmapFeatureType() {
+
     // Initialize new SimpleFeatureTypeBuilder
     final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
 
@@ -203,10 +204,11 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
   }
 
   protected boolean isHeatmapQuery() {
-    return GeoWaveFeatureCollection.isDistributedRenderQuery(query);
+    return GeoWaveFeatureCollection.isHeatmapQuery(query);
   }
 
   protected static final boolean isHeatmapQuery(final Query query) {
+
     final Object heatmapEnabled = query.getHints().get(GeoWaveHeatMapProcess.HEATMAP_ENABLED);
     final Object useBinning = query.getHints().get(GeoWaveHeatMapProcess.USE_BINNING);
     if ((heatmapEnabled instanceof Boolean)
@@ -223,7 +225,6 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
   }
 
   protected static final boolean isDistributedRenderQuery(final Query query) {
-
     return query.getHints().containsKey(DistributedRenderProcess.OPTIONS);
   }
 
@@ -231,6 +232,9 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
 
     if (GeoWaveFeatureCollection.isDistributedRenderQuery(query)) {
       return getDistributedRenderFeatureType();
+    }
+    if (GeoWaveFeatureCollection.isHeatmapQuery(query)) {
+      return getHeatmapFeatureType();
     }
     return reader.getComponents().getFeatureType();
   }
@@ -313,6 +317,7 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
         && query.getHints().containsKey(GeoWaveHeatMapProcess.OUTPUT_BBOX)
         && query.getHints().containsKey(GeoWaveHeatMapProcess.USE_BINNING)
         && ((Boolean) query.getHints().get(GeoWaveHeatMapProcess.USE_BINNING) == true)) {
+
       // GeoWave Heatmap Process
       featureCursor =
           new CloseableIterator.Wrapper<>(
@@ -335,8 +340,6 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
   private ReferencedEnvelope getEnvelope(final Query query)
       throws TransformException, FactoryException {
 
-    // System.out.println("COLLECTION - START getEnvelope");
-
     if (query.getHints().containsKey(SubsampleProcess.OUTPUT_BBOX)) {
       return ((ReferencedEnvelope) query.getHints().get(SubsampleProcess.OUTPUT_BBOX)).transform(
           reader.getFeatureType().getCoordinateReferenceSystem(),
@@ -345,8 +348,6 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
 
     // Return the heatmap referenced envelope
     if (query.getHints().containsKey(GeoWaveHeatMapProcess.OUTPUT_BBOX)) {
-
-      // System.out.println("COLLECTION - contains heatmap output bbox");
 
       final ReferencedEnvelope bbox =
           (ReferencedEnvelope) query.getHints().get(GeoWaveHeatMapProcess.OUTPUT_BBOX);

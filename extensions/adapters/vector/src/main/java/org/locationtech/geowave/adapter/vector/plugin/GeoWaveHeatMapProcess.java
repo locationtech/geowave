@@ -220,26 +220,8 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
     final CoordinateReferenceSystem srcCRS =
         useSpatialBinning ? GeometryUtils.getDefaultCRS()
             : obsFeatures.getSchema().getCoordinateReferenceSystem();
+
     final CoordinateReferenceSystem dstCRS = argOutputEnv.getCoordinateReferenceSystem();
-
-    System.out.println("HEATMAP - SOURCE CRS: " + srcCRS.getName());
-    System.out.println("HEATMAP - DEST CRS: " + dstCRS.getName());
-
-    // Boolean isWGS84 = dstCRS.getName().getCode().equals("WGS 84");
-    // if (!isWGS84) {
-    // // Decode the target CRS of "EPSG:4326"
-    // try {
-    // dstCRS = CRS.decode("EPSG:4326");
-    // } catch (NoSuchAuthorityCodeException e) {
-    // // TODO Auto-generated catch block
-    // e.printStackTrace();
-    // } catch (FactoryException e) {
-    // // TODO Auto-generated catch block
-    // e.printStackTrace();
-    // }
-    // }
-
-    System.out.println("HEATMAP - SOURCE CRS FINAL: " + srcCRS.getName());
 
     MathTransform trans = null;
     try {

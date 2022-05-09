@@ -33,7 +33,6 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
@@ -248,8 +247,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
   public void testExamplesIngestProjected() throws Exception {
     final DataStore ds = dataStorePluginOptions.createDataStore();
     final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
-
-    System.out.println("TEST - IS ORACLE JRE? " + TestUtils.isOracleJRE());
 
     // Keep these Booleans for local testing purposes
     Boolean runNoSpatialBinning = true;
@@ -536,23 +533,15 @@ public class GeoServerIngestIT extends BaseServiceIT {
 
     // Get coordinates for zoomed-in tests
     ArrayList<Double> zoomCoords = getZoomedCoordinates(env);
-    System.out.println("TEST - ZOOM COORDS: " + zoomCoords);
 
     Double minXzoom = zoomCoords.get(0);
     Double maxXzoom = zoomCoords.get(1);
     Double minYzoom = zoomCoords.get(2);
     Double maxYzoom = zoomCoords.get(3);
 
-    // System.out.println("TEST - MINX: " + minXzoom);
-    // System.out.println("TEST - MAXX: " + maxXzoom);
-    // System.out.println("TEST - MINY: " + minYzoom);
-    // System.out.println("TEST - MAXY: " + maxYzoom);
-
     // Test the count aggregation heatmap rendering (NO SPATIAL BINNING)
     if (runNoSpatialBinning) {
       BufferedImage heatMapRenderingNoSpatBin;
-
-      System.out.println("TEST - STARTING NO SPATIAL BINNING");
 
       heatMapRenderingNoSpatBin =
           getWMSSingleTile(
@@ -586,7 +575,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
     }
 
     // Test the count aggregation heatmap rendering (CNT_AGGR)
-    System.out.println("TEST - STARTING CNT AGGR ZOOM - PROJECTED");
     if (runCntAggr) {
       final BufferedImage heatMapRenderingCntAggr =
           getWMSSingleTile(
@@ -617,7 +605,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
     }
 
     if (runCntAggrZoom) {
-      System.out.println("TEST - STARTING ZOOMED-IN VERSION");
 
       // Test zoomed-in version of heatmap count aggregation
       final BufferedImage heatMapRenderingCntAggrZoom =
@@ -683,7 +670,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
     }
 
     if (runSumAggrZoom) {
-      System.out.println("TEST - STARTING ZOOMED-IN VERSION SUM_AGGR");
 
       // Test zoomed-in version of heatmap sum aggregation
       final BufferedImage heatMapRenderingSumAggrZoom =
@@ -846,8 +832,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
     final DataStore ds = dataStorePluginOptions.createDataStore();
     final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
 
-    System.out.println("TEST - STARTING UNPROJECTED TESTS!");
-
     // Set booleans for WGS84 tests
     Boolean runNoSpatialBinningWGS84 = true;
     Boolean runCntAggrWGS84 = true;
@@ -1000,20 +984,13 @@ public class GeoServerIngestIT extends BaseServiceIT {
 
     // Get coordinates for zoomed-in tests
     ArrayList<Double> zoomCoords = getZoomedCoordinates(env);
-    System.out.println("TEST - ZOOM COORDS: " + zoomCoords);
 
     Double minXzoom = zoomCoords.get(0);
     Double maxXzoom = zoomCoords.get(1);
     Double minYzoom = zoomCoords.get(2);
     Double maxYzoom = zoomCoords.get(3);
 
-    // System.out.println("TEST - MINX: " + minXzoom);
-    // System.out.println("TEST - MAXX: " + maxXzoom);
-    // System.out.println("TEST - MINY: " + minYzoom);
-    // System.out.println("TEST - MAXY: " + maxYzoom);
-
     // Test the count aggregation heatmap rendering (NO SPATIAL BINNING)
-    System.out.println("TEST - START NO SPATIAL BINNING WGS84");
     if (runNoSpatialBinningWGS84) {
       BufferedImage heatMapRenderingNoSpatBinWGS84;
 
@@ -1084,7 +1061,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
     }
 
     // Test the count aggregation heatmap rendering WGS84 (CNT_AGGR zoomed-in)
-    System.out.println("TEST - STARTING heatmap render CNT_AGGR ZOOM WGS84");
     if (runCntAggrZoomedWGS84) {
       final BufferedImage heatMapRenderingCntAggrWGS84Zoomed =
           getWMSSingleTile(
@@ -1119,7 +1095,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
     }
 
     // Test the sum aggregation heatmap rendering WGS84 (SUM_AGGR zoomed-in)
-    System.out.println("TEST - STARTING SUM AGGR WGS84 ZOOM");
     if (runSumAggrZoomedWGS84) {
       final BufferedImage heatMapRenderingSumAggrWGS84Zoomed =
           getWMSSingleTile(
@@ -1192,21 +1167,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
     // String crsToUse = projected ? "EPSG:3857" : "EPSG:4326";
     String crsToUse = projected ? TestUtils.CUSTOM_CRSCODE : TestUtils.CUSTOM_CRSCODE_WGS84;
 
-
-    System.out.println("TEST - PROJECTED? " + projected);
-    System.out.println("TEST - CRS TO USE: " + crsToUse);
-    // System.out.println("TEST - minX: " + minX);
-    // System.out.println("TEST - maxX: " + maxX);
-    // System.out.println("TEST - minY: " + minY);
-    // System.out.println("TEST - maxY: " + maxY);
-    // System.out.println("TEST - layer: " + layer);
-    // System.out.println("TEST - style: " + style);
-    // System.out.println("TEST - width: " + width);
-    // System.out.println("TEST - height: " + height);
-    // System.out.println("TEST - outputFormat: " + outputFormat);
-    // System.out.println("TEST - temporalFilter: " + temporalFilter);
-
-
     // Initiate an empty Uniform Resource Identifier (URI) builder
     final URIBuilder builder = new URIBuilder();
 
@@ -1278,7 +1238,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
 
   @After
   public void cleanup() {
-    System.out.println("TEST - CLEANING UP!");
     geoServerServiceClient.removeFeatureLayer(SimpleIngest.FEATURE_NAME);
     geoServerServiceClient.removeDataStore(dataStorePluginOptions.getGeoWaveNamespace(), WORKSPACE);
     geoServerServiceClient.removeDataStore(
