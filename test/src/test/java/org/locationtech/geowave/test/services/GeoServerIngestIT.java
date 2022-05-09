@@ -118,8 +118,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
 
   private static final String REFERENCE_WMS_HEATMAP_CNT_AGGR_ZOOM_WGS84 =
       TestUtils.isOracleJRE()
-          ? "src/test/resources/wms/wms-heatmap-cnt-aggr-wgs84-zoom-oraclejdk.gif"
-          : "src/test/resources/wms/wms-heatmap-cnt-aggr-wgs84-zoom.gif";
+          ? "src/test/resources/wms/W-wms-heatmap-cnt-aggr-wgs84-zoom-oraclejdk.gif"
+          : "src/test/resources/wms/W-wms-heatmap-cnt-aggr-wgs84-zoom.gif";
 
   private static final String REFERENCE_WMS_HEATMAP_SUM_AGGR_ZOOM_WGS84 =
       TestUtils.isOracleJRE()
@@ -1105,8 +1105,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
       // heatMapRenderingCntAggrWGS84Zoomed,
       // "gif",
       // new
-      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/wms-heatmap-cnt-aggr-wgs84-zoom.gif"));
-      // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/wms-heatmap-cnt-aggr-wgs84-zoom-oraclejdk.gif"));
+      //// File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/wms-heatmap-cnt-aggr-wgs84-zoom.gif"));
+      // File("/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/W-wms-heatmap-cnt-aggr-wgs84-zoom-oraclejdk.gif"));
 
       final BufferedImage refHeatMapCntAggrWGS84Zoom =
           ImageIO.read(new File(REFERENCE_WMS_HEATMAP_CNT_AGGR_ZOOM_WGS84));
@@ -1139,8 +1139,8 @@ public class GeoServerIngestIT extends BaseServiceIT {
       // heatMapRenderingSumAggrWGS84Zoomed,
       // "gif",
       // new
-      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/W-wms-heatmap-sum-aggr-wgs84-zoom.gif"));
-      // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/W-wms-heatmap-sum-aggr-wgs84-zoom-oraclejdk.gif"));
+      //// File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/W-wms-heatmap-sum-aggr-wgs84-zoom.gif"));
+      // File("/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/W-wms-heatmap-sum-aggr-wgs84-zoom-oraclejdk.gif"));
 
       final BufferedImage refHeatMapSumAggrWGS84Zoom =
           ImageIO.read(new File(REFERENCE_WMS_HEATMAP_SUM_AGGR_ZOOM_WGS84));
