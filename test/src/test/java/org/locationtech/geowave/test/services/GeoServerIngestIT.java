@@ -834,7 +834,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
 
     // Set booleans for WGS84 tests
     Boolean runNoSpatialBinningWGS84 = true;
-    Boolean runCntAggrWGS84 = true;
+    Boolean runCntAggrWGS84 = false;
     Boolean runCntAggrZoomedWGS84 = true;
     Boolean runSumAggrZoomedWGS84 = true;
 
