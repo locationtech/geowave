@@ -254,7 +254,7 @@ public class GeoServerIngestIT extends BaseServiceIT {
     Boolean runCntAggrZoom = true;
     Boolean runSumAggr = true;
     Boolean runSumAggrZoom = true;
-    Boolean runCntStats = true;
+    Boolean runCntStats = false;
     Boolean runSumStats = true;
 
     // Use Web Mercator projection
