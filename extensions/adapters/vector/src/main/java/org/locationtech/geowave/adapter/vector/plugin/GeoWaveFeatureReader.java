@@ -87,6 +87,11 @@ import com.google.common.collect.Sets;
  * This class wraps a geotools data store as well as one for statistics (e.g. to display Heatmaps)
  * into a GeoTools FeatureReader for simple feature data. It acts as a helper for GeoWave's GeoTools
  * data store.
+ * 
+ *
+ * @apiNote Changelog: <br> 3-25-2022 M. Zagorski: Added code for custom HeatMapProcess using
+ *          spatial binning. <br>
+ *
  */
 public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, SimpleFeature> {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveFeatureReader.class);
@@ -601,6 +606,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
               jtsBounds,
               sourceCRS);
 
+      // TODO: implement tiling
       // Temporary histogram builder
       // TDigestNumericHistogram histogram = new TDigestNumericHistogram();
       // Create a method that utilizes histogram.add(cell values);
@@ -621,6 +627,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
       if (queryType.equals(GeoWaveHeatMapProcess.SUM_AGGR)) {
         newFeatures =
             HeatMapAggregations.buildFieldSumAggrQuery(
+                // histogram,
                 components,
                 queryConstraints,
                 jtsBounds,
@@ -632,6 +639,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
       if (queryType.equals(GeoWaveHeatMapProcess.CNT_STATS)) {
         newFeatures =
             HeatMapStatistics.buildCountStatsQuery(
+                // histogram,
                 components,
                 queryConstraints,
                 jtsBounds,
@@ -644,6 +652,7 @@ public class GeoWaveFeatureReader implements FeatureReader<SimpleFeatureType, Si
       if (queryType.equals(GeoWaveHeatMapProcess.SUM_STATS)) {
         newFeatures =
             HeatMapStatistics.buildFieldStatsQuery(
+                // histogram,
                 components,
                 queryConstraints,
                 jtsBounds,

@@ -41,12 +41,17 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.locationtech.geowave.adapter.vector.plugin.heatmap.HeatMapUtils;
 
 /**
  * This class is a helper for the GeoWave GeoTools data store. It represents a collection of feature
  * data by encapsulating a GeoWave reader and a query object in order to open the appropriate cursor
  * to iterate over data. It uses Keys within the Query hints to determine whether to perform special
  * purpose queries such as decimation, distributed rendering, subsampling, and heatmap processes.
+ * 
+ * @apiNote Changelog: <br> 3-25-2022 M. Zagorski: Added code for custom HeatMapProcess using
+ *          spatial binning. <br>
+ * 
  */
 public class GeoWaveFeatureCollection extends DataFeatureCollection {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveFeatureCollection.class);
@@ -164,7 +169,7 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
 
   public static synchronized SimpleFeatureType getHeatmapFeatureType() {
     if (heatmapFeatureType == null) {
-      heatmapFeatureType = createHeatmapFeatureType();
+      heatmapFeatureType = HeatMapUtils.createHeatmapFeatureType();
     }
     return heatmapFeatureType;
   }
@@ -174,32 +179,6 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
     typeBuilder.setName("distributed_render");
     typeBuilder.add("result", DistributedRenderResult.class);
     typeBuilder.add("options", DistributedRenderOptions.class);
-    return typeBuilder.buildFeatureType();
-  }
-
-  /**
-   * Creates the heatmap feature type
-   * 
-   * @return {SimpleFeatureType} Returns the SimpleFeatureType
-   */
-  private static SimpleFeatureType createHeatmapFeatureType() {
-
-    // Initialize new SimpleFeatureTypeBuilder
-    final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
-
-    // Set Name and CRS
-    typeBuilder.setName("heatmap_bins");
-    typeBuilder.setCRS(GeometryUtils.getDefaultCRS());
-
-    // Add keys to the typeBuilder
-    typeBuilder.add("the_geom", Geometry.class);
-    typeBuilder.add("field_name", String.class);
-    typeBuilder.add("weight", Double.class);
-    typeBuilder.add("geohashId", String.class);
-    typeBuilder.add("source", String.class);
-    typeBuilder.add("geohashPrec", Integer.class);
-
-    // Build the new type
     return typeBuilder.buildFeatureType();
   }
 

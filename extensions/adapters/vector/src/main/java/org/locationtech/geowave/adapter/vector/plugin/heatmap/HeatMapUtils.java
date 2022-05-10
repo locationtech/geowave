@@ -45,34 +45,35 @@ import org.slf4j.LoggerFactory;
 public class HeatMapUtils {
 
   public static int SQ_KM_CONV = 1000 * 1000;
+  private static int axis = 6378137;
 
   static final Logger LOGGER = LoggerFactory.getLogger(HeatMapUtils.class);
 
-  // /**
-  // * Creates the heatmap feature type
-  // *
-  // * @return {SimpleFeatureType} Returns the SimpleFeatureType
-  // */
-  // private static SimpleFeatureType createHeatmapFeatureType() {
-  //
-  // // Initialize new SimpleFeatureTypeBuilder
-  // final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
-  //
-  // // Set Name and CRS
-  // typeBuilder.setName("heatmap_bins");
-  // typeBuilder.setCRS(GeometryUtils.getDefaultCRS());
-  //
-  // // Add keys to the typeBuilder
-  // typeBuilder.add("the_geom", Geometry.class);
-  // typeBuilder.add("field_name", String.class);
-  // typeBuilder.add("weight", Double.class);
-  // typeBuilder.add("geohashId", String.class);
-  // typeBuilder.add("source", String.class);
-  // typeBuilder.add("geohashPrec", Integer.class);
-  //
-  // // Build the new type
-  // return typeBuilder.buildFeatureType();
-  // }
+  /**
+   * Creates the heatmap feature type
+   * 
+   * @return {SimpleFeatureType} Returns the SimpleFeatureType
+   */
+  public static SimpleFeatureType createHeatmapFeatureType() {
+
+    // Initialize new SimpleFeatureTypeBuilder
+    final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
+
+    // Set Name and CRS
+    typeBuilder.setName("heatmap_bins");
+    typeBuilder.setCRS(GeometryUtils.getDefaultCRS());
+
+    // Add keys to the typeBuilder
+    typeBuilder.add("the_geom", Geometry.class);
+    typeBuilder.add("field_name", String.class);
+    typeBuilder.add("weight", Double.class);
+    typeBuilder.add("geohashId", String.class);
+    typeBuilder.add("source", String.class);
+    typeBuilder.add("geohashPrec", Integer.class);
+
+    // Build the new type
+    return typeBuilder.buildFeatureType();
+  }
 
   /**
    * Builds a simple feature.
@@ -177,7 +178,7 @@ public class HeatMapUtils {
       return 8;
     if (cellArea >= 0.00002)
       return 9;
-    if (cellArea >= 0.00005)
+    if (cellArea >= 0.000005)
       return 10;
     if (cellArea >= 0.00000002)
       return 11;
@@ -223,8 +224,8 @@ public class HeatMapUtils {
     double width = area / length;
 
     // Calculate the length, width in meters and the area is square kilometers
-    double lengthMeters = length * (Math.PI / 180) * 6378137;
-    double widthMeters = width * (Math.PI / 180) * 6378137;
+    double lengthMeters = length * (Math.PI / 180) * axis;
+    double widthMeters = width * (Math.PI / 180) * axis;
     double geomArea = (lengthMeters * widthMeters) / SQ_KM_CONV;
 
     return geomArea;
@@ -272,13 +273,6 @@ public class HeatMapUtils {
 
       // Get latitude coordinate of centroid
       double latitude = centroid.getY();
-
-      // if (longitude == -0.0) {
-      // longitude = -0.000000000000001;
-      // }
-      // if (latitude == -0.0) {
-      // latitude = 0.000000000000001;
-      // }
 
       // Get the location
       String code = "AUTO:42001," + longitude + "," + latitude;

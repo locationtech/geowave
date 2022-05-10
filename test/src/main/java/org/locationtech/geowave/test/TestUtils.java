@@ -769,9 +769,6 @@ public class TestUtils {
     for (int x = 0; x < expected.getWidth(); x++) {
       for (int y = 0; y < expected.getHeight(); y++) {
 
-        // System.out.println("TEST - ACTUAL RGB: " + actual.getRGB(x, y));
-        // System.out.println("TEST - EXPECTED RGB: " + expected.getRGB(x, y));
-
         if (actual.getRGB(x, y) != expected.getRGB(x, y)) {
           errorPixels++;
           if (errorPixels > maxErrorPixels) {
@@ -926,11 +923,6 @@ public class TestUtils {
       final Response response) {
     final String assertionMsg =
         msg + String.format(": A %s response code should be received", expectedCode);
-
-    System.out.println("ASSERTION MSG: " + assertionMsg);
-    System.out.println("EXPECTED CODE: " + expectedCode);
-    System.out.println("RESPONSE STATUS: " + response.getStatus());
-    System.out.println("------------------------------------------------------");
 
     Assert.assertEquals(assertionMsg, expectedCode, response.getStatus());
   }

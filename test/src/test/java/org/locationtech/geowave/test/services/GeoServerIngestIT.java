@@ -17,9 +17,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import javax.imageio.ImageIO;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.HttpResponse;
@@ -59,6 +57,14 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+/**
+ * Integration tests for GeoServer ingest.
+ *
+ * @apiNote Changelog: <br> 3-25-2022 M. Zagorski: Added tests for custom HeatMapProcess using
+ *          spatial binning. <br>
+ *
+ */
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({Environment.SERVICES})
@@ -557,13 +563,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
               false,
               true);
 
-      // ImageIO.write(
-      // heatMapRenderingNoSpatBin,
-      // "gif",
-      // new
-      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-no-spat-bin.gif"));
-      // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-no-spat-bin-oraclejdk.gif"));
-
       final BufferedImage refHeatMapNoSpatialBinning =
           ImageIO.read(new File(REFERENCE_WMS_HEATMAP_NO_SB));
 
@@ -590,13 +589,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
               false,
               true);
 
-      // ImageIO.write(
-      // heatMapRenderingCntAggr,
-      // "gif",
-      // new
-      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-cnt-aggr.gif"));
-      // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-cnt-aggr-oraclejdk.gif"));
-
       final BufferedImage refHeatMapCntAggr =
           ImageIO.read(new File(REFERENCE_WMS_HEATMAP_CNT_AGGR));
 
@@ -620,13 +612,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
               null,
               false,
               true);
-
-      // ImageIO.write(
-      // heatMapRenderingCntAggrZoom,
-      // "gif",
-      // new
-      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-cnt-aggr-zoom.gif"));
-      // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-cnt-aggr-zoom-oraclejdk.gif"));
 
       final BufferedImage refHeatMapCntAggrZoom =
           ImageIO.read(new File(REFERENCE_WMS_HEATMAP_CNT_AGGR_ZOOM));
@@ -655,13 +640,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
               false,
               true);
 
-      // ImageIO.write(
-      // heatMapRenderingSumAggr,
-      // "gif",
-      // new
-      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-sum-aggr.gif"));
-      // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-sum-aggr-oraclejdk.gif"));
-
       final BufferedImage refHeatMapSumAggr =
           ImageIO.read(new File(REFERENCE_WMS_HEATMAP_SUM_AGGR));
 
@@ -685,13 +663,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
               null,
               false,
               true);
-
-      // ImageIO.write(
-      // heatMapRenderingSumAggrZoom,
-      // "gif",
-      // new
-      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-sum-aggr-zoom.gif"));
-      // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-sum-aggr-zoom-oraclejdk.gif"));
 
       final BufferedImage refHeatMapSumAggrZoom =
           ImageIO.read(new File(REFERENCE_WMS_HEATMAP_SUM_AGGR_ZOOM));
@@ -721,13 +692,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
               false,
               true);
 
-      // ImageIO.write(
-      // heatMapRenderingCntStats,
-      // "gif",
-      // new
-      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-cnt-stats.gif"));
-      // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-cnt-stats-oraclejdk.gif"));
-
       final BufferedImage refHeatMapCntStats =
           ImageIO.read(new File(REFERENCE_WMS_HEATMAP_CNT_STATS));
 
@@ -750,13 +714,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
               null,
               false,
               true);
-
-      // ImageIO.write(
-      // heatMapRenderingSumStats,
-      // "gif",
-      // new
-      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-sum-stats.gif"));
-      // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/X-wms-heatmap-sum-stats-oraclejdk.gif"));
 
       final BufferedImage refHeatMapSumStats =
           ImageIO.read(new File(REFERENCE_WMS_HEATMAP_SUM_STATS));
@@ -1008,13 +965,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
               false,
               false);
 
-      // ImageIO.write(
-      // heatMapRenderingNoSpatBinWGS84,
-      // "gif",
-      // new
-      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/W-wms-heatmap-no-spat-bin-wgs84.gif"));
-      // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/W-wms-heatmap-no-spat-bin-wgs84-oraclejdk.gif"));
-
       final BufferedImage refHeatMapNoSpatialBinningWGS84 =
           ImageIO.read(new File(REFERENCE_WMS_HEATMAP_NO_SB_WGS84));
       TestUtils.testTileAgainstReference(
@@ -1042,14 +992,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
               false,
               false);
 
-
-      // ImageIO.write(
-      // heatMapRenderingCntAggrWGS84,
-      // "gif",
-      // new
-      // File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/W-wms-heatmap-cnt-aggr-wgs84.gif"));
-      // "/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/W-wms-heatmap-cnt-aggr-wgs84-oraclejdk.gif"));
-
       final BufferedImage refHeatMapCntAggrWGS84 =
           ImageIO.read(new File(REFERENCE_WMS_HEATMAP_CNT_AGGR_WGS84));
       TestUtils.testTileAgainstReference(
@@ -1075,14 +1017,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
               null,
               false,
               false);
-
-
-      // ImageIO.write(
-      // heatMapRenderingCntAggrWGS84Zoomed,
-      // "gif",
-      // new
-      //// File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/wms-heatmap-cnt-aggr-wgs84-zoom.gif"));
-      // File("/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/W-wms-heatmap-cnt-aggr-wgs84-zoom-oraclejdk.gif"));
 
       final BufferedImage refHeatMapCntAggrWGS84Zoom =
           ImageIO.read(new File(REFERENCE_WMS_HEATMAP_CNT_AGGR_ZOOM_WGS84));
@@ -1110,13 +1044,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
               false,
               false);
 
-      // ImageIO.write(
-      // heatMapRenderingSumAggrWGS84Zoomed,
-      // "gif",
-      // new
-      //// File("/home/me/Repos/GEOWAVE/geowave/test/src/test/resources/wms/W-wms-heatmap-sum-aggr-wgs84-zoom.gif"));
-      // File("/home/milla/repos/SAFEHOUSE/GEOWAVE/geowave/test/src/test/resources/wms/W-wms-heatmap-sum-aggr-wgs84-zoom-oraclejdk.gif"));
-
       final BufferedImage refHeatMapSumAggrWGS84Zoom =
           ImageIO.read(new File(REFERENCE_WMS_HEATMAP_SUM_AGGR_ZOOM_WGS84));
       TestUtils.testTileAgainstReference(
@@ -1126,10 +1053,6 @@ public class GeoServerIngestIT extends BaseServiceIT {
           0.07);
 
     }
-    // ds.removeIndex(spatialIdx.getName());
-    // ds.deleteAll();
-    // ServicesTestEnvironment.getInstance().restartServices();
-    // ----------------------------------------------------------------------
   }
 
 
