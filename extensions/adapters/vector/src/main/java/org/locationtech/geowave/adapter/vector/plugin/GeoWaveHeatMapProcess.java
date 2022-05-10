@@ -487,7 +487,7 @@ public class GeoWaveHeatMapProcess implements VectorProcess {
           if (counter <= 30) {
             final FeatureJSON fjson = new FeatureJSON();
             final String name =
-                "/home/milla/Desktop/BACKUP_WORKING/GEOWAVE_BACKUP/geowave/JOSM_Verification/output_data/"
+                "/xxx/xxx"
                     + fieldName
                     + "_GEOHASH_"
                     + geohashPrec
