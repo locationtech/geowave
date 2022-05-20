@@ -183,6 +183,7 @@ fi
 %{geowave_tools_home}
 
 %attr(755, geowave, geowave) %{geowave_tools_home}/geowave-tools.sh
+%attr(777, geowave, geowave) %{geowave_tools_home}/logs
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
