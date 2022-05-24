@@ -440,7 +440,6 @@
 											<exclude>*:commons-logging:*</exclude>
 											<exclude>*:commons-io:*</exclude>
 											<exclude>*:jts*:*</exclude>
-											<exclude>*:stax*:*</exclude>
 											<exclude>*:activation:*</exclude>
 											<exclude>*:servlet-api:*</exclude>
 											<exclude>*:*:jsr305</exclude>
