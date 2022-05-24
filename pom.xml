@@ -82,6 +82,7 @@
 		<guice.version>3.0</guice.version>
 		<skipITs>true</skipITs>
 		<vfs2.version>2.3</vfs2.version>
+		<configuration2.version>2.3</configuration2.version>
 		<hbase.version>2.4.2</hbase.version>
 		<hadoop.version>3.1.2</hadoop.version>
 		<avro.version>1.7.6</avro.version>
@@ -157,15 +158,12 @@
 		<formatter.skip>false</formatter.skip>
 	</properties>
 	<dependencyManagement>
-
-
 		<dependencies>
-<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-configuration2 -->
-<dependency>
-    <groupId>org.apache.commons</groupId>
-    <artifactId>commons-configuration2</artifactId>
-    <version>2.3</version>
-</dependency>
+			<dependency>
+    			<groupId>org.apache.commons</groupId>
+    			<artifactId>commons-configuration2</artifactId>
+    			<version>${configuration2.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-server</artifactId>
