@@ -32,8 +32,6 @@ import org.apache.hadoop.hbase.regionserver.ScanType;
 import org.apache.hadoop.hbase.regionserver.Store;
 import org.apache.hadoop.hbase.regionserver.compactions.CompactionLifeCycleTracker;
 import org.apache.hadoop.hbase.regionserver.compactions.CompactionRequest;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.server.ServerOpConfig.ServerOpScope;
 import org.locationtech.geowave.datastore.hbase.server.HBaseServerOp;
@@ -42,11 +40,13 @@ import org.locationtech.geowave.datastore.hbase.server.ServerOpRegionScannerWrap
 import org.locationtech.geowave.datastore.hbase.server.ServerSideOperationStore;
 import org.locationtech.geowave.datastore.hbase.server.ServerSideOperationUtils;
 import org.locationtech.geowave.datastore.hbase.util.HBaseUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableSet;
 
 public class ServerSideOperationsObserver implements RegionObserver, RegionCoprocessor {
 
-  private static final Logger LOGGER = LogManager.getLogger(ServerSideOperationsObserver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ServerSideOperationsObserver.class);
   private static final int SERVER_OP_OPTIONS_PREFIX_LENGTH =
       ServerSideOperationUtils.SERVER_OP_OPTIONS_PREFIX.length();
 

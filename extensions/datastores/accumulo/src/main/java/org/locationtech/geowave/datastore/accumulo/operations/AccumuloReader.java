@@ -19,8 +19,6 @@ import org.apache.accumulo.core.client.ScannerBase;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
@@ -32,12 +30,14 @@ import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.operations.SimpleParallelDecoder;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.datastore.accumulo.AccumuloRow;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 
 public class AccumuloReader<T> implements RowReader<T> {
-  private static final Logger LOGGER = LogManager.getLogger(AccumuloReader.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AccumuloReader.class);
   protected final ScannerBase scanner;
   private final Iterator<Entry<Key, Value>> baseIter;
   private ParallelDecoder<T> parallelDecoder = null;

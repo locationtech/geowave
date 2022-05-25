@@ -15,8 +15,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.IndexUtils;
@@ -35,6 +33,8 @@ import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.SpaceFillingCurve;
 import org.locationtech.geowave.core.index.sfc.binned.BinnedSFCUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class wraps a single SpaceFillingCurve implementation with a tiered approach to indexing (an
@@ -42,7 +42,7 @@ import org.locationtech.geowave.core.index.sfc.binned.BinnedSFCUtils;
  * encapsulated sub-strategy.
  */
 public class SingleTierSubStrategy implements NumericIndexStrategy {
-  private static final Logger LOGGER = LogManager.getLogger(SingleTierSubStrategy.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SingleTierSubStrategy.class);
   private SpaceFillingCurve sfc;
   private NumericDimensionDefinition[] baseDefinitions;
   public byte tier;
@@ -156,10 +156,7 @@ public class SingleTierSubStrategy implements NumericIndexStrategy {
     if (this == obj) {
       return true;
     }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
+    if ((obj == null) || (getClass() != obj.getClass())) {
       return false;
     }
     final SingleTierSubStrategy other = (SingleTierSubStrategy) obj;

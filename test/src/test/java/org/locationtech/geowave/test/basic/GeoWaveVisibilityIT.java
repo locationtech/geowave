@@ -19,8 +19,6 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -68,6 +66,8 @@ import org.locationtech.jts.geom.Point;
 import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import jersey.repackaged.com.google.common.collect.Iterators;
@@ -87,7 +87,7 @@ public class GeoWaveVisibilityIT extends AbstractGeoWaveIT {
       options = {"enableVisibility=true", "enableSecondaryIndexing=false"})
   protected DataStorePluginOptions dataStoreOptions;
 
-  private static final Logger LOGGER = LogManager.getLogger(AbstractGeoWaveIT.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractGeoWaveIT.class);
   private static long startMillis;
 
   private static final int TOTAL_FEATURES = 800;

@@ -10,14 +10,14 @@ package org.locationtech.geowave.datastore.accumulo.operations;
 
 import org.apache.accumulo.core.client.MutationsRejectedException;
 import org.apache.accumulo.core.data.Mutation;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.RowWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 abstract public class AbstractAccumuloWriter implements RowWriter {
-  private static final Logger LOGGER = LogManager.getLogger(AbstractAccumuloWriter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractAccumuloWriter.class);
   private org.apache.accumulo.core.client.BatchWriter batchWriter;
   private final AccumuloOperations operations;
   private final String tableName;
