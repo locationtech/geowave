@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRanges;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
@@ -46,12 +44,13 @@ import org.locationtech.geowave.core.store.statistics.index.DuplicateEntryCountS
 import org.locationtech.geowave.core.store.statistics.index.FieldVisibilityCountStatistic.FieldVisibilityCountValue;
 import org.locationtech.geowave.core.store.statistics.index.IndexMetaDataSetStatistic.IndexMetaDataSetValue;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.google.common.collect.Iterators;
 
 /** This class represents basic numeric contraints applied to a datastore query */
 public class BaseConstraintsQuery extends BaseFilteredIndexQuery {
-
-  private static final Logger LOGGER = LogManager.getLogger(BaseConstraintsQuery.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(BaseConstraintsQuery.class);
   private boolean queryFiltersEnabled;
 
   public final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation;

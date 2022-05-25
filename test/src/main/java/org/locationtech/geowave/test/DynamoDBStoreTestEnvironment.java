@@ -9,8 +9,6 @@
 package org.locationtech.geowave.test;
 
 import java.io.File;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.locationtech.geowave.core.store.GenericStoreFactory;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.api.DataStore;
@@ -18,6 +16,8 @@ import org.locationtech.geowave.datastore.dynamodb.DynamoDBStoreFactoryFamily;
 import org.locationtech.geowave.datastore.dynamodb.cli.DynamoDBLocal;
 import org.locationtech.geowave.datastore.dynamodb.config.DynamoDBOptions;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DynamoDBStoreTestEnvironment extends StoreTestEnvironment {
   private static final GenericStoreFactory<DataStore> STORE_FACTORY =
@@ -32,7 +32,7 @@ public class DynamoDBStoreTestEnvironment extends StoreTestEnvironment {
     return singletonInstance;
   }
 
-  private static final Logger LOGGER = LogManager.getLogger(DynamoDBStoreTestEnvironment.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DynamoDBStoreTestEnvironment.class);
 
   protected DynamoDBLocal dynamoLocal;
   public static final File DEFAULT_DIR = new File("./target/temp/dynamodb");

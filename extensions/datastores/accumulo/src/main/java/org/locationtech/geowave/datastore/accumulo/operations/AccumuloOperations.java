@@ -54,8 +54,6 @@ import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.hadoop.io.Text;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
@@ -123,6 +121,8 @@ import org.locationtech.geowave.datastore.accumulo.util.ConnectorPool.ConnectorC
 import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
 import org.locationtech.geowave.mapreduce.splits.GeoWaveRowRange;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
@@ -142,7 +142,7 @@ public class AccumuloOperations implements
     ConnectorCloseListener,
     Closeable {
   private static Object CONNECTOR_MUTEX = new Object();
-  private static final Logger LOGGER = LogManager.getLogger(AccumuloOperations.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AccumuloOperations.class);
   private static final int DEFAULT_NUM_THREADS = 16;
   private static final long DEFAULT_TIMEOUT_MILLIS = 1000L; // 1 second
   private static final long DEFAULT_BYTE_BUFFER_SIZE = 1048576L; // 1 MB

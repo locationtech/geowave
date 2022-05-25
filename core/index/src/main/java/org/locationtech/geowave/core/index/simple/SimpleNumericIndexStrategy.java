@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.Coordinate;
@@ -32,6 +30,8 @@ import org.locationtech.geowave.core.index.numeric.BasicNumericDataset;
 import org.locationtech.geowave.core.index.numeric.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.numeric.NumericData;
 import org.locationtech.geowave.core.index.numeric.NumericValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A simple 1-dimensional NumericIndexStrategy that represents an index of signed integer values
@@ -40,7 +40,7 @@ import org.locationtech.geowave.core.index.numeric.NumericValue;
  * inserting ranges because there will be too much replication of data.
  */
 public abstract class SimpleNumericIndexStrategy<T extends Number> implements NumericIndexStrategy {
-  private static final Logger LOGGER = LogManager.getLogger(SimpleNumericIndexStrategy.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SimpleNumericIndexStrategy.class);
 
   private final NumberLexicoder<T> lexicoder;
   private final NumericDimensionDefinition[] definitions;

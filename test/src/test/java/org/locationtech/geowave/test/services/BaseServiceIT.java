@@ -9,9 +9,7 @@
 package org.locationtech.geowave.test.services;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -32,9 +30,9 @@ public abstract class BaseServiceIT extends AbstractGeoWaveIT {
   protected synchronized void muteLogging() {
     if (loggerMap.isEmpty()) {
       @SuppressWarnings("unchecked")
-      LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+      final LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
       final Collection<Logger> currentLoggers = ctx.getLoggers();
-      org.apache.logging.log4j.Logger rootLogger = LogManager.getRootLogger();
+      final org.apache.logging.log4j.Logger rootLogger = LogManager.getRootLogger();
       currentLoggers.add((Logger) rootLogger);
 
       currentLoggers.forEach(logger -> {
@@ -46,7 +44,7 @@ public abstract class BaseServiceIT extends AbstractGeoWaveIT {
 
   protected synchronized void unmuteLogging() {
     loggerMap.entrySet().forEach(entry -> {
-      Map<String, Level> entryLoggerMap = new HashMap<>();
+      final Map<String, Level> entryLoggerMap = new HashMap<>();
       entryLoggerMap.put(entry.getKey(), entry.getValue());
       Configurator.setLevel(entryLoggerMap);
     });

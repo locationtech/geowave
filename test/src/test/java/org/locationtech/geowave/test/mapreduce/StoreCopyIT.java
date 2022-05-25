@@ -11,8 +11,6 @@ package org.locationtech.geowave.test.mapreduce;
 import java.io.File;
 import java.net.URL;
 import org.apache.hadoop.util.ToolRunner;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -32,6 +30,8 @@ import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import org.locationtech.geowave.test.annotation.NamespaceOverride;
 import org.locationtech.geowave.test.basic.AbstractGeoWaveBasicVectorIT;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({Environment.MAP_REDUCE})
@@ -52,7 +52,7 @@ public class StoreCopyIT extends AbstractGeoWaveBasicVectorIT {
   protected DataStorePluginOptions inputDataStorePluginOptions;
   protected boolean testOutput = false;
 
-  private static final Logger LOGGER = LogManager.getLogger(StoreCopyIT.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(StoreCopyIT.class);
   private static long startMillis;
 
   @BeforeClass

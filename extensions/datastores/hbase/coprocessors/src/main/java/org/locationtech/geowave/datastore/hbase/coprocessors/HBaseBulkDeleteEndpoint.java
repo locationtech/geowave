@@ -33,8 +33,6 @@ import org.apache.hadoop.hbase.regionserver.OperationStatus;
 import org.apache.hadoop.hbase.regionserver.Region;
 import org.apache.hadoop.hbase.regionserver.RegionScanner;
 import org.apache.hadoop.hbase.util.Bytes;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.datastore.hbase.coprocessors.protobuf.HBaseBulkDeleteProtosServer.BulkDeleteRequest;
@@ -44,6 +42,8 @@ import org.locationtech.geowave.datastore.hbase.coprocessors.protobuf.HBaseBulkD
 import org.locationtech.geowave.datastore.hbase.coprocessors.protobuf.HBaseBulkDeleteProtosServer.BulkDeleteService;
 import org.locationtech.geowave.datastore.hbase.filters.HBaseDistributableFilter;
 import org.locationtech.geowave.datastore.hbase.filters.HBaseNumericIndexStrategyFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
 import com.google.protobuf.Service;
@@ -51,7 +51,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class HBaseBulkDeleteEndpoint extends BulkDeleteService implements RegionCoprocessor {
   private static final String NO_OF_VERSIONS_TO_DELETE = "noOfVersionsToDelete";
-  private static final Logger LOGGER = LogManager.getLogger(HBaseBulkDeleteEndpoint.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(HBaseBulkDeleteEndpoint.class);
 
   private RegionCoprocessorEnvironment env;
 
