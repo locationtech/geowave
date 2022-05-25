@@ -114,7 +114,7 @@
 		<beanutils.version>1.9.4</beanutils.version>
 		<fasterxml.jackson.version>2.10.5</fasterxml.jackson.version>
 		<fasterxml.jackson.databind.version>2.10.5.1</fasterxml.jackson.databind.version>
-		<spring-security.version>5.1.13.RELEASE</spring-security.version>
+		<spring-security.version>5.5.7</spring-security.version>
 		<slf4j.version>1.7.30</slf4j.version>
 		<log4j.version>2.17.1</log4j.version>
 		<jna.version>5.7.0</jna.version>
