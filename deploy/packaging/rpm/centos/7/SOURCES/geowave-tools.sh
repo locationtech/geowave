@@ -40,7 +40,7 @@ if [ -n "${HADOOP_HOME}" ] && [ -d "${HADOOP_HOME}" ]; then
      HADOOP_CLASSPATH=""
      for i in $(echo $CLASSPATH | sed "s/:/ /g")
      do
-       if [[ "$i" != *log4j-slf4j-impl*.jar && "$i" != *slf4j-log4j*.jar ]]; then
+       if [[ "$i" != *log4j-slf4j-impl*.jar && "$i" != *slf4j-log4j*.jar && "$i" != *protobuf-java*.jar ]]; then
          HADOOP_CLASSPATH=${HADOOP_CLASSPATH}:$i
        fi
      done
@@ -69,7 +69,7 @@ if [ -n "${SPARK_HOME}" ] && [ -d "${SPARK_HOME}" ]; then
   SPARK_CLASSPATH=""
   for i in ${SPARK_HOME}/jars/*.jar
   do
-     if [[ "$i" != *log4j-slf4j-impl*.jar && "$i" != *guava*.jar && "$i" != *slf4j-log4j*.jar ]]; then
+     if [[ "$i" != *log4j-slf4j-impl*.jar && "$i" != *guava*.jar && "$i" != *slf4j-log4j*.jar && "$i" != *protobuf-java*.jar ]]; then
        SPARK_CLASSPATH=${SPARK_CLASSPATH}:$i
      fi
   done  
