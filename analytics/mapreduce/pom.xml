@@ -4,7 +4,7 @@
 		<artifactId>geowave-analytic-parent</artifactId>
 		<groupId>org.locationtech.geowave</groupId>
 		<relativePath>../</relativePath>
-		<version>2.0.1-SNAPSHOT</version>
+		<version>2.0.1</version>
 	</parent>
 	<artifactId>geowave-analytic-mapreduce</artifactId>
 	<name>GeoWave MapReduce Analytics</name>
