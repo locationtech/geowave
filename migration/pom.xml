@@ -5,7 +5,7 @@
 		<groupId>org.locationtech.geowave</groupId>
 		<artifactId>geowave-parent</artifactId>
 		<relativePath>../</relativePath>
-		<version>2.0.1</version>
+		<version>2.0.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-migration</artifactId>
 	<name>GeoWave Migrations</name>
