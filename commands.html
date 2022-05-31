@@ -1617,7 +1617,7 @@ The truststore file is used to validate client certificates.</p>
 <div class="sect3">
 <h4 id="store-copy-description"><a class="anchor" href="#store-copy-description"></a>DESCRIPTION</h4>
 <div class="paragraph">
-<p>This command copies all of the data from one data store to another.</p>
+<p>This command copies all of the data from one data store to another existing data store.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1651,7 +1651,7 @@ The truststore file is used to validate client certificates.</p>
 <div class="sect3">
 <h4 id="store-copymr-description"><a class="anchor" href="#store-copymr-description"></a>DESCRIPTION</h4>
 <div class="paragraph">
-<p>This command copies all of the data from one data store to another using MapReduce.</p>
+<p>This command copies all of the data from one data store to another existing data store using MapReduce.</p>
 </div>
 </div>
 <div class="sect3">
@@ -8912,7 +8912,7 @@ OSM commands are not included in GeoWave by default.
 <dl>
 <dt class="hdlist1"><strong>--cql</strong> <em>&lt;filter&gt;</em></dt>
 <dd>
-<p>An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: <code>shape</code> (Geometry), <code>acquisitionDate</code> (Date), <code>cloudCover</code> (double), <code>processingLevel</code> (String), <code>path</code> (int), <code>row</code> (int) and the feature ID is <code>entityId</code> for the scene.  Additionally attributes of the individuals band can be used such as <code>band</code> (String), <code>sizeMB</code> (double), and <code>bandDownloadUrl</code> (String).</p>
+<p>An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: <code>shape</code> (Geometry), <code>acquisitionDate</code> (Date), <code>cloudCover</code> (double), <code>processingLevel</code> (String), <code>path</code> (int), <code>row</code> (int) and the feature ID is <code>productId</code> for the scene.  Additionally attributes of the individuals band can be used such as <code>band</code> (String), <code>sizeMB</code> (double), and <code>bandDownloadUrl</code> (String).</p>
 </dd>
 <dt class="hdlist1"><strong>--nbestbands</strong> <em>&lt;count&gt;</em></dt>
 <dd>
@@ -8981,7 +8981,7 @@ OSM commands are not included in GeoWave by default.
 <dl>
 <dt class="hdlist1"><strong>--cql</strong> <em>&lt;filter&gt;</em></dt>
 <dd>
-<p>An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: <code>shape</code> (Geometry), <code>acquisitionDate</code> (Date), <code>cloudCover</code> (double), <code>processingLevel</code> (String), <code>path</code> (int), <code>row</code> (int) and the feature ID is <code>entityId</code> for the scene.  Additionally attributes of the individuals band can be used such as <code>band</code> (String), <code>sizeMB</code> (double), and <code>bandDownloadUrl</code> (String).</p>
+<p>An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: <code>shape</code> (Geometry), <code>acquisitionDate</code> (Date), <code>cloudCover</code> (double), <code>processingLevel</code> (String), <code>path</code> (int), <code>row</code> (int) and the feature ID is <code>productId</code> for the scene.  Additionally attributes of the individuals band can be used such as <code>band</code> (String), <code>sizeMB</code> (double), and <code>bandDownloadUrl</code> (String).</p>
 </dd>
 <dt class="hdlist1"><strong>--nbestbands</strong> <em>&lt;count&gt;</em></dt>
 <dd>
@@ -9054,11 +9054,11 @@ OSM commands are not included in GeoWave by default.
 </dd>
 <dt class="hdlist1"><strong>--coverage</strong> <em>&lt;name&gt;</em></dt>
 <dd>
-<p>The name to give to each unique coverage. Freemarker templating can be used for variable substition based on the same attributes used for filtering. The default coverage name is <code>${entityId}_${band}</code>.  If <code>${band}</code> is unused in the coverage name, all bands will be merged together into the same coverage.</p>
+<p>The name to give to each unique coverage. Freemarker templating can be used for variable substition based on the same attributes used for filtering. The default coverage name is <code>${productId}_${band}</code>.  If <code>${band}</code> is unused in the coverage name, all bands will be merged together into the same coverage.</p>
 </dd>
 <dt class="hdlist1"><strong>--cql</strong> <em>&lt;filter&gt;</em></dt>
 <dd>
-<p>An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: <code>shape</code> (Geometry), <code>acquisitionDate</code> (Date), <code>cloudCover</code> (double), <code>processingLevel</code> (String), <code>path</code> (int), <code>row</code> (int) and the feature ID is <code>entityId</code> for the scene. Additionally attributes of the individuals band can be used such as <code>band</code> (String), <code>sizeMB</code> (double), and <code>bandDownloadUrl</code> (String).</p>
+<p>An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: <code>shape</code> (Geometry), <code>acquisitionDate</code> (Date), <code>cloudCover</code> (double), <code>processingLevel</code> (String), <code>path</code> (int), <code>row</code> (int) and the feature ID is <code>productId</code> for the scene. Additionally attributes of the individuals band can be used such as <code>band</code> (String), <code>sizeMB</code> (double), and <code>bandDownloadUrl</code> (String).</p>
 </dd>
 <dt class="hdlist1"><strong>--crop</strong></dt>
 <dd>
@@ -9171,11 +9171,11 @@ OSM commands are not included in GeoWave by default.
 </dd>
 <dt class="hdlist1"><strong>--coverage</strong> <em>&lt;name&gt;</em></dt>
 <dd>
-<p>The name to give to each unique coverage. Freemarker templating can be used for variable substition based on the same attributes used for filtering. The default coverage name is <code>${entityId}_${band}</code>.  If <code>${band}</code> is unused in the coverage name, all bands will be merged together into the same coverage.</p>
+<p>The name to give to each unique coverage. Freemarker templating can be used for variable substitution based on the same attributes used for filtering. The default coverage name is <code>${productId}_${band}</code>.  If <code>${band}</code> is unused in the coverage name, all bands will be merged together into the same coverage.</p>
 </dd>
 <dt class="hdlist1"><strong>--cql</strong> <em>&lt;filter&gt;</em></dt>
 <dd>
-<p>An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: <code>shape</code> (Geometry), <code>acquisitionDate</code> (Date), <code>cloudCover</code> (double), <code>processingLevel</code> (String), <code>path</code> (int), <code>row</code> (int) and the feature ID is <code>entityId</code> for the scene. Additionally attributes of the individuals band can be used such as <code>band</code> (String), <code>sizeMB</code> (double), and <code>bandDownloadUrl</code> (String).</p>
+<p>An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: <code>shape</code> (Geometry), <code>acquisitionDate</code> (Date), <code>cloudCover</code> (double), <code>processingLevel</code> (String), <code>path</code> (int), <code>row</code> (int) and the feature ID is <code>productId</code> for the scene. Additionally attributes of the individuals band can be used such as <code>band</code> (String), <code>sizeMB</code> (double), and <code>bandDownloadUrl</code> (String).</p>
 </dd>
 <dt class="hdlist1"><strong>--crop</strong></dt>
 <dd>
@@ -9276,7 +9276,7 @@ OSM commands are not included in GeoWave by default.
 <dl>
 <dt class="hdlist1"><strong>--cql</strong> <em>&lt;filter&gt;</em></dt>
 <dd>
-<p>An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: <code>shape</code> (Geometry), <code>acquisitionDate</code> (Date), <code>cloudCover</code> (double), <code>processingLevel</code> (String), <code>path</code> (int), <code>row</code> (int) and the feature ID is <code>entityId</code> for the scene. Additionally attributes of the individuals band can be used such as <code>band</code> (String), <code>sizeMB</code> (double), and <code>bandDownloadUrl</code> (String).</p>
+<p>An optional CQL expression to filter the ingested imagery. The feature type for the expression has the following attributes: <code>shape</code> (Geometry), <code>acquisitionDate</code> (Date), <code>cloudCover</code> (double), <code>processingLevel</code> (String), <code>path</code> (int), <code>row</code> (int) and the feature ID is <code>productId</code> for the scene. Additionally attributes of the individuals band can be used such as <code>band</code> (String), <code>sizeMB</code> (double), and <code>bandDownloadUrl</code> (String).</p>
 </dd>
 <dt class="hdlist1"><strong>--nbestbands</strong> <em>&lt;count&gt;</em></dt>
 <dd>
@@ -9450,12 +9450,12 @@ OSM commands are not included in GeoWave by default.
 </div>
 <hr>
 <script>
-var geowave_version = '2.0.0';
+var geowave_version = '2.0.1';
 </script>
 
 <div class="geowave-footer col-md-12 docs-footer">
   <div class="py-4 d-flex justify-content-center align-items-center">
-    <small><p class="footer-text">This page was generated on Monday, September 27, 2021 at 11:18 AM UTC<br><a href="https://github.com/locationtech/geowave/tree/215458e8ee6ef6d7b3eb1bebca1f882428197b10">View the commit it was generated from on GitHub</a></p></small>
+    <small><p class="footer-text">This page was generated on Tuesday, May 31, 2022 at 04:44 PM UTC<br><a href="https://github.com/locationtech/geowave/tree/b675ba1967b3e36dac160749d7b4f8361d100e25">View the commit it was generated from on GitHub</a></p></small>
   </div>
 </div>
 </div>
@@ -9465,7 +9465,7 @@ var geowave_version = '2.0.0';
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-09-27 11:18:10 +00:00
+Last updated 2022-05-31 16:44:56 +00:00
 </div>
 </div>
 </body>

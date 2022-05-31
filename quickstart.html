@@ -520,7 +520,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#visualizing-the-data">Visualizing the Data</a></li>
 </ul>
 </li>
-<li><a href="#raster-demo">Raster Demo</a>
+<li><a href="#raster-demo-em-deprecated-em">Raster Demo <em>(deprecated)</em></a>
 <ul class="sectlevel2">
 <li><a href="#install-gdal">Install GDAL</a></li>
 <li><a href="#configure-geowave-data-stores">Configure GeoWave Data Stores</a></li>
@@ -607,10 +607,10 @@ $ cd quickstart</code></pre>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="http://s3.amazonaws.com/geowave/2.0.0/scripts/emr/quickstart/KDEColorMap.sld">KDEColorMap.sld</a></p>
+<p><a href="http://s3.amazonaws.com/geowave/2.0.1/scripts/emr/quickstart/KDEColorMap.sld">KDEColorMap.sld</a></p>
 </li>
 <li>
-<p><a href="http://s3.amazonaws.com/geowave/2.0.0/scripts/emr/quickstart/SubsamplePoints.sld">SubsamplePoints.sld</a></p>
+<p><a href="http://s3.amazonaws.com/geowave/2.0.1/scripts/emr/quickstart/SubsamplePoints.sld">SubsamplePoints.sld</a></p>
 </li>
 </ul>
 </div>
@@ -1001,10 +1001,11 @@ $ geowave gs style set gdeltevent --styleName SubsamplePoints</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="raster-demo"><a class="anchor" href="#raster-demo"></a>Raster Demo</h2>
+<h2 id="raster-demo-em-deprecated-em"><a class="anchor" href="#raster-demo-em-deprecated-em"></a>Raster Demo <em>(deprecated)</em></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In this demo, we will be looking at Band 8 of Landsat raster data around Berlin, Germany. See <a href="https://www.usgs.gov/land-resources/nli/landsat/landsat-8" target="blank">USGS.gov</a> for more information about Landsat 8.</p>
+<p><em>DISCLAIMER: It appears in March 2022 AWS completely removed LandSat8 Open Data Imagery, effectively deprecating this raster demo</em>
+In this demo, we will be looking at Band 8 of Landsat raster data around Berlin, Germany. See <a href="https://www.usgs.gov/land-resources/nli/landsat/landsat-8" target="blank">USGS.gov</a> for more information about Landsat 8.</p>
 </div>
 <div class="sect2">
 <h3 id="install-gdal"><a class="anchor" href="#install-gdal"></a>Install GDAL</h3>
@@ -1170,12 +1171,12 @@ $ geowave gs layer add landsatvector --add all</code></pre>
 <p><a href="commands.html"><strong>Command-Line Interface Documentation</strong></a></p>
 </div>
 <script>
-var geowave_version = '2.0.0';
+var geowave_version = '2.0.1';
 </script>
 
 <div class="geowave-footer col-md-12 docs-footer">
   <div class="py-4 d-flex justify-content-center align-items-center">
-    <small><p class="footer-text">This page was generated on Monday, September 27, 2021 at 11:18 AM UTC<br><a href="https://github.com/locationtech/geowave/tree/215458e8ee6ef6d7b3eb1bebca1f882428197b10">View the commit it was generated from on GitHub</a></p></small>
+    <small><p class="footer-text">This page was generated on Tuesday, May 31, 2022 at 04:44 PM UTC<br><a href="https://github.com/locationtech/geowave/tree/b675ba1967b3e36dac160749d7b4f8361d100e25">View the commit it was generated from on GitHub</a></p></small>
   </div>
 </div>
 </div>
@@ -1183,7 +1184,7 @@ var geowave_version = '2.0.0';
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-09-27 11:18:10 +00:00
+Last updated 2022-05-31 16:44:56 +00:00
 </div>
 </div>
 </body>
