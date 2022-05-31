@@ -16,7 +16,7 @@ if ! curl --head --silent --fail  https://oss.sonatype.org/service/local/reposit
     popd
 fi
 echo -e "Deploying geowave artifacts..."
-mvn deploy --settings .utility/.maven.xml -DskipTests -Dspotbugs.skip -B -U -Prelease
+mvn install --settings .utility/.maven.xml -DskipTests -Dspotbugs.skip -B -U -Prelease
 
 # Get the version from the build.properties file
 filePath=deploy/target/classes/build.properties
@@ -31,7 +31,8 @@ if [[ ! "$GEOWAVE_VERSION" =~ "SNAPSHOT" ]] ; then
     pushd python/src/main/python
     python3 -m venv publish-venv
     source ./publish-venv/bin/activate
-  
+
+    pip install setuptools-rust
     pip install --upgrade pip wheel setuptools twine
     python3 setup.py bdist_wheel --python-tag=py3 sdist
     twine upload --skip-existing -u __token__ -p $PYPI_CREDENTIALS dist/*

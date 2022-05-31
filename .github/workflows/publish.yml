@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - pygw-fix
 env:
   DEV_RESOURCES_VERSION: 1.7
   MAVEN_OPTS: "-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2g -XX:MaxMetaspaceSize=512m"
