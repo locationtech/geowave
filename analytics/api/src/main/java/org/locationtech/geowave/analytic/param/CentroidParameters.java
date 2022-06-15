@@ -25,6 +25,7 @@ public class CentroidParameters {
         "A factory class that implements org.locationtech.geowave.analytics.tools.AnalyticItemWrapperFactory",
         true, true),
     ZOOM_LEVEL(Integer.class, "czl", "Zoom Level Number", true, true);
+
     private final ParameterHelper helper;
 
     private Centroid(

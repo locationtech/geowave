@@ -53,6 +53,7 @@ public @interface GeoWaveTestStore {
     REDIS(RedisStoreTestEnvironment.getInstance()),
     ROCKSDB(RocksDBStoreTestEnvironment.getInstance()),
     FILESYSTEM(FileSystemStoreTestEnvironment.getInstance());
+
     private final StoreTestEnvironment testEnvironment;
 
     private GeoWaveStoreType(final StoreTestEnvironment testEnvironment) {

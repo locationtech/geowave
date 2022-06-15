@@ -206,6 +206,7 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 
   public static enum Bias {
     TEMPORAL, BALANCED, SPATIAL;
+
     // converter that will be used later
     public static Bias fromString(final String code) {
 

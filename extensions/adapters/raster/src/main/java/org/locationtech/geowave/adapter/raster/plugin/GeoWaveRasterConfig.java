@@ -55,6 +55,7 @@ public class GeoWaveRasterConfig {
     EQUALIZE_HISTOGRAM("equalizeHistogramOverride"),
     AUTHORIZATION_PROVIDER("authorizationProvider"),
     AUTHORIZATION_URL("authorizationUrl");
+
     private String configName;
 
     private ConfigParameter(final String configName) {
