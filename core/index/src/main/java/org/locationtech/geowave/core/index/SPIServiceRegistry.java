@@ -117,19 +117,28 @@ public class SPIServiceRegistry extends ServiceRegistry {
     final Set<ClassLoader> loaders = new HashSet<>();
 
     try {
-      loaders.add(SPIServiceRegistry.class.getClassLoader());
+      final ClassLoader cl = SPIServiceRegistry.class.getClassLoader();
+      if (cl != null) {
+        loaders.add(cl);
+      }
     } catch (final SecurityException ex) {
       LOGGER.warn("Unable to get the class loader", ex);
       exceptions.add("SPIServiceRegistry's class loader : " + ex.getLocalizedMessage());
     }
     try {
-      loaders.add(ClassLoader.getSystemClassLoader());
+      final ClassLoader cl = ClassLoader.getSystemClassLoader();
+      if (cl != null) {
+        loaders.add(cl);
+      }
     } catch (final SecurityException ex) {
       LOGGER.warn("Unable to get the system class loader", ex);
       exceptions.add("System class loader : " + ex.getLocalizedMessage());
     }
     try {
-      loaders.add(Thread.currentThread().getContextClassLoader());
+      final ClassLoader cl = Thread.currentThread().getContextClassLoader();
+      if (cl != null) {
+        loaders.add(cl);
+      }
     } catch (final SecurityException ex) {
       LOGGER.warn("Unable to get the context class loader", ex);
       exceptions.add("Thread's class loader : " + ex.getLocalizedMessage());
