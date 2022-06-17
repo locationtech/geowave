@@ -82,7 +82,7 @@
 		<guice.version>3.0</guice.version>
 		<skipITs>true</skipITs>
 		<vfs2.version>2.3</vfs2.version>
-		<configuration2.version>2.3</configuration2.version>
+		<configuration2.version>2.7</configuration2.version>
 		<hbase.version>2.4.2</hbase.version>
 		<hadoop.version>3.1.2</hadoop.version>
 		<avro.version>1.7.6</avro.version>
