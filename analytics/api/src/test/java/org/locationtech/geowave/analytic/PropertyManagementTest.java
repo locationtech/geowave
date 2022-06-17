@@ -246,6 +246,7 @@ public class PropertyManagementTest {
   enum MyLocalBoolEnum implements ParameterEnum {
     BOOLEAN_ARG1(Boolean.class, "mi", "test id", false),
     BOOLEAN_ARG2(Boolean.class, "rd", "test id", false);
+
     private final ParameterHelper<Object> helper;
 
     MyLocalBoolEnum(

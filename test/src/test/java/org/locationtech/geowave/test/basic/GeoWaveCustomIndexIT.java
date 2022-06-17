@@ -71,6 +71,7 @@ public class GeoWaveCustomIndexIT {
 
   private static enum TestEnum {
     A(i -> (i % 2) == 0), B(i -> (i % 3) == 0), C(i -> (i % 5) == 0), NOT_A(i -> (i + 1) % 2 == 0);
+
     private final IntPredicate ingestLogic;
 
     private TestEnum(final IntPredicate ingestLogic) {

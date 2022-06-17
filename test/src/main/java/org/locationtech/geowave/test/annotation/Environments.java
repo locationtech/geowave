@@ -33,6 +33,7 @@ public @interface Environments {
     KAFKA(KafkaTestEnvironment.getInstance()),
     SERVICES(ServicesTestEnvironment.getInstance()),
     SPARK(SparkTestEnvironment.getInstance());
+
     private final TestEnvironment testEnvironment;
 
     private Environment(final TestEnvironment testEnvironment) {

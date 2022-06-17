@@ -53,8 +53,8 @@ public abstract class GeoServerCommand<T> extends ServiceEnabledCommand<T> {
         throw new ForbiddenException(errorMessage);
       case 404:
         throw new TargetNotFoundException(errorMessage);
-        // GeoServer responses for 500 codes are poorly formatted so
-        // don't return that response
+      // GeoServer responses for 500 codes are poorly formatted so
+      // don't return that response
       case 500:
         throw new Exception("Internal Server Error\n GeoServer Response Code = 500");
       default:

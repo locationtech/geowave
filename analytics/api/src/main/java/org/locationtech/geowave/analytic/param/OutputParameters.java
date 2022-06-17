@@ -21,6 +21,7 @@ public class OutputParameters {
     DATA_NAMESPACE_URI(String.class, "ons",
         "Output namespace for objects that will be written to GeoWave", false, true),
     HDFS_OUTPUT_PATH(Path.class, "oop", "Output HDFS File Path", false, true);
+
     private final ParameterHelper<Object> helper;
 
     private Output(
