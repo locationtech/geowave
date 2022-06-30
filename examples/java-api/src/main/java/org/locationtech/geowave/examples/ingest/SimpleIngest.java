@@ -40,7 +40,6 @@ public class SimpleIngest {
         DataStoreFactory.createDataStore(new MemoryRequiredOptions());
 
     si.writeExampleData(geowaveDataStore);
-    System.out.println("Finished ingesting data");
   }
 
   /** * Here we will change the ingest mechanism to use a producer/consumer pattern */
@@ -65,7 +64,7 @@ public class SimpleIngest {
     try (Writer<SimpleFeature> indexWriter =
         geowaveDataStore.createWriter(dataTypeAdapter.getTypeName())) {
       // build a grid of points across the globe at each whole
-      // lattitude/longitude intersection
+      // latitude/longitude intersection
 
       for (final SimpleFeature sft : getGriddedFeatures(pointBuilder, 1000)) {
         indexWriter.write(sft);
@@ -203,6 +202,9 @@ public class SimpleIngest {
     builder.add(ab.binding(Double.class).nillable(false).buildDescriptor("Longitude"));
     builder.add(ab.binding(String.class).nillable(true).buildDescriptor("TrajectoryID"));
     builder.add(ab.binding(String.class).nillable(true).buildDescriptor("Comment"));
+
+    // Create a SIZE field for sum aggregation and statistics tests
+    builder.add(ab.binding(Double.class).nillable(true).buildDescriptor("SIZE"));
 
     return builder.buildFeatureType();
   }

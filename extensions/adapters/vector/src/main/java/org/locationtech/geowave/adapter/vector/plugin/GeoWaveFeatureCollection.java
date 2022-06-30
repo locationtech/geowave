@@ -36,15 +36,22 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 import org.opengis.geometry.BoundingBox;
 import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+// import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.locationtech.geowave.adapter.vector.plugin.heatmap.HeatMapUtils;
 
 /**
  * This class is a helper for the GeoWave GeoTools data store. It represents a collection of feature
  * data by encapsulating a GeoWave reader and a query object in order to open the appropriate cursor
  * to iterate over data. It uses Keys within the Query hints to determine whether to perform special
- * purpose queries such as decimation or distributed rendering.
+ * purpose queries such as decimation, distributed rendering, subsampling, and heatmap processes.
+ * 
+ * @apiNote Changelog: <br> 3-25-2022 M. Zagorski: Added code for custom HeatMapProcess using
+ *          spatial binning. <br>
+ * 
  */
 public class GeoWaveFeatureCollection extends DataFeatureCollection {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveFeatureCollection.class);
@@ -52,6 +59,7 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
   private CloseableIterator<SimpleFeature> featureCursor;
   private final Query query;
   private static SimpleFeatureType distributedRenderFeatureType;
+  private static SimpleFeatureType heatmapFeatureType;
 
   public GeoWaveFeatureCollection(final GeoWaveFeatureReader reader, final Query query) {
     this.reader = reader;
@@ -61,6 +69,7 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
 
   @Override
   public int getCount() {
+
     if (query.getFilter().equals(Filter.INCLUDE)) {
       // GEOWAVE-60 optimization
       final CountValue count =
@@ -94,6 +103,7 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
 
     double minx = Double.MAX_VALUE, maxx = -Double.MAX_VALUE, miny = Double.MAX_VALUE,
         maxy = -Double.MAX_VALUE;
+
     try {
       // GEOWAVE-60 optimization
       final BoundingBoxValue boundingBox =
@@ -121,6 +131,7 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
         maxy = Math.max(bbox.getMaxY(), maxy);
       }
       close(iterator);
+
     } catch (final Exception e) {
       LOGGER.warn("Error calculating bounds", e);
       return new ReferencedEnvelope(-180, 180, -90, 90, GeometryUtils.getDefaultCRS());
@@ -132,8 +143,21 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
   public SimpleFeatureType getSchema() {
     if (isDistributedRenderQuery()) {
       return getDistributedRenderFeatureType();
+    } else if (isHeatmapQuery()) {
+      return getHeatmapFeatureType();
     }
     return reader.getFeatureType();
+  }
+
+  public static SimpleFeatureType getSchema(
+      final Query query,
+      final SimpleFeatureType defaultType) {
+    if (isDistributedRenderQuery(query)) {
+      return getDistributedRenderFeatureType();
+    } else if (isHeatmapQuery(query)) {
+      return getHeatmapFeatureType();
+    }
+    return defaultType;
   }
 
   public static synchronized SimpleFeatureType getDistributedRenderFeatureType() {
@@ -143,12 +167,36 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
     return distributedRenderFeatureType;
   }
 
+  public static synchronized SimpleFeatureType getHeatmapFeatureType() {
+    if (heatmapFeatureType == null) {
+      heatmapFeatureType = HeatMapUtils.createHeatmapFeatureType();
+    }
+    return heatmapFeatureType;
+  }
+
   private static SimpleFeatureType createDistributedRenderFeatureType() {
     final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
     typeBuilder.setName("distributed_render");
     typeBuilder.add("result", DistributedRenderResult.class);
     typeBuilder.add("options", DistributedRenderOptions.class);
     return typeBuilder.buildFeatureType();
+  }
+
+  protected boolean isHeatmapQuery() {
+    return GeoWaveFeatureCollection.isHeatmapQuery(query);
+  }
+
+  protected static final boolean isHeatmapQuery(final Query query) {
+
+    final Object heatmapEnabled = query.getHints().get(GeoWaveHeatMapProcess.HEATMAP_ENABLED);
+    final Object useBinning = query.getHints().get(GeoWaveHeatMapProcess.USE_BINNING);
+    if ((heatmapEnabled instanceof Boolean)
+        && (Boolean) heatmapEnabled
+        && (useBinning instanceof Boolean)
+        && (Boolean) useBinning) {
+      return true;
+    }
+    return false;
   }
 
   protected boolean isDistributedRenderQuery() {
@@ -160,18 +208,24 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
   }
 
   private static SimpleFeatureType getSchema(final GeoWaveFeatureReader reader, final Query query) {
+
     if (GeoWaveFeatureCollection.isDistributedRenderQuery(query)) {
       return getDistributedRenderFeatureType();
+    }
+    if (GeoWaveFeatureCollection.isHeatmapQuery(query)) {
+      return getHeatmapFeatureType();
     }
     return reader.getComponents().getFeatureType();
   }
 
   protected QueryConstraints getQueryConstraints() throws TransformException, FactoryException {
+
     final ReferencedEnvelope referencedEnvelope = getEnvelope(query);
     final Geometry jtsBounds;
     final TemporalConstraintsSet timeBounds;
-    if (reader.getGeoWaveFilter() == null
-        || query.getHints().containsKey(SubsampleProcess.SUBSAMPLE_ENABLED)) {
+    if ((reader.getGeoWaveFilter() == null)
+        || query.getHints().containsKey(SubsampleProcess.SUBSAMPLE_ENABLED)
+        || query.getHints().containsKey(GeoWaveHeatMapProcess.HEATMAP_ENABLED)) {
       jtsBounds = getBBox(query, referencedEnvelope);
       timeBounds = getBoundedTime(query);
     } else {
@@ -182,13 +236,14 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
     Integer limit = getLimit(query);
     final Integer startIndex = getStartIndex(query);
 
-    // limit becomes a 'soft' constraint since GeoServer will inforce
+    // limit becomes a 'soft' constraint since GeoServer will enforce
     // the limit
     final Long max =
         (limit != null) ? limit.longValue() + (startIndex == null ? 0 : startIndex.longValue())
             : null;
     // limit only used if less than an integer max value.
     limit = ((max != null) && (max.longValue() < Integer.MAX_VALUE)) ? max.intValue() : null;
+
     return new QueryConstraints(jtsBounds, timeBounds, referencedEnvelope, limit);
   }
 
@@ -205,7 +260,7 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
 
   private Iterator<SimpleFeature> openIterator(final QueryConstraints constraints) {
 
-    if (reader.getGeoWaveFilter() == null
+    if ((reader.getGeoWaveFilter() == null)
         && (((constraints.jtsBounds != null) && constraints.jtsBounds.isEmpty())
             || ((constraints.timeBounds != null) && constraints.timeBounds.isEmpty()))) {
       // return nothing if either constraint is empty
@@ -236,6 +291,24 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
               constraints.referencedEnvelope,
               constraints.limit);
 
+    } else if (query.getHints().containsKey(GeoWaveHeatMapProcess.OUTPUT_WIDTH)
+        && query.getHints().containsKey(GeoWaveHeatMapProcess.OUTPUT_HEIGHT)
+        && query.getHints().containsKey(GeoWaveHeatMapProcess.OUTPUT_BBOX)
+        && query.getHints().containsKey(GeoWaveHeatMapProcess.USE_BINNING)
+        && ((Boolean) query.getHints().get(GeoWaveHeatMapProcess.USE_BINNING) == true)) {
+
+      // GeoWave Heatmap Process
+      featureCursor =
+          new CloseableIterator.Wrapper<>(
+              DataUtilities.iterator(
+                  reader.getDataHeatMap(
+                      constraints.jtsBounds,
+                      constraints.timeBounds,
+                      (ReferencedEnvelope) query.getHints().get(GeoWaveHeatMapProcess.OUTPUT_BBOX),
+                      (Integer) query.getHints().get(GeoWaveHeatMapProcess.OUTPUT_WIDTH),
+                      (Integer) query.getHints().get(GeoWaveHeatMapProcess.OUTPUT_HEIGHT),
+                      constraints.limit))); // TODO: is limit needed?
+
     } else {
       featureCursor =
           reader.getData(constraints.jtsBounds, constraints.timeBounds, constraints.limit);
@@ -245,15 +318,46 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
 
   private ReferencedEnvelope getEnvelope(final Query query)
       throws TransformException, FactoryException {
+
     if (query.getHints().containsKey(SubsampleProcess.OUTPUT_BBOX)) {
       return ((ReferencedEnvelope) query.getHints().get(SubsampleProcess.OUTPUT_BBOX)).transform(
           reader.getFeatureType().getCoordinateReferenceSystem(),
           true);
     }
+
+    // Return the heatmap referenced envelope
+    if (query.getHints().containsKey(GeoWaveHeatMapProcess.OUTPUT_BBOX)) {
+
+      final ReferencedEnvelope bbox =
+          (ReferencedEnvelope) query.getHints().get(GeoWaveHeatMapProcess.OUTPUT_BBOX);
+      final CoordinateReferenceSystem bboxCRS = bbox.getCoordinateReferenceSystem();
+      System.out.println("COLLECTION - BBOX CRS: " + bboxCRS.getName());
+
+      final CoordinateReferenceSystem featureCRS =
+          reader.getFeatureType().getCoordinateReferenceSystem();
+      System.out.println("COLLECTION - FEATURE CRS: " + featureCRS.getName());
+
+      // Find out if the CRS is WGS84
+      final Boolean isWGS84 = featureCRS.getName().getCode().equals("WGS 84");
+      System.out.println("COLLECTION - isWGS84? " + isWGS84);
+
+      return ((ReferencedEnvelope) query.getHints().get(
+          GeoWaveHeatMapProcess.OUTPUT_BBOX)).transform(
+              reader.getFeatureType().getCoordinateReferenceSystem(),
+              true);
+
+      // TODO: Does jtsBounds need to have the same CRS as the output bbox?
+      // return ((ReferencedEnvelope) query.getHints().get(
+      // GeoWaveHeatMapProcess.OUTPUT_BBOX)).transform(
+      // bbox.getCoordinateReferenceSystem(),
+      // true);
+    }
+
     return null;
   }
 
   private Geometry getBBox(final Query query, final ReferencedEnvelope envelope) {
+
     if (envelope != null) {
       return new GeometryFactory().toGeometry(envelope);
     }
@@ -272,14 +376,17 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
   }
 
   private Query validateQuery(final String typeName, final Query query) {
+
     return query == null ? new Query(typeName, Filter.EXCLUDE) : query;
   }
 
   private Integer getStartIndex(final Query query) {
+
     return query.getStartIndex();
   }
 
   private Integer getLimit(final Query query) {
+
     if (!query.isMaxFeaturesUnlimited() && (query.getMaxFeatures() >= 0)) {
       return query.getMaxFeatures();
     }
@@ -290,6 +397,7 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
   public void accepts(
       final org.opengis.feature.FeatureVisitor visitor,
       final org.opengis.util.ProgressListener progress) throws IOException {
+
     if (!GeoWaveGTPluginUtils.accepts(
         reader.getComponents().getStatsStore(),
         reader.getComponents().getAdapter(),
@@ -305,6 +413,7 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
    * @return the temporal constraints of the query
    */
   protected TemporalConstraintsSet getBoundedTime(final Query query) {
+
     if (query == null) {
       return null;
     }
@@ -316,26 +425,31 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
 
   @Override
   public FeatureReader<SimpleFeatureType, SimpleFeature> reader() {
+
     return reader;
   }
 
   @Override
   protected void closeIterator(final Iterator<SimpleFeature> close) {
+
     featureCursor.close();
   }
 
   public Iterator<SimpleFeature> getOpenIterator() {
+
     return featureCursor;
   }
 
   @Override
   public void close(final FeatureIterator<SimpleFeature> iterator) {
+
     featureCursor = null;
     super.close(iterator);
   }
 
   @Override
   public boolean isEmpty() {
+
     try {
       return !reader.hasNext();
     } catch (final IOException e) {
@@ -362,4 +476,5 @@ public class GeoWaveFeatureCollection extends DataFeatureCollection {
       this.limit = limit;
     }
   }
+
 }
