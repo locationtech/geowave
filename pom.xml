@@ -77,7 +77,7 @@
 		<kuduclient.version>1.14.0</kuduclient.version>
 		<grpc.version>1.38.0</grpc.version>
 		<netty.version>4.1.65.Final</netty.version>
-		<protobuf.version>3.17.1</protobuf.version>
+		<protobuf.version>3.19.6</protobuf.version>
 		<mavenprotoc.version>3.11.4</mavenprotoc.version>
 		<guice.version>3.0</guice.version>
 		<skipITs>true</skipITs>
