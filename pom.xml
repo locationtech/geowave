@@ -93,7 +93,7 @@
 		<accumulo.scope>compile</accumulo.scope>
 		<hbase.scope>compile</hbase.scope>
 		<hadoop.scope>compile</hadoop.scope>
-		<jetty.version>9.4.43.v20210629</jetty.version>
+		<jetty.version>9.4.51.v20230217</jetty.version>
 		<bouncycastle.version>1.69</bouncycastle.version>
 		<lz4.version>1.7.1</lz4.version>
 		<zookeeper.version>3.5.7</zookeeper.version>
