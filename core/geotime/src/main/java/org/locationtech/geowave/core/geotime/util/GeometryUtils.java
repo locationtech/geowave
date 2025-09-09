@@ -109,7 +109,8 @@ public class GeometryUtils {
   private static final Object MUTEX_DEFAULT_CRS = new Object();
   public static final String DEFAULT_CRS_STR = "EPSG:4326";
   private static CoordinateReferenceSystem defaultCrsSingleton;
-  private static boolean classLoaderInitialized = false;
+  // TODO this is a hack for now
+  private static boolean classLoaderInitialized = true;
 
   // Make sure GeoTools is properly initialized before we do anything
   static {

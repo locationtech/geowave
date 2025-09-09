@@ -22,11 +22,11 @@ This guide assumes the following:
 GeoWave development requires the following components:
 
 [options="compact"]
-* link:http://www.oracle.com/technetwork/java/javase/downloads/index.html[Java Development Kit (JDK), window="_blank"] (>= 1.8)
+* link:https://adoptium.net/[Java Development Kit (JDK), window="_blank"] (>= 17)
 +
-Requires JDK v1.8 or greater
+Requires JDK v17 or greater
 +
-Download from the link:http://www.oracle.com/technetwork/java/javase/downloads/index.html[Java downloads site, window="_blank"]. The OracleJDK is the most thoroughly tested but there are no known issues with OpenJDK.
+Download from the link:https://adoptium.net/[Eclipse Temurin downloads site, window="_blank"]. OpenJDK distributions like Eclipse Temurin are recommended.
 
 * link:http://git-scm.com/[Git, window="_blank"]
 +

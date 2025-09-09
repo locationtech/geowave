@@ -8,8 +8,8 @@
  */
 package org.locationtech.geowave.service.client;
 
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.locationtech.geowave.service.GeoServerService;

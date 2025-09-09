@@ -35,7 +35,6 @@
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-analytic-mapreduce</artifactId>
 			<version>${project.version}</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
@@ -44,7 +43,7 @@
 		<dependency>
 			<groupId>org.scalatest</groupId>
 			<artifactId>scalatest_2.12</artifactId>
-			<version>${spark.version}</version>
+			<version>3.2.15</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

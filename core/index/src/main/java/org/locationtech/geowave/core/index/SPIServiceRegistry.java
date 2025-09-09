@@ -8,14 +8,13 @@
  */
 package org.locationtech.geowave.core.index;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ServiceLoader;
 import java.util.Set;
-import javax.imageio.spi.ServiceRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,20 +29,22 @@ import org.slf4j.LoggerFactory;
  * <p> (2) Look up SPI providers:
  *
  * <p> final Iterator<FieldSerializationProviderSpi> serializationProviders = new
- * SPIServiceRegistry(FieldSerializationProviderSpi.class).load(
- * FieldSerializationProviderSpi.class);
+ * SPIServiceRegistry().load(FieldSerializationProviderSpi.class);
  */
-public class SPIServiceRegistry extends ServiceRegistry {
+public class SPIServiceRegistry {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SPIServiceRegistry.class);
 
-  @SuppressWarnings("unchecked")
+  public SPIServiceRegistry() {
+    // Default constructor
+  }
+
   public SPIServiceRegistry(final Class<?> category) {
-    super((Iterator) Arrays.asList(category).iterator());
+    // Constructor for compatibility - no longer extends ServiceRegistry
   }
 
   public SPIServiceRegistry(final Iterator<Class<?>> categories) {
-    super(categories);
+    // Constructor for compatibility - no longer extends ServiceRegistry
   }
 
   private static final Set<ClassLoader> ClassLoaders =
@@ -78,7 +79,7 @@ public class SPIServiceRegistry extends ServiceRegistry {
             continue;
           }
           checkset.add(l);
-          spiIT = ServiceRegistry.lookupProviders(service, l);
+          spiIT = ServiceLoader.load(service, l).iterator();
         }
         return (spiIT != null) && spiIT.hasNext();
       }

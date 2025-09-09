@@ -36,8 +36,7 @@ public class IndexFieldMapperRegistry {
 
   private IndexFieldMapperRegistry() {
     final Iterator<IndexFieldMapperRegistrySPI> spiIter =
-        new SPIServiceRegistry(IndexFieldMapperRegistry.class).load(
-            IndexFieldMapperRegistrySPI.class);
+        new SPIServiceRegistry().load(IndexFieldMapperRegistrySPI.class);
     int mappingCount = 0;
     while (spiIter.hasNext()) {
       final IndexFieldMapperRegistrySPI providedFieldMappers = spiIter.next();

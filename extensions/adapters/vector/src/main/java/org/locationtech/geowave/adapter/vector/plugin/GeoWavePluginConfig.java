@@ -394,7 +394,7 @@ public class GeoWavePluginConfig {
   }
 
   private static Iterator<IndexQueryStrategySPI> getInxexQueryStrategyList() {
-    return new SPIServiceRegistry(GeoWavePluginConfig.class).load(IndexQueryStrategySPI.class);
+    return new SPIServiceRegistry().load(IndexQueryStrategySPI.class);
   }
 
   private static class GeoWaveConfigOptionToGeoToolsConfigOption implements

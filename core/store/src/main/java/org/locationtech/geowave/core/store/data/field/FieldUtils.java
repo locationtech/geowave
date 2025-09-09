@@ -45,8 +45,7 @@ public class FieldUtils {
     fieldReaderRegistry = new HashMap<>();
     fieldWriterRegistry = new HashMap<>();
     final Iterator<FieldSerializationProviderSpi> serializationProviders =
-        new SPIServiceRegistry(FieldSerializationProviderSpi.class).load(
-            FieldSerializationProviderSpi.class);
+        new SPIServiceRegistry().load(FieldSerializationProviderSpi.class);
     while (serializationProviders.hasNext()) {
       final FieldSerializationProviderSpi<?> serializationProvider = serializationProviders.next();
       if (serializationProvider != null) {

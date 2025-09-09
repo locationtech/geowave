@@ -99,8 +99,7 @@ public class IngestUtils {
   public static synchronized Map<String, LocalFileIngestPlugin<?>> getDefaultLocalIngestPlugins() {
     if (localIngestPlugins == null) {
       final Iterator<LocalFileIngestPluginRegistrySpi> registries =
-          new SPIServiceRegistry(LocalFileIngestPluginRegistrySpi.class).load(
-              LocalFileIngestPluginRegistrySpi.class);
+          new SPIServiceRegistry().load(LocalFileIngestPluginRegistrySpi.class);
       localIngestPlugins = new HashMap<>();
       while (registries.hasNext()) {
         localIngestPlugins.putAll(registries.next().getDefaultLocalIngestPlugins());

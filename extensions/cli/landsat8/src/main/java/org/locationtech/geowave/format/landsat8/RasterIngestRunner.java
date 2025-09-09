@@ -456,7 +456,7 @@ public class RasterIngestRunner extends DownloadRunner {
     if (registeredBandConverters == null) {
       registeredBandConverters = new HashMap<>();
       final Iterator<Landsat8BandConverterSpi> spiIter =
-          new SPIServiceRegistry(RasterIngestRunner.class).load(Landsat8BandConverterSpi.class);
+          new SPIServiceRegistry().load(Landsat8BandConverterSpi.class);
       while (spiIter.hasNext()) {
         final Landsat8BandConverterSpi converter = spiIter.next();
         registeredBandConverters.put(converter.getName(), converter);

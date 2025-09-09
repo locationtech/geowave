@@ -40,8 +40,8 @@ import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.opengis.coverage.grid.GridCoverage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import jersey.repackaged.com.google.common.collect.Iterables;
-import jersey.repackaged.com.google.common.collect.Iterators;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Iterators;
 import scala.Tuple2;
 
 public class RasterTileResizeSparkRunner {

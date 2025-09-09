@@ -58,33 +58,33 @@
 	</developers>
 	<properties>
 		<geowave-dev-resources.version>1.7</geowave-dev-resources.version>
-		<spark.version>3.1.1</spark.version>
+		<spark.version>3.4.2</spark.version>
 		<uzaygezen.version>0.2</uzaygezen.version>
 		<jsonlib.version>2.4</jsonlib.version>
-		<geotools.version>25.0</geotools.version>
-		<jts.version>1.18.1</jts.version>
-		<imageio.ext.version>1.3.5</imageio.ext.version>
-		<guava.version>30.1-jre</guava.version>
-		<geoserver.version>2.19.0</geoserver.version>
+		<geotools.version>28.5</geotools.version>
+		<jts.version>1.19.0</jts.version>
+		<imageio.ext.version>1.4.13</imageio.ext.version>
+		<guava.version>32.1.3-jre</guava.version>
+		<geoserver.version>2.23.2</geoserver.version>
 		<accumulo.version>2.0.1</accumulo.version>
-		<thrift.version>0.12.0</thrift.version>
-		<bigtable.version>1.20.0</bigtable.version>
-		<cassandra.version>4.0.1</cassandra.version>
-		<redisson.version>3.15.5</redisson.version>
-		<rocksdb.version>6.19.3</rocksdb.version>
-		<cassandraclient.version>4.11.1</cassandraclient.version>
+		<thrift.version>0.18.1</thrift.version>
+		<bigtable.version>2.21.0</bigtable.version>
+		<cassandra.version>4.1.3</cassandra.version>
+		<redisson.version>3.23.4</redisson.version>
+		<rocksdb.version>8.5.3</rocksdb.version>
+		<cassandraclient.version>4.17.0</cassandraclient.version>
 		<cassandraunit.version>4.3.1.0</cassandraunit.version>
-		<kuduclient.version>1.14.0</kuduclient.version>
-		<grpc.version>1.38.0</grpc.version>
-		<netty.version>4.1.65.Final</netty.version>
-		<protobuf.version>3.17.1</protobuf.version>
+		<kuduclient.version>1.17.0</kuduclient.version>
+		<grpc.version>1.58.0</grpc.version>
+		<netty.version>4.1.100.Final</netty.version>
+		<protobuf.version>3.24.4</protobuf.version>
 		<mavenprotoc.version>3.11.4</mavenprotoc.version>
-		<guice.version>3.0</guice.version>
+		<guice.version>5.1.0</guice.version>
 		<skipITs>true</skipITs>
-		<vfs2.version>2.3</vfs2.version>
-		<configuration2.version>2.3</configuration2.version>
-		<hbase.version>2.4.2</hbase.version>
-		<hadoop.version>3.1.2</hadoop.version>
+		<vfs2.version>2.9.0</vfs2.version>
+		<configuration2.version>2.9.0</configuration2.version>
+		<hbase.version>2.5.5</hbase.version>
+		<hadoop.version>3.3.6</hadoop.version>
 		<avro.version>1.7.6</avro.version>
 		<awssdk.version>1.11.1015</awssdk.version>
 		<httpclient.version>4.5.13</httpclient.version>
@@ -93,30 +93,30 @@
 		<accumulo.scope>compile</accumulo.scope>
 		<hbase.scope>compile</hbase.scope>
 		<hadoop.scope>compile</hadoop.scope>
-		<jetty.version>9.4.43.v20210629</jetty.version>
-		<bouncycastle.version>1.69</bouncycastle.version>
-		<lz4.version>1.7.1</lz4.version>
-		<zookeeper.version>3.5.7</zookeeper.version>
-		<jersey.version>2.23.1</jersey.version>
-		<scala.version>2.12.13</scala.version>
+		<jetty.version>11.0.17</jetty.version>
+		<bouncycastle.version>1.70</bouncycastle.version>
+		<lz4.version>1.8.0</lz4.version>
+		<zookeeper.version>3.8.2</zookeeper.version>
+		<jersey.version>3.1.3</jersey.version>
+		<scala.version>2.12.18</scala.version>
 		<kafka.artifact>kafka_2.12</kafka.artifact>
-		<kafka.version>2.8.0</kafka.version>
-		<snappy.version>1.1.8.2</snappy.version>
+		<kafka.version>3.5.1</kafka.version>
+		<snappy.version>1.1.10.4</snappy.version>
 		<collections4.version>4.4</collections4.version>
-		<io.version>2.8.0</io.version>
-		<text.version>1.6</text.version>
-		<lang3.version>3.8.1</lang3.version>
-		<jcommander.version>1.81</jcommander.version>
-		<hbaseprotobuf.version>3.5.1</hbaseprotobuf.version>
+		<io.version>2.13.0</io.version>
+		<text.version>1.10.0</text.version>
+		<lang3.version>3.13.0</lang3.version>
+		<jcommander.version>1.82</jcommander.version>
+		<hbaseprotobuf.version>3.17.1</hbaseprotobuf.version>
 		<hbaseprotoc.version>2.5.0</hbaseprotoc.version>
-		<hbaseguava.version>12.0.1</hbaseguava.version>
+		<hbaseguava.version>32.1.3-jre</hbaseguava.version>
 		<jackson.version>1.9.13</jackson.version>
 		<beanutils.version>1.9.4</beanutils.version>
-		<fasterxml.jackson.version>2.10.5</fasterxml.jackson.version>
-		<fasterxml.jackson.databind.version>2.10.5.1</fasterxml.jackson.databind.version>
-		<spring-security.version>5.1.13.RELEASE</spring-security.version>
-		<slf4j.version>1.7.30</slf4j.version>
-		<log4j.version>2.17.1</log4j.version>
+		<fasterxml.jackson.version>2.15.2</fasterxml.jackson.version>
+		<fasterxml.jackson.databind.version>2.15.2</fasterxml.jackson.databind.version>
+		<spring-security.version>6.1.4</spring-security.version>
+		<slf4j.version>2.0.9</slf4j.version>
+		<log4j.version>2.20.0</log4j.version>
 		<jna.version>5.7.0</jna.version>
 		<math.version>2.2</math.version>
 		<math3.version>3.6.1</math3.version>
@@ -142,7 +142,7 @@
 		<sonar.jacoco.itReportPath>${jacoco.it.reportPath}</sonar.jacoco.itReportPath>
 		<surefire.report.path>${basedir}/target/surefire-reports</surefire.report.path>
 		<sonar.junit.reportsPath>${surefire.report.path}</sonar.junit.reportsPath>
-		<jacoco.version>0.7.4.201502262128</jacoco.version>
+		<jacoco.version>0.8.8</jacoco.version>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<test.args>-XX:CompressedClassSpaceSize=512m -XX:+UseSerialGC -Xms1g
@@ -192,11 +192,6 @@
 			<dependency>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-http</artifactId>
-				<version>${jetty.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-util</artifactId>
 				<version>${jetty.version}</version>
 			</dependency>
 			<dependency>
@@ -1401,10 +1396,11 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
+				<version>3.11.0</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>17</source>
+					<target>17</target>
+					<release>17</release>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -1415,7 +1411,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.13</version>
+				<version>3.1.2</version>
 				<configuration>
 					<argLine>${test.args} ${jacoco.surefire.argline}</argLine>
 					<excludes>
@@ -1434,10 +1430,13 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
+				<version>3.5.0</version>
 				<configuration>
 					<notimestamp>true</notimestamp>
-					<additionalparam>${javadoc.opts}</additionalparam>
+					<additionalJOptions>
+						<additionalJOption>${javadoc.opts}</additionalJOption>
+					</additionalJOptions>
+					<source>17</source>
 				</configuration>
 				<executions>
 					<execution>
@@ -1703,9 +1702,9 @@
 			</properties>
 		</profile>
 		<profile>
-			<id>doclint-java8-disable</id>
+			<id>doclint-java17-disable</id>
 			<activation>
-				<jdk>[1.8,)</jdk>
+				<jdk>[17,)</jdk>
 			</activation>
 			<properties>
 				<javadoc.opts>-Xdoclint:none</javadoc.opts>

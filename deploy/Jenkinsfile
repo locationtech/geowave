@@ -29,7 +29,7 @@ node ('master') {
     }
 
   // Setting java home for the withMaven block
-  jdk = tool name: 'JDK18'
+  jdk = tool name: 'JDK17'
   env.JAVA_HOME = "${jdk}"
 
   // The following grabs the EC2 role from the instance for things like S3 Access
@@ -57,7 +57,7 @@ node ('master') {
   // Mark the create docker image 'stage'
   stage('Create Docker Image'){
     // Build the docker container
-    sh 'docker build -t locationtech/geowave-centos7-java8-build -f deploy/packaging/docker/geowave-centos7-java8-build.dockerfile deploy/packaging/docker'
+    sh 'docker build -t locationtech/geowave-centos7-java17-build -f deploy/packaging/docker/geowave-centos7-java17-build.dockerfile deploy/packaging/docker'
     sh 'docker build -t locationtech/geowave-centos7-rpm-build -f deploy/packaging/docker/geowave-centos7-rpm-build.dockerfile deploy/packaging/docker'
     sh "docker build -t locationtech/geowave-centos7-publish -f deploy/packaging/docker/geowave-centos7-publish.dockerfile --build-arg third_party_deps_path=${ params.third_party_deps_path } deploy/packaging/docker"
   }

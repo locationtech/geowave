@@ -30,7 +30,7 @@ public class PersistableFactory {
     if (singletonInstance == null) {
       final PersistableFactory internalFactory = new PersistableFactory();
       final Iterator<PersistableRegistrySpi> persistableRegistries =
-          new SPIServiceRegistry(PersistableFactory.class).load(PersistableRegistrySpi.class);
+          new SPIServiceRegistry().load(PersistableRegistrySpi.class);
       while (persistableRegistries.hasNext()) {
         final PersistableRegistrySpi persistableRegistry = persistableRegistries.next();
         if (persistableRegistry != null) {

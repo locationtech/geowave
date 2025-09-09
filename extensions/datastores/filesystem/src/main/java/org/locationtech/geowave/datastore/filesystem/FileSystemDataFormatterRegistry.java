@@ -24,8 +24,7 @@ public class FileSystemDataFormatterRegistry {
   private static void initDataFormatterRegistry() {
     dataFormatterRegistry = new HashMap<>();
     final Iterator<FileSystemDataFormatterSpi> pluginProviders =
-        new SPIServiceRegistry(FileSystemDataFormatterRegistry.class).load(
-            FileSystemDataFormatterSpi.class);
+        new SPIServiceRegistry().load(FileSystemDataFormatterSpi.class);
     while (pluginProviders.hasNext()) {
       final FileSystemDataFormatterSpi pluginProvider = pluginProviders.next();
       dataFormatterRegistry.put(

@@ -39,7 +39,7 @@ public class GWQLExtensionRegistry {
 
   private GWQLExtensionRegistry() {
     final Iterator<GWQLExtensionRegistrySpi> spiIter =
-        new SPIServiceRegistry(GWQLExtensionRegistry.class).load(GWQLExtensionRegistrySpi.class);
+        new SPIServiceRegistry().load(GWQLExtensionRegistrySpi.class);
     while (spiIter.hasNext()) {
       final GWQLExtensionRegistrySpi functionSet = spiIter.next();
       final AggregationFunction<?>[] aggregations = functionSet.getAggregationFunctions();

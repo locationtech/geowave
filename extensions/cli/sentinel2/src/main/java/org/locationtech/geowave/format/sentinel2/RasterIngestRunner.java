@@ -481,7 +481,7 @@ public class RasterIngestRunner extends DownloadRunner {
     if (registeredBandConverters == null) {
       registeredBandConverters = new HashMap<>();
       final Iterator<Sentinel2BandConverterSpi> spiIter =
-          new SPIServiceRegistry(RasterIngestRunner.class).load(Sentinel2BandConverterSpi.class);
+          new SPIServiceRegistry().load(Sentinel2BandConverterSpi.class);
       while (spiIter.hasNext()) {
         final Sentinel2BandConverterSpi converter = spiIter.next();
         registeredBandConverters.put(converter.getName(), converter);
