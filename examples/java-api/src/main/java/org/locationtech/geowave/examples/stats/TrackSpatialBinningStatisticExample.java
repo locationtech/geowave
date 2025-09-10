@@ -19,6 +19,7 @@ import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.binning.ComplexGeometryBinningOption;
 import org.locationtech.geowave.core.geotime.binning.SpatialBinningType;
 import org.locationtech.geowave.core.geotime.index.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.index.SpatialOptions;
@@ -138,6 +139,10 @@ public class TrackSpatialBinningStatisticExample {
         new SpatialFieldValueBinningStrategy(featureType.getGeometryDescriptor().getLocalName());
     spatialBinning.setType(SpatialBinningType.S2);
     spatialBinning.setPrecision(18); // ~10 meter resolution
+    // Use weighted binning: scale contributions based on geometry overlap percentage
+    // This prevents double-counting when tracks intersect multiple spatial bins
+    spatialBinning.setComplexGeometry(
+        ComplexGeometryBinningOption.USE_FULL_GEOMETRY_SCALE_BY_OVERLAP);
 
     // Track count statistic
     final CountStatistic trackCount = new CountStatistic(featureType.getTypeName());
@@ -173,12 +178,12 @@ public class TrackSpatialBinningStatisticExample {
     // Sum statistics for acceleration and speed
     final NumericStatsStatistic accelerationSum =
         new NumericStatsStatistic(featureType.getTypeName(), "acceleration");
-    accelerationSum.setTag("Acceleration-Sum");
+    accelerationSum.setTag("Acceleration-Stats");
     accelerationSum.setBinningStrategy(spatialBinning);
 
     final NumericStatsStatistic speedSum =
         new NumericStatsStatistic(featureType.getTypeName(), "speed");
-    speedSum.setTag("Speed-Sum");
+    speedSum.setTag("Speed-Stats");
     speedSum.setBinningStrategy(spatialBinning);
 
 
@@ -347,8 +352,8 @@ public class TrackSpatialBinningStatisticExample {
 
     for (int i = 0; i < points.length; i++) {
       double[] point = points[i];
-      double lat = point[0];
-      double lon = point[1];
+      double lon = point[0];
+      double lat = point[1];
       double speed = point[2];
       double acceleration = point[3];
       double heading = point[4];
@@ -427,7 +432,9 @@ public class TrackSpatialBinningStatisticExample {
 
     System.out.println("***** Track Spatial Binning Statistics *****");
     System.out.println("Using S2 Level 18 (~10 meter resolution) spatial binning");
-    System.out.println("Each track contributes one statistic value per spatial bin it intersects");
+    System.out.println(
+        "Using weighted binning: track contributions are scaled by geometry overlap percentage");
+    System.out.println("This prevents double-counting when tracks intersect multiple spatial bins");
 
     System.out.println("\n** Track Count by Spatial Bin **");
     try (CloseableIterator<Pair<ByteArray, Long>> it =
@@ -550,7 +557,6 @@ public class TrackSpatialBinningStatisticExample {
 
     // Demonstrate querying within specific bounding boxes
     System.out.println("\n***** Bounding Box Queries *****");
-
     // Query 1: Dense urban area where multiple tracks overlap
     final Envelope urbanArea = new Envelope(-77.040, -77.030, 38.885, 38.905);
     System.out.println(String.format("\n** Urban Area Query: %s **", urbanArea));
@@ -570,9 +576,6 @@ public class TrackSpatialBinningStatisticExample {
     final Long whiteHouseTracks =
         dataStore.getStatisticValue(trackCount, BinConstraints.ofObject(whiteHouseArea));
     System.out.println(String.format("Track count near White House: %d", whiteHouseTracks));
-
-    System.out.println("\nNote: Spatially binned statistics automatically aggregate results");
-    System.out.println("from all spatial bins that intersect with the specified bounding box.");
   }
 
   /**
