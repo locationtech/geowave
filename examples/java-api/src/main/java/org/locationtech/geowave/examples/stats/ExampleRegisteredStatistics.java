@@ -23,15 +23,38 @@ public class ExampleRegisteredStatistics implements StatisticsRegistrySPI {
 
   @Override
   public RegisteredStatistic[] getRegisteredStatistics() {
-    // Register the example word count statistic with some persistable IDs that aren't being used by
-    // GeoWave.
+    // Register the example statistics with some persistable IDs that aren't being used by GeoWave.
     return new RegisteredStatistic[] {
         new RegisteredStatistic(
             WordCountStatistic.STATS_TYPE,
             WordCountStatistic::new,
             WordCountValue::new,
             (short) 20100,
-            (short) 20101),};
+            (short) 20101),
+        new RegisteredStatistic(
+            TrackSpeedStatistic.STATS_TYPE,
+            TrackSpeedStatistic::new,
+            () -> new TrackSpeedStatistic.TrackSpeedValue(),
+            (short) 20102,
+            (short) 20103),
+        new RegisteredStatistic(
+            TrackAccelerationStatistic.STATS_TYPE,
+            TrackAccelerationStatistic::new,
+            () -> new TrackAccelerationStatistic.TrackAccelerationValue(),
+            (short) 20104,
+            (short) 20105),
+        new RegisteredStatistic(
+            TrackHeadingStatistic.STATS_TYPE,
+            TrackHeadingStatistic::new,
+            () -> new TrackHeadingStatistic.TrackHeadingValue(),
+            (short) 20106,
+            (short) 20107),
+        new RegisteredStatistic(
+            TrackTwisterStatistic.STATS_TYPE,
+            TrackTwisterStatistic::new,
+            () -> new TrackTwisterStatistic.TrackTwisterValue(),
+            (short) 20108,
+            (short) 20109)};
   }
 
   @Override
