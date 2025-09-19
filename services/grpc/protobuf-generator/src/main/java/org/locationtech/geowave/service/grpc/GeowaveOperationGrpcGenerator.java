@@ -29,8 +29,7 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParametersDelegate;
 
 public class GeowaveOperationGrpcGenerator {
-  private static final Logger LOGGER =
-      LoggerFactory.getLogger(GeowaveOperationGrpcGenerator.class.getName());
+  private static final Logger LOGGER = LoggerFactory.getLogger(GeowaveOperationGrpcGenerator.class);
   private static final String protobufPackage =
       "option java_package = \"org.locationtech.geowave.service.grpc.protobuf\";\n";
   private static final String header =

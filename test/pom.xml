@@ -30,8 +30,8 @@
 			<artifactId>geowave-analytic-spark</artifactId>
 			<exclusions>
 				<exclusion>
-					<groupId>javax.ws.rs</groupId>
-					<artifactId>javax.ws.rs-api</artifactId>
+					<groupId>jakarta.ws.rs</groupId>
+					<artifactId>jakarta.ws.rs-api</artifactId>
 				</exclusion>
 				<exclusion>
 					<groupId>javax.servlet</groupId>
@@ -71,8 +71,8 @@
 			<version>${project.version}</version>
 			<exclusions>
 				<exclusion>
-					<groupId>javax.ws.rs</groupId>
-					<artifactId>javax.ws.rs-api</artifactId>
+					<groupId>jakarta.ws.rs</groupId>
+					<artifactId>jakarta.ws.rs-api</artifactId>
 				</exclusion>
 				<exclusion>
 					<groupId>org.restlet.osgi</groupId>
@@ -211,17 +211,6 @@
 				<exclusion>
 					<groupId>org.codehaus.jackson</groupId>
 					<artifactId>jackson-jaxrs</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-datastore-bigtable</artifactId>
-			<version>${project.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.hbase</groupId>
-					<artifactId>hbase-shaded-client</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>

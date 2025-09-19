@@ -68,7 +68,7 @@
 		<geoserver.version>2.23.2</geoserver.version>
 		<accumulo.version>2.0.1</accumulo.version>
 		<thrift.version>0.18.1</thrift.version>
-		<bigtable.version>2.21.0</bigtable.version>
+		<bigtable.version>2.15.4</bigtable.version>
 		<cassandra.version>4.1.3</cassandra.version>
 		<redisson.version>3.23.4</redisson.version>
 		<rocksdb.version>8.5.3</rocksdb.version>
@@ -83,7 +83,7 @@
 		<skipITs>true</skipITs>
 		<vfs2.version>2.9.0</vfs2.version>
 		<configuration2.version>2.9.0</configuration2.version>
-		<hbase.version>2.5.5</hbase.version>
+		<hbase.version>2.5.12</hbase.version>
 		<hadoop.version>3.3.6</hadoop.version>
 		<avro.version>1.7.6</avro.version>
 		<awssdk.version>1.11.1015</awssdk.version>
@@ -147,7 +147,8 @@
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<test.args>-XX:CompressedClassSpaceSize=512m -XX:+UseSerialGC -Xms1g
 			-Xmx2g -XX:MaxMetaspaceSize=512m</test.args>
-		<spotbugs.version>3.1.10</spotbugs.version>
+		<spotbugs.version>4.9.6.0</spotbugs.version>
+		<spotbugs.annotations.version>4.9.6</spotbugs.annotations.version>
 		<spotbugs.omitVisitors>MutableStaticFields,FindReturnRef</spotbugs.omitVisitors>
 		<spotbugs.effort>Max</spotbugs.effort>
 		<spotbugs.threshold>Medium</spotbugs.threshold>
@@ -1009,7 +1010,7 @@
 			<dependency>
 				<groupId>com.github.spotbugs</groupId>
 				<artifactId>spotbugs-annotations</artifactId>
-				<version>${spotbugs.version}</version>
+				<version>${spotbugs.annotations.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.glassfish.jersey.media</groupId>
@@ -1609,7 +1610,7 @@
 		<repository>
 			<id>geosolutions</id>
 			<name>GeoSolutions Repository</name>
-			<url>http://maven.geo-solutions.it</url>
+			<url>https://maven.geo-solutions.it</url>
 		</repository>
 		<repository>
 			<id>ossrh</id>

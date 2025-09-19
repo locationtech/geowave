@@ -47,7 +47,6 @@ public class ServicesTestEnvironment implements TestEnvironment {
   protected static final String JETTY_BASE_URL = "http://localhost:" + JETTY_PORT;
   protected static final int ACCEPT_QUEUE_SIZE = 100;
   protected static final int MAX_IDLE_TIME = (int) TimeUnit.HOURS.toMillis(1);
-  protected static final int SO_LINGER_TIME = -1;
   protected static final int MAX_FORM_CONTENT_SIZE = 1024 * 1024 * 2;
   protected static final String GEOSERVER_USER = "admin";
   protected static final String GEOSERVER_PASS = "geoserver";
@@ -113,7 +112,6 @@ public class ServicesTestEnvironment implements TestEnvironment {
         conn.setPort(JETTY_PORT);
         conn.setAcceptQueueSize(ACCEPT_QUEUE_SIZE);
         conn.setIdleTimeout(MAX_IDLE_TIME);
-        conn.setSoLingerTime(SO_LINGER_TIME);
         jettyServer.setConnectors(new Connector[] {conn});
         FileUtils.copyFile(
             new File(TEST_GEOSERVER_LOGGING_PATH),

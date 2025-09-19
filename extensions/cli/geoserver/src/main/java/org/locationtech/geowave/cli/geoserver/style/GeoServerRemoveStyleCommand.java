@@ -10,8 +10,8 @@ package org.locationtech.geowave.cli.geoserver.style;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import org.locationtech.geowave.cli.geoserver.GeoServerRemoveCommand;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;

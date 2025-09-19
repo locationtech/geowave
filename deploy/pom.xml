@@ -94,11 +94,6 @@
 				</dependency>
 				<dependency>
 					<groupId>org.locationtech.geowave</groupId>
-					<artifactId>geowave-datastore-bigtable</artifactId>
-					<version>${project.version}</version>
-				</dependency>
-				<dependency>
-					<groupId>org.locationtech.geowave</groupId>
 					<artifactId>geowave-datastore-cassandra</artifactId>
 					<version>${project.version}</version>
 				</dependency>

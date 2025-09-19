@@ -94,7 +94,7 @@ import org.threeten.extra.Interval;
 import com.beust.jcommander.Parameter;
 import com.google.common.hash.BloomFilter;
 import com.google.common.math.DoubleMath;
-import jersey.repackaged.com.google.common.collect.Iterators;
+import com.google.common.collect.Iterators;
 
 @RunWith(GeoWaveITRunner.class)
 public class GeoWaveStatisticsIT extends AbstractGeoWaveBasicVectorIT {

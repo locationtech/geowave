@@ -23,8 +23,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
 import javax.net.ssl.HttpsURLConnection;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MediaType;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.geotools.coverage.grid.GridCoverage2D;
@@ -337,9 +337,9 @@ public class TheiaImageryProvider extends Sentinel2ImageryProvider {
 
         final ClientResponse response =
             client.resource(downloadUrl).accept("application/zip").header(
-                javax.ws.rs.core.HttpHeaders.USER_AGENT,
+                jakarta.ws.rs.core.HttpHeaders.USER_AGENT,
                 "Mozilla/5.0").header(
-                    javax.ws.rs.core.HttpHeaders.AUTHORIZATION,
+                    jakarta.ws.rs.core.HttpHeaders.AUTHORIZATION,
                     "Bearer " + tokenId).get(ClientResponse.class);
 
         String displaySize = FileUtils.byteCountToDisplaySize(response.getLength());

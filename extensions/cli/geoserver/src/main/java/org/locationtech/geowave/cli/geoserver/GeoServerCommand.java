@@ -8,8 +8,8 @@
  */
 package org.locationtech.geowave.cli.geoserver;
 
-import javax.ws.rs.NotAuthorizedException;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.NotAuthorizedException;
+import jakarta.ws.rs.core.Response;
 import org.apache.spark.status.api.v1.ForbiddenException;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;

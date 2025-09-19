@@ -87,7 +87,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
-import jersey.repackaged.com.google.common.collect.Maps;
+import com.google.common.collect.Maps;
 
 public abstract class AbstractGeoWaveBasicVectorIT extends AbstractGeoWaveIT {
   private static final Logger LOGGER = LoggerFactory.getLogger(AbstractGeoWaveBasicVectorIT.class);

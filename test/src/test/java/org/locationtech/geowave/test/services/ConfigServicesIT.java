@@ -9,7 +9,7 @@
 package org.locationtech.geowave.test.services;
 
 import static org.junit.Assert.assertEquals;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;

@@ -10,7 +10,7 @@ package org.locationtech.geowave.test.services;
 
 import java.io.File;
 import java.net.URISyntaxException;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;

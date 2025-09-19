@@ -13,6 +13,12 @@
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-grpc-protobuf</artifactId>
 			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>io.grpc</groupId>
@@ -26,6 +32,12 @@
 			<groupId>io.grpc</groupId>
 			<artifactId>grpc-services</artifactId>
 			<version>${grpc.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.reflections</groupId>
@@ -58,11 +70,23 @@
 			<artifactId>geowave-analytic-mapreduce</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-analytic-spark</artifactId>
 			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 	<profiles>
