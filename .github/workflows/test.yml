@@ -7,7 +7,7 @@ env:
     MAVEN_OPTS: "-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2g -XX:MaxMetaspaceSize=512m"    
 jobs:
     unit-tests:
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu-24.04
         name: Unit Tests on Latest ASF Versions
         env:
             IT_ONLY: false
@@ -64,7 +64,7 @@ jobs:
                 github_token: ${{ secrets.GITHUB_TOKEN }} 
                      
     python-tests:
-        runs-on:  ubuntu-20.04
+        runs-on:  ubuntu-24.04
         name: Python Tests on Latest ASF Versions
         env:
             IT_ONLY: false
@@ -121,7 +121,7 @@ jobs:
                 github_token: ${{ secrets.GITHUB_TOKEN }}
 
     integration-tests:
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu-24.04
         name: ${{ matrix.profile }} Integration Tests 
         strategy:
             fail-fast: false
