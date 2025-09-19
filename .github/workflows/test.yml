@@ -28,7 +28,7 @@ jobs:
                 maven-version: 3.6.3
                 
             - name: Cache maven resources
-              uses: actions/cache@v2
+              uses: actions/cache@v4
               env:
                 cache-name: cache-maven-resources
               with:
@@ -39,7 +39,7 @@ jobs:
                       ~/.m2/repository
 
             - name: Cache other resources
-              uses: actions/cache@v2
+              uses: actions/cache@v4
               env:
                 cache-name: cache-resources
               with:
@@ -85,7 +85,7 @@ jobs:
                 maven-version: 3.6.3
                 
             - name: Cache maven resources
-              uses: actions/cache@v2
+              uses: actions/cache@v4
               env:
                 cache-name: cache-maven-resources
               with:
@@ -96,7 +96,7 @@ jobs:
                       ~/.m2/repository
 
             - name: Cache other resources
-              uses: actions/cache@v2
+              uses: actions/cache@v4
               env:
                 cache-name: cache-resources
               with:
@@ -158,7 +158,7 @@ jobs:
               
                 
             - name: Cache maven resources
-              uses: actions/cache@v2
+              uses: actions/cache@v4
               env:
                 cache-name: cache-maven-resources
               with:
@@ -169,7 +169,7 @@ jobs:
                       ~/.m2/repository
 
             - name: Cache other resources
-              uses: actions/cache@v2
+              uses: actions/cache@v4
               env:
                 cache-name: cache-resources
               with:
