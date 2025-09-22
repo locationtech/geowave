@@ -43,7 +43,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /** Generate clusters of geometries. */
-public class GeometryDataSetGenerator {
+public final class GeometryDataSetGenerator {
   static final Logger LOGGER = LoggerFactory.getLogger(GeometryDataSetGenerator.class);
   private final Random rand = new Random();
   private final GeometryFactory geoFactory = new GeometryFactory();
@@ -553,6 +553,8 @@ public class GeometryDataSetGenerator {
       return results;
     }
 
+    private static final Random RAND = new Random();
+
     private static final List<Point> generatePoints(
         final GeometryFactory factory,
         final Vector2D coordinateOne,
@@ -560,15 +562,14 @@ public class GeometryDataSetGenerator {
         final double distanceFactor,
         final int points) {
       final List<Point> results = new ArrayList<>();
-      final Random rand = new Random();
       final Vector2D originVec = coordinateTwo.subtract(coordinateOne);
       for (int i = 0; i < points; i++) {
         // HP Fortify "Insecure Randomness" false positive
         // This random number is not used for any purpose
         // related to security or cryptography
-        final double factor = rand.nextDouble();
+        final double factor = RAND.nextDouble();
         final Vector2D projectionPoint = originVec.scalarMultiply(factor);
-        final double direction = rand.nextGaussian() * distanceFactor;
+        final double direction = RAND.nextGaussian() * distanceFactor;
         final Vector2D orthogonal = new Vector2D(originVec.getY(), -originVec.getX());
 
         results.add(

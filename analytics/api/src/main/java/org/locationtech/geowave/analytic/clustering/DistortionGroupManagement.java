@@ -193,7 +193,7 @@ public class DistortionGroupManagement {
     return 0;
   }
 
-  public static class DistortionEntry implements Writable {
+  public static final class DistortionEntry implements Writable {
     private String groupId;
     private String batchId;
     private Integer clusterCount;

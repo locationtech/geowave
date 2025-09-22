@@ -76,7 +76,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @param <T> The item type used to represent a centroid.
  */
-public class CentroidManagerGeoWave<T> implements CentroidManager<T> {
+public final class CentroidManagerGeoWave<T> implements CentroidManager<T> {
   static final Logger LOGGER = LoggerFactory.getLogger(CentroidManagerGeoWave.class);
   private static final ParameterEnum<?>[] MY_PARAMS =
       new ParameterEnum[] {
@@ -200,8 +200,8 @@ public class CentroidManagerGeoWave<T> implements CentroidManager<T> {
     return centroidFactory.createNextItem(feature, groupID, coordinate, extraNames, extraValues);
   }
 
-  private final int capacity = 100;
-  private final LRUMap groupToCentroid = new LRUMap(capacity);
+  private static final int CAPACITY = 100;
+  private final LRUMap groupToCentroid = new LRUMap(CAPACITY);
 
   @Override
   public void clear() {
@@ -234,7 +234,7 @@ public class CentroidManagerGeoWave<T> implements CentroidManager<T> {
         groups.add(groupID);
       }
       // cache the first set
-      if (pos < capacity) {
+      if (pos < CAPACITY) {
         getCentroidsForGroup(groupID);
       }
     }

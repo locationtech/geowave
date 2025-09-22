@@ -34,9 +34,9 @@ public class FixedCardinalitySkippingIterator extends ExceptionHandlingSkippingI
   protected Text nextRow;
   protected Integer bitPosition;
   protected Collection<ByteSequence> columnFamilies;
-  private boolean reachedEnd = false;
+  private volatile boolean reachedEnd = false;
 
-  protected boolean inclusive = false;
+  protected volatile boolean inclusive = false;
   protected Range range;
 
   public FixedCardinalitySkippingIterator() {

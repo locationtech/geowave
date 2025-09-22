@@ -26,7 +26,7 @@ import com.beust.jcommander.JCommander;
  * overrides the sub commands that are added to make them instances of PrefixedJCommander 3. It
  * lazily initializes child commands using an Initializer interface.
  */
-public class PrefixedJCommander extends JCommander {
+public final class PrefixedJCommander extends JCommander {
 
   private static Logger LOGGER = LoggerFactory.getLogger(PrefixedJCommander.class);
 

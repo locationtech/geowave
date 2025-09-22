@@ -69,7 +69,7 @@ public class GWQLExtensionRegistry {
     }
   }
 
-  public static GWQLExtensionRegistry instance() {
+  public static synchronized GWQLExtensionRegistry instance() {
     if (INSTANCE == null) {
       INSTANCE = new GWQLExtensionRegistry();
     }

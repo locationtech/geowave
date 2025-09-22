@@ -16,6 +16,9 @@ import org.locationtech.geowave.core.index.persist.Persistable;
  * Extracted numeric dimension values associated with an item or a sum of dimension values from
  * multiple items.
  */
+@edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+    value = "PA_PUBLIC_PRIMITIVE_ATTRIBUTE",
+    justification = "Public fields are part of the API design for this data transfer object")
 public class GeoObjectDimensionValues implements Persistable {
   public double x = 0.0;
   public double y = 0.0;

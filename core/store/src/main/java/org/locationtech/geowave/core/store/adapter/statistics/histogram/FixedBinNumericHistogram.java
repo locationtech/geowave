@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  * bin contains the entire population between 0 and 1, a single bin represents the single value of
  * 10000.
  */
-public class FixedBinNumericHistogram implements NumericHistogram {
+public final class FixedBinNumericHistogram implements NumericHistogram {
   private static final Logger LOGGER =
       LoggerFactory.getLogger(FixedBinNumericHistogram.class.getName());
 

@@ -49,7 +49,7 @@ import org.locationtech.geowave.test.annotation.OptionsOverride;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GeoWaveITRunner extends Suite {
+public final class GeoWaveITRunner extends Suite {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveITRunner.class);
   public static final AtomicBoolean DEFER_CLEANUP = new AtomicBoolean(false);
   public static final Object MUTEX = new Object();

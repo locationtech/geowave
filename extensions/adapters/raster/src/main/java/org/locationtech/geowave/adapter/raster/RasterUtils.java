@@ -607,9 +607,6 @@ public class RasterUtils {
 
   private static long i = 0;
 
-  @SuppressFBWarnings(
-      value = {"RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT"},
-      justification = "incorrect; drawImage has side effects")
   public static BufferedImage toBufferedImage(final Image image, final int type) {
     final BufferedImage bi = new BufferedImage(image.getWidth(null), image.getHeight(null), type);
     final Graphics g = bi.getGraphics();

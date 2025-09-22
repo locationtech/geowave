@@ -42,7 +42,7 @@ public class HBaseStoreTestEnvironment extends StoreTestEnvironment {
 
   private HBaseMiniCluster hbaseMiniCluster;
 
-  public HBaseStoreTestEnvironment() {}
+  private HBaseStoreTestEnvironment() {}
 
   // VisibilityTest valid authorizations
   private static String[] auths = new String[] {"a", "b", "c", "g", "t", "z"};

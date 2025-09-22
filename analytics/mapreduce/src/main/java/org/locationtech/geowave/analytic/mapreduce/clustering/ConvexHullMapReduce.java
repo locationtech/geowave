@@ -156,7 +156,7 @@ public class ConvexHullMapReduce {
      * Logic inspired by SpatialHadoop convexHullStream method
      */
     // absolute point cloud limit
-    private final int pointCloudThreshold = 50000000;
+    private static final int POINT_CLOUD_THRESHOLD = 50000000;
 
     private final List<Coordinate> batchCoords = new ArrayList<>(10000);
 
@@ -180,7 +180,7 @@ public class ConvexHullMapReduce {
         @SuppressWarnings("unchecked")
         final Geometry geo = projectionFunction.getProjection((T) value);
         final Coordinate[] coords = geo.getCoordinates();
-        if ((coords.length + batchCoords.size()) > pointCloudThreshold) {
+        if ((coords.length + batchCoords.size()) > POINT_CLOUD_THRESHOLD) {
           break;
         }
         for (final Coordinate coordinate : coords) {

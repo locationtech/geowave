@@ -22,7 +22,7 @@ import org.locationtech.geowave.service.StoreService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class StoreServiceClient implements StoreService {
+public final class StoreServiceClient implements StoreService {
   private static final Logger LOGGER = LoggerFactory.getLogger(StoreServiceClient.class);
   private final StoreService storeService;
   // Jersey 2 web resource proxy client doesn't work well with dynamic

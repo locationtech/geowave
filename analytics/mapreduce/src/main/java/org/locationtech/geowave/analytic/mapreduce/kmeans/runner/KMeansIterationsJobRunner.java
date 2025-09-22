@@ -45,7 +45,7 @@ public class KMeansIterationsJobRunner<T> implements MapReduceJobRunner, Indepen
   protected static final Logger LOGGER = LoggerFactory.getLogger(KMeansIterationsJobRunner.class);
 
   private final KMeansJobRunner jobRunner = new KMeansJobRunner();
-  private double convergenceTol = 0.0001;
+  private volatile double convergenceTol = 0.0001;
 
   public KMeansIterationsJobRunner() {}
 

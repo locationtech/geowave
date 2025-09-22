@@ -534,7 +534,6 @@ public class GeoWaveRecordReader<T> extends RecordReader<GeoWaveInputKey, T> {
       return currentIterator.next();
     }
 
-    @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH", justification = "Precondition catches null")
     @Override
     public void remove() {
       Preconditions.checkState(

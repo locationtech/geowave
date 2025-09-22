@@ -43,7 +43,7 @@ import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
 import org.opengis.feature.simple.SimpleFeature;
 import java.util.Arrays;
 
-public class OSMConversionRunner extends Configured implements Tool {
+public final class OSMConversionRunner extends Configured implements Tool {
 
   private final OSMIngestCommandArgs ingestOptions;
   private final DataStorePluginOptions inputStoreOptions;

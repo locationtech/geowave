@@ -146,7 +146,7 @@
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<test.args>-XX:CompressedClassSpaceSize=512m -XX:+UseSerialGC -Xms1g
-			-Xmx2g -XX:MaxMetaspaceSize=512m</test.args>
+			-Xmx2g -XX:MaxMetaspaceSize=512m --add-opens java.base/java.net=ALL-UNNAMED</test.args>
 		<spotbugs.version>4.9.6.0</spotbugs.version>
 		<spotbugs.annotations.version>4.9.6</spotbugs.annotations.version>
 		<spotbugs.omitVisitors>MutableStaticFields,FindReturnRef</spotbugs.omitVisitors>
@@ -155,6 +155,7 @@
 		<spotbugs.failOnError>true</spotbugs.failOnError>
 		<spotbugs.maxHeap>1024</spotbugs.maxHeap>
 		<spotbugs.filterFile>findbugs/findbugs-exclude.xml</spotbugs.filterFile>
+		<spotbugs.skip>false</spotbugs.skip>
 		<formatter.action>format</formatter.action>
 		<formatter.skip>false</formatter.skip>
 	</properties>
@@ -1693,6 +1694,22 @@
 				<skipITs>true</skipITs>
 				<skipTests>true</skipTests>
 				<formatter.skip>true</formatter.skip>
+				<spotbugs.skip>true</spotbugs.skip>
+			</properties>
+		</profile>
+		<profile>
+			<id>spotbugs-skip-api-design-modules</id>
+			<activation>
+				<property>
+					<name>spotbugs.skip.api.design</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<modules>
+				<module>extensions/adapters/raster</module>
+				<module>extensions/formats/stanag4676/format</module>
+			</modules>
+			<properties>
 				<spotbugs.skip>true</spotbugs.skip>
 			</properties>
 		</profile>

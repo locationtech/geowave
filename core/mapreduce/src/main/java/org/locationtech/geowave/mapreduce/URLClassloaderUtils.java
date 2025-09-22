@@ -70,14 +70,21 @@ public class URLClassloaderUtils {
       // The need to change the accessibility here is
       // necessary, has been review and judged to be safe
       lockField.setAccessible(true);
-      synchronized (lockField.get(null)) {
-        factoryField.set(null, null);
+      synchronized (MUTEX) {
+        synchronized (lockField.get(null)) {
+          factoryField.set(null, null);
 
+          if (urlType == URLTYPE.S3) {
+            URL.setURLStreamHandlerFactory(new S3URLStreamHandlerFactory(urlStreamHandlerFactory));
+          } else { // HDFS
+            URL.setURLStreamHandlerFactory(
+                new HdfsUrlStreamHandlerFactory(urlStreamHandlerFactory));
+          }
+        }
+        // Update static fields outside the instance lock but inside the static lock
         if (urlType == URLTYPE.S3) {
-          URL.setURLStreamHandlerFactory(new S3URLStreamHandlerFactory(urlStreamHandlerFactory));
           hasS3Handler = true;
         } else { // HDFS
-          URL.setURLStreamHandlerFactory(new HdfsUrlStreamHandlerFactory(urlStreamHandlerFactory));
           hasHdfsHandler = true;
         }
       }

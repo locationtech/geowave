@@ -30,7 +30,7 @@ public class RunHBaseServer extends DefaultOperation implements Command {
   @Parameter(
       names = {"--interactive", "-i"},
       description = "Whether to prompt for user input to end the process")
-  private final boolean interactive = false;
+  private boolean interactive = false;
 
   /**
    * Prep the driver & run the operation.

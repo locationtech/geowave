@@ -23,7 +23,7 @@ import org.locationtech.geowave.core.store.index.CommonIndexModel;
 public class DedupeFilter implements QueryFilter {
   private final Map<Short, Set<ByteArray>> adapterIdToVisitedDataIdMap;
 
-  private boolean dedupAcrossIndices = false;
+  private volatile boolean dedupAcrossIndices = false;
 
   public DedupeFilter() {
     adapterIdToVisitedDataIdMap = new HashMap<>();

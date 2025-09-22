@@ -45,9 +45,6 @@ public class SingleAdapterServerMergeStrategy<T extends Persistable> implements
     this.mergeStrategy = mergeStrategy;
   }
 
-  @SuppressFBWarnings(
-      value = {"DLS_DEAD_LOCAL_STORE"},
-      justification = "Incorrect warning, sampleModelBinary used")
   @Override
   public byte[] toBinary() {
     final byte[] sampleModelBinary = SampleModelPersistenceUtils.getSampleModelBinary(sampleModel);

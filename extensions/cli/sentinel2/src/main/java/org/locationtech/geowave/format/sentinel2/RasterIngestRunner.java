@@ -477,16 +477,18 @@ public class RasterIngestRunner extends DownloadRunner {
     return converter;
   }
 
-  private synchronized Map<String, Sentinel2BandConverterSpi> getRegisteredConverters() {
-    if (registeredBandConverters == null) {
-      registeredBandConverters = new HashMap<>();
-      final Iterator<Sentinel2BandConverterSpi> spiIter =
-          new SPIServiceRegistry().load(Sentinel2BandConverterSpi.class);
-      while (spiIter.hasNext()) {
-        final Sentinel2BandConverterSpi converter = spiIter.next();
-        registeredBandConverters.put(converter.getName(), converter);
+  private Map<String, Sentinel2BandConverterSpi> getRegisteredConverters() {
+    synchronized (RasterIngestRunner.class) {
+      if (registeredBandConverters == null) {
+        registeredBandConverters = new HashMap<>();
+        final Iterator<Sentinel2BandConverterSpi> spiIter =
+            new SPIServiceRegistry().load(Sentinel2BandConverterSpi.class);
+        while (spiIter.hasNext()) {
+          final Sentinel2BandConverterSpi converter = spiIter.next();
+          registeredBandConverters.put(converter.getName(), converter);
+        }
       }
+      return registeredBandConverters;
     }
-    return registeredBandConverters;
   }
 }

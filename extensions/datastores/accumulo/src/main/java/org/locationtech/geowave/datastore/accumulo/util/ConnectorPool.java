@@ -49,6 +49,8 @@ public class ConnectorPool {
   private final Map<ConnectorConfig, Pair<Connector, Set<ConnectorCloseListener>>> connectorCache =
       new HashMap<>();
 
+  private ConnectorPool() {}
+
   public synchronized Connector getConnector(
       final String zookeeperUrl,
       final String instanceName,

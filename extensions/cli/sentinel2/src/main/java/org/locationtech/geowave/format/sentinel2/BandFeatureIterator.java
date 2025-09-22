@@ -32,7 +32,7 @@ import org.opengis.referencing.NoSuchAuthorityCodeException;
 import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
 
-public class BandFeatureIterator implements SimpleFeatureIterator {
+public final class BandFeatureIterator implements SimpleFeatureIterator {
   // List of predefined attributes
   public static final String BAND_ATTRIBUTE_NAME = "band";
 

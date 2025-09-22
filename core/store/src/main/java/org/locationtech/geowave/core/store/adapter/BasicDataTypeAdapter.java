@@ -38,7 +38,7 @@ import org.locationtech.geowave.core.store.data.field.FieldWriter;
  *
  * @param <T> the data type
  */
-public class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
+public final class BasicDataTypeAdapter<T> extends AbstractDataTypeAdapter<T> {
 
   private Class<T> dataClass;
   private Constructor<T> objectConstructor;

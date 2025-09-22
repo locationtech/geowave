@@ -16,7 +16,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import org.locationtech.geowave.core.store.util.ClasspathUtils;
 
-public class HBaseMiniClusterClassLoader extends URLClassLoader {
+public final class HBaseMiniClusterClassLoader extends URLClassLoader {
 
   /**
    * If the class being loaded starts with any of these strings, we will skip trying to load it from

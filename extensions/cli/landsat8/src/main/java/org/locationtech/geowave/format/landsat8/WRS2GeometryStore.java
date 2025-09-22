@@ -29,7 +29,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class WRS2GeometryStore {
+public final class WRS2GeometryStore {
   private static final Logger LOGGER = LoggerFactory.getLogger(WRS2GeometryStore.class);
 
   protected static class WRS2Key {

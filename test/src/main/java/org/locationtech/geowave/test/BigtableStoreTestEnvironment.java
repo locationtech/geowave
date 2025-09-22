@@ -36,7 +36,7 @@ public class BigtableStoreTestEnvironment extends StoreTestEnvironment {
 
   // Set to false if you're running an emulator elsewhere.
   // To run externally, see https://cloud.google.com/bigtable/docs/emulator
-  private boolean internalEmulator = true;
+  private volatile boolean internalEmulator = true;
 
   // Default host:port
   private String emulatorHostPort = "127.0.0.1:8086";

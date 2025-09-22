@@ -55,7 +55,7 @@ public class BaseConstraintsQuery extends BaseFilteredIndexQuery {
 
   public final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation;
   public final List<MultiDimensionalNumericData> constraints;
-  public List<QueryFilter> distributableFilters;
+  private List<QueryFilter> distributableFilters;
 
   public final IndexMetaData[] indexMetaData;
   private final Index index;
@@ -337,5 +337,13 @@ public class BaseConstraintsQuery extends BaseFilteredIndexQuery {
         targetResolutionPerDimensionForHierarchicalIndex,
         maxRangeDecomposition,
         indexMetaData);
+  }
+
+  public List<QueryFilter> getDistributableFilters() {
+    return distributableFilters;
+  }
+
+  public void setDistributableFilters(final List<QueryFilter> distributableFilters) {
+    this.distributableFilters = distributableFilters;
   }
 }

@@ -54,7 +54,7 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.MinMaxPriorityQueue;
 import com.google.common.io.LineReader;
 
-public class SceneFeatureIterator implements SimpleFeatureIterator {
+public final class SceneFeatureIterator implements SimpleFeatureIterator {
   protected static class BestCloudCoverComparator implements
       Comparator<SimpleFeature>,
       Serializable {
@@ -92,10 +92,10 @@ public class SceneFeatureIterator implements SimpleFeatureIterator {
           PRODUCT_ID_ATTRIBUTE_NAME,
           SCENE_DOWNLOAD_ATTRIBUTE_NAME};
   protected static String AQUISITION_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
-  private final String SCENES_DIR = "scenes";
-  private final String COMPRESSED_FILE_NAME = "scene_list.gz";
-  private final String CSV_FILE_NAME = "scene_list";
-  private final String TEMP_CSV_FILE_NAME = "scene_list.tmp";
+  private static final String SCENES_DIR = "scenes";
+  private static final String COMPRESSED_FILE_NAME = "scene_list.gz";
+  private static final String CSV_FILE_NAME = "scene_list";
+  private static final String TEMP_CSV_FILE_NAME = "scene_list.tmp";
   private CSVParser parser;
   private FileInputStream parserFis;
   private InputStreamReader parserIsr;

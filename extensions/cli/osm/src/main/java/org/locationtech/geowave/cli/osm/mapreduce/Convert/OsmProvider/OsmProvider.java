@@ -47,7 +47,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.base.Joiner;
 
-public class OsmProvider {
+public final class OsmProvider {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(OsmProvider.class);
   private Connector conn = null;

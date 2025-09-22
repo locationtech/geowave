@@ -7,4 +7,58 @@
 			<Package name="~.*\.gwql.parse" />
 		</Or>
 	</Match>
+	<!-- Exclude CT_CONSTRUCTOR_THROW for AbstractDataTypeAdapter as it's an abstract class -->
+	<Match>
+		<Class name="org.locationtech.geowave.core.store.adapter.AbstractDataTypeAdapter" />
+		<Bug pattern="CT_CONSTRUCTOR_THROW" />
+	</Match>
+	<!-- Exclude CT_CONSTRUCTOR_THROW for plugin config classes that need to throw exceptions -->
+	<Match>
+		<Class name="org.locationtech.geowave.adapter.vector.plugin.GeoWavePluginConfig" />
+		<Bug pattern="CT_CONSTRUCTOR_THROW" />
+	</Match>
+	<Match>
+		<Class name="org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveTransactionManagementState" />
+		<Bug pattern="CT_CONSTRUCTOR_THROW" />
+	</Match>
+	<!-- Exclude CT_CONSTRUCTOR_THROW for raster adapter classes that need to throw exceptions -->
+	<Match>
+		<Class name="org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter" />
+		<Bug pattern="CT_CONSTRUCTOR_THROW" />
+	</Match>
+	<Match>
+		<Class name="org.locationtech.geowave.adapter.raster.plugin.GeoWaveRasterReader" />
+		<Bug pattern="CT_CONSTRUCTOR_THROW" />
+	</Match>
+	<Match>
+		<Class name="org.locationtech.geowave.adapter.raster.stats.HistogramConfig" />
+		<Bug pattern="CT_CONSTRUCTOR_THROW" />
+	</Match>
+	<!-- Exclude Avro-generated classes from all SpotBugs checks -->
+	<Match>
+		<Class name="~.*\.Avro.*" />
+	</Match>
+	<!-- Exclude CT_CONSTRUCTOR_THROW for GPX consumer that needs to throw exceptions -->
+	<Match>
+		<Class name="org.locationtech.geowave.format.gpx.GPXConsumer" />
+		<Bug pattern="CT_CONSTRUCTOR_THROW" />
+	</Match>
+	<!-- Exclude CT_CONSTRUCTOR_THROW for RasterDataAdapter constructors that need to throw exceptions as part of API design -->
+	<Match>
+		<Class name="org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter" />
+		<Bug pattern="CT_CONSTRUCTOR_THROW" />
+	</Match>
+	<!-- Exclude STANAG 4676 format classes that have complex cross-package field access -->
+	<Match>
+		<Class name="~org\.locationtech\.geowave\.format\.stanag4676\..*" />
+		<Bug pattern="PA_PUBLIC_PRIMITIVE_ATTRIBUTE" />
+	</Match>
+	<Match>
+		<Class name="~org\.locationtech\.geowave\.format\.stanag4676\..*" />
+		<Bug pattern="DCN_NULLPOINTER_EXCEPTION" />
+	</Match>
+	<Match>
+		<Class name="~org\.locationtech\.geowave\.format\.stanag4676\..*" />
+		<Bug pattern="FL_FLOATS_AS_LOOP_COUNTERS" />
+	</Match>
 </FindBugsFilter>

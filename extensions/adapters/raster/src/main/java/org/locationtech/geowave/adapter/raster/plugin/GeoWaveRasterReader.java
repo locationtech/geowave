@@ -88,7 +88,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /** the reader gets the connection info and returns a grid coverage for every data adapter */
-public class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
+public final class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
     GridCoverage2DReader {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveRasterReader.class);
 
@@ -140,7 +140,7 @@ public class GeoWaveRasterReader extends AbstractGridCoverage2DReader implements
    */
   public GeoWaveRasterReader(final Object source, final Hints uHints) throws IOException {
     super(source, uHints);
-    this.source = source;
+    this.source = java.util.Objects.requireNonNull(source, "Source cannot be null");
     if (GeoWaveGTRasterFormat.isParamList(source)) {
       try {
         config = GeoWaveRasterConfig.readFromConfigParams(source.toString());

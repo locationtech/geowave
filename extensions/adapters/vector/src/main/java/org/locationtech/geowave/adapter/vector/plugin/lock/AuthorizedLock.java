@@ -31,7 +31,7 @@ public class AuthorizedLock implements State, java.io.Serializable {
 
   private final Set<String> authorizations = new HashSet<>();
   private final String ID = UUID.randomUUID().toString();
-  private long expireTime = System.currentTimeMillis();
+  private volatile long expireTime = System.currentTimeMillis();
   private transient AbstractLockingManagement lockingManagement;
   private long expiryInMinutes;
 

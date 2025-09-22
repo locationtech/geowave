@@ -60,37 +60,37 @@ public class Stanag4676EventWritable implements Writable {
 
   public static Stanag4676EventWritable clone(final Stanag4676EventWritable sw) {
     final Stanag4676EventWritable sw2 = new Stanag4676EventWritable();
-    sw2.EventType = new IntWritable(sw.EventType.get());
-    sw2.Geometry = new BytesWritable(sw.Geometry.copyBytes());
-    sw2.DetailGeometry = new BytesWritable(sw.DetailGeometry.copyBytes());
-    sw2.Image = new BytesWritable(sw.Image.copyBytes());
-    sw2.MissionUUID = new Text(sw.MissionUUID.toString());
-    sw2.MissionName = new Text(sw.MissionName.toString());
-    sw2.MissionNumFrames = new IntWritable(sw.MissionNumFrames.get());
-    sw2.TrackNumber = new Text(sw.TrackNumber.toString());
-    sw2.TrackUUID = new Text(sw.TrackUUID.toString());
-    sw2.TrackStatus = new Text(sw.TrackStatus.toString());
-    sw2.TrackClassification = new Text(sw.TrackClassification.toString());
-    sw2.TrackItemUUID = new Text(sw.TrackItemUUID.toString());
-    sw2.TrackPointSource = new Text(sw.TrackPointSource.toString());
-    sw2.TimeStamp = new LongWritable(sw.TimeStamp.get());
-    sw2.EndTimeStamp = new LongWritable(sw.EndTimeStamp.get());
-    sw2.Speed = new DoubleWritable(sw.Speed.get());
-    sw2.Course = new DoubleWritable(sw.Course.get());
-    sw2.TrackItemClassification = new Text(sw.TrackItemClassification.toString());
-    sw2.Latitude = new DoubleWritable(sw.Latitude.get());
-    sw2.Longitude = new DoubleWritable(sw.Longitude.get());
-    sw2.Elevation = new DoubleWritable(sw.Elevation.get());
-    sw2.DetailLatitude = new DoubleWritable(sw.DetailLatitude.get());
-    sw2.DetailLongitude = new DoubleWritable(sw.DetailLongitude.get());
-    sw2.DetailElevation = new DoubleWritable(sw.DetailElevation.get());
-    sw2.PixelRow = new IntWritable(sw.PixelRow.get());
-    sw2.PixelColumn = new IntWritable(sw.PixelColumn.get());
-    sw2.MotionEvent = new Text(sw.MotionEvent.toString());
-    sw2.FrameNumber = new IntWritable(sw.FrameNumber.get());
-    sw2.ObjectClass = new Text(sw.ObjectClass.toString());
-    sw2.ObjectClassConf = new IntWritable(sw.ObjectClassConf.get());
-    sw2.ObjectClassRel = new IntWritable(sw.ObjectClassRel.get());
+    sw2.setEventType(new IntWritable(sw.getEventType().get()));
+    sw2.setGeometry(new BytesWritable(sw.getGeometry().copyBytes()));
+    sw2.setDetailGeometry(new BytesWritable(sw.getDetailGeometry().copyBytes()));
+    sw2.setImage(new BytesWritable(sw.getImage().copyBytes()));
+    sw2.setMissionUUID(new Text(sw.getMissionUUID().toString()));
+    sw2.setMissionName(new Text(sw.getMissionName().toString()));
+    sw2.setMissionNumFrames(new IntWritable(sw.getMissionNumFrames().get()));
+    sw2.setTrackNumber(new Text(sw.getTrackNumber().toString()));
+    sw2.setTrackUUID(new Text(sw.getTrackUUID().toString()));
+    sw2.setTrackStatus(new Text(sw.getTrackStatus().toString()));
+    sw2.setTrackClassification(new Text(sw.getTrackClassification().toString()));
+    sw2.setTrackItemUUID(new Text(sw.getTrackItemUUID().toString()));
+    sw2.setTrackPointSource(new Text(sw.getTrackPointSource().toString()));
+    sw2.setTimeStamp(new LongWritable(sw.getTimeStamp().get()));
+    sw2.setEndTimeStamp(new LongWritable(sw.getEndTimeStamp().get()));
+    sw2.setSpeed(new DoubleWritable(sw.getSpeed().get()));
+    sw2.setCourse(new DoubleWritable(sw.getCourse().get()));
+    sw2.setTrackItemClassification(new Text(sw.getTrackItemClassification().toString()));
+    sw2.setLatitude(new DoubleWritable(sw.getLatitude().get()));
+    sw2.setLongitude(new DoubleWritable(sw.getLongitude().get()));
+    sw2.setElevation(new DoubleWritable(sw.getElevation().get()));
+    sw2.setDetailLatitude(new DoubleWritable(sw.getDetailLatitude().get()));
+    sw2.setDetailLongitude(new DoubleWritable(sw.getDetailLongitude().get()));
+    sw2.setDetailElevation(new DoubleWritable(sw.getDetailElevation().get()));
+    sw2.setPixelRow(new IntWritable(sw.getPixelRow().get()));
+    sw2.setPixelColumn(new IntWritable(sw.getPixelColumn().get()));
+    sw2.setMotionEvent(new Text(sw.getMotionEvent().toString()));
+    sw2.setFrameNumber(new IntWritable(sw.getFrameNumber().get()));
+    sw2.setObjectClass(new Text(sw.getObjectClass().toString()));
+    sw2.setObjectClassConf(new IntWritable(sw.getObjectClassConf().get()));
+    sw2.setObjectClassRel(new IntWritable(sw.getObjectClassRel().get()));
 
     return sw2;
   }
@@ -346,5 +346,254 @@ public class Stanag4676EventWritable implements Writable {
     ObjectClass.write(out);
     ObjectClassConf.write(out);
     ObjectClassRel.write(out);
+  }
+
+  // Getter and setter methods for all fields
+  public IntWritable getEventType() {
+    return EventType;
+  }
+
+  public void setEventType(IntWritable eventType) {
+    this.EventType = eventType;
+  }
+
+  public BytesWritable getGeometry() {
+    return Geometry;
+  }
+
+  public void setGeometry(BytesWritable geometry) {
+    this.Geometry = geometry;
+  }
+
+  public BytesWritable getDetailGeometry() {
+    return DetailGeometry;
+  }
+
+  public void setDetailGeometry(BytesWritable detailGeometry) {
+    this.DetailGeometry = detailGeometry;
+  }
+
+  public BytesWritable getImage() {
+    return Image;
+  }
+
+  public void setImage(BytesWritable image) {
+    this.Image = image;
+  }
+
+  public Text getMissionUUID() {
+    return MissionUUID;
+  }
+
+  public void setMissionUUID(Text missionUUID) {
+    this.MissionUUID = missionUUID;
+  }
+
+  public Text getMissionName() {
+    return MissionName;
+  }
+
+  public void setMissionName(Text missionName) {
+    this.MissionName = missionName;
+  }
+
+  public IntWritable getMissionNumFrames() {
+    return MissionNumFrames;
+  }
+
+  public void setMissionNumFrames(IntWritable missionNumFrames) {
+    this.MissionNumFrames = missionNumFrames;
+  }
+
+  public Text getTrackNumber() {
+    return TrackNumber;
+  }
+
+  public void setTrackNumber(Text trackNumber) {
+    this.TrackNumber = trackNumber;
+  }
+
+  public Text getTrackUUID() {
+    return TrackUUID;
+  }
+
+  public void setTrackUUID(Text trackUUID) {
+    this.TrackUUID = trackUUID;
+  }
+
+  public Text getTrackStatus() {
+    return TrackStatus;
+  }
+
+  public void setTrackStatus(Text trackStatus) {
+    this.TrackStatus = trackStatus;
+  }
+
+  public Text getTrackClassification() {
+    return TrackClassification;
+  }
+
+  public void setTrackClassification(Text trackClassification) {
+    this.TrackClassification = trackClassification;
+  }
+
+  public Text getTrackItemUUID() {
+    return TrackItemUUID;
+  }
+
+  public void setTrackItemUUID(Text trackItemUUID) {
+    this.TrackItemUUID = trackItemUUID;
+  }
+
+  public Text getTrackPointSource() {
+    return TrackPointSource;
+  }
+
+  public void setTrackPointSource(Text trackPointSource) {
+    this.TrackPointSource = trackPointSource;
+  }
+
+  public LongWritable getTimeStamp() {
+    return TimeStamp;
+  }
+
+  public void setTimeStamp(LongWritable timeStamp) {
+    this.TimeStamp = timeStamp;
+  }
+
+  public LongWritable getEndTimeStamp() {
+    return EndTimeStamp;
+  }
+
+  public void setEndTimeStamp(LongWritable endTimeStamp) {
+    this.EndTimeStamp = endTimeStamp;
+  }
+
+  public DoubleWritable getSpeed() {
+    return Speed;
+  }
+
+  public void setSpeed(DoubleWritable speed) {
+    this.Speed = speed;
+  }
+
+  public DoubleWritable getCourse() {
+    return Course;
+  }
+
+  public void setCourse(DoubleWritable course) {
+    this.Course = course;
+  }
+
+  public Text getTrackItemClassification() {
+    return TrackItemClassification;
+  }
+
+  public void setTrackItemClassification(Text trackItemClassification) {
+    this.TrackItemClassification = trackItemClassification;
+  }
+
+  public DoubleWritable getLatitude() {
+    return Latitude;
+  }
+
+  public void setLatitude(DoubleWritable latitude) {
+    this.Latitude = latitude;
+  }
+
+  public DoubleWritable getLongitude() {
+    return Longitude;
+  }
+
+  public void setLongitude(DoubleWritable longitude) {
+    this.Longitude = longitude;
+  }
+
+  public DoubleWritable getElevation() {
+    return Elevation;
+  }
+
+  public void setElevation(DoubleWritable elevation) {
+    this.Elevation = elevation;
+  }
+
+  public DoubleWritable getDetailLatitude() {
+    return DetailLatitude;
+  }
+
+  public void setDetailLatitude(DoubleWritable detailLatitude) {
+    this.DetailLatitude = detailLatitude;
+  }
+
+  public DoubleWritable getDetailLongitude() {
+    return DetailLongitude;
+  }
+
+  public void setDetailLongitude(DoubleWritable detailLongitude) {
+    this.DetailLongitude = detailLongitude;
+  }
+
+  public DoubleWritable getDetailElevation() {
+    return DetailElevation;
+  }
+
+  public void setDetailElevation(DoubleWritable detailElevation) {
+    this.DetailElevation = detailElevation;
+  }
+
+  public IntWritable getPixelRow() {
+    return PixelRow;
+  }
+
+  public void setPixelRow(IntWritable pixelRow) {
+    this.PixelRow = pixelRow;
+  }
+
+  public IntWritable getPixelColumn() {
+    return PixelColumn;
+  }
+
+  public void setPixelColumn(IntWritable pixelColumn) {
+    this.PixelColumn = pixelColumn;
+  }
+
+  public Text getMotionEvent() {
+    return MotionEvent;
+  }
+
+  public void setMotionEvent(Text motionEvent) {
+    this.MotionEvent = motionEvent;
+  }
+
+  public IntWritable getFrameNumber() {
+    return FrameNumber;
+  }
+
+  public void setFrameNumber(IntWritable frameNumber) {
+    this.FrameNumber = frameNumber;
+  }
+
+  public Text getObjectClass() {
+    return ObjectClass;
+  }
+
+  public void setObjectClass(Text objectClass) {
+    this.ObjectClass = objectClass;
+  }
+
+  public IntWritable getObjectClassConf() {
+    return ObjectClassConf;
+  }
+
+  public void setObjectClassConf(IntWritable objectClassConf) {
+    this.ObjectClassConf = objectClassConf;
+  }
+
+  public IntWritable getObjectClassRel() {
+    return ObjectClassRel;
+  }
+
+  public void setObjectClassRel(IntWritable objectClassRel) {
+    this.ObjectClassRel = objectClassRel;
   }
 }

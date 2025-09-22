@@ -26,7 +26,9 @@ public class RasterOptionProvider implements IngestFormatOptions {
   // for now, default to no merging
   private static final RasterTileMergeStrategy DEFAULT_MERGE_STRATEGY = null;
   private static final Logger LOGGER = LoggerFactory.getLogger(RasterOptionProvider.class);
-  private static Map<String, RasterMergeStrategyProviderSpi> registeredMergeStrategies = null;
+  private static volatile Map<String, RasterMergeStrategyProviderSpi> registeredMergeStrategies =
+      null;
+  private static final Object MERGE_STRATEGIES_LOCK = new Object();
 
   @Parameter(
       names = "--pyramid",
@@ -133,15 +135,20 @@ public class RasterOptionProvider implements IngestFormatOptions {
     return provider.getStrategy();
   }
 
-  private synchronized Map<String, RasterMergeStrategyProviderSpi> getRegisteredMergeStrategies() {
+  private Map<String, RasterMergeStrategyProviderSpi> getRegisteredMergeStrategies() {
     if (registeredMergeStrategies == null) {
-      registeredMergeStrategies = new HashMap<>();
-      final ServiceLoader<RasterMergeStrategyProviderSpi> converters =
-          ServiceLoader.load(RasterMergeStrategyProviderSpi.class);
-      final Iterator<RasterMergeStrategyProviderSpi> it = converters.iterator();
-      while (it.hasNext()) {
-        final RasterMergeStrategyProviderSpi converter = it.next();
-        registeredMergeStrategies.put(converter.getName(), converter);
+      synchronized (MERGE_STRATEGIES_LOCK) {
+        if (registeredMergeStrategies == null) {
+          final Map<String, RasterMergeStrategyProviderSpi> strategies = new HashMap<>();
+          final ServiceLoader<RasterMergeStrategyProviderSpi> converters =
+              ServiceLoader.load(RasterMergeStrategyProviderSpi.class);
+          final Iterator<RasterMergeStrategyProviderSpi> it = converters.iterator();
+          while (it.hasNext()) {
+            final RasterMergeStrategyProviderSpi converter = it.next();
+            strategies.put(converter.getName(), converter);
+          }
+          registeredMergeStrategies = strategies;
+        }
       }
     }
     return registeredMergeStrategies;

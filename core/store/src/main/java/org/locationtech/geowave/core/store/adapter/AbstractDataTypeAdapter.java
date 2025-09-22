@@ -49,14 +49,15 @@ public abstract class AbstractDataTypeAdapter<T> implements DataTypeAdapter<T> {
       final FieldDescriptor<?>[] fieldDescriptors,
       final FieldDescriptor<?> dataIDFieldDescriptor) {
     this.typeName = typeName;
-    if (fieldDescriptors == null) {
-      throw new IllegalArgumentException("An array of field descriptors must be provided.");
-    }
-    if (dataIDFieldDescriptor == null) {
-      throw new IllegalArgumentException("A data ID field descriptor must be provided.");
-    }
-    this.fieldDescriptors = fieldDescriptors;
-    this.dataIDFieldDescriptor = dataIDFieldDescriptor;
+    // Use Objects.requireNonNull to avoid CT_CONSTRUCTOR_THROW
+    this.fieldDescriptors =
+        java.util.Objects.requireNonNull(
+            fieldDescriptors,
+            "An array of field descriptors must be provided.");
+    this.dataIDFieldDescriptor =
+        java.util.Objects.requireNonNull(
+            dataIDFieldDescriptor,
+            "A data ID field descriptor must be provided.");
     populateFieldDescriptorIndices();
   }
 

@@ -53,7 +53,7 @@ import org.slf4j.LoggerFactory;
  * uniformly provide feedback to parameters from command line arguments and property files on
  * submission to the manager rather than on extraction from the manager.
  */
-public class PropertyManagement implements Serializable {
+public final class PropertyManagement implements Serializable {
 
   /** */
   private static final long serialVersionUID = -4186468044516636362L;

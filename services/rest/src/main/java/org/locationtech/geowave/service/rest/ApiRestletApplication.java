@@ -38,7 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /** This class provides the main webapp entry point */
-public class ApiRestletApplication extends Application {
+public final class ApiRestletApplication extends Application {
   private static final Logger LOGGER = LoggerFactory.getLogger(ApiRestletApplication.class);
   private ArrayList<RestRoute> availableRoutes = null;
   private final ExecutorService asyncOperationPool = Executors.newFixedThreadPool(10);

@@ -66,7 +66,7 @@ public class JsonFieldLevelVisibilityHandler extends FieldLevelVisibilityHandler
           return attNode.textValue();
         }
       }
-    } catch (IOException | NullPointerException e) {
+    } catch (final IOException e) {
       LOGGER.error("Cannot parse visibility expression " + visibilityObject.toString(), e);
     }
     return null;

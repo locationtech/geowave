@@ -47,8 +47,8 @@ public class PrimitiveHilbertSFCOperations implements HilbertSFCOperations {
   protected static final long UNIT_CELL_SIZE = (long) Math.pow(2, 19);
   protected long[] binsPerDimension;
 
-  protected long minHilbertValue;
-  protected long maxHilbertValue;
+  protected volatile long minHilbertValue;
+  protected volatile long maxHilbertValue;
 
   @Override
   public void init(final SFCDimensionDefinition[] dimensionDefs) {

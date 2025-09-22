@@ -31,7 +31,7 @@ import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
-public class FacebookTokenServices extends RemoteTokenServices {
+public final class FacebookTokenServices extends RemoteTokenServices {
   protected final Log logger = LogFactory.getLog(getClass());
 
   private RestOperations restTemplate;

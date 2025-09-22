@@ -57,7 +57,7 @@ public class DistributedRenderResult implements Mergeable {
       for (final Pair<PersistableRenderedImage, PersistableComposite> currentStyle : orderedStyles) {
         if ((currentStyle == null)
             || (currentStyle.getKey() == null)
-            || (currentStyle.getKey().image == null)) {
+            || (currentStyle.getKey().getImage() == null)) {
           continue;
         }
         if ((currentStyle.getValue() == null) || (currentStyle.getValue().getComposite() == null)) {
@@ -65,7 +65,7 @@ public class DistributedRenderResult implements Mergeable {
         } else {
           graphics.setComposite(currentStyle.getValue().getComposite());
         }
-        graphics.drawImage(currentStyle.getKey().image, 0, 0, null);
+        graphics.drawImage(currentStyle.getKey().getImage(), 0, 0, null);
       }
       if (compositeGroupImage != null) {
         if ((composite == null) || (composite.getComposite() == null)) {
@@ -326,8 +326,8 @@ public class DistributedRenderResult implements Mergeable {
       final DistributedRenderResult other = ((DistributedRenderResult) merge);
       final int minComposites = Math.min(orderedComposites.size(), other.orderedComposites.size());
       // first render parents together
-      if ((parentImage != null) && (parentImage.image != null)) {
-        if ((other.parentImage != null) && (other.parentImage.image != null)) {
+      if ((parentImage != null) && (parentImage.getImage() != null)) {
+        if ((other.parentImage != null) && (other.parentImage.getImage() != null)) {
           // all composites should be the same, if they're not
           // then these distributed results got mis-ordered by
           // composite group, so composite remains this.composite
@@ -360,10 +360,10 @@ public class DistributedRenderResult implements Mergeable {
   private static PersistableRenderedImage mergeImage(
       final PersistableRenderedImage image1,
       final PersistableRenderedImage image2) {
-    final Graphics2D graphics = image1.image.createGraphics();
+    final Graphics2D graphics = image1.getImage().createGraphics();
     graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
-    graphics.drawImage(image2.image, 0, 0, null);
+    graphics.drawImage(image2.getImage(), 0, 0, null);
     graphics.dispose();
-    return new PersistableRenderedImage(image1.image);
+    return new PersistableRenderedImage(image1.getImage());
   }
 }

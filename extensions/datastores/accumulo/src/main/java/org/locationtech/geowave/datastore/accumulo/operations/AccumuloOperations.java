@@ -155,7 +155,7 @@ public class AccumuloOperations implements
   private final String tableNamespace;
   protected Connector connector;
   private final Map<String, Long> locGrpCache;
-  private long cacheTimeoutMillis;
+  private volatile long cacheTimeoutMillis;
   private final Map<String, Set<String>> ensuredAuthorizationCache = new HashMap<>();
   private final Map<String, Set<ByteArray>> ensuredPartitionCache = new HashMap<>();
   private final AccumuloOptions options;

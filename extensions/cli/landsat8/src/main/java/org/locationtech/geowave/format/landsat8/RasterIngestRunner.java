@@ -452,17 +452,19 @@ public class RasterIngestRunner extends DownloadRunner {
     return converter;
   }
 
-  private synchronized Map<String, Landsat8BandConverterSpi> getRegisteredConverters() {
-    if (registeredBandConverters == null) {
-      registeredBandConverters = new HashMap<>();
-      final Iterator<Landsat8BandConverterSpi> spiIter =
-          new SPIServiceRegistry().load(Landsat8BandConverterSpi.class);
-      while (spiIter.hasNext()) {
-        final Landsat8BandConverterSpi converter = spiIter.next();
-        registeredBandConverters.put(converter.getName(), converter);
+  private Map<String, Landsat8BandConverterSpi> getRegisteredConverters() {
+    synchronized (RasterIngestRunner.class) {
+      if (registeredBandConverters == null) {
+        registeredBandConverters = new HashMap<>();
+        final Iterator<Landsat8BandConverterSpi> spiIter =
+            new SPIServiceRegistry().load(Landsat8BandConverterSpi.class);
+        while (spiIter.hasNext()) {
+          final Landsat8BandConverterSpi converter = spiIter.next();
+          registeredBandConverters.put(converter.getName(), converter);
+        }
       }
+      return registeredBandConverters;
     }
-    return registeredBandConverters;
   }
 
   private static class BandData {

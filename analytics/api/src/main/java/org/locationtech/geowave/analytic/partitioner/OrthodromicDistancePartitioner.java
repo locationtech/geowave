@@ -77,6 +77,9 @@ public class OrthodromicDistancePartitioner<T> extends AbstractPartitioner<T> im
 
   public OrthodromicDistancePartitioner() {}
 
+  @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+      value = "CT_CONSTRUCTOR_THROW",
+      justification = "Constructor validation is necessary and class is extended by BoundaryPartitioner")
   public OrthodromicDistancePartitioner(
       final CoordinateReferenceSystem crs,
       final CommonIndexModel indexModel,
@@ -84,6 +87,15 @@ public class OrthodromicDistancePartitioner<T> extends AbstractPartitioner<T> im
       final double[] distancePerDimension,
       final Unit<Length> geometricDistanceUnit) {
     super(distancePerDimension);
+    if (crs == null) {
+      throw new IllegalArgumentException("CoordinateReferenceSystem cannot be null");
+    }
+    if (indexModel == null) {
+      throw new IllegalArgumentException("CommonIndexModel cannot be null");
+    }
+    if (dimensionExtractor == null) {
+      throw new IllegalArgumentException("DimensionExtractor cannot be null");
+    }
     this.crs = crs;
     this.crsName = crs.getIdentifiers().iterator().next().toString();
     this.geometricDistanceUnit = geometricDistanceUnit;

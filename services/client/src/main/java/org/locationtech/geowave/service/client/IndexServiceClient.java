@@ -22,7 +22,7 @@ import java.lang.reflect.AnnotatedElement;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class IndexServiceClient implements IndexService {
+public final class IndexServiceClient implements IndexService {
   private static final Logger LOGGER = LoggerFactory.getLogger(IndexServiceClient.class);
   private final IndexService indexService;
   private final WebTarget addIndexTarget;

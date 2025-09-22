@@ -27,10 +27,10 @@ public class HdfsFile extends org.apache.avro.specific.SpecificRecordBase implem
 
   /** Original file data */
   @Deprecated
-  public java.nio.ByteBuffer originalFile;
+  private java.nio.ByteBuffer originalFile;
   /** Original file path */
   @Deprecated
-  public java.lang.CharSequence originalFilePath;
+  private java.lang.CharSequence originalFilePath;
 
   /**
    * Default constructor. Note that this does not initialize fields to their default values from the

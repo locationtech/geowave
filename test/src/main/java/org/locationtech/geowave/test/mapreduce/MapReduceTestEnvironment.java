@@ -43,7 +43,7 @@ public class MapReduceTestEnvironment implements TestEnvironment {
   private static final String DEFAULT_JOB_TRACKER = "local";
   private String jobtracker;
   private String hdfs;
-  private boolean hdfsProtocol;
+  private volatile boolean hdfsProtocol;
   private String hdfsBaseDirectory;
   private ManualOperationParams operationParams;
   private File configFile;

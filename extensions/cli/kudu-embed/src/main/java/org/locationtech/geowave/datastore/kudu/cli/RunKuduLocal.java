@@ -30,7 +30,7 @@ public class RunKuduLocal extends DefaultOperation implements Command {
       names = {"--interactive", "-i"},
       arity = 1,
       description = "Whether to prompt for user input to end the process")
-  private final boolean interactive = true;
+  private boolean interactive = true;
 
   /**
    * Prep the driver & run the operation.

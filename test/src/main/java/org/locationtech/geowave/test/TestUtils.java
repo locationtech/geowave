@@ -830,7 +830,7 @@ public class TestUtils {
     }
   }
 
-  private static Random rng = null;
+  private static final Random rng = new Random();
 
   public static double getTileValue(
       final int x,
@@ -844,11 +844,7 @@ public class TestUtils {
     if ((r % 2) == 0) {
       return resultOfFunction;
     } else {
-      if (rng == null) {
-        rng = new Random((long) resultOfFunction);
-      } else {
-        rng.setSeed((long) resultOfFunction);
-      }
+      rng.setSeed((long) resultOfFunction);
 
       return rng.nextDouble() * resultOfFunction;
     }

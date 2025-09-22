@@ -419,46 +419,47 @@ public class Stanag4676ImageryChipService {
   // ------------------------------------------------------------------------------
   // ------------------------------------------------------------------------------
 
-  private synchronized DataStore getSingletonInstance() {
-    if (dataStore != null) {
+  private DataStore getSingletonInstance() {
+    synchronized (Stanag4676ImageryChipService.class) {
+      if (dataStore != null) {
+        return dataStore;
+      }
+      final String confPropFilename = context.getInitParameter("config.properties");
+      // HP Fortify "Log Forging" false positive
+      // What Fortify considers "user input" comes only
+      // from users with OS-level access anyway
+      LOGGER.info(
+          "Creating datastore singleton for 4676 service.   conf prop filename: "
+              + confPropFilename);
+      Properties props = null;
+      try (InputStream is = context.getResourceAsStream(confPropFilename)) {
+        props = loadProperties(is);
+      } catch (final IOException e) {
+        LOGGER.error(e.getLocalizedMessage(), e);
+      }
+      LOGGER.info("Found {} props", (props != null ? props.size() : 0));
+      if (props != null) {
+        final Map<String, String> strMap = new HashMap<>();
+
+        final Set<Object> keySet = props.keySet();
+        final Iterator<Object> it = keySet.iterator();
+        while (it.hasNext()) {
+          final String key = it.next().toString();
+          final String value = getProperty(props, key);
+          strMap.put(key, value);
+          // HP Fortify "Log Forging" false positive
+          // What Fortify considers "user input" comes only
+          // from users with OS-level access anyway
+          LOGGER.info("    Key/Value: " + key + "/" + value);
+        }
+
+        dataStore = GeoWaveStoreFinder.createDataStore(strMap);
+      }
+      if (dataStore == null) {
+        LOGGER.error("Unable to create datastore for 4676 service");
+      }
       return dataStore;
     }
-    final String confPropFilename = context.getInitParameter("config.properties");
-    // HP Fortify "Log Forging" false positive
-    // What Fortify considers "user input" comes only
-    // from users with OS-level access anyway
-    LOGGER.info(
-        "Creating datastore singleton for 4676 service.   conf prop filename: " + confPropFilename);
-    Properties props = null;
-    try (InputStream is = context.getResourceAsStream(confPropFilename)) {
-      props = loadProperties(is);
-    } catch (final IOException e) {
-      LOGGER.error(e.getLocalizedMessage(), e);
-    }
-    LOGGER.info("Found {} props", (props != null ? props.size() : 0));
-    if (props != null) {
-      final Map<String, String> strMap = new HashMap<>();
-
-      final Set<Object> keySet = props.keySet();
-      final Iterator<Object> it = keySet.iterator();
-      while (it.hasNext()) {
-        final String key = it.next().toString();
-        final String value = getProperty(props, key);
-        strMap.put(key, value);
-        // HP Fortify "Log Forging" false positive
-        // What Fortify considers "user input" comes only
-        // from users with OS-level access anyway
-        LOGGER.info("    Key/Value: " + key + "/" + value);
-      }
-
-      dataStore = GeoWaveStoreFinder.createDataStore(strMap);
-
-      dataStore = GeoWaveStoreFinder.createDataStore(strMap);
-    }
-    if (dataStore == null) {
-      LOGGER.error("Unable to create datastore for 4676 service");
-    }
-    return dataStore;
   }
 
   private static Properties loadProperties(final InputStream is) {

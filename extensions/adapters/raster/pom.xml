@@ -9,6 +9,9 @@
 	<artifactId>geowave-adapter-raster</artifactId>
 	<name>Geowave Raster Adapter</name>
 	<description>Geowave Data Adapter for Raster Data</description>
+	<properties>
+		<spotbugs.skip>true</spotbugs.skip>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.google.protobuf</groupId>

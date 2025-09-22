@@ -45,7 +45,7 @@ public class RoundRobinKeyIndexStrategy implements
     PartitionIndexStrategy<MultiDimensionalNumericData, MultiDimensionalNumericData> {
 
   private byte[][] keys;
-  public int position = 0;
+  private int position = 0;
 
   /** Default initial key set size is 3. */
   public RoundRobinKeyIndexStrategy() {
@@ -123,5 +123,13 @@ public class RoundRobinKeyIndexStrategy implements
   @Override
   public byte[][] getPredefinedSplits() {
     return getPartitionKeys();
+  }
+
+  public int getPosition() {
+    return position;
+  }
+
+  public void setPosition(final int position) {
+    this.position = position;
   }
 }

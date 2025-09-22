@@ -26,7 +26,7 @@ import it.geosolutions.imageio.plugins.png.PNGWriter;
 public class PersistableRenderedImage implements Persistable {
   private static final Logger LOGGER = LoggerFactory.getLogger(PersistableRenderedImage.class);
   private static final float DEFAULT_PNG_QUALITY = 0.8f;
-  public BufferedImage image;
+  private BufferedImage image;
 
   public PersistableRenderedImage() {}
 
@@ -36,6 +36,10 @@ public class PersistableRenderedImage implements Persistable {
 
   public BufferedImage getImage() {
     return image;
+  }
+
+  public void setImage(final BufferedImage image) {
+    this.image = image;
   }
 
   @Override

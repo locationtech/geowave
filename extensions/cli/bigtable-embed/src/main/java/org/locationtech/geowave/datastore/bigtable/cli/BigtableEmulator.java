@@ -56,7 +56,7 @@ public class BigtableEmulator {
   private static final String GCLOUD_EXE_DIR = "google-cloud-sdk/bin";
   private final Object STARTUP_LOCK = new Object();
   private boolean matchFound = false;
-  private final long MAX_STARTUP_WAIT = 60000L; // if it doesn't start in 1
+  private static final long MAX_STARTUP_WAIT = 60000L; // if it doesn't start in 1
   // minute, just move on and
   // get it over with
   private final File sdkDir;

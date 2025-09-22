@@ -17,7 +17,7 @@ import org.locationtech.geowave.datastore.filesystem.FileSystemStoreFactoryFamil
 import org.locationtech.geowave.datastore.filesystem.config.FileSystemOptions;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
-public class FileSystemStoreTestEnvironment extends StoreTestEnvironment {
+public final class FileSystemStoreTestEnvironment extends StoreTestEnvironment {
 
   private static final GenericStoreFactory<DataStore> STORE_FACTORY =
       new FileSystemStoreFactoryFamily().getDataStoreFactory();
@@ -30,6 +30,8 @@ public class FileSystemStoreTestEnvironment extends StoreTestEnvironment {
     }
     return singletonInstance;
   }
+
+  private FileSystemStoreTestEnvironment() {}
 
   @Override
   public void setup() throws Exception {}

@@ -482,7 +482,7 @@ public class TieredSpatialJoin extends JoinStrategy {
           for (final SubStrategy strat : strategies) {
             final SingleTierSubStrategy tierStrat =
                 (SingleTierSubStrategy) strat.getIndexStrategy();
-            if (targetTierId == tierStrat.tier) {
+            if (targetTierId == tierStrat.getTier()) {
               useStrat = tierStrat;
               break;
             }

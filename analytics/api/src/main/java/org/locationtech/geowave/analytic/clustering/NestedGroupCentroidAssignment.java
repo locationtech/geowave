@@ -53,7 +53,7 @@ import org.slf4j.Logger;
  * <!-- @formatter:on -->
  * @param <T>
  */
-public class NestedGroupCentroidAssignment<T> {
+public final class NestedGroupCentroidAssignment<T> {
   private final CentroidAssociationFn<T> associationdFunction = new CentroidAssociationFn<>();
   private final CentroidManager<T> centroidManager;
   private final int endZoomLevel;

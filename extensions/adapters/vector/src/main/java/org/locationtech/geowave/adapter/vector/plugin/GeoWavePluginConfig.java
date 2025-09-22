@@ -52,8 +52,10 @@ import org.slf4j.LoggerFactory;
  * store within GeoTools. For GeoServer this configuration can be provided within the data store
  * definition workflow.
  */
-public class GeoWavePluginConfig {
+public final class GeoWavePluginConfig {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWavePluginConfig.class);
+
+  private final StoreFactoryFamilySpi storeFactoryFamily;
 
   public static final String GEOWAVE_NAMESPACE_KEY = StoreFactoryOptions.GEOWAVE_NAMESPACE_OPTION;
   // name matches the workspace parameter provided to the factory
@@ -168,7 +170,9 @@ public class GeoWavePluginConfig {
 
   public GeoWavePluginConfig(final DataStorePluginOptions params) throws GeoWavePluginException {
     this(
-        params.getFactoryFamily(),
+        java.util.Objects.requireNonNull(
+            params,
+            "DataStorePluginOptions cannot be null").getFactoryFamily(),
         // converting to Map<String,String> to Map<String,Serializable>
         params.getOptionsAsMap().entrySet().stream().collect(
             Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
@@ -177,6 +181,11 @@ public class GeoWavePluginConfig {
   public GeoWavePluginConfig(
       final StoreFactoryFamilySpi storeFactoryFamily,
       final Map<String, ?> params) throws GeoWavePluginException {
+    this.storeFactoryFamily =
+        java.util.Objects.requireNonNull(
+            storeFactoryFamily,
+            "StoreFactoryFamilySpi cannot be null");
+    java.util.Objects.requireNonNull(params, "Parameters map cannot be null");
 
     Object param = params.get(GEOWAVE_NAMESPACE_KEY);
     name = storeFactoryFamily.getType() + (param == null ? "" : ("_" + param));

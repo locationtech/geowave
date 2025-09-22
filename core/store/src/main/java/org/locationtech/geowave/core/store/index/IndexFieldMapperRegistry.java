@@ -52,7 +52,7 @@ public class IndexFieldMapperRegistry {
     this.totalFieldMappings = mappingCount;
   }
 
-  public static IndexFieldMapperRegistry instance() {
+  public static synchronized IndexFieldMapperRegistry instance() {
     if (INSTANCE == null) {
       INSTANCE = new IndexFieldMapperRegistry();
     }

@@ -40,7 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
-public class OSMRunner extends Configured implements Tool {
+public final class OSMRunner extends Configured implements Tool {
   private static final Logger log = LoggerFactory.getLogger(OSMRunner.class);
   private org.apache.avro.Schema avroSchema = null;
   private String inputAvroFile = null;

@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
-public class BaseQueryOptions {
+public final class BaseQueryOptions {
   private static Logger LOGGER = LoggerFactory.getLogger(BaseQueryOptions.class);
   private static ScanCallback<Object, GeoWaveRow> DEFAULT_CALLBACK =
       new ScanCallback<Object, GeoWaveRow>() {
@@ -52,7 +52,6 @@ public class BaseQueryOptions {
         public void entryScanned(final Object entry, final GeoWaveRow row) {}
       };
 
-  @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(value = {"SE_TRANSIENT_FIELD_NOT_RESTORED"})
   private Collection<InternalDataAdapter<?>> adapters = null;
 
   private short[] adapterIds = null;

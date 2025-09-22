@@ -12,11 +12,12 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -26,7 +27,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class JsonFileAuthorizationProvider implements AuthorizationSPI {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(JsonFileAuthorizationProvider.class);
+
   private AuthorizationSet authorizationSet;
+
 
   public JsonFileAuthorizationProvider(final URL location) {
     if (location == null) {
@@ -35,24 +39,22 @@ public class JsonFileAuthorizationProvider implements AuthorizationSPI {
       String path = location.getPath();
       if (!location.getProtocol().equals("file")
           || (!new File(path).canRead() && !new File("." + path).canRead())) {
-        throw new IllegalArgumentException("Cannot find file " + location.toString());
+        LOGGER.error("Cannot find file " + location.toString());
+        authorizationSet = new AuthorizationSet();
       }
       try {
         if (!new File(path).canRead()) {
           path = "." + path;
         }
         parse(new File(path));
-      } catch (final JsonParseException e) {
-        throw new IllegalArgumentException("Cannot parse file " + location.toString(), e);
-      } catch (final JsonMappingException e) {
-        throw new IllegalArgumentException("Cannot parse file " + location.toString(), e);
       } catch (final IOException e) {
-        throw new IllegalArgumentException("Cannot parse file " + location.toString(), e);
+        LOGGER.error("Cannot parse file " + location.toString(), e);
+        authorizationSet = new AuthorizationSet();
       }
     }
   }
 
-  private void parse(final File file) throws JsonParseException, JsonMappingException, IOException {
+  private void parse(final File file) throws IOException {
     final ObjectMapper mapper = new ObjectMapper();
     authorizationSet = mapper.readValue(file, AuthorizationSet.class);
   }

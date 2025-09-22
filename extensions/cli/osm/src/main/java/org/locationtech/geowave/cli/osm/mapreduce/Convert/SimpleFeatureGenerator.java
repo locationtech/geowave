@@ -140,7 +140,7 @@ public class SimpleFeatureGenerator {
     NODE, WAY, RELATION, UNSET
   }
 
-  public static class OSMUnion {
+  public static final class OSMUnion {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OSMUnion.class);
 

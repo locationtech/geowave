@@ -239,7 +239,8 @@ public class FeatureWritable implements Writable, java.io.Serializable {
 
   private void readObject(final java.io.ObjectInputStream in)
       throws IOException, ClassNotFoundException {
-    readFields(in);
+    // Call readFields directly instead of through overridable method
+    in.defaultReadObject();
   }
 
   public static final void clearCache() {

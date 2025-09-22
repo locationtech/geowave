@@ -104,36 +104,46 @@ public class GeoWaveGrpcVectorService extends VectorGrpc.VectorImplBase implemen
     ContentFeatureCollection featureCollection = null;
     try {
       final String typeName = request.getTypeName();
-      featureCollection = gtStore.getFeatureSource(typeName).getFeatures(filter);
-    } catch (final IOException | NullPointerException e) {
+      if (gtStore != null && typeName != null) {
+        featureCollection = gtStore.getFeatureSource(typeName).getFeatures(filter);
+      } else {
+        LOGGER.error("gtStore or typeName is null");
+        responseObserver.onError(new IllegalArgumentException("gtStore or typeName is null"));
+        return;
+      }
+    } catch (final IOException e) {
       LOGGER.error("Exception encountered getting feature collection", e);
       responseObserver.onError(e);
     }
 
-    try (final SimpleFeatureIterator iterator = featureCollection.features()) {
+    if (featureCollection != null) {
+      try (final SimpleFeatureIterator iterator = featureCollection.features()) {
 
-      while (iterator.hasNext()) {
-        final SimpleFeature simpleFeature = iterator.next();
-        final SimpleFeatureType type = simpleFeature.getType();
-        final FeatureProtos.Builder b = FeatureProtos.newBuilder();
-        final FeatureAttributeProtos.Builder attBuilder = FeatureAttributeProtos.newBuilder();
+        while (iterator.hasNext()) {
+          final SimpleFeature simpleFeature = iterator.next();
+          final SimpleFeatureType type = simpleFeature.getType();
+          final FeatureProtos.Builder b = FeatureProtos.newBuilder();
+          final FeatureAttributeProtos.Builder attBuilder = FeatureAttributeProtos.newBuilder();
 
-        for (int i = 0; i < type.getAttributeDescriptors().size(); i++) {
-          setAttributeBuilderValue(simpleFeature.getAttribute(i), attBuilder);
-          b.putAttributes(type.getAttributeDescriptors().get(i).getLocalName(), attBuilder.build());
-          /*
-           * b.putAttributes( type.getAttributeDescriptors().get( i).getLocalName(),
-           * simpleFeature.getAttribute(i) == null ? "" : simpleFeature.getAttribute(
-           * i).toString());
-           */
+          for (int i = 0; i < type.getAttributeDescriptors().size(); i++) {
+            setAttributeBuilderValue(simpleFeature.getAttribute(i), attBuilder);
+            b.putAttributes(
+                type.getAttributeDescriptors().get(i).getLocalName(),
+                attBuilder.build());
+            /*
+             * b.putAttributes( type.getAttributeDescriptors().get( i).getLocalName(),
+             * simpleFeature.getAttribute(i) == null ? "" : simpleFeature.getAttribute(
+             * i).toString());
+             */
+          }
+          final FeatureProtos f = b.build();
+          responseObserver.onNext(f);
         }
-        final FeatureProtos f = b.build();
-        responseObserver.onNext(f);
+        responseObserver.onCompleted();
       }
-      responseObserver.onCompleted();
-    } catch (final NullPointerException e) {
-      LOGGER.error("Exception encountered", e);
-      responseObserver.onError(e);
+    } else {
+      LOGGER.error("Feature collection is null");
+      responseObserver.onError(new IllegalStateException("Feature collection is null"));
     }
   }
 

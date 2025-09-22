@@ -49,7 +49,8 @@ public class GeoWaveGTDataStoreFactory implements DataStoreFactorySpi {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveGTDataStoreFactory.class);
   private final List<DataStoreCacheEntry> dataStoreCache = new ArrayList<>();
   private final StoreFactoryFamilySpi geowaveStoreFactoryFamily;
-  private static Boolean isAvailable = null;
+  private static volatile Boolean isAvailable = null;
+  private static final Object AVAILABILITY_LOCK = new Object();
 
   /**
    * Public "no argument" constructor called by Factory Service Provider (SPI) entry listed in
@@ -173,16 +174,20 @@ public class GeoWaveGTDataStoreFactory implements DataStoreFactorySpi {
   }
 
   @Override
-  public synchronized boolean isAvailable() {
+  public boolean isAvailable() {
     if (isAvailable == null) {
-      if (geowaveStoreFactoryFamily == null) {
-        isAvailable = false;
-      } else {
-        try {
-          Class.forName("org.locationtech.geowave.adapter.vector.plugin.GeoWaveGTDataStore");
-          isAvailable = true;
-        } catch (final ClassNotFoundException e) {
-          isAvailable = false;
+      synchronized (AVAILABILITY_LOCK) {
+        if (isAvailable == null) {
+          if (geowaveStoreFactoryFamily == null) {
+            isAvailable = false;
+          } else {
+            try {
+              Class.forName("org.locationtech.geowave.adapter.vector.plugin.GeoWaveGTDataStore");
+              isAvailable = true;
+            } catch (final ClassNotFoundException e) {
+              isAvailable = false;
+            }
+          }
         }
       }
     }

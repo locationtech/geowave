@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
 
-public class SceneFeatureIterator implements SimpleFeatureIterator {
+public final class SceneFeatureIterator implements SimpleFeatureIterator {
   private static final Logger LOGGER = LoggerFactory.getLogger(SceneFeatureIterator.class);
 
   private static final String SCENES_DIR = "scenes";

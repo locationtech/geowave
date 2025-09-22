@@ -30,7 +30,7 @@ import org.locationtech.geowave.analytic.mapreduce.MapReduceJobRunner;
  */
 public class IterationCountCalculateRunner<T> implements MapReduceJobRunner {
 
-  private int iterationsCount = 1;
+  private volatile int iterationsCount = 1;
 
   public IterationCountCalculateRunner() {}
 

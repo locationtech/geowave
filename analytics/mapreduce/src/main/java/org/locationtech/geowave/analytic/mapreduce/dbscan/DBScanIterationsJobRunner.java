@@ -131,7 +131,7 @@ public class DBScanIterationsJobRunner implements MapReduceJobRunner, Independen
         {
           int i = 0;
           for (final String eachDistance : distancesArray) {
-            distancePerDimension[i++] = Double.valueOf(eachDistance);
+            distancePerDimension[i++] = Double.parseDouble(eachDistance);
           }
         }
         boolean secondary = precisionFactor < 1.0;

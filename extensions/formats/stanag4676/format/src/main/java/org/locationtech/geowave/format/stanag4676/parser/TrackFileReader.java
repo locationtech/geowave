@@ -106,15 +106,15 @@ public class TrackFileReader implements TrackReader {
       handler.initialize(run);
       fis = new FileInputStream(f);
       read(fis);
-    } catch (final FileNotFoundException | NullPointerException | SecurityException e) {
+    } catch (final FileNotFoundException | SecurityException e) {
       LOGGER.error("Unable to create input stream", e);
     } finally {
       {
         try {
-          // HP Fortify "Null Dereference" false positive
-          // NullPointerException is caught below
-          fis.close();
-        } catch (final IOException | NullPointerException e2) {
+          if (fis != null) {
+            fis.close();
+          }
+        } catch (final IOException e2) {
           LOGGER.error("Unable to close the InputStream", e2);
         }
       }

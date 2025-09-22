@@ -16,7 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.restlet.representation.Representation;
 
-public class RequestParametersJson extends RequestParameters {
+public final class RequestParametersJson extends RequestParameters {
 
   public RequestParametersJson(final Representation request) throws IOException {
     super();

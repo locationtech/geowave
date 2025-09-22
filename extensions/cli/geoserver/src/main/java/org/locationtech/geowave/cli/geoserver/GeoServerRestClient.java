@@ -105,7 +105,7 @@ public class GeoServerRestClient {
     this.console = console;
   }
 
-  public static GeoServerRestClient getInstance(
+  public static synchronized GeoServerRestClient getInstance(
       final GeoServerConfig config,
       final Console console) {
     if (SINGLETON_INSTANCE == null) {

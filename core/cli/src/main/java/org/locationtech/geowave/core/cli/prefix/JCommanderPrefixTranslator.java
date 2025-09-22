@@ -26,7 +26,7 @@ import com.beust.jcommander.Parameterized;
  * or a map, where the String key is prepended as a prefix to the commands under that object. TODO:
  * This might work better with a Visitor pattern
  */
-public class JCommanderPrefixTranslator {
+public final class JCommanderPrefixTranslator {
 
   private final Queue<ParseContext> queue = new LinkedList<>();
 
@@ -38,7 +38,7 @@ public class JCommanderPrefixTranslator {
   private Field paraField;
   private Field paraMethod;
 
-  public JCommanderPrefixTranslator() {
+  public JCommanderPrefixTranslator() throws RuntimeException {
     try {
       // HP Fortify "Access Specifier Manipulation"
       // These fields are being modified by trusted code,

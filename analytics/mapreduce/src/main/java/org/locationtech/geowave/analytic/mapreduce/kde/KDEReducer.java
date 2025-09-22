@@ -178,9 +178,6 @@ public class KDEReducer extends
     }
   }
 
-  @SuppressFBWarnings(
-      value = "INT_BAD_REM_BY_1",
-      justification = "The calculation is appropriate if we ever want to vary to tile size.")
   private TileInfo fromCellIndexToTileInfo(final long index) {
     final int xPost = (int) (index / numYPosts);
     final int yPost = (int) (index % numYPosts);

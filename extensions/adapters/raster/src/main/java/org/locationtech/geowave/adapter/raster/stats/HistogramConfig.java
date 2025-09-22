@@ -15,7 +15,7 @@ import org.geotools.util.NumberRange;
 import org.locationtech.geowave.core.index.VarintUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 
-public class HistogramConfig implements Persistable {
+public final class HistogramConfig implements Persistable {
   private static final int MAX_DEFAULT_NUM_BINS = 65536;
   private double[] highValues;
   private double[] lowValues;
@@ -24,6 +24,7 @@ public class HistogramConfig implements Persistable {
   public HistogramConfig() {}
 
   public HistogramConfig(final SampleModel sampleModel) {
+    java.util.Objects.requireNonNull(sampleModel, "Sample model cannot be null");
     final int numBands = sampleModel.getNumBands();
     highValues = new double[numBands];
     lowValues = new double[numBands];

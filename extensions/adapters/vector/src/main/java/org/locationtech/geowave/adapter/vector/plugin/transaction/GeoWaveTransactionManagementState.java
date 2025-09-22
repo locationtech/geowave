@@ -20,7 +20,7 @@ import org.locationtech.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents
 import org.locationtech.geowave.adapter.vector.plugin.lock.LockingManagement;
 
 /** Implements the transaction state protocol with Geotools. */
-public class GeoWaveTransactionManagementState implements GeoWaveTransactionState {
+public final class GeoWaveTransactionManagementState implements GeoWaveTransactionState {
 
   private final GeoWaveDataStoreComponents components;
   private final LockingManagement lockingManager;
@@ -41,9 +41,11 @@ public class GeoWaveTransactionManagementState implements GeoWaveTransactionStat
       final Transaction transaction,
       final LockingManagement lockingManager) throws IOException {
     this.transactionBufferSize = transactionBufferSize;
-    this.components = components;
-    this.transaction = transaction;
-    this.lockingManager = lockingManager;
+    this.components =
+        java.util.Objects.requireNonNull(components, "GeoWaveDataStoreComponents cannot be null");
+    this.transaction = java.util.Objects.requireNonNull(transaction, "Transaction cannot be null");
+    this.lockingManager =
+        java.util.Objects.requireNonNull(lockingManager, "LockingManagement cannot be null");
     txID = components.getTransaction();
   }
 

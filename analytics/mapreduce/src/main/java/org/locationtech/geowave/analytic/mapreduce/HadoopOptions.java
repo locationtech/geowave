@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
  * This class encapsulates the command-line options and parsed values specific to staging
  * intermediate data to HDFS.
  */
-public class HadoopOptions {
+public final class HadoopOptions {
   private static final Logger LOGGER = LoggerFactory.getLogger(HadoopOptions.class);
   private final String hdfsHostPort;
   private final Path basePath;

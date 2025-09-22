@@ -259,7 +259,7 @@ public class JCommanderTranslationMap {
         translatedObjects.add(instance);
       }
     } catch (InstantiationException | IllegalAccessException | NotFoundException
-        | IllegalStateException | NullPointerException | CannotCompileException e) {
+        | IllegalStateException | CannotCompileException e) {
       LOGGER.error("Unable to create classes", e);
       throw new RuntimeException();
     }

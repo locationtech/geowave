@@ -61,7 +61,7 @@ public class InternalDataAdapterImpl<T> implements InternalDataAdapter<T> {
   private transient volatile boolean positionMapsInitialized = false;
   private Object MUTEX = new Object();
   protected DataTypeAdapter<T> adapter;
-  protected short adapterId;
+  protected volatile short adapterId;
   protected VisibilityHandler visibilityHandler = null;
 
   public InternalDataAdapterImpl() {}

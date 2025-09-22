@@ -46,7 +46,7 @@ public class CassandraStoreTestEnvironment extends StoreTestEnvironment {
     return singletonInstance;
   }
 
-  private boolean running = false;
+  private volatile boolean running = false;
   CassandraServer s;
 
   private CassandraStoreTestEnvironment() {}

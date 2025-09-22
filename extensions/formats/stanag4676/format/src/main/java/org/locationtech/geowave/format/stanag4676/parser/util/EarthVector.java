@@ -365,11 +365,11 @@ public class EarthVector {
     double deg = rad * DPR;
 
     // normalize to (-180 to 180)
-    while (deg > 180) {
-      deg -= 360;
+    if (deg > 180) {
+      deg = deg - 360 * Math.ceil((deg - 180) / 360);
     }
-    while (deg < -180) {
-      deg += 360;
+    if (deg < -180) {
+      deg = deg + 360 * Math.ceil((-180 - deg) / 360);
     }
 
     return deg;
@@ -631,11 +631,11 @@ public class EarthVector {
 
   private static double get180NormalizedLon(final double lon) {
     double newLon = lon;
-    while (newLon < -180) {
-      newLon += 360;
+    if (newLon < -180) {
+      newLon = newLon + 360 * Math.ceil((-180 - newLon) / 360);
     }
-    while (newLon > 180) {
-      newLon -= 360;
+    if (newLon > 180) {
+      newLon = newLon - 360 * Math.ceil((newLon - 180) / 360);
     }
     return newLon;
   }

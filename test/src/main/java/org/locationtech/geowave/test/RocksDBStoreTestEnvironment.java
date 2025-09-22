@@ -18,7 +18,7 @@ import org.locationtech.geowave.datastore.rocksdb.config.RocksDBOptions;
 import org.locationtech.geowave.datastore.rocksdb.util.RocksDBClientCache;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
-public class RocksDBStoreTestEnvironment extends StoreTestEnvironment {
+public final class RocksDBStoreTestEnvironment extends StoreTestEnvironment {
 
   private static final GenericStoreFactory<DataStore> STORE_FACTORY =
       new RocksDBStoreFactoryFamily().getDataStoreFactory();
@@ -31,6 +31,8 @@ public class RocksDBStoreTestEnvironment extends StoreTestEnvironment {
     }
     return singletonInstance;
   }
+
+  private RocksDBStoreTestEnvironment() {}
 
   @Override
   public void setup() throws Exception {}

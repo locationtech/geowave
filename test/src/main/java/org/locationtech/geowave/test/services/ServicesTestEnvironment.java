@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-public class ServicesTestEnvironment implements TestEnvironment {
+public final class ServicesTestEnvironment implements TestEnvironment {
   private static final Logger LOGGER = LoggerFactory.getLogger(ServicesTestEnvironment.class);
 
   private static ServicesTestEnvironment singletonInstance = null;
@@ -39,6 +39,8 @@ public class ServicesTestEnvironment implements TestEnvironment {
     }
     return singletonInstance;
   }
+
+  private ServicesTestEnvironment() {}
 
   private static String[] PARENT_CLASSLOADER_LIBRARIES =
       new String[] {"hbase", "hadoop", "protobuf", "guava", "restlet", "spring"};
@@ -85,9 +87,6 @@ public class ServicesTestEnvironment implements TestEnvironment {
 
   private Server jettyServer;
 
-  @SuppressFBWarnings(
-      value = {"SWL_SLEEP_WITH_LOCK_HELD"},
-      justification = "Jetty must be started before releasing the lock")
   @Override
   public void setup() throws Exception {
     synchronized (GeoWaveITRunner.MUTEX) {

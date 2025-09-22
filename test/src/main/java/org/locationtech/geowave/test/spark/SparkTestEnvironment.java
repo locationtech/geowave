@@ -15,7 +15,7 @@ import org.locationtech.geowave.test.TestEnvironment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SparkTestEnvironment implements TestEnvironment {
+public final class SparkTestEnvironment implements TestEnvironment {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SparkTestEnvironment.class);
 
@@ -28,6 +28,8 @@ public class SparkTestEnvironment implements TestEnvironment {
     }
     return singletonInstance;
   }
+
+  private SparkTestEnvironment() {}
 
   @Override
   public void setup() throws Exception {

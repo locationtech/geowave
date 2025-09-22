@@ -36,12 +36,38 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
   // the purpose for these maps instead of a list of samplemodel and adapter
   // ID pairs is to allow for multiple adapters to share the same sample model
   protected Map<Integer, SampleModel> sampleModels = new HashMap<>();
-  public Map<Short, Integer> adapterIdToSampleModelKey = new HashMap<>();
+  private Map<Short, Integer> adapterIdToSampleModelKey = new HashMap<>();
 
-  public Map<Integer, RasterTileMergeStrategy<T>> childMergeStrategies = new HashMap<>();
-  public Map<Short, Integer> adapterIdToChildMergeStrategyKey = new HashMap<>();
+  private Map<Integer, RasterTileMergeStrategy<T>> childMergeStrategies = new HashMap<>();
+  private Map<Short, Integer> adapterIdToChildMergeStrategyKey = new HashMap<>();
 
   public MultiAdapterServerMergeStrategy() {}
+
+  public Map<Short, Integer> getAdapterIdToSampleModelKey() {
+    return adapterIdToSampleModelKey;
+  }
+
+  public void setAdapterIdToSampleModelKey(final Map<Short, Integer> adapterIdToSampleModelKey) {
+    this.adapterIdToSampleModelKey = adapterIdToSampleModelKey;
+  }
+
+  public Map<Integer, RasterTileMergeStrategy<T>> getChildMergeStrategies() {
+    return childMergeStrategies;
+  }
+
+  public void setChildMergeStrategies(
+      final Map<Integer, RasterTileMergeStrategy<T>> childMergeStrategies) {
+    this.childMergeStrategies = childMergeStrategies;
+  }
+
+  public Map<Short, Integer> getAdapterIdToChildMergeStrategyKey() {
+    return adapterIdToChildMergeStrategyKey;
+  }
+
+  public void setAdapterIdToChildMergeStrategyKey(
+      final Map<Short, Integer> adapterIdToChildMergeStrategyKey) {
+    this.adapterIdToChildMergeStrategyKey = adapterIdToChildMergeStrategyKey;
+  }
 
   public MultiAdapterServerMergeStrategy(
       final SingleAdapterServerMergeStrategy singleAdapterMergeStrategy) {
@@ -170,9 +196,6 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
     }
   }
 
-  @SuppressFBWarnings(
-      value = {"DLS_DEAD_LOCAL_STORE"},
-      justification = "Incorrect warning, sampleModelBinary used")
   @Override
   public byte[] toBinary() {
     int byteCount = 0;

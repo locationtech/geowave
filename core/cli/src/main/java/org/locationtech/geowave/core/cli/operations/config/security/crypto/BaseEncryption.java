@@ -56,7 +56,7 @@ public abstract class BaseEncryption {
   private static final Pattern ENCCodePattern =
       Pattern.compile(PREFIX.replace("{", "\\{") + "([^}]+)" + SUFFIX.replace("{", "\\{"));
 
-  private final String KEY_ENCRYPTION_ALGORITHM = "AES";
+  private final static String KEY_ENCRYPTION_ALGORITHM = "AES";
 
   /**
    * Base constructor for encryption, allowing a resource location for the cryptography token key to

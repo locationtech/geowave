@@ -161,7 +161,7 @@ public class RasterDataAdapter implements
   private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
 
   private String coverageName;
-  protected int tileSize;
+  protected volatile int tileSize;
   private SampleModel sampleModel;
   private ColorModel colorModel;
   private Map<String, String> metadata;
@@ -171,9 +171,9 @@ public class RasterDataAdapter implements
   private double[] maxesPerBand;
   private String[] namesPerBand;
   private double[] backgroundValuesPerBand;
-  private boolean buildPyramid;
+  private volatile boolean buildPyramid;
   private RasterTileMergeStrategy<?> mergeStrategy;
-  private boolean equalizeHistogram;
+  private volatile boolean equalizeHistogram;
   private Interpolation interpolation;
 
   public RasterDataAdapter() {}
@@ -239,6 +239,10 @@ public class RasterDataAdapter implements
       final double[][] noDataValuesPerBand,
       final RasterTileMergeStrategy<?> mergeStrategy) {
     staticInit();
+
+    java.util.Objects.requireNonNull(coverageName, "Coverage name cannot be null");
+    java.util.Objects.requireNonNull(originalGridCoverage, "Original grid coverage cannot be null");
+    java.util.Objects.requireNonNull(mergeStrategy, "Merge strategy cannot be null");
 
     final RenderedImage img = originalGridCoverage.getRenderedImage();
     final SampleModel imgSampleModel = img.getSampleModel();

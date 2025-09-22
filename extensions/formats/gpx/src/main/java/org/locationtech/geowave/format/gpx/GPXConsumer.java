@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
  * globally unique. In contrast, Route way points include the file name and parent route name as
  * part of their ID. Routes are not assumed to be global.
  */
-public class GPXConsumer implements CloseableIterator<GeoWaveData<SimpleFeature>> {
+public final class GPXConsumer implements CloseableIterator<GeoWaveData<SimpleFeature>> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GpxIngestPlugin.class);
 
@@ -102,8 +102,8 @@ public class GPXConsumer implements CloseableIterator<GeoWaveData<SimpleFeature>
       final boolean uniqueWayPoints,
       final double maxLength) {
     super();
-    this.fileStream = fileStream;
-    this.indexNames = indexNames;
+    this.fileStream = java.util.Objects.requireNonNull(fileStream, "File stream cannot be null");
+    this.indexNames = java.util.Objects.requireNonNull(indexNames, "Index names cannot be null");
     this.inputID = inputID != null ? inputID : "";
     this.uniqueWayPoints = uniqueWayPoints;
     this.additionalData = additionalData;

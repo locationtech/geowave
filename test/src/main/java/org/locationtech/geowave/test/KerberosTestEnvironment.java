@@ -54,7 +54,7 @@ public class KerberosTestEnvironment implements TestEnvironment {
   public static final String JAVA_SECURITY_KRB5_CONF = "java.security.krb5.conf",
       SUN_SECURITY_KRB5_DEBUG = "sun.security.krb5.debug";
   private ClusterUser rootUser;
-  private boolean running = false;
+  private volatile boolean running = false;
 
 
   private KerberosTestEnvironment() {

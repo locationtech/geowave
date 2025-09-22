@@ -35,7 +35,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LegacyFeatureDataAdapter implements DataTypeAdapter<SimpleFeature> {
+public final class LegacyFeatureDataAdapter implements DataTypeAdapter<SimpleFeature> {
   private static final Logger LOGGER = LoggerFactory.getLogger(LegacyFeatureDataAdapter.class);
 
   private SimpleFeatureType persistedFeatureType;

@@ -33,12 +33,20 @@ public class TemporalDimensionalityTypeProvider implements
     DimensionalityTypeProviderSpi<TemporalOptions> {
   private static final String DEFAULT_TEMPORAL_ID_STR = "TIME_IDX";
 
-  public static final NumericDimensionDefinition[] TEMPORAL_DIMENSIONS =
+  private static final NumericDimensionDefinition[] TEMPORAL_DIMENSIONS =
       new NumericDimensionDefinition[] {
           new TimeDefinition(SpatialTemporalOptions.DEFAULT_PERIODICITY)};
 
-  public static final NumericDimensionField<?>[] TEMPORAL_FIELDS =
+  private static final NumericDimensionField<?>[] TEMPORAL_FIELDS =
       new NumericDimensionField[] {new TimeField(SpatialTemporalOptions.DEFAULT_PERIODICITY)};
+
+  public static NumericDimensionDefinition[] getTemporalDimensions() {
+    return TEMPORAL_DIMENSIONS.clone();
+  }
+
+  public static NumericDimensionField<?>[] getTemporalFields() {
+    return TEMPORAL_FIELDS.clone();
+  }
 
   public TemporalDimensionalityTypeProvider() {}
 
@@ -65,8 +73,8 @@ public class TemporalDimensionalityTypeProvider implements
   public static Index createIndexFromOptions(final TemporalOptions options) {
 
     if (!options.noTimeRanges) {
-      final NumericDimensionDefinition[] dimensions = TEMPORAL_DIMENSIONS;
-      final NumericDimensionField<?>[] fields = TEMPORAL_FIELDS;
+      final NumericDimensionDefinition[] dimensions = getTemporalDimensions();
+      final NumericDimensionField<?>[] fields = getTemporalFields();
 
       dimensions[dimensions.length - 1] = new TimeDefinition(options.periodicity);
       fields[dimensions.length - 1] = new TimeField(options.periodicity);

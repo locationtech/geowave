@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+	<!-- Exclude CT_CONSTRUCTOR_THROW for RasterDataAdapter constructors that need to throw exceptions as part of API design -->
+	<Match>
+		<Class name="org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter" />
+		<Bug pattern="CT_CONSTRUCTOR_THROW" />
+	</Match>
+</FindBugsFilter>

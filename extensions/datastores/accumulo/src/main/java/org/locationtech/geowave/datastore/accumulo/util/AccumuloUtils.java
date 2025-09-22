@@ -384,7 +384,7 @@ public class AccumuloUtils {
     return iterator;
   }
 
-  private static class IteratorWrapper implements Iterator<Entry<Key, Value>> {
+  private static final class IteratorWrapper implements Iterator<Entry<Key, Value>> {
 
     private final Iterator<Entry<Key, Value>> scannerIt;
     private final PersistentAdapterStore adapterStore;

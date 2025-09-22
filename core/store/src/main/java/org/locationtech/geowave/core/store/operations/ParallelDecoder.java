@@ -19,6 +19,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
@@ -37,7 +38,7 @@ public abstract class ParallelDecoder<T> implements CloseableIterator<T> {
   private ExecutorService threadPool;
   private final GeoWaveRowIteratorTransformer<T> rowTransformer;
   private static int RESULT_BUFFER_SIZE = 10000;
-  private int remainingTasks = 0;
+  private final AtomicInteger remainingTasks = new AtomicInteger(0);
   private final int numThreads;
   private static Object TASK_END_MARKER = new Object();
 
@@ -108,7 +109,7 @@ public abstract class ParallelDecoder<T> implements CloseableIterator<T> {
    */
   public void startDecode() throws Exception {
     final List<RowProvider> rowProviders = getRowProviders();
-    remainingTasks = rowProviders.size();
+    remainingTasks.set(rowProviders.size());
     for (final RowProvider rowProvider : rowProviders) {
       threadPool.submit(new DecodeTask<>(rowProvider, this));
     }
@@ -175,7 +176,7 @@ public abstract class ParallelDecoder<T> implements CloseableIterator<T> {
   private void computeNext() {
     try {
       nextResult = null;
-      while (remainingTasks > 0) {
+      while (remainingTasks.get() > 0) {
         while (!hasException() && ((nextResult = results.poll()) == null)) {
           // No results available, but there are still tasks running,
           // wait for more results.
@@ -183,7 +184,7 @@ public abstract class ParallelDecoder<T> implements CloseableIterator<T> {
         }
         // task end was signaled, reduce remaining task count.
         if (nextResult == TASK_END_MARKER) {
-          remainingTasks--;
+          remainingTasks.decrementAndGet();
           nextResult = null;
           continue;
         }

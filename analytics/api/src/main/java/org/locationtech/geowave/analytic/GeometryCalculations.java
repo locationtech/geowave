@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.units.indriya.unit.Units;
 
-public class GeometryCalculations {
+public final class GeometryCalculations {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeometryCalculations.class);
 
   final GeometryFactory factory;

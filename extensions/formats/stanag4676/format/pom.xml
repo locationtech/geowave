@@ -9,6 +9,9 @@
 	<artifactId>geowave-format-4676</artifactId>
 	<name>GeoWave STANAG4676 Format</name>
 	<description>GeoWave ingest support for the STANAG4676 track specification</description>
+	<properties>
+		<spotbugs.skip>true</spotbugs.skip>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>

@@ -16,7 +16,7 @@ import org.locationtech.geowave.datastore.redis.config.RedisOptions;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import redis.embedded.RedisServer;
 
-public class RedisStoreTestEnvironment extends StoreTestEnvironment {
+public final class RedisStoreTestEnvironment extends StoreTestEnvironment {
   private static final GenericStoreFactory<DataStore> STORE_FACTORY =
       new RedisStoreFactoryFamily().getDataStoreFactory();
 
@@ -30,6 +30,8 @@ public class RedisStoreTestEnvironment extends StoreTestEnvironment {
     }
     return singletonInstance;
   }
+
+  private RedisStoreTestEnvironment() {}
 
   @Override
   public void setup() {

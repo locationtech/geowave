@@ -45,7 +45,7 @@ public class SingleTierSubStrategy implements NumericIndexStrategy {
   private static final Logger LOGGER = LoggerFactory.getLogger(SingleTierSubStrategy.class);
   private SpaceFillingCurve sfc;
   private NumericDimensionDefinition[] baseDefinitions;
-  public byte tier;
+  private byte tier;
 
   public SingleTierSubStrategy() {}
 
@@ -260,5 +260,9 @@ public class SingleTierSubStrategy implements NumericIndexStrategy {
       final MultiDimensionalNumericData queryData,
       final IndexMetaData... hints) {
     return IndexUtils.getQueryPartitionKeys(this, queryData, hints);
+  }
+
+  public byte getTier() {
+    return tier;
   }
 }
