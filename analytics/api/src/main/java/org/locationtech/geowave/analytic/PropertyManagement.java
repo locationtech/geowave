@@ -353,7 +353,7 @@ public final class PropertyManagement implements Serializable {
       } catch (final ClassNotFoundException e) {
         LOGGER.error("Class not found for property " + property, e);
       } catch (final java.lang.IllegalArgumentException ex) {
-        LOGGER.error("Invalid class for property" + property, ex);
+        LOGGER.debug("Invalid class for property" + property, ex);
         throw new IllegalArgumentException("Invalid class for property" + property);
       }
     }
@@ -375,7 +375,7 @@ public final class PropertyManagement implements Serializable {
         LOGGER.error("Class not found for property " + property.self().toString());
         throw e;
       } catch (final java.lang.IllegalArgumentException ex) {
-        LOGGER.error("Invalid class for property" + property.self().toString(), ex);
+        LOGGER.debug("Invalid class for property" + property.self().toString(), ex);
         throw new IllegalArgumentException("Invalid class for property" + property);
       }
     } else {
@@ -400,7 +400,7 @@ public final class PropertyManagement implements Serializable {
       } catch (final ClassNotFoundException e) {
         LOGGER.error("Class not found for property " + property, e);
       } catch (final java.lang.IllegalArgumentException ex) {
-        LOGGER.error("Invalid class for property" + property, ex);
+        LOGGER.debug("Invalid class for property" + property, ex);
         throw new IllegalArgumentException("Invalid class for property" + property);
       }
     }
@@ -411,7 +411,7 @@ public final class PropertyManagement implements Serializable {
   private <T> Class<T> validate(final Class<T> classToValidate, final Class<?> iface)
       throws IllegalArgumentException {
     if (!iface.isAssignableFrom(classToValidate)) {
-      throw new IllegalArgumentException(classToValidate + "is an invalid subclass of " + iface);
+      throw new IllegalArgumentException(classToValidate + " is an invalid subclass of " + iface);
     }
     return classToValidate;
   }
