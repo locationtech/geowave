@@ -128,10 +128,10 @@ public class TrackTwisterStatistic extends
       double headingChange = heading2 - heading1;
 
       // Normalize heading change to [-180, 180] degrees
-      while (headingChange > 180) {
+      if (headingChange > 180) {
         headingChange -= 360;
       }
-      while (headingChange < -180) {
+      if (headingChange < -180) {
         headingChange += 360;
       }
 

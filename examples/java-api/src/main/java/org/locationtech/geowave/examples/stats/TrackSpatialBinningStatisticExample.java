@@ -369,7 +369,7 @@ public class TrackSpatialBinningStatisticExample {
         }
       }
 
-      long timestamp = startTimestamp + (i * intervalSeconds * 1000L);
+      long timestamp = startTimestamp + (((long) i) * intervalSeconds * 1000L);
       trackPoints.add(
           new TrackPoint(trackId, lat, lon, timestamp, speed, acceleration, heading, twister));
     }
@@ -559,20 +559,20 @@ public class TrackSpatialBinningStatisticExample {
     System.out.println("\n***** Bounding Box Queries *****");
     // Query 1: Dense urban area where multiple tracks overlap
     final Envelope urbanArea = new Envelope(-77.040, -77.030, 38.885, 38.905);
-    System.out.println(String.format("\n** Urban Area Query: %s **", urbanArea));
+    System.out.println(String.format("%n** Urban Area Query: %s **", urbanArea));
     final Long urbanTracks =
         dataStore.getStatisticValue(trackCount, BinConstraints.ofObject(urbanArea));
     System.out.println(String.format("Track count in dense urban area: %d", urbanTracks));
 
     // Query 2: Broader Washington DC area
     final Envelope dcArea = new Envelope(-77.1, -76.8, 38.85, 39.0);
-    System.out.println(String.format("\n** Washington DC Area Query: %s **", dcArea));
+    System.out.println(String.format("%n** Washington DC Area Query: %s **", dcArea));
     final Long dcTracks = dataStore.getStatisticValue(trackCount, BinConstraints.ofObject(dcArea));
     System.out.println(String.format("Track count in DC area: %d", dcTracks));
 
     // Query 3: Small focused area around White House coordinates
     final Envelope whiteHouseArea = new Envelope(-77.037, -77.033, 38.888, 38.892);
-    System.out.println(String.format("\n** White House Area Query: %s **", whiteHouseArea));
+    System.out.println(String.format("%n** White House Area Query: %s **", whiteHouseArea));
     final Long whiteHouseTracks =
         dataStore.getStatisticValue(trackCount, BinConstraints.ofObject(whiteHouseArea));
     System.out.println(String.format("Track count near White House: %d", whiteHouseTracks));

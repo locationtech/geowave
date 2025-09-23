@@ -56,7 +56,7 @@ public class CustomIngestPlugin extends MinimalSimpleFeatureIngestPlugin {
       try (final GeonamesFeatureReader reader = new GeonamesFeatureReader(file)) {
         reader.hasNext();
       }
-    } catch (final IOException | RuntimeException e) {
+    } catch (final RuntimeException e) {
       return false;
     }
     return true;
@@ -75,29 +75,27 @@ public class CustomIngestPlugin extends MinimalSimpleFeatureIngestPlugin {
    */
   @Override
   protected CloseableIterator<SimpleFeature> getFeatures(final URL input) {
-    try {
-      return new GeonamesFeatureReader(input);
-    } catch (final IOException e) {
-      throw new RuntimeException("Unable to read features from URL " + input.toString() + ".", e);
-    }
+    return new GeonamesFeatureReader(input);
   }
 
 
   /**
    * This class reads features line by line from a text file and converts them to SimpleFeatures.
    */
-  private static class GeonamesFeatureReader implements CloseableIterator<SimpleFeature> {
+  private static final class GeonamesFeatureReader implements CloseableIterator<SimpleFeature> {
 
     private final BufferedReader reader;
     private SimpleFeature next = null;
     private final SimpleFeatureBuilder builder =
         new SimpleFeatureBuilder(GeonamesSimpleFeatureType.getInstance());
 
-    public GeonamesFeatureReader(final URL input) throws IOException {
-      final InputStream inputStream = input.openStream();
-      final InputStreamReader inputStreamReader =
-          new InputStreamReader(inputStream, StringUtils.UTF8_CHARSET);
-      reader = new BufferedReader(inputStreamReader);
+    public GeonamesFeatureReader(final URL input) {
+      try {
+        reader =
+            new BufferedReader(new InputStreamReader(input.openStream(), StringUtils.UTF8_CHARSET));
+      } catch (final IOException e) {
+        throw new RuntimeException("Unable to open Geonames input stream for " + input, e);
+      }
     }
 
     private SimpleFeature parseEntry(final String entry) {

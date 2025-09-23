@@ -301,7 +301,7 @@ public class TrackDataModel {
         }
       }
 
-      final long timestamp = startTimestamp + (i * intervalSeconds * 1000L);
+      final long timestamp = startTimestamp + (((long) i) * intervalSeconds * 1000L);
       trackPoints.add(new TrackPoint(lat, lon, timestamp, speed, acceleration, heading, twister));
     }
 
