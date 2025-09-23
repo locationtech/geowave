@@ -13,8 +13,12 @@ import org.locationtech.geowave.datastore.filesystem.FileSystemDataFormatterRegi
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 
-public class DataFormatterCache {
+public final class DataFormatterCache {
   private static DataFormatterCache singletonInstance;
+
+  private DataFormatterCache() {
+    // enforce singleton
+  }
 
   public static synchronized DataFormatterCache getInstance() {
     if (singletonInstance == null) {

@@ -131,8 +131,7 @@ abstract public class AbstractRocksDBTable {
     currentBatch = null;
   }
 
-  @SuppressFBWarnings(
-      justification = "The null check outside of the synchronized block is intentional to minimize the need for synchronization.")
+
   public void flush() {
     if (batchWrite) {
       synchronized (BATCH_WRITE_MUTEX) {

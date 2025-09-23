@@ -21,9 +21,14 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsync;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsyncClientBuilder;
 import com.beust.jcommander.ParameterException;
 
-public class DynamoDBClientPool {
+public final class DynamoDBClientPool {
   private final Logger LOGGER = LoggerFactory.getLogger(DynamoDBClientPool.class);
   private static DynamoDBClientPool singletonInstance;
+
+  private DynamoDBClientPool() {
+    // enforce singleton
+  }
+
   private static final int DEFAULT_RETRY_THREADS = 4;
   protected static ExecutorService DYNAMO_RETRY_POOL =
       Executors.newFixedThreadPool(DEFAULT_RETRY_THREADS);

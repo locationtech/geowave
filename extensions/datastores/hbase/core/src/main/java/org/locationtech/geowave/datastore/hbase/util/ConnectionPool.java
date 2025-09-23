@@ -16,8 +16,12 @@ import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
 
-public class ConnectionPool {
+public final class ConnectionPool {
   private static ConnectionPool singletonInstance;
+
+  private ConnectionPool() {
+    // enforce singleton
+  }
 
   public static synchronized ConnectionPool getInstance() {
     if (singletonInstance == null) {

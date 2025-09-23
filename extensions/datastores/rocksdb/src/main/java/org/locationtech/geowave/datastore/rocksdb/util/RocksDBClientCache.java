@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 
-public class RocksDBClientCache {
+public final class RocksDBClientCache {
   private static Logger LOGGER = LoggerFactory.getLogger(RocksDBClientCache.class);
   private static RocksDBClientCache singletonInstance;
 
@@ -36,7 +36,7 @@ public class RocksDBClientCache {
             subDirectoryVisiblityPair.walOnBatchWrite);
       });
 
-  protected RocksDBClientCache() {}
+  private RocksDBClientCache() {}
 
   public RocksDBClient getClient(
       final String directory,
@@ -53,7 +53,7 @@ public class RocksDBClientCache {
             walOnBatchWrite));
   }
 
-  public synchronized void close(
+  public void close(
       final String directory,
       final boolean visibilityEnabled,
       final boolean compactOnWrite,
@@ -67,14 +67,42 @@ public class RocksDBClientCache {
             compactOnWrite,
             batchWriteSize,
             walOnBatchWrite);
-    final RocksDBClient client = clientCache.getIfPresent(key);
-    if (client != null) {
-      if (invalidateCache) {
-        clientCache.invalidate(key);
+    RocksDBClient client;
+    synchronized (this) {
+      client = clientCache.getIfPresent(key);
+      if (client != null) {
+        if (invalidateCache) {
+          clientCache.invalidate(key);
+        }
       }
+    }
+    if (client != null) {
       client.close();
     }
-    if (clientCache.estimatedSize() == 0) {
+    boolean empty;
+    synchronized (this) {
+      empty = clientCache.estimatedSize() == 0;
+    }
+    if (empty) {
+      synchronized (RocksDBClient.class) {
+        if (RocksDBClient.metadataOptions != null) {
+          RocksDBClient.metadataOptions.close();
+          RocksDBClient.metadataOptions = null;
+        }
+        if (RocksDBClient.indexWriteOptions != null) {
+          RocksDBClient.indexWriteOptions.close();
+          RocksDBClient.indexWriteOptions = null;
+        }
+      }
+    }
+  }
+
+  public void closeAll() {
+    synchronized (this) {
+      clientCache.asMap().forEach((k, v) -> v.close());
+      clientCache.invalidateAll();
+    }
+    synchronized (RocksDBClient.class) {
       if (RocksDBClient.metadataOptions != null) {
         RocksDBClient.metadataOptions.close();
         RocksDBClient.metadataOptions = null;
@@ -83,19 +111,6 @@ public class RocksDBClientCache {
         RocksDBClient.indexWriteOptions.close();
         RocksDBClient.indexWriteOptions = null;
       }
-    }
-  }
-
-  public synchronized void closeAll() {
-    clientCache.asMap().forEach((k, v) -> v.close());
-    clientCache.invalidateAll();
-    if (RocksDBClient.metadataOptions != null) {
-      RocksDBClient.metadataOptions.close();
-      RocksDBClient.metadataOptions = null;
-    }
-    if (RocksDBClient.indexWriteOptions != null) {
-      RocksDBClient.indexWriteOptions.close();
-      RocksDBClient.indexWriteOptions = null;
     }
   }
 

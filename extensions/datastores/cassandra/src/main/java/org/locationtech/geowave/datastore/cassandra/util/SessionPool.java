@@ -18,7 +18,7 @@ import com.datastax.oss.driver.api.core.CqlSessionBuilder;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 
-public class SessionPool {
+public final class SessionPool {
   private static int DEFAULT_CQL_PORT = 9042;
   private static String DEFAULT_DATA_CENTER = "datacenter1";
 
@@ -31,7 +31,7 @@ public class SessionPool {
     return singletonInstance;
   }
 
-  protected SessionPool() {}
+  private SessionPool() {}
 
   private final LoadingCache<Pair<String, String>, CqlSession> sessionCache =
       Caffeine.newBuilder().build(pair -> {

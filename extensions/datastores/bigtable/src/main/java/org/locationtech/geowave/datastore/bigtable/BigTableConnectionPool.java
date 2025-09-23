@@ -15,8 +15,12 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.client.Connection;
 import com.google.cloud.bigtable.hbase.BigtableConfiguration;
 
-public class BigTableConnectionPool {
+public final class BigTableConnectionPool {
   private static BigTableConnectionPool singletonInstance;
+
+  private BigTableConnectionPool() {
+    // enforce singleton
+  }
 
   public static synchronized BigTableConnectionPool getInstance() {
     if (singletonInstance == null) {

@@ -29,7 +29,7 @@ abstract public class AbstractFileSystemTable {
       final short adapterId,
       final String typeName,
       final String format,
-      final boolean visibilityEnabled) throws IOException {
+      final boolean visibilityEnabled) {
     super();
     this.adapterId = adapterId;
     this.typeName = typeName;
@@ -37,8 +37,8 @@ abstract public class AbstractFileSystemTable {
     formatter = DataFormatterCache.getInstance().getFormatter(format, visibilityEnabled);
   }
 
-  protected void setTableDirectory(final Path tableDirectory) throws IOException {
-    this.tableDirectory = Files.createDirectories(tableDirectory);
+  protected void setTableDirectory(final Path tableDirectory) {
+    this.tableDirectory = tableDirectory;
   }
 
   public void deleteFile(final String fileName) {
@@ -51,6 +51,7 @@ abstract public class AbstractFileSystemTable {
 
   protected void writeFile(final String fileName, final byte[] value) {
     try {
+      Files.createDirectories(tableDirectory);
       Files.write(
           tableDirectory.resolve(fileName),
           value,

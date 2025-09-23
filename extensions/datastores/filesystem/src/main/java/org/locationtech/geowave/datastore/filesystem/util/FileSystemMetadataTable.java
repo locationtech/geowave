@@ -31,10 +31,9 @@ public class FileSystemMetadataTable {
   public FileSystemMetadataTable(
       final Path subDirectory,
       final boolean requiresTimestamp,
-      final boolean visibilityEnabled) throws IOException {
+      final boolean visibilityEnabled) {
     super();
     this.subDirectory = subDirectory;
-    Files.createDirectories(subDirectory);
     this.requiresTimestamp = requiresTimestamp;
     this.visibilityEnabled = visibilityEnabled;
   }
@@ -120,6 +119,7 @@ public class FileSystemMetadataTable {
 
   public void put(final byte[] key, final byte[] value) {
     try {
+      Files.createDirectories(subDirectory);
       Files.write(
           subDirectory.resolve(FileSystemUtils.keyToFileName(key)),
           value,

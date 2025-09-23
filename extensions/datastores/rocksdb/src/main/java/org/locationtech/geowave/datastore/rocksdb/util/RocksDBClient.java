@@ -29,6 +29,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class RocksDBClient implements Closeable {
   private static final Logger LOGGER = LoggerFactory.getLogger(RocksDBClient.class);
+  private static final Object STATIC_OPTIONS_LOCK = new Object();
+
 
   private static class CacheKey {
     protected final String directory;
@@ -175,7 +177,7 @@ public class RocksDBClient implements Closeable {
   private final boolean walOnBatchWrite;
 
   protected static Options indexWriteOptions = null;
-  protected WriteOptions batchWriteOptions = null;
+  protected volatile WriteOptions batchWriteOptions = null;
   protected static Options metadataOptions = null;
 
   public RocksDBClient(
@@ -203,9 +205,7 @@ public class RocksDBClient implements Closeable {
         compactOnWrite);
   }
 
-  @SuppressFBWarnings(
-      value = "IS2_INCONSISTENT_SYNC",
-      justification = "This is only called from the loading cache which is synchronized")
+
   private RocksDBIndexTable loadIndexTable(final IndexCacheKey key) {
     return new RocksDBIndexTable(
         indexWriteOptions,
@@ -219,9 +219,7 @@ public class RocksDBClient implements Closeable {
         batchWriteSize);
   }
 
-  @SuppressFBWarnings(
-      value = "IS2_INCONSISTENT_SYNC",
-      justification = "This is only called from the loading cache which is synchronized")
+
   private RocksDBDataIndexTable loadDataIndexTable(final DataIndexCacheKey key) {
     return new RocksDBDataIndexTable(
         indexWriteOptions,
@@ -237,20 +235,25 @@ public class RocksDBClient implements Closeable {
     return subDirectory;
   }
 
-  public synchronized RocksDBIndexTable getIndexTable(
+  public RocksDBIndexTable getIndexTable(
       final String tableName,
       final short adapterId,
       final byte[] partition,
       final boolean requiresTimestamp) {
-    if (indexWriteOptions == null) {
-      RocksDB.loadLibrary();
-      final int cores = Runtime.getRuntime().availableProcessors();
-      indexWriteOptions =
-          new Options().setCreateIfMissing(true).prepareForBulkLoad().setIncreaseParallelism(cores);
+    synchronized (STATIC_OPTIONS_LOCK) {
+      if (indexWriteOptions == null) {
+        RocksDB.loadLibrary();
+        final int cores = Runtime.getRuntime().availableProcessors();
+        indexWriteOptions =
+            new Options().setCreateIfMissing(true).prepareForBulkLoad().setIncreaseParallelism(
+                cores);
+      }
     }
-    if (batchWriteOptions == null) {
-      batchWriteOptions =
-          new WriteOptions().setDisableWAL(!walOnBatchWrite).setNoSlowdown(false).setSync(false);
+    synchronized (this) {
+      if (batchWriteOptions == null) {
+        batchWriteOptions =
+            new WriteOptions().setDisableWAL(!walOnBatchWrite).setNoSlowdown(false).setSync(false);
+      }
     }
     final String directory = subDirectory + "/" + tableName;
     return indexTableCache.get(
@@ -259,28 +262,33 @@ public class RocksDBClient implements Closeable {
             d -> new IndexCacheKey(d, adapterId, partition, requiresTimestamp)));
   }
 
-  public synchronized RocksDBDataIndexTable getDataIndexTable(
-      final String tableName,
-      final short adapterId) {
-    if (indexWriteOptions == null) {
-      RocksDB.loadLibrary();
-      final int cores = Runtime.getRuntime().availableProcessors();
-      indexWriteOptions =
-          new Options().setCreateIfMissing(true).prepareForBulkLoad().setIncreaseParallelism(cores);
+  public RocksDBDataIndexTable getDataIndexTable(final String tableName, final short adapterId) {
+    synchronized (STATIC_OPTIONS_LOCK) {
+      if (indexWriteOptions == null) {
+        RocksDB.loadLibrary();
+        final int cores = Runtime.getRuntime().availableProcessors();
+        indexWriteOptions =
+            new Options().setCreateIfMissing(true).prepareForBulkLoad().setIncreaseParallelism(
+                cores);
+      }
     }
-    if (batchWriteOptions == null) {
-      batchWriteOptions =
-          new WriteOptions().setDisableWAL(!walOnBatchWrite).setNoSlowdown(false).setSync(false);
+    synchronized (this) {
+      if (batchWriteOptions == null) {
+        batchWriteOptions =
+            new WriteOptions().setDisableWAL(!walOnBatchWrite).setNoSlowdown(false).setSync(false);
+      }
     }
     final String directory = subDirectory + "/" + tableName;
     return dataIndexTableCache.get(
         (DataIndexCacheKey) keyCache.get(directory, d -> new DataIndexCacheKey(d, adapterId)));
   }
 
-  public synchronized RocksDBMetadataTable getMetadataTable(final MetadataType type) {
-    if (metadataOptions == null) {
-      RocksDB.loadLibrary();
-      metadataOptions = new Options().setCreateIfMissing(true).optimizeForSmallDb();
+  public RocksDBMetadataTable getMetadataTable(final MetadataType type) {
+    synchronized (STATIC_OPTIONS_LOCK) {
+      if (metadataOptions == null) {
+        RocksDB.loadLibrary();
+        metadataOptions = new Options().setCreateIfMissing(true).optimizeForSmallDb();
+      }
     }
     final String directory = subDirectory + "/" + type.id();
     return metadataTableCache.get(

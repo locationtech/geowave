@@ -173,17 +173,12 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
   public static final int MERGING_MAX_VERSIONS = HConstants.ALL_VERSIONS;
   public static final int DEFAULT_MAX_VERSIONS = 1;
 
-  public HBaseOperations(
+  public static HBaseOperations create(
       final String zookeeperInstances,
       final String geowaveNamespace,
       final HBaseOptions options) throws IOException {
-    conn = ConnectionPool.getInstance().getConnection(zookeeperInstances);
-    tableNamespace = geowaveNamespace;
-
-    schemaUpdateEnabled =
-        conn.getConfiguration().getBoolean("hbase.online.schema.update.enable", true);
-
-    this.options = options;
+    final Connection conn = ConnectionPool.getInstance().getConnection(zookeeperInstances);
+    return new HBaseOperations(conn, geowaveNamespace, options);
   }
 
   public HBaseOperations(
@@ -202,7 +197,7 @@ public class HBaseOperations implements MapReduceDataStoreOperations, ServerSide
 
   public static HBaseOperations createOperations(final HBaseRequiredOptions options)
       throws IOException {
-    return new HBaseOperations(
+    return HBaseOperations.create(
         options.getZookeeper(),
         options.getGeoWaveNamespace(),
         (HBaseOptions) options.getStoreOptions());

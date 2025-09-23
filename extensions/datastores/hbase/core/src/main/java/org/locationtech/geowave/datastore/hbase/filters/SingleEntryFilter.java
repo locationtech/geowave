@@ -27,15 +27,22 @@ import com.google.protobuf.InvalidProtocolBufferException;
  * href="https://developers.google.com/protocol-buffers/docs/javatutorial">Google documentation</a>
  * for more info.
  */
-public class SingleEntryFilter extends FilterBase {
+@edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+    value = "HSM_HIDING_METHOD",
+    justification = "HBase requires public static parseFrom(byte[]) for PB deserialization; static hiding is expected and intentional")
+public final class SingleEntryFilter extends FilterBase {
 
   public static final String ADAPTER_ID = "adapterid";
   public static final String DATA_ID = "dataid";
   private final byte[] adapterId;
   private final byte[] dataId;
 
-  public SingleEntryFilter(final byte[] dataId, final byte[] adapterId) {
+  private SingleEntryFilter(final byte[] dataId, final byte[] adapterId) {
+    this.adapterId = adapterId;
+    this.dataId = dataId;
+  }
 
+  public static SingleEntryFilter of(final byte[] dataId, final byte[] adapterId) {
     if (adapterId == null) {
       throw new IllegalArgumentException(
           "'adapterid' must be set for " + SingleEntryFilter.class.getName());
@@ -44,9 +51,7 @@ public class SingleEntryFilter extends FilterBase {
       throw new IllegalArgumentException(
           "'dataid' must be set for " + SingleEntryFilter.class.getName());
     }
-
-    this.adapterId = adapterId;
-    this.dataId = dataId;
+    return new SingleEntryFilter(dataId, adapterId);
   }
 
   @Override
@@ -90,7 +95,7 @@ public class SingleEntryFilter extends FilterBase {
     } catch (final InvalidProtocolBufferException e) {
       throw new DeserializationException(e);
     }
-    return new SingleEntryFilter(
+    return SingleEntryFilter.of(
         proto.getDataId().toByteArray(),
         proto.getAdapterId().toByteArray());
   }

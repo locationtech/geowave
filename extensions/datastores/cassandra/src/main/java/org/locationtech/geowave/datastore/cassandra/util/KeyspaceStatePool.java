@@ -14,7 +14,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 
-public class KeyspaceStatePool {
+public final class KeyspaceStatePool {
   private static KeyspaceStatePool singletonInstance;
 
   public static synchronized KeyspaceStatePool getInstance() {
@@ -26,7 +26,7 @@ public class KeyspaceStatePool {
 
   private final Map<Pair<String, String>, KeyspaceState> keyspaceStateCache = new HashMap<>();
 
-  protected KeyspaceStatePool() {}
+  private KeyspaceStatePool() {}
 
   public synchronized KeyspaceState getCachedState(
       final String contactPoints,

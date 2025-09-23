@@ -39,7 +39,7 @@ public class FileSystemIndexTable extends AbstractFileSystemTable {
       final byte[] partitionKey,
       final String format,
       final boolean requiresTimestamp,
-      final boolean visibilityEnabled) throws IOException {
+      final boolean visibilityEnabled) {
     super(adapterId, typeName, format, visibilityEnabled);
     this.requiresTimestamp = requiresTimestamp;
     this.indexName = indexName;

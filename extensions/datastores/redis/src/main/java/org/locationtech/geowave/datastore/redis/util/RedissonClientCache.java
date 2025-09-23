@@ -15,7 +15,7 @@ import org.redisson.config.SingleServerConfig;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 
-public class RedissonClientCache {
+public final class RedissonClientCache {
   private static RedissonClientCache singletonInstance;
 
   public static synchronized RedissonClientCache getInstance() {
@@ -40,7 +40,7 @@ public class RedissonClientCache {
         return Redisson.create(config);
       });
 
-  protected RedissonClientCache() {}
+  private RedissonClientCache() {}
 
   public RedissonClient getClient(
       final String username,

@@ -11,7 +11,7 @@ package org.locationtech.geowave.datastore.filesystem.util;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 
-public class FileSystemClientCache {
+public final class FileSystemClientCache {
   private static FileSystemClientCache singletonInstance;
 
   public static synchronized FileSystemClientCache getInstance() {
@@ -29,7 +29,7 @@ public class FileSystemClientCache {
             clientInfo.visibilityEnabled);
       });
 
-  protected FileSystemClientCache() {}
+  private FileSystemClientCache() {}
 
   public FileSystemClient getClient(
       final String directory,

@@ -14,10 +14,14 @@ import org.slf4j.LoggerFactory;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 
-public class ClientPool {
+public final class ClientPool {
   private static final Logger LOGGER = LoggerFactory.getLogger(ClientPool.class);
 
   private static ClientPool singletonInstance;
+
+  private ClientPool() {
+    // enforce singleton
+  }
 
   public static synchronized ClientPool getInstance() {
     if (singletonInstance == null) {

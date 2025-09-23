@@ -10,6 +10,7 @@ package org.locationtech.geowave.datastore.redis.util;
 
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.redisson.api.BatchOptions;
 import org.redisson.api.RBatch;
 import org.redisson.api.RedissonClient;
@@ -27,7 +28,7 @@ abstract public class AbstractRedisSetWrapper<A, S> implements AutoCloseable {
   private final RedissonClient client;
   private final String setName;
   private final Codec codec;
-  private int batchCmdCounter = 0;
+  private final AtomicInteger batchCmdCounter = new AtomicInteger(0);
   private static final int MAX_CONCURRENT_WRITE = 100;
   private final Semaphore writeSemaphore = new Semaphore(MAX_CONCURRENT_WRITE);
 
@@ -41,7 +42,7 @@ abstract public class AbstractRedisSetWrapper<A, S> implements AutoCloseable {
   }
 
   public void flush() {
-    batchCmdCounter = 0;
+    batchCmdCounter.set(0);
     final RBatch flushBatch = this.currentBatch;
     currentAsync = null;
     currentBatch = null;
@@ -99,10 +100,10 @@ abstract public class AbstractRedisSetWrapper<A, S> implements AutoCloseable {
   abstract protected S initSyncCollection(RedissonClient client, String setName, Codec codec);
 
   protected void preAdd() {
-    if (++batchCmdCounter > BATCH_SIZE) {
+    if (batchCmdCounter.incrementAndGet() > BATCH_SIZE) {
       synchronized (this) {
         // check again inside the synchronized block
-        if (batchCmdCounter > BATCH_SIZE) {
+        if (batchCmdCounter.get() > BATCH_SIZE) {
           flush();
         }
       }

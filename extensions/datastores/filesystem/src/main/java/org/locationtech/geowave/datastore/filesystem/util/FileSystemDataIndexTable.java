@@ -30,7 +30,7 @@ public class FileSystemDataIndexTable extends AbstractFileSystemTable {
       final short adapterId,
       final String typeName,
       final String format,
-      final boolean visibilityEnabled) throws IOException {
+      final boolean visibilityEnabled) {
     super(adapterId, typeName, format, visibilityEnabled);
     setTableDirectory(
         FileSystemUtils.getSubdirectory(
