@@ -26,6 +26,8 @@ import org.locationtech.geowave.core.store.statistics.DataStatisticsStore;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.ParametersDelegate;
 
+
+
 /**
  * Class is used to facilitate loading of a DataStore from options specified on the command line.
  */
@@ -49,13 +51,17 @@ public class DataStorePluginOptions extends DefaultPluginOptions implements Plug
    *
    * @param options
    */
+
   public DataStorePluginOptions(final Map<String, String> options) throws IllegalArgumentException {
-    factoryPlugin = GeoWaveStoreFinder.findStoreFamily(options);
-    if (factoryPlugin == null) {
+    final StoreFactoryFamilySpi localFactoryPlugin = GeoWaveStoreFinder.findStoreFamily(options);
+    if (localFactoryPlugin == null) {
       throw new IllegalArgumentException("Cannot find store plugin factory");
     }
-    factoryOptions = factoryPlugin.getDataStoreFactory().createOptionsInstance();
-    ConfigUtils.populateOptionsFromList(getFactoryOptions(), options);
+    final StoreFactoryOptions localFactoryOptions =
+        localFactoryPlugin.getDataStoreFactory().createOptionsInstance();
+    ConfigUtils.populateOptionsFromList(localFactoryOptions, options);
+    this.factoryPlugin = localFactoryPlugin;
+    this.factoryOptions = localFactoryOptions;
   }
 
   public DataStorePluginOptions(final StoreFactoryOptions factoryOptions) {
