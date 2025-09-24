@@ -25,6 +25,7 @@ import org.geotools.geometry.GeneralEnvelope;
 import org.geotools.referencing.operation.projection.MapProjection;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.adapter.raster.plugin.GeoWaveRasterConfig;
@@ -53,6 +54,7 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import it.geosolutions.jaiext.JAIExt;
 
+@Ignore("GDAL is no longer downloadable. This class is temporarily disabled.")
 @RunWith(GeoWaveITRunner.class)
 public class CustomCRSLandsatIT extends AbstractGeoWaveIT {
   private static class RasterIngestTester extends RasterIngestRunner {

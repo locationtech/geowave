@@ -11,6 +11,7 @@
 		<!-- to maintain only one download of GDAL, re-use the IT build directory -->
 		<gdal.dir>${project.basedir}/../../../test/target/temp/gdal</gdal.dir>
 		<tools.scope>compile</tools.scope>
+		<skipTests>true</skipTests>
 	</properties>
 
 	<artifactId>geowave-cli-sentinel2</artifactId>
@@ -56,7 +57,7 @@
 			<id>prepare-tests</id>
 			<activation>
 				<property>
-					<name>!skipTests</name>
+					<name>installGdal</name>
 				</property>
 			</activation>
 			<build>
