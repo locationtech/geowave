@@ -52,7 +52,7 @@ import org.slf4j.LoggerFactory;
  * store within GeoTools. For GeoServer this configuration can be provided within the data store
  * definition workflow.
  */
-public final class GeoWavePluginConfig {
+public class GeoWavePluginConfig {
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWavePluginConfig.class);
 
   private final StoreFactoryFamilySpi storeFactoryFamily;
