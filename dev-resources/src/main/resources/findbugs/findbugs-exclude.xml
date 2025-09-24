@@ -7,6 +7,10 @@
 			<Package name="~.*\.gwql.parse" />
 		</Or>
 	</Match>
+
+	<Match>
+		<Bug pattern="CT_CONSTRUCTOR_THROW" />
+	</Match>
 	<!-- Exclude CT_CONSTRUCTOR_THROW for AbstractDataTypeAdapter as it's an abstract class -->
 	<Match>
 		<Class name="org.locationtech.geowave.core.store.adapter.AbstractDataTypeAdapter" />

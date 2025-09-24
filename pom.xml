@@ -57,7 +57,7 @@
 		</developer>
 	</developers>
 	<properties>
-		<geowave-dev-resources.version>1.7</geowave-dev-resources.version>
+		<geowave-dev-resources.version>1.8</geowave-dev-resources.version>
 		<spark.version>3.4.2</spark.version>
 		<uzaygezen.version>0.2</uzaygezen.version>
 		<jsonlib.version>2.4</jsonlib.version>
