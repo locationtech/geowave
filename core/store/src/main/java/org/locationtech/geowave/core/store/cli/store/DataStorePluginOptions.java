@@ -29,7 +29,7 @@ import com.beust.jcommander.ParametersDelegate;
 /**
  * Class is used to facilitate loading of a DataStore from options specified on the command line.
  */
-public final class DataStorePluginOptions extends DefaultPluginOptions implements PluginOptions {
+public class DataStorePluginOptions extends DefaultPluginOptions implements PluginOptions {
 
   public static final String DATASTORE_PROPERTY_NAMESPACE = "store";
   public static final String DEFAULT_PROPERTY_NAMESPACE = "storedefault";
