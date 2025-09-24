@@ -117,20 +117,16 @@ public class ClasspathUtils {
         final ClassLoader classLoader = classloaders.get(i);
 
         if (classLoader instanceof URLClassLoader) {
-
           for (final URL u : ((URLClassLoader) classLoader).getURLs()) {
             append(classpathBuilder, u);
           }
-
         } else if (classLoader instanceof VFSClassLoader) {
-
           final VFSClassLoader vcl = (VFSClassLoader) classLoader;
           for (final FileObject f : vcl.getFileObjects()) {
             append(classpathBuilder, f.getURL());
           }
-        } else {
-          throw new IllegalArgumentException(
-              "Unknown classloader type : " + classLoader.getClass().getName());
+        } else  {
+          return java.util.Objects.toString(System.getProperty("java.class.path"), "");
         }
       }
 
