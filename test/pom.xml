@@ -715,28 +715,32 @@
                     <name>installGdal</name>
                 </property>
             </activation>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.2.1</version>
-                <executions>
-                    <execution>
-                        <id>install-gdal-it</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <mainClass>
-                        org.locationtech.geowave.adapter.raster.plugin.gdal.InstallGdal
-                    </mainClass>
-                    <arguments>
-                        <argument>${gdal.dir}</argument>
-                    </arguments>
-                </configuration>
-            </plugin>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>install-gdal-it</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <mainClass>
+                                org.locationtech.geowave.adapter.raster.plugin.gdal.InstallGdal
+                            </mainClass>
+                            <arguments>
+                                <argument>${gdal.dir}</argument>
+                            </arguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
         <profile>
             <id>accumulo-it-server</id>
