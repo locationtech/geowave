@@ -54,22 +54,20 @@ public class ZookeeperMiniCluster {
         System.setProperty(
             "test.build.data.basedirectory",
             conf.get("zookeeper.temp.dir", zkDataDir));
-        zookeeperLocalCluster =
-            Class.forName(
-                "org.apache.hadoop.hbase.HBaseTestingUtility",
-                true,
-                hbaseMiniClusterCl).getConstructor(Configuration.class).newInstance(conf);
-        zookeeperLocalCluster.getClass().getMethod("startMiniZKCluster").invoke(
-            zookeeperLocalCluster);
+        final Class<?> htuClass =
+            Class.forName("org.apache.hadoop.hbase.HBaseTestingUtility", true, hbaseMiniClusterCl);
+        final Object instance = htuClass.getConstructor(Configuration.class).newInstance(conf);
+        if (instance == null) {
+          throw new IllegalStateException(
+              "Mini Zookeeper cluster failed to instantiate HBaseTestingUtility");
+        }
+        zookeeperLocalCluster = instance;
+        htuClass.getMethod("startMiniZKCluster").invoke(zookeeperLocalCluster);
       } catch (final Exception e) {
         LOGGER.error("Exception starting zookeeperLocalCluster: " + e, e);
         throw e;
       } finally {
         Thread.currentThread().setContextClassLoader(prevCl);
-      }
-      if (zookeeperLocalCluster == null) {
-        throw new IllegalStateException(
-            "Mini Zookeeper cluster failed to start; see logs for details");
       }
       final Object zkCluster =
           zookeeperLocalCluster.getClass().getMethod("getZkCluster").invoke(zookeeperLocalCluster);
@@ -78,6 +76,10 @@ public class ZookeeperMiniCluster {
   }
 
   public void tearDown() throws Exception {
+    if (zookeeperLocalCluster == null) {
+      zookeeper = null;
+      return;
+    }
     try {
       zookeeperLocalCluster.getClass().getMethod("shutdownMiniZKCluster").invoke(
           zookeeperLocalCluster);
