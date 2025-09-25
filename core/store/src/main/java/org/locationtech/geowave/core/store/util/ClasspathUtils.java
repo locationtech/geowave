@@ -125,12 +125,21 @@ public class ClasspathUtils {
           for (final FileObject f : vcl.getFileObjects()) {
             append(classpathBuilder, f.getURL());
           }
-        } else  {
-          return java.util.Objects.toString(System.getProperty("java.class.path"), "");
+        } else {
+          // Java 9+ classloaders (e.g., AppClassLoader/PlatformClassLoader) are not URLClassLoader.
+          // Skip explicit URL extraction; we'll fall back to the system classpath if nothing was
+          // added.
+          continue;
         }
       }
 
-      classpathBuilder.deleteCharAt(0);
+      if (classpathBuilder.length() == 0) {
+        final String sysCp = System.getProperty("java.class.path");
+        return (sysCp == null) ? "" : sysCp;
+      }
+      if (classpathBuilder.charAt(0) == ' ') {
+        classpathBuilder.deleteCharAt(0);
+      }
       return classpathBuilder.toString();
 
     } catch (final URISyntaxException e) {

@@ -40,8 +40,8 @@ public class ZookeeperMiniCluster {
   public void setup() throws Exception {
     if ((zookeeper == null) || zookeeper.isEmpty()) {
       System.setProperty("zookeeper.4lw.commands.whitelist", "*");
+      final ClassLoader prevCl = Thread.currentThread().getContextClassLoader();
       try {
-        final ClassLoader prevCl = Thread.currentThread().getContextClassLoader();
         final ClassLoader hbaseMiniClusterCl =
             HBaseMiniClusterClassLoader.getInstance(prevCl, hbaseLibDir);
         Thread.currentThread().setContextClassLoader(hbaseMiniClusterCl);
@@ -61,9 +61,15 @@ public class ZookeeperMiniCluster {
                 hbaseMiniClusterCl).getConstructor(Configuration.class).newInstance(conf);
         zookeeperLocalCluster.getClass().getMethod("startMiniZKCluster").invoke(
             zookeeperLocalCluster);
-        Thread.currentThread().setContextClassLoader(prevCl);
       } catch (final Exception e) {
         LOGGER.error("Exception starting zookeeperLocalCluster: " + e, e);
+        throw e;
+      } finally {
+        Thread.currentThread().setContextClassLoader(prevCl);
+      }
+      if (zookeeperLocalCluster == null) {
+        throw new IllegalStateException(
+            "Mini Zookeeper cluster failed to start; see logs for details");
       }
       final Object zkCluster =
           zookeeperLocalCluster.getClass().getMethod("getZkCluster").invoke(zookeeperLocalCluster);

@@ -59,8 +59,15 @@ public class HBaseMiniCluster {
   public void setup() {
     if (hbaseLocalCluster == null) {
       if ((zookeeper == null) || zookeeper.isEmpty()) {
-        zookeeper = ZookeeperMiniCluster.getInstance(hbaseLibDir, zkDataDir).getZookeeper();
-        LOGGER.debug("Using local zookeeper URL: " + zookeeper);
+        try {
+          final ZookeeperMiniCluster zk = ZookeeperMiniCluster.getInstance(hbaseLibDir, zkDataDir);
+          zk.setup();
+          zookeeper = zk.getZookeeper();
+          LOGGER.debug("Using local zookeeper URL: " + zookeeper);
+        } catch (final Exception e) {
+          LOGGER.error("Failed to start embedded ZooKeeper for HBase mini cluster", e);
+          throw new RuntimeException("Failed to start embedded ZooKeeper", e);
+        }
       }
 
       final ClassLoader prevCl = Thread.currentThread().getContextClassLoader();
