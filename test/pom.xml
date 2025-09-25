@@ -85,6 +85,10 @@
                     </groupId>
                     <artifactId>spring-security-oauth2</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hbase</groupId>
+                    <artifactId>hbase-shaded-client</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -185,6 +189,10 @@
                 <exclusion>
                     <groupId>org.codehaus.jackson</groupId>
                     <artifactId>jackson-jaxrs</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hbase</groupId>
+                    <artifactId>hbase-shaded-client</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -386,6 +394,10 @@
                 <exclusion>
                     <artifactId>accumulo-native</artifactId>
                     <groupId>org.apache.accumulo</groupId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-client-minicluster</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>

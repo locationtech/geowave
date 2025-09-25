@@ -723,6 +723,54 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.hadoop</groupId>
+				<artifactId>hadoop-client-api</artifactId>
+				<version>${hadoop.version}</version>
+				<scope>${hadoop.scope}</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>log4j</groupId>
+						<artifactId>log4j</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.hadoop</groupId>
+				<artifactId>hadoop-client-runtime</artifactId>
+				<version>${hadoop.version}</version>
+				<scope>${hadoop.scope}</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>log4j</groupId>
+						<artifactId>log4j</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.hadoop</groupId>
+				<artifactId>hadoop-hdfs-client</artifactId>
+				<version>${hadoop.version}</version>
+				<scope>${hadoop.scope}</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>log4j</groupId>
+						<artifactId>log4j</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.hadoop</groupId>
 				<artifactId>hadoop-minikdc</artifactId>
 				<version>${hadoop.version}</version>
 				<exclusions>
