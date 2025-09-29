@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.security.PrivilegedExceptionAction;
 import java.util.List;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.protobuf.generated.VisibilityLabelsProtos.VisibilityLabelsResponse;
 import org.apache.hadoop.hbase.security.User;
@@ -34,7 +33,7 @@ public class HBaseMiniCluster {
 
   private final String zkDataDir;
 
-  private GeoWaveHBaseUtility hbaseLocalCluster;
+  private Object hbaseLocalCluster;
   private final String hbaseLibDir;
   private final String hbaseDataDir;
   private final int numRegionServers;
@@ -72,11 +71,15 @@ public class HBaseMiniCluster {
       }
 
       final ClassLoader prevCl = Thread.currentThread().getContextClassLoader();
-      final ClassLoader hbaseMiniClusterCl = prevCl;
-//          HBaseMiniClusterClassLoader.getInstance(prevCl, hbaseLibDir);
+      final ClassLoader hbaseMiniClusterCl =
+          HBaseMiniClusterClassLoader.getInstance(prevCl, hbaseLibDir);
       Thread.currentThread().setContextClassLoader(hbaseMiniClusterCl);
       try {
-        final Configuration conf = HBaseConfiguration.create();
+        final Configuration conf =
+            (Configuration) Class.forName(
+                "org.apache.hadoop.hbase.HBaseConfiguration",
+                true,
+                hbaseMiniClusterCl).getMethod("create").invoke(null);
         System.setProperty("test.build.data.basedirectory", hbaseDataDir);
         conf.setBoolean("hbase.online.schema.update.enable", true);
         conf.setBoolean("hbase.defaults.for.version.skip", true);
@@ -113,9 +116,18 @@ public class HBaseMiniCluster {
 
         // HBaseTestingUtility must be loaded dynamically by the
         // minicluster class loader
-        hbaseLocalCluster = new GeoWaveHBaseUtility(conf);
+        hbaseLocalCluster =
+            Class.forName(
+                // "org.apache.hadoop.hbase.HBaseTestingUtility",
+                "org.locationtech.geowave.datastore.hbase.cli.GeoWaveHBaseUtility",
+                true,
+                hbaseMiniClusterCl).getConstructor(Configuration.class).newInstance(conf);
+
         // Start the cluster
-        hbaseLocalCluster.startMiniCluster(1, numRegionServers);
+        hbaseLocalCluster.getClass().getMethod(
+            "startMiniHBaseCluster",
+            Integer.TYPE,
+            Integer.TYPE).invoke(hbaseLocalCluster, 1, numRegionServers);
 
 
         if (enableVisibility) {

@@ -40,8 +40,8 @@ public class ZookeeperMiniCluster {
   public void setup() throws Exception {
     if ((zookeeper == null) || zookeeper.isEmpty()) {
       System.setProperty("zookeeper.4lw.commands.whitelist", "*");
-      final ClassLoader prevCl = Thread.currentThread().getContextClassLoader();
       try {
+        final ClassLoader prevCl = Thread.currentThread().getContextClassLoader();
         final ClassLoader hbaseMiniClusterCl =
             HBaseMiniClusterClassLoader.getInstance(prevCl, hbaseLibDir);
         Thread.currentThread().setContextClassLoader(hbaseMiniClusterCl);
@@ -54,20 +54,16 @@ public class ZookeeperMiniCluster {
         System.setProperty(
             "test.build.data.basedirectory",
             conf.get("zookeeper.temp.dir", zkDataDir));
-        final Class<?> htuClass =
-            Class.forName("org.apache.hadoop.hbase.HBaseTestingUtility", true, hbaseMiniClusterCl);
-        final Object instance = htuClass.getConstructor(Configuration.class).newInstance(conf);
-        if (instance == null) {
-          throw new IllegalStateException(
-              "Mini Zookeeper cluster failed to instantiate HBaseTestingUtility");
-        }
-        zookeeperLocalCluster = instance;
-        htuClass.getMethod("startMiniZKCluster").invoke(zookeeperLocalCluster);
+        zookeeperLocalCluster =
+            Class.forName(
+                "org.apache.hadoop.hbase.HBaseTestingUtility",
+                true,
+                hbaseMiniClusterCl).getConstructor(Configuration.class).newInstance(conf);
+        zookeeperLocalCluster.getClass().getMethod("startMiniZKCluster").invoke(
+            zookeeperLocalCluster);
+        Thread.currentThread().setContextClassLoader(prevCl);
       } catch (final Exception e) {
         LOGGER.error("Exception starting zookeeperLocalCluster: " + e, e);
-        throw e;
-      } finally {
-        Thread.currentThread().setContextClassLoader(prevCl);
       }
       final Object zkCluster =
           zookeeperLocalCluster.getClass().getMethod("getZkCluster").invoke(zookeeperLocalCluster);
@@ -76,10 +72,6 @@ public class ZookeeperMiniCluster {
   }
 
   public void tearDown() throws Exception {
-    if (zookeeperLocalCluster == null) {
-      zookeeper = null;
-      return;
-    }
     try {
       zookeeperLocalCluster.getClass().getMethod("shutdownMiniZKCluster").invoke(
           zookeeperLocalCluster);
