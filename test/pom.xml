@@ -640,7 +640,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-failsafe-plugin</artifactId>
-						<version>2.18.1</version>
+						<version>3.6.0</version>
 						<executions>
 							<execution>
 								<configuration>
@@ -666,7 +666,7 @@
 										<java.util.logging.config.file>
 											${project.build.testOutputDirectory}/jul-test.properties
 										</java.util.logging.config.file>
-										<bigtable.emulator.endpoint>${bigtable.emulator.endpoing}
+										<bigtable.emulator.endpoint>${bigtable.emulator.endpoint}
 										</bigtable.emulator.endpoint>
 										<bigtable.emulator.internal>${bigtable.emulator.internal}
 										</bigtable.emulator.internal>
@@ -675,7 +675,7 @@
 									</systemPropertyVariables>
 									<!-- Sonar currently just supports surefire so "trick" Sonar into 
 										thinking they are surefire reports -->
-									<reportsDirectory>${sonar.surefire.reportsPath}
+									<reportsDirectory>${surefire.report.path}
 									</reportsDirectory>
 									<argLine>${test.args} ${jacoco.failsafe.argline}</argLine>
 									<excludes>
