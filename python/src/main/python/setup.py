@@ -11,9 +11,8 @@ def get_version():
         version = get_maven_version()
     except ModuleNotFoundError:
         # If maven version isn't found, it must be from the distribution
-        from pkg_resources import get_distribution
-        from pkg_resources import DistributionNotFound
-        version = get_distribution('pygw').version
+        from importlib.metadata import version as distribution_version
+        version = distribution_version('pygw')
     return version
 
 
