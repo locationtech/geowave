@@ -493,6 +493,13 @@
 				<version>${accumulo.version}</version>
 				<scope>${accumulo.scope}</scope>
 				<exclusions>
+					<!-- hibernate-validator 6.0.11 activates a <jdk>[11,)</jdk> profile that
+						depends on org.openjfx:javafx.base:11.0.0-SNAPSHOT, which does not
+						exist. Harmless on JDK 8, fatal to resolution on anything newer. -->
+					<exclusion>
+						<groupId>org.openjfx</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
 					<exclusion>
 						<groupId>log4j</groupId>
 						<artifactId>log4j</artifactId>
@@ -522,6 +529,13 @@
 				<version>${accumulo.version}</version>
 				<scope>${accumulo.scope}</scope>
 				<exclusions>
+					<!-- hibernate-validator 6.0.11 activates a <jdk>[11,)</jdk> profile that
+						depends on org.openjfx:javafx.base:11.0.0-SNAPSHOT, which does not
+						exist. Harmless on JDK 8, fatal to resolution on anything newer. -->
+					<exclusion>
+						<groupId>org.openjfx</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
 					<exclusion>
 						<groupId>log4j</groupId>
 						<artifactId>log4j</artifactId>
@@ -537,6 +551,13 @@
 				<artifactId>accumulo-test</artifactId>
 				<version>${accumulo.version}</version>
 				<exclusions>
+					<!-- hibernate-validator 6.0.11 activates a <jdk>[11,)</jdk> profile that
+						depends on org.openjfx:javafx.base:11.0.0-SNAPSHOT, which does not
+						exist. Harmless on JDK 8, fatal to resolution on anything newer. -->
+					<exclusion>
+						<groupId>org.openjfx</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
 					<exclusion>
 						<groupId>org.slf4j</groupId>
 						<artifactId>slf4j-log4j12</artifactId>
@@ -552,6 +573,13 @@
 				<artifactId>accumulo-minicluster</artifactId>
 				<version>${accumulo.version}</version>
 				<exclusions>
+					<!-- hibernate-validator 6.0.11 activates a <jdk>[11,)</jdk> profile that
+						depends on org.openjfx:javafx.base:11.0.0-SNAPSHOT, which does not
+						exist. Harmless on JDK 8, fatal to resolution on anything newer. -->
+					<exclusion>
+						<groupId>org.openjfx</groupId>
+						<artifactId>*</artifactId>
+					</exclusion>
 					<exclusion>
 						<groupId>log4j</groupId>
 						<artifactId>log4j</artifactId>
