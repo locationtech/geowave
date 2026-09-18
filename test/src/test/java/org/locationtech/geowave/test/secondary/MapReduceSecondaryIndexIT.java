@@ -40,12 +40,10 @@ public class MapReduceSecondaryIndexIT extends AbstractSecondaryIndexIT {
           GeoWaveStoreType.ACCUMULO,
           // HBase for cloudera 5.14 takes too long
           // GeoWaveStoreType.HBASE,
-          GeoWaveStoreType.BIGTABLE,
           // TODO: Cassandra seems to have inconsistencies passing this IT
           // GeoWaveStoreType.CASSANDRA,
           // TODO: DYNAMODB takes too long
           // GeoWaveStoreType.DYNAMODB,
-          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB,
       // testLocalIngestAndQuerySpatialAndSpatialTemporal sporadically fails on
@@ -61,12 +59,10 @@ public class MapReduceSecondaryIndexIT extends AbstractSecondaryIndexIT {
           GeoWaveStoreType.ACCUMULO,
           // HBase for cloudera 5.14 takes too long
           // GeoWaveStoreType.HBASE,
-          GeoWaveStoreType.BIGTABLE,
           // TODO: Cassandra seems to have inconsistencies passing this IT
           // GeoWaveStoreType.CASSANDRA,
           // GeoWaveStoreType.DYNAMODB,
           // TODO GEOWAVE Issue #1573 prevents deletion from passing on Kudu
-          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB,
       // testLocalIngestAndQuerySpatialAndSpatialTemporal sporadically fails on

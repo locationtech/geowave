@@ -68,13 +68,11 @@
 		<geoserver.version>2.19.0</geoserver.version>
 		<accumulo.version>2.0.1</accumulo.version>
 		<thrift.version>0.12.0</thrift.version>
-		<bigtable.version>1.20.0</bigtable.version>
 		<cassandra.version>4.0.1</cassandra.version>
 		<redisson.version>3.15.5</redisson.version>
 		<rocksdb.version>6.19.3</rocksdb.version>
 		<cassandraclient.version>4.11.1</cassandraclient.version>
 		<cassandraunit.version>4.3.1.0</cassandraunit.version>
-		<kuduclient.version>1.14.0</kuduclient.version>
 		<grpc.version>1.38.0</grpc.version>
 		<netty.version>4.1.65.Final</netty.version>
 		<protobuf.version>3.17.1</protobuf.version>
@@ -513,17 +511,6 @@
 				</exclusions>
 			</dependency>
 			<dependency>
-				<groupId>org.locationtech.geowave</groupId>
-				<artifactId>geowave-cli-bigtable-embed</artifactId>
-				<version>${project.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>log4j</groupId>
-						<artifactId>log4j</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
 				<groupId>org.apache.accumulo</groupId>
 				<artifactId>accumulo-server</artifactId>
 				<version>${accumulo.version}</version>
@@ -575,11 +562,6 @@
 				<groupId>org.apache.accumulo</groupId>
 				<artifactId>accumulo-shell</artifactId>
 				<version>${accumulo.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.google.cloud.bigtable</groupId>
-				<artifactId>bigtable-hbase-2.x-shaded</artifactId>
-				<version>${bigtable.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.hbase</groupId>

@@ -65,11 +65,9 @@ public class BasicKafkaIT extends AbstractGeoWaveIT {
   @GeoWaveTestStore(
       value = {
           GeoWaveStoreType.ACCUMULO,
-          GeoWaveStoreType.BIGTABLE,
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.CASSANDRA,
-          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB,
           GeoWaveStoreType.FILESYSTEM})

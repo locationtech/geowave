@@ -64,7 +64,6 @@ import org.slf4j.LoggerFactory;
 @Environments({Environment.MAP_REDUCE})
 @GeoWaveTestStore({
     GeoWaveStoreType.ACCUMULO,
-    GeoWaveStoreType.BIGTABLE,
     GeoWaveStoreType.HBASE,
     GeoWaveStoreType.REDIS,
     // TODO ROCKSDB can sometimes throws native exceptions (hserrpid) in the Spark section, probably

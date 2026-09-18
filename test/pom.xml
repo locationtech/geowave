@@ -136,11 +136,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-cli-osm</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-analytic-mapreduce</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -214,17 +209,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-datastore-bigtable</artifactId>
-			<version>${project.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.hbase</groupId>
-					<artifactId>hbase-shaded-client</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
 
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
@@ -243,22 +227,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-datastore-kudu</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-example</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-cli-landsat8</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-cli-sentinel2</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -342,16 +311,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-cli-bigtable-embed</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-cli-dynamodb-embed</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-cli-kudu-embed</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -616,28 +576,6 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>exec-maven-plugin</artifactId>
-						<version>1.2.1</version>
-						<executions>
-							<execution>
-								<id>install-gdal-it</id>
-								<phase>pre-integration-test</phase>
-								<goals>
-									<goal>java</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<mainClass>
-								org.locationtech.geowave.adapter.raster.plugin.gdal.InstallGdal
-							</mainClass>
-							<arguments>
-								<argument>${gdal.dir}</argument>
-							</arguments>
-						</configuration>
-					</plugin>
-					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-failsafe-plugin</artifactId>
 						<version>3.6.0</version>
@@ -647,7 +585,6 @@
 									<environmentVariables>
 										<LD_LIBRARY_PATH>${gdal.dir}${path.separator}${env.LD_LIBRARY_PATH}</LD_LIBRARY_PATH>
 										<PATH>${gdal.dir}${path.separator}${env.PATH}</PATH>
-										<BIGTABLE_EMULATOR_HOST>${bigtable.emulator.endpoint}</BIGTABLE_EMULATOR_HOST>
 										<GDAL_DIR>${gdal.dir}</GDAL_DIR>
 										<NCS_USER_PREFS />
 									</environmentVariables>
@@ -666,12 +603,6 @@
 										<java.util.logging.config.file>
 											${project.build.testOutputDirectory}/jul-test.properties
 										</java.util.logging.config.file>
-										<bigtable.emulator.endpoint>${bigtable.emulator.endpoint}
-										</bigtable.emulator.endpoint>
-										<bigtable.emulator.internal>${bigtable.emulator.internal}
-										</bigtable.emulator.internal>
-										<bigtable.sdk.url>${bigtable.sdk.url}</bigtable.sdk.url>
-										<bigtable.sdk.file>${bigtable.sdk.file}</bigtable.sdk.file>
 									</systemPropertyVariables>
 									<!-- Sonar currently just supports surefire so "trick" Sonar into 
 										thinking they are surefire reports -->
@@ -817,13 +748,6 @@
 			</properties>
 		</profile>
 		<profile>
-			<id>kudu-it</id>
-			<properties>
-				<skipITs>false</skipITs>
-				<testStoreType>KUDU</testStoreType>
-			</properties>
-		</profile>
-		<profile>
 			<id>redis-it</id>
 			<properties>
 				<skipITs>false</skipITs>
@@ -875,17 +799,6 @@
 					</plugin>
 				</plugins>
 			</build>
-		</profile>
-		<profile>
-			<id>bigtable-it</id>
-			<properties>
-				<skipITs>false</skipITs>
-				<testStoreType>BIGTABLE</testStoreType>
-				<bigtable.emulator.endpoint>127.0.0.1:8128</bigtable.emulator.endpoint>
-				<bigtable.emulator.internal>true</bigtable.emulator.internal>
-				<bigtable.sdk.url>https://storage.googleapis.com/cloud-sdk-release</bigtable.sdk.url>
-				<bigtable.sdk.file>google-cloud-sdk-341.0.0-linux-x86_64.tar.gz</bigtable.sdk.file>
-			</properties>
 		</profile>
 	</profiles>
 </project>

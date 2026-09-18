@@ -65,8 +65,7 @@ public class GeoWaveMultiProcessIngestIT extends AbstractGeoWaveBasicVectorIT {
       // these data stores don't seem to properly pass the environment using Hadoop config and could
       // be investigated further
       // GeoWaveStoreType.DYNAMODB,
-      // GeoWaveStoreType.KUDU,
-      // GeoWaveStoreType.BIGTABLE
+      //
       })
   protected DataStorePluginOptions dataStorePluginOptions;
 

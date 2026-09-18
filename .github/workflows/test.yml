@@ -121,8 +121,6 @@ jobs:
           - hbase-it-client
           - hbase-it-server
           - dynamodb-it
-          - bigtable-it
-          - kudu-it
           - filesystem-it
           - 'filesystem-it,secondary-index-it'
           - 'rocksdb-it,secondary-index-it'
@@ -146,18 +144,13 @@ jobs:
           java-version: '8'
           cache: maven
 
-      # Not covered by setup-java's maven cache: GDAL natives and the imagery
-      # fixtures the landsat8/sentinel2 tests download.
+      # Not covered by setup-java's maven cache.
       - name: Cache downloaded test resources
         uses: actions/cache@v4
         with:
           key: ${{ runner.os }}-other-${{ secrets.CACHE_ID }}
           restore-keys: ${{ runner.os }}-other-
-          path: |
-            ~/.downloads
-            test/landsat8
-            test/sentinel2
-            test/target/temp/gdal
+          path: ~/.downloads
 
       - name: Run
         run: ./.utility/retry ./.utility/run-tests.sh

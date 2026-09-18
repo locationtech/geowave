@@ -53,10 +53,8 @@ public class GeoWaveSparkIngestIT extends AbstractGeoWaveBasicVectorIT {
       value = {
           GeoWaveStoreType.ACCUMULO,
           GeoWaveStoreType.HBASE,
-          GeoWaveStoreType.BIGTABLE,
           GeoWaveStoreType.CASSANDRA,
           GeoWaveStoreType.DYNAMODB,
-          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB,
           GeoWaveStoreType.FILESYSTEM})

@@ -55,11 +55,9 @@ import jersey.repackaged.com.google.common.collect.Iterators;
 @GeoWaveTestStore(
     value = {
         GeoWaveStoreType.ACCUMULO,
-        GeoWaveStoreType.BIGTABLE,
         GeoWaveStoreType.HBASE,
         GeoWaveStoreType.CASSANDRA,
         GeoWaveStoreType.DYNAMODB,
-        GeoWaveStoreType.KUDU,
         GeoWaveStoreType.REDIS,
         GeoWaveStoreType.ROCKSDB,
         GeoWaveStoreType.FILESYSTEM})

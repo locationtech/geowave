@@ -105,11 +105,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-datastore-bigtable</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-datastore-dynamodb</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -126,11 +121,6 @@
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-datastore-rocksdb</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-datastore-kudu</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

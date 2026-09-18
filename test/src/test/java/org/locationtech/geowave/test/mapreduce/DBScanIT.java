@@ -70,7 +70,6 @@ public class DBScanIT extends AbstractGeoWaveIT {
   @GeoWaveTestStore(
       value = {
           GeoWaveStoreType.ACCUMULO,
-          GeoWaveStoreType.BIGTABLE,
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB,

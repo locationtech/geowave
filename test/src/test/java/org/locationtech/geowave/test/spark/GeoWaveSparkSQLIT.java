@@ -46,11 +46,9 @@ public class GeoWaveSparkSQLIT extends AbstractGeoWaveBasicVectorIT {
   @GeoWaveTestStore(
       value = {
           GeoWaveStoreType.ACCUMULO,
-          GeoWaveStoreType.BIGTABLE,
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.CASSANDRA,
           GeoWaveStoreType.HBASE,
-          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB,
           GeoWaveStoreType.FILESYSTEM})
