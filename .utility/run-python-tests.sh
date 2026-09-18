@@ -1,8 +1,10 @@
 #!/bin/bash
 
+MVN="$(cd "$(dirname "$0")/.." && pwd)/mvnw"
+
 # Build and Run Java Gateway
-mvn -q package -P geowave-tools-singlejar -Dfindbugs.skip=true -DskipTests=true -Dspotbugs.skip=true
-GEOWAVE_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+"$MVN" -q package -P geowave-tools-singlejar -Dfindbugs.skip=true -DskipTests=true -Dspotbugs.skip=true
+GEOWAVE_VERSION=$("$MVN" -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
 echo -e "GeoWave version: $GEOWAVE_VERSION\n"
 nohup java -cp deploy/target/geowave-deploy-${GEOWAVE_VERSION}-tools.jar org.locationtech.geowave.core.cli.GeoWaveMain util python rungateway &
 echo -e "Gateway started...\n"

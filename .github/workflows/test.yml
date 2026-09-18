@@ -1,193 +1,164 @@
 name: Tests
-on: [push, pull_request]
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+# Integration tests spin up real backends and take the bulk of the CI time, so
+# they run on master, on demand, and on pull requests labelled 'run-its' --
+# rather than on every push to every branch.
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
-    DEV_RESOURCES_VERSION: 1.7
-    MAVEN_PROFILES: '""'
-    IT_ONLY: true
-    MAVEN_OPTS: "-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2g -XX:MaxMetaspaceSize=512m"    
+  DEV_RESOURCES_VERSION: 1.7
+  MAVEN_PROFILES: '""'
+  IT_ONLY: true
+  MAVEN_OPTS: "-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2g -XX:MaxMetaspaceSize=512m"
+
 jobs:
-    unit-tests:
-        runs-on: ubuntu-20.04
-        name: Unit Tests on Latest ASF Versions
-        env:
-            IT_ONLY: false
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v2
+  unit-tests:
+    runs-on: ubuntu-24.04
+    name: Unit Tests
+    env:
+      IT_ONLY: false
+    steps:
+      - uses: actions/checkout@v4
 
-            - name: Set up JDK 1.8
-              uses: joschi/setup-jdk@v2
-              with:
-                java-version: '8'  
-                architecture: x64  
+      - name: Set up JDK 8
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '8'
+          cache: maven
 
-            - name: Set up Maven
-              uses: stCarolas/setup-maven@v4
-              with:
-                maven-version: 3.6.3
-                
-            - name: Cache maven resources
-              uses: actions/cache@v2
-              env:
-                cache-name: cache-maven-resources
-              with:
-                key: ${{ runner.os }}-mvn-${{ hashFiles('**/pom.xml') }}
-                restore-keys: |
-                      ${{ runner.os }}-mvn-
-                path: |
-                      ~/.m2/repository
+      - name: Run
+        run: ./.utility/run-tests.sh
 
-            - name: Cache other resources
-              uses: actions/cache@v2
-              env:
-                cache-name: cache-resources
-              with:
-                key: ${{ runner.os }}-other-${{ secrets.CACHE_ID }}
-                restore-keys: |
-                      ${{ runner.os }}-other-${{ secrets.CACHE_ID }}
-                path: |  
-                      ~/.downloads
-                      test/landsat8
-                      test/sentinel2
-                      test/target/temp/gdal
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-reports
+          path: "**/target/surefire-reports/*.xml"
+          if-no-files-found: warn
 
-            - name: Run
-              run: ./.utility/run-tests.sh
+  # Non-blocking. The project targets Java 8 today; this is here so that the
+  # work needed to move off it is visible before it is urgent.
+  jdk-canary:
+    runs-on: ubuntu-24.04
+    name: Unit Tests on JDK 21 (informational)
+    continue-on-error: true
+    env:
+      IT_ONLY: false
+    steps:
+      - uses: actions/checkout@v4
 
-            - name: Publish Unit Test Results
-              uses: scacap/action-surefire-report@v1
-              if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
-              with:
-                check_name: Unit Test Results
-                report_paths: "**/target/surefire-reports/*.xml"
-                github_token: ${{ secrets.GITHUB_TOKEN }} 
-                     
-    python-tests:
-        runs-on:  ubuntu-20.04
-        name: Python Tests on Latest ASF Versions
-        env:
-            IT_ONLY: false
-            PYTHON_BUILD: true
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v2
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
 
-            - name: Set up AdoptOpenJDK 1.8
-              uses: joschi/setup-jdk@v2
-              with:
-                java-version: '8'  
-                architecture: x64   
+      - name: Run
+        run: ./.utility/run-tests.sh
 
-            - name: Set up Maven
-              uses: stCarolas/setup-maven@v4
-              with:
-                maven-version: 3.6.3
-                
-            - name: Cache maven resources
-              uses: actions/cache@v2
-              env:
-                cache-name: cache-maven-resources
-              with:
-                key: ${{ runner.os }}-mvn-${{ hashFiles('**/pom.xml') }}
-                restore-keys: |
-                      ${{ runner.os }}-mvn-
-                path: |
-                      ~/.m2/repository
+  python-tests:
+    runs-on: ubuntu-24.04
+    name: Python Tests
+    env:
+      IT_ONLY: false
+      PYTHON_BUILD: true
+    steps:
+      - uses: actions/checkout@v4
 
-            - name: Cache other resources
-              uses: actions/cache@v2
-              env:
-                cache-name: cache-resources
-              with:
-                key: ${{ runner.os }}-other-${{ secrets.CACHE_ID }}
-                restore-keys: |
-                      ${{ runner.os }}-other-${{ secrets.CACHE_ID }}
-                path: |  
-                      ~/.downloads
-                      test/landsat8
-                      test/sentinel2
-                      test/target/temp/gdal
+      - name: Set up JDK 8
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '8'
+          cache: maven
 
-            - name: Run
-              run: ./.utility/run-tests.sh
+      - name: Run
+        run: ./.utility/run-tests.sh
 
-            - name: Python Test Results
-              uses: scacap/action-surefire-report@v1
-              if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
-              with:
-                check_name: Python Test Results
-                report_paths: python/src/main/python/test-report.xml
-                github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-test-reports
+          path: python/src/main/python/test-report.xml
+          if-no-files-found: warn
 
-    integration-tests:
-        runs-on: ubuntu-20.04
-        name: ${{ matrix.profile }} Integration Tests 
-        strategy:
-            fail-fast: false
-            matrix:
-                profile: [redis-it, rocksdb-it, accumulo-it-client, accumulo-it-server, hbase-it-client, hbase-it-server, dynamodb-it, bigtable-it, kudu-it, filesystem-it, 'filesystem-it,secondary-index-it', 'rocksdb-it,secondary-index-it', 'accumulo-it-server,compatibility','hbase-it-server,secondary-index-it']
-                include:
-                  - profile: cassandra-it
-                    retry_tests: true
-                ## for now kerberos test environment isn't quite working, skip the kerberos tests until the issue is resolved
-                  # include a new variable of TEST_KERBEROS = true
-                #  - profile: accumulo-it-kerberos
-                #    test_kerberos: true
-                #  - profile: 'accumulo-it-kerberos,compatibility'
-                #    test_kerberos: true
-        env:
-            IT_ONLY: true
-            MAVEN_PROFILES: ${{ matrix.profile }}
-            TEST_KERBEROS: ${{ matrix.test_kerberos }}
-            RETRY_TESTS: ${{ matrix.retry_tests }}
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v2
-              
-            - name: Set up AdoptOpenJDK 1.8
-              uses: joschi/setup-jdk@v2
-              with:
-                java-version: '8' 
-                architecture: x64  
-                
-            - name: Set up Maven
-              uses: stCarolas/setup-maven@v4
-              with:
-                maven-version: 3.6.3
-              
-                
-            - name: Cache maven resources
-              uses: actions/cache@v2
-              env:
-                cache-name: cache-maven-resources
-              with:
-                key: ${{ runner.os }}-mvn-${{ hashFiles('**/pom.xml') }}
-                restore-keys: |
-                      ${{ runner.os }}-mvn-
-                path: |
-                      ~/.m2/repository
+  integration-tests:
+    if: >-
+      github.event_name != 'pull_request' ||
+      contains(github.event.pull_request.labels.*.name, 'run-its')
+    runs-on: ubuntu-24.04
+    name: ${{ matrix.profile }} Integration Tests
+    strategy:
+      fail-fast: false
+      matrix:
+        profile:
+          - redis-it
+          - rocksdb-it
+          - accumulo-it-client
+          - accumulo-it-server
+          - hbase-it-client
+          - hbase-it-server
+          - dynamodb-it
+          - bigtable-it
+          - kudu-it
+          - filesystem-it
+          - 'filesystem-it,secondary-index-it'
+          - 'rocksdb-it,secondary-index-it'
+          - 'accumulo-it-server,compatibility'
+          - 'hbase-it-server,secondary-index-it'
+        include:
+          - profile: cassandra-it
+            retry_tests: true
+    env:
+      IT_ONLY: true
+      MAVEN_PROFILES: ${{ matrix.profile }}
+      TEST_KERBEROS: ${{ matrix.test_kerberos }}
+      RETRY_TESTS: ${{ matrix.retry_tests }}
+    steps:
+      - uses: actions/checkout@v4
 
-            - name: Cache other resources
-              uses: actions/cache@v2
-              env:
-                cache-name: cache-resources
-              with:
-                key: ${{ runner.os }}-other-${{ secrets.CACHE_ID }}
-                restore-keys: |
-                      ${{ runner.os }}-other-${{ secrets.CACHE_ID }}
-                path: |  
-                      ~/.downloads
-                      test/landsat8
-                      test/sentinel2
-                      test/target/temp/gdal
+      - name: Set up JDK 8
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '8'
+          cache: maven
 
-            - name: Run
-              run: ./.utility/retry ./.utility/run-tests.sh
+      # Not covered by setup-java's maven cache: GDAL natives and the imagery
+      # fixtures the landsat8/sentinel2 tests download.
+      - name: Cache downloaded test resources
+        uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-other-${{ secrets.CACHE_ID }}
+          restore-keys: ${{ runner.os }}-other-
+          path: |
+            ~/.downloads
+            test/landsat8
+            test/sentinel2
+            test/target/temp/gdal
 
-            - name: Publish Integration Test ${{ matrix.profile }} Results
-              uses: scacap/action-surefire-report@v1
-              if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
-              with:
-                check_name: ${{ matrix.profile }} Results
-                report_paths: test/target/failsafe-reports/TEST-org.locationtech.geowave.test.GeoWaveITSuite.xml
-                github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run
+        run: ./.utility/retry ./.utility/run-tests.sh
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: it-reports-${{ strategy.job-index }}
+          path: test/target/failsafe-reports/*.xml
+          if-no-files-found: warn
