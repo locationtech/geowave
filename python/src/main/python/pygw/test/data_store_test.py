@@ -13,11 +13,9 @@ import os
 
 from pygw.store import DataStoreFactory
 from pygw.store.accumulo import AccumuloOptions
-from pygw.store.bigtable import BigTableOptions
 from pygw.store.cassandra import CassandraOptions
 from pygw.store.dynamodb import DynamoDBOptions
 from pygw.store.hbase import HBaseOptions
-from pygw.store.kudu import KuduOptions
 from pygw.store.redis import RedisOptions
 from pygw.store.rocksdb import RocksDBOptions
 from pygw.index import SpatialIndexBuilder
@@ -478,17 +476,6 @@ def test_accumulo_options():
     _test_base_options(options)
 
 
-def test_bigtable_options():
-    options = BigTableOptions()
-    options.set_scan_cache_size(42)
-    assert options.get_scan_cache_size() == 42
-    options.set_project_id("test_project_id")
-    assert options.get_project_id() == "test_project_id"
-    options.set_instance_id("test_instance_id")
-    assert options.get_instance_id() == "test_instance_id"
-    _test_base_options(options)
-
-
 def test_cassandra_options():
     options = CassandraOptions()
     options.set_contact_points("test_contact_point")
@@ -555,13 +542,6 @@ def test_hbase_options():
     options.set_coprocessor_jar("test_jar")
     assert options.get_coprocessor_jar() == "test_jar"
     _test_base_options(options)
-
-
-def test_kudu_options():
-    options = KuduOptions()
-    options.set_kudu_master("test_master")
-    assert options.get_kudu_master() == "test_master"
-    _test_base_options(options, False)
 
 
 def test_redis_options():

@@ -164,33 +164,3 @@ When the `dynamodb` type option is used, additional options are:
 *--cacheResponseMetadata* _<enabled>_::
   Whether to cache responses from AWS. High performance systems can disable this but debugging will be more difficult.  Default is `true`.
 
-When the `kudu` type option is used, additional options are:
-
-*$$*$$ --kuduMaster* _<url>_::
-  A URL for the Kudu master node.
-
-When the `bigtable` type option is used, additional options are:
-
-*--projectId* _<project>_::
-  The Bigtable project to connect to.  Default is `geowave-bigtable-project-id`.
-
-*--instanceId* _<instance>_::
-  The Bigtable instance to connect to.  Default is `geowave-bigtable-instance-id`.
-
-*--scanCacheSize* _<size>_::
-  The number of rows passed to each scanner (higher values will enable faster scanners, but will use more memory).
-
-[[store-add-examples]]
-==== EXAMPLES
-
-Add a data store called `example` that uses a locally running Accumulo instance:
-
-  geowave store add -t accumulo --zookeeper localhost:2181 --instance accumulo --user root --password secret example
-
-Add a data store called `example` that uses a locally running HBase instance:
-
-  geowave store add -t hbase --zookeeper localhost:2181 example
-
-Add a data store called `example` that uses a RocksDB database in the current directory:
-
-  geowave store add -t rocksdb example

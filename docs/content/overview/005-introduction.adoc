@@ -21,8 +21,6 @@ Basically, GeoWave is working to bridge geospatial software with distributed com
 * link:https://accumulo.apache.org[Apache Accumulo^, window="_blank"]
 * link:https://cassandra.apache.org[Apache Cassandra^, window="_blank"]
 * link:https://hbase.apache.org[Apache HBase^, window="_blank"]
-* link:https://kudu.apache.org[Apache Kudu^, window="_blank"]
-* link:https://cloud.google.com/bigtable[Google Cloud Bigtable^, window="_blank"]
 * link:https://redis.io[Redis^, window="_blank"]
 * link:https://rocksdb.org[RocksDB^, window="_blank"]
 
