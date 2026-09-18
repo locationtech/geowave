@@ -142,7 +142,7 @@
 		<sonar.jacoco.itReportPath>${jacoco.it.reportPath}</sonar.jacoco.itReportPath>
 		<surefire.report.path>${basedir}/target/surefire-reports</surefire.report.path>
 		<sonar.junit.reportsPath>${surefire.report.path}</sonar.junit.reportsPath>
-		<jacoco.version>0.7.4.201502262128</jacoco.version>
+		<jacoco.version>0.8.15</jacoco.version>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<test.args>-XX:CompressedClassSpaceSize=512m -XX:+UseSerialGC -Xms1g
@@ -1400,8 +1400,31 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.6.3</version>
+				<executions>
+					<execution>
+						<id>enforce-build-environment</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<!-- Several plugins are declared without a version and so resolve
+									against the super-POM of whichever Maven is running. Requiring a
+									floor keeps that resolution the same for everyone. -->
+								<requireMavenVersion>
+									<version>[3.9.0,)</version>
+								</requireMavenVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
+				<version>3.16.0</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
@@ -1415,11 +1438,11 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.13</version>
+				<version>3.6.0</version>
 				<configuration>
 					<argLine>${test.args} ${jacoco.surefire.argline}</argLine>
 					<excludes>
-						<exclude>**IT.java</exclude>
+						<exclude>**/*IT.java</exclude>
 						<exclude>**/*ITSuite.java</exclude>
 					</excludes>
 					<environmentVariables>
@@ -1434,7 +1457,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
+				<version>3.12.0</version>
 				<configuration>
 					<notimestamp>true</notimestamp>
 					<additionalparam>${javadoc.opts}</additionalparam>
@@ -1545,6 +1568,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
+				<version>3.3.1</version>
 				<configuration>
 					<tagNameFormat>v@{project.version}</tagNameFormat>
 					<autoVersionSubmodules>true</autoVersionSubmodules>
@@ -1624,19 +1648,6 @@
 		</repository>
 	</repositories>
 
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>findbugs-maven-plugin</artifactId>
-				<configuration>
-					<findbugsXmlOutput>true</findbugsXmlOutput>
-					<xmlOutput>true</xmlOutput>
-					<xmlOutputDirectory>${project.basedir}/target/site</xmlOutputDirectory>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
 	<profiles>
 		<profile>
 			<id>build-installer-plugin</id>
@@ -1733,7 +1744,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-source-plugin</artifactId>
-						<version>3.2.0</version>
+						<version>3.4.0</version>
 						<executions>
 							<execution>
 								<id>attach-sources</id>
@@ -1746,7 +1757,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-javadoc-plugin</artifactId>
-						<version>2.10.4</version>
+						<version>3.12.0</version>
 						<executions>
 							<execution>
 								<id>attach-javadocs</id>
@@ -1761,7 +1772,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
-						<version>1.6</version>
+						<version>3.2.8</version>
 						<executions>
 							<execution>
 								<id>sign-artifacts</id>
