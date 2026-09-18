@@ -27,9 +27,8 @@ import org.locationtech.jts.geom.Polygon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.uber.h3core.H3Core;
-import com.uber.h3core.LengthUnit;
-import com.uber.h3core.exceptions.LineUndefinedException;
-import com.uber.h3core.util.GeoCoord;
+import com.uber.h3core.PolygonToCellsFlags;
+import com.uber.h3core.util.LatLng;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 class H3BinningHelper implements SpatialBinningHelper {
@@ -49,11 +48,10 @@ class H3BinningHelper implements SpatialBinningHelper {
   public Geometry getBinGeometry(final ByteArray bin, final int precision) {
     // understanding is that this does not produce a closed loop so we need to add the first point
     // at the end to close the loop
-    final List<GeoCoord> coords =
-        h3().h3ToGeoBoundary(Lexicoders.LONG.fromByteArray(bin.getBytes()));
+    final List<LatLng> coords = h3().cellToBoundary(Lexicoders.LONG.fromByteArray(bin.getBytes()));
     coords.add(coords.get(0));
     return GeometryUtils.GEOMETRY_FACTORY.createPolygon(
-        coords.stream().map(geoCoord -> new Coordinate(geoCoord.lng, geoCoord.lat)).toArray(
+        coords.stream().map(latLng -> new Coordinate(latLng.lng, latLng.lat)).toArray(
             Coordinate[]::new));
   }
 
@@ -86,100 +84,75 @@ class H3BinningHelper implements SpatialBinningHelper {
   private static class H3GeometryHandler implements GeometryHandler {
     private final int precision;
     private final Set<Long> ids = new HashSet<>();
-    // this is just an approximation
-    private static final double KM_PER_DEGREE = 111;
-    private final boolean hasBeenBuffered;
+
+    // Minimal buffer distance in degrees (~0.1mm at the equator).
+    // This is only needed to convert a LineString to a valid polygon for the H3 API,
+    // not for geometric coverage purposes.
+    private static final double MINIMAL_BUFFER_DEGREES = 1e-9;
 
     public H3GeometryHandler(final int precision) {
-      this(precision, false);
-    }
-
-    public H3GeometryHandler(final int precision, final boolean hasBeenBuffered) {
       super();
       this.precision = precision;
-      this.hasBeenBuffered = hasBeenBuffered;
     }
 
     @Override
     public void handlePoint(final Point point) {
-      ids.add(h3().geoToH3(point.getY(), point.getX(), precision));
-    }
-
-    private Long coordToH3(final Coordinate coord) {
-      return h3().geoToH3(coord.getY(), coord.getX(), precision);
+      ids.add(h3().latLngToCell(point.getY(), point.getX(), precision));
     }
 
     @Override
     public void handleLineString(final LineString lineString) {
-      final double edgeLengthDegrees = h3().edgeLength(precision, LengthUnit.km) / KM_PER_DEGREE;
-      internalHandlePolygon((Polygon) lineString.buffer(edgeLengthDegrees));
-
-      // this is an under-approximation, but turns out just as poor of an approximation as the above
-      // logic and should be much faster (doing both actually improves accuracy a bit, albeit more
-      // expensive)
+      // polygonToCellsExperimental needs a 2D polygon, so the line is buffered by a negligible
+      // amount (~0.1mm at the equator) purely to make one. With containment_overlapping every cell
+      // the buffered shape touches is returned, which for a buffer this small is exactly the set of
+      // cells the line itself passes through.
       final Coordinate[] coords = lineString.getCoordinates();
-      if (coords.length > 1) {
-        Coordinate prev = coords[0];
-        for (int i = 1; i < coords.length; i++) {
-          try {
-            ids.addAll(h3().h3Line(coordToH3(prev), coordToH3(coords[i])));
-          } catch (final LineUndefinedException e) {
-            LOGGER.error("Unable to add H3 line for " + lineString, e);
-          }
-          prev = coords[i];
-        }
-      } else if (coords.length == 1) {
-        ids.add(coordToH3(coords[0]));
+      if (coords.length == 1) {
+        handlePoint(lineString.getPointN(0));
+        return;
       }
-    }
-
-    private void internalHandlePolygon(final Polygon polygon) {
-      final int numInteriorRings = polygon.getNumInteriorRing();
-      final List<Long> idsToAdd;
-      if (numInteriorRings > 0) {
-        final List<List<GeoCoord>> holes = new ArrayList<>(numInteriorRings);
-        for (int i = 0; i < numInteriorRings; i++) {
-          holes.add(
-              Arrays.stream(polygon.getInteriorRingN(i).getCoordinates()).map(
-                  c -> new GeoCoord(c.getY(), c.getX())).collect(Collectors.toList()));
-        }
-        idsToAdd =
-            h3().polyfill(
-                Arrays.stream(polygon.getExteriorRing().getCoordinates()).map(
-                    c -> new GeoCoord(c.getY(), c.getX())).collect(Collectors.toList()),
-                holes,
-                precision);
-
-      } else {
-        idsToAdd =
-            h3().polyfill(
-                Arrays.stream(polygon.getExteriorRing().getCoordinates()).map(
-                    c -> new GeoCoord(c.getY(), c.getX())).collect(Collectors.toList()),
-                null,
-                precision);
-      }
-      if (idsToAdd.isEmpty()) {
-        // given the approximations involved with H3 this is still a slight possibility, even given
-        // our geometric buffering to circumvent the approximations
-        handlePoint(polygon.getCentroid());
-      } else {
-        ids.addAll(idsToAdd);
-      }
+      final H3GeometryHandler handler = new H3GeometryHandler(precision);
+      GeometryUtils.visitGeometry(lineString.buffer(MINIMAL_BUFFER_DEGREES), handler);
+      ids.addAll(handler.ids);
     }
 
     @Override
     public void handlePolygon(final Polygon polygon) {
-      // the H3 APIs is an under-approximation - it only returns hexagons whose center is inside the
-      // polygon, *not* all hexagons that intersect the polygon
-      // by buffering the polygon by the approximation of the edge length we can at least get closer
-      // to all the intersections
-      if (hasBeenBuffered) {
-        internalHandlePolygon(polygon);
+      // Using polygonToCellsExperimental with CONTAINMENT_OVERLAPPING mode to get all hexagons
+      // that intersect the polygon at any point. This eliminates the need for the buffering
+      // workaround that was previously required with polygonToCells (which only returns hexagons
+      // whose centers are inside the polygon).
+      final int numInteriorRings = polygon.getNumInteriorRing();
+      final List<Long> idsToAdd;
+      if (numInteriorRings > 0) {
+        final List<List<LatLng>> holes = new ArrayList<>(numInteriorRings);
+        for (int i = 0; i < numInteriorRings; i++) {
+          holes.add(
+              Arrays.stream(polygon.getInteriorRingN(i).getCoordinates()).map(
+                  c -> new LatLng(c.getY(), c.getX())).collect(Collectors.toList()));
+        }
+        idsToAdd =
+            h3().polygonToCellsExperimental(
+                Arrays.stream(polygon.getExteriorRing().getCoordinates()).map(
+                    c -> new LatLng(c.getY(), c.getX())).collect(Collectors.toList()),
+                holes,
+                precision,
+                PolygonToCellsFlags.containment_overlapping);
+
       } else {
-        final double edgeLengthDegrees = h3().edgeLength(precision, LengthUnit.km) / KM_PER_DEGREE;
-        final H3GeometryHandler handler = new H3GeometryHandler(precision, true);
-        GeometryUtils.visitGeometry(polygon.buffer(edgeLengthDegrees), handler);
-        ids.addAll(handler.ids);
+        idsToAdd =
+            h3().polygonToCellsExperimental(
+                Arrays.stream(polygon.getExteriorRing().getCoordinates()).map(
+                    c -> new LatLng(c.getY(), c.getX())).collect(Collectors.toList()),
+                null,
+                precision,
+                PolygonToCellsFlags.containment_overlapping);
+      }
+      if (idsToAdd.isEmpty()) {
+        // For very small polygons that don't intersect any hexagon centers, fall back to centroid
+        handlePoint(polygon.getCentroid());
+      } else {
+        ids.addAll(idsToAdd);
       }
     }
   }
