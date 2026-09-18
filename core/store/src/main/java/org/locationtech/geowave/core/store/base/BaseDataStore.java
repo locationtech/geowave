@@ -2128,7 +2128,8 @@ public class BaseDataStore implements DataStore {
                 statisticsStore,
                 index,
                 indexMapping,
-                adapter)) {
+                adapter,
+                baseOptions.getFlushStatsThreshold())) {
           try (CloseableIterator<?> entryIt =
               this.query(query, (ScanCallback<Object, GeoWaveRow>) updateCallback)) {
             while (entryIt.hasNext()) {
@@ -2156,7 +2157,8 @@ public class BaseDataStore implements DataStore {
               statisticsStore,
               indices[0],
               indexMapping,
-              adapter)) {
+              adapter,
+              baseOptions.getFlushStatsThreshold())) {
         try (CloseableIterator<?> entryIt =
             this.query(query, (ScanCallback<Object, GeoWaveRow>) updateCallback)) {
           while (entryIt.hasNext()) {

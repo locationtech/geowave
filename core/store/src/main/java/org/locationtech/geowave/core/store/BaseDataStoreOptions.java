@@ -35,6 +35,9 @@ public class BaseDataStoreOptions implements DataStoreOptions {
   @Parameter(names = "--aggregationMaxRangeDecomposition", arity = 1)
   protected int configuredAggregationMaxRangeDecomposition = Integer.MIN_VALUE;
 
+  @Parameter(names = "--flushStatsThreshold", arity = 1)
+  protected int configuredFlushStatsThreshold = Integer.MIN_VALUE;
+
   @Override
   public boolean isPersistDataStatistics() {
     return persistDataStatistics;
@@ -125,5 +128,19 @@ public class BaseDataStoreOptions implements DataStoreOptions {
 
   public void setEnableVisibility(final boolean configuredEnableVisibility) {
     this.configuredEnableVisibility = configuredEnableVisibility;
+  }
+
+  @Override
+  public int getFlushStatsThreshold() {
+    return configuredFlushStatsThreshold == Integer.MIN_VALUE ? defaultFlushStatsThreshold()
+        : configuredFlushStatsThreshold;
+  }
+
+  protected int defaultFlushStatsThreshold() {
+    return 1000000;
+  }
+
+  public void setFlushStatsThreshold(final int flushStatsThreshold) {
+    this.configuredFlushStatsThreshold = flushStatsThreshold;
   }
 }

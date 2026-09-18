@@ -35,12 +35,11 @@ public class StatisticUpdateCallback<T> implements
     Closeable,
     Flushable {
 
-  private static final int FLUSH_STATS_THRESHOLD = 1000000;
-
   private final List<StatisticUpdateHandler<T, ?, ?>> statisticUpdateHandlers;
   private final Object MUTEX = new Object();
   private final DataStatisticsStore statisticsStore;
   private final boolean skipFlush;
+  private final int flushStatsThreshold;
   private boolean overwrite;
 
   private int updateCount = 0;
@@ -52,6 +51,7 @@ public class StatisticUpdateCallback<T> implements
    * @param statisticsStore the statistics store
    * @param index the index used in the operation
    * @param type the type used in the operation
+   * @param flushStatsThreshold the number of updates to buffer before flushing to the store
    */
   @SuppressWarnings({"rawtypes", "unchecked"})
   public StatisticUpdateCallback(
@@ -59,8 +59,10 @@ public class StatisticUpdateCallback<T> implements
       final DataStatisticsStore statisticsStore,
       final Index index,
       final AdapterToIndexMapping indexMapping,
-      final InternalDataAdapter<T> type) {
+      final InternalDataAdapter<T> type,
+      final int flushStatsThreshold) {
     this.statisticsStore = statisticsStore;
+    this.flushStatsThreshold = flushStatsThreshold;
     statisticUpdateHandlers = Lists.newArrayListWithCapacity(statistics.size());
     for (Statistic<?> statistic : statistics) {
       StatisticUpdateHandler handler =
@@ -94,7 +96,7 @@ public class StatisticUpdateCallback<T> implements
   }
 
   private void checkStats() {
-    if (!skipFlush && (updateCount >= FLUSH_STATS_THRESHOLD)) {
+    if (!skipFlush && (updateCount >= flushStatsThreshold)) {
       updateCount = 0;
       flush();
     }

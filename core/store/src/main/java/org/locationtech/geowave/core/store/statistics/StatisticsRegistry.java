@@ -75,7 +75,7 @@ public class StatisticsRegistry {
   }
 
 
-  public static StatisticsRegistry instance() {
+  public static synchronized StatisticsRegistry instance() {
     if (INSTANCE == null) {
       INSTANCE = new StatisticsRegistry();
     }
