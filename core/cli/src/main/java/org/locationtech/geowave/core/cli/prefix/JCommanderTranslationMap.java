@@ -10,6 +10,7 @@ package org.locationtech.geowave.core.cli.prefix;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.locationtech.geowave.core.cli.parsed.GeneratedClassAnchor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.beust.jcommander.JCommander;
@@ -254,12 +256,15 @@ public class JCommanderTranslationMap {
 
       // Convert the translated CtClass to an actual class.
       for (final CtClass clz : createdClasses.values()) {
-        final Class<?> toClass = clz.toClass();
-        final Object instance = toClass.newInstance();
+        // The anchor supplies the package-local lookup that Javassist needs to define the class;
+        // without it, it reflects into ClassLoader.defineClass and fails on JDK 9+.
+        final Class<?> toClass = clz.toClass(GeneratedClassAnchor.class);
+        final Object instance = toClass.getDeclaredConstructor().newInstance();
         translatedObjects.add(instance);
       }
     } catch (InstantiationException | IllegalAccessException | NotFoundException
-        | IllegalStateException | NullPointerException | CannotCompileException e) {
+        | IllegalStateException | NullPointerException | CannotCompileException
+        | NoSuchMethodException | InvocationTargetException e) {
       LOGGER.error("Unable to create classes", e);
       throw new RuntimeException();
     }
