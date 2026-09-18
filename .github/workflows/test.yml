@@ -4,6 +4,9 @@ on:
   push:
     branches: [master]
   pull_request:
+    # 'labeled' so that adding run-its to an open pull request actually starts
+    # the integration matrix rather than waiting for the next push.
+    types: [opened, synchronize, reopened, labeled]
   workflow_dispatch:
 
 # Integration tests spin up real backends and take the bulk of the CI time, so
