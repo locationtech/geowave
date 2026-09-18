@@ -1,0 +1,87 @@
+name: IP Check
+
+# Eclipse projects must account for the licences of everything they
+# redistribute. This regenerates the Dash dependency summary and fails when a
+# change introduces content that has not been vetted.
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      file_reviews:
+        description: File review requests with the Eclipse IP team for restricted content
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ip-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  dependencies:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      # Inter-module dependencies do not resolve from the reactor alone, so the
+      # summary would be missing GeoWave's own artifacts without this.
+      - name: Install artifacts
+        run: mvn -B -DskipTests -Dspotbugs.skip -Dformatter.skip=true -Djacoco.skip=true install
+
+      - name: Generate dependency summary
+        run: ./.utility/dash-summary.sh "${{ runner.temp }}/DEPENDENCIES.generated"
+
+      # Uploaded even on failure: on the first run this artifact is what gets
+      # committed as the baseline.
+      - name: Upload summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: DEPENDENCIES
+          path: ${{ runner.temp }}/DEPENDENCIES.generated
+          if-no-files-found: warn
+
+      - name: Check for newly restricted content
+        run: ./.utility/dash-gate.sh DEPENDENCIES "${{ runner.temp }}/DEPENDENCIES.generated"
+
+  # Filing requests needs a committer's token, so it is never run from
+  # pull_request -- a pull request from a fork must not be able to reach it.
+  file-reviews:
+    if: github.event_name == 'workflow_dispatch' && inputs.file_reviews
+    runs-on: ubuntu-24.04
+    environment: eclipse-ip
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Install artifacts
+        run: mvn -B -DskipTests -Dspotbugs.skip -Dformatter.skip=true -Djacoco.skip=true install
+
+      - name: File review requests
+        env:
+          DASH_IPLAB_TOKEN: ${{ secrets.DASH_IPLAB_TOKEN }}
+        run: |
+          if [ -z "$DASH_IPLAB_TOKEN" ]; then
+            echo "DASH_IPLAB_TOKEN is not set. A committer must create a"
+            echo "gitlab.eclipse.org personal access token with the 'api' scope"
+            echo "and store it as a repository secret."
+            exit 1
+          fi
+          ./.utility/dash-summary.sh "${{ runner.temp }}/DEPENDENCIES.generated" \
+            -Ddash.iplab.token="$DASH_IPLAB_TOKEN"
