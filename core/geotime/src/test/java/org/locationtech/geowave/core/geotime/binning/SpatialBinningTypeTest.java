@@ -29,8 +29,10 @@ public class SpatialBinningTypeTest {
           SpatialBinningType.S2,
           0.01,
           SpatialBinningType.H3,
-          // H3 approximations can just be *bad*
-          0.25);
+          // was 0.25 under h3 3.x, whose polyfill returned only cells whose centre fell inside the
+          // geometry; h3 4.x's containment_overlapping returns every cell touched, so coverage is
+          // now effectively exact
+          1E-6);
 
   @Test
   public void testPolygons() {
