@@ -11,6 +11,7 @@ package org.locationtech.geowave.core.geotime.store.statistics;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.apache.commons.lang3.tuple.Pair;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.geowave.core.geotime.binning.ComplexGeometryBinningOption;
@@ -92,6 +93,13 @@ public class IncorporateStatisticFromEntryTest {
     dataStore.addType(
         BasicDataTypeAdapter.newAdapter(TYPE_NAME, Region.class, "id"),
         new SpatialIndexBuilder().createIndex());
+  }
+
+  // The in-memory store is cached statically per namespace, and these tests do not set one, so
+  // anything left behind is visible to every other test in the JVM.
+  @After
+  public void tearDown() {
+    dataStore.deleteAll();
   }
 
   @Test

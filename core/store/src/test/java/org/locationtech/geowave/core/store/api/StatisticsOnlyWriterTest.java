@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.tuple.Pair;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.geowave.core.index.ByteArray;
@@ -86,6 +87,13 @@ public class StatisticsOnlyWriterTest {
     dataStore.addType(
         BasicDataTypeAdapter.newAdapter(TYPE_NAME, TestData.class, "id"),
         new NullIndex("index"));
+  }
+
+  // The in-memory store is cached statically per namespace, and these tests do not set one, so
+  // anything left behind is visible to every other test in the JVM.
+  @After
+  public void tearDown() {
+    dataStore.deleteAll();
   }
 
   @Test
