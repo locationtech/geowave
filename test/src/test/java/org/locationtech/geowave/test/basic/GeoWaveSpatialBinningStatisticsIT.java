@@ -76,11 +76,11 @@ public class GeoWaveSpatialBinningStatisticsIT extends AbstractGeoWaveBasicVecto
   @GeoWaveTestStore(
       value = {
           GeoWaveTestStore.GeoWaveStoreType.ACCUMULO,
-          GeoWaveTestStore.GeoWaveTestStore.GeoWaveStoreType.CASSANDRA,
+          GeoWaveTestStore.GeoWaveStoreType.CASSANDRA,
           GeoWaveTestStore.GeoWaveStoreType.DYNAMODB,
           GeoWaveTestStore.GeoWaveStoreType.FILESYSTEM,
           GeoWaveTestStore.GeoWaveStoreType.HBASE,
-          GeoWaveTestStore.GeoWaveTestStore.GeoWaveStoreType.REDIS,
+          GeoWaveTestStore.GeoWaveStoreType.REDIS,
           GeoWaveTestStore.GeoWaveStoreType.ROCKSDB})
   protected DataStorePluginOptions dataStoreOptions;
 
