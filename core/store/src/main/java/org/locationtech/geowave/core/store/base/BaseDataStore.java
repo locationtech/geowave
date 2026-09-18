@@ -53,6 +53,7 @@ import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.api.Statistic;
 import org.locationtech.geowave.core.store.api.StatisticQuery;
 import org.locationtech.geowave.core.store.api.StatisticValue;
+import org.locationtech.geowave.core.store.api.StatisticsOnlyWriter;
 import org.locationtech.geowave.core.store.api.VisibilityHandler;
 import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.base.dataidx.DataIndexUtils;
@@ -100,6 +101,7 @@ import org.locationtech.geowave.core.store.statistics.InternalStatisticsHelper;
 import org.locationtech.geowave.core.store.statistics.StatisticId;
 import org.locationtech.geowave.core.store.statistics.StatisticType;
 import org.locationtech.geowave.core.store.statistics.StatisticUpdateCallback;
+import org.locationtech.geowave.core.store.statistics.StatisticsIngestCallback;
 import org.locationtech.geowave.core.store.statistics.adapter.DataTypeStatisticType;
 import org.locationtech.geowave.core.store.statistics.field.FieldStatisticType;
 import org.locationtech.geowave.core.store.statistics.index.DifferingVisibilityCountStatistic.DifferingVisibilityCountValue;
@@ -1357,6 +1359,20 @@ public class BaseDataStore implements DataStore {
   }
 
   /** Returns an index writer to perform batched write operations for the given typename */
+  @SuppressWarnings("unchecked")
+  @Override
+  public <T> StatisticsOnlyWriter<T> createStatisticsOnlyWriter(final String typeName) {
+    final DataTypeAdapter<T> adapter = (DataTypeAdapter<T>) getType(typeName);
+    if (adapter == null) {
+      LOGGER.warn(
+          "DataTypeAdapter does not exist for type '"
+              + typeName
+              + "'. Add it using addType(<dataTypeAdapter>).");
+      return null;
+    }
+    return new StatisticsOnlyWriterImpl<>(this, typeName, adapter);
+  }
+
   @Override
   public <T> Writer<T> createWriter(final String typeName) {
     return createWriter(typeName, null);
@@ -2485,5 +2501,77 @@ public class BaseDataStore implements DataStore {
     return new CloseableIteratorWrapper<>(
         values,
         Iterators.transform(values, (v) -> Pair.of(v.getBin(), v.getValue())));
+  }
+
+  @Override
+  public <V extends StatisticValue<R>, R> void incorporateStatisticValue(
+      final Statistic<V> statistic,
+      final V value) {
+    assertStatisticExists(statistic);
+    statisticsStore.incorporateStatisticValue(statistic, value);
+  }
+
+  @Override
+  public <V extends StatisticValue<R>, R> void incorporateStatisticValue(
+      final Statistic<V> statistic,
+      final V value,
+      final ByteArray bin) {
+    assertStatisticExists(statistic);
+    statisticsStore.incorporateStatisticValue(statistic, value, bin);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public <T, V extends StatisticValue<R>, R> void incorporateStatisticFromEntry(
+      final Statistic<V> statistic,
+      final String typeName,
+      final T entry) {
+    assertStatisticExists(statistic);
+    final DataTypeAdapter<T> adapter = (DataTypeAdapter<T>) getType(typeName);
+    if (adapter == null) {
+      throw new IllegalArgumentException(
+          "Type '" + typeName + "' doesn't exist. Add it first using addType().");
+    }
+
+    if (statistic.getBinningStrategy() == null) {
+      statisticsStore.incorporateStatisticValue(
+          statistic,
+          computeValue(statistic, adapter, entry, StatisticValue.NO_BIN));
+      return;
+    }
+    // Each bin gets its own value, because a binning strategy may make the computation itself
+    // bin-dependent -- see StatisticUpdateHandler.handleBin.
+    final ByteArray[] bins = statistic.getBinningStrategy().getBins(adapter, entry);
+    if (bins == null) {
+      return;
+    }
+    for (final ByteArray bin : bins) {
+      statisticsStore.incorporateStatisticValue(
+          statistic,
+          computeValue(statistic, adapter, entry, bin),
+          bin);
+    }
+  }
+
+  private <T, V extends StatisticValue<R>, R> V computeValue(
+      final Statistic<V> statistic,
+      final DataTypeAdapter<T> adapter,
+      final T entry,
+      final ByteArray bin) {
+    final V value = statistic.createEmpty();
+    value.setBin(bin);
+    if (value instanceof StatisticsIngestCallback) {
+      ((StatisticsIngestCallback) value).entryIngested(adapter, entry);
+    }
+    return value;
+  }
+
+  private void assertStatisticExists(final Statistic<?> statistic) {
+    if (!statisticsStore.exists(statistic)) {
+      throw new IllegalArgumentException(
+          "The statistic "
+              + statistic.toString()
+              + " doesn't exist. Add it first using addEmptyStatistic().");
+    }
   }
 }
