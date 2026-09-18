@@ -42,16 +42,11 @@ The table below outlines the different project hierarchies within the GeoWave pr
 2.1+| 3.1+| cli              | GeoWave Extension CLI's               | Extensions to the GeoWave command-line tools framework.  Contains tools whose sole purpose is to extend the GeoWave command-line tools.
 3.1+| 2.1+| debug            | GeoWave Debug Command-line Tools       | A set of ad-hoc debug tools available through the command-line that can be applied to GeoWave data.
 3.1+| 2.1+| geoserver        | GeoWave GeoServer Command-line Tools   | GeoWave command-line tools for managing GeoServer layers and data stores.
-3.1+| 2.1+| landsat8         | GeoWave LandSat8 Operations           | GeoWave support for public LandSat8 data.
-3.1+| 2.1+| sentinel2        | GeoWave Sentinel2 Operations          | GeoWave support for public Sentinel2 data.
-3.1+| 2.1+| osm              | GeoWave OSM Command-Line Tools        | OSM data processing system for GeoWave.
 2.1+| 3.1+| datastores       | GeoWave Data Stores                   | These extensions contain all of the necessary code to run GeoWave on a particular backend key/value store.  The intent is to keep as much logic out of these extensions as possible to prevent fragmentation of the codebase.
 3.1+| 2.1+| accumulo         | GeoWave Accumulo                      | GeoWave data store on Apache Accumulo.
-3.1+| 2.1+| bigtable         | GeoWave BigTable                      | GeoWave data store on Google Bigtable.
 3.1+| 2.1+| cassandra        | GeoWave Cassandra                     | GeoWave data store on Apache Cassandra.
 3.1+| 2.1+| dynamodb         | GeoWave DynamoDB                      | GeoWave data store on DynamoDB.
 3.1+| 2.1+| hbase            | GeoWave HBase                         | GeoWave data store on Apache HBase.
-3.1+| 2.1+| kudu             | GeoWave Kudu                          | GeoWave data store on Apache Kudu.
 3.1+| 2.1+| redis            | GeoWave Redis                         | GeoWave data store on Redis.
 3.1+| 2.1+| rocksdb          | GeoWave RocksDB                       | GeoWave data store on RocksDB.
 2.1+| 3.1+| formats          | GeoWave Extension Formats             | A format plugin in the system is an extension to the command-line ingest framework, providing a means to read data from a particular format of interest and map it to a particular adapter; in the open source project, we provide a variety of vector formats and a single raster format that wraps a popular library; GeoTools (`geotools-vector` format covers all formats supported by GeoTools and `geotools-raster` covers all raster formats supported by GeoTools, each covering a large variety of popular geospatial formats).

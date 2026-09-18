@@ -17,12 +17,10 @@
 		<module>datastores/accumulo</module>
 		<module>datastores/hbase/core</module>
 		<module>datastores/hbase/coprocessors</module>
-		<module>datastores/bigtable</module>
 		<module>datastores/cassandra</module>
 		<module>datastores/dynamodb</module>
 		<module>datastores/redis</module>
 		<module>datastores/rocksdb</module>
-		<module>datastores/kudu</module>
 		<module>datastores/filesystem</module>
 		<module>formats/geolife</module>
 		<module>formats/geotools-raster</module>
@@ -41,11 +39,6 @@
 		<module>cli/hbase-embed</module>
 		<module>cli/accumulo-embed</module>
 		<module>cli/cassandra-embed</module>
-		<module>cli/bigtable-embed</module>
-		<module>cli/kudu-embed</module>
 		<module>cli/dynamodb-embed</module>
-		<module>cli/osm</module>
-		<module>cli/landsat8</module>
-		<module>cli/sentinel2</module>
 	</modules>
 </project>

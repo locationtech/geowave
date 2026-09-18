@@ -53,11 +53,9 @@ public class GeoWaveGeometryPrecisionIT extends AbstractGeoWaveBasicVectorIT {
   @GeoWaveTestStore(
       value = {
           GeoWaveStoreType.ACCUMULO,
-          GeoWaveStoreType.BIGTABLE,
           GeoWaveStoreType.CASSANDRA,
           GeoWaveStoreType.DYNAMODB,
           GeoWaveStoreType.HBASE,
-          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB,
           GeoWaveStoreType.FILESYSTEM},

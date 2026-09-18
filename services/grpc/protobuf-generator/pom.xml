@@ -40,22 +40,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-datastore-bigtable</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-cli-osm</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-cli-geoserver</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-cli-landsat8</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

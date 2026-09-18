@@ -15,11 +15,9 @@
 :format-avro: {blob-root}/extensions/formats/avro/{source-root}
 :grpc-server: {blob-root}/services/grpc/server/{source-root}
 :store-accumulo: {blob-root}/extensions/datastores/accumulo/{source-root}
-:store-bigtable: {blob-root}/extensions/datastores/bigtable/{source-root}
 :store-cassandra: {blob-root}/extensions/datastores/cassandra/{source-root}
 :store-dynamodb: {blob-root}/extensions/datastores/dynamodb/{source-root}
 :store-hbase: {blob-root}/extensions/datastores/hbase/{source-root}
-:store-kudu: {blob-root}/extensions/datastores/kudu/{source-root}
 :store-redis: {blob-root}/extensions/datastores/redis/{source-root}
 :store-rocksdb: {blob-root}/extensions/datastores/rocksdb/{source-root}
 

@@ -38,11 +38,9 @@ public class FileUploadIT {
   @GeoWaveTestStore(
       value = {
           GeoWaveStoreType.ACCUMULO,
-          GeoWaveStoreType.BIGTABLE,
           GeoWaveStoreType.HBASE,
           GeoWaveStoreType.CASSANDRA,
           GeoWaveStoreType.DYNAMODB,
-          GeoWaveStoreType.KUDU,
           GeoWaveStoreType.REDIS,
           GeoWaveStoreType.ROCKSDB,
           GeoWaveStoreType.FILESYSTEM})

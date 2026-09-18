@@ -48,13 +48,11 @@ Integration tests are all written in the `geowave-tests` project and are run usi
 | accumulo-it-client | Run integration tests on Accumulo with server-side libraries disabled
 | accumulo-it-server | Run integration tests on Accumulo with server-side libraries enabled
 | accumulo-it-all    | Run integration tests on Accumulo with server-side libraries enabled and disabled
-| bigtable-it        | Run integration tests on Bigtable
 | cassandra-it       | Run integration tests on Cassandra
 | dynamodb-it        | Run integration tests on DynamoDB
 | hbase-it-client    | Run integration tests on HBase with server-side libraries disabled
 | hbase-it-server    | Run integration tests on HBase with server-side libraries enabled
 | hbase-it-all       | Run integration tests on HBase with server-side libraries enabled and disabled
-| kudu-it            | Run integration tests on Kudu
 | redis-it           | Run integration tests on Redis
 | rocksdb-it         | Run integration tests on RocksDB
 | secondary-index-it | Run integration tests with secondary indexing enabled, this profile can be used with any of the previous profiles

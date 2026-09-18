@@ -13,11 +13,9 @@ Data stores are created by instantiating a {core-store}/core/store/StoreFactoryO
 |======================
 | Key/Value Store | Options Class
 | Accumulo        | {store-accumulo}/datastore/accumulo/config/AccumuloRequiredOptions.java[`org.locationtech.geowave.datastore.accumulo.config.AccumuloRequiredOptions`]
-| Bigtable        | {store-bigtable}/datastore/bigtable/config/BigTableOptions.java[`org.locationtech.geowave.datastore.bigtable.config.BigTableOptions`]
 | Cassandra       | {store-cassandra}/datastore/cassandra/config/CassandraRequiredOptions.java[`org.locationtech.geowave.datastore.cassandra.config.CassandraRequiredOptions`]
 | DynamoDB        | {store-dynamodb}/datastore/dynamodb/config/DynamoDBOptions.java[`org.locationtech.geowave.datastore.dynamodb.config.DynamoDBOptions`]
 | HBase           | {store-hbase}/datastore/hbase/config/HBaseRequiredOptions.java[`org.locationtech.geowave.datastore.hbase.config.HBaseRequiredOptions`]
-| Kudu            | {store-kudu}/datastore/kudu/config/KuduOptions.java[`org.locationtech.geowave.datastore.kudu.config.KuduOptions`]
 | Redis           | {store-redis}/datastore/redis/config/RedisOptions.java[`org.locationtech.geowave.datastore.redis.config.RedisOptions`]
 | RocksDB         | {store-rocksdb}/datastore/rocksdb/config/RocksDBOptions.java[`org.locationtech.geowave.datastore.rocksdb.config.RocksDBOptions`]
 |======================
