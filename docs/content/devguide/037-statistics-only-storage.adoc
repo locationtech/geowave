@@ -1,0 +1,63 @@
+[[statistics-only-storage]]
+<<<
+
+== Statistics-Only Storage
+
+=== Overview
+
+Statistics are normally maintained as a side effect of ingest: entries are written to an index, and the statistics registered for that type are updated as the rows are produced.  Sometimes only the statistics are wanted.  A high-volume feed may be far too large to retain in full, or the raw records may not be yours to store, while the aggregates derived from them are still worth keeping.
+
+A statistics-only writer computes and stores statistics from entries without persisting the entries themselves.  Nothing is written to the index; querying the type afterwards returns no results, but the statistics registered for it reflect everything that passed through the writer.
+
+=== Writing Statistics Without Data
+
+Statistics must be registered before the writer is created -- the writer discovers the statistics that exist for the type at the moment it is constructed, so anything added afterwards will not be updated.
+
+[source, java]
+----
+final CountStatistic count = new CountStatistic("Track");
+final NumericMeanStatistic meanSpeed = new NumericMeanStatistic("Track", "speed");
+dataStore.addEmptyStatistic(count, meanSpeed);
+
+try (StatisticsOnlyWriter<Track> writer = dataStore.createStatisticsOnlyWriter("Track")) {
+  for (final Track track : streamingTracks) {
+    writer.write(track);
+  }
+}
+
+final Long trackCount = dataStore.getStatisticValue(count);
+final Double averageSpeed = dataStore.getStatisticValue(meanSpeed);
+----
+
+{core-store}/core/store/api/StatisticsOnlyWriter.java[`StatisticsOnlyWriter`] also accepts an `Iterable`, so a batch can be handed over in one call.  It is `Closeable` and `Flushable`, and the try-with-resources form above is the expected usage.
+
+There are several behaviours worth knowing:
+
+* Updates are *buffered*.  A statistic value is not visible to a reader until `flush()` or `close()` has been called, so a writer that is still open will appear to have had no effect.  The buffer is also flushed automatically once the number of entries written reaches the store's `--flushStatsThreshold`, which defaults to 1,000,000.
+* The writer is *not thread safe*.  Use one writer per thread rather than sharing a single instance.
+* `createStatisticsOnlyWriter` returns `null` if the named type has not been registered with `addType`.
+* Statistics that GeoWave maintains internally for a type are updated along with the ones you registered.  A count statistic will therefore report entries that were never stored, which is the intended behaviour but can be surprising when comparing a count against a query result.
+* If the type has no index, entries cannot be encoded into rows and no statistics are computed.  The writer logs a warning rather than failing, because a statistic that depends on row content -- partition binning, for instance -- has nothing to work from.
+
+=== Incorporating Values Directly
+
+Two lower-level methods sit beneath the writer, for cases that need finer control than "write this entry".
+
+`incorporateStatisticFromEntry` computes a value from a single entry and merges it into the statistic, applying the binning strategy along the way:
+
+[source, java]
+----
+dataStore.incorporateStatisticFromEntry(count, "Track", track);
+----
+
+`incorporateStatisticValue` merges a value that has already been computed, which is useful for combining statistics that were produced somewhere else -- another store, or an offline job.  Its second argument is the `StatisticValue` itself rather than the raw value it wraps, and a binned statistic takes the target bin as a third argument.  Statistic values are `Mergeable`, so incorporating one adds to the running total rather than replacing it.
+
+A distinct value is computed for each bin the entry contributes to, with the bin set before the computation runs.  This matters because a binning strategy may make the computation itself bin-dependent.  The {core-geotime}/core/geotime/store/statistics/binning/SpatialFieldValueBinningStrategy.java[`SpatialFieldValueBinningStrategy`] configured with `USE_FULL_GEOMETRY_SCALE_BY_OVERLAP` is the clearest example: it weights each bin by how much of the geometry falls inside that bin, so a polygon spanning several cells contributes a fraction to each rather than a whole entry to every one of them.
+
+=== When to Use It
+
+Statistics-only storage suits cases where the aggregate is the product and the records are transient -- summarising a live feed, characterising a dataset held elsewhere, or maintaining coverage and density information over data that is too large or too sensitive to retain.
+
+If the entries are being stored anyway, there is nothing to gain here.  An ordinary {core-store}/core/store/api/Writer.java[`Writer`] already updates the same statistics as it ingests, and going through both would count everything twice.
+
+See the <<035-statistics.adoc#statistics, Statistics>> section for the statistic types and binning strategies that are available.
