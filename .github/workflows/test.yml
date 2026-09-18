@@ -57,6 +57,10 @@ jobs:
     continue-on-error: true
     env:
       IT_ONLY: false
+      # spotbugs 3.1.10 cannot load on JDK 9+, which would mask whatever this
+      # job is actually meant to reveal. MAVEN_ARGS needs Maven 3.9+, which the
+      # wrapper pins.
+      MAVEN_ARGS: -Dspotbugs.skip
     steps:
       - uses: actions/checkout@v4
 

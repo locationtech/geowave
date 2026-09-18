@@ -1555,18 +1555,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>com.github.spotbugs</groupId>
-				<artifactId>spotbugs-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>verify</phase>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 			<!-- for incrementing version numbers and tagging repositories To Use: 
 				0. Ensure all files checked into master (clean environment). Make sure you 
 				have access to both mvn and git on your command line, and you are in a terminal 
@@ -1675,6 +1663,36 @@
 		</pluginRepository>
 	</pluginRepositories>
 	<profiles>
+		<profile>
+			<!-- spotbugs-maven-plugin 3.1.10 bundles a Groovy that cannot initialize on
+				JDK 9 or later: the mojo fails to load before it ever reads its own skip
+				parameter, so -Dspotbugs.skip alone cannot avoid it. Binding the execution
+				through a profile means the property deactivates the profile and the plugin
+				is never resolved at all, which is what -Dspotbugs.skip is expected to do.
+				This can go away once the analyzer is upgraded. -->
+			<id>spotbugs</id>
+			<activation>
+				<property>
+					<name>!spotbugs.skip</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.github.spotbugs</groupId>
+						<artifactId>spotbugs-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>verify</phase>
+								<goals>
+									<goal>check</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 		<profile>
 			<id>build-installer-plugin</id>
 			<properties>
