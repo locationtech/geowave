@@ -24,8 +24,10 @@ public class PrefixedJCommanderTest {
   public void testAddCommand() {
     final PrefixedJCommander prefixedJCommander = new PrefixedJCommander();
 
-    prefixedJCommander.addCommand("abc", (Object) "hello, world", "a");
-    prefixedJCommander.addCommand("def", (Object) "goodbye, world", "b");
+    // Commands must be parameter-bearing objects; passing a java.lang.String makes JCommander
+    // introspect java.lang.String itself, which JDK 9+ does not permit.
+    prefixedJCommander.addCommand("abc", new ArgumentChildren(), "a");
+    prefixedJCommander.addCommand("def", new ArgumentChildrenOther(), "b");
     prefixedJCommander.parse("abc");
     Assert.assertEquals(prefixedJCommander.getParsedCommand(), "abc");
   }

@@ -8,14 +8,13 @@
  */
 package org.locationtech.geowave.core.index;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import javax.imageio.spi.ServiceRegistry;
+import java.util.ServiceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,18 +32,23 @@ import org.slf4j.LoggerFactory;
  * SPIServiceRegistry(FieldSerializationProviderSpi.class).load(
  * FieldSerializationProviderSpi.class);
  */
-public class SPIServiceRegistry extends ServiceRegistry {
+public class SPIServiceRegistry {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SPIServiceRegistry.class);
 
-  @SuppressWarnings("unchecked")
-  public SPIServiceRegistry(final Class<?> category) {
-    super((Iterator) Arrays.asList(category).iterator());
-  }
+  public SPIServiceRegistry() {}
 
-  public SPIServiceRegistry(final Iterator<Class<?>> categories) {
-    super(categories);
-  }
+  /**
+   * @param category retained for source compatibility; the service class is supplied to
+   *        {@link #load(Class)} instead and this argument is ignored
+   */
+  public SPIServiceRegistry(final Class<?> category) {}
+
+  /**
+   * @param categories retained for source compatibility; the service class is supplied to
+   *        {@link #load(Class)} instead and this argument is ignored
+   */
+  public SPIServiceRegistry(final Iterator<Class<?>> categories) {}
 
   private static final Set<ClassLoader> ClassLoaders =
       Collections.synchronizedSet(new HashSet<ClassLoader>());
@@ -78,7 +82,7 @@ public class SPIServiceRegistry extends ServiceRegistry {
             continue;
           }
           checkset.add(l);
-          spiIT = ServiceRegistry.lookupProviders(service, l);
+          spiIT = ServiceLoader.load(service, l).iterator();
         }
         return (spiIT != null) && spiIT.hasNext();
       }
