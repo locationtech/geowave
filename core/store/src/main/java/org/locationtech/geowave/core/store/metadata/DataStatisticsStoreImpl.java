@@ -582,7 +582,13 @@ public class DataStatisticsStoreImpl extends
         }
       }
     }
-    return new StatisticUpdateCallback<>(statistics, this, index, indexMapping, adapter);
+    return new StatisticUpdateCallback<>(
+        statistics,
+        this,
+        index,
+        indexMapping,
+        adapter,
+        options.getFlushStatsThreshold());
   }
 
   @Override

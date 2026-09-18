@@ -30,4 +30,6 @@ public interface DataStoreOptions {
   boolean isSecondaryIndexing();
 
   void setSecondaryIndexing(boolean se);
+
+  int getFlushStatsThreshold();
 }

@@ -155,6 +155,53 @@ public interface DataStore {
   void recalcStatistic(Statistic<?>... statistic);
 
   /**
+   * Incorporate a statistic value directly into the data store without ingesting the underlying
+   * data. This is useful for maintaining statistics computed from external sources or streaming data
+   * without storing the raw data itself. This method is for statistics that do not use a binning
+   * strategy.
+   *
+   * @param <V> the StatisticValue implementation of the statistic
+   * @param <R> the raw value type of the statistic
+   * @param statistic the statistic to incorporate the value into
+   * @param value the statistic value to incorporate
+   */
+  <V extends StatisticValue<R>, R> void incorporateStatisticValue(Statistic<V> statistic, V value);
+
+  /**
+   * Incorporate a statistic value directly into a specific bin of the data store without ingesting
+   * the underlying data. This is useful for maintaining binned statistics computed from external
+   * sources or streaming data without storing the raw data itself. This method is for statistics
+   * that use a binning strategy.
+   *
+   * @param <V> the StatisticValue implementation of the statistic
+   * @param <R> the raw value type of the statistic
+   * @param statistic the statistic to incorporate the value into
+   * @param value the statistic value to incorporate
+   * @param bin the bin to incorporate the value into
+   */
+  <V extends StatisticValue<R>, R> void incorporateStatisticValue(
+      Statistic<V> statistic,
+      V value,
+      ByteArray bin);
+
+  /**
+   * Compute and incorporate statistic values from an entry without storing the entry itself. The
+   * statistic's binning strategy, if any, is applied so that a distinct value is computed for each
+   * bin the entry contributes to.
+   *
+   * @param <T> the data type
+   * @param <V> the StatisticValue implementation of the statistic
+   * @param <R> the raw value type of the statistic
+   * @param statistic the statistic to update
+   * @param typeName the type name of the entry
+   * @param entry the entry to compute statistics from (will not be stored)
+   */
+  <T, V extends StatisticValue<R>, R> void incorporateStatisticFromEntry(
+      Statistic<V> statistic,
+      String typeName,
+      T entry);
+
+  /**
    * Gets all of the statistics that are being tracked on the provided data type adapter.
    *
    * @param typeName the data type adapter to get the statistics for
@@ -473,4 +520,20 @@ public interface DataStore {
    * @return a writer which can be used to write entries into this datastore of the given type
    */
   <T> Writer<T> createWriter(String typeName, VisibilityHandler visibilityHandler);
+
+  /**
+   * Returns a statistics-only writer that computes and stores statistics from entries without
+   * persisting the entries themselves. This is useful for maintaining aggregate statistics from
+   * streaming data or external sources without the overhead of storing all raw data.
+   *
+   * <p>The writer will automatically find all statistics that have been registered for the type
+   * (using {@link #addEmptyStatistic(Statistic...)} or {@link #addStatistic(Statistic...)}) and
+   * update them as entries are written.
+   *
+   * @param <T> the type of entries to compute statistics from
+   * @param typeName the type name
+   * @return a statistics-only writer which can be used to compute statistics from entries without
+   *         storing the entries themselves
+   */
+  <T> StatisticsOnlyWriter<T> createStatisticsOnlyWriter(String typeName);
 }
