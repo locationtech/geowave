@@ -153,8 +153,7 @@ public class StatisticsOnlyWriterTest {
   @Test
   public void rejectsWritesAfterClose() {
     dataStore.addEmptyStatistic(new CountStatistic(TYPE_NAME));
-    final StatisticsOnlyWriter<TestData> writer =
-        dataStore.createStatisticsOnlyWriter(TYPE_NAME);
+    final StatisticsOnlyWriter<TestData> writer = dataStore.createStatisticsOnlyWriter(TYPE_NAME);
     writer.close();
     try {
       writer.write(ENTRIES.get(0));

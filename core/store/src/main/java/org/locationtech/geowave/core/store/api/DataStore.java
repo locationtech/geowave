@@ -156,9 +156,9 @@ public interface DataStore {
 
   /**
    * Incorporate a statistic value directly into the data store without ingesting the underlying
-   * data. This is useful for maintaining statistics computed from external sources or streaming data
-   * without storing the raw data itself. This method is for statistics that do not use a binning
-   * strategy.
+   * data. This is useful for maintaining statistics computed from external sources or streaming
+   * data without storing the raw data itself. This method is for statistics that do not use a
+   * binning strategy.
    *
    * @param <V> the StatisticValue implementation of the statistic
    * @param <R> the raw value type of the statistic

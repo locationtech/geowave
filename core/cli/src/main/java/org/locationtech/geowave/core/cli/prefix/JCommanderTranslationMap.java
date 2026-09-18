@@ -282,8 +282,8 @@ public class JCommanderTranslationMap {
    * <p> On Java 9 and later the no-argument {@code toClass()} reflects into
    * {@code ClassLoader.defineClass}, which the module system refuses. Passing a neighbour class in
    * the target package lets Javassist define the class through a {@code MethodHandles.Lookup}
-   * instead. That overload is itself unavailable on Java 8, where it calls {@code Class.getModule()}
-   * and fails with {@link NoSuchMethodError}.
+   * instead. That overload is itself unavailable on Java 8, where it calls
+   * {@code Class.getModule()} and fails with {@link NoSuchMethodError}.
    *
    * <p> Collapse this to the neighbour form once Java 8 is no longer supported.
    */
