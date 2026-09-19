@@ -11,7 +11,7 @@ package org.locationtech.geowave.test.basic;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
-import org.apache.commons.math.util.MathUtils;
+import org.apache.commons.math3.util.Precision;
 import org.geotools.coverage.CoverageFactoryFinder;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.GridCoverageFactory;
@@ -58,7 +58,7 @@ public class GeoWaveBasicCustomCRSRasterIT extends AbstractGeoWaveIT {
   protected DataStorePluginOptions dataStoreOptions;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveBasicCustomCRSRasterIT.class);
-  private static final double DELTA = MathUtils.EPSILON;
+  private static final double DELTA = Precision.EPSILON;
   private static long startMillis;
 
   @Override

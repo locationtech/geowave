@@ -33,7 +33,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-math</artifactId>
+			<artifactId>commons-math3</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>net.lingala.zip4j</groupId>
