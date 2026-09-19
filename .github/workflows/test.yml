@@ -125,9 +125,12 @@ jobs:
           - 'filesystem-it,secondary-index-it'
           - 'rocksdb-it,secondary-index-it'
           - 'hbase-it-server,secondary-index-it'
-        # cassandra-it is excluded for now: it is much slower than the other
-        # lanes and was holding up the whole matrix. Run it on demand with
-        # workflow_dispatch until that is addressed.
+        include:
+          # Cassandra is retried because its cluster startup is timing sensitive.
+          # .utility/retry keeps going for up to two hours, so a deterministic
+          # failure here costs the whole window rather than failing fast.
+          - profile: cassandra-it
+            retry_tests: true
     env:
       IT_ONLY: true
       MAVEN_PROFILES: ${{ matrix.profile }}
